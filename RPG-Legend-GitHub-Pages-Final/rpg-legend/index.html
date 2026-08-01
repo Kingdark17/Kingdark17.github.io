@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RPG Legend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="title-bar">
+    <div>
+      <h1>RPG Legend</h1>
+      <div class="sub" id="headerSub">menu principal</div>
+    </div>
+    <div class="header-actions">
+      <button class="rune-btn small hidden" id="newHeroBtn">&#9876; Criar Novo Personagem</button>
+    </div>
+  </header>
+
+  <!-- ============ MENU PRINCIPAL ============ -->
+  <section id="menuScreen" class="panel">
+    <div class="menu-title">RPG Legend</div>
+    <div class="menu-sub">aventura &middot; exploração &middot; progressão</div>
+    <div class="menu-list">
+      <button class="rune-btn" id="btnNewGame">Novo Jogo</button>
+      <button class="rune-btn" id="btnContinueGame">Continuar</button>
+      <button class="rune-btn" id="btnMultiplayer">Multiplayer (Beta)</button>
+      <button class="rune-btn ghost" id="btnSettings">Configurações</button>
+      <button class="rune-btn ghost" id="btnCredits">Créditos</button>
+      <button class="rune-btn ghost" id="btnExitGame">Sair</button>
+    </div>
+    <div class="menu-note hidden" id="exitNote">Pode fechar esta aba com segurança — seu progresso já foi salvo automaticamente.</div>
+</section>
+
+<!-- ============ MULTIPLAYER ============ -->
+<div class="modal-overlay hidden" id="multiplayerModal">
+  <div class="modal-box multiplayer-box">
+    <div class="modal-header"><h2>⚔ Multiplayer Cooperativo</h2><button class="modal-close" id="closeMultiplayerBtn">&times;</button></div>
+    <p class="multiplayer-help">Crie uma sala e envie o código ao outro jogador. Cada participante criará seu próprio herói.</p>
+    <label class="multi-label">Seu nome<input id="multiplayerName" class="name-input" maxlength="20" placeholder="Ex: Pedro"></label>
+    <label class="multi-label">Código da sala<input id="multiplayerRoom" class="name-input room-code" maxlength="6" placeholder="Ex: DRAGAO"></label>
+    <div class="multi-actions"><button class="rune-btn" id="createRoomBtn">Criar Sala</button><button class="rune-btn" id="joinRoomBtn">Entrar na Sala</button></div>
+    <div id="multiplayerMessage" class="multiplayer-message">Nenhuma sala conectada.</div>
+  </div>
+</div>
+
+<div id="multiplayerStatus" class="multiplayer-status hidden"></div>
+
+<!-- ============ CONFIGURAÇÕES ============ -->
+  <section id="settingsPanel" class="panel hidden">
+    <h2>Configurações</h2>
+    <div class="settings-row">
+      <span>Efeitos sonoros</span>
+      <label><input type="checkbox" id="soundToggle" checked> Ativado</label>
+    </div>
+    <div class="creation-footer">
+      <div></div>
+      <button class="rune-btn" id="settingsBackBtn">Voltar ao Menu</button>
+    </div>
+  </section>
+
+<!-- ============ CRÉDITOS ============ -->
+  <section id="creditsPanel" class="panel hidden">
+    <h2>Créditos</h2>
+    <p style="font-size:14px; color:var(--parchment-dim); line-height:1.6;">
+      <b style="color:var(--gold-bright);">RPG Legend</b> foi construído inteiramente em HTML, CSS e
+      JavaScript puro, sem frameworks. Mapas de cidade e masmorra são gerados
+      proceduralmente a cada partida, com dificuldade crescente por andar,
+      chefes periódicos, itens com raridade, comércio, missões e progressão de nível.
+    </p>
+    <div class="creation-footer">
+      <div></div>
+      <button class="rune-btn" id="creditsBackBtn">Voltar ao Menu</button>
+    </div>
+  </section>
+
+<!-- ============ CRIAÇÃO DE PERSONAGEM ============ -->
+  <section id="creationScreen" class="panel hidden">
+    <h2>Crie seu Personagem</h2>
+    <div class="creation-step">
+      <div class="step-title">Nome</div>
+      <div class="step-sub">Como seu herói será lembrado nas tavernas e masmorras</div>
+      <input type="text" id="nameInput" class="name-input" placeholder="Ex: Aldric Pedraverde" maxlength="28">
+    </div>
+    <div class="creation-step">
+      <div class="step-title">Raça</div>
+      <div class="step-sub">Escolha uma</div>
+      <div class="pick-grid" id="raceGrid"></div>
+    </div>
+    <div class="creation-step">
+      <div class="step-title">Classe</div>
+      <div class="step-sub">Escolha uma</div>
+      <div class="pick-grid" id="classGrid"></div>
+    </div>
+    <div class="creation-step">
+      <div class="step-title">Poderes</div>
+      <div class="power-hint">Sua classe já dá 1 poder automático. Escolha até 2 poderes extras.</div>
+      <div class="pick-grid" id="powerGrid"></div>
+    </div>
+    <div class="creation-step">
+      <div class="step-title">Fraqueza (debuff)</div>
+      <div class="step-sub">Todo herói carrega um fardo. Escolha uma</div>
+      <div class="pick-grid" id="debuffGrid"></div>
+    </div>
+    <div class="creation-step">
+      <div class="step-title">Modo de Jogo</div>
+      <div class="step-sub">Jogue sozinho ou monte uma equipe de aventureiros</div>
+      <div class="mode-grid" id="modeGrid"></div>
+    </div>
+    <div class="creation-footer">
+      <div class="creation-error" id="creationError"></div>
+      <button class="rune-btn" id="startAdventureBtn">Começar Aventura &#8594;</button>
+    </div>
+  </section>
+
+  <!-- ============ TELA DE JOGO ============ -->
+  <div id="gameScreen" class="hidden">
+    <div class="layout">
+
+      <aside class="panel" id="playerPanel">
+        <h2>Ficha do Aventureiro</h2>
+        <div class="hero-id">
+          <div class="hero-avatar" id="heroAvatar">&#9876;</div>
+          <div>
+            <div class="hero-name" id="heroName">-</div>
+            <div class="hero-class" id="heroClass">-</div>
+          </div>
+        </div>
+
+        <div class="level-row"><span>Personagem</span><b id="heroLevel">Nível 1</b></div>
+        <div class="gold-display"><span class="icon">&#128176;</span><span id="goldText">0</span></div>
+
+        <div class="stat-row">
+          <div class="stat-label-row"><span>Vida</span><span id="hpText">-</span></div>
+          <div class="bar-track"><div class="bar-fill hp" id="hpBar" style="width:100%"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label-row"><span>Mana</span><span id="mpText">-</span></div>
+          <div class="bar-track"><div class="bar-fill mp" id="mpBar" style="width:100%"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-label-row"><span>XP</span><span id="xpText">-</span></div>
+          <div class="bar-track xp-track"><div class="bar-fill xp" id="xpBar" style="width:0%"></div></div>
+        </div>
+
+        <div class="attr-grid" id="attrGrid"></div>
+
+        <div class="stat-label-row" style="margin-top:4px;"><span>Equipamento</span></div>
+        <div class="equip-slots" id="equipSlots"></div>
+
+        <div class="stat-label-row" style="margin-top:12px;"><span>Poderes</span></div>
+        <div id="powersList"></div>
+
+        <div class="stat-label-row" style="margin-top:12px;"><span>Fraqueza</span></div>
+        <div id="debuffList"></div>
+
+        <div id="activeEffectsSection" class="hidden">
+          <div class="stat-label-row" style="margin-top:12px;"><span>Efeitos Ativos</span></div>
+          <div id="activeEffectsList"></div>
+        </div>
+
+        <div id="partySection" class="hidden">
+          <div class="stat-label-row" style="margin-top:12px;"><span>Equipe</span></div>
+          <div class="party-list" id="partyList"></div>
+        </div>
+
+        <div class="panel-btn-row">
+          <button id="backpackBtn">&#127890; Mochila <span class="badge" id="itemCount">0</span></button>
+        </div>
+      </aside>
+
+      <main>
+        <section class="panel">
+          <h2>Exploração</h2>
+          <div class="location-tag" id="locationTag">Cidade Inicial</div>
+          <div class="map-toolbar">
+            <div class="legend" id="mapLegend"></div>
+            <button class="rune-btn small" id="regenMapBtn">Reiniciar Local</button>
+          </div>
+
+          <div class="explore-stage">
+            <div class="story-box">
+              <div class="npc-card" id="npcCard" style="display:none;">
+                <div class="npc-portrait" id="npcPortrait">&#129497;</div>
+                <div>
+                  <div class="npc-name" id="npcName">-</div>
+                  <div class="npc-role" id="npcRole">-</div>
+                </div>
+              </div>
+              <div id="sceneText"></div>
+              <div class="dialogue-controls hidden" id="dialogueControlsWrap">
+                <button id="npcActionBtn" class="hidden">Solicitar Serviço</button>
+                <button id="dialogueNextBtn">Continuar &#8594;</button>
+                <button id="dialogueCloseBtn">Encerrar</button>
+              </div>
+            </div>
+            <div class="combat-scene hidden" id="combatScene"></div>
+            <div class="minimap-wrap">
+              <div class="minimap-label">Mapa</div>
+              <div class="map-grid" id="mapGrid"></div>
+            </div>
+          </div>
+
+          <div id="controlsArea"></div>
+        </section>
+
+        <section class="panel dice-tray">
+          <h2>Rolagens</h2>
+          <div class="roll-stage">
+            <div class="die-perspective"><div class="roll-die" id="rollDie">-</div></div>
+            <div class="roll-info" id="rollInfo">As rolagens de combate e negociação aparecem aqui.</div>
+          </div>
+          <div class="roll-log" id="rollLog"></div>
+        </section>
+      </main>
+
+      <aside class="panel event-log">
+        <h2>Diário de Aventura</h2>
+        <div class="log-list" id="logList"></div>
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: MOCHILA ============ -->
+<div class="modal-overlay hidden" id="backpackModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>&#127890; Mochila</h2>
+      <button class="modal-close" id="closeModalBtn">&times;</button>
+    </div>
+    <div class="tab-row" id="invTabs"></div>
+    <div class="item-grid" id="itemGrid"></div>
+    <div class="item-detail" id="itemDetail" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ============ MODAL: COMERCIANTE ============ -->
+<div class="modal-overlay hidden" id="merchantModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="merchantTitle">&#127349; Vendedor</h2>
+      <button class="modal-close" id="closeMerchantBtn">&times;</button>
+    </div>
+    <div class="gold-display"><span class="icon">&#128176;</span><span id="merchantGoldText">0</span></div>
+    <div class="merchant-negotiation" id="merchantNegotiation"></div>
+    <div class="creation-step">
+      <div class="step-title">Itens a Venda</div>
+      <div class="item-grid" id="merchantBuyGrid"></div>
+    </div>
+    <div class="creation-step">
+      <div class="step-title">Vender da Mochila</div>
+      <div class="item-grid" id="merchantSellGrid"></div>
+    </div>
+    <button class="rune-btn small" id="merchantRestockBtn">Renovar Estoque</button>
+  </div>
+</div>
+
+<!-- ============ MODAL: QUADRO DE MISSOES ============ -->
+<div class="modal-overlay hidden" id="questModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>&#128220; Quadro de Missões</h2>
+      <button class="modal-close" id="closeQuestBtn">&times;</button>
+    </div>
+    <div id="questList"></div>
+  </div>
+</div>
+
+<!-- Scripts: a ordem não afeta as definições (tudo se anexa ao objeto global RPG),
+     mas main.js precisa ser o último por depender de todos os outros. -->
+<script src="js/items.js"></script>
+<script src="js/monsters.js"></script>
+<script src="js/narrator.js"></script>
+<script src="js/player.js"></script>
+<script src="js/map.js"></script>
+<script src="js/events.js"></script>
+<script src="js/npc-services.js"></script>
+<script src="js/city.js"></script>
+<script src="js/dungeon.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/inventory.js"></script>
+<script src="js/shop.js"></script>
+<script src="js/quests.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/save.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/multiplayer-config.js"></script>
+<script src="js/multiplayer.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
