@@ -32,8 +32,11 @@ function load(file) {
   vm.runInContext(fs.readFileSync(path.join(root, file), 'utf8'), context, { filename: file });
 }
 
-['js/items.js', 'js/monsters.js', 'js/player.js', 'js/map.js', 'js/events.js', 'js/npc-services.js', 'js/dungeon.js', 'js/save.js'].forEach(load);
+['js/items.js', 'js/monsters.js', 'js/player.js', 'js/map.js', 'js/events.js', 'js/npc-services.js', 'js/dungeon.js', 'js/save.js', 'js/tutorial.js'].forEach(load);
 const RPG = context.RPG;
+const tutorialState=RPG.Tutorial.create(true);
+assert.strictEqual(tutorialState.enabled,true,'tutorial nao foi ativado');
+assert.deepStrictEqual(Object.keys(tutorialState.completed),[],'tutorial novo iniciou com etapas concluidas');
 assert(RPG.Player.RACES.length >= 12, 'novas racas nao foram carregadas');
 assert(RPG.Player.CLASSES.length >= 12, 'novas classes nao foram carregadas');
 assert(RPG.Player.POWERS.some(power => power.status === 'veneno'), 'poder de veneno ausente');
@@ -62,6 +65,9 @@ hero.maxHp = baseHp; hero.hp = baseHp; hero.maxMp = baseMp; hero.mp = baseMp;
 RPG.Player.equipItem(hero, amulet);
 assert.strictEqual(hero.maxHp, baseHp + 4, 'bonus de vida do equipamento');
 assert.strictEqual(hero.maxMp, baseMp + 6, 'bonus de mana do equipamento');
+const armorPreview=RPG.Items.instantiate(RPG.Items.TEMPLATES.find(item=>item.id==='placas'),RPG.Items.RARITIES[0]);
+const armorImpact=RPG.Items.equipmentImpact(hero,armorPreview);
+assert(armorImpact.some(row=>row.key==='defesa'&&row.diff>0),'comparacao nao mostrou aumento de defesa do jogador');
 
 for (let floor = 1; floor <= 100; floor++) {
   const state = { floor, mapRows:6, mapCols:6 };

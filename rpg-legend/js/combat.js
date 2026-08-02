@@ -348,6 +348,7 @@ RPG.Combat = (function(){
     document.getElementById('combatScene').classList.remove('hidden');
     RPG.UI.setSceneMessage('O combate começa! Ataque, use um poder ou tente fugir.');
     renderCombatScene(cell);
+    if(RPG.Tutorial)RPG.Tutorial.event('combat');
     RPG.UI.renderControls();
     if(RPG.Multiplayer) RPG.Multiplayer.sync();
   }

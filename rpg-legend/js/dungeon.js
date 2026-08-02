@@ -39,8 +39,23 @@ RPG.Dungeon = (function(){
     // Gera novamente quando não existem pelo menos duas salas que sejam
     // distantes tanto pelo caminho real quanto visualmente na grade. Antes,
     // uma sala podia ter rota longa, mas ainda aparecer colada ao jogador.
-    var res,distances,distantRooms=[],attempts=0;
-    while(attempts<40 && distantRooms.length<2){
+    var res,distances,distantRooms=[],attempts=0,branchCount=0;
+    function startBranch(cell){
+      var current=cell,guard=0;
+      while((distances[current.x+','+current.y]||0)>1 && guard++<100){
+        var currentDistance=distances[current.x+','+current.y];
+        var previous=null;
+        Object.keys(current.doors||{}).some(function(dir){
+          var v=RPG.MapUtil.DIR_VECTORS[dir],candidate=res.grid[current.y+v.y][current.x+v.x];
+          if(distances[candidate.x+','+candidate.y]===currentDistance-1){previous=candidate;return true;}
+          return false;
+        });
+        if(!previous)break;
+        current=previous;
+      }
+      return current.x+','+current.y;
+    }
+    while(attempts<80 && distantRooms.length<2){
       attempts++;
       res=RPG.MapUtil.generateRoomGraph(rows,cols,roomCount);
       distances=RPG.MapUtil.distancesFrom(res.grid,res.start,cols,rows);
@@ -49,10 +64,16 @@ RPG.Dungeon = (function(){
         var visualDistance=Math.abs(cell.x-res.start.x)+Math.abs(cell.y-res.start.y);
         return pathDistance>=4 && visualDistance>=3;
       });
+      distantRooms.forEach(function(cell){cell.startBranch=startBranch(cell);});
+      var branches={};distantRooms.forEach(function(cell){branches[cell.startBranch]=true;});
+      branchCount=Object.keys(branches).length;
     }
     var pool = res.rooms.slice(1).sort(function(){ return Math.random()-0.5; });
     // Fallback defensivo para grades muito pequenas ou saves modificados.
-    if(distantRooms.length<2)distantRooms=pool.filter(function(cell){return (distances[cell.x+','+cell.y]||0)>=3;});
+    if(distantRooms.length<2){
+      distantRooms=pool.filter(function(cell){return (distances[cell.x+','+cell.y]||0)>=3;});
+      distantRooms.forEach(function(cell){cell.startBranch=startBranch(cell);});
+    }
     distantRooms=distantRooms.slice().sort(function(a,b){
       var pathDiff=(distances[b.x+','+b.y]||0)-(distances[a.x+','+a.y]||0);
       if(pathDiff)return pathDiff;
@@ -60,8 +81,13 @@ RPG.Dungeon = (function(){
       var bVisual=Math.abs(b.x-res.start.x)+Math.abs(b.y-res.start.y);
       return bVisual-aVisual;
     });
-    function reserveDistant(type){
-      var cell=distantRooms.shift();
+    function reserveDistant(type,otherBranch){
+      var pickIndex=0;
+      if(otherBranch){
+        pickIndex=distantRooms.findIndex(function(candidate){return candidate.startBranch!==otherBranch;});
+        if(pickIndex<0)pickIndex=0;
+      }
+      var cell=distantRooms.splice(pickIndex,1)[0];
       if(!cell)return null;
       var index=pool.indexOf(cell);
       if(index>=0)pool.splice(index,1);
@@ -71,8 +97,8 @@ RPG.Dungeon = (function(){
     }
     // As duas rotas importantes ficam entre as salas mais distantes. Assim o
     // jogador precisa explorar o andar antes de descer ou voltar à cidade.
-    reserveDistant('stairs');
-    reserveDistant('exit');
+    var stairsRoom=reserveDistant('stairs');
+    reserveDistant('exit',stairsRoom&&stairsRoom.startBranch);
     function place(type, count){ var out=[]; for(var i=0;i<count && pool.length;i++){ var c=pool.pop(); c.type=type; out.push(c);} return out; }
 
     place('npc', 1 + (Math.random()<0.5?1:0));

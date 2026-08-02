@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function(){
     quests: [],
     soundOn: true
   };
+  RPG.state.tutorial=RPG.Tutorial.create(true);
 
   // pre-renderiza a tela de criacao (ela fica oculta ate ser usada)
   RPG.UI.renderCreationScreen();
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function(){
   RPG.UI.bindMerchantModal();
   RPG.UI.bindQuestModal();
   RPG.UI.bindDialogueControls();
+  RPG.Tutorial.bind();
 
   document.getElementById('startAdventureBtn').addEventListener('click', RPG.UI.startAdventure);
 
@@ -73,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function(){
     state.mapRows = data.mapRows || 6;
     state.mapCols = data.mapCols || 6;
     state.soundOn = data.soundOn !== undefined ? data.soundOn : true;
+    state.tutorial = data.tutorial || RPG.Tutorial.create(false);
     document.getElementById('soundToggle').checked = state.soundOn;
 
     RPG.UI.showScreen('game');
@@ -103,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function(){
     RPG.UI.renderControls();
     RPG.UI.resetDialogue();
     RPG.UI.logEvent('Bem-vindo de volta, <b>'+state.hero.name+'</b>! Continuando de onde parou.');
+    RPG.Tutorial.render();
   });
 
   document.getElementById('btnSettings').addEventListener('click', function(){

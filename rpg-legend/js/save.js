@@ -28,6 +28,7 @@ RPG.Save = (function(){
         mapCols: state.mapCols,
         pos: state.pos,
         soundOn: state.soundOn,
+        tutorial: state.tutorial,
         savedAt: Date.now()
       };
       localStorage.setItem(KEY, JSON.stringify(data));

@@ -80,6 +80,10 @@ RPG.Inventory = (function(){
     var tags = RPG.Items.statTags(item);
     var tagsHtml = tags.map(function(t){ return '<span class="tag '+(t.positive?'buff':'debuff')+'">'+t.text+'</span>'; }).join('');
     if(!tagsHtml){ tagsHtml = '<span class="tag" style="color:var(--parchment-dim); border:1px solid var(--line);">Sem efeitos especiais</span>'; }
+    var tierInfo=itemTier?RPG.Items.tierInfo(item):null;
+    var itemSheet='<div class="item-stat-sheet"><div><span>Tier</span><b>'+(itemTier||'—')+'</b></div><div><span>Raridade</span><b class="rarity-'+item.rarity+'">'+item.rarityLabel+'</b></div><div><span>Poder</span><b>'+(tierInfo?tierInfo.score:'—')+'</b></div><div><span>Valor</span><b>'+item.value+' ouro</b></div></div>';
+    var impactRows=RPG.Items.equipmentImpact(state.hero,item).filter(function(row){return row.diff!==0;});
+    var impactHtml=impactRows.length?'<div class="player-impact"><div class="compare-title">Mudança nos status do personagem</div>'+impactRows.map(function(row){return '<div class="impact-row"><span>'+row.label+'</span><span>'+row.before+' → '+row.after+'</span><b class="'+(row.diff>0?'better':'worse')+'">'+(row.diff>0?'+':'')+row.diff+'</b></div>';}).join('')+'</div>':'';
 
     var extraInfo = '';
     if(item.category==='arma'){
@@ -126,9 +130,11 @@ RPG.Inventory = (function(){
     detail.innerHTML =
       '<div class="id-title"><span class="ic-icon">'+item.icon+'</span><span class="id-name rarity-'+item.rarity+'">'+item.name+'</span>'+(itemTier?'<span class="tier-badge '+RPG.Items.tierClass(itemTier)+'">Tier '+itemTier+'</span>':'')+'</div>'+
       '<div class="id-desc">'+item.desc+'</div>'+
+      itemSheet+
       '<div class="tag-row">'+tagsHtml+'</div>'+
       extraInfo +
       comparisonHtml +
+      impactHtml+
       '<div style="font-family:var(--font-mono); font-size:11px; color:var(--gold-bright); margin-top:8px;">Valor: '+item.value+' ouro</div>'+
       '<div class="panel-btn-row" style="margin-top:10px;">'+actions+'</div>';
 

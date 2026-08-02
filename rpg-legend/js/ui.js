@@ -108,6 +108,7 @@ RPG.UI = (function(){
     if(!validateCreation()) return;
     var state = RPG.state;
     state.hero = RPG.Player.buildHero(creation);
+    state.tutorial = RPG.Tutorial.create(document.getElementById('tutorialEnabled').checked);
     state.inventory = [];
     RPG.Inventory.addItem(state, RPG.Items.randomItem({ category:'consumivel', floor:1 }));
     state.party = [];
@@ -134,6 +135,7 @@ RPG.UI = (function(){
     resetDialogue();
     logEvent('<b>'+state.hero.name+'</b> ('+state.hero.race+' '+state.hero.className+') chega a cidade inicial'+(state.party.length? ' acompanhado de sua equipe.':'.'));
     RPG.Save.save(state);
+    RPG.Tutorial.start();
   }
 
   /* ================= HERO PANEL ================= */
@@ -327,6 +329,7 @@ RPG.UI = (function(){
     resetDialogue();
     logEvent('Você atravessa o portão e entra na <b>masmorra</b>.');
     RPG.Save.save(state);
+    RPG.Tutorial.event('dungeon');
   }
   function enterCity(){
     var state = RPG.state;
@@ -398,6 +401,7 @@ RPG.UI = (function(){
     if(!handled){ resetDialogueAmbient(); }
     renderControls();
     RPG.Save.save(state);
+    RPG.Tutorial.event('move');
   }
 
   function setSceneMessage(text){
@@ -439,7 +443,9 @@ RPG.UI = (function(){
     var t = state.pendingTarget;
     state.mode = 'move';
     state.pendingTarget = null;
-    var passableWithoutInteraction = ['npc','shop','blacksmith','tavern','questboard','treasure','event'];
+    // A saída também pode ocupar uma sala de passagem. Responder "Não"
+    // atravessa o local sem voltar à cidade, impedindo que ela bloqueie a escada.
+    var passableWithoutInteraction = ['npc','shop','blacksmith','tavern','questboard','treasure','event','exit'];
     if(t && passableWithoutInteraction.indexOf(t.cell.type) >= 0){
       state.pos = { x:t.nx, y:t.ny };
       t.cell.visited = true;
@@ -474,6 +480,7 @@ RPG.UI = (function(){
     setDialogueControls(true, true);
     updateNpcActionButton();
     logEvent('Você iniciou uma conversa com <b>'+npc.name+'</b>.');
+    RPG.Tutorial.event('npc');
   }
   function showSimpleDialogue(icon, title, text){
     currentNPC = null;
@@ -556,6 +563,7 @@ RPG.UI = (function(){
       RPG.Inventory.resetSelection();
       RPG.Inventory.render(RPG.state);
       document.getElementById('backpackModal').classList.remove('hidden');
+      RPG.Tutorial.event('inventory');
     });
     document.getElementById('closeModalBtn').addEventListener('click', function(){ document.getElementById('backpackModal').classList.add('hidden'); });
     document.getElementById('backpackModal').addEventListener('click', function(e){ if(e.target.id === 'backpackModal'){ document.getElementById('backpackModal').classList.add('hidden'); } });
@@ -595,6 +603,7 @@ RPG.UI = (function(){
     document.getElementById('creationScreen').classList.toggle('hidden', name!=='creation');
     document.getElementById('gameScreen').classList.toggle('hidden', name!=='game');
     document.getElementById('newHeroBtn').classList.toggle('hidden', name!=='game');
+    document.getElementById('tutorialGuideBtn').classList.toggle('hidden', name!=='game');
     document.getElementById('headerSub').textContent =
       name==='game' ? 'mesa de rpg \u00b7 dados \u00b7 cidade \u00b7 masmorra' :
       name==='creation' ? 'criação de personagem' : 'menu principal';

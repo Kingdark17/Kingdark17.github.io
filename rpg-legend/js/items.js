@@ -170,6 +170,21 @@ RPG.Items = (function(){
     item.reforgeCount=(item.reforgeCount||0)+1;
     return {oldTier:TIER_ORDER[oldRank],newTier:TIER_ORDER[target],oldRank:oldRank,newRank:target};
   }
+  function heroEquipmentSnapshot(hero){
+    var derived=RPG.Player.getDerived(hero),bonus=RPG.Player.equipmentBonus(hero),weapon=hero.equip&&hero.equip.arma;
+    var affinity=100,cls=RPG.Player.classByName(hero.className);
+    if(weapon&&cls&&cls.affinity&&cls.affinity[weapon.templateId]!=null)affinity=cls.affinity[weapon.templateId];
+    var weaponAtk=weapon?Math.round((weapon.stats.ataque||0)*affinity/100):0;
+    var otherAtk=(bonus.ataque||0)-(weapon&&weapon.stats.ataque||0);
+    return {vida:derived.maxHp,mana:derived.maxMp,danoFisico:derived.dmgFisico+weaponAtk+otherAtk,danoMagico:derived.dmgMagico,defesa:bonus.defesa||0,critico:derived.critico+(bonus.critico||0),esquiva:derived.esquiva,velocidade:derived.velocidade};
+  }
+  function equipmentImpact(hero,item){
+    if(!hero||!item||['arma','armadura','acessorio'].indexOf(item.category)<0)return [];
+    var before=heroEquipmentSnapshot(hero),preview={className:hero.className,level:hero.level,attrs:hero.attrs,debuff:hero.debuff,equip:{arma:hero.equip.arma,armadura:hero.equip.armadura,acessorio:hero.equip.acessorio}};
+    preview.equip[item.category]=item;
+    var after=heroEquipmentSnapshot(preview),labels={vida:'Vida máxima',mana:'Mana máxima',danoFisico:'Dano físico',danoMagico:'Dano mágico',defesa:'Defesa',critico:'Crítico',esquiva:'Esquiva',velocidade:'Velocidade'};
+    return Object.keys(labels).map(function(key){var oldValue=Math.round(before[key]*10)/10,newValue=Math.round(after[key]*10)/10;return {key:key,label:labels[key],before:oldValue,after:newValue,diff:Math.round((newValue-oldValue)*10)/10};});
+  }
 
   return {
     RARITIES: RARITIES,
@@ -187,6 +202,7 @@ RPG.Items = (function(){
     tierRank: tierRank,
     tierClass: tierClass,
     tierInfo: tierInfo,
-    reforge: reforge
+    reforge: reforge,
+    equipmentImpact: equipmentImpact
   };
 })();
