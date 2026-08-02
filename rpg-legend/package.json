@@ -1,0 +1,12 @@
+{
+  "name": "rpg-legend-multiplayer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Servidor opcional do modo cooperativo de RPG Legend",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

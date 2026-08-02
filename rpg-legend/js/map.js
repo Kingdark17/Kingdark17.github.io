@@ -64,6 +64,27 @@ RPG.MapUtil = (function(){
 
   function isRoom(cell){ return cell && cell.type !== 'void'; }
 
+  // Distância real em número de portas a partir de uma sala. É usada para
+  // impedir que saídas importantes apareçam coladas ao ponto inicial.
+  function distancesFrom(grid, start, cols, rows){
+    var distances={};
+    var queue=[start];
+    distances[start.x+','+start.y]=0;
+    while(queue.length){
+      var cell=queue.shift();
+      var base=distances[cell.x+','+cell.y];
+      Object.keys(cell.doors||{}).forEach(function(dir){
+        var v=DIR_VECTORS[dir],nx=cell.x+v.x,ny=cell.y+v.y;
+        if(!inBounds(nx,ny,cols,rows))return;
+        var key=nx+','+ny;
+        if(distances[key]!==undefined)return;
+        distances[key]=base+1;
+        queue.push(grid[ny][nx]);
+      });
+    }
+    return distances;
+  }
+
   // Uma sala fica "conhecida" (silhueta visivel no minimapa) assim que
   // qualquer sala vizinha ligada por porta ja foi visitada — nao precisa
   // ter tentado abrir a porta ainda. O conteudo so aparece ao entrar.
@@ -80,7 +101,7 @@ RPG.MapUtil = (function(){
 
   return {
     DIR_VECTORS: DIR_VECTORS, DIR_LABEL: DIR_LABEL, DIR_OPP: DIR_OPP, DIR_ORDER: DIR_ORDER,
-    generateRoomGraph: generateRoomGraph, inBounds: inBounds,
+    generateRoomGraph: generateRoomGraph, distancesFrom: distancesFrom, inBounds: inBounds,
     isRoom: isRoom, isKnown: isKnown
   };
 })();

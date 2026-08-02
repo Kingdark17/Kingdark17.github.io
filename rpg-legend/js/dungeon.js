@@ -38,6 +38,21 @@ RPG.Dungeon = (function(){
     var roomCount = Math.min(22, 9 + floor);
     var res = RPG.MapUtil.generateRoomGraph(rows, cols, roomCount);
     var pool = res.rooms.slice(1).sort(function(){ return Math.random()-0.5; });
+    var distances=RPG.MapUtil.distancesFrom(res.grid,res.start,cols,rows);
+    var distantRooms=pool.slice().sort(function(a,b){return (distances[b.x+','+b.y]||0)-(distances[a.x+','+a.y]||0);});
+    function reserveDistant(type){
+      var cell=distantRooms.shift();
+      if(!cell)return null;
+      var index=pool.indexOf(cell);
+      if(index>=0)pool.splice(index,1);
+      cell.type=type;
+      cell.distanceFromStart=distances[cell.x+','+cell.y]||0;
+      return cell;
+    }
+    // As duas rotas importantes ficam entre as salas mais distantes. Assim o
+    // jogador precisa explorar o andar antes de descer ou voltar à cidade.
+    reserveDistant('stairs');
+    reserveDistant('exit');
     function place(type, count){ var out=[]; for(var i=0;i<count && pool.length;i++){ var c=pool.pop(); c.type=type; out.push(c);} return out; }
 
     place('npc', 1 + (Math.random()<0.5?1:0));
@@ -46,7 +61,7 @@ RPG.Dungeon = (function(){
 
     // Sempre reserva salas para escada e saida; em andares de chefe,
     // reserva uma terceira sala para o chefe.
-    var reservedRooms = isBossFloor(floor) ? 3 : 2;
+    var reservedRooms = isBossFloor(floor) ? 1 : 0;
     var monsterRoomCount = Math.min(pool.length - reservedRooms, 3 + Math.floor((floor-1)*1.3));
     var monsterRooms = place('monster', Math.max(2, monsterRoomCount));
     monsterRooms.forEach(function(cell){
@@ -77,9 +92,6 @@ RPG.Dungeon = (function(){
         bossRoom.beaten = false;
       }
     }
-
-    place('stairs', 1);
-    place('exit', 1);
 
     res.rooms.forEach(function(cell){
       if(cell.type === 'npc'){

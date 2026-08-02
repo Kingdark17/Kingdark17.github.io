@@ -7,7 +7,7 @@ var RPG = window.RPG || {};
 
 RPG.UI = (function(){
 
-  var creation = { name:"", race:null, cls:null, powers:[], debuff:null, mode:null };
+  var creation = { name:"", race:null, cls:null, powers:[], debuff:null, mode:"solo" };
 
   function rnd(n){ return Math.floor(Math.random()*n); }
   function pick(arr){ return arr[rnd(arr.length)]; }
@@ -67,7 +67,7 @@ RPG.UI = (function(){
   }
 
   function renderCreationScreen(){
-    creation = { name:"", race:null, cls:null, powers:[], debuff:null, mode:null };
+    creation = { name:"", race:null, cls:null, powers:[], debuff:null, mode:"solo" };
     document.getElementById('nameInput').value = '';
 
     buildPickGrid('raceGrid', RPG.Player.RACES, function(it, card){
@@ -88,20 +88,6 @@ RPG.UI = (function(){
       card.classList.add('selected'); clearError();
     });
 
-    var modeEl = document.getElementById('modeGrid');
-    modeEl.innerHTML = '';
-    RPG.Player.MODES.forEach(function(m){
-      var card = document.createElement('div');
-      card.className = 'mode-card';
-      card.innerHTML = '<div class="mc-icon">'+m.icon+'</div><div class="mc-name">'+m.name+'</div><div class="mc-desc">'+m.desc+'</div>';
-      card.addEventListener('click', function(){
-        creation.mode = m.id;
-        Array.prototype.forEach.call(modeEl.children, function(c){ c.classList.remove('selected'); });
-        card.classList.add('selected'); clearError();
-      });
-      modeEl.appendChild(card);
-    });
-
     document.getElementById('nameInput').oninput = function(e){ creation.name = e.target.value; clearError(); };
   }
 
@@ -114,7 +100,6 @@ RPG.UI = (function(){
     if(!creation.race){ showError('Escolha uma raça.'); return false; }
     if(!creation.cls){ showError('Escolha uma classe.'); return false; }
     if(!creation.debuff){ showError('Escolha uma fraqueza.'); return false; }
-    if(!creation.mode){ showError('Escolha o modo de jogo.'); return false; }
     creation.name = name;
     return true;
   }
@@ -126,7 +111,6 @@ RPG.UI = (function(){
     state.inventory = [];
     RPG.Inventory.addItem(state, RPG.Items.randomItem({ category:'consumivel', floor:1 }));
     state.party = [];
-    if(creation.mode === 'equipe'){ for(var i=0;i<2;i++){ state.party.push(RPG.Player.generateCompanion()); } }
     state.floor = 1;
     state.quests = [];
     RPG.Quests.ensureBoard(state);
@@ -581,6 +565,7 @@ RPG.UI = (function(){
     document.getElementById('closeMerchantBtn').addEventListener('click', RPG.Shop.close);
     document.getElementById('merchantModal').addEventListener('click', function(e){ if(e.target.id === 'merchantModal'){ RPG.Shop.close(); } });
     document.getElementById('merchantRestockBtn').addEventListener('click', function(){ RPG.Shop.restock(RPG.state); });
+    document.getElementById('merchantForgeOpenBtn').addEventListener('click', function(){ RPG.Shop.toggleForge(RPG.state); });
   }
 
   function bindQuestModal(){

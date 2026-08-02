@@ -101,7 +101,7 @@ RPG.Combat = (function(){
     var monster = currentMonster(cell);
     if(!monster.status) return false;
     var total = 0;
-    ['queimadura','sangramento'].forEach(function(key){
+    ['queimadura','sangramento','veneno'].forEach(function(key){
       var s = monster.status[key];
       if(s && s.turns>0){
         monster.hp -= s.dmg; total += s.dmg; s.turns--;
@@ -169,7 +169,17 @@ RPG.Combat = (function(){
   function modifyDamageByAffinity(monster, dmg, type){
     if(monster.weakness===type) dmg = Math.round(dmg*1.25);
     if(monster.resistance===type) dmg = Math.round(dmg*0.8);
+    if(monster.status && monster.status.vulneravel && monster.status.vulneravel.turns>0) dmg = Math.round(dmg*(1+(monster.status.vulneravel.amount||0.2)));
     return Math.max(1,dmg);
+  }
+
+  function applyPowerStatus(power, monster, derived){
+    if(!power.status) return;
+    monster.status = monster.status || {};
+    if(power.status==='atordoado') monster.status.atordoado=(monster.status.atordoado||0)+(power.turns||1);
+    else if(power.status==='veneno' || power.status==='sangramento' || power.status==='queimadura') monster.status[power.status]={turns:power.turns||3,dmg:Math.max(2,Math.round(Math.max(derived.dmgMagico,derived.dmgFisico)*(power.dotRatio||0.2)))};
+    else monster.status[power.status]={turns:power.turns||3,amount:power.amount||0.2};
+    RPG.UI.logEvent(monster.name+' sofre o efeito <b>'+power.status+'</b>.');
   }
 
   function startEncounterChoice(cell){
@@ -247,6 +257,8 @@ RPG.Combat = (function(){
       RPG.UI.logEvent('<b>'+monster.bossAbility+'</b>: o chefe entra em fúria e aumenta seu dano!');
     }
     var attackMult = 1;
+    if(monster.status && monster.status.enfraquecido && monster.status.enfraquecido.turns>0){attackMult*=1-(monster.status.enfraquecido.amount||0.25);monster.status.enfraquecido.turns--;}
+    if(monster.status && monster.status.lento && monster.status.lento.turns>0){if(Math.random()<(monster.status.lento.amount||0.2)){monster.status.lento.turns--;RPG.UI.logEvent(monster.name+' está lento e perde o ataque.');return;}monster.status.lento.turns--;}
     if(monster.behavior==='agressivo' && Math.random()<0.25){ attackMult=1.45; RPG.UI.logEvent(monster.ability+' aumenta a força do golpe!'); }
     if(monster.behavior==='lento' && monster.attackCount%3===0){ attackMult=1.7; RPG.UI.logEvent(monster.ability+' acerta com grande impacto!'); }
     if(monster.isMainBoss && monster.attackCount%3===0){ attackMult=1.9; RPG.UI.logEvent('<b>'+monster.bossAbility+'</b> é ativado!'); }
@@ -280,6 +292,7 @@ RPG.Combat = (function(){
     if(RPG.Player.hasDebuffEffect(hero, 'fireVulnerability') && (monster.behavior==='magico' || monster.name.indexOf('Fogo')>=0)){
       dmg = Math.max(1, Math.round(dmg*1.25));
     }
+    if(RPG.Player.hasDebuffEffect(hero, 'physicalVulnerability')) dmg=Math.max(1,Math.round(dmg*1.2));
     if(hero.buffs.shield > 0){
       dmg = Math.max(1, Math.round(dmg*(1-hero.buffs.shield)));
       hero.buffs.shield = 0;
@@ -287,7 +300,7 @@ RPG.Combat = (function(){
     }
     hero.hp = Math.max(0, hero.hp - dmg);
     if(monster.behavior==='venenoso' && Math.random()<0.35){
-      hero.buffs.poisonTurns = 3; hero.buffs.poisonDmg = Math.max(2,Math.floor(monster.dmg/3));
+      hero.buffs.poisonTurns = 3; hero.buffs.poisonDmg = Math.max(2,Math.round(Math.floor(monster.dmg/3)*(RPG.Player.hasDebuffEffect(hero,'poisonVulnerability')?1.5:1)));
       RPG.UI.logEvent(monster.ability+' envenena você por 3 turnos!');
     }
     if(monster.behavior==='magico' && Math.random()<0.35){
@@ -359,7 +372,7 @@ RPG.Combat = (function(){
     var statusTags = '';
     if(monster.status){
       Object.keys(monster.status).forEach(function(k){
-        var labels = { queimadura:'\ud83d\udd25 Queimando', sangramento:'\ud83e\ude78 Sangrando', atordoado:'\ud83d\udcab Atordoado' };
+        var labels = { queimadura:'\ud83d\udd25 Queimando', sangramento:'\ud83e\ude78 Sangrando', veneno:'\u2623\ufe0f Envenenado', atordoado:'\ud83d\udcab Atordoado', enfraquecido:'\ud83d\udcc9 Enfraquecido', vulneravel:'\ud83c\udfaf Vulnerável', lento:'\u2744\ufe0f Lento' };
         statusTags += '<span class="status-tag">'+(labels[k]||k)+'</span>';
       });
     }
@@ -446,12 +459,13 @@ RPG.Combat = (function(){
     var state = RPG.state;
     var hero = state.hero;
     if(tickHeroStatus()) return;
-    if(hero.mp < power.cost){
+    var manaCost=Math.ceil(power.cost*(RPG.Player.hasDebuffEffect(hero,'manaCostPenalty')?1.2:1));
+    if(hero.mp < manaCost){
       RPG.UI.setSceneMessage('Mana insuficiente para usar '+power.name+'.');
       return;
     }
     hero.buffs = hero.buffs || {};
-    hero.mp -= power.cost;
+    hero.mp -= manaCost;
     var d = hero.derived || RPG.Player.getDerived(hero);
     var monster = currentMonster(cell);
     var msg = '';
@@ -461,6 +475,8 @@ RPG.Combat = (function(){
       var dmg = Math.round(base*power.power) + rnd(6);
       dmg = modifyDamageByAffinity(monster,dmg,power.type==='dano_magico'?'magico':'fisico');
       monster.hp -= dmg;
+      applyPowerStatus(power,monster,d);
+      if(power.healRatio){var drainHeal=Math.max(1,Math.round(dmg*power.healRatio));hero.hp=Math.min(hero.maxHp,hero.hp+drainHeal);}
       RPG.Effects.floatText(document.getElementById('combatScene'), power.icon+' -'+dmg, power.type==='dano_magico'?'crit':'dmg');
       RPG.Effects.playSfx('crit');
       msg = 'Você usa '+power.name+' e causa '+dmg+' de dano!';
@@ -468,7 +484,7 @@ RPG.Combat = (function(){
       RPG.UI.renderHero();
       if(monster.hp <= 0){ RPG.UI.setSceneMessage(msg); handleMonsterDefeated(cell); return; }
     } else if(power.type === 'cura'){
-      var heal = Math.round(10*power.power + d.curaBonus);
+      var heal = Math.round((10*power.power + d.curaBonus)*(RPG.Player.hasDebuffEffect(hero,'healingPenalty')?0.75:1));
       hero.hp = Math.min(hero.maxHp, hero.hp+heal);
       msg = 'Você usa '+power.name+' e recupera '+heal+' de vida.';
       RPG.UI.logEvent(msg);

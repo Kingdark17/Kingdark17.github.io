@@ -50,11 +50,12 @@ RPG.Inventory = (function(){
       var card = document.createElement('div');
       card.className = 'item-card rarity-'+item.rarity + (selectedUid===item.uid ? ' selected' : '');
       var equippedTag = item.equipped ? ' (equipado)' : '';
+      var tier = RPG.Items.tierFor(item);
       var statsPreview = RPG.Items.statTags(item).map(function(t){ return t.text; }).join(' · ');
       card.innerHTML =
         '<div class="ic-top"><span class="ic-icon">'+item.icon+'</span><span class="ic-name">'+item.name+equippedTag+'</span></div>'+
         '<div class="ic-type">'+RPG.Items.CATEGORY_LABELS[item.category]+'</div>'+
-        '<div class="ic-rarity rarity-'+item.rarity+'">'+item.rarityLabel+'</div>'+
+        '<div class="ic-meta"><span class="ic-rarity rarity-'+item.rarity+'">'+item.rarityLabel+'</span>'+(tier?'<span class="tier-badge '+RPG.Items.tierClass(tier)+'">Tier '+tier+'</span>':'')+'</div>'+
         '<div class="ic-desc">'+item.desc+'</div>'+
         (statsPreview ? '<div class="ic-stats">'+statsPreview+'</div>' : '');
       card.addEventListener('click', function(){ selectedUid = item.uid; render(state); showDetail(state, item); });
@@ -75,6 +76,7 @@ RPG.Inventory = (function(){
   function showDetail(state, item){
     var detail = document.getElementById('itemDetail');
     detail.style.display = 'block';
+    var itemTier=RPG.Items.tierFor(item);
     var tags = RPG.Items.statTags(item);
     var tagsHtml = tags.map(function(t){ return '<span class="tag '+(t.positive?'buff':'debuff')+'">'+t.text+'</span>'; }).join('');
     if(!tagsHtml){ tagsHtml = '<span class="tag" style="color:var(--parchment-dim); border:1px solid var(--line);">Sem efeitos especiais</span>'; }
@@ -92,6 +94,7 @@ RPG.Inventory = (function(){
     if(item.category==='arma' || item.category==='armadura' || item.category==='acessorio'){
       var equipped=state.hero.equip[item.category];
       if(equipped && equipped.uid!==item.uid){
+        var equippedTier=RPG.Items.tierFor(equipped);
         var labels={ataque:'Ataque',defesa:'Defesa',vida:'Vida',mana:'Mana',critico:'Crítico',velocidade:'Velocidade',esquiva:'Esquiva'};
         var keys={};
         Object.keys(equipped.stats||{}).forEach(function(k){keys[k]=true;});
@@ -102,7 +105,8 @@ RPG.Inventory = (function(){
           var diff=newValue-oldValue;
           return '<div class="compare-row"><span>'+ (labels[k]||k) +'</span><span>'+oldValue+'</span><span>'+newValue+'</span><b class="'+(diff>0?'better':(diff<0?'worse':'same'))+'">'+(diff>0?'+':'')+diff+'</b></div>';
         }).join('');
-        comparisonHtml='<div class="item-comparison"><div class="compare-title">Comparação com '+equipped.name+'</div><div class="compare-head"><span>Atributo</span><span>Atual</span><span>Novo</span><span>Dif.</span></div>'+rows+'</div>';
+        var tierDiff=RPG.Items.tierRank(item)-RPG.Items.tierRank(equipped);
+        comparisonHtml='<div class="item-comparison"><div class="compare-title">Comparação com '+equipped.name+'</div><div class="tier-comparison"><span class="tier-badge '+RPG.Items.tierClass(equippedTier)+'">'+equippedTier+'</span><b>→</b><span class="tier-badge '+RPG.Items.tierClass(itemTier)+'">'+itemTier+'</span><strong class="'+(tierDiff>0?'better':(tierDiff<0?'worse':'same'))+'">'+(tierDiff>0?'Tier superior':(tierDiff<0?'Tier inferior':'Mesmo tier'))+'</strong></div><div class="compare-head"><span>Atributo</span><span>Atual</span><span>Novo</span><span>Dif.</span></div>'+rows+'</div>';
       } else if(equipped && equipped.uid===item.uid){
         comparisonHtml='<div class="item-comparison equipped-note">Este item está equipado.</div>';
       }
@@ -120,7 +124,7 @@ RPG.Inventory = (function(){
     actions += '<button class="equip-btn" id="actDiscard">Descartar</button>';
 
     detail.innerHTML =
-      '<div class="id-title"><span class="ic-icon">'+item.icon+'</span><span class="id-name rarity-'+item.rarity+'">'+item.name+'</span></div>'+
+      '<div class="id-title"><span class="ic-icon">'+item.icon+'</span><span class="id-name rarity-'+item.rarity+'">'+item.name+'</span>'+(itemTier?'<span class="tier-badge '+RPG.Items.tierClass(itemTier)+'">Tier '+itemTier+'</span>':'')+'</div>'+
       '<div class="id-desc">'+item.desc+'</div>'+
       '<div class="tag-row">'+tagsHtml+'</div>'+
       extraInfo +

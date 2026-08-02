@@ -1,186 +1,34 @@
-/* =========================================================
-   RPG Legend - js/shop.js
-   Vendedor (itens gerais) e Ferreiro (equipamentos), com
-   estoque aleatorio que pode ser renovado.
-   ========================================================= */
+/* RPG Legend - lojas, comparação e reforja. */
 var RPG = window.RPG || {};
-
 RPG.Shop = (function(){
-
-  var activeCell = null;
-  var activeKind = 'shop'; // 'shop' ou 'blacksmith'
-  var discount = 0;
-  var discountRolled = false;
-  var restockCount = 0;
-
-  function rollStock(kind, floor){
-    var stock = [];
-    var count = 5;
-    for(var i=0;i<count;i++){
-      if(kind === 'blacksmith'){
-        var cat = ['arma','armadura','acessorio'][Math.floor(Math.random()*3)];
-        stock.push(RPG.Items.randomItem({ category: cat, floor: floor }));
-      } else {
-        stock.push(RPG.Items.randomItem({ category:'consumivel', floor: floor }));
-      }
-    }
-    return stock;
-  }
-
-  function ensureStock(cell, kind, floor){
-    if(!cell.forSale){ cell.forSale = rollStock(kind, floor); }
-  }
-
-  function open(state, cell, kind){
-    activeCell = cell;
-    activeKind = kind;
-    discount = 0;
-    discountRolled = false;
-    restockCount = 0;
-    ensureStock(cell, kind, state.floor);
-    document.getElementById('merchantTitle').textContent = kind==='blacksmith' ? '\ud83d\udd28 Ferreiro' : '\ud83c\udff5 Vendedor Itinerante';
-    render(state);
-    document.getElementById('merchantModal').classList.remove('hidden');
-  }
-
-  function close(){ document.getElementById('merchantModal').classList.add('hidden'); }
-
-  function buyPrice(state, item){
-    var d = state.hero.derived || RPG.Player.getDerived(state.hero);
-    var total = Math.min(0.6, (d.descontoLoja/100) + discount);
-    return Math.max(1, Math.round(item.value * (1 - total)));
-  }
-
-  function rollForDiscount(state){
-    if(discountRolled) return;
-    RPG.Combat.rollDie(20, function(result){
-      var pct = 0;
-      if(result >= 20) pct = 30;
-      else if(result >= 19) pct = 20;
-      else if(result >= 15) pct = 15;
-      else if(result >= 11) pct = 10;
-      else if(result >= 6) pct = 5;
-      discount = pct/100;
-      discountRolled = true;
-      RPG.Effects.playSfx(pct>0 ? 'gold' : 'miss');
-      RPG.UI.logEvent(pct>0
-        ? 'Você rolou '+result+' no d20 e convenceu o comerciante a dar '+pct+'% de desconto.'
-        : 'Você rolou '+result+' no d20 e o comerciante não cedeu desconto algum desta vez.');
-      render(state);
-    });
-  }
-
-  function renderNegotiation(state){
-    var el = document.getElementById('merchantNegotiation');
-    if(!el) return;
-    if(discountRolled){
-      el.innerHTML = discount > 0
-        ? '<span class="haggle-result">Desconto conseguido: <b>'+Math.round(discount*100)+'%</b> nesta visita.</span>'
-        : '<span class="haggle-result dim">O comerciante não cedeu desconto desta vez.</span>';
-    } else {
-      el.innerHTML = '<button class="rune-btn small" id="haggleBtn">\ud83c\udfb2 Rolar Dado por Desconto</button>';
-      var btn = document.getElementById('haggleBtn');
-      if(btn){ btn.addEventListener('click', function(){ rollForDiscount(state); }); }
-    }
-  }
-
-  function render(state){
-    document.getElementById('merchantGoldText').textContent = state.hero.gold;
-    var restockBtn = document.getElementById('merchantRestockBtn');
-    var restockPrice = 10 + state.floor*3 + restockCount*10;
-    if(restockBtn){
-      restockBtn.textContent = 'Renovar Estoque ('+restockPrice+' ouro)';
-      restockBtn.disabled = state.hero.gold < restockPrice;
-    }
-    renderNegotiation(state);
-
-    var buyGrid = document.getElementById('merchantBuyGrid');
-    buyGrid.innerHTML = '';
-    activeCell.forSale.forEach(function(item, idx){
-      var price = buyPrice(state, item);
-      var afford = state.hero.gold >= price;
-      var statsPreview = RPG.Items.statTags(item).map(function(t){ return t.text; }).join(' · ');
-      var card = document.createElement('div');
-      card.className = 'item-card rarity-'+item.rarity;
-      card.innerHTML =
-        '<div class="ic-top"><span class="ic-icon">'+item.icon+'</span><span class="ic-name">'+item.name+'</span></div>'+
-        '<div class="ic-type">'+RPG.Items.CATEGORY_LABELS[item.category]+'</div>'+
-        '<div class="ic-rarity rarity-'+item.rarity+'">'+item.rarityLabel+'</div>'+
-        '<div class="ic-desc">'+item.desc+'</div>'+
-        (statsPreview ? '<div class="ic-stats">'+statsPreview+'</div>' : '')+
-        (item.proc ? '<div class="ic-power">'+item.proc.icon+' '+Math.round(item.proc.chance*100)+'%: '+item.proc.label+'</div>' : '')+
-        '<div class="ic-price">'+(price<item.value ? '<s>'+item.value+'</s> '+price : price)+' ouro</div>'+
-        '<button class="trade-btn" data-idx="'+idx+'" '+(afford?'':'disabled')+'>Comprar</button>';
-      buyGrid.appendChild(card);
-    });
-    Array.prototype.forEach.call(buyGrid.querySelectorAll('.trade-btn'), function(btn){
-      btn.addEventListener('click', function(){
-        var idx = parseInt(btn.getAttribute('data-idx'),10);
-        var item = activeCell.forSale[idx];
-        var price = buyPrice(state, item);
-        if(state.hero.gold >= price){
-          state.hero.gold -= price;
-          RPG.Inventory.addItem(state, item);
-          activeCell.forSale.splice(idx,1);
-          RPG.Effects.playSfx('buy');
-          RPG.UI.logEvent('Você comprou <b>'+item.name+'</b> por '+price+' ouro.');
-          RPG.UI.renderHero();
-          RPG.Save.save(state);
-          render(state);
-        }
-      });
-    });
-
-    var sellGrid = document.getElementById('merchantSellGrid');
-    sellGrid.innerHTML = '';
-    var sellable = state.inventory.filter(function(it){ return !it.equipped; });
-    if(sellable.length===0){ sellGrid.innerHTML = '<div style="color:var(--parchment-dim); font-size:13px;">Nada para vender no momento.</div>'; }
-    sellable.forEach(function(item){
-      var sellPrice = Math.max(1, Math.floor(item.value*0.5));
-      var statsPreview = RPG.Items.statTags(item).map(function(t){ return t.text; }).join(' · ');
-      var card = document.createElement('div');
-      card.className = 'item-card rarity-'+item.rarity;
-      card.innerHTML =
-        '<div class="ic-top"><span class="ic-icon">'+item.icon+'</span><span class="ic-name">'+item.name+'</span></div>'+
-        '<div class="ic-type">'+RPG.Items.CATEGORY_LABELS[item.category]+'</div>'+
-        '<div class="ic-desc">'+item.desc+'</div>'+
-        (statsPreview ? '<div class="ic-stats">'+statsPreview+'</div>' : '')+
-        '<div class="ic-price">'+sellPrice+' ouro</div>'+
-        '<button class="trade-btn" data-uid="'+item.uid+'">Vender</button>';
-      sellGrid.appendChild(card);
-    });
-    Array.prototype.forEach.call(sellGrid.querySelectorAll('.trade-btn'), function(btn){
-      btn.addEventListener('click', function(){
-        var uid = btn.getAttribute('data-uid');
-        var item = RPG.Inventory.findByUid(state, uid);
-        if(item){
-          var sellPrice = Math.max(1, Math.floor(item.value*0.5));
-          state.hero.gold += sellPrice;
-          RPG.Inventory.removeByUid(state, uid);
-          RPG.Effects.playSfx('sell');
-          RPG.UI.logEvent('Você vendeu <b>'+item.name+'</b> por '+sellPrice+' ouro.');
-          RPG.UI.renderHero();
-          RPG.Save.save(state);
-          render(state);
-        }
-      });
-    });
-  }
-
-  function restock(state){
-    var price = 10 + state.floor*3 + restockCount*10;
-    if(state.hero.gold < price){
-      RPG.UI.logEvent('Ouro insuficiente para renovar o estoque.');
-      return;
-    }
-    state.hero.gold -= price;
-    restockCount++;
-    activeCell.forSale = rollStock(activeKind, state.floor);
-    RPG.UI.logEvent('O comerciante renovou seu estoque por '+price+' ouro.');
-    RPG.UI.renderHero();
-    RPG.Save.save(state);
-    render(state);
-  }
-
-  return { open: open, close: close, restock: restock };
+  var activeCell=null,activeKind='shop',discount=0,discountRolled=false,restockCount=0,selectedTrade=null,forgeOpen=false;
+  var FORGE={
+    minerio:{name:'Minério Bruto',icon:'⛏️',cost:20,outcomes:[[-1,30],[0,40],[1,30]]},
+    essencia:{name:'Essência Arcana',icon:'✨',cost:50,outcomes:[[-1,15],[0,35],[1,40],[2,10]]},
+    catalisador_mitico:{name:'Catalisador Mítico',icon:'💠',cost:120,outcomes:[[-1,5],[0,20],[1,45],[2,25],[3,5]]},
+    pedra_protecao:{name:'Pedra de Proteção',icon:'🛡️',cost:80,outcomes:[[0,45],[1,45],[2,10]]}
+  };
+  function rollStock(kind,floor){var stock=[];for(var i=0;i<5;i++)stock.push(RPG.Items.randomItem({category:kind==='blacksmith'?['arma','armadura','acessorio'][Math.floor(Math.random()*3)]:'consumivel',floor:floor}));return stock;}
+  function ensureStock(cell,kind,floor){if(!cell.forSale)cell.forSale=rollStock(kind,floor);}
+  function open(state,cell,kind){activeCell=cell;activeKind=kind;discount=0;discountRolled=false;restockCount=0;selectedTrade=null;forgeOpen=false;ensureStock(cell,kind,state.floor);document.getElementById('merchantTitle').textContent=kind==='blacksmith'?'🔨 Ferreiro':'🏵 Vendedor Itinerante';var forgeBtn=document.getElementById('merchantForgeOpenBtn');forgeBtn.classList.toggle('hidden',kind!=='blacksmith');forgeBtn.textContent='⚒️ Abrir Reforja';document.getElementById('merchantForgeSection').classList.remove('forge-open');render(state);document.getElementById('merchantModal').classList.remove('hidden');}
+  function close(){forgeOpen=false;document.getElementById('merchantForgeSection').classList.remove('forge-open');document.getElementById('merchantModal').classList.add('hidden');}
+  function toggleForge(state){forgeOpen=!forgeOpen;var section=document.getElementById('merchantForgeSection'),button=document.getElementById('merchantForgeOpenBtn');section.classList.toggle('forge-open',forgeOpen);button.textContent=forgeOpen?'✖ Fechar Reforja':'⚒️ Abrir Reforja';if(forgeOpen){var first=state.inventory.filter(function(i){return !i.equipped&&RPG.Items.tierFor(i);})[0];if(first)selectedTrade={mode:'forge',uid:first.uid};}else if(selectedTrade&&selectedTrade.mode==='forge')selectedTrade=null;render(state);}
+  function buyPrice(state,item){var d=state.hero.derived||RPG.Player.getDerived(state.hero);return Math.max(1,Math.round(item.value*(1-Math.min(.6,(d.descontoLoja/100)+discount))));}
+  function rollForDiscount(state){if(discountRolled)return;RPG.Combat.rollDie(20,function(result){var pct=result>=20?30:(result>=19?20:(result>=15?15:(result>=11?10:(result>=6?5:0))));discount=pct/100;discountRolled=true;RPG.Effects.playSfx(pct>0?'gold':'miss');RPG.UI.logEvent(pct>0?'Você conseguiu '+pct+'% de desconto.':'O comerciante não concedeu desconto.');render(state);});}
+  function renderNegotiation(state){var el=document.getElementById('merchantNegotiation');if(discountRolled)el.innerHTML=discount>0?'<span class="haggle-result">Desconto: <b>'+Math.round(discount*100)+'%</b></span>':'<span class="haggle-result dim">Sem desconto nesta visita.</span>';else{el.innerHTML='<button class="rune-btn small" id="haggleBtn">🎲 Rolar Dado por Desconto</button>';document.getElementById('haggleBtn').onclick=function(){rollForDiscount(state);};}}
+  function badge(tier){return tier?'<span class="tier-badge '+RPG.Items.tierClass(tier)+'">Tier '+tier+'</span>':'';}
+  function progress(item){var info=RPG.Items.tierInfo(item);if(!info.tier)return '';return '<div class="tier-progress-label"><span>Poder '+info.score+'</span><span>'+(info.next===null?'Tier máximo':info.progress+'% até o próximo tier')+'</span></div><div class="tier-progress"><i style="width:'+info.progress+'%"></i></div>';}
+  function compactCard(item,price,label){var stats=RPG.Items.statTags(item).map(function(t){return t.text;}).join(' · '),tier=RPG.Items.tierFor(item);return '<div class="ic-top"><span class="ic-icon">'+item.icon+'</span><span class="ic-name">'+item.name+'</span></div><div class="ic-type">'+RPG.Items.CATEGORY_LABELS[item.category]+'</div><div class="ic-meta"><span class="ic-rarity rarity-'+item.rarity+'">'+item.rarityLabel+'</span>'+badge(tier)+'</div>'+(stats?'<div class="ic-stats">'+stats+'</div>':'')+(price===null?'<div class="ic-price">'+label+'</div>':'<div class="ic-price">'+price+' ouro · '+label+'</div>');}
+  function comparison(state,item){if(['arma','armadura','acessorio'].indexOf(item.category)<0)return '';var equipped=state.hero.equip[item.category];if(!equipped||equipped.uid===item.uid)return '';var oldTier=RPG.Items.tierFor(equipped),newTier=RPG.Items.tierFor(item),diffTier=RPG.Items.tierRank(item)-RPG.Items.tierRank(equipped),labels={ataque:'Ataque',defesa:'Defesa',vida:'Vida',mana:'Mana',critico:'Crítico',velocidade:'Velocidade',esquiva:'Esquiva'},keys={};Object.keys(equipped.stats||{}).forEach(function(k){keys[k]=true;});Object.keys(item.stats||{}).forEach(function(k){keys[k]=true;});var rows=Object.keys(keys).map(function(k){var a=equipped.stats[k]||0,b=item.stats[k]||0,d=b-a;return '<div class="compare-row"><span>'+(labels[k]||k)+'</span><span>'+a+'</span><span>'+b+'</span><b class="'+(d>0?'better':d<0?'worse':'same')+'">'+(d>0?'+':'')+d+'</b></div>';}).join('');return '<div class="item-comparison"><div class="compare-title">Comparação com '+equipped.name+'</div><div class="tier-comparison">'+badge(oldTier)+'<b>→</b>'+badge(newTier)+'<strong class="'+(diffTier>0?'better':diffTier<0?'worse':'same')+'">'+(diffTier>0?'Melhoria de tier':diffTier<0?'Tier inferior':'Mesmo tier')+'</strong></div><div class="compare-head"><span>Atributo</span><span>Atual</span><span>Novo</span><span>Dif.</span></div>'+rows+'</div>';}
+  function selectedItem(state){if(!selectedTrade)return null;if(selectedTrade.mode==='buy')return activeCell.forSale.filter(function(i){return i.uid===selectedTrade.uid;})[0]||null;return RPG.Inventory.findByUid(state,selectedTrade.uid);}
+  function materialCount(state,id){return state.inventory.filter(function(i){return i.templateId===id;}).length;}
+  function removeMaterial(state,id){var mat=state.inventory.filter(function(i){return i.templateId===id;})[0];if(mat)RPG.Inventory.removeByUid(state,mat.uid);}
+  function oddsText(cfg,pity){if(pity>=4)return 'Garantia ativa: pelo menos +1 tier';return cfg.outcomes.map(function(o){return (o[0]>0?'+':'')+o[0]+' tier: '+o[1]+'%';}).join(' · ');}
+  function rollOutcome(cfg,pity){var r=Math.random()*100,total=0,result=0;for(var i=0;i<cfg.outcomes.length;i++){total+=cfg.outcomes[i][1];if(r<total){result=cfg.outcomes[i][0];break;}}return pity>=4?Math.max(1,result):result;}
+  function forgePanel(state,item){var tier=RPG.Items.tierFor(item),rank=RPG.Items.tierRank(item),pity=item.reforgeFails||0;if(rank===RPG.Items.TIER_ORDER.length-1)return '<div class="forge-max">🏆 Este equipamento já alcançou o tier MAX.</div>';var buttons=Object.keys(FORGE).map(function(id){var c=FORGE[id],count=materialCount(state,id),disabled=!count||state.hero.gold<c.cost;return '<button class="forge-option" data-forge="'+id+'" '+(disabled?'disabled':'')+'><b>'+c.icon+' '+c.name+'</b><span>'+c.cost+' ouro · você tem '+count+'</span><small>'+oddsText(c,pity)+'</small></button>';}).join('');return '<div class="forge-panel"><div class="compare-title">Reforjar equipamento</div><p>O resultado pode piorar, manter ou melhorar o tier. Os atributos reais também mudam.</p><div class="forge-pity">Garantia: '+Math.min(4,pity)+'/4 tentativas sem melhoria</div>'+buttons+'</div>';}
+  function doForge(state,item,id){var cfg=FORGE[id];if(!cfg||!materialCount(state,id)||state.hero.gold<cfg.cost)return;var oldRank=RPG.Items.tierRank(item),delta=rollOutcome(cfg,item.reforgeFails||0);state.hero.gold-=cfg.cost;removeMaterial(state,id);var result=RPG.Items.reforge(item,delta),improved=result.newRank>oldRank;item.reforgeFails=improved?0:(item.reforgeFails||0)+1;RPG.Effects.playSfx(improved?'gold':'miss');RPG.UI.logEvent('Reforja de <b>'+item.name+'</b>: Tier '+result.oldTier+' → <b>Tier '+result.newTier+'</b>.');RPG.UI.renderHero();RPG.Save.save(state);render(state);}
+  function showDetail(state){var pane=document.getElementById('merchantItemDetail'),item=selectedItem(state);if(!item){pane.innerHTML='';return;}var mode=selectedTrade.mode,tier=RPG.Items.tierFor(item),tags=RPG.Items.statTags(item).map(function(t){return '<span class="tag '+(t.positive?'buff':'debuff')+'">'+t.text+'</span>';}).join('');pane.innerHTML='<div class="id-title"><span class="ic-icon">'+item.icon+'</span><span class="id-name rarity-'+item.rarity+'">'+item.name+'</span>'+badge(tier)+'</div><div class="id-desc">'+item.desc+'</div><div class="tag-row">'+(tags||'<span class="tag">Sem atributos</span>')+'</div>'+progress(item)+(mode==='forge'?forgePanel(state,item):comparison(state,item));if(mode==='forge'){Array.prototype.forEach.call(pane.querySelectorAll('[data-forge]'),function(btn){btn.onclick=function(){doForge(state,item,btn.getAttribute('data-forge'));};});return;}var buying=mode==='buy',price=buying?buyPrice(state,item):Math.max(1,Math.floor(item.value*.5));pane.innerHTML+='<div class="merchant-detail-price">'+(buying?'Preço':'Valor de venda')+': <b>'+price+' ouro</b></div><button class="equip-btn merchant-action" id="merchantActionBtn" '+(buying&&state.hero.gold<price?'disabled':'')+'>'+(buying?'Comprar':'Vender')+'</button>';document.getElementById('merchantActionBtn').onclick=function(){if(buying){if(state.hero.gold<price)return;state.hero.gold-=price;RPG.Inventory.addItem(state,item);activeCell.forSale=activeCell.forSale.filter(function(i){return i.uid!==item.uid;});RPG.Effects.playSfx('buy');}else{state.hero.gold+=price;RPG.Inventory.removeByUid(state,item.uid);RPG.Effects.playSfx('sell');}selectedTrade=null;RPG.UI.renderHero();RPG.Save.save(state);render(state);};}
+  function render(state){document.getElementById('merchantGoldText').textContent=state.hero.gold;renderNegotiation(state);var restockBtn=document.getElementById('merchantRestockBtn'),restockPrice=10+state.floor*3+restockCount*10;restockBtn.textContent='Renovar Estoque ('+restockPrice+' ouro)';restockBtn.disabled=state.hero.gold<restockPrice;var buy=document.getElementById('merchantBuyGrid');buy.innerHTML='';activeCell.forSale.forEach(function(item){var card=document.createElement('div');card.className='item-card rarity-'+item.rarity+(selectedTrade&&selectedTrade.mode==='buy'&&selectedTrade.uid===item.uid?' selected':'');card.innerHTML=compactCard(item,buyPrice(state,item),'comprar');card.onclick=function(){selectedTrade={mode:'buy',uid:item.uid};render(state);};buy.appendChild(card);});var sell=document.getElementById('merchantSellGrid'),sellable=state.inventory.filter(function(i){return !i.equipped;});sell.innerHTML=sellable.length?'':'<div class="empty-items">Nada para vender.</div>';sellable.forEach(function(item){var card=document.createElement('div');card.className='item-card rarity-'+item.rarity+(selectedTrade&&selectedTrade.mode==='sell'&&selectedTrade.uid===item.uid?' selected':'');card.innerHTML=compactCard(item,Math.max(1,Math.floor(item.value*.5)),'vender');card.onclick=function(){selectedTrade={mode:'sell',uid:item.uid};render(state);};sell.appendChild(card);});var section=document.getElementById('merchantForgeSection'),forge=document.getElementById('merchantForgeGrid'),forgeable=state.inventory.filter(function(i){return !i.equipped&&RPG.Items.tierFor(i);});section.classList.toggle('hidden',activeKind!=='blacksmith');forge.innerHTML=forgeable.length?'':'<div class="empty-items">Desequipe uma arma, armadura ou acessório para reforjar.</div>';forgeable.forEach(function(item){var card=document.createElement('div');card.className='item-card rarity-'+item.rarity+(selectedTrade&&selectedTrade.mode==='forge'&&selectedTrade.uid===item.uid?' selected':'');card.innerHTML=compactCard(item,null,'selecionar para reforja');card.onclick=function(){selectedTrade={mode:'forge',uid:item.uid};render(state);};forge.appendChild(card);});if(!selectedItem(state)){if(activeCell.forSale.length)selectedTrade={mode:'buy',uid:activeCell.forSale[0].uid};else if(sellable.length)selectedTrade={mode:'sell',uid:sellable[0].uid};}showDetail(state);}
+  function restock(state){var price=10+state.floor*3+restockCount*10;if(state.hero.gold<price)return;state.hero.gold-=price;restockCount++;activeCell.forSale=rollStock(activeKind,state.floor);selectedTrade=null;RPG.UI.renderHero();RPG.Save.save(state);render(state);}
+  return {open:open,close:close,restock:restock,toggleForge:toggleForge};
 })();

@@ -107,11 +107,6 @@
       <div class="step-sub">Todo herói carrega um fardo. Escolha uma</div>
       <div class="pick-grid" id="debuffGrid"></div>
     </div>
-    <div class="creation-step">
-      <div class="step-title">Modo de Jogo</div>
-      <div class="step-sub">Jogue sozinho ou monte uma equipe de aventureiros</div>
-      <div class="mode-grid" id="modeGrid"></div>
-    </div>
     <div class="creation-footer">
       <div class="creation-error" id="creationError"></div>
       <button class="rune-btn" id="startAdventureBtn">Começar Aventura &#8594;</button>
@@ -230,35 +225,52 @@
 
 <!-- ============ MODAL: MOCHILA ============ -->
 <div class="modal-overlay hidden" id="backpackModal">
-  <div class="modal-box">
+  <div class="modal-box inventory-modal-box">
     <div class="modal-header">
       <h2>&#127890; Mochila</h2>
       <button class="modal-close" id="closeModalBtn">&times;</button>
     </div>
-    <div class="tab-row" id="invTabs"></div>
-    <div class="item-grid" id="itemGrid"></div>
-    <div class="item-detail" id="itemDetail" style="display:none;"></div>
+    <div class="item-browser-layout">
+      <div class="item-browser-list">
+        <div class="tab-row" id="invTabs"></div>
+        <div class="item-grid" id="itemGrid"></div>
+      </div>
+      <aside class="item-detail item-detail-pane" id="itemDetail" style="display:none;"></aside>
+    </div>
   </div>
 </div>
 
 <!-- ============ MODAL: COMERCIANTE ============ -->
 <div class="modal-overlay hidden" id="merchantModal">
-  <div class="modal-box">
+  <div class="modal-box merchant-modal-box">
     <div class="modal-header">
       <h2 id="merchantTitle">&#127349; Vendedor</h2>
       <button class="modal-close" id="closeMerchantBtn">&times;</button>
     </div>
-    <div class="gold-display"><span class="icon">&#128176;</span><span id="merchantGoldText">0</span></div>
-    <div class="merchant-negotiation" id="merchantNegotiation"></div>
-    <div class="creation-step">
-      <div class="step-title">Itens a Venda</div>
-      <div class="item-grid" id="merchantBuyGrid"></div>
+    <div class="item-browser-layout merchant-browser-layout">
+      <div class="item-browser-list">
+        <div class="gold-display"><span class="icon">&#128176;</span><span id="merchantGoldText">0</span></div>
+        <div class="merchant-action-row">
+          <div class="merchant-negotiation" id="merchantNegotiation"></div>
+          <button class="rune-btn small hidden forge-menu-btn" id="merchantForgeOpenBtn">⚒️ Abrir Reforja</button>
+        </div>
+        <div class="creation-step merchant-section">
+          <div class="step-title">Itens a Venda</div>
+          <div class="item-grid" id="merchantBuyGrid"></div>
+        </div>
+        <div class="creation-step merchant-section">
+          <div class="step-title">Vender da Mochila</div>
+          <div class="item-grid" id="merchantSellGrid"></div>
+        </div>
+        <div class="creation-step merchant-section forge-mini-menu hidden" id="merchantForgeSection">
+          <div class="step-title">Reforjar Equipamento</div>
+          <div class="step-sub">Desequipe o item e selecione-o abaixo.</div>
+          <div class="item-grid" id="merchantForgeGrid"></div>
+        </div>
+        <button class="rune-btn small" id="merchantRestockBtn">Renovar Estoque</button>
+      </div>
+      <aside class="item-detail item-detail-pane" id="merchantItemDetail"></aside>
     </div>
-    <div class="creation-step">
-      <div class="step-title">Vender da Mochila</div>
-      <div class="item-grid" id="merchantSellGrid"></div>
-    </div>
-    <button class="rune-btn small" id="merchantRestockBtn">Renovar Estoque</button>
   </div>
 </div>
 

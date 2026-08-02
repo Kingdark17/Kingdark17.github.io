@@ -1,5 +1,15 @@
 # RPG Legend - cópia revisada
 
+## Feedback de exploração e itens
+
+- Escadas e saída são reservadas entre as salas mais distantes do início.
+- Testes automáticos impedem que essas portas apareçam coladas ao jogador.
+- Mochila reorganizada em catálogo e painel lateral fixo de detalhes.
+- Lojas usam o mesmo padrão, com compra e venda no painel lateral.
+- Em telas pequenas, os detalhes ficam fixos acima da lista de itens.
+- Armas, armaduras e acessórios agora recebem tiers D, C, B, A, S, SS ou SSS.
+- A loja compara o tier e todos os atributos do item com o equipamento atual.
+
 ## Correções aplicadas
 
 - Companheiros agora atacam automaticamente e podem receber dano em combate.

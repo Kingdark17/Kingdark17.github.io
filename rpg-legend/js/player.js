@@ -13,7 +13,13 @@ RPG.Player = (function(){
     { name:"Anão", icon:"\u26cf\ufe0f", desc:"Resistente e forte, mas pouco ágil.", bonus:{constituicao:2,forca:1,destreza:-1} },
     { name:"Orc", icon:"\ud83d\udc79", desc:"Força bruta acima da média, raciocínio mais lento.", bonus:{forca:3,intelecto:-1} },
     { name:"Elfo Negro", icon:"\ud83e\udd87", desc:"Mente afiada e reflexos rápidos, porém frio com estranhos.", bonus:{intelecto:2,destreza:1,carisma:-1} },
-    { name:"Meio-Elfo", icon:"\ud83c\udf43", desc:"Carismático e sábio, herda o melhor de dois mundos.", bonus:{carisma:1,sabedoria:1} }
+    { name:"Meio-Elfo", icon:"\ud83c\udf43", desc:"Carismático e sábio, herda o melhor de dois mundos.", bonus:{carisma:1,sabedoria:1} },
+    { name:"Draconato", icon:"\ud83d\udc32", desc:"Muito forte e resistente, mas pouco carismático.", bonus:{forca:2,constituicao:2,carisma:-1} },
+    { name:"Goblin", icon:"\ud83d\udc7a", desc:"Ágil e esperto, porém fisicamente frágil.", bonus:{destreza:2,intelecto:1,constituicao:-1} },
+    { name:"Fada", icon:"\ud83e\uddda", desc:"Possui grande magia e carisma, mas pouca força.", bonus:{intelecto:2,carisma:2,forca:-2} },
+    { name:"Morto-vivo", icon:"\ud83d\udc80", desc:"Muito resistente, mas pouco sábio e carismático.", bonus:{constituicao:3,carisma:-2,sabedoria:-1} },
+    { name:"Felino", icon:"\ud83d\udc31", desc:"Reflexos excelentes, embora suporte menos golpes pesados.", bonus:{destreza:3,constituicao:-1} },
+    { name:"Celestial", icon:"\ud83d\ude07", desc:"Sábio e carismático, mas menos adaptado à força bruta.", bonus:{sabedoria:2,carisma:2,forca:-1} }
   ];
 
   // afinidade = % de eficiencia da classe com cada tipo de arma (base).
@@ -30,20 +36,33 @@ RPG.Player = (function(){
       affinity:{maca:100,cajado:70,espada:50,adaga:40,arco:35,machado:30} },
     { name:"Bárbaro", icon:"\ud83e\ude93", weaponTemplate:'machado', bias:{forca:4}, desc:"Fúria bruta, dano massivo corpo a corpo.", signature:"Grito de Guerra",
       affinity:{machado:100,espada:85,maca:55,adaga:45,arco:35,cajado:15} },
-    { name:"Arqueiro", icon:"\ud83c\udff9", weaponTemplate:'arco', bias:{destreza:3,sabedoria:1}, desc:"Precisão a distância e mobilidade.", signature:"Tiro Certeiro",
-      affinity:{arco:100,adaga:70,espada:50,maca:40,machado:35,cajado:25} }
+    { name:"Arqueiro", icon:"\ud83c\udff9", weaponTemplate:'arco', bias:{destreza:3,sabedoria:1}, desc:"Precisão a distância e mobilidade.", signature:"Tiro Certeiro", affinity:{arco:100,adaga:70,espada:50,maca:40,machado:35,cajado:25} },
+    { name:"Paladino", icon:"\ud83d\udee1\ufe0f", weaponTemplate:'espada', bias:{forca:2,sabedoria:2,constituicao:1}, desc:"Defensor sagrado que combina resistência e cura.", signature:"Julgamento Sagrado", affinity:{espada:100,maca:90,machado:65,cajado:60,adaga:40,arco:35} },
+    { name:"Necromante", icon:"\u2620\ufe0f", weaponTemplate:'cajado', bias:{intelecto:3,constituicao:1}, desc:"Conjura maldições e drena a força dos inimigos.", signature:"Maldição Sombria", affinity:{cajado:100,adaga:75,maca:55,espada:40,arco:35,machado:25} },
+    { name:"Druida", icon:"\ud83c\udf3f", weaponTemplate:'cajado', bias:{sabedoria:3,constituicao:1}, desc:"Controla a natureza, venenos e magia de cura.", signature:"Esporos Venenosos", affinity:{cajado:100,maca:75,arco:65,adaga:50,espada:35,machado:35} },
+    { name:"Monge", icon:"\ud83e\udd4b", weaponTemplate:'maca', bias:{destreza:2,sabedoria:2}, desc:"Lutador disciplinado que domina corpo e espírito.", signature:"Golpe Atordoante", affinity:{maca:100,adaga:85,cajado:70,espada:55,machado:40,arco:40} },
+    { name:"Bardo", icon:"\ud83c\udfb5", weaponTemplate:'adaga', bias:{carisma:3,destreza:1}, desc:"Usa música para fortalecer aliados e enfraquecer inimigos.", signature:"Canção Debilitante", affinity:{adaga:100,arco:80,espada:65,cajado:65,maca:50,machado:30} },
+    { name:"Caçador", icon:"\ud83d\udc3a", weaponTemplate:'arco', bias:{destreza:2,sabedoria:2}, desc:"Especialista em rastrear e sangrar criaturas.", signature:"Flecha Serrilhada", affinity:{arco:100,adaga:85,espada:60,machado:50,maca:35,cajado:25} }
   ];
 
   // type: dano_fisico | dano_magico | cura | buff_crit | buff_precisao | buff_forca | buff_esquiva | escudo
   var POWERS = [
     { name:"Golpe Poderoso", icon:"\ud83d\udca5", desc:"Concentra força extra no próximo ataque corpo a corpo.", cost:8, type:"dano_fisico", power:1.8 },
-    { name:"Bola de Fogo", icon:"\ud83d\udd25", desc:"Conjura uma explosão de fogo, causa dano mágico.", cost:14, type:"dano_magico", power:1.6 },
+    { name:"Bola de Fogo", icon:"\ud83d\udd25", desc:"Conjura uma explosão e causa queimadura por 3 turnos.", cost:14, type:"dano_magico", power:1.5, status:"queimadura", turns:3, dotRatio:0.18 },
     { name:"Cura Menor", icon:"\u2728", desc:"Restaura uma quantidade de vida.", cost:10, type:"cura", power:1.0 },
     { name:"Furtividade Sombria", icon:"\ud83c\udf11", desc:"O próximo ataque é um acerto crítico garantido.", cost:8, type:"buff_crit" },
     { name:"Tiro Certeiro", icon:"\ud83c\udfaf", desc:"Aumenta muito a precisão dos próximos ataques.", cost:6, type:"buff_precisao", turns:2, amount:25 },
     { name:"Grito de Guerra", icon:"\ud83d\udcef", desc:"Aumenta o dano físico causado por um tempo.", cost:10, type:"buff_forca", turns:3, amount:0.3 },
     { name:"Escudo Arcano", icon:"\ud83d\udd37", desc:"Cria uma barreira que absorve o próximo golpe recebido.", cost:10, type:"escudo", amount:0.5 },
-    { name:"Passo Veloz", icon:"\ud83d\udca8", desc:"Aumenta a chance de esquiva por um tempo.", cost:6, type:"buff_esquiva", turns:3, amount:20 }
+    { name:"Passo Veloz", icon:"\ud83d\udca8", desc:"Aumenta a chance de esquiva por um tempo.", cost:6, type:"buff_esquiva", turns:3, amount:20 },
+    { name:"Julgamento Sagrado", icon:"\ud83c\udf1f", desc:"Golpe mágico que também recupera um pouco de Vida.", cost:12, type:"dano_magico", power:1.35, healRatio:0.3 },
+    { name:"Maldição Sombria", icon:"\u2620\ufe0f", desc:"Causa dano e reduz o dano do inimigo por 3 turnos.", cost:12, type:"dano_magico", power:1.25, status:"enfraquecido", turns:3, amount:0.25 },
+    { name:"Esporos Venenosos", icon:"\u2623\ufe0f", desc:"Envenena o inimigo por 4 turnos.", cost:11, type:"dano_magico", power:0.9, status:"veneno", turns:4, dotRatio:0.22 },
+    { name:"Golpe Atordoante", icon:"\ud83d\udcab", desc:"Ataque físico que atordoa o inimigo.", cost:10, type:"dano_fisico", power:1.15, status:"atordoado", turns:1 },
+    { name:"Canção Debilitante", icon:"\ud83c\udfb6", desc:"Torna o inimigo vulnerável a ataques por 3 turnos.", cost:10, type:"dano_magico", power:0.7, status:"vulneravel", turns:3, amount:0.2 },
+    { name:"Flecha Serrilhada", icon:"\ud83e\ude78", desc:"Causa dano físico e sangramento por 3 turnos.", cost:9, type:"dano_fisico", power:1.25, status:"sangramento", turns:3, dotRatio:0.2 },
+    { name:"Rajada Glacial", icon:"\u2744\ufe0f", desc:"Causa dano mágico e deixa o inimigo lento.", cost:12, type:"dano_magico", power:1.3, status:"lento", turns:3, amount:0.2 },
+    { name:"Renovação Natural", icon:"\ud83c\udf31", desc:"Uma cura poderosa alimentada pela Sabedoria.", cost:15, type:"cura", power:1.8 }
   ];
 
   var DEBUFFS = [
@@ -52,13 +71,15 @@ RPG.Player = (function(){
     { name:"Visão Fraca", icon:"\ud83d\udc41\ufe0f", desc:"-2 nas rolagens de ataque quando usa arco ou cajado.", attr:null, effect:"rangedPenalty" },
     { name:"Sono Leve", icon:"\ud83d\ude34", desc:"Descansa mal e recupera menos energia; -1 Constituição.", attr:"constituicao" },
     { name:"Desajeitado", icon:"\ud83e\udd15", desc:"-1 Destreza em testes de agilidade.", attr:"destreza" },
-    { name:"Teimoso", icon:"\ud83e\udded", desc:"-1 Sabedoria e -2 nas tentativas de fuga.", attr:"sabedoria", effect:"fleePenalty" }
+    { name:"Teimoso", icon:"\ud83e\udded", desc:"-1 Sabedoria e -2 nas tentativas de fuga.", attr:"sabedoria", effect:"fleePenalty" },
+    { name:"Corpo Frágil", icon:"\ud83e\uddb4", desc:"-1 Constituição e recebe 20% mais dano físico.", attr:"constituicao", effect:"physicalVulnerability" },
+    { name:"Mana Instável", icon:"\ud83d\udca2", desc:"-1 Intelecto e poderes custam 20% mais Mana.", attr:"intelecto", effect:"manaCostPenalty" },
+    { name:"Azarado", icon:"\ud83c\udf42", desc:"Sua chance de acerto crítico é reduzida em 8%.", attr:null, effect:"critPenalty" },
+    { name:"Sangue Tóxico", icon:"\u2623\ufe0f", desc:"Efeitos de veneno causam 50% mais dano.", attr:null, effect:"poisonVulnerability" },
+    { name:"Cicatrização Lenta", icon:"\ud83e\ude79", desc:"Curas recebidas são 25% menos eficientes.", attr:null, effect:"healingPenalty" }
   ];
 
-  var MODES = [
-    { id:"solo", icon:"\ud83e\udea6", name:"Jogar Solo", desc:"Você enfrenta a cidade e a masmorra sozinho." },
-    { id:"equipe", icon:"\ud83e\udd1d", name:"Criar Equipe", desc:"Dois companheiros de aventura se juntam a você." }
-  ];
+  var MODES = [{ id:"solo", icon:"\ud83e\udea6", name:"Jogar Solo", desc:"Você começa sozinho e pode recrutar aliados durante a aventura." }];
 
   var FIRST_NAMES = ["Aldric","Bryn","Cael","Dara","Eron","Fiora","Garrick","Helka","Ivo","Junne","Korrin","Lyra","Maren","Norrik","Orla","Petra","Quill","Rhoda","Sten","Thalia"];
   var SURNAMES = ["Pedraverde","Fenris","Duasluas","Corvonegro","Vale-Ferro","Lobodourado","Ventoforte","Silêncio","Brasa","Marfim"];
@@ -101,7 +122,7 @@ RPG.Player = (function(){
       dmgFisico: a.forca*2,
       dmgMagico: a.intelecto*3,
       esquiva: Math.max(0, a.destreza*0.5 + eq.esquiva),
-      critico: 5 + a.destreza*0.5,
+      critico: Math.max(0,5 + a.destreza*0.5 - (hasDebuffEffect(hero,'critPenalty')?8:0)),
       velocidade: a.destreza + eq.velocidade,
       curaBonus: a.sabedoria,
       resistMagica: a.sabedoria,
@@ -170,7 +191,13 @@ RPG.Player = (function(){
       Ladino:{ability:'Ataque Furtivo',desc:'Pode causar um segundo golpe.'},
       'Clérigo':{ability:'Prece Curativa',desc:'Pode recuperar a Vida do herói.'},
       'Bárbaro':{ability:'Fúria',desc:'Causa mais dano quando está ferido.'},
-      Arqueiro:{ability:'Tiro Crítico',desc:'Possui chance elevada de dano crítico.'}
+      Arqueiro:{ability:'Tiro Crítico',desc:'Possui chance elevada de dano crítico.'},
+      Paladino:{ability:'Proteção Sagrada',desc:'Protege a equipe e resiste a golpes.'},
+      Necromante:{ability:'Maldição',desc:'Enfraquece criaturas durante a batalha.'},
+      Druida:{ability:'Esporos',desc:'Pode causar dano contínuo e auxiliar aliados.'},
+      Monge:{ability:'Golpe Atordoante',desc:'Pode impedir a reação do inimigo.'},
+      Bardo:{ability:'Canção de Batalha',desc:'Inspira os aliados durante o combate.'},
+      'Caçador':{ability:'Flecha Serrilhada',desc:'Possui chance elevada de causar sangramento.'}
     };
     var role=classRoles[cls.name] || {ability:'Ataque',desc:'Ajuda durante o combate.'};
     return { name: pick(FIRST_NAMES)+" "+pick(SURNAMES), raceIcon: race.icon, race: race.name, className: cls.name, classIcon: cls.icon,

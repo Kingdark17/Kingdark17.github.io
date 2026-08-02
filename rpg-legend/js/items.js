@@ -46,6 +46,8 @@ RPG.Items = (function(){
 
     { id:'minerio', name:'Minério Bruto', icon:'\u26cf\ufe0f', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },
     { id:'essencia', name:'Essência Arcana', icon:'\u2728', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
+    { id:'catalisador_mitico', name:'Catalisador Mítico', icon:'\ud83d\udca0', category:'material', desc:'Catalisador raro que aumenta muito a chance de elevar o tier na reforja.', base:{}, value:80 },
+    { id:'pedra_protecao', name:'Pedra de Proteção', icon:'\ud83d\udee1\ufe0f', category:'material', desc:'Protege o equipamento: uma reforja feita com ela nunca reduz o tier.', base:{}, value:55 },
     { id:'couro_bruto', name:'Couro de Fera', icon:'\ud83e\uddb4', category:'material', desc:'Material usado em armaduras leves.', base:{}, value:10 }
   ];
 
@@ -106,7 +108,14 @@ RPG.Items = (function(){
     opts = opts || {};
     var template = opts.category ? pickTemplate(opts.category) : pickTemplate();
     var rarity = opts.rarity ? RARITIES.filter(function(r){return r.id===opts.rarity;})[0] : pickRarity(opts.floor);
-    return instantiate(template, rarity || RARITIES[0]);
+    var item=instantiate(template, rarity || RARITIES[0]);
+    var floor=Math.max(1,opts.floor||1);
+    if(['arma','armadura','acessorio'].indexOf(item.category)>=0 && floor>1){
+      var depthMult=1+Math.min(.75,(floor-1)*.015);
+      Object.keys(item.stats).forEach(function(key){if(item.stats[key]>0)item.stats[key]=Math.max(1,Math.round(item.stats[key]*depthMult));});
+      item.foundFloor=floor;
+    }
+    return item;
   }
 
   function statTags(item){
@@ -122,6 +131,46 @@ RPG.Items = (function(){
     return tags;
   }
 
+  var TIER_ORDER = ['E','D','C','B','A','S','SS','SSS','SSS+','MAX'];
+  var TIER_MIN = [0,25,40,60,85,115,145,175,210,250];
+  function powerScore(item){
+    if(!item || ['arma','armadura','acessorio'].indexOf(item.category)<0) return 0;
+    var rarityIndex=Math.max(0,RARITIES.map(function(r){return r.id;}).indexOf(item.rarity));
+    var rarityBase=[10,25,40,58,78,95][rarityIndex]||10;
+    var weights={ataque:4,defesa:4,vida:.2,mana:.2,critico:1,velocidade:3,esquiva:2};
+    var score=rarityBase;
+    Object.keys(item.stats||{}).forEach(function(key){score+=Math.max(0,item.stats[key]||0)*(weights[key]||.5);});
+    if(item.proc)score+=(item.proc.chance||0)*30;
+    return Math.round(score+(Number(item.tierAdjustment)||0));
+  }
+  function tierFromScore(score){
+    for(var i=TIER_MIN.length-1;i>=0;i--){if(score>=TIER_MIN[i])return TIER_ORDER[i];}
+    return 'E';
+  }
+  function tierFor(item){
+    if(!item || ['arma','armadura','acessorio'].indexOf(item.category)<0)return null;
+    return tierFromScore(powerScore(item));
+  }
+  function tierRank(item){var tier=typeof item==='string'?item:tierFor(item);return TIER_ORDER.indexOf(tier);}
+  function tierClass(tier){return 'tier-'+String(tier||'').toLowerCase().replace('+','-plus');}
+  function tierInfo(item){
+    var score=powerScore(item),rank=tierRank(item),min=TIER_MIN[Math.max(0,rank)],next=rank<TIER_ORDER.length-1?TIER_MIN[rank+1]:null;
+    return {score:score,tier:TIER_ORDER[rank],rank:rank,min:min,next:next,progress:next===null?100:Math.max(0,Math.min(100,Math.round((score-min)/(next-min)*100)))};
+  }
+  function reforge(item,delta){
+    var oldRank=tierRank(item),target=Math.max(0,Math.min(TIER_ORDER.length-1,oldRank+delta));
+    if(target===oldRank)return {oldTier:TIER_ORDER[oldRank],newTier:TIER_ORDER[target],oldRank:oldRank,newRank:target};
+    var oldScore=Math.max(1,powerScore(item)),nextMin=TIER_MIN[target],nextMax=target<TIER_ORDER.length-1?TIER_MIN[target+1]-1:300;
+    var desired=Math.round((nextMin+nextMax)/2),factor=Math.max(.55,Math.min(1.8,desired/oldScore));
+    Object.keys(item.stats||{}).forEach(function(key){var value=item.stats[key];if(value>0)item.stats[key]=Math.max(1,Math.round(value*factor));});
+    if(item.proc)item.proc.chance=Math.max(.05,Math.min(.65,item.proc.chance+(target-oldRank)*.015));
+    item.tierAdjustment=0;
+    item.tierAdjustment=desired-powerScore(item);
+    item.value=Math.max(1,Math.round(item.value*(1+(target-oldRank)*.16)));
+    item.reforgeCount=(item.reforgeCount||0)+1;
+    return {oldTier:TIER_ORDER[oldRank],newTier:TIER_ORDER[target],oldRank:oldRank,newRank:target};
+  }
+
   return {
     RARITIES: RARITIES,
     TEMPLATES: TEMPLATES,
@@ -130,6 +179,14 @@ RPG.Items = (function(){
     pickTemplate: pickTemplate,
     instantiate: instantiate,
     randomItem: randomItem,
-    statTags: statTags
+    statTags: statTags,
+    TIER_ORDER: TIER_ORDER,
+    powerScore: powerScore,
+    tierFromScore: tierFromScore,
+    tierFor: tierFor,
+    tierRank: tierRank,
+    tierClass: tierClass,
+    tierInfo: tierInfo,
+    reforge: reforge
   };
 })();
