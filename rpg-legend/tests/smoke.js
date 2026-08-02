@@ -73,8 +73,10 @@ for (let floor = 1; floor <= 100; floor++) {
   assert(exit, `andar ${floor} sem saida`);
   const start = rooms.find(c => c.type === 'start');
   const distances = RPG.MapUtil.distancesFrom(state.map, start, state.mapCols, state.mapRows);
-  assert(distances[stairs.x+','+stairs.y] >= 2, `andar ${floor} com escada colada ao inicio`);
-  assert(distances[exit.x+','+exit.y] >= 2, `andar ${floor} com saida colada ao inicio`);
+  assert(distances[stairs.x+','+stairs.y] >= 4, `andar ${floor} com escada perto pelo caminho`);
+  assert(distances[exit.x+','+exit.y] >= 4, `andar ${floor} com saida perto pelo caminho`);
+  assert(Math.abs(stairs.x-start.x)+Math.abs(stairs.y-start.y) >= 3, `andar ${floor} com escada colada visualmente ao inicio`);
+  assert(Math.abs(exit.x-start.x)+Math.abs(exit.y-start.y) >= 3, `andar ${floor} com saida colada visualmente ao inicio`);
   assert(rooms.some(c => c.type === 'event'), `andar ${floor} sem evento`);
   if (floor % 5 === 0) assert(rooms.some(c => c.type === 'boss'), `andar ${floor} sem chefe`);
 }

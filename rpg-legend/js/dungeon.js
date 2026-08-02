@@ -36,10 +36,30 @@ RPG.Dungeon = (function(){
     var rows = state.mapRows, cols = state.mapCols;
     var floor = state.floor;
     var roomCount = Math.min(22, 9 + floor);
-    var res = RPG.MapUtil.generateRoomGraph(rows, cols, roomCount);
+    // Gera novamente quando não existem pelo menos duas salas que sejam
+    // distantes tanto pelo caminho real quanto visualmente na grade. Antes,
+    // uma sala podia ter rota longa, mas ainda aparecer colada ao jogador.
+    var res,distances,distantRooms=[],attempts=0;
+    while(attempts<40 && distantRooms.length<2){
+      attempts++;
+      res=RPG.MapUtil.generateRoomGraph(rows,cols,roomCount);
+      distances=RPG.MapUtil.distancesFrom(res.grid,res.start,cols,rows);
+      distantRooms=res.rooms.slice(1).filter(function(cell){
+        var pathDistance=distances[cell.x+','+cell.y]||0;
+        var visualDistance=Math.abs(cell.x-res.start.x)+Math.abs(cell.y-res.start.y);
+        return pathDistance>=4 && visualDistance>=3;
+      });
+    }
     var pool = res.rooms.slice(1).sort(function(){ return Math.random()-0.5; });
-    var distances=RPG.MapUtil.distancesFrom(res.grid,res.start,cols,rows);
-    var distantRooms=pool.slice().sort(function(a,b){return (distances[b.x+','+b.y]||0)-(distances[a.x+','+a.y]||0);});
+    // Fallback defensivo para grades muito pequenas ou saves modificados.
+    if(distantRooms.length<2)distantRooms=pool.filter(function(cell){return (distances[cell.x+','+cell.y]||0)>=3;});
+    distantRooms=distantRooms.slice().sort(function(a,b){
+      var pathDiff=(distances[b.x+','+b.y]||0)-(distances[a.x+','+a.y]||0);
+      if(pathDiff)return pathDiff;
+      var aVisual=Math.abs(a.x-res.start.x)+Math.abs(a.y-res.start.y);
+      var bVisual=Math.abs(b.x-res.start.x)+Math.abs(b.y-res.start.y);
+      return bVisual-aVisual;
+    });
     function reserveDistant(type){
       var cell=distantRooms.shift();
       if(!cell)return null;
