@@ -1,0 +1,178 @@
+/* =========================================================
+   RPG Legend - js/main.js
+   Ponto de entrada: cria o estado global, liga o menu
+   principal (Novo Jogo / Continuar / Configuracoes /
+   Creditos / Sair) e conecta os binds dos outros modulos.
+   ========================================================= */
+var RPG = window.RPG || {};
+
+document.addEventListener('DOMContentLoaded', function(){
+  var settingsReturnScreen='menu';
+
+  // ---------- estado global ----------
+  RPG.state = {
+    screen: 'menu',
+    hero: null,
+    party: [],
+    inventory: [],
+    map: [], mapRows: 6, mapCols: 6, mapMode: 'city', floor: 1,
+    pos: { x:0, y:0 }, mode: 'move',
+    pendingTarget: null, pendingMonsterCell: null,
+    quests: [],
+    soundOn: true
+  };
+  RPG.state.tutorial=RPG.Tutorial.create(true);
+
+  // pre-renderiza a tela de criacao (ela fica oculta ate ser usada)
+  RPG.UI.renderCreationScreen();
+
+  // liga os controles compartilhados definidos em ui.js
+  RPG.UI.bindKeyboard();
+  RPG.UI.bindBackpack();
+  RPG.UI.bindMerchantModal();
+  RPG.UI.bindQuestModal();
+  RPG.UI.bindDialogueControls();
+  RPG.Tutorial.bind();
+
+  document.getElementById('startAdventureBtn').addEventListener('click', RPG.UI.startAdventure);
+
+  // botao no cabecalho, disponivel durante o jogo, volta para a criacao
+  document.getElementById('newHeroBtn').addEventListener('click', function(){
+    RPG.Save.clear();
+    RPG.UI.showScreen('creation');
+    RPG.UI.renderCreationScreen();
+  });
+
+  /* ================= MENU PRINCIPAL ================= */
+  function refreshContinueButton(){
+    document.getElementById('btnContinueGame').disabled = !RPG.Save.hasSave();
+  }
+  refreshContinueButton();
+
+  document.getElementById('btnNewGame').addEventListener('click', function(){
+    RPG.Save.clear();
+    RPG.UI.showScreen('creation');
+    RPG.UI.renderCreationScreen();
+  });
+
+  document.getElementById('btnContinueGame').addEventListener('click', function(){
+    var data = RPG.Save.load();
+    if(!data || !data.hero) return;
+    var state = RPG.state;
+    state.hero = data.hero;
+    state.hero.equip = state.hero.equip || {arma:null,armadura:null,acessorio:null};
+    if(state.hero.equip.secundaria===undefined) state.hero.equip.secundaria=null;
+    state.hero.attrPoints = state.hero.attrPoints || 0;
+    state.hero.buffs = {};
+    if(!state.hero.powers || !state.hero.powers.length){
+      var cls = RPG.Player.classByName(state.hero.className);
+      var sig = cls ? RPG.Player.powerByName(cls.signature) : null;
+      state.hero.powers = sig ? [sig] : [];
+    }
+    RPG.Player.recomputeDerived(state.hero);
+    state.party = data.party || [];
+    state.inventory = data.inventory || [];
+    state.quests = data.quests || [];
+    state.floor = data.floor || 1;
+    state.mapMode = data.mapMode || 'city';
+    state.mapRows = data.mapRows || 6;
+    state.mapCols = data.mapCols || 6;
+    state.soundOn = data.soundOn !== undefined ? data.soundOn : true;
+    state.tutorial = data.tutorial || RPG.Tutorial.create(false);
+    document.getElementById('soundToggle').checked = state.soundOn;
+
+    RPG.UI.showScreen('game');
+    document.getElementById('rollLog').innerHTML = '';
+    document.getElementById('rollDie').textContent = '-';
+    document.getElementById('rollDie').className = 'roll-die';
+    document.getElementById('rollInfo').textContent = 'Escolha um dado para rolar.';
+    document.getElementById('logList').innerHTML = '';
+    RPG.UI.renderHero();
+
+    // Saves novos preservam mapa, posição, baús, monstros, eventos e NPCs.
+    // Saves antigos continuam válidos e geram o local uma única vez.
+    if(Array.isArray(data.map) && data.map.length && data.pos){
+      state.map=data.map;
+      state.pos=data.pos;
+      state.mode='move';
+      state.pendingTarget=null;
+      state.pendingMonsterCell=null;
+      if(state.mapMode==='dungeon') RPG.Dungeon.refreshPresentation(state);
+      else RPG.City.refreshPresentation(state);
+    } else {
+      var startCell = (state.mapMode === 'dungeon') ? RPG.Dungeon.generate(state) : RPG.City.generate(state);
+      RPG.UI.resetPlayerToStart(startCell);
+    }
+    document.getElementById('combatScene').classList.add('hidden');
+    document.getElementById('sceneText').classList.remove('hidden');
+    RPG.UI.renderMap();
+    RPG.UI.renderControls();
+    RPG.UI.resetDialogue();
+    RPG.UI.logEvent('Bem-vindo de volta, <b>'+state.hero.name+'</b>! Continuando de onde parou.');
+    RPG.Tutorial.render();
+  });
+
+  document.getElementById('btnSettings').addEventListener('click', function(){
+    settingsReturnScreen='menu';
+    document.getElementById('soundToggle').checked = RPG.state.soundOn;
+    RPG.UI.showScreen('settings');
+  });
+  document.getElementById('gameSettingsBtn').addEventListener('click', function(){
+    settingsReturnScreen='game';
+    document.getElementById('soundToggle').checked=RPG.state.soundOn;
+    RPG.Save.save(RPG.state);
+    RPG.UI.showScreen('settings');
+  });
+  document.getElementById('gameMainMenuBtn').addEventListener('click', function(){
+    RPG.Save.save(RPG.state);
+    if(RPG.Multiplayer&&RPG.Multiplayer.disconnect)RPG.Multiplayer.disconnect();
+    refreshContinueButton();
+    RPG.UI.showScreen('menu');
+  });
+  document.getElementById('btnCredits').addEventListener('click', function(){
+    RPG.UI.showScreen('credits');
+  });
+  document.getElementById('settingsBackBtn').addEventListener('click', function(){ RPG.UI.showScreen(settingsReturnScreen); });
+  document.getElementById('creditsBackBtn').addEventListener('click', function(){ RPG.UI.showScreen('menu'); });
+
+  document.getElementById('soundToggle').addEventListener('change', function(e){
+    RPG.state.soundOn = e.target.checked;
+    if(RPG.state.hero){ RPG.Save.save(RPG.state); }
+  });
+
+  function backupStatus(message,type){var el=document.getElementById('backupStatus');el.textContent=message||'';el.className='backup-status'+(type?' '+type:'');}
+  document.getElementById('exportBackupBtn').addEventListener('click',function(){
+    var raw=RPG.Save.createBackup(RPG.state);
+    if(!raw){backupStatus('Nenhum progresso válido foi encontrado para exportar.','error');return;}
+    var blob=new Blob([raw],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+    var hero=RPG.Save.load().hero,safeName=String(hero.name||'aventureiro').replace(/[^a-z0-9_-]+/gi,'-').replace(/^-|-$/g,'');
+    link.href=url;link.download='RPG-Legend-'+(safeName||'aventureiro')+'-'+new Date().toISOString().slice(0,10)+'.rpglegend';
+    document.body.appendChild(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
+    backupStatus('Backup exportado com sucesso. Guarde o arquivo em um local seguro.','success');
+  });
+  document.getElementById('importBackupBtn').addEventListener('click',function(){
+    if(RPG.Account&&RPG.Account.currentUser()){backupStatus('Saia da conta antes de importar. Backups baixados funcionam somente no modo offline e não alteram o save oficial.','error');return;}
+    document.getElementById('backupFileInput').click();
+  });
+  document.getElementById('backupFileInput').addEventListener('change',function(e){
+    var input=e.target,file=input.files&&input.files[0];if(!file)return;
+    if(file.size>5000000){backupStatus('O arquivo selecionado é grande demais.','error');input.value='';return;}
+    var reader=new FileReader();reader.onload=function(){
+      if(!window.confirm('Importar este backup substituirá o progresso salvo neste navegador. Deseja continuar?')){input.value='';return;}
+      var result=RPG.Save.restoreBackup(String(reader.result||''));
+      if(!result.ok){backupStatus(result.message,'error');input.value='';return;}
+      backupStatus('Backup restaurado no modo offline. Ele não poderá substituir o save oficial nem ser usado no multiplayer. Recarregando…','success');setTimeout(function(){window.location.reload();},700);
+    };reader.onerror=function(){backupStatus('Não foi possível abrir o arquivo selecionado.','error');input.value='';};reader.readAsText(file);
+  });
+
+  document.getElementById('btnExitGame').addEventListener('click', function(){
+    var note = document.getElementById('exitNote');
+    try{ window.close(); }catch(e){}
+    // a maioria dos navegadores bloqueia o fechamento de abas nao abertas por script;
+    // nesse caso avisamos que e seguro fechar manualmente.
+    note.classList.remove('hidden');
+  });
+
+  refreshContinueButton();
+  RPG.UI.showScreen('menu');
+});
