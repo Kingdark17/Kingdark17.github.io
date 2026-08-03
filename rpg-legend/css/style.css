@@ -310,7 +310,14 @@ button.rune-btn.ghost{ background: rgba(0,0,0,0.2); border-color: var(--line); c
 .id-affinity .dim{ color: var(--ember); }
 
 /* ---------- dice tray ---------- */
-.dice-tray{ margin-top: 18px; }
+.lower-panels{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:18px;align-items:stretch}
+.dice-tray{ margin-top: 0; min-width:0; }
+.lower-panels .event-log{min-width:0}
+.equipment-panel .equip-slots{margin-top:0}
+.equipment-backpack{margin-top:14px}
+.equipment-powers-title{margin-top:18px!important;padding-top:12px;border-top:1px solid var(--line)}
+.equipment-party-title{margin-top:18px!important;padding-top:12px;border-top:1px solid var(--line)}
+@media (max-width:700px){.lower-panels{grid-template-columns:1fr}}
 .merchant-action-row{display:flex;align-items:stretch;gap:10px;margin:4px 0 14px;flex-wrap:wrap}.merchant-negotiation{margin:0;min-height:34px;display:flex;align-items:center}.merchant-action-row .rune-btn{height:100%;min-height:38px}
 .merchant-negotiation .haggle-result{ font-family: var(--font-mono); font-size: 12.5px; color: var(--gold-bright); }
 .merchant-negotiation .haggle-result.dim{ color: var(--parchment-dim); }

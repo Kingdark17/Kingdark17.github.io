@@ -6,7 +6,7 @@
 <title>RPG Legend</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20260803e">
+<link rel="stylesheet" href="css/style.css?v=20260803g">
 <link rel="stylesheet" href="css/animations.css?v=20260802c">
 </head>
 <body>
@@ -154,12 +154,6 @@
 
         <div class="attr-grid" id="attrGrid"></div>
 
-        <div class="stat-label-row" style="margin-top:4px;"><span>Equipamento</span></div>
-        <div class="equip-slots" id="equipSlots"></div>
-
-        <div class="stat-label-row" style="margin-top:12px;"><span>Poderes</span></div>
-        <div id="powersList"></div>
-
         <div class="stat-label-row" style="margin-top:12px;"><span>Fraqueza</span></div>
         <div id="debuffList"></div>
 
@@ -168,14 +162,6 @@
           <div id="activeEffectsList"></div>
         </div>
 
-        <div id="partySection" class="hidden">
-          <div class="stat-label-row" style="margin-top:12px;"><span>Equipe</span></div>
-          <div class="party-list" id="partyList"></div>
-        </div>
-
-        <div class="panel-btn-row">
-          <button id="backpackBtn">&#127890; Mochila <span class="badge" id="itemCount">0</span></button>
-        </div>
       </aside>
 
       <main>
@@ -213,19 +199,35 @@
           <div id="controlsArea"></div>
         </section>
 
-        <section class="panel dice-tray">
-          <h2>Rolagens</h2>
-          <div class="roll-stage">
-            <div class="die-perspective"><div class="roll-die" id="rollDie">-</div></div>
-            <div class="roll-info" id="rollInfo">As rolagens de combate e negociação aparecem aqui.</div>
-          </div>
-          <div class="roll-log" id="rollLog"></div>
-        </section>
+        <div class="lower-panels">
+          <section class="panel dice-tray">
+            <h2>Rolagens</h2>
+            <div class="roll-stage">
+              <div class="die-perspective"><div class="roll-die" id="rollDie">-</div></div>
+              <div class="roll-info" id="rollInfo">As rolagens de combate e negociação aparecem aqui.</div>
+            </div>
+            <div class="roll-log" id="rollLog"></div>
+          </section>
+
+          <section class="panel event-log">
+            <h2>Diário de Aventura</h2>
+            <div class="log-list" id="logList"></div>
+          </section>
+        </div>
       </main>
 
-      <aside class="panel event-log">
-        <h2>Diário de Aventura</h2>
-        <div class="log-list" id="logList"></div>
+      <aside class="panel equipment-panel">
+        <h2>Equipamentos</h2>
+        <div class="equip-slots" id="equipSlots"></div>
+        <div class="panel-btn-row equipment-backpack">
+          <button id="backpackBtn">&#127890; Mochila <span class="badge" id="itemCount">0</span></button>
+        </div>
+        <div class="stat-label-row equipment-powers-title"><span>Poderes</span></div>
+        <div id="powersList"></div>
+        <div id="partySection" class="hidden">
+          <div class="stat-label-row equipment-party-title"><span>Equipe</span></div>
+          <div class="party-list" id="partyList"></div>
+        </div>
       </aside>
 
     </div>
