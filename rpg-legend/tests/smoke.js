@@ -84,7 +84,9 @@ assert.strictEqual(hero.equip.secundaria,dagger,'arma secundaria incorreta');
 const bow=RPG.Items.instantiate(RPG.Items.TEMPLATES.find(item=>item.id==='arco'),RPG.Items.RARITIES[0]);
 assert.strictEqual(RPG.Player.equipItem(hero,bow,'secundaria'),false,'arma de duas maos entrou na mao secundaria');
 RPG.Player.equipItem(hero,bow,'arma');
-assert.strictEqual(hero.equip.secundaria,null,'arma de duas maos nao liberou a mao secundaria');
+RPG.Player.equipItem(hero,shield,'secundaria');
+assert.strictEqual(hero.equip.arma,bow,'escudo removeu a arma da mao principal');
+assert.strictEqual(hero.equip.secundaria,shield,'escudo nao permaneceu com a arma principal');
 
 for (let floor = 1; floor <= 100; floor++) {
   const state = { floor, mapRows:6, mapCols:6 };

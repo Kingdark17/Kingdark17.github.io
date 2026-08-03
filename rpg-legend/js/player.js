@@ -241,8 +241,6 @@ RPG.Player = (function(){
     if(slot==='armadura' && (item.category!=='armadura' || item.templateId==='escudo')) return false;
     if(slot==='acessorio' && item.category!=='acessorio') return false;
     if(hero.equip[slot]){ hero.equip[slot].equipped = false; }
-    if(slot==='arma' && isTwoHanded(item) && hero.equip.secundaria){hero.equip.secundaria.equipped=false;hero.equip.secundaria=null;}
-    if(slot==='secundaria' && isTwoHanded(hero.equip.arma)){hero.equip.arma.equipped=false;hero.equip.arma=null;}
     Object.keys(hero.equip).forEach(function(otherSlot){
       if(otherSlot!==slot && hero.equip[otherSlot]===item) hero.equip[otherSlot]=null;
     });
