@@ -56,7 +56,10 @@ RPG.Save = (function(){
       var raw = localStorage.getItem(KEY);
       if(!raw) return null;
       var data=JSON.parse(raw);
-      return verifyIntegrity(data)?data:null;
+      if(!verifyIntegrity(data))return null;
+      // Saves criados antes da protecao recebem a assinatura no primeiro carregamento.
+      if(!data.integrity){seal(data);localStorage.setItem(KEY,JSON.stringify(data));}
+      return data;
     }catch(e){ return null; }
   }
 
