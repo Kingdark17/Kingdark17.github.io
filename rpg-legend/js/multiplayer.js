@@ -84,8 +84,10 @@ RPG.Multiplayer = (function(){
     else if(msg.type==='error')message(msg.message||'Erro na sala multiplayer.',true);
     else if(msg.type==='peer-left')message('O outro jogador desconectou.',true);
   }
-  function connect(create){
+  async function connect(create){
     if(RPG.Save&&RPG.Save.isImportedBackup&&RPG.Save.isImportedBackup()){message('Backups importados são apenas offline. Carregue o progresso oficial da conta ou inicie um novo jogo para entrar no multiplayer.',true);return;}
+    if(!RPG.Account||!RPG.Account.currentUser()){message('Entre em uma conta para acessar o multiplayer oficial.',true);return;}
+    if(RPG.Save.hasSave()&&!(await RPG.Account.verifyOfficial())){message('Este progresso não possui uma assinatura oficial válida. Abra a Conta e carregue o progresso da nuvem.',true);return;}
     var server=(window.RPG_MULTIPLAYER_CONFIG&&window.RPG_MULTIPLAYER_CONFIG.serverUrl)||'';
     var name=(document.getElementById('multiplayerName').value||'Aventureiro').trim();
     var room=(document.getElementById('multiplayerRoom').value||'').trim().toUpperCase();
