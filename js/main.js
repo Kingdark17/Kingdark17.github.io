@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', function(){
     pos: { x:0, y:0 }, mode: 'move',
     pendingTarget: null, pendingMonsterCell: null,
     quests: [],
-    soundOn: true
+    soundOn: true,
+    musicVolume: 0.28
   };
   RPG.state.tutorial=RPG.Tutorial.create(true);
 
@@ -78,8 +79,10 @@ document.addEventListener('DOMContentLoaded', function(){
     state.mapRows = data.mapRows || 6;
     state.mapCols = data.mapCols || 6;
     state.soundOn = data.soundOn !== undefined ? data.soundOn : true;
+    state.musicVolume = data.musicVolume !== undefined ? data.musicVolume : 0.28;
     state.tutorial = data.tutorial || RPG.Tutorial.create(false);
     document.getElementById('soundToggle').checked = state.soundOn;
+    document.getElementById('musicVolume').value = Math.round(state.musicVolume*100);
 
     RPG.UI.showScreen('game');
     document.getElementById('rollLog').innerHTML = '';
@@ -137,7 +140,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
   document.getElementById('soundToggle').addEventListener('change', function(e){
     RPG.state.soundOn = e.target.checked;
+    if(RPG.Music)RPG.Music.refresh();
     if(RPG.state.hero){ RPG.Save.save(RPG.state); }
+  });
+  document.getElementById('musicVolume').addEventListener('input',function(e){
+    RPG.state.musicVolume=Math.max(0,Math.min(1,Number(e.target.value)/100));
+    if(RPG.Music)RPG.Music.refresh();
+    if(RPG.state.hero)RPG.Save.save(RPG.state);
   });
 
   function backupStatus(message,type){var el=document.getElementById('backupStatus');el.textContent=message||'';el.className='backup-status'+(type?' '+type:'');}

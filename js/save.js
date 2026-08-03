@@ -29,6 +29,7 @@ RPG.Save = (function(){
         mapCols: state.mapCols,
         pos: state.pos,
         soundOn: state.soundOn,
+        musicVolume: state.musicVolume,
         tutorial: state.tutorial,
         savedAt: Date.now()
       };
