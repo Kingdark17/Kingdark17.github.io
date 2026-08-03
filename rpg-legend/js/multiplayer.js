@@ -85,6 +85,7 @@ RPG.Multiplayer = (function(){
     else if(msg.type==='peer-left')message('O outro jogador desconectou.',true);
   }
   function connect(create){
+    if(RPG.Save&&RPG.Save.isImportedBackup&&RPG.Save.isImportedBackup()){message('Backups importados são apenas offline. Carregue o progresso oficial da conta ou inicie um novo jogo para entrar no multiplayer.',true);return;}
     var server=(window.RPG_MULTIPLAYER_CONFIG&&window.RPG_MULTIPLAYER_CONFIG.serverUrl)||'';
     var name=(document.getElementById('multiplayerName').value||'Aventureiro').trim();
     var room=(document.getElementById('multiplayerRoom').value||'').trim().toUpperCase();
