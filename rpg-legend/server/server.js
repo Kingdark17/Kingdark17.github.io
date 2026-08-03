@@ -3,6 +3,7 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs');
 const { WebSocketServer } = require('ws');
+const accounts = require('./accounts');
 
 const port = Number(process.env.PORT || 8080);
 const root = path.resolve(__dirname, '..');
@@ -15,7 +16,7 @@ function clone(value){return JSON.parse(JSON.stringify(value));}
 function xpForLevel(level){return 40+(level-1)*35;}
 function equipmentStat(hero,key,cap){
   let total=0;const equip=hero&&hero.equip||{};
-  ['arma','armadura','acessorio'].forEach(slot=>{const item=equip[slot];if(item&&item.stats)total+=integer(item.stats[key],0,cap);});
+  ['arma','secundaria','armadura','acessorio'].forEach(slot=>{const item=equip[slot];if(item&&item.stats)total+=integer(item.stats[key],0,cap);});
   return Math.min(total,cap);
 }
 function sanitizeParty(party){
@@ -70,7 +71,9 @@ function sanitizeState(data,room,role){
   return state;
 }
 
-const server=http.createServer((req,res)=>{
+const server=http.createServer(async(req,res)=>{
+  const url=new URL(req.url||'/',`http://${req.headers.host||'localhost'}`);
+  if(await accounts.handle(req,res,url))return;
   const requestPath=decodeURIComponent((req.url||'/').split('?')[0]);
   if(requestPath==='/health'){res.writeHead(200,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify({online:true,rooms:rooms.size,validation:true}));return;}
   const relative=requestPath==='/'?'index.html':requestPath.replace(/^\/+/, '');const file=path.resolve(root,relative);
@@ -135,4 +138,4 @@ wss.on('connection',ws=>{
     if(room.clients.length){room.clients.forEach(client=>send(client,{type:'peer-left',room:ws.room}));}else rooms.delete(ws.room);
   });
 });
-server.listen(port,()=>console.log(`RPG Legend protegido disponível na porta ${port}`));
+accounts.init().then(()=>server.listen(port,()=>console.log(`RPG Legend protegido disponível na porta ${port}`))).catch(error=>{console.error('Falha ao iniciar banco de contas:',error);process.exit(1);});

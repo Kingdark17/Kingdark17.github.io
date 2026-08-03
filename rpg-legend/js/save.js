@@ -32,6 +32,7 @@ RPG.Save = (function(){
         savedAt: Date.now()
       };
       localStorage.setItem(KEY, JSON.stringify(data));
+      if(RPG.Account&&RPG.Account.scheduleCloudSave)RPG.Account.scheduleCloudSave();
       return true;
     }catch(e){ return false; }
   }
@@ -48,5 +49,30 @@ RPG.Save = (function(){
     try{ localStorage.removeItem(KEY); }catch(e){}
   }
 
-  return { hasSave: hasSave, save: save, load: load, clear: clear, KEY: KEY };
+  function validSave(data){
+    return !!(data && typeof data==='object' && data.hero && typeof data.hero.name==='string' &&
+      data.hero.attrs && data.hero.equip && Array.isArray(data.inventory) && Array.isArray(data.party) &&
+      isFinite(Number(data.floor)) && Number(data.floor)>=1 && Number(data.floor)<=10000);
+  }
+
+  function createBackup(state){
+    if(state && state.hero) save(state);
+    var data=load();
+    if(!validSave(data)) return null;
+    return JSON.stringify({format:'RPG_LEGEND_BACKUP',version:1,exportedAt:Date.now(),save:data},null,2);
+  }
+
+  function restoreBackup(raw){
+    try{
+      if(typeof raw!=='string' || raw.length<10 || raw.length>5000000) return {ok:false,message:'O arquivo está vazio ou é grande demais.'};
+      var parsed=JSON.parse(raw);
+      var data=parsed && parsed.format==='RPG_LEGEND_BACKUP' ? parsed.save : parsed;
+      if(!validSave(data)) return {ok:false,message:'Este arquivo não contém um progresso válido do RPG Legend.'};
+      data.hero.equip.secundaria=data.hero.equip.secundaria||null;
+      localStorage.setItem(KEY,JSON.stringify(data));
+      return {ok:true,data:data};
+    }catch(e){return {ok:false,message:'Não foi possível ler o arquivo de backup.'};}
+  }
+
+  return { hasSave: hasSave, save: save, load: load, clear: clear, createBackup:createBackup, restoreBackup:restoreBackup, validSave:validSave, KEY: KEY };
 })();

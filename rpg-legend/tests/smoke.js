@@ -55,6 +55,7 @@ assert.deepStrictEqual(JSON.parse(JSON.stringify(loadedState.map)), savedState.m
 assert.deepStrictEqual(JSON.parse(JSON.stringify(loadedState.pos)), savedState.pos, 'posição não foi preservada no save');
 
 const hero = {
+  name: 'Herói de Backup',
   level: 1,
   attrs: { forca:10, destreza:10, constituicao:10, intelecto:10, sabedoria:10, carisma:10 },
   equip: { arma:null, secundaria:null, armadura:null, acessorio:null }
@@ -87,6 +88,13 @@ RPG.Player.equipItem(hero,bow,'arma');
 RPG.Player.equipItem(hero,shield,'secundaria');
 assert.strictEqual(hero.equip.arma,bow,'escudo removeu a arma da mao principal');
 assert.strictEqual(hero.equip.secundaria,shield,'escudo nao permaneceu com a arma principal');
+const backupState={hero,party:[],inventory:[sword,shield],quests:[],floor:12,mapMode:'dungeon',map:[],mapRows:6,mapCols:6,pos:{x:0,y:0},soundOn:true,tutorial:tutorialState};
+const backupRaw=RPG.Save.createBackup(backupState);
+assert(backupRaw&&backupRaw.includes('RPG_LEGEND_BACKUP'),'backup nao foi criado');
+RPG.Save.clear();
+const restoredBackup=RPG.Save.restoreBackup(backupRaw);
+assert(restoredBackup.ok&&RPG.Save.load().floor===12,'backup nao restaurou o progresso');
+assert.strictEqual(RPG.Save.restoreBackup('{arquivo invalido').ok,false,'backup invalido foi aceito');
 
 for (let floor = 1; floor <= 100; floor++) {
   const state = { floor, mapRows:6, mapCols:6 };

@@ -140,6 +140,28 @@ document.addEventListener('DOMContentLoaded', function(){
     if(RPG.state.hero){ RPG.Save.save(RPG.state); }
   });
 
+  function backupStatus(message,type){var el=document.getElementById('backupStatus');el.textContent=message||'';el.className='backup-status'+(type?' '+type:'');}
+  document.getElementById('exportBackupBtn').addEventListener('click',function(){
+    var raw=RPG.Save.createBackup(RPG.state);
+    if(!raw){backupStatus('Nenhum progresso válido foi encontrado para exportar.','error');return;}
+    var blob=new Blob([raw],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+    var hero=RPG.Save.load().hero,safeName=String(hero.name||'aventureiro').replace(/[^a-z0-9_-]+/gi,'-').replace(/^-|-$/g,'');
+    link.href=url;link.download='RPG-Legend-'+(safeName||'aventureiro')+'-'+new Date().toISOString().slice(0,10)+'.rpglegend';
+    document.body.appendChild(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
+    backupStatus('Backup exportado com sucesso. Guarde o arquivo em um local seguro.','success');
+  });
+  document.getElementById('importBackupBtn').addEventListener('click',function(){document.getElementById('backupFileInput').click();});
+  document.getElementById('backupFileInput').addEventListener('change',function(e){
+    var input=e.target,file=input.files&&input.files[0];if(!file)return;
+    if(file.size>5000000){backupStatus('O arquivo selecionado é grande demais.','error');input.value='';return;}
+    var reader=new FileReader();reader.onload=function(){
+      if(!window.confirm('Importar este backup substituirá o progresso salvo neste navegador. Deseja continuar?')){input.value='';return;}
+      var result=RPG.Save.restoreBackup(String(reader.result||''));
+      if(!result.ok){backupStatus(result.message,'error');input.value='';return;}
+      backupStatus('Backup restaurado. Recarregando o jogo…','success');setTimeout(function(){window.location.reload();},500);
+    };reader.onerror=function(){backupStatus('Não foi possível abrir o arquivo selecionado.','error');input.value='';};reader.readAsText(file);
+  });
+
   document.getElementById('btnExitGame').addEventListener('click', function(){
     var note = document.getElementById('exitNote');
     try{ window.close(); }catch(e){}
