@@ -54,7 +54,7 @@
     <div id="accountLogged" class="hidden">
       <div class="account-welcome">Conectado como <b id="accountName">—</b></div>
       <p class="account-help">O jogo salva automaticamente na nuvem. Você também pode forçar o envio ou recuperar o último progresso.</p>
-      <div class="account-actions"><button class="rune-btn" id="cloudSaveBtn">Salvar na Nuvem</button><button class="rune-btn" id="cloudLoadBtn">Carregar da Nuvem</button><button class="rune-btn ghost" id="accountLogoutBtn">Sair da Conta</button></div>
+      <div class="account-actions"><button class="rune-btn" id="cloudSaveBtn">Salvar na Nuvem</button><button class="rune-btn" id="cloudLoadBtn">Carregar da Nuvem</button><button class="rune-btn" id="cloudRestoreBtn">Restaurar Versão Anterior</button><button class="rune-btn ghost" id="accountLogoutBtn">Sair da Conta</button></div>
     </div>
     <div id="accountMessage" class="account-message"></div>
   </div>
@@ -81,9 +81,13 @@
       <span>Efeitos sonoros</span>
       <label><input type="checkbox" id="soundToggle" checked> Ativado</label>
     </div>
+    <div class="settings-row">
+      <span>Volume da música</span>
+      <label><input type="range" id="musicVolume" min="0" max="100" value="28" aria-label="Volume da música"></label>
+    </div>
     <div class="backup-settings">
       <div class="backup-title">Backup do progresso</div>
-      <p>Salve seu personagem em um arquivo para recuperar o progresso ou levá-lo para outro aparelho.</p>
+      <p>O arquivo offline é criptografado com uma senha escolhida por você. Ele não substitui o save oficial da conta e não pode ser usado no multiplayer.</p>
       <div class="backup-actions">
         <button class="rune-btn small" id="exportBackupBtn">⬇ Exportar Backup</button>
         <button class="rune-btn small" id="importBackupBtn">⬆ Importar Backup</button>
@@ -352,7 +356,8 @@
 <script src="js/shop.js?v=20260803e"></script>
 <script src="js/quests.js?v=20260803a"></script>
 <script src="js/effects.js?v=20260802c"></script>
-<script src="js/save.js?v=20260803i"></script>
+<script src="js/music.js?v=20260803a"></script>
+<script src="js/save.js?v=20260803k"></script>
 <script src="js/tutorial.js?v=20260802d"></script>
 <script src="js/ui.js?v=20260803e"></script>
 <script src="js/multiplayer-config.js?v=20260802c"></script>
