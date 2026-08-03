@@ -94,6 +94,11 @@ RPG.Multiplayer = (function(){
     send({type:'state',state:snapshot(),turn:session.turn,role:session.role});status();
   }
   function commit(){sync(true);}
+  function disconnect(){
+    if(session.transport){try{session.transport.close();}catch(e){}}
+    session.connected=false;session.transport=null;session.room='';session.role=0;session.players=1;session.profiles={};session.pendingState=null;session.guestCreating=false;
+    status();
+  }
   function canAct(){return !session.connected||session.turn===session.role;}
   function beginMove(){
     if(!session.connected)return true;
@@ -133,5 +138,5 @@ RPG.Multiplayer = (function(){
   }
   RPG.Save.save=function(state){var result=originalSave(state);if(!session.applying)sync(false);return result;};
   document.addEventListener('DOMContentLoaded',init);
-  return {commit:commit,sync:function(){sync(false);},canAct:canAct,beginMove:beginMove,grantSharedXP:grantSharedXP,grantSharedGold:grantSharedGold,isGuestCreating:function(){return session.guestCreating;},finishGuestCreation:finishGuestCreation,session:session};
+  return {commit:commit,sync:function(){sync(false);},disconnect:disconnect,canAct:canAct,beginMove:beginMove,grantSharedXP:grantSharedXP,grantSharedGold:grantSharedGold,isGuestCreating:function(){return session.guestCreating;},finishGuestCreation:finishGuestCreation,session:session};
 })();

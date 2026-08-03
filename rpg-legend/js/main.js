@@ -7,6 +7,7 @@
 var RPG = window.RPG || {};
 
 document.addEventListener('DOMContentLoaded', function(){
+  var settingsReturnScreen='menu';
 
   // ---------- estado global ----------
   RPG.state = {
@@ -110,13 +111,26 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   document.getElementById('btnSettings').addEventListener('click', function(){
+    settingsReturnScreen='menu';
     document.getElementById('soundToggle').checked = RPG.state.soundOn;
     RPG.UI.showScreen('settings');
+  });
+  document.getElementById('gameSettingsBtn').addEventListener('click', function(){
+    settingsReturnScreen='game';
+    document.getElementById('soundToggle').checked=RPG.state.soundOn;
+    RPG.Save.save(RPG.state);
+    RPG.UI.showScreen('settings');
+  });
+  document.getElementById('gameMainMenuBtn').addEventListener('click', function(){
+    RPG.Save.save(RPG.state);
+    if(RPG.Multiplayer&&RPG.Multiplayer.disconnect)RPG.Multiplayer.disconnect();
+    refreshContinueButton();
+    RPG.UI.showScreen('menu');
   });
   document.getElementById('btnCredits').addEventListener('click', function(){
     RPG.UI.showScreen('credits');
   });
-  document.getElementById('settingsBackBtn').addEventListener('click', function(){ RPG.UI.showScreen('menu'); });
+  document.getElementById('settingsBackBtn').addEventListener('click', function(){ RPG.UI.showScreen(settingsReturnScreen); });
   document.getElementById('creditsBackBtn').addEventListener('click', function(){ RPG.UI.showScreen('menu'); });
 
   document.getElementById('soundToggle').addEventListener('change', function(e){
