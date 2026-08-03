@@ -60,18 +60,33 @@ RPG.Save = (function(){
       isFinite(Number(data.floor)) && Number(data.floor)>=1 && Number(data.floor)<=10000);
   }
 
-  function createBackup(state){
+  function bytesToBase64(bytes){var out='',chunk=0x8000;for(var i=0;i<bytes.length;i+=chunk)out+=String.fromCharCode.apply(null,bytes.subarray(i,Math.min(i+chunk,bytes.length)));return btoa(out);}
+  function base64ToBytes(text){var raw=atob(text),out=new Uint8Array(raw.length);for(var i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out;}
+  async function backupKey(password,salt,usage){var material=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:210000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,[usage]);}
+
+  async function createBackup(state,password){
     if(state && state.hero) save(state);
     var data=load();
-    if(!validSave(data)) return null;
-    return JSON.stringify({format:'RPG_LEGEND_BACKUP',version:1,exportedAt:Date.now(),save:data},null,2);
+    if(!validSave(data)||!window.crypto||!crypto.subtle||typeof password!=='string'||password.length<6) return null;
+    try{
+      var salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+      var key=await backupKey(password,salt,'encrypt');
+      var encrypted=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(data)));
+      return JSON.stringify({format:'RPG_LEGEND_BACKUP_ENCRYPTED',version:2,cipher:'AES-256-GCM',kdf:'PBKDF2-SHA256',iterations:210000,exportedAt:Date.now(),salt:bytesToBase64(salt),iv:bytesToBase64(iv),data:bytesToBase64(new Uint8Array(encrypted))},null,2);
+    }catch(e){return null;}
   }
 
-  function restoreBackup(raw){
+  function isEncryptedBackup(raw){try{var parsed=JSON.parse(raw);return !!(parsed&&parsed.format==='RPG_LEGEND_BACKUP_ENCRYPTED'&&parsed.version===2);}catch(e){return false;}}
+
+  async function restoreBackup(raw,password){
     try{
       if(typeof raw!=='string' || raw.length<10 || raw.length>5000000) return {ok:false,message:'O arquivo está vazio ou é grande demais.'};
       var parsed=JSON.parse(raw);
-      var data=parsed && parsed.format==='RPG_LEGEND_BACKUP' ? parsed.save : parsed;
+      var data;
+      if(parsed&&parsed.format==='RPG_LEGEND_BACKUP_ENCRYPTED'&&parsed.version===2){
+        if(typeof password!=='string'||password.length<1)return {ok:false,message:'Digite a senha usada para proteger este backup.'};
+        try{var salt=base64ToBytes(parsed.salt),iv=base64ToBytes(parsed.iv),encrypted=base64ToBytes(parsed.data);var key=await backupKey(password,salt,'decrypt');var clear=await crypto.subtle.decrypt({name:'AES-GCM',iv:iv},key,encrypted);data=JSON.parse(new TextDecoder().decode(clear));}catch(e){return {ok:false,message:'Senha incorreta ou arquivo modificado.'};}
+      }else data=parsed && parsed.format==='RPG_LEGEND_BACKUP' ? parsed.save : parsed;
       if(!validSave(data)) return {ok:false,message:'Este arquivo não contém um progresso válido do RPG Legend.'};
       data.hero.equip.secundaria=data.hero.equip.secundaria||null;
       localStorage.setItem(KEY,JSON.stringify(data));
@@ -80,5 +95,5 @@ RPG.Save = (function(){
     }catch(e){return {ok:false,message:'Não foi possível ler o arquivo de backup.'};}
   }
 
-  return { hasSave: hasSave, save: save, load: load, clear: clear, createBackup:createBackup, restoreBackup:restoreBackup, validSave:validSave, isImportedBackup:isImportedBackup, markOfficial:markOfficial, KEY: KEY };
+  return { hasSave: hasSave, save: save, load: load, clear: clear, createBackup:createBackup, restoreBackup:restoreBackup, isEncryptedBackup:isEncryptedBackup, validSave:validSave, isImportedBackup:isImportedBackup, markOfficial:markOfficial, KEY: KEY };
 })();

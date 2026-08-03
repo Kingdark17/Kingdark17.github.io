@@ -150,14 +150,17 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   function backupStatus(message,type){var el=document.getElementById('backupStatus');el.textContent=message||'';el.className='backup-status'+(type?' '+type:'');}
-  document.getElementById('exportBackupBtn').addEventListener('click',function(){
-    var raw=RPG.Save.createBackup(RPG.state);
-    if(!raw){backupStatus('Nenhum progresso válido foi encontrado para exportar.','error');return;}
+  document.getElementById('exportBackupBtn').addEventListener('click',async function(){
+    var password=window.prompt('Crie uma senha com pelo menos 6 caracteres para proteger o backup:');if(password===null)return;
+    if(password.length<6){backupStatus('A senha do backup precisa ter pelo menos 6 caracteres.','error');return;}
+    var confirmation=window.prompt('Digite novamente a senha do backup:');if(confirmation!==password){backupStatus('As senhas não coincidem. O backup não foi criado.','error');return;}
+    backupStatus('Criptografando o backup…');var raw=await RPG.Save.createBackup(RPG.state,password);
+    if(!raw){backupStatus('Não foi possível criptografar o progresso neste navegador.','error');return;}
     var blob=new Blob([raw],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
     var hero=RPG.Save.load().hero,safeName=String(hero.name||'aventureiro').replace(/[^a-z0-9_-]+/gi,'-').replace(/^-|-$/g,'');
     link.href=url;link.download='RPG-Legend-'+(safeName||'aventureiro')+'-'+new Date().toISOString().slice(0,10)+'.rpglegend';
     document.body.appendChild(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
-    backupStatus('Backup exportado com sucesso. Guarde o arquivo em um local seguro.','success');
+    backupStatus('Backup criptografado com sucesso. Guarde o arquivo e não esqueça a senha.','success');
   });
   document.getElementById('importBackupBtn').addEventListener('click',function(){
     if(RPG.Account&&RPG.Account.currentUser()){backupStatus('Saia da conta antes de importar. Backups baixados funcionam somente no modo offline e não alteram o save oficial.','error');return;}
@@ -166,9 +169,10 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('backupFileInput').addEventListener('change',function(e){
     var input=e.target,file=input.files&&input.files[0];if(!file)return;
     if(file.size>5000000){backupStatus('O arquivo selecionado é grande demais.','error');input.value='';return;}
-    var reader=new FileReader();reader.onload=function(){
+    var reader=new FileReader();reader.onload=async function(){
       if(!window.confirm('Importar este backup substituirá o progresso salvo neste navegador. Deseja continuar?')){input.value='';return;}
-      var result=RPG.Save.restoreBackup(String(reader.result||''));
+      var raw=String(reader.result||''),password='';if(RPG.Save.isEncryptedBackup(raw)){password=window.prompt('Digite a senha deste backup:');if(password===null){input.value='';return;}}
+      backupStatus('Verificando o backup…');var result=await RPG.Save.restoreBackup(raw,password);
       if(!result.ok){backupStatus(result.message,'error');input.value='';return;}
       backupStatus('Backup restaurado no modo offline. Ele não poderá substituir o save oficial nem ser usado no multiplayer. Recarregando…','success');setTimeout(function(){window.location.reload();},700);
     };reader.onerror=function(){backupStatus('Não foi possível abrir o arquivo selecionado.','error');input.value='';};reader.readAsText(file);
