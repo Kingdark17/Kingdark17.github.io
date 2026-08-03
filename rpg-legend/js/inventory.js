@@ -31,6 +31,7 @@ RPG.Inventory = (function(){
   ];
 
   function render(state){
+    state.inventory.forEach(function(item){item.equipped=!!RPG.Player.equippedSlot(state.hero,item);});
     var tabRow = document.getElementById('invTabs');
     tabRow.innerHTML = '';
     TABS.forEach(function(t){
@@ -82,7 +83,9 @@ RPG.Inventory = (function(){
     if(!tagsHtml){ tagsHtml = '<span class="tag" style="color:var(--parchment-dim); border:1px solid var(--line);">Sem efeitos especiais</span>'; }
     var tierInfo=itemTier?RPG.Items.tierInfo(item):null;
     var itemSheet='<div class="item-stat-sheet"><div><span>Tier</span><b>'+(itemTier||'—')+'</b></div><div><span>Raridade</span><b class="rarity-'+item.rarity+'">'+item.rarityLabel+'</b></div><div><span>Poder</span><b>'+(tierInfo?tierInfo.score:'—')+'</b></div><div><span>Valor</span><b>'+item.value+' ouro</b></div></div>';
-    var impactRows=RPG.Items.equipmentImpact(state.hero,item).filter(function(row){return row.diff!==0;});
+    var currentSlot=RPG.Player.equippedSlot(state.hero,item);
+    var defaultSlot=item.templateId==='escudo'?'secundaria':item.category;
+    var impactRows=RPG.Items.equipmentImpact(state.hero,item,defaultSlot).filter(function(row){return row.diff!==0;});
     var impactHtml=impactRows.length?'<div class="player-impact"><div class="compare-title">Mudança nos status do personagem</div>'+impactRows.map(function(row){return '<div class="impact-row"><span>'+row.label+'</span><span>'+row.before+' → '+row.after+'</span><b class="'+(row.diff>0?'better':'worse')+'">'+(row.diff>0?'+':'')+row.diff+'</b></div>';}).join('')+'</div>':'';
 
     var extraInfo = '';
@@ -96,7 +99,7 @@ RPG.Inventory = (function(){
 
     var comparisonHtml='';
     if(item.category==='arma' || item.category==='armadura' || item.category==='acessorio'){
-      var equipped=state.hero.equip[item.category];
+      var equipped=state.hero.equip[defaultSlot];
       if(equipped && equipped.uid!==item.uid){
         var equippedTier=RPG.Items.tierFor(equipped);
         var labels={ataque:'Ataque',defesa:'Defesa',vida:'Vida',mana:'Mana',critico:'Crítico',velocidade:'Velocidade',esquiva:'Esquiva'};
@@ -118,9 +121,16 @@ RPG.Inventory = (function(){
 
     var actions = '';
     if(item.category==='arma' || item.category==='armadura' || item.category==='acessorio'){
-      actions += item.equipped
-        ? '<button class="equip-btn" id="actUnequip">Desequipar</button>'
-        : '<button class="equip-btn" id="actEquip">Equipar</button>';
+      if(currentSlot){
+        actions += '<button class="equip-btn" id="actUnequip">Desequipar da '+(currentSlot==='secundaria'?'mão secundária':currentSlot==='arma'?'mão principal':currentSlot)+'</button>';
+      }else if(item.category==='arma'){
+        actions += '<button class="equip-btn" id="actEquipMain">Equipar na mão principal</button>';
+        if(RPG.Player.isOffhandEligible(item)) actions += '<button class="equip-btn" id="actEquipOffhand">Equipar na mão secundária</button>';
+      }else if(item.templateId==='escudo'){
+        actions += '<button class="equip-btn" id="actEquipOffhand">Equipar na mão secundária</button>';
+      }else{
+        actions += '<button class="equip-btn" id="actEquip">Equipar</button>';
+      }
     }
     if(item.category==='consumivel'){
       actions += '<button class="equip-btn" id="actUse">Usar</button>';
@@ -146,9 +156,20 @@ RPG.Inventory = (function(){
       RPG.Save.save(state);
       render(state);
     }); }
+    var mainBtn = document.getElementById('actEquipMain');
+    if(mainBtn){ mainBtn.addEventListener('click', function(){
+      RPG.Player.equipItem(state.hero, item, 'arma');
+      RPG.Effects.playSfx('buy'); RPG.UI.renderHero(); RPG.Save.save(state); render(state);
+    }); }
+    var offhandBtn = document.getElementById('actEquipOffhand');
+    if(offhandBtn){ offhandBtn.addEventListener('click', function(){
+      RPG.Player.equipItem(state.hero, item, 'secundaria');
+      RPG.Effects.playSfx('buy'); RPG.UI.renderHero(); RPG.Save.save(state); render(state);
+    }); }
     var unBtn = document.getElementById('actUnequip');
     if(unBtn){ unBtn.addEventListener('click', function(){
-      RPG.Player.unequipItem(state.hero, item.category);
+      RPG.Player.unequipItem(state.hero, currentSlot || defaultSlot);
+      item.equipped=false;
       RPG.UI.renderHero();
       RPG.Save.save(state);
       render(state);
@@ -160,7 +181,7 @@ RPG.Inventory = (function(){
     }); }
     var discardBtn = document.getElementById('actDiscard');
     if(discardBtn){ discardBtn.addEventListener('click', function(){
-      if(item.equipped){ RPG.Player.unequipItem(state.hero, item.category); }
+      var slot=RPG.Player.equippedSlot(state.hero,item);if(slot){ RPG.Player.unequipItem(state.hero, slot); }
       removeByUid(state, item.uid);
       selectedUid = null;
       RPG.UI.renderHero();

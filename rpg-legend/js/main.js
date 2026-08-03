@@ -60,6 +60,8 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!data || !data.hero) return;
     var state = RPG.state;
     state.hero = data.hero;
+    state.hero.equip = state.hero.equip || {arma:null,armadura:null,acessorio:null};
+    if(state.hero.equip.secundaria===undefined) state.hero.equip.secundaria=null;
     state.hero.attrPoints = state.hero.attrPoints || 0;
     state.hero.buffs = {};
     if(!state.hero.powers || !state.hero.powers.length){

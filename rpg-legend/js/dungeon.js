@@ -146,6 +146,7 @@ RPG.Dungeon = (function(){
       }
       if(cell.type === 'event'){ cell.event = RPG.Events.random(); cell.resolved = false; }
       if(cell.type === 'treasure'){
+        cell.isMimic=Math.random()<Math.min(.25,.1+floor*.008);
         cell.giveGold = Math.random() < 0.5;
         cell.item = cell.giveGold ? null : RPG.Items.randomItem({ floor: floor });
         cell.collected = false;
@@ -163,7 +164,7 @@ RPG.Dungeon = (function(){
     var floor=state.floor;
     document.getElementById('locationTag').textContent = 'Masmorra \u2014 Andar ' + floor + (isBossFloor(floor) ? ' \u2694\ufe0f Andar de Chefe' : '');
     RPG.UI.setLegend([
-      ['\ud83d\ude80','Início'], ['\ud83e\uddd9','NPC'], ['\ud83c\udf81','Tesouro'],
+      ['\ud83d\ude80','Início'], ['\ud83e\uddd9','NPC'], ['\ud83e\uddf0','Baú'],
       ['\ud83d\udc7e','Monstro'], ['\ud83d\udc51','Chefe'], ['\u2b07\ufe0f','Escadas'], ['\ud83d\udeaa','Saída']
       ,['\u2753','Evento']
     ]);
@@ -171,7 +172,7 @@ RPG.Dungeon = (function(){
 
   function iconFor(cell){
     if(cell.type==='npc') return '\ud83e\uddd9';
-    if(cell.type==='treasure') return cell.collected ? '' : '\ud83c\udf81';
+    if(cell.type==='treasure') return cell.collected ? '' : '\ud83e\uddf0';
     if(cell.type==='monster') return cell.beaten ? '' : (cell.monsters[0].icon);
     if(cell.type==='boss') return cell.beaten ? '' : '\ud83d\udc51';
     if(cell.type==='event') return cell.resolved ? '' : '\u2753';
@@ -223,24 +224,29 @@ RPG.Dungeon = (function(){
     if(cell.type==='event'){ RPG.Events.open(state, cell); return true; }
     if(cell.type==='treasure'){
       if(!cell.collected){
+        if(cell.isMimic){
+          var mimic=RPG.Monsters.generate(state.floor+1);mimic.name='Mímico '+(state.floor>=8?'Ancestral':'Faminto');mimic.icon='\ud83e\uddf0';mimic.behavior='agressivo';mimic.ability='Mordida Surpresa';mimic.abilityDesc='Ataca com força depois de se revelar como um baú falso.';mimic.hp=Math.round(mimic.hp*1.45);mimic.maxHp=mimic.hp;mimic.dmg=Math.round(mimic.dmg*1.25);mimic.xp+=8+state.floor*2;mimic.gold+=10+state.floor*2;
+          cell.type='monster';cell.monsters=[mimic];cell.monsterIndex=0;cell.beaten=false;cell.bonusTreasure=cell.giveGold?{gold:10+state.floor*3+rnd(15)}:{item:cell.item};delete cell.isMimic;
+          RPG.UI.renderMap();RPG.UI.logEvent('O baú cria dentes e revela ser um <b>Mímico</b>!');RPG.Combat.startEncounterChoice(cell);return true;
+        }
         cell.collected = true;
         if(cell.giveGold){
           var goldAmt = 8 + rnd(18) + state.floor*2;
           state.hero.gold += goldAmt;
-          RPG.UI.showSimpleDialogue('\ud83c\udf81','Baú Encontrado','Você encontra '+goldAmt+' moedas de ouro dentro do baú.');
+          RPG.UI.showSimpleDialogue('\ud83e\uddf0','Baú Encontrado','Você encontra '+goldAmt+' moedas de ouro dentro do baú.');
           RPG.UI.logEvent('Você encontrou <b>'+goldAmt+' de ouro</b> em um baú.');
           RPG.Effects.playSfx('gold');
         } else {
           RPG.Inventory.addItem(state, cell.item);
           RPG.Quests.onItemCollected(state);
-          RPG.UI.showSimpleDialogue('\ud83c\udf81','Baú Encontrado','<b>'+cell.item.name+'</b> foi adicionado à sua mochila.<br><span class="item-found-desc">'+cell.item.desc+'</span>');
+          RPG.UI.showSimpleDialogue('\ud83e\uddf0','Baú Encontrado','<b>'+cell.item.name+'</b> foi adicionado à sua mochila.<br><span class="item-found-desc">'+cell.item.desc+'</span>');
           RPG.UI.logEvent('Você encontrou <b>'+cell.item.name+'</b> em um baú.');
           RPG.Effects.playSfx('buy');
         }
         RPG.UI.renderHero();
         RPG.UI.renderMap();
       } else {
-        RPG.UI.showSimpleDialogue('\ud83c\udf81','Baú Vazio','Este baú já foi revistado.');
+        RPG.UI.showSimpleDialogue('\ud83e\uddf0','Baú Vazio','Este baú já foi revistado.');
       }
       return true;
     }
@@ -250,6 +256,8 @@ RPG.Dungeon = (function(){
       return true;
     }
     if(cell.type==='stairs'){
+      var livingBoss=state.map.some(function(row){return row.some(function(room){return room.type==='boss'&&!room.beaten;});});
+      if(isBossFloor(state.floor)&&livingBoss){RPG.UI.showSimpleDialogue('\ud83d\udc51','Caminho Selado','O poder do chefe bloqueia as escadas. Derrote-o para avançar automaticamente.');RPG.UI.logEvent('As escadas permanecerão seladas enquanto o chefe estiver vivo.');return true;}
       state.floor++;
       var startCell = generate(state);
       RPG.UI.resetPlayerToStart(startCell);

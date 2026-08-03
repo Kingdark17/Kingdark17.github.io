@@ -33,6 +33,13 @@ RPG.Monsters = (function(){
   var BOSS_TITLES = [
     'o Devorador', 'o Flagelo', 'Senhor das Trevas', 'o Ímpio', 'o Eterno', 'Rei dos Ossos', 'a Calamidade'
   ];
+  var ENEMY_CLASSES = [
+    {name:'Brutamontes',icon:'\ud83d\udca5',power:'Impacto Brutal',powerDesc:'A cada 3 ataques causa 70% mais dano.',hp:1.15,dmg:1.2,speed:.9},
+    {name:'Assassino',icon:'\ud83d\udde1\ufe0f',power:'Lâmina Tóxica',powerDesc:'A cada 3 ataques causa dano extra e aplica veneno.',hp:.9,dmg:1.15,speed:1.25},
+    {name:'Xamã',icon:'\ud83d\udd2e',power:'Regeneração Profana',powerDesc:'A cada 3 ataques recupera parte da própria Vida.',hp:1,dmg:1.05,speed:1},
+    {name:'Guardião',icon:'\ud83d\udee1\ufe0f',power:'Muralha Sombria',powerDesc:'A cada 3 ataques reduz o dano dos próximos golpes.',hp:1.35,dmg:.95,speed:.8},
+    {name:'Feiticeiro',icon:'\ud83e\uddd9',power:'Ruptura Arcana',powerDesc:'A cada 3 ataques drena Mana e aumenta o dano mágico.',hp:.95,dmg:1.18,speed:1.05}
+  ];
 
   function rnd(n){ return Math.floor(Math.random()*n); }
   function pick(arr){ return arr[rnd(arr.length)]; }
@@ -44,22 +51,28 @@ RPG.Monsters = (function(){
     }
     return '';
   }
+  function ensureClass(monster){
+    if(!monster.enemyClass){var cls=pick(ENEMY_CLASSES);monster.enemyClass=cls.name;monster.classIcon=cls.icon;monster.classPower=cls.power;monster.classPowerDesc=cls.powerDesc;}
+    return monster;
+  }
 
   // Gera um monstro comum escalado para o andar informado.
   function generate(floor){
     var sp = pick(SPECIES);
+    var enemyClass=pick(ENEMY_CLASSES);
     var adj = tierLabelFor(floor);
     var name = adj ? (sp.name + ' ' + adj) : sp.name;
-    var scale = 1 + (floor-1)*0.22;
+    var scale = 1 + (floor-1)*0.27;
     return {
       name: name,
       icon: sp.icon,
       behavior: sp.behavior,
       ability: sp.ability, abilityDesc: sp.abilityDesc,
+      enemyClass:enemyClass.name,classIcon:enemyClass.icon,classPower:enemyClass.power,classPowerDesc:enemyClass.powerDesc,
       weakness: sp.weakness, resistance: sp.resistance,
-      speed: Math.round(sp.baseSpeed * (1 + (floor-1)*0.08)),
-      hp: Math.round(sp.baseHp * scale) + rnd(4),
-      dmg: sp.baseDmg + Math.floor((floor-1)/2),
+      speed: Math.max(1,Math.round(sp.baseSpeed*(1+(floor-1)*0.09)*enemyClass.speed)),
+      hp: Math.round(sp.baseHp*scale*enemyClass.hp)+rnd(4),
+      dmg: Math.max(1,Math.round((sp.baseDmg+Math.floor((floor-1)*.6))*enemyClass.dmg)),
       xp: 6 + floor*3 + rnd(4),
       gold: 4 + floor*2 + rnd(6),
       isBoss: false
@@ -69,6 +82,7 @@ RPG.Monsters = (function(){
   // Gera um chefe (mini-chefe a cada 5 andares, chefe principal a cada 10).
   function generateBoss(floor){
     var sp = pick(SPECIES);
+    var enemyClass=pick(ENEMY_CLASSES);
     var isMain = (floor % 10 === 0);
     var title = pick(BOSS_TITLES);
     var mult = isMain ? 3.2 : 2.1;
@@ -77,10 +91,11 @@ RPG.Monsters = (function(){
       icon: sp.icon,
       behavior: sp.behavior,
       ability: sp.ability, abilityDesc: sp.abilityDesc,
+      enemyClass:'Chefe '+enemyClass.name,classIcon:enemyClass.icon,classPower:enemyClass.power,classPowerDesc:enemyClass.powerDesc,
       weakness: sp.weakness, resistance: sp.resistance,
       speed: Math.round(sp.baseSpeed * (1 + (floor-1)*0.08) * 0.9),
-      hp: Math.round(sp.baseHp * (1+(floor-1)*0.22) * mult) + 15,
-      dmg: sp.baseDmg + Math.floor((floor-1)/2) + (isMain?4:2),
+      hp: Math.round(sp.baseHp*(1+(floor-1)*0.27)*mult*enemyClass.hp)+20,
+      dmg: Math.round((sp.baseDmg+Math.floor((floor-1)*.65)+(isMain?5:3))*enemyClass.dmg),
       xp: (isMain? 60 : 30) + floor*5,
       gold: (isMain? 80 : 40) + floor*6,
       isBoss: true,
@@ -92,6 +107,8 @@ RPG.Monsters = (function(){
 
   return {
     SPECIES: SPECIES,
+    ENEMY_CLASSES:ENEMY_CLASSES,
+    ensureClass:ensureClass,
     generate: generate,
     generateBoss: generateBoss
   };

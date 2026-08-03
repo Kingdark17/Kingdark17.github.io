@@ -41,6 +41,9 @@ assert(RPG.Player.RACES.length >= 12, 'novas racas nao foram carregadas');
 assert(RPG.Player.CLASSES.length >= 12, 'novas classes nao foram carregadas');
 assert(RPG.Player.POWERS.some(power => power.status === 'veneno'), 'poder de veneno ausente');
 assert(RPG.Player.POWERS.some(power => power.status === 'vulneravel'), 'poder de vulnerabilidade ausente');
+RPG.Player.CLASSES.forEach(cls=>assert(RPG.Player.powerByName(cls.signature),`classe sem poder funcional: ${cls.name}`));
+const knownPowerTypes=['dano_fisico','dano_magico','cura','buff_crit','buff_precisao','buff_forca','buff_esquiva','escudo'];
+RPG.Player.POWERS.forEach(power=>assert(knownPowerTypes.includes(power.type),`tipo de poder sem implementacao: ${power.name}`));
 assert.strictEqual(RPG.Player.MODES.some(mode => mode.id === 'equipe'), false, 'criacao automatica de equipe ainda disponivel');
 RPG.UI = { setLegend(){}, logEvent(){}, renderHero(){}, renderMap(){}, renderControls(){}, resetPlayerToStart(){}, showSimpleDialogue(){}, enterCity(){} };
 RPG.Quests = { onFloorReached(){}, onItemCollected(){} };
@@ -54,7 +57,7 @@ assert.deepStrictEqual(JSON.parse(JSON.stringify(loadedState.pos)), savedState.p
 const hero = {
   level: 1,
   attrs: { forca:10, destreza:10, constituicao:10, intelecto:10, sabedoria:10, carisma:10 },
-  equip: { arma:null, armadura:null, acessorio:null }
+  equip: { arma:null, secundaria:null, armadura:null, acessorio:null }
 };
 let derived = RPG.Player.getDerived(hero);
 const baseHp = derived.maxHp;
@@ -68,6 +71,20 @@ assert.strictEqual(hero.maxMp, baseMp + 6, 'bonus de mana do equipamento');
 const armorPreview=RPG.Items.instantiate(RPG.Items.TEMPLATES.find(item=>item.id==='placas'),RPG.Items.RARITIES[0]);
 const armorImpact=RPG.Items.equipmentImpact(hero,armorPreview);
 assert(armorImpact.some(row=>row.key==='defesa'&&row.diff>0),'comparacao nao mostrou aumento de defesa do jogador');
+const sword=RPG.Items.instantiate(RPG.Items.TEMPLATES.find(item=>item.id==='espada'),RPG.Items.RARITIES[0]);
+const shield=RPG.Items.instantiate(RPG.Items.TEMPLATES.find(item=>item.id==='escudo'),RPG.Items.RARITIES[0]);
+RPG.Player.equipItem(hero,armorPreview);
+RPG.Player.equipItem(hero,sword,'arma');
+assert(RPG.Player.equipItem(hero,shield,'secundaria'),'escudo nao entrou na mao secundaria');
+assert.strictEqual(hero.equip.armadura,armorPreview,'escudo substituiu a armadura corporal');
+assert.strictEqual(hero.equip.secundaria,shield,'slot de mao secundaria nao foi preservado');
+const dagger=RPG.Items.instantiate(RPG.Items.TEMPLATES.find(item=>item.id==='adaga'),RPG.Items.RARITIES[0]);
+assert(RPG.Player.equipItem(hero,dagger,'secundaria'),'arma leve nao entrou na mao secundaria');
+assert.strictEqual(hero.equip.secundaria,dagger,'arma secundaria incorreta');
+const bow=RPG.Items.instantiate(RPG.Items.TEMPLATES.find(item=>item.id==='arco'),RPG.Items.RARITIES[0]);
+assert.strictEqual(RPG.Player.equipItem(hero,bow,'secundaria'),false,'arma de duas maos entrou na mao secundaria');
+RPG.Player.equipItem(hero,bow,'arma');
+assert.strictEqual(hero.equip.secundaria,null,'arma de duas maos nao liberou a mao secundaria');
 
 for (let floor = 1; floor <= 100; floor++) {
   const state = { floor, mapRows:6, mapCols:6 };
@@ -107,5 +124,11 @@ assert.strictEqual(RPG.Items.tierClass('SSS+'), 'tier-sss-plus', 'classe visual 
 RPG.Monsters.SPECIES.forEach(monster => {
   assert(monster.ability && monster.weakness && monster.resistance, `criatura sem identidade: ${monster.name}`);
 });
+for(let floor=1;floor<=30;floor++){
+  const enemy=RPG.Monsters.generate(floor);
+  assert(enemy.enemyClass&&enemy.classPower&&enemy.classPowerDesc,`inimigo sem classe ou poder no andar ${floor}`);
+}
+const functionalBoss=RPG.Monsters.generateBoss(10);
+assert(functionalBoss.enemyClass&&functionalBoss.classPower&&functionalBoss.isMainBoss,'chefe principal sem classe funcional');
 ['heal','blessing','barter','reveal','recruit'].forEach(service => assert(RPG.NPCServices.info(service), `serviço de NPC ausente: ${service}`));
 console.log('Smoke tests: OK (equipamentos, equipe, NPCs, criaturas, eventos e andares 1-100)');

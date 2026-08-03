@@ -2,7 +2,7 @@
 var RPG = window.RPG || {};
 
 RPG.Multiplayer = (function(){
-  var session={connected:false,room:'',name:'',role:0,turn:1,transport:null,applying:false,players:1,profiles:{},pendingState:null,guestCreating:false,moveLockedUntil:0};
+  var session={connected:false,room:'',name:'',role:0,turn:1,transport:null,applying:false,applyingAction:false,players:1,profiles:{},pendingState:null,guestCreating:false,moveLockedUntil:0};
   var originalSave=RPG.Save.save;
 
   function code(){var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',out='';for(var i=0;i<6;i++)out+=chars[Math.floor(Math.random()*chars.length)];return out;}
@@ -27,6 +27,8 @@ RPG.Multiplayer = (function(){
   function mergeProfiles(incoming){Object.keys(incoming||{}).forEach(function(role){session.profiles[role]=incoming[role];});}
   function renderRemote(){
     var s=RPG.state;RPG.UI.showScreen('game');RPG.UI.renderHero();RPG.UI.renderMap();RPG.UI.renderControls();
+    if(!document.getElementById('merchantModal').classList.contains('hidden')&&RPG.Shop.refresh)RPG.Shop.refresh(s);
+    if(!document.getElementById('questModal').classList.contains('hidden'))RPG.Quests.renderBoard(s);
     if(s.mode==='combat'&&s.pendingMonsterCell){document.getElementById('sceneText').classList.add('hidden');document.getElementById('combatScene').classList.remove('hidden');if(RPG.Combat.refresh)RPG.Combat.refresh(s.pendingMonsterCell);}
     else{document.getElementById('combatScene').classList.add('hidden');document.getElementById('sceneText').classList.remove('hidden');RPG.UI.updateSceneText();}
   }
@@ -63,6 +65,22 @@ RPG.Multiplayer = (function(){
       }
     }
     else if(msg.type==='move-lock'&&msg.role!==session.role){session.moveLockedUntil=Math.max(session.moveLockedUntil,Date.now()+700);}
+    else if(msg.type==='ui-action'&&msg.role!==session.role){
+      session.applyingAction=true;
+      var action=msg.action||{},payload=msg.payload||{},cell=payload.x!=null&&RPG.state.map[payload.y]?RPG.state.map[payload.y][payload.x]:null;
+      if(action==='shop'&&cell)RPG.Shop.open(RPG.state,cell,payload.kind||'shop');
+      else if(action==='npc'&&payload.npc)RPG.UI.openDialogueWithNPC(payload.npc);
+      else if(action==='simple')RPG.UI.showSimpleDialogue(payload.icon,payload.title,payload.text);
+      else if(action==='event'&&cell)RPG.Events.open(RPG.state,cell);
+      else if(action==='questboard')RPG.Quests.openBoard(RPG.state);
+      else if(action==='encounter'&&cell)RPG.Combat.startEncounterChoice(cell);
+      session.applyingAction=false;
+    }
+    else if(msg.type==='team-heal'&&msg.role!==session.role){
+      var heal=Math.max(0,Math.min(500,Math.floor(msg.amount||0)));
+      if(RPG.state.hero){RPG.state.hero.hp=Math.min(RPG.state.hero.maxHp,RPG.state.hero.hp+heal);(RPG.state.party||[]).forEach(function(member){member.hp=Math.min(member.maxHp,member.hp+Math.round(heal*.7));});RPG.UI.renderHero();RPG.Save.save(RPG.state);RPG.UI.logEvent('O poder de cura do parceiro restaura '+heal+' de Vida.');}
+    }
+    else if(msg.type==='boss-advance'&&session.role===1){RPG.Combat.advanceAfterBoss(String(msg.bossName||'o chefe'));}
     else if(msg.type==='error')message(msg.message||'Erro na sala multiplayer.',true);
     else if(msg.type==='peer-left')message('O outro jogador desconectou.',true);
   }
@@ -94,6 +112,9 @@ RPG.Multiplayer = (function(){
     send({type:'state',state:snapshot(),turn:session.turn,role:session.role});status();
   }
   function commit(){sync(true);}
+  function broadcastAction(action,payload){if(session.connected&&!session.applyingAction)send({type:'ui-action',action:action,payload:payload||{}});}
+  function healTeam(amount){if(session.connected)send({type:'team-heal',amount:Math.max(0,Math.floor(amount||0))});}
+  function requestBossAdvance(name){if(session.connected)send({type:'boss-advance-request',bossName:String(name||'o chefe').slice(0,80)});}
   function disconnect(){
     if(session.transport){try{session.transport.close();}catch(e){}}
     session.connected=false;session.transport=null;session.room='';session.role=0;session.players=1;session.profiles={};session.pendingState=null;session.guestCreating=false;
@@ -102,6 +123,7 @@ RPG.Multiplayer = (function(){
   function canAct(){return !session.connected||session.turn===session.role;}
   function beginMove(){
     if(!session.connected)return true;
+    if(session.role!==1){message('O dono da sala guia a exploração. Você participa das interações e batalhas.',true);return false;}
     if(Date.now()<session.moveLockedUntil){message('O grupo já está se movimentando.',true);return false;}
     session.moveLockedUntil=Date.now()+700;
     send({type:'move-lock',role:session.role});
@@ -138,5 +160,5 @@ RPG.Multiplayer = (function(){
   }
   RPG.Save.save=function(state){var result=originalSave(state);if(!session.applying)sync(false);return result;};
   document.addEventListener('DOMContentLoaded',init);
-  return {commit:commit,sync:function(){sync(false);},disconnect:disconnect,canAct:canAct,beginMove:beginMove,grantSharedXP:grantSharedXP,grantSharedGold:grantSharedGold,isGuestCreating:function(){return session.guestCreating;},finishGuestCreation:finishGuestCreation,session:session};
+  return {commit:commit,sync:function(){sync(false);},disconnect:disconnect,broadcastAction:broadcastAction,healTeam:healTeam,requestBossAdvance:requestBossAdvance,canAct:canAct,beginMove:beginMove,grantSharedXP:grantSharedXP,grantSharedGold:grantSharedGold,isGuestCreating:function(){return session.guestCreating;},finishGuestCreation:finishGuestCreation,session:session};
 })();

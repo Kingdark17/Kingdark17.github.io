@@ -12,7 +12,7 @@ RPG.Combat = (function(){
   var rolling = false;
 
   function rnd(n){ return Math.floor(Math.random()*n); }
-  function currentMonster(cell){ return cell.monsters[cell.monsterIndex]; }
+  function currentMonster(cell){ return RPG.Monsters.ensureClass(cell.monsters[cell.monsterIndex]); }
 
   function rollDie(sides, callback){
     if(rolling) return;
@@ -71,9 +71,13 @@ RPG.Combat = (function(){
 
   function otherEquipAtk(hero){
     var sum = 0;
-    ['armadura','acessorio'].forEach(function(slot){
+    ['secundaria','armadura','acessorio'].forEach(function(slot){
       var it = hero.equip[slot];
-      if(it && it.stats.ataque) sum += it.stats.ataque;
+      if(it && it.stats.ataque){
+        var pct=100,cls=RPG.Player.classByName(hero.className);
+        if(slot==='secundaria' && cls && cls.affinity && cls.affinity[it.templateId]!=null)pct=cls.affinity[it.templateId];
+        sum += Math.round(it.stats.ataque*pct/100);
+      }
     });
     return sum;
   }
@@ -140,6 +144,13 @@ RPG.Combat = (function(){
         if(member.className==='Ladino' && Math.random()<0.25){ dmg=Math.round(dmg*1.65); RPG.UI.logEvent(member.name+' ativa Ataque Furtivo!'); }
         if((member.className==='Bárbaro' || member.className==='Barbaro') && member.hp<member.maxHp/2) dmg=Math.round(dmg*1.35);
         if(member.className==='Arqueiro' && Math.random()<0.25){ dmg=Math.round(dmg*1.5); RPG.UI.logEvent(member.name+' acerta um Tiro Crítico!'); }
+        monster.status=monster.status||{};
+        if(member.className==='Necromante'&&Math.random()<0.3){monster.status.enfraquecido={turns:2,amount:.2};RPG.UI.logEvent(member.name+' enfraquece o inimigo.');}
+        if(member.className==='Druida'&&Math.random()<0.3){monster.status.veneno={turns:3,dmg:Math.max(2,Math.round(dmg*.2))};RPG.UI.logEvent(member.name+' envenena o inimigo.');}
+        if(member.className==='Monge'&&Math.random()<0.22){monster.status.atordoado=(monster.status.atordoado||0)+1;RPG.UI.logEvent(member.name+' atordoa o inimigo.');}
+        if(member.className==='Bardo'&&Math.random()<0.3){monster.status.vulneravel={turns:2,amount:.15};RPG.UI.logEvent(member.name+' deixa o inimigo vulnerável.');}
+        if((member.className==='Caçador'||member.className==='Cacador')&&Math.random()<0.3){monster.status.sangramento={turns:3,dmg:Math.max(2,Math.round(dmg*.2))};RPG.UI.logEvent(member.name+' causa sangramento.');}
+        if(member.className==='Paladino'&&Math.random()<0.25){var paladinHeal=Math.max(3,Math.round(dmg*.2));RPG.state.hero.hp=Math.min(RPG.state.hero.maxHp,RPG.state.hero.hp+paladinHeal);RPG.UI.logEvent(member.name+' restaura '+paladinHeal+' de Vida do herói.');}
         monster.hp -= dmg;
         total += dmg;
         RPG.UI.logEvent(member.name+' acerta '+monster.name+' e causa '+dmg+' de dano.');
@@ -169,8 +180,20 @@ RPG.Combat = (function(){
   function modifyDamageByAffinity(monster, dmg, type){
     if(monster.weakness===type) dmg = Math.round(dmg*1.25);
     if(monster.resistance===type) dmg = Math.round(dmg*0.8);
-    if(monster.status && monster.status.vulneravel && monster.status.vulneravel.turns>0) dmg = Math.round(dmg*(1+(monster.status.vulneravel.amount||0.2)));
+    if(monster.status && monster.status.vulneravel && monster.status.vulneravel.turns>0){dmg=Math.round(dmg*(1+(monster.status.vulneravel.amount||0.2)));monster.status.vulneravel.turns--;if(monster.status.vulneravel.turns<=0)delete monster.status.vulneravel;}
+    if(monster.guardHits>0){dmg=Math.max(1,Math.round(dmg*.65));monster.guardHits--;RPG.UI.logEvent(monster.classPower+' reduz o dano recebido.');}
     return Math.max(1,dmg);
+  }
+
+  function triggerEnemyClassPower(monster,hero){
+    if(!monster.enemyClass||monster.attackCount%3!==0)return 1;
+    RPG.UI.logEvent(monster.classIcon+' <b>'+monster.classPower+'</b> é ativado!');
+    if(monster.enemyClass.indexOf('Brutamontes')>=0)return 1.7;
+    if(monster.enemyClass.indexOf('Assassino')>=0){monster.poisonStrike=true;return 1.4;}
+    if(monster.enemyClass.indexOf('Xamã')>=0){var heal=Math.max(4,Math.round(monster.maxHp*.14));monster.hp=Math.min(monster.maxHp,monster.hp+heal);RPG.UI.logEvent(monster.name+' recupera '+heal+' de Vida.');return 1;}
+    if(monster.enemyClass.indexOf('Guardião')>=0){monster.guardHits=2;return 1;}
+    if(monster.enemyClass.indexOf('Feiticeiro')>=0){var drain=Math.min(hero.mp,Math.max(4,Math.round(monster.dmg*.6)));hero.mp-=drain;RPG.UI.logEvent(monster.name+' drena '+drain+' de Mana.');return 1.3;}
+    return 1;
   }
 
   function applyPowerStatus(power, monster, derived){
@@ -196,14 +219,16 @@ RPG.Combat = (function(){
     var danger = monster.dmg <= 5 ? 'Baixo' : (monster.dmg <= 10 ? 'Medio' : 'Alto');
     function combatLabel(value){ return { fisico:'físico', magico:'mágico', nenhuma:'nenhuma' }[value] || value; }
     var info = '<div class="enemy-preview">'+
-      '<span>Vida <b>'+monster.hp+'</b></span><span>Dano <b>'+monster.dmg+' ('+danger+')</b></span><span>Velocidade <b>'+monster.speed+'</b></span>'+
+      '<span>Vida <b>'+monster.hp+'</b></span><span>Dano <b>'+monster.dmg+' ('+danger+')</b></span><span>Velocidade <b>'+monster.speed+'</b></span><span>Classe <b>'+monster.classIcon+' '+monster.enemyClass+'</b></span>'+
       '<span>Fraqueza <b>'+combatLabel(monster.weakness)+'</b></span><span>Resistência <b>'+combatLabel(monster.resistance)+'</b></span>'+
       '<span class="enemy-ability">Habilidade <b>'+monster.ability+'</b>: '+monster.abilityDesc+'</span>'+
+      '<span class="enemy-ability">Poder da classe <b>'+monster.classPower+'</b>: '+monster.classPowerDesc+'</span>'+
       (monster.isBoss ? '<span class="enemy-ability boss-info">Especial <b>'+monster.bossAbility+'</b>: '+monster.bossAbilityDesc+'</span>' : '')+
       '<span>Recompensa <b>'+monster.xp+' XP / '+monster.gold+' ouro</b></span></div>';
     RPG.UI.setSceneMessage(groupMsg+info);
     RPG.UI.logEvent((monster.isBoss?'Um CHEFE surge: ':'Um <b>')+monster.name+(monster.isBoss?'!':'</b> surge no caminho.'));
     RPG.UI.renderControls();
+    if(RPG.Multiplayer)RPG.Multiplayer.broadcastAction('encounter',{x:cell.x,y:cell.y});
   }
 
   function attemptFlee(cell, phase){
@@ -262,6 +287,7 @@ RPG.Combat = (function(){
     if(monster.behavior==='agressivo' && Math.random()<0.25){ attackMult=1.45; RPG.UI.logEvent(monster.ability+' aumenta a força do golpe!'); }
     if(monster.behavior==='lento' && monster.attackCount%3===0){ attackMult=1.7; RPG.UI.logEvent(monster.ability+' acerta com grande impacto!'); }
     if(monster.isMainBoss && monster.attackCount%3===0){ attackMult=1.9; RPG.UI.logEvent('<b>'+monster.bossAbility+'</b> é ativado!'); }
+    attackMult*=triggerEnemyClassPower(monster,hero);
 
     var livingParty = (state.party || []).filter(function(m){ return m.hp > 0; });
     var defenders=livingParty.filter(function(m){ return (m.stance||'equilibrada')==='defensiva' || m.className==='Guerreiro'; });
@@ -299,6 +325,7 @@ RPG.Combat = (function(){
       RPG.UI.logEvent('O escudo arcano absorve parte do golpe.');
     }
     hero.hp = Math.max(0, hero.hp - dmg);
+    if(monster.poisonStrike){monster.poisonStrike=false;hero.buffs.poisonTurns=3;hero.buffs.poisonDmg=Math.max(2,Math.round(monster.dmg*.35));RPG.UI.logEvent('A Lâmina Tóxica envenena você.');}
     if(monster.behavior==='venenoso' && Math.random()<0.35){
       hero.buffs.poisonTurns = 3; hero.buffs.poisonDmg = Math.max(2,Math.round(Math.floor(monster.dmg/3)*(RPG.Player.hasDebuffEffect(hero,'poisonVulnerability')?1.5:1)));
       RPG.UI.logEvent(monster.ability+' envenena você por 3 turnos!');
@@ -357,8 +384,9 @@ RPG.Combat = (function(){
     if(!hero.powers || !hero.powers.length) return '';
     var html = '<div class="power-row">';
     hero.powers.forEach(function(p, i){
-      var canUse = hero.mp >= p.cost;
-      html += '<button class="power-btn'+(canUse?'':' disabled')+'" data-idx="'+i+'">'+p.icon+' '+p.name+' <span class="mp-cost">('+p.cost+' MP)</span></button>';
+      var shownCost=Math.ceil(p.cost*(RPG.Player.hasDebuffEffect(hero,'manaCostPenalty')?1.2:1));
+      var canUse = hero.mp >= shownCost;
+      html += '<button class="power-btn'+(canUse?'':' disabled')+'" data-idx="'+i+'">'+p.icon+' '+p.name+' <span class="mp-cost">('+shownCost+' MP)</span></button>';
     });
     html += '</div>';
     return html;
@@ -377,20 +405,23 @@ RPG.Combat = (function(){
         statusTags += '<span class="status-tag">'+(labels[k]||k)+'</span>';
       });
     }
+    var mageAttack=hero.className==='Mago';
     el.innerHTML =
       '<div class="cs-icon">'+monster.icon+'</div>'+
       '<div class="cs-name">'+monster.name+(monster.isBoss?' \ud83d\udc51':'')+'</div>'+
+      '<div class="cs-hp enemy-class-line">'+monster.classIcon+' '+monster.enemyClass+' · '+monster.classPower+'</div>'+
       progress +
       '<div class="cs-hp">Vida da criatura: '+Math.max(0,monster.hp)+' / '+monster.maxHp+'</div>'+
       (statusTags ? '<div class="status-tags">'+statusTags+'</div>' : '') +
       '<div class="combat-actions">'+
-        '<button class="attack" id="combatAttackBtn">Atacar (d20)</button>'+
+        (mageAttack?'<button class="attack" id="combatAttackBtn" '+(hero.mp<5?'disabled':'')+'>Ataque Mágico (d20 · 5 MP)</button><button class="attack staff-attack" id="combatPhysicalBtn">Ataque Físico (d20)</button>':'<button class="attack" id="combatAttackBtn">Atacar (d20)</button>')+
         '<button class="flee" id="combatFleeBtn">Fugir da Batalha</button>'+
       '</div>'+
       powerButtonsHtml(hero);
     document.getElementById('combatAttackBtn').addEventListener('click', function(){
-      rollDie(20, function(result){ resolveAttack(cell, result); });
+      rollDie(20, function(result){ resolveAttack(cell,result,mageAttack?'magic':'normal'); });
     });
+    var physicalBtn=document.getElementById('combatPhysicalBtn');if(physicalBtn)physicalBtn.addEventListener('click',function(){rollDie(20,function(result){resolveAttack(cell,result,'physical');});});
     document.getElementById('combatFleeBtn').addEventListener('click', function(){
       attemptFlee(cell, 'combat');
     });
@@ -404,11 +435,13 @@ RPG.Combat = (function(){
 
   function updateCombatPanel(cell){ renderCombatScene(cell); }
 
-  function resolveAttack(cell, roll){
+  function resolveAttack(cell, roll, attackStyle){
     var state = RPG.state;
     var hero = state.hero;
     if(tickHeroStatus()) return;
     hero.buffs = hero.buffs || {};
+    var isMage=hero.className==='Mago',magicalAttack=isMage&&attackStyle==='magic',magicAttackCost=5;
+    if(magicalAttack){if(hero.mp<magicAttackCost){RPG.UI.setSceneMessage('Mana insuficiente. Use o ataque físico.');updateCombatPanel(cell);return;}hero.mp-=magicAttackCost;RPG.UI.renderHero();}
     var monster = currentMonster(cell);
     var d = hero.derived || RPG.Player.getDerived(hero);
     var bonus = RPG.Player.equipmentBonus(hero);
@@ -427,16 +460,16 @@ RPG.Combat = (function(){
     }
     if(hit){
       var forcaMult = hero.buffs.forcaTurns>0 ? (1+(hero.buffs.forcaAmount||0)) : 1;
-      var base = 3+rnd(6);
-      var dmg = Math.round((base + d.dmgFisico + weaponAtkContribution(hero, affinity) + otherEquipAtk(hero)) * forcaMult);
-      dmg = modifyDamageByAffinity(monster,dmg,'fisico');
+      var base = 3+rnd(6),dmg;
+      if(magicalAttack){dmg=Math.round(base+d.dmgMagico+weaponAtkContribution(hero,affinity)+otherEquipAtk(hero));dmg=modifyDamageByAffinity(monster,dmg,'magico');}
+      else {var physicalBase=isMage&&attackStyle==='physical'?Math.round(d.dmgFisico*.5):d.dmgFisico;dmg=Math.round((base+physicalBase+weaponAtkContribution(hero,affinity)+otherEquipAtk(hero))*forcaMult);dmg=modifyDamageByAffinity(monster,dmg,'fisico');}
       var critChance = (d.critico + (bonus.critico||0))/100;
       var isCrit = guaranteedCrit || Math.random() < critChance || roll === 20;
       if(isCrit){ dmg = Math.round(dmg*1.6); }
       monster.hp -= dmg;
       RPG.Effects.floatText(document.getElementById('combatScene'), (isCrit?'CRITICO! ':'')+'-'+dmg, isCrit?'crit':'dmg');
       RPG.Effects.playSfx(isCrit?'crit':'hit');
-      RPG.UI.logEvent('Você acerta o '+monster.name+' causando '+dmg+' de dano'+(isCrit?' (crítico!)':'')+(affinity<100?' (afinidade de arma '+affinity+'%)':'')+'.');
+      RPG.UI.logEvent('Você acerta o '+monster.name+' causando '+dmg+' de dano '+(magicalAttack?'mágico':'físico')+(isCrit?' (crítico!)':'')+(affinity<100?' (afinidade de arma '+affinity+'%)':'')+'.');
       RPG.UI.setSceneMessage(isCrit ? 'Golpe crítico! Você causa '+dmg+' de dano.' : 'Golpe certeiro! Você causa '+dmg+' de dano.');
       hero.buffs.critNext = false;
       if(hero.buffs.precisaoTurns>0) hero.buffs.precisaoTurns--;
@@ -487,7 +520,10 @@ RPG.Combat = (function(){
     } else if(power.type === 'cura'){
       var heal = Math.round((10*power.power + d.curaBonus)*(RPG.Player.hasDebuffEffect(hero,'healingPenalty')?0.75:1));
       hero.hp = Math.min(hero.maxHp, hero.hp+heal);
-      msg = 'Você usa '+power.name+' e recupera '+heal+' de vida.';
+      var allyHeal=Math.max(1,Math.round(heal*.7));
+      (state.party||[]).forEach(function(member){if(member.hp>0)member.hp=Math.min(member.maxHp,member.hp+allyHeal);});
+      if(RPG.Multiplayer)RPG.Multiplayer.healTeam(allyHeal);
+      msg = 'Você usa '+power.name+' e recupera '+heal+' de Vida. A equipe recupera '+allyHeal+'.';
       RPG.UI.logEvent(msg);
       RPG.UI.renderHero();
     } else if(power.type === 'buff_crit'){
@@ -518,6 +554,12 @@ RPG.Combat = (function(){
     applyMonsterHit(cell);
     updateCombatPanel(cell);
     if(RPG.Multiplayer) RPG.Multiplayer.commit();
+  }
+
+  function advanceAfterBoss(defeatedBossName){
+    var state=RPG.state;state.floor++;var nextStart=RPG.Dungeon.generate(state);RPG.UI.resetPlayerToStart(nextStart);
+    state.mode='move';state.pendingMonsterCell=null;state.hero.buffs={};document.getElementById('sceneText').classList.remove('hidden');document.getElementById('combatScene').classList.add('hidden');document.getElementById('npcCard').style.display='none';
+    RPG.UI.renderMap();RPG.UI.renderControls();RPG.UI.setSceneMessage('O chefe foi derrotado! O caminho se abre e o grupo avança automaticamente para o <b>Andar '+state.floor+'</b>.');RPG.UI.logEvent('Após vencer <b>'+(defeatedBossName||'o chefe')+'</b>, o grupo avança automaticamente para o Andar '+state.floor+'.');RPG.Save.save(state);
   }
 
   function handleMonsterDefeated(cell){
@@ -575,6 +617,11 @@ RPG.Combat = (function(){
       }
       RPG.UI.renderHero();
     }
+    if(cell.type==='boss'){
+      var defeatedBossName=monster.name;
+      if(RPG.Multiplayer&&RPG.Multiplayer.session.connected&&RPG.Multiplayer.session.role!==1){exitCombat(cell,true,lootItem,bonusMsg);RPG.Multiplayer.requestBossAdvance(defeatedBossName);return;}
+      advanceAfterBoss(defeatedBossName);return;
+    }
     RPG.Save.save(state);
     exitCombat(cell, true, lootItem, bonusMsg);
   }
@@ -602,7 +649,7 @@ RPG.Combat = (function(){
     rollDie: rollDie,
     weaponAffinityPct: weaponAffinityPct,
     startEncounterChoice: startEncounterChoice, attemptFlee: attemptFlee,
-    startCombat: startCombat, resolveAttack: resolveAttack, usePower: usePower,
+    startCombat: startCombat, resolveAttack: resolveAttack, usePower: usePower,advanceAfterBoss:advanceAfterBoss,
     refresh: updateCombatPanel
   };
 })();

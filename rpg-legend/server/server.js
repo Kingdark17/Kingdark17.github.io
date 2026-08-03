@@ -63,6 +63,9 @@ function sanitizeState(data,room,role){
   if(incoming)room.profiles[role]=sanitizeProfile(incoming,room.profiles[role]);
   state.profiles=publicProfiles(room);
   state.floor=integer(state.floor,1,10000);state.mapRows=integer(state.mapRows,1,12);state.mapCols=integer(state.mapCols,1,12);
+  // Na exploração, somente o criador da sala conduz posição, andar e local.
+  // O convidado ainda pode atualizar combate, perfil e interações compartilhadas.
+  if(role!==1&&room.state){state.pos=clone(room.state.pos);state.floor=room.state.floor;state.mapMode=room.state.mapMode;state.mapRows=room.state.mapRows;state.mapCols=room.state.mapCols;}
   if(Array.isArray(state.map))state.map=state.map.slice(0,12).map(row=>Array.isArray(row)?row.slice(0,12):[]);
   return state;
 }
@@ -111,7 +114,21 @@ wss.on('connection',ws=>{
       room.state=sanitizeState(data.state,room,ws.role);data.state=room.state;relay(room,ws,data);
       send(ws,{type:'authoritative',room:code,state:room.state,turn:data.turn,role:ws.role});return;
     }
-    if(data.type==='move-lock')relay(room,ws,data);
+    if(data.type==='move-lock'){if(ws.role===1)relay(room,ws,data);return;}
+    if(data.type==='ui-action'){
+      const allowed=['shop','npc','simple','event','questboard','encounter'];if(!allowed.includes(data.action))return;
+      const p=data.payload&&typeof data.payload==='object'?data.payload:{};
+      data.payload={x:integer(p.x,-1,11),y:integer(p.y,-1,11),kind:p.kind==='blacksmith'?'blacksmith':'shop'};
+      if(data.action==='simple'){data.payload.icon=String(p.icon||'').slice(0,8);data.payload.title=String(p.title||'').replace(/[<>]/g,'').slice(0,60);data.payload.text=String(p.text||'').replace(/[<>]/g,'').slice(0,500);}
+      if(data.action==='npc'&&p.npc){data.payload.npc={name:String(p.npc.name||'NPC').replace(/[<>]/g,'').slice(0,50),role:String(p.npc.role||'').replace(/[<>]/g,'').slice(0,50),service:String(p.npc.service||'').slice(0,20),icon:String(p.npc.icon||'').slice(0,8),lines:(Array.isArray(p.npc.lines)?p.npc.lines:[]).slice(0,10).map(line=>String(line).replace(/[<>]/g,'').slice(0,300)),serviceUsed:!!p.npc.serviceUsed};}
+      relay(room,ws,data);return;
+    }
+    if(data.type==='team-heal'){data.amount=integer(data.amount,0,500);relay(room,ws,data);return;}
+    if(data.type==='boss-advance-request'&&ws.role===2&&room.state&&room.state.floor%5===0){
+      const defeated=(room.state.map||[]).some(row=>(row||[]).some(cell=>cell&&cell.type==='boss'&&cell.beaten));
+      if(defeated)relay(room,ws,{type:'boss-advance',room:code,role:2,bossName:String(data.bossName||'o chefe').replace(/[<>]/g,'').slice(0,80)});
+      return;
+    }
   });
   ws.on('close',()=>{
     if(!ws.room)return;const room=rooms.get(ws.room);if(!room)return;room.clients=room.clients.filter(client=>client!==ws);

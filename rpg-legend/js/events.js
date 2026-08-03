@@ -42,6 +42,7 @@ RPG.Events = (function(){
     Array.prototype.forEach.call(document.querySelectorAll('.event-choice'), function(btn){
       btn.addEventListener('click', function(){ resolve(state, cell, btn.getAttribute('data-choice')); });
     });
+    if(RPG.Multiplayer)RPG.Multiplayer.broadcastAction('event',{x:cell.x,y:cell.y});
   }
 
   function resolve(state, cell, choice){

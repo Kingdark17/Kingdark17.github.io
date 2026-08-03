@@ -36,34 +36,19 @@ RPG.UI = (function(){
     });
   }
 
-  // cada classe ja vem com 1 poder proprio (automatico); o jogador
-  // escolhe ate 2 poderes extras entre os das outras classes.
+  function rouletteCard(it,label){return '<div class="pick-card selected signature"><div class="pc-top"><span class="pc-icon">'+it.icon+'</span><span class="pc-name">'+it.name+(label?' <small>('+label+')</small>':'')+'</span></div><div class="pc-desc">'+it.desc+'</div></div>';}
   function renderPowerGrid(){
     var el = document.getElementById('powerGrid');
     el.innerHTML = '';
     var sigName = creation.cls ? creation.cls.signature : null;
-    creation.powers = creation.powers.filter(function(p){ return p.name !== sigName; });
-    RPG.Player.POWERS.forEach(function(it){
-      var isSig = it.name === sigName;
-      var card = document.createElement('div');
-      card.className = 'pick-card' + (isSig ? ' selected signature' : '');
-      card.innerHTML = '<div class="pc-top"><span class="pc-icon">'+it.icon+'</span><span class="pc-name">'+it.name+(isSig?' <small>(da classe)</small>':'')+'</span></div><div class="pc-desc">'+it.desc+'</div>';
-      if(isSig){
-        card.classList.add('locked');
-      } else {
-        if(creation.powers.indexOf(it) >= 0){ card.classList.add('selected'); }
-        card.addEventListener('click', function(){
-          var idx = creation.powers.indexOf(it);
-          if(idx >= 0){ creation.powers.splice(idx,1); card.classList.remove('selected'); }
-          else {
-            if(creation.powers.length >= 2){ showError('Você só pode escolher até 2 poderes extras.'); return; }
-            creation.powers.push(it); card.classList.add('selected');
-          }
-          clearError();
-        });
-      }
-      el.appendChild(card);
-    });
+    if(sigName){var signature=RPG.Player.powerByName(sigName);if(signature)el.innerHTML+=rouletteCard(signature,'poder da classe');}
+    creation.powers.forEach(function(power){el.innerHTML+=rouletteCard(power,'poder da roleta');});
+    if(!creation.powers.length)el.innerHTML+='<div class="roulette-result-placeholder">Gire a roleta para descobrir seus dois poderes adicionais.</div>';
+  }
+  function renderDebuffResult(){var el=document.getElementById('debuffGrid');el.innerHTML=creation.debuff?rouletteCard(creation.debuff,'fraqueza sorteada'):'<div class="roulette-result-placeholder">Gire a roleta para descobrir sua fraqueza.</div>';}
+  function animateRoulette(button,pool,onDone){
+    button.classList.add('rolling');button.disabled=true;var original=button.textContent,count=0;
+    var timer=setInterval(function(){var item=pick(pool);button.textContent=item.icon+' '+item.name;if(++count>=12){clearInterval(timer);button.classList.remove('rolling');button.disabled=false;button.textContent=original;onDone();clearError();}},70);
   }
 
   function renderCreationScreen(){
@@ -76,17 +61,15 @@ RPG.UI = (function(){
       card.classList.add('selected'); clearError();
     });
     buildPickGrid('classGrid', RPG.Player.CLASSES, function(it, card){
-      creation.cls = it;
+      creation.cls = it;creation.powers=[];
       Array.prototype.forEach.call(document.getElementById('classGrid').children, function(c){ c.classList.remove('selected'); });
       card.classList.add('selected'); clearError();
       renderPowerGrid();
     });
     renderPowerGrid();
-    buildPickGrid('debuffGrid', RPG.Player.DEBUFFS, function(it, card){
-      creation.debuff = it;
-      Array.prototype.forEach.call(document.getElementById('debuffGrid').children, function(c){ c.classList.remove('selected'); });
-      card.classList.add('selected'); clearError();
-    });
+    renderDebuffResult();
+    document.getElementById('rollPowersBtn').onclick=function(){if(!creation.cls){showError('Escolha uma classe antes de girar os poderes.');return;}var pool=RPG.Player.POWERS.filter(function(power){return power.name!==creation.cls.signature;});animateRoulette(this,pool,function(){var shuffled=pool.slice().sort(function(){return Math.random()-.5;});creation.powers=shuffled.slice(0,2);renderPowerGrid();});};
+    document.getElementById('rollDebuffBtn').onclick=function(){var pool=RPG.Player.DEBUFFS;animateRoulette(this,pool,function(){creation.debuff=pick(pool);renderDebuffResult();});};
 
     document.getElementById('nameInput').oninput = function(e){ creation.name = e.target.value; clearError(); };
   }
@@ -99,6 +82,7 @@ RPG.UI = (function(){
     if(!name){ showError('Dê um nome ao seu herói.'); return false; }
     if(!creation.race){ showError('Escolha uma raça.'); return false; }
     if(!creation.cls){ showError('Escolha uma classe.'); return false; }
+    if(creation.powers.length!==2){ showError('Gire a roleta para receber dois poderes adicionais.'); return false; }
     if(!creation.debuff){ showError('Escolha uma fraqueza.'); return false; }
     creation.name = name;
     return true;
@@ -197,7 +181,8 @@ RPG.UI = (function(){
 
     var slots = document.getElementById('equipSlots');
     slots.innerHTML = '';
-    [['arma','Arma'],['armadura','Armadura'],['acessorio','Acessório']].forEach(function(pair){
+    h.equip.secundaria=h.equip.secundaria||null;
+    [['arma','Mão principal'],['secundaria','Mão secundária'],['armadura','Armadura'],['acessorio','Acessório']].forEach(function(pair){
       var it = h.equip[pair[0]];
       var line = document.createElement('div');
       line.className = 'equip-line';
@@ -481,6 +466,7 @@ RPG.UI = (function(){
     updateNpcActionButton();
     logEvent('Você iniciou uma conversa com <b>'+npc.name+'</b>.');
     RPG.Tutorial.event('npc');
+    if(RPG.Multiplayer)RPG.Multiplayer.broadcastAction('npc',{npc:npc});
   }
   function showSimpleDialogue(icon, title, text){
     currentNPC = null;
@@ -491,6 +477,7 @@ RPG.UI = (function(){
     setSceneMessage(text);
     setDialogueControls(false, true);
     document.getElementById('npcActionBtn').classList.add('hidden');
+    if(RPG.Multiplayer)RPG.Multiplayer.broadcastAction('simple',{icon:icon,title:title,text:text});
   }
   function dialogueNext(){
     if(!currentNPC){ return; }
@@ -500,6 +487,7 @@ RPG.UI = (function(){
   }
   function resetDialogue(){
     currentNPC = null;
+    if(RPG.state&&['combat','encounter','event'].indexOf(RPG.state.mode)<0){RPG.state.mode='move';RPG.state.pendingTarget=null;}
     document.getElementById('npcCard').style.display = 'none';
     setDialogueControls(false, false);
     document.getElementById('npcActionBtn').classList.add('hidden');
@@ -507,6 +495,7 @@ RPG.UI = (function(){
   }
   function resetDialogueAmbient(){
     currentNPC = null;
+    if(RPG.state&&['combat','encounter','event'].indexOf(RPG.state.mode)<0){RPG.state.mode='move';RPG.state.pendingTarget=null;}
     document.getElementById('npcCard').style.display = 'none';
     setDialogueControls(false, false);
     document.getElementById('npcActionBtn').classList.add('hidden');
@@ -585,12 +574,14 @@ RPG.UI = (function(){
     document.getElementById('npcActionBtn').addEventListener('click', function(){
       if(!currentNPC) return;
       setSceneMessage(RPG.NPCServices.use(RPG.state,currentNPC));
+      if(RPG.state.mode!=='combat'&&RPG.state.mode!=='event'){RPG.state.mode='move';RPG.state.pendingTarget=null;renderControls();}
       updateNpcActionButton();
     });
     document.getElementById('dialogueNextBtn').addEventListener('click', dialogueNext);
     document.getElementById('dialogueCloseBtn').addEventListener('click', function(){
       if(currentNPC){ logEvent('Você encerrou a conversa com <b>'+currentNPC.name+'</b>.'); }
       resetDialogue();
+      renderControls();
     });
   }
 

@@ -94,6 +94,7 @@ RPG.Quests = (function(){
     ensureBoard(state);
     renderBoard(state);
     document.getElementById('questModal').classList.remove('hidden');
+    if(RPG.Multiplayer)RPG.Multiplayer.broadcastAction('questboard',{});
   }
   function closeBoard(){ document.getElementById('questModal').classList.add('hidden'); }
 

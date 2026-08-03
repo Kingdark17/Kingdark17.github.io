@@ -49,7 +49,7 @@ RPG.Player = (function(){
   var POWERS = [
     { name:"Golpe Poderoso", icon:"\ud83d\udca5", desc:"Concentra força extra no próximo ataque corpo a corpo.", cost:8, type:"dano_fisico", power:1.8 },
     { name:"Bola de Fogo", icon:"\ud83d\udd25", desc:"Conjura uma explosão e causa queimadura por 3 turnos.", cost:14, type:"dano_magico", power:1.5, status:"queimadura", turns:3, dotRatio:0.18 },
-    { name:"Cura Menor", icon:"\u2728", desc:"Restaura uma quantidade de vida.", cost:10, type:"cura", power:1.0 },
+    { name:"Cura Menor", icon:"\u2728", desc:"Restaura Vida do herói, companheiros e parceiro online.", cost:10, type:"cura", power:1.0 },
     { name:"Furtividade Sombria", icon:"\ud83c\udf11", desc:"O próximo ataque é um acerto crítico garantido.", cost:8, type:"buff_crit" },
     { name:"Tiro Certeiro", icon:"\ud83c\udfaf", desc:"Aumenta muito a precisão dos próximos ataques.", cost:6, type:"buff_precisao", turns:2, amount:25 },
     { name:"Grito de Guerra", icon:"\ud83d\udcef", desc:"Aumenta o dano físico causado por um tempo.", cost:10, type:"buff_forca", turns:3, amount:0.3 },
@@ -62,7 +62,7 @@ RPG.Player = (function(){
     { name:"Canção Debilitante", icon:"\ud83c\udfb6", desc:"Torna o inimigo vulnerável a ataques por 3 turnos.", cost:10, type:"dano_magico", power:0.7, status:"vulneravel", turns:3, amount:0.2 },
     { name:"Flecha Serrilhada", icon:"\ud83e\ude78", desc:"Causa dano físico e sangramento por 3 turnos.", cost:9, type:"dano_fisico", power:1.25, status:"sangramento", turns:3, dotRatio:0.2 },
     { name:"Rajada Glacial", icon:"\u2744\ufe0f", desc:"Causa dano mágico e deixa o inimigo lento.", cost:12, type:"dano_magico", power:1.3, status:"lento", turns:3, amount:0.2 },
-    { name:"Renovação Natural", icon:"\ud83c\udf31", desc:"Uma cura poderosa alimentada pela Sabedoria.", cost:15, type:"cura", power:1.8 }
+    { name:"Renovação Natural", icon:"\ud83c\udf31", desc:"Cura poderosa para o herói, companheiros e parceiro online.", cost:15, type:"cura", power:1.8 }
   ];
 
   var DEBUFFS = [
@@ -170,7 +170,7 @@ RPG.Player = (function(){
       level: 1, xp: 0, xpNext: xpForLevel(1), attrPoints: 0,
       gold: 30 + rnd(21),
       powers: powers, debuff: creation.debuff,
-      equip: { arma: startWeapon, armadura: null, acessorio: null },
+      equip: { arma: startWeapon, secundaria: null, armadura: null, acessorio: null },
       killCount: 0
     };
     var d = getDerived(hero);
@@ -208,7 +208,7 @@ RPG.Player = (function(){
   // soma os bonus de todos os itens equipados
   function equipmentBonus(hero){
     var sum = { ataque:0, defesa:0, vida:0, mana:0, critico:0, velocidade:0, esquiva:0 };
-    ['arma','armadura','acessorio'].forEach(function(slot){
+    ['arma','secundaria','armadura','acessorio'].forEach(function(slot){
       var it = hero.equip[slot];
       if(!it) return;
       Object.keys(it.stats).forEach(function(k){ if(sum[k]!==undefined){ sum[k] += it.stats[k]; } });
@@ -216,10 +216,36 @@ RPG.Player = (function(){
     return sum;
   }
 
-  function equipItem(hero, item){
+  function isOffhandEligible(item){
+    if(!item) return false;
+    if(item.templateId==='escudo') return true;
+    return item.category==='arma' && ['espada','adaga','maca'].indexOf(item.templateId)>=0;
+  }
+
+  function isTwoHanded(item){
+    return !!(item && item.category==='arma' && ['arco','cajado','machado'].indexOf(item.templateId)>=0);
+  }
+
+  function equippedSlot(hero,item){
+    if(!hero || !hero.equip || !item) return null;
+    return ['arma','secundaria','armadura','acessorio'].filter(function(slot){return hero.equip[slot]===item || (hero.equip[slot] && hero.equip[slot].uid===item.uid);})[0] || null;
+  }
+
+  function equipItem(hero, item, requestedSlot){
     if(item.category !== 'arma' && item.category !== 'armadura' && item.category !== 'acessorio') return false;
-    var slot = item.category;
+    hero.equip=hero.equip||{};
+    if(hero.equip.secundaria===undefined) hero.equip.secundaria=null;
+    var slot = requestedSlot || (item.templateId==='escudo' ? 'secundaria' : item.category);
+    if(slot==='secundaria' && !isOffhandEligible(item)) return false;
+    if(slot==='arma' && item.category!=='arma') return false;
+    if(slot==='armadura' && (item.category!=='armadura' || item.templateId==='escudo')) return false;
+    if(slot==='acessorio' && item.category!=='acessorio') return false;
     if(hero.equip[slot]){ hero.equip[slot].equipped = false; }
+    if(slot==='arma' && isTwoHanded(item) && hero.equip.secundaria){hero.equip.secundaria.equipped=false;hero.equip.secundaria=null;}
+    if(slot==='secundaria' && isTwoHanded(hero.equip.arma)){hero.equip.arma.equipped=false;hero.equip.arma=null;}
+    Object.keys(hero.equip).forEach(function(otherSlot){
+      if(otherSlot!==slot && hero.equip[otherSlot]===item) hero.equip[otherSlot]=null;
+    });
     hero.equip[slot] = item;
     item.equipped = true;
     recomputeDerived(hero);
@@ -257,7 +283,7 @@ RPG.Player = (function(){
     RACES: RACES, CLASSES: CLASSES, POWERS: POWERS, DEBUFFS: DEBUFFS, MODES: MODES,
     ATTR_KEYS: ATTR_KEYS, ATTR_LABELS: ATTR_LABELS,
     attrMod: attrMod, buildHero: buildHero, generateCompanion: generateCompanion,
-    equipmentBonus: equipmentBonus, equipItem: equipItem, unequipItem: unequipItem,
+    equipmentBonus: equipmentBonus, equipItem: equipItem, unequipItem: unequipItem, isOffhandEligible: isOffhandEligible, isTwoHanded:isTwoHanded, equippedSlot: equippedSlot,
     gainXP: gainXP, xpForLevel: xpForLevel,
     getDerived: getDerived, recomputeDerived: recomputeDerived, spendAttrPoint: spendAttrPoint,
     hasDebuffEffect: hasDebuffEffect,

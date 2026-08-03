@@ -178,10 +178,11 @@ RPG.Items = (function(){
     var otherAtk=(bonus.ataque||0)-(weapon&&weapon.stats.ataque||0);
     return {vida:derived.maxHp,mana:derived.maxMp,danoFisico:derived.dmgFisico+weaponAtk+otherAtk,danoMagico:derived.dmgMagico,defesa:bonus.defesa||0,critico:derived.critico+(bonus.critico||0),esquiva:derived.esquiva,velocidade:derived.velocidade};
   }
-  function equipmentImpact(hero,item){
+  function equipmentImpact(hero,item,targetSlot){
     if(!hero||!item||['arma','armadura','acessorio'].indexOf(item.category)<0)return [];
-    var before=heroEquipmentSnapshot(hero),preview={className:hero.className,level:hero.level,attrs:hero.attrs,debuff:hero.debuff,equip:{arma:hero.equip.arma,armadura:hero.equip.armadura,acessorio:hero.equip.acessorio}};
-    preview.equip[item.category]=item;
+    var before=heroEquipmentSnapshot(hero),preview={className:hero.className,level:hero.level,attrs:hero.attrs,debuff:hero.debuff,equip:{arma:hero.equip.arma,secundaria:hero.equip.secundaria||null,armadura:hero.equip.armadura,acessorio:hero.equip.acessorio}};
+    var slot=targetSlot || (item.templateId==='escudo'?'secundaria':item.category);
+    preview.equip[slot]=item;
     var after=heroEquipmentSnapshot(preview),labels={vida:'Vida máxima',mana:'Mana máxima',danoFisico:'Dano físico',danoMagico:'Dano mágico',defesa:'Defesa',critico:'Crítico',esquiva:'Esquiva',velocidade:'Velocidade'};
     return Object.keys(labels).map(function(key){var oldValue=Math.round(before[key]*10)/10,newValue=Math.round(after[key]*10)/10;return {key:key,label:labels[key],before:oldValue,after:newValue,diff:Math.round((newValue-oldValue)*10)/10};});
   }
