@@ -204,7 +204,6 @@
           <div class="location-tag" id="locationTag">Cidade Inicial</div>
           <div class="map-toolbar">
             <div class="legend" id="mapLegend"></div>
-            <button class="rune-btn small" id="regenMapBtn">Reiniciar Local</button>
           </div>
 
           <div class="explore-stage">
@@ -296,8 +295,9 @@
       <div class="item-browser-list">
         <div class="gold-display"><span class="icon">&#128176;</span><span id="merchantGoldText">0</span></div>
         <div class="merchant-action-row">
-          <div class="merchant-negotiation" id="merchantNegotiation"></div>
+          <button class="rune-btn small" id="merchantRestockBtn">Renovar Estoque</button>
           <button class="rune-btn small hidden forge-menu-btn" id="merchantForgeOpenBtn">⚒️ Abrir Reforja</button>
+          <div class="merchant-negotiation hidden" id="merchantNegotiation"></div>
         </div>
         <div class="creation-step merchant-section">
           <div class="step-title">Itens a Venda</div>
@@ -312,7 +312,6 @@
           <div class="step-sub">Desequipe o item e selecione-o abaixo.</div>
           <div class="item-grid" id="merchantForgeGrid"></div>
         </div>
-        <button class="rune-btn small" id="merchantRestockBtn">Renovar Estoque</button>
       </div>
       <aside class="item-detail item-detail-pane" id="merchantItemDetail"></aside>
     </div>
