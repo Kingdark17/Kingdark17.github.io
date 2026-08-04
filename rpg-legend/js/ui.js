@@ -597,6 +597,7 @@ RPG.UI = (function(){
     document.getElementById('tutorialGuideBtn').classList.toggle('hidden', name!=='game');
     document.getElementById('gameSettingsBtn').classList.toggle('hidden', name!=='game');
     document.getElementById('gameMainMenuBtn').classList.toggle('hidden', name!=='game');
+    if(RPG.AdminPanel) RPG.AdminPanel.refreshButton();
     document.getElementById('headerSub').textContent =
       name==='game' ? 'mesa de rpg \u00b7 dados \u00b7 cidade \u00b7 masmorra' :
       name==='creation' ? 'criação de personagem' : 'menu principal';

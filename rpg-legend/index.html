@@ -55,6 +55,7 @@
       <div class="sub" id="headerSub">menu principal</div>
     </div>
     <div class="header-actions">
+      <button class="rune-btn small hidden" id="adminPanelBtn">🛠 ADM</button>
       <button class="rune-btn small hidden" id="tutorialGuideBtn">📖 Guia</button>
       <button class="rune-btn small hidden" id="gameSettingsBtn">⚙ Configurações</button>
       <button class="rune-btn small hidden" id="gameMainMenuBtn">☰ Menu Principal</button>
@@ -137,6 +138,32 @@
     <p class="account-help">Use o ouro do seu personagem oficial para desbloquear pets, molduras e cores de nome permanentes.</p>
     <div class="item-grid" id="profileShopList"></div>
     <div id="shopMessage" class="account-message"></div>
+  </div>
+</div>
+
+<!-- ============ PAINEL ADM ============ -->
+<div class="modal-overlay hidden" id="adminPanelModal">
+  <div class="modal-box account-box">
+    <div class="modal-header"><h2>🛠 Painel ADM</h2><button class="modal-close" id="closeAdminPanelBtn">&times;</button></div>
+    <p class="account-help">Edita o personagem atual diretamente. So visivel para a conta admin.</p>
+    <div class="creation-step admin-grid">
+      <label class="multi-label">Vida<input id="admHp" class="name-input" type="number"></label>
+      <label class="multi-label">Vida maxima<input id="admMaxHp" class="name-input" type="number"></label>
+      <label class="multi-label">Mana<input id="admMp" class="name-input" type="number"></label>
+      <label class="multi-label">Mana maxima<input id="admMaxMp" class="name-input" type="number"></label>
+      <label class="multi-label">Ouro<input id="admGold" class="name-input" type="number"></label>
+      <label class="multi-label">Nivel<input id="admLevel" class="name-input" type="number" min="1"></label>
+      <label class="multi-label">XP<input id="admXp" class="name-input" type="number" min="0"></label>
+      <label class="multi-label">Pontos de atributo<input id="admAttrPoints" class="name-input" type="number" min="0"></label>
+      <label class="multi-label">Forca<input id="admForca" class="name-input" type="number" min="1"></label>
+      <label class="multi-label">Destreza<input id="admDestreza" class="name-input" type="number" min="1"></label>
+      <label class="multi-label">Constituicao<input id="admConstituicao" class="name-input" type="number" min="1"></label>
+      <label class="multi-label">Intelecto<input id="admIntelecto" class="name-input" type="number" min="1"></label>
+      <label class="multi-label">Sabedoria<input id="admSabedoria" class="name-input" type="number" min="1"></label>
+      <label class="multi-label">Carisma<input id="admCarisma" class="name-input" type="number" min="1"></label>
+    </div>
+    <button class="rune-btn" id="admApplyBtn">Aplicar Alteracoes</button>
+    <div id="adminPanelMessage" class="account-message"></div>
   </div>
 </div>
 
@@ -449,6 +476,7 @@
 <script src="js/multiplayer-config.js?v=20260802c"></script>
 <script src="js/pets.js?v=20260804c"></script>
 <script src="js/account.js?v=20260804g"></script>
+<script src="js/admin-panel.js?v=20260804a"></script>
 <script src="js/multiplayer.js?v=20260804c"></script>
 <script src="js/main.js?v=20260804b"></script>
 </body>
