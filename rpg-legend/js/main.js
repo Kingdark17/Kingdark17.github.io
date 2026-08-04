@@ -38,25 +38,40 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('startAdventureBtn').addEventListener('click', RPG.UI.startAdventure);
 
   // botao no cabecalho, disponivel durante o jogo, volta para a criacao
-  document.getElementById('newHeroBtn').addEventListener('click', function(){
+  document.getElementById('newHeroBtn').addEventListener('click', async function(){
+    if(!RPG.Account||!RPG.Account.currentUser())return;
+    if(!window.confirm('Criar outro personagem apagará o personagem atual desta conta. Deseja continuar?'))return;
+    if(!(await RPG.Account.resetCloud()))return;
     RPG.Save.clear();
     RPG.UI.showScreen('creation');
     RPG.UI.renderCreationScreen();
   });
 
   /* ================= MENU PRINCIPAL ================= */
+  function requireOnlineAccount(){
+    if(!RPG.Account||!RPG.Account.isReady()||!RPG.Account.currentUser()){if(RPG.Account)RPG.Account.open('Entre ou crie uma conta para jogar. O progresso agora é salvo somente na nuvem.');return false;}
+    return true;
+  }
   function refreshContinueButton(){
-    document.getElementById('btnContinueGame').disabled = !RPG.Save.hasSave();
+    var online=RPG.Account&&RPG.Account.isReady()&&RPG.Account.currentUser();
+    document.getElementById('btnNewGame').disabled=!online;
+    document.getElementById('btnContinueGame').disabled = !(online&&RPG.Account.hasCloudSave()&&RPG.Save.hasSave());
   }
   refreshContinueButton();
+  document.addEventListener('rpg-account-ready',refreshContinueButton);
+  document.addEventListener('rpg-cloud-save-ready',refreshContinueButton);
 
-  document.getElementById('btnNewGame').addEventListener('click', function(){
+  document.getElementById('btnNewGame').addEventListener('click', async function(){
+    if(!requireOnlineAccount())return;
+    if(RPG.Account.hasCloudSave()&&!window.confirm('Criar um novo personagem substituirá o personagem atual desta conta após o primeiro salvamento. Deseja continuar?'))return;
+    if(RPG.Account.hasCloudSave()&&!(await RPG.Account.resetCloud()))return;
     RPG.Save.clear();
     RPG.UI.showScreen('creation');
     RPG.UI.renderCreationScreen();
   });
 
   document.getElementById('btnContinueGame').addEventListener('click', function(){
+    if(!requireOnlineAccount()||!RPG.Account.hasCloudSave())return;
     var data = RPG.Save.load();
     if(!data || !data.hero) return;
     var state = RPG.state;
@@ -147,35 +162,6 @@ document.addEventListener('DOMContentLoaded', function(){
     RPG.state.musicVolume=Math.max(0,Math.min(1,Number(e.target.value)/100));
     if(RPG.Music)RPG.Music.refresh();
     if(RPG.state.hero)RPG.Save.save(RPG.state);
-  });
-
-  function backupStatus(message,type){var el=document.getElementById('backupStatus');el.textContent=message||'';el.className='backup-status'+(type?' '+type:'');}
-  document.getElementById('exportBackupBtn').addEventListener('click',async function(){
-    var password=window.prompt('Crie uma senha com pelo menos 6 caracteres para proteger o backup:');if(password===null)return;
-    if(password.length<6){backupStatus('A senha do backup precisa ter pelo menos 6 caracteres.','error');return;}
-    var confirmation=window.prompt('Digite novamente a senha do backup:');if(confirmation!==password){backupStatus('As senhas não coincidem. O backup não foi criado.','error');return;}
-    backupStatus('Criptografando o backup…');var raw=await RPG.Save.createBackup(RPG.state,password);
-    if(!raw){backupStatus('Não foi possível criptografar o progresso neste navegador.','error');return;}
-    var blob=new Blob([raw],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
-    var hero=RPG.Save.load().hero,safeName=String(hero.name||'aventureiro').replace(/[^a-z0-9_-]+/gi,'-').replace(/^-|-$/g,'');
-    link.href=url;link.download='RPG-Legend-'+(safeName||'aventureiro')+'-'+new Date().toISOString().slice(0,10)+'.rpglegend';
-    document.body.appendChild(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
-    backupStatus('Backup criptografado com sucesso. Guarde o arquivo e não esqueça a senha.','success');
-  });
-  document.getElementById('importBackupBtn').addEventListener('click',function(){
-    if(RPG.Account&&RPG.Account.currentUser()){backupStatus('Saia da conta antes de importar. Backups baixados funcionam somente no modo offline e não alteram o save oficial.','error');return;}
-    document.getElementById('backupFileInput').click();
-  });
-  document.getElementById('backupFileInput').addEventListener('change',function(e){
-    var input=e.target,file=input.files&&input.files[0];if(!file)return;
-    if(file.size>5000000){backupStatus('O arquivo selecionado é grande demais.','error');input.value='';return;}
-    var reader=new FileReader();reader.onload=async function(){
-      if(!window.confirm('Importar este backup substituirá o progresso salvo neste navegador. Deseja continuar?')){input.value='';return;}
-      var raw=String(reader.result||''),password='';if(RPG.Save.isEncryptedBackup(raw)){password=window.prompt('Digite a senha deste backup:');if(password===null){input.value='';return;}}
-      backupStatus('Verificando o backup…');var result=await RPG.Save.restoreBackup(raw,password);
-      if(!result.ok){backupStatus(result.message,'error');input.value='';return;}
-      backupStatus('Backup restaurado no modo offline. Ele não poderá substituir o save oficial nem ser usado no multiplayer. Recarregando…','success');setTimeout(function(){window.location.reload();},700);
-    };reader.onerror=function(){backupStatus('Não foi possível abrir o arquivo selecionado.','error');input.value='';};reader.readAsText(file);
   });
 
   document.getElementById('btnExitGame').addEventListener('click', function(){

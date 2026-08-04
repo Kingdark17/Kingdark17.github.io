@@ -305,7 +305,8 @@ RPG.Combat = (function(){
     }
 
     var d = hero.derived || RPG.Player.getDerived(hero);
-    var dodge = d.esquiva + (hero.buffs.esquivaTurns>0 ? (hero.buffs.esquivaAmount||0) : 0);
+    var petBonus=RPG.Pets&&RPG.Pets.bonus?RPG.Pets.bonus():{};
+    var dodge = d.esquiva + (petBonus.esquiva||0) + (hero.buffs.esquivaTurns>0 ? (hero.buffs.esquivaAmount||0) : 0);
     if(hero.buffs.esquivaTurns>0) hero.buffs.esquivaTurns--;
     if(Math.random()*100 < dodge){
       RPG.UI.setSceneMessage('Você esquiva do ataque do '+monster.name+'!');
@@ -346,10 +347,28 @@ RPG.Combat = (function(){
 
   function handleDefeat(){
     var state = RPG.state;
+    var level = Number(state.hero.level)||1;
+    var lostGold = 0;
+    var lostItem = null;
+    if(level>5){
+      lostGold = Math.min(500,Math.floor((Number(state.hero.gold)||0)*0.10));
+      state.hero.gold = Math.max(0,(Number(state.hero.gold)||0)-lostGold);
+      var eligible=(state.inventory||[]).filter(function(item){
+        var rarity=String(item.rarity||'comum').toLowerCase();
+        return !item.equipped&&!item.premium&&!item.purchasedWithMoney&&(rarity==='comum'||rarity==='common'||rarity==='incomum');
+      });
+      if(eligible.length){
+        lostItem=eligible[Math.floor(Math.random()*eligible.length)];
+        var lostIndex=state.inventory.indexOf(lostItem);
+        if(lostIndex>=0)state.inventory.splice(lostIndex,1);
+      }
+    }
     state.hero.hp = Math.max(1, Math.floor(state.hero.maxHp*0.3));
     RPG.UI.renderHero();
     RPG.Effects.playSfx('defeat');
-    RPG.UI.logEvent('<b>Você quase morreu!</b> Seus aliados o arrastam de volta para a cidade mais próxima.');
+    var penalty=level<=5?'A proteção de iniciante preservou seus itens e seu ouro.':'Você perdeu '+lostGold+' de ouro'+(lostItem?' e o item <b>'+lostItem.name+'</b>.':'.');
+    RPG.UI.logEvent('<b>Você foi derrotado!</b> '+penalty+' O grupo retorna à cidade inicial.');
+    RPG.UI.setSceneMessage('<b>Derrota</b><br>'+penalty+'<br>Você voltou para a cidade inicial.');
     (state.party||[]).forEach(function(m){ m.hp = Math.max(1, Math.floor(m.maxHp*0.3)); });
     state.mode = 'move';
     state.pendingMonsterCell = null;
@@ -463,7 +482,8 @@ RPG.Combat = (function(){
       var base = 3+rnd(6),dmg;
       if(magicalAttack){dmg=Math.round(base+d.dmgMagico+weaponAtkContribution(hero,affinity)+otherEquipAtk(hero));dmg=modifyDamageByAffinity(monster,dmg,'magico');}
       else {var physicalBase=isMage&&attackStyle==='physical'?Math.round(d.dmgFisico*.5):d.dmgFisico;dmg=Math.round((base+physicalBase+weaponAtkContribution(hero,affinity)+otherEquipAtk(hero))*forcaMult);dmg=modifyDamageByAffinity(monster,dmg,'fisico');}
-      var critChance = (d.critico + (bonus.critico||0))/100;
+      var petBonus=RPG.Pets&&RPG.Pets.bonus?RPG.Pets.bonus():{};
+      var critChance = (d.critico + (bonus.critico||0) + (petBonus.critico||0))/100;
       var isCrit = guaranteedCrit || Math.random() < critChance || roll === 20;
       if(isCrit){ dmg = Math.round(dmg*1.6); }
       monster.hp -= dmg;
@@ -499,7 +519,9 @@ RPG.Combat = (function(){
       return;
     }
     hero.buffs = hero.buffs || {};
-    hero.mp -= manaCost;
+    var petBonus=RPG.Pets&&RPG.Pets.bonus?RPG.Pets.bonus():{};
+    var petSavedMana=petBonus.manaSave&&Math.random()*100<petBonus.manaSave;
+    if(!petSavedMana)hero.mp -= manaCost;
     var d = hero.derived || RPG.Player.getDerived(hero);
     var monster = currentMonster(cell);
     var msg = '';
@@ -518,7 +540,7 @@ RPG.Combat = (function(){
       RPG.UI.renderHero();
       if(monster.hp <= 0){ RPG.UI.setSceneMessage(msg); handleMonsterDefeated(cell); return; }
     } else if(power.type === 'cura'){
-      var heal = Math.round((10*power.power + d.curaBonus)*(RPG.Player.hasDebuffEffect(hero,'healingPenalty')?0.75:1));
+      var heal = Math.round((10*power.power + d.curaBonus)*(RPG.Player.hasDebuffEffect(hero,'healingPenalty')?0.75:1)*(1+(petBonus.healing||0)/100));
       hero.hp = Math.min(hero.maxHp, hero.hp+heal);
       var allyHeal=Math.max(1,Math.round(heal*.7));
       (state.party||[]).forEach(function(member){if(member.hp>0)member.hp=Math.min(member.maxHp,member.hp+allyHeal);});
@@ -548,6 +570,7 @@ RPG.Combat = (function(){
       RPG.UI.renderHero();
     }
 
+    if(petSavedMana)msg+=' Sua coruja poupou a mana do poder.';
     RPG.UI.setSceneMessage(msg);
     if(applyPartyTurn(cell)){ handleMonsterDefeated(cell); return; }
     if(tickMonsterDot(cell)){ handleMonsterDefeated(cell); return; }

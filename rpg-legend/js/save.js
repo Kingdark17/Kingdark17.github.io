@@ -1,6 +1,6 @@
 /* =========================================================
    RPG Legend - js/save.js
-   Salvamento automatico em localStorage. Guarda heroi,
+   Cache local temporário do save oficial na nuvem. Guarda heroi,
    inventario, ouro, XP, andar, missoes, configuracoes,
    layout do mapa e posicao exata do jogador.
    ========================================================= */
@@ -27,6 +27,7 @@ RPG.Save = (function(){
   }
 
   function save(state){
+    if(!RPG.Account||!RPG.Account.currentUser())return false;
     try{
       var data = {
         hero: state.hero,
@@ -112,5 +113,5 @@ RPG.Save = (function(){
     }catch(e){return {ok:false,message:'Não foi possível ler o arquivo de backup.'};}
   }
 
-  return { hasSave: hasSave, save: save, load: load, clear: clear, createBackup:createBackup, restoreBackup:restoreBackup, isEncryptedBackup:isEncryptedBackup, validSave:validSave, verifyIntegrity:verifyIntegrity, isImportedBackup:isImportedBackup, markOfficial:markOfficial, KEY: KEY };
+  return { hasSave: hasSave, save: save, load: load, clear: clear, validSave:validSave, verifyIntegrity:verifyIntegrity, isImportedBackup:isImportedBackup, markOfficial:markOfficial, KEY: KEY };
 })();
