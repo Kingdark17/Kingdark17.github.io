@@ -13,6 +13,14 @@
   #accountLogged[data-frame="silver"] #accountAvatar{border-color:#d8dee9;box-shadow:0 0 10px #d8dee9}
   #accountLogged[data-frame="gold"] #accountAvatar{border-color:#ffd166;box-shadow:0 0 12px #ffd166}
   #accountLogged[data-frame="arcane"] #accountAvatar{border-color:#b084ff;box-shadow:0 0 14px #8a5cff}
+  #accountLogged[data-frame="emerald"] #accountAvatar,#publicProfileCard[data-frame="emerald"] #publicProfileAvatar,.menu-side-account[data-frame="emerald"] .menu-account-avatar{border-color:#37df8b;box-shadow:0 0 13px #20b86c}
+  #accountLogged[data-frame="crimson"] #accountAvatar,#publicProfileCard[data-frame="crimson"] #publicProfileAvatar,.menu-side-account[data-frame="crimson"] .menu-account-avatar{border-color:#ff5568;box-shadow:0 0 13px #d51f3a}
+  #accountLogged[data-frame="obsidian"] #accountAvatar,#publicProfileCard[data-frame="obsidian"] #publicProfileAvatar,.menu-side-account[data-frame="obsidian"] .menu-account-avatar{border-color:#8f82ad;box-shadow:0 0 15px #08070c,0 0 5px #9a8bb8}
+  #accountLogged[data-frame="celestial"] #accountAvatar,#publicProfileCard[data-frame="celestial"] #publicProfileAvatar,.menu-side-account[data-frame="celestial"] .menu-account-avatar{border-color:#e9f7ff;box-shadow:0 0 8px #fff,0 0 18px #5bbcff}
+  @keyframes rgbGlow{0%{border-color:#ff4d4d;box-shadow:0 0 15px #ff4d4d}25%{border-color:#ffe34d;box-shadow:0 0 15px #ffe34d}50%{border-color:#4dff88;box-shadow:0 0 15px #4dff88}75%{border-color:#4da6ff;box-shadow:0 0 15px #4da6ff}100%{border-color:#d94dff;box-shadow:0 0 15px #d94dff}}
+  @keyframes rgbText{0%{color:#ff5c5c}20%{color:#ffd95c}40%{color:#66ff8c}60%{color:#5cecff}80%{color:#a875ff}100%{color:#ff68c8}}
+  #accountLogged[data-frame="rgb"] #accountAvatar,#publicProfileCard[data-frame="rgb"] #publicProfileAvatar,.menu-side-account[data-frame="rgb"] .menu-account-avatar{animation:rgbGlow 2.2s linear infinite}
+  .rgb-name{animation:rgbText 2.2s linear infinite!important;text-shadow:0 0 10px currentColor}
   #publicProfileCard{gap:14px;align-items:center}
   #publicProfileAvatar{border-radius:50%;object-fit:cover;background:#111;border:4px solid #8b6f3d}
   #publicProfileCard[data-frame="silver"] #publicProfileAvatar{border-color:#d8dee9;box-shadow:0 0 10px #d8dee9}
@@ -27,6 +35,7 @@
   .menu-side-tab::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tab-color)}
   .menu-side-tab:hover,.menu-side-tab:focus-visible{background:color-mix(in srgb,var(--tab-color) 16%,transparent);color:#fff;transform:translateX(3px);outline:none}
   .menu-side-icon{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;font-size:25px;background:#171c28;border:1px solid var(--tab-color);box-shadow:0 8px 20px rgba(0,0,0,.25)}
+  .menu-side-account .menu-side-icon{background:transparent;border:0;box-shadow:none;border-radius:0}
   .menu-side-play,.menu-side-account,.menu-side-settings,.menu-side-shop,.menu-side-credits{--tab-color:#b99245}
   .menu-account-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#171923;border:2px solid #b99245;display:none}
   .menu-account-avatar.visible{display:block}.menu-account-fallback.hidden{display:none}.menu-side-name{max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -438,9 +447,9 @@
 <script src="js/tutorial.js?v=20260802d"></script>
 <script src="js/ui.js?v=20260803e"></script>
 <script src="js/multiplayer-config.js?v=20260802c"></script>
-<script src="js/pets.js?v=20260804b"></script>
-<script src="js/account.js?v=20260804e"></script>
-<script src="js/multiplayer.js?v=20260804b"></script>
+<script src="js/pets.js?v=20260804c"></script>
+<script src="js/account.js?v=20260804g"></script>
+<script src="js/multiplayer.js?v=20260804c"></script>
 <script src="js/main.js?v=20260804b"></script>
 </body>
 </html>
