@@ -8,6 +8,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css?v=20260803i">
 <link rel="stylesheet" href="css/animations.css?v=20260802c">
+<style>
+  #accountAvatar{border-radius:50%;object-fit:cover;background:#111;border:3px solid #8b6f3d;vertical-align:middle;margin-right:8px}
+  #accountLogged[data-frame="silver"] #accountAvatar{border-color:#d8dee9;box-shadow:0 0 10px #d8dee9}
+  #accountLogged[data-frame="gold"] #accountAvatar{border-color:#ffd166;box-shadow:0 0 12px #ffd166}
+  #accountLogged[data-frame="arcane"] #accountAvatar{border-color:#b084ff;box-shadow:0 0 14px #8a5cff}
+  #publicProfileCard{gap:14px;align-items:center}
+  #publicProfileAvatar{border-radius:50%;object-fit:cover;background:#111;border:4px solid #8b6f3d}
+  #publicProfileCard[data-frame="silver"] #publicProfileAvatar{border-color:#d8dee9;box-shadow:0 0 10px #d8dee9}
+  #publicProfileCard[data-frame="gold"] #publicProfileAvatar{border-color:#ffd166;box-shadow:0 0 12px #ffd166}
+  #publicProfileCard[data-frame="arcane"] #publicProfileAvatar{border-color:#b084ff;box-shadow:0 0 14px #8a5cff}
+  #profilePetWidget{position:fixed;right:18px;bottom:18px;width:68px;height:68px;border-radius:50%;z-index:90;font-size:34px;border:2px solid #c99b3d;background:#171923;box-shadow:0 0 16px #000;cursor:pointer}
+  #profilePetWidget .pet-heart{position:absolute;left:25px;top:10px;font-size:18px;pointer-events:none;transition:transform .8s ease-out,opacity .8s ease-out}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -47,12 +60,35 @@
     <div class="modal-header"><h2>👤 Conta do Jogador</h2><button class="modal-close" id="closeAccountBtn">&times;</button></div>
     <div id="accountGuest">
       <p class="account-help">Crie uma conta para guardar seu progresso na nuvem e recuperá-lo em outro aparelho.</p>
-      <label class="multi-label">Nome de usuário<input id="accountUsername" class="name-input" maxlength="24" autocomplete="username" placeholder="Ex: Pedro17"></label>
+      <label class="multi-label">Nome ou e-mail<input id="accountUsername" class="name-input" maxlength="254" autocomplete="username" placeholder="Nome da conta ou e-mail"></label>
+      <label class="multi-label">E-mail para criar conta<input id="accountEmail" class="name-input" type="email" maxlength="254" autocomplete="email" placeholder="voce@exemplo.com"></label>
       <label class="multi-label">Senha<input id="accountPassword" class="name-input" type="password" maxlength="128" autocomplete="current-password" placeholder="Mínimo de 8 caracteres"></label>
-      <div class="account-actions"><button class="rune-btn" id="accountLoginBtn">Entrar</button><button class="rune-btn" id="accountRegisterBtn">Criar Conta</button></div>
+      <div class="account-actions"><button class="rune-btn" id="accountLoginBtn">Entrar</button><button class="rune-btn" id="accountRegisterBtn">Criar Conta</button><button class="rune-btn ghost" id="forgotPasswordBtn">Esqueci a Senha</button></div>
     </div>
     <div id="accountLogged" class="hidden">
-      <div class="account-welcome">Conectado como <b id="accountName">—</b></div>
+      <div class="account-welcome"><img id="accountAvatar" class="hidden" alt="Foto do perfil" width="56" height="56"> Conectado como <b id="accountName">—</b></div>
+      <p class="account-help" id="accountEmailStatus"></p>
+      <div class="account-actions"><button class="rune-btn small" id="resendVerificationBtn">Reenviar Confirmação</button></div>
+      <div class="creation-step">
+        <div class="step-title">Perfil</div>
+        <label class="multi-label">Foto do computador<input id="profileAvatarFile" class="name-input" type="file" accept="image/png,image/jpeg,image/webp"></label>
+        <label class="multi-label">Ou link HTTPS da foto<input id="profileAvatarUrl" class="name-input" maxlength="500" placeholder="https://..."></label>
+        <label class="multi-label">Moldura<select id="profileFrame" class="name-input"></select></label>
+        <label class="multi-label">Cor do nome<select id="profileNameColor" class="name-input"></select></label>
+        <label class="multi-label">Pet equipado<select id="profilePet" class="name-input"></select></label>
+        <button class="rune-btn small" id="profileSaveBtn">Salvar Perfil</button>
+      </div>
+      <div class="creation-step" id="legacyEmailBox">
+        <div class="step-title">E-mail da Conta</div>
+        <label class="multi-label">E-mail<input id="profileAccountEmail" class="name-input" type="email" maxlength="254"></label>
+        <label class="multi-label">Senha atual<input id="profileEmailPassword" class="name-input" type="password" maxlength="128"></label>
+        <button class="rune-btn small" id="accountEmailSaveBtn">Cadastrar ou Alterar E-mail</button>
+      </div>
+      <div class="creation-step">
+        <div class="step-title">Loja de Personalizações</div>
+        <p class="account-help">Use o ouro do seu personagem oficial para desbloquear itens permanentes da conta.</p>
+        <div class="item-grid" id="profileShopList"></div>
+      </div>
       <p class="account-help">O jogo salva automaticamente na nuvem. Você também pode forçar o envio ou recuperar o último progresso.</p>
       <div class="account-actions"><button class="rune-btn" id="cloudSaveBtn">Salvar na Nuvem</button><button class="rune-btn" id="cloudLoadBtn">Carregar da Nuvem</button><button class="rune-btn" id="cloudRestoreBtn">Restaurar Versão Anterior</button><button class="rune-btn ghost" id="accountLogoutBtn">Sair da Conta</button></div>
     </div>
@@ -69,6 +105,18 @@
     <label class="multi-label">Código da sala<input id="multiplayerRoom" class="name-input room-code" maxlength="6" placeholder="Ex: DRAGAO"></label>
     <div class="multi-actions"><button class="rune-btn" id="createRoomBtn">Criar Sala</button><button class="rune-btn" id="joinRoomBtn">Entrar na Sala</button></div>
     <div id="multiplayerMessage" class="multiplayer-message">Nenhuma sala conectada.</div>
+    <div id="multiplayerProfiles" class="item-grid"></div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="publicProfileModal">
+  <div class="modal-box account-box">
+    <div class="modal-header"><h2>Perfil do Jogador</h2><button class="modal-close" id="closePublicProfileBtn">&times;</button></div>
+    <div class="account-welcome" id="publicProfileCard" data-frame="none">
+      <img id="publicProfileAvatar" class="hidden" alt="Foto do jogador" width="84" height="84">
+      <b id="publicProfileName">Aventureiro</b>
+    </div>
+    <p class="account-help" id="publicProfilePet"></p>
   </div>
 </div>
 
@@ -86,14 +134,8 @@
       <label><input type="range" id="musicVolume" min="0" max="100" value="28" aria-label="Volume da música"></label>
     </div>
     <div class="backup-settings">
-      <div class="backup-title">Backup do progresso</div>
-      <p>O arquivo offline é criptografado com uma senha escolhida por você. Ele não substitui o save oficial da conta e não pode ser usado no multiplayer.</p>
-      <div class="backup-actions">
-        <button class="rune-btn small" id="exportBackupBtn">⬇ Exportar Backup</button>
-        <button class="rune-btn small" id="importBackupBtn">⬆ Importar Backup</button>
-        <input type="file" id="backupFileInput" accept=".rpglegend,.json,application/json" class="hidden">
-      </div>
-      <div id="backupStatus" class="backup-status"></div>
+      <div class="backup-title">Progresso Online</div>
+      <p>Seu personagem é salvo automaticamente na conta. Entre com a mesma conta em outro aparelho para continuar de onde parou.</p>
     </div>
     <div class="creation-footer">
       <div></div>
@@ -338,6 +380,7 @@
   </div>
 </div>
 <div class="tutorial-toast hidden" id="tutorialToast"><b id="tutorialToastTitle"></b><span id="tutorialToastText"></span><button id="tutorialToastClose">×</button></div>
+<button class="hidden" id="profilePetWidget" type="button" aria-label="Interagir com seu pet"><span id="profilePetIcon">🐔</span></button>
 
 <!-- Scripts: a ordem não afeta as definições (tudo se anexa ao objeto global RPG),
      mas main.js precisa ser o último por depender de todos os outros. -->
@@ -350,18 +393,19 @@
 <script src="js/npc-services.js?v=20260802c"></script>
 <script src="js/city.js?v=20260802c"></script>
 <script src="js/dungeon.js?v=20260803c"></script>
-<script src="js/combat.js?v=20260803e"></script>
+<script src="js/combat.js?v=20260804f"></script>
 <script src="js/inventory.js?v=20260803e"></script>
 <script src="js/shop.js?v=20260803e"></script>
 <script src="js/quests.js?v=20260803a"></script>
 <script src="js/effects.js?v=20260802c"></script>
 <script src="js/music.js?v=20260803b"></script>
-<script src="js/save.js?v=20260803k"></script>
+<script src="js/save.js?v=20260804a"></script>
 <script src="js/tutorial.js?v=20260802d"></script>
 <script src="js/ui.js?v=20260803e"></script>
 <script src="js/multiplayer-config.js?v=20260802c"></script>
-<script src="js/account.js?v=20260803j"></script>
-<script src="js/multiplayer.js?v=20260803d"></script>
-<script src="js/main.js?v=20260803h"></script>
+<script src="js/pets.js?v=20260804b"></script>
+<script src="js/account.js?v=20260804c"></script>
+<script src="js/multiplayer.js?v=20260804b"></script>
+<script src="js/main.js?v=20260804a"></script>
 </body>
 </html>
