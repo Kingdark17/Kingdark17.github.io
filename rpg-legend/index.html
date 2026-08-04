@@ -89,31 +89,44 @@
     <div id="accountLogged" class="hidden">
       <div class="account-welcome"><img id="accountAvatar" class="hidden" alt="Foto do perfil" width="56" height="56"> Conectado como <b id="accountName">—</b></div>
       <p class="account-help" id="accountEmailStatus"></p>
-      <div class="account-actions"><button class="rune-btn small" id="resendVerificationBtn">Reenviar Confirmação</button></div>
-      <div class="creation-step">
-        <div class="step-title">Perfil</div>
-        <label class="multi-label">Foto do computador<input id="profileAvatarFile" class="name-input" type="file" accept="image/png,image/jpeg,image/webp"></label>
-        <label class="multi-label">Ou link HTTPS da foto<input id="profileAvatarUrl" class="name-input" maxlength="500" placeholder="https://..."></label>
-        <label class="multi-label">Moldura<select id="profileFrame" class="name-input"></select></label>
-        <label class="multi-label">Cor do nome<select id="profileNameColor" class="name-input"></select></label>
-        <label class="multi-label">Pet equipado<select id="profilePet" class="name-input"></select></label>
-        <button class="rune-btn small" id="profileSaveBtn">Salvar Perfil</button>
-      </div>
+      <div class="account-actions"><button class="rune-btn small" id="openProfileEditorBtn">Editar Perfil</button><button class="rune-btn small" id="resendVerificationBtn">Reenviar Confirmação</button></div>
       <div class="creation-step" id="legacyEmailBox">
         <div class="step-title">E-mail da Conta</div>
         <label class="multi-label">E-mail<input id="profileAccountEmail" class="name-input" type="email" maxlength="254"></label>
         <label class="multi-label">Senha atual<input id="profileEmailPassword" class="name-input" type="password" maxlength="128"></label>
         <button class="rune-btn small" id="accountEmailSaveBtn">Cadastrar ou Alterar E-mail</button>
       </div>
-      <div class="creation-step" id="profileShopSection">
-        <div class="step-title">Loja de Personalizações</div>
-        <p class="account-help">Use o ouro do seu personagem oficial para desbloquear itens permanentes da conta.</p>
-        <div class="item-grid" id="profileShopList"></div>
-      </div>
       <p class="account-help">O jogo salva automaticamente na nuvem. Você também pode forçar o envio ou recuperar o último progresso.</p>
       <div class="account-actions"><button class="rune-btn" id="cloudSaveBtn">Salvar na Nuvem</button><button class="rune-btn" id="cloudLoadBtn">Carregar da Nuvem</button><button class="rune-btn" id="cloudRestoreBtn">Restaurar Versão Anterior</button><button class="rune-btn ghost" id="accountLogoutBtn">Sair da Conta</button></div>
     </div>
     <div id="accountMessage" class="account-message"></div>
+  </div>
+</div>
+
+<!-- ============ EDIÇÃO DO PERFIL ============ -->
+<div class="modal-overlay hidden" id="profileEditorModal">
+  <div class="modal-box account-box">
+    <div class="modal-header"><h2>🎨 Editar Perfil</h2><button class="modal-close" id="closeProfileEditorBtn">&times;</button></div>
+    <p class="account-help">Personalize como sua conta aparece para os outros jogadores.</p>
+    <div class="creation-step">
+      <label class="multi-label">Foto do computador<input id="profileAvatarFile" class="name-input" type="file" accept="image/png,image/jpeg,image/webp"></label>
+      <label class="multi-label">Ou link HTTPS da foto<input id="profileAvatarUrl" class="name-input" maxlength="500" placeholder="https://..."></label>
+      <label class="multi-label">Moldura<select id="profileFrame" class="name-input"></select></label>
+      <label class="multi-label">Cor do nome<select id="profileNameColor" class="name-input"></select></label>
+      <label class="multi-label">Pet equipado<select id="profilePet" class="name-input"></select></label>
+      <button class="rune-btn" id="profileSaveBtn">Salvar Perfil</button>
+    </div>
+    <div id="profileMessage" class="account-message"></div>
+  </div>
+</div>
+
+<!-- ============ LOJA DE PERSONALIZAÇÕES ============ -->
+<div class="modal-overlay hidden" id="profileShopModal">
+  <div class="modal-box account-box">
+    <div class="modal-header"><h2>🛒 Loja de Personalizações</h2><button class="modal-close" id="closeProfileShopBtn">&times;</button></div>
+    <p class="account-help">Use o ouro do seu personagem oficial para desbloquear pets, molduras e cores de nome permanentes.</p>
+    <div class="item-grid" id="profileShopList"></div>
+    <div id="shopMessage" class="account-message"></div>
   </div>
 </div>
 
@@ -425,7 +438,7 @@
 <script src="js/ui.js?v=20260803e"></script>
 <script src="js/multiplayer-config.js?v=20260802c"></script>
 <script src="js/pets.js?v=20260804b"></script>
-<script src="js/account.js?v=20260804d"></script>
+<script src="js/account.js?v=20260804e"></script>
 <script src="js/multiplayer.js?v=20260804b"></script>
 <script src="js/main.js?v=20260804b"></script>
 </body>
