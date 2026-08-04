@@ -20,6 +20,20 @@
   #publicProfileCard[data-frame="arcane"] #publicProfileAvatar{border-color:#b084ff;box-shadow:0 0 14px #8a5cff}
   #profilePetWidget{position:fixed;right:18px;bottom:18px;width:68px;height:68px;border-radius:50%;z-index:90;font-size:34px;border:2px solid #c99b3d;background:#171923;box-shadow:0 0 16px #000;cursor:pointer}
   #profilePetWidget .pet-heart{position:absolute;left:25px;top:10px;font-size:18px;pointer-events:none;transition:transform .8s ease-out,opacity .8s ease-out}
+  #menuScreen.main-menu-layout{position:relative;min-height:690px;padding:34px 34px 34px 190px;overflow:hidden}
+  .main-menu-sidebar{position:absolute;inset:0 auto 0 0;width:154px;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d1018,#111620);border-right:1px solid rgba(209,164,75,.35);box-shadow:12px 0 34px rgba(0,0,0,.28);z-index:2}
+  .main-menu-sidebar::after{content:"";position:absolute;right:-2px;top:0;width:3px;height:100%;background:linear-gradient(#e33b34 0 20%,#e98a2f 20% 40%,#3478db 40% 60%,#1aa16d 60% 80%,#9b6437 80%)}
+  .menu-side-tab{appearance:none;border:0;border-bottom:1px solid rgba(255,255,255,.06);background:transparent;color:#d8c99c;min-height:126px;padding:16px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-family:'Cinzel',serif;letter-spacing:1.5px;font-size:11px;cursor:pointer;transition:background .2s,color .2s,transform .2s;position:relative}
+  .menu-side-tab::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tab-color)}
+  .menu-side-tab:hover,.menu-side-tab:focus-visible{background:color-mix(in srgb,var(--tab-color) 16%,transparent);color:#fff;transform:translateX(3px);outline:none}
+  .menu-side-icon{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;font-size:25px;background:#171c28;border:1px solid var(--tab-color);box-shadow:0 8px 20px rgba(0,0,0,.25)}
+  .menu-side-play{--tab-color:#e33b34}.menu-side-account{--tab-color:#e98a2f}.menu-side-settings{--tab-color:#3478db}.menu-side-shop{--tab-color:#1aa16d}.menu-side-credits{--tab-color:#9b6437}
+  .menu-account-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#171923;border:2px solid #e98a2f;display:none}
+  .menu-account-avatar.visible{display:block}.menu-account-fallback.hidden{display:none}.menu-side-name{max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .main-menu-stage{min-height:620px;display:grid;place-items:center}.main-menu-card{width:min(100%,570px);padding:30px 26px 24px;border:1px solid rgba(209,164,75,.42);border-radius:10px;background:linear-gradient(145deg,rgba(31,38,56,.98),rgba(23,28,41,.98));box-shadow:0 24px 70px rgba(0,0,0,.38),inset 0 0 0 5px rgba(255,255,255,.015)}
+  .main-menu-card .menu-list{margin-top:30px}.main-menu-card .menu-list .rune-btn{min-height:62px}.main-menu-card .menu-list .menu-secondary-action{border-color:rgba(209,164,75,.35)}
+  #menuScreen.sidebar-collapsed{padding-left:108px}.sidebar-collapsed .main-menu-sidebar{width:72px}.sidebar-collapsed .menu-side-tab>span:last-child{display:none}.sidebar-collapsed .menu-side-tab{min-height:126px}.sidebar-collapsed .menu-side-icon{width:43px;height:43px}
+  @media(max-width:760px){#menuScreen.main-menu-layout,#menuScreen.sidebar-collapsed{padding:120px 15px 22px;min-height:auto}.main-menu-sidebar,.sidebar-collapsed .main-menu-sidebar{inset:0 0 auto 0;width:auto;height:98px;flex-direction:row;border-right:0;border-bottom:1px solid rgba(209,164,75,.35)}.main-menu-sidebar::after{right:0;top:auto;bottom:-2px;width:100%;height:3px;background:linear-gradient(90deg,#e33b34 0 20%,#e98a2f 20% 40%,#3478db 40% 60%,#1aa16d 60% 80%,#9b6437 80%)}.menu-side-tab,.sidebar-collapsed .menu-side-tab{flex:1;min-height:98px;padding:8px 3px;border-bottom:0;border-right:1px solid rgba(255,255,255,.05);font-size:8px;letter-spacing:.4px}.sidebar-collapsed .menu-side-tab>span:last-child{display:block}.menu-side-tab::before{display:none}.menu-side-icon,.sidebar-collapsed .menu-side-icon{width:39px;height:39px;border-radius:11px;font-size:19px}.menu-account-avatar{width:38px;height:38px}.menu-side-name{max-width:65px}.main-menu-stage{min-height:500px}.main-menu-card{padding:24px 15px 18px}}
 </style>
 </head>
 <body>
@@ -39,19 +53,26 @@
   </header>
 
   <!-- ============ MENU PRINCIPAL ============ -->
-  <section id="menuScreen" class="panel">
-    <div class="menu-title">RPG Legend</div>
-    <div class="menu-sub">aventura &middot; exploração &middot; progressão</div>
-    <div class="menu-list">
-      <button class="rune-btn" id="btnNewGame">Novo Jogo</button>
-      <button class="rune-btn" id="btnContinueGame">Continuar</button>
-      <button class="rune-btn" id="btnMultiplayer">Multiplayer (Beta)</button>
-      <button class="rune-btn ghost" id="btnAccount">👤 Conta</button>
-      <button class="rune-btn ghost" id="btnSettings">Configurações</button>
-      <button class="rune-btn ghost" id="btnCredits">Créditos</button>
-      <button class="rune-btn ghost" id="btnExitGame">Sair</button>
+  <section id="menuScreen" class="panel main-menu-layout">
+    <nav class="main-menu-sidebar" aria-label="Navegação principal">
+      <button class="menu-side-tab menu-side-play" id="btnPlayTab" type="button" aria-expanded="true" aria-label="Abrir ou recolher menu lateral"><span class="menu-side-icon">☰</span><span>Menu</span></button>
+      <button class="menu-side-tab menu-side-account" id="btnAccount" type="button"><span class="menu-side-icon"><img id="menuAccountAvatar" class="menu-account-avatar" alt="Foto da conta"><span id="menuAccountFallback" class="menu-account-fallback">👤</span></span><span class="menu-side-name" id="menuAccountName">Conta</span></button>
+      <button class="menu-side-tab menu-side-settings" id="btnSettings" type="button"><span class="menu-side-icon">⚙</span><span>Configurações</span></button>
+      <button class="menu-side-tab menu-side-shop" id="btnProfileShop" type="button"><span class="menu-side-icon">🛒</span><span>Loja</span></button>
+      <button class="menu-side-tab menu-side-credits" id="btnCredits" type="button"><span class="menu-side-icon">📜</span><span>Créditos</span></button>
+    </nav>
+    <div class="main-menu-stage"><div class="main-menu-card">
+      <div class="menu-title">RPG Legend</div>
+      <div class="menu-sub">aventura &middot; exploração &middot; progressão</div>
+      <div class="menu-list">
+        <button class="rune-btn" id="btnNewGame">Novo Jogo</button>
+        <button class="rune-btn" id="btnContinueGame">Continuar</button>
+        <button class="rune-btn" id="btnMultiplayer">Multiplayer (Beta)</button>
+        <button class="rune-btn ghost menu-secondary-action" id="btnExitGame">Sair</button>
+      </div>
+      <div class="menu-note hidden" id="exitNote">Pode fechar esta aba com segurança — seu progresso já foi salvo automaticamente.</div>
     </div>
-    <div class="menu-note hidden" id="exitNote">Pode fechar esta aba com segurança — seu progresso já foi salvo automaticamente.</div>
+    </div>
 </section>
 
 <!-- ============ CONTA DO JOGADOR ============ -->
@@ -84,7 +105,7 @@
         <label class="multi-label">Senha atual<input id="profileEmailPassword" class="name-input" type="password" maxlength="128"></label>
         <button class="rune-btn small" id="accountEmailSaveBtn">Cadastrar ou Alterar E-mail</button>
       </div>
-      <div class="creation-step">
+      <div class="creation-step" id="profileShopSection">
         <div class="step-title">Loja de Personalizações</div>
         <p class="account-help">Use o ouro do seu personagem oficial para desbloquear itens permanentes da conta.</p>
         <div class="item-grid" id="profileShopList"></div>
