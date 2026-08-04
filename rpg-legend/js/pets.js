@@ -1,13 +1,17 @@
 /* Pets cosméticos do perfil. */
 var RPG=window.RPG||{};
 RPG.Pets=(function(){
-  var icons={chicken:'🐔',cat:'🐈',fox:'🦊',owl:'🦉',slime:'🟢'};
+  var icons={chicken:'🐔',cat:'🐈',fox:'🦊',owl:'🦉',slime:'🟢',wolf:'🐺',fairy:'🧚',baby_dragon:'🐲',admin_dragon:'🐉'};
   var bonuses={
     chicken:{esquiva:3,label:'+3% de esquiva'},
     cat:{critico:3,label:'+3% de crítico'},
     fox:{esquiva:2,critico:2,label:'+2% de esquiva e crítico'},
     owl:{manaSave:5,label:'5% de chance de poupar mana'},
-    slime:{healing:5,label:'+5% de cura recebida'}
+    slime:{healing:5,label:'+5% de cura recebida'},
+    wolf:{esquiva:4,label:'+4% de esquiva'},
+    fairy:{healing:10,manaSave:5,label:'+10% de cura e 5% de economia de mana'},
+    baby_dragon:{critico:6,esquiva:3,label:'+6% de crítico e +3% de esquiva'},
+    admin_dragon:{critico:20,esquiva:20,manaSave:35,healing:35,label:'+20% crítico e esquiva, +35% cura e economia de mana'}
   };
   function render(user){
     var widget=document.getElementById('profilePetWidget');
