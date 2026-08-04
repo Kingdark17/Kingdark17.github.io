@@ -61,6 +61,11 @@ document.addEventListener('DOMContentLoaded', function(){
   document.addEventListener('rpg-account-ready',refreshContinueButton);
   document.addEventListener('rpg-cloud-save-ready',refreshContinueButton);
 
+  document.getElementById('btnPlayTab').addEventListener('click',function(){
+    var menu=document.getElementById('menuScreen'),collapsed=menu.classList.toggle('sidebar-collapsed');
+    this.setAttribute('aria-expanded',collapsed?'false':'true');
+  });
+
   document.getElementById('btnNewGame').addEventListener('click', async function(){
     if(!requireOnlineAccount())return;
     if(RPG.Account.hasCloudSave()&&!window.confirm('Criar um novo personagem substituirá o personagem atual desta conta após o primeiro salvamento. Deseja continuar?'))return;

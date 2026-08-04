@@ -8,7 +8,8 @@ RPG.Account=(function(){
   function fillSelect(id,values,labels){var select=el(id),current=select.value;select.innerHTML='';(values||[]).forEach(function(value){var option=document.createElement('option');option.value=value;option.textContent=labels[value]||value;select.appendChild(option);});if((values||[]).includes(current))select.value=current;}
   function renderOwned(){var owned=user&&user.cosmetics||{frames:['none'],colors:['#e8d7a5'],pets:['none']};fillSelect('profileFrame',owned.frames,{none:'Sem moldura',bronze:'Bronze',silver:'Prata',gold:'Ouro',arcane:'Arcana'});fillSelect('profileNameColor',owned.colors,{'#e8d7a5':'Pergaminho','#ffffff':'Branco','#6ee7ff':'Azul','#8cff98':'Verde','#d8a4ff':'Roxo','#ff8f8f':'Vermelho','#ffd166':'Dourado'});fillSelect('profilePet',owned.pets,{none:'Nenhum',chicken:'Galinha (+3% esquiva)',cat:'Gato (+3% crítico)',fox:'Raposa (+2% esquiva e crítico)',owl:'Coruja (5% de chance de poupar mana)',slime:'Slime (+5% cura recebida)'});}
   function render(){
-    el('accountGuest').classList.toggle('hidden',!!user);el('accountLogged').classList.toggle('hidden',!user);el('accountName').textContent=user?user.username:'—';el('btnAccount').textContent=user?'👤 '+user.username:'👤 Conta';
+    el('accountGuest').classList.toggle('hidden',!!user);el('accountLogged').classList.toggle('hidden',!user);el('accountName').textContent=user?user.username:'—';
+    var menuName=el('menuAccountName'),menuAvatar=el('menuAccountAvatar'),menuFallback=el('menuAccountFallback');if(menuName){menuName.textContent=user?user.username:'Conta';menuName.style.color=user&&user.nameColor?user.nameColor:'';}if(menuAvatar){menuAvatar.classList.toggle('visible',!!(user&&user.avatarUrl));if(user&&user.avatarUrl)menuAvatar.src=user.avatarUrl;}if(menuFallback)menuFallback.classList.toggle('hidden',!!(user&&user.avatarUrl));
     if(!user){if(RPG.Pets)RPG.Pets.render(null);return;}
     renderOwned();
     el('accountName').style.color=user.nameColor||'#e8d7a5';
@@ -43,6 +44,7 @@ RPG.Account=(function(){
   async function logout(){try{await request('/api/account/logout',{method:'POST'});}catch(e){}token='';user=null;cloudAvailable=false;localStorage.removeItem(TOKEN_KEY);localStorage.removeItem(SIGNATURE_KEY);RPG.Save.clear();window.location.reload();}
   async function init(){
     el('btnAccount').onclick=function(){el('accountModal').classList.remove('hidden');refresh();};el('closeAccountBtn').onclick=function(){el('accountModal').classList.add('hidden');};
+    var shopButton=el('btnProfileShop');if(shopButton)shopButton.onclick=function(){el('accountModal').classList.remove('hidden');refresh().then(function(){if(!user){message('Entre ou crie uma conta para acessar a loja.',true);return;}var shop=el('profileShopSection');if(shop)shop.scrollIntoView({behavior:'smooth',block:'start'});});};
     el('accountLoginBtn').onclick=function(){enter('login');};el('accountRegisterBtn').onclick=function(){enter('register');};el('forgotPasswordBtn').onclick=forgotPassword;el('profileSaveBtn').onclick=saveProfile;el('accountEmailSaveBtn').onclick=saveEmail;el('resendVerificationBtn').onclick=resendVerification;el('cloudSaveBtn').onclick=function(){upload(false);};el('cloudLoadBtn').onclick=download;el('cloudRestoreBtn').onclick=restorePrevious;el('accountLogoutBtn').onclick=logout;await handleEmailLink();refresh();
   }
   document.addEventListener('DOMContentLoaded',init);
