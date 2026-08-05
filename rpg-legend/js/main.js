@@ -105,8 +105,7 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('musicVolume').value = Math.round(state.musicVolume*100);
 
     RPG.UI.showScreen('game');
-    document.getElementById('rollLog').innerHTML = '';
-    document.getElementById('rollDie').textContent = '-';
+        document.getElementById('rollDie').textContent = '-';
     document.getElementById('rollDie').className = 'roll-die';
     document.getElementById('rollInfo').textContent = 'Escolha um dado para rolar.';
     document.getElementById('logList').innerHTML = '';

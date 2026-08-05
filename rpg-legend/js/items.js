@@ -18,16 +18,16 @@ RPG.Items = (function(){
 
   // Modelos base de item. category: arma | armadura | acessorio | consumivel | material
   var TEMPLATES = [
-    { id:'espada', name:'Espada', icon:'\u2694\ufe0f', category:'arma', desc:'Uma lâmina equilibrada para combate corpo a corpo.', base:{ataque:4}, value:22,
+    { id:'espada', name:'Espada', icon:'<img src="img/weapons/espada.png" class="weapon-icon-img" alt="Espada">', category:'arma', desc:'Uma lâmina equilibrada para combate corpo a corpo.', base:{ataque:4}, value:22,
       proc:{ chance:0.15, effect:'queimadura', label:'Queimadura', icon:'\ud83d\udd25' } },
-    { id:'machado', name:'Machado de Guerra', icon:'\ud83e\ude93', category:'arma', desc:'Pesado e brutal, favorece a força bruta.', base:{ataque:6, velocidade:-1}, value:26,
+    { id:'machado', name:'Machado de Guerra', icon:'<img src="img/weapons/machado.png" class="weapon-icon-img" alt="Machado">', category:'arma', desc:'Pesado e brutal, favorece a força bruta.', base:{ataque:6, velocidade:-1}, value:26,
       proc:{ chance:0.12, effect:'atordoar', label:'Atordoar', icon:'\ud83d\udcab' } },
-    { id:'adaga', name:'Adaga Sombria', icon:'\ud83d\udd2a', category:'arma', desc:'Rápida e precisa, ideal para golpes furtivos.', base:{ataque:3, critico:8}, value:20,
+    { id:'adaga', name:'Adaga Sombria', icon:'<img src="img/weapons/adaga.png" class="weapon-icon-img" alt="Adaga">', category:'arma', desc:'Rápida e precisa, ideal para golpes furtivos.', base:{ataque:3, critico:8}, value:20,
       proc:{ chance:0.15, effect:'sangramento', label:'Sangramento', icon:'\ud83e\ude78' } },
-    { id:'arco', name:'Arco Longo', icon:'\ud83c\udff9', category:'arma', desc:'Ataques precisos a distância.', base:{ataque:4, esquiva:2, critico:6}, value:24 },
+    { id:'arco', name:'Arco Longo', icon:'<img src="img/weapons/arco.png" class="weapon-icon-img" alt="Arco">', category:'arma', desc:'Ataques precisos a distância.', base:{ataque:4, esquiva:2, critico:6}, value:24 },
     { id:'cajado', name:'Cajado Arcano', icon:'\ud83e\ude84', category:'arma', desc:'Canaliza energia mágica em combate.', base:{ataque:3, mana:8}, value:24,
       proc:{ chance:0.10, effect:'mana_gratis', label:'Poupanca Arcana', icon:'\ud83d\udd37' } },
-    { id:'maca', name:'Maça Sagrada', icon:'\ud83d\udd28', category:'arma', desc:'Abençoada, favorece curandeiros.', base:{ataque:3, vida:6}, value:22,
+    { id:'maca', name:'Maça Sagrada', icon:'<img src="img/weapons/maca.png" class="weapon-icon-img" alt="Maça">', category:'arma', desc:'Abençoada, favorece curandeiros.', base:{ataque:3, vida:6}, value:22,
       proc:{ chance:0.10, effect:'cura_no_acerto', label:'Toque Curativo', icon:'\u2728' } },
 
     { id:'escudo', name:'Escudo de Carvalho', icon:'\ud83d\udee1\ufe0f', category:'armadura', desc:'Pesado, mas confiável contra golpes diretos.', base:{defesa:5, velocidade:-1}, value:24 },

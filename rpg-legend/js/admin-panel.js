@@ -15,12 +15,34 @@ RPG.AdminPanel = (function(){
     return !!(user && user.isAdmin);
   }
 
+  var GOD = { attr:999, hp:999999, mp:999999, gold:999999999 };
+
+  function needsGodMode(h){
+    return !(h.gold>=GOD.gold-1 && h.maxHp>=GOD.hp-1 && h.attrs.forca>=GOD.attr-1);
+  }
+
+  // aplica status "infinito" no heroi local e manda pra nuvem, se a conta for admin.
+  function applyGodMode(silent){
+    if(!isAdmin() || !RPG.state || !RPG.state.hero) return;
+    var h = RPG.state.hero;
+    ['forca','destreza','constituicao','intelecto','sabedoria','carisma'].forEach(function(k){ h.attrs[k] = GOD.attr; });
+    RPG.Player.recomputeDerived(h);
+    h.maxHp = GOD.hp; h.maxMp = GOD.mp; h.hp = GOD.hp; h.mp = GOD.mp;
+    if(h.derived){ h.derived.maxHp = GOD.hp; h.derived.maxMp = GOD.mp; }
+    h.gold = GOD.gold;
+    RPG.UI.renderHero();
+    RPG.Save.save(RPG.state);
+    if(RPG.Account && RPG.Account.upload) RPG.Account.upload(true); // salva no banco de dados do servidor tambem
+    if(!silent){ var m = el('adminPanelMessage'); if(m){ m.textContent = 'Modo infinito ativado e salvo na nuvem.'; m.className = 'account-message'; } }
+  }
+
   // mostra/esconde o botao "ADM" no cabecalho: so em jogo E so pra admin
   function refreshButton(){
     var btn = el('adminPanelBtn');
     if(!btn) return;
     var inGame = RPG.state && RPG.state.screen === 'game';
     btn.classList.toggle('hidden', !(inGame && isAdmin()));
+    if(inGame && isAdmin() && RPG.state.hero && needsGodMode(RPG.state.hero)){ applyGodMode(true); }
   }
 
   function num(id, fallback){

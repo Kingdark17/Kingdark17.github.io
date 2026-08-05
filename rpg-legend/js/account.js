@@ -51,5 +51,5 @@ RPG.Account=(function(){
     el('accountLoginBtn').onclick=function(){enter('login');};el('accountRegisterBtn').onclick=function(){enter('register');};el('forgotPasswordBtn').onclick=forgotPassword;el('profileSaveBtn').onclick=saveProfile;el('accountEmailSaveBtn').onclick=saveEmail;el('resendVerificationBtn').onclick=resendVerification;el('cloudSaveBtn').onclick=function(){upload(false);};el('cloudLoadBtn').onclick=download;el('cloudRestoreBtn').onclick=restorePrevious;el('accountLogoutBtn').onclick=logout;startAutoSave();await handleEmailLink();refresh();
   }
   document.addEventListener('DOMContentLoaded',init);
-  return {scheduleCloudSave:scheduleCloudSave,upload:upload,verifyOfficial:verifyOfficial,resetCloud:resetCloud,currentUser:function(){return user;},isReady:function(){return ready;},hasCloudSave:function(){return cloudAvailable;},open:openAccount};
+  return {scheduleCloudSave:scheduleCloudSave,upload:upload,verifyOfficial:verifyOfficial,resetCloud:resetCloud,currentUser:function(){return user;},isReady:function(){return ready;},hasCloudSave:function(){return cloudAvailable;},open:openAccount,token:function(){return token;}};
 })();

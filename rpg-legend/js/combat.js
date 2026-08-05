@@ -34,11 +34,6 @@ RPG.Combat = (function(){
         var crit = (sides===20 && result===20);
         var fail = (sides===20 && result===1);
         infoEl.innerHTML = 'Resultado em <b>d'+sides+'</b>: <b>'+result+'</b>' + (crit? ' &mdash; Acerto Crítico!' : (fail? ' &mdash; Falha Critica!' : ''));
-        var logLine = document.createElement('div');
-        logLine.innerHTML = '<span>d'+sides+'</span> &rarr; ' + result + (crit? ' (crítico)':'') + (fail? ' (falha)':'');
-        var logEl = document.getElementById('rollLog');
-        logEl.insertBefore(logLine, logEl.firstChild);
-        while(logEl.children.length > 12){ logEl.removeChild(logEl.lastChild); }
         RPG.UI.logEvent('Você rolou <b>d'+sides+'</b> e tirou <b>'+result+'</b>.');
         rolling = false;
         if(callback){ callback(result); }

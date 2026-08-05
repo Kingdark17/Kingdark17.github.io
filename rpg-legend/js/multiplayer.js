@@ -100,7 +100,7 @@ RPG.Multiplayer = (function(){
     session.room=room;session.name=name;session.role=create?1:2;session.turn=1;session.connected=true;status();
     try{
       var ws=new WebSocket(server);session.transport=ws;
-      ws.onopen=function(){send({type:create?'create':'join',name:name,role:session.role});message(create?'Criando sala...':'Procurando a sala '+room+'...');};
+      ws.onopen=function(){send({type:create?'create':'join',name:name,role:session.role,accountToken:(RPG.Account&&RPG.Account.token?RPG.Account.token():'')});message(create?'Criando sala...':'Procurando a sala '+room+'...');};
       ws.onmessage=function(e){try{receive(JSON.parse(e.data));}catch(err){}};
       ws.onerror=function(){message('Não foi possível conectar ao servidor.',true);};
       ws.onclose=function(){message('Conexão encerrada.',true);};
