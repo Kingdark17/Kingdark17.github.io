@@ -318,7 +318,8 @@ button.rune-btn.ghost{ background: rgba(0,0,0,0.2); border-color: var(--line); c
 
 /* ---------- dice tray ---------- */
 .lower-panels{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:18px;align-items:stretch}
-.dice-tray{ margin-top: 0; min-width:0; }
+.lower-panels .panel{ display:flex; flex-direction:column; min-height:400px; }
+.dice-tray{ margin-top: 0; min-width:0; justify-content:center; }
 .lower-panels .event-log{min-width:0}
 .equipment-panel .equip-slots{margin-top:0}
 .equipment-backpack{margin-top:14px}
@@ -328,14 +329,14 @@ button.rune-btn.ghost{ background: rgba(0,0,0,0.2); border-color: var(--line); c
 .merchant-action-row{display:flex;align-items:stretch;gap:10px;margin:4px 0 14px;flex-wrap:wrap}.merchant-negotiation{margin:0;min-height:34px;display:flex;align-items:center}.merchant-action-row .rune-btn{height:100%;min-height:38px}
 .merchant-negotiation .haggle-result{ font-family: var(--font-mono); font-size: 12.5px; color: var(--gold-bright); }
 .merchant-negotiation .haggle-result.dim{ color: var(--parchment-dim); }
-.roll-stage{ display:flex; align-items:center; gap: 18px; background: rgba(0,0,0,0.3); border: 1px solid var(--line); border-radius: 6px; padding: 14px; min-height: 86px; }
+.roll-stage{ display:flex; align-items:center; gap: 18px; background: rgba(0,0,0,0.3); border: 1px solid var(--line); border-radius: 6px; padding: 14px; height: 86px; overflow:hidden; flex-shrink:0; }
 .die-perspective{ perspective: 500px; width: 60px; height: 60px; flex-shrink:0; }
 .roll-die{ width: 60px; height: 60px; border-radius: 12px; display:flex; align-items:center; justify-content:center; font-family: var(--font-mono); font-size: 22px; font-weight: 700; background: linear-gradient(160deg, #3a2f4d, #211a2e); border: 2px solid var(--gold); color: var(--gold-bright); transform-style: preserve-3d; }
-.roll-info{ font-family: var(--font-mono); font-size: 12px; color: var(--parchment-dim); }
+.roll-info{ font-family: var(--font-mono); font-size: 12px; color: var(--parchment-dim); overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; }
 .roll-info b{ color: var(--parchment); }
 
 /* ---------- event log ---------- */
-.event-log .log-list{ max-height: 320px; overflow-y: auto; display:flex; flex-direction: column; gap: 6px; }
+.event-log .log-list{ flex:1; min-height:0; max-height: 320px; overflow-y: auto; display:flex; flex-direction: column; gap: 6px; }
 .event-log .log-item{ font-size: 12.5px; color: var(--parchment-dim); border-left: 2px solid var(--line); padding-left: 8px; }
 .event-log .log-item b{ color: var(--parchment); font-weight: 600; }
 

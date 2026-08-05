@@ -16,24 +16,52 @@ RPG.AdminPanel = (function(){
   }
 
   var GOD = { attr:999, hp:999999, mp:999999, gold:999999999 };
+  var EQUIP_CATEGORIES = ['arma','armadura','acessorio'];
 
   function needsGodMode(h){
     return !(h.gold>=GOD.gold-1 && h.maxHp>=GOD.hp-1 && h.attrs.forca>=GOD.attr-1);
   }
 
-  // aplica status "infinito" no heroi local e manda pra nuvem, se a conta for admin.
+  // garante 1 copia mitica de cada arma/armadura/acessorio e estoque de consumiveis.
+  // idempotente: so adiciona o que ainda falta, nao duplica a cada chamada.
+  function grantEverything(){
+    var state = RPG.state;
+    if(!state.inventory) state.inventory = [];
+    var inv = state.inventory;
+    var have = {};
+    inv.forEach(function(it){ if(it.rarity==='mitico') have[it.templateId] = true; });
+    var topRarity = RPG.Items.RARITIES[RPG.Items.RARITIES.length-1];
+    var added = false;
+    RPG.Items.TEMPLATES.forEach(function(t){
+      if(EQUIP_CATEGORIES.indexOf(t.category) === -1) return;
+      if(have[t.id]) return;
+      inv.push(RPG.Items.instantiate(t, topRarity));
+      added = true;
+    });
+    RPG.Items.TEMPLATES.filter(function(t){ return t.category==='consumivel'; }).forEach(function(t){
+      var count = inv.filter(function(it){ return it.templateId===t.id; }).length;
+      while(count < 20){ inv.push(RPG.Items.instantiate(t, RPG.Items.RARITIES[0])); count++; added = true; }
+    });
+    return added;
+  }
+
+  // aplica status "infinito" e inventario completo no heroi local, e manda pra nuvem se algo mudou.
   function applyGodMode(silent){
     if(!isAdmin() || !RPG.state || !RPG.state.hero) return;
     var h = RPG.state.hero;
+    var changed = needsGodMode(h);
     ['forca','destreza','constituicao','intelecto','sabedoria','carisma'].forEach(function(k){ h.attrs[k] = GOD.attr; });
     RPG.Player.recomputeDerived(h);
     h.maxHp = GOD.hp; h.maxMp = GOD.mp; h.hp = GOD.hp; h.mp = GOD.mp;
     if(h.derived){ h.derived.maxHp = GOD.hp; h.derived.maxMp = GOD.mp; }
     h.gold = GOD.gold;
+    if(grantEverything()) changed = true;
     RPG.UI.renderHero();
-    RPG.Save.save(RPG.state);
-    if(RPG.Account && RPG.Account.upload) RPG.Account.upload(true); // salva no banco de dados do servidor tambem
-    if(!silent){ var m = el('adminPanelMessage'); if(m){ m.textContent = 'Modo infinito ativado e salvo na nuvem.'; m.className = 'account-message'; } }
+    if(changed){
+      RPG.Save.save(RPG.state);
+      if(RPG.Account && RPG.Account.upload) RPG.Account.upload(true); // salva no banco de dados do servidor tambem
+    }
+    if(!silent){ var m = el('adminPanelMessage'); if(m){ m.textContent = 'Modo infinito ativado, inventario completo e salvo na nuvem.'; m.className = 'account-message'; } }
   }
 
   // mostra/esconde o botao "ADM" no cabecalho: so em jogo E so pra admin
@@ -42,7 +70,7 @@ RPG.AdminPanel = (function(){
     if(!btn) return;
     var inGame = RPG.state && RPG.state.screen === 'game';
     btn.classList.toggle('hidden', !(inGame && isAdmin()));
-    if(inGame && isAdmin() && RPG.state.hero && needsGodMode(RPG.state.hero)){ applyGodMode(true); }
+    if(inGame && isAdmin() && RPG.state.hero){ applyGodMode(true); }
   }
 
   function num(id, fallback){
@@ -50,9 +78,7 @@ RPG.AdminPanel = (function(){
     return isNaN(v) ? fallback : v;
   }
 
-  function open(){
-    if(!isAdmin()){ return; }
-    if(!RPG.state || !RPG.state.hero){ return; }
+  function populateFields(){
     var h = RPG.state.hero;
     el('admHp').value = h.hp;
     el('admMaxHp').value = h.maxHp;
@@ -68,6 +94,12 @@ RPG.AdminPanel = (function(){
     el('admIntelecto').value = h.attrs.intelecto;
     el('admSabedoria').value = h.attrs.sabedoria;
     el('admCarisma').value = h.attrs.carisma;
+  }
+
+  function open(){
+    if(!isAdmin()){ return; }
+    if(!RPG.state || !RPG.state.hero){ return; }
+    populateFields();
     el('adminPanelMessage').textContent = '';
     el('adminPanelModal').classList.remove('hidden');
   }
@@ -118,6 +150,8 @@ RPG.AdminPanel = (function(){
     if(closeBtn) closeBtn.addEventListener('click', close);
     var applyBtn = el('admApplyBtn');
     if(applyBtn) applyBtn.addEventListener('click', apply);
+    var godBtn = el('admGodBtn');
+    if(godBtn) godBtn.addEventListener('click', function(){ applyGodMode(false); populateFields(); });
   });
 
   return { isAdmin: isAdmin, refreshButton: refreshButton, open: open, close: close, apply: apply };
