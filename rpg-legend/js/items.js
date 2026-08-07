@@ -32,7 +32,7 @@ RPG.Items = (function(){
     { id:'marreta', name:'Marreta de Guerra', icon:'<img src="img/weapons/marreta.png" class="weapon-icon-img" alt="Marreta">', category:'arma', desc:'Um golpe pesado o suficiente para rachar armaduras.', base:{ataque:7, velocidade:-2}, value:27,
       proc:{ chance:0.12, effect:'atordoar', label:'Atordoar', icon:'\ud83d\udcab' } },
 
-    { id:'escudo', name:'Escudo de Carvalho', icon:'\ud83d\udee1\ufe0f', category:'armadura', desc:'Pesado, mas confiável contra golpes diretos.', base:{defesa:5, velocidade:-1}, value:24 },
+    { id:'escudo', name:'Escudo de Carvalho', icon:'<img src="img/armor/escudo.png" class="weapon-icon-img" alt="Escudo">', category:'armadura', desc:'Pesado, mas confiável contra golpes diretos.', base:{defesa:5, velocidade:-1}, value:24 },
     { id:'couro', name:'Armadura de Couro Batido', icon:'\ud83e\udd4b', category:'armadura', desc:'Leve o suficiente para não atrapalhar reflexos.', base:{defesa:3, velocidade:1}, value:22 },
     { id:'placas', name:'Armadura de Placas', icon:'\ud83e\udee5', category:'armadura', desc:'Proteção pesada, reduz agilidade.', base:{defesa:7, esquiva:-2}, value:30 },
     { id:'robe', name:'Robe Arcano', icon:'\ud83e\udd7c', category:'armadura', desc:'Tecido enfeitiçado que amplia o poder mágico.', base:{defesa:2, mana:10}, value:26 },
