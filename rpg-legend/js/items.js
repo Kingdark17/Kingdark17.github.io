@@ -39,7 +39,7 @@ RPG.Items = (function(){
 
     { id:'anel_som', name:'Anel das Sombras', icon:'<img src="img/accessories/anel_som.png" class="weapon-icon-img" alt="Anel das Sombras">', category:'acessorio', desc:'Sussurra segredos no escuro.', base:{critico:5, esquiva:2}, value:20 },
     { id:'amuleto_sab', name:'Amuleto da Sabedoria', icon:'<img src="img/accessories/amuleto_sab.png" class="weapon-icon-img" alt="Amuleto da Sabedoria">', category:'acessorio', desc:'Pertenceu a um oráculo esquecido.', base:{mana:6, vida:4}, value:20 },
-    { id:'bota_vento', name:'Botas do Vento', icon:'\ud83d\udc62', category:'acessorio', desc:'Passos leves como brisa de outono.', base:{velocidade:3, esquiva:1}, value:18 },
+    { id:'bota_vento', name:'Botas do Vento', icon:'<img src="img/accessories/bota_vento.png" class="weapon-icon-img" alt="Botas do Vento">', category:'acessorio', desc:'Passos leves como brisa de outono.', base:{velocidade:3, esquiva:1}, value:18 },
     { id:'colar_forca', name:'Colar da Força Ancestral', icon:'<img src="img/accessories/colar_forca.png" class="weapon-icon-img" alt="Colar da Força Ancestral">', category:'acessorio', desc:'Pulsa com poder antigo.', base:{ataque:2, vida:8}, value:22 },
 
     { id:'pot_vida', name:'Poção de Vida', icon:'<img src="img/potions/cura.png" class="weapon-icon-img" alt="Poção de Vida">', category:'consumivel', desc:'Restaura uma quantidade de vida ao ser bebida.', base:{cura:22}, value:14 },
