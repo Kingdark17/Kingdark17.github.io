@@ -37,10 +37,10 @@ RPG.Items = (function(){
     { id:'placas', name:'Armadura de Placas', icon:'\ud83e\udee5', category:'armadura', desc:'Proteção pesada, reduz agilidade.', base:{defesa:7, esquiva:-2}, value:30 },
     { id:'robe', name:'Robe Arcano', icon:'\ud83e\udd7c', category:'armadura', desc:'Tecido enfeitiçado que amplia o poder mágico.', base:{defesa:2, mana:10}, value:26 },
 
-    { id:'anel_som', name:'Anel das Sombras', icon:'\ud83d\udc8d', category:'acessorio', desc:'Sussurra segredos no escuro.', base:{critico:5, esquiva:2}, value:20 },
-    { id:'amuleto_sab', name:'Amuleto da Sabedoria', icon:'\ud83d\udccf', category:'acessorio', desc:'Pertenceu a um oráculo esquecido.', base:{mana:6, vida:4}, value:20 },
+    { id:'anel_som', name:'Anel das Sombras', icon:'<img src="img/accessories/anel_som.png" class="weapon-icon-img" alt="Anel das Sombras">', category:'acessorio', desc:'Sussurra segredos no escuro.', base:{critico:5, esquiva:2}, value:20 },
+    { id:'amuleto_sab', name:'Amuleto da Sabedoria', icon:'<img src="img/accessories/amuleto_sab.png" class="weapon-icon-img" alt="Amuleto da Sabedoria">', category:'acessorio', desc:'Pertenceu a um oráculo esquecido.', base:{mana:6, vida:4}, value:20 },
     { id:'bota_vento', name:'Botas do Vento', icon:'\ud83d\udc62', category:'acessorio', desc:'Passos leves como brisa de outono.', base:{velocidade:3, esquiva:1}, value:18 },
-    { id:'colar_forca', name:'Colar da Força Ancestral', icon:'\ud83d\udcff', category:'acessorio', desc:'Pulsa com poder antigo.', base:{ataque:2, vida:8}, value:22 },
+    { id:'colar_forca', name:'Colar da Força Ancestral', icon:'<img src="img/accessories/colar_forca.png" class="weapon-icon-img" alt="Colar da Força Ancestral">', category:'acessorio', desc:'Pulsa com poder antigo.', base:{ataque:2, vida:8}, value:22 },
 
     { id:'pot_vida', name:'Poção de Vida', icon:'<img src="img/potions/cura.png" class="weapon-icon-img" alt="Poção de Vida">', category:'consumivel', desc:'Restaura uma quantidade de vida ao ser bebida.', base:{cura:22}, value:14 },
     { id:'pot_mana', name:'Poção de Mana', icon:'<img src="img/potions/mana.png" class="weapon-icon-img" alt="Poção de Mana">', category:'consumivel', desc:'Restaura uma quantidade de mana.', base:{curaMana:16}, value:14 },
