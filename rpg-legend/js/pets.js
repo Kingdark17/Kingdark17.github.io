@@ -2,6 +2,7 @@
 var RPG=window.RPG||{};
 RPG.Pets=(function(){
   var icons={chicken:'🐔',cat:'🐈',fox:'🦊',owl:'🦉',slime:'🟢',wolf:'🐺',fairy:'🧚',baby_dragon:'🐲',admin_dragon:'🐉'};
+  var images={baby_dragon:{normal:'img/pets/dragon-normal.png',heart:'img/pets/dragon-heart.png'}};
   var bonuses={
     chicken:{esquiva:3,label:'+3% de esquiva'},
     cat:{critico:3,label:'+3% de crítico'},
@@ -13,21 +14,36 @@ RPG.Pets=(function(){
     baby_dragon:{critico:6,esquiva:3,label:'+6% de crítico e +3% de esquiva'},
     admin_dragon:{critico:20,esquiva:20,manaSave:35,healing:35,label:'+20% crítico e esquiva, +35% cura e economia de mana'}
   };
+  var revertTimer=null;
+  function setFace(pet,variant){
+    var img=images[pet],face=document.getElementById('profilePetIcon');
+    if(!img||!face)return false;
+    face.innerHTML='<img src="'+img[variant]+'" class="pet-icon-img" alt="Pet">';
+    return true;
+  }
   function render(user){
     var widget=document.getElementById('profilePetWidget');
     if(!widget)return;
     var pet=user&&user.pet||'none';
     widget.classList.toggle('hidden',pet==='none'||!icons[pet]);
-    if(icons[pet])document.getElementById('profilePetIcon').textContent=icons[pet];
+    widget.setAttribute('data-pet',pet);
+    if(revertTimer){clearTimeout(revertTimer);revertTimer=null;}
+    if(!setFace(pet,'normal')&&icons[pet])document.getElementById('profilePetIcon').textContent=icons[pet];
   }
   function love(){
     var widget=document.getElementById('profilePetWidget');
     if(!widget||widget.classList.contains('hidden'))return;
+    var pet=widget.getAttribute('data-pet');
     var heart=document.createElement('span');
     heart.className='pet-heart';heart.textContent='❤';heart.style.color='#ff6b8a';
     widget.appendChild(heart);
     requestAnimationFrame(function(){heart.style.transform='translateY(-48px) scale(1.4)';heart.style.opacity='0';});
     setTimeout(function(){heart.remove();},850);
+    if(images[pet]){
+      setFace(pet,'heart');
+      if(revertTimer)clearTimeout(revertTimer);
+      revertTimer=setTimeout(function(){setFace(pet,'normal');revertTimer=null;},1200);
+    }
     if(RPG.Effects&&RPG.Effects.playSfx)RPG.Effects.playSfx('heal');
   }
   document.addEventListener('DOMContentLoaded',function(){var widget=document.getElementById('profilePetWidget');if(widget)widget.addEventListener('click',love);});

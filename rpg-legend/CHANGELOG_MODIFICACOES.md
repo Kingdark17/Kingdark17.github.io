@@ -34,6 +34,9 @@
   foram revisados ortográfica e gramaticalmente em português brasileiro.
 - NPCs agora oferecem cura, bênção, troca de materiais, informações do mapa
   ou recrutamento temporário, além das conversas normais.
+- Nova arma Marreta de Guerra, com afinidade por classe própria.
+- Ícone do Machado de Guerra e das Poções de Vida e Mana trocados por pixel art.
+- Dragão Filhote do perfil agora usa sprite próprio (normal/coração ao clicar).
 
 ## Como testar
 

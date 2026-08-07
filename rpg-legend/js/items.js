@@ -29,6 +29,8 @@ RPG.Items = (function(){
       proc:{ chance:0.10, effect:'mana_gratis', label:'Poupanca Arcana', icon:'\ud83d\udd37' } },
     { id:'maca', name:'Maça Sagrada', icon:'<img src="img/weapons/maca.png" class="weapon-icon-img" alt="Maça">', category:'arma', desc:'Abençoada, favorece curandeiros.', base:{ataque:3, vida:6}, value:22,
       proc:{ chance:0.10, effect:'cura_no_acerto', label:'Toque Curativo', icon:'\u2728' } },
+    { id:'marreta', name:'Marreta de Guerra', icon:'<img src="img/weapons/marreta.png" class="weapon-icon-img" alt="Marreta">', category:'arma', desc:'Um golpe pesado o suficiente para rachar armaduras.', base:{ataque:7, velocidade:-2}, value:27,
+      proc:{ chance:0.12, effect:'atordoar', label:'Atordoar', icon:'\ud83d\udcab' } },
 
     { id:'escudo', name:'Escudo de Carvalho', icon:'\ud83d\udee1\ufe0f', category:'armadura', desc:'Pesado, mas confiável contra golpes diretos.', base:{defesa:5, velocidade:-1}, value:24 },
     { id:'couro', name:'Armadura de Couro Batido', icon:'\ud83e\udd4b', category:'armadura', desc:'Leve o suficiente para não atrapalhar reflexos.', base:{defesa:3, velocidade:1}, value:22 },
@@ -40,8 +42,8 @@ RPG.Items = (function(){
     { id:'bota_vento', name:'Botas do Vento', icon:'\ud83d\udc62', category:'acessorio', desc:'Passos leves como brisa de outono.', base:{velocidade:3, esquiva:1}, value:18 },
     { id:'colar_forca', name:'Colar da Força Ancestral', icon:'\ud83d\udcff', category:'acessorio', desc:'Pulsa com poder antigo.', base:{ataque:2, vida:8}, value:22 },
 
-    { id:'pot_vida', name:'Poção de Vida', icon:'\ud83e\uddea', category:'consumivel', desc:'Restaura uma quantidade de vida ao ser bebida.', base:{cura:22}, value:14 },
-    { id:'pot_mana', name:'Poção de Mana', icon:'\ud83e\uddec', category:'consumivel', desc:'Restaura uma quantidade de mana.', base:{curaMana:16}, value:14 },
+    { id:'pot_vida', name:'Poção de Vida', icon:'<img src="img/potions/cura.png" class="weapon-icon-img" alt="Poção de Vida">', category:'consumivel', desc:'Restaura uma quantidade de vida ao ser bebida.', base:{cura:22}, value:14 },
+    { id:'pot_mana', name:'Poção de Mana', icon:'<img src="img/potions/mana.png" class="weapon-icon-img" alt="Poção de Mana">', category:'consumivel', desc:'Restaura uma quantidade de mana.', base:{curaMana:16}, value:14 },
     { id:'pergaminho', name:'Pergaminho Selado', icon:'\ud83d\udcdc', category:'consumivel', desc:'Contém um feitiço de propósito desconhecido.', base:{cura:10, curaMana:10}, value:16 },
 
     { id:'minerio', name:'Minério Bruto', icon:'\u26cf\ufe0f', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },

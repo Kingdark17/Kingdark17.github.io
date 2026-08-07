@@ -27,22 +27,22 @@ RPG.Player = (function(){
   // so causa menos dano/efeito nas que tem pouca afinidade.
   var CLASSES = [
     { name:"Guerreiro", icon:"\u2694\ufe0f", weaponTemplate:'espada', bias:{forca:3,constituicao:2}, desc:"Combate corpo a corpo, resistente na linha de frente.", signature:"Golpe Poderoso",
-      affinity:{espada:100,machado:90,maca:70,adaga:55,arco:50,cajado:25} },
+      affinity:{espada:100,machado:90,maca:70,adaga:55,arco:50,cajado:25,marreta:90} },
     { name:"Mago", icon:"\ud83e\uddd9", weaponTemplate:'cajado', bias:{intelecto:3,sabedoria:1}, desc:"Magias ofensivas e controle de mana.", signature:"Bola de Fogo",
-      affinity:{cajado:100,maca:55,adaga:45,arco:40,espada:30,machado:20} },
+      affinity:{cajado:100,maca:55,adaga:45,arco:40,espada:30,machado:20,marreta:20} },
     { name:"Ladino", icon:"\ud83d\udd2a", weaponTemplate:'adaga', bias:{destreza:3,carisma:1}, desc:"Furtividade, críticos e agilidade.", signature:"Furtividade Sombria",
-      affinity:{adaga:100,arco:80,espada:55,maca:40,machado:40,cajado:30} },
+      affinity:{adaga:100,arco:80,espada:55,maca:40,machado:40,cajado:30,marreta:40} },
     { name:"Clérigo", icon:"\u271d\ufe0f", weaponTemplate:'maca', bias:{sabedoria:3,constituicao:1}, desc:"Cura aliados e resiste a corrupção.", signature:"Cura Menor",
-      affinity:{maca:100,cajado:70,espada:50,adaga:40,arco:35,machado:30} },
+      affinity:{maca:100,cajado:70,espada:50,adaga:40,arco:35,machado:30,marreta:30} },
     { name:"Bárbaro", icon:"\ud83e\ude93", weaponTemplate:'machado', bias:{forca:4}, desc:"Fúria bruta, dano massivo corpo a corpo.", signature:"Grito de Guerra",
-      affinity:{machado:100,espada:85,maca:55,adaga:45,arco:35,cajado:15} },
-    { name:"Arqueiro", icon:"\ud83c\udff9", weaponTemplate:'arco', bias:{destreza:3,sabedoria:1}, desc:"Precisão a distância e mobilidade.", signature:"Tiro Certeiro", affinity:{arco:100,adaga:70,espada:50,maca:40,machado:35,cajado:25} },
-    { name:"Paladino", icon:"\ud83d\udee1\ufe0f", weaponTemplate:'espada', bias:{forca:2,sabedoria:2,constituicao:1}, desc:"Defensor sagrado que combina resistência e cura.", signature:"Julgamento Sagrado", affinity:{espada:100,maca:90,machado:65,cajado:60,adaga:40,arco:35} },
-    { name:"Necromante", icon:"\u2620\ufe0f", weaponTemplate:'cajado', bias:{intelecto:3,constituicao:1}, desc:"Conjura maldições e drena a força dos inimigos.", signature:"Maldição Sombria", affinity:{cajado:100,adaga:75,maca:55,espada:40,arco:35,machado:25} },
-    { name:"Druida", icon:"\ud83c\udf3f", weaponTemplate:'cajado', bias:{sabedoria:3,constituicao:1}, desc:"Controla a natureza, venenos e magia de cura.", signature:"Esporos Venenosos", affinity:{cajado:100,maca:75,arco:65,adaga:50,espada:35,machado:35} },
-    { name:"Monge", icon:"\ud83e\udd4b", weaponTemplate:'maca', bias:{destreza:2,sabedoria:2}, desc:"Lutador disciplinado que domina corpo e espírito.", signature:"Golpe Atordoante", affinity:{maca:100,adaga:85,cajado:70,espada:55,machado:40,arco:40} },
-    { name:"Bardo", icon:"\ud83c\udfb5", weaponTemplate:'adaga', bias:{carisma:3,destreza:1}, desc:"Usa música para fortalecer aliados e enfraquecer inimigos.", signature:"Canção Debilitante", affinity:{adaga:100,arco:80,espada:65,cajado:65,maca:50,machado:30} },
-    { name:"Caçador", icon:"\ud83d\udc3a", weaponTemplate:'arco', bias:{destreza:2,sabedoria:2}, desc:"Especialista em rastrear e sangrar criaturas.", signature:"Flecha Serrilhada", affinity:{arco:100,adaga:85,espada:60,machado:50,maca:35,cajado:25} }
+      affinity:{machado:100,espada:85,maca:55,adaga:45,arco:35,cajado:15,marreta:100} },
+    { name:"Arqueiro", icon:"\ud83c\udff9", weaponTemplate:'arco', bias:{destreza:3,sabedoria:1}, desc:"Precisão a distância e mobilidade.", signature:"Tiro Certeiro", affinity:{arco:100,adaga:70,espada:50,maca:40,machado:35,cajado:25,marreta:35} },
+    { name:"Paladino", icon:"\ud83d\udee1\ufe0f", weaponTemplate:'espada', bias:{forca:2,sabedoria:2,constituicao:1}, desc:"Defensor sagrado que combina resistência e cura.", signature:"Julgamento Sagrado", affinity:{espada:100,maca:90,machado:65,cajado:60,adaga:40,arco:35,marreta:65} },
+    { name:"Necromante", icon:"\u2620\ufe0f", weaponTemplate:'cajado', bias:{intelecto:3,constituicao:1}, desc:"Conjura maldições e drena a força dos inimigos.", signature:"Maldição Sombria", affinity:{cajado:100,adaga:75,maca:55,espada:40,arco:35,machado:25,marreta:25} },
+    { name:"Druida", icon:"\ud83c\udf3f", weaponTemplate:'cajado', bias:{sabedoria:3,constituicao:1}, desc:"Controla a natureza, venenos e magia de cura.", signature:"Esporos Venenosos", affinity:{cajado:100,maca:75,arco:65,adaga:50,espada:35,machado:35,marreta:35} },
+    { name:"Monge", icon:"\ud83e\udd4b", weaponTemplate:'maca', bias:{destreza:2,sabedoria:2}, desc:"Lutador disciplinado que domina corpo e espírito.", signature:"Golpe Atordoante", affinity:{maca:100,adaga:85,cajado:70,espada:55,machado:40,arco:40,marreta:40} },
+    { name:"Bardo", icon:"\ud83c\udfb5", weaponTemplate:'adaga', bias:{carisma:3,destreza:1}, desc:"Usa música para fortalecer aliados e enfraquecer inimigos.", signature:"Canção Debilitante", affinity:{adaga:100,arco:80,espada:65,cajado:65,maca:50,machado:30,marreta:30} },
+    { name:"Caçador", icon:"\ud83d\udc3a", weaponTemplate:'arco', bias:{destreza:2,sabedoria:2}, desc:"Especialista em rastrear e sangrar criaturas.", signature:"Flecha Serrilhada", affinity:{arco:100,adaga:85,espada:60,machado:50,maca:35,cajado:25,marreta:50} }
   ];
 
   // type: dano_fisico | dano_magico | cura | buff_crit | buff_precisao | buff_forca | buff_esquiva | escudo
