@@ -25,7 +25,7 @@ RPG.Items = (function(){
     { id:'adaga', name:'Adaga Sombria', icon:'<img src="img/weapons/adaga.png" class="weapon-icon-img" alt="Adaga">', category:'arma', desc:'Rápida e precisa, ideal para golpes furtivos.', base:{ataque:3, critico:8}, value:20,
       proc:{ chance:0.15, effect:'sangramento', label:'Sangramento', icon:'\ud83e\ude78' } },
     { id:'arco', name:'Arco Longo', icon:'<img src="img/weapons/arco.png" class="weapon-icon-img" alt="Arco">', category:'arma', desc:'Ataques precisos a distância.', base:{ataque:4, esquiva:2, critico:6}, value:24 },
-    { id:'cajado', name:'Cajado Arcano', icon:'\ud83e\ude84', category:'arma', desc:'Canaliza energia mágica em combate.', base:{ataque:3, mana:8}, value:24,
+    { id:'cajado', name:'Cajado Arcano', icon:'<img src="img/weapons/cajado.png" class="weapon-icon-img" alt="Cajado Arcano">', category:'arma', desc:'Canaliza energia mágica em combate.', base:{ataque:3, mana:8}, value:24,
       proc:{ chance:0.10, effect:'mana_gratis', label:'Poupanca Arcana', icon:'\ud83d\udd37' } },
     { id:'maca', name:'Maça Sagrada', icon:'<img src="img/weapons/maca.png" class="weapon-icon-img" alt="Maça">', category:'arma', desc:'Abençoada, favorece curandeiros.', base:{ataque:3, vida:6}, value:22,
       proc:{ chance:0.10, effect:'cura_no_acerto', label:'Toque Curativo', icon:'\u2728' } },
@@ -44,7 +44,7 @@ RPG.Items = (function(){
 
     { id:'pot_vida', name:'Poção de Vida', icon:'<img src="img/potions/cura.png" class="weapon-icon-img" alt="Poção de Vida">', category:'consumivel', desc:'Restaura uma quantidade de vida ao ser bebida.', base:{cura:22}, value:14 },
     { id:'pot_mana', name:'Poção de Mana', icon:'<img src="img/potions/mana.png" class="weapon-icon-img" alt="Poção de Mana">', category:'consumivel', desc:'Restaura uma quantidade de mana.', base:{curaMana:16}, value:14 },
-    { id:'pergaminho', name:'Pergaminho Selado', icon:'\ud83d\udcdc', category:'consumivel', desc:'Contém um feitiço de propósito desconhecido.', base:{cura:10, curaMana:10}, value:16 },
+    { id:'pergaminho', name:'Pergaminho Selado', icon:'<img src="img/scrolls/pergaminho.png" class="weapon-icon-img" alt="Pergaminho Selado">', category:'consumivel', desc:'Contém um feitiço de propósito desconhecido.', base:{cura:10, curaMana:10}, value:16 },
 
     { id:'minerio', name:'Minério Bruto', icon:'\u26cf\ufe0f', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },
     { id:'essencia', name:'Essência Arcana', icon:'\u2728', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
