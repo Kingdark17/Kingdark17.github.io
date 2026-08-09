@@ -18,39 +18,39 @@ RPG.Items = (function(){
 
   // Modelos base de item. category: arma | armadura | acessorio | consumivel | material
   var TEMPLATES = [
-    { id:'espada', name:'Espada', icon:'<img src="img/weapons/espada.png" class="weapon-icon-img" alt="Espada">', category:'arma', desc:'Uma lâmina equilibrada para combate corpo a corpo.', base:{ataque:4}, value:22,
+    { id:'espada', name:'Espada', icon:'<img src="img/weapons/espada.png?v=20260809c" class="weapon-icon-img" alt="Espada">', category:'arma', desc:'Uma lâmina equilibrada para combate corpo a corpo.', base:{ataque:4}, value:22,
       proc:{ chance:0.15, effect:'queimadura', label:'Queimadura', icon:'\ud83d\udd25' } },
-    { id:'machado', name:'Machado de Guerra', icon:'<img src="img/weapons/machado.png" class="weapon-icon-img" alt="Machado">', category:'arma', desc:'Pesado e brutal, favorece a força bruta.', base:{ataque:6, velocidade:-1}, value:26,
+    { id:'machado', name:'Machado de Guerra', icon:'<img src="img/weapons/machado.png?v=20260809c" class="weapon-icon-img" alt="Machado">', category:'arma', desc:'Pesado e brutal, favorece a força bruta.', base:{ataque:6, velocidade:-1}, value:26,
       proc:{ chance:0.12, effect:'atordoar', label:'Atordoar', icon:'\ud83d\udcab' } },
-    { id:'adaga', name:'Adaga Sombria', icon:'<img src="img/weapons/adaga.png" class="weapon-icon-img" alt="Adaga">', category:'arma', desc:'Rápida e precisa, ideal para golpes furtivos.', base:{ataque:3, critico:8}, value:20,
+    { id:'adaga', name:'Adaga Sombria', icon:'<img src="img/weapons/adaga.png?v=20260809c" class="weapon-icon-img" alt="Adaga">', category:'arma', desc:'Rápida e precisa, ideal para golpes furtivos.', base:{ataque:3, critico:8}, value:20,
       proc:{ chance:0.15, effect:'sangramento', label:'Sangramento', icon:'\ud83e\ude78' } },
-    { id:'arco', name:'Arco Longo', icon:'<img src="img/weapons/arco.png" class="weapon-icon-img" alt="Arco">', category:'arma', desc:'Ataques precisos a distância.', base:{ataque:4, esquiva:2, critico:6}, value:24 },
-    { id:'cajado', name:'Cajado Arcano', icon:'<img src="img/weapons/cajado.png" class="weapon-icon-img" alt="Cajado Arcano">', category:'arma', desc:'Canaliza energia mágica em combate.', base:{ataque:3, mana:8}, value:24,
+    { id:'arco', name:'Arco Longo', icon:'<img src="img/weapons/arco.png?v=20260809c" class="weapon-icon-img" alt="Arco">', category:'arma', desc:'Ataques precisos a distância.', base:{ataque:4, esquiva:2, critico:6}, value:24 },
+    { id:'cajado', name:'Cajado Arcano', icon:'<img src="img/weapons/cajado.png?v=20260809c" class="weapon-icon-img" alt="Cajado Arcano">', category:'arma', desc:'Canaliza energia mágica em combate.', base:{ataque:3, mana:8}, value:24,
       proc:{ chance:0.10, effect:'mana_gratis', label:'Poupanca Arcana', icon:'\ud83d\udd37' } },
-    { id:'maca', name:'Maça Sagrada', icon:'<img src="img/weapons/maca.png" class="weapon-icon-img" alt="Maça">', category:'arma', desc:'Abençoada, favorece curandeiros.', base:{ataque:3, vida:6}, value:22,
+    { id:'maca', name:'Maça Sagrada', icon:'<img src="img/weapons/maca.png?v=20260809c" class="weapon-icon-img" alt="Maça">', category:'arma', desc:'Abençoada, favorece curandeiros.', base:{ataque:3, vida:6}, value:22,
       proc:{ chance:0.10, effect:'cura_no_acerto', label:'Toque Curativo', icon:'\u2728' } },
-    { id:'marreta', name:'Marreta de Guerra', icon:'<img src="img/weapons/marreta.png" class="weapon-icon-img" alt="Marreta">', category:'arma', desc:'Um golpe pesado o suficiente para rachar armaduras.', base:{ataque:7, velocidade:-2}, value:27,
+    { id:'marreta', name:'Marreta de Guerra', icon:'<img src="img/weapons/marreta.png?v=20260809c" class="weapon-icon-img" alt="Marreta">', category:'arma', desc:'Um golpe pesado o suficiente para rachar armaduras.', base:{ataque:7, velocidade:-2}, value:27,
       proc:{ chance:0.12, effect:'atordoar', label:'Atordoar', icon:'\ud83d\udcab' } },
 
-    { id:'escudo', name:'Escudo de Carvalho', icon:'<img src="img/armor/escudo.png" class="weapon-icon-img" alt="Escudo">', category:'armadura', desc:'Pesado, mas confiável contra golpes diretos.', base:{defesa:5, velocidade:-1}, value:24 },
-    { id:'couro', name:'Armadura de Couro Batido', icon:'<img src="img/armor/couro.png" class="weapon-icon-img" alt="Armadura de Couro Batido">', category:'armadura', desc:'Leve o suficiente para não atrapalhar reflexos.', base:{defesa:3, velocidade:1}, value:22 },
-    { id:'placas', name:'Armadura de Placas', icon:'<img src="img/armor/placas.png" class="weapon-icon-img" alt="Armadura de Placas">', category:'armadura', desc:'Proteção pesada, reduz agilidade.', base:{defesa:7, esquiva:-2}, value:30 },
-    { id:'robe', name:'Robe Arcano', icon:'<img src="img/armor/robe.png" class="weapon-icon-img" alt="Robe Arcano">', category:'armadura', desc:'Tecido enfeitiçado que amplia o poder mágico.', base:{defesa:2, mana:10}, value:26 },
+    { id:'escudo', name:'Escudo de Carvalho', icon:'<img src="img/armor/escudo.png?v=20260809c" class="weapon-icon-img" alt="Escudo">', category:'armadura', desc:'Pesado, mas confiável contra golpes diretos.', base:{defesa:5, velocidade:-1}, value:24 },
+    { id:'couro', name:'Armadura de Couro Batido', icon:'<img src="img/armor/couro.png?v=20260809c" class="weapon-icon-img" alt="Armadura de Couro Batido">', category:'armadura', desc:'Leve o suficiente para não atrapalhar reflexos.', base:{defesa:3, velocidade:1}, value:22 },
+    { id:'placas', name:'Armadura de Placas', icon:'<img src="img/armor/placas.png?v=20260809c" class="weapon-icon-img" alt="Armadura de Placas">', category:'armadura', desc:'Proteção pesada, reduz agilidade.', base:{defesa:7, esquiva:-2}, value:30 },
+    { id:'robe', name:'Robe Arcano', icon:'<img src="img/armor/robe.png?v=20260809c" class="weapon-icon-img" alt="Robe Arcano">', category:'armadura', desc:'Tecido enfeitiçado que amplia o poder mágico.', base:{defesa:2, mana:10}, value:26 },
 
-    { id:'anel_som', name:'Anel das Sombras', icon:'<img src="img/accessories/anel_som.png" class="weapon-icon-img" alt="Anel das Sombras">', category:'acessorio', desc:'Sussurra segredos no escuro.', base:{critico:5, esquiva:2}, value:20 },
-    { id:'amuleto_sab', name:'Amuleto da Sabedoria', icon:'<img src="img/accessories/amuleto_sab.png" class="weapon-icon-img" alt="Amuleto da Sabedoria">', category:'acessorio', desc:'Pertenceu a um oráculo esquecido.', base:{mana:6, vida:4}, value:20 },
-    { id:'bota_vento', name:'Botas do Vento', icon:'<img src="img/accessories/bota_vento.png" class="weapon-icon-img" alt="Botas do Vento">', category:'acessorio', desc:'Passos leves como brisa de outono.', base:{velocidade:3, esquiva:1}, value:18 },
-    { id:'colar_forca', name:'Colar da Força Ancestral', icon:'<img src="img/accessories/colar_forca.png" class="weapon-icon-img" alt="Colar da Força Ancestral">', category:'acessorio', desc:'Pulsa com poder antigo.', base:{ataque:2, vida:8}, value:22 },
+    { id:'anel_som', name:'Anel das Sombras', icon:'<img src="img/accessories/anel_som.png?v=20260809c" class="weapon-icon-img" alt="Anel das Sombras">', category:'acessorio', desc:'Sussurra segredos no escuro.', base:{critico:5, esquiva:2}, value:20 },
+    { id:'amuleto_sab', name:'Amuleto da Sabedoria', icon:'<img src="img/accessories/amuleto_sab.png?v=20260809c" class="weapon-icon-img" alt="Amuleto da Sabedoria">', category:'acessorio', desc:'Pertenceu a um oráculo esquecido.', base:{mana:6, vida:4}, value:20 },
+    { id:'bota_vento', name:'Botas do Vento', icon:'<img src="img/accessories/bota_vento.png?v=20260809c" class="weapon-icon-img" alt="Botas do Vento">', category:'acessorio', desc:'Passos leves como brisa de outono.', base:{velocidade:3, esquiva:1}, value:18 },
+    { id:'colar_forca', name:'Colar da Força Ancestral', icon:'<img src="img/accessories/colar_forca.png?v=20260809c" class="weapon-icon-img" alt="Colar da Força Ancestral">', category:'acessorio', desc:'Pulsa com poder antigo.', base:{ataque:2, vida:8}, value:22 },
 
-    { id:'pot_vida', name:'Poção de Vida', icon:'<img src="img/potions/cura.png" class="weapon-icon-img" alt="Poção de Vida">', category:'consumivel', desc:'Restaura uma quantidade de vida ao ser bebida.', base:{cura:22}, value:14 },
-    { id:'pot_mana', name:'Poção de Mana', icon:'<img src="img/potions/mana.png" class="weapon-icon-img" alt="Poção de Mana">', category:'consumivel', desc:'Restaura uma quantidade de mana.', base:{curaMana:16}, value:14 },
-    { id:'pergaminho', name:'Pergaminho Selado', icon:'<img src="img/scrolls/pergaminho.png" class="weapon-icon-img" alt="Pergaminho Selado">', category:'consumivel', desc:'Contém um feitiço de propósito desconhecido.', base:{cura:10, curaMana:10}, value:16 },
+    { id:'pot_vida', name:'Poção de Vida', icon:'<img src="img/potions/cura.png?v=20260809c" class="weapon-icon-img" alt="Poção de Vida">', category:'consumivel', desc:'Restaura uma quantidade de vida ao ser bebida.', base:{cura:22}, value:14 },
+    { id:'pot_mana', name:'Poção de Mana', icon:'<img src="img/potions/mana.png?v=20260809c" class="weapon-icon-img" alt="Poção de Mana">', category:'consumivel', desc:'Restaura uma quantidade de mana.', base:{curaMana:16}, value:14 },
+    { id:'pergaminho', name:'Pergaminho Selado', icon:'<img src="img/scrolls/pergaminho.png?v=20260809c" class="weapon-icon-img" alt="Pergaminho Selado">', category:'consumivel', desc:'Contém um feitiço de propósito desconhecido.', base:{cura:10, curaMana:10}, value:16 },
 
-    { id:'minerio', name:'Minério Bruto', icon:'<img src="img/materials/minerio.png" class="weapon-icon-img" alt="Minério Bruto">', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },
-    { id:'essencia', name:'Essência Arcana', icon:'<img src="img/materials/essencia.png" class="weapon-icon-img" alt="Essência Arcana">', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
-    { id:'catalisador_mitico', name:'Catalisador Mítico', icon:'<img src="img/materials/catalisador_mitico.png" class="weapon-icon-img" alt="Catalisador Mítico">', category:'material', desc:'Catalisador raro que aumenta muito a chance de elevar o tier na reforja.', base:{}, value:80 },
-    { id:'pedra_protecao', name:'Pedra de Proteção', icon:'<img src="img/materials/pedra_protecao.png" class="weapon-icon-img" alt="Pedra de Proteção">', category:'material', desc:'Protege o equipamento: uma reforja feita com ela nunca reduz o tier.', base:{}, value:55 },
-    { id:'couro_bruto', name:'Couro de Fera', icon:'<img src="img/materials/couro_bruto.png" class="weapon-icon-img" alt="Couro de Fera">', category:'material', desc:'Material usado em armaduras leves.', base:{}, value:10 }
+    { id:'minerio', name:'Minério Bruto', icon:'<img src="img/materials/minerio.png?v=20260809c" class="weapon-icon-img" alt="Minério Bruto">', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },
+    { id:'essencia', name:'Essência Arcana', icon:'<img src="img/materials/essencia.png?v=20260809c" class="weapon-icon-img" alt="Essência Arcana">', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
+    { id:'catalisador_mitico', name:'Catalisador Mítico', icon:'<img src="img/materials/catalisador_mitico.png?v=20260809c" class="weapon-icon-img" alt="Catalisador Mítico">', category:'material', desc:'Catalisador raro que aumenta muito a chance de elevar o tier na reforja.', base:{}, value:80 },
+    { id:'pedra_protecao', name:'Pedra de Proteção', icon:'<img src="img/materials/pedra_protecao.png?v=20260809c" class="weapon-icon-img" alt="Pedra de Proteção">', category:'material', desc:'Protege o equipamento: uma reforja feita com ela nunca reduz o tier.', base:{}, value:55 },
+    { id:'couro_bruto', name:'Couro de Fera', icon:'<img src="img/materials/couro_bruto.png?v=20260809c" class="weapon-icon-img" alt="Couro de Fera">', category:'material', desc:'Material usado em armaduras leves.', base:{}, value:10 }
   ];
 
   var CATEGORY_LABELS = { arma:'Arma', armadura:'Armadura', acessorio:'Acessório', consumivel:'Consumível', material:'Material', missao:'Missão' };
