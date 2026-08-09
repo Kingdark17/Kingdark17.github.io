@@ -49,10 +49,10 @@ RPG.Items = (function(){
     { id:'pergaminho', name:'Pergaminho Selado', icon:'<img src="img/scrolls/pergaminho.png?v=20260809d" class="weapon-icon-img" alt="Pergaminho Selado">', category:'consumivel', desc:'Contém um feitiço de propósito desconhecido.', base:{cura:10, curaMana:10}, value:16 },
 
     { id:'minerio', name:'Minério Bruto', icon:'<img src="img/materials/minerio.png?v=20260809c" class="weapon-icon-img" alt="Minério Bruto">', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },
-    { id:'essencia', name:'Essência Arcana', icon:'<img src="img/materials/essencia.png?v=20260809c" class="weapon-icon-img" alt="Essência Arcana">', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
+    { id:'essencia', name:'Essência Arcana', icon:'<img src="img/materials/essencia.png?v=20260809d" class="weapon-icon-img" alt="Essência Arcana">', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
     { id:'catalisador_mitico', name:'Catalisador Mítico', icon:'<img src="img/materials/catalisador_mitico.png?v=20260809c" class="weapon-icon-img" alt="Catalisador Mítico">', category:'material', desc:'Catalisador raro que aumenta muito a chance de elevar o tier na reforja.', base:{}, value:80 },
     { id:'pedra_protecao', name:'Pedra de Proteção', icon:'<img src="img/materials/pedra_protecao.png?v=20260809c" class="weapon-icon-img" alt="Pedra de Proteção">', category:'material', desc:'Protege o equipamento: uma reforja feita com ela nunca reduz o tier.', base:{}, value:55 },
-    { id:'couro_bruto', name:'Couro de Fera', icon:'<img src="img/materials/couro_bruto.png?v=20260809c" class="weapon-icon-img" alt="Couro de Fera">', category:'material', desc:'Material usado em armaduras leves.', base:{}, value:10 }
+    { id:'couro_bruto', name:'Couro de Fera', icon:'<img src="img/materials/couro_bruto.png?v=20260809d" class="weapon-icon-img" alt="Couro de Fera">', category:'material', desc:'Material usado em armaduras leves.', base:{}, value:10 }
   ];
 
   var CATEGORY_LABELS = { arma:'Arma', armadura:'Armadura', acessorio:'Acessório', consumivel:'Consumível', material:'Material', missao:'Missão' };
