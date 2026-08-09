@@ -44,7 +44,7 @@ RPG.Items = (function(){
 
     { id:'pot_vida', name:'Poção de Vida', icon:'<img src="img/potions/cura.png?v=20260809c" class="weapon-icon-img" alt="Poção de Vida">', category:'consumivel', desc:'Restaura uma quantidade de vida ao ser bebida.', base:{cura:22}, value:14 },
     { id:'pot_mana', name:'Poção de Mana', icon:'<img src="img/potions/mana.png?v=20260809c" class="weapon-icon-img" alt="Poção de Mana">', category:'consumivel', desc:'Restaura uma quantidade de mana.', base:{curaMana:16}, value:14 },
-    { id:'pergaminho', name:'Pergaminho Selado', icon:'<img src="img/scrolls/pergaminho.png?v=20260809c" class="weapon-icon-img" alt="Pergaminho Selado">', category:'consumivel', desc:'Contém um feitiço de propósito desconhecido.', base:{cura:10, curaMana:10}, value:16 },
+    { id:'pergaminho', name:'Pergaminho Selado', icon:'<img src="img/scrolls/pergaminho.png?v=20260809d" class="weapon-icon-img" alt="Pergaminho Selado">', category:'consumivel', desc:'Contém um feitiço de propósito desconhecido.', base:{cura:10, curaMana:10}, value:16 },
 
     { id:'minerio', name:'Minério Bruto', icon:'<img src="img/materials/minerio.png?v=20260809c" class="weapon-icon-img" alt="Minério Bruto">', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },
     { id:'essencia', name:'Essência Arcana', icon:'<img src="img/materials/essencia.png?v=20260809c" class="weapon-icon-img" alt="Essência Arcana">', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
