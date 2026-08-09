@@ -48,7 +48,7 @@ RPG.Items = (function(){
 
     { id:'minerio', name:'Minério Bruto', icon:'\u26cf\ufe0f', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },
     { id:'essencia', name:'Essência Arcana', icon:'\u2728', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
-    { id:'catalisador_mitico', name:'Catalisador Mítico', icon:'\ud83d\udca0', category:'material', desc:'Catalisador raro que aumenta muito a chance de elevar o tier na reforja.', base:{}, value:80 },
+    { id:'catalisador_mitico', name:'Catalisador Mítico', icon:'<img src="img/materials/catalisador_mitico.png" class="weapon-icon-img" alt="Catalisador Mítico">', category:'material', desc:'Catalisador raro que aumenta muito a chance de elevar o tier na reforja.', base:{}, value:80 },
     { id:'pedra_protecao', name:'Pedra de Proteção', icon:'\ud83d\udee1\ufe0f', category:'material', desc:'Protege o equipamento: uma reforja feita com ela nunca reduz o tier.', base:{}, value:55 },
     { id:'couro_bruto', name:'Couro de Fera', icon:'\ud83e\uddb4', category:'material', desc:'Material usado em armaduras leves.', base:{}, value:10 }
   ];
