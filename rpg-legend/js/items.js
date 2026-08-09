@@ -33,9 +33,9 @@ RPG.Items = (function(){
       proc:{ chance:0.12, effect:'atordoar', label:'Atordoar', icon:'\ud83d\udcab' } },
 
     { id:'escudo', name:'Escudo de Carvalho', icon:'<img src="img/armor/escudo.png" class="weapon-icon-img" alt="Escudo">', category:'armadura', desc:'Pesado, mas confiável contra golpes diretos.', base:{defesa:5, velocidade:-1}, value:24 },
-    { id:'couro', name:'Armadura de Couro Batido', icon:'\ud83e\udd4b', category:'armadura', desc:'Leve o suficiente para não atrapalhar reflexos.', base:{defesa:3, velocidade:1}, value:22 },
-    { id:'placas', name:'Armadura de Placas', icon:'\ud83e\udee5', category:'armadura', desc:'Proteção pesada, reduz agilidade.', base:{defesa:7, esquiva:-2}, value:30 },
-    { id:'robe', name:'Robe Arcano', icon:'\ud83e\udd7c', category:'armadura', desc:'Tecido enfeitiçado que amplia o poder mágico.', base:{defesa:2, mana:10}, value:26 },
+    { id:'couro', name:'Armadura de Couro Batido', icon:'<img src="img/armor/couro.png" class="weapon-icon-img" alt="Armadura de Couro Batido">', category:'armadura', desc:'Leve o suficiente para não atrapalhar reflexos.', base:{defesa:3, velocidade:1}, value:22 },
+    { id:'placas', name:'Armadura de Placas', icon:'<img src="img/armor/placas.png" class="weapon-icon-img" alt="Armadura de Placas">', category:'armadura', desc:'Proteção pesada, reduz agilidade.', base:{defesa:7, esquiva:-2}, value:30 },
+    { id:'robe', name:'Robe Arcano', icon:'<img src="img/armor/robe.png" class="weapon-icon-img" alt="Robe Arcano">', category:'armadura', desc:'Tecido enfeitiçado que amplia o poder mágico.', base:{defesa:2, mana:10}, value:26 },
 
     { id:'anel_som', name:'Anel das Sombras', icon:'<img src="img/accessories/anel_som.png" class="weapon-icon-img" alt="Anel das Sombras">', category:'acessorio', desc:'Sussurra segredos no escuro.', base:{critico:5, esquiva:2}, value:20 },
     { id:'amuleto_sab', name:'Amuleto da Sabedoria', icon:'<img src="img/accessories/amuleto_sab.png" class="weapon-icon-img" alt="Amuleto da Sabedoria">', category:'acessorio', desc:'Pertenceu a um oráculo esquecido.', base:{mana:6, vida:4}, value:20 },
@@ -46,11 +46,11 @@ RPG.Items = (function(){
     { id:'pot_mana', name:'Poção de Mana', icon:'<img src="img/potions/mana.png" class="weapon-icon-img" alt="Poção de Mana">', category:'consumivel', desc:'Restaura uma quantidade de mana.', base:{curaMana:16}, value:14 },
     { id:'pergaminho', name:'Pergaminho Selado', icon:'<img src="img/scrolls/pergaminho.png" class="weapon-icon-img" alt="Pergaminho Selado">', category:'consumivel', desc:'Contém um feitiço de propósito desconhecido.', base:{cura:10, curaMana:10}, value:16 },
 
-    { id:'minerio', name:'Minério Bruto', icon:'\u26cf\ufe0f', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },
-    { id:'essencia', name:'Essência Arcana', icon:'\u2728', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
+    { id:'minerio', name:'Minério Bruto', icon:'<img src="img/materials/minerio.png" class="weapon-icon-img" alt="Minério Bruto">', category:'material', desc:'Pode ser vendido a um ferreiro.', base:{}, value:10 },
+    { id:'essencia', name:'Essência Arcana', icon:'<img src="img/materials/essencia.png" class="weapon-icon-img" alt="Essência Arcana">', category:'material', desc:'Resíduo de magia cristalizado.', base:{}, value:14 },
     { id:'catalisador_mitico', name:'Catalisador Mítico', icon:'<img src="img/materials/catalisador_mitico.png" class="weapon-icon-img" alt="Catalisador Mítico">', category:'material', desc:'Catalisador raro que aumenta muito a chance de elevar o tier na reforja.', base:{}, value:80 },
-    { id:'pedra_protecao', name:'Pedra de Proteção', icon:'\ud83d\udee1\ufe0f', category:'material', desc:'Protege o equipamento: uma reforja feita com ela nunca reduz o tier.', base:{}, value:55 },
-    { id:'couro_bruto', name:'Couro de Fera', icon:'\ud83e\uddb4', category:'material', desc:'Material usado em armaduras leves.', base:{}, value:10 }
+    { id:'pedra_protecao', name:'Pedra de Proteção', icon:'<img src="img/materials/pedra_protecao.png" class="weapon-icon-img" alt="Pedra de Proteção">', category:'material', desc:'Protege o equipamento: uma reforja feita com ela nunca reduz o tier.', base:{}, value:55 },
+    { id:'couro_bruto', name:'Couro de Fera', icon:'<img src="img/materials/couro_bruto.png" class="weapon-icon-img" alt="Couro de Fera">', category:'material', desc:'Material usado em armaduras leves.', base:{}, value:10 }
   ];
 
   var CATEGORY_LABELS = { arma:'Arma', armadura:'Armadura', acessorio:'Acessório', consumivel:'Consumível', material:'Material', missao:'Missão' };
