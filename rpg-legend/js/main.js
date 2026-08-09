@@ -93,6 +93,10 @@ document.addEventListener('DOMContentLoaded', function(){
     RPG.Player.recomputeDerived(state.hero);
     state.party = data.party || [];
     state.inventory = data.inventory || [];
+    state.inventory.forEach(RPG.Items.refreshIcon);
+    ['arma','secundaria','armadura','acessorio'].forEach(function(slot){
+      RPG.Items.refreshIcon(state.hero.equip[slot]);
+    });
     state.quests = data.quests || [];
     state.floor = data.floor || 1;
     state.mapMode = data.mapMode || 'city';

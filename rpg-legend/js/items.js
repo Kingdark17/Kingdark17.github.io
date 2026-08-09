@@ -73,6 +73,21 @@ RPG.Items = (function(){
     return pool[rnd(pool.length)];
   }
 
+  function templateById(id){
+    return TEMPLATES.filter(function(t){ return t.id===id; })[0] || null;
+  }
+
+  // Itens salvos guardam o icone da epoca em que foram criados; isso atualiza
+  // para o icone/proc atual do template sempre que um save antigo e carregado.
+  function refreshIcon(item){
+    if(!item || !item.templateId) return item;
+    var template = templateById(item.templateId);
+    if(!template) return item;
+    item.icon = template.icon;
+    if(item.proc && template.proc) item.proc.icon = template.proc.icon;
+    return item;
+  }
+
   // Gera uma instancia de item a partir de um template + raridade, com stats escalados.
   function instantiate(template, rarity){
     var stats = {};
@@ -195,6 +210,8 @@ RPG.Items = (function(){
     CATEGORY_LABELS: CATEGORY_LABELS,
     pickRarity: pickRarity,
     pickTemplate: pickTemplate,
+    templateById: templateById,
+    refreshIcon: refreshIcon,
     instantiate: instantiate,
     randomItem: randomItem,
     statTags: statTags,
