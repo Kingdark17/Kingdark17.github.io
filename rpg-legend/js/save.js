@@ -39,6 +39,8 @@ RPG.Save = (function(){
         map: state.map,
         mapRows: state.mapRows,
         mapCols: state.mapCols,
+        cityMap: state.cityMap,
+        cityStart: state.cityStart,
         pos: state.pos,
         soundOn: state.soundOn,
         musicVolume: state.musicVolume,

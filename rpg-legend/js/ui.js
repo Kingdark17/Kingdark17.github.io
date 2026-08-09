@@ -46,14 +46,43 @@ RPG.UI = (function(){
     if(!creation.powers.length)el.innerHTML+='<div class="roulette-result-placeholder">Gire a roleta para descobrir seus dois poderes adicionais.</div>';
   }
   function renderDebuffResult(){var el=document.getElementById('debuffGrid');el.innerHTML=creation.debuff?rouletteCard(creation.debuff,'fraqueza sorteada'):'<div class="roulette-result-placeholder">Gire a roleta para descobrir sua fraqueza.</div>';}
+  function renderAttrsResult(){
+    var el = document.getElementById('creationAttrGrid');
+    el.innerHTML = '';
+    if(!creation.attrs){ el.innerHTML = '<div class="roulette-result-placeholder">Gire para sortear suas características.</div>'; return; }
+    RPG.Player.ATTR_KEYS.forEach(function(k){
+      var cell = document.createElement('div');
+      cell.className = 'attr-cell';
+      cell.innerHTML = '<div class="k">'+RPG.Player.ATTR_LABELS[k]+'</div><div class="v">'+creation.attrs[k]+'</div>';
+      el.appendChild(cell);
+    });
+  }
+  // marca um botao de roleta como usado -- so pode ser girado uma vez por criacao
+  function lockRouletteButton(button,label){
+    button.disabled = true;
+    button.classList.add('roulette-used');
+    button.textContent = label;
+  }
+  function unlockRouletteButton(button,label){
+    button.disabled = false;
+    button.classList.remove('roulette-used');
+    button.textContent = label;
+  }
   function animateRoulette(button,pool,onDone){
     button.classList.add('rolling');button.disabled=true;var original=button.textContent,count=0;
-    var timer=setInterval(function(){var item=pick(pool);button.textContent=item.icon+' '+item.name;if(++count>=12){clearInterval(timer);button.classList.remove('rolling');button.disabled=false;button.textContent=original;onDone();clearError();}},70);
+    var timer=setInterval(function(){var item=pick(pool);button.textContent=item.icon+' '+item.name;if(++count>=12){clearInterval(timer);button.classList.remove('rolling');button.textContent=original;onDone();clearError();}},70);
   }
 
   function renderCreationScreen(){
-    creation = { name:"", race:null, cls:null, powers:[], debuff:null, mode:"solo" };
+    creation = { name:"", race:null, cls:null, powers:[], debuff:null, attrs:null, mode:"solo" };
     document.getElementById('nameInput').value = '';
+
+    var powersBtn = document.getElementById('rollPowersBtn');
+    var debuffBtn = document.getElementById('rollDebuffBtn');
+    var attrsBtn = document.getElementById('rollAttrsBtn');
+    unlockRouletteButton(powersBtn, '🎲 Girar Poderes');
+    unlockRouletteButton(debuffBtn, '🎲 Girar Fraqueza');
+    unlockRouletteButton(attrsBtn, '🎲 Rolar Características');
 
     buildPickGrid('raceGrid', RPG.Player.RACES, function(it, card){
       creation.race = it;
@@ -68,8 +97,51 @@ RPG.UI = (function(){
     });
     renderPowerGrid();
     renderDebuffResult();
-    document.getElementById('rollPowersBtn').onclick=function(){if(!creation.cls){showError('Escolha uma classe antes de girar os poderes.');return;}var pool=RPG.Player.POWERS.filter(function(power){return power.name!==creation.cls.signature;});animateRoulette(this,pool,function(){var shuffled=pool.slice().sort(function(){return Math.random()-.5;});creation.powers=shuffled.slice(0,2);renderPowerGrid();});};
-    document.getElementById('rollDebuffBtn').onclick=function(){var pool=RPG.Player.DEBUFFS;animateRoulette(this,pool,function(){creation.debuff=pick(pool);renderDebuffResult();});};
+    renderAttrsResult();
+    powersBtn.onclick=function(){
+      if(creation.powersRolled) return;
+      if(!creation.cls){showError('Escolha uma classe antes de girar os poderes.');return;}
+      var btn=this;
+      var pool=RPG.Player.POWERS.filter(function(power){return power.name!==creation.cls.signature;});
+      animateRoulette(btn,pool,function(){
+        var shuffled=pool.slice().sort(function(){return Math.random()-.5;});
+        creation.powers=shuffled.slice(0,2);
+        creation.powersRolled=true;
+        renderPowerGrid();
+        lockRouletteButton(btn,'🎲 Poderes Sorteados');
+      });
+    };
+    debuffBtn.onclick=function(){
+      if(creation.debuffRolled) return;
+      var btn=this;
+      var pool=RPG.Player.DEBUFFS;
+      animateRoulette(btn,pool,function(){
+        creation.debuff=pick(pool);
+        creation.debuffRolled=true;
+        renderDebuffResult();
+        lockRouletteButton(btn,'🎲 Fraqueza Sorteada');
+      });
+    };
+    attrsBtn.onclick=function(){
+      if(creation.attrsRolled) return;
+      if(!creation.race){showError('Escolha uma raça antes de rolar as características.');return;}
+      if(!creation.cls){showError('Escolha uma classe antes de rolar as características.');return;}
+      if(!creation.debuff){showError('Gire a roleta de fraqueza antes de rolar as características.');return;}
+      var btn=this,original=btn.textContent,count=0;
+      btn.classList.add('rolling');btn.disabled=true;
+      var timer=setInterval(function(){
+        count++;
+        if(count>=8){
+          clearInterval(timer);
+          btn.classList.remove('rolling');btn.textContent=original;
+          creation.attrs=RPG.Player.rollAttrs(creation.race,creation.cls,creation.debuff);
+          creation.attrsRolled=true;
+          renderAttrsResult();
+          lockRouletteButton(btn,'🎲 Características Sorteadas');
+          clearError();
+        }
+      },70);
+    };
 
     document.getElementById('nameInput').oninput = function(e){ creation.name = e.target.value; clearError(); };
   }
@@ -84,6 +156,7 @@ RPG.UI = (function(){
     if(!creation.cls){ showError('Escolha uma classe.'); return false; }
     if(creation.powers.length!==2){ showError('Gire a roleta para receber dois poderes adicionais.'); return false; }
     if(!creation.debuff){ showError('Escolha uma fraqueza.'); return false; }
+    if(!creation.attrs){ showError('Gire a roleta para sortear suas características.'); return false; }
     creation.name = name;
     return true;
   }
@@ -98,6 +171,8 @@ RPG.UI = (function(){
     state.party = [];
     state.floor = 1;
     state.quests = [];
+    state.cityMap = null;
+    state.cityStart = null;
     RPG.Quests.ensureBoard(state);
 
     // No multiplayer, o convidado cria apenas o próprio herói. O mapa da
@@ -125,7 +200,11 @@ RPG.UI = (function(){
   function renderHero(){
     var h = RPG.state.hero;
     if(!h) return;
-    document.getElementById('heroAvatar').innerHTML = h.raceIcon;
+    var heroAvatarEl = document.getElementById('heroAvatar');
+    var accountUser = RPG.Account && RPG.Account.currentUser ? RPG.Account.currentUser() : null;
+    heroAvatarEl.innerHTML = (accountUser && accountUser.avatarUrl)
+      ? '<img src="'+accountUser.avatarUrl+'" alt="Foto de perfil" class="hero-avatar-img">'
+      : h.raceIcon;
     document.getElementById('heroName').textContent = h.name;
     document.getElementById('heroClass').textContent = h.race + ' \u00b7 ' + h.className;
     document.getElementById('heroLevel').textContent = 'Nível ' + h.level;
@@ -193,6 +272,13 @@ RPG.UI = (function(){
 
     var pl = document.getElementById('powersList');
     pl.innerHTML = '';
+    var passive = RPG.Player.classPassive(h.className);
+    if(passive){
+      var pd = document.createElement('div');
+      pd.className = 'trait-line passive';
+      pd.innerHTML = '<span class="icon">🌟</span><div class="txt"><b>'+passive.name+' <small>(passiva)</small></b><span>'+passive.desc+'</span></div>';
+      pl.appendChild(pd);
+    }
     h.powers.forEach(function(p){
       var d = document.createElement('div');
       d.className = 'trait-line';
@@ -253,6 +339,19 @@ RPG.UI = (function(){
 
   function iconFor(cell){ return currentModule().iconFor(cell); }
 
+  // Instinto de Caça: o Caçador enxerga criaturas em salas vizinhas ainda
+  // nao visitadas, mesmo sem abrir a porta.
+  function isHunterTrackedCell(cell, state){
+    var hero = state.hero;
+    if(!hero || (hero.className!=='Caçador' && hero.className!=='Cacador')) return false;
+    return Math.abs(cell.x-state.pos.x) + Math.abs(cell.y-state.pos.y) === 1;
+  }
+  function trackedMonsterIcon(cell){
+    if((cell.type==='monster'||cell.type==='boss') && !cell.beaten && cell.monsters && cell.monsters.length){
+      return cell.monsters[0].icon;
+    }
+    return '';
+  }
   function renderMap(){
     var state = RPG.state;
     var el = document.getElementById('mapGrid');
@@ -271,6 +370,10 @@ RPG.UI = (function(){
           div.textContent = iconFor(cell);
         } else {
           div.className = 'tile room-dim';
+          if(isHunterTrackedCell(cell, state)){
+            div.classList.add('tracked-enemy');
+            div.textContent = trackedMonsterIcon(cell);
+          }
         }
         if(isPlayer){ div.classList.add('player-tile'); }
         el.appendChild(div);
@@ -315,10 +418,22 @@ RPG.UI = (function(){
     RPG.Save.save(state);
     RPG.Tutorial.event('dungeon');
   }
-  function enterCity(){
+  // A cidade inicial e gerada uma unica vez por personagem e reaproveitada
+  // sempre que o jogador volta da masmorra (nao "redesenha" a cada ida e
+  // volta). Passe force=true para gerar uma cidade nova (ex: botao de ADM).
+  function enterCity(force){
     var state = RPG.state;
     state.mapMode = 'city';
-    var startCell = RPG.City.generate(state);
+    var startCell;
+    if(!force && state.cityMap && state.cityMap.length){
+      state.map = state.cityMap;
+      RPG.City.refreshPresentation();
+      startCell = state.map[state.cityStart.y][state.cityStart.x];
+    } else {
+      startCell = RPG.City.generate(state);
+      state.cityMap = state.map;
+      state.cityStart = { x: startCell.x, y: startCell.y };
+    }
     resetPlayerToStart(startCell);
     document.getElementById('combatScene').classList.add('hidden');
     document.getElementById('sceneText').classList.remove('hidden');
@@ -334,7 +449,7 @@ RPG.UI = (function(){
     if(regenBtn){
       regenBtn.addEventListener('click', function(){
         var state = RPG.state;
-        if(state.mapMode === 'city'){ enterCity(); logEvent('A cidade foi redesenhada e você reaparece no início.'); }
+        if(state.mapMode === 'city'){ enterCity(true); logEvent('A cidade foi redesenhada e você reaparece no início.'); }
         else { var startCell = RPG.Dungeon.generate(state); resetPlayerToStart(startCell); renderMap(); renderControls(); logEvent('Este andar foi redesenhado.'); }
         resetDialogue();
       });

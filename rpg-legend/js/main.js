@@ -117,6 +117,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Saves novos preservam mapa, posição, baús, monstros, eventos e NPCs.
     // Saves antigos continuam válidos e geram o local uma única vez.
+    if(Array.isArray(data.cityMap) && data.cityMap.length){
+      state.cityMap = data.cityMap;
+      state.cityStart = data.cityStart || null;
+    }
     if(Array.isArray(data.map) && data.map.length && data.pos){
       state.map=data.map;
       state.pos=data.pos;
@@ -125,8 +129,21 @@ document.addEventListener('DOMContentLoaded', function(){
       state.pendingMonsterCell=null;
       if(state.mapMode==='dungeon') RPG.Dungeon.refreshPresentation(state);
       else RPG.City.refreshPresentation(state);
+      // Saves de antes do cache de cidade nao tem cityMap salvo -- se o
+      // jogador estava na cidade nesse save, usa o mapa atual como cache.
+      if(state.mapMode==='city' && (!state.cityMap || !state.cityMap.length)){
+        state.cityMap = state.map;
+        if(!state.cityStart){
+          for(var cy=0;cy<state.map.length && !state.cityStart;cy++){
+            for(var cx=0;cx<state.map[cy].length;cx++){
+              if(state.map[cy][cx].type==='start'){ state.cityStart={x:cx,y:cy}; break; }
+            }
+          }
+        }
+      }
     } else {
       var startCell = (state.mapMode === 'dungeon') ? RPG.Dungeon.generate(state) : RPG.City.generate(state);
+      if(state.mapMode==='city'){ state.cityMap = state.map; state.cityStart = { x: startCell.x, y: startCell.y }; }
       RPG.UI.resetPlayerToStart(startCell);
     }
     document.getElementById('combatScene').classList.add('hidden');
