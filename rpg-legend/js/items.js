@@ -8,12 +8,12 @@ RPG.Items = (function(){
 
   // Raridades, da mais comum a mais rara. mult afeta stats e valor.
   var RARITIES = [
-    { id:'comum',    label:'Comum',    color:'var(--r-comum)',    mult:1.0, weight:45 },
-    { id:'incomum',  label:'Incomum',  color:'var(--r-incomum)',  mult:1.3, weight:28 },
-    { id:'raro',     label:'Raro',     color:'var(--r-raro)',     mult:1.7, weight:16 },
-    { id:'epico',    label:'Épico',    color:'var(--r-epico)',    mult:2.2, weight:7  },
-    { id:'lendario', label:'Lendário', color:'var(--r-lendario)', mult:3.0, weight:3  },
-    { id:'mitico',   label:'Mítico',   color:'var(--r-mitico)',   mult:4.0, weight:1  }
+    { id:'comum',    label:'Comum',    color:'var(--r-comum)',    mult:1.0, weight:45   },
+    { id:'incomum',  label:'Incomum',  color:'var(--r-incomum)',  mult:1.3, weight:28   },
+    { id:'raro',     label:'Raro',     color:'var(--r-raro)',     mult:1.7, weight:16   },
+    { id:'epico',    label:'Épico',    color:'var(--r-epico)',    mult:2.2, weight:7    },
+    { id:'lendario', label:'Lendário', color:'var(--r-lendario)', mult:3.0, weight:1.2  },
+    { id:'mitico',   label:'Mítico',   color:'var(--r-mitico)',   mult:4.0, weight:0.35 }
   ];
 
   // Modelos base de item. category: arma | armadura | acessorio | consumivel | material
@@ -64,11 +64,16 @@ RPG.Items = (function(){
     // real so se aproxima do peso "cheio" da raridade perto do andar 12.
     var floor = Math.max(1, luckFloor||1);
     var depthFactor = Math.min(1, (floor-1)/12);
-    var bonus = depthFactor * 15;
+    var rareTiers = RARITIES.slice(2);
+    var rareWeightSum = rareTiers.reduce(function(a,r){ return a+r.weight; }, 0);
+    var bonus = depthFactor * 12;
     var weights = RARITIES.map(function(r, idx){
       if(idx<2) return r.weight; // comum/incomum nao mudam
       var scaled = r.weight * (0.12 + 0.88*depthFactor);
-      return scaled + bonus/(RARITIES.length-2);
+      // o bonus de andar profundo e dividido PROPORCIONALMENTE ao peso base
+      // de cada raridade, entao lendario/mitico (peso base minusculo)
+      // continuam muito mais raros que raro/epico mesmo no fundo da masmorra.
+      return scaled + bonus*(r.weight/rareWeightSum);
     });
     var total = weights.reduce(function(a,b){ return a+b; }, 0);
     var roll = Math.random()*total, acc = 0;
