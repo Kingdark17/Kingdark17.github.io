@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="img/branding/favicon.png?v=20260809a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20260810c">
+<link rel="stylesheet" href="css/style.css?v=20260810d">
 <link rel="stylesheet" href="css/animations.css?v=20260802c">
 <style>
   #accountAvatar{border-radius:50%;object-fit:cover;background:#111;border:3px solid #8b6f3d;vertical-align:middle;margin-right:8px}
@@ -178,12 +178,26 @@
 <div class="modal-overlay hidden" id="multiplayerModal">
   <div class="modal-box multiplayer-box">
     <div class="modal-header"><h2>⚔ Multiplayer Cooperativo</h2><button class="modal-close" id="closeMultiplayerBtn">&times;</button></div>
-    <p class="multiplayer-help">Crie uma sala e envie o código ao outro jogador. Cada participante criará seu próprio herói.</p>
-    <label class="multi-label">Seu nome<input id="multiplayerName" class="name-input" maxlength="20" placeholder="Ex: Pedro"></label>
-    <label class="multi-label">Código da sala<input id="multiplayerRoom" class="name-input room-code" maxlength="6" placeholder="Ex: DRAGAO"></label>
-    <div class="multi-actions"><button class="rune-btn" id="createRoomBtn">Criar Sala</button><button class="rune-btn" id="joinRoomBtn">Entrar na Sala</button></div>
+    <div id="multiplayerForm">
+      <p class="multiplayer-help">Crie uma sala e envie o código ao outro jogador. Cada participante entra com o próprio herói.</p>
+      <label class="multi-label">Seu nome<input id="multiplayerName" class="name-input" maxlength="20" placeholder="Ex: Pedro"></label>
+      <label class="multi-label">Código da sala<input id="multiplayerRoom" class="name-input room-code" maxlength="6" placeholder="Ex: DRAGAO"></label>
+      <div class="multi-actions"><button class="rune-btn" id="createRoomBtn">Criar Sala</button><button class="rune-btn" id="joinRoomBtn">Entrar na Sala</button></div>
+    </div>
+    <div id="multiplayerLobby" class="multiplayer-lobby hidden">
+      <div class="mp-lobby-code">
+        <span class="mp-lobby-code-label">Código da sala</span>
+        <div class="mp-lobby-code-value" id="mpLobbyCode">------</div>
+        <button class="rune-btn ghost small" id="mpLobbyCopyBtn" type="button">📋 Copiar código</button>
+      </div>
+      <div class="mp-lobby-status" id="mpLobbyStatus">Conectando...</div>
+      <div id="multiplayerProfiles" class="item-grid"></div>
+      <div class="multi-actions">
+        <button class="rune-btn hidden" id="mpLobbyStartBtn" type="button">Começar Aventura</button>
+        <button class="rune-btn ghost" id="mpLobbyLeaveBtn" type="button">Sair da Sala</button>
+      </div>
+    </div>
     <div id="multiplayerMessage" class="multiplayer-message">Nenhuma sala conectada.</div>
-    <div id="multiplayerProfiles" class="item-grid"></div>
   </div>
 </div>
 
@@ -465,6 +479,31 @@
 <div class="tutorial-toast hidden" id="tutorialToast"><b id="tutorialToastTitle"></b><span id="tutorialToastText"></span><button id="tutorialToastClose">×</button></div>
 <button class="hidden" id="profilePetWidget" type="button" aria-label="Interagir com seu pet"><span id="profilePetIcon">🐔</span></button>
 
+<!-- ============ SOCIAL: AMIGOS E CHAT ============ -->
+<button class="social-launcher hidden" id="socialLauncherBtn" type="button" aria-label="Amigos">
+  💬<span class="social-badge hidden" id="socialBadge">0</span>
+</button>
+<div class="social-panel hidden" id="socialPanel">
+  <div class="social-panel-header">
+    <h3>Amigos</h3>
+    <button class="modal-close" id="socialPanelCloseBtn" type="button">&times;</button>
+  </div>
+  <div class="social-add-row">
+    <input id="socialAddInput" class="name-input" maxlength="24" placeholder="Nome de usuário">
+    <button class="rune-btn small" id="socialAddBtn" type="button">Adicionar</button>
+  </div>
+  <div class="social-form-message" id="socialFormMessage"></div>
+  <div class="social-section hidden" id="socialIncomingSection">
+    <div class="social-section-title">Pedidos recebidos</div>
+    <div id="socialIncomingList" class="social-list"></div>
+  </div>
+  <div class="social-section">
+    <div class="social-section-title">Amigos</div>
+    <div id="socialFriendsList" class="social-list"><div class="social-empty">Você ainda não tem amigos adicionados.</div></div>
+  </div>
+</div>
+<div class="social-chats" id="socialChats"></div>
+
 <!-- Scripts: a ordem não afeta as definições (tudo se anexa ao objeto global RPG),
      mas main.js precisa ser o último por depender de todos os outros. -->
 <script src="js/items.js?v=20260810a"></script>
@@ -489,7 +528,8 @@
 <script src="js/pets.js?v=20260809a"></script>
 <script src="js/account.js?v=20260804g"></script>
 <script src="js/admin-panel.js?v=20260804a"></script>
-<script src="js/multiplayer.js?v=20260810b"></script>
+<script src="js/multiplayer.js?v=20260810c"></script>
+<script src="js/social.js?v=20260810a"></script>
 <script src="js/main.js?v=20260810a"></script>
 </body>
 </html>

@@ -210,6 +210,16 @@ button.rune-btn.ghost{ background: rgba(0,0,0,0.2); border-color: var(--line); c
 .multiplayer-status.my-turn{ border-color:#68c99a; color:#9be0bc; }
 .multiplayer-status.waiting-turn{ border-color:#d8a34b; color:#edc878; }
 
+.multiplayer-lobby{ margin-top:4px; }
+.mp-lobby-code{ display:flex; flex-direction:column; align-items:center; gap:8px; padding:18px; border:1px solid var(--gold); border-radius:8px; background:rgba(0,0,0,0.25); }
+.mp-lobby-code-label{ font-family:var(--font-mono); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--parchment-dim); }
+.mp-lobby-code-value{ font-family:var(--font-mono); font-size:34px; font-weight:700; letter-spacing:8px; color:var(--gold-bright); text-shadow:0 0 12px rgba(201,162,39,0.35); }
+.mp-lobby-status{ margin:14px 0; text-align:center; font-family:var(--font-mono); font-size:12.5px; color:var(--parchment); min-height:18px; }
+.mp-lobby-status.ready{ color:#9be0bc; }
+@keyframes mpDotPulse{ 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
+.mp-lobby-status.waiting::after{ content:'...'; display:inline-block; animation:mpDotPulse 1.2s ease-in-out infinite; }
+#multiplayerLobby .multi-actions:has(#mpLobbyStartBtn.hidden){ grid-template-columns:1fr; }
+
 .panel-btn-row{ display:flex; gap:8px; margin-top: 12px; flex-wrap: wrap; }
 .panel-btn-row button{ flex:1; min-width: 100px; display:flex; align-items:center; justify-content:center; gap: 6px; background: linear-gradient(180deg, #2a2118, #1a140e); border: 1px solid var(--gold); border-radius: 4px; color: var(--gold-bright); font-family: var(--font-display); font-size: 11.5px; letter-spacing: .5px; text-transform: uppercase; padding: 9px 6px; cursor: pointer; }
 .panel-btn-row button:hover{ box-shadow: 0 0 14px rgba(201,162,39,0.3); }
@@ -448,4 +458,49 @@ button.rune-btn.ghost{ background: rgba(0,0,0,0.2); border-color: var(--line); c
 .rarity-raro{ color: var(--r-raro); border-left-color: var(--r-raro) !important; }
 .rarity-epico{ color: var(--r-epico); border-left-color: var(--r-epico) !important; }
 .rarity-lendario{ color: var(--r-lendario); border-left-color: var(--r-lendario) !important; }
+
+/* ---------- social: amigos e chat (estilo Messenger de PC) ---------- */
+.social-launcher{ position:fixed; right:16px; bottom:16px; z-index:82; width:48px; height:48px; border-radius:50%; border:1px solid var(--gold); background:linear-gradient(180deg,var(--panel),var(--panel-2)); color:var(--gold-bright); font-size:20px; cursor:pointer; box-shadow:0 4px 18px rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; }
+.social-launcher:hover{ border-color:var(--gold-bright); }
+.social-badge{ position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px; border-radius:9px; background:var(--blood); color:#fff; font-family:var(--font-mono); font-size:10px; display:flex; align-items:center; justify-content:center; }
+.social-panel{ position:fixed; right:16px; bottom:72px; z-index:82; width:300px; max-height:70vh; display:flex; flex-direction:column; background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid var(--gold); border-radius:8px; box-shadow:0 8px 26px rgba(0,0,0,.55); padding:14px; }
+.social-panel-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.social-panel-header h3{ margin:0; font-family:var(--font-display); font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold); }
+.social-add-row{ display:flex; gap:6px; }
+.social-add-row .name-input{ flex:1; min-width:0; }
+.social-form-message{ min-height:16px; margin:6px 0 4px; font-family:var(--font-mono); font-size:10.5px; color:var(--parchment-dim); }
+.social-section{ margin-top:10px; padding-top:10px; border-top:1px solid var(--line); }
+.social-section-title{ font-family:var(--font-mono); font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold-bright); margin-bottom:6px; }
+.social-list{ display:flex; flex-direction:column; gap:6px; overflow-y:auto; max-height:220px; }
+.social-empty{ color:var(--parchment-dim); font-size:11.5px; text-align:center; padding:10px 4px; }
+.social-friend{ display:flex; align-items:center; gap:8px; padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.2); }
+.social-friend.pending{ opacity:.7; }
+.social-dot{ width:8px; height:8px; border-radius:50%; background:#5a5f6e; flex-shrink:0; }
+.social-dot.online{ background:#68c99a; box-shadow:0 0 6px #68c99a; }
+.social-friend-name{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12.5px; color:var(--parchment); }
+.social-friend-actions{ display:flex; gap:4px; flex-shrink:0; }
+.social-friend-actions .rune-btn{ padding:4px 7px; font-size:10px; }
+
+.social-chats{ position:fixed; right:76px; bottom:0; z-index:81; display:flex; flex-direction:row-reverse; gap:10px; align-items:flex-end; pointer-events:none; }
+.chat-window{ pointer-events:auto; width:270px; height:340px; display:flex; flex-direction:column; background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid var(--gold); border-bottom:none; border-radius:8px 8px 0 0; box-shadow:0 -4px 18px rgba(0,0,0,.5); overflow:hidden; }
+.chat-window-header{ display:flex; align-items:center; gap:7px; padding:9px 10px; border-bottom:1px solid var(--line); background:rgba(0,0,0,0.2); }
+.chat-window-name{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:var(--font-display); font-size:12px; color:var(--gold-bright); }
+.chat-window-close{ background:none; border:none; color:var(--parchment-dim); font-size:16px; line-height:1; cursor:pointer; padding:0 2px; }
+.chat-window-close:hover{ color:var(--parchment); }
+.chat-window-body{ flex:1; min-height:0; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:6px; }
+.chat-msg{ max-width:85%; display:flex; flex-direction:column; gap:2px; }
+.chat-msg.mine{ align-self:flex-end; align-items:flex-end; }
+.chat-msg.theirs{ align-self:flex-start; align-items:flex-start; }
+.chat-msg-body{ padding:6px 10px; border-radius:12px; font-size:12px; line-height:1.4; word-break:break-word; background:rgba(0,0,0,0.25); color:var(--parchment); border:1px solid var(--line); }
+.chat-msg.mine .chat-msg-body{ background:rgba(201,162,39,0.18); border-color:var(--gold); }
+.chat-msg-time{ font-family:var(--font-mono); font-size:8.5px; color:var(--parchment-dim); }
+.chat-window-input{ display:flex; gap:6px; padding:8px; border-top:1px solid var(--line); }
+.chat-window-input input{ flex:1; min-width:0; background:#11141c; border:1px solid var(--line); border-radius:14px; padding:6px 12px; color:var(--parchment); font-family:var(--font-body); font-size:12.5px; }
+.chat-window-input button{ width:30px; height:30px; border-radius:50%; border:1px solid var(--gold); background:rgba(201,162,39,0.15); color:var(--gold-bright); cursor:pointer; flex-shrink:0; }
+
+@media (max-width:640px){
+  .social-panel{ right:8px; left:8px; width:auto; bottom:66px; }
+  .social-chats{ right:8px; left:8px; flex-wrap:wrap-reverse; }
+  .chat-window{ width:100%; max-width:320px; }
+}
 .rarity-mitico{ color: var(--r-mitico); border-left-color: var(--r-mitico) !important; }

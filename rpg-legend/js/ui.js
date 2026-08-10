@@ -196,6 +196,7 @@ RPG.UI = (function(){
     logEvent('<b>'+state.hero.name+'</b> ('+state.hero.race+' '+state.hero.className+') chega a cidade inicial'+(state.party.length? ' acompanhado de sua equipe.':'.'));
     RPG.Save.save(state);
     RPG.Tutorial.start();
+    if(RPG.Multiplayer && RPG.Multiplayer.showHostLobby) RPG.Multiplayer.showHostLobby();
   }
 
   /* ================= HERO PANEL ================= */
@@ -715,8 +716,9 @@ RPG.UI = (function(){
   // Carrega um save (local/nuvem) em RPG.state e entra direto no jogo, no
   // ponto exato onde o heroi parou. Usado pelo botao "Continuar" e para
   // reaproveitar o personagem solo ao entrar no multiplayer.
-  function resumeSavedGame(data){
+  function resumeSavedGame(data, opts){
     if(!data || !data.hero) return false;
+    var forceCity = !!(opts && opts.forceCity);
     var state = RPG.state;
     state.hero = RPG.Player.hydrateSavedHero(data.hero);
     state.party = data.party || [];
@@ -725,9 +727,9 @@ RPG.UI = (function(){
     ['arma','secundaria','armadura','acessorio'].forEach(function(slot){
       RPG.Items.refreshIcon(state.hero.equip[slot]);
     });
-    state.quests = data.quests || [];
-    state.floor = data.floor || 1;
-    state.mapMode = data.mapMode || 'city';
+    state.quests = forceCity ? [] : (data.quests || []);
+    state.floor = forceCity ? 1 : (data.floor || 1);
+    state.mapMode = forceCity ? 'city' : (data.mapMode || 'city');
     state.mapRows = data.mapRows || 6;
     state.mapCols = data.mapCols || 6;
     state.soundOn = data.soundOn !== undefined ? data.soundOn : true;
@@ -745,11 +747,14 @@ RPG.UI = (function(){
 
     // Saves novos preservam mapa, posição, baús, monstros, eventos e NPCs.
     // Saves antigos continuam válidos e geram o local uma única vez.
-    if(Array.isArray(data.cityMap) && data.cityMap.length){
+    if(!forceCity && Array.isArray(data.cityMap) && data.cityMap.length){
       state.cityMap = data.cityMap;
       state.cityStart = data.cityStart || null;
+    } else if(forceCity){
+      state.cityMap = null;
+      state.cityStart = null;
     }
-    if(Array.isArray(data.map) && data.map.length && data.pos){
+    if(!forceCity && Array.isArray(data.map) && data.map.length && data.pos){
       state.map=data.map;
       state.pos=data.pos;
       state.mode='move';
@@ -779,7 +784,7 @@ RPG.UI = (function(){
     renderMap();
     renderControls();
     resetDialogue();
-    logEvent('Bem-vindo de volta, <b>'+state.hero.name+'</b>! Continuando de onde parou.');
+    logEvent(forceCity ? ('<b>'+state.hero.name+'</b> chega à cidade inicial para a aventura online.') : ('Bem-vindo de volta, <b>'+state.hero.name+'</b>! Continuando de onde parou.'));
     RPG.Tutorial.render();
     return true;
   }
