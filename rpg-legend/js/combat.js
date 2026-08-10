@@ -286,7 +286,7 @@ RPG.Combat = (function(){
           startCombat(cell);
         } else {
           if(tickMonsterDot(cell)){ handleMonsterDefeated(cell); return; }
-          applyMonsterHit(cell);
+          if(applyMonsterHit(cell)) return;
           updateCombatPanel(cell);
         }
       }
@@ -377,7 +377,7 @@ RPG.Combat = (function(){
     RPG.Effects.playSfx('hit');
     RPG.UI.setSceneMessage('A criatura acerta um golpe ('+dmg+' de dano)!');
     RPG.UI.logEvent('O '+monster.name+' causa '+dmg+' de dano em você.');
-    if(hero.hp <= 0){ handleDefeat(); }
+    if(hero.hp <= 0){ handleDefeat(); return true; }
   }
 
   function handleDefeat(){
@@ -541,7 +541,7 @@ RPG.Combat = (function(){
     }
     if(applyPartyTurn(cell)){ handleMonsterDefeated(cell); return; }
     if(tickMonsterDot(cell)){ handleMonsterDefeated(cell); return; }
-    applyMonsterHit(cell);
+    if(applyMonsterHit(cell)) return;
     updateCombatPanel(cell);
     if(RPG.Multiplayer) RPG.Multiplayer.commit();
   }
@@ -611,7 +611,7 @@ RPG.Combat = (function(){
     RPG.UI.setSceneMessage(msg);
     if(applyPartyTurn(cell)){ handleMonsterDefeated(cell); return; }
     if(tickMonsterDot(cell)){ handleMonsterDefeated(cell); return; }
-    applyMonsterHit(cell);
+    if(applyMonsterHit(cell)) return;
     updateCombatPanel(cell);
     if(RPG.Multiplayer) RPG.Multiplayer.commit();
   }
