@@ -107,10 +107,15 @@ RPG.Social = (function(){
     });
     friends.forEach(function(info){
       var unread=chats[key(info.username)]&&chats[key(info.username)].unread||0;
-      var card=friendCard(info,[
-        {label:unread?('💬 ('+unread+')'):'💬 Conversar',onClick:function(){ openChat(info.username); }},
-        {label:'Remover',onClick:function(){ removeFriend(info.username); }}
-      ]);
+      var actions=[{label:unread?('💬 ('+unread+')'):'💬 Conversar',onClick:function(){ openChat(info.username); }}];
+      var mp=RPG.Multiplayer&&RPG.Multiplayer.session;
+      // So mostra "Convidar" pra quem esta hospedando uma sala (role 1) e o
+      // amigo esta online -- convidar offline nao teria como chegar a tempo.
+      if(mp&&mp.connected&&mp.role===1&&info.online){
+        actions.push({label:'🎮 Convidar',onClick:function(){ inviteToRoom(info.username); }});
+      }
+      actions.push({label:'Remover',onClick:function(){ removeFriend(info.username); }});
+      var card=friendCard(info,actions);
       friendsList.appendChild(card);
     });
   }
@@ -133,6 +138,29 @@ RPG.Social = (function(){
   async function removeFriend(username){
     if(!window.confirm('Remover '+username+' da lista de amigos?')) return;
     try{ await api('/api/friends/remove',{method:'POST',body:JSON.stringify({username:username})}); closeChat(username); refreshFriends(); }catch(e){}
+  }
+
+  /* ================= Convite de sala (multiplayer) ================= */
+  var pendingInvite=null;
+  function inviteToRoom(username){
+    var mp=RPG.Multiplayer&&RPG.Multiplayer.session;
+    if(!mp||!mp.connected||mp.role!==1||!socket||socket.readyState!==1||!authed) return;
+    var hostName=(RPG.Account&&RPG.Account.currentUser&&RPG.Account.currentUser()&&RPG.Account.currentUser().username)||mp.name||'Aventureiro';
+    socket.send(JSON.stringify({type:'room-invite',to:username,code:mp.room,hostName:hostName}));
+  }
+  function showRoomInvite(from,code,hostName){
+    pendingInvite={from:from,code:code};
+    var toast=el('roomInviteToast'); if(!toast) return;
+    toast.querySelector('.room-invite-text').textContent=(hostName||from)+' te convidou para a sala '+code+'.';
+    toast.classList.remove('hidden');
+    notify('<b>'+from+'</b> te convidou para uma sala multiplayer.');
+  }
+  function respondRoomInvite(accepted){
+    if(!pendingInvite) return;
+    var invite=pendingInvite; pendingInvite=null;
+    var toast=el('roomInviteToast'); if(toast) toast.classList.add('hidden');
+    if(socket&&socket.readyState===1&&authed) socket.send(JSON.stringify({type:'room-invite-response',to:invite.from,code:invite.code,accepted:accepted}));
+    if(accepted&&RPG.Multiplayer&&RPG.Multiplayer.joinRoomCode) RPG.Multiplayer.joinRoomCode(invite.code);
   }
 
   /* ================= WebSocket: presenca + chat ao vivo ================= */
@@ -174,6 +202,10 @@ RPG.Social = (function(){
     if(msg.type==='chat-ack'){ reconcileMessage(msg.to,msg.tempId,{id:msg.id,createdAt:msg.createdAt}); return; }
     if(msg.type==='chat-error'){ markMessageFailed(msg.to,msg.tempId,msg.message); return; }
     if(msg.type==='auth-error'){ authed=false; console.error('[Social] token invalido ao autenticar o chat.'); return; }
+    if(msg.type==='room-invite'){ showRoomInvite(msg.from,msg.code,msg.hostName); return; }
+    if(msg.type==='room-invite-sent'){ setFormMessage('Convite enviado para '+msg.to+'.',false); return; }
+    if(msg.type==='room-invite-error'){ setFormMessage(msg.message||'Não foi possível enviar o convite.',true); return; }
+    if(msg.type==='room-invite-response'){ notify(msg.accepted?('<b>'+msg.from+'</b> aceitou seu convite e está entrando na sala.'):('<b>'+msg.from+'</b> recusou o convite.')); return; }
   }
   function notify(html){
     if(RPG.UI && RPG.UI.logEvent && RPG.state && RPG.state.screen==='game') RPG.UI.logEvent(html);
@@ -307,6 +339,8 @@ RPG.Social = (function(){
     el('socialPanelCloseBtn').addEventListener('click',function(){ el('socialPanel').classList.add('hidden'); });
     el('socialAddBtn').addEventListener('click',function(){ sendRequest(el('socialAddInput').value); });
     el('socialAddInput').addEventListener('keydown',function(e){ if(e.key==='Enter') sendRequest(el('socialAddInput').value); });
+    if(el('roomInviteAcceptBtn')) el('roomInviteAcceptBtn').addEventListener('click',function(){ respondRoomInvite(true); });
+    if(el('roomInviteDeclineBtn')) el('roomInviteDeclineBtn').addEventListener('click',function(){ respondRoomInvite(false); });
     document.addEventListener('click',function(e){
       var panel=el('socialPanel'),launcher=el('socialLauncherBtn'),tab=el('btnSocialTab');
       if(panel.classList.contains('hidden')) return;

@@ -6,6 +6,27 @@ RPG.Multiplayer = (function(){
   var originalSave=RPG.Save.save;
 
   function code(){var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',out='';for(var i=0;i<6;i++)out+=chars[Math.floor(Math.random()*chars.length)];return out;}
+  function escapeHtmlLocal(text){ return String(text||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function apiBase(){ var ws=(window.RPG_MULTIPLAYER_CONFIG&&window.RPG_MULTIPLAYER_CONFIG.serverUrl)||''; return ws.replace(/^wss:/,'https:').replace(/^ws:/,'http:').replace(/\/$/,''); }
+  // Lista de salas publicas abertas (aguardando o segundo jogador), buscada
+  // por HTTP simples pra nao depender de uma conexao de sala ja aberta.
+  function refreshPublicRooms(){
+    var list=document.getElementById('mpPublicRoomsList');if(!list)return;
+    var base=apiBase();if(!base){list.innerHTML='';return;}
+    list.innerHTML='<div class="mp-public-rooms-empty">Carregando...</div>';
+    fetch(base+'/api/rooms').then(function(r){return r.json();}).then(function(data){
+      var roomsList=data.rooms||[];
+      if(!roomsList.length){list.innerHTML='<div class="mp-public-rooms-empty">Nenhuma sala pública aberta agora.</div>';return;}
+      list.innerHTML='';
+      roomsList.forEach(function(r){
+        var row=document.createElement('div');row.className='mp-public-room-row';
+        var label=document.createElement('span');label.innerHTML=escapeHtmlLocal(r.hostName||'Aventureiro')+' · <b>'+escapeHtmlLocal(r.code)+'</b>';
+        var btn=document.createElement('button');btn.type='button';btn.className='rune-btn small';btn.textContent='Entrar';
+        btn.addEventListener('click',function(){document.getElementById('multiplayerRoom').value=r.code;connect(false);});
+        row.appendChild(label);row.appendChild(btn);list.appendChild(row);
+      });
+    }).catch(function(){list.innerHTML='<div class="mp-public-rooms-empty">Não foi possível carregar as salas.</div>';});
+  }
   function message(text,error){var el=document.getElementById('multiplayerMessage');if(el){el.textContent=text;el.style.color=error?'#e28a8a':'var(--parchment-dim)';}}
   function status(){
     var el=document.getElementById('multiplayerStatus');if(!el)return;
@@ -60,7 +81,12 @@ RPG.Multiplayer = (function(){
   }
   function mergeProfiles(incoming){Object.keys(incoming||{}).forEach(function(role){session.profiles[role]=incoming[role];});renderProfiles();}
   function renderRemote(){
-    var s=RPG.state;hideModal();RPG.UI.showScreen('game');RPG.UI.renderHero();RPG.UI.renderMap();RPG.UI.renderControls();
+    // Nao fecha a sala de espera aqui -- isso tambem roda no eco
+    // 'authoritative' da PROPRIA sincronizacao (ex: auto-save de 60s),
+    // o que fechava o lobby do anfitriao sozinho mesmo sem o parceiro
+    // ter entrado. O fechamento fica a cargo de quem detecta o parceiro
+    // de verdade (mensagens 'profile' e 'state' vindas do outro papel).
+    var s=RPG.state;RPG.UI.showScreen('game');RPG.UI.renderHero();RPG.UI.renderMap();RPG.UI.renderControls();
     if(!document.getElementById('merchantModal').classList.contains('hidden')&&RPG.Shop.refresh)RPG.Shop.refresh(s);
     if(!document.getElementById('questModal').classList.contains('hidden'))RPG.Quests.renderBoard(s);
     if(s.mode==='combat'&&s.pendingMonsterCell){document.getElementById('sceneText').classList.add('hidden');document.getElementById('combatScene').classList.remove('hidden');if(RPG.Combat.refresh)RPG.Combat.refresh(s.pendingMonsterCell);}
@@ -138,12 +164,12 @@ RPG.Multiplayer = (function(){
     if(msg.type==='created'){beginCharacterCreation(false, 'Sala criada: '+session.room+'. ');}
     else if(msg.type==='hello'&&session.role===1){session.players=2;send({type:'welcome',state:snapshot(),profiles:session.profiles,turn:session.turn});status();message(msg.name+' entrou na sala.');}
     else if(msg.type==='welcome'&&session.role===2){session.players=2;session.turn=msg.turn||1;mergeProfiles(msg.profiles);session.pendingState=msg.state||null;status();beginCharacterCreation(true, 'Sala encontrada. ');}
-    else if(msg.type==='profile'&&msg.role!==session.role){session.profiles[msg.role]=msg.profile;session.players=2;renderProfiles();message(msg.profile.hero.name+' está pronto para jogar.');}
+    else if(msg.type==='profile'&&msg.role!==session.role){session.profiles[msg.role]=msg.profile;session.players=2;renderProfiles();message(msg.profile.hero.name+' está pronto para jogar.');hideModal();}
     else if(msg.type==='profile-accepted'&&msg.role===session.role){session.profiles[msg.role]=msg.profile;renderProfiles();}
     else if(msg.type==='authoritative'&&msg.role===session.role){session.turn=msg.turn||session.turn;applyState(msg.state);status();}
     else if(msg.type==='state'&&msg.role!==session.role){
       var oldPos=RPG.state&&RPG.state.pos?{x:RPG.state.pos.x,y:RPG.state.pos.y}:null;
-      session.turn=msg.turn||session.turn;applyState(msg.state);status();
+      session.turn=msg.turn||session.turn;applyState(msg.state);status();hideModal();
       if(oldPos&&msg.state&&msg.state.pos&&(oldPos.x!==msg.state.pos.x||oldPos.y!==msg.state.pos.y)){
         var dx=msg.state.pos.x-oldPos.x,dy=msg.state.pos.y-oldPos.y;
         var direction=dy<0?'Norte':(dy>0?'Sul':(dx>0?'Leste':'Oeste'));
@@ -178,21 +204,31 @@ RPG.Multiplayer = (function(){
     var server=(window.RPG_MULTIPLAYER_CONFIG&&window.RPG_MULTIPLAYER_CONFIG.serverUrl)||'';
     var name=(document.getElementById('multiplayerName').value||'Aventureiro').trim();
     var room=(document.getElementById('multiplayerRoom').value||'').trim().toUpperCase();
+    var makePublic=!!(create&&document.getElementById('mpPublicToggle')&&document.getElementById('mpPublicToggle').checked);
     if(!server){message('O servidor online ainda não foi configurado.',true);return;}
     if(create){room=code();document.getElementById('multiplayerRoom').value=room;}else if(!room){message('Digite o código da sala.',true);return;}
     session.room=room;session.name=name;session.role=create?1:2;session.turn=1;session.connected=true;status();
     try{
       var ws=new WebSocket(server);session.transport=ws;
-      ws.onopen=function(){send({type:create?'create':'join',name:name,role:session.role,accountToken:(RPG.Account&&RPG.Account.token?RPG.Account.token():'')});message(create?'Criando sala...':'Procurando a sala '+room+'...');};
+      ws.onopen=function(){send({type:create?'create':'join',name:name,role:session.role,accountToken:(RPG.Account&&RPG.Account.token?RPG.Account.token():''),public:makePublic});message(create?'Criando sala...':'Procurando a sala '+room+'...');};
       ws.onmessage=function(e){try{receive(JSON.parse(e.data));}catch(err){console.error('[Multiplayer] falha ao processar mensagem',err);}};
       ws.onerror=function(){message('Não foi possível conectar ao servidor.',true);};
       ws.onclose=function(){message('Conexão encerrada.',true);};
     }catch(e){message('Servidor multiplayer inválido.',true);}
   }
+  // Chamado a partir de um convite de sala aceito pelo painel de amigos:
+  // abre o modal ja na aba de entrar e usa o codigo recebido do convite.
+  function joinRoomCode(roomCode){
+    document.getElementById('multiplayerForm').classList.remove('hidden');
+    document.getElementById('multiplayerLobby').classList.add('hidden');
+    document.getElementById('multiplayerModal').classList.remove('hidden');
+    document.getElementById('multiplayerRoom').value=String(roomCode||'').toUpperCase().slice(0,6);
+    connect(false);
+  }
   function finishGuestCreation(state){
     session.guestCreating=false;session.profiles[2]={name:session.name,publicProfile:accountProfile(),hero:state.hero,inventory:state.inventory||[],party:state.party||[]};
     send({type:'profile',role:2,profile:session.profiles[2]});
-    if(session.pendingState){var pending=session.pendingState;session.pendingState=null;pending.profiles=pending.profiles||{};pending.profiles[2]=session.profiles[2];applyState(pending);}
+    if(session.pendingState){var pending=session.pendingState;session.pendingState=null;pending.profiles=pending.profiles||{};pending.profiles[2]=session.profiles[2];applyState(pending);hideModal();}
     else{ showLobby(); }
     status();
   }
@@ -243,10 +279,11 @@ RPG.Multiplayer = (function(){
     if(RPG.state.screen==='game'){e.preventDefault();e.stopImmediatePropagation();message('Aguarde a vez do outro jogador na batalha.',true);}
   }
   function init(){
-    document.getElementById('btnMultiplayer').addEventListener('click',function(){ if(session.connected) showLobby(); else document.getElementById('multiplayerModal').classList.remove('hidden'); });
+    document.getElementById('btnMultiplayer').addEventListener('click',function(){ if(session.connected) showLobby(); else { document.getElementById('multiplayerModal').classList.remove('hidden'); refreshPublicRooms(); } });
     document.getElementById('closeMultiplayerBtn').addEventListener('click',hideModal);
     document.getElementById('createRoomBtn').addEventListener('click',function(){connect(true);});
     document.getElementById('joinRoomBtn').addEventListener('click',function(){connect(false);});
+    document.getElementById('mpRefreshRoomsBtn').addEventListener('click',refreshPublicRooms);
     document.getElementById('mpLobbyCopyBtn').addEventListener('click',function(){
       if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(session.room).then(function(){message('Código copiado!');}).catch(function(){});
     });
@@ -257,5 +294,5 @@ RPG.Multiplayer = (function(){
   }
   RPG.Save.save=function(state){var result=originalSave(state);if(!session.applying)sync(false);return result;};
   document.addEventListener('DOMContentLoaded',init);
-  return {commit:commit,sync:function(){sync(false);},disconnect:disconnect,broadcastAction:broadcastAction,healTeam:healTeam,requestBossAdvance:requestBossAdvance,canAct:canAct,beginMove:beginMove,grantSharedXP:grantSharedXP,grantSharedGold:grantSharedGold,isGuestCreating:function(){return session.guestCreating;},finishGuestCreation:finishGuestCreation,showHostLobby:showHostLobby,session:session};
+  return {commit:commit,sync:function(){sync(false);},disconnect:disconnect,broadcastAction:broadcastAction,healTeam:healTeam,requestBossAdvance:requestBossAdvance,canAct:canAct,beginMove:beginMove,grantSharedXP:grantSharedXP,grantSharedGold:grantSharedGold,isGuestCreating:function(){return session.guestCreating;},finishGuestCreation:finishGuestCreation,showHostLobby:showHostLobby,joinRoomCode:joinRoomCode,session:session};
 })();

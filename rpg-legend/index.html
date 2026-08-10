@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="img/branding/favicon.png?v=20260809a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20260810i">
+<link rel="stylesheet" href="css/style.css?v=20260810j">
 <link rel="stylesheet" href="css/animations.css?v=20260802c">
 <style>
   #accountAvatar{border-radius:50%;object-fit:cover;background:#111;border:3px solid #8b6f3d;vertical-align:middle;margin-right:8px}
@@ -199,7 +199,12 @@
       <p class="multiplayer-help">Crie uma sala e envie o código ao outro jogador. Cada participante entra com o próprio herói.</p>
       <label class="multi-label">Seu nome<input id="multiplayerName" class="name-input" maxlength="20" placeholder="Ex: Pedro"></label>
       <label class="multi-label">Código da sala<input id="multiplayerRoom" class="name-input room-code" maxlength="6" placeholder="Ex: DRAGAO"></label>
+      <label class="multi-label mp-public-toggle"><input type="checkbox" id="mpPublicToggle"> Sala pública (aparece na lista para todos)</label>
       <div class="multi-actions"><button class="rune-btn" id="createRoomBtn">Criar Sala</button><button class="rune-btn" id="joinRoomBtn">Entrar na Sala</button></div>
+      <div class="mp-public-rooms">
+        <div class="mp-public-rooms-head"><span>Salas Públicas</span><button class="rune-btn ghost small" id="mpRefreshRoomsBtn" type="button">🔄 Atualizar</button></div>
+        <div class="mp-public-rooms-list" id="mpPublicRoomsList"></div>
+      </div>
     </div>
     <div id="multiplayerLobby" class="multiplayer-lobby hidden">
       <div class="mp-lobby-code">
@@ -522,6 +527,13 @@
   </div>
 </div>
 <div class="social-chats" id="socialChats"></div>
+<div class="room-invite-toast hidden" id="roomInviteToast">
+  <div class="room-invite-text"></div>
+  <div class="room-invite-actions">
+    <button class="rune-btn small" id="roomInviteAcceptBtn" type="button">Aceitar</button>
+    <button class="rune-btn ghost small" id="roomInviteDeclineBtn" type="button">Recusar</button>
+  </div>
+</div>
 
 <!-- Scripts: a ordem não afeta as definições (tudo se anexa ao objeto global RPG),
      mas main.js precisa ser o último por depender de todos os outros. -->
@@ -547,8 +559,8 @@
 <script src="js/pets.js?v=20260810a"></script>
 <script src="js/account.js?v=20260810a"></script>
 <script src="js/admin-panel.js?v=20260804a"></script>
-<script src="js/multiplayer.js?v=20260810d"></script>
-<script src="js/social.js?v=20260810c"></script>
+<script src="js/multiplayer.js?v=20260810f"></script>
+<script src="js/social.js?v=20260810d"></script>
 <script src="js/main.js?v=20260810b"></script>
 </body>
 </html>
