@@ -43,13 +43,13 @@ RPG.UI = (function(){
     var sigName = creation.cls ? creation.cls.signature : null;
     if(sigName){var signature=RPG.Player.powerByName(sigName);if(signature)el.innerHTML+=rouletteCard(signature,'poder da classe');}
     creation.powers.forEach(function(power){el.innerHTML+=rouletteCard(power,'poder da roleta');});
-    if(!creation.powers.length)el.innerHTML+='<div class="roulette-result-placeholder">Gire a roleta para descobrir seus dois poderes adicionais.</div>';
+    if(!creation.powers.length)el.innerHTML+='<div class="roulette-result-placeholder">Gire a Roleta do Destino para descobrir seus dois poderes adicionais.</div>';
   }
-  function renderDebuffResult(){var el=document.getElementById('debuffGrid');el.innerHTML=creation.debuff?rouletteCard(creation.debuff,'fraqueza sorteada'):'<div class="roulette-result-placeholder">Gire a roleta para descobrir sua fraqueza.</div>';}
+  function renderDebuffResult(){var el=document.getElementById('debuffGrid');el.innerHTML=creation.debuff?rouletteCard(creation.debuff,'fraqueza sorteada'):'<div class="roulette-result-placeholder">Gire a Roleta do Destino para descobrir sua fraqueza.</div>';}
   function renderAttrsResult(){
     var el = document.getElementById('creationAttrGrid');
     el.innerHTML = '';
-    if(!creation.attrs){ el.innerHTML = '<div class="roulette-result-placeholder">Gire para sortear suas características.</div>'; return; }
+    if(!creation.attrs){ el.innerHTML = '<div class="roulette-result-placeholder">Gire a Roleta do Destino para sortear suas características.</div>'; return; }
     RPG.Player.ATTR_KEYS.forEach(function(k){
       var cell = document.createElement('div');
       cell.className = 'attr-cell';
@@ -68,9 +68,36 @@ RPG.UI = (function(){
     button.classList.remove('roulette-used');
     button.textContent = label;
   }
-  function animateRoulette(button,pool,onDone){
-    button.classList.add('rolling');button.disabled=true;var original=button.textContent,count=0;
-    var timer=setInterval(function(){var item=pick(pool);button.textContent=item.icon+' '+item.name;if(++count>=12){clearInterval(timer);button.classList.remove('rolling');button.textContent=original;onDone();clearError();}},70);
+  // marca no grid de cards (raca/classe) o item escolhido pela roleta
+  function selectGridCard(containerId, items, chosen){
+    var idx = items.indexOf(chosen);
+    var el = document.getElementById(containerId);
+    Array.prototype.forEach.call(el.children, function(c,i){ c.classList.toggle('selected', i===idx); });
+  }
+  // sorteia 2 poderes adicionais (sem repetir o poder de assinatura da classe atual)
+  function rerollPowers(){
+    var pool = RPG.Player.POWERS.filter(function(p){ return p.name!==creation.cls.signature; });
+    var shuffled = pool.slice().sort(function(){ return Math.random()-.5; });
+    creation.powers = shuffled.slice(0,2);
+    renderPowerGrid();
+  }
+  // recalcula os atributos sempre que raca/classe/fraqueza mudam depois do sorteio inicial
+  function rerollAttrsIfReady(){
+    if(creation.race && creation.cls && creation.debuff){
+      creation.attrs = RPG.Player.rollAttrs(creation.race, creation.cls, creation.debuff);
+      renderAttrsResult();
+    }
+  }
+  function rollEverything(){
+    creation.race = pick(RPG.Player.RACES);
+    creation.cls = pick(RPG.Player.CLASSES);
+    selectGridCard('raceGrid', RPG.Player.RACES, creation.race);
+    selectGridCard('classGrid', RPG.Player.CLASSES, creation.cls);
+    rerollPowers();
+    creation.debuff = pick(RPG.Player.DEBUFFS);
+    renderDebuffResult();
+    creation.attrs = RPG.Player.rollAttrs(creation.race, creation.cls, creation.debuff);
+    renderAttrsResult();
   }
 
   function renderCreationScreen(){
@@ -79,67 +106,39 @@ RPG.UI = (function(){
     creation = { name:defaultName, race:null, cls:null, powers:[], debuff:null, attrs:null, mode:"solo" };
     document.getElementById('nameInput').value = defaultName;
 
-    var powersBtn = document.getElementById('rollPowersBtn');
-    var debuffBtn = document.getElementById('rollDebuffBtn');
-    var attrsBtn = document.getElementById('rollAttrsBtn');
-    unlockRouletteButton(powersBtn, '🎲 Girar Poderes');
-    unlockRouletteButton(debuffBtn, '🎲 Girar Fraqueza');
-    unlockRouletteButton(attrsBtn, '🎲 Rolar Características');
+    var allBtn = document.getElementById('rollAllBtn');
+    unlockRouletteButton(allBtn, '🎲 Rolar Tudo');
 
     buildPickGrid('raceGrid', RPG.Player.RACES, function(it, card){
       creation.race = it;
       Array.prototype.forEach.call(document.getElementById('raceGrid').children, function(c){ c.classList.remove('selected'); });
       card.classList.add('selected'); clearError();
+      rerollAttrsIfReady();
     });
     buildPickGrid('classGrid', RPG.Player.CLASSES, function(it, card){
-      creation.cls = it;creation.powers=[];
+      creation.cls = it;
       Array.prototype.forEach.call(document.getElementById('classGrid').children, function(c){ c.classList.remove('selected'); });
       card.classList.add('selected'); clearError();
-      renderPowerGrid();
+      if(creation.allRolled || creation.powers.length) rerollPowers(); else renderPowerGrid();
+      rerollAttrsIfReady();
     });
     renderPowerGrid();
     renderDebuffResult();
     renderAttrsResult();
-    powersBtn.onclick=function(){
-      if(creation.powersRolled) return;
-      if(!creation.cls){showError('Escolha uma classe antes de girar os poderes.');return;}
-      var btn=this;
-      var pool=RPG.Player.POWERS.filter(function(power){return power.name!==creation.cls.signature;});
-      animateRoulette(btn,pool,function(){
-        var shuffled=pool.slice().sort(function(){return Math.random()-.5;});
-        creation.powers=shuffled.slice(0,2);
-        creation.powersRolled=true;
-        renderPowerGrid();
-        lockRouletteButton(btn,'🎲 Poderes Sorteados');
-      });
-    };
-    debuffBtn.onclick=function(){
-      if(creation.debuffRolled) return;
-      var btn=this;
-      var pool=RPG.Player.DEBUFFS;
-      animateRoulette(btn,pool,function(){
-        creation.debuff=pick(pool);
-        creation.debuffRolled=true;
-        renderDebuffResult();
-        lockRouletteButton(btn,'🎲 Fraqueza Sorteada');
-      });
-    };
-    attrsBtn.onclick=function(){
-      if(creation.attrsRolled) return;
-      if(!creation.race){showError('Escolha uma raça antes de rolar as características.');return;}
-      if(!creation.cls){showError('Escolha uma classe antes de rolar as características.');return;}
-      if(!creation.debuff){showError('Gire a roleta de fraqueza antes de rolar as características.');return;}
-      var btn=this,original=btn.textContent,count=0;
-      btn.classList.add('rolling');btn.disabled=true;
+
+    allBtn.onclick=function(){
+      if(creation.allRolled) return;
+      var btn=this, original=btn.textContent, count=0;
+      btn.classList.add('rolling'); btn.disabled=true;
+      var flavorPool = RPG.Player.CLASSES;
       var timer=setInterval(function(){
-        count++;
-        if(count>=8){
+        var flavor=pick(flavorPool); btn.textContent=flavor.icon+' '+flavor.name;
+        if(++count>=14){
           clearInterval(timer);
-          btn.classList.remove('rolling');btn.textContent=original;
-          creation.attrs=RPG.Player.rollAttrs(creation.race,creation.cls,creation.debuff);
-          creation.attrsRolled=true;
-          renderAttrsResult();
-          lockRouletteButton(btn,'🎲 Características Sorteadas');
+          btn.classList.remove('rolling'); btn.textContent=original;
+          rollEverything();
+          creation.allRolled=true;
+          lockRouletteButton(btn,'🎲 Tudo Sorteado');
           clearError();
         }
       },70);
@@ -154,11 +153,7 @@ RPG.UI = (function(){
   function validateCreation(){
     var name = document.getElementById('nameInput').value.trim();
     if(!name){ showError('Dê um nome ao seu herói.'); return false; }
-    if(!creation.race){ showError('Escolha uma raça.'); return false; }
-    if(!creation.cls){ showError('Escolha uma classe.'); return false; }
-    if(creation.powers.length!==2){ showError('Gire a roleta para receber dois poderes adicionais.'); return false; }
-    if(!creation.debuff){ showError('Escolha uma fraqueza.'); return false; }
-    if(!creation.attrs){ showError('Gire a roleta para sortear suas características.'); return false; }
+    if(!creation.race || !creation.cls || creation.powers.length!==2 || !creation.debuff || !creation.attrs){ showError('Gire a Roleta do Destino antes de começar.'); return false; }
     creation.name = name;
     return true;
   }

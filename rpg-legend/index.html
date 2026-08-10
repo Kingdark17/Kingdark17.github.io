@@ -267,31 +267,33 @@
       <input type="text" id="nameInput" class="name-input" placeholder="Ex: Aldric Pedraverde" maxlength="28">
     </div>
     <div class="creation-step">
+      <div class="step-title">Roleta do Destino</div>
+      <div class="step-sub">Sorteia raça, classe, poderes, fraqueza e atributos de uma vez. Você ainda pode trocar a raça ou a classe clicando nos cards abaixo depois de girar.</div>
+      <button class="rune-btn roulette-btn" id="rollAllBtn">🎲 Rolar Tudo</button>
+    </div>
+    <div class="creation-step">
       <div class="step-title">Raça</div>
-      <div class="step-sub">Escolha uma</div>
+      <div class="step-sub">Escolha uma ou deixe a roleta decidir</div>
       <div class="pick-grid" id="raceGrid"></div>
     </div>
     <div class="creation-step">
       <div class="step-title">Classe</div>
-      <div class="step-sub">Escolha uma</div>
+      <div class="step-sub">Escolha uma ou deixe a roleta decidir</div>
       <div class="pick-grid" id="classGrid"></div>
     </div>
     <div class="creation-step">
-      <div class="step-title">Roleta de Poderes</div>
-      <div class="power-hint">Sua classe concede 1 poder exclusivo. Gire para receber 2 poderes adicionais aleatórios.</div>
-      <button class="rune-btn small roulette-btn" id="rollPowersBtn">🎲 Girar Poderes</button>
+      <div class="step-title">Poderes</div>
+      <div class="power-hint">Sua classe concede 1 poder exclusivo. A Roleta do Destino sorteia 2 poderes adicionais.</div>
       <div class="pick-grid" id="powerGrid"></div>
     </div>
     <div class="creation-step">
-      <div class="step-title">Roleta de Fraqueza</div>
-      <div class="step-sub">Todo herói carrega um fardo. A roleta decidirá qual será o seu.</div>
-      <button class="rune-btn small roulette-btn" id="rollDebuffBtn">🎲 Girar Fraqueza</button>
+      <div class="step-title">Fraqueza</div>
+      <div class="step-sub">Todo herói carrega um fardo, sorteado pela Roleta do Destino.</div>
       <div class="pick-grid" id="debuffGrid"></div>
     </div>
     <div class="creation-step">
       <div class="step-title">Características</div>
-      <div class="step-sub">Sorteie os atributos do seu herói (considera raça, classe e fraqueza).</div>
-      <button class="rune-btn small roulette-btn" id="rollAttrsBtn">🎲 Rolar Características</button>
+      <div class="step-sub">Atributos sorteados pela Roleta do Destino (consideram raça, classe e fraqueza).</div>
       <div class="attr-grid" id="creationAttrGrid"></div>
     </div>
     <div class="creation-step tutorial-choice">
@@ -531,7 +533,7 @@
 <script src="js/music.js?v=20260803b"></script>
 <script src="js/save.js?v=20260809a"></script>
 <script src="js/tutorial.js?v=20260802d"></script>
-<script src="js/ui.js?v=20260810d"></script>
+<script src="js/ui.js?v=20260810e"></script>
 <script src="js/multiplayer-config.js?v=20260802c"></script>
 <script src="js/pets.js?v=20260810a"></script>
 <script src="js/account.js?v=20260804g"></script>
