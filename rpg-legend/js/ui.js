@@ -357,27 +357,38 @@ RPG.UI = (function(){
   function renderMap(){
     var state = RPG.state;
     var el = document.getElementById('mapGrid');
+    if(!state.map || !state.map.length || !state.pos){
+      el.innerHTML = '';
+      return;
+    }
     el.style.gridTemplateColumns = 'repeat(' + state.mapCols + ', 1fr)';
     el.innerHTML = '';
     state.map.forEach(function(row){
       row.forEach(function(cell){
         var div = document.createElement('div');
-        var isPlayer = (cell.x===state.pos.x && cell.y===state.pos.y);
-        if(cell.type === 'void'){
-          div.className = 'tile void';
-        } else if(!RPG.MapUtil.isKnown(state.map, cell, state.mapCols, state.mapRows) && !isPlayer){
-          div.className = 'tile fog';
-        } else if(cell.visited || cell.revealed || isPlayer){
-          div.className = 'tile room-known ' + cell.type + ((cell.collected||cell.beaten) ? ' collected' : '');
-          div.textContent = iconFor(cell);
-        } else {
-          div.className = 'tile room-dim';
-          if(isHunterTrackedCell(cell, state)){
-            div.classList.add('tracked-enemy');
-            div.textContent = trackedMonsterIcon(cell);
+        // Uma celula com dado inesperado (ex: sincronia de multiplayer em
+        // transito) nao pode derrubar o mapa inteiro -- pula so essa celula.
+        try{
+          var isPlayer = (cell.x===state.pos.x && cell.y===state.pos.y);
+          if(cell.type === 'void'){
+            div.className = 'tile void';
+          } else if(!RPG.MapUtil.isKnown(state.map, cell, state.mapCols, state.mapRows) && !isPlayer){
+            div.className = 'tile fog';
+          } else if(cell.visited || cell.revealed || isPlayer){
+            div.className = 'tile room-known ' + cell.type + ((cell.collected||cell.beaten) ? ' collected' : '');
+            div.textContent = iconFor(cell);
+          } else {
+            div.className = 'tile room-dim';
+            if(isHunterTrackedCell(cell, state)){
+              div.classList.add('tracked-enemy');
+              div.textContent = trackedMonsterIcon(cell);
+            }
           }
+          if(isPlayer){ div.classList.add('player-tile'); }
+        }catch(err){
+          div.className = 'tile fog';
+          console.error('[RPG] falha ao renderizar celula do mapa', cell, err);
         }
-        if(isPlayer){ div.classList.add('player-tile'); }
         el.appendChild(div);
       });
     });

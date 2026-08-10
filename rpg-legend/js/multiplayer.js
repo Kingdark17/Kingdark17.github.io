@@ -37,7 +37,7 @@ RPG.Multiplayer = (function(){
     else{document.getElementById('combatScene').classList.add('hidden');document.getElementById('sceneText').classList.remove('hidden');RPG.UI.updateSceneText();}
   }
   function applyState(data){
-    if(!data||!data.map)return;session.applying=true;
+    if(!data||!data.map||!data.map.length||!data.pos)return;session.applying=true;
     mergeProfiles(data.profiles);
     var own=session.profiles[session.role];if(!own){session.pendingState=data;session.applying=false;return;}
     var s=RPG.state;
@@ -134,7 +134,7 @@ RPG.Multiplayer = (function(){
     try{
       var ws=new WebSocket(server);session.transport=ws;
       ws.onopen=function(){send({type:create?'create':'join',name:name,role:session.role,accountToken:(RPG.Account&&RPG.Account.token?RPG.Account.token():'')});message(create?'Criando sala...':'Procurando a sala '+room+'...');};
-      ws.onmessage=function(e){try{receive(JSON.parse(e.data));}catch(err){}};
+      ws.onmessage=function(e){try{receive(JSON.parse(e.data));}catch(err){console.error('[Multiplayer] falha ao processar mensagem',err);}};
       ws.onerror=function(){message('Não foi possível conectar ao servidor.',true);};
       ws.onclose=function(){message('Conexão encerrada.',true);};
     }catch(e){message('Servidor multiplayer inválido.',true);}
