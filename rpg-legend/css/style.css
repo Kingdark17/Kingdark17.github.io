@@ -248,8 +248,8 @@ button.rune-btn.ghost{ background: rgba(0,0,0,0.2); border-color: var(--line); c
 .minimap-wrap .tile{ font-size: 11px; border-radius: 2px; }
 
 @media (max-width: 640px){
-  .story-box{ padding: 18px; padding-bottom: 150px; min-height: 260px; }
-  .minimap-wrap{ top: auto; bottom: 10px; right: 10px; }
+  .story-box{ padding: 18px; min-height: 260px; }
+  .minimap-wrap{ position: static; top: auto; right: auto; bottom: auto; width: 100%; max-width: 220px; margin: 14px auto 0; }
 }
 
 .map-grid{ display: grid; gap: 3px; background: #05060a; border: 1px solid var(--line); border-radius: 4px; padding: 8px; position: relative; }

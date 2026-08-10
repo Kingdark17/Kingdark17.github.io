@@ -33,6 +33,8 @@ RPG.Pets=(function(){
   function love(){
     var widget=document.getElementById('profilePetWidget');
     if(!widget||widget.classList.contains('hidden'))return;
+    widget.classList.add('pet-active');
+    setTimeout(function(){widget.classList.remove('pet-active');},1400);
     var pet=widget.getAttribute('data-pet');
     var heart=document.createElement('span');
     heart.className='pet-heart';heart.textContent='❤';heart.style.color='#ff6b8a';
