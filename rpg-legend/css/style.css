@@ -494,6 +494,9 @@ button.rune-btn.ghost{ background: rgba(0,0,0,0.2); border-color: var(--line); c
 .chat-msg-body{ padding:6px 10px; border-radius:12px; font-size:12px; line-height:1.4; word-break:break-word; background:rgba(0,0,0,0.25); color:var(--parchment); border:1px solid var(--line); }
 .chat-msg.mine .chat-msg-body{ background:rgba(201,162,39,0.18); border-color:var(--gold); }
 .chat-msg-time{ font-family:var(--font-mono); font-size:8.5px; color:var(--parchment-dim); }
+.chat-msg.pending .chat-msg-body{ opacity:.55; }
+.chat-msg.failed .chat-msg-body{ border-color:#e28a8a; }
+.chat-msg.failed .chat-msg-time{ color:#e28a8a; }
 .chat-window-input{ display:flex; gap:6px; padding:8px; border-top:1px solid var(--line); }
 .chat-window-input input{ flex:1; min-width:0; background:#11141c; border:1px solid var(--line); border-radius:14px; padding:6px 12px; color:var(--parchment); font-family:var(--font-body); font-size:12.5px; }
 .chat-window-input button{ width:30px; height:30px; border-radius:50%; border:1px solid var(--gold); background:rgba(201,162,39,0.15); color:var(--gold-bright); cursor:pointer; flex-shrink:0; }

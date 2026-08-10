@@ -38,13 +38,20 @@ RPG.Social = (function(){
     Object.keys(chats).forEach(function(k){ messageCount+=chats[k].unread||0; });
     return incomingCount+messageCount;
   }
-  function renderLauncher(){
-    var btn=el('socialLauncherBtn'); if(!btn) return;
+  function refreshLauncher(){
+    var btn=el('socialLauncherBtn'),tab=el('btnSocialTab'); if(!btn||!tab) return;
     var loggedIn=!!(RPG.Account&&RPG.Account.currentUser&&RPG.Account.currentUser());
-    btn.classList.toggle('hidden',!loggedIn);
-    var count=totalUnread(),badge=el('socialBadge');
-    badge.textContent=count>9?'9+':String(count);
-    badge.classList.toggle('hidden',count<=0);
+    var onMenu=!RPG.state||RPG.state.screen==='menu';
+    // A aba de "Amigos" mora no menu (embaixo de Conta); a bolha flutuante
+    // so aparece durante o jogo, pra nao duplicar o mesmo acesso na tela.
+    tab.classList.toggle('hidden',!loggedIn);
+    btn.classList.toggle('hidden',!loggedIn||onMenu);
+    var count=totalUnread();
+    [el('socialBadge'),el('socialTabBadge')].forEach(function(badge){
+      if(!badge) return;
+      badge.textContent=count>9?'9+':String(count);
+      badge.classList.toggle('hidden',count<=0);
+    });
   }
   async function refreshFriends(){
     if(!RPG.Account||!RPG.Account.currentUser||!RPG.Account.currentUser()) return;
@@ -52,7 +59,7 @@ RPG.Social = (function(){
       var data=await api('/api/friends',{method:'GET'});
       friends=data.friends||[]; incoming=data.incoming||[]; outgoing=data.outgoing||[];
       renderFriendsList();
-      renderLauncher();
+      refreshLauncher();
       refreshOpenChatDots();
     }catch(e){ /* silencioso -- o painel so mostra a lista quando reaberto */ }
   }
@@ -159,11 +166,14 @@ RPG.Social = (function(){
       chat.loaded=true;
       if(openOrder.indexOf(key(msg.from))>=0){ renderChatWindow(msg.from); }
       else{ chat.unread=(chat.unread||0)+1; notify('<b>'+msg.from+'</b> te enviou uma mensagem.'); }
-      renderFriendsList(); renderLauncher();
+      renderFriendsList(); refreshLauncher();
       return;
     }
     if(msg.type==='friend-request'){ notify('<b>'+msg.username+'</b> te enviou um pedido de amizade.'); refreshFriends(); return; }
     if(msg.type==='friend-accept'){ notify('<b>'+msg.username+'</b> aceitou seu pedido de amizade.'); refreshFriends(); return; }
+    if(msg.type==='chat-ack'){ reconcileMessage(msg.to,msg.tempId,{id:msg.id,createdAt:msg.createdAt}); return; }
+    if(msg.type==='chat-error'){ markMessageFailed(msg.to,msg.tempId,msg.message); return; }
+    if(msg.type==='auth-error'){ authed=false; console.error('[Social] token invalido ao autenticar o chat.'); return; }
   }
   function notify(html){
     if(RPG.UI && RPG.UI.logEvent && RPG.state && RPG.state.screen==='game') RPG.UI.logEvent(html);
@@ -184,10 +194,28 @@ RPG.Social = (function(){
   function sendMessage(username,text){
     text=(text||'').trim(); if(!text) return;
     var chat=chatFor(username);
-    chat.messages.push({id:'tmp'+Date.now(),fromMe:true,body:text,createdAt:new Date().toISOString()});
+    var tempId='tmp'+Date.now()+Math.random().toString(36).slice(2);
+    chat.messages.push({id:tempId,fromMe:true,body:text,createdAt:new Date().toISOString(),pending:true});
     renderChatWindow(username);
-    if(socket&&socket.readyState===1&&authed) socket.send(JSON.stringify({type:'chat',to:username,body:text}));
-    else api('/api/messages/'+encodeURIComponent(username),{method:'POST',body:JSON.stringify({body:text})}).catch(function(){});
+    if(socket&&socket.readyState===1&&authed){
+      socket.send(JSON.stringify({type:'chat',to:username,body:text,tempId:tempId}));
+    }else{
+      api('/api/messages/'+encodeURIComponent(username),{method:'POST',body:JSON.stringify({body:text})})
+        .then(function(data){ reconcileMessage(username,tempId,data.message); })
+        .catch(function(err){ markMessageFailed(username,tempId,err.message); });
+    }
+  }
+  function reconcileMessage(username,tempId,serverMsg){
+    var chat=chatFor(username),msg=chat.messages.filter(function(m){ return m.id===tempId; })[0];
+    if(msg&&serverMsg){ msg.id=serverMsg.id; msg.createdAt=serverMsg.createdAt||msg.createdAt; delete msg.pending; }
+    renderChatWindow(username);
+  }
+  function markMessageFailed(username,tempId,errorText){
+    var chat=chatFor(username),msg=chat.messages.filter(function(m){ return m.id===tempId; })[0];
+    if(msg){ delete msg.pending; msg.failed=true; }
+    renderChatWindow(username);
+    setFormMessage(errorText||'Não foi possível enviar a mensagem.',true);
+    console.error('[Social] falha ao enviar mensagem:',errorText);
   }
 
   /* ================= Janelas de chat (estilo Messenger) ================= */
@@ -201,7 +229,7 @@ RPG.Social = (function(){
       buildChatWindow(username);
     }
     loadHistory(username);
-    renderFriendsList(); renderLauncher();
+    renderFriendsList(); refreshLauncher();
     el('socialPanel').classList.add('hidden');
     var node=chatWindowEl(username); if(node) node.querySelector('.chat-window-input input').focus();
   }
@@ -242,25 +270,29 @@ RPG.Social = (function(){
     var body=node.querySelector('.chat-window-body'),chat=chatFor(username);
     var wasNearBottom=body.scrollHeight-body.scrollTop-body.clientHeight<40;
     body.innerHTML=chat.messages.length?chat.messages.map(function(m){
-      return '<div class="chat-msg '+(m.fromMe?'mine':'theirs')+'"><span class="chat-msg-body">'+escapeHtml(m.body)+'</span><span class="chat-msg-time">'+formatTime(m.createdAt)+'</span></div>';
+      var stateClass=m.failed?' failed':(m.pending?' pending':'');
+      var timeLabel=m.failed?'Falhou ao enviar':(m.pending?'Enviando...':formatTime(m.createdAt));
+      return '<div class="chat-msg '+(m.fromMe?'mine':'theirs')+stateClass+'"><span class="chat-msg-body">'+escapeHtml(m.body)+'</span><span class="chat-msg-time">'+timeLabel+'</span></div>';
     }).join(''):'<div class="social-empty">Diga oi! 👋</div>';
     if(wasNearBottom) body.scrollTop=body.scrollHeight;
   }
 
   /* ================= Boot ================= */
+  function togglePanel(){
+    var panel=el('socialPanel'),willOpen=panel.classList.contains('hidden');
+    panel.classList.toggle('hidden');
+    if(willOpen) refreshFriends();
+  }
   function bindPanel(){
-    el('socialLauncherBtn').addEventListener('click',function(){
-      var panel=el('socialPanel'),willOpen=panel.classList.contains('hidden');
-      panel.classList.toggle('hidden');
-      if(willOpen) refreshFriends();
-    });
+    el('socialLauncherBtn').addEventListener('click',togglePanel);
+    el('btnSocialTab').addEventListener('click',togglePanel);
     el('socialPanelCloseBtn').addEventListener('click',function(){ el('socialPanel').classList.add('hidden'); });
     el('socialAddBtn').addEventListener('click',function(){ sendRequest(el('socialAddInput').value); });
     el('socialAddInput').addEventListener('keydown',function(e){ if(e.key==='Enter') sendRequest(el('socialAddInput').value); });
     document.addEventListener('click',function(e){
-      var panel=el('socialPanel'),launcher=el('socialLauncherBtn');
+      var panel=el('socialPanel'),launcher=el('socialLauncherBtn'),tab=el('btnSocialTab');
       if(panel.classList.contains('hidden')) return;
-      if(panel.contains(e.target)||launcher.contains(e.target)) return;
+      if(panel.contains(e.target)||launcher.contains(e.target)||tab.contains(e.target)) return;
       panel.classList.add('hidden');
     });
   }
@@ -269,11 +301,11 @@ RPG.Social = (function(){
     bindPanel();
     document.addEventListener('rpg-account-ready',function(e){
       var user=e.detail&&e.detail.user;
-      renderLauncher();
+      refreshLauncher();
       if(user) connect();
     });
-    if(RPG.Account&&RPG.Account.currentUser&&RPG.Account.currentUser()){ renderLauncher(); connect(); }
+    if(RPG.Account&&RPG.Account.currentUser&&RPG.Account.currentUser()){ refreshLauncher(); connect(); }
   }
   document.addEventListener('DOMContentLoaded',init);
-  return { openChat:openChat, refreshFriends:refreshFriends };
+  return { openChat:openChat, refreshFriends:refreshFriends, refreshLauncher:refreshLauncher };
 })();

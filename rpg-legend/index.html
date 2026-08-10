@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="img/branding/favicon.png?v=20260809a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20260810d">
+<link rel="stylesheet" href="css/style.css?v=20260810e">
 <link rel="stylesheet" href="css/animations.css?v=20260802c">
 <style>
   #accountAvatar{border-radius:50%;object-fit:cover;background:#111;border:3px solid #8b6f3d;vertical-align:middle;margin-right:8px}
@@ -38,7 +38,9 @@
   .menu-side-tab:hover,.menu-side-tab:focus-visible{background:color-mix(in srgb,var(--tab-color) 16%,transparent);color:#fff;transform:translateX(3px);outline:none}
   .menu-side-icon{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;font-size:25px;background:#171c28;border:1px solid var(--tab-color);box-shadow:0 8px 20px rgba(0,0,0,.25)}
   .menu-side-account .menu-side-icon{background:transparent;border:0;box-shadow:none;border-radius:0}
-  .menu-side-play,.menu-side-account,.menu-side-settings,.menu-side-shop,.menu-side-credits{--tab-color:#b99245}
+  .menu-side-play,.menu-side-account,.menu-side-social,.menu-side-settings,.menu-side-shop,.menu-side-credits{--tab-color:#b99245}
+  .menu-side-social .menu-side-icon{position:relative}
+  .menu-side-social .social-badge{position:absolute;top:-4px;right:-4px}
   .menu-account-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#171923;border:2px solid #b99245;display:none}
   .menu-account-avatar.visible{display:block}.menu-account-fallback.hidden{display:none}.menu-side-name{max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .main-menu-stage{width:100%;min-height:calc(100vh - 68px);display:grid;place-items:center}.main-menu-card{width:min(100%,570px);padding:30px 26px 24px;border:1px solid rgba(209,164,75,.42);border-radius:10px;background:linear-gradient(145deg,rgba(31,38,56,.98),rgba(23,28,41,.98));box-shadow:0 24px 70px rgba(0,0,0,.38),inset 0 0 0 5px rgba(255,255,255,.015)}
@@ -73,6 +75,7 @@
     <nav class="main-menu-sidebar" aria-label="Navegação principal">
       <button class="menu-side-tab menu-side-play" id="btnPlayTab" type="button" aria-expanded="true" aria-label="Abrir ou recolher menu lateral"><span class="menu-side-icon">☰</span><span>Menu</span></button>
       <button class="menu-side-tab menu-side-account" id="btnAccount" type="button"><span class="menu-side-icon"><img id="menuAccountAvatar" class="menu-account-avatar" alt="Foto da conta"><span id="menuAccountFallback" class="menu-account-fallback">👤</span></span><span class="menu-side-name" id="menuAccountName">Conta</span></button>
+      <button class="menu-side-tab menu-side-social hidden" id="btnSocialTab" type="button"><span class="menu-side-icon">💬<span class="social-badge hidden" id="socialTabBadge">0</span></span><span>Amigos</span></button>
       <button class="menu-side-tab menu-side-settings" id="btnSettings" type="button"><span class="menu-side-icon">⚙</span><span>Configurações</span></button>
       <button class="menu-side-tab menu-side-shop" id="btnProfileShop" type="button"><span class="menu-side-icon">🛒</span><span>Loja</span></button>
       <button class="menu-side-tab menu-side-credits" id="btnCredits" type="button"><span class="menu-side-icon">📜</span><span>Créditos</span></button>
@@ -523,13 +526,13 @@
 <script src="js/music.js?v=20260803b"></script>
 <script src="js/save.js?v=20260809a"></script>
 <script src="js/tutorial.js?v=20260802d"></script>
-<script src="js/ui.js?v=20260810b"></script>
+<script src="js/ui.js?v=20260810c"></script>
 <script src="js/multiplayer-config.js?v=20260802c"></script>
 <script src="js/pets.js?v=20260809a"></script>
 <script src="js/account.js?v=20260804g"></script>
 <script src="js/admin-panel.js?v=20260804a"></script>
 <script src="js/multiplayer.js?v=20260810c"></script>
-<script src="js/social.js?v=20260810a"></script>
+<script src="js/social.js?v=20260810b"></script>
 <script src="js/main.js?v=20260810a"></script>
 </body>
 </html>
