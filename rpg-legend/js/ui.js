@@ -119,7 +119,7 @@ RPG.UI = (function(){
       creation.cls = it;
       Array.prototype.forEach.call(document.getElementById('classGrid').children, function(c){ c.classList.remove('selected'); });
       card.classList.add('selected'); clearError();
-      if(creation.allRolled || creation.powers.length) rerollPowers(); else renderPowerGrid();
+      if(creation.powers.length) rerollPowers(); else renderPowerGrid();
       rerollAttrsIfReady();
     });
     renderPowerGrid();
@@ -127,7 +127,6 @@ RPG.UI = (function(){
     renderAttrsResult();
 
     allBtn.onclick=function(){
-      if(creation.allRolled) return;
       var btn=this, original=btn.textContent, count=0;
       btn.classList.add('rolling'); btn.disabled=true;
       var flavorPool = RPG.Player.CLASSES;
@@ -135,10 +134,8 @@ RPG.UI = (function(){
         var flavor=pick(flavorPool); btn.textContent=flavor.icon+' '+flavor.name;
         if(++count>=14){
           clearInterval(timer);
-          btn.classList.remove('rolling'); btn.textContent=original;
+          btn.classList.remove('rolling'); btn.textContent=original; btn.disabled=false;
           rollEverything();
-          creation.allRolled=true;
-          lockRouletteButton(btn,'🎲 Tudo Sorteado');
           clearError();
         }
       },70);
