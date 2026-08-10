@@ -195,24 +195,42 @@ RPG.Social = (function(){
     text=(text||'').trim(); if(!text) return;
     var chat=chatFor(username);
     var tempId='tmp'+Date.now()+Math.random().toString(36).slice(2);
-    chat.messages.push({id:tempId,fromMe:true,body:text,createdAt:new Date().toISOString(),pending:true});
+    var entry={id:tempId,fromMe:true,body:text,createdAt:new Date().toISOString(),pending:true};
+    chat.messages.push(entry);
     renderChatWindow(username);
     if(socket&&socket.readyState===1&&authed){
       socket.send(JSON.stringify({type:'chat',to:username,body:text,tempId:tempId}));
+      // O WebSocket pode "morrer" em silencio (sem disparar onclose) e
+      // deixar a mensagem presa em "Enviando..." pra sempre -- se a
+      // confirmacao nao chegar em alguns segundos, tenta por HTTP e forca
+      // a reconexao do socket, que provavelmente esta com problema.
+      entry.timeoutHandle=setTimeout(function(){
+        if(!entry.pending) return;
+        console.error('[Social] sem resposta do servidor via WebSocket, tentando por HTTP.');
+        sendViaRest(username,text,tempId);
+        if(socket){ try{ socket.close(); }catch(e){} }
+      },6000);
     }else{
-      api('/api/messages/'+encodeURIComponent(username),{method:'POST',body:JSON.stringify({body:text})})
-        .then(function(data){ reconcileMessage(username,tempId,data.message); })
-        .catch(function(err){ markMessageFailed(username,tempId,err.message); });
+      sendViaRest(username,text,tempId);
     }
+  }
+  function sendViaRest(username,text,tempId){
+    api('/api/messages/'+encodeURIComponent(username),{method:'POST',body:JSON.stringify({body:text})})
+      .then(function(data){ reconcileMessage(username,tempId,data.message); })
+      .catch(function(err){ markMessageFailed(username,tempId,err.message); });
   }
   function reconcileMessage(username,tempId,serverMsg){
     var chat=chatFor(username),msg=chat.messages.filter(function(m){ return m.id===tempId; })[0];
-    if(msg&&serverMsg){ msg.id=serverMsg.id; msg.createdAt=serverMsg.createdAt||msg.createdAt; delete msg.pending; }
+    if(msg){
+      if(msg.timeoutHandle){ clearTimeout(msg.timeoutHandle); delete msg.timeoutHandle; }
+      if(serverMsg){ msg.id=serverMsg.id; msg.createdAt=serverMsg.createdAt||msg.createdAt; }
+      delete msg.pending;
+    }
     renderChatWindow(username);
   }
   function markMessageFailed(username,tempId,errorText){
     var chat=chatFor(username),msg=chat.messages.filter(function(m){ return m.id===tempId; })[0];
-    if(msg){ delete msg.pending; msg.failed=true; }
+    if(msg){ if(msg.timeoutHandle){ clearTimeout(msg.timeoutHandle); delete msg.timeoutHandle; } delete msg.pending; msg.failed=true; }
     renderChatWindow(username);
     setFormMessage(errorText||'Não foi possível enviar a mensagem.',true);
     console.error('[Social] falha ao enviar mensagem:',errorText);
