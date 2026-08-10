@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="img/branding/favicon.png?v=20260809a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20260810h">
+<link rel="stylesheet" href="css/style.css?v=20260810i">
 <link rel="stylesheet" href="css/animations.css?v=20260802c">
 <style>
   #accountAvatar{border-radius:50%;object-fit:cover;background:#111;border:3px solid #8b6f3d;vertical-align:middle;margin-right:8px}
@@ -90,8 +90,7 @@
       <div class="menu-title">RPG Legend</div>
       <div class="menu-sub">aventura &middot; exploração &middot; progressão</div>
       <div class="menu-list">
-        <button class="rune-btn" id="btnNewGame">Novo Jogo</button>
-        <button class="rune-btn" id="btnContinueGame">Continuar</button>
+        <button class="rune-btn" id="btnCharacters">Personagens</button>
         <button class="rune-btn" id="btnMultiplayer">Multiplayer (Beta)</button>
         <button class="rune-btn ghost menu-secondary-action" id="btnExitGame">Sair</button>
       </div>
@@ -179,6 +178,16 @@
     <button class="rune-btn" id="admApplyBtn">Aplicar Alteracoes</button>
     <button class="rune-btn" id="admGodBtn">♾ Modo Infinito (status + itens)</button>
     <div id="adminPanelMessage" class="account-message"></div>
+  </div>
+</div>
+
+<!-- ============ PERSONAGENS ============ -->
+<div class="modal-overlay hidden" id="characterModal">
+  <div class="modal-box character-modal-box">
+    <div class="modal-header"><h2>👤 Personagens</h2><button class="modal-close" id="closeCharacterModalBtn">&times;</button></div>
+    <p class="multiplayer-help">Escolha um personagem para continuar ou crie um novo em um slot vazio.</p>
+    <div class="character-slots" id="characterSlots"></div>
+    <div class="account-message" id="characterModalMessage"></div>
   </div>
 </div>
 
@@ -531,15 +540,15 @@
 <script src="js/quests.js?v=20260803a"></script>
 <script src="js/effects.js?v=20260802c"></script>
 <script src="js/music.js?v=20260803b"></script>
-<script src="js/save.js?v=20260809a"></script>
+<script src="js/save.js?v=20260810a"></script>
 <script src="js/tutorial.js?v=20260802d"></script>
-<script src="js/ui.js?v=20260810e"></script>
+<script src="js/ui.js?v=20260810f"></script>
 <script src="js/multiplayer-config.js?v=20260802c"></script>
 <script src="js/pets.js?v=20260810a"></script>
-<script src="js/account.js?v=20260804g"></script>
+<script src="js/account.js?v=20260810a"></script>
 <script src="js/admin-panel.js?v=20260804a"></script>
-<script src="js/multiplayer.js?v=20260810c"></script>
+<script src="js/multiplayer.js?v=20260810d"></script>
 <script src="js/social.js?v=20260810c"></script>
-<script src="js/main.js?v=20260810a"></script>
+<script src="js/main.js?v=20260810b"></script>
 </body>
 </html>

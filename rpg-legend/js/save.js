@@ -30,6 +30,7 @@ RPG.Save = (function(){
     if(!RPG.Account||!RPG.Account.currentUser())return false;
     try{
       var data = {
+        slot: state.slot || 1,
         hero: state.hero,
         party: state.party,
         inventory: state.inventory,

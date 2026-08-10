@@ -732,6 +732,7 @@ RPG.UI = (function(){
     state.mapMode = forceCity ? 'city' : (data.mapMode || 'city');
     state.mapRows = data.mapRows || 6;
     state.mapCols = data.mapCols || 6;
+    state.slot = data.slot || 1;
     state.soundOn = data.soundOn !== undefined ? data.soundOn : true;
     state.musicVolume = data.musicVolume !== undefined ? data.musicVolume : 0.28;
     state.tutorial = data.tutorial || RPG.Tutorial.create(false);

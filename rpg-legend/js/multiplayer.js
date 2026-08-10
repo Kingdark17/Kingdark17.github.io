@@ -85,6 +85,7 @@ RPG.Multiplayer = (function(){
   }
   function resumeSoloForGuest(data){
     var state=RPG.state;
+    state.slot=data.slot||1;
     state.hero=RPG.Player.hydrateSavedHero(data.hero);
     state.inventory=(data.inventory||[]).slice();
     state.inventory.forEach(RPG.Items.refreshIcon);
@@ -112,7 +113,22 @@ RPG.Multiplayer = (function(){
     }
     hideModal();
     message(prefix+'Crie seu herói para entrar na sala.');
-    RPG.UI.showScreen('creation');RPG.UI.renderCreationScreen();
+    assignFreshSlot().then(function(){
+      RPG.UI.showScreen('creation');RPG.UI.renderCreationScreen();
+    });
+  }
+  // Sem save solo pra reaproveitar: acha um slot vazio pro personagem novo
+  // em vez de sempre usar o slot 1 (que poderia ja ter outro personagem
+  // num dispositivo/navegador diferente do que sincronizou por ultimo).
+  async function assignFreshSlot(){
+    try{
+      if(RPG.Account&&RPG.Account.refreshCharacters) await RPG.Account.refreshCharacters();
+      var chars=(RPG.Account&&RPG.Account.characters&&RPG.Account.characters())||[];
+      var max=(RPG.Account&&RPG.Account.maxSlots&&RPG.Account.maxSlots())||4;
+      var used={}; chars.forEach(function(c){ used[c.slot]=true; });
+      var slot=1; while(used[slot]&&slot<=max) slot++;
+      RPG.state.slot = slot<=max ? slot : 1;
+    }catch(e){ RPG.state.slot = RPG.state.slot || 1; }
   }
   // Chamado por ui.js apos startAdventure() quando quem criou o personagem
   // do zero e o dono da sala -- mostra a sala de espera com o codigo.
