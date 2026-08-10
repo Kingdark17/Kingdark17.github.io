@@ -41,7 +41,7 @@ RPG.Player = (function(){
     { name:"Necromante", icon:"\u2620\ufe0f", weaponTemplate:'cajado', bias:{intelecto:3,constituicao:1}, desc:"Conjura maldições e drena a força dos inimigos.", signature:"Maldição Sombria", affinity:{cajado:100,adaga:75,maca:55,espada:40,arco:35,machado:25,marreta:25,violao:40} },
     { name:"Druida", icon:"\ud83c\udf3f", weaponTemplate:'cajado', bias:{sabedoria:3,constituicao:1}, desc:"Controla a natureza, venenos e magia de cura.", signature:"Esporos Venenosos", affinity:{cajado:100,maca:75,arco:65,adaga:50,espada:35,machado:35,marreta:35,violao:55} },
     { name:"Monge", icon:"\ud83e\udd4b", weaponTemplate:'maca', bias:{destreza:2,sabedoria:2}, desc:"Lutador disciplinado que domina corpo e espírito.", signature:"Golpe Atordoante", affinity:{maca:100,adaga:85,cajado:70,espada:55,machado:40,arco:40,marreta:40,violao:45} },
-    { name:"Bardo", icon:"\ud83c\udfb5", weaponTemplate:'adaga', bias:{carisma:3,destreza:1}, desc:"Usa música para fortalecer aliados e enfraquecer inimigos.", signature:"Canção Debilitante", affinity:{adaga:100,arco:80,espada:65,cajado:65,maca:50,machado:30,marreta:30,violao:100} },
+    { name:"Bardo", icon:"\ud83c\udfb5", weaponTemplate:'violao', bias:{carisma:3,destreza:1}, desc:"Usa música para fortalecer aliados e enfraquecer inimigos.", signature:"Canção Debilitante", affinity:{adaga:100,arco:80,espada:65,cajado:65,maca:50,machado:30,marreta:30,violao:100} },
     { name:"Caçador", icon:"\ud83d\udc3a", weaponTemplate:'arco', bias:{destreza:2,sabedoria:2}, desc:"Especialista em rastrear e sangrar criaturas.", signature:"Flecha Serrilhada", affinity:{arco:100,adaga:85,espada:60,machado:50,maca:35,cajado:25,marreta:50,violao:40} }
   ];
 
@@ -296,6 +296,23 @@ RPG.Player = (function(){
     return { leveledUp: levels>0, levels: levels };
   }
 
+  // Normaliza um heroi vindo de um save (local, nuvem ou de outro modo de
+  // jogo) preenchendo campos que saves antigos podem nao ter. Usado tanto
+  // por "Continuar" quanto para reaproveitar o heroi solo no multiplayer.
+  function hydrateSavedHero(hero){
+    hero.equip = hero.equip || {arma:null,armadura:null,acessorio:null};
+    if(hero.equip.secundaria===undefined) hero.equip.secundaria=null;
+    hero.attrPoints = hero.attrPoints || 0;
+    hero.buffs = {};
+    if(!hero.powers || !hero.powers.length){
+      var cls = classByName(hero.className);
+      var sig = cls ? powerByName(cls.signature) : null;
+      hero.powers = sig ? [sig] : [];
+    }
+    recomputeDerived(hero);
+    return hero;
+  }
+
   return {
     RACES: RACES, CLASSES: CLASSES, POWERS: POWERS, DEBUFFS: DEBUFFS, MODES: MODES,
     ATTR_KEYS: ATTR_KEYS, ATTR_LABELS: ATTR_LABELS,
@@ -304,6 +321,6 @@ RPG.Player = (function(){
     gainXP: gainXP, xpForLevel: xpForLevel,
     getDerived: getDerived, recomputeDerived: recomputeDerived, spendAttrPoint: spendAttrPoint,
     hasDebuffEffect: hasDebuffEffect,
-    classByName: classByName, powerByName: powerByName
+    classByName: classByName, powerByName: powerByName, hydrateSavedHero: hydrateSavedHero
   };
 })();

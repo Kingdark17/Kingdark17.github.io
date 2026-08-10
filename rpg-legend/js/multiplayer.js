@@ -46,15 +46,48 @@ RPG.Multiplayer = (function(){
     if(data.pendingMonsterPos&&s.map[data.pendingMonsterPos.y])s.pendingMonsterCell=s.map[data.pendingMonsterPos.y][data.pendingMonsterPos.x];
     originalSave(s);renderRemote();session.applying=false;
   }
-  function beginCharacterCreation(guest){
+  // Reaproveita o personagem solo (save local/nuvem já verificado por
+  // connect()) em vez de forçar a criação de outro herói para jogar online.
+  function loadSoloSave(){
+    if(!RPG.Save||!RPG.Save.hasSave())return null;
+    var data=RPG.Save.load();
+    return (data&&data.hero)?data:null;
+  }
+  function resumeSoloForGuest(data){
+    var state=RPG.state;
+    state.hero=RPG.Player.hydrateSavedHero(data.hero);
+    state.inventory=(data.inventory||[]).slice();
+    state.inventory.forEach(RPG.Items.refreshIcon);
+    ['arma','secundaria','armadura','acessorio'].forEach(function(slot){
+      RPG.Items.refreshIcon(state.hero.equip[slot]);
+    });
+    state.party=data.party||[];
+    state.tutorial=data.tutorial||RPG.Tutorial.create(true);
+    state.quests=[];
+    state.floor=1;
+    state.mapMode='city';
+    state.cityMap=null;
+    state.cityStart=null;
+    finishGuestCreation(state);
+  }
+  function beginCharacterCreation(guest, prefix){
     session.guestCreating=guest;document.getElementById('multiplayerModal').classList.add('hidden');
+    prefix = prefix || '';
+    var solo=loadSoloSave();
+    if(solo){
+      message(prefix+'Personagem "'+solo.hero.name+'" carregado do seu progresso salvo.');
+      if(guest) resumeSoloForGuest(solo);
+      else RPG.UI.resumeSavedGame(solo);
+      return;
+    }
+    message(prefix+'Crie seu herói para entrar na sala.');
     RPG.UI.showScreen('creation');RPG.UI.renderCreationScreen();
   }
   function receive(msg){
     if(!msg||msg.room!==session.room)return;
-    if(msg.type==='created'){message('Sala criada: '+session.room+'. Crie seu herói e envie o código ao parceiro.');beginCharacterCreation(false);}
-    else if(msg.type==='hello'&&session.role===1){session.players=2;send({type:'welcome',state:snapshot(),profiles:session.profiles,turn:session.turn});status();message(msg.name+' entrou e está criando um personagem.');}
-    else if(msg.type==='welcome'&&session.role===2){session.players=2;session.turn=msg.turn||1;mergeProfiles(msg.profiles);session.pendingState=msg.state||null;status();message('Sala encontrada. Agora crie seu personagem.');beginCharacterCreation(true);}
+    if(msg.type==='created'){beginCharacterCreation(false, 'Sala criada: '+session.room+'. ');}
+    else if(msg.type==='hello'&&session.role===1){session.players=2;send({type:'welcome',state:snapshot(),profiles:session.profiles,turn:session.turn});status();message(msg.name+' entrou na sala.');}
+    else if(msg.type==='welcome'&&session.role===2){session.players=2;session.turn=msg.turn||1;mergeProfiles(msg.profiles);session.pendingState=msg.state||null;status();beginCharacterCreation(true, 'Sala encontrada. ');}
     else if(msg.type==='profile'&&msg.role!==session.role){session.profiles[msg.role]=msg.profile;session.players=2;renderProfiles();message(msg.profile.hero.name+' está pronto para jogar.');}
     else if(msg.type==='profile-accepted'&&msg.role===session.role){session.profiles[msg.role]=msg.profile;renderProfiles();}
     else if(msg.type==='authoritative'&&msg.role===session.role){session.turn=msg.turn||session.turn;applyState(msg.state);status();}

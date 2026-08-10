@@ -3,10 +3,10 @@ var RPG = window.RPG || {};
 RPG.Shop = (function(){
   var activeCell=null,activeKind='shop',discount=0,discountRolled=false,restockCount=0,selectedTrade=null,forgeOpen=false;
   var FORGE={
-    minerio:{name:'Minério Bruto',icon:'⛏️',cost:20,outcomes:[[-1,30],[0,40],[1,30]]},
-    essencia:{name:'Essência Arcana',icon:'✨',cost:50,outcomes:[[-1,15],[0,35],[1,40],[2,10]]},
-    catalisador_mitico:{name:'Catalisador Mítico',icon:'💠',cost:120,outcomes:[[-1,5],[0,20],[1,45],[2,25],[3,5]]},
-    pedra_protecao:{name:'Pedra de Proteção',icon:'🛡️',cost:80,outcomes:[[0,45],[1,45],[2,10]]}
+    minerio:{name:'Minério Bruto',icon:'<img src="img/materials/minerio.png?v=20260809c" class="weapon-icon-img" alt="Minério Bruto">',cost:20,outcomes:[[-1,30],[0,40],[1,30]]},
+    essencia:{name:'Essência Arcana',icon:'<img src="img/materials/essencia.png?v=20260809d" class="weapon-icon-img" alt="Essência Arcana">',cost:50,outcomes:[[-1,15],[0,35],[1,40],[2,10]]},
+    catalisador_mitico:{name:'Catalisador Mítico',icon:'<img src="img/materials/catalisador_mitico.png?v=20260809c" class="weapon-icon-img" alt="Catalisador Mítico">',cost:120,outcomes:[[-1,5],[0,20],[1,45],[2,25],[3,5]]},
+    pedra_protecao:{name:'Pedra de Proteção',icon:'<img src="img/materials/pedra_protecao.png?v=20260809c" class="weapon-icon-img" alt="Pedra de Proteção">',cost:80,outcomes:[[0,45],[1,45],[2,10]]}
   };
   function rollStock(kind,floor){var stock=[];for(var i=0;i<5;i++)stock.push(RPG.Items.randomItem({category:kind==='blacksmith'?['arma','armadura','acessorio'][Math.floor(Math.random()*3)]:'consumivel',floor:floor}));return stock;}
   function ensureStock(cell,kind,floor){if(!cell.forSale)cell.forSale=rollStock(kind,floor);}

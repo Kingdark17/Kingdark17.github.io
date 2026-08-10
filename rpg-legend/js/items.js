@@ -60,14 +60,23 @@ RPG.Items = (function(){
   function rnd(n){ return Math.floor(Math.random()*n); }
 
   function pickRarity(luckFloor){
-    // andares mais profundos empurram a sorte para raridades melhores
-    var bonus = Math.min(20, (luckFloor||0) * 1.2);
-    var pool = [];
-    RARITIES.forEach(function(r, idx){
-      var w = r.weight + (idx>=2 ? bonus/RARITIES.length : 0);
-      for(var i=0;i<Math.ceil(w);i++){ pool.push(r); }
+    // Nos primeiros andares, raro+ e bem mais dificil de cair -- a chance
+    // real so se aproxima do peso "cheio" da raridade perto do andar 12.
+    var floor = Math.max(1, luckFloor||1);
+    var depthFactor = Math.min(1, (floor-1)/12);
+    var bonus = depthFactor * 15;
+    var weights = RARITIES.map(function(r, idx){
+      if(idx<2) return r.weight; // comum/incomum nao mudam
+      var scaled = r.weight * (0.12 + 0.88*depthFactor);
+      return scaled + bonus/(RARITIES.length-2);
     });
-    return pool[rnd(pool.length)];
+    var total = weights.reduce(function(a,b){ return a+b; }, 0);
+    var roll = Math.random()*total, acc = 0;
+    for(var i=0;i<RARITIES.length;i++){
+      acc += weights[i];
+      if(roll < acc) return RARITIES[i];
+    }
+    return RARITIES[RARITIES.length-1];
   }
 
   function pickTemplate(category){

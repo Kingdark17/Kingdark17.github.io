@@ -74,8 +74,10 @@ RPG.UI = (function(){
   }
 
   function renderCreationScreen(){
-    creation = { name:"", race:null, cls:null, powers:[], debuff:null, attrs:null, mode:"solo" };
-    document.getElementById('nameInput').value = '';
+    var accountUser = (RPG.Account && RPG.Account.currentUser && RPG.Account.currentUser()) || null;
+    var defaultName = accountUser ? accountUser.username : '';
+    creation = { name:defaultName, race:null, cls:null, powers:[], debuff:null, attrs:null, mode:"solo" };
+    document.getElementById('nameInput').value = defaultName;
 
     var powersBtn = document.getElementById('rollPowersBtn');
     var debuffBtn = document.getElementById('rollDebuffBtn');
@@ -699,6 +701,78 @@ RPG.UI = (function(){
     });
   }
 
+  // Carrega um save (local/nuvem) em RPG.state e entra direto no jogo, no
+  // ponto exato onde o heroi parou. Usado pelo botao "Continuar" e para
+  // reaproveitar o personagem solo ao entrar no multiplayer.
+  function resumeSavedGame(data){
+    if(!data || !data.hero) return false;
+    var state = RPG.state;
+    state.hero = RPG.Player.hydrateSavedHero(data.hero);
+    state.party = data.party || [];
+    state.inventory = data.inventory || [];
+    state.inventory.forEach(RPG.Items.refreshIcon);
+    ['arma','secundaria','armadura','acessorio'].forEach(function(slot){
+      RPG.Items.refreshIcon(state.hero.equip[slot]);
+    });
+    state.quests = data.quests || [];
+    state.floor = data.floor || 1;
+    state.mapMode = data.mapMode || 'city';
+    state.mapRows = data.mapRows || 6;
+    state.mapCols = data.mapCols || 6;
+    state.soundOn = data.soundOn !== undefined ? data.soundOn : true;
+    state.musicVolume = data.musicVolume !== undefined ? data.musicVolume : 0.28;
+    state.tutorial = data.tutorial || RPG.Tutorial.create(false);
+    document.getElementById('soundToggle').checked = state.soundOn;
+    document.getElementById('musicVolume').value = Math.round(state.musicVolume*100);
+
+    showScreen('game');
+    document.getElementById('rollDie').textContent = '-';
+    document.getElementById('rollDie').className = 'roll-die';
+    document.getElementById('rollInfo').textContent = 'Escolha um dado para rolar.';
+    document.getElementById('logList').innerHTML = '';
+    renderHero();
+
+    // Saves novos preservam mapa, posição, baús, monstros, eventos e NPCs.
+    // Saves antigos continuam válidos e geram o local uma única vez.
+    if(Array.isArray(data.cityMap) && data.cityMap.length){
+      state.cityMap = data.cityMap;
+      state.cityStart = data.cityStart || null;
+    }
+    if(Array.isArray(data.map) && data.map.length && data.pos){
+      state.map=data.map;
+      state.pos=data.pos;
+      state.mode='move';
+      state.pendingTarget=null;
+      state.pendingMonsterCell=null;
+      if(state.mapMode==='dungeon') RPG.Dungeon.refreshPresentation(state);
+      else RPG.City.refreshPresentation(state);
+      // Saves de antes do cache de cidade nao tem cityMap salvo -- se o
+      // jogador estava na cidade nesse save, usa o mapa atual como cache.
+      if(state.mapMode==='city' && (!state.cityMap || !state.cityMap.length)){
+        state.cityMap = state.map;
+        if(!state.cityStart){
+          for(var cy=0;cy<state.map.length && !state.cityStart;cy++){
+            for(var cx=0;cx<state.map[cy].length;cx++){
+              if(state.map[cy][cx].type==='start'){ state.cityStart={x:cx,y:cy}; break; }
+            }
+          }
+        }
+      }
+    } else {
+      var startCell = (state.mapMode === 'dungeon') ? RPG.Dungeon.generate(state) : RPG.City.generate(state);
+      if(state.mapMode==='city'){ state.cityMap = state.map; state.cityStart = { x: startCell.x, y: startCell.y }; }
+      resetPlayerToStart(startCell);
+    }
+    document.getElementById('combatScene').classList.add('hidden');
+    document.getElementById('sceneText').classList.remove('hidden');
+    renderMap();
+    renderControls();
+    resetDialogue();
+    logEvent('Bem-vindo de volta, <b>'+state.hero.name+'</b>! Continuando de onde parou.');
+    RPG.Tutorial.render();
+    return true;
+  }
+
   /* ================= SCREEN SWITCHING ================= */
   function showScreen(name){
     RPG.state.screen = name;
@@ -728,6 +802,6 @@ RPG.UI = (function(){
     resetDialogue: resetDialogue, logEvent: logEvent,
     bindKeyboard: bindKeyboard, bindBackpack: bindBackpack, bindMerchantModal: bindMerchantModal,
     bindQuestModal: bindQuestModal, bindDialogueControls: bindDialogueControls,
-    showScreen: showScreen
+    showScreen: showScreen, resumeSavedGame: resumeSavedGame
   };
 })();
