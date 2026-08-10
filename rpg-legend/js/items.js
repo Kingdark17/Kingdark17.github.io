@@ -31,7 +31,7 @@ RPG.Items = (function(){
       proc:{ chance:0.10, effect:'cura_no_acerto', label:'Toque Curativo', icon:'\u2728' } },
     { id:'marreta', name:'Marreta de Guerra', icon:'<img src="img/weapons/marreta.png?v=20260809c" class="weapon-icon-img" alt="Marreta">', category:'arma', desc:'Um golpe pesado o suficiente para rachar armaduras.', base:{ataque:7, velocidade:-2}, value:27,
       proc:{ chance:0.12, effect:'atordoar', label:'Atordoar', icon:'\ud83d\udcab' } },
-    { id:'violao', name:'Viol\u00e3o Encantado', icon:'\ud83c\udfb8', category:'arma', desc:'Acordes que vibram no ar e atordoam quem ousar se aproximar.', base:{ataque:3, critico:6, esquiva:2}, value:23,
+    { id:'violao', name:'Viol\u00e3o Encantado', icon:'<img src="img/weapons/violao.png?v=20260809a" class="weapon-icon-img" alt="Viol\u00e3o Encantado">', category:'arma', desc:'Acordes que vibram no ar e atordoam quem ousar se aproximar.', base:{ataque:3, critico:6, esquiva:2}, value:23,
       proc:{ chance:0.15, effect:'atordoar', label:'Atordoar', icon:'\ud83d\udcab' } },
 
     { id:'escudo', name:'Escudo de Carvalho', icon:'<img src="img/armor/escudo.png?v=20260809c" class="weapon-icon-img" alt="Escudo">', category:'armadura', desc:'Pesado, mas confiável contra golpes diretos.', base:{defesa:5, velocidade:-1}, value:24 },
