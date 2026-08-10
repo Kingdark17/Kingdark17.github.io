@@ -398,7 +398,12 @@ RPG.UI = (function(){
 
   function updateSceneText(){
     var el = document.getElementById('sceneText');
-    if(el && RPG.state.hero && RPG.state.map && RPG.state.map.length){
+    // So a descricao generica da sala faz sentido no modo "move" -- em
+    // 'confirm'/'encounter'/'event' o texto da cena mostra um prompt ou
+    // escolhas customizadas (ex: botoes de evento) que nao podem ser
+    // sobrescritas por um re-render do mapa (comum em sincronias de
+    // multiplayer), senao o jogador perde a interacao no meio.
+    if(el && RPG.state.hero && RPG.state.map && RPG.state.map.length && RPG.state.mode==='move'){
       el.innerHTML = RPG.Narrator.describeCurrent(RPG.state);
     }
   }
