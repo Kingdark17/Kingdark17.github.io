@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="img/branding/favicon.png?v=20260809a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20260810g">
+<link rel="stylesheet" href="css/style.css?v=20260810h">
 <link rel="stylesheet" href="css/animations.css?v=20260802c">
 <style>
   #accountAvatar{border-radius:50%;object-fit:cover;background:#111;border:3px solid #8b6f3d;vertical-align:middle;margin-right:8px}
@@ -30,6 +30,11 @@
   #profilePetWidget{position:fixed;right:18px;bottom:18px;width:68px;height:68px;border-radius:50%;z-index:90;font-size:34px;border:2px solid #c99b3d;background:#171923;box-shadow:0 0 16px #000;cursor:pointer}
   #profilePetWidget .pet-heart{position:absolute;left:25px;top:10px;font-size:18px;pointer-events:none;transition:transform .8s ease-out,opacity .8s ease-out}
   #profilePetWidget .pet-icon-img{width:56px;height:56px;object-fit:contain;image-rendering:pixelated;pointer-events:none}
+  @media(max-width:640px){
+    #profilePetWidget{width:44px;height:44px;right:8px;bottom:8px;font-size:22px;opacity:.6;transition:opacity .2s}
+    #profilePetWidget:active,#profilePetWidget.pet-active{opacity:1}
+    #profilePetWidget .pet-icon-img{width:36px;height:36px}
+  }
   #menuScreen.main-menu-layout{position:fixed;inset:0;z-index:50;width:100vw;height:100vh;max-width:none;min-height:100vh;margin:0;padding:34px 34px 34px 190px;overflow:auto;border:0;border-radius:0;box-sizing:border-box;background:radial-gradient(circle at 64% 42%,rgba(37,48,70,.72),transparent 38%),linear-gradient(135deg,#0c0f16,#151b27 58%,#0d1119)}
   .main-menu-sidebar{position:absolute;inset:0 auto 0 0;width:154px;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d1018,#111620);border-right:1px solid rgba(209,164,75,.35);box-shadow:12px 0 34px rgba(0,0,0,.28);z-index:2}
   .main-menu-sidebar::after{content:"";position:absolute;right:-2px;top:0;width:2px;height:100%;background:linear-gradient(transparent,#b99245 12% 88%,transparent);opacity:.75}
@@ -528,7 +533,7 @@
 <script src="js/tutorial.js?v=20260802d"></script>
 <script src="js/ui.js?v=20260810d"></script>
 <script src="js/multiplayer-config.js?v=20260802c"></script>
-<script src="js/pets.js?v=20260809a"></script>
+<script src="js/pets.js?v=20260810a"></script>
 <script src="js/account.js?v=20260804g"></script>
 <script src="js/admin-panel.js?v=20260804a"></script>
 <script src="js/multiplayer.js?v=20260810c"></script>
