@@ -460,10 +460,10 @@ button.rune-btn.ghost{ background: rgba(0,0,0,0.2); border-color: var(--line); c
 .rarity-lendario{ color: var(--r-lendario); border-left-color: var(--r-lendario) !important; }
 
 /* ---------- social: amigos e chat (estilo Messenger de PC) ---------- */
-.social-launcher{ position:fixed; right:16px; bottom:16px; z-index:82; width:48px; height:48px; border-radius:50%; border:1px solid var(--gold); background:linear-gradient(180deg,var(--panel),var(--panel-2)); color:var(--gold-bright); font-size:20px; cursor:pointer; box-shadow:0 4px 18px rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; }
+.social-launcher{ position:fixed; right:16px; bottom:16px; z-index:95; width:48px; height:48px; border-radius:50%; border:1px solid var(--gold); background:linear-gradient(180deg,var(--panel),var(--panel-2)); color:var(--gold-bright); font-size:20px; cursor:pointer; box-shadow:0 4px 18px rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; }
 .social-launcher:hover{ border-color:var(--gold-bright); }
 .social-badge{ position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px; border-radius:9px; background:var(--blood); color:#fff; font-family:var(--font-mono); font-size:10px; display:flex; align-items:center; justify-content:center; }
-.social-panel{ position:fixed; right:16px; bottom:72px; z-index:82; width:300px; max-height:70vh; display:flex; flex-direction:column; background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid var(--gold); border-radius:8px; box-shadow:0 8px 26px rgba(0,0,0,.55); padding:14px; }
+.social-panel{ position:fixed; right:16px; bottom:72px; z-index:95; width:300px; max-height:70vh; display:flex; flex-direction:column; background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid var(--gold); border-radius:8px; box-shadow:0 8px 26px rgba(0,0,0,.55); padding:14px; }
 .social-panel-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
 .social-panel-header h3{ margin:0; font-family:var(--font-display); font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold); }
 .social-add-row{ display:flex; gap:6px; }
@@ -481,7 +481,7 @@ button.rune-btn.ghost{ background: rgba(0,0,0,0.2); border-color: var(--line); c
 .social-friend-actions{ display:flex; gap:4px; flex-shrink:0; }
 .social-friend-actions .rune-btn{ padding:4px 7px; font-size:10px; }
 
-.social-chats{ position:fixed; right:76px; bottom:0; z-index:81; display:flex; flex-direction:row-reverse; gap:10px; align-items:flex-end; pointer-events:none; }
+.social-chats{ position:fixed; right:76px; bottom:0; z-index:94; display:flex; flex-direction:row-reverse; gap:10px; align-items:flex-end; pointer-events:none; }
 .chat-window{ pointer-events:auto; width:270px; height:340px; display:flex; flex-direction:column; background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid var(--gold); border-bottom:none; border-radius:8px 8px 0 0; box-shadow:0 -4px 18px rgba(0,0,0,.5); overflow:hidden; }
 .chat-window-header{ display:flex; align-items:center; gap:7px; padding:9px 10px; border-bottom:1px solid var(--line); background:rgba(0,0,0,0.2); }
 .chat-window-name{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:var(--font-display); font-size:12px; color:var(--gold-bright); }
