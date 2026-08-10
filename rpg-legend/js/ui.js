@@ -46,14 +46,45 @@ RPG.UI = (function(){
     if(!creation.powers.length)el.innerHTML+='<div class="roulette-result-placeholder">Gire a roleta para descobrir seus dois poderes adicionais.</div>';
   }
   function renderDebuffResult(){var el=document.getElementById('debuffGrid');el.innerHTML=creation.debuff?rouletteCard(creation.debuff,'fraqueza sorteada'):'<div class="roulette-result-placeholder">Gire a roleta para descobrir sua fraqueza.</div>';}
+  function renderAttrsResult(){
+    var el = document.getElementById('creationAttrGrid');
+    el.innerHTML = '';
+    if(!creation.attrs){ el.innerHTML = '<div class="roulette-result-placeholder">Gire para sortear suas características.</div>'; return; }
+    RPG.Player.ATTR_KEYS.forEach(function(k){
+      var cell = document.createElement('div');
+      cell.className = 'attr-cell';
+      cell.innerHTML = '<div class="k">'+RPG.Player.ATTR_LABELS[k]+'</div><div class="v">'+creation.attrs[k]+'</div>';
+      el.appendChild(cell);
+    });
+  }
+  // marca um botao de roleta como usado -- so pode ser girado uma vez por criacao
+  function lockRouletteButton(button,label){
+    button.disabled = true;
+    button.classList.add('roulette-used');
+    button.textContent = label;
+  }
+  function unlockRouletteButton(button,label){
+    button.disabled = false;
+    button.classList.remove('roulette-used');
+    button.textContent = label;
+  }
   function animateRoulette(button,pool,onDone){
     button.classList.add('rolling');button.disabled=true;var original=button.textContent,count=0;
-    var timer=setInterval(function(){var item=pick(pool);button.textContent=item.icon+' '+item.name;if(++count>=12){clearInterval(timer);button.classList.remove('rolling');button.disabled=false;button.textContent=original;onDone();clearError();}},70);
+    var timer=setInterval(function(){var item=pick(pool);button.textContent=item.icon+' '+item.name;if(++count>=12){clearInterval(timer);button.classList.remove('rolling');button.textContent=original;onDone();clearError();}},70);
   }
 
   function renderCreationScreen(){
-    creation = { name:"", race:null, cls:null, powers:[], debuff:null, mode:"solo" };
-    document.getElementById('nameInput').value = '';
+    var accountUser = (RPG.Account && RPG.Account.currentUser && RPG.Account.currentUser()) || null;
+    var defaultName = accountUser ? accountUser.username : '';
+    creation = { name:defaultName, race:null, cls:null, powers:[], debuff:null, attrs:null, mode:"solo" };
+    document.getElementById('nameInput').value = defaultName;
+
+    var powersBtn = document.getElementById('rollPowersBtn');
+    var debuffBtn = document.getElementById('rollDebuffBtn');
+    var attrsBtn = document.getElementById('rollAttrsBtn');
+    unlockRouletteButton(powersBtn, '🎲 Girar Poderes');
+    unlockRouletteButton(debuffBtn, '🎲 Girar Fraqueza');
+    unlockRouletteButton(attrsBtn, '🎲 Rolar Características');
 
     buildPickGrid('raceGrid', RPG.Player.RACES, function(it, card){
       creation.race = it;
@@ -68,8 +99,51 @@ RPG.UI = (function(){
     });
     renderPowerGrid();
     renderDebuffResult();
-    document.getElementById('rollPowersBtn').onclick=function(){if(!creation.cls){showError('Escolha uma classe antes de girar os poderes.');return;}var pool=RPG.Player.POWERS.filter(function(power){return power.name!==creation.cls.signature;});animateRoulette(this,pool,function(){var shuffled=pool.slice().sort(function(){return Math.random()-.5;});creation.powers=shuffled.slice(0,2);renderPowerGrid();});};
-    document.getElementById('rollDebuffBtn').onclick=function(){var pool=RPG.Player.DEBUFFS;animateRoulette(this,pool,function(){creation.debuff=pick(pool);renderDebuffResult();});};
+    renderAttrsResult();
+    powersBtn.onclick=function(){
+      if(creation.powersRolled) return;
+      if(!creation.cls){showError('Escolha uma classe antes de girar os poderes.');return;}
+      var btn=this;
+      var pool=RPG.Player.POWERS.filter(function(power){return power.name!==creation.cls.signature;});
+      animateRoulette(btn,pool,function(){
+        var shuffled=pool.slice().sort(function(){return Math.random()-.5;});
+        creation.powers=shuffled.slice(0,2);
+        creation.powersRolled=true;
+        renderPowerGrid();
+        lockRouletteButton(btn,'🎲 Poderes Sorteados');
+      });
+    };
+    debuffBtn.onclick=function(){
+      if(creation.debuffRolled) return;
+      var btn=this;
+      var pool=RPG.Player.DEBUFFS;
+      animateRoulette(btn,pool,function(){
+        creation.debuff=pick(pool);
+        creation.debuffRolled=true;
+        renderDebuffResult();
+        lockRouletteButton(btn,'🎲 Fraqueza Sorteada');
+      });
+    };
+    attrsBtn.onclick=function(){
+      if(creation.attrsRolled) return;
+      if(!creation.race){showError('Escolha uma raça antes de rolar as características.');return;}
+      if(!creation.cls){showError('Escolha uma classe antes de rolar as características.');return;}
+      if(!creation.debuff){showError('Gire a roleta de fraqueza antes de rolar as características.');return;}
+      var btn=this,original=btn.textContent,count=0;
+      btn.classList.add('rolling');btn.disabled=true;
+      var timer=setInterval(function(){
+        count++;
+        if(count>=8){
+          clearInterval(timer);
+          btn.classList.remove('rolling');btn.textContent=original;
+          creation.attrs=RPG.Player.rollAttrs(creation.race,creation.cls,creation.debuff);
+          creation.attrsRolled=true;
+          renderAttrsResult();
+          lockRouletteButton(btn,'🎲 Características Sorteadas');
+          clearError();
+        }
+      },70);
+    };
 
     document.getElementById('nameInput').oninput = function(e){ creation.name = e.target.value; clearError(); };
   }
@@ -84,6 +158,7 @@ RPG.UI = (function(){
     if(!creation.cls){ showError('Escolha uma classe.'); return false; }
     if(creation.powers.length!==2){ showError('Gire a roleta para receber dois poderes adicionais.'); return false; }
     if(!creation.debuff){ showError('Escolha uma fraqueza.'); return false; }
+    if(!creation.attrs){ showError('Gire a roleta para sortear suas características.'); return false; }
     creation.name = name;
     return true;
   }
@@ -98,6 +173,8 @@ RPG.UI = (function(){
     state.party = [];
     state.floor = 1;
     state.quests = [];
+    state.cityMap = null;
+    state.cityStart = null;
     RPG.Quests.ensureBoard(state);
 
     // No multiplayer, o convidado cria apenas o próprio herói. O mapa da
@@ -119,13 +196,18 @@ RPG.UI = (function(){
     logEvent('<b>'+state.hero.name+'</b> ('+state.hero.race+' '+state.hero.className+') chega a cidade inicial'+(state.party.length? ' acompanhado de sua equipe.':'.'));
     RPG.Save.save(state);
     RPG.Tutorial.start();
+    if(RPG.Multiplayer && RPG.Multiplayer.showHostLobby) RPG.Multiplayer.showHostLobby();
   }
 
   /* ================= HERO PANEL ================= */
   function renderHero(){
     var h = RPG.state.hero;
     if(!h) return;
-    document.getElementById('heroAvatar').innerHTML = h.raceIcon;
+    var heroAvatarEl = document.getElementById('heroAvatar');
+    var accountUser = RPG.Account && RPG.Account.currentUser ? RPG.Account.currentUser() : null;
+    heroAvatarEl.innerHTML = (accountUser && accountUser.avatarUrl)
+      ? '<img src="'+accountUser.avatarUrl+'" alt="Foto de perfil" class="hero-avatar-img">'
+      : h.raceIcon;
     document.getElementById('heroName').textContent = h.name;
     document.getElementById('heroClass').textContent = h.race + ' \u00b7 ' + h.className;
     document.getElementById('heroLevel').textContent = 'Nível ' + h.level;
@@ -193,6 +275,13 @@ RPG.UI = (function(){
 
     var pl = document.getElementById('powersList');
     pl.innerHTML = '';
+    var passive = RPG.Player.classPassive(h.className);
+    if(passive){
+      var pd = document.createElement('div');
+      pd.className = 'trait-line passive';
+      pd.innerHTML = '<span class="icon">🌟</span><div class="txt"><b>'+passive.name+' <small>(passiva)</small></b><span>'+passive.desc+'</span></div>';
+      pl.appendChild(pd);
+    }
     h.powers.forEach(function(p){
       var d = document.createElement('div');
       d.className = 'trait-line';
@@ -253,26 +342,54 @@ RPG.UI = (function(){
 
   function iconFor(cell){ return currentModule().iconFor(cell); }
 
+  // Instinto de Caça: o Caçador enxerga criaturas em salas vizinhas ainda
+  // nao visitadas, mesmo sem abrir a porta.
+  function isHunterTrackedCell(cell, state){
+    var hero = state.hero;
+    if(!hero || (hero.className!=='Caçador' && hero.className!=='Cacador')) return false;
+    return Math.abs(cell.x-state.pos.x) + Math.abs(cell.y-state.pos.y) === 1;
+  }
+  function trackedMonsterIcon(cell){
+    if((cell.type==='monster'||cell.type==='boss') && !cell.beaten && cell.monsters && cell.monsters.length){
+      return cell.monsters[0].icon;
+    }
+    return '';
+  }
   function renderMap(){
     var state = RPG.state;
     var el = document.getElementById('mapGrid');
+    if(!state.map || !state.map.length || !state.pos){
+      el.innerHTML = '';
+      return;
+    }
     el.style.gridTemplateColumns = 'repeat(' + state.mapCols + ', 1fr)';
     el.innerHTML = '';
     state.map.forEach(function(row){
       row.forEach(function(cell){
         var div = document.createElement('div');
-        var isPlayer = (cell.x===state.pos.x && cell.y===state.pos.y);
-        if(cell.type === 'void'){
-          div.className = 'tile void';
-        } else if(!RPG.MapUtil.isKnown(state.map, cell, state.mapCols, state.mapRows) && !isPlayer){
+        // Uma celula com dado inesperado (ex: sincronia de multiplayer em
+        // transito) nao pode derrubar o mapa inteiro -- pula so essa celula.
+        try{
+          var isPlayer = (cell.x===state.pos.x && cell.y===state.pos.y);
+          if(cell.type === 'void'){
+            div.className = 'tile void';
+          } else if(!RPG.MapUtil.isKnown(state.map, cell, state.mapCols, state.mapRows) && !isPlayer){
+            div.className = 'tile fog';
+          } else if(cell.visited || cell.revealed || isPlayer){
+            div.className = 'tile room-known ' + cell.type + ((cell.collected||cell.beaten) ? ' collected' : '');
+            div.textContent = iconFor(cell);
+          } else {
+            div.className = 'tile room-dim';
+            if(isHunterTrackedCell(cell, state)){
+              div.classList.add('tracked-enemy');
+              div.textContent = trackedMonsterIcon(cell);
+            }
+          }
+          if(isPlayer){ div.classList.add('player-tile'); }
+        }catch(err){
           div.className = 'tile fog';
-        } else if(cell.visited || cell.revealed || isPlayer){
-          div.className = 'tile room-known ' + cell.type + ((cell.collected||cell.beaten) ? ' collected' : '');
-          div.textContent = iconFor(cell);
-        } else {
-          div.className = 'tile room-dim';
+          console.error('[RPG] falha ao renderizar celula do mapa', cell, err);
         }
-        if(isPlayer){ div.classList.add('player-tile'); }
         el.appendChild(div);
       });
     });
@@ -315,10 +432,22 @@ RPG.UI = (function(){
     RPG.Save.save(state);
     RPG.Tutorial.event('dungeon');
   }
-  function enterCity(){
+  // A cidade inicial e gerada uma unica vez por personagem e reaproveitada
+  // sempre que o jogador volta da masmorra (nao "redesenha" a cada ida e
+  // volta). Passe force=true para gerar uma cidade nova (ex: botao de ADM).
+  function enterCity(force){
     var state = RPG.state;
     state.mapMode = 'city';
-    var startCell = RPG.City.generate(state);
+    var startCell;
+    if(!force && state.cityMap && state.cityMap.length){
+      state.map = state.cityMap;
+      RPG.City.refreshPresentation();
+      startCell = state.map[state.cityStart.y][state.cityStart.x];
+    } else {
+      startCell = RPG.City.generate(state);
+      state.cityMap = state.map;
+      state.cityStart = { x: startCell.x, y: startCell.y };
+    }
     resetPlayerToStart(startCell);
     document.getElementById('combatScene').classList.add('hidden');
     document.getElementById('sceneText').classList.remove('hidden');
@@ -334,7 +463,7 @@ RPG.UI = (function(){
     if(regenBtn){
       regenBtn.addEventListener('click', function(){
         var state = RPG.state;
-        if(state.mapMode === 'city'){ enterCity(); logEvent('A cidade foi redesenhada e você reaparece no início.'); }
+        if(state.mapMode === 'city'){ enterCity(true); logEvent('A cidade foi redesenhada e você reaparece no início.'); }
         else { var startCell = RPG.Dungeon.generate(state); resetPlayerToStart(startCell); renderMap(); renderControls(); logEvent('Este andar foi redesenhado.'); }
         resetDialogue();
       });
@@ -584,6 +713,82 @@ RPG.UI = (function(){
     });
   }
 
+  // Carrega um save (local/nuvem) em RPG.state e entra direto no jogo, no
+  // ponto exato onde o heroi parou. Usado pelo botao "Continuar" e para
+  // reaproveitar o personagem solo ao entrar no multiplayer.
+  function resumeSavedGame(data, opts){
+    if(!data || !data.hero) return false;
+    var forceCity = !!(opts && opts.forceCity);
+    var state = RPG.state;
+    state.hero = RPG.Player.hydrateSavedHero(data.hero);
+    state.party = data.party || [];
+    state.inventory = data.inventory || [];
+    state.inventory.forEach(RPG.Items.refreshIcon);
+    ['arma','secundaria','armadura','acessorio'].forEach(function(slot){
+      RPG.Items.refreshIcon(state.hero.equip[slot]);
+    });
+    state.quests = forceCity ? [] : (data.quests || []);
+    state.floor = forceCity ? 1 : (data.floor || 1);
+    state.mapMode = forceCity ? 'city' : (data.mapMode || 'city');
+    state.mapRows = data.mapRows || 6;
+    state.mapCols = data.mapCols || 6;
+    state.soundOn = data.soundOn !== undefined ? data.soundOn : true;
+    state.musicVolume = data.musicVolume !== undefined ? data.musicVolume : 0.28;
+    state.tutorial = data.tutorial || RPG.Tutorial.create(false);
+    document.getElementById('soundToggle').checked = state.soundOn;
+    document.getElementById('musicVolume').value = Math.round(state.musicVolume*100);
+
+    showScreen('game');
+    document.getElementById('rollDie').textContent = '-';
+    document.getElementById('rollDie').className = 'roll-die';
+    document.getElementById('rollInfo').textContent = 'Escolha um dado para rolar.';
+    document.getElementById('logList').innerHTML = '';
+    renderHero();
+
+    // Saves novos preservam mapa, posição, baús, monstros, eventos e NPCs.
+    // Saves antigos continuam válidos e geram o local uma única vez.
+    if(!forceCity && Array.isArray(data.cityMap) && data.cityMap.length){
+      state.cityMap = data.cityMap;
+      state.cityStart = data.cityStart || null;
+    } else if(forceCity){
+      state.cityMap = null;
+      state.cityStart = null;
+    }
+    if(!forceCity && Array.isArray(data.map) && data.map.length && data.pos){
+      state.map=data.map;
+      state.pos=data.pos;
+      state.mode='move';
+      state.pendingTarget=null;
+      state.pendingMonsterCell=null;
+      if(state.mapMode==='dungeon') RPG.Dungeon.refreshPresentation(state);
+      else RPG.City.refreshPresentation(state);
+      // Saves de antes do cache de cidade nao tem cityMap salvo -- se o
+      // jogador estava na cidade nesse save, usa o mapa atual como cache.
+      if(state.mapMode==='city' && (!state.cityMap || !state.cityMap.length)){
+        state.cityMap = state.map;
+        if(!state.cityStart){
+          for(var cy=0;cy<state.map.length && !state.cityStart;cy++){
+            for(var cx=0;cx<state.map[cy].length;cx++){
+              if(state.map[cy][cx].type==='start'){ state.cityStart={x:cx,y:cy}; break; }
+            }
+          }
+        }
+      }
+    } else {
+      var startCell = (state.mapMode === 'dungeon') ? RPG.Dungeon.generate(state) : RPG.City.generate(state);
+      if(state.mapMode==='city'){ state.cityMap = state.map; state.cityStart = { x: startCell.x, y: startCell.y }; }
+      resetPlayerToStart(startCell);
+    }
+    document.getElementById('combatScene').classList.add('hidden');
+    document.getElementById('sceneText').classList.remove('hidden');
+    renderMap();
+    renderControls();
+    resetDialogue();
+    logEvent(forceCity ? ('<b>'+state.hero.name+'</b> chega à cidade inicial para a aventura online.') : ('Bem-vindo de volta, <b>'+state.hero.name+'</b>! Continuando de onde parou.'));
+    RPG.Tutorial.render();
+    return true;
+  }
+
   /* ================= SCREEN SWITCHING ================= */
   function showScreen(name){
     RPG.state.screen = name;
@@ -597,6 +802,7 @@ RPG.UI = (function(){
     document.getElementById('gameSettingsBtn').classList.toggle('hidden', name!=='game');
     document.getElementById('gameMainMenuBtn').classList.toggle('hidden', name!=='game');
     if(RPG.AdminPanel) RPG.AdminPanel.refreshButton();
+    if(RPG.Social) RPG.Social.refreshLauncher();
     document.getElementById('headerSub').textContent =
       name==='game' ? 'mesa de rpg \u00b7 dados \u00b7 cidade \u00b7 masmorra' :
       name==='creation' ? 'criação de personagem' : 'menu principal';
@@ -613,6 +819,6 @@ RPG.UI = (function(){
     resetDialogue: resetDialogue, logEvent: logEvent,
     bindKeyboard: bindKeyboard, bindBackpack: bindBackpack, bindMerchantModal: bindMerchantModal,
     bindQuestModal: bindQuestModal, bindDialogueControls: bindDialogueControls,
-    showScreen: showScreen
+    showScreen: showScreen, resumeSavedGame: resumeSavedGame
   };
 })();

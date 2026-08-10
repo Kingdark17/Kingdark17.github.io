@@ -23,26 +23,62 @@ RPG.City = (function(){
       "Cada andar que você descer será mais perigoso que o anterior. Vá com cuidado."] }
   ];
 
-  function pickNpc(){
-    var source=NPC_TEMPLATES[Math.floor(Math.random()*NPC_TEMPLATES.length)];
+  function pickNpc(index){
+    var source=NPC_TEMPLATES[index % NPC_TEMPLATES.length];
     return { name:source.name, role:source.role, service:source.service, icon:source.icon, lines:source.lines.slice(), serviceUsed:false };
+  }
+
+  // Layout fixo da cidade (mesmo mapa para todos os jogadores, sempre).
+  // Coordenadas relativas ao centro da grade 6x6 (start em 3,3).
+  var LAYOUT = [
+    { x:3, y:3, type:'start' },
+    { x:3, y:2, type:'normal' },
+    { x:3, y:1, type:'gate' },
+    { x:2, y:3, type:'shop' },
+    { x:1, y:3, type:'blacksmith' },
+    { x:4, y:3, type:'tavern' },
+    { x:5, y:3, type:'questboard' },
+    { x:3, y:4, type:'npc', npcIndex:0 },
+    { x:3, y:5, type:'npc', npcIndex:1 },
+    { x:2, y:2, type:'normal' },
+    { x:4, y:2, type:'normal' }
+  ];
+  var LAYOUT_DOORS = [
+    [3,3,'N'], [3,2,'N'], [3,3,'W'], [2,3,'W'],
+    [3,3,'E'], [4,3,'E'], [3,3,'S'], [3,4,'S'],
+    [3,2,'W'], [3,2,'E']
+  ];
+
+  function buildFixedGraph(rows, cols){
+    var grid = [];
+    for(var y=0;y<rows;y++){
+      var row = [];
+      for(var x=0;x<cols;x++){ row.push({ type:'void', x:x, y:y, doors:{} }); }
+      grid.push(row);
+    }
+    var DIR_VECTORS = { N:{x:0,y:-1}, S:{x:0,y:1}, W:{x:-1,y:0}, E:{x:1,y:0} };
+    var DIR_OPP = { N:'S', S:'N', E:'W', W:'E' };
+    LAYOUT.forEach(function(spec){
+      var cell = grid[spec.y][spec.x];
+      cell.type = spec.type;
+      if(spec.type === 'npc'){ cell.npc = pickNpc(spec.npcIndex); }
+    });
+    LAYOUT_DOORS.forEach(function(entry){
+      var x=entry[0], y=entry[1], dir=entry[2];
+      var v = DIR_VECTORS[dir];
+      var cell = grid[y][x];
+      var target = grid[y+v.y][x+v.x];
+      cell.doors[dir] = true;
+      target.doors[DIR_OPP[dir]] = true;
+    });
+    var rooms = LAYOUT.map(function(spec){ return grid[spec.y][spec.x]; });
+    var start = grid[3][3];
+    return { grid: grid, rooms: rooms, start: start };
   }
 
   function generate(state){
     var rows = state.mapRows, cols = state.mapCols;
-    var res = RPG.MapUtil.generateRoomGraph(rows, cols, 11);
-    var pool = res.rooms.slice(1).sort(function(){ return Math.random()-0.5; });
-    function place(type, count){ for(var i=0;i<count && pool.length;i++){ pool.pop().type = type; } }
-    place('npc', 2);
-    place('shop', 1);
-    place('blacksmith', 1);
-    place('tavern', 1);
-    place('questboard', 1);
-    if(pool.length){ pool.pop().type = 'gate'; }
-
-    res.rooms.forEach(function(cell){
-      if(cell.type === 'npc'){ cell.npc = pickNpc(); }
-    });
+    var res = buildFixedGraph(rows, cols);
 
     state.map = res.grid;
     state.mapMode = 'city';

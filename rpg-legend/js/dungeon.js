@@ -121,8 +121,8 @@ RPG.Dungeon = (function(){
       cell.monsterIndex = 0;
       cell.beaten = false;
       // sala com mais de um inimigo tem chance de esconder uma recompensa extra
-      if(groupSize > 1 && Math.random() < 0.5){
-        cell.bonusTreasure = Math.random() < 0.5
+      if(groupSize > 1 && Math.random() < 0.35){
+        cell.bonusTreasure = Math.random() < 0.7
           ? { gold: 10 + floor*3 + rnd(15) }
           : { item: RPG.Items.randomItem({ floor: floor }) };
       }
@@ -147,7 +147,7 @@ RPG.Dungeon = (function(){
       if(cell.type === 'event'){ cell.event = RPG.Events.random(); cell.resolved = false; }
       if(cell.type === 'treasure'){
         cell.isMimic=Math.random()<Math.min(.25,.1+floor*.008);
-        cell.giveGold = Math.random() < 0.5;
+        cell.giveGold = Math.random() < 0.7;
         cell.item = cell.giveGold ? null : RPG.Items.randomItem({ floor: floor });
         cell.collected = false;
       }
@@ -173,7 +173,7 @@ RPG.Dungeon = (function(){
   function iconFor(cell){
     if(cell.type==='npc') return '\ud83e\uddd9';
     if(cell.type==='treasure') return cell.collected ? '' : '\ud83e\uddf0';
-    if(cell.type==='monster') return cell.beaten ? '' : (cell.monsters[0].icon);
+    if(cell.type==='monster') return (cell.beaten || !cell.monsters || !cell.monsters.length) ? '' : cell.monsters[cell.monsterIndex||0].icon;
     if(cell.type==='boss') return cell.beaten ? '' : '\ud83d\udc51';
     if(cell.type==='event') return cell.resolved ? '' : '\u2753';
     if(cell.type==='stairs') return '\u2b07\ufe0f';

@@ -172,12 +172,48 @@ RPG.Combat = (function(){
     return false;
   }
 
-  function modifyDamageByAffinity(monster, dmg, type){
+  function modifyDamageByAffinity(monster, dmg, type, halfResist){
     if(monster.weakness===type) dmg = Math.round(dmg*1.25);
-    if(monster.resistance===type) dmg = Math.round(dmg*0.8);
+    if(monster.resistance===type) dmg = Math.round(dmg*(halfResist?0.9:0.8));
     if(monster.status && monster.status.vulneravel && monster.status.vulneravel.turns>0){dmg=Math.round(dmg*(1+(monster.status.vulneravel.amount||0.2)));monster.status.vulneravel.turns--;if(monster.status.vulneravel.turns<=0)delete monster.status.vulneravel;}
     if(monster.guardHits>0){dmg=Math.max(1,Math.round(dmg*.65));monster.guardHits--;RPG.UI.logEvent(monster.classPower+' reduz o dano recebido.');}
     return Math.max(1,dmg);
+  }
+
+  // Passivas de classe do heroi -- espelham as habilidades ja usadas pelos
+  // companheiros em applyPartyTurn, agora tambem para o proprio heroi.
+  function applyHeroClassPassive(hero, monster, dmg){
+    var cls = hero.className;
+    monster.status = monster.status || {};
+    if(cls==='Ladino' && Math.random()<0.25){
+      var extra = Math.max(1, Math.round(dmg*0.5));
+      monster.hp -= extra;
+      RPG.Effects.floatText(document.getElementById('combatScene'), 'Furtivo -'+extra, 'dmg');
+      RPG.UI.logEvent('<b>Ataque Furtivo</b> ativado: mais '+extra+' de dano.');
+    } else if(cls==='Necromante' && Math.random()<0.3){
+      monster.status.enfraquecido = { turns:2, amount:.2 };
+      RPG.UI.logEvent('<b>Toque Sombrio</b> enfraquece o inimigo.');
+    } else if(cls==='Druida' && Math.random()<0.3){
+      monster.status.veneno = { turns:3, dmg:Math.max(2, Math.round(dmg*.2)) };
+      RPG.UI.logEvent('<b>Picada Natural</b> envenena o inimigo.');
+    } else if(cls==='Monge' && Math.random()<0.22){
+      monster.status.atordoado = (monster.status.atordoado||0) + 1;
+      RPG.UI.logEvent('<b>Disciplina</b> atordoa o inimigo.');
+    } else if(cls==='Bardo' && Math.random()<0.3){
+      monster.status.vulneravel = { turns:2, amount:.15 };
+      RPG.UI.logEvent('<b>Dissonância</b> deixa o inimigo vulnerável.');
+    } else if((cls==='Caçador'||cls==='Cacador') && Math.random()<0.3){
+      monster.status.sangramento = { turns:3, dmg:Math.max(2, Math.round(dmg*.2)) };
+      RPG.UI.logEvent('<b>Instinto de Caça</b> causa sangramento.');
+    } else if(cls==='Paladino' && Math.random()<0.25){
+      var paladinHeal = Math.max(3, Math.round(dmg*.2));
+      hero.hp = Math.min(hero.maxHp, hero.hp+paladinHeal);
+      RPG.UI.logEvent('<b>Graça Divina</b> restaura '+paladinHeal+' de Vida.');
+    } else if(cls==='Clérigo' && Math.random()<0.2){
+      var clerigoHeal = Math.max(2, Math.round(dmg*.15));
+      hero.hp = Math.min(hero.maxHp, hero.hp+clerigoHeal);
+      RPG.UI.logEvent('<b>Prece Silenciosa</b> restaura '+clerigoHeal+' de Vida.');
+    }
   }
 
   function triggerEnemyClassPower(monster,hero){
@@ -315,6 +351,10 @@ RPG.Combat = (function(){
       dmg = Math.max(1, Math.round(dmg*1.25));
     }
     if(RPG.Player.hasDebuffEffect(hero, 'physicalVulnerability')) dmg=Math.max(1,Math.round(dmg*1.2));
+    if(hero.className==='Guerreiro' && Math.random()<0.2){
+      dmg = Math.max(1, Math.round(dmg*0.6));
+      RPG.UI.logEvent('<b>Postura Defensiva</b> reduz o golpe recebido.');
+    }
     if(hero.buffs.shield > 0){
       dmg = Math.max(1, Math.round(dmg*(1-hero.buffs.shield)));
       hero.buffs.shield = 0;
@@ -474,11 +514,12 @@ RPG.Combat = (function(){
     }
     if(hit){
       var forcaMult = hero.buffs.forcaTurns>0 ? (1+(hero.buffs.forcaAmount||0)) : 1;
+      if((hero.className==='Bárbaro'||hero.className==='Barbaro') && hero.hp < hero.maxHp*0.5) forcaMult *= 1.35;
       var base = 3+rnd(6),dmg;
-      if(magicalAttack){dmg=Math.round(base+d.dmgMagico+weaponAtkContribution(hero,affinity)+otherEquipAtk(hero));dmg=modifyDamageByAffinity(monster,dmg,'magico');}
+      if(magicalAttack){dmg=Math.round(base+d.dmgMagico+weaponAtkContribution(hero,affinity)+otherEquipAtk(hero));dmg=modifyDamageByAffinity(monster,dmg,'magico',isMage);}
       else {var physicalBase=isMage&&attackStyle==='physical'?Math.round(d.dmgFisico*.5):d.dmgFisico;dmg=Math.round((base+physicalBase+weaponAtkContribution(hero,affinity)+otherEquipAtk(hero))*forcaMult);dmg=modifyDamageByAffinity(monster,dmg,'fisico');}
       var petBonus=RPG.Pets&&RPG.Pets.bonus?RPG.Pets.bonus():{};
-      var critChance = (d.critico + (bonus.critico||0) + (petBonus.critico||0))/100;
+      var critChance = (d.critico + (bonus.critico||0) + (petBonus.critico||0) + (hero.className==='Arqueiro'?8:0))/100;
       var isCrit = guaranteedCrit || Math.random() < critChance || roll === 20;
       if(isCrit){ dmg = Math.round(dmg*1.6); }
       monster.hp -= dmg;
@@ -490,6 +531,7 @@ RPG.Combat = (function(){
       if(hero.buffs.precisaoTurns>0) hero.buffs.precisaoTurns--;
       if(hero.buffs.forcaTurns>0) hero.buffs.forcaTurns--;
       applyWeaponProc(hero, monster);
+      applyHeroClassPassive(hero, monster, dmg);
       if(monster.hp <= 0){ handleMonsterDefeated(cell); return; }
     } else {
       RPG.Effects.playSfx('miss');
@@ -614,7 +656,7 @@ RPG.Combat = (function(){
     departing.forEach(function(member){ RPG.UI.logEvent(member.name+' se despede da equipe após cumprir sua promessa.'); });
     state.party=(state.party||[]).filter(function(member){ return !member.temporary || member.combatsLeft>0; });
     var gotLoot = false, lootItem = null;
-    var lootChance = cell.type==='boss' ? 0.95 : 0.5;
+    var lootChance = cell.type==='boss' ? 0.8 : 0.25;
     if(Math.random() < lootChance){
       lootItem = RPG.Items.randomItem({ floor: state.floor });
       RPG.Inventory.addItem(state, lootItem);
