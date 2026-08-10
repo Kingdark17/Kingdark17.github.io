@@ -656,7 +656,7 @@ RPG.Combat = (function(){
     departing.forEach(function(member){ RPG.UI.logEvent(member.name+' se despede da equipe após cumprir sua promessa.'); });
     state.party=(state.party||[]).filter(function(member){ return !member.temporary || member.combatsLeft>0; });
     var gotLoot = false, lootItem = null;
-    var lootChance = cell.type==='boss' ? 0.95 : 0.5;
+    var lootChance = cell.type==='boss' ? 0.8 : 0.25;
     if(Math.random() < lootChance){
       lootItem = RPG.Items.randomItem({ floor: state.floor });
       RPG.Inventory.addItem(state, lootItem);
