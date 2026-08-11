@@ -31,3 +31,6 @@ export * from './combat/class-passives.js';
 export * from './combat/party.js';
 export * from './combat/resolve-attack.js';
 export * from './combat/monster-hit.js';
+
+export * from './dungeon/graph.js';
+export * from './dungeon/generate.js';
