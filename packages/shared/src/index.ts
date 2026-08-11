@@ -32,5 +32,7 @@ export * from './combat/party.js';
 export * from './combat/resolve-attack.js';
 export * from './combat/monster-hit.js';
 
+export * from './events/events.js';
+
 export * from './dungeon/graph.js';
 export * from './dungeon/generate.js';

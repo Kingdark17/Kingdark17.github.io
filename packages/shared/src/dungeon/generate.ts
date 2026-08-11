@@ -5,12 +5,12 @@
  * `refreshPresentation()` e as chamadas de DOM/áudio do original ficam de
  * fora: pertencem a uma camada de orquestração futura, não ao motor.
  *
- * Salas de evento saem como um stub (`DungeonEventStub`, só o `templateId`
- * sorteado) — `js/events.js` ainda não foi portado. O `templateId` já usa os
- * mesmos três ids do original (`ferido`/`altar`/`porta`), então a resolução
- * completa pode ser encaixada depois sem mudar o formato da sala.
+ * Salas de evento saem com o evento sorteado pronto (`../events/events.js`,
+ * já portado), mas não resolvido — `resolveEvent()` é chamado depois, quando
+ * o jogador escolhe uma opção, não na geração do andar.
  */
 
+import { randomEventTemplate, type EventTemplateId } from '../events/events.js';
 import { generate as generateMonster, generateBoss, monsterView, type MonsterInstance } from '../monsters/generate.js';
 import { randomItem, type Item } from '../items/item.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
@@ -53,10 +53,6 @@ const NPC_TEMPLATES: NpcTemplate[] = [
     ],
   },
 ];
-
-/** Ids de evento conhecidos hoje (`js/events.js`'s `TEMPLATES`) — ver nota do módulo sobre o stub. */
-const EVENT_TEMPLATE_IDS = ['ferido', 'altar', 'porta'] as const;
-export type EventTemplateId = (typeof EVENT_TEMPLATE_IDS)[number];
 
 export interface DungeonNpc {
   name: string;
@@ -136,6 +132,8 @@ function startBranch(grid: RoomCell[][], distances: Record<string, number>, cell
 
 export interface DungeonGenerateOptions {
   rng?: Rng;
+  /** Injetável para os `uid` de item gerados ficarem reproduzíveis em teste — mesmo padrão de `InstantiateOptions.now`. */
+  now?: () => number;
 }
 
 interface DistantRoomsResult {
@@ -212,7 +210,7 @@ function reserveDistant(
 }
 
 /** Gera os monstros de cada sala sorteada como `monster`, com chance de recompensa extra em salas com mais de um inimigo. */
-function populateMonsterRooms(rooms: DungeonCell[], floor: number, rng: Rng): void {
+function populateMonsterRooms(rooms: DungeonCell[], floor: number, rng: Rng, now?: () => number): void {
   for (const cell of rooms) {
     const groupSize = monsterGroupSize(floor, rng);
     cell.monsters = [];
@@ -220,7 +218,7 @@ function populateMonsterRooms(rooms: DungeonCell[], floor: number, rng: Rng): vo
     cell.monsterIndex = 0;
     cell.beaten = false;
     if (groupSize > 1 && rng() < 0.35) {
-      cell.bonusTreasure = rng() < 0.7 ? { gold: 10 + floor * 3 + randomInt(15, rng) } : { item: randomItem({ floor, rng }) };
+      cell.bonusTreasure = rng() < 0.7 ? { gold: 10 + floor * 3 + randomInt(15, rng) } : { item: randomItem({ floor, rng, now }) };
     }
   }
 }
@@ -233,20 +231,20 @@ function placeBoss(bossRoom: DungeonCell | undefined, floor: number, rng: Rng): 
 }
 
 /** Preenche NPC/evento/tesouro nas salas já tipadas por `place()` — monstro e chefe já saem prontos de `populateMonsterRooms`/`placeBoss`. */
-function populateRoomContent(rooms: DungeonCell[], floor: number, rng: Rng): void {
+function populateRoomContent(rooms: DungeonCell[], floor: number, rng: Rng, now?: () => number): void {
   for (const cell of rooms) {
     if (cell.type === 'npc') {
       const template = pick(NPC_TEMPLATES, rng);
       cell.npc = { name: template.name, role: template.role, service: template.service, icon: template.icon, lines: [...template.lines], serviceUsed: false };
     }
     if (cell.type === 'event') {
-      cell.event = { templateId: pick([...EVENT_TEMPLATE_IDS], rng) };
+      cell.event = { templateId: randomEventTemplate(rng).id };
       cell.resolved = false;
     }
     if (cell.type === 'treasure') {
       cell.isMimic = rng() < Math.min(0.25, 0.1 + floor * 0.008);
       cell.giveGold = rng() < 0.7;
-      cell.item = cell.giveGold ? null : randomItem({ floor, rng });
+      cell.item = cell.giveGold ? null : randomItem({ floor, rng, now });
       cell.collected = false;
     }
   }
@@ -260,6 +258,7 @@ function populateRoomContent(rooms: DungeonCell[], floor: number, rng: Rng): voi
  */
 export function generateDungeonFloor(floor: number, rows: number, cols: number, options: DungeonGenerateOptions = {}): DungeonFloor {
   const rng = options.rng ?? defaultRng;
+  const { now } = options;
   const roomCount = Math.min(22, 9 + floor);
 
   const { res, distances, distantRooms, pool } = resolveDistantRooms(rows, cols, roomCount, rng);
@@ -285,11 +284,11 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
   // uma terceira sala para o chefe.
   const reservedRooms = isBossFloor(floor) ? 1 : 0;
   const monsterRoomCount = Math.min(pool.length - reservedRooms, 3 + Math.floor((floor - 1) * 1.3));
-  populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), floor, rng);
+  populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), floor, rng, now);
 
   if (isBossFloor(floor)) placeBoss(place('boss', 1)[0], floor, rng);
 
-  populateRoomContent(res.rooms as DungeonCell[], floor, rng);
+  populateRoomContent(res.rooms as DungeonCell[], floor, rng, now);
 
   return { grid: res.grid as DungeonCell[][], rooms: res.rooms as DungeonCell[], start: res.start as DungeonCell };
 }

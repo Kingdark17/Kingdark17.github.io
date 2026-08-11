@@ -127,9 +127,10 @@ describe('generateDungeonFloor — estrutura do andar', () => {
     }
   });
 
-  it('é determinístico: a mesma seed produz o mesmo andar', () => {
-    const a = generateDungeonFloor(9, 11, 11, { rng: seededRng(123) });
-    const b = generateDungeonFloor(9, 11, 11, { rng: seededRng(123) });
+  it('é determinístico: a mesma seed produz o mesmo andar (com "now" fixo, já que uid de item usa timestamp)', () => {
+    const now = () => 1700000000000;
+    const a = generateDungeonFloor(9, 11, 11, { rng: seededRng(123), now });
+    const b = generateDungeonFloor(9, 11, 11, { rng: seededRng(123), now });
     expect(JSON.stringify(a.grid)).toBe(JSON.stringify(b.grid));
   });
 });
