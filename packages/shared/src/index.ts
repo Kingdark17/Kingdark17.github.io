@@ -29,3 +29,4 @@ export * from './combat/weapon-proc.js';
 export * from './combat/hero-status.js';
 export * from './combat/class-passives.js';
 export * from './combat/party.js';
+export * from './combat/resolve-attack.js';
