@@ -131,8 +131,8 @@ export function generateMimic(floor: number, { rng = defaultRng }: GenerateOptio
   };
 }
 
-/** Visão "gorda" do monstro, com tudo resolvido para exibir ou narrar. */
-export interface MonsterView extends MonsterInstance {
+/** Campos que a visão soma por cima do que já está na instância. */
+export interface MonsterViewFields {
   species: Species;
   enemyClass: EnemyClass;
   name: string;
@@ -144,7 +144,15 @@ export interface MonsterView extends MonsterInstance {
   enemyClassLabel: string;
 }
 
-export function monsterView(monster: MonsterInstance): MonsterView {
+export type MonsterView = MonsterInstance & MonsterViewFields;
+
+/**
+ * Genérica em `T` de propósito: `combat.ts` estende `MonsterInstance` com
+ * campos de runtime (`status`, `attackCount`, `guardHits`...) que só existem
+ * durante um combate. Chamar `monsterView(combatMonster)` precisa devolver
+ * esses campos de volta tipados — `MonsterView` sozinho não os conhece.
+ */
+export function monsterView<T extends MonsterInstance>(monster: T): T & MonsterViewFields {
   const species = speciesById(monster.speciesId);
   const enemyClass = enemyClassById(monster.enemyClassId);
   if (!species) throw new Error(`Espécie desconhecida: ${monster.speciesId}`);

@@ -21,3 +21,8 @@ export * from './items/tiers.js';
 
 export * from './monsters/species.js';
 export * from './monsters/generate.js';
+
+export * from './combat/monster-state.js';
+export * from './combat/damage.js';
+export * from './combat/status-effects.js';
+export * from './combat/weapon-proc.js';
