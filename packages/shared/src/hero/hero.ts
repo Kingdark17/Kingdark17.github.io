@@ -306,6 +306,9 @@ export function weaponAffinityPct(hero: Pick<Hero, 'className' | 'equip'>): numb
 
 // ---------- companheiro ----------
 
+/** Postura escolhida pelo jogador no dropdown de gerenciar equipe (`ui.js`). */
+export type CompanionStance = 'equilibrada' | 'agressiva' | 'defensiva' | 'suporte';
+
 export interface Companion {
   name: string;
   raceIcon: string;
@@ -316,9 +319,12 @@ export interface Companion {
   maxHp: number;
   attack: number;
   attrs: Attributes;
-  stance: 'equilibrada';
+  stance: CompanionStance;
   ability: string;
   abilityDesc: string;
+  /** Companheiro recrutado por tempo limitado (serviço de NPC) em vez de permanente. */
+  temporary?: boolean;
+  combatsLeft?: number;
 }
 
 const COMPANION_ROLES: Record<string, { ability: string; desc: string }> = {

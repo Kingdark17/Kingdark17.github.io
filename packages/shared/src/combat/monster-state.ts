@@ -1,4 +1,4 @@
-import type { MonsterInstance } from '../monsters/generate.js';
+import type { MonsterInstance, MonsterViewFields } from '../monsters/generate.js';
 
 /** Status contínuo: causa dano fixo por turno até `turns` zerar. */
 export interface DotStatus {
@@ -48,6 +48,15 @@ export interface CombatMonster extends MonsterInstance {
 export function freshCombatMonster(monster: MonsterInstance): CombatMonster {
   return { ...monster, status: {}, attackCount: 0 };
 }
+
+/**
+ * `CombatMonster` com nome/ícone/comportamento/fraqueza/resistência já
+ * resolvidos via `monsterView()`. É o formato que as funções de resolução de
+ * ataque recebem — elas precisam tanto do estado bruto (status, guardHits)
+ * quanto dos campos resolvidos da espécie (weakness/resistance ficam dentro
+ * de `.species`, behavior já vem raso).
+ */
+export type CombatMonsterView = CombatMonster & MonsterViewFields;
 
 /**
  * Escreve (ou remove, se `value` for `undefined`) um campo de status sem
