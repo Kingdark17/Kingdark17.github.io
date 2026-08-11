@@ -75,6 +75,8 @@ export interface Hero extends HeroCore {
   maxMp: number;
   derived: DerivedStats;
   buffs?: HeroBuffs;
+  /** Bênção de um NPC do mapa: bônus de esquiva que dura N combates inteiros (não turnos) — distinto de `HeroBuffs`, que zera a cada combate. Concedida por `npc-services.js`'s `blessing()`, consumida no início de cada combate. */
+  npcBlessing?: { combats: number; dodge: number };
 }
 
 export function heroPowers(hero: Pick<Hero, 'powerNames'>): Power[] {

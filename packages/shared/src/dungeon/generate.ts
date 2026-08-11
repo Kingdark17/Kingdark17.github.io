@@ -13,12 +13,11 @@
 import { randomEventTemplate, type EventTemplateId } from '../events/events.js';
 import { generate as generateMonster, generateBoss, monsterView, type MonsterInstance } from '../monsters/generate.js';
 import { randomItem, type Item } from '../items/item.js';
+import type { NpcService } from '../npc/npc-services.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import { distancesFrom, generateRoomGraph, DIR_VECTORS, type Direction, type RoomCell, type RoomGraph } from './graph.js';
 
 export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit';
-
-export type NpcService = 'reveal' | 'heal';
 
 interface NpcTemplate {
   name: string;
