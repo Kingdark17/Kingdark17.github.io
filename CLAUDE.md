@@ -72,3 +72,55 @@ Grafo de salas conectadas por portas (N/S/L/O), neblina revela só a silhueta
 das salas vizinhas, múltiplos monstros em fila por sala (combate encadeado
 automático), tesouro bônus ao limpar a sala, movimento em direção absoluta
 fixa.
+
+---
+
+# Preferências de trabalho (registradas 2026-08-11)
+
+## Como conduzir o trabalho
+- **Consultar antes de decidir.** Toda decisão de arquitetura, biblioteca ou
+  escopo passa por pergunta explícita, com as alternativas e o trade-off de
+  cada uma. Não assumir "o óbvio" sem falar.
+- **Toda dúvida vira pergunta.** Se houver ambiguidade real, perguntar em vez
+  de escolher sozinho e seguir.
+- **Pensar até ter certeza antes de agir.** Levantar os fatos no código antes
+  de opinar. Recomendação sem leitura prévia do arquivo relevante não vale.
+- **Dizer o que não dá.** Se algo pedido não existe ou não é possível, falar
+  na hora em vez de entregar uma aproximação disfarçada.
+- Sempre que ajudar no desempenho ou na qualidade da entrega, usar as skills
+  disponíveis em vez de fazer na mão.
+
+## Migração em andamento (fase 0 concluída)
+O jogo está sendo migrado de JS vanilla para um monorepo. Decisões fechadas:
+
+| Camada | Escolha |
+|---|---|
+| Front | Next.js (App Router) na Vercel |
+| Backend | NestJS |
+| Tempo real | socket.io (substitui `ws` cru) |
+| Banco | Drizzle ORM |
+| Cache/estado | Redis (salas, sessões, rate limit, presença) |
+| Engine | TypeScript puro, **fora do React**, em `packages/shared` |
+| Personagem 2D | PixiJS, paperdoll com equipamento |
+| Animação de UI | Motion via `LazyMotion` (~6 KB), só na UI React |
+| Infra final | Supabase (Postgres + Storage); auth próprio permanece |
+
+**Regras que decorrem disso:**
+- A engine em `packages/shared` não importa React, DOM nem Node — é o que
+  permite o Nest validar jogada com o mesmo código do cliente.
+- Não propor Zustand/Redux para lógica de jogo: a engine é fora do React de
+  propósito.
+- Não propor Supabase Auth: os hashes são scrypt e não importam pra lá;
+  forçar reset de senha de todo mundo foi descartado.
+- Loops decorativos continuam em CSS. Motion não entra dentro do PixiJS.
+- `rpg-legend/` continua servido pelo GitHub Pages a partir da raiz e **não
+  entra no workspace pnpm** enquanto a migração acontece.
+
+Ordem das fases: 0 monorepo → 1 engine shared → 2 Nest (ainda no Neon) →
+3 front Next → 4 paperdoll PixiJS → 5 Neon→Supabase → 6 otimização completa.
+
+## Armadilha conhecida
+`rpg-legend/server/` neste repo é **cópia desatualizada** do servidor. O real
+está em `github.com/Kingdark17/RPG-Legend-Server` (~565 linhas contra as 141
+da cópia) e tem salas públicas, amigos, chat, slots e loja de cosméticos que
+a cópia não tem. Nunca usar a cópia local como referência.

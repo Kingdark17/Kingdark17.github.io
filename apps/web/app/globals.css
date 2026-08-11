@@ -1,0 +1,61 @@
+/* =========================================================
+   Tokens de design portados de rpg-legend/css/style.css.
+   As famílias de fonte agora vêm de next/font (ver layout.tsx),
+   que auto-hospeda os arquivos em vez de buscar no CDN do Google
+   — menos uma conexão externa e sem flash de fonte.
+   ========================================================= */
+
+:root {
+  --ink: #10121a;
+  --panel: #1d2230;
+  --panel-2: #242a3a;
+  --line: rgba(201, 162, 39, 0.28);
+  --parchment: #ecdfc0;
+  --parchment-dim: #b9ab86;
+  --gold: #c9a227;
+  --gold-bright: #e8c65a;
+  --ember: #c0532f;
+  --blood: #8a2b2b;
+  --mystic: #4a8073;
+  --xp: #4a7fd6;
+
+  /* cores de raridade */
+  --r-comum: #b7b7b7;
+  --r-incomum: #4caf7d;
+  --r-raro: #3d8fd6;
+  --r-epico: #a15fd6;
+  --r-lendario: #e0a13a;
+  --r-mitico: #e0483a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--ink);
+  color: var(--parchment);
+  font-family: var(--font-body), Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* A arte do jogo é pixel art: nunca deixar o navegador suavizar na escala. */
+.pixelated {
+  image-rendering: pixelated;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

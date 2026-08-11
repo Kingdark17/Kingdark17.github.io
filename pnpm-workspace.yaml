@@ -1,0 +1,17 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# Scripts de instalação aprovados explicitamente (pnpm 11 bloqueia por padrão).
+# esbuild precisa do postinstall para linkar o binário nativo da plataforma.
+allowBuilds:
+  esbuild: true
+  # resolver nativo usado pelo ESLint que vem no template do Next
+  unrs-resolver: true
+  # otimização de imagem do next/image: na Vercel é a plataforma que resolve,
+  # então o binário nativo não precisa ser baixado aqui (padrão do template)
+  sharp: false
+
+# O jogo atual (rpg-legend/) fica FORA do workspace de propósito: ele continua
+# sendo servido estaticamente pelo GitHub Pages a partir da raiz do repo e não
+# deve ganhar node_modules nem passar por build enquanto a migração acontece.
