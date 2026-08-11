@@ -7,5 +7,12 @@
  * cliente usou para produzi-la.
  */
 
+export * from './rng.js';
+
 export * from './hero/stats.js';
 export * from './hero/derived.js';
+
+export * from './items/rarity.js';
+export * from './items/templates.js';
+export * from './items/item.js';
+export * from './items/tiers.js';
