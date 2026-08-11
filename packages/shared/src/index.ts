@@ -16,3 +16,6 @@ export * from './items/rarity.js';
 export * from './items/templates.js';
 export * from './items/item.js';
 export * from './items/tiers.js';
+
+export * from './monsters/species.js';
+export * from './monsters/generate.js';
