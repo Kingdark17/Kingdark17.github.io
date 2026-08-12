@@ -39,3 +39,4 @@ export * from './dungeon/generate.js';
 
 export * from './inventory/inventory.js';
 export * from './npc/npc-services.js';
+export * from './quests/quests.js';
