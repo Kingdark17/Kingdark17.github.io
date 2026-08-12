@@ -38,6 +38,8 @@ export interface Item {
   foundFloor?: number;
   tierAdjustment?: number;
   reforgeCount?: number;
+  /** Contador de "pity" da reforja na forja (`shop.js`): tentativas seguidas sem melhora de tier. Zera ao melhorar; a partir de 4, o próximo resultado é forçado a não piorar. */
+  reforgeFails?: number;
 }
 
 /** Visão "gorda" do item, montada na hora de renderizar. */

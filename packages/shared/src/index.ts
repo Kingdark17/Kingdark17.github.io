@@ -42,3 +42,4 @@ export * from './npc/npc-services.js';
 export * from './quests/quests.js';
 export * from './city/city.js';
 export * from './pets/pets.js';
+export * from './shop/shop.js';
