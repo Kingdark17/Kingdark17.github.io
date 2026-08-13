@@ -9,7 +9,7 @@
 import { cleanMessageText } from './message-text';
 import type { PresenceChecker } from './presence-checker';
 import type { SocialNotifier } from './social-notifier';
-import type { InternalFriendRow, RecentMessage, SocialRepository, StoredMessage } from './social-repository';
+import type { InternalFriendRow, RecentMessage, SocialRepository, StoredMessage, UserLookup } from './social-repository';
 
 export interface PublicFriendView {
   username: string;
@@ -41,6 +41,8 @@ export type SimpleFriendResult = { kind: 'target-not-found' } | { kind: 'ok' };
 export type SendChatMessageResult = { kind: 'target-not-found' } | { kind: 'not-friends' } | { kind: 'empty-message' } | { kind: 'ok'; message: StoredMessage };
 
 export type RecentMessagesResult = { kind: 'target-not-found' } | { kind: 'not-friends' } | { kind: 'ok'; messages: RecentMessage[] };
+
+export type InviteTargetResult = { kind: 'target-not-found' } | { kind: 'not-friends' } | { kind: 'ok'; target: UserLookup };
 
 const CHAT_HISTORY_LIMIT_MIN = 1;
 const CHAT_HISTORY_LIMIT_MAX = 80;
@@ -120,6 +122,19 @@ export class SocialService {
     const saved = await this.repo.recordMessage(fromUser.id, target.id, clean);
     this.notifier.notify('chat', target.id, { from: fromUser.username, id: saved.id, body: saved.body, createdAt: saved.createdAt });
     return { kind: 'ok', message: saved };
+  }
+
+  /** Convite de sala só vale entre amigos — regra do `room-invite` no server.js original. */
+  async resolveInviteTarget(fromUserId: number, toUsername: string): Promise<InviteTargetResult> {
+    const target = await this.repo.findUserByUsername(toUsername);
+    if (!target) return { kind: 'target-not-found' };
+    if (!(await this.repo.areFriends(fromUserId, target.id))) return { kind: 'not-friends' };
+    return { kind: 'ok', target };
+  }
+
+  /** Resposta a convite não checa amizade (o original também não) — só resolve pra quem entregar. */
+  findUser(username: string): Promise<UserLookup | null> {
+    return this.repo.findUserByUsername(username);
   }
 
   async recentMessages(userId: number, otherUsername: string, beforeId: unknown, limit: unknown): Promise<RecentMessagesResult> {
