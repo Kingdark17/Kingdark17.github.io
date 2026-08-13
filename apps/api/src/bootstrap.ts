@@ -13,12 +13,21 @@
  * pro ar, mas trocar o padrão agora quebraria o cliente atual.
  */
 
-import type { INestApplication } from '@nestjs/common';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 
 import { DatabaseNotConfiguredFilter } from './common/database-not-configured.filter';
 import { NoStoreInterceptor } from './common/no-store.interceptor';
 
-export function configureApp(app: INestApplication): INestApplication {
+/**
+ * Mesmo teto do `body()` do accounts.js original. O padrão do Express é
+ * 100 KB, que não dá conta de dois corpos que o cliente manda todo dia: o
+ * save completo em `PUT /api/save` e a foto de perfil em base64 (até ~400
+ * KB depois da compressão que `compressPhoto()` faz no navegador).
+ */
+export const MAX_BODY_BYTES = 700_000;
+
+export function configureApp(app: NestExpressApplication): NestExpressApplication {
+  app.useBodyParser('json', { limit: MAX_BODY_BYTES });
   app.enableCors({
     origin: process.env.ALLOWED_ORIGIN || '*',
     methods: 'GET,POST,PUT,OPTIONS',

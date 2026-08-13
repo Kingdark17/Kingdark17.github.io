@@ -7,19 +7,19 @@
  * que rota de banco responde 503 limpo em vez de estourar 500.
  */
 
-import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import request from 'supertest';
 
 import { AppModule } from './app.module';
-import { configureApp } from './bootstrap';
+import { MAX_BODY_BYTES, configureApp } from './bootstrap';
 
 describe('configureApp', () => {
-  let app: INestApplication;
+  let app: NestExpressApplication;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
-    app = configureApp(moduleRef.createNestApplication());
+    app = configureApp(moduleRef.createNestApplication<NestExpressApplication>());
     await app.init();
   });
 
@@ -51,6 +51,22 @@ describe('configureApp', () => {
 
     const health = await request(app.getHttpServer()).get('/health');
     expect(health.headers['cache-control']).toBeUndefined();
+  });
+
+  it('aceita corpo grande: foto de perfil em base64 e save completo passam do padrão de 100 KB do Express', async () => {
+    const grande = await request(app.getHttpServer())
+      .put('/api/account/profile')
+      .send({ avatarUrl: 'x'.repeat(400_000) });
+
+    expect(grande.status).not.toBe(413);
+  });
+
+  it('mas ainda barra corpo acima do teto do original', async () => {
+    const gigante = await request(app.getHttpServer())
+      .put('/api/account/profile')
+      .send({ avatarUrl: 'x'.repeat(MAX_BODY_BYTES + 1_000) });
+
+    expect(gigante.status).toBe(413);
   });
 
   it('rota que precisa do banco responde 503 sem DATABASE_URL', async () => {
