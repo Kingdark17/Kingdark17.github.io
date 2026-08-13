@@ -8,10 +8,11 @@
  * já mora em `AuthService`.
  */
 
-import { Body, Controller, Get, Headers, HttpCode, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, HttpCode, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { extractBearerToken } from './bearer-token';
+import { IpRateLimitGuard } from './ip-rate-limit.guard';
 
 interface RegisterBody {
   username?: unknown;
@@ -29,6 +30,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @UseGuards(IpRateLimitGuard)
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() body: RegisterBody) {
     const result = await this.authService.register({
@@ -51,6 +53,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @UseGuards(IpRateLimitGuard)
   @HttpCode(HttpStatus.OK)
   async login(@Body() body: LoginBody) {
     const result = await this.authService.login({

@@ -14,8 +14,4 @@ export class AppService {
   authoritativeStats(hero: HeroCore): DerivedStats & { xpNext: number } {
     return { ...derivedStats(hero), xpNext: xpForLevel(hero.level) };
   }
-
-  health(): { online: boolean; engine: string } {
-    return { online: true, engine: '@rpg-legend/shared' };
-  }
 }

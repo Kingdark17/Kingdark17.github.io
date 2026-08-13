@@ -15,15 +15,31 @@ import * as schema from './schema';
 
 export type Database = NodePgDatabase<typeof schema>;
 
+/**
+ * Erro com tipo próprio (em vez de `Error` genérico) pra o filtro HTTP
+ * distinguir "ninguém configurou o banco" de "a query falhou" sem
+ * comparar texto de mensagem — o original respondia 503 nesse caso.
+ */
+export class DatabaseNotConfiguredError extends Error {
+  constructor() {
+    super('DATABASE_URL não configurada — defina antes de usar o banco de dados.');
+    this.name = 'DatabaseNotConfiguredError';
+  }
+}
+
 let pool: Pool | null = null;
 let db: Database | null = null;
+
+export function isDatabaseConfigured(): boolean {
+  return !!process.env.DATABASE_URL;
+}
 
 export function getDb(): Database {
   if (db) return db;
 
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
-    throw new Error('DATABASE_URL não configurada — defina antes de usar o banco de dados.');
+    throw new DatabaseNotConfiguredError();
   }
 
   pool = new Pool({

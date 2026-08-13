@@ -15,13 +15,6 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  it('responde ao health check', () => {
-    expect(appController.health()).toEqual({
-      online: true,
-      engine: '@rpg-legend/shared',
-    });
-  });
-
   describe('engine compartilhada', () => {
     it('calcula os derivados com @rpg-legend/shared dentro do Nest', () => {
       const stats = appController.smokeDerived();

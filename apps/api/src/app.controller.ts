@@ -7,11 +7,6 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('health')
-  health() {
-    return this.appService.health();
-  }
-
   /**
    * Rota de fumaça da fase 0: confirma que a engine compartilhada roda dentro
    * do Nest (que é CommonJS) e devolve os mesmos números que o Next calculou.

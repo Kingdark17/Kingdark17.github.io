@@ -24,5 +24,7 @@ import { RoomsController } from './rooms.controller';
   imports: [AuthModule, SocialModule],
   controllers: [RoomsController],
   providers: [{ provide: RoomRegistry, useFactory: () => new RoomRegistry() }, RealtimeGateway],
+  // `/health` conta as salas abertas a partir do mesmo registro.
+  exports: [RoomRegistry],
 })
 export class RealtimeModule {}

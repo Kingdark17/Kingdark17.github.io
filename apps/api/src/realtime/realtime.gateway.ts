@@ -28,10 +28,10 @@ import { ConnectedSocket, MessageBody, OnGatewayDisconnect, SubscribeMessage, We
 import type { Socket } from 'socket.io';
 
 import { AuthService } from '../auth/auth.service';
+import { RateLimiter } from '../common/rate-limiter';
 import { OnlineUsersRegistry } from '../social/online-users-registry';
 import { SocialService } from '../social/social.service';
 import { clampInt } from './numeric';
-import { RateLimiter } from './rate-limiter';
 import { HOST_ROLE, GUEST_ROLE, RoomRegistry, normalizePlayerName, normalizeRoomCode, type Room, type RoomRole } from './room-registry';
 import { isUiAction, sanitizeUiActionPayload } from './ui-action';
 
@@ -40,6 +40,10 @@ const CHAT_ERROR_MESSAGES = {
   'not-friends': 'Vocês precisam ser amigos para conversar.',
   'empty-message': 'Mensagem vazia.',
 } as const;
+
+/** Mesmo teto do `ws.rate` original: 30 mensagens por segundo por conexão. */
+const SOCKET_MESSAGE_LIMIT = 30;
+const SOCKET_WINDOW_MS = 1000;
 
 const MAX_TURN = 1_000_000;
 const MAX_HEAL = 500;
@@ -57,7 +61,7 @@ interface SocketState {
 })
 export class RealtimeGateway implements OnGatewayDisconnect {
   private readonly logger = new Logger(RealtimeGateway.name);
-  private readonly limiter = new RateLimiter();
+  private readonly limiter = new RateLimiter(SOCKET_MESSAGE_LIMIT, SOCKET_WINDOW_MS);
 
   constructor(
     private readonly auth: AuthService,

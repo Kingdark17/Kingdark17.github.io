@@ -1,14 +1,17 @@
 /**
- * Teto de mensagens por conexão — porta do `ws.rate` do server.js
- * original (30 mensagens por segundo, janela fixa que reinicia sozinha).
+ * Teto de eventos por chave, com janela fixa que reinicia sozinha — a
+ * mesma forma dos dois limitadores do servidor original: `ws.rate` (30
+ * mensagens por segundo por conexão, no server.js) e `limited()` (12
+ * tentativas por minuto por IP, no accounts.js).
  *
  * Janela fixa mesmo, não deslizante: é o que o original fazia e o que
- * basta pra barrar flood de socket. `now` entra injetado pra o teste não
- * depender de relógio real.
+ * basta aqui. `now` entra injetado pra o teste não depender de relógio
+ * real.
+ *
+ * O estado é do processo, como no original. Quando o Redis entrar (fase
+ * 6) e a API rodar em mais de uma instância, é esta classe que precisa de
+ * um backend compartilhado — hoje cada instância conta a sua parte.
  */
-
-export const DEFAULT_MESSAGE_LIMIT = 30;
-export const DEFAULT_WINDOW_MS = 1000;
 
 interface Bucket {
   windowStart: number;
@@ -19,8 +22,8 @@ export class RateLimiter {
   private readonly buckets = new Map<string, Bucket>();
 
   constructor(
-    private readonly limit: number = DEFAULT_MESSAGE_LIMIT,
-    private readonly windowMs: number = DEFAULT_WINDOW_MS,
+    private readonly limit: number,
+    private readonly windowMs: number,
     private readonly now: () => number = Date.now,
   ) {}
 
