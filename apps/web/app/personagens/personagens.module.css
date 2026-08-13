@@ -1,0 +1,156 @@
+.tela {
+  min-height: 100dvh;
+  padding: 2.5rem 1rem;
+}
+
+.conteudo {
+  width: min(52rem, 100%);
+  margin: 0 auto;
+}
+
+.titulo {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  margin: 0 0 0.35rem;
+  font-size: 1.7rem;
+}
+
+.subtitulo {
+  color: var(--parchment-dim);
+  margin: 0 0 1.75rem;
+  font-size: 0.9rem;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.slot {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 1.1rem;
+  min-height: 11rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.slotVazio {
+  border-style: dashed;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--parchment-dim);
+}
+
+.numeroSlot {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+  margin: 0 0 0.5rem;
+}
+
+.nome {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--parchment);
+  margin: 0 0 0.2rem;
+}
+
+.classe {
+  color: var(--parchment-dim);
+  font-size: 0.9rem;
+  margin: 0 0 0.75rem;
+}
+
+.numeros {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0 0 1rem;
+}
+
+.numero {
+  display: flex;
+  flex-direction: column;
+}
+
+.valor {
+  font-family: var(--font-mono), monospace;
+  font-size: 1.05rem;
+  color: var(--gold-bright);
+}
+
+.chave {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--parchment-dim);
+}
+
+.rodapeSlot {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.botao {
+  padding: 0.45rem 0.9rem;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  border-radius: 0.3rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.botaoDiscreto {
+  background: none;
+  border: none;
+  color: var(--parchment-dim);
+  font: inherit;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.botaoPerigo {
+  color: var(--ember);
+}
+
+.atualizado {
+  font-size: 0.75rem;
+  color: var(--parchment-dim);
+  margin: 0 0 0.75rem;
+}
+
+.erro {
+  padding: 0.6rem 0.75rem;
+  background: rgba(138, 43, 43, 0.25);
+  border: 1px solid var(--blood);
+  border-radius: 0.3rem;
+  margin: 0 0 1.25rem;
+}
+
+.confirmacao {
+  margin-top: auto;
+  font-size: 0.85rem;
+}
+
+.perguntaConfirmacao {
+  margin: 0 0 0.5rem;
+  color: var(--parchment);
+}

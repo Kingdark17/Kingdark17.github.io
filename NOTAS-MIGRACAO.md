@@ -18,8 +18,8 @@ nada que o código ou o `git log` já contem sozinhos.
 |---|---|
 | 0 — monorepo | pronta |
 | 1 — engine em `packages/shared` | pronta (304 testes) |
-| 2 — Nest ainda no Neon | porte **completo**; falta rodar contra banco de verdade |
-| 3 — front Next | não começou |
+| 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
+| 3 — front Next | em andamento: conta e seleção de personagem |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
 | 6 — otimização | não começou |
