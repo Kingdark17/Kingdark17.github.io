@@ -67,12 +67,21 @@ class FakeSessionsRepository implements SessionsRepository {
 const ADMIN_USERNAME = 'adm';
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
+class FakeVerificationIssuer {
+  readonly issuedFor: { id: number; email: string | null }[] = [];
+
+  async issueVerification(user: { id: number; email: string | null }): Promise<void> {
+    this.issuedFor.push({ id: user.id, email: user.email });
+  }
+}
+
 function makeService(startTime = 1700000000000) {
   let currentTime = startTime;
   const users = new FakeUsersRepository();
   const sessions = new FakeSessionsRepository(users);
-  const service = new AuthService(users, sessions, { adminUsername: ADMIN_USERNAME, sessionTtlMs: SESSION_TTL_MS }, () => currentTime);
-  return { service, users, sessions, advanceTime: (ms: number) => (currentTime += ms) };
+  const verification = new FakeVerificationIssuer();
+  const service = new AuthService(users, sessions, { adminUsername: ADMIN_USERNAME, sessionTtlMs: SESSION_TTL_MS }, () => currentTime, verification);
+  return { service, users, sessions, verification, advanceTime: (ms: number) => (currentTime += ms) };
 }
 
 describe('AuthService.register', () => {
@@ -85,6 +94,21 @@ describe('AuthService.register', () => {
   it('rejeita e-mail inválido', async () => {
     const { service } = makeService();
     expect(await service.register({ username: 'jogador', email: 'nao-e-email', password: 'senha123' })).toEqual({ kind: 'invalid-email' });
+  });
+
+  it('dispara o e-mail de confirmação pra conta recém-criada, como o original', async () => {
+    const { service, verification } = makeService();
+    const result = await service.register({ username: 'Jogador1', email: 'jogador1@example.com', password: 'senha123' });
+
+    expect(result.kind).toBe('registered');
+    expect(verification.issuedFor).toEqual([{ id: expect.any(Number), email: 'jogador1@example.com' }]);
+  });
+
+  it('não dispara confirmação quando o cadastro é recusado', async () => {
+    const { service, verification } = makeService();
+    await service.register({ username: 'ab', email: 'a@b.com', password: 'senha123' });
+
+    expect(verification.issuedFor).toEqual([]);
   });
 
   it('rejeita senha fora de [8, 128] caracteres', async () => {
