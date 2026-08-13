@@ -12,14 +12,11 @@
 import { or, sql } from 'drizzle-orm';
 
 import { getDb } from '../db/client';
+import { isUniqueViolation } from '../db/is-unique-violation';
 import { users } from '../db/schema';
 import type { AccountRecord, CreateUserInput, UsersRepository } from './users-repository';
 import { UniqueViolationError } from './users-repository';
 import { toAccountRecord } from './to-account-record';
-
-function isUniqueViolation(err: unknown): boolean {
-  return typeof err === 'object' && err !== null && 'code' in err && (err as { code?: unknown }).code === '23505';
-}
 
 export class DrizzleUsersRepository implements UsersRepository {
   async findByUsernameOrEmail(identifier: string): Promise<AccountRecord | null> {
