@@ -11,6 +11,7 @@
 import { Body, Controller, Get, Headers, HttpCode, HttpException, HttpStatus, Post } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
+import { extractBearerToken } from './bearer-token';
 
 interface RegisterBody {
   username?: unknown;
@@ -21,11 +22,6 @@ interface RegisterBody {
 interface LoginBody {
   username?: unknown;
   password?: unknown;
-}
-
-function extractBearerToken(header: string | undefined): string {
-  const value = String(header || '');
-  return value.startsWith('Bearer ') ? value.slice(7) : '';
 }
 
 @Controller('api/account')
