@@ -1,4 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+  // `src/db/testing/` sobe um Postgres em WASM pros testes de integração;
+  // depende de devDependencies e não pode ir pro build de produção.
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "src/db/testing/**"]
 }

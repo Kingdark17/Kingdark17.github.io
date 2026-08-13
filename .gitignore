@@ -31,3 +31,6 @@ pnpm-debug.log*
 
 # Cobertura de testes
 coverage/
+
+# Skills baixadas de terceiros — nao versionar
+.claude/skills/
