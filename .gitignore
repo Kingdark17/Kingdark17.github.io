@@ -34,3 +34,6 @@ coverage/
 
 # Skills baixadas de terceiros — nao versionar
 .claude/skills/
+
+# Banco local de desenvolvimento (PGlite)
+.pglite-dev/
