@@ -33,15 +33,25 @@ chat, presença, relay de sala co-op, `/api/rooms`, `/health`,
 
 ### Fase 2 — o que falta
 
-1. **A camada Drizzle nunca executou uma query.** Seis classes de
-   repositório, o schema, as transações e os `FOR UPDATE` só passaram por
-   typecheck. Decisão tomada em 2026-08-13: verificar com **PGlite**
-   (Postgres em WASM) nos testes, criando o banco com o **DDL do
-   `init()` do servidor original** — assim divergência entre o nosso
-   schema e o banco real aparece na hora, em vez de o schema validar a si
-   mesmo.
-2. Rodar contra um `DATABASE_URL` de staging de verdade.
-3. Fechar o e-mail com `RESEND_API_KEY`.
+1. Rodar contra um `DATABASE_URL` de staging de verdade.
+2. Fechar o e-mail com `RESEND_API_KEY`.
+
+### Como os testes de banco funcionam
+
+Os testes de integração sobem **PGlite** (Postgres compilado em WASM)
+atrás de um socket que fala o protocolo do Postgres. Nada do código de
+produção sabe que está em teste: `getDb()` abre o mesmo `pg.Pool` de
+sempre contra uma `DATABASE_URL` normal. Sem Docker, sem credencial.
+
+O banco de teste nasce do **DDL do `init()` do servidor original**
+(`src/db/testing/original-ddl.ts`), não de `drizzle-kit generate` a
+partir do nosso schema — gerar do próprio schema seria circular.
+
+Isso exige `--experimental-vm-modules` no Node (PGlite usa `import()`
+dinâmico), já embutido no script `test`.
+
+**Limite:** é Postgres, mas não é o Neon. Diferença de versão, extensão
+ou comportamento do pooler só um `DATABASE_URL` de staging pega.
 
 ---
 
@@ -60,6 +70,15 @@ iguais no porte e precisam de decisão sua.
 | 5 | Exceção de rede no envio de e-mail sobe e vira 500 — provedor fora do ar reprovava cadastro | corrigido (vira `false` e loga) |
 | 6 | `connected` do `/health` era um flag gravado no boot: continuava `true` depois do banco cair | corrigido (mede na hora com `SELECT 1`) |
 | 7 | Rate limit por IP usa o IP visto pelo servidor. Atrás de proxy vira limite global | **mantido** — depende de ligar `trust proxy` no deploy |
+
+### Bug do porte, achado pelos testes de integração
+
+`isUniqueViolation()` só olhava `err.code`, mas o Drizzle embrulha o erro
+do driver num `DrizzleQueryError` e põe o original em `cause`. Cadastro
+com username repetido responderia **500 em vez de 409**. Passou por
+typecheck e por todos os testes de unidade — só apareceu quando uma query
+de verdade rodou. É o argumento a favor de ter feito a verificação com
+PGlite antes de começar a fase 3.
 
 Fora esses, dois achados de desempenho de sessões anteriores continuam
 valendo: avatares em base64 viajando dentro de `/api/friends`, e o estado
