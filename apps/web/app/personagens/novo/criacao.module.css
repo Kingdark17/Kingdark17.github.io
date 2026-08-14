@@ -1,0 +1,198 @@
+.tela {
+  min-height: 100dvh;
+  padding: 2.5rem 1rem;
+}
+
+.conteudo {
+  width: min(60rem, 100%);
+  margin: 0 auto;
+}
+
+.titulo {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  margin: 0 0 0.35rem;
+  font-size: 1.7rem;
+}
+
+.subtitulo {
+  color: var(--parchment-dim);
+  margin: 0 0 1.75rem;
+  font-size: 0.9rem;
+}
+
+.secao {
+  margin-bottom: 1.75rem;
+}
+
+.tituloSecao {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.05rem;
+  color: var(--parchment);
+  margin: 0 0 0.75rem;
+}
+
+.campo {
+  display: block;
+  max-width: 22rem;
+}
+
+.rotulo {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  margin-bottom: 0.3rem;
+}
+
+.entrada {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  color: var(--parchment);
+  font: inherit;
+}
+
+.entrada:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.6rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.carta {
+  width: 100%;
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  padding: 0.7rem;
+  color: var(--parchment);
+  font: inherit;
+  cursor: pointer;
+}
+
+.carta:hover {
+  border-color: var(--gold);
+}
+
+.cartaEscolhida {
+  border-color: var(--gold-bright);
+  background: var(--panel-2);
+  box-shadow: inset 0 0 0 1px var(--gold-bright);
+}
+
+.icone {
+  font-size: 1.3rem;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.nomeCarta {
+  font-weight: 600;
+  display: block;
+}
+
+.descricao {
+  font-size: 0.78rem;
+  color: var(--parchment-dim);
+  display: block;
+  margin-top: 0.2rem;
+}
+
+.sorteado {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  padding: 0.7rem;
+}
+
+.placeholder {
+  color: var(--parchment-dim);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+}
+
+.gradeAtributos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+  gap: 0.6rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.atributo {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.valorAtributo {
+  display: block;
+  font-family: var(--font-mono), monospace;
+  font-size: 1.3rem;
+  color: var(--gold-bright);
+}
+
+.chaveAtributo {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--parchment-dim);
+}
+
+.acoes {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.botao {
+  padding: 0.6rem 1.2rem;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  border-radius: 0.3rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.botaoSecundario {
+  background: var(--panel-2);
+  color: var(--parchment);
+  border: 1px solid var(--line);
+}
+
+.erro {
+  padding: 0.6rem 0.75rem;
+  background: rgba(138, 43, 43, 0.25);
+  border: 1px solid var(--blood);
+  border-radius: 0.3rem;
+  margin: 1rem 0 0;
+}
+
+.dica {
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+  margin: 0.75rem 0 0;
+}

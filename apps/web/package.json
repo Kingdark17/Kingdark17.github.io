@@ -7,7 +7,8 @@
     "build": "next build",
     "typecheck": "tsc --noEmit",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run"
   },
   "dependencies": {
     "@rpg-legend/shared": "workspace:*",
@@ -22,7 +23,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   },
   "packageManager": "pnpm@11.21.0"
 }

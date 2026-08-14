@@ -9,6 +9,7 @@
  * página inteira e não dá pra estilizar nem ler direito no celular.
  */
 
+import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
 import { apagarPersonagem, listarPersonagens, type ResumoPersonagem } from '@/lib/api/characters';
@@ -81,7 +82,9 @@ export function ListaPersonagens() {
             return (
               <li key={slot} className={`${styles.slot} ${styles.slotVazio}`}>
                 <p className={styles.numeroSlot}>Slot {slot}</p>
-                <p>Vazio</p>
+                <Link className={styles.botao} href={`/personagens/novo?slot=${slot}`}>
+                  Criar personagem
+                </Link>
               </li>
             );
           }
