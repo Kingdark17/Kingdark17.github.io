@@ -14,6 +14,17 @@ export interface RespostaSave {
   signature: string;
 }
 
+export interface SaveNaNuvem {
+  /** `null` quando o slot está vazio. */
+  save: unknown;
+  signature?: string;
+  updatedAt?: string;
+}
+
+export function carregarSave(slot: number): Promise<SaveNaNuvem> {
+  return chamarApi<SaveNaNuvem>(`/api/save?slot=${slot}`, { autenticado: true });
+}
+
 export function gravarSave(entrada: { slot: number; save: unknown; baseSignature?: string }): Promise<RespostaSave> {
   return chamarApi<RespostaSave>('/api/save', {
     method: 'PUT',

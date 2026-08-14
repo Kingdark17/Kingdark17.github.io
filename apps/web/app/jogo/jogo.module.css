@@ -1,0 +1,211 @@
+.tela {
+  min-height: 100dvh;
+  padding: 2rem 1rem;
+}
+
+.conteudo {
+  width: min(64rem, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 60rem) {
+  .conteudo {
+    grid-template-columns: 18rem minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.painel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 1.1rem;
+}
+
+.nomeHeroi {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 1.25rem;
+  margin: 0 0 0.1rem;
+}
+
+.classeHeroi {
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+  margin: 0 0 1rem;
+}
+
+.barra {
+  margin-bottom: 0.65rem;
+}
+
+.rotuloBarra {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--parchment-dim);
+  margin-bottom: 0.2rem;
+}
+
+.trilho {
+  height: 0.55rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.preenchimento {
+  height: 100%;
+}
+
+.vida {
+  background: var(--blood);
+}
+
+.mana {
+  background: var(--xp);
+}
+
+.listaAtributos {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.linhaAtributo {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.chave {
+  color: var(--parchment-dim);
+}
+
+.valor {
+  font-family: var(--font-mono), monospace;
+  color: var(--parchment);
+}
+
+.local {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  margin: 0 0 0.15rem;
+  font-size: 1.15rem;
+}
+
+.descricaoLocal {
+  color: var(--parchment-dim);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.grade {
+  display: grid;
+  gap: 0.3rem;
+  margin-bottom: 1.25rem;
+}
+
+.celula {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+  border-radius: 0.3rem;
+  border: 1px solid transparent;
+}
+
+.vazia {
+  background: transparent;
+}
+
+.desconhecida {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--line);
+}
+
+.conhecida {
+  background: var(--panel-2);
+  border-color: var(--line);
+  opacity: 0.6;
+}
+
+.visitada {
+  background: var(--panel-2);
+  border-color: var(--line);
+}
+
+.aqui {
+  border-color: var(--gold-bright);
+  box-shadow: inset 0 0 0 1px var(--gold-bright);
+}
+
+.bussola {
+  display: grid;
+  grid-template-columns: repeat(3, 3.2rem);
+  grid-template-rows: repeat(3, 3.2rem);
+  gap: 0.35rem;
+  justify-content: start;
+}
+
+.norte {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.oeste {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.leste {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.sul {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.botaoDirecao {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+  color: var(--parchment);
+  font: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.botaoDirecao:hover:not(:disabled) {
+  border-color: var(--gold);
+}
+
+.botaoDirecao:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.estadoSalvamento {
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  margin: 1rem 0 0;
+  min-height: 1.2em;
+}
+
+.erro {
+  padding: 0.6rem 0.75rem;
+  background: rgba(138, 43, 43, 0.25);
+  border: 1px solid var(--blood);
+  border-radius: 0.3rem;
+  margin: 1rem 0 0;
+}

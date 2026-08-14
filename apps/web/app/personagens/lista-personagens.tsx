@@ -127,9 +127,9 @@ export function ListaPersonagens() {
                 </div>
               ) : (
                 <div className={styles.rodapeSlot}>
-                  <button type="button" className={styles.botao} disabled>
+                  <Link className={styles.botao} href={`/jogo?slot=${slot}`}>
                     Jogar
-                  </button>
+                  </Link>
                   <button type="button" className={styles.botaoDiscreto} onClick={() => setConfirmandoSlot(slot)}>
                     Apagar
                   </button>
