@@ -71,6 +71,16 @@ iguais no porte e precisam de decisão sua.
 | 6 | `connected` do `/health` era um flag gravado no boot: continuava `true` depois do banco cair | corrigido (mede na hora com `SELECT 1`) |
 | 7 | Rate limit por IP usa o IP visto pelo servidor. Atrás de proxy vira limite global | **mantido** — depende de ligar `trust proxy` no deploy |
 
+### Divergência entre o CLAUDE.md e o jogo de verdade
+
+O `CLAUDE.md` diz "poder de assinatura fixo por classe + **até 2
+escolhidos pelo jogador**". O jogo em produção **sorteia** os dois:
+`rerollPowers()` em `rpg-legend/js/ui.js`, e o grid de poderes não tem
+handler de clique — só raça e classe são clicáveis.
+
+O porte seguiu o código, não a documentação. Mudar isso é decisão de
+regra de jogo, não de migração.
+
 ### Bug do porte, achado pelos testes de integração
 
 `isUniqueViolation()` só olhava `err.code`, mas o Drizzle embrulha o erro
