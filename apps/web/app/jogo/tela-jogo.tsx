@@ -11,9 +11,9 @@
  * este navegador está partindo do progresso mais recente.
  *
  * Sala "interessante" pergunta antes (`precisaConfirmar`); dizer não
- * atravessa quando a sala é de passagem. Sala de monstro troca esta tela
- * pela de combate; loja e ferreiro, pela tela de negócio. NPCs, quadro de
- * missões e eventos ainda não foram migrados e avisam isso ao entrar.
+ * atravessa quando a sala é de passagem. Sala com conteúdo próprio
+ * (combate, loja, NPC, quadro de missões, evento) troca esta tela pela
+ * dela — `interagir` devolve qual, e `conteudoDaTela` escolhe.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -23,14 +23,16 @@ import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { apresentacaoDe } from '@/lib/jogo/apresentacao';
 import { andar, celulaAtual, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
-import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso } from '@/lib/jogo/sala';
+import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
 import type { Combate } from '@/lib/jogo/combate';
-import type { Loja } from '@/lib/jogo/loja';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
 import { PainelHeroi } from './painel-heroi';
 import { TelaCombate } from './tela-combate';
+import { TelaDialogo } from './tela-dialogo';
+import { TelaEvento } from './tela-evento';
 import { TelaLoja } from './tela-loja';
+import { TelaMissoes } from './tela-missoes';
 import { TextoDoJogo } from './texto-do-jogo';
 
 const ESPERA_ANTES_DE_SALVAR_MS = 2500;
@@ -47,8 +49,7 @@ type EstadoDoSalvamento = 'parado' | 'salvando' | 'salvo';
 export function TelaJogo({ slot }: { slot: number }) {
   const [estado, setEstado] = useState<EstadoDoJogo | null>(null);
   const [aviso, setAviso] = useState<Aviso | null>(null);
-  const [combate, setCombate] = useState<Combate | null>(null);
-  const [loja, setLoja] = useState<Loja | null>(null);
+  const [tela, setTela] = useState<TelaAberta | null>(null);
   const [perguntando, setPerguntando] = useState<Direction | null>(null);
   const [erro, setErro] = useState('');
   const [carregando, setCarregando] = useState(true);
@@ -111,41 +112,26 @@ export function TelaJogo({ slot }: { slot: number }) {
     if (movido === atual) return;
     const resultado = interagir(movido);
     registrarMudanca(resultado.estado, resultado.aviso);
-    setCombate(resultado.combate);
-    setLoja(resultado.loja ?? null);
-  }
-
-  /** Comprar, vender e reforjar mexem no ouro e na mochila: grava igual a um passo. */
-  function seguirLoja(proxima: Loja) {
-    setLoja(proxima);
-    setEstado(proxima.estado);
-    precisaSalvar.current = true;
-    setSalvamento('parado');
-  }
-
-  function fecharLoja(final: Loja) {
-    setLoja(null);
-    setEstado(final.estado);
-    precisaSalvar.current = true;
-    setSalvamento('parado');
+    setTela(resultado.tela);
   }
 
   /**
-   * Toda ação de combate mexe no save (vida da criatura, XP, ouro), então
-   * o estado do jogo acompanha a luta em vez de esperar o fim dela: fechar
-   * a aba no meio de um chefe não devolve o chefe com vida cheia.
+   * Toda ação dentro de uma tela dessas mexe no save — vida da criatura,
+   * ouro, mochila, equipe, missão. O estado do jogo acompanha em vez de
+   * esperar o fim: fechar a aba no meio de um chefe não devolve o chefe
+   * com vida cheia.
    */
-  function seguirCombate(proximo: Combate) {
-    setCombate(proximo);
-    setEstado(proximo.estado);
+  function seguir(proxima: TelaAberta, proximoEstado: EstadoDoJogo) {
+    setTela(proxima);
+    setEstado(proximoEstado);
     precisaSalvar.current = true;
     setSalvamento('parado');
   }
 
-  function encerrarCombate(final: Combate) {
-    setCombate(null);
-    setEstado(final.estado);
-    setAviso(avisoDoFim(final));
+  function fechar(estadoFinal: EstadoDoJogo, avisoFinal: Aviso | null = null) {
+    setTela(null);
+    setEstado(estadoFinal);
+    setAviso(avisoFinal);
     precisaSalvar.current = true;
     setSalvamento('parado');
   }
@@ -190,20 +176,56 @@ export function TelaJogo({ slot }: { slot: number }) {
   if (erro && !estado) return <p className={styles.erro}>{erro}</p>;
   if (!estado) return null;
 
-  if (loja) {
-    return (
-      <div className={styles.conteudo}>
-        <PainelHeroi hero={estado.hero} />
-        <TelaLoja loja={loja} onLoja={seguirLoja} onFechar={fecharLoja} />
-      </div>
-    );
+  function conteudoDaTela(aberta: TelaAberta) {
+    switch (aberta.tipo) {
+      case 'combate':
+        return (
+          <TelaCombate
+            combate={aberta.combate}
+            onCombate={(proximo) => seguir({ tipo: 'combate', combate: proximo }, proximo.estado)}
+            onEncerrar={(final) => fechar(final.estado, avisoDoFim(final))}
+          />
+        );
+      case 'loja':
+        return (
+          <TelaLoja
+            loja={aberta.loja}
+            onLoja={(proxima) => seguir({ tipo: 'loja', loja: proxima }, proxima.estado)}
+            onFechar={(final) => fechar(final.estado)}
+          />
+        );
+      case 'dialogo':
+        return (
+          <TelaDialogo
+            dialogo={aberta.dialogo}
+            onDialogo={(proximo) => seguir({ tipo: 'dialogo', dialogo: proximo }, proximo.estado)}
+            onFechar={(final) => fechar(final.estado)}
+          />
+        );
+      case 'missoes':
+        return (
+          <TelaMissoes
+            quadro={aberta.quadro}
+            onQuadro={(proximo) => seguir({ tipo: 'missoes', quadro: proximo }, proximo.estado)}
+            onFechar={(final) => fechar(final.estado)}
+          />
+        );
+      case 'evento':
+        return (
+          <TelaEvento
+            evento={aberta.evento}
+            onEvento={(proximo) => seguir({ tipo: 'evento', evento: proximo }, proximo.estado)}
+            onFechar={(final) => fechar(final.estado)}
+          />
+        );
+    }
   }
 
-  if (combate) {
+  if (tela) {
     return (
       <div className={styles.conteudo}>
         <PainelHeroi hero={estado.hero} />
-        <TelaCombate combate={combate} onCombate={seguirCombate} onEncerrar={encerrarCombate} />
+        {conteudoDaTela(tela)}
       </div>
     );
   }

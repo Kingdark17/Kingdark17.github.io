@@ -327,6 +327,41 @@
   margin-top: 0.2rem;
 }
 
+.listaDeMissoes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.missao {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  padding: 0.85rem 1rem;
+  display: grid;
+  gap: 0.35rem;
+  justify-items: start;
+}
+
+.tituloDaMissao {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.descricaoDaMissao {
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.missao .trilho {
+  width: 100%;
+}
+
 /* ---------- combate ---------- */
 
 .combate {

@@ -8,11 +8,10 @@
  * cidade só por ele passar por cima dela — e ela pode estar no caminho da
  * escada. As duas regras estão aqui, iguais.
  *
- * Cada função devolve `{ estado, aviso, combate }`: estado novo (imutável),
- * a caixinha de diálogo que a tela mostra e, quando a sala abre uma luta, o
- * combate já no estágio de encontro. Lojas, NPCs, eventos e quadro de
- * missões ainda não foram migrados — aqui eles avisam isso na cara em vez
- * de não fazer nada em silêncio.
+ * Cada função devolve `{ estado, aviso, tela }`: estado novo (imutável), a
+ * caixinha de diálogo que a tela mostra e, quando a sala tem conteúdo
+ * próprio (combate, loja, conversa, quadro de missões, evento), qual tela
+ * abrir no lugar da exploração.
  */
 
 import {
@@ -30,7 +29,10 @@ import {
 } from '@rpg-legend/shared';
 
 import { iniciarEncontro, type Combate } from './combate';
+import { abrirDialogo, type Dialogo } from './dialogo';
+import { abrirEvento, type Evento } from './evento';
 import { abrirLoja, type Loja } from './loja';
+import { abrirQuadro, type Quadro } from './missoes';
 import {
   celulaAtual,
   descerEscada,
@@ -49,13 +51,22 @@ export interface Aviso {
   texto: string;
 }
 
+/**
+ * Sala que troca a tela de exploração por outra. União em vez de um campo
+ * opcional por tipo: a tela só precisa olhar `tipo` pra saber o que abrir,
+ * e acrescentar um lugar novo não vira mais um `?: X | null` na interface.
+ */
+export type TelaAberta =
+  | { tipo: 'combate'; combate: Combate }
+  | { tipo: 'loja'; loja: Loja }
+  | { tipo: 'dialogo'; dialogo: Dialogo }
+  | { tipo: 'missoes'; quadro: Quadro }
+  | { tipo: 'evento'; evento: Evento };
+
 export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;
   aviso: Aviso | null;
-  /** Preenchido quando a sala abre uma luta — a tela troca pra tela de combate. */
-  combate: Combate | null;
-  /** Preenchido quando a sala é loja ou ferreiro. */
-  loja?: Loja | null;
+  tela: TelaAberta | null;
 }
 
 /** Salas que abrem a pergunta "deseja entrar?" antes do passo (`needsConfirm`). */
@@ -91,11 +102,6 @@ function aviso(icone: string, titulo: string, texto: string): Aviso {
   return { icone, titulo, texto };
 }
 
-/** Fase 3 ainda não tem combate, loja, diálogo nem evento. Melhor falar do que fingir que a sala é vazia. */
-function aindaNaoMigrado(icone: string, titulo: string, oQue: string): Aviso {
-  return aviso(icone, titulo, `${oQue} ainda não foi migrado para esta versão do jogo. A sala continua aqui, esperando.`);
-}
-
 /** Resolve a sala em que o jogador acabou de entrar. */
 export function interagir(estado: EstadoDoJogo, rng: Rng = defaultRng): ResultadoDaInteracao {
   return estado.mapMode === 'city' ? naCidade(estado, rng) : naMasmorra(estado, rng);
@@ -103,7 +109,7 @@ export function interagir(estado: EstadoDoJogo, rng: Rng = defaultRng): Resultad
 
 function naCidade(estado: EstadoNaCidade, rng: Rng): ResultadoDaInteracao {
   const celula = celulaAtual(estado);
-  if (!celula) return { estado, aviso: null, combate: null };
+  if (!celula) return { estado, aviso: null, tela: null };
 
   switch (celula.type) {
     case 'gate': {
@@ -111,7 +117,7 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResultadoDaInteracao {
       return {
         estado: dentro,
         aviso: aviso('🌟', 'Portão da Masmorra', `Você atravessa o portão e entra na masmorra. Andar ${dentro.floor}.`),
-        combate: null,
+        tela: null,
       };
     }
     case 'tavern': {
@@ -119,63 +125,65 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResultadoDaInteracao {
       return {
         estado: { ...estado, hero: descanso.hero, party: descanso.party },
         aviso: aviso('🍺', 'Taverna', 'Você descansa por uma noite. Vida e mana totalmente restauradas.'),
-        combate: null,
+        tela: null,
       };
     }
     case 'shop':
-      return { estado, aviso: null, combate: null, loja: abrirLoja(estado, 'shop', rng) };
+      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'shop', rng) } };
     case 'blacksmith':
-      return { estado, aviso: null, combate: null, loja: abrirLoja(estado, 'blacksmith', rng) };
+      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'blacksmith', rng) } };
     case 'questboard':
-      return { estado, aviso: aindaNaoMigrado('📜', 'Quadro de Missões', 'O quadro de missões'), combate: null };
+      return { estado, aviso: null, tela: { tipo: 'missoes', quadro: abrirQuadro(estado, rng) } };
     case 'npc':
-      return { estado, aviso: aindaNaoMigrado('🧙', celula.npc?.name ?? 'Morador', 'A conversa com os moradores'), combate: null };
+      return abrirConversa(estado);
     case 'start':
-      return { estado, aviso: aviso('🚀', 'Ponto de Partida', 'Foi aqui que sua jornada começou.'), combate: null };
+      return { estado, aviso: aviso('🚀', 'Ponto de Partida', 'Foi aqui que sua jornada começou.'), tela: null };
     default:
-      return { estado, aviso: null, combate: null };
+      return { estado, aviso: null, tela: null };
   }
 }
 
 function naMasmorra(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
   const celula = celulaAtual(estado);
-  if (!celula || estado.mapMode !== 'dungeon') return { estado, aviso: null, combate: null };
+  if (!celula || estado.mapMode !== 'dungeon') return { estado, aviso: null, tela: null };
 
   switch (celula.type) {
     case 'treasure':
       return abrirBau(estado, celula, rng);
     case 'monster':
     case 'boss':
-      if (celula.beaten) return { estado, aviso: aviso('👾', 'Sala Vazia', 'Não há mais nada aqui.'), combate: null };
-      return { estado, aviso: null, combate: iniciarEncontro(estado) };
+      if (celula.beaten) return { estado, aviso: aviso('👾', 'Sala Vazia', 'Não há mais nada aqui.'), tela: null };
+      return { estado, aviso: null, tela: { tipo: 'combate', combate: iniciarEncontro(estado) } };
     case 'stairs':
       return descer(estado, rng);
     case 'exit':
       return {
         estado: voltarParaCidade(estado),
         aviso: aviso('🚪', 'De Volta à Cidade', 'Você sobe o caminho iluminado e retorna à cidade.'),
-        combate: null,
+        tela: null,
       };
     case 'npc':
-      return { estado, aviso: aindaNaoMigrado('🧙', celula.npc?.name ?? 'Alguém', 'A conversa com os NPCs'), combate: null };
-    case 'event':
-      return { estado, aviso: aindaNaoMigrado('❓', 'Acontecimento', 'Os eventos de masmorra'), combate: null };
+      return abrirConversa(estado);
+    case 'event': {
+      const evento = abrirEvento(estado);
+      return evento ? { estado, aviso: null, tela: { tipo: 'evento', evento } } : { estado, aviso: null, tela: null };
+    }
     case 'start':
-      return { estado, aviso: aviso('🚀', 'Ponto de Partida', 'Foi aqui que você chegou neste andar.'), combate: null };
+      return { estado, aviso: aviso('🚀', 'Ponto de Partida', 'Foi aqui que você chegou neste andar.'), tela: null };
     default:
-      return { estado, aviso: null, combate: null };
+      return { estado, aviso: null, tela: null };
   }
 }
 
 function descer(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
   const resultado = descerEscada(estado, rng);
   if (resultado.kind === 'selado') {
-    return { estado, aviso: aviso('👑', 'Caminho Selado', 'O poder do chefe bloqueia as escadas. Derrote-o para avançar.'), combate: null };
+    return { estado, aviso: aviso('👑', 'Caminho Selado', 'O poder do chefe bloqueia as escadas. Derrote-o para avançar.'), tela: null };
   }
   return {
     estado: resultado.estado,
     aviso: aviso('⬇️', 'Escadas', `Você desce mais fundo na masmorra. Andar ${resultado.estado.floor}. O ar fica mais pesado…`),
-    combate: null,
+    tela: null,
   };
 }
 
@@ -186,7 +194,7 @@ function descer(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
  * já fica salvo na sala, esperando.
  */
 function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): ResultadoDaInteracao {
-  if (celula.collected) return { estado, aviso: aviso('🧰', 'Baú Vazio', 'Este baú já foi revistado.'), combate: null };
+  if (celula.collected) return { estado, aviso: aviso('🧰', 'Baú Vazio', 'Este baú já foi revistado.'), tela: null };
 
   if (celula.isMimic) {
     const bonus: DungeonTreasureBonus = premioDoBau(celula, estado.floor, rng);
@@ -203,7 +211,7 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): Resu
     return {
       estado: emboscada,
       aviso: aviso('🧰', 'Mímico!', 'O baú cria dentes e revela ser um <b>Mímico</b>!'),
-      combate: iniciarEncontro(emboscada),
+      tela: { tipo: 'combate', combate: iniciarEncontro(emboscada) },
     };
   }
 
@@ -214,7 +222,7 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): Resu
     return {
       estado: substituirCelulaAtual({ ...estado, hero: { ...estado.hero, gold: estado.hero.gold + ouro } }, aberto),
       aviso: aviso('🧰', 'Baú Encontrado', `Você encontra ${ouro} moedas de ouro dentro do baú.`),
-      combate: null,
+      tela: null,
     };
   }
 
@@ -225,10 +233,17 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): Resu
       aberto,
     ),
     aviso: aviso('🧰', 'Baú Encontrado', `<b>${displayName(item)}</b> foi adicionado à sua mochila.`),
-    combate: null,
+    tela: null,
   };
 }
 
 function premioDoBau(celula: DungeonCell, floor: number, rng: Rng): DungeonTreasureBonus {
   return celula.giveGold || !celula.item ? { gold: 10 + floor * 3 + randomInt(15, rng) } : { item: celula.item };
+}
+
+/** NPC existe nos dois mapas, com o mesmo formato. */
+function abrirConversa(estado: EstadoDoJogo): ResultadoDaInteracao {
+  const dialogo = abrirDialogo(estado);
+  if (!dialogo) return { estado, aviso: null, tela: null };
+  return { estado, aviso: null, tela: { tipo: 'dialogo', dialogo } };
 }

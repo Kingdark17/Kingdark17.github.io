@@ -93,24 +93,35 @@ describe('interagir na cidade', () => {
   });
 
   it('a loja abre com estoque em vez de avisar', () => {
-    const { loja } = interagir(emCimaDe(cidadeNova(), 'shop'), seededRng(5));
+    const { tela } = interagir(emCimaDe(cidadeNova(), 'shop'), seededRng(5));
 
-    expect(loja?.kind).toBe('shop');
-    expect(loja?.estado.mapMode).toBe('city');
+    expect(tela?.tipo).toBe('loja');
+    if (tela?.tipo !== 'loja') return;
+    expect(tela.loja.kind).toBe('shop');
   });
 
   it('o ferreiro abre no modo de forja', () => {
-    const { loja } = interagir(emCimaDe(cidadeNova(), 'blacksmith'), seededRng(5));
+    const { tela } = interagir(emCimaDe(cidadeNova(), 'blacksmith'), seededRng(5));
 
-    expect(loja?.kind).toBe('blacksmith');
+    expect(tela?.tipo).toBe('loja');
+    if (tela?.tipo !== 'loja') return;
+    expect(tela.loja.kind).toBe('blacksmith');
   });
 
-  it('avisa que o quadro de missões ainda não foi migrado, sem mexer no estado', () => {
-    const cidade = emCimaDe(cidadeNova(), 'questboard');
-    const { estado, aviso } = interagir(cidade);
+  it('o quadro de missões abre com missões dentro', () => {
+    const { tela } = interagir(emCimaDe(cidadeNova(), 'questboard'), seededRng(5));
 
-    expect(estado).toBe(cidade);
-    expect(aviso?.texto).toContain('ainda não foi migrado');
+    expect(tela?.tipo).toBe('missoes');
+    if (tela?.tipo !== 'missoes') return;
+    expect(tela.quadro.estado.quests.length).toBeGreaterThan(0);
+  });
+
+  it('o morador abre conversa em vez de avisar', () => {
+    const { tela } = interagir(emCimaDe(cidadeNova(), 'npc'));
+
+    expect(tela?.tipo).toBe('dialogo');
+    if (tela?.tipo !== 'dialogo') return;
+    expect(tela.dialogo.npc.lines.length).toBeGreaterThan(0);
   });
 });
 
@@ -182,18 +193,29 @@ describe('interagir na masmorra', () => {
 
   it('sala de monstro abre o encontro em vez de resolver sozinha', () => {
     const naSala = emCimaDe(masmorraNoAndar(2), 'monster');
-    const { estado, combate } = interagir(naSala);
+    const { estado, tela } = interagir(naSala);
 
     expect(estado).toBe(naSala);
-    expect(combate?.fase).toBe('encontro');
+    expect(tela?.tipo).toBe('combate');
+    if (tela?.tipo !== 'combate') return;
+    expect(tela.combate.fase).toBe('encontro');
   });
 
   it('o mímico já entra em combate junto com a revelação', () => {
     const bau = comSalaAtual(emCimaDe(masmorraNoAndar(2), 'treasure'), { isMimic: true, giveGold: true, collected: false });
 
-    const { combate } = interagir(bau, seededRng(7));
+    const { tela } = interagir(bau, seededRng(7));
 
-    expect(combate?.fase).toBe('encontro');
-    expect(combate?.log[0]).toContain('aparece');
+    expect(tela?.tipo).toBe('combate');
+    if (tela?.tipo !== 'combate') return;
+    expect(tela.combate.log[0]).toContain('aparece');
+  });
+
+  it('sala de evento abre o acontecimento', () => {
+    const { tela } = interagir(emCimaDe(masmorraNoAndar(2), 'event'));
+
+    expect(tela?.tipo).toBe('evento');
+    if (tela?.tipo !== 'evento') return;
+    expect(tela.evento.resolvido).toBe(false);
   });
 });

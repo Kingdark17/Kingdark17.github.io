@@ -19,6 +19,7 @@
 import {
   addItem,
   applyMonsterHit,
+  applyNpcBlessing,
   applyPartyTurn,
   attemptFlee,
   defaultRng,
@@ -151,16 +152,14 @@ export function comecarCombate(combate: Combate): Combate {
   if (!monstro) return { ...combate, fase: 'vitoria' };
 
   const log: string[] = [];
-  let hero: Hero = { ...estado.hero, buffs: {} };
 
-  const bencao = hero.npcBlessing;
-  if (bencao && bencao.combats > 0) {
-    hero = { ...hero, buffs: { esquivaTurns: 999, esquivaAmount: bencao.dodge } };
-    const restantes = bencao.combats - 1;
-    hero = restantes > 0 ? { ...hero, npcBlessing: { ...bencao, combats: restantes } } : semBencao(hero);
-    log.push(`A bênção recebida concede +${bencao.dodge}% de Esquiva neste combate.`);
-  }
+  // `applyNpcBlessing` assume que os buffs do combate anterior já foram
+  // zerados — o original faz `hero.buffs={}` incondicionalmente antes.
+  const dodge = estado.hero.npcBlessing?.dodge ?? 0;
+  const bencao = applyNpcBlessing({ ...estado.hero, buffs: {} });
+  const hero: Hero = bencao.hero;
 
+  if (bencao.applied) log.push(`A bênção recebida concede +${dodge}% de Esquiva neste combate.`);
   log.push('O combate começa! Ataque, use um poder ou tente fugir.');
 
   return {
@@ -169,12 +168,6 @@ export function comecarCombate(combate: Combate): Combate {
     fase: 'combate',
     log,
   };
-}
-
-function semBencao(hero: Hero): Hero {
-  const { npcBlessing, ...resto } = hero;
-  void npcBlessing;
-  return resto;
 }
 
 // ---------- ações do jogador ----------

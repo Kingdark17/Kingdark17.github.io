@@ -19,7 +19,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 0 — monorepo | pronta |
 | 1 — engine em `packages/shared` | pronta (321 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
-| 3 — front Next | em andamento: conta, personagem, cidade, masmorra, combate e **loja/ferreiro** jogáveis; faltam NPCs, quadro de missões e eventos |
+| 3 — front Next | **todas as salas jogáveis**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões e eventos. Falta a mochila (equipar/usar item) e o level up manual |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
 | 6 — otimização | não começou |
@@ -117,12 +117,16 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 
 ### Fase 3 — o que já dá pra jogar
 
-Criar conta → criar personagem → andar pela cidade → taverna →
-**comprar, vender e reforjar** → atravessar o portão → explorar a
-masmorra → abrir baú → lutar → descer escada → sair pela saída e voltar
-pra cidade. Tudo gravando na nuvem com a assinatura encadeada.
+Criar conta → criar personagem → andar pela cidade → taverna → comprar,
+vender e reforjar → **conversar com NPC e usar o serviço dele** → **pegar
+missão no quadro** → atravessar o portão → explorar a masmorra → abrir
+baú → lutar → **resolver evento de sala** → descer escada → sair pela
+saída e voltar pra cidade. Tudo gravando na nuvem com a assinatura
+encadeada.
 
-Falta: quadro de missões, diálogo com NPC e eventos de sala.
+**Toda sala do jogo já faz alguma coisa.** O que falta na fase 3 é o que
+nunca foi sala: a mochila (equipar, usar poção) e a tela de level up
+manual (distribuir os 2 pontos por nível).
 
 ### Onde o combate ficou dividido, e por quê
 
@@ -139,6 +143,30 @@ Isso deixa uma pergunta em aberto pra quando o Nest for validar jogada:
 porque o servidor precisa do mesmo tipo de save e da mesma máquina de
 turnos. Não movi agora porque a fase 3 ainda está mexendo neles todo dia —
 é decisão pra fase 6.
+
+### Salas com tela própria
+
+`interagir()` devolve `tela: TelaAberta | null` — união discriminada por
+`tipo` (`combate`, `loja`, `dialogo`, `missoes`, `evento`). Antes eram
+campos opcionais soltos (`combate: Combate | null`, `loja?: Loja | null`)
+e ia virar um por tipo de sala; a união deixa a tela só olhar `tipo`.
+
+As três últimas seguem o mesmo padrão de sempre — a engine já tinha tudo
+(`npc-services.ts`, `quests.ts`, `events.ts`), e o módulo em
+`apps/web/lib/jogo/` só guarda o que é sessão e escreve de volta o que é
+save:
+
+- `dialogo.ts` — a fala atual é sessão; `serviceUsed` é save e volta pro
+  `cell.npc`, senão dava pra curar de graça saindo e voltando da conversa.
+- `missoes.ts` — nada é sessão. O progresso já era atualizado de dentro do
+  combate, do baú e da geração de andar.
+- `evento.ts` — `resolved` é save e volta pra sala. Os rótulos dos botões
+  (`Dar 15 ouro`, `Usar SAB`...) moram aqui porque no original eram string
+  de HTML dentro de `js/events.js`.
+
+Uma duplicação apareceu e foi removida no caminho: `comecarCombate` fazia
+o consumo da bênção de NPC na mão, com a fórmula copiada. Agora chama
+`applyNpcBlessing`, que já estava portada.
 
 ### Loja e ferreiro
 
@@ -183,7 +211,9 @@ save nenhum campo que `monsterView()` acrescenta (`species`, `name`,
 a cada golpe no multiplayer.
 
 Save **com estoque de loja** idem: o `forSale` da sala sobe e volta
-idêntico, e o `cityMap` guarda o mesmo estoque. O item no save continua
+idêntico, e o `cityMap` guarda o mesmo estoque. Save com **NPC já
+atendido, missões no quadro e evento resolvido** também: os três voltam
+idênticos, com o `serviceUsed` gravado dentro do `cityMap`. O item no save continua
 sendo só `uid/templateId/rarity/stats/value/equipped` — o catálogo não
 entra. E a arte serve de `/img/...` no build do Next (conferido com
 `next start` + `curl`, 200 e `image/png`).
