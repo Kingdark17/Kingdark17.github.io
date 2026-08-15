@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 
 import { cadastrar, entrar, sair, usuarioAtual, type Usuario } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
-import { lerToken } from '@/lib/api/session';
 import styles from './conta.module.css';
 
 type Modo = 'entrar' | 'cadastrar';
@@ -26,11 +25,8 @@ export function PainelConta() {
   const [carregandoSessao, setCarregandoSessao] = useState(true);
 
   // Sessão guardada de uma visita anterior: só o servidor sabe se ainda vale.
+  // Sem token, `usuarioAtual()` já rejeita sozinho (ver `chamarApi`).
   useEffect(() => {
-    if (!lerToken()) {
-      setCarregandoSessao(false);
-      return;
-    }
     usuarioAtual()
       .then(setUsuario)
       .catch(() => undefined)

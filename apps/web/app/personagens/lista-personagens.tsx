@@ -10,11 +10,10 @@
  */
 
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { apagarPersonagem, listarPersonagens, type ResumoPersonagem } from '@/lib/api/characters';
 import { ErroDaApi } from '@/lib/api/client';
-import { lerToken } from '@/lib/api/session';
 import styles from './personagens.module.css';
 
 function dataCurta(iso: string): string {
@@ -29,35 +28,29 @@ export function ListaPersonagens() {
   const [carregando, setCarregando] = useState(true);
   const [confirmandoSlot, setConfirmandoSlot] = useState<number | null>(null);
   const [ocupado, setOcupado] = useState(false);
+  const [versao, setVersao] = useState(0);
 
-  const recarregar = useCallback(async () => {
-    try {
-      const lista = await listarPersonagens();
-      setPersonagens(lista.characters);
-      setMaxSlots(lista.maxSlots);
-      setErro('');
-    } catch (falha) {
-      setErro(falha instanceof ErroDaApi ? falha.message : 'Erro inesperado.');
-    } finally {
-      setCarregando(false);
-    }
-  }, []);
-
+  // Sem token a listagem já rejeita sozinha (ver `chamarApi`), então o
+  // "entre na sua conta" chega pelo mesmo `.catch` de qualquer outro erro.
+  // Apagar personagem só incrementa `versao`: quem busca a lista é sempre
+  // este efeito, num lugar só.
   useEffect(() => {
-    if (!lerToken()) {
-      setErro('Entre na sua conta para ver seus personagens.');
-      setCarregando(false);
-      return;
-    }
-    void recarregar();
-  }, [recarregar]);
+    listarPersonagens()
+      .then((lista) => {
+        setPersonagens(lista.characters);
+        setMaxSlots(lista.maxSlots);
+        setErro('');
+      })
+      .catch((falha) => setErro(falha instanceof ErroDaApi ? falha.message : 'Erro inesperado.'))
+      .finally(() => setCarregando(false));
+  }, [versao]);
 
   async function confirmarExclusao(slot: number) {
     setOcupado(true);
     try {
       await apagarPersonagem(slot);
       setConfirmandoSlot(null);
-      await recarregar();
+      setVersao((atual) => atual + 1);
     } catch (falha) {
       setErro(falha instanceof ErroDaApi ? falha.message : 'Erro inesperado.');
     } finally {

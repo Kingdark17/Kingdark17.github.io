@@ -148,6 +148,79 @@
   box-shadow: inset 0 0 0 1px var(--gold-bright);
 }
 
+.legenda {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  padding: 0;
+  margin: -0.85rem 0 1.25rem;
+  font-size: 0.75rem;
+  color: var(--parchment-dim);
+}
+
+.itemLegenda {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.caixa {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.iconeCaixa {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.tituloCaixa {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 1rem;
+  margin: 0 0 0.2rem;
+}
+
+.textoCaixa {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--parchment);
+}
+
+.escolhas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+}
+
+.botao {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  color: var(--parchment);
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+}
+
+.botao:hover {
+  border-color: var(--gold);
+}
+
+.botaoPrincipal {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}
+
 .bussola {
   display: grid;
   grid-template-columns: repeat(3, 3.2rem);

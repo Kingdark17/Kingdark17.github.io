@@ -29,10 +29,21 @@ interface Opcoes {
   autenticado?: boolean;
 }
 
+export const SEM_SESSAO = 'Entre na sua conta para continuar.';
+
 export async function chamarApi<T>(caminho: string, opcoes: Opcoes = {}): Promise<T> {
   const headers: Record<string, string> = {};
   if (opcoes.body !== undefined) headers['Content-Type'] = 'application/json';
-  if (opcoes.autenticado) headers.Authorization = `Bearer ${lerToken()}`;
+
+  // Sem token a chamada já falha aqui, como rejeição da promessa. Evita
+  // mandar `Bearer ` vazio pro servidor e, do lado da tela, deixa o
+  // "você não está logado" cair no mesmo `.catch` de qualquer outro erro —
+  // sem `setState` síncrono dentro de `useEffect`.
+  if (opcoes.autenticado) {
+    const token = lerToken();
+    if (!token) throw new ErroDaApi(SEM_SESSAO, 401);
+    headers.Authorization = `Bearer ${token}`;
+  }
 
   let resposta: Response;
   try {
