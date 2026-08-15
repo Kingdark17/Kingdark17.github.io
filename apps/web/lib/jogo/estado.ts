@@ -264,8 +264,20 @@ export function revelar(estado: EstadoDoJogo, posicao: Posicao): EstadoDoJogo {
   return { ...estado, map: alterarCelula(estado.map, posicao, { revealed: true }) };
 }
 
-/** Troca a sala onde o jogador está (baú aberto, mímico revelado). Só masmorra: nenhuma sala da cidade muda de conteúdo. */
-export function substituirCelulaAtual(estado: EstadoNaMasmorra, celula: DungeonCell): EstadoNaMasmorra {
-  const mapa = estado.map.map((linha, y) => linha.map((atual, x) => (x === estado.pos.x && y === estado.pos.y ? celula : atual)));
-  return { ...estado, map: mapa };
+/**
+ * Troca a sala onde o jogador está: baú aberto e mímico revelado na
+ * masmorra, estoque da loja na cidade. Na cidade o `cityMap` acompanha,
+ * porque ele e o `map` são o mesmo mapa.
+ */
+export function substituirCelulaAtual(estado: EstadoNaCidade, celula: CityCell): EstadoNaCidade;
+export function substituirCelulaAtual(estado: EstadoNaMasmorra, celula: DungeonCell): EstadoNaMasmorra;
+export function substituirCelulaAtual(estado: EstadoDoJogo, celula: CelulaDoMapa): EstadoDoJogo {
+  const troca = <C extends RoomCell>(grade: C[][], nova: C): C[][] =>
+    grade.map((linha, y) => linha.map((atual, x) => (x === estado.pos.x && y === estado.pos.y ? nova : atual)));
+
+  if (estado.mapMode === 'city') {
+    const mapa = troca(estado.map, celula as CityCell);
+    return { ...estado, map: mapa, cityMap: mapa };
+  }
+  return { ...estado, map: troca(estado.map, celula as DungeonCell) };
 }

@@ -92,8 +92,21 @@ describe('interagir na cidade', () => {
     expect(estado.hero.mp).toBe(estado.hero.maxMp);
   });
 
-  it('avisa que a loja ainda não foi migrada, sem mexer no estado', () => {
-    const cidade = emCimaDe(cidadeNova(), 'shop');
+  it('a loja abre com estoque em vez de avisar', () => {
+    const { loja } = interagir(emCimaDe(cidadeNova(), 'shop'), seededRng(5));
+
+    expect(loja?.kind).toBe('shop');
+    expect(loja?.estado.mapMode).toBe('city');
+  });
+
+  it('o ferreiro abre no modo de forja', () => {
+    const { loja } = interagir(emCimaDe(cidadeNova(), 'blacksmith'), seededRng(5));
+
+    expect(loja?.kind).toBe('blacksmith');
+  });
+
+  it('avisa que o quadro de missões ainda não foi migrado, sem mexer no estado', () => {
+    const cidade = emCimaDe(cidadeNova(), 'questboard');
     const { estado, aviso } = interagir(cidade);
 
     expect(estado).toBe(cidade);

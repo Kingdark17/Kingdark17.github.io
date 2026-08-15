@@ -12,6 +12,7 @@
  */
 
 import type { Companion, Hero } from '../hero/hero.js';
+import type { Item } from '../items/item.js';
 import type { NpcService } from '../npc/npc-services.js';
 import { DIR_OPP, DIR_VECTORS, type Direction, type RoomCell } from '../dungeon/graph.js';
 
@@ -29,6 +30,13 @@ export interface CityNpc {
 export interface CityCell extends RoomCell {
   type: CityRoomType;
   npc?: CityNpc;
+  /**
+   * Estoque da loja/ferreiro, sorteado na primeira visita e guardado na
+   * própria sala — igual `ensureStock()` em `js/shop.js`. Fica no save de
+   * propósito: sair e voltar não deve rolar um estoque novo de graça,
+   * senão o botão de renovar (que cobra ouro) não teria razão de existir.
+   */
+  forSale?: Item[];
 }
 
 export interface CityLayout {

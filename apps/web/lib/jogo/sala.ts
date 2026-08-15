@@ -30,6 +30,7 @@ import {
 } from '@rpg-legend/shared';
 
 import { iniciarEncontro, type Combate } from './combate';
+import { abrirLoja, type Loja } from './loja';
 import {
   celulaAtual,
   descerEscada,
@@ -53,6 +54,8 @@ export interface ResultadoDaInteracao {
   aviso: Aviso | null;
   /** Preenchido quando a sala abre uma luta — a tela troca pra tela de combate. */
   combate: Combate | null;
+  /** Preenchido quando a sala é loja ou ferreiro. */
+  loja?: Loja | null;
 }
 
 /** Salas que abrem a pergunta "deseja entrar?" antes do passo (`needsConfirm`). */
@@ -120,9 +123,9 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResultadoDaInteracao {
       };
     }
     case 'shop':
-      return { estado, aviso: aindaNaoMigrado('🏵', 'Loja', 'A loja'), combate: null };
+      return { estado, aviso: null, combate: null, loja: abrirLoja(estado, 'shop', rng) };
     case 'blacksmith':
-      return { estado, aviso: aindaNaoMigrado('🔨', 'Ferreiro', 'A forja do ferreiro'), combate: null };
+      return { estado, aviso: null, combate: null, loja: abrirLoja(estado, 'blacksmith', rng) };
     case 'questboard':
       return { estado, aviso: aindaNaoMigrado('📜', 'Quadro de Missões', 'O quadro de missões'), combate: null };
     case 'npc':

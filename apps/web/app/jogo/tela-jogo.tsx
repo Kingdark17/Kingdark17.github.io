@@ -12,8 +12,8 @@
  *
  * Sala "interessante" pergunta antes (`precisaConfirmar`); dizer não
  * atravessa quando a sala é de passagem. Sala de monstro troca esta tela
- * pela de combate. Lojas, NPCs e eventos ainda não foram migrados e avisam
- * isso ao entrar.
+ * pela de combate; loja e ferreiro, pela tela de negócio. NPCs, quadro de
+ * missões e eventos ainda não foram migrados e avisam isso ao entrar.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -25,10 +25,12 @@ import { apresentacaoDe } from '@/lib/jogo/apresentacao';
 import { andar, celulaAtual, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso } from '@/lib/jogo/sala';
 import type { Combate } from '@/lib/jogo/combate';
+import type { Loja } from '@/lib/jogo/loja';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
 import { PainelHeroi } from './painel-heroi';
 import { TelaCombate } from './tela-combate';
+import { TelaLoja } from './tela-loja';
 import { TextoDoJogo } from './texto-do-jogo';
 
 const ESPERA_ANTES_DE_SALVAR_MS = 2500;
@@ -46,6 +48,7 @@ export function TelaJogo({ slot }: { slot: number }) {
   const [estado, setEstado] = useState<EstadoDoJogo | null>(null);
   const [aviso, setAviso] = useState<Aviso | null>(null);
   const [combate, setCombate] = useState<Combate | null>(null);
+  const [loja, setLoja] = useState<Loja | null>(null);
   const [perguntando, setPerguntando] = useState<Direction | null>(null);
   const [erro, setErro] = useState('');
   const [carregando, setCarregando] = useState(true);
@@ -109,6 +112,22 @@ export function TelaJogo({ slot }: { slot: number }) {
     const resultado = interagir(movido);
     registrarMudanca(resultado.estado, resultado.aviso);
     setCombate(resultado.combate);
+    setLoja(resultado.loja ?? null);
+  }
+
+  /** Comprar, vender e reforjar mexem no ouro e na mochila: grava igual a um passo. */
+  function seguirLoja(proxima: Loja) {
+    setLoja(proxima);
+    setEstado(proxima.estado);
+    precisaSalvar.current = true;
+    setSalvamento('parado');
+  }
+
+  function fecharLoja(final: Loja) {
+    setLoja(null);
+    setEstado(final.estado);
+    precisaSalvar.current = true;
+    setSalvamento('parado');
   }
 
   /**
@@ -170,6 +189,15 @@ export function TelaJogo({ slot }: { slot: number }) {
   if (carregando) return <p>Carregando progresso…</p>;
   if (erro && !estado) return <p className={styles.erro}>{erro}</p>;
   if (!estado) return null;
+
+  if (loja) {
+    return (
+      <div className={styles.conteudo}>
+        <PainelHeroi hero={estado.hero} />
+        <TelaLoja loja={loja} onLoja={seguirLoja} onFechar={fecharLoja} />
+      </div>
+    );
+  }
 
   if (combate) {
     return (

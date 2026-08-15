@@ -221,6 +221,112 @@
   color: var(--gold-bright);
 }
 
+/* ---------- loja e ferreiro ---------- */
+
+.loja {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.cabecalhoLoja {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cabecalhoLoja .local {
+  margin: 0;
+  flex: 1;
+}
+
+.ouro {
+  font-family: var(--font-mono), monospace;
+  color: var(--gold-bright);
+  margin: 0;
+}
+
+.resultadoPechincha {
+  font-size: 0.85rem;
+  color: var(--gold-bright);
+  align-self: center;
+}
+
+.tituloDaSecao {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--parchment);
+  font-size: 0.95rem;
+  margin: 0.75rem 0 0;
+}
+
+.vazio {
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.gradeDeItens {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.6rem;
+}
+
+.cartaItem {
+  display: grid;
+  gap: 0.15rem;
+  justify-items: center;
+  text-align: center;
+  padding: 0.7rem 0.6rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  font: inherit;
+  color: var(--parchment);
+}
+
+.cartaClicavel {
+  cursor: pointer;
+}
+
+.cartaClicavel:hover {
+  border-color: var(--gold);
+}
+
+.cartaSelecionada {
+  border-color: var(--gold-bright);
+  box-shadow: inset 0 0 0 1px var(--gold-bright);
+}
+
+.spriteItem {
+  image-rendering: pixelated;
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}
+
+.nomeItem {
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+.metaItem {
+  font-size: 0.7rem;
+  color: var(--parchment-dim);
+}
+
+.statsItem {
+  font-size: 0.7rem;
+  color: var(--parchment);
+}
+
+.rodapeItem {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  color: var(--gold-bright);
+  margin-top: 0.2rem;
+}
+
 /* ---------- combate ---------- */
 
 .combate {

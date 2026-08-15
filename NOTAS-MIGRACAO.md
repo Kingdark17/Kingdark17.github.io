@@ -19,7 +19,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 0 — monorepo | pronta |
 | 1 — engine em `packages/shared` | pronta (321 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
-| 3 — front Next | em andamento: conta, personagem, cidade, masmorra e **combate** jogáveis; faltam lojas, NPCs e eventos |
+| 3 — front Next | em andamento: conta, personagem, cidade, masmorra, combate e **loja/ferreiro** jogáveis; faltam NPCs, quadro de missões e eventos |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
 | 6 — otimização | não começou |
@@ -113,16 +113,16 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 | front (fase 3) | o combate grava a cada ação, não só no fim | fechar a aba no meio de um chefe não devolvia o chefe com vida cheia — o original salva igual |
 | front (fase 3) | texto com `<b>` da engine vira `<strong>` de verdade, sem `innerHTML` | o original jogava tudo em `innerHTML`; o mapa trafega pela rede e um dia vem de outro jogador no multiplayer |
 | front (fase 3) | sem token, `chamarApi` já rejeita no cliente | evita mandar `Bearer ` vazio e tira o `setState` síncrono de dentro do `useEffect` (regra `react-hooks/set-state-in-effect` do lint do Next 16) |
+| front (fase 3) | a arte dos itens foi **copiada** de `rpg-legend/img/` pra `apps/web/public/img/` | 240 KB, 28 arquivos. O app na Vercel não pode depender do GitHub Pages pra desenhar um item. Enquanto os dois clientes coexistirem há duas cópias; a do jogo antigo some junto com ele |
 
 ### Fase 3 — o que já dá pra jogar
 
-Criar conta → criar personagem → andar pela cidade → taverna → atravessar
-o portão → explorar a masmorra → abrir baú → **lutar** → descer escada →
-sair pela saída e voltar pra cidade. Tudo gravando na nuvem com a
-assinatura encadeada.
+Criar conta → criar personagem → andar pela cidade → taverna →
+**comprar, vender e reforjar** → atravessar o portão → explorar a
+masmorra → abrir baú → lutar → descer escada → sair pela saída e voltar
+pra cidade. Tudo gravando na nuvem com a assinatura encadeada.
 
-Falta: lojas, ferreiro, quadro de missões, diálogo com NPC e eventos de
-sala.
+Falta: quadro de missões, diálogo com NPC e eventos de sala.
 
 ### Onde o combate ficou dividido, e por quê
 
@@ -139,6 +139,27 @@ Isso deixa uma pergunta em aberto pra quando o Nest for validar jogada:
 porque o servidor precisa do mesmo tipo de save e da mesma máquina de
 turnos. Não movi agora porque a fase 3 ainda está mexendo neles todo dia —
 é decisão pra fase 6.
+
+### Loja e ferreiro
+
+Mesma divisão do combate: a economia inteira já estava na engine
+(`rollStock`, `resolveBuy`, `resolveSell`, `resolveForge`,
+`resolveRestock`, `discountForRoll`), e `apps/web/lib/jogo/loja.ts` só
+guarda o que é sessão — o desconto da pechincha e quantas renovações já
+houve nesta visita, que no original eram variáveis módulo-level zeradas a
+cada `open()`.
+
+O **estoque não é sessão**: mora em `cell.forSale`, na própria sala, e vai
+pro save — igual `ensureStock()` do original. Sair e voltar não sorteia
+estoque novo de graça, senão o botão de renovar (que cobra ouro) não teria
+razão de existir. Isso obrigou a acrescentar `forSale?: Item[]` em
+`CityCell` na engine, e a fazer `substituirCelulaAtual` funcionar também
+na cidade — lá o `map` e o `cityMap` são o mesmo mapa e precisam andar
+juntos.
+
+`FORGE_MATERIALS` na engine só guarda custo e probabilidades por
+`templateId`; nome e arte do material vêm do catálogo de itens
+(`templateById`). O original duplicava as duas coisas.
 
 O d20 é rolado **na tela** e passado como parâmetro pra máquina de turnos.
 Foi de propósito: é o número que o jogador vê, e é o que o servidor vai
@@ -160,6 +181,12 @@ save nenhum campo que `monsterView()` acrescenta (`species`, `name`,
 `icon`...). Era o risco real do combate — sem o `despirView` de
 `combate.ts`, o catálogo da espécie inteiro entraria no save e trafegaria
 a cada golpe no multiplayer.
+
+Save **com estoque de loja** idem: o `forSale` da sala sobe e volta
+idêntico, e o `cityMap` guarda o mesmo estoque. O item no save continua
+sendo só `uid/templateId/rarity/stats/value/equipped` — o catálogo não
+entra. E a arte serve de `/img/...` no build do Next (conferido com
+`next start` + `curl`, 200 e `image/png`).
 
 ---
 
