@@ -8,6 +8,7 @@
  */
 
 import Image from 'next/image';
+import type { ReactNode } from 'react';
 
 import { itemView, statTags, tierFor, type Item } from '@rpg-legend/shared';
 
@@ -25,9 +26,11 @@ interface Props {
   rodape?: string;
   selecionado?: boolean;
   onClick?: () => void;
+  /** Botões sob a carta, quando o item aceita mais de uma ação (equipar na principal ou na secundária, usar, descartar). */
+  acoes?: ReactNode;
 }
 
-export function CartaItem({ item, rodape, selecionado, onClick }: Props) {
+export function CartaItem({ item, rodape, selecionado, onClick, acoes }: Props) {
   const visao = itemView(item);
   const tier = tierFor(item);
   const tags = statTags(item);
@@ -53,6 +56,15 @@ export function CartaItem({ item, rodape, selecionado, onClick }: Props) {
       {rodape && <span className={styles.rodapeItem}>{rodape}</span>}
     </>
   );
+
+  if (acoes) {
+    return (
+      <div className={styles.cartaItem}>
+        {conteudo}
+        <div className={styles.acoesDaCarta}>{acoes}</div>
+      </div>
+    );
+  }
 
   if (!onClick) return <div className={styles.cartaItem}>{conteudo}</div>;
 

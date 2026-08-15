@@ -17,9 +17,9 @@ nada que o código ou o `git log` já contem sozinhos.
 | Fase | Situação |
 |---|---|
 | 0 — monorepo | pronta |
-| 1 — engine em `packages/shared` | pronta (321 testes) |
+| 1 — engine em `packages/shared` | pronta (326 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
-| 3 — front Next | **todas as salas jogáveis**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões e eventos. Falta a mochila (equipar/usar item) e o level up manual |
+| 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila e level up manual |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
 | 6 — otimização | não começou |
@@ -109,8 +109,9 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 | e-mail | erro de rede no envio não sobe | ver bug #5 |
 | e-mail | tamanho da senha é validado antes de olhar o token | não gastar o link por causa de senha curta |
 | repositórios | `getDb()` só é chamado dentro dos métodos | o app sobe e roteia sem `DATABASE_URL`; só quebra a rota que precisa do banco |
-| front (fase 3) | sala não migrada avisa "ainda não foi migrado" em vez de não fazer nada | entrar numa loja e a tela não reagir parece bug; o aviso deixa claro o que falta e não inventa regra nova |
 | front (fase 3) | o combate grava a cada ação, não só no fim | fechar a aba no meio de um chefe não devolvia o chefe com vida cheia — o original salva igual |
+| front (fase 3) | guardar ou trocar a arma **devolve a peça pra mochila** | a arma inicial nasce só dentro de `hero.equip.arma`, sem entrada na mochila. No jogo antigo, equipar outra arma a apaga pra sempre — isso não é regra, é bug |
+| engine | `useConsumable()` virou `consumeItem()` | o `react-hooks` do ESLint trata qualquer `useX()` como Hook e recusa a chamada fora de um componente. Mesmo motivo do `castPower()` |
 | front (fase 3) | texto com `<b>` da engine vira `<strong>` de verdade, sem `innerHTML` | o original jogava tudo em `innerHTML`; o mapa trafega pela rede e um dia vem de outro jogador no multiplayer |
 | front (fase 3) | sem token, `chamarApi` já rejeita no cliente | evita mandar `Bearer ` vazio e tira o `setState` síncrono de dentro do `useEffect` (regra `react-hooks/set-state-in-effect` do lint do Next 16) |
 | front (fase 3) | a arte dos itens foi **copiada** de `rpg-legend/img/` pra `apps/web/public/img/` | 240 KB, 28 arquivos. O app na Vercel não pode depender do GitHub Pages pra desenhar um item. Enquanto os dois clientes coexistirem há duas cópias; a do jogo antigo some junto com ele |
@@ -121,12 +122,13 @@ Criar conta → criar personagem → andar pela cidade → taverna → comprar,
 vender e reforjar → **conversar com NPC e usar o serviço dele** → **pegar
 missão no quadro** → atravessar o portão → explorar a masmorra → abrir
 baú → lutar → **resolver evento de sala** → descer escada → sair pela
-saída e voltar pra cidade. Tudo gravando na nuvem com a assinatura
-encadeada.
+saída e voltar pra cidade — **abrindo a mochila a qualquer momento pra
+trocar equipamento, beber poção e distribuir os pontos do nível**. Tudo
+gravando na nuvem com a assinatura encadeada.
 
-**Toda sala do jogo já faz alguma coisa.** O que falta na fase 3 é o que
-nunca foi sala: a mochila (equipar, usar poção) e a tela de level up
-manual (distribuir os 2 pontos por nível).
+A mochila é a única tela que não é sala: abre por botão na exploração, e
+continua acessível com a pergunta "deseja entrar?" na tela — beber uma
+poção antes de encarar o monstro é justamente quando ela serve.
 
 ### Onde o combate ficou dividido, e por quê
 

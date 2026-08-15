@@ -327,6 +327,39 @@
   margin-top: 0.2rem;
 }
 
+/* ---------- mochila ---------- */
+
+.acoesDaCarta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+}
+
+.botaoDiscreto {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 0.25rem;
+  color: var(--parchment-dim);
+  font: inherit;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+}
+
+.botaoDiscreto:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}
+
+.slotVazio {
+  border-style: dashed;
+  opacity: 0.55;
+  min-height: 5rem;
+  align-content: center;
+}
+
 .listaDeMissoes {
   list-style: none;
   padding: 0;
@@ -455,6 +488,24 @@
 .custoDeMana {
   color: var(--parchment-dim);
   font-size: 0.75rem;
+}
+
+.acoesDaExploracao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.9rem 0;
+}
+
+/* Pontos de atributo parados são fáceis de esquecer — o botão avisa. */
+.marcaDePontos {
+  background: var(--gold);
+  color: var(--ink);
+  border-radius: 0.8rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  padding: 0 0.4rem;
+  margin-left: 0.35rem;
 }
 
 .bussola {

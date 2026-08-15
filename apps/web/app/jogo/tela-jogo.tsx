@@ -24,6 +24,7 @@ import { carregarSave, gravarSave } from '@/lib/api/save';
 import { apresentacaoDe } from '@/lib/jogo/apresentacao';
 import { andar, celulaAtual, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
+import { abrirMochila } from '@/lib/jogo/mochila';
 import type { Combate } from '@/lib/jogo/combate';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
@@ -33,6 +34,7 @@ import { TelaDialogo } from './tela-dialogo';
 import { TelaEvento } from './tela-evento';
 import { TelaLoja } from './tela-loja';
 import { TelaMissoes } from './tela-missoes';
+import { TelaMochila } from './tela-mochila';
 import { TextoDoJogo } from './texto-do-jogo';
 
 const ESPERA_ANTES_DE_SALVAR_MS = 2500;
@@ -218,6 +220,14 @@ export function TelaJogo({ slot }: { slot: number }) {
             onFechar={(final) => fechar(final.estado)}
           />
         );
+      case 'mochila':
+        return (
+          <TelaMochila
+            mochila={aberta.mochila}
+            onMochila={(proxima) => seguir({ tipo: 'mochila', mochila: proxima }, proxima.estado)}
+            onFechar={(final) => fechar(final.estado)}
+          />
+        );
     }
   }
 
@@ -296,6 +306,20 @@ export function TelaJogo({ slot }: { slot: number }) {
             </div>
           </div>
         )}
+
+        {/* A mochila não é sala: abre por botão, e continua acessível com a
+            pergunta "deseja entrar?" na tela — beber uma poção antes de
+            encarar o monstro é justamente quando ela serve. */}
+        <div className={styles.acoesDaExploracao}>
+          <button
+            type="button"
+            className={`${styles.botao} ${estado.hero.attrPoints > 0 ? styles.botaoPrincipal : ''}`}
+            onClick={() => setTela({ tipo: 'mochila', mochila: abrirMochila(estado) })}
+          >
+            🎒 Mochila
+            {estado.hero.attrPoints > 0 && <span className={styles.marcaDePontos}>{estado.hero.attrPoints}</span>}
+          </button>
+        </div>
 
         <div className={styles.bussola}>
           {DIRECOES.map(({ direcao, classe, seta }) => (

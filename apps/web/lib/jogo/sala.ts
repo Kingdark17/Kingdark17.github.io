@@ -32,6 +32,7 @@ import { iniciarEncontro, type Combate } from './combate';
 import { abrirDialogo, type Dialogo } from './dialogo';
 import { abrirEvento, type Evento } from './evento';
 import { abrirLoja, type Loja } from './loja';
+import type { Mochila } from './mochila';
 import { abrirQuadro, type Quadro } from './missoes';
 import {
   celulaAtual,
@@ -52,16 +53,21 @@ export interface Aviso {
 }
 
 /**
- * Sala que troca a tela de exploração por outra. União em vez de um campo
+ * O que troca a tela de exploração por outra. União em vez de um campo
  * opcional por tipo: a tela só precisa olhar `tipo` pra saber o que abrir,
  * e acrescentar um lugar novo não vira mais um `?: X | null` na interface.
+ *
+ * `mochila` é a única que `interagir` nunca devolve — ela não é sala, abre
+ * por botão. Mora aqui mesmo assim porque o que a união descreve é qual
+ * tela está aberta, não de onde ela veio.
  */
 export type TelaAberta =
   | { tipo: 'combate'; combate: Combate }
   | { tipo: 'loja'; loja: Loja }
   | { tipo: 'dialogo'; dialogo: Dialogo }
   | { tipo: 'missoes'; quadro: Quadro }
-  | { tipo: 'evento'; evento: Evento };
+  | { tipo: 'evento'; evento: Evento }
+  | { tipo: 'mochila'; mochila: Mochila };
 
 export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;
