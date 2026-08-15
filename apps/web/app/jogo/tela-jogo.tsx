@@ -25,15 +25,19 @@ import { carregarSave, gravarSave } from '@/lib/api/save';
 import { apresentacaoDe } from '@/lib/jogo/apresentacao';
 import { andar, celulaAtual, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
+import { abrirAdm } from '@/lib/jogo/adm';
 import { abrirMochila } from '@/lib/jogo/mochila';
+import { marcar, type Recado } from '@/lib/jogo/tutorial';
 import type { Combate } from '@/lib/jogo/combate';
 import { BichoDeEstimacao } from './bicho-de-estimacao';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
 import { PainelHeroi } from './painel-heroi';
+import { TelaAdm } from './tela-adm';
 import { TelaCombate } from './tela-combate';
 import { TelaDialogo } from './tela-dialogo';
 import { TelaEvento } from './tela-evento';
+import { TelaGuia } from './tela-guia';
 import { TelaLoja } from './tela-loja';
 import { TelaMissoes } from './tela-missoes';
 import { TelaMochila } from './tela-mochila';
@@ -59,6 +63,9 @@ export function TelaJogo({ slot }: { slot: number }) {
   const [carregando, setCarregando] = useState(true);
   const [salvamento, setSalvamento] = useState<EstadoDoSalvamento>('parado');
   const [pet, setPet] = useState<PetId | null>(null);
+  const [admin, setAdmin] = useState(false);
+  const [recado, setRecado] = useState<Recado | null>(null);
+  const [guiaAberto, setGuiaAberto] = useState(false);
 
   const assinatura = useRef('');
   const precisaSalvar = useRef(false);
@@ -78,11 +85,15 @@ export function TelaJogo({ slot }: { slot: number }) {
       .finally(() => setCarregando(false));
   }, [slot]);
 
-  // O pet é cosmético da conta e dá bônus de combate. Não achar não é erro
-  // de jogo: sem pet a luta acontece igual, só sem os bônus.
+  // A conta traz duas coisas que o save não tem: o pet (bônus de combate)
+  // e se é a conta administradora (painel ADM). Falhar aqui não é erro de
+  // jogo — sem pet a luta acontece igual, só sem os bônus.
   useEffect(() => {
     usuarioAtual()
-      .then((usuario) => setPet(usuario.pet && usuario.pet !== 'none' ? (usuario.pet as PetId) : null))
+      .then((usuario) => {
+        setPet(usuario.pet && usuario.pet !== 'none' ? (usuario.pet as PetId) : null);
+        setAdmin(usuario.isAdmin);
+      })
       .catch(() => undefined);
   }, []);
 
@@ -123,9 +134,25 @@ export function TelaJogo({ slot }: { slot: number }) {
   function entrar(atual: EstadoDoJogo, direcao: Direction) {
     const movido = andar(atual, direcao);
     if (movido === atual) return;
-    const resultado = interagir(movido, undefined, pet);
+
+    // "Dê o primeiro passo" fecha aqui; as outras etapas de sala saem
+    // de dentro de `interagir`, que sabe em que sala o jogador caiu.
+    const passo = marcar(movido, 'move');
+    const resultado = interagir(passo.estado, undefined, pet);
+
     registrarMudanca(resultado.estado, resultado.aviso);
+    setRecado(resultado.recado ?? passo.recado);
     setTela(resultado.tela);
+  }
+
+  function abrirTelaDaMochila(atual: EstadoDoJogo) {
+    const passo = marcar(atual, 'inventory');
+    if (passo.recado) {
+      setEstado(passo.estado);
+      setRecado(passo.recado);
+      precisaSalvar.current = true;
+    }
+    setTela({ tipo: 'mochila', mochila: abrirMochila(passo.estado) });
   }
 
   /**
@@ -239,7 +266,42 @@ export function TelaJogo({ slot }: { slot: number }) {
             onFechar={(final) => fechar(final.estado)}
           />
         );
+      case 'adm':
+        return (
+          <TelaAdm
+            adm={aberta.adm}
+            onAdm={(proximo) => seguir({ tipo: 'adm', adm: proximo }, proximo.estado)}
+            onFechar={(final) => fechar(final.estado)}
+          />
+        );
     }
+  }
+
+  const enfeites = (
+    <>
+      <BichoDeEstimacao pet={pet} />
+      {recado && (
+        <div className={styles.recado} role="status">
+          <span className={styles.textoDoRecado}>
+            <strong>{recado.titulo}</strong>
+            <span>{recado.texto}</span>
+          </span>
+          <button type="button" className={styles.fecharRecado} onClick={() => setRecado(null)} aria-label="Fechar aviso">
+            ×
+          </button>
+        </div>
+      )}
+    </>
+  );
+
+  if (guiaAberto) {
+    return (
+      <div className={styles.conteudo}>
+        <PainelHeroi hero={estado.hero} />
+        <TelaGuia estado={estado} onFechar={() => setGuiaAberto(false)} />
+        {enfeites}
+      </div>
+    );
   }
 
   if (tela) {
@@ -247,7 +309,7 @@ export function TelaJogo({ slot }: { slot: number }) {
       <div className={styles.conteudo}>
         <PainelHeroi hero={estado.hero} />
         {conteudoDaTela(tela)}
-        <BichoDeEstimacao pet={pet} />
+        {enfeites}
       </div>
     );
   }
@@ -326,11 +388,21 @@ export function TelaJogo({ slot }: { slot: number }) {
           <button
             type="button"
             className={`${styles.botao} ${estado.hero.attrPoints > 0 ? styles.botaoPrincipal : ''}`}
-            onClick={() => setTela({ tipo: 'mochila', mochila: abrirMochila(estado) })}
+            onClick={() => abrirTelaDaMochila(estado)}
           >
             🎒 Mochila
             {estado.hero.attrPoints > 0 && <span className={styles.marcaDePontos}>{estado.hero.attrPoints}</span>}
           </button>
+
+          <button type="button" className={styles.botao} onClick={() => setGuiaAberto(true)}>
+            📖 Guia
+          </button>
+
+          {admin && (
+            <button type="button" className={styles.botao} onClick={() => setTela({ tipo: 'adm', adm: abrirAdm(estado) })}>
+              🛠️ ADM
+            </button>
+          )}
         </div>
 
         <div className={styles.bussola}>
@@ -357,7 +429,7 @@ export function TelaJogo({ slot }: { slot: number }) {
         {erro && <p className={styles.erro}>{erro}</p>}
       </section>
 
-      <BichoDeEstimacao pet={pet} />
+      {enfeites}
     </div>
   );
 }

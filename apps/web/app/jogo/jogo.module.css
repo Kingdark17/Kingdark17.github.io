@@ -644,3 +644,119 @@
     animation: none;
   }
 }
+
+/* ---------- painel ADM ---------- */
+
+.fichaDoAdm {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.6rem;
+}
+
+.campoDoAdm {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.entradaDoAdm {
+  padding: 0.35rem 0.5rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  color: var(--parchment);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.entradaDoAdm:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+/* ---------- guia do aventureiro ---------- */
+
+.listaDePassos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.passo {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+}
+
+.passoFeito {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}
+
+.iconeDoPasso {
+  font-size: 1.3rem;
+}
+
+.nomeDoPasso {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.9rem;
+}
+
+.dicaDoPasso {
+  color: var(--parchment-dim);
+  font-size: 0.78rem;
+  margin: 0.1rem 0 0;
+}
+
+.gradeDoGuia {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.6rem;
+}
+
+.cartaDoGuia {
+  padding: 0.7rem 0.8rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+}
+
+/* Aviso curto de etapa concluída. Não some sozinho: sai no clique. */
+.recado {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: min(28rem, calc(100vw - 2rem));
+  padding: 0.6rem 0.8rem;
+  background: var(--panel);
+  border: 1px solid var(--gold);
+  border-radius: 0.4rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
+  z-index: 95;
+}
+
+.textoDoRecado {
+  display: grid;
+}
+
+.fecharRecado {
+  background: none;
+  border: none;
+  color: var(--parchment-dim);
+  font: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}

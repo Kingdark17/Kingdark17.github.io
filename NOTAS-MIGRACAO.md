@@ -113,6 +113,7 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 | front (fase 3) | guardar ou trocar a arma **devolve a peça pra mochila** | a arma inicial nasce só dentro de `hero.equip.arma`, sem entrada na mochila. No jogo antigo, equipar outra arma a apaga pra sempre — isso não é regra, é bug |
 | engine | `useConsumable()` virou `consumeItem()` | o `react-hooks` do ESLint trata qualquer `useX()` como Hook e recusa a chamada fora de um componente. Mesmo motivo do `castPower()` |
 | front (fase 3) | o pet entra no combate por **parâmetro** (`iniciarEncontro(estado, pet)`) | o original lia o global `RPG.Account.currentUser()` de dentro de `combat.js`. Pet é cosmético da conta: passando por parâmetro ele não entra no save nem viaja pela rede a cada golpe |
+| front (fase 3) | o modo infinito do ADM só liga no clique | o original chamava `applyGodMode(true)` sozinho toda vez que um admin entrava no jogo, e mandava pra nuvem em seguida. Reescrever o save de alguém sem pedir não dá pra desfazer |
 | front (fase 3) | texto com `<b>` da engine vira `<strong>` de verdade, sem `innerHTML` | o original jogava tudo em `innerHTML`; o mapa trafega pela rede e um dia vem de outro jogador no multiplayer |
 | front (fase 3) | sem token, `chamarApi` já rejeita no cliente | evita mandar `Bearer ` vazio e tira o `setState` síncrono de dentro do `useEffect` (regra `react-hooks/set-state-in-effect` do lint do Next 16) |
 | front (fase 3) | a arte dos itens foi **copiada** de `rpg-legend/img/` pra `apps/web/public/img/` | 240 KB, 28 arquivos. O app na Vercel não pode depender do GitHub Pages pra desenhar um item. Enquanto os dois clientes coexistirem há duas cópias; a do jogo antigo some junto com ele |
@@ -140,10 +141,18 @@ recusar, remover e trocar mensagem. O histórico vem do banco por REST.
 
 O menu principal (`/`) tomou o lugar da página de fumaça da fase 0.
 
+Painel ADM e Guia do Aventureiro abrem por botão na exploração — o ADM só
+aparece pra conta administradora, e quem diz quem é admin é o servidor.
+As seis etapas dos Primeiros Passos são marcadas ao andar, abrir a
+mochila e entrar em NPC/loja/portão/monstro, com a mesma recompensa de 40
+de ouro e uma poção.
+
 ### Fase 3 — o que ainda é só do cliente antigo
 
-Multiplayer (salas co-op, convite, chat ao vivo), perfil público de outro
-jogador, painel ADM e tutorial.
+Multiplayer (salas co-op, convite, chat ao vivo) e o perfil público de
+outro jogador — que no original só existe dentro da sala co-op, montado
+com o perfil que o parceiro mandou pelo socket. Não há rota REST de
+"perfil do jogador X"; ele nasce junto com o multiplayer ou não nasce.
 
 Duas consequências visíveis de não ter socket ainda:
 

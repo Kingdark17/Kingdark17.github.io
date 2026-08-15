@@ -35,6 +35,8 @@ import {
   type RoomCell,
 } from '@rpg-legend/shared';
 
+import type { Tutorial } from './tutorial';
+
 /** Mesmo tamanho de grade do original (`main.js`: mapRows/mapCols = 6). */
 export const LINHAS_DO_MAPA = 6;
 export const COLUNAS_DO_MAPA = 6;
@@ -61,6 +63,8 @@ interface EstadoBase {
   cityMap: CityCell[][] | null;
   cityStart: Posicao | null;
   pos: Posicao;
+  /** Progresso dos Primeiros Passos. Ausente em save antigo — `tutorialDe()` cuida disso. */
+  tutorial?: Tutorial;
 }
 
 export interface EstadoNaCidade extends EstadoBase {
@@ -89,6 +93,7 @@ export interface SaveCarregado {
   cityMap?: CityCell[][] | null;
   cityStart?: Posicao | null;
   pos?: Posicao | null;
+  tutorial?: Tutorial;
 }
 
 function comuns(save: SaveCarregado): Omit<EstadoBase, 'pos'> {
@@ -102,6 +107,9 @@ function comuns(save: SaveCarregado): Omit<EstadoBase, 'pos'> {
     mapCols: save.mapCols ?? COLUNAS_DO_MAPA,
     cityMap: save.cityMap ?? null,
     cityStart: save.cityStart ?? null,
+    // Só entra no estado se o save já tinha — assim o save de quem nunca
+    // mexeu no tutorial não ganha um campo novo à toa.
+    ...(save.tutorial ? { tutorial: save.tutorial } : {}),
   };
 }
 

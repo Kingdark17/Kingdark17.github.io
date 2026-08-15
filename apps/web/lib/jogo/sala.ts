@@ -29,12 +29,14 @@ import {
   type Rng,
 } from '@rpg-legend/shared';
 
+import type { Adm } from './adm';
 import { iniciarEncontro, type Combate } from './combate';
 import { abrirDialogo, type Dialogo } from './dialogo';
 import { abrirEvento, type Evento } from './evento';
 import { abrirLoja, type Loja } from './loja';
 import type { Mochila } from './mochila';
 import { abrirQuadro, type Quadro } from './missoes';
+import { marcar, type PassoDoTutorial, type Recado, type ResultadoDoPasso } from './tutorial';
 import {
   celulaAtual,
   descerEscada,
@@ -58,9 +60,9 @@ export interface Aviso {
  * opcional por tipo: a tela só precisa olhar `tipo` pra saber o que abrir,
  * e acrescentar um lugar novo não vira mais um `?: X | null` na interface.
  *
- * `mochila` é a única que `interagir` nunca devolve — ela não é sala, abre
- * por botão. Mora aqui mesmo assim porque o que a união descreve é qual
- * tela está aberta, não de onde ela veio.
+ * `mochila` e `adm` são as duas que `interagir` nunca devolve — não são
+ * sala, abrem por botão. Moram aqui mesmo assim porque o que a união
+ * descreve é qual tela está aberta, não de onde ela veio.
  */
 export type TelaAberta =
   | { tipo: 'combate'; combate: Combate }
@@ -68,13 +70,29 @@ export type TelaAberta =
   | { tipo: 'dialogo'; dialogo: Dialogo }
   | { tipo: 'missoes'; quadro: Quadro }
   | { tipo: 'evento'; evento: Evento }
-  | { tipo: 'mochila'; mochila: Mochila };
+  | { tipo: 'mochila'; mochila: Mochila }
+  | { tipo: 'adm'; adm: Adm };
 
 export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;
   aviso: Aviso | null;
   tela: TelaAberta | null;
+  /** Etapa dos Primeiros Passos concluída agora, pra tela mostrar o aviso curto. */
+  recado: Recado | null;
 }
+
+/** O que cada sala resolve. O `recado` do tutorial é costurado por `interagir`, não por sala. */
+type ResolucaoDaSala = Omit<ResultadoDaInteracao, 'recado'>;
+
+/** Qual etapa dos Primeiros Passos esta sala fecha, se alguma. */
+const PASSO_DA_SALA: Record<string, PassoDoTutorial> = {
+  npc: 'npc',
+  shop: 'shop',
+  blacksmith: 'shop',
+  gate: 'dungeon',
+  monster: 'combat',
+  boss: 'combat',
+};
 
 /** Salas que abrem a pergunta "deseja entrar?" antes do passo (`needsConfirm`). */
 const PEDEM_CONFIRMACAO = new Set([
@@ -113,12 +131,30 @@ function aviso(icone: string, titulo: string, texto: string): Aviso {
  * Resolve a sala em que o jogador acabou de entrar. `pet` é o cosmético da
  * conta, não do save — só a sala de monstro o usa, pra passar os bônus ao
  * combate.
+ *
+ * A etapa do tutorial é marcada **antes** de montar a tela da sala: a
+ * recompensa entra no ouro e na mochila que a loja vai mostrar, e a tela
+ * aberta já carrega o estado com a etapa marcada — senão fechá-la
+ * desfaria a marca.
  */
 export function interagir(estado: EstadoDoJogo, rng: Rng = defaultRng, pet: PetId | null = null): ResultadoDaInteracao {
-  return estado.mapMode === 'city' ? naCidade(estado, rng) : naMasmorra(estado, rng, pet);
+  const antes = comEtapaDaSala(estado, rng);
+  const resultado =
+    antes.estado.mapMode === 'city' ? naCidade(antes.estado, rng) : naMasmorra(antes.estado, rng, pet);
+  return { ...resultado, recado: antes.recado };
 }
 
-function naCidade(estado: EstadoNaCidade, rng: Rng): ResultadoDaInteracao {
+function comEtapaDaSala(estado: EstadoDoJogo, rng: Rng): ResultadoDoPasso {
+  const celula = celulaAtual(estado);
+  const passo = celula ? PASSO_DA_SALA[celula.type] : undefined;
+  if (!passo) return { estado, recado: null };
+
+  // Sala de monstro já limpa não conta como "comece um combate".
+  const jaBatida = passo === 'combat' && (celula as DungeonCell).beaten;
+  return jaBatida ? { estado, recado: null } : marcar(estado, passo, rng);
+}
+
+function naCidade(estado: EstadoNaCidade, rng: Rng): ResolucaoDaSala {
   const celula = celulaAtual(estado);
   if (!celula) return { estado, aviso: null, tela: null };
 
@@ -154,7 +190,7 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResultadoDaInteracao {
   }
 }
 
-function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): ResultadoDaInteracao {
+function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): ResolucaoDaSala {
   const celula = celulaAtual(estado);
   if (!celula || estado.mapMode !== 'dungeon') return { estado, aviso: null, tela: null };
 
@@ -186,7 +222,7 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): Resu
   }
 }
 
-function descer(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
+function descer(estado: EstadoNaMasmorra, rng: Rng): ResolucaoDaSala {
   const resultado = descerEscada(estado, rng);
   if (resultado.kind === 'selado') {
     return { estado, aviso: aviso('👑', 'Caminho Selado', 'O poder do chefe bloqueia as escadas. Derrote-o para avançar.'), tela: null };
@@ -204,7 +240,7 @@ function descer(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
  * faz antes de chamar o combate. O combate em si é o que falta; o mímico
  * já fica salvo na sala, esperando.
  */
-function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng, pet: PetId | null): ResultadoDaInteracao {
+function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng, pet: PetId | null): ResolucaoDaSala {
   if (celula.collected) return { estado, aviso: aviso('🧰', 'Baú Vazio', 'Este baú já foi revistado.'), tela: null };
 
   if (celula.isMimic) {
@@ -253,7 +289,7 @@ function premioDoBau(celula: DungeonCell, floor: number, rng: Rng): DungeonTreas
 }
 
 /** NPC existe nos dois mapas, com o mesmo formato. */
-function abrirConversa(estado: EstadoDoJogo): ResultadoDaInteracao {
+function abrirConversa(estado: EstadoDoJogo): ResolucaoDaSala {
   const dialogo = abrirDialogo(estado);
   if (!dialogo) return { estado, aviso: null, tela: null };
   return { estado, aviso: null, tela: { tipo: 'dialogo', dialogo } };

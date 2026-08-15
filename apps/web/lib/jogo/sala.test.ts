@@ -195,7 +195,9 @@ describe('interagir na masmorra', () => {
     const naSala = emCimaDe(masmorraNoAndar(2), 'monster');
     const { estado, tela } = interagir(naSala);
 
-    expect(estado).toBe(naSala);
+    // Entrar não mexe em herói nem em sala; só marca a etapa do tutorial.
+    expect(estado.hero).toBe(naSala.hero);
+    expect(estado.map).toBe(naSala.map);
     expect(tela?.tipo).toBe('combate');
     if (tela?.tipo !== 'combate') return;
     expect(tela.combate.fase).toBe('encontro');
