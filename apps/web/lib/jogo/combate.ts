@@ -14,6 +14,11 @@
  * A rolagem do d20 entra por parâmetro em vez de ser sorteada aqui — a tela
  * mostra o dado girando antes de saber o resultado, e um dia o servidor vai
  * querer conferir a jogada com o mesmo número.
+ *
+ * O pet também entra por parâmetro. Ele é cosmético **da conta**, não do
+ * save: o original lia o global `RPG.Account.currentUser()` de dentro do
+ * combate; aqui quem abre a luta já sabe quem está jogando e passa o id.
+ * Assim o pet não vaza pra dentro do save nem viaja pela rede a cada golpe.
  */
 
 import {
@@ -29,6 +34,7 @@ import {
   monsterView,
   onItemCollected,
   onMonsterKilled,
+  petBonus,
   randomItem,
   resolveAttack,
   tickHeroStatus,
@@ -41,6 +47,7 @@ import {
   type DungeonCell,
   type Hero,
   type Item,
+  type PetId,
   type Power,
   type Rng,
 } from '@rpg-legend/shared';
@@ -70,6 +77,8 @@ export interface Combate {
   dado: number | null;
   /** Item achado ao vencer, pra tela dar destaque. */
   loot: Item | null;
+  /** Pet cosmético da conta, pelos bônus de crítico/esquiva/cura/mana. */
+  pet: PetId | null;
 }
 
 const CHANCE_DE_LOOT_NORMAL = 0.25;
@@ -130,7 +139,7 @@ function despirView(monstro: CombatMonster): CombatMonster {
 
 // ---------- entrada e saída ----------
 
-export function iniciarEncontro(estado: EstadoNaMasmorra): Combate {
+export function iniciarEncontro(estado: EstadoNaMasmorra, pet: PetId | null = null): Combate {
   const monstro = monstroAtual(estado);
   const restantes = inimigosRestantes(estado);
   const abertura = !monstro
@@ -139,7 +148,7 @@ export function iniciarEncontro(estado: EstadoNaMasmorra): Combate {
       ? `Um grupo de ${restantes} criaturas aparece! O que você faz?`
       : `${monstro.name} aparece! O que você faz?`;
 
-  return { estado, fase: 'encontro', log: [abertura], dado: null, loot: null };
+  return { estado, fase: 'encontro', log: [abertura], dado: null, loot: null, pet };
 }
 
 /**
@@ -182,7 +191,7 @@ export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng:
   if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
   if (veneno.defeated) return derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng);
 
-  const ataque = resolveAttack(veneno.hero, monstro, roll, estilo, { rng });
+  const ataque = resolveAttack(veneno.hero, monstro, roll, estilo, { rng, petCriticoBonus: petBonus(combate.pet).critico ?? 0 });
 
   if (ataque.outcome === 'no_mana') {
     // Turno não passa: o original só avisa e devolve o controle.
@@ -221,7 +230,12 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
   if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
   if (veneno.defeated) return derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng);
 
-  const uso = castPower(veneno.hero, estado.party, monstro, poder, { rng });
+  const bonus = petBonus(combate.pet);
+  const uso = castPower(veneno.hero, estado.party, monstro, poder, {
+    rng,
+    petCuraBonus: bonus.healing ?? 0,
+    petManaSaveChance: bonus.manaSave ?? 0,
+  });
 
   if (uso.outcome === 'no_mana') {
     return { ...combate, estado: { ...estado, hero: veneno.hero }, log: [`Mana insuficiente para usar ${poder.name}.`] };
@@ -298,7 +312,10 @@ function turnoDosOutros(combate: Combate, rng: Rng): Combate {
   comEquipe = comMonstro(comEquipe, dot.monster);
   if (dot.defeated) return derrotarMonstro({ ...combate, estado: comEquipe, log }, monstro, rng);
 
-  const golpe = applyMonsterHit(comEquipe.hero, comEquipe.party, monsterView(dot.monster), { rng });
+  const golpe = applyMonsterHit(comEquipe.hero, comEquipe.party, monsterView(dot.monster), {
+    rng,
+    petEsquivaBonus: petBonus(combate.pet).esquiva ?? 0,
+  });
   log.push(textoDoGolpe(golpe, monstro.name));
 
   const depois: Combate = {

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { seededRng, type DungeonCell, type Hero, type MonsterInstance, type Rng } from '@rpg-legend/shared';
+import { heroPowers, seededRng, type DungeonCell, type Hero, type MonsterInstance, type Rng } from '@rpg-legend/shared';
 
-import { atacar, comecarCombate, fugir, iniciarEncontro, monstroAtual, salaDeCombate, type Combate } from './combate';
+import { atacar, comecarCombate, fugir, iniciarEncontro, monstroAtual, salaDeCombate, usarPoder, type Combate } from './combate';
 import { rolarTudo } from './criacao';
 import { celulaAtual, retomarSave, substituirCelulaAtual, type EstadoNaMasmorra } from './estado';
 import { montarSaveInicial } from './save-inicial';
@@ -262,5 +262,36 @@ describe('salaDeCombate', () => {
   it('não enxerga sala de monstro sem monstro', () => {
     const estado = comSalaDeMonstro({ monsters: [] });
     expect(salaDeCombate(estado)).toBeNull();
+  });
+});
+
+describe('bônus de pet', () => {
+  /** O poder de dano da classe inicial, pra ter um custo de mana pra poupar. */
+  function poderDeDano(estado: EstadoNaMasmorra) {
+    const poder = heroPowers(estado.hero).find((atual) => atual.type === 'dano_fisico' || atual.type === 'dano_magico');
+    if (!poder) throw new Error('o herói de teste não tem poder de dano');
+    return poder;
+  }
+
+  it('a coruja poupa a mana do poder; sem pet, o poder cobra', () => {
+    const estado = comSalaDeMonstro();
+    const poder = poderDeDano(estado);
+
+    // `SEMPRE` faz o sorteio de 5% da coruja cair sempre dentro da chance.
+    const comCoruja = usarPoder(comecarCombate(iniciarEncontro(estado, 'owl')), poder, SEMPRE);
+    const semPet = usarPoder(comecarCombate(iniciarEncontro(estado)), poder, SEMPRE);
+
+    expect(comCoruja.estado.hero.mp).toBe(estado.hero.mp);
+    expect(semPet.estado.hero.mp).toBeLessThan(estado.hero.mp);
+  });
+
+  it('o pet acompanha o combate inteiro, não só o primeiro golpe', () => {
+    const combate = comecarCombate(iniciarEncontro(comSalaDeMonstro(), 'admin_dragon'));
+
+    expect(atacar(combate, 10, 'normal', NUNCA).pet).toBe('admin_dragon');
+  });
+
+  it('sem pet a luta acontece igual', () => {
+    expect(iniciarEncontro(comSalaDeMonstro()).pet).toBeNull();
   });
 });

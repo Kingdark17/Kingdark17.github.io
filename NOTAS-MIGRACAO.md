@@ -112,6 +112,7 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 | front (fase 3) | o combate grava a cada ação, não só no fim | fechar a aba no meio de um chefe não devolvia o chefe com vida cheia — o original salva igual |
 | front (fase 3) | guardar ou trocar a arma **devolve a peça pra mochila** | a arma inicial nasce só dentro de `hero.equip.arma`, sem entrada na mochila. No jogo antigo, equipar outra arma a apaga pra sempre — isso não é regra, é bug |
 | engine | `useConsumable()` virou `consumeItem()` | o `react-hooks` do ESLint trata qualquer `useX()` como Hook e recusa a chamada fora de um componente. Mesmo motivo do `castPower()` |
+| front (fase 3) | o pet entra no combate por **parâmetro** (`iniciarEncontro(estado, pet)`) | o original lia o global `RPG.Account.currentUser()` de dentro de `combat.js`. Pet é cosmético da conta: passando por parâmetro ele não entra no save nem viaja pela rede a cada golpe |
 | front (fase 3) | texto com `<b>` da engine vira `<strong>` de verdade, sem `innerHTML` | o original jogava tudo em `innerHTML`; o mapa trafega pela rede e um dia vem de outro jogador no multiplayer |
 | front (fase 3) | sem token, `chamarApi` já rejeita no cliente | evita mandar `Bearer ` vazio e tira o `setState` síncrono de dentro do `useEffect` (regra `react-hooks/set-state-in-effect` do lint do Next 16) |
 | front (fase 3) | a arte dos itens foi **copiada** de `rpg-legend/img/` pra `apps/web/public/img/` | 240 KB, 28 arquivos. O app na Vercel não pode depender do GitHub Pages pra desenhar um item. Enquanto os dois clientes coexistirem há duas cópias; a do jogo antigo some junto com ele |
@@ -129,6 +130,17 @@ gravando na nuvem com a assinatura encadeada.
 A mochila é a única tela que não é sala: abre por botão na exploração, e
 continua acessível com a pergunta "deseja entrar?" na tela — beber uma
 poção antes de encarar o monstro é justamente quando ela serve.
+
+Na página da conta dá pra trocar foto, moldura, cor do nome e pet, e
+comprar cosmético na loja. O ouro da compra sai do **personagem**, não de
+uma carteira da conta — por isso a loja pede o slot antes.
+
+### Fase 3 — o que ainda é só do cliente antigo
+
+Multiplayer (salas, convite, chat em tempo real), lista de amigos, perfil
+público de outro jogador, painel ADM e tutorial. As rotas REST de amigos
+e mensagens já existem no Nest; o tempo real depende de escolher onde o
+cliente socket.io mora no Next — ver "Contrato de rede do multiplayer".
 
 ### Onde o combate ficou dividido, e por quê
 

@@ -13,6 +13,8 @@ import { useEffect, useState } from 'react';
 
 import { cadastrar, entrar, sair, usuarioAtual, type Usuario } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
+import { Avatar, NomeColorido } from './avatar';
+import { PainelPerfil } from './painel-perfil';
 import styles from './conta.module.css';
 
 type Modo = 'entrar' | 'cadastrar';
@@ -68,8 +70,13 @@ export function PainelConta() {
 
   if (usuario) {
     return (
-      <div className={styles.painel}>
-        <h1 className={styles.titulo}>{usuario.username}</h1>
+      <div className={`${styles.painel} ${styles.painelLargo}`}>
+        <div className={styles.previa}>
+          <Avatar url={usuario.avatarUrl} frame={usuario.frame} nome={usuario.username} />
+          <h1 className={styles.titulo} style={{ margin: 0 }}>
+            <NomeColorido nome={usuario.username} cor={usuario.nameColor || '#e8d7a5'} />
+          </h1>
+        </div>
         <p className={styles.linhaUsuario}>
           <span className={styles.chave}>E-mail</span>
           <span>{usuario.email ?? '—'}</span>
@@ -90,6 +97,8 @@ export function PainelConta() {
             Sair
           </button>
         </div>
+
+        <PainelPerfil usuario={usuario} onUsuario={setUsuario} />
       </div>
     );
   }

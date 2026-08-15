@@ -18,7 +18,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { DIR_LABEL, displayName, type Direction } from '@rpg-legend/shared';
+import { DIR_LABEL, displayName, type Direction, type PetId } from '@rpg-legend/shared';
+import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { apresentacaoDe } from '@/lib/jogo/apresentacao';
@@ -26,6 +27,7 @@ import { andar, celulaAtual, celulaEm, podeAndar, retomarSave, revelar, vizinhaE
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
 import { abrirMochila } from '@/lib/jogo/mochila';
 import type { Combate } from '@/lib/jogo/combate';
+import { BichoDeEstimacao } from './bicho-de-estimacao';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
 import { PainelHeroi } from './painel-heroi';
@@ -56,6 +58,7 @@ export function TelaJogo({ slot }: { slot: number }) {
   const [erro, setErro] = useState('');
   const [carregando, setCarregando] = useState(true);
   const [salvamento, setSalvamento] = useState<EstadoDoSalvamento>('parado');
+  const [pet, setPet] = useState<PetId | null>(null);
 
   const assinatura = useRef('');
   const precisaSalvar = useRef(false);
@@ -74,6 +77,14 @@ export function TelaJogo({ slot }: { slot: number }) {
       .catch((falha) => setErro(falha instanceof ErroDaApi ? falha.message : 'Erro inesperado ao carregar o progresso.'))
       .finally(() => setCarregando(false));
   }, [slot]);
+
+  // O pet é cosmético da conta e dá bônus de combate. Não achar não é erro
+  // de jogo: sem pet a luta acontece igual, só sem os bônus.
+  useEffect(() => {
+    usuarioAtual()
+      .then((usuario) => setPet(usuario.pet && usuario.pet !== 'none' ? (usuario.pet as PetId) : null))
+      .catch(() => undefined);
+  }, []);
 
   const salvar = useCallback(
     async (paraGravar: EstadoDoJogo) => {
@@ -112,7 +123,7 @@ export function TelaJogo({ slot }: { slot: number }) {
   function entrar(atual: EstadoDoJogo, direcao: Direction) {
     const movido = andar(atual, direcao);
     if (movido === atual) return;
-    const resultado = interagir(movido);
+    const resultado = interagir(movido, undefined, pet);
     registrarMudanca(resultado.estado, resultado.aviso);
     setTela(resultado.tela);
   }
@@ -236,6 +247,7 @@ export function TelaJogo({ slot }: { slot: number }) {
       <div className={styles.conteudo}>
         <PainelHeroi hero={estado.hero} />
         {conteudoDaTela(tela)}
+        <BichoDeEstimacao pet={pet} />
       </div>
     );
   }
@@ -344,6 +356,8 @@ export function TelaJogo({ slot }: { slot: number }) {
 
         {erro && <p className={styles.erro}>{erro}</p>}
       </section>
+
+      <BichoDeEstimacao pet={pet} />
     </div>
   );
 }

@@ -25,6 +25,7 @@ import {
   type DungeonCell,
   type DungeonTreasureBonus,
   type Item,
+  type PetId,
   type Rng,
 } from '@rpg-legend/shared';
 
@@ -108,9 +109,13 @@ function aviso(icone: string, titulo: string, texto: string): Aviso {
   return { icone, titulo, texto };
 }
 
-/** Resolve a sala em que o jogador acabou de entrar. */
-export function interagir(estado: EstadoDoJogo, rng: Rng = defaultRng): ResultadoDaInteracao {
-  return estado.mapMode === 'city' ? naCidade(estado, rng) : naMasmorra(estado, rng);
+/**
+ * Resolve a sala em que o jogador acabou de entrar. `pet` é o cosmético da
+ * conta, não do save — só a sala de monstro o usa, pra passar os bônus ao
+ * combate.
+ */
+export function interagir(estado: EstadoDoJogo, rng: Rng = defaultRng, pet: PetId | null = null): ResultadoDaInteracao {
+  return estado.mapMode === 'city' ? naCidade(estado, rng) : naMasmorra(estado, rng, pet);
 }
 
 function naCidade(estado: EstadoNaCidade, rng: Rng): ResultadoDaInteracao {
@@ -149,17 +154,17 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResultadoDaInteracao {
   }
 }
 
-function naMasmorra(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
+function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): ResultadoDaInteracao {
   const celula = celulaAtual(estado);
   if (!celula || estado.mapMode !== 'dungeon') return { estado, aviso: null, tela: null };
 
   switch (celula.type) {
     case 'treasure':
-      return abrirBau(estado, celula, rng);
+      return abrirBau(estado, celula, rng, pet);
     case 'monster':
     case 'boss':
       if (celula.beaten) return { estado, aviso: aviso('👾', 'Sala Vazia', 'Não há mais nada aqui.'), tela: null };
-      return { estado, aviso: null, tela: { tipo: 'combate', combate: iniciarEncontro(estado) } };
+      return { estado, aviso: null, tela: { tipo: 'combate', combate: iniciarEncontro(estado, pet) } };
     case 'stairs':
       return descer(estado, rng);
     case 'exit':
@@ -199,7 +204,7 @@ function descer(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
  * faz antes de chamar o combate. O combate em si é o que falta; o mímico
  * já fica salvo na sala, esperando.
  */
-function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): ResultadoDaInteracao {
+function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng, pet: PetId | null): ResultadoDaInteracao {
   if (celula.collected) return { estado, aviso: aviso('🧰', 'Baú Vazio', 'Este baú já foi revistado.'), tela: null };
 
   if (celula.isMimic) {
@@ -217,7 +222,7 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): Resu
     return {
       estado: emboscada,
       aviso: aviso('🧰', 'Mímico!', 'O baú cria dentes e revela ser um <b>Mímico</b>!'),
-      tela: { tipo: 'combate', combate: iniciarEncontro(emboscada) },
+      tela: { tipo: 'combate', combate: iniciarEncontro(emboscada, pet) },
     };
   }
 
