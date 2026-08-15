@@ -11,7 +11,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 
-import styles from './conta.module.css';
+import styles from './avatar.module.css';
 
 interface Props {
   url: string;

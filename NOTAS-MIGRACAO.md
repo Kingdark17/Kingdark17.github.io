@@ -135,12 +135,26 @@ Na página da conta dá pra trocar foto, moldura, cor do nome e pet, e
 comprar cosmético na loja. O ouro da compra sai do **personagem**, não de
 uma carteira da conta — por isso a loja pede o slot antes.
 
+Amigos e conversa têm página própria (`/amigos`): pedir, aceitar,
+recusar, remover e trocar mensagem. O histórico vem do banco por REST.
+
+O menu principal (`/`) tomou o lugar da página de fumaça da fase 0.
+
 ### Fase 3 — o que ainda é só do cliente antigo
 
-Multiplayer (salas, convite, chat em tempo real), lista de amigos, perfil
-público de outro jogador, painel ADM e tutorial. As rotas REST de amigos
-e mensagens já existem no Nest; o tempo real depende de escolher onde o
-cliente socket.io mora no Next — ver "Contrato de rede do multiplayer".
+Multiplayer (salas co-op, convite, chat ao vivo), perfil público de outro
+jogador, painel ADM e tutorial.
+
+Duas consequências visíveis de não ter socket ainda:
+
+- **todo amigo aparece offline** — `online` vem da presença do servidor,
+  que só conhece quem está com socket ligado. É a verdade do servidor,
+  não bug da tela;
+- **mensagem nova não chega sozinha** — daí o botão "Atualizar" na
+  conversa, em vez de fingir tempo real.
+
+O tempo real depende de decidir onde o cliente socket.io mora no Next —
+ver "Contrato de rede do multiplayer".
 
 ### Onde o combate ficou dividido, e por quê
 

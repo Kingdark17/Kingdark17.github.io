@@ -1,43 +1,32 @@
-import { derivedStats, type HeroCore } from '@rpg-legend/shared';
-
+import { DestinosDoMenu, type Destino } from './destinos-do-menu';
 import styles from './page.module.css';
-import { StatsPanel } from './stats-panel';
 
 /**
- * Página de fumaça da fase 0. Existe para provar três coisas de uma vez:
+ * Menu principal. Substitui a página de fumaça da fase 0, que existia só
+ * pra provar que `@rpg-legend/shared` atravessava servidor e cliente — o
+ * jogo inteiro faz essa prova agora.
  *
- *  1. `@rpg-legend/shared` resolve e roda no servidor (isto é um Server
- *     Component — os números abaixo são calculados em Node, exatamente como o
- *     NestJS vai calculá-los para validar uma jogada).
- *  2. O mesmo pacote atravessa a fronteira e chega tipado no cliente.
- *  3. O Motion anima na borda cliente sem arrastar a página inteira junto.
- *
- * Some quando a tela de menu real chegar, na fase 3.
+ * Server Component: os quatro destinos são iguais pra todo mundo. Quem
+ * está logado (e o que isso muda) é assunto de cada página, onde o token
+ * já vive.
  */
 
-const HERO: HeroCore = {
-  level: 3,
-  attrs: {
-    forca: 14,
-    destreza: 12,
-    constituicao: 15,
-    intelecto: 8,
-    sabedoria: 10,
-    carisma: 11,
-  },
-  equip: {
-    arma: { stats: { ataque: 6, critico: 2 } },
-    armadura: { stats: { defesa: 4, vida: 20 } },
-    acessorio: { stats: { mana: 10, esquiva: 3 } },
-  },
-};
+const DESTINOS: Destino[] = [
+  { href: '/personagens', icone: '⚔️', titulo: 'Jogar', texto: 'Escolha um personagem e volte pra masmorra.' },
+  { href: '/personagens/novo', icone: '✨', titulo: 'Novo personagem', texto: 'Raça, classe, fraqueza e poderes.' },
+  { href: '/amigos', icone: '💬', titulo: 'Amigos', texto: 'Adicione jogadores e converse.' },
+  { href: '/conta', icone: '🎭', titulo: 'Conta e perfil', texto: 'Foto, moldura, cor do nome, pet e loja.' },
+];
 
 export default function Page() {
-  const stats = derivedStats(HERO);
-
   return (
     <main className={styles.main}>
-      <StatsPanel heroName="Aventureiro" level={HERO.level} stats={stats} />
+      <div className={styles.menu}>
+        <h1 className={styles.marca}>RPG Legend</h1>
+        <p className={styles.subtitulo}>Uma masmorra diferente a cada descida.</p>
+
+        <DestinosDoMenu destinos={DESTINOS} />
+      </div>
     </main>
   );
 }

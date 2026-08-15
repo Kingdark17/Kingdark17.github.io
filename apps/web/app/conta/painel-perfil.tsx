@@ -28,7 +28,7 @@ import {
   type ItemDeCosmetico,
   type PerfilEscolhido,
 } from '@/lib/api/perfil';
-import { Avatar, NomeColorido } from './avatar';
+import { Avatar, NomeColorido } from '../componentes/avatar';
 import { comprimirFoto, FotoInvalidaError } from './comprimir-foto';
 import styles from './conta.module.css';
 

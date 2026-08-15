@@ -1,0 +1,223 @@
+.tela {
+  min-height: 100dvh;
+  padding: 2rem 1rem;
+}
+
+.colunas {
+  width: min(64rem, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 56rem) {
+  .colunas {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.painel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+}
+
+.titulo {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 1.4rem;
+  margin: 0 0 1rem;
+}
+
+.subtitulo {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--parchment);
+  font-size: 0.95rem;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.formularioDeBusca {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.entrada {
+  flex: 1;
+  min-width: 0;
+  padding: 0.45rem 0.7rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  color: var(--parchment);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.entrada:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+.botao {
+  padding: 0.45rem 1rem;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  border-radius: 0.3rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.botaoDiscreto {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 0.25rem;
+  color: var(--parchment-dim);
+  font: inherit;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+
+.botaoDiscreto:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}
+
+.botaoDiscreto:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.listaDePessoas {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.pessoa {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0.6rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+}
+
+.dadosDaPessoa {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.online {
+  font-size: 0.7rem;
+  color: #8cff98;
+}
+
+.offline {
+  font-size: 0.7rem;
+  color: var(--parchment-dim);
+}
+
+.acoesDaPessoa {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.cabecalhoDaConversa {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.tituloDaConversa {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.1rem;
+  flex: 1;
+}
+
+.mensagens {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.9rem;
+  display: grid;
+  gap: 0.5rem;
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.minha,
+.dele {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.35rem;
+  max-width: 85%;
+  font-size: 0.88rem;
+}
+
+.minha {
+  justify-self: end;
+  background: rgba(201, 162, 39, 0.16);
+  border: 1px solid var(--line);
+}
+
+.dele {
+  justify-self: start;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+}
+
+.corpoDaMensagem {
+  color: var(--parchment);
+  overflow-wrap: anywhere;
+}
+
+.horaDaMensagem {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  color: var(--parchment-dim);
+}
+
+.vazio {
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.aviso {
+  margin: 1rem 0 0;
+  padding: 0.55rem 0.7rem;
+  background: rgba(201, 162, 39, 0.12);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  font-size: 0.85rem;
+}
+
+.erro {
+  margin: 1rem 0 0;
+  padding: 0.55rem 0.7rem;
+  background: rgba(138, 43, 43, 0.25);
+  border: 1px solid var(--blood);
+  border-radius: 0.3rem;
+  font-size: 0.85rem;
+}

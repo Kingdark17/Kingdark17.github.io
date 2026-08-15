@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 
 import { cadastrar, entrar, sair, usuarioAtual, type Usuario } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
-import { Avatar, NomeColorido } from './avatar';
+import { Avatar, NomeColorido } from '../componentes/avatar';
 import { PainelPerfil } from './painel-perfil';
 import styles from './conta.module.css';
 
