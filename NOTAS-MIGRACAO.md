@@ -8,7 +8,7 @@ credencial, armadilhas de deploy e o contrato de rede do multiplayer.
 **O que NÃO entra:** decisão de arquitetura fechada (isso é `CLAUDE.md`) e
 nada que o código ou o `git log` já contem sozinhos.
 
-Última atualização: 2026-08-14.
+Última atualização: 2026-08-15.
 
 ---
 
@@ -17,9 +17,9 @@ nada que o código ou o `git log` já contem sozinhos.
 | Fase | Situação |
 |---|---|
 | 0 — monorepo | pronta |
-| 1 — engine em `packages/shared` | pronta (304 testes) |
+| 1 — engine em `packages/shared` | pronta (321 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
-| 3 — front Next | em andamento: conta, personagem, cidade e masmorra jogáveis; falta combate |
+| 3 — front Next | em andamento: conta, personagem, cidade, masmorra e **combate** jogáveis; faltam lojas, NPCs e eventos |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
 | 6 — otimização | não começou |
@@ -109,19 +109,44 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 | e-mail | erro de rede no envio não sobe | ver bug #5 |
 | e-mail | tamanho da senha é validado antes de olhar o token | não gastar o link por causa de senha curta |
 | repositórios | `getDb()` só é chamado dentro dos métodos | o app sobe e roteia sem `DATABASE_URL`; só quebra a rota que precisa do banco |
-| front (fase 3) | sala não migrada avisa "ainda não foi migrado" em vez de não fazer nada | entrar num monstro e a tela não reagir parece bug; o aviso deixa claro o que falta e não inventa regra nova |
+| front (fase 3) | sala não migrada avisa "ainda não foi migrado" em vez de não fazer nada | entrar numa loja e a tela não reagir parece bug; o aviso deixa claro o que falta e não inventa regra nova |
+| front (fase 3) | o combate grava a cada ação, não só no fim | fechar a aba no meio de um chefe não devolvia o chefe com vida cheia — o original salva igual |
 | front (fase 3) | texto com `<b>` da engine vira `<strong>` de verdade, sem `innerHTML` | o original jogava tudo em `innerHTML`; o mapa trafega pela rede e um dia vem de outro jogador no multiplayer |
 | front (fase 3) | sem token, `chamarApi` já rejeita no cliente | evita mandar `Bearer ` vazio e tira o `setState` síncrono de dentro do `useEffect` (regra `react-hooks/set-state-in-effect` do lint do Next 16) |
 
 ### Fase 3 — o que já dá pra jogar
 
 Criar conta → criar personagem → andar pela cidade → taverna → atravessar
-o portão → explorar a masmorra → abrir baú → descer escada → sair pela
-saída e voltar pra cidade. Tudo gravando na nuvem com a assinatura
-encadeada.
+o portão → explorar a masmorra → abrir baú → **lutar** → descer escada →
+sair pela saída e voltar pra cidade. Tudo gravando na nuvem com a
+assinatura encadeada.
 
-Falta: combate (o pedaço grande), lojas, ferreiro, quadro de missões,
-diálogo com NPC e eventos de sala.
+Falta: lojas, ferreiro, quadro de missões, diálogo com NPC e eventos de
+sala.
+
+### Onde o combate ficou dividido, e por quê
+
+A engine (`packages/shared/src/combat/`) tem as peças puras de uma ação:
+`resolveAttack`, `castPower`, `applyPartyTurn`, `tickMonsterDot`,
+`applyMonsterHit`, `attemptFlee`. Nenhuma delas decide o que vem depois.
+
+A **ordem** delas e o que cada resultado significa pro save (quem entra na
+fila, o que cai de recompensa, pra onde o jogador vai) mora em
+`apps/web/lib/jogo/combate.ts`, junto de `estado.ts` e `sala.ts`.
+
+Isso deixa uma pergunta em aberto pra quando o Nest for validar jogada:
+`estado.ts`/`combate.ts` teriam que ir pra `packages/shared` também,
+porque o servidor precisa do mesmo tipo de save e da mesma máquina de
+turnos. Não movi agora porque a fase 3 ainda está mexendo neles todo dia —
+é decisão pra fase 6.
+
+O d20 é rolado **na tela** e passado como parâmetro pra máquina de turnos.
+Foi de propósito: é o número que o jogador vê, e é o que o servidor vai
+precisar receber pra conferir a jogada.
+
+`usePower` da engine virou **`castPower`**: o lint do React reserva o
+prefixo `use` pra hooks e reprova qualquer `useAlgumaCoisa()` chamado fora
+de componente. O nome do original está no comentário do arquivo.
 
 **Verificado contra a API de verdade** (PGlite local, `pnpm --filter api
 dev:db`): save de masmorra sobe, volta idêntico (`deepStrictEqual`; a
@@ -129,6 +154,12 @@ diferença de string é só ordem de chave do `jsonb`), escada e saída
 gravam, e assinatura velha leva **409**. Um andar inteiro de masmorra dá
 ~6,6 KB de JSON — bem abaixo do limite de 700 KB do corpo, porque monstro
 guarda `speciesId` e item guarda `templateId` em vez do catálogo inteiro.
+
+Save **no meio da luta** também: sobe, volta idêntico, e não vaza pro
+save nenhum campo que `monsterView()` acrescenta (`species`, `name`,
+`icon`...). Era o risco real do combate — sem o `despirView` de
+`combate.ts`, o catálogo da espécie inteiro entraria no save e trafegaria
+a cada golpe no multiplayer.
 
 ---
 

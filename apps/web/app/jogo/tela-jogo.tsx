@@ -11,21 +11,24 @@
  * este navegador está partindo do progresso mais recente.
  *
  * Sala "interessante" pergunta antes (`precisaConfirmar`); dizer não
- * atravessa quando a sala é de passagem. Combate, lojas, NPCs e eventos
- * ainda não foram migrados e avisam isso ao entrar.
+ * atravessa quando a sala é de passagem. Sala de monstro troca esta tela
+ * pela de combate. Lojas, NPCs e eventos ainda não foram migrados e avisam
+ * isso ao entrar.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { DIR_LABEL, type Direction } from '@rpg-legend/shared';
+import { DIR_LABEL, displayName, type Direction } from '@rpg-legend/shared';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { apresentacaoDe } from '@/lib/jogo/apresentacao';
 import { andar, celulaAtual, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso } from '@/lib/jogo/sala';
+import type { Combate } from '@/lib/jogo/combate';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
 import { PainelHeroi } from './painel-heroi';
+import { TelaCombate } from './tela-combate';
 import { TextoDoJogo } from './texto-do-jogo';
 
 const ESPERA_ANTES_DE_SALVAR_MS = 2500;
@@ -42,6 +45,7 @@ type EstadoDoSalvamento = 'parado' | 'salvando' | 'salvo';
 export function TelaJogo({ slot }: { slot: number }) {
   const [estado, setEstado] = useState<EstadoDoJogo | null>(null);
   const [aviso, setAviso] = useState<Aviso | null>(null);
+  const [combate, setCombate] = useState<Combate | null>(null);
   const [perguntando, setPerguntando] = useState<Direction | null>(null);
   const [erro, setErro] = useState('');
   const [carregando, setCarregando] = useState(true);
@@ -104,6 +108,27 @@ export function TelaJogo({ slot }: { slot: number }) {
     if (movido === atual) return;
     const resultado = interagir(movido);
     registrarMudanca(resultado.estado, resultado.aviso);
+    setCombate(resultado.combate);
+  }
+
+  /**
+   * Toda ação de combate mexe no save (vida da criatura, XP, ouro), então
+   * o estado do jogo acompanha a luta em vez de esperar o fim dela: fechar
+   * a aba no meio de um chefe não devolve o chefe com vida cheia.
+   */
+  function seguirCombate(proximo: Combate) {
+    setCombate(proximo);
+    setEstado(proximo.estado);
+    precisaSalvar.current = true;
+    setSalvamento('parado');
+  }
+
+  function encerrarCombate(final: Combate) {
+    setCombate(null);
+    setEstado(final.estado);
+    setAviso(avisoDoFim(final));
+    precisaSalvar.current = true;
+    setSalvamento('parado');
   }
 
   function mover(direcao: Direction) {
@@ -145,6 +170,15 @@ export function TelaJogo({ slot }: { slot: number }) {
   if (carregando) return <p>Carregando progresso…</p>;
   if (erro && !estado) return <p className={styles.erro}>{erro}</p>;
   if (!estado) return null;
+
+  if (combate) {
+    return (
+      <div className={styles.conteudo}>
+        <PainelHeroi hero={estado.hero} />
+        <TelaCombate combate={combate} onCombate={seguirCombate} onEncerrar={encerrarCombate} />
+      </div>
+    );
+  }
 
   const visual = apresentacaoDe(estado);
   const aqui = celulaAtual(estado);
@@ -238,4 +272,14 @@ export function TelaJogo({ slot }: { slot: number }) {
       </section>
     </div>
   );
+}
+
+function avisoDoFim(final: Combate): Aviso {
+  if (final.fase === 'derrota') return { icone: '💀', titulo: 'Derrota', texto: final.log.join(' ') };
+  if (final.fase === 'fuga') return { icone: '🏃', titulo: 'Fuga', texto: 'Você escapa da batalha, ofegante.' };
+  return {
+    icone: '🏆',
+    titulo: 'Vitória',
+    texto: `Você venceu a batalha!${final.loot ? ` Encontrou <b>${displayName(final.loot)}</b>.` : ''}`,
+  };
 }

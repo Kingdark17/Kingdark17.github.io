@@ -221,6 +221,101 @@
   color: var(--gold-bright);
 }
 
+/* ---------- combate ---------- */
+
+.combate {
+  display: grid;
+  gap: 1rem;
+}
+
+.cartaInimigo {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.cartaChefe {
+  border-color: var(--gold);
+  box-shadow: inset 0 0 2rem rgba(138, 43, 43, 0.25);
+}
+
+.iconeInimigo {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.nomeInimigo {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 1.2rem;
+  margin: 0.4rem 0 0.1rem;
+}
+
+.classeInimigo,
+.filaInimigos {
+  color: var(--parchment-dim);
+  font-size: 0.8rem;
+  margin: 0 0 0.5rem;
+}
+
+.vidaInimigo {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  margin: 0.3rem 0 0;
+}
+
+.marcadores {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0;
+  margin: 0.6rem 0 0;
+}
+
+.marcador {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--parchment-dim);
+}
+
+.dado {
+  font-family: var(--font-mono), monospace;
+  font-size: 1.1rem;
+  color: var(--gold-bright);
+  text-align: center;
+  margin: 0;
+}
+
+.log {
+  list-style: none;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  display: grid;
+  gap: 0.3rem;
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.linhaDoLog {
+  color: var(--parchment);
+}
+
+.custoDeMana {
+  color: var(--parchment-dim);
+  font-size: 0.75rem;
+}
+
 .bussola {
   display: grid;
   grid-template-columns: repeat(3, 3.2rem);

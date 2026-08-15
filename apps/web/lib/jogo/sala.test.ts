@@ -167,11 +167,20 @@ describe('interagir na masmorra', () => {
     expect(estado.hero.gold).toBe(bau.hero.gold);
   });
 
-  it('sala de monstro avisa que o combate não foi migrado, sem inventar regra nova', () => {
+  it('sala de monstro abre o encontro em vez de resolver sozinha', () => {
     const naSala = emCimaDe(masmorraNoAndar(2), 'monster');
-    const { estado, aviso } = interagir(naSala);
+    const { estado, combate } = interagir(naSala);
 
     expect(estado).toBe(naSala);
-    expect(aviso?.texto).toContain('ainda não foi migrado');
+    expect(combate?.fase).toBe('encontro');
+  });
+
+  it('o mímico já entra em combate junto com a revelação', () => {
+    const bau = comSalaAtual(emCimaDe(masmorraNoAndar(2), 'treasure'), { isMimic: true, giveGold: true, collected: false });
+
+    const { combate } = interagir(bau, seededRng(7));
+
+    expect(combate?.fase).toBe('encontro');
+    expect(combate?.log[0]).toContain('aparece');
   });
 });

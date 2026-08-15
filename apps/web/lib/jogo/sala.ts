@@ -8,10 +8,11 @@
  * cidade só por ele passar por cima dela — e ela pode estar no caminho da
  * escada. As duas regras estão aqui, iguais.
  *
- * Cada função devolve `{ estado, aviso }`: estado novo (imutável) e, quando
- * há, a caixinha de diálogo que a tela mostra. Combate, lojas, NPCs, eventos
- * e quadro de missões ainda não foram migrados — aqui eles avisam isso na
- * cara em vez de não fazer nada em silêncio.
+ * Cada função devolve `{ estado, aviso, combate }`: estado novo (imutável),
+ * a caixinha de diálogo que a tela mostra e, quando a sala abre uma luta, o
+ * combate já no estágio de encontro. Lojas, NPCs, eventos e quadro de
+ * missões ainda não foram migrados — aqui eles avisam isso na cara em vez
+ * de não fazer nada em silêncio.
  */
 
 import {
@@ -28,6 +29,7 @@ import {
   type Rng,
 } from '@rpg-legend/shared';
 
+import { iniciarEncontro, type Combate } from './combate';
 import {
   celulaAtual,
   descerEscada,
@@ -49,6 +51,8 @@ export interface Aviso {
 export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;
   aviso: Aviso | null;
+  /** Preenchido quando a sala abre uma luta — a tela troca pra tela de combate. */
+  combate: Combate | null;
 }
 
 /** Salas que abrem a pergunta "deseja entrar?" antes do passo (`needsConfirm`). */
@@ -96,69 +100,79 @@ export function interagir(estado: EstadoDoJogo, rng: Rng = defaultRng): Resultad
 
 function naCidade(estado: EstadoNaCidade, rng: Rng): ResultadoDaInteracao {
   const celula = celulaAtual(estado);
-  if (!celula) return { estado, aviso: null };
+  if (!celula) return { estado, aviso: null, combate: null };
 
   switch (celula.type) {
     case 'gate': {
       const dentro = entrarNaMasmorra(estado, rng);
-      return { estado: dentro, aviso: aviso('🌟', 'Portão da Masmorra', `Você atravessa o portão e entra na masmorra. Andar ${dentro.floor}.`) };
+      return {
+        estado: dentro,
+        aviso: aviso('🌟', 'Portão da Masmorra', `Você atravessa o portão e entra na masmorra. Andar ${dentro.floor}.`),
+        combate: null,
+      };
     }
     case 'tavern': {
       const descanso = restAtTavern(estado.hero, estado.party);
       return {
         estado: { ...estado, hero: descanso.hero, party: descanso.party },
         aviso: aviso('🍺', 'Taverna', 'Você descansa por uma noite. Vida e mana totalmente restauradas.'),
+        combate: null,
       };
     }
     case 'shop':
-      return { estado, aviso: aindaNaoMigrado('🏵', 'Loja', 'A loja') };
+      return { estado, aviso: aindaNaoMigrado('🏵', 'Loja', 'A loja'), combate: null };
     case 'blacksmith':
-      return { estado, aviso: aindaNaoMigrado('🔨', 'Ferreiro', 'A forja do ferreiro') };
+      return { estado, aviso: aindaNaoMigrado('🔨', 'Ferreiro', 'A forja do ferreiro'), combate: null };
     case 'questboard':
-      return { estado, aviso: aindaNaoMigrado('📜', 'Quadro de Missões', 'O quadro de missões') };
+      return { estado, aviso: aindaNaoMigrado('📜', 'Quadro de Missões', 'O quadro de missões'), combate: null };
     case 'npc':
-      return { estado, aviso: aindaNaoMigrado('🧙', celula.npc?.name ?? 'Morador', 'A conversa com os moradores') };
+      return { estado, aviso: aindaNaoMigrado('🧙', celula.npc?.name ?? 'Morador', 'A conversa com os moradores'), combate: null };
     case 'start':
-      return { estado, aviso: aviso('🚀', 'Ponto de Partida', 'Foi aqui que sua jornada começou.') };
+      return { estado, aviso: aviso('🚀', 'Ponto de Partida', 'Foi aqui que sua jornada começou.'), combate: null };
     default:
-      return { estado, aviso: null };
+      return { estado, aviso: null, combate: null };
   }
 }
 
 function naMasmorra(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
   const celula = celulaAtual(estado);
-  if (!celula || estado.mapMode !== 'dungeon') return { estado, aviso: null };
+  if (!celula || estado.mapMode !== 'dungeon') return { estado, aviso: null, combate: null };
 
   switch (celula.type) {
     case 'treasure':
       return abrirBau(estado, celula, rng);
     case 'monster':
     case 'boss':
-      if (celula.beaten) return { estado, aviso: aviso('👾', 'Sala Vazia', 'Não há mais nada aqui.') };
-      return { estado, aviso: aindaNaoMigrado(celula.type === 'boss' ? '👑' : '👾', 'Combate', 'O combate') };
+      if (celula.beaten) return { estado, aviso: aviso('👾', 'Sala Vazia', 'Não há mais nada aqui.'), combate: null };
+      return { estado, aviso: null, combate: iniciarEncontro(estado) };
     case 'stairs':
       return descer(estado, rng);
     case 'exit':
-      return { estado: voltarParaCidade(estado), aviso: aviso('🚪', 'De Volta à Cidade', 'Você sobe o caminho iluminado e retorna à cidade.') };
+      return {
+        estado: voltarParaCidade(estado),
+        aviso: aviso('🚪', 'De Volta à Cidade', 'Você sobe o caminho iluminado e retorna à cidade.'),
+        combate: null,
+      };
     case 'npc':
-      return { estado, aviso: aindaNaoMigrado('🧙', celula.npc?.name ?? 'Alguém', 'A conversa com os NPCs') };
+      return { estado, aviso: aindaNaoMigrado('🧙', celula.npc?.name ?? 'Alguém', 'A conversa com os NPCs'), combate: null };
     case 'event':
-      return { estado, aviso: aindaNaoMigrado('❓', 'Acontecimento', 'Os eventos de masmorra') };
+      return { estado, aviso: aindaNaoMigrado('❓', 'Acontecimento', 'Os eventos de masmorra'), combate: null };
     case 'start':
-      return { estado, aviso: aviso('🚀', 'Ponto de Partida', 'Foi aqui que você chegou neste andar.') };
+      return { estado, aviso: aviso('🚀', 'Ponto de Partida', 'Foi aqui que você chegou neste andar.'), combate: null };
     default:
-      return { estado, aviso: null };
+      return { estado, aviso: null, combate: null };
   }
 }
 
 function descer(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
   const resultado = descerEscada(estado, rng);
   if (resultado.kind === 'selado') {
-    return { estado, aviso: aviso('👑', 'Caminho Selado', 'O poder do chefe bloqueia as escadas. Derrote-o para avançar.') };
+    return { estado, aviso: aviso('👑', 'Caminho Selado', 'O poder do chefe bloqueia as escadas. Derrote-o para avançar.'), combate: null };
   }
   return {
     estado: resultado.estado,
     aviso: aviso('⬇️', 'Escadas', `Você desce mais fundo na masmorra. Andar ${resultado.estado.floor}. O ar fica mais pesado…`),
+    combate: null,
   };
 }
 
@@ -169,7 +183,7 @@ function descer(estado: EstadoNaMasmorra, rng: Rng): ResultadoDaInteracao {
  * já fica salvo na sala, esperando.
  */
 function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): ResultadoDaInteracao {
-  if (celula.collected) return { estado, aviso: aviso('🧰', 'Baú Vazio', 'Este baú já foi revistado.') };
+  if (celula.collected) return { estado, aviso: aviso('🧰', 'Baú Vazio', 'Este baú já foi revistado.'), combate: null };
 
   if (celula.isMimic) {
     const bonus: DungeonTreasureBonus = premioDoBau(celula, estado.floor, rng);
@@ -182,9 +196,11 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): Resu
       bonusTreasure: bonus,
       isMimic: false,
     };
+    const emboscada = substituirCelulaAtual(estado, revelado);
     return {
-      estado: substituirCelulaAtual(estado, revelado),
-      aviso: aviso('🧰', 'Mímico!', 'O baú cria dentes e revela ser um <b>Mímico</b>! O combate ainda não foi migrado — ele fica na sala, esperando.'),
+      estado: emboscada,
+      aviso: aviso('🧰', 'Mímico!', 'O baú cria dentes e revela ser um <b>Mímico</b>!'),
+      combate: iniciarEncontro(emboscada),
     };
   }
 
@@ -195,6 +211,7 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): Resu
     return {
       estado: substituirCelulaAtual({ ...estado, hero: { ...estado.hero, gold: estado.hero.gold + ouro } }, aberto),
       aviso: aviso('🧰', 'Baú Encontrado', `Você encontra ${ouro} moedas de ouro dentro do baú.`),
+      combate: null,
     };
   }
 
@@ -205,6 +222,7 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng): Resu
       aberto,
     ),
     aviso: aviso('🧰', 'Baú Encontrado', `<b>${displayName(item)}</b> foi adicionado à sua mochila.`),
+    combate: null,
   };
 }
 

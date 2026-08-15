@@ -167,7 +167,16 @@ export type ResultadoDaEscada = { kind: 'selado' } | { kind: 'desceu'; estado: E
  */
 export function descerEscada(estado: EstadoNaMasmorra, rng: Rng = defaultRng): ResultadoDaEscada {
   if (isBossFloor(estado.floor) && temChefeVivo(estado)) return { kind: 'selado' };
-  return { kind: 'desceu', estado: gerarAndar(estado, estado.floor + 1, rng) };
+  return { kind: 'desceu', estado: avancarAndar(estado, rng) };
+}
+
+/**
+ * Gera o próximo andar sem passar pela escada. É o que o original faz
+ * depois de derrotar um chefe (`advanceAfterBoss`): o caminho se abre e o
+ * grupo desce sozinho.
+ */
+export function avancarAndar(estado: EstadoNaMasmorra, rng: Rng = defaultRng): EstadoNaMasmorra {
+  return gerarAndar(estado, estado.floor + 1, rng);
 }
 
 export function temChefeVivo(estado: EstadoNaMasmorra): boolean {

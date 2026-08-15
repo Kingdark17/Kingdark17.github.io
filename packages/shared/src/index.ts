@@ -31,6 +31,8 @@ export * from './combat/class-passives.js';
 export * from './combat/party.js';
 export * from './combat/resolve-attack.js';
 export * from './combat/monster-hit.js';
+export * from './combat/use-power.js';
+export * from './combat/flee.js';
 
 export * from './events/events.js';
 
