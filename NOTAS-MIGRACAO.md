@@ -306,6 +306,12 @@ navegador baixa antes da página funcionar**, rota por rota:
 4. `grep` por `engine.io` / `motionValue` dentro dos pedaços diz se uma
    biblioteca específica entrou na carga inicial.
 
+Rota **dinâmica** (`ƒ`) não tem HTML no disco, então o passo 2 não serve.
+Pra essas, a lista sai de `.next/build-manifest.json` (`rootMainFiles`)
+mais os pedaços citados em
+`.next/server/app/<rota>/page_client-reference-manifest.js`. Conferido
+contra as rotas estáticas: os dois caminhos dão o mesmo número, ao KB.
+
 ### Primeiro corte — o que saiu e quanto foi
 
 Navegador moderno, sem o polyfill `noModule`:
@@ -384,17 +390,43 @@ calcular a versão, mesmo sem mandar pro navegador. Dá pra resolver com
 SQL e em JS, e o fake dos testes deixa de valer como espelho do
 repositório real. Fica anotado.
 
-### Decisão sua: a dependência `motion`
+### Motion, onde ele ganha o lugar — e quanto custa de verdade
 
-Com o menu em CSS, **nenhum arquivo importa `motion`** — a dependência
-está em `apps/web/package.json` sem uso. Deixei porque o `CLAUDE.md`
-fecha "Motion via `LazyMotion`, só na UI React" como parte da pilha, e
-tirar é reverter decisão sua. Se a ideia é mesmo animar UI mais pra
-frente, ela fica; se não, é um `pnpm remove motion`.
+Decidido em 2026-08-16: em vez de remover a dependência que tinha ficado
+sem uso, usar Motion onde CSS não alcança. Só há um lugar assim no jogo,
+e é a **saída** de elemento: o CSS não anima o que já saiu do DOM.
 
-Vale registrar o que a medição mostrou: o uso que existia **não** era
-`LazyMotion` (que seriam ~6 KB), era o `motion` inteiro. Se ela voltar,
-tem que voltar pelo caminho que o `CLAUDE.md` escolheu.
+Ficou no **log de combate** (`tela-combate.tsx`). Ele guarda oito linhas;
+cada golpe entra embaixo e empurra a mais velha pra fora. Sem animação de
+saída, a linha some no mesmo quadro em que a nova aparece e a leitura
+vira um pulo. `AnimatePresence` resolve; `@keyframes` não tem como.
+
+Isso obrigou o log a ter **chave estável** (`{id, texto}` em vez de
+índice) — com chave por índice o React reaproveita a `<li>` e a saída
+nunca chega a rodar. Os ids são atribuídos no manipulador de evento, não
+dentro do `setHistorico`: em StrictMode o atualizador roda duas vezes.
+
+**O custo medido, que não bate com o que o `CLAUDE.md` supõe:**
+
+| Arranjo | Total gerado | `/jogo` inicial |
+|---|---|---|
+| sem Motion | 855 KB | 584 KB |
+| `import()` inline dentro da tela | 1097 KB | — |
+| `LazyMotion` + `motion/react-m` + arquivo próprio de recursos | 944 KB | **635 KB** |
+
+Duas lições concretas:
+
+- **O `import()` do pacote de recursos precisa de arquivo próprio**
+  (`animacoes-do-log.ts`). Chamar `import('motion/react')` de dentro da
+  tela que já importa `motion/react` não separa nada — o build acabou com
+  **duas cópias** e +242 KB.
+- **`LazyMotion` não custa "~6 KB".** Esses 6 KB são o núcleo do `m`
+  sozinho. Com `LazyMotion` + `AnimatePresence` + `MotionConfig`, o
+  pedaço que `/jogo` baixa de cara é **~50 KB**, mais ~38 KB que chegam
+  depois, na primeira animação. É oito vezes o que o `CLAUDE.md` diz.
+
+Se 50 KB na tela principal do jogo for caro demais, a saída é desistir da
+animação de saída e deixar tudo em CSS — não há meio-termo barato.
 
 ### `pnpm lint` na API está vermelho — e é dívida antiga
 

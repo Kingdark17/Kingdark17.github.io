@@ -7,9 +7,23 @@
  * O d20 é rolado aqui e passado pra máquina de turnos em vez de sorteado lá
  * dentro: a tela mostra o número que saiu, e é o mesmo número que um dia o
  * servidor vai conferir.
+ *
+ * **É a única tela com Motion, e por um motivo.** O log guarda oito
+ * linhas: cada golpe entra embaixo e empurra a mais velha pra fora. Sem
+ * animação de saída a linha some no mesmo quadro em que a nova aparece,
+ * e a leitura fica um pulo. Animar saída é justamente o que CSS não faz
+ * — o elemento já não está mais no DOM. Entrada, brilho e loop decorativo
+ * continuam em CSS, como no resto do jogo.
+ *
+ * `LazyMotion` + `m` em vez de `motion`: o `motion` cheio carrega todo o
+ * pacote de recursos junto. `MotionConfig reducedMotion="user"` respeita
+ * quem pediu menos movimento no sistema, igual ao `@media` das outras
+ * telas.
  */
 
-import { useState } from 'react';
+import { AnimatePresence, LazyMotion, MotionConfig } from 'motion/react';
+import * as m from 'motion/react-m';
+import { useRef, useState } from 'react';
 
 import { heroPowers, powerManaCost, type CombatMonsterView, type Power } from '@rpg-legend/shared';
 
@@ -19,6 +33,19 @@ import { TextoDoJogo } from './texto-do-jogo';
 
 const LADOS_DO_DADO = 20;
 const LINHAS_DO_LOG = 8;
+
+const carregarAnimacoes = () => import('./animacoes-do-log').then((modulo) => modulo.default);
+
+const ENTRADA_DA_LINHA = { opacity: 0, x: -10 };
+const LINHA_PARADA = { opacity: 1, x: 0 };
+const SAIDA_DA_LINHA = { opacity: 0, height: 0, marginTop: -4 };
+const RITMO = { duration: 0.18, ease: 'easeOut' } as const;
+
+/** O log precisa de chave estável: sem ela a saída nunca chega a rodar. */
+interface LinhaDoLog {
+  id: number;
+  texto: string;
+}
 
 const ROTULOS_DE_STATUS: Record<string, string> = {
   queimadura: '🔥 Queimando',
@@ -48,7 +75,8 @@ interface Props {
 }
 
 export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
-  const [historico, setHistorico] = useState<string[]>(combate.log);
+  const [historico, setHistorico] = useState<LinhaDoLog[]>(() => combate.log.map((texto, indice) => ({ id: indice, texto })));
+  const proximoId = useRef(combate.log.length);
 
   const monstro = monstroAtual(combate.estado);
   const hero = combate.estado.hero;
@@ -56,7 +84,10 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
   const acabou = combate.fase === 'vitoria' || combate.fase === 'fuga' || combate.fase === 'derrota';
 
   function avancar(proximo: Combate) {
-    setHistorico((atual) => [...atual, ...proximo.log].slice(-LINHAS_DO_LOG));
+    // Os ids saem daqui, não de dentro do `setHistorico`: em StrictMode o
+    // atualizador roda duas vezes e a mesma linha ganharia ids diferentes.
+    const novas = proximo.log.map((texto) => ({ id: proximoId.current++, texto }));
+    setHistorico((atual) => [...atual, ...novas].slice(-LINHAS_DO_LOG));
     onCombate(proximo);
   }
 
@@ -108,13 +139,28 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
         </p>
       )}
 
-      <ul className={styles.log}>
-        {historico.map((linha, indice) => (
-          <li key={`${indice}-${linha}`} className={styles.linhaDoLog}>
-            <TextoDoJogo>{linha}</TextoDoJogo>
-          </li>
-        ))}
-      </ul>
+      <MotionConfig reducedMotion="user">
+        <LazyMotion features={carregarAnimacoes} strict>
+          <ul className={styles.log}>
+            {/* `initial={false}`: ao abrir a tela as linhas já existentes
+                aparecem prontas, sem desfilar uma cascata de entrada. */}
+            <AnimatePresence initial={false}>
+              {historico.map((linha) => (
+                <m.li
+                  key={linha.id}
+                  className={styles.linhaDoLog}
+                  initial={ENTRADA_DA_LINHA}
+                  animate={LINHA_PARADA}
+                  exit={SAIDA_DA_LINHA}
+                  transition={RITMO}
+                >
+                  <TextoDoJogo>{linha.texto}</TextoDoJogo>
+                </m.li>
+              ))}
+            </AnimatePresence>
+          </ul>
+        </LazyMotion>
+      </MotionConfig>
 
       {acabou ? (
         <div className={styles.escolhas}>
