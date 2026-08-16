@@ -73,6 +73,8 @@ export interface LeaveRoomResult {
   role: RoomRole;
   /** Quem sobrou na sala; vazio quando a sala foi descartada. */
   remaining: RoomConnection[];
+  /** Preenchido quando o anfitrião saiu e quem ficou assumiu o papel 1. */
+  promoted?: { connection: RoomConnection; from: RoomRole; to: RoomRole };
 }
 
 export function normalizeRoomCode(value: unknown): string {
@@ -143,8 +145,8 @@ export class RoomRegistry {
     if (room.members.length >= MAX_ROOM_SIZE) return { kind: 'full' };
 
     this.forget(connection.id);
-    // Igual ao original: quem entra é sempre papel 2, mesmo que o criador
-    // já tenha saído. Sala que perdeu o anfitrião não promove ninguém.
+    // Quem entra é sempre papel 2. Sala sem anfitrião não existe mais: se
+    // o papel 1 cai, `leave()` promove quem ficou (ver ali).
     room.adminRoles[GUEST_ROLE] = options.admin;
     room.members.push({ connection, role: GUEST_ROLE });
     this.membership.set(connection.id, { code, role: GUEST_ROLE });
@@ -171,11 +173,43 @@ export class RoomRegistry {
       this.rooms.delete(membership.code);
       return { code: membership.code, role: membership.role, remaining: [] };
     }
+
     return {
       code: membership.code,
       role: membership.role,
       remaining: room.members.map((member) => member.connection),
+      ...(membership.role === HOST_ROLE ? { promoted: this.promoverSobrevivente(room) } : {}),
     };
+  }
+
+  /**
+   * O anfitrião caiu e alguém ficou: quem ficou vira papel 1.
+   *
+   * **Divergência do original**, decidida com o dono do projeto: no
+   * `server.js` quem entra é sempre papel 2 e ninguém é promovido, então
+   * uma sala que perde o papel 1 fica travada — só o papel 1 manda
+   * `welcome`/`move-lock` e conduz posição/andar, e só o papel 2 pode
+   * pedir `boss-advance`. Sem promoção o jogador que ficou não consegue
+   * nem andar nem avançar; a sala só morre quando ele desiste.
+   *
+   * Promover carrega junto perfil e flag de admin: `applyState` compara o
+   * perfil novo com o anterior *do mesmo papel*, e deixar o perfil no
+   * papel 2 abriria a porta pra ele voltar com atributos inflados.
+   */
+  private promoverSobrevivente(room: Room): LeaveRoomResult['promoted'] {
+    const sucessor = room.members[0];
+    if (!sucessor || sucessor.role === HOST_ROLE) return undefined;
+
+    const anterior = sucessor.role;
+    sucessor.role = HOST_ROLE;
+    this.membership.set(sucessor.connection.id, { code: room.code, role: HOST_ROLE });
+
+    room.profiles[HOST_ROLE] = room.profiles[anterior];
+    delete room.profiles[anterior];
+    room.adminRoles[HOST_ROLE] = room.adminRoles[anterior];
+    delete room.adminRoles[anterior];
+
+    return { connection: sucessor.connection, from: anterior, to: HOST_ROLE };
   }
 
   isAdmin(room: Room, role: RoomRole): boolean {

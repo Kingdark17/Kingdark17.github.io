@@ -26,8 +26,11 @@ import { apresentacaoDe } from '@/lib/jogo/apresentacao';
 import { andar, celulaAtual, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
 import { abrirAdm } from '@/lib/jogo/adm';
+import { aplicarRemoto, instantaneoDaSala, type CosmeticosDoJogador } from '@/lib/jogo/coop';
 import { abrirMochila } from '@/lib/jogo/mochila';
 import { marcar, type Recado } from '@/lib/jogo/tutorial';
+import { abrirAventura, assinar, instantanea, mandarEstado, mandarPerfil, PAPEL_ANFITRIAO, travarParceiro } from '@/lib/rede/sala';
+import { useSala } from '@/lib/rede/use-sala';
 import type { Combate } from '@/lib/jogo/combate';
 import { BichoDeEstimacao } from './bicho-de-estimacao';
 import styles from './jogo.module.css';
@@ -54,7 +57,11 @@ const DIRECOES: { direcao: Direction; classe: string; seta: string }[] = [
 
 type EstadoDoSalvamento = 'parado' | 'salvando' | 'salvo';
 
-export function TelaJogo({ slot }: { slot: number }) {
+export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: string }) {
+  const sala = useSala();
+  const emCoop = !!codigoDaSala && sala.codigo === codigoDaSala;
+  const conduzo = !emCoop || sala.papel === PAPEL_ANFITRIAO;
+
   const [estado, setEstado] = useState<EstadoDoJogo | null>(null);
   const [aviso, setAviso] = useState<Aviso | null>(null);
   const [tela, setTela] = useState<TelaAberta | null>(null);
@@ -69,6 +76,9 @@ export function TelaJogo({ slot }: { slot: number }) {
 
   const assinatura = useRef('');
   const precisaSalvar = useRef(false);
+  const abriu = useRef(false);
+  const cosmeticos = useRef<CosmeticosDoJogador | null>(null);
+  const ultimoRemoto = useRef<Record<string, unknown> | null>(null);
 
   // Sem token o carregamento já rejeita sozinho (ver `chamarApi`).
   useEffect(() => {
@@ -93,6 +103,13 @@ export function TelaJogo({ slot }: { slot: number }) {
       .then((usuario) => {
         setPet(usuario.pet && usuario.pet !== 'none' ? (usuario.pet as PetId) : null);
         setAdmin(usuario.isAdmin);
+        cosmeticos.current = {
+          username: usuario.username,
+          avatarUrl: usuario.avatarUrl,
+          frame: usuario.frame,
+          nameColor: usuario.nameColor,
+          pet: usuario.pet,
+        };
       })
       .catch(() => undefined);
   }, []);
@@ -112,16 +129,72 @@ export function TelaJogo({ slot }: { slot: number }) {
     [slot],
   );
 
-  // Só grava depois de um passo — carregar o jogo ou revelar uma sala não
-  // conta como mudança de progresso.
+  /**
+   * Só grava depois de um passo — carregar o jogo ou revelar uma sala não
+   * conta como mudança de progresso.
+   *
+   * **Em sala co-op a gravação fica desligada.** O mapa da sessão é o do
+   * anfitrião; gravá-lo no slot do convidado substituiria a masmorra dele
+   * pela do parceiro só por ter entrado pra ajudar. Ao sair da sala, o
+   * save do slot está como ele deixou.
+   */
   useEffect(() => {
-    if (!estado || !precisaSalvar.current) return;
+    if (!estado || !precisaSalvar.current || emCoop) return;
     const relogio = setTimeout(() => {
       precisaSalvar.current = false;
       void salvar(estado);
     }, ESPERA_ANTES_DE_SALVAR_MS);
     return () => clearTimeout(relogio);
-  }, [estado, salvar]);
+  }, [estado, salvar, emCoop]);
+
+  // ---------------------------------------------------------------- co-op
+
+  /** O que o parceiro precisa saber, mandado depois de cada mudança minha. */
+  const sincronizar = useCallback(
+    (atual: EstadoDoJogo, abrindo = false) => {
+      if (!emCoop || !sala.papel) return;
+      const pacote = instantaneoDaSala(atual, sala.papel, atual.hero.name, cosmeticos.current);
+      if (abrindo) abrirAventura(pacote, sala.turno);
+      else mandarEstado(pacote, sala.turno);
+    },
+    [emCoop, sala.papel, sala.turno],
+  );
+
+  // Quem conduz abre a aventura assim que o save carrega; quem acompanha
+  // manda o próprio perfil e espera o `welcome`.
+  useEffect(() => {
+    if (!emCoop || !estado || !sala.papel || abriu.current) return;
+    abriu.current = true;
+
+    mandarPerfil({
+      name: estado.hero.name,
+      hero: estado.hero,
+      inventory: estado.inventory,
+      party: estado.party,
+      publicProfile: cosmeticos.current,
+    });
+    if (sala.papel === PAPEL_ANFITRIAO) sincronizar(estado, true);
+  }, [emCoop, estado, sala.papel, sincronizar]);
+
+  /**
+   * Estado que chegou do parceiro. O herói continua sendo o meu: quem o
+   * devolve é `profiles[meuPapel]`, não o pacote do outro.
+   *
+   * Assina a sessão direto em vez de olhar `sala.remoto` a cada render:
+   * o `setEstado` acontece no callback de uma fonte externa, que é
+   * exatamente o caso pra que `useEffect` existe. `ultimoRemoto` corta a
+   * reaplicação quando o que mudou na sessão foi outra coisa (um recado,
+   * um perfil), o que só geraria render à toa.
+   */
+  useEffect(() => {
+    if (!emCoop) return;
+    return assinar(() => {
+      const agora = instantanea();
+      if (!agora.remoto || !agora.papel || agora.remoto === ultimoRemoto.current) return;
+      ultimoRemoto.current = agora.remoto;
+      setEstado((atual) => (atual ? aplicarRemoto(atual, agora.remoto!, agora.perfis[agora.papel!]) : atual));
+    });
+  }, [emCoop]);
 
   function registrarMudanca(proximo: EstadoDoJogo, avisoNovo: Aviso | null) {
     precisaSalvar.current = true;
@@ -129,6 +202,7 @@ export function TelaJogo({ slot }: { slot: number }) {
     setEstado(proximo);
     setAviso(avisoNovo);
     setPerguntando(null);
+    sincronizar(proximo);
   }
 
   function entrar(atual: EstadoDoJogo, direcao: Direction) {
@@ -166,6 +240,7 @@ export function TelaJogo({ slot }: { slot: number }) {
     setEstado(proximoEstado);
     precisaSalvar.current = true;
     setSalvamento('parado');
+    sincronizar(proximoEstado);
   }
 
   function fechar(estadoFinal: EstadoDoJogo, avisoFinal: Aviso | null = null) {
@@ -174,10 +249,15 @@ export function TelaJogo({ slot }: { slot: number }) {
     setAviso(avisoFinal);
     precisaSalvar.current = true;
     setSalvamento('parado');
+    sincronizar(estadoFinal);
   }
 
   function mover(direcao: Direction) {
-    if (!estado) return;
+    if (!estado || !conduzo) return;
+
+    // Quem conduz avisa o parceiro que está andando: enquanto isso ele não
+    // age, senão os dois mexem no mesmo mapa ao mesmo tempo.
+    if (emCoop) travarParceiro();
 
     const destino = vizinhaEm(estado, direcao);
     if (!destino) return;
@@ -412,7 +492,7 @@ export function TelaJogo({ slot }: { slot: number }) {
               type="button"
               className={`${styles.botaoDirecao} ${classe}`}
               onClick={() => mover(direcao)}
-              disabled={!podeAndar(estado, direcao) || perguntando !== null}
+              disabled={!podeAndar(estado, direcao) || perguntando !== null || !conduzo}
               aria-label={DIR_LABEL[direcao]}
               title={DIR_LABEL[direcao]}
             >
@@ -422,8 +502,9 @@ export function TelaJogo({ slot }: { slot: number }) {
         </div>
 
         <p className={styles.estadoSalvamento}>
-          {salvamento === 'salvando' && 'Salvando na nuvem…'}
-          {salvamento === 'salvo' && 'Progresso salvo na nuvem.'}
+          {emCoop && `Sala ${sala.codigo} · ${conduzo ? 'você conduz a exploração' : 'o anfitrião conduz'} · o progresso desta sessão não é gravado`}
+          {!emCoop && salvamento === 'salvando' && 'Salvando na nuvem…'}
+          {!emCoop && salvamento === 'salvo' && 'Progresso salvo na nuvem.'}
         </p>
 
         {erro && <p className={styles.erro}>{erro}</p>}

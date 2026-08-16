@@ -16,6 +16,7 @@
 
 import { ATTR_KEYS, equipmentCap, equipmentStat, xpForLevel, type Equipment } from '@rpg-legend/shared';
 
+import { PROFILE_COLORS, PROFILE_FRAMES, PROFILE_PETS } from '../auth/cosmetics';
 import { clampInt, cloneJson } from './numeric';
 
 const GOD_ATTR = 999;
@@ -106,23 +107,66 @@ export function sanitizeHero(candidate: unknown, previousRecord: SanitizedHeroRe
   return { hero, baseAttrs: baseline };
 }
 
+/**
+ * Cosméticos da conta que o parceiro pode ver — o `accountProfile()` que
+ * o cliente antigo embutia em `profiles[papel].publicProfile` pra montar
+ * o cartão de perfil público dentro da sala.
+ *
+ * O saneamento do porte descartava isso (só `name`/`hero`/`inventory`/
+ * `party` sobreviviam), então o parceiro aparecia sem rosto. Aqui volta,
+ * com os valores presos às listas do catálogo: moldura, cor e pet que não
+ * existem viram o padrão, em vez de virar CSS arbitrário na tela do outro.
+ */
+export interface PublicCosmetics {
+  username: string;
+  avatarUrl: string;
+  frame: string;
+  nameColor: string;
+  pet: string;
+}
+
+const MAX_AVATAR_LENGTH = 400_000;
+const AVATAR_PATTERN = /^(https:\/\/|data:image\/(png|jpeg|webp);base64,)/i;
+
+export function sanitizeCosmetics(candidate: unknown): PublicCosmetics | null {
+  if (!candidate || typeof candidate !== 'object') return null;
+  const source = candidate as Record<string, unknown>;
+
+  const avatarUrl = String(source.avatarUrl ?? '');
+  const frame = String(source.frame ?? 'none');
+  const nameColor = String(source.nameColor ?? '#e8d7a5').toLowerCase();
+  const pet = String(source.pet ?? 'none');
+
+  return {
+    username: String(source.username ?? '').slice(0, 24),
+    avatarUrl: AVATAR_PATTERN.test(avatarUrl) && avatarUrl.length <= MAX_AVATAR_LENGTH ? avatarUrl : '',
+    frame: (PROFILE_FRAMES as readonly string[]).includes(frame) ? frame : 'none',
+    nameColor: (PROFILE_COLORS as readonly string[]).includes(nameColor) ? nameColor : '#e8d7a5',
+    pet: (PROFILE_PETS as readonly string[]).includes(pet) ? pet : 'none',
+  };
+}
+
 export interface SanitizedProfile {
   name: string;
   hero: Record<string, unknown>;
   inventory: unknown[];
   party: Record<string, unknown>[];
   baseAttrs: number;
+  publicProfile: PublicCosmetics | null;
 }
 
-export function sanitizeProfile(profile: unknown, previousRecord: SanitizedHeroRecord | null, adminFlag: boolean): SanitizedProfile {
+export function sanitizeProfile(profile: unknown, previous: SanitizedProfile | null, adminFlag: boolean): SanitizedProfile {
   const source = (profile ?? {}) as Record<string, unknown>;
-  const result = sanitizeHero(source.hero, previousRecord, adminFlag);
+  const result = sanitizeHero(source.hero, previous, adminFlag);
   return {
     name: String(source.name || 'Aventureiro').slice(0, 20),
     hero: result.hero,
     inventory: Array.isArray(source.inventory) ? cloneJson(source.inventory).slice(0, 120) : [],
     party: sanitizeParty(source.party),
     baseAttrs: result.baseAttrs,
+    // Sem cosmético novo, o já aceito continua valendo: assim o avatar
+    // atravessa a rede uma vez, no `profile`, e não a cada ação de jogo.
+    publicProfile: sanitizeCosmetics(source.publicProfile) ?? previous?.publicProfile ?? null,
   };
 }
 
@@ -131,8 +175,15 @@ export interface PublicProfile {
   hero: Record<string, unknown>;
   inventory: unknown[];
   party: Record<string, unknown>[];
+  publicProfile: PublicCosmetics | null;
 }
 
 export function toPublicProfile(profile: SanitizedProfile): PublicProfile {
-  return { name: profile.name, hero: profile.hero, inventory: profile.inventory, party: profile.party };
+  return {
+    name: profile.name,
+    hero: profile.hero,
+    inventory: profile.inventory,
+    party: profile.party,
+    publicProfile: profile.publicProfile,
+  };
 }

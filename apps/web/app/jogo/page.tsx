@@ -15,12 +15,12 @@ function slotValido(valor: string | undefined): number {
   return Number.isInteger(numero) && numero >= 1 && numero <= MAX_SLOTS ? numero : SLOT_PADRAO;
 }
 
-export default async function PaginaJogo({ searchParams }: { searchParams: Promise<{ slot?: string }> }) {
-  const { slot } = await searchParams;
+export default async function PaginaJogo({ searchParams }: { searchParams: Promise<{ slot?: string; sala?: string }> }) {
+  const { slot, sala } = await searchParams;
 
   return (
     <main className={styles.tela}>
-      <TelaJogo slot={slotValido(slot)} />
+      <TelaJogo slot={slotValido(slot)} sala={sala} />
     </main>
   );
 }

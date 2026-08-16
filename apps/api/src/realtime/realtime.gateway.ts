@@ -17,6 +17,10 @@
  * - `error` sempre leva `room` quando existe sala. No original não levava,
  *   e o cliente descarta mensagem sem `room` — ou seja, "Sala já existe."
  *   e "Sala cheia." nunca apareciam pra ninguém.
+ * - Anfitrião que cai **promove** quem ficou (evento `role-changed`). No
+ *   original a sala travava: só o papel 1 conduz exploração e só o papel 2
+ *   pede `boss-advance`, então quem sobrava não conseguia fazer nem um
+ *   nem outro.
  *
  * O que continua igual: papéis (1 cria e conduz exploração, 2 acompanha),
  * saneamento autoritativo de perfil/estado, 30 mensagens por segundo por
@@ -88,6 +92,10 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     const left = this.rooms.leave(socket.id);
     if (!left) return;
     for (const peer of left.remaining) peer.emit('peer-left', { room: left.code });
+
+    // Quem ficou assumiu o papel 1 e precisa saber: sem isso ele continua
+    // se achando papel 2 e não manda `welcome`/`move-lock` nunca mais.
+    if (left.promoted) left.promoted.connection.emit('role-changed', { room: left.code, role: left.promoted.to });
   }
 
   // ---------------------------------------------------------------- social

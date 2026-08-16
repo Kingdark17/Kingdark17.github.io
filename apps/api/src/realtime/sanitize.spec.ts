@@ -1,4 +1,4 @@
-import { sanitizeHero, sanitizeParty, sanitizeProfile, toPublicProfile, type SanitizedHeroRecord } from './sanitize';
+import { sanitizeCosmetics, sanitizeHero, sanitizeParty, sanitizeProfile, toPublicProfile, type SanitizedHeroRecord } from './sanitize';
 
 describe('sanitizeHero', () => {
   it('primeira submissão (sem estado anterior): força nível 1, ouro até 100, killCount zerado', () => {
@@ -135,7 +135,47 @@ describe('toPublicProfile', () => {
   it('remove baseAttrs da view pública', () => {
     const profile = sanitizeProfile({ name: 'Aria' }, null, false);
     const pub = toPublicProfile(profile);
-    expect(pub).toEqual({ name: 'Aria', hero: profile.hero, inventory: [], party: [] });
+    expect(pub).toEqual({ name: 'Aria', hero: profile.hero, inventory: [], party: [], publicProfile: null });
     expect(pub).not.toHaveProperty('baseAttrs');
+  });
+});
+
+describe('sanitizeCosmetics', () => {
+  const cheio = {
+    username: 'Aria',
+    avatarUrl: 'https://exemplo.com/foto.png',
+    frame: 'gold',
+    nameColor: '#6ee7ff',
+    pet: 'owl',
+  };
+
+  it('deixa passar o que existe no catálogo', () => {
+    expect(sanitizeCosmetics(cheio)).toEqual(cheio);
+  });
+
+  it('moldura, cor e pet fora do catálogo caem no padrão', () => {
+    const sujo = sanitizeCosmetics({ ...cheio, frame: 'url(javascript:alert(1))', nameColor: 'red; background:url()', pet: 'dragao_pirata' });
+
+    expect(sujo).toEqual({ ...cheio, frame: 'none', nameColor: '#e8d7a5', pet: 'none' });
+  });
+
+  it('avatar só passa como https ou data:image conhecido', () => {
+    expect(sanitizeCosmetics({ ...cheio, avatarUrl: 'javascript:alert(1)' })?.avatarUrl).toBe('');
+    expect(sanitizeCosmetics({ ...cheio, avatarUrl: 'http://exemplo.com/f.png' })?.avatarUrl).toBe('');
+    expect(sanitizeCosmetics({ ...cheio, avatarUrl: 'data:image/svg+xml;base64,AAAA' })?.avatarUrl).toBe('');
+    expect(sanitizeCosmetics({ ...cheio, avatarUrl: 'data:image/png;base64,AAAA' })?.avatarUrl).toBe('data:image/png;base64,AAAA');
+  });
+
+  it('avatar gigante é descartado em vez de trafegar', () => {
+    const enorme = `data:image/png;base64,${'A'.repeat(400_001)}`;
+
+    expect(sanitizeCosmetics({ ...cheio, avatarUrl: enorme })?.avatarUrl).toBe('');
+  });
+
+  it('sem cosmético novo, o já aceito continua valendo', () => {
+    const antes = sanitizeProfile({ name: 'Aria', publicProfile: cheio }, null, false);
+    const depois = sanitizeProfile({ name: 'Aria' }, antes, false);
+
+    expect(depois.publicProfile).toEqual(cheio);
   });
 });

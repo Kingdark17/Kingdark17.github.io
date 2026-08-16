@@ -14,6 +14,7 @@ import styles from './page.module.css';
 const DESTINOS: Destino[] = [
   { href: '/personagens', icone: '⚔️', titulo: 'Jogar', texto: 'Escolha um personagem e volte pra masmorra.' },
   { href: '/personagens/novo', icone: '✨', titulo: 'Novo personagem', texto: 'Raça, classe, fraqueza e poderes.' },
+  { href: '/multiplayer', icone: '👥', titulo: 'Jogar com alguém', texto: 'Crie uma sala ou entre na de um amigo.' },
   { href: '/amigos', icone: '💬', titulo: 'Amigos', texto: 'Adicione jogadores e converse.' },
   { href: '/conta', icone: '🎭', titulo: 'Conta e perfil', texto: 'Foto, moldura, cor do nome, pet e loja.' },
 ];

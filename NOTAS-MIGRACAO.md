@@ -113,6 +113,8 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 | front (fase 3) | guardar ou trocar a arma **devolve a peça pra mochila** | a arma inicial nasce só dentro de `hero.equip.arma`, sem entrada na mochila. No jogo antigo, equipar outra arma a apaga pra sempre — isso não é regra, é bug |
 | engine | `useConsumable()` virou `consumeItem()` | o `react-hooks` do ESLint trata qualquer `useX()` como Hook e recusa a chamada fora de um componente. Mesmo motivo do `castPower()` |
 | front (fase 3) | o pet entra no combate por **parâmetro** (`iniciarEncontro(estado, pet)`) | o original lia o global `RPG.Account.currentUser()` de dentro de `combat.js`. Pet é cosmético da conta: passando por parâmetro ele não entra no save nem viaja pela rede a cada golpe |
+| gateway | anfitrião que cai **promove** quem ficou (`role-changed`) | no original a sala travava: só o papel 1 conduz exploração e só o papel 2 pede `boss-advance`, então quem sobrava não conseguia fazer nem um nem outro. Decidido com o dono do projeto em 2026-08-15 |
+| relay | o cosmético do parceiro (`publicProfile`) volta a atravessar o relay | o porte só deixava passar `name`/`hero`/`inventory`/`party`, então o cartão de perfil público aparecia sem rosto. Moldura, cor e pet são presos ao catálogo, e o avatar só passa como `https:` ou `data:image/(png\|jpeg\|webp)` |
 | front (fase 3) | o modo infinito do ADM só liga no clique | o original chamava `applyGodMode(true)` sozinho toda vez que um admin entrava no jogo, e mandava pra nuvem em seguida. Reescrever o save de alguém sem pedir não dá pra desfazer |
 | front (fase 3) | texto com `<b>` da engine vira `<strong>` de verdade, sem `innerHTML` | o original jogava tudo em `innerHTML`; o mapa trafega pela rede e um dia vem de outro jogador no multiplayer |
 | front (fase 3) | sem token, `chamarApi` já rejeita no cliente | evita mandar `Bearer ` vazio e tira o `setState` síncrono de dentro do `useEffect` (regra `react-hooks/set-state-in-effect` do lint do Next 16) |
@@ -147,23 +149,46 @@ As seis etapas dos Primeiros Passos são marcadas ao andar, abrir a
 mochila e entrar em NPC/loja/portão/monstro, com a mesma recompensa de 40
 de ouro e uma poção.
 
+Em `/multiplayer` dá pra criar sala (pública ou por código), entrar numa
+sala da vitrine, chamar um amigo online e ver o perfil público do
+parceiro — o cartão com moldura, cor do nome e pet. Daí vai pro jogo com
+`?sala=CODIGO`.
+
+### Onde mora a sessão de tempo real
+
+`apps/web/lib/rede/sala.ts`, **fora do React** — mesma regra da engine. A
+conexão é uma por aba e sobrevive à navegação entre páginas; um provider
+teria o ciclo de vida errado (o StrictMode monta duas vezes em dev e
+conectaria duas vezes). Quem lê assina com `useSyncExternalStore`
+(`use-sala.ts`), e o instantâneo imutável decide sozinho se re-renderiza.
+
+O `setEstado` que aplica o pacote do parceiro assina a sessão direto em
+vez de olhar o instantâneo a cada render: `setState` dentro de callback
+de fonte externa é o caso pra que `useEffect` existe, e é o que a regra
+`react-hooks/set-state-in-effect` do Next 16 aceita.
+
+### O que o co-op compartilha, e o que não
+
+Mapa, posição, andar e missões viajam; herói, mochila e equipe ficam em
+`profiles[papel]` e voltam pra quem os mandou. `aplicarRemoto` monta o
+estado novo com o mapa do parceiro e o **meu** perfil — nunca o dele.
+
+**Em sala, a gravação na nuvem fica desligada** (decidido com o dono do
+projeto em 2026-08-15). O mapa da sessão é o do anfitrião; gravá-lo no
+slot do convidado substituiria a masmorra dele pela do parceiro só por
+ter entrado pra ajudar. O original faz isso — `applyState` chama
+`originalSave(s)` a cada sincronização. Ao sair da sala, o save do slot
+está como ele deixou.
+
+Consequência aceita: progresso ganho em co-op (ouro, XP, item) não
+sobrevive à sessão para o convidado.
+
 ### Fase 3 — o que ainda é só do cliente antigo
 
-Multiplayer (salas co-op, convite, chat ao vivo) e o perfil público de
-outro jogador — que no original só existe dentro da sala co-op, montado
-com o perfil que o parceiro mandou pelo socket. Não há rota REST de
-"perfil do jogador X"; ele nasce junto com o multiplayer ou não nasce.
-
-Duas consequências visíveis de não ter socket ainda:
-
-- **todo amigo aparece offline** — `online` vem da presença do servidor,
-  que só conhece quem está com socket ligado. É a verdade do servidor,
-  não bug da tela;
-- **mensagem nova não chega sozinha** — daí o botão "Atualizar" na
-  conversa, em vez de fingir tempo real.
-
-O tempo real depende de decidir onde o cliente socket.io mora no Next —
-ver "Contrato de rede do multiplayer".
+Nada de tela. O chat entre amigos ainda é REST puro: o socket já entrega
+`chat`/`chat-ack`, mas `/amigos` não assina esses eventos, então mensagem
+nova continua chegando pelo botão "Atualizar". A presença (`online`) já
+funciona pra quem estiver com a sessão de sala aberta.
 
 ### Onde o combate ficou dividido, e por quê
 

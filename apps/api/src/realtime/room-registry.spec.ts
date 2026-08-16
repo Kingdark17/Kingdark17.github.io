@@ -95,6 +95,51 @@ describe('RoomRegistry — ciclo de vida', () => {
     expect(registry.membershipOf('host')).toBeUndefined();
   });
 
+  it('anfitrião que cai promove quem ficou a papel 1', () => {
+    const { registry } = createdRegistry();
+    const guest = fakeConnection('guest');
+    registry.join('ABC123', guest, { admin: false });
+
+    const saida = registry.leave('host');
+
+    expect(saida?.promoted).toEqual({ connection: guest, from: GUEST_ROLE, to: HOST_ROLE });
+    expect(registry.membershipOf('guest')).toEqual({ code: 'ABC123', role: HOST_ROLE });
+  });
+
+  it('a promoção leva perfil e flag de admin junto, sem deixar cópia no papel antigo', () => {
+    const { registry, room } = createdRegistry();
+    const guest = fakeConnection('guest');
+    registry.join('ABC123', guest, { admin: true });
+    registry.applyProfile(room, GUEST_ROLE, { name: 'Bree' });
+
+    registry.leave('host');
+
+    expect(room.profiles[HOST_ROLE]?.name).toBe('Bree');
+    expect(room.profiles[GUEST_ROLE]).toBeUndefined();
+    expect(registry.isAdmin(room, HOST_ROLE)).toBe(true);
+    expect(registry.isAdmin(room, GUEST_ROLE)).toBe(false);
+  });
+
+  it('promovido conduz posição e andar, que era o que travava antes', () => {
+    const { registry, room } = createdRegistry();
+    const guest = fakeConnection('guest');
+    registry.join('ABC123', guest, { admin: false });
+    registry.applyState(room, HOST_ROLE, { pos: { x: 1, y: 1 }, floor: 3, mapMode: 'dungeon' });
+
+    registry.leave('host');
+    const depois = registry.applyState(room, HOST_ROLE, { pos: { x: 4, y: 2 }, floor: 5, mapMode: 'dungeon' });
+
+    expect(depois.pos).toEqual({ x: 4, y: 2 });
+    expect(depois.floor).toBe(5);
+  });
+
+  it('saída do convidado não promove ninguém', () => {
+    const { registry } = createdRegistry();
+    registry.join('ABC123', fakeConnection('guest'), { admin: false });
+
+    expect(registry.leave('guest')?.promoted).toBeUndefined();
+  });
+
   it('saída de quem nunca entrou em sala nenhuma não faz nada', () => {
     const { registry } = createdRegistry();
     expect(registry.leave('desconhecido')).toBeNull();

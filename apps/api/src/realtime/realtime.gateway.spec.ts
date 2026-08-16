@@ -122,6 +122,28 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
     expect(await left).toEqual({ room: 'SAI001' });
   });
 
+  it('anfitrião que cai promove quem ficou, e o promovido passa a conduzir', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'PRO001', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    const guest = connect();
+    await waitFor(guest, 'connect');
+    guest.emit('join', { room: 'PRO001', name: 'Bree' });
+    await waitFor(host, 'hello');
+
+    const promovido = waitFor(guest, 'role-changed');
+    host.disconnect();
+    expect(await promovido).toEqual({ room: 'PRO001', role: 1 });
+
+    // Antes da promoção, `move-lock` do papel 2 era descartado em silêncio;
+    // agora ele conduz — o eco autoritativo confirma o papel novo.
+    const eco = waitFor<{ role: number }>(guest, 'authoritative');
+    guest.emit('state', { room: 'PRO001', turn: 1, state: { pos: { x: 3, y: 3 }, floor: 2 } });
+    expect((await eco).role).toBe(1);
+  });
+
   it('convidado não conduz exploração: move-lock dele não chega no criador', async () => {
     const host = connect();
     await waitFor(host, 'connect');

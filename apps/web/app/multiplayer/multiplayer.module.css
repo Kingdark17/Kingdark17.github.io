@@ -1,0 +1,239 @@
+.tela {
+  min-height: 100dvh;
+  padding: 2rem 1rem;
+}
+
+.colunas {
+  width: min(64rem, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 56rem) {
+  .colunas {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+}
+
+.painel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+}
+
+.titulo {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 1.4rem;
+  margin: 0 0 0.5rem;
+}
+
+.subtitulo {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--parchment);
+  font-size: 0.95rem;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.legenda {
+  color: var(--parchment-dim);
+  font-size: 0.82rem;
+  margin: 0 0 0.9rem;
+}
+
+.campo {
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+.rotulo {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--parchment-dim);
+  margin-bottom: 0.25rem;
+}
+
+.entrada {
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  color: var(--parchment);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.entrada:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+.caixaDeMarcar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--parchment-dim);
+  margin-bottom: 0.5rem;
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.botao {
+  padding: 0.5rem 1.1rem;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  border-radius: 0.3rem;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.botaoVazado {
+  padding: 0.5rem 1.1rem;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  color: var(--parchment);
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.botaoVazado:hover:not(:disabled) {
+  border-color: var(--gold);
+}
+
+.botaoVazado:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.botaoDiscreto {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 0.25rem;
+  color: var(--parchment-dim);
+  font: inherit;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.botaoDiscreto:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}
+
+.botaoDiscreto:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.linhaDaLista {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.codigoDaSala {
+  font-family: var(--font-mono), monospace;
+  color: var(--gold-bright);
+  letter-spacing: 0.08em;
+}
+
+.dono {
+  color: var(--parchment);
+  overflow-wrap: anywhere;
+}
+
+.nomeClicavel {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.nomeGrande {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.15rem;
+}
+
+.cartaDePerfil {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  background: var(--panel-2);
+  border: 1px solid var(--gold);
+  border-radius: 0.4rem;
+}
+
+.cartaDePerfil .legenda {
+  margin: 0.15rem 0 0;
+}
+
+.convite {
+  margin-top: 1rem;
+  padding: 0.75rem 0.85rem;
+  background: rgba(201, 162, 39, 0.12);
+  border: 1px solid var(--gold);
+  border-radius: 0.35rem;
+  font-size: 0.88rem;
+}
+
+.convite p {
+  margin: 0;
+}
+
+.aviso {
+  margin: 1rem 0 0;
+  padding: 0.55rem 0.7rem;
+  background: rgba(201, 162, 39, 0.12);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  font-size: 0.85rem;
+}
+
+.erro {
+  margin: 1rem 0 0;
+  padding: 0.55rem 0.7rem;
+  background: rgba(138, 43, 43, 0.25);
+  border: 1px solid var(--blood);
+  border-radius: 0.3rem;
+  font-size: 0.85rem;
+}
