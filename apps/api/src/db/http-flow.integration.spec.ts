@@ -35,6 +35,10 @@ function saveDe(gold: number, level = 1) {
   };
 }
 
+/** PNG de 1×1 — o formato que `compressPhoto()` produz no navegador. */
+const PNG_DE_TESTE =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+
 function waitFor<T = unknown>(socket: ClientSocket, event: string, timeoutMs = 5_000): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error(`tempo esgotado esperando "${event}"`)), timeoutMs);
@@ -155,12 +159,26 @@ describe('fluxo social com presença de verdade', () => {
     const comoAria = (req: request.Test) => req.set('Authorization', `Bearer ${tokenAria}`);
     const comoBree = (req: request.Test) => req.set('Authorization', `Bearer ${tokenBree}`);
 
+    await comoBree(request(app.getHttpServer()).put('/api/account/profile')).send({ avatarUrl: PNG_DE_TESTE });
     await comoAria(request(app.getHttpServer()).post('/api/friends/request')).send({ username: 'Bree' });
     await comoBree(request(app.getHttpServer()).post('/api/friends/accept')).send({ username: 'Aria' });
 
     const amigosDaAria = await comoAria(request(app.getHttpServer()).get('/api/friends'));
     expect(amigosDaAria.body.friends).toHaveLength(1);
     expect(amigosDaAria.body.friends[0]).toMatchObject({ username: 'Bree', online: false });
+
+    // A foto não viaja mais dentro do JSON: vem como endereço, e o
+    // endereço serve a imagem **sem** Authorization — que é tudo o que um
+    // `<img src>` consegue mandar.
+    const endereco = amigosDaAria.body.friends[0].avatarUrl as string;
+    expect(JSON.stringify(amigosDaAria.body)).not.toContain('base64');
+    expect(endereco).toMatch(/^\/api\/users\/Bree\/avatar\?v=[0-9a-f]{12}$/);
+
+    const foto = await request(app.getHttpServer()).get(endereco);
+    expect(foto.status).toBe(200);
+    expect(foto.headers['content-type']).toBe('image/png');
+    expect(foto.headers['cache-control']).toContain('max-age=31536000');
+    expect(Buffer.from(foto.body as Buffer).subarray(0, 4)).toEqual(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
 
     // Bree conecta e autentica no socket: agora a presença muda de verdade.
     const socketDaBree = io(url, { transports: ['websocket'], forceNew: true });

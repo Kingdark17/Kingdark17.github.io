@@ -22,6 +22,15 @@ function baseUrl(): string {
   return process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3000';
 }
 
+/**
+ * Endereço absoluto de um caminho da API. Serve pro que o navegador
+ * busca sozinho, fora do `fetch` — hoje só o `<img src>` da foto de
+ * perfil, que a API devolve como caminho relativo a ela mesma.
+ */
+export function urlDaApi(caminho: string): string {
+  return `${baseUrl()}${caminho}`;
+}
+
 interface Opcoes {
   method?: 'GET' | 'POST' | 'PUT';
   body?: unknown;

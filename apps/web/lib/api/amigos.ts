@@ -10,7 +10,7 @@
  * socket ligado — ou seja, quem tem alguma tela do jogo aberta.
  */
 
-import { chamarApi } from './client';
+import { chamarApi, urlDaApi } from './client';
 
 export interface AmigoPublico {
   username: string;
@@ -34,8 +34,23 @@ export interface Mensagem {
   createdAt: string;
 }
 
-export function listarAmigos(): Promise<Relacoes> {
-  return chamarApi<Relacoes>('/api/friends', { autenticado: true });
+/**
+ * A foto enviada não vem mais embutida no JSON: a API devolve o caminho
+ * do endpoint que a serve, e o navegador guarda em cache (o endereço
+ * carrega a versão do conteúdo). Como a API mora em outro domínio, o
+ * caminho relativo precisa virar absoluto antes de chegar num `<img>`.
+ */
+function comFotoAbsoluta(amigo: AmigoPublico): AmigoPublico {
+  return amigo.avatarUrl.startsWith('/') ? { ...amigo, avatarUrl: urlDaApi(amigo.avatarUrl) } : amigo;
+}
+
+export async function listarAmigos(): Promise<Relacoes> {
+  const relacoes = await chamarApi<Relacoes>('/api/friends', { autenticado: true });
+  return {
+    friends: relacoes.friends.map(comFotoAbsoluta),
+    incoming: relacoes.incoming.map(comFotoAbsoluta),
+    outgoing: relacoes.outgoing.map(comFotoAbsoluta),
+  };
 }
 
 /** Pedir pra alguém que já tinha pedido pra você aceita na hora (`accepted: true`). */

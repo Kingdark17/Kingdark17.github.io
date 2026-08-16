@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { AuthModule } from '../auth/auth.module';
+import { AvatarController } from './avatar.controller';
 import { DrizzleSocialRepository } from './drizzle-social-repository';
 import { OnlineUsersRegistry } from './online-users-registry';
 import { SocialController } from './social.controller';
@@ -8,7 +9,9 @@ import { SocialService } from './social.service';
 
 @Module({
   imports: [AuthModule],
-  controllers: [SocialController],
+  // `AvatarController` é o único sem `AuthGuard`: `<img src>` não manda
+  // cabeçalho de sessão. Ver o comentário do arquivo.
+  controllers: [SocialController, AvatarController],
   providers: [
     { provide: OnlineUsersRegistry, useFactory: () => new OnlineUsersRegistry() },
     {

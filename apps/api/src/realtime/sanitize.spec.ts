@@ -163,7 +163,13 @@ describe('sanitizeCosmetics', () => {
     expect(sanitizeCosmetics({ ...cheio, avatarUrl: 'javascript:alert(1)' })?.avatarUrl).toBe('');
     expect(sanitizeCosmetics({ ...cheio, avatarUrl: 'http://exemplo.com/f.png' })?.avatarUrl).toBe('');
     expect(sanitizeCosmetics({ ...cheio, avatarUrl: 'data:image/svg+xml;base64,AAAA' })?.avatarUrl).toBe('');
-    expect(sanitizeCosmetics({ ...cheio, avatarUrl: 'data:image/png;base64,AAAA' })?.avatarUrl).toBe('data:image/png;base64,AAAA');
+  });
+
+  it('a foto enviada vira endereço em vez de trafegar em base64 a cada ação', () => {
+    const virou = sanitizeCosmetics({ ...cheio, avatarUrl: 'data:image/png;base64,AAAA' })?.avatarUrl;
+
+    expect(virou).toMatch(/^\/api\/users\/Aria\/avatar\?v=[0-9a-f]{12}$/);
+    expect(virou).not.toContain('base64');
   });
 
   it('avatar gigante é descartado em vez de trafegar', () => {

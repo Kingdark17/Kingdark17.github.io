@@ -40,6 +40,8 @@ export interface RecentMessage {
 
 export interface SocialRepository {
   findUserByUsername(username: string): Promise<UserLookup | null>;
+  /** `avatar_url` cru (link externo ou `data:`), pro endpoint de foto. `null` quando o jogador não existe. */
+  findAvatarByUsername(username: string): Promise<string | null>;
   areFriends(userId: number, otherId: number): Promise<boolean>;
   hasPendingRequest(fromId: number, toId: number): Promise<boolean>;
   /** Devolve 'duplicate' em vez de lançar quando já existe o mesmo par (from,to) — equivalente ao 23505 do original. */

@@ -17,6 +17,7 @@
 import { ATTR_KEYS, equipmentCap, equipmentStat, xpForLevel, type Equipment } from '@rpg-legend/shared';
 
 import { PROFILE_COLORS, PROFILE_FRAMES, PROFILE_PETS } from '../auth/cosmetics';
+import { publicAvatarUrl } from '../social/avatar';
 import { clampInt, cloneJson } from './numeric';
 
 const GOD_ATTR = 999;
@@ -137,9 +138,22 @@ export function sanitizeCosmetics(candidate: unknown): PublicCosmetics | null {
   const nameColor = String(source.nameColor ?? '#e8d7a5').toLowerCase();
   const pet = String(source.pet ?? 'none');
 
+  const username = String(source.username ?? '').slice(0, 24);
+  const aceita = AVATAR_PATTERN.test(avatarUrl) && avatarUrl.length <= MAX_AVATAR_LENGTH;
+
   return {
-    username: String(source.username ?? '').slice(0, 24),
-    avatarUrl: AVATAR_PATTERN.test(avatarUrl) && avatarUrl.length <= MAX_AVATAR_LENGTH ? avatarUrl : '',
+    username,
+    // `publicProfiles()` é recalculado a cada `state`, e `state` sai a
+    // cada ação — a foto em base64 ia junto, o jogo todo, nos dois
+    // sentidos. Vira endereço pro endpoint, que o parceiro busca uma vez
+    // e guarda em cache. Link externo passa direto.
+    //
+    // O endereço sai do `username` que o próprio cliente mandou, que é o
+    // mesmo que ele já usa pro nome no cartão: mentir aqui mostra a foto
+    // de outra pessoa, exatamente como mentir ali já mostrava o nome de
+    // outra pessoa. Não é buraco novo, e a foto é pública de qualquer
+    // jeito (ver `social/avatar.controller.ts`).
+    avatarUrl: aceita ? publicAvatarUrl(username, avatarUrl) : '',
     frame: (PROFILE_FRAMES as readonly string[]).includes(frame) ? frame : 'none',
     nameColor: (PROFILE_COLORS as readonly string[]).includes(nameColor) ? nameColor : '#e8d7a5',
     pet: (PROFILE_PETS as readonly string[]).includes(pet) ? pet : 'none',

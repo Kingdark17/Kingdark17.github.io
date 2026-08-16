@@ -121,6 +121,7 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 | front (fase 3) | a arte dos itens foi **copiada** de `rpg-legend/img/` pra `apps/web/public/img/` | 240 KB, 28 arquivos. O app na Vercel não pode depender do GitHub Pages pra desenhar um item. Enquanto os dois clientes coexistirem há duas cópias; a do jogo antigo some junto com ele |
 | front (fase 6) | a entrada dos cartões do menu é `@keyframes`, não Motion | medido: ~106 KB de JS na primeira página que qualquer pessoa abre, por um fade de cinco cartões. Ver "Fase 6" |
 | front (fase 6) | socket.io entra por `import()` dentro de `conectar()` | 41 KB que só quem abre sala ou fica de olho no chat precisa. Quem joga sozinho pagava por ele em `/jogo` sem nunca conectar |
+| API (fase 6) | a foto de perfil vira `GET /api/users/:username/avatar`, sem sessão | o original manda base64 dentro do JSON de `/api/friends` e dentro de `state.profiles`, que o relay reemite a cada ação. Ver "Segundo corte" |
 
 ### Fase 3 — o que já dá pra jogar
 
@@ -341,6 +342,47 @@ Os 110 KB de core-js continuam sendo gerados, mas só um navegador sem
 suporte a `type="module"` os baixa. Encolher isso é mexer no
 `browserslist`, ou seja, decidir quais navegadores o jogo ainda atende —
 não é otimização, é escopo.
+
+### Segundo corte — a foto de perfil parou de trafegar em base64
+
+O `avatar_url` do banco é ou um `https://` que o jogador digitou, ou um
+`data:image/...;base64,...` de até 400 KB. O segundo viajava embutido em
+JSON, em dois lugares:
+
+1. **`/api/friends`** devolve amigos + pedidos recebidos + pedidos
+   enviados, cada um com a foto inteira. A resposta é `no-store`, então
+   abrir `/amigos` e depois `/multiplayer` baixava tudo de novo.
+2. **O relay do co-op**, muito pior: `applyState` recalcula
+   `state.profiles` a cada `state`, e `state` sai **a cada ação**. A foto
+   dos dois jogadores ia junto de cada passo, ataque e poção, nos dois
+   sentidos.
+
+Agora existe `GET /api/users/:username/avatar?v=<versão>`, e os dois
+lugares mandam esse endereço no lugar da imagem. O `v` é a impressão
+digital do conteúdo: trocar de foto muda o endereço, então a resposta
+pode ser `immutable` por um ano sem nunca servir foto velha. Quem usa
+link externo passa direto, como antes.
+
+**A rota é pública, decidido em 2026-08-16.** Um `<img src>` não manda o
+`Bearer` do localStorage; exigir sessão obrigaria a buscar cada foto por
+`fetch` e virar blob. A foto já é visível pra qualquer amigo e em
+qualquer sala pública.
+
+Duas coisas que o teste guarda porque quebrariam calado:
+
+- O `Cache-Control` do handler **sobrescreve** o `no-store` que o
+  `NoStoreInterceptor` põe em tudo que é `/api/*` (o interceptador roda
+  antes; `setHeader` substitui). Se isso inverter, o navegador rebaixa a
+  foto toda vez e a otimização vira nada, sem nenhum outro teste falhar.
+- O caminho que a API devolve é **relativo a ela mesma**. O front prefixa
+  com a base da API (`urlDaApi`, em `lib/api/client.ts`) antes de pôr num
+  `<img>`, porque os dois moram em domínios diferentes.
+
+O que ficou de fora: a lista ainda **lê** o base64 do Postgres pra
+calcular a versão, mesmo sem mandar pro navegador. Dá pra resolver com
+`md5(avatar_url)` na própria consulta, mas aí a regra passa a existir em
+SQL e em JS, e o fake dos testes deixa de valer como espelho do
+repositório real. Fica anotado.
 
 ### Decisão sua: a dependência `motion`
 

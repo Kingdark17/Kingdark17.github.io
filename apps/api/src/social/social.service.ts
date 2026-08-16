@@ -6,6 +6,7 @@
  * `SocialNotifier` — ver os comentários desses arquivos.
  */
 
+import { decodeAvatar, publicAvatarUrl, type AvatarDecodificado } from './avatar';
 import { cleanMessageText } from './message-text';
 import type { PresenceChecker } from './presence-checker';
 import type { SocialNotifier } from './social-notifier';
@@ -59,13 +60,21 @@ export class SocialService {
     const rows = await this.repo.listRelations(userId);
     const toPublic = (row: InternalFriendRow): PublicFriendView => ({
       username: row.username,
-      avatarUrl: row.avatarUrl,
+      // Foto enviada não viaja aqui: vira endereço pro endpoint, que o
+      // navegador guarda em cache. Ver `avatar.ts`.
+      avatarUrl: publicAvatarUrl(row.username, row.avatarUrl),
       frame: row.frame,
       nameColor: row.nameColor,
       pet: row.pet,
       online: this.presence.isOnline(row.id),
     });
     return { friends: rows.friends.map(toPublic), incoming: rows.incoming.map(toPublic), outgoing: rows.outgoing.map(toPublic) };
+  }
+
+  /** Foto de um jogador em bytes. `null` pra quem não existe, não tem foto ou usa link externo. */
+  async findAvatar(username: string): Promise<AvatarDecodificado | null> {
+    const guardado = await this.repo.findAvatarByUsername(username);
+    return guardado ? decodeAvatar(guardado) : null;
   }
 
   async sendFriendRequest(fromUser: { id: number; username: string }, toUsername: string): Promise<SendFriendRequestResult> {

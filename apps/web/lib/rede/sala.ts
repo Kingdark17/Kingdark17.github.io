@@ -18,6 +18,7 @@
 
 import type { Socket } from 'socket.io-client';
 
+import { urlDaApi } from '../api/client';
 import { lerToken } from '../api/session';
 
 export type PapelNaSala = 1 | 2;
@@ -109,6 +110,22 @@ export function assinar(ouvinte: Ouvinte): () => void {
   return () => ouvintes.delete(ouvinte);
 }
 
+/**
+ * A foto do parceiro chega como caminho da API, não como base64 — o
+ * relay para de repetir a imagem inteira a cada ação (ver
+ * `sanitize.ts`). Como a API mora em outro domínio, o caminho vira
+ * absoluto antes de chegar num `<img>`.
+ */
+function comFotoAbsoluta(perfil: PerfilNaSala): PerfilNaSala {
+  const cosmeticos = perfil.publicProfile;
+  if (!cosmeticos?.avatarUrl.startsWith('/')) return perfil;
+  return { ...perfil, publicProfile: { ...cosmeticos, avatarUrl: urlDaApi(cosmeticos.avatarUrl) } };
+}
+
+function guardarPerfil(papel: number, perfil: PerfilNaSala): Partial<Record<PapelNaSala, PerfilNaSala>> {
+  return { ...instantaneo.perfis, [papel]: comFotoAbsoluta(perfil) };
+}
+
 function mudar(mudanca: Partial<EstadoDaSala>): void {
   instantaneo = { ...instantaneo, ...mudanca };
   for (const ouvinte of ouvintes) ouvinte();
@@ -174,12 +191,12 @@ function ligar(conexao: Socket, token: string): void {
 
   conexao.on('profile', (dados: { role?: number; profile?: PerfilNaSala }) => {
     if (!dados?.profile || !dados.role) return;
-    mudar({ perfis: { ...instantaneo.perfis, [dados.role]: dados.profile } });
+    mudar({ perfis: guardarPerfil(dados.role, dados.profile) });
   });
 
   conexao.on('profile-accepted', (dados: { role?: number; profile?: PerfilNaSala }) => {
     if (!dados?.profile || !dados.role) return;
-    mudar({ perfis: { ...instantaneo.perfis, [dados.role]: dados.profile } });
+    mudar({ perfis: guardarPerfil(dados.role, dados.profile) });
   });
 
   // `welcome` é o anfitrião abrindo a aventura; `state` é sincronização
@@ -230,7 +247,12 @@ function adotarRemoto(
 
   const perfisRecebidos = (dados.state.profiles ?? dados.profiles) as Record<string, PerfilNaSala> | undefined;
   const perfis = perfisRecebidos
-    ? { ...instantaneo.perfis, ...(Object.fromEntries(Object.entries(perfisRecebidos).map(([papel, perfil]) => [Number(papel), perfil])) as Partial<Record<PapelNaSala, PerfilNaSala>>) }
+    ? {
+        ...instantaneo.perfis,
+        ...(Object.fromEntries(
+          Object.entries(perfisRecebidos).map(([papel, perfil]) => [Number(papel), comFotoAbsoluta(perfil)]),
+        ) as Partial<Record<PapelNaSala, PerfilNaSala>>),
+      }
     : instantaneo.perfis;
 
   mudar({

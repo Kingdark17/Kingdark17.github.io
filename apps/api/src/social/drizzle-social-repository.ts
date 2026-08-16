@@ -28,6 +28,15 @@ export class DrizzleSocialRepository implements SocialRepository {
     return rows[0] ?? null;
   }
 
+  async findAvatarByUsername(username: string): Promise<string | null> {
+    const rows = await getDb()
+      .select({ avatarUrl: users.avatarUrl })
+      .from(users)
+      .where(sql`lower(${users.username}) = lower(${username.trim()})`)
+      .limit(1);
+    return rows[0]?.avatarUrl ?? null;
+  }
+
   async areFriends(userId: number, otherId: number): Promise<boolean> {
     const rows = await getDb()
       .select({ userId: friendships.userId })

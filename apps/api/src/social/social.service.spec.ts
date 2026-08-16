@@ -35,6 +35,14 @@ class FakeSocialRepository implements SocialRepository {
     return null;
   }
 
+  async findAvatarByUsername(username: string): Promise<string | null> {
+    const needle = username.trim().toLowerCase();
+    for (const user of this.users.values()) {
+      if (user.username.toLowerCase() === needle) return user.avatarUrl;
+    }
+    return null;
+  }
+
   async areFriends(userId: number, otherId: number): Promise<boolean> {
     return this.friendships.has(this.pairKey(userId, otherId));
   }
@@ -124,6 +132,12 @@ class FakePresenceChecker implements PresenceChecker {
 
 const USER = { id: 1, username: 'Aria' };
 const OTHER = { id: 2, username: 'Bram' };
+
+/** PNGs de 1×1 — só precisam ser `data:` válidos e diferentes entre si. */
+const FOTO_ENVIADA =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+const OUTRA_FOTO =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 
 function makeUser(id: number, username: string): FakeUser {
   return { id, username, avatarUrl: '', frame: 'none', nameColor: '#e8d7a5', pet: 'none' };
@@ -229,6 +243,56 @@ describe('SocialService.listRelations', () => {
     expect(relations.friends).toEqual([{ username: 'Bram', avatarUrl: '', frame: 'none', nameColor: '#e8d7a5', pet: 'none', online: true }]);
     expect(relations.incoming).toEqual([]);
     expect(relations.outgoing).toEqual([]);
+  });
+
+  it('troca a foto enviada por um endereço, e deixa link externo passar', async () => {
+    const { service, repo } = makeService();
+    await repo.acceptFriendRequest(USER.id, OTHER.id);
+    repo.addUser({ ...makeUser(OTHER.id, OTHER.username), avatarUrl: FOTO_ENVIADA });
+
+    const [amigo] = (await service.listRelations(USER.id)).friends;
+    expect(amigo.avatarUrl).toMatch(/^\/api\/users\/Bram\/avatar\?v=[0-9a-f]{12}$/);
+    expect(amigo.avatarUrl).not.toContain('base64');
+
+    repo.addUser({ ...makeUser(OTHER.id, OTHER.username), avatarUrl: 'https://exemplo.com/foto.png' });
+    expect((await service.listRelations(USER.id)).friends[0].avatarUrl).toBe('https://exemplo.com/foto.png');
+  });
+
+  it('o endereço muda quando a foto muda — é o que permite o cache longo', async () => {
+    const { service, repo } = makeService();
+    await repo.acceptFriendRequest(USER.id, OTHER.id);
+
+    repo.addUser({ ...makeUser(OTHER.id, OTHER.username), avatarUrl: FOTO_ENVIADA });
+    const antes = (await service.listRelations(USER.id)).friends[0].avatarUrl;
+
+    repo.addUser({ ...makeUser(OTHER.id, OTHER.username), avatarUrl: OUTRA_FOTO });
+    expect((await service.listRelations(USER.id)).friends[0].avatarUrl).not.toBe(antes);
+  });
+});
+
+describe('SocialService.findAvatar', () => {
+  it('devolve os bytes e o tipo da foto enviada', async () => {
+    const { service, repo } = makeService();
+    repo.addUser({ ...makeUser(OTHER.id, OTHER.username), avatarUrl: FOTO_ENVIADA });
+
+    const foto = await service.findAvatar(OTHER.username);
+    expect(foto?.mime).toBe('image/png');
+    expect(foto?.bytes.subarray(0, 4)).toEqual(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
+  });
+
+  it('devolve null pra quem não existe, pra quem não tem foto e pra link externo', async () => {
+    const { service, repo } = makeService();
+    expect(await service.findAvatar('ninguem')).toBeNull();
+    expect(await service.findAvatar(OTHER.username)).toBeNull();
+
+    repo.addUser({ ...makeUser(OTHER.id, OTHER.username), avatarUrl: 'https://exemplo.com/foto.png' });
+    expect(await service.findAvatar(OTHER.username)).toBeNull();
+  });
+
+  it('acha o jogador sem diferenciar maiúscula', async () => {
+    const { service, repo } = makeService();
+    repo.addUser({ ...makeUser(OTHER.id, OTHER.username), avatarUrl: FOTO_ENVIADA });
+    expect(await service.findAvatar('bram')).not.toBeNull();
   });
 });
 
