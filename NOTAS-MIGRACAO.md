@@ -19,7 +19,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 0 — monorepo | pronta |
 | 1 — engine em `packages/shared` | pronta (326 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
-| 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila e level up manual |
+| 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM e multiplayer co-op |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
 | 6 — otimização | não começou |
@@ -183,12 +183,14 @@ está como ele deixou.
 Consequência aceita: progresso ganho em co-op (ouro, XP, item) não
 sobrevive à sessão para o convidado.
 
-### Fase 3 — o que ainda é só do cliente antigo
+### Fase 3 — concluída
 
-Nada de tela. O chat entre amigos ainda é REST puro: o socket já entrega
-`chat`/`chat-ack`, mas `/amigos` não assina esses eventos, então mensagem
-nova continua chegando pelo botão "Atualizar". A presença (`online`) já
-funciona pra quem estiver com a sessão de sala aberta.
+Toda tela do cliente antigo tem equivalente no front novo. O chat é
+híbrido de propósito: histórico e envio por REST, socket só pro aviso de
+mensagem nova — a mesma `SocialService` empurra o aviso quando a mensagem
+entra por REST, então mandar por socket não mudaria nada e perderia a
+resposta de erro. O botão "Atualizar" continua na tela como saída pra
+quando o socket estiver fora do ar.
 
 ### Onde o combate ficou dividido, e por quê
 

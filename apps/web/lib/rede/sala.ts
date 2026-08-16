@@ -48,6 +48,14 @@ export interface Convite {
   nomeDoAnfitriao: string;
 }
 
+/** Mensagem que chegou enquanto a página estava aberta. */
+export interface MensagemRecebida {
+  de: string;
+  id: string;
+  corpo: string;
+  quando: string;
+}
+
 export type FaseDaSala = 'desligado' | 'conectando' | 'conectado' | 'esperando' | 'jogando';
 
 export interface EstadoDaSala {
@@ -63,6 +71,8 @@ export interface EstadoDaSala {
   /** True enquanto o anfitrião está andando: o convidado não age. */
   travado: boolean;
   convite: Convite | null;
+  /** Última mensagem de amigo empurrada pelo servidor. */
+  mensagem: MensagemRecebida | null;
   recado: string;
   erro: string;
 }
@@ -77,6 +87,7 @@ const VAZIO: EstadoDaSala = {
   turno: 1,
   travado: false,
   convite: null,
+  mensagem: null,
   recado: '',
   erro: '',
 };
@@ -174,6 +185,14 @@ export function conectar(): void {
 
   conexao.on('role-changed', (dados: { role?: number }) =>
     mudar({ papel: (dados?.role as PapelNaSala) ?? PAPEL_ANFITRIAO, recado: 'Você assumiu a condução da aventura.' }),
+  );
+
+  // Mensagem de amigo. O servidor empurra pra quem está online, inclusive
+  // quando ela foi enviada por REST — é a mesma `SocialService`.
+  conexao.on('chat', (dados: { from?: string; id?: string; body?: string; createdAt?: string }) =>
+    mudar({
+      mensagem: { de: dados?.from ?? '', id: String(dados?.id ?? ''), corpo: dados?.body ?? '', quando: dados?.createdAt ?? '' },
+    }),
   );
 
   conexao.on('room-invite', (dados: { from?: string; code?: string; hostName?: string }) =>

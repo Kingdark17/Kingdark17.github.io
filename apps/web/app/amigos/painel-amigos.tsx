@@ -9,9 +9,14 @@
  * amizade na hora — é o servidor que decide isso (`accepted: true`), e a
  * tela só repete o que ele respondeu.
  *
- * A conversa é histórico do banco, buscado por REST. Sem o cliente de
- * tempo real, mensagem nova chega ao recarregar a conversa; o botão de
- * atualizar existe justamente por isso, em vez de fingir que é ao vivo.
+ * A conversa é histórico do banco, buscado por REST. O socket entra só
+ * pra avisar que chegou mensagem nova: quando o aviso é de quem está na
+ * tela, o histórico é relido; quando é de outro amigo, vira um recado.
+ * Enviar continua sendo REST — a mesma `SocialService` empurra o aviso
+ * pro outro lado, então mandar por socket não adiantaria nada.
+ *
+ * Estar aqui com a sessão ligada também é o que faz você aparecer online
+ * pros seus amigos.
  */
 
 import { useCallback, useEffect, useState } from 'react';
@@ -29,6 +34,7 @@ import {
   type Relacoes,
 } from '@/lib/api/amigos';
 import { ErroDaApi } from '@/lib/api/client';
+import { assinar, conectar, instantanea } from '@/lib/rede/sala';
 import { Avatar, NomeColorido } from '../componentes/avatar';
 import styles from './amigos.module.css';
 
@@ -61,6 +67,31 @@ export function PainelAmigos() {
       .then(setMensagens)
       .catch((falha) => setErro(falha instanceof ErroDaApi ? falha.message : 'Não foi possível abrir a conversa.'));
   }, []);
+
+  useEffect(() => {
+    conectar();
+  }, []);
+
+  /**
+   * Aviso de mensagem nova. Assina a sessão direto em vez de olhar o
+   * instantâneo a cada render: `setState` em callback de fonte externa é
+   * o caso pra que `useEffect` existe.
+   */
+  useEffect(() => {
+    let ultima = '';
+    return assinar(() => {
+      const chegou = instantanea().mensagem;
+      if (!chegou || chegou.id === ultima) return;
+      ultima = chegou.id;
+
+      if (conversando?.username === chegou.de) {
+        conversaCom(chegou.de).then(setMensagens).catch(() => undefined);
+        return;
+      }
+      setRecado(`${chegou.de} mandou uma mensagem.`);
+      setVersao((n) => n + 1);
+    });
+  }, [conversando]);
 
   async function comAviso(acao: () => Promise<string>) {
     setOcupado(true);

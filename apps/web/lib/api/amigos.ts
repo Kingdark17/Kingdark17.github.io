@@ -1,13 +1,13 @@
 /**
  * Amigos e conversa (`/api/friends*` e `/api/messages/:username`).
  *
- * O histórico vem do banco por REST; o socket só serve pra avisar que
- * chegou mensagem nova enquanto a página está aberta. Enquanto o cliente
- * de tempo real não existe, recarregar a conversa é o que atualiza —
- * decisão explícita, não esquecimento (ver NOTAS-MIGRACAO.md).
+ * O histórico vem do banco por REST; o socket só avisa que chegou
+ * mensagem nova (ver `lib/rede/sala.ts`). Mandar continua sendo REST: a
+ * mesma `SocialService` do servidor empurra o aviso pro outro lado, então
+ * mandar por socket não mudaria nada e perderia a resposta de erro.
  *
- * `online` vem da presença do servidor: sem socket ligado, todo mundo
- * aparece offline. É a verdade do servidor, não um bug da tela.
+ * `online` vem da presença do servidor, que só conhece quem está com
+ * socket ligado — ou seja, quem tem alguma tela do jogo aberta.
  */
 
 import { chamarApi } from './client';
