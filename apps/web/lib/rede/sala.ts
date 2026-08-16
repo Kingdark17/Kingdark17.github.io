@@ -16,7 +16,7 @@
  * sala travava (ver `room-registry.ts`).
  */
 
-import { io, type Socket } from 'socket.io-client';
+import type { Socket } from 'socket.io-client';
 
 import { lerToken } from '../api/session';
 
@@ -95,6 +95,8 @@ const VAZIO: EstadoDaSala = {
 type Ouvinte = () => void;
 
 let socket: Socket | null = null;
+/** Segura chamadas de `conectar()` durante o `import()` do cliente socket. */
+let ligando = false;
 let instantaneo: EstadoDaSala = VAZIO;
 const ouvintes = new Set<Ouvinte>();
 
@@ -119,9 +121,13 @@ function baseUrl(): string {
 /**
  * Conecta e autentica. Chamar de novo com a conexão de pé não faz nada —
  * a tela pode chamar à vontade sem contar quantas vezes montou.
+ *
+ * O cliente socket.io entra por `import()` dinâmico: são ~45 KB de JS que
+ * só fazem sentido pra quem vai abrir uma sala ou ficar de olho no chat.
+ * Quem só joga sozinho nunca baixa esse pedaço.
  */
 export function conectar(): void {
-  if (socket) return;
+  if (socket || ligando) return;
 
   const token = lerToken();
   if (!token) {
@@ -129,8 +135,17 @@ export function conectar(): void {
     return;
   }
 
+  ligando = true;
   mudar({ fase: 'conectando', erro: '' });
-  const conexao = io(baseUrl(), { transports: ['websocket'], forceNew: true });
+  void import('socket.io-client')
+    .then(({ io }) => ligar(io(baseUrl(), { transports: ['websocket'], forceNew: true }), token))
+    .catch(() => mudar({ fase: 'desligado', erro: 'Não foi possível carregar o modo online.' }))
+    .finally(() => {
+      ligando = false;
+    });
+}
+
+function ligar(conexao: Socket, token: string): void {
   socket = conexao;
 
   conexao.on('connect', () => conexao.emit('auth', { token }));

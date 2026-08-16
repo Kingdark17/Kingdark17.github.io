@@ -44,6 +44,23 @@
   color: var(--parchment);
   text-decoration: none;
   transition: border-color 0.15s ease;
+  animation: entrada 0.24s ease-out backwards;
+}
+
+/* `backwards` guarda o estado inicial durante o `animation-delay`; sem
+   ele o cartão pisca visível antes de começar a subir. */
+@keyframes entrada {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem);
+  }
+}
+
+/* Entrada é enfeite: quem pediu menos movimento recebe o cartão pronto. */
+@media (prefers-reduced-motion: reduce) {
+  .destino {
+    animation: none;
+  }
 }
 
 .destino:hover,

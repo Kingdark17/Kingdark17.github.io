@@ -8,7 +8,7 @@ credencial, armadilhas de deploy e o contrato de rede do multiplayer.
 **O que NÃO entra:** decisão de arquitetura fechada (isso é `CLAUDE.md`) e
 nada que o código ou o `git log` já contem sozinhos.
 
-Última atualização: 2026-08-15.
+Última atualização: 2026-08-16.
 
 ---
 
@@ -22,7 +22,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM e multiplayer co-op |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
-| 6 — otimização | não começou |
+| 6 — otimização | **em andamento** — primeiro corte de JavaScript feito e medido |
 
 ### Fase 2 — o que já existe no Nest
 
@@ -119,6 +119,8 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 | front (fase 3) | texto com `<b>` da engine vira `<strong>` de verdade, sem `innerHTML` | o original jogava tudo em `innerHTML`; o mapa trafega pela rede e um dia vem de outro jogador no multiplayer |
 | front (fase 3) | sem token, `chamarApi` já rejeita no cliente | evita mandar `Bearer ` vazio e tira o `setState` síncrono de dentro do `useEffect` (regra `react-hooks/set-state-in-effect` do lint do Next 16) |
 | front (fase 3) | a arte dos itens foi **copiada** de `rpg-legend/img/` pra `apps/web/public/img/` | 240 KB, 28 arquivos. O app na Vercel não pode depender do GitHub Pages pra desenhar um item. Enquanto os dois clientes coexistirem há duas cópias; a do jogo antigo some junto com ele |
+| front (fase 6) | a entrada dos cartões do menu é `@keyframes`, não Motion | medido: ~106 KB de JS na primeira página que qualquer pessoa abre, por um fade de cinco cartões. Ver "Fase 6" |
+| front (fase 6) | socket.io entra por `import()` dentro de `conectar()` | 41 KB que só quem abre sala ou fica de olho no chat precisa. Quem joga sozinho pagava por ele em `/jogo` sem nunca conectar |
 
 ### Fase 3 — o que já dá pra jogar
 
@@ -284,6 +286,94 @@ entra. E a arte serve de `/img/...` no build do Next (conferido com
 
 ---
 
+## Fase 6 — otimização
+
+### Como medir (pra repetir depois)
+
+Não dá pra confiar no relatório do `next build`: ele conta o que é
+compartilhado uma vez só. O que interessa é **quanto JavaScript o
+navegador baixa antes da página funcionar**, rota por rota:
+
+1. `pnpm build` em `apps/web`.
+2. Somar o tamanho de cada `<script src="/_next/static/chunks/...">` do
+   HTML da rota. Nas rotas estáticas (`○` no relatório) o HTML já está em
+   `.next/server/app/NOME.html`, sem precisar servir nada; nas dinâmicas
+   (`ƒ`, hoje só `/jogo`) é `next start` e `curl`.
+3. **Descartar o `<script>` marcado `noModule`.** São os polyfills do
+   core-js, 110 KB que só navegador velho baixa. Contá-los infla toda
+   rota pelo mesmo valor e faz o número parecer bem pior do que é.
+4. `grep` por `engine.io` / `motionValue` dentro dos pedaços diz se uma
+   biblioteca específica entrou na carga inicial.
+
+### Primeiro corte — o que saiu e quanto foi
+
+Navegador moderno, sem o polyfill `noModule`:
+
+| Rota | Antes | Depois |
+|---|---|---|
+| `/` | 553 KB | **449 KB** |
+| `/jogo` | 624 KB | **584 KB** |
+| `/multiplayer` | 558 KB | **518 KB** |
+| `/amigos` | 494 KB | **454 KB** |
+
+Total dos pedaços gerados no disco: 950 KB → **855 KB** (esse número
+inclui tudo que o build produz, o polyfill junto).
+
+Duas coisas, as duas achadas medindo e não chutando:
+
+- **Motion saiu do menu.** Eram ~106 KB de JavaScript na primeira página
+  que qualquer pessoa abre, para um fade de cinco cartões que CSS faz com
+  `@keyframes` + `animation-delay`. `/` agora é Server Component puro,
+  sem uma linha de JS próprio. É a mesma regra que já valia pros loops
+  decorativos do jogo (`CLAUDE.md`).
+- **socket.io virou `import()` dinâmico** dentro de `conectar()`, em
+  `lib/rede/sala.ts`. São 41 KB que só fazem sentido pra quem vai abrir
+  uma sala ou ficar de olho no chat; quem joga sozinho nunca baixava
+  socket nenhum e mesmo assim pagava por ele em `/jogo`. O pedaço
+  continua existindo, agora sob demanda.
+
+O que sobrou é quase todo do Next, não nosso: `react-dom` é o maior
+pedaço do build (223 KB) e o runtime do App Router vem logo atrás
+(150 KB). A engine aparece em dois pedaços, 76 KB e 61 KB — é o catálogo
+de itens/monstros, e é o que faz o jogo existir.
+
+Os 110 KB de core-js continuam sendo gerados, mas só um navegador sem
+suporte a `type="module"` os baixa. Encolher isso é mexer no
+`browserslist`, ou seja, decidir quais navegadores o jogo ainda atende —
+não é otimização, é escopo.
+
+### Decisão sua: a dependência `motion`
+
+Com o menu em CSS, **nenhum arquivo importa `motion`** — a dependência
+está em `apps/web/package.json` sem uso. Deixei porque o `CLAUDE.md`
+fecha "Motion via `LazyMotion`, só na UI React" como parte da pilha, e
+tirar é reverter decisão sua. Se a ideia é mesmo animar UI mais pra
+frente, ela fica; se não, é um `pnpm remove motion`.
+
+Vale registrar o que a medição mostrou: o uso que existia **não** era
+`LazyMotion` (que seriam ~6 KB), era o `motion` inteiro. Se ela voltar,
+tem que voltar pelo caminho que o `CLAUDE.md` escolheu.
+
+### `pnpm lint` na API está vermelho — e é dívida antiga
+
+`pnpm lint` na raiz falha em `apps/api`: 120 erros e 20 avisos que o
+autofix não resolve, quase todos `no-base-to-string` (46),
+`require-await` (35) e a família `no-unsafe-*` (55). **Nada disso é da
+fase 6** — os arquivos apontados (`auth/`, `save/`, `social/`, `main.ts`)
+não mudam desde a fase 2, e o `eslint.config` é o do scaffold do Nest,
+intocado desde a fase 0. O preset `recommendedTypeChecked` é bem mais
+severo do que o código portado. `apps/web` e `packages/shared` passam
+limpos.
+
+**Cuidado ao rodar:** o script de lint da API é `eslint ... --fix` (vem
+assim do scaffold). Rodar `pnpm lint` **reescreve 83 arquivos** de
+`apps/api` na hora, só de formatação — 4 mil linhas de diff que não têm
+nada a ver com o que você estava fazendo. Ou se roda com a árvore limpa
+e se descarta depois (`git checkout -- apps/api`), ou se tira o `--fix`
+do script antes.
+
+---
+
 ## Travado esperando você
 
 | O quê | Pra quê | Sem isso |
@@ -355,6 +445,8 @@ substituídos pelo estado do anfitrião.
   guarda a URL do `.woff2` que o `next/font/google` baixou, e o Google
   troca esse nome de arquivo de tempos em tempos. Quando isso acontece o
   build morre com `module-not-found` em `fonts.gstatic.com` **404** —
-  aconteceu em 2026-08-14 com a JetBrains Mono. Não é erro do código:
-  `rm -rf apps/web/.next/cache/turbopack` e buildar de novo resolve. Se
-  acontecer na Vercel, é limpar o cache de build de lá.
+  aconteceu em 2026-08-14 com a JetBrains Mono, e de novo em 2026-08-16.
+  Não é erro do código. Apagar só o `.next` **não basta** — parte do cache
+  fica em `node_modules/.cache`. O que resolve é apagar os dois:
+  `rm -rf apps/web/.next apps/web/node_modules/.cache`. Se acontecer na
+  Vercel, é limpar o cache de build de lá.
