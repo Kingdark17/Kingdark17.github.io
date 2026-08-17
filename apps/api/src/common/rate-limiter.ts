@@ -8,9 +8,13 @@
  * basta aqui. `now` entra injetado pra o teste não depender de relógio
  * real.
  *
- * O estado é do processo, como no original. Quando o Redis entrar (fase
- * 6) e a API rodar em mais de uma instância, é esta classe que precisa de
- * um backend compartilhado — hoje cada instância conta a sua parte.
+ * O estado é do processo. Isso continua **certo** pro limite de socket
+ * (30 mensagens por segundo por conexão): a conexão vive numa instância
+ * só, então contar fora dela não faria diferença nenhuma.
+ *
+ * Pro limite por IP era errado, e virou `shared-state/contador.ts`: duas
+ * instâncias dariam 12 tentativas cada uma. Esta classe ainda é o miolo
+ * da versão em memória de lá.
  */
 
 interface Bucket {

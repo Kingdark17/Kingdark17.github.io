@@ -566,18 +566,62 @@ padrão e a validação de sempre recusa.
 Foi o que o `isUniqueViolation` já tinha mostrado na fase 2: aviso de
 ferramenta que ninguém olha às vezes é bug esperando.
 
+### Redis — rate limit e presença (2026-08-17)
+
+Decidido com o dono do projeto: **entra agora, e só estas duas peças.**
+Salas ficam de fora — mover o relay depende do adaptador Redis do
+socket.io e de um Redis de verdade pra verificar, e nada disso está
+resolvido.
+
+**O acordo é o mesmo do `DATABASE_URL`: sem `REDIS_URL`, o app sobe e se
+comporta exatamente como antes**, com o estado no processo. Não existe
+"modo cluster" que só é exercitado em produção — as duas versões saem da
+mesma interface, e o caminho sem Redis é o caminho de sempre.
+
+O que estava errado com uma instância só, e por que:
+
+| Peça | Com duas instâncias, antes | Agora |
+|---|---|---|
+| tentativas por IP | 12 por minuto **por instância** — o teto virava 24, 36… | `INCR` + `PEXPIRE` numa chave só |
+| quem está online | amigo conectado na instância B aparecia offline pra quem estava na A | cada instância publica o conjunto dela; quem lê junta as vivas |
+| aviso de mensagem | e, pior, **não chegava**: presença que mente é pior que presença nenhuma | publicação num canal; a instância dona do socket entrega |
+
+Três decisões que ficam ditas porque não se leem no código:
+
+- **Presença expira sozinha.** Cada instância publica o *seu* conjunto
+  (`rpg:online:<instância>`) com prazo renovado por batimento, em vez de
+  um conjunto global com contagem de referências. Instância que morre
+  para de renovar e some; com contagem, um processo derrubado deixaria
+  gente "online" pra sempre.
+- **Redis fora do ar não fecha o portão.** Se o `INCR` falhar, a
+  requisição passa. Derrubar cadastro e login porque o cache caiu é pior
+  do que perder o teto por alguns segundos — o teto existe contra força
+  bruta, não contra indisponibilidade.
+- **A presença virou pergunta em lote** (`onlineAmong(ids)`). A lista de
+  amigos pergunta por todo mundo de uma vez; uma pergunta por amigo seria
+  uma ida e volta por amigo.
+
+O limite de socket (30 mensagens por segundo por conexão) **continua em
+memória de propósito**: a conexão vive numa instância só, então contar
+fora dela não mudaria nada.
+
+**O que os testes não provam.** `RedisDeMentira` é um fake em memória com
+a semântica que este código usa — expiração preguiçosa, conjunto, canal.
+Prova a lógica (janela fixa, instância morta sumindo, publicador não
+entregando duas vezes pra si mesmo) e **não prova nada sobre Redis de
+verdade**: reconexão, partição, `PEXPIRE` real. Aqui não há a sorte do
+PGlite, que é Postgres de verdade. Antes de confiar nisso em produção,
+rodar contra um Redis real.
+
 ### O que ainda falta na fase 6
 
-- **Redis.** É decisão fechada no `CLAUDE.md` (salas, sessões, rate limit,
-  presença) e **está travado na mesma pergunta de sempre: onde a API vai
-  rodar.** Hoje `RoomRegistry`, `OnlineUsersRegistry` e `RateLimiter`
-  guardam estado no processo, igual ao original — funciona numa instância
-  só, e é exatamente o que quebra na segunda. As três classes já estão
-  isoladas pra isso: são a fronteira a substituir, nada mais do relay
-  guarda estado.
+- **Salas no Redis.** `RoomRegistry` guarda estado e conexões no
+  processo, então dois jogadores em instâncias diferentes não entram na
+  mesma sala. Precisa do adaptador Redis do socket.io e de um Redis de
+  verdade pra verificar.
 - **O estado inteiro viaja a cada ação no co-op.** A foto saiu, que era o
   pedaço grande, mas o mapa continua indo por completo a cada passo. Só
-  vale mexer junto do Redis: o formato do que trafega e onde a sala mora
+  vale mexer junto das salas: o formato do que trafega e onde a sala mora
   são a mesma decisão.
 - **A foto ainda mora no Postgres como base64.** Não sai mais de lá numa
   lista, mas guardar imagem em coluna de texto é remendo — o lugar dela é
@@ -635,6 +679,7 @@ substituídos pelo estado do anfitrião.
 | `ALLOWED_ORIGIN` | `*` | CORS |
 | `PUBLIC_GAME_URL` | `https://kingdark17.github.io/rpg-legend/` | monta o link dos e-mails; formato `?verify=` / `?reset=` é o que o cliente lê |
 | `RESEND_API_KEY` / `EMAIL_FROM` | — | sem as duas, e-mail não sai (só avisa no log) |
+| `REDIS_URL` | — | sem ela, tentativas por IP e presença ficam **no processo**, como antes: correto com uma instância, errado com duas |
 | `PORT` | 3000 | — |
 
 ---

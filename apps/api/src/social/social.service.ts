@@ -60,6 +60,12 @@ export class SocialService {
 
   async listRelations(userId: number): Promise<RelationsView> {
     const rows = await this.repo.listRelations(userId);
+
+    // Uma pergunta de presença pra lista inteira. Com Redis, perguntar de
+    // um em um seria uma ida e volta por amigo.
+    const todos = [...rows.friends, ...rows.incoming, ...rows.outgoing];
+    const online = await this.presence.onlineAmong(todos.map((row) => row.id));
+
     const toPublic = (row: InternalFriendRow): PublicFriendView => ({
       username: row.username,
       // Foto enviada não viaja aqui: vira endereço pro endpoint, que o
@@ -68,7 +74,7 @@ export class SocialService {
       frame: row.frame,
       nameColor: row.nameColor,
       pet: row.pet,
-      online: this.presence.isOnline(row.id),
+      online: online.has(row.id),
     });
     return { friends: rows.friends.map(toPublic), incoming: rows.incoming.map(toPublic), outgoing: rows.outgoing.map(toPublic) };
   }

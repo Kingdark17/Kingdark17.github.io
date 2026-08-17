@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { RateLimiter } from '../common/rate-limiter';
+import { REDIS, type ClienteRedis } from '../shared-state/cliente-redis';
+import { ContadorEmMemoria, ContadorNoRedis } from '../shared-state/contador';
+import { SharedStateModule } from '../shared-state/shared-state.module';
 import { AccountEmailController } from './account-email.controller';
 import { AccountEmailService } from './account-email.service';
 import { AuthController } from './auth.controller';
@@ -21,6 +23,7 @@ function adminUsername(): string {
 }
 
 @Module({
+  imports: [SharedStateModule],
   controllers: [AuthController, AccountEmailController],
   providers: [
     {
@@ -48,8 +51,14 @@ function adminUsername(): string {
     AuthGuard,
     // Instância única: as 12 tentativas por minuto são contadas juntas
     // entre registro, login e as rotas de recuperação de senha, como no
-    // `attempts` de módulo do original.
-    { provide: AUTH_RATE_LIMITER, useFactory: () => new RateLimiter(IP_ATTEMPT_LIMIT, IP_WINDOW_MS) },
+    // `attempts` de módulo do original. Com `REDIS_URL`, contadas juntas
+    // também entre instâncias — senão o teto se multiplicaria por elas.
+    {
+      provide: AUTH_RATE_LIMITER,
+      useFactory: (redis: ClienteRedis | null) =>
+        redis ? new ContadorNoRedis(redis, IP_ATTEMPT_LIMIT, IP_WINDOW_MS) : new ContadorEmMemoria(IP_ATTEMPT_LIMIT, IP_WINDOW_MS),
+      inject: [REDIS],
+    },
   ],
   // AuthService/AuthGuard exportados pra outros módulos (ex: SaveModule) protegerem rotas com @UseGuards(AuthGuard).
   exports: [AuthService, AuthGuard],

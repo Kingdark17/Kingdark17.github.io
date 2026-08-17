@@ -145,8 +145,12 @@ class SpySocialNotifier implements SocialNotifier {
 
 class FakePresenceChecker implements PresenceChecker {
   online = new Set<number>();
-  isOnline(userId: number): boolean {
-    return this.online.has(userId);
+  /** Quantas vezes foi consultado — a lista tem que perguntar uma vez só. */
+  consultas = 0;
+
+  onlineAmong(userIds: number[]): Promise<Set<number>> {
+    this.consultas += 1;
+    return Promise.resolve(new Set(userIds.filter((id) => this.online.has(id))));
   }
 }
 
@@ -261,6 +265,18 @@ describe('SocialService.listRelations', () => {
     expect(relations.friends).toEqual([{ username: 'Bram', avatarUrl: '', frame: 'none', nameColor: '#e8d7a5', pet: 'none', online: true }]);
     expect(relations.incoming).toEqual([]);
     expect(relations.outgoing).toEqual([]);
+  });
+
+  it('pergunta a presença uma vez só, pra lista inteira', async () => {
+    const { service, repo, presence } = makeService();
+    await repo.acceptFriendRequest(USER.id, OTHER.id);
+    await repo.createFriendRequest(3, USER.id);
+    repo.addUser(makeUser(3, 'Cadu'));
+
+    await service.listRelations(USER.id);
+
+    // Com Redis, uma pergunta por amigo seria uma ida e volta por amigo.
+    expect(presence.consultas).toBe(1);
   });
 
   it('troca a foto enviada por um endereço, e deixa link externo passar', async () => {
