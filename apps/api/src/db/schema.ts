@@ -35,6 +35,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
   uniqueIndex,
   varchar,
 } from 'drizzle-orm/pg-core';
@@ -43,7 +44,7 @@ export const users = pgTable(
   'users',
   {
     id: bigserial('id', { mode: 'number' }).primaryKey(),
-    username: varchar('username', { length: 24 }).notNull(),
+    username: varchar('username', { length: 24 }).notNull().unique('users_username_key'),
     passwordHash: text('password_hash').notNull(),
     passwordSalt: text('password_salt').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -95,7 +96,7 @@ export const cloudSaves = pgTable(
     data: jsonb('data').notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [primaryKey({ columns: [table.userId, table.slot] })],
+  (table) => [primaryKey({ name: 'cloud_saves_pkey', columns: [table.userId, table.slot] })],
 );
 
 export const cloudSaveHistory = pgTable(
@@ -110,8 +111,8 @@ export const cloudSaveHistory = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
-    index('cloud_save_history_user_idx').on(table.userId, table.createdAt.desc()),
-    index('cloud_save_history_user_slot_idx').on(table.userId, table.slot, table.createdAt.desc()),
+    index('cloud_save_history_user_idx').on(table.userId, table.createdAt.desc().nullsFirst()),
+    index('cloud_save_history_user_slot_idx').on(table.userId, table.slot, table.createdAt.desc().nullsFirst()),
   ],
 );
 
@@ -127,7 +128,7 @@ export const friendRequests = pgTable(
       .references(() => users.id, { onDelete: 'cascade' }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [uniqueIndex('friend_requests_from_to_idx').on(table.fromId, table.toId), index('friend_requests_to_idx').on(table.toId)],
+  (table) => [unique('friend_requests_from_id_to_id_key').on(table.fromId, table.toId), index('friend_requests_to_idx').on(table.toId)],
 );
 
 export const friendships = pgTable(
@@ -141,7 +142,7 @@ export const friendships = pgTable(
       .references(() => users.id, { onDelete: 'cascade' }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [primaryKey({ columns: [table.userId, table.friendId] }), index('friendships_user_idx').on(table.userId)],
+  (table) => [primaryKey({ name: 'friendships_pkey', columns: [table.userId, table.friendId] }), index('friendships_user_idx').on(table.userId)],
 );
 
 export const chatMessages = pgTable(
@@ -162,7 +163,7 @@ export const chatMessages = pgTable(
     index('chat_messages_pair_idx').on(
       sql`least(${table.senderId}, ${table.recipientId})`,
       sql`greatest(${table.senderId}, ${table.recipientId})`,
-      table.id.desc(),
+      table.id.desc().nullsFirst(),
     ),
   ],
 );

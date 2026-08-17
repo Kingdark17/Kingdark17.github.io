@@ -9,7 +9,7 @@
 
 import { audio, estaMudo, saidaMestre } from './audio';
 
-export type Efeito = 'hit' | 'crit' | 'miss' | 'gold' | 'buy' | 'sell' | 'door' | 'levelup' | 'victory' | 'defeat' | 'step';
+export type Efeito = 'hit' | 'crit' | 'miss' | 'gold' | 'buy' | 'sell' | 'door' | 'levelup' | 'victory' | 'defeat' | 'step' | 'heal';
 
 interface Beep {
   hz: number;
@@ -32,6 +32,16 @@ const EFEITOS: Record<Efeito, Beep[]> = {
   victory: [beep(660, 0.12, 'triangle', 0.08), beep(880, 0.16, 'triangle', 0.08)],
   defeat: [beep(200, 0.3, 'sawtooth', 0.07)],
   step: [beep(140, 0.05, 'sine', 0.03)],
+  /**
+   * Este não existia. O `js/pets.js` do cliente antigo pedia `'heal'` e a
+   * tabela do `effects.js` não tinha essa chave, então `playSfx` caía num
+   * `if(SFX[name])` falso e o carinho no bichinho nunca fez som nenhum.
+   *
+   * Feito com a mesma régua dos vizinhos — triângulo suave, duas notas
+   * subindo, mais baixo que o `levelup` porque é enfeite e acontece com
+   * frequência.
+   */
+  heal: [beep(587, 0.1, 'triangle', 0.05), beep(784, 0.14, 'triangle', 0.05)],
 };
 
 function soar({ hz, duracao, onda, ganho }: Beep): void {

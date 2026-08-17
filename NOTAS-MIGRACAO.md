@@ -21,7 +21,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
 | 4 — paperdoll PixiJS | não começou |
-| 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
+| 5 — **Neon → Supabase** | **começada em 2026-08-17**: base de migração versionada e provada igual à produção, acesso público do Supabase fechado por migração. Falta rodar contra o Supabase — ver "Fase 5" |
 | 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
 
 ### Fase 2 — o que já existe no Nest
@@ -738,6 +738,97 @@ mesma pendência do `trust proxy`:
 
 Não dá pra escolher sozinho sem saber o destino, e chutar aqui é escolher
 gastar CPU à toa ou deixar banda na mesa.
+
+---
+
+## Fase 5 — Neon → Supabase
+
+Decidido por você em 2026-08-17. O que já está feito não precisa de
+credencial nenhuma; o que falta precisa de duas decisões suas (no fim
+desta seção).
+
+### A conexão é a parte fácil, e é fácil mesmo
+
+Não há nada de Neon no código: `pg` puro com `drizzle-orm/node-postgres`
+lendo `DATABASE_URL` em `db/client.ts`, sem `@neondatabase/*`. Supabase é
+Postgres. Trocar a variável basta.
+
+Um detalhe que depende de onde a API vai rodar: o Supabase dá três
+endereços (direto na 5432, session pooler, transaction pooler na 6543) e
+**o direto é só IPv6** sem o add-on de IPv4. Com `pg.Pool` num processo de
+vida longa, o direto é o certo — se a rede do host alcançar.
+
+### O schema agora tem base versionada, e ela é a mesma da produção
+
+Antes não existia migração nenhuma: `apps/api/drizzle/` estava vazia e o
+banco de produção nasceu do `init()` do servidor antigo. Agora
+`pnpm db:generate` produziu `0000_*.sql`, e
+`db/schema-vs-original.integration.spec.ts` sobe **dois Postgres de
+verdade** — um do DDL original, outro da migração — e compara coluna a
+coluna, índice a índice, chave a chave.
+
+Isso importa porque um banco novo no Supabase nasce da migração e a
+produção nasceu do DDL. Divergência entre os dois não falharia em teste
+nenhum (os testes rodam sobre o DDL): o jogo simplesmente se comportaria
+diferente no banco novo.
+
+**A comparação achou uma diferença que ninguém veria de olho:** o
+`.desc()` do Drizzle gera `DESC NULLS LAST`, e `DESC` puro no Postgres é
+`NULLS FIRST`. Índice com ordem de nulos diferente da consulta **não é
+usado pra ordenar** — o banco cria o índice, não reclama, e ordena na mão.
+Apareceria só como lentidão em produção, no histórico de saves e na busca
+de conversa. Corrigido no `schema.ts` com `.nullsFirst()`.
+
+Junto disso, o `schema.ts` passou a declarar os mesmos nomes que a
+produção usa (`users_username_key`, `cloud_saves_pkey`,
+`friendships_pkey`, `friend_requests_from_id_to_id_key`). Não é preciosismo:
+com nomes diferentes, um `drizzle-kit generate` rodado contra um banco
+restaurado da produção proporia derrubar e recriar cada constraint.
+
+Nome de chave estrangeira ficou de fora dessa convergência de propósito —
+o teste compara **para onde a chave aponta e o `ON DELETE`**, não o nome.
+Postgres batiza de `sessions_user_id_fkey`, Drizzle de
+`sessions_user_id_users_id_fk`, e nenhum código lê isso
+(`isUniqueViolation` olha só o SQLSTATE).
+
+### A porta que o Supabase abre sozinha
+
+`0001_fecha_acesso_publico_supabase.sql`. O Supabase publica um PostgREST
+em cima do schema `public`, e a chave `anon` é pública por natureza — ela
+vai no navegador. **Com as tabelas em `public` e sem RLS, qualquer pessoa
+com essa chave lê a tabela `users` inteira**: e-mail, hash e salt de
+senha. No Neon isso não existe porque não há API HTTP na frente do banco,
+e é a diferença mais importante entre os dois — ela não aparece quando
+você troca a string de conexão e vê que funciona.
+
+Nada no jogo fala com o PostgREST, então a migração fecha a porta em vez
+de usá-la: RLS ligado sem policy nenhuma, e `REVOKE` de `anon` e
+`authenticated`. A API se conecta como dona das tabelas, e dona ignora
+RLS (não usamos `FORCE`) — nada muda pro jogo.
+
+É migração e não passo manual justamente porque passo manual se esquece.
+Roda dentro de um `DO` que só age se o papel `anon` existir, então em
+PGlite, Neon ou Postgres local é um nada-a-fazer — o que o teste de
+comparação de schema comprova, porque aplica esse arquivo também.
+
+### O que falta, e as duas decisões que faltam com ele
+
+`pnpm db:migrate` (novo) aplica as migrações contra a `DATABASE_URL` do
+ambiente. Falta rodar — e antes disso, decidir:
+
+1. **O que o Supabase recebe primeiro.** Banco novo e vazio só pro
+   ambiente novo (o jogo no ar continua no Neon, nenhuma conta se mexe);
+   ou uma cópia dos dados reais via `pg_dump` (dá pra testar com dados de
+   verdade, e as duas bases divergem a partir da cópia); ou a virada
+   completa, com o servidor antigo apontando pro Supabase também — aí é
+   conta de gente real mudando de casa, com janela de indisponibilidade e
+   caminho de volta preparado.
+2. **Se a foto de perfil vai junto pro Storage** ou fica pra uma etapa
+   própria. Hoje ela é base64 numa coluna de texto; já não sai de lá numa
+   lista (ver "Segundo corte"), mas o lugar dela é o Storage.
+
+**A regra de sempre continua:** nunca apontar `drizzle-kit push`/`migrate`
+pro banco de produção sem decisão explícita.
 
 ---
 

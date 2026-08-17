@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 
 import { petIcon, type PetId } from '@rpg-legend/shared';
 
+import { tocar } from '@/lib/som/efeitos';
 import styles from './jogo.module.css';
 
 const ROSTOS: Partial<Record<PetId, { normal: string; coracao: string }>> = {
@@ -38,7 +39,10 @@ export function BichoDeEstimacao({ pet }: { pet: PetId | null }) {
     <button
       type="button"
       className={`${styles.bichinho} ${carinho ? styles.bichinhoFeliz : ''}`}
-      onClick={() => setCarinho(true)}
+      onClick={() => {
+        setCarinho(true);
+        tocar('heal');
+      }}
       aria-label="Fazer carinho no seu pet"
     >
       {rosto ? (
