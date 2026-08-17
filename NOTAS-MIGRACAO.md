@@ -22,7 +22,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM e multiplayer co-op |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
-| 6 — otimização | **em andamento** — primeiro corte de JavaScript feito e medido |
+| 6 — otimização | **em andamento** — JavaScript cortado e medido, foto de perfil fora do JSON, `pnpm lint` verde. Falta o Redis, que depende de onde a API vai rodar |
 
 ### Fase 2 — o que já existe no Nest
 
@@ -463,6 +463,22 @@ padrão e a validação de sempre recusa.
 
 Foi o que o `isUniqueViolation` já tinha mostrado na fase 2: aviso de
 ferramenta que ninguém olha às vezes é bug esperando.
+
+### O que ainda falta na fase 6
+
+- **Redis.** É decisão fechada no `CLAUDE.md` (salas, sessões, rate limit,
+  presença) e **está travado na mesma pergunta de sempre: onde a API vai
+  rodar.** Hoje `RoomRegistry`, `OnlineUsersRegistry` e `RateLimiter`
+  guardam estado no processo, igual ao original — funciona numa instância
+  só, e é exatamente o que quebra na segunda. As três classes já estão
+  isoladas pra isso: são a fronteira a substituir, nada mais do relay
+  guarda estado.
+- **O estado inteiro viaja a cada ação no co-op.** A foto saiu, que era o
+  pedaço grande, mas o mapa continua indo por completo a cada passo. Só
+  vale mexer junto do Redis: o formato do que trafega e onde a sala mora
+  são a mesma decisão.
+- **A lista de amigos ainda lê o base64 do Postgres** pra calcular a
+  versão da foto, mesmo sem mandar pro navegador. Ver "Segundo corte".
 
 ---
 
