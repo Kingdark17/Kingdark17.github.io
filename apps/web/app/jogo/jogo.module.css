@@ -570,6 +570,13 @@
   margin: 1rem 0 0;
 }
 
+/* Espera entre o clique e o pedaço da tela chegar. Só na primeira vez. */
+.abrindo {
+  padding: 0.6rem 0.75rem;
+  color: var(--parchment-dim);
+  margin: 1rem 0 0;
+}
+
 /* ---------- bichinho do perfil ---------- */
 
 .bichinho {

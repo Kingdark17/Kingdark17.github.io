@@ -320,7 +320,7 @@ Navegador moderno, sem o polyfill `noModule`:
 | Rota | Antes | Depois |
 |---|---|---|
 | `/` | 553 KB | **449 KB** |
-| `/jogo` | 624 KB | **584 KB** |
+| `/jogo` | 624 KB | **584 KB** (e 580 KB depois do terceiro corte) |
 | `/multiplayer` | 558 KB | **518 KB** |
 | `/amigos` | 494 KB | **454 KB** |
 
@@ -426,8 +426,25 @@ Duas lições concretas:
   pedaço que `/jogo` baixa de cara é **~50 KB**, mais ~38 KB que chegam
   depois, na primeira animação. É oito vezes o que o `CLAUDE.md` diz.
 
-Se 50 KB na tela principal do jogo for caro demais, a saída é desistir da
-animação de saída e deixar tudo em CSS — não há meio-termo barato.
+Os 50 KB depois saíram da carga inicial junto com as outras telas de sala
+(ver a seção seguinte), então o custo real ficou sendo só o download
+tardio.
+
+### Terceiro corte — as telas de sala saem da carga inicial
+
+`tela-jogo.tsx` importava as sete telas de sala de uma vez. Nenhuma
+aparece quando `/jogo` abre: o jogador cai no mapa e só depois entra numa
+loja, num combate, no quadro de missões. Todas viraram `next/dynamic` com
+`ssr: false` — que é honesto, porque enquanto o save não volta da nuvem a
+tela devolve `null` e nada disso renderiza no servidor mesmo.
+
+**`/jogo`: 635 KB → 580 KB.** Abaixo até dos 584 KB de antes do Motion,
+que agora viaja no pedaço do combate em vez do inicial.
+
+A de combate é buscada por um `import()` solto assim que a tela monta.
+Estar fora do pacote inicial não pode virar espera no momento em que o
+monstro aparece — todo mundo abre essa tela, e cedo. As outras carregam
+no clique, com um "Abrindo…" que só aparece na primeira vez de cada uma.
 
 ### `pnpm lint` — de 1045 problemas a zero
 

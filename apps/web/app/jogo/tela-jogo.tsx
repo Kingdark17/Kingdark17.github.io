@@ -16,6 +16,7 @@
  * dela — `interagir` devolve qual, e `conteudoDaTela` escolhe.
  */
 
+import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { DIR_LABEL, displayName, type Direction, type PetId } from '@rpg-legend/shared';
@@ -36,15 +37,34 @@ import { BichoDeEstimacao } from './bicho-de-estimacao';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
 import { PainelHeroi } from './painel-heroi';
-import { TelaAdm } from './tela-adm';
-import { TelaCombate } from './tela-combate';
-import { TelaDialogo } from './tela-dialogo';
-import { TelaEvento } from './tela-evento';
-import { TelaGuia } from './tela-guia';
-import { TelaLoja } from './tela-loja';
-import { TelaMissoes } from './tela-missoes';
 import { TelaMochila } from './tela-mochila';
 import { TextoDoJogo } from './texto-do-jogo';
+
+/** Piscada entre o clique e o pedaço chegar. Só aparece na primeira vez de cada tela. */
+function Abrindo() {
+  return <p className={styles.abrindo}>Abrindo…</p>;
+}
+
+/**
+ * As telas de sala entram por `next/dynamic`: nenhuma delas aparece
+ * quando `/jogo` abre — o jogador chega no mapa e só depois entra numa
+ * loja, num combate ou na mochila. Medido, tirá-las da carga inicial vale
+ * mais do que parece, porque a de combate carrega o Motion junto.
+ *
+ * `ssr: false` porque nenhuma renderiza no servidor de qualquer jeito:
+ * até o save voltar da nuvem esta tela devolve `null`.
+ *
+ * A de combate e a mochila são buscadas assim que o save carrega (ver
+ * `useEffect` de prefetch): estar fora do pacote inicial não pode virar
+ * uma espera na hora que o monstro aparece.
+ */
+const TelaAdm = dynamic(() => import('./tela-adm').then((m) => m.TelaAdm), { ssr: false, loading: Abrindo });
+const TelaCombate = dynamic(() => import('./tela-combate').then((m) => m.TelaCombate), { ssr: false, loading: Abrindo });
+const TelaDialogo = dynamic(() => import('./tela-dialogo').then((m) => m.TelaDialogo), { ssr: false, loading: Abrindo });
+const TelaEvento = dynamic(() => import('./tela-evento').then((m) => m.TelaEvento), { ssr: false, loading: Abrindo });
+const TelaGuia = dynamic(() => import('./tela-guia').then((m) => m.TelaGuia), { ssr: false, loading: Abrindo });
+const TelaLoja = dynamic(() => import('./tela-loja').then((m) => m.TelaLoja), { ssr: false, loading: Abrindo });
+const TelaMissoes = dynamic(() => import('./tela-missoes').then((m) => m.TelaMissoes), { ssr: false, loading: Abrindo });
 
 const ESPERA_ANTES_DE_SALVAR_MS = 2500;
 
@@ -112,6 +132,13 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
         };
       })
       .catch(() => undefined);
+  }, []);
+
+  // Combate é a tela que todo mundo abre, e a única cara (leva o Motion
+  // junto). Buscar o pedaço enquanto o jogador ainda lê a sala tira a
+  // espera de onde ela apareceria: na hora em que o monstro surge.
+  useEffect(() => {
+    void import('./tela-combate');
   }, []);
 
   const salvar = useCallback(
