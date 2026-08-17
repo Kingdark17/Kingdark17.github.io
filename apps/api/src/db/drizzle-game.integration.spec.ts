@@ -63,8 +63,36 @@ describe('DrizzleSaveRepository', () => {
     expect((await saves.getSlot(conta.id, 3))?.data).toMatchObject({ hero: { gold: 30 } });
     expect(await saves.getSlot(conta.id, 2)).toBeNull();
 
-    const lista = await saves.listSlots(conta.id);
+    const lista = await saves.listHeads(conta.id);
     expect(lista.map((linha) => linha.slot).sort()).toEqual([1, 3]);
+  });
+
+  it('a lista de personagens traz o resumo, não o save inteiro', async () => {
+    const conta = await criarConta('Aria');
+    const mapa = Array.from({ length: 60 }, (_, i) => ({ id: i, tipo: 'normal', visto: false }));
+    await saves.store(
+      conta.id,
+      1,
+      {
+        hero: { name: 'Aria', raceIcon: '🧝', className: 'Mago', classIcon: '🔮', level: 7, gold: 999, equip: {} },
+        inventory: [],
+        party: [],
+        floor: 4,
+        map: mapa,
+      },
+      false,
+      new Date(),
+    );
+
+    const [linha] = await saves.listHeads(conta.id);
+
+    // Os seis campos do card chegam...
+    expect(linha.data).toEqual({ hero: { name: 'Aria', raceIcon: '🧝', className: 'Mago', classIcon: '🔮', level: 7 }, floor: 4 });
+    // ...e o resto some dentro do Postgres, que é o ponto: o mapa e o
+    // inventário não têm por que sair do banco pra desenhar um card.
+    const cru = JSON.stringify(linha.data);
+    expect(cru).not.toContain('map');
+    expect(cru).not.toContain('999');
   });
 
   it('gravar de novo no mesmo slot sobrescreve, não duplica linha', async () => {
@@ -74,7 +102,7 @@ describe('DrizzleSaveRepository', () => {
     await saves.store(conta.id, 1, saveDe(10), false, agora);
     await saves.store(conta.id, 1, saveDe(99), false, new Date(agora.getTime() + MINUTO));
 
-    expect(await saves.listSlots(conta.id)).toHaveLength(1);
+    expect(await saves.listHeads(conta.id)).toHaveLength(1);
     expect((await saves.getSlot(conta.id, 1))?.data).toMatchObject({ hero: { gold: 99 } });
   });
 

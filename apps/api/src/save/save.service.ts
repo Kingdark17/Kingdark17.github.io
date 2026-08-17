@@ -65,7 +65,7 @@ export class SaveService {
   ) {}
 
   async listCharacters(userId: number): Promise<{ characters: CharacterSummary[]; maxSlots: number }> {
-    const rows = await this.repo.listSlots(userId);
+    const rows = await this.repo.listHeads(userId);
     const characters = rows.map((row) => ({ slot: row.slot, updatedAt: row.updatedAt, ...heroFieldsOf(row.data) }));
     return { characters, maxSlots: MAX_SLOTS };
   }

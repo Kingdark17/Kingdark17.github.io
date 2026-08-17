@@ -1,6 +1,6 @@
 import { signSave } from '../auth/save-signature';
 import { SaveService } from './save.service';
-import type { CloudSaveRow, SaveHistoryEntry, SaveRepository } from './save-repository';
+import type { CharacterHeadRow, CloudSaveRow, SaveHistoryEntry, SaveRepository } from './save-repository';
 
 const SECRET = 'segredo-de-teste';
 const USER_ID = 1;
@@ -21,7 +21,7 @@ class FakeSaveRepository implements SaveRepository {
     return `${userId}:${slot}`;
   }
 
-  listSlots(userId: number): Promise<CloudSaveRow[]> {
+  listHeads(userId: number): Promise<CharacterHeadRow[]> {
     return Promise.resolve(
       [...this.slots.entries()]
         .filter(([key]) => key.startsWith(`${userId}:`))

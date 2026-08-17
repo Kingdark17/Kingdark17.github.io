@@ -9,19 +9,43 @@
  * pool manual.
  */
 
-import { and, desc, eq, gt, notInArray } from 'drizzle-orm';
+import { and, desc, eq, gt, notInArray, sql } from 'drizzle-orm';
 
 import { getDb } from '../db/client';
 import { cloudSaveHistory, cloudSaves } from '../db/schema';
-import type { CloudSaveRow, SaveHistoryEntry, SaveRepository } from './save-repository';
+import type { CharacterHeadRow, CloudSaveRow, SaveHistoryEntry, SaveRepository } from './save-repository';
 
 const HISTORY_LIMIT = 10;
 const HISTORY_THROTTLE_MS = 15 * 60 * 1000;
 
+/**
+ * Remonta, dentro do Postgres, um objeto só com o que o resumo lê. O save
+ * inteiro — herói, inventário, missões e o mapa do andar — fica no banco
+ * em vez de atravessar a rede uma vez por slot pra virar seis campos.
+ *
+ * `jsonb_build_object` em vez de colunas soltas de propósito: assim o
+ * `data` que chega tem a mesma forma do save, e o `heroFieldsOf` do
+ * service continua sendo o único lugar que lê esses campos. Uma segunda
+ * leitura, escrita em SQL, é uma que pode discordar da primeira.
+ */
+const RESUMO_DO_HEROI = sql<unknown>`jsonb_build_object(
+  'hero', jsonb_build_object(
+    'name', ${cloudSaves.data} #> '{hero,name}',
+    'raceIcon', ${cloudSaves.data} #> '{hero,raceIcon}',
+    'className', ${cloudSaves.data} #> '{hero,className}',
+    'classIcon', ${cloudSaves.data} #> '{hero,classIcon}',
+    'level', ${cloudSaves.data} #> '{hero,level}'
+  ),
+  'floor', ${cloudSaves.data} #> '{floor}'
+)`;
+
 export class DrizzleSaveRepository implements SaveRepository {
-  async listSlots(userId: number): Promise<CloudSaveRow[]> {
-    const rows = await getDb().select().from(cloudSaves).where(eq(cloudSaves.userId, userId)).orderBy(cloudSaves.slot);
-    return rows.map((row) => ({ slot: row.slot, data: row.data, updatedAt: row.updatedAt }));
+  listHeads(userId: number): Promise<CharacterHeadRow[]> {
+    return getDb()
+      .select({ slot: cloudSaves.slot, updatedAt: cloudSaves.updatedAt, data: RESUMO_DO_HEROI })
+      .from(cloudSaves)
+      .where(eq(cloudSaves.userId, userId))
+      .orderBy(cloudSaves.slot);
   }
 
   async getSlot(userId: number, slot: number): Promise<CloudSaveRow | null> {

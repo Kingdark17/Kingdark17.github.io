@@ -22,7 +22,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM e multiplayer co-op |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
-| 6 — otimização | **em andamento** — JavaScript cortado e medido, foto de perfil fora do JSON, `pnpm lint` verde. Falta o Redis, que depende de onde a API vai rodar |
+| 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
 
 ### Fase 2 — o que já existe no Nest
 
@@ -523,6 +523,49 @@ Vale mais que a maioria dos cortes de JS desta fase, e some do relatório
 do `next build`, que só conta JavaScript. **Ao acrescentar peso ou estilo
 no `layout.tsx`, conferir se o CSS realmente seleciona aquilo.**
 
+### Sexto corte — a tela de personagens lia os saves inteiros
+
+`GET /api/characters` desenha um card por slot com seis campos: nome,
+ícone de raça, classe, ícone de classe, nível e andar. Pra montar isso ele
+puxava **o save completo dos quatro slots** do Postgres — herói,
+inventário, missões, party e o mapa do andar — e jogava fora tudo menos os
+seis campos, no processo.
+
+Medido com um save de verdade da engine (`montarSaveInicial` →
+`entrarNaCidade` → `entrarNaMasmorra`):
+
+| | Tamanho |
+|---|---|
+| save recém-criado | 1,0 KB |
+| na cidade | 5,6 KB |
+| na masmorra | 6,4 KB |
+| **o resumo que a tela usa** | **0,1 KB** |
+
+São ~25 KB vindos do Neon, pela rede, a cada abertura da tela de
+personagens, pra produzir 0,4 KB. Não é a ordem de grandeza da foto em
+base64, mas é a mesma falha: o banco está do outro lado da rede e a
+consulta pedia o que ninguém ia ler.
+
+Agora o `jsonb_build_object` remonta no Postgres um objeto só com esses
+campos. A escolha de devolver **a mesma forma** (`{hero: {...}, floor}`)
+em vez de colunas soltas é o que mantém o `heroFieldsOf` do service como
+único lugar que lê esses campos — uma segunda leitura, escrita em SQL,
+seria uma que pode discordar da primeira. Aqui não dava pra usar a saída
+do avatar (contrato frouxo, `md5` de um lado e JS do outro): estes valores
+aparecem na tela, então precisam ser exatamente os mesmos.
+
+`listSlots` virou `listHeads` e devolve `CharacterHeadRow`, tipo separado
+de propósito — quem for mexer aí não reintroduz o save inteiro sem
+perceber. O teste de integração guarda o lado SQL: grava um save com mapa
+e ouro, e confere que nem um nem outro chegam.
+
+### CSS não é problema (medido)
+
+Só pra fechar a conta do caminho crítico, já que JavaScript e fonte foram
+medidos: o CSS por rota vai de **9 KB** (`/`) a **17 KB**
+(`/multiplayer`). Não há nada a cortar — CSS Modules já entrega só o que
+a rota usa. Fica registrado pra ninguém gastar tempo aqui.
+
 ### O piso é o Next, não o jogo
 
 **427 KB são compartilhados por todas as rotas** e não são nossos: é o
@@ -626,6 +669,27 @@ rodar contra um Redis real.
 - **A foto ainda mora no Postgres como base64.** Não sai mais de lá numa
   lista, mas guardar imagem em coluna de texto é remendo — o lugar dela é
   o Supabase Storage, que é a fase 5.
+- **Nenhuma resposta da API sai comprimida** — falta decidir, não falta
+  fazer (ver abaixo).
+
+### Compressão das respostas — decisão pendente
+
+`configureApp` não liga compressão nenhuma. Todo JSON sai cru: o save de
+~6 KB a cada `GET /api/save` e a cada autosave, mais `/api/friends` e as
+conversas. JSON comprime muito bem — costuma cair pra menos de um quinto.
+
+**Não fiz porque a resposta depende de onde a API vai rodar**, que é a
+mesma pendência do `trust proxy`:
+
+- Se ela ficar atrás de um proxy que já comprime na borda (Vercel,
+  Cloudflare, Render), o `compression` do Express seria trabalho repetido
+  — gasta CPU do Node pra um ganho que já existe.
+- Se for um container cru (Fly, VPS, Railway sem proxy), ninguém comprime
+  e vale a pena: uma dependência (`compression`) e uma linha no
+  `configureApp`.
+
+Não dá pra escolher sozinho sem saber o destino, e chutar aqui é escolher
+gastar CPU à toa ou deixar banda na mesa.
 
 ---
 

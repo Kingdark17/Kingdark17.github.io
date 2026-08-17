@@ -10,13 +10,30 @@ export interface CloudSaveRow {
   updatedAt: Date;
 }
 
+/**
+ * A linha da tela de personagens — tipo separado de `CloudSaveRow` de
+ * propósito, pra não voltar a ser o save inteiro.
+ */
+export interface CharacterHeadRow {
+  slot: number;
+  updatedAt: Date;
+  /**
+   * Só `{hero: {name, raceIcon, className, classIcon, level}, floor}` —
+   * os seis campos que o card mostra. Ler os quatro slots por completo
+   * pra montar esse resumo é o mesmo desperdício da foto em base64 no
+   * `/api/friends`.
+   */
+  data: unknown;
+}
+
 export interface SaveHistoryEntry {
   id: string;
   createdAt: Date;
 }
 
 export interface SaveRepository {
-  listSlots(userId: number): Promise<CloudSaveRow[]>;
+  /** Os slots ocupados, já reduzidos ao que a tela de personagens mostra. */
+  listHeads(userId: number): Promise<CharacterHeadRow[]>;
   getSlot(userId: number, slot: number): Promise<CloudSaveRow | null>;
   resetSlot(userId: number, slot: number): Promise<void>;
   /**
