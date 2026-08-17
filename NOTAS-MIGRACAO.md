@@ -458,6 +458,46 @@ Estar fora do pacote inicial não pode virar espera no momento em que o
 monstro aparece — todo mundo abre essa tela, e cedo. As outras carregam
 no clique, com um "Abrindo…" que só aparece na primeira vez de cada uma.
 
+### Quarto corte — a engine deixou de vir inteira
+
+Medindo rota a rota apareceu um número que não fazia sentido:
+`/multiplayer` e `/conta` carregavam **62 KB de catálogo de itens e
+monstros**. As duas telas importam exatamente uma coisa da engine —
+`PET_ICONS`, um mapa de id de pet pra emoji.
+
+A causa era o empacotamento: `tsup` juntava `packages/shared` inteiro num
+`dist/index.js`, e a granularidade do corte de um bundler é o **módulo**.
+Com um módulo só, não há por onde cortar. Marcar `"sideEffects": false`
+no `package.json` não resolveu sozinho — foi medido, não mudou um byte.
+
+O que resolveu foi `bundle: false` no `tsup.config.ts`: um arquivo de
+saída por arquivo de origem. A fonte já usava import com extensão
+explícita (`./pets.js`), que é o que esse modo exige.
+
+| Rota | Antes | Depois |
+|---|---|---|
+| `/conta` | 516 KB | **456 KB** |
+| `/multiplayer` | 519 KB | **459 KB** |
+| `/personagens/novo` | 510 KB | **474 KB** |
+| `/jogo` | 580 KB | 584 KB |
+
+`/jogo` subiu 4 KB — ele usa a engine quase toda, então perdeu o pouco
+que o empacotamento economizava e não ganhou nada em troca. Vale os
+60 KB das outras.
+
+O `.cjs` que o Nest consome também virou um arquivo por módulo. Conferido
+à mão (`require('./dist/index.cjs')` e `import('./dist/index.js')` fora
+do build), e os testes da API resolvem `@rpg-legend/shared` pelo pacote
+construído, não pela fonte — os 357 continuam passando.
+
+### O piso é o Next, não o jogo
+
+**427 KB são compartilhados por todas as rotas** e não são nossos: é o
+`react-dom` (223 KB) mais o runtime do App Router. O código próprio de
+cada rota hoje vai de 14 KB (`/`) a 157 KB (`/jogo`, que é o jogo
+inteiro). Continuar cortando do nosso lado tem pouco a render — o que
+sobrou de grande é framework.
+
 ### `pnpm lint` — de 1045 problemas a zero
 
 `pnpm lint` na raiz nunca tinha passado: `apps/api` acusava 898 erros de

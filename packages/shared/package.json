@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "//sideEffects": "A engine é pura: nenhum módulo mexe em global, DOM ou Node ao ser carregado (é a regra do CLAUDE.md que permite o Nest validar jogada com o mesmo código). Sem esta linha o bundler não pode provar isso e mantém o pacote inteiro — medido: /conta e /multiplayer baixavam os 62 KB do catálogo de itens e monstros só por importarem PET_ICONS.",
+  "sideEffects": false,
   "types": "./dist/index.d.ts",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
