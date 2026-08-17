@@ -15,7 +15,10 @@ import type { InternalFriendRow, RecentMessage, RelationRows, SocialRepository, 
 const CHAT_HISTORY_LIMIT = 200;
 
 function pairFilter(fromId: number, toId: number) {
-  return or(and(eq(chatMessages.senderId, fromId), eq(chatMessages.recipientId, toId)), and(eq(chatMessages.senderId, toId), eq(chatMessages.recipientId, fromId)));
+  return or(
+    and(eq(chatMessages.senderId, fromId), eq(chatMessages.recipientId, toId)),
+    and(eq(chatMessages.senderId, toId), eq(chatMessages.recipientId, fromId)),
+  );
 }
 
 export class DrizzleSocialRepository implements SocialRepository {
@@ -93,7 +96,10 @@ export class DrizzleSocialRepository implements SocialRepository {
     await getDb()
       .delete(friendships)
       .where(
-        or(and(eq(friendships.userId, userId), eq(friendships.friendId, otherId)), and(eq(friendships.userId, otherId), eq(friendships.friendId, userId))),
+        or(
+          and(eq(friendships.userId, userId), eq(friendships.friendId, otherId)),
+          and(eq(friendships.userId, otherId), eq(friendships.friendId, userId)),
+        ),
       );
   }
 

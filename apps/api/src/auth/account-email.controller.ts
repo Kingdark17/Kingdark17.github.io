@@ -18,6 +18,7 @@ import { AuthGuard } from './auth.guard';
 import type { SafeUser } from './cosmetics';
 import { CurrentUser } from './current-user.decorator';
 import { IpRateLimitGuard } from './ip-rate-limit.guard';
+import { comoTexto } from '../common/texto';
 
 @Controller('api/account')
 export class AccountEmailController {
@@ -26,7 +27,7 @@ export class AccountEmailController {
   @Post('verify-email')
   @HttpCode(HttpStatus.OK)
   async verifyEmail(@Body() body: { token?: unknown }) {
-    const result = await this.accountEmail.verifyEmail(String(body.token ?? ''));
+    const result = await this.accountEmail.verifyEmail(comoTexto(body.token));
     if (result.kind === 'invalid-token') {
       throw new HttpException({ error: 'Link de confirmação inválido ou expirado.' }, HttpStatus.BAD_REQUEST);
     }
@@ -37,7 +38,7 @@ export class AccountEmailController {
   @UseGuards(IpRateLimitGuard)
   @HttpCode(HttpStatus.OK)
   async requestPasswordReset(@Body() body: { email?: unknown }) {
-    await this.accountEmail.requestPasswordReset(String(body.email ?? ''));
+    await this.accountEmail.requestPasswordReset(comoTexto(body.email));
     // Mesma resposta com conta ou sem: a rota não pode virar um
     // verificador de quais e-mails estão cadastrados.
     return { ok: true, message: 'Se o e-mail estiver cadastrado, enviaremos um link de recuperação.' };
@@ -47,7 +48,7 @@ export class AccountEmailController {
   @UseGuards(IpRateLimitGuard)
   @HttpCode(HttpStatus.OK)
   async resetPassword(@Body() body: { token?: unknown; password?: unknown }) {
-    const result = await this.accountEmail.resetPassword(String(body.token ?? ''), String(body.password ?? ''));
+    const result = await this.accountEmail.resetPassword(comoTexto(body.token), comoTexto(body.password));
     switch (result.kind) {
       case 'invalid-password':
         throw new HttpException({ error: 'A senha precisa ter entre 8 e 128 caracteres.' }, HttpStatus.BAD_REQUEST);
@@ -62,7 +63,7 @@ export class AccountEmailController {
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   async changeEmail(@CurrentUser() user: SafeUser, @Body() body: { email?: unknown; password?: unknown }) {
-    const result = await this.accountEmail.changeEmail(user.id, String(body.email ?? ''), String(body.password ?? ''));
+    const result = await this.accountEmail.changeEmail(user.id, comoTexto(body.email), comoTexto(body.password));
     switch (result.kind) {
       case 'invalid-email':
         throw new HttpException({ error: 'Informe um e-mail válido.' }, HttpStatus.BAD_REQUEST);

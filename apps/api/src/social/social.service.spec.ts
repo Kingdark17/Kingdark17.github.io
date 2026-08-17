@@ -27,54 +27,58 @@ class FakeSocialRepository implements SocialRepository {
     return `${a}:${b}`;
   }
 
-  async findUserByUsername(username: string): Promise<UserLookup | null> {
+  private acharPorNome(username: string): FakeUser | null {
     const needle = username.trim().toLowerCase();
     for (const user of this.users.values()) {
-      if (user.username.toLowerCase() === needle) return { id: user.id, username: user.username };
+      if (user.username.toLowerCase() === needle) return user;
     }
     return null;
   }
 
-  async findAvatarByUsername(username: string): Promise<string | null> {
-    const needle = username.trim().toLowerCase();
-    for (const user of this.users.values()) {
-      if (user.username.toLowerCase() === needle) return user.avatarUrl;
-    }
-    return null;
+  findUserByUsername(username: string): Promise<UserLookup | null> {
+    const user = this.acharPorNome(username);
+    return Promise.resolve(user ? { id: user.id, username: user.username } : null);
   }
 
-  async areFriends(userId: number, otherId: number): Promise<boolean> {
-    return this.friendships.has(this.pairKey(userId, otherId));
+  findAvatarByUsername(username: string): Promise<string | null> {
+    return Promise.resolve(this.acharPorNome(username)?.avatarUrl ?? null);
   }
 
-  async hasPendingRequest(fromId: number, toId: number): Promise<boolean> {
-    return this.requests.has(this.pairKey(fromId, toId));
+  areFriends(userId: number, otherId: number): Promise<boolean> {
+    return Promise.resolve(this.friendships.has(this.pairKey(userId, otherId)));
   }
 
-  async createFriendRequest(fromId: number, toId: number): Promise<'created' | 'duplicate'> {
+  hasPendingRequest(fromId: number, toId: number): Promise<boolean> {
+    return Promise.resolve(this.requests.has(this.pairKey(fromId, toId)));
+  }
+
+  createFriendRequest(fromId: number, toId: number): Promise<'created' | 'duplicate'> {
     const key = this.pairKey(fromId, toId);
-    if (this.requests.has(key)) return 'duplicate';
+    if (this.requests.has(key)) return Promise.resolve('duplicate');
     this.requests.add(key);
-    return 'created';
+    return Promise.resolve('created');
   }
 
-  async acceptFriendRequest(fromId: number, toId: number): Promise<void> {
+  acceptFriendRequest(fromId: number, toId: number): Promise<void> {
     this.requests.delete(this.pairKey(fromId, toId));
     this.friendships.add(this.pairKey(fromId, toId));
     this.friendships.add(this.pairKey(toId, fromId));
+    return Promise.resolve();
   }
 
-  async deleteFriendRequestBetween(userId: number, otherId: number): Promise<void> {
+  deleteFriendRequestBetween(userId: number, otherId: number): Promise<void> {
     this.requests.delete(this.pairKey(userId, otherId));
     this.requests.delete(this.pairKey(otherId, userId));
+    return Promise.resolve();
   }
 
-  async deleteFriendship(userId: number, otherId: number): Promise<void> {
+  deleteFriendship(userId: number, otherId: number): Promise<void> {
     this.friendships.delete(this.pairKey(userId, otherId));
     this.friendships.delete(this.pairKey(otherId, userId));
+    return Promise.resolve();
   }
 
-  async listRelations(userId: number): Promise<RelationRows> {
+  listRelations(userId: number): Promise<RelationRows> {
     const toRow = (id: number): InternalFriendRow => {
       const user = this.users.get(id);
       if (!user) throw new Error('usuário inexistente no fake');
@@ -92,27 +96,33 @@ class FakeSocialRepository implements SocialRepository {
       if (to === userId) incoming.push(toRow(from));
       if (from === userId) outgoing.push(toRow(to));
     }
-    return { friends, incoming, outgoing };
+    return Promise.resolve({ friends, incoming, outgoing });
   }
 
-  async recordMessage(fromId: number, toId: number, text: string): Promise<StoredMessage> {
+  recordMessage(fromId: number, toId: number, text: string): Promise<StoredMessage> {
     const message = { id: this.nextMessageId++, senderId: fromId, recipientId: toId, body: text, createdAt: new Date() };
     this.messages.push(message);
-    return { id: String(message.id), body: message.body, createdAt: message.createdAt };
+    return Promise.resolve({ id: String(message.id), body: message.body, createdAt: message.createdAt });
   }
 
-  async recentMessages(userId: number, otherId: number, beforeId: string | undefined, limit: number): Promise<RecentMessage[]> {
+  recentMessages(userId: number, otherId: number, beforeId: string | undefined, limit: number): Promise<RecentMessage[]> {
     let pairMessages = this.messages.filter(
-      (message) => (message.senderId === userId && message.recipientId === otherId) || (message.senderId === otherId && message.recipientId === userId),
+      (message) =>
+        (message.senderId === userId && message.recipientId === otherId) || (message.senderId === otherId && message.recipientId === userId),
     );
     if (beforeId) pairMessages = pairMessages.filter((message) => message.id < Number(beforeId));
-    pairMessages = [...pairMessages].sort((a, b) => b.id - a.id).slice(0, limit).reverse();
-    return pairMessages.map((message) => ({
-      id: String(message.id),
-      fromMe: message.senderId === userId,
-      body: message.body,
-      createdAt: message.createdAt,
-    }));
+    pairMessages = [...pairMessages]
+      .sort((a, b) => b.id - a.id)
+      .slice(0, limit)
+      .reverse();
+    return Promise.resolve(
+      pairMessages.map((message) => ({
+        id: String(message.id),
+        fromMe: message.senderId === userId,
+        body: message.body,
+        createdAt: message.createdAt,
+      })),
+    );
   }
 }
 
@@ -134,10 +144,8 @@ const USER = { id: 1, username: 'Aria' };
 const OTHER = { id: 2, username: 'Bram' };
 
 /** PNGs de 1×1 — só precisam ser `data:` válidos e diferentes entre si. */
-const FOTO_ENVIADA =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
-const OUTRA_FOTO =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+const FOTO_ENVIADA = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+const OUTRA_FOTO = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 
 function makeUser(id: number, username: string): FakeUser {
   return { id, username, avatarUrl: '', frame: 'none', nameColor: '#e8d7a5', pet: 'none' };
@@ -321,7 +329,11 @@ describe('SocialService.sendChatMessage', () => {
     if (result.kind !== 'ok') return;
     expect(result.message.body).toBe('Oi Bram!');
     expect(notifier.events).toEqual([
-      { type: 'chat', targetUserId: OTHER.id, payload: { from: USER.username, id: result.message.id, body: 'Oi Bram!', createdAt: result.message.createdAt } },
+      {
+        type: 'chat',
+        targetUserId: OTHER.id,
+        payload: { from: USER.username, id: result.message.id, body: 'Oi Bram!', createdAt: result.message.createdAt },
+      },
     ]);
   });
 });

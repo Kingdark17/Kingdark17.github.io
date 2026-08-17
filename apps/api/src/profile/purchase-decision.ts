@@ -11,10 +11,7 @@
 import type { Cosmetics, ProfileCatalogItem } from '../auth/cosmetics';
 
 export type PurchaseDecision =
-  | { kind: 'no-character' }
-  | { kind: 'already-owned' }
-  | { kind: 'insufficient-gold' }
-  | { kind: 'purchased'; cosmetics: Cosmetics; save: unknown };
+  { kind: 'no-character' } | { kind: 'already-owned' } | { kind: 'insufficient-gold' } | { kind: 'purchased'; cosmetics: Cosmetics; save: unknown };
 
 function bucketFor(item: ProfileCatalogItem): keyof Cosmetics {
   if (item.type === 'frame') return 'frames';

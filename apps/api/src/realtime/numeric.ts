@@ -10,5 +10,5 @@ export function clampInt(value: unknown, min: number, max: number): number {
 }
 
 export function cloneJson<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value));
+  return JSON.parse(JSON.stringify(value)) as T;
 }

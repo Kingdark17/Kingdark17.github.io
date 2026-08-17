@@ -162,29 +162,29 @@ describe('isValidTransition', () => {
 
   it('aceita atributo subindo até +10', () => {
     const oldSave = makeSave({}, { attrs: { forca: 5, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } });
-    expect(isValidTransition(oldSave, makeSave({}, { attrs: { forca: 15, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } }))).toBe(
-      true,
-    );
+    expect(
+      isValidTransition(oldSave, makeSave({}, { attrs: { forca: 15, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } })),
+    ).toBe(true);
   });
 
   it('rejeita atributo subindo mais que +10', () => {
     const oldSave = makeSave({}, { attrs: { forca: 5, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } });
-    expect(isValidTransition(oldSave, makeSave({}, { attrs: { forca: 16, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } }))).toBe(
-      false,
-    );
+    expect(
+      isValidTransition(oldSave, makeSave({}, { attrs: { forca: 16, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } })),
+    ).toBe(false);
   });
 
   it('rejeita atributo abaixo de 1', () => {
     const oldSave = makeSave({}, { attrs: { forca: 1, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } });
-    expect(isValidTransition(oldSave, makeSave({}, { attrs: { forca: 0, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } }))).toBe(
-      false,
-    );
+    expect(
+      isValidTransition(oldSave, makeSave({}, { attrs: { forca: 0, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } })),
+    ).toBe(false);
   });
 
   it('rejeita atributo acima de 99 mesmo sem violar o salto de +10', () => {
     const oldSave = makeSave({}, { attrs: { forca: 95, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } });
-    expect(isValidTransition(oldSave, makeSave({}, { attrs: { forca: 100, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } }))).toBe(
-      false,
-    );
+    expect(
+      isValidTransition(oldSave, makeSave({}, { attrs: { forca: 100, destreza: 5, constituicao: 5, intelecto: 5, sabedoria: 5, carisma: 5 } })),
+    ).toBe(false);
   });
 });

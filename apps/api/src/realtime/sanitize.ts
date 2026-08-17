@@ -19,6 +19,7 @@ import { ATTR_KEYS, equipmentCap, equipmentStat, xpForLevel, type Equipment } fr
 import { PROFILE_COLORS, PROFILE_FRAMES, PROFILE_PETS } from '../auth/cosmetics';
 import { publicAvatarUrl } from '../social/avatar';
 import { clampInt, cloneJson } from './numeric';
+import { comoTexto } from '../common/texto';
 
 const GOD_ATTR = 999;
 const GOD_HP = 999999;
@@ -98,9 +99,7 @@ export function sanitizeHero(candidate: unknown, previousRecord: SanitizedHeroRe
   hero.xp = clampInt(hero.xp, 0, (hero.xpNext as number) - 1);
   hero.attrPoints = clampInt(hero.attrPoints, 0, Math.max(0, ((hero.level as number) - 1) * 2));
   hero.gold = previous ? clampInt(hero.gold, 0, clampInt(previous.gold, 0, 100000000) + 5000) : clampInt(hero.gold, 0, 100);
-  hero.killCount = previous
-    ? clampInt(hero.killCount, clampInt(previous.killCount, 0, 1000000), clampInt(previous.killCount, 0, 1000000) + 20)
-    : 0;
+  hero.killCount = previous ? clampInt(hero.killCount, clampInt(previous.killCount, 0, 1000000), clampInt(previous.killCount, 0, 1000000) + 20) : 0;
   if (hero.derived && typeof hero.derived === 'object') {
     hero.derived = { ...(hero.derived as Record<string, unknown>), maxHp: calculatedHp, maxMp: calculatedMp };
   }
@@ -133,12 +132,12 @@ export function sanitizeCosmetics(candidate: unknown): PublicCosmetics | null {
   if (!candidate || typeof candidate !== 'object') return null;
   const source = candidate as Record<string, unknown>;
 
-  const avatarUrl = String(source.avatarUrl ?? '');
-  const frame = String(source.frame ?? 'none');
-  const nameColor = String(source.nameColor ?? '#e8d7a5').toLowerCase();
-  const pet = String(source.pet ?? 'none');
+  const avatarUrl = comoTexto(source.avatarUrl);
+  const frame = comoTexto(source.frame, 'none');
+  const nameColor = comoTexto(source.nameColor, '#e8d7a5').toLowerCase();
+  const pet = comoTexto(source.pet, 'none');
 
-  const username = String(source.username ?? '').slice(0, 24);
+  const username = comoTexto(source.username).slice(0, 24);
   const aceita = AVATAR_PATTERN.test(avatarUrl) && avatarUrl.length <= MAX_AVATAR_LENGTH;
 
   return {
@@ -173,7 +172,7 @@ export function sanitizeProfile(profile: unknown, previous: SanitizedProfile | n
   const source = (profile ?? {}) as Record<string, unknown>;
   const result = sanitizeHero(source.hero, previous, adminFlag);
   return {
-    name: String(source.name || 'Aventureiro').slice(0, 20),
+    name: (comoTexto(source.name) || 'Aventureiro').slice(0, 20),
     hero: result.hero,
     inventory: Array.isArray(source.inventory) ? cloneJson(source.inventory).slice(0, 120) : [],
     party: sanitizeParty(source.party),

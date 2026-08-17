@@ -1,11 +1,4 @@
-import {
-  GUEST_ROLE,
-  HOST_ROLE,
-  RoomRegistry,
-  normalizePlayerName,
-  normalizeRoomCode,
-  type RoomConnection,
-} from './room-registry';
+import { GUEST_ROLE, HOST_ROLE, RoomRegistry, normalizePlayerName, normalizeRoomCode, type RoomConnection } from './room-registry';
 
 function fakeConnection(id: string): RoomConnection & { sent: { event: string; payload: unknown }[] } {
   const sent: { event: string; payload: unknown }[] = [];
@@ -208,7 +201,7 @@ describe('RoomRegistry — estado autoritativo', () => {
       floor: 99999,
       mapRows: 50,
       mapCols: 50,
-      map: new Array(20).fill(null).map(() => new Array(20).fill({ type: 'normal' })),
+      map: Array.from({ length: 20 }, () => Array.from({ length: 20 }, () => ({ type: 'normal' }))),
     });
 
     expect(state.floor).toBe(10000);

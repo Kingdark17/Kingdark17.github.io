@@ -13,6 +13,7 @@ import { Body, Controller, Get, Headers, HttpCode, HttpException, HttpStatus, Po
 import { AuthService } from './auth.service';
 import { extractBearerToken } from './bearer-token';
 import { IpRateLimitGuard } from './ip-rate-limit.guard';
+import { comoTexto } from '../common/texto';
 
 interface RegisterBody {
   username?: unknown;
@@ -34,9 +35,9 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() body: RegisterBody) {
     const result = await this.authService.register({
-      username: String(body.username ?? ''),
-      email: String(body.email ?? ''),
-      password: String(body.password ?? ''),
+      username: comoTexto(body.username),
+      email: comoTexto(body.email),
+      password: comoTexto(body.password),
     });
     switch (result.kind) {
       case 'invalid-username':
@@ -57,8 +58,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@Body() body: LoginBody) {
     const result = await this.authService.login({
-      username: String(body.username ?? ''),
-      password: String(body.password ?? ''),
+      username: comoTexto(body.username),
+      password: comoTexto(body.password),
     });
     if (result.kind === 'invalid-credentials') {
       throw new HttpException({ error: 'Usuário ou senha incorretos.' }, HttpStatus.UNAUTHORIZED);

@@ -14,6 +14,7 @@
 
 import { clampInt, cloneJson } from './numeric';
 import { sanitizeProfile, toPublicProfile, type PublicProfile, type SanitizedProfile } from './sanitize';
+import { comoTexto } from '../common/texto';
 
 export type RoomRole = 1 | 2;
 
@@ -63,10 +64,7 @@ export interface PublicRoomSummary {
 
 export type CreateRoomResult = { kind: 'created'; room: Room } | { kind: 'already-exists' };
 
-export type JoinRoomResult =
-  | { kind: 'joined'; room: Room; role: RoomRole; peers: RoomConnection[] }
-  | { kind: 'not-found' }
-  | { kind: 'full' };
+export type JoinRoomResult = { kind: 'joined'; room: Room; role: RoomRole; peers: RoomConnection[] } | { kind: 'not-found' } | { kind: 'full' };
 
 export interface LeaveRoomResult {
   code: string;
@@ -78,13 +76,11 @@ export interface LeaveRoomResult {
 }
 
 export function normalizeRoomCode(value: unknown): string {
-  return String(value ?? '')
-    .toUpperCase()
-    .slice(0, MAX_CODE_LENGTH);
+  return comoTexto(value).toUpperCase().slice(0, MAX_CODE_LENGTH);
 }
 
 export function normalizePlayerName(value: unknown): string {
-  return String(value || 'Aventureiro').slice(0, MAX_NAME_LENGTH);
+  return (comoTexto(value) || 'Aventureiro').slice(0, MAX_NAME_LENGTH);
 }
 
 export class RoomRegistry {
@@ -116,11 +112,7 @@ export class RoomRegistry {
     return list;
   }
 
-  create(
-    code: string,
-    connection: RoomConnection,
-    options: { admin: boolean; isPublic: boolean; hostName: string },
-  ): CreateRoomResult {
+  create(code: string, connection: RoomConnection, options: { admin: boolean; isPublic: boolean; hostName: string }): CreateRoomResult {
     const existing = this.rooms.get(code);
     if (existing && existing.members.length) return { kind: 'already-exists' };
 
@@ -155,9 +147,7 @@ export class RoomRegistry {
 
   /** Todo mundo na sala menos quem mandou a mensagem — o `relay()` do original. */
   peersOf(room: Room, senderConnectionId: string): RoomConnection[] {
-    return room.members
-      .filter((member) => member.connection.id !== senderConnectionId)
-      .map((member) => member.connection);
+    return room.members.filter((member) => member.connection.id !== senderConnectionId).map((member) => member.connection);
   }
 
   leave(connectionId: string): LeaveRoomResult | null {
@@ -267,9 +257,8 @@ export class RoomRegistry {
     }
 
     if (Array.isArray(state.map)) {
-      state.map = state.map
-        .slice(0, MAX_MAP_SIZE)
-        .map((row) => (Array.isArray(row) ? row.slice(0, MAX_MAP_SIZE) : []));
+      const linhas = state.map as unknown[];
+      state.map = linhas.slice(0, MAX_MAP_SIZE).map((row) => (Array.isArray(row) ? (row as unknown[]).slice(0, MAX_MAP_SIZE) : []));
     }
 
     room.state = state;

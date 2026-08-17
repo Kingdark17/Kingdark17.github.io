@@ -50,8 +50,8 @@ describe('resolvePurchase', () => {
 
   it('não muta o contexto original', () => {
     const context = makeContext({ gold: 200, frames: ['none'] });
-    const snapshotCosmetics = JSON.parse(JSON.stringify(context.cosmetics));
-    const snapshotSave = JSON.parse(JSON.stringify(context.save));
+    const snapshotCosmetics = JSON.parse(JSON.stringify(context.cosmetics)) as unknown;
+    const snapshotSave = JSON.parse(JSON.stringify(context.save)) as unknown;
     resolvePurchase(context, FRAME_ITEM);
     expect(context.cosmetics).toEqual(snapshotCosmetics);
     expect(context.save).toEqual(snapshotSave);

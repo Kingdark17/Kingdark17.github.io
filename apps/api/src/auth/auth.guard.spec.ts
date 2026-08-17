@@ -27,7 +27,7 @@ function makeContext(authorization: string | undefined): { context: ExecutionCon
 }
 
 function makeFakeAuthService(meResult: MeResult): AuthService {
-  return { me: async () => meResult } as unknown as AuthService;
+  return { me: () => Promise.resolve(meResult) } as unknown as AuthService;
 }
 
 describe('AuthGuard', () => {

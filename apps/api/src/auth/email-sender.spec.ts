@@ -2,13 +2,16 @@ import { ResendEmailSender, type ResendConfig } from './email-sender';
 
 function fakeFetch(response: { ok: boolean; status?: number; text?: string }) {
   const calls: { url: string; init: RequestInit }[] = [];
-  const impl = (async (input: RequestInfo | URL, init?: RequestInit) => {
-    calls.push({ url: String(input), init: init ?? {} });
-    return {
+  const impl = ((input: RequestInfo | URL, init?: RequestInit) => {
+    // `fetch` aceita string, URL ou Request; só a string tem texto útil —
+    // `String(request)` daria "[object Request]" e o teste passaria à toa.
+    const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+    calls.push({ url, init: init ?? {} });
+    return Promise.resolve({
       ok: response.ok,
       status: response.status ?? (response.ok ? 200 : 422),
-      text: async () => response.text ?? '',
-    } as Response;
+      text: () => Promise.resolve(response.text ?? ''),
+    } as Response);
   }) as typeof fetch;
   return { impl, calls };
 }
@@ -25,7 +28,7 @@ describe('ResendEmailSender', () => {
     expect(calls[0].url).toBe('https://api.resend.com/emails');
     expect(calls[0].init.method).toBe('POST');
     expect((calls[0].init.headers as Record<string, string>).Authorization).toBe('Bearer chave-de-teste');
-    expect(JSON.parse(String(calls[0].init.body))).toEqual({
+    expect(JSON.parse(calls[0].init.body as string)).toEqual({
       from: 'rpg@exemplo.com',
       to: ['aria@exemplo.com'],
       subject: 'Assunto',
@@ -51,9 +54,7 @@ describe('ResendEmailSender', () => {
   });
 
   it('erro de rede vira false, não derruba quem chamou', async () => {
-    const impl = (async () => {
-      throw new Error('getaddrinfo ENOTFOUND');
-    }) as unknown as typeof fetch;
+    const impl = (() => Promise.reject(new Error('getaddrinfo ENOTFOUND'))) as unknown as typeof fetch;
     const sender = new ResendEmailSender(() => CONFIGURED, impl);
 
     await expect(sender.send('a@b.co', 's', 'h')).resolves.toBe(false);

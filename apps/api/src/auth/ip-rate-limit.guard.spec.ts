@@ -16,7 +16,7 @@ function makeGuard(clock: () => number) {
 
 describe('IpRateLimitGuard', () => {
   it('libera 12 tentativas por minuto e barra a 13ª com 429', () => {
-    let now = 1_000;
+    const now = 1_000;
     const guard = makeGuard(() => now);
     const context = httpContext('203.0.113.7');
 

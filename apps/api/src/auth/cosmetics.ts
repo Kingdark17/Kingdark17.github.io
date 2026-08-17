@@ -94,7 +94,12 @@ export interface UserRow {
 
 export function isAdmin(row: Pick<UserRow, 'username'> | null | undefined, adminUsername: string): boolean {
   const normalizedAdmin = adminUsername.trim().toLowerCase();
-  return !!(row && String(row.username || '').trim().toLowerCase() === normalizedAdmin);
+  return !!(
+    row &&
+    String(row.username || '')
+      .trim()
+      .toLowerCase() === normalizedAdmin
+  );
 }
 
 export function cosmeticsFor(row: UserRow | null | undefined, adminUsername: string): Cosmetics {

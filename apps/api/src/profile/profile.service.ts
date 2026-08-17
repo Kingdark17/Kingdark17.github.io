@@ -4,10 +4,20 @@
  * `/api/account/profile/purchase` (POST) do `accounts.js` original.
  */
 
-import { PROFILE_CATALOG, PROFILE_COLORS, PROFILE_FRAMES, PROFILE_PETS, safeUser, type Cosmetics, type ProfileCatalogItem, type SafeUser } from '../auth/cosmetics';
+import {
+  PROFILE_CATALOG,
+  PROFILE_COLORS,
+  PROFILE_FRAMES,
+  PROFILE_PETS,
+  safeUser,
+  type Cosmetics,
+  type ProfileCatalogItem,
+  type SafeUser,
+} from '../auth/cosmetics';
 import { isValidSlot } from '../auth/validation';
 import { signSave, type JsonValue } from '../auth/save-signature';
 import type { ProfileRepository } from './profile-repository';
+import { comoTexto } from '../common/texto';
 
 const REMOTE_PHOTO_PATTERN = /^https:\/\//i;
 const UPLOADED_PHOTO_PATTERN = /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/i;
@@ -19,10 +29,7 @@ const ALL_COLORS: readonly string[] = PROFILE_COLORS;
 const ALL_PETS: readonly string[] = PROFILE_PETS;
 
 export type UpdateProfileResult =
-  | { kind: 'invalid-avatar' }
-  | { kind: 'invalid-selection' }
-  | { kind: 'not-unlocked' }
-  | { kind: 'ok'; user: SafeUser };
+  { kind: 'invalid-avatar' } | { kind: 'invalid-selection' } | { kind: 'not-unlocked' } | { kind: 'ok'; user: SafeUser };
 
 export type PurchaseResult =
   | { kind: 'item-not-found' }
@@ -49,10 +56,10 @@ export class ProfileService {
     currentCosmetics: Cosmetics,
     input: { avatarUrl?: unknown; frame?: unknown; nameColor?: unknown; pet?: unknown },
   ): Promise<UpdateProfileResult> {
-    const avatarUrl = String(input.avatarUrl ?? '').trim();
-    const frame = String(input.frame ?? 'none');
-    const nameColor = String(input.nameColor ?? '#e8d7a5').toLowerCase();
-    const pet = String(input.pet ?? 'none');
+    const avatarUrl = comoTexto(input.avatarUrl).trim();
+    const frame = comoTexto(input.frame, 'none');
+    const nameColor = comoTexto(input.nameColor, '#e8d7a5').toLowerCase();
+    const pet = comoTexto(input.pet, 'none');
 
     const remotePhoto = REMOTE_PHOTO_PATTERN.test(avatarUrl) && avatarUrl.length <= MAX_REMOTE_PHOTO_LENGTH;
     const uploadedPhoto = UPLOADED_PHOTO_PATTERN.test(avatarUrl) && avatarUrl.length <= MAX_UPLOADED_PHOTO_LENGTH;
@@ -70,7 +77,7 @@ export class ProfileService {
   }
 
   async purchase(userId: number, input: { id?: unknown; slot?: unknown }, isAdmin: boolean): Promise<PurchaseResult> {
-    const item = PROFILE_CATALOG.find((entry) => entry.id === String(input.id ?? ''));
+    const item = PROFILE_CATALOG.find((entry) => entry.id === comoTexto(input.id));
     if (!item) return { kind: 'item-not-found' };
     if (item.adminOnly && !isAdmin) return { kind: 'admin-only' };
     const slot = Number(input.slot);

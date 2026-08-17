@@ -2,7 +2,7 @@ import { RateLimiter } from './rate-limiter';
 
 describe('RateLimiter', () => {
   it('libera até o teto e barra o excedente dentro da janela', () => {
-    let clock = 1_000;
+    const clock = 1_000;
     const limiter = new RateLimiter(3, 1000, () => clock);
 
     expect(limiter.allow('c1')).toBe(true);
@@ -25,7 +25,7 @@ describe('RateLimiter', () => {
   });
 
   it('conta cada conexão separadamente', () => {
-    let clock = 1_000;
+    const clock = 1_000;
     const limiter = new RateLimiter(1, 1000, () => clock);
 
     expect(limiter.allow('c1')).toBe(true);
@@ -34,7 +34,7 @@ describe('RateLimiter', () => {
   });
 
   it('esquecer a conexão zera a contagem dela', () => {
-    let clock = 1_000;
+    const clock = 1_000;
     const limiter = new RateLimiter(1, 1000, () => clock);
 
     expect(limiter.allow('c1')).toBe(true);

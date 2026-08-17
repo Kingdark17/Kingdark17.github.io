@@ -11,6 +11,7 @@ import request from 'supertest';
 
 import { AppModule } from '../app.module';
 import { configureApp } from '../bootstrap';
+import { servidorDe } from '../testing/servidor';
 
 describe('rotas de e-mail e recuperação de senha', () => {
   let app: INestApplication;
@@ -26,7 +27,7 @@ describe('rotas de e-mail e recuperação de senha', () => {
   });
 
   it('as cinco rotas do original existem', async () => {
-    const server = app.getHttpServer();
+    const server = servidorDe(app);
     const respostas = await Promise.all([
       request(server).post('/api/account/verify-email').send({ token: 'x' }),
       request(server).post('/api/account/request-password-reset').send({ email: 'a@b.co' }),
@@ -39,7 +40,7 @@ describe('rotas de e-mail e recuperação de senha', () => {
   });
 
   it('trocar e-mail e reenviar confirmação exigem sessão', async () => {
-    const server = app.getHttpServer();
+    const server = servidorDe(app);
 
     const semSessao = await request(server).put('/api/account/email').send({ email: 'a@b.co', password: 'segredo123' });
     expect(semSessao.status).toBe(401);
@@ -49,7 +50,7 @@ describe('rotas de e-mail e recuperação de senha', () => {
   });
 
   it('senha curta é recusada antes de chegar no banco', async () => {
-    const resposta = await request(app.getHttpServer()).post('/api/account/reset-password').send({ token: 'x', password: 'curta' });
+    const resposta = await request(servidorDe(app)).post('/api/account/reset-password').send({ token: 'x', password: 'curta' });
 
     expect(resposta.status).toBe(400);
     expect(resposta.body).toEqual({ error: 'A senha precisa ter entre 8 e 128 caracteres.' });
@@ -58,7 +59,7 @@ describe('rotas de e-mail e recuperação de senha', () => {
   it('o guard de sessão roda antes de olhar o corpo', async () => {
     // Corpo inválido + sem sessão responde 401, não 400: quem não está
     // autenticado não recebe pista nenhuma sobre a validação.
-    const resposta = await request(app.getHttpServer()).put('/api/account/email').send({ email: 'sem-arroba', password: 'x' });
+    const resposta = await request(servidorDe(app)).put('/api/account/email').send({ email: 'sem-arroba', password: 'x' });
 
     expect(resposta.status).toBe(401);
   });

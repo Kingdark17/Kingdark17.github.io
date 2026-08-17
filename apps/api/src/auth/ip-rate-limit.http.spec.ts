@@ -14,6 +14,7 @@ import request from 'supertest';
 import { AppModule } from '../app.module';
 import { configureApp } from '../bootstrap';
 import { IP_ATTEMPT_LIMIT } from './ip-rate-limit.guard';
+import { servidorDe } from '../testing/servidor';
 
 describe('rate limit por IP nas rotas de conta', () => {
   let app: INestApplication;
@@ -29,7 +30,7 @@ describe('rate limit por IP nas rotas de conta', () => {
   });
 
   it('registro e login dividem as 12 tentativas por minuto', async () => {
-    const server = app.getHttpServer();
+    const server = servidorDe(app);
     const login = () => request(server).post('/api/account/login').send({ username: 'aria', password: 'segredo123' });
     const register = () => request(server).post('/api/account/register').send({ username: 'aria', email: 'a@b.co', password: 'segredo123' });
 

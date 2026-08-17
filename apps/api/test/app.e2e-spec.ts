@@ -18,10 +18,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/health (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/health')
-      .expect(200)
-      .expect({ online: true, engine: '@rpg-legend/shared' });
+    return request(app.getHttpServer()).get('/health').expect(200).expect({ online: true, engine: '@rpg-legend/shared' });
   });
 
   it('/smoke/derived (GET) devolve os números da engine compartilhada', () => {

@@ -16,6 +16,7 @@ import { configureApp } from '../bootstrap';
 import type { AvatarDecodificado } from './avatar';
 import { AvatarController } from './avatar.controller';
 import { SocialService } from './social.service';
+import { servidorDe } from '../testing/servidor';
 
 const BYTES = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
@@ -42,7 +43,7 @@ describe('GET /api/users/:username/avatar', () => {
   });
 
   it('serve a imagem sem exigir sessão', async () => {
-    const resposta = await request(app.getHttpServer()).get('/api/users/Aria/avatar?v=abc123');
+    const resposta = await request(servidorDe(app)).get('/api/users/Aria/avatar?v=abc123');
 
     expect(resposta.status).toBe(200);
     expect(resposta.headers['content-type']).toBe('image/png');
@@ -50,19 +51,19 @@ describe('GET /api/users/:username/avatar', () => {
   });
 
   it('com versão no endereço, manda guardar por muito tempo — e não `no-store`', async () => {
-    const resposta = await request(app.getHttpServer()).get('/api/users/Aria/avatar?v=abc123');
+    const resposta = await request(servidorDe(app)).get('/api/users/Aria/avatar?v=abc123');
 
     expect(resposta.headers['cache-control']).toBe('public, max-age=31536000, immutable');
   });
 
   it('sem versão no endereço não guarda: não haveria como saber que a foto mudou', async () => {
-    const resposta = await request(app.getHttpServer()).get('/api/users/Aria/avatar');
+    const resposta = await request(servidorDe(app)).get('/api/users/Aria/avatar');
 
     expect(resposta.headers['cache-control']).toBe('no-cache');
   });
 
   it('404 pra quem não tem foto enviada', async () => {
-    const resposta = await request(app.getHttpServer()).get('/api/users/Bram/avatar');
+    const resposta = await request(servidorDe(app)).get('/api/users/Bram/avatar');
 
     expect(resposta.status).toBe(404);
     expect(resposta.body).toEqual({ error: 'Foto não encontrada.' });

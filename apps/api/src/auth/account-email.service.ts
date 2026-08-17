@@ -21,7 +21,7 @@ import { hashPassword, generateSalt, verifyPassword } from './password';
 import { safeUser, type SafeUser } from './cosmetics';
 import { emailLink, emailTemplate, type EmailTokenType } from './email-templates';
 import { generateSessionToken, hashToken } from './tokens';
-import { UniqueViolationError } from './users-repository';
+import { UniqueViolationError, type AccountRecord } from './users-repository';
 import type { AccountEmailRepository } from './account-email-repository';
 import type { EmailSender } from './email-sender';
 
@@ -40,11 +40,7 @@ export type RequestPasswordResetResult = { kind: 'ok' };
 export type ResetPasswordResult = { kind: 'invalid-password' } | { kind: 'invalid-token' } | { kind: 'ok' };
 
 export type ChangeEmailResult =
-  | { kind: 'invalid-email' }
-  | { kind: 'wrong-password' }
-  | { kind: 'account-not-found' }
-  | { kind: 'email-taken' }
-  | { kind: 'ok'; user: SafeUser };
+  { kind: 'invalid-email' } | { kind: 'wrong-password' } | { kind: 'account-not-found' } | { kind: 'email-taken' } | { kind: 'ok'; user: SafeUser };
 
 export type ResendVerificationResult = { kind: 'no-email' } | { kind: 'already-verified' } | { kind: 'ok' };
 
@@ -95,7 +91,7 @@ export class AccountEmailService implements VerificationIssuer {
     if (!account) return { kind: 'account-not-found' };
     if (!(await verifyPassword(password, account.passwordSalt, account.passwordHash))) return { kind: 'wrong-password' };
 
-    let updated;
+    let updated: AccountRecord;
     try {
       updated = await this.repo.updateEmail(userId, email);
     } catch (err) {

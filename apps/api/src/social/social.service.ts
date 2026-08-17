@@ -6,6 +6,7 @@
  * `SocialNotifier` — ver os comentários desses arquivos.
  */
 
+import { comoTexto } from '../common/texto';
 import { decodeAvatar, publicAvatarUrl, type AvatarDecodificado } from './avatar';
 import { cleanMessageText } from './message-text';
 import type { PresenceChecker } from './presence-checker';
@@ -39,7 +40,8 @@ export type AcceptFriendRequestResult = { kind: 'target-not-found' } | { kind: '
 
 export type SimpleFriendResult = { kind: 'target-not-found' } | { kind: 'ok' };
 
-export type SendChatMessageResult = { kind: 'target-not-found' } | { kind: 'not-friends' } | { kind: 'empty-message' } | { kind: 'ok'; message: StoredMessage };
+export type SendChatMessageResult =
+  { kind: 'target-not-found' } | { kind: 'not-friends' } | { kind: 'empty-message' } | { kind: 'ok'; message: StoredMessage };
 
 export type RecentMessagesResult = { kind: 'target-not-found' } | { kind: 'not-friends' } | { kind: 'ok'; messages: RecentMessage[] };
 
@@ -152,7 +154,8 @@ export class SocialService {
     if (!(await this.repo.areFriends(userId, target.id))) return { kind: 'not-friends' };
 
     const cap = Math.max(CHAT_HISTORY_LIMIT_MIN, Math.min(CHAT_HISTORY_LIMIT_MAX, Number(limit) || CHAT_HISTORY_LIMIT_DEFAULT));
-    const before = beforeId && /^\d+$/.test(String(beforeId)) ? String(beforeId) : undefined;
+    const marcador = comoTexto(beforeId);
+    const before = /^\d+$/.test(marcador) ? marcador : undefined;
     const messages = await this.repo.recentMessages(userId, target.id, before, cap);
     return { kind: 'ok', messages };
   }

@@ -17,33 +17,34 @@ class FakeAccountEmailRepository implements AccountEmailRepository {
   readonly tokens = new Map<number, StoredToken>();
   readonly droppedSessionsOf: number[] = [];
 
-  async findById(userId: number): Promise<AccountRecord | null> {
-    return this.accounts.get(userId) ?? null;
+  findById(userId: number): Promise<AccountRecord | null> {
+    return Promise.resolve(this.accounts.get(userId) ?? null);
   }
 
-  async findByEmail(email: string): Promise<AccountRecord | null> {
+  findByEmail(email: string): Promise<AccountRecord | null> {
     for (const account of this.accounts.values()) {
-      if ((account.email ?? '').toLowerCase() === email.toLowerCase()) return account;
+      if ((account.email ?? '').toLowerCase() === email.toLowerCase()) return Promise.resolve(account);
     }
-    return null;
+    return Promise.resolve(null);
   }
 
-  async setEmailToken(userId: number, type: EmailTokenType, tokenHash: string, expiresAt: Date): Promise<void> {
+  setEmailToken(userId: number, type: EmailTokenType, tokenHash: string, expiresAt: Date): Promise<void> {
     this.tokens.set(userId, { type, hash: tokenHash, expiresAt });
+    return Promise.resolve();
   }
 
-  async consumeEmailVerification(tokenHash: string, now: Date): Promise<boolean> {
+  consumeEmailVerification(tokenHash: string, now: Date): Promise<boolean> {
     for (const [userId, token] of this.tokens) {
       if (token.type !== 'verify' || token.hash !== tokenHash || token.expiresAt <= now) continue;
       const account = this.accounts.get(userId);
       if (account) account.emailVerified = true;
       this.tokens.delete(userId);
-      return true;
+      return Promise.resolve(true);
     }
-    return false;
+    return Promise.resolve(false);
   }
 
-  async consumePasswordReset(tokenHash: string, now: Date, passwordHash: string, passwordSalt: string): Promise<boolean> {
+  consumePasswordReset(tokenHash: string, now: Date, passwordHash: string, passwordSalt: string): Promise<boolean> {
     for (const [userId, token] of this.tokens) {
       if (token.type !== 'reset' || token.hash !== tokenHash || token.expiresAt <= now) continue;
       const account = this.accounts.get(userId);
@@ -53,12 +54,12 @@ class FakeAccountEmailRepository implements AccountEmailRepository {
       }
       this.tokens.delete(userId);
       this.droppedSessionsOf.push(userId);
-      return true;
+      return Promise.resolve(true);
     }
-    return false;
+    return Promise.resolve(false);
   }
 
-  async updateEmail(userId: number, email: string): Promise<AccountRecord> {
+  updateEmail(userId: number, email: string): Promise<AccountRecord> {
     for (const [otherId, account] of this.accounts) {
       if (otherId !== userId && (account.email ?? '').toLowerCase() === email.toLowerCase()) throw new UniqueViolationError();
     }
@@ -66,7 +67,7 @@ class FakeAccountEmailRepository implements AccountEmailRepository {
     if (!account) throw new Error('conta inexistente no fake');
     account.email = email;
     account.emailVerified = false;
-    return account;
+    return Promise.resolve(account);
   }
 }
 
@@ -74,9 +75,9 @@ class FakeEmailSender implements EmailSender {
   readonly sent: { to: string; subject: string; html: string }[] = [];
   outcome = true;
 
-  async send(to: string, subject: string, html: string): Promise<boolean> {
+  send(to: string, subject: string, html: string): Promise<boolean> {
     this.sent.push({ to, subject, html });
-    return this.outcome;
+    return Promise.resolve(this.outcome);
   }
 }
 
@@ -103,7 +104,12 @@ async function makeAccount(id: number, email: string | null, password = 'segredo
 async function setup() {
   const repo = new FakeAccountEmailRepository();
   const mailer = new FakeEmailSender();
-  const service = new AccountEmailService(repo, mailer, { adminUsername: 'ADM', publicGameUrl: 'https://kingdark17.github.io/rpg-legend/' }, () => NOW);
+  const service = new AccountEmailService(
+    repo,
+    mailer,
+    { adminUsername: 'ADM', publicGameUrl: 'https://kingdark17.github.io/rpg-legend/' },
+    () => NOW,
+  );
   const account = await makeAccount(1, 'aria@exemplo.com');
   repo.accounts.set(account.id, account);
   return { repo, mailer, service, account };

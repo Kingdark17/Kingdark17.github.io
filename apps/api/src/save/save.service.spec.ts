@@ -21,24 +21,27 @@ class FakeSaveRepository implements SaveRepository {
     return `${userId}:${slot}`;
   }
 
-  async listSlots(userId: number): Promise<CloudSaveRow[]> {
-    return [...this.slots.entries()]
-      .filter(([key]) => key.startsWith(`${userId}:`))
-      .map(([, row]) => row)
-      .sort((a, b) => a.slot - b.slot);
+  listSlots(userId: number): Promise<CloudSaveRow[]> {
+    return Promise.resolve(
+      [...this.slots.entries()]
+        .filter(([key]) => key.startsWith(`${userId}:`))
+        .map(([, row]) => row)
+        .sort((a, b) => a.slot - b.slot),
+    );
   }
 
-  async getSlot(userId: number, slot: number): Promise<CloudSaveRow | null> {
-    return this.slots.get(this.key(userId, slot)) ?? null;
+  getSlot(userId: number, slot: number): Promise<CloudSaveRow | null> {
+    return Promise.resolve(this.slots.get(this.key(userId, slot)) ?? null);
   }
 
-  async resetSlot(userId: number, slot: number): Promise<void> {
+  resetSlot(userId: number, slot: number): Promise<void> {
     const key = this.key(userId, slot);
     this.slots.delete(key);
     this.history.delete(key);
+    return Promise.resolve();
   }
 
-  async store(userId: number, slot: number, data: unknown, forceHistory: boolean, now: Date): Promise<void> {
+  store(userId: number, slot: number, data: unknown, forceHistory: boolean, now: Date): Promise<void> {
     const key = this.key(userId, slot);
     const current = this.slots.get(key);
     if (current) {
@@ -51,16 +54,17 @@ class FakeSaveRepository implements SaveRepository {
       }
     }
     this.slots.set(key, { slot, data, updatedAt: now });
+    return Promise.resolve();
   }
 
-  async listHistory(userId: number, slot: number): Promise<SaveHistoryEntry[]> {
+  listHistory(userId: number, slot: number): Promise<SaveHistoryEntry[]> {
     const list = this.history.get(this.key(userId, slot)) ?? [];
-    return list.map(({ id, createdAt }) => ({ id, createdAt })).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    return Promise.resolve(list.map(({ id, createdAt }) => ({ id, createdAt })).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()));
   }
 
-  async getHistoryEntry(userId: number, slot: number, id: string): Promise<unknown | null> {
+  getHistoryEntry(userId: number, slot: number, id: string): Promise<unknown> {
     const list = this.history.get(this.key(userId, slot)) ?? [];
-    return list.find((entry) => entry.id === id)?.data ?? null;
+    return Promise.resolve(list.find((entry) => entry.id === id)?.data ?? null);
   }
 }
 
@@ -130,7 +134,9 @@ describe('SaveService.putSave', () => {
 
   it('rejeita backup importado', async () => {
     const { service } = makeService();
-    expect(await service.putSave(USER_ID, { slot: 1, save: makeValidSave(), source: 'imported-backup' })).toEqual({ kind: 'imported-backup-rejected' });
+    expect(await service.putSave(USER_ID, { slot: 1, save: makeValidSave(), source: 'imported-backup' })).toEqual({
+      kind: 'imported-backup-rejected',
+    });
   });
 
   it('rejeita save com formato inválido', async () => {

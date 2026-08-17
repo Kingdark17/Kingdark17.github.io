@@ -31,25 +31,27 @@ class FakeProfileRepository implements ProfileRepository {
   users = new Map<number, AccountRecord>();
   saves = new Map<string, unknown>();
 
-  async updateProfile(userId: number, input: UpdateProfileInput): Promise<AccountRecord> {
+  updateProfile(userId: number, input: UpdateProfileInput): Promise<AccountRecord> {
     const current = this.users.get(userId);
     if (!current) throw new Error('usuário inexistente no fake');
     const updated: AccountRecord = { ...current, avatarUrl: input.avatarUrl, profileFrame: input.frame, nameColor: input.nameColor, pet: input.pet };
     this.users.set(userId, updated);
-    return updated;
+    return Promise.resolve(updated);
   }
 
-  async purchase(userId: number, slot: number, item: ProfileCatalogItem): Promise<ProfilePurchaseOutcome> {
+  purchase(userId: number, slot: number, item: ProfileCatalogItem): Promise<ProfilePurchaseOutcome> {
     const user = this.users.get(userId) ?? null;
     const save = this.saves.get(`${userId}:${slot}`) ?? null;
     const context = user && save ? { cosmetics: cosmeticsFor(user, ADMIN_USERNAME), save } : null;
     const decision = resolvePurchase(context, item);
-    if (decision.kind !== 'purchased') return decision;
+    if (decision.kind !== 'purchased') return Promise.resolve(decision);
+    // `purchased` só sai quando havia contexto, ou seja, quando havia usuário.
+    if (!user) throw new Error('compra aprovada sem usuário no fake');
 
     this.saves.set(`${userId}:${slot}`, decision.save);
-    const updatedUser: AccountRecord = { ...user!, cosmetics: decision.cosmetics };
+    const updatedUser: AccountRecord = { ...user, cosmetics: decision.cosmetics };
     this.users.set(userId, updatedUser);
-    return { kind: 'purchased', account: updatedUser, save: decision.save };
+    return Promise.resolve({ kind: 'purchased', account: updatedUser, save: decision.save });
   }
 }
 

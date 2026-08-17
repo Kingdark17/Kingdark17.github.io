@@ -122,6 +122,7 @@ Tudo isto está comentado no código também, mas aqui fica a lista junta.
 | front (fase 6) | a entrada dos cartões do menu é `@keyframes`, não Motion | medido: ~106 KB de JS na primeira página que qualquer pessoa abre, por um fade de cinco cartões. Ver "Fase 6" |
 | front (fase 6) | socket.io entra por `import()` dentro de `conectar()` | 41 KB que só quem abre sala ou fica de olho no chat precisa. Quem joga sozinho pagava por ele em `/jogo` sem nunca conectar |
 | API (fase 6) | a foto de perfil vira `GET /api/users/:username/avatar`, sem sessão | o original manda base64 dentro do JSON de `/api/friends` e dentro de `state.profiles`, que o relay reemite a cada ação. Ver "Segundo corte" |
+| API (fase 6) | corpo de requisição passa por `comoTexto()` em vez de `String()` | `String({})` é `'[object Object]'`: o original aceitava `{"username": {}}` como nome de conta e `{"room": ['A','B']}` como sala `A,B` |
 
 ### Fase 3 — o que já dá pra jogar
 
@@ -428,23 +429,40 @@ Duas lições concretas:
 Se 50 KB na tela principal do jogo for caro demais, a saída é desistir da
 animação de saída e deixar tudo em CSS — não há meio-termo barato.
 
-### `pnpm lint` na API está vermelho — e é dívida antiga
+### `pnpm lint` — de 1045 problemas a zero
 
-`pnpm lint` na raiz falha em `apps/api`: 120 erros e 20 avisos que o
-autofix não resolve, quase todos `no-base-to-string` (46),
-`require-await` (35) e a família `no-unsafe-*` (55). **Nada disso é da
-fase 6** — os arquivos apontados (`auth/`, `save/`, `social/`, `main.ts`)
-não mudam desde a fase 2, e o `eslint.config` é o do scaffold do Nest,
-intocado desde a fase 0. O preset `recommendedTypeChecked` é bem mais
-severo do que o código portado. `apps/web` e `packages/shared` passam
-limpos.
+`pnpm lint` na raiz nunca tinha passado: `apps/api` acusava 898 erros de
+formatação e 147 de regra. Dívida da fase 2, não da 6 — os arquivos
+apontados não mudavam desde então, e o `eslint.config` é o do scaffold do
+Nest, intocado desde a fase 0. Agora passa limpo, sem nenhum aviso.
 
-**Cuidado ao rodar:** o script de lint da API é `eslint ... --fix` (vem
-assim do scaffold). Rodar `pnpm lint` **reescreve 83 arquivos** de
-`apps/api` na hora, só de formatação — 4 mil linhas de diff que não têm
-nada a ver com o que você estava fazendo. Ou se roda com a árvore limpa
-e se descarta depois (`git checkout -- apps/api`), ou se tira o `--fix`
-do script antes.
+**Primeiro, os 898 de formatação.** O prettier estava no padrão de 80
+colunas, e a API inteira foi escrita em ~150 — a mesma largura de
+`apps/web` e `packages/shared`. Reformatar pra 80 seria 4 mil linhas de
+diff e deixaria a API diferente dos outros dois pacotes; declarar
+`printWidth: 150` (a largura real) reduziu tudo a 24 arquivos e 120
+linhas. Isso também desarma a armadilha do `--fix`: o script de lint da
+API é `eslint ... --fix`, e com a configuração batendo com o código ele
+não tem mais nada pra reescrever.
+
+**Depois, os 147 de regra.** O que cada grupo era, e o que virou:
+
+| Regra | Quantos | O que era, e o conserto |
+|---|---|---|
+| `no-base-to-string` | 46 | `String(body.campo ?? '')` em todo corpo de requisição e pacote de socket. Virou `comoTexto()` (`common/texto.ts`) — ver abaixo, era buraco de verdade |
+| `require-await` | 36 | fakes de teste com `async` sem `await`. Viraram métodos síncronos devolvendo `Promise.resolve` |
+| `no-unsafe-*` | 57 | quase tudo `app.getHttpServer()`, que o Nest declara `any`, e o `body` do supertest. Viraram `servidorDe(app)` (`testing/servidor.ts`) e `corpo<T>(resposta)` |
+| resto | 8 | `Promise<unknown \| null>` redundante, `JSON.parse` sem `as T`, `new Array(20)` que nasce `any[]`, `bootstrap()` sem `.catch` no `main.ts` |
+
+**O `no-base-to-string` escondia um buraco real.** `String({})` devolve
+`'[object Object]'`, com 15 caracteres, todos válidos: um POST com
+`{"username": {}}` criava a conta `[object Object]` em vez de cair na
+validação. `{"room": ['A','B']}` virava a sala `A,B`; `{"room": []}`, a
+sala `""`. `comoTexto()` deixa passar só primitivo — o resto vira o
+padrão e a validação de sempre recusa.
+
+Foi o que o `isUniqueViolation` já tinha mostrado na fase 2: aviso de
+ferramenta que ninguém olha às vezes é bug esperando.
 
 ---
 

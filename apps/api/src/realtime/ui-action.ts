@@ -6,6 +6,7 @@
  */
 
 import { clampInt } from './numeric';
+import { comoTexto } from '../common/texto';
 
 export const UI_ACTIONS = ['shop', 'npc', 'simple', 'event', 'questboard', 'encounter'] as const;
 export type UiAction = (typeof UI_ACTIONS)[number];
@@ -45,9 +46,7 @@ export function isUiAction(value: unknown): value is UiAction {
 }
 
 function plainText(value: unknown, maxLength: number): string {
-  return String(value ?? '')
-    .replace(/[<>]/g, '')
-    .slice(0, maxLength);
+  return comoTexto(value).replace(/[<>]/g, '').slice(0, maxLength);
 }
 
 export function sanitizeUiActionPayload(action: UiAction, raw: unknown): UiActionPayload {
@@ -59,7 +58,7 @@ export function sanitizeUiActionPayload(action: UiAction, raw: unknown): UiActio
   };
 
   if (action === 'simple') {
-    payload.icon = String(source.icon ?? '').slice(0, MAX_ICON);
+    payload.icon = comoTexto(source.icon).slice(0, MAX_ICON);
     payload.title = plainText(source.title, MAX_TITLE);
     payload.text = plainText(source.text, MAX_TEXT);
   }
@@ -69,8 +68,8 @@ export function sanitizeUiActionPayload(action: UiAction, raw: unknown): UiActio
     payload.npc = {
       name: plainText(npc.name || 'NPC', MAX_NPC_NAME),
       role: plainText(npc.role, MAX_NPC_ROLE),
-      service: String(npc.service ?? '').slice(0, MAX_NPC_SERVICE),
-      icon: String(npc.icon ?? '').slice(0, MAX_ICON),
+      service: comoTexto(npc.service).slice(0, MAX_NPC_SERVICE),
+      icon: comoTexto(npc.icon).slice(0, MAX_ICON),
       lines: (Array.isArray(npc.lines) ? npc.lines : []).slice(0, MAX_NPC_LINES).map((line) => plainText(line, MAX_NPC_LINE)),
       serviceUsed: !!npc.serviceUsed,
     };

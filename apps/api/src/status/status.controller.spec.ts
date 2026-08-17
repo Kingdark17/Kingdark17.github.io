@@ -3,6 +3,7 @@ import { Test } from '@nestjs/testing';
 import request from 'supertest';
 
 import { AppModule } from '../app.module';
+import { servidorDe } from '../testing/servidor';
 
 describe('StatusController', () => {
   let app: INestApplication;
@@ -18,14 +19,14 @@ describe('StatusController', () => {
   });
 
   it('/api/account/status diz que o banco não está configurado, sem erro', async () => {
-    const response = await request(app.getHttpServer()).get('/api/account/status');
+    const response = await request(servidorDe(app)).get('/api/account/status');
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ configured: false, connected: false });
   });
 
   it('/health responde 200 mesmo com o banco fora', async () => {
-    const response = await request(app.getHttpServer()).get('/health');
+    const response = await request(servidorDe(app)).get('/health');
 
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({

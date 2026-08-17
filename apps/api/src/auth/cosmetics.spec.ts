@@ -69,7 +69,10 @@ describe('cosmeticsFor', () => {
     expect(owned.colors).toEqual(['#e8d7a5', '#ffffff', 'rainbow']);
     expect(owned.pets).toEqual(['none', 'admin_dragon']);
 
-    const alreadyOwned = cosmeticsFor(makeUser({ username: 'ADM', cosmetics: { frames: ['rgb'], colors: ['rainbow'], pets: ['admin_dragon'] } }), ADMIN_USERNAME);
+    const alreadyOwned = cosmeticsFor(
+      makeUser({ username: 'ADM', cosmetics: { frames: ['rgb'], colors: ['rainbow'], pets: ['admin_dragon'] } }),
+      ADMIN_USERNAME,
+    );
     expect(alreadyOwned).toEqual({ frames: ['rgb'], colors: ['rainbow'], pets: ['admin_dragon'] });
   });
 });

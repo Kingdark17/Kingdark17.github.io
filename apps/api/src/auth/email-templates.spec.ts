@@ -10,12 +10,8 @@ describe('normalizePublicGameUrl', () => {
 
 describe('emailLink', () => {
   it('aponta pro jogo com o token no parâmetro que o cliente lê', () => {
-    expect(emailLink('https://kingdark17.github.io/rpg-legend/', 'verify', 'abc123')).toBe(
-      'https://kingdark17.github.io/rpg-legend/?verify=abc123',
-    );
-    expect(emailLink('https://kingdark17.github.io/rpg-legend', 'reset', 'abc123')).toBe(
-      'https://kingdark17.github.io/rpg-legend/?reset=abc123',
-    );
+    expect(emailLink('https://kingdark17.github.io/rpg-legend/', 'verify', 'abc123')).toBe('https://kingdark17.github.io/rpg-legend/?verify=abc123');
+    expect(emailLink('https://kingdark17.github.io/rpg-legend', 'reset', 'abc123')).toBe('https://kingdark17.github.io/rpg-legend/?reset=abc123');
   });
 
   it('escapa o token', () => {

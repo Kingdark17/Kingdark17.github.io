@@ -13,6 +13,7 @@ import request from 'supertest';
 
 import { AppModule } from './app.module';
 import { MAX_BODY_BYTES, configureApp } from './bootstrap';
+import { servidorDe } from './testing/servidor';
 
 describe('configureApp', () => {
   let app: NestExpressApplication;
@@ -28,14 +29,14 @@ describe('configureApp', () => {
   });
 
   it('libera CORS pra o jogo em outro domínio', async () => {
-    const response = await request(app.getHttpServer()).get('/api/rooms').set('Origin', 'https://kingdark17.github.io');
+    const response = await request(servidorDe(app)).get('/api/rooms').set('Origin', 'https://kingdark17.github.io');
 
     expect(response.status).toBe(200);
     expect(response.headers['access-control-allow-origin']).toBe('*');
   });
 
   it('responde o preflight com os métodos e cabeçalhos que o cliente usa', async () => {
-    const response = await request(app.getHttpServer())
+    const response = await request(servidorDe(app))
       .options('/api/save')
       .set('Origin', 'https://kingdark17.github.io')
       .set('Access-Control-Request-Method', 'PUT');
@@ -46,15 +47,15 @@ describe('configureApp', () => {
   });
 
   it('marca no-store em /api e deixa o resto em paz', async () => {
-    const api = await request(app.getHttpServer()).get('/api/rooms');
+    const api = await request(servidorDe(app)).get('/api/rooms');
     expect(api.headers['cache-control']).toBe('no-store');
 
-    const health = await request(app.getHttpServer()).get('/health');
+    const health = await request(servidorDe(app)).get('/health');
     expect(health.headers['cache-control']).toBeUndefined();
   });
 
   it('aceita corpo grande: foto de perfil em base64 e save completo passam do padrão de 100 KB do Express', async () => {
-    const grande = await request(app.getHttpServer())
+    const grande = await request(servidorDe(app))
       .put('/api/account/profile')
       .send({ avatarUrl: 'x'.repeat(400_000) });
 
@@ -62,7 +63,7 @@ describe('configureApp', () => {
   });
 
   it('mas ainda barra corpo acima do teto do original', async () => {
-    const gigante = await request(app.getHttpServer())
+    const gigante = await request(servidorDe(app))
       .put('/api/account/profile')
       .send({ avatarUrl: 'x'.repeat(MAX_BODY_BYTES + 1_000) });
 
@@ -70,7 +71,7 @@ describe('configureApp', () => {
   });
 
   it('rota que precisa do banco responde 503 sem DATABASE_URL', async () => {
-    const response = await request(app.getHttpServer()).post('/api/account/login').send({ username: 'aria', password: 'segredo123' });
+    const response = await request(servidorDe(app)).post('/api/account/login').send({ username: 'aria', password: 'segredo123' });
 
     expect(response.status).toBe(503);
     expect(response.body).toEqual({ error: 'O banco de dados de contas ainda não foi configurado.' });

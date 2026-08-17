@@ -38,6 +38,7 @@ import { SocialService } from '../social/social.service';
 import { clampInt } from './numeric';
 import { HOST_ROLE, GUEST_ROLE, RoomRegistry, normalizePlayerName, normalizeRoomCode, type Room, type RoomRole } from './room-registry';
 import { isUiAction, sanitizeUiActionPayload } from './ui-action';
+import { comoTexto } from '../common/texto';
 
 const CHAT_ERROR_MESSAGES = {
   'target-not-found': 'Jogador não encontrado.',
@@ -103,7 +104,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
   @SubscribeMessage('auth')
   async handleAuth(@ConnectedSocket() socket: Socket, @MessageBody() body: { token?: unknown }): Promise<void> {
     await this.guard(socket, 'auth', null, async () => {
-      const result = await this.auth.me(String(body?.token ?? ''));
+      const result = await this.auth.me(comoTexto(body?.token));
       if (result.kind !== 'ok') {
         socket.emit('auth-error', {});
         return;
@@ -121,8 +122,8 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     const sender = this.senderOf(socket);
     if (!sender) return;
 
-    const to = String(body?.to ?? '');
-    const tempId = String(body?.tempId ?? '');
+    const to = comoTexto(body?.to);
+    const tempId = comoTexto(body?.tempId);
     try {
       const result = await this.social.sendChatMessage(sender, to, body?.body);
       if (result.kind !== 'ok') {
@@ -148,7 +149,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     if (!sender) return;
 
     try {
-      const resolved = await this.social.resolveInviteTarget(sender.id, String(body?.to ?? ''));
+      const resolved = await this.social.resolveInviteTarget(sender.id, comoTexto(body?.to));
       if (resolved.kind === 'target-not-found') {
         socket.emit('room-invite-error', { message: 'Jogador não encontrado.' });
         return;
@@ -168,7 +169,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
       });
       socket.emit('room-invite-sent', { to: resolved.target.username });
     } catch (err) {
-      this.logger.error(`Erro ao enviar convite de sala (from=${sender.id} to=${String(body?.to ?? '')})`, err as Error);
+      this.logger.error(`Erro ao enviar convite de sala (from=${sender.id} to=${comoTexto(body?.to)})`, err as Error);
       socket.emit('room-invite-error', { message: 'Erro interno ao enviar o convite.' });
     }
   }
@@ -182,7 +183,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     if (!sender) return;
 
     try {
-      const target = await this.social.findUser(String(body?.to ?? ''));
+      const target = await this.social.findUser(comoTexto(body?.to));
       if (!target) return;
       this.online.deliver(target.id, 'room-invite-response', {
         from: sender.username,
@@ -322,9 +323,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     this.relay(seat.room, socket, 'boss-advance', {
       room: seat.room.code,
       role: GUEST_ROLE,
-      bossName: String(body?.bossName || 'o chefe')
-        .replace(/[<>]/g, '')
-        .slice(0, MAX_BOSS_NAME),
+      bossName: (comoTexto(body?.bossName) || 'o chefe').replace(/[<>]/g, '').slice(0, MAX_BOSS_NAME),
     });
   }
 
@@ -353,7 +352,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
   /** `isAdminToken()` do original: token de conta, não a sessão do socket. */
   private async isAdminToken(token: unknown): Promise<boolean> {
-    const result = await this.auth.me(String(token ?? ''));
+    const result = await this.auth.me(comoTexto(token));
     return result.kind === 'ok' && result.user.isAdmin;
   }
 
@@ -370,5 +369,9 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
 function hasBeatenBoss(map: unknown): boolean {
   if (!Array.isArray(map)) return false;
-  return map.some((row) => Array.isArray(row) && row.some((cell) => !!cell && (cell as { type?: unknown; beaten?: unknown }).type === 'boss' && !!(cell as { beaten?: unknown }).beaten));
+  return map.some(
+    (row) =>
+      Array.isArray(row) &&
+      row.some((cell) => !!cell && (cell as { type?: unknown; beaten?: unknown }).type === 'boss' && !!(cell as { beaten?: unknown }).beaten),
+  );
 }

@@ -15,6 +15,7 @@ import { Test } from '@nestjs/testing';
 import { io, type Socket as ClientSocket } from 'socket.io-client';
 
 import { AppModule } from '../app.module';
+import { servidorDe } from '../testing/servidor';
 
 jest.setTimeout(20_000);
 
@@ -45,7 +46,7 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
     await app.listen(0);
     // `getUrl()` pode devolver o literal IPv6 (`[::1]`) no Windows; o
     // endereço do servidor dá a porta direto e evita esse atrito.
-    const address = app.getHttpServer().address() as { port: number };
+    const address = servidorDe(app).address() as { port: number };
     url = `http://127.0.0.1:${address.port}`;
   });
 

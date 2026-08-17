@@ -93,7 +93,7 @@ export class DrizzleSaveRepository implements SaveRepository {
     return rows.map((row) => ({ id: String(row.id), createdAt: row.createdAt }));
   }
 
-  async getHistoryEntry(userId: number, slot: number, id: string): Promise<unknown | null> {
+  async getHistoryEntry(userId: number, slot: number, id: string): Promise<unknown> {
     const rows = await getDb()
       .select({ data: cloudSaveHistory.data })
       .from(cloudSaveHistory)

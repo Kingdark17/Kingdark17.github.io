@@ -30,7 +30,7 @@ export function canonical(value: JsonValue): string {
 }
 
 export function signSave(userId: number, slot: number, data: JsonValue, signingSecret: string): string {
-  const clean: JsonValue = data && typeof data === 'object' ? ({ ...(data as Record<string, JsonValue>) } as JsonValue) : data;
+  const clean: JsonValue = data && typeof data === 'object' ? { ...(data as Record<string, JsonValue>) } : data;
   if (clean && typeof clean === 'object') {
     delete (clean as Record<string, JsonValue>).integrity;
   }

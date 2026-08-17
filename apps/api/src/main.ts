@@ -9,4 +9,10 @@ async function bootstrap() {
   configureApp(app);
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+
+// Sem o `catch`, uma falha ao subir (porta ocupada, por exemplo) virava
+// rejeição não tratada: o processo morria sem dizer o que houve.
+bootstrap().catch((err) => {
+  console.error('Falha ao subir a API:', err);
+  process.exit(1);
+});

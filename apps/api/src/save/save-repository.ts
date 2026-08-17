@@ -27,5 +27,6 @@ export interface SaveRepository {
    */
   store(userId: number, slot: number, data: unknown, forceHistory: boolean, now: Date): Promise<void>;
   listHistory(userId: number, slot: number): Promise<SaveHistoryEntry[]>;
-  getHistoryEntry(userId: number, slot: number, id: string): Promise<unknown | null>;
+  /** `null` quando a versão não existe — `unknown` já cobre isso, e `unknown | null` seria redundante. */
+  getHistoryEntry(userId: number, slot: number, id: string): Promise<unknown>;
 }

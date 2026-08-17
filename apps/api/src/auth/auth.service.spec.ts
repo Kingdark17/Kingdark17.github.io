@@ -7,15 +7,15 @@ class FakeUsersRepository implements UsersRepository {
   private byId = new Map<number, AccountRecord>();
   private nextId = 1;
 
-  async findByUsernameOrEmail(identifier: string): Promise<AccountRecord | null> {
+  findByUsernameOrEmail(identifier: string): Promise<AccountRecord | null> {
     const needle = identifier.toLowerCase();
     for (const user of this.byId.values()) {
-      if (user.username.toLowerCase() === needle || user.email?.toLowerCase() === needle) return user;
+      if (user.username.toLowerCase() === needle || user.email?.toLowerCase() === needle) return Promise.resolve(user);
     }
-    return null;
+    return Promise.resolve(null);
   }
 
-  async create(input: CreateUserInput): Promise<AccountRecord> {
+  create(input: CreateUserInput): Promise<AccountRecord> {
     for (const user of this.byId.values()) {
       if (user.username.toLowerCase() === input.username.toLowerCase() || user.email?.toLowerCase() === input.email.toLowerCase()) {
         throw new UniqueViolationError();
@@ -36,7 +36,7 @@ class FakeUsersRepository implements UsersRepository {
       passwordSalt: input.passwordSalt,
     };
     this.byId.set(record.id, record);
-    return record;
+    return Promise.resolve(record);
   }
 
   findById(id: number): AccountRecord | undefined {
@@ -49,18 +49,20 @@ class FakeSessionsRepository implements SessionsRepository {
 
   constructor(private readonly users: FakeUsersRepository) {}
 
-  async create(input: CreateSessionInput): Promise<void> {
+  create(input: CreateSessionInput): Promise<void> {
     this.sessions.set(input.tokenHash, { userId: input.userId, expiresAt: input.expiresAt });
+    return Promise.resolve();
   }
 
-  async deleteByTokenHash(tokenHash: string): Promise<void> {
+  deleteByTokenHash(tokenHash: string): Promise<void> {
     this.sessions.delete(tokenHash);
+    return Promise.resolve();
   }
 
-  async findUserByTokenHash(tokenHash: string, now: Date): Promise<AccountRecord | null> {
+  findUserByTokenHash(tokenHash: string, now: Date): Promise<AccountRecord | null> {
     const session = this.sessions.get(tokenHash);
-    if (!session || session.expiresAt <= now) return null;
-    return this.users.findById(session.userId) ?? null;
+    if (!session || session.expiresAt <= now) return Promise.resolve(null);
+    return Promise.resolve(this.users.findById(session.userId) ?? null);
   }
 }
 
@@ -70,8 +72,9 @@ const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 class FakeVerificationIssuer {
   readonly issuedFor: { id: number; email: string | null }[] = [];
 
-  async issueVerification(user: { id: number; email: string | null }): Promise<void> {
+  issueVerification(user: { id: number; email: string | null }): Promise<void> {
     this.issuedFor.push({ id: user.id, email: user.email });
+    return Promise.resolve();
   }
 }
 
@@ -101,7 +104,7 @@ describe('AuthService.register', () => {
     const result = await service.register({ username: 'Jogador1', email: 'jogador1@example.com', password: 'senha123' });
 
     expect(result.kind).toBe('registered');
-    expect(verification.issuedFor).toEqual([{ id: expect.any(Number), email: 'jogador1@example.com' }]);
+    expect(verification.issuedFor).toEqual([{ id: expect.any(Number) as unknown, email: 'jogador1@example.com' }]);
   });
 
   it('não dispara confirmação quando o cadastro é recusado', async () => {

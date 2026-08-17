@@ -12,6 +12,7 @@
 import { isValidSave, isValidSlot, isValidTransition, MAX_SLOTS, type SaveData } from '../auth/validation';
 import { signSave, validSignature, type JsonValue } from '../auth/save-signature';
 import type { SaveRepository } from './save-repository';
+import { comoTexto } from '../common/texto';
 
 export interface CharacterSummary {
   slot: number;
@@ -40,7 +41,8 @@ export type VerifyResult = { kind: 'invalid-slot' } | { kind: 'ok'; valid: boole
 
 export type HistoryResult = { kind: 'invalid-slot' } | { kind: 'ok'; versions: { id: string; createdAt: Date }[] };
 
-export type RestoreResult = { kind: 'invalid-slot' } | { kind: 'invalid-version' } | { kind: 'not-found' } | { kind: 'ok'; save: unknown; signature: string };
+export type RestoreResult =
+  { kind: 'invalid-slot' } | { kind: 'invalid-version' } | { kind: 'not-found' } | { kind: 'ok'; save: unknown; signature: string };
 
 function heroFieldsOf(data: unknown): Omit<CharacterSummary, 'slot' | 'updatedAt'> {
   const save = data && typeof data === 'object' ? (data as Record<string, unknown>) : {};
@@ -109,7 +111,8 @@ export class SaveService {
   verifySave(userId: number, input: { slot: unknown; save: unknown; signature?: unknown }): VerifyResult {
     const slot = Number(input.slot);
     if (!isValidSlot(slot)) return { kind: 'invalid-slot' };
-    const valid = isValidSave(input.save) && validSignature(userId, slot, input.save as JsonValue, input.signature as string | undefined, this.signingSecret);
+    const valid =
+      isValidSave(input.save) && validSignature(userId, slot, input.save as JsonValue, input.signature as string | undefined, this.signingSecret);
     return { kind: 'ok', valid };
   }
 
@@ -123,7 +126,7 @@ export class SaveService {
   async restoreSave(userId: number, input: { slot: unknown; id: unknown }): Promise<RestoreResult> {
     const slot = Number(input.slot);
     if (!isValidSlot(slot)) return { kind: 'invalid-slot' };
-    const id = String(input.id || '');
+    const id = comoTexto(input.id);
     if (!/^\d+$/.test(id)) return { kind: 'invalid-version' };
     const chosen = await this.repo.getHistoryEntry(userId, slot, id);
     if (chosen === null) return { kind: 'not-found' };

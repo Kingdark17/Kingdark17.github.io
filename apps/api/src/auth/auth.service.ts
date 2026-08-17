@@ -18,7 +18,7 @@
 import { generateSalt, hashPassword, verifyPassword } from './password';
 import { generateSessionToken, hashToken } from './tokens';
 import { safeUser, type SafeUser } from './cosmetics';
-import { UniqueViolationError, type UsersRepository } from './users-repository';
+import { UniqueViolationError, type AccountRecord, type UsersRepository } from './users-repository';
 import type { VerificationIssuer } from './account-email.service';
 import type { SessionsRepository } from './sessions-repository';
 
@@ -69,7 +69,7 @@ export class AuthService {
     const salt = generateSalt();
     const passwordHash = await hashPassword(password, salt);
 
-    let created;
+    let created: AccountRecord;
     try {
       created = await this.users.create({ username, email, passwordHash, passwordSalt: salt });
     } catch (err) {

@@ -23,7 +23,21 @@
  */
 
 import { sql } from 'drizzle-orm';
-import { bigint, bigserial, boolean, char, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import {
+  bigint,
+  bigserial,
+  boolean,
+  char,
+  index,
+  integer,
+  jsonb,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uniqueIndex,
+  varchar,
+} from 'drizzle-orm/pg-core';
 
 export const users = pgTable(
   'users',
@@ -39,7 +53,9 @@ export const users = pgTable(
     nameColor: varchar('name_color', { length: 16 }).notNull().default('#e8d7a5'),
     pet: varchar('pet', { length: 32 }).notNull().default('none'),
     /** `{ frames: string[], colors: string[], pets: string[] }` — ver `cosmeticsFor()` em accounts.js. */
-    cosmetics: jsonb('cosmetics').notNull().default({ frames: ['none'], colors: ['#e8d7a5', '#ffffff'], pets: ['none'] }),
+    cosmetics: jsonb('cosmetics')
+      .notNull()
+      .default({ frames: ['none'], colors: ['#e8d7a5', '#ffffff'], pets: ['none'] }),
     emailVerified: boolean('email_verified').notNull().default(false),
     emailVerificationTokenHash: char('email_verification_token_hash', { length: 64 }),
     emailVerificationExpiresAt: timestamp('email_verification_expires_at', { withTimezone: true }),

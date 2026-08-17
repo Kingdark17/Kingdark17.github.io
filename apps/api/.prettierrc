@@ -1,4 +1,6 @@
 {
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "_comentario": "printWidth 150 é a largura em que a API foi escrita, e a mesma de apps/web e packages/shared. O padrão do prettier (80) veio do scaffold do Nest e nunca foi respeitado: reformatar pra ele seria 4 mil linhas de diff e deixaria a API diferente dos outros dois pacotes.",
+  "printWidth": 150
 }
