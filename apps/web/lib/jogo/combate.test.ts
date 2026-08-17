@@ -295,3 +295,54 @@ describe('bônus de pet', () => {
     expect(iniciarEncontro(comSalaDeMonstro()).pet).toBeNull();
   });
 });
+
+describe('som e números flutuantes', () => {
+  /** Criatura resistente: o teste é sobre o som do golpe, não sobre matá-la. */
+  function lutaLonga() {
+    return comecarCombate(iniciarEncontro(comSalaDeMonstro({ monsters: [monstro({ hp: 900, maxHp: 900 })] })));
+  }
+
+  it('acerto, crítico e erro têm som próprio', () => {
+    const combate = lutaLonga();
+
+    // 20 no d20 é crítico; 1 erra.
+    expect(atacar(combate, 20, 'normal', NUNCA).som).toBe('crit');
+    expect(atacar(combate, 1, 'normal', NUNCA).som).toBe('miss');
+  });
+
+  it('vencer troca o som do golpe pelo da vitória', () => {
+    // A criatura padrão tem 40 de vida e não sobrevive ao crítico.
+    expect(atacar(comecarCombate(iniciarEncontro(comSalaDeMonstro())), 20, 'normal', NUNCA).som).toBe('victory');
+  });
+
+  it('o golpe vira número na tela, e o erro não', () => {
+    const combate = lutaLonga();
+
+    const acerto = atacar(combate, 20, 'normal', NUNCA);
+    const noInimigo = acerto.flutuantes.filter((numero) => numero.alvo === 'inimigo');
+    expect(noInimigo).toHaveLength(1);
+    expect(noInimigo[0].texto).toContain('CRÍTICO!');
+
+    expect(atacar(combate, 1, 'normal', NUNCA).flutuantes.filter((numero) => numero.alvo === 'inimigo')).toHaveLength(0);
+  });
+
+  /**
+   * O `{ ...combate }` de cada turno carregaria o som e os números do
+   * turno anterior se alguma ação esquecesse de defini-los. Um golpe
+   * repetiria o "crítico" do anterior sem ninguém notar no log.
+   */
+  it('cada ação começa do zero, sem herdar a anterior', () => {
+    const critico = atacar(lutaLonga(), 20, 'normal', NUNCA);
+    expect(critico.som).toBe('crit');
+
+    const depois = comecarCombate(critico);
+    expect(depois.som).toBeNull();
+    expect(depois.flutuantes).toEqual([]);
+  });
+
+  it('a criatura acertando o herói também deixa número na tela', () => {
+    const turno = atacar(lutaLonga(), 10, 'normal', NUNCA);
+
+    expect(turno.flutuantes.some((numero) => numero.alvo === 'heroi')).toBe(true);
+  });
+});

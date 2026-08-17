@@ -1,5 +1,10 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
 import { ATTR_KEYS, ATTR_LABELS, type Hero } from '@rpg-legend/shared';
 
+import { tocar } from '@/lib/som/efeitos';
 import styles from './jogo.module.css';
 
 function porcentagem(atual: number, maximo: number): string {
@@ -7,8 +12,28 @@ function porcentagem(atual: number, maximo: number): string {
 }
 
 export function PainelHeroi({ hero }: { hero: Hero }) {
+  const [subiu, setSubiu] = useState(false);
+  const nivelAnterior = useRef(hero.level);
+
+  // O painel percebe o nível novo sozinho, como o `renderHero()` do
+  // cliente antigo: subir de nível acontece no combate, na mochila e no
+  // painel ADM, e nenhum dos três precisa saber que existe uma piscada.
+  useEffect(() => {
+    if (hero.level > nivelAnterior.current) {
+      setSubiu(true);
+      tocar('levelup');
+    }
+    nivelAnterior.current = hero.level;
+  }, [hero.level]);
+
   return (
-    <aside className={styles.painel}>
+    <aside
+      className={styles.painel}
+      data-subiu-de-nivel={subiu || undefined}
+      onAnimationEnd={(evento) => {
+        if (evento.currentTarget === evento.target) setSubiu(false);
+      }}
+    >
       <h2 className={styles.nomeHeroi}>{hero.name}</h2>
       <p className={styles.classeHeroi}>
         {hero.raceIcon} {hero.race} · {hero.classIcon} {hero.className} · nível {hero.level}

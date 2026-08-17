@@ -19,7 +19,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 0 — monorepo | pronta |
 | 1 — engine em `packages/shared` | pronta (326 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
-| 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM e multiplayer co-op |
+| 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
 | 4 — paperdoll PixiJS | não começou |
 | 5 — **Neon → Supabase** | não começou — **reafirmado pelo usuário em 2026-08-13: fazer assim que a migração terminar** |
 | 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
@@ -186,6 +186,54 @@ está como ele deixou.
 
 Consequência aceita: progresso ganho em co-op (ouro, XP, item) não
 sobrevive à sessão para o convidado.
+
+### A camada sensorial ficou pra trás na fase 3 (corrigido em 2026-08-17)
+
+Estas notas diziam "fase 3 pronta" com uma lista de telas — e a lista não
+mencionava som nenhum, porque **três módulos do cliente antigo nunca
+foram portados**. Ninguém percebeu porque nada disso aparece em teste e
+nada quebra quando falta: o jogo simplesmente ficou mudo e sem descrever
+as salas.
+
+| Módulo antigo | Linhas | Foi pra onde |
+|---|---|---|
+| `js/effects.js` | 80 | `lib/som/efeitos.ts` (som) + CSS e React (número flutuante, tremida, piscada de nível) |
+| `js/narrator.js` | 70 | `lib/jogo/narrador.ts` |
+| `js/music.js` | 45 | `lib/som/musica.ts` |
+
+**Custo medido em `/jogo`: 584 KB → 593 KB.** A música entra por
+`import()` porque não toca antes do primeiro gesto do jogador.
+
+Quatro decisões que valem ficar ditas:
+
+- **Um `AudioContext`, não dois.** `effects.js` e `music.js` abriam cada
+  um o seu, com volume e estado de suspensão separados — dava pra
+  destravar a música no primeiro clique e os efeitos continuarem mudos.
+  Agora tudo passa por um ganho mestre só, e por isso **o controle de
+  volume também vale pros efeitos**; no original ele só mexia na música.
+- **Volume e liga/desliga saíram do save.** Ver `lib/som/preferencia.ts`:
+  eram campos do progresso, e o `soundOn` ainda viajava no relay do
+  co-op, sincronizando o botão de som de um jogador com o do outro. É
+  preferência do aparelho, e o save novo é assinado e conferido contra
+  trapaça — pagar validação por um controle de volume seria caro pelo
+  motivo errado.
+- **A frase de ambiente da sala é derivada, não guardada.** O original
+  sorteava e gravava em `cell.ambientLine` pra a sala não trocar de cara
+  entre visitas. Aqui ela sai da posição da sala pelo `seededRng`: mesmo
+  efeito, sem campo novo dentro do save nem no que trafega no co-op — e
+  os dois jogadores leem a mesma frase de graça.
+- **Som e números flutuantes são decididos em `lib/jogo/combate.ts`,** ao
+  lado do `dado`, não na tela. É lá que se sabe se o golpe foi crítico;
+  deduzir isso do log seria ler texto pra descobrir o que a regra já
+  sabia. Isso traz junto uma armadilha, e ela tem teste: como todo turno
+  é `{ ...combate }`, **toda ação precisa definir o seu `som`** — senão
+  um golpe repete o "crítico" do anterior sem aparecer no log.
+
+**Um defeito do original que não portei:** `js/pets.js:49` chama
+`playSfx('heal')`, e `heal` não existe na tabela de efeitos do
+`effects.js` — o som de fazer carinho no bichinho nunca tocou. Não
+inventei um: é design de som, não conserto de código. Fica anotado pra
+você decidir.
 
 ### Fase 3 — concluída
 

@@ -27,7 +27,8 @@ import { useRef, useState } from 'react';
 
 import { heroPowers, powerManaCost, type CombatMonsterView, type Power } from '@rpg-legend/shared';
 
-import { atacar, comecarCombate, fugir, inimigosRestantes, monstroAtual, usarPoder, type Combate } from '@/lib/jogo/combate';
+import { atacar, comecarCombate, fugir, inimigosRestantes, monstroAtual, usarPoder, type Combate, type Flutuante } from '@/lib/jogo/combate';
+import { tocar } from '@/lib/som/efeitos';
 import styles from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
 
@@ -45,6 +46,16 @@ const RITMO = { duration: 0.18, ease: 'easeOut' } as const;
 interface LinhaDoLog {
   id: number;
   texto: string;
+}
+
+/**
+ * Número que sobe e some. Ganha id próprio pelo mesmo motivo do log — e
+ * some sozinho quando a animação acaba (`onAnimationEnd`), sem
+ * `setTimeout`: quem sabe a hora certa é a animação, não um relógio
+ * paralelo que erra quando a aba fica em segundo plano.
+ */
+interface NumeroNaTela extends Flutuante {
+  id: number;
 }
 
 const ROTULOS_DE_STATUS: Record<string, string> = {
@@ -76,6 +87,8 @@ interface Props {
 
 export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
   const [historico, setHistorico] = useState<LinhaDoLog[]>(() => combate.log.map((texto, indice) => ({ id: indice, texto })));
+  const [naTela, setNaTela] = useState<NumeroNaTela[]>([]);
+  const [tremida, setTremida] = useState(false);
   const proximoId = useRef(combate.log.length);
 
   const monstro = monstroAtual(combate.estado);
@@ -88,6 +101,17 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
     // atualizador roda duas vezes e a mesma linha ganharia ids diferentes.
     const novas = proximo.log.map((texto) => ({ id: proximoId.current++, texto }));
     setHistorico((atual) => [...atual, ...novas].slice(-LINHAS_DO_LOG));
+
+    const numeros = proximo.flutuantes.map((flutuante) => ({ ...flutuante, id: proximoId.current++ }));
+    setNaTela((atual) => [...atual, ...numeros]);
+    // A tremida se apaga sozinha no fim da animação (ver `onAnimationEnd`
+    // na seção), que é o equivalente React do `classList.remove` + reflow
+    // que o cliente antigo fazia à mão.
+    if (numeros.some((numero) => numero.alvo === 'heroi')) setTremida(true);
+
+    // Aqui e não num efeito: dois acertos seguidos têm o mesmo `som`, e
+    // um efeito que observa o valor não tocaria o segundo.
+    if (proximo.som) tocar(proximo.som);
     onCombate(proximo);
   }
 
@@ -97,7 +121,28 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
   if (!monstro && !acabou) return <p className={styles.erro}>A sala está vazia.</p>;
 
   return (
-    <section className={styles.combate}>
+    <section
+      className={styles.combate}
+      data-tremendo={tremida || undefined}
+      onAnimationEnd={(evento) => {
+        if (evento.currentTarget === evento.target) setTremida(false);
+      }}
+    >
+      {/* Os números do golpe. Ficam sobre a cena inteira, como o
+          `#combatScene` do cliente antigo, e cada um se remove quando a
+          própria animação termina. */}
+      <div className={styles.numerosFlutuantes} aria-hidden>
+        {naTela.map((numero) => (
+          <span
+            key={numero.id}
+            className={`${styles.numeroFlutuante} ${numero.tom === 'critico' ? styles.critico : ''} ${numero.alvo === 'heroi' ? styles.noHeroi : ''}`}
+            onAnimationEnd={() => setNaTela((atual) => atual.filter((outro) => outro.id !== numero.id))}
+          >
+            {numero.texto}
+          </span>
+        ))}
+      </div>
+
       {monstro && !acabou && (
         <div className={`${styles.cartaInimigo} ${monstro.isBoss ? styles.cartaChefe : ''}`}>
           <span className={styles.iconeInimigo} aria-hidden>

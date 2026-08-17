@@ -29,6 +29,7 @@ import {
   type Rng,
 } from '@rpg-legend/shared';
 
+import type { Efeito } from '@/lib/som/efeitos';
 import type { Adm } from './adm';
 import { iniciarEncontro, type Combate } from './combate';
 import { abrirDialogo, type Dialogo } from './dialogo';
@@ -77,6 +78,13 @@ export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;
   aviso: Aviso | null;
   tela: TelaAberta | null;
+  /**
+   * Som da entrada nesta sala. Opcional porque a maioria das salas não tem
+   * um — quem chama toca o passo comum quando vem vazio. Fica aqui pelo
+   * mesmo motivo do `aviso`: é a sala que sabe se abriu um baú de ouro ou
+   * uma porta de loja, e a tela não tem por que redescobrir isso.
+   */
+  som?: Efeito;
   /** Etapa dos Primeiros Passos concluída agora, pra tela mostrar o aviso curto. */
   recado: Recado | null;
 }
@@ -165,6 +173,7 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResolucaoDaSala {
         estado: dentro,
         aviso: aviso('🌟', 'Portão da Masmorra', `Você atravessa o portão e entra na masmorra. Andar ${dentro.floor}.`),
         tela: null,
+        som: 'door',
       };
     }
     case 'tavern': {
@@ -173,12 +182,13 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResolucaoDaSala {
         estado: { ...estado, hero: descanso.hero, party: descanso.party },
         aviso: aviso('🍺', 'Taverna', 'Você descansa por uma noite. Vida e mana totalmente restauradas.'),
         tela: null,
+        som: 'door',
       };
     }
     case 'shop':
-      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'shop', rng) } };
+      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'shop', rng) }, som: 'door' };
     case 'blacksmith':
-      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'blacksmith', rng) } };
+      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'blacksmith', rng) }, som: 'door' };
     case 'questboard':
       return { estado, aviso: null, tela: { tipo: 'missoes', quadro: abrirQuadro(estado, rng) } };
     case 'npc':
@@ -208,6 +218,7 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): Reso
         estado: voltarParaCidade(estado),
         aviso: aviso('🚪', 'De Volta à Cidade', 'Você sobe o caminho iluminado e retorna à cidade.'),
         tela: null,
+        som: 'door',
       };
     case 'npc':
       return abrirConversa(estado);
@@ -231,6 +242,7 @@ function descer(estado: EstadoNaMasmorra, rng: Rng): ResolucaoDaSala {
     estado: resultado.estado,
     aviso: aviso('⬇️', 'Escadas', `Você desce mais fundo na masmorra. Andar ${resultado.estado.floor}. O ar fica mais pesado…`),
     tela: null,
+    som: 'door',
   };
 }
 
@@ -270,6 +282,7 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng, pet: 
       estado: substituirCelulaAtual({ ...estado, hero: { ...estado.hero, gold: estado.hero.gold + ouro } }, aberto),
       aviso: aviso('🧰', 'Baú Encontrado', `Você encontra ${ouro} moedas de ouro dentro do baú.`),
       tela: null,
+      som: 'gold',
     };
   }
 
@@ -281,6 +294,7 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng, pet: 
     ),
     aviso: aviso('🧰', 'Baú Encontrado', `<b>${displayName(item)}</b> foi adicionado à sua mochila.`),
     tela: null,
+    som: 'buy',
   };
 }
 

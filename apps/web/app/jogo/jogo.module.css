@@ -108,6 +108,140 @@
   margin: 0 0 1rem;
 }
 
+.linhaDaCena {
+  margin: 0 0 0.5rem;
+}
+
+/* ---- efeitos de combate (portados de css/animations.css) ---- */
+
+.painel[data-subiu-de-nivel] {
+  animation: piscadaDeNivel 0.9s ease-out;
+}
+
+@keyframes piscadaDeNivel {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(232, 198, 90, 0);
+  }
+  30% {
+    box-shadow: 0 0 26px rgba(232, 198, 90, 0.85);
+  }
+}
+
+
+.numerosFlutuantes {
+  height: 0;
+  pointer-events: none;
+  position: relative;
+  z-index: 30;
+}
+
+.numeroFlutuante {
+  animation: sobeESome 1s ease-out forwards;
+  color: #ff6b6b;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  left: 50%;
+  position: absolute;
+  top: 2.5rem;
+  white-space: nowrap;
+}
+
+.numeroFlutuante.critico {
+  color: #ffd35c;
+  font-size: 1.06rem;
+}
+
+/* O golpe que o herói toma sobe do outro lado, pra não empilhar com o dele. */
+.numeroFlutuante.noHeroi {
+  color: #ff9f6b;
+  left: 25%;
+  top: 4.5rem;
+}
+
+@keyframes sobeESome {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-46px);
+  }
+}
+
+.combate[data-tremendo] {
+  animation: tremida 0.3s ease-in-out;
+}
+
+@keyframes tremida {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+/* Quem pediu menos movimento no sistema continua vendo o número, parado. */
+@media (prefers-reduced-motion: reduce) {
+  .numeroFlutuante {
+    animation-duration: 1s;
+    animation-name: soSome;
+  }
+
+  .combate[data-tremendo] {
+    animation: none;
+  }
+}
+
+@keyframes soSome {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.controleDeSom {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.volume {
+  accent-color: var(--gold);
+  max-width: 6rem;
+}
+
+.volume:disabled {
+  opacity: 0.4;
+}
+
+/* Mesmo tratamento do `.scene-hints` do cliente antigo: monoespaçada e
+   miúda, pra a lista de portas ler como legenda e não competir com a
+   descrição da sala. */
+.pistasDasPortas {
+  color: var(--parchment-dim);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  margin: 0;
+}
+
 .grade {
   display: grid;
   gap: 0.3rem;

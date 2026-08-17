@@ -24,16 +24,22 @@ import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { apresentacaoDe } from '@/lib/jogo/apresentacao';
-import { andar, celulaAtual, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
+import { andar, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
 import { abrirAdm } from '@/lib/jogo/adm';
 import { aplicarRemoto, instantaneoDaSala, type CosmeticosDoJogador } from '@/lib/jogo/coop';
 import { abrirMochila } from '@/lib/jogo/mochila';
+import { narrar } from '@/lib/jogo/narrador';
+import { monstroAtual } from '@/lib/jogo/combate';
+import { tocar } from '@/lib/som/efeitos';
+import { useTrilha } from '@/lib/som/use-trilha';
+import type { Tema } from '@/lib/som/musica';
 import { marcar, type Recado } from '@/lib/jogo/tutorial';
 import { abrirAventura, assinar, instantanea, mandarEstado, mandarPerfil, PAPEL_ANFITRIAO, travarParceiro } from '@/lib/rede/sala';
 import { useSala } from '@/lib/rede/use-sala';
 import type { Combate } from '@/lib/jogo/combate';
 import { BichoDeEstimacao } from './bicho-de-estimacao';
+import { ControleDeSom } from './controle-de-som';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
 import { PainelHeroi } from './painel-heroi';
@@ -99,6 +105,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const abriu = useRef(false);
   const cosmeticos = useRef<CosmeticosDoJogador | null>(null);
   const ultimoRemoto = useRef<Record<string, unknown> | null>(null);
+
+  useTrilha(temaDaCena(estado, tela));
 
   // Sem token o carregamento já rejeita sozinho (ver `chamarApi`).
   useEffect(() => {
@@ -240,6 +248,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     // de dentro de `interagir`, que sabe em que sala o jogador caiu.
     const passo = marcar(movido, 'move');
     const resultado = interagir(passo.estado, undefined, pet);
+
+    // Sala sem som próprio soa como passo, que é o que o cliente antigo
+    // tocava em toda caminhada.
+    tocar(resultado.som ?? 'step');
 
     registrarMudanca(resultado.estado, resultado.aviso);
     setRecado(resultado.recado ?? passo.recado);
@@ -422,7 +434,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   }
 
   const visual = apresentacaoDe(estado);
-  const aqui = celulaAtual(estado);
+  const narracao = narrar(estado);
   const alvoDaPergunta = perguntando ? celulaEm(estado, vizinhaEm(estado, perguntando) ?? estado.pos) : null;
 
   return (
@@ -431,9 +443,17 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
 
       <section>
         <h1 className={styles.local}>{visual.lugar}</h1>
-        <p className={styles.descricaoLocal}>
-          <TextoDoJogo>{aqui ? visual.descricao(aqui) : ''}</TextoDoJogo>
-        </p>
+        {narracao && (
+          <div className={styles.descricaoLocal}>
+            <p className={styles.linhaDaCena}>{narracao.ambiente}</p>
+            {narracao.conteudo && (
+              <p className={styles.linhaDaCena}>
+                <TextoDoJogo>{narracao.conteudo}</TextoDoJogo>
+              </p>
+            )}
+            <p className={styles.pistasDasPortas}>{narracao.portas.join(' ')}</p>
+          </div>
+        )}
 
         <Mapa
           grade={estado.map}
@@ -505,6 +525,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             📖 Guia
           </button>
 
+          <ControleDeSom />
+
           {admin && (
             <button type="button" className={styles.botao} onClick={() => setTela({ tipo: 'adm', adm: abrirAdm(estado) })}>
               🛠️ ADM
@@ -540,6 +562,17 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
       {enfeites}
     </div>
   );
+}
+
+/**
+ * Qual trilha combina com o que está na tela. Enquanto o save não chega
+ * (`estado` nulo) toca o tema de menu, igual ao cliente antigo fora do
+ * jogo.
+ */
+function temaDaCena(estado: EstadoDoJogo | null, tela: TelaAberta | null): Tema {
+  if (!estado) return 'menu';
+  if (tela?.tipo === 'combate') return monstroAtual(estado)?.isBoss ? 'boss' : 'combat';
+  return estado.mapMode === 'dungeon' ? 'dungeon' : 'city';
 }
 
 function avisoDoFim(final: Combate): Aviso {

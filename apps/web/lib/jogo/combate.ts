@@ -52,6 +52,7 @@ import {
   type Rng,
 } from '@rpg-legend/shared';
 
+import type { Efeito } from '@/lib/som/efeitos';
 import {
   avancarAndar,
   celulaAtual,
@@ -79,6 +80,29 @@ export interface Combate {
   loot: Item | null;
   /** Pet cosmético da conta, pelos bônus de crítico/esquiva/cura/mana. */
   pet: PetId | null;
+  /**
+   * Som da última ação, pra tela tocar. Decidido aqui porque é aqui que se
+   * sabe se o golpe foi crítico ou se o herói caiu — deduzir isso do log
+   * na tela seria ler texto pra descobrir o que a regra já sabia.
+   *
+   * Segue a disciplina do `dado`: **toda ação define o seu**, senão o
+   * `{ ...combate }` carregaria o som do turno anterior.
+   */
+  som: Efeito | null;
+  /**
+   * Números que sobem e somem na tela — o `floatText` de `js/effects.js`.
+   * Lista, e não um só, porque um turno produz mais de um: seu golpe e o
+   * troco da criatura acontecem na mesma ação. Zera a cada ação, igual ao
+   * `log`.
+   */
+  flutuantes: Flutuante[];
+}
+
+export interface Flutuante {
+  texto: string;
+  tom: 'dano' | 'critico';
+  /** Sobre quem o número aparece. */
+  alvo: 'inimigo' | 'heroi';
 }
 
 const CHANCE_DE_LOOT_NORMAL = 0.25;
@@ -148,7 +172,7 @@ export function iniciarEncontro(estado: EstadoNaMasmorra, pet: PetId | null = nu
       ? `Um grupo de ${restantes} criaturas aparece! O que você faz?`
       : `${monstro.name} aparece! O que você faz?`;
 
-  return { estado, fase: 'encontro', log: [abertura], dado: null, loot: null, pet };
+  return { estado, fase: 'encontro', log: [abertura], dado: null, loot: null, pet, som: null, flutuantes: [] };
 }
 
 /**
@@ -176,10 +200,18 @@ export function comecarCombate(combate: Combate): Combate {
     estado: comMonstro({ ...estado, hero }, freshCombatMonster(monstro)),
     fase: 'combate',
     log,
+    som: null,
+    flutuantes: [],
   };
 }
 
 // ---------- ações do jogador ----------
+
+/** Acerto normal, crítico e erro têm som próprio; esquiva do monstro conta como erro. */
+function somDoGolpe(acertou: boolean, critico: boolean | undefined): Efeito {
+  if (!acertou) return 'miss';
+  return critico ? 'crit' : 'hit';
+}
 
 export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng: Rng = defaultRng): Combate {
   const estado = exigirMasmorra(combate);
@@ -195,7 +227,7 @@ export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng:
 
   if (ataque.outcome === 'no_mana') {
     // Turno não passa: o original só avisa e devolve o controle.
-    return { ...combate, estado: { ...estado, hero: veneno.hero }, dado: roll, log: ['Mana insuficiente. Use o ataque físico.'] };
+    return { ...combate, estado: { ...estado, hero: veneno.hero }, dado: roll, log: ['Mana insuficiente. Use o ataque físico.'], som: null, flutuantes: [] };
   }
 
   if (ataque.outcome === 'hit') {
@@ -214,6 +246,11 @@ export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng:
     estado: comMonstro({ ...estado, hero: ataque.hero }, ataque.monster),
     dado: roll,
     log,
+    som: somDoGolpe(ataque.outcome === 'hit', ataque.isCrit),
+    flutuantes:
+      ataque.outcome === 'hit'
+        ? [{ texto: `${ataque.isCrit ? 'CRÍTICO! ' : ''}-${ataque.damage}`, tom: ataque.isCrit ? 'critico' : 'dano', alvo: 'inimigo' }]
+        : [],
   };
 
   if (ataque.monsterDefeated) return derrotarMonstro(depois, monstro, rng);
@@ -238,7 +275,7 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
   });
 
   if (uso.outcome === 'no_mana') {
-    return { ...combate, estado: { ...estado, hero: veneno.hero }, log: [`Mana insuficiente para usar ${poder.name}.`] };
+    return { ...combate, estado: { ...estado, hero: veneno.hero }, log: [`Mana insuficiente para usar ${poder.name}.`], som: null, flutuantes: [] };
   }
 
   if (uso.outcome === 'damage') log.push(`Você usa ${poder.name} e causa ${uso.damage} de dano!`);
@@ -250,6 +287,9 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
     ...combate,
     estado: comMonstro({ ...estado, hero: uso.hero, party: uso.party }, uso.monster),
     log,
+    // Poder que cura não é golpe; o original só tinha som de acerto.
+    som: uso.outcome === 'damage' ? 'crit' : null,
+    flutuantes: uso.outcome === 'damage' ? [{ texto: `${poder.icon} -${uso.damage}`, tom: 'critico', alvo: 'inimigo' }] : [],
   };
 
   if (uso.monsterDefeated) return derrotarMonstro(depois, monstro, rng);
@@ -274,6 +314,8 @@ export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Co
       fase: 'fuga',
       dado: roll,
       log: [`Você rolou ${roll}${comBonus} e fugiu com sucesso.`, 'Você escapa da batalha, ofegante.'],
+      som: 'door',
+      flutuantes: [],
     };
   }
 
@@ -322,6 +364,9 @@ function turnoDosOutros(combate: Combate, rng: Rng): Combate {
     ...combate,
     estado: comMonstro({ ...comEquipe, hero: golpe.hero, party: golpe.party }, golpe.monster),
     log,
+    // Soma ao que o golpe do jogador já pôs na tela — os dois números
+    // aparecem no mesmo turno, como no original.
+    flutuantes: golpe.damage ? [...combate.flutuantes, { texto: `-${golpe.damage}`, tom: 'dano' as const, alvo: 'heroi' as const }] : combate.flutuantes,
   };
 
   return golpe.heroDefeated ? derrota(depois, log, rng) : depois;
@@ -409,10 +454,10 @@ function limparSala(combate: Combate, abatido: CombatMonsterView, rng: Rng): Com
   if (sala.type === 'boss') {
     const proximo = avancarAndar(limpo, rng);
     log.push(`Após vencer ${abatido.name}, o grupo avança automaticamente para o Andar ${proximo.floor}.`);
-    return { ...combate, estado: proximo, fase: 'vitoria', log, loot };
+    return { ...combate, estado: proximo, fase: 'vitoria', log, loot, som: 'victory' };
   }
 
-  return { ...combate, estado: limpo, fase: 'vitoria', log, loot };
+  return { ...combate, estado: limpo, fase: 'vitoria', log, loot, som: 'victory' };
 }
 
 function despedirTemporarios(party: readonly Companion[]): { party: Companion[]; saindo: Companion[] } {
@@ -456,6 +501,7 @@ function derrota(combate: Combate, log: string[], rng: Rng): Combate {
     ...combate,
     estado: voltarParaCidade({ ...estado, hero: revivido, party: equipe, inventory }),
     fase: 'derrota',
+    som: 'defeat',
     log: linhas,
   };
 }

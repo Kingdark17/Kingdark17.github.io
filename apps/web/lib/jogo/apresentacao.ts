@@ -14,10 +14,12 @@ import {
   cityEntryText,
   cityIconFor,
   cityRoomDesc,
+  cityShortLabel,
   entryText,
   iconFor,
   isBossFloor,
   roomDesc,
+  shortLabel,
   type CityCell,
   type DungeonCell,
 } from '@rpg-legend/shared';
@@ -32,6 +34,8 @@ export interface Apresentacao {
   icone: (celula: CelulaDoMapa) => string;
   descricao: (celula: CelulaDoMapa) => string;
   textoDeEntrada: (celula: CelulaDoMapa) => string;
+  /** Nome curto pra citar a sala de fora dela ("um baú fechado"), usado nas pistas de porta. */
+  rotulo: (celula: CelulaDoMapa) => string;
 }
 
 const LEGENDA_DA_CIDADE: Array<[string, string]> = [
@@ -63,6 +67,7 @@ export function apresentacaoDe(estado: EstadoDoJogo): Apresentacao {
       icone: (celula) => cityIconFor(celula as CityCell),
       descricao: (celula) => cityRoomDesc(celula as CityCell),
       textoDeEntrada: (celula) => cityEntryText(celula as CityCell),
+      rotulo: (celula) => cityShortLabel(celula as CityCell),
     };
   }
 
@@ -72,5 +77,6 @@ export function apresentacaoDe(estado: EstadoDoJogo): Apresentacao {
     icone: (celula) => iconFor(celula as DungeonCell),
     descricao: (celula) => roomDesc(celula as DungeonCell),
     textoDeEntrada: (celula) => entryText(celula as DungeonCell),
+    rotulo: (celula) => shortLabel(celula as DungeonCell),
   };
 }
