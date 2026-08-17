@@ -4,16 +4,24 @@
  * manter o service testável com um fake em memória, sem banco.
  */
 
+import type { ResumoDoAvatar } from './avatar';
+
 export interface UserLookup {
   id: number;
   username: string;
 }
 
-/** Linha "crua" de amigo/pedido — inclui `id` pra `SocialService` resolver presença; a view pública final não expõe `id`. */
+/**
+ * Linha "crua" de amigo/pedido — inclui `id` pra `SocialService` resolver
+ * presença; a view pública final não expõe `id`.
+ *
+ * `avatar` é o resumo, nunca a foto: o base64 de até 400 KB não sai do
+ * banco por causa de uma lista. Ver `avatar.ts`.
+ */
 export interface InternalFriendRow {
   id: number;
   username: string;
-  avatarUrl: string;
+  avatar: ResumoDoAvatar;
   frame: string;
   nameColor: string;
   pet: string;

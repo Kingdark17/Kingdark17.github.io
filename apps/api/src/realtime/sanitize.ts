@@ -17,7 +17,7 @@
 import { ATTR_KEYS, equipmentCap, equipmentStat, xpForLevel, type Equipment } from '@rpg-legend/shared';
 
 import { PROFILE_COLORS, PROFILE_FRAMES, PROFILE_PETS } from '../auth/cosmetics';
-import { publicAvatarUrl } from '../social/avatar';
+import { publicAvatarUrl, resumoDoAvatar } from '../social/avatar';
 import { clampInt, cloneJson } from './numeric';
 import { comoTexto } from '../common/texto';
 
@@ -152,7 +152,7 @@ export function sanitizeCosmetics(candidate: unknown): PublicCosmetics | null {
     // de outra pessoa, exatamente como mentir ali já mostrava o nome de
     // outra pessoa. Não é buraco novo, e a foto é pública de qualquer
     // jeito (ver `social/avatar.controller.ts`).
-    avatarUrl: aceita ? publicAvatarUrl(username, avatarUrl) : '',
+    avatarUrl: aceita ? publicAvatarUrl(username, resumoDoAvatar(avatarUrl)) : '',
     frame: (PROFILE_FRAMES as readonly string[]).includes(frame) ? frame : 'none',
     nameColor: (PROFILE_COLORS as readonly string[]).includes(nameColor) ? nameColor : '#e8d7a5',
     pet: (PROFILE_PETS as readonly string[]).includes(pet) ? pet : 'none',

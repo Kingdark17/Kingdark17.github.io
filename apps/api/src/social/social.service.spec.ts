@@ -1,3 +1,4 @@
+import { resumoDoAvatar } from './avatar';
 import type { PresenceChecker } from './presence-checker';
 import type { SocialEventType, SocialNotifier } from './social-notifier';
 import type { InternalFriendRow, RecentMessage, RelationRows, SocialRepository, StoredMessage, UserLookup } from './social-repository';
@@ -82,7 +83,16 @@ class FakeSocialRepository implements SocialRepository {
     const toRow = (id: number): InternalFriendRow => {
       const user = this.users.get(id);
       if (!user) throw new Error('usuário inexistente no fake');
-      return { id: user.id, username: user.username, avatarUrl: user.avatarUrl, frame: user.frame, nameColor: user.nameColor, pet: user.pet };
+      // O repositório de verdade calcula isto em SQL; aqui, o mesmo
+      // contrato pela função pura. Ver `avatar.ts`.
+      return {
+        id: user.id,
+        username: user.username,
+        avatar: resumoDoAvatar(user.avatarUrl),
+        frame: user.frame,
+        nameColor: user.nameColor,
+        pet: user.pet,
+      };
     };
     const friends: InternalFriendRow[] = [];
     for (const key of this.friendships) {

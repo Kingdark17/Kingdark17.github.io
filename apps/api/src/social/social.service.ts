@@ -64,7 +64,7 @@ export class SocialService {
       username: row.username,
       // Foto enviada não viaja aqui: vira endereço pro endpoint, que o
       // navegador guarda em cache. Ver `avatar.ts`.
-      avatarUrl: publicAvatarUrl(row.username, row.avatarUrl),
+      avatarUrl: publicAvatarUrl(row.username, row.avatar),
       frame: row.frame,
       nameColor: row.nameColor,
       pet: row.pet,

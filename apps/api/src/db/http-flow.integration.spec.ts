@@ -36,8 +36,9 @@ function saveDe(gold: number, level = 1) {
   };
 }
 
-/** PNG de 1×1 — o formato que `compressPhoto()` produz no navegador. */
+/** PNGs de 1×1 — o formato que `compressPhoto()` produz no navegador. */
 const PNG_DE_TESTE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+const OUTRO_PNG_DE_TESTE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 
 function waitFor<T = unknown>(socket: ClientSocket, event: string, timeoutMs = 5_000): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -201,6 +202,14 @@ describe('fluxo social com presença de verdade', () => {
     expect(foto.headers['content-type']).toBe('image/png');
     expect(foto.headers['cache-control']).toContain('max-age=31536000');
     expect(Buffer.from(foto.body as Buffer).subarray(0, 4)).toEqual(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
+
+    // A versão do endereço é calculada **em SQL** (`md5` na consulta), pra
+    // o base64 não atravessar a rede até o banco. Só um teste com Postgres
+    // de verdade prova que ela muda quando a foto muda — e é disso que o
+    // cache de um ano depende.
+    await comoBree(request(servidorDe(app)).put('/api/account/profile')).send({ avatarUrl: OUTRO_PNG_DE_TESTE });
+    const depois = await comoAria(request(servidorDe(app)).get('/api/friends'));
+    expect(corpo<Relacoes>(depois).friends[0].avatarUrl).not.toBe(endereco);
 
     // Bree conecta e autentica no socket: agora a presença muda de verdade.
     const socketDaBree = io(url, { transports: ['websocket'], forceNew: true });

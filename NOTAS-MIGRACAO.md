@@ -385,11 +385,23 @@ Duas coisas que o teste guarda porque quebrariam calado:
   com a base da API (`urlDaApi`, em `lib/api/client.ts`) antes de pôr num
   `<img>`, porque os dois moram em domínios diferentes.
 
-O que ficou de fora: a lista ainda **lê** o base64 do Postgres pra
-calcular a versão, mesmo sem mandar pro navegador. Dá pra resolver com
-`md5(avatar_url)` na própria consulta, mas aí a regra passa a existir em
-SQL e em JS, e o fake dos testes deixa de valer como espelho do
-repositório real. Fica anotado.
+**O base64 também parou de sair do banco.** A lista ainda lia
+`avatar_url` inteiro do Postgres pra calcular a versão, e o Postgres está
+do outro lado da rede: com 20 amigos eram alguns megabytes vindos do Neon
+a cada `/amigos`, pra jogar fora em seguida. Agora quem calcula é a
+própria consulta (`substr(md5(avatar_url), 1, 12)`) e só o resumo
+atravessa.
+
+Isso podia virar regra duplicada em SQL e em JS. Não virou porque o
+contrato de `version` é **frouxo de propósito**: qualquer texto que mude
+quando a foto muda. Ninguém interpreta o valor, só compara — então o SQL
+usa `md5`, o fake dos testes usa `resumoDoAvatar`, e os dois estão
+certos. A montagem do endereço, essa sim, continua num lugar só
+(`publicAvatarUrl`).
+
+O que o SQL faz sozinho é justamente o que teste de unidade não pega, por
+isso o teste de integração com Postgres de verdade troca a foto e
+confere que o endereço muda: é disso que o cache de um ano depende.
 
 ### Motion, onde ele ganha o lugar — e quanto custa de verdade
 
@@ -494,8 +506,9 @@ ferramenta que ninguém olha às vezes é bug esperando.
   pedaço grande, mas o mapa continua indo por completo a cada passo. Só
   vale mexer junto do Redis: o formato do que trafega e onde a sala mora
   são a mesma decisão.
-- **A lista de amigos ainda lê o base64 do Postgres** pra calcular a
-  versão da foto, mesmo sem mandar pro navegador. Ver "Segundo corte".
+- **A foto ainda mora no Postgres como base64.** Não sai mais de lá numa
+  lista, mas guardar imagem em coluna de texto é remendo — o lugar dela é
+  o Supabase Storage, que é a fase 5.
 
 ---
 

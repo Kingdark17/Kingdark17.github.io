@@ -1,4 +1,4 @@
-import { avatarVersion, decodeAvatar, isUploadedAvatar, publicAvatarUrl } from './avatar';
+import { avatarVersion, decodeAvatar, isUploadedAvatar, publicAvatarUrl, resumoDoAvatar } from './avatar';
 
 /** PNG de 1×1, o mesmo formato que `compressPhoto()` produz no navegador. */
 const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
@@ -11,26 +11,46 @@ describe('isUploadedAvatar', () => {
   });
 });
 
-describe('publicAvatarUrl', () => {
-  it('troca a foto enviada pelo endereço do endpoint, com a versão do conteúdo', () => {
-    expect(publicAvatarUrl('Aria', PNG)).toBe(`/api/users/Aria/avatar?v=${avatarVersion(PNG)}`);
+describe('resumoDoAvatar', () => {
+  it('foto enviada vira só versão; o base64 não passa adiante', () => {
+    const resumo = resumoDoAvatar(PNG);
+
+    expect(resumo.url).toBe('');
+    expect(resumo.version).toMatch(/^[0-9a-f]{12}$/);
   });
 
-  it('deixa link externo e ausência de foto como estão', () => {
-    expect(publicAvatarUrl('Aria', 'https://exemplo.com/foto.png')).toBe('https://exemplo.com/foto.png');
-    expect(publicAvatarUrl('Aria', '')).toBe('');
+  it('link externo passa como está, sem versão', () => {
+    expect(resumoDoAvatar('https://exemplo.com/foto.png')).toEqual({ url: 'https://exemplo.com/foto.png', version: '' });
   });
 
-  it('escapa o nome — ele vem do cliente e entra numa URL', () => {
-    expect(publicAvatarUrl('a/b?c', PNG)).toContain('/api/users/a%2Fb%3Fc/avatar');
+  it('sem foto, nada dos dois', () => {
+    expect(resumoDoAvatar('')).toEqual({ url: '', version: '' });
   });
 
   it('a versão muda com a foto e não muda sozinha', () => {
     const outra = PNG.replace('iVBOR', 'iVBOQ');
 
-    expect(avatarVersion(PNG)).toBe(avatarVersion(PNG));
-    expect(avatarVersion(PNG)).not.toBe(avatarVersion(outra));
-    expect(avatarVersion(PNG)).toMatch(/^[0-9a-f]{12}$/);
+    expect(resumoDoAvatar(PNG).version).toBe(resumoDoAvatar(PNG).version);
+    expect(resumoDoAvatar(PNG).version).not.toBe(resumoDoAvatar(outra).version);
+  });
+});
+
+describe('publicAvatarUrl', () => {
+  it('troca a foto enviada pelo endereço do endpoint, com a versão do conteúdo', () => {
+    expect(publicAvatarUrl('Aria', resumoDoAvatar(PNG))).toBe(`/api/users/Aria/avatar?v=${avatarVersion(PNG)}`);
+  });
+
+  it('deixa link externo e ausência de foto como estão', () => {
+    expect(publicAvatarUrl('Aria', resumoDoAvatar('https://exemplo.com/foto.png'))).toBe('https://exemplo.com/foto.png');
+    expect(publicAvatarUrl('Aria', resumoDoAvatar(''))).toBe('');
+  });
+
+  it('escapa o nome — ele vem do cliente e entra numa URL', () => {
+    expect(publicAvatarUrl('a/b?c', resumoDoAvatar(PNG))).toContain('/api/users/a%2Fb%3Fc/avatar');
+  });
+
+  it('serve qualquer versão, venha do SQL ou do JS — o valor é opaco', () => {
+    expect(publicAvatarUrl('Aria', { url: '', version: 'ab12cd34ef56' })).toBe('/api/users/Aria/avatar?v=ab12cd34ef56');
   });
 });
 

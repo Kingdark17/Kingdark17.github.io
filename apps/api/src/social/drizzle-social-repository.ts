@@ -105,10 +105,15 @@ export class DrizzleSocialRepository implements SocialRepository {
 
   async listRelations(userId: number): Promise<RelationRows> {
     const db = getDb();
+    // A foto enviada **não sai do banco**: só a impressão digital dela.
+    // Com 20 amigos, trazer `avatar_url` inteiro seria alguns megabytes
+    // pela rede até o Neon toda vez que alguém abre `/amigos`, pra jogar
+    // tudo fora depois. Ver `avatar.ts` pro contrato de `version`.
     const columns = {
       id: users.id,
       username: users.username,
-      avatarUrl: users.avatarUrl,
+      avatarUrl: sql<string>`case when ${users.avatarUrl} like 'data:%' then '' else coalesce(${users.avatarUrl}, '') end`,
+      avatarVersion: sql<string>`case when ${users.avatarUrl} like 'data:%' then substr(md5(${users.avatarUrl}), 1, 12) else '' end`,
       frame: users.profileFrame,
       nameColor: users.nameColor,
       pet: users.pet,
@@ -135,7 +140,10 @@ export class DrizzleSocialRepository implements SocialRepository {
       .where(eq(friendRequests.fromId, userId))
       .orderBy(friendRequests.createdAt);
 
-    const toRow = (row: (typeof friendRows)[number]): InternalFriendRow => row;
+    const toRow = ({ avatarUrl, avatarVersion, ...resto }: (typeof friendRows)[number]): InternalFriendRow => ({
+      ...resto,
+      avatar: { url: avatarUrl, version: avatarVersion },
+    });
     return { friends: friendRows.map(toRow), incoming: incomingRows.map(toRow), outgoing: outgoingRows.map(toRow) };
   }
 
