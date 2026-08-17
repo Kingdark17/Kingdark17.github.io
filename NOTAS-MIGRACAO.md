@@ -306,6 +306,9 @@ navegador baixa antes da página funcionar**, rota por rota:
    rota pelo mesmo valor e faz o número parecer bem pior do que é.
 4. `grep` por `engine.io` / `motionValue` dentro dos pedaços diz se uma
    biblioteca específica entrou na carga inicial.
+5. **Somar também as fontes**, que não aparecem em relatório nenhum: os
+   `<link rel="preload" as="font">` do HTML são baixados antes do
+   primeiro texto e chegaram a pesar mais que o JS de qualquer rota.
 
 Rota **dinâmica** (`ƒ`) não tem HTML no disco, então o passo 2 não serve.
 Pra essas, a lista sai de `.next/build-manifest.json` (`rootMainFiles`)
@@ -489,6 +492,36 @@ O `.cjs` que o Nest consome também virou um arquivo por módulo. Conferido
 à mão (`require('./dist/index.cjs')` e `import('./dist/index.js')` fora
 do build), e os testes da API resolvem `@rpg-legend/shared` pelo pacote
 construído, não pela fonte — os 357 continuam passando.
+
+### Quinto corte — fonte é peso que ninguém mede
+
+Depois que o JavaScript parou de render, o maior arquivo no caminho
+crítico não era JavaScript: **eram 149 KB de fonte**, baixados antes de
+qualquer texto aparecer, em toda rota.
+
+`next/font/google` gera um arquivo por peso e por estilo, e **pré-carrega
+os que o layout declara — em toda rota, mesmo que só uma tela use**. O
+`layout.tsx` pedia nove faces; o CSS seleciona seis.
+
+O que estava sendo carregado à toa:
+
+- **Itálico do EB Garamond (48 KB, o maior arquivo pré-carregado de
+  todos).** Existe um único `font-style: italic` no projeto, num
+  `.placeholder` da criação de personagem. Navegador inclina o normal
+  sozinho quando não há itálico de verdade.
+- **Cinzel 900.** Nenhuma regra pede peso 800 ou mais.
+- **JetBrains Mono 600.** O único `font-weight: 600` do projeto é o
+  `.botao`, e nenhum texto monoespaçado mora dentro de um.
+
+| | Antes | Depois |
+|---|---|---|
+| baixado antes do primeiro texto | 149 KB | **91 KB** |
+| total de fonte gerado | 593 KB | **336 KB** |
+| arquivos | 22 | 15 |
+
+Vale mais que a maioria dos cortes de JS desta fase, e some do relatório
+do `next build`, que só conta JavaScript. **Ao acrescentar peso ou estilo
+no `layout.tsx`, conferir se o CSS realmente seleciona aquilo.**
 
 ### O piso é o Next, não o jogo
 

@@ -115,6 +115,9 @@
   padding: 0.7rem;
 }
 
+/* Único itálico do projeto. O navegador inclina o Garamond normal sozinho —
+   carregar a família itálica inteira só por esta linha custava 48 KB no
+   caminho crítico de toda rota (ver o comentário de `layout.tsx`). */
 .placeholder {
   color: var(--parchment-dim);
   font-size: 0.9rem;
