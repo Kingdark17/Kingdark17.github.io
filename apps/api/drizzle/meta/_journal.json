@@ -15,6 +15,13 @@
       "when": 1786992010736,
       "tag": "0001_fecha_acesso_publico_supabase",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1787076801150,
+      "tag": "0002_fecha_tabelas_futuras",
+      "breakpoints": true
     }
   ]
 }
