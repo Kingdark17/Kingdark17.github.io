@@ -35,24 +35,24 @@ export interface ClassDef {
   weaponTemplate: string;
   bias: Partial<Record<AttrKey, number>>;
   desc: string;
-  /** Nome do poder de assinatura — resolvido via {@link powerByName}. */
-  signature: string;
+  /** Id do poder de assinatura — resolvido via {@link powerById}. */
+  signatureId: string;
   affinity: Record<string, number>;
 }
 
 export const CLASSES: readonly ClassDef[] = [
-  { id: 'guerreiro', name: 'Guerreiro', icon: '⚔️', weaponTemplate: 'espada', bias: { forca: 3, constituicao: 2 }, desc: 'Combate corpo a corpo, resistente na linha de frente.', signature: 'Golpe Poderoso', affinity: { espada: 100, machado: 90, maca: 70, adaga: 55, arco: 50, cajado: 25, marreta: 90, violao: 20 } },
-  { id: 'mago', name: 'Mago', icon: '🧙', weaponTemplate: 'cajado', bias: { intelecto: 3, sabedoria: 1 }, desc: 'Magias ofensivas e controle de mana.', signature: 'Bola de Fogo', affinity: { cajado: 100, maca: 55, adaga: 45, arco: 40, espada: 30, machado: 20, marreta: 20, violao: 30 } },
-  { id: 'ladino', name: 'Ladino', icon: '🗡', weaponTemplate: 'adaga', bias: { destreza: 3, carisma: 1 }, desc: 'Furtividade, críticos e agilidade.', signature: 'Furtividade Sombria', affinity: { adaga: 100, arco: 80, espada: 55, maca: 40, machado: 40, cajado: 30, marreta: 40, violao: 45 } },
-  { id: 'clerigo', name: 'Clérigo', icon: '✝️', weaponTemplate: 'maca', bias: { sabedoria: 3, constituicao: 1 }, desc: 'Cura aliados e resiste a corrupção.', signature: 'Cura Menor', affinity: { maca: 100, cajado: 70, espada: 50, adaga: 40, arco: 35, machado: 30, marreta: 30, violao: 35 } },
-  { id: 'barbaro', name: 'Bárbaro', icon: '🪓', weaponTemplate: 'machado', bias: { forca: 4 }, desc: 'Fúria bruta, dano massivo corpo a corpo.', signature: 'Grito de Guerra', affinity: { machado: 100, espada: 85, maca: 55, adaga: 45, arco: 35, cajado: 15, marreta: 100, violao: 15 } },
-  { id: 'arqueiro', name: 'Arqueiro', icon: '🏹', weaponTemplate: 'arco', bias: { destreza: 3, sabedoria: 1 }, desc: 'Precisão a distância e mobilidade.', signature: 'Tiro Certeiro', affinity: { arco: 100, adaga: 70, espada: 50, maca: 40, machado: 35, cajado: 25, marreta: 35, violao: 35 } },
-  { id: 'paladino', name: 'Paladino', icon: '🛡️', weaponTemplate: 'espada', bias: { forca: 2, sabedoria: 2, constituicao: 1 }, desc: 'Defensor sagrado que combina resistência e cura.', signature: 'Julgamento Sagrado', affinity: { espada: 100, maca: 90, machado: 65, cajado: 60, adaga: 40, arco: 35, marreta: 65, violao: 35 } },
-  { id: 'necromante', name: 'Necromante', icon: '☠️', weaponTemplate: 'cajado', bias: { intelecto: 3, constituicao: 1 }, desc: 'Conjura maldições e drena a força dos inimigos.', signature: 'Maldição Sombria', affinity: { cajado: 100, adaga: 75, maca: 55, espada: 40, arco: 35, machado: 25, marreta: 25, violao: 40 } },
-  { id: 'druida', name: 'Druida', icon: '🌿', weaponTemplate: 'cajado', bias: { sabedoria: 3, constituicao: 1 }, desc: 'Controla a natureza, venenos e magia de cura.', signature: 'Esporos Venenosos', affinity: { cajado: 100, maca: 75, arco: 65, adaga: 50, espada: 35, machado: 35, marreta: 35, violao: 55 } },
-  { id: 'monge', name: 'Monge', icon: '🥋', weaponTemplate: 'maca', bias: { destreza: 2, sabedoria: 2 }, desc: 'Lutador disciplinado que domina corpo e espírito.', signature: 'Golpe Atordoante', affinity: { maca: 100, adaga: 85, cajado: 70, espada: 55, machado: 40, arco: 40, marreta: 40, violao: 45 } },
-  { id: 'bardo', name: 'Bardo', icon: '🎵', weaponTemplate: 'violao', bias: { carisma: 3, destreza: 1 }, desc: 'Usa música para fortalecer aliados e enfraquecer inimigos.', signature: 'Canção Debilitante', affinity: { adaga: 100, arco: 80, espada: 65, cajado: 65, maca: 50, machado: 30, marreta: 30, violao: 100 } },
-  { id: 'cacador', name: 'Caçador', icon: '🐺', weaponTemplate: 'arco', bias: { destreza: 2, sabedoria: 2 }, desc: 'Especialista em rastrear e sangrar criaturas.', signature: 'Flecha Serrilhada', affinity: { arco: 100, adaga: 85, espada: 60, machado: 50, maca: 35, cajado: 25, marreta: 50, violao: 40 } },
+  { id: 'guerreiro', name: 'Guerreiro', icon: '⚔️', weaponTemplate: 'espada', bias: { forca: 3, constituicao: 2 }, desc: 'Combate corpo a corpo, resistente na linha de frente.', signatureId: 'golpe_poderoso', affinity: { espada: 100, machado: 90, maca: 70, adaga: 55, arco: 50, cajado: 25, marreta: 90, violao: 20 } },
+  { id: 'mago', name: 'Mago', icon: '🧙', weaponTemplate: 'cajado', bias: { intelecto: 3, sabedoria: 1 }, desc: 'Magias ofensivas e controle de mana.', signatureId: 'bola_de_fogo', affinity: { cajado: 100, maca: 55, adaga: 45, arco: 40, espada: 30, machado: 20, marreta: 20, violao: 30 } },
+  { id: 'ladino', name: 'Ladino', icon: '🗡', weaponTemplate: 'adaga', bias: { destreza: 3, carisma: 1 }, desc: 'Furtividade, críticos e agilidade.', signatureId: 'furtividade_sombria', affinity: { adaga: 100, arco: 80, espada: 55, maca: 40, machado: 40, cajado: 30, marreta: 40, violao: 45 } },
+  { id: 'clerigo', name: 'Clérigo', icon: '✝️', weaponTemplate: 'maca', bias: { sabedoria: 3, constituicao: 1 }, desc: 'Cura aliados e resiste a corrupção.', signatureId: 'cura_menor', affinity: { maca: 100, cajado: 70, espada: 50, adaga: 40, arco: 35, machado: 30, marreta: 30, violao: 35 } },
+  { id: 'barbaro', name: 'Bárbaro', icon: '🪓', weaponTemplate: 'machado', bias: { forca: 4 }, desc: 'Fúria bruta, dano massivo corpo a corpo.', signatureId: 'grito_de_guerra', affinity: { machado: 100, espada: 85, maca: 55, adaga: 45, arco: 35, cajado: 15, marreta: 100, violao: 15 } },
+  { id: 'arqueiro', name: 'Arqueiro', icon: '🏹', weaponTemplate: 'arco', bias: { destreza: 3, sabedoria: 1 }, desc: 'Precisão a distância e mobilidade.', signatureId: 'tiro_certeiro', affinity: { arco: 100, adaga: 70, espada: 50, maca: 40, machado: 35, cajado: 25, marreta: 35, violao: 35 } },
+  { id: 'paladino', name: 'Paladino', icon: '🛡️', weaponTemplate: 'espada', bias: { forca: 2, sabedoria: 2, constituicao: 1 }, desc: 'Defensor sagrado que combina resistência e cura.', signatureId: 'julgamento_sagrado', affinity: { espada: 100, maca: 90, machado: 65, cajado: 60, adaga: 40, arco: 35, marreta: 65, violao: 35 } },
+  { id: 'necromante', name: 'Necromante', icon: '☠️', weaponTemplate: 'cajado', bias: { intelecto: 3, constituicao: 1 }, desc: 'Conjura maldições e drena a força dos inimigos.', signatureId: 'maldicao_sombria', affinity: { cajado: 100, adaga: 75, maca: 55, espada: 40, arco: 35, machado: 25, marreta: 25, violao: 40 } },
+  { id: 'druida', name: 'Druida', icon: '🌿', weaponTemplate: 'cajado', bias: { sabedoria: 3, constituicao: 1 }, desc: 'Controla a natureza, venenos e magia de cura.', signatureId: 'esporos_venenosos', affinity: { cajado: 100, maca: 75, arco: 65, adaga: 50, espada: 35, machado: 35, marreta: 35, violao: 55 } },
+  { id: 'monge', name: 'Monge', icon: '🥋', weaponTemplate: 'maca', bias: { destreza: 2, sabedoria: 2 }, desc: 'Lutador disciplinado que domina corpo e espírito.', signatureId: 'golpe_atordoante', affinity: { maca: 100, adaga: 85, cajado: 70, espada: 55, machado: 40, arco: 40, marreta: 40, violao: 45 } },
+  { id: 'bardo', name: 'Bardo', icon: '🎵', weaponTemplate: 'violao', bias: { carisma: 3, destreza: 1 }, desc: 'Usa música para fortalecer aliados e enfraquecer inimigos.', signatureId: 'cancao_debilitante', affinity: { adaga: 100, arco: 80, espada: 65, cajado: 65, maca: 50, machado: 30, marreta: 30, violao: 100 } },
+  { id: 'cacador', name: 'Caçador', icon: '🐺', weaponTemplate: 'arco', bias: { destreza: 2, sabedoria: 2 }, desc: 'Especialista em rastrear e sangrar criaturas.', signatureId: 'flecha_serrilhada', affinity: { arco: 100, adaga: 85, espada: 60, machado: 50, maca: 35, cajado: 25, marreta: 50, violao: 40 } },
 ];
 
 export type PowerType =
@@ -152,23 +152,24 @@ export interface ClassPassive {
   desc: string;
 }
 
+/** Chaveado pelo **id** da classe, não pelo nome: nome é texto de tela e um dia muda de idioma. */
 export const CLASS_PASSIVES: Record<string, ClassPassive> = {
-  Guerreiro: { name: 'Postura Defensiva', desc: '20% de chance de reduzir o golpe recebido em 40%.' },
-  Mago: { name: 'Fluxo Arcano', desc: 'Ataques mágicos sofrem metade da penalidade de resistência do inimigo.' },
-  Ladino: { name: 'Ataque Furtivo', desc: '25% de chance de acertar um segundo golpe ao atacar.' },
-  Clérigo: { name: 'Prece Silenciosa', desc: '20% de chance de recuperar Vida ao acertar um golpe.' },
-  Bárbaro: { name: 'Fúria', desc: '+35% de dano físico quando está com menos de 50% de Vida.' },
-  Arqueiro: { name: 'Precisão Nata', desc: '+8% de chance de acerto crítico.' },
-  Paladino: { name: 'Graça Divina', desc: '25% de chance de recuperar Vida ao acertar um golpe.' },
-  Necromante: { name: 'Toque Sombrio', desc: '30% de chance de enfraquecer o inimigo ao acertar.' },
-  Druida: { name: 'Picada Natural', desc: '30% de chance de envenenar o inimigo ao acertar.' },
-  Monge: { name: 'Disciplina', desc: '22% de chance de atordoar o inimigo ao acertar.' },
-  Bardo: { name: 'Dissonância', desc: '30% de chance de deixar o inimigo vulnerável ao acertar.' },
-  Caçador: { name: 'Instinto de Caça', desc: '30% de chance de causar sangramento ao acertar. Enxerga criaturas em salas vizinhas ainda não exploradas.' },
+  guerreiro: { name: 'Postura Defensiva', desc: '20% de chance de reduzir o golpe recebido em 40%.' },
+  mago: { name: 'Fluxo Arcano', desc: 'Ataques mágicos sofrem metade da penalidade de resistência do inimigo.' },
+  ladino: { name: 'Ataque Furtivo', desc: '25% de chance de acertar um segundo golpe ao atacar.' },
+  clerigo: { name: 'Prece Silenciosa', desc: '20% de chance de recuperar Vida ao acertar um golpe.' },
+  barbaro: { name: 'Fúria', desc: '+35% de dano físico quando está com menos de 50% de Vida.' },
+  arqueiro: { name: 'Precisão Nata', desc: '+8% de chance de acerto crítico.' },
+  paladino: { name: 'Graça Divina', desc: '25% de chance de recuperar Vida ao acertar um golpe.' },
+  necromante: { name: 'Toque Sombrio', desc: '30% de chance de enfraquecer o inimigo ao acertar.' },
+  druida: { name: 'Picada Natural', desc: '30% de chance de envenenar o inimigo ao acertar.' },
+  monge: { name: 'Disciplina', desc: '22% de chance de atordoar o inimigo ao acertar.' },
+  bardo: { name: 'Dissonância', desc: '30% de chance de deixar o inimigo vulnerável ao acertar.' },
+  cacador: { name: 'Instinto de Caça', desc: '30% de chance de causar sangramento ao acertar. Enxerga criaturas em salas vizinhas ainda não exploradas.' },
 };
 
-export function classPassive(className: string): ClassPassive | null {
-  return CLASS_PASSIVES[className] ?? null;
+export function classPassive(classId: string): ClassPassive | null {
+  return CLASS_PASSIVES[classId] ?? null;
 }
 
 export const FIRST_NAMES = ['Aldric', 'Bryn', 'Cael', 'Dara', 'Eron', 'Fiora', 'Garrick', 'Helka', 'Ivo', 'Junne', 'Korrin', 'Lyra', 'Maren', 'Norrik', 'Orla', 'Petra', 'Quill', 'Rhoda', 'Sten', 'Thalia'] as const;
@@ -224,6 +225,26 @@ export function debuffById(id: string): Debuff | null {
   return DEBUFFS_BY_ID.get(id) ?? null;
 }
 
+/**
+ * ## Identidade é id; nome é texto de tela
+ *
+ * Classe, raça e poder têm `id` estável e `name` de exibição. **As regras
+ * do jogo só podem olhar o `id`** — afinidade de arma, passiva de classe,
+ * bônus de companheiro. O `name` existe pra mostrar, e texto de tela um
+ * dia muda de idioma.
+ *
+ * Isso não era assim: o combate comparava `hero.className === 'Mago'` em
+ * uma dúzia de lugares, e `CLASS_PASSIVES` era chaveado pelo nome. Traduzir
+ * uma palavra teria mudado dano, desligado a cura do clérigo e sumido com
+ * a passiva do guerreiro — sem erro nenhum, porque toda busca termina em
+ * `?? null`. O rastro disso ficou visível nos `'Clérigo' || 'Clerigo'` que
+ * alguém já teve que escrever quando o acento sumiu de um save.
+ *
+ * Os saves que já estão na nuvem guardam só o nome. Por isso as buscas por
+ * nome continuam existindo — e é por elas que `idDaClasse`/`idDaRaca`
+ * resolvem quem chegou sem id.
+ */
+
 /** Busca por nome de exibição, insensível a acento — para entrada de save antigo. */
 export function classByName(name: string): ClassDef | null {
   const target = normalizedName(name);
@@ -237,4 +258,30 @@ export function powerByName(name: string): Power | null {
 export function raceByName(name: string): Race | null {
   const target = normalizedName(name);
   return RACES.find((r) => normalizedName(r.name) === target) ?? null;
+}
+
+/** O que o save tem de identidade — `classId` novo, ou só o nome antigo. */
+export interface IdentidadeDeClasse {
+  classId?: string;
+  className?: string;
+}
+
+export interface IdentidadeDeRaca {
+  raceId?: string;
+  race?: string;
+}
+
+/**
+ * Id da classe a partir de qualquer save: o campo novo quando existe, o
+ * nome traduzido de volta quando não. Toda regra passa por aqui, então a
+ * compatibilidade com save antigo vive **num lugar só**.
+ */
+export function idDaClasse(quem: IdentidadeDeClasse): string | null {
+  if (quem.classId) return quem.classId;
+  return quem.className ? (classByName(quem.className)?.id ?? null) : null;
+}
+
+export function idDaRaca(quem: IdentidadeDeRaca): string | null {
+  if (quem.raceId) return quem.raceId;
+  return quem.race ? (raceByName(quem.race)?.id ?? null) : null;
 }

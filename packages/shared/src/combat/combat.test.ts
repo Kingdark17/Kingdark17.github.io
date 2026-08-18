@@ -19,7 +19,7 @@ const SEM_DEBUFF = DEBUFFS.find((d) => !d.effect)!;
 const FLEE_DEBUFF = DEBUFFS.find((d) => d.effect === 'fleePenalty')!;
 
 function heroi(cls = GUERREIRO, debuff = SEM_DEBUFF): Hero {
-  return buildHero({ name: 'T', race: HUMANO, cls, debuff, chosenPowerNames: [] }, seededRng(1));
+  return buildHero({ name: 'T', race: HUMANO, cls, debuff, chosenPowerIds: [] }, seededRng(1));
 }
 
 function monstro(floor = 1): CombatMonster {

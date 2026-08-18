@@ -20,8 +20,8 @@ describe('sortearPoderes', () => {
   it('nunca inclui o poder de assinatura da classe, que já vem de graça', () => {
     for (const classe of CLASSES) {
       for (let tentativa = 0; tentativa < 20; tentativa += 1) {
-        const nomes = sortearPoderes(classe, Math.random).map((poder) => poder.name);
-        expect(nomes).not.toContain(classe.signature);
+        const ids = sortearPoderes(classe, Math.random).map((poder) => poder.id);
+        expect(ids).not.toContain(classe.signatureId);
       }
     }
   });
@@ -104,8 +104,8 @@ describe('montarSaveInicial', () => {
     const criacao = rolarTudo('Aria', Math.random);
     const save = montarSaveInicial(criacao, Math.random);
 
-    expect(save.hero.powerNames).toContain(criacao.classe!.signature);
-    expect(save.hero.powerNames).toHaveLength(3);
+    expect(save.hero.powerIds).toContain(criacao.classe!.signatureId);
+    expect(save.hero.powerIds).toHaveLength(3);
   });
 
   it('recusa criação incompleta em vez de gravar lixo', () => {

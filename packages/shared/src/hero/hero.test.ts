@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { classById, classByName, CLASSES, DEBUFFS, powerByName, RACES, raceByName } from './catalog.js';
+import { classById, classByName, CLASSES, DEBUFFS, powerById, powerByName, RACES, raceByName } from './catalog.js';
 import {
   buildHero,
   equipItem,
@@ -30,7 +30,7 @@ const SEM_DEBUFF = DEBUFFS[0]!; // qualquer um serve para os testes que não che
 
 function novoHeroi(rng = seededRng(1)): Hero {
   return buildHero(
-    { name: 'Testudo', race: HUMANO, cls: GUERREIRO, debuff: SEM_DEBUFF, chosenPowerNames: [] },
+    { name: 'Testudo', race: HUMANO, cls: GUERREIRO, debuff: SEM_DEBUFF, chosenPowerIds: [] },
     rng,
   );
 }
@@ -88,9 +88,12 @@ describe('buildHero', () => {
 
   it('poder de assinatura sempre entra, sem duplicar se escolhido de novo', () => {
     const hero = buildHero(
-      { name: 'X', race: HUMANO, cls: GUERREIRO, debuff: SEM_DEBUFF, chosenPowerNames: ['Golpe Poderoso', 'Escudo Arcano'] },
+      { name: 'X', race: HUMANO, cls: GUERREIRO, debuff: SEM_DEBUFF, chosenPowerIds: ['golpe_poderoso', 'escudo_arcano'] },
       seededRng(1),
     );
+    // A assinatura do guerreiro é `golpe_poderoso`: escolhê-la de novo não
+    // pode duplicar.
+    expect(hero.powerIds).toEqual(['golpe_poderoso', 'escudo_arcano']);
     expect(hero.powerNames).toEqual(['Golpe Poderoso', 'Escudo Arcano']);
   });
 
@@ -328,7 +331,7 @@ describe('hydrateSavedHero', () => {
   });
 });
 
-describe('classById/powerByName integridade', () => {
+describe('classById/powerById integridade', () => {
   it('toda classe referenciada por id existe', () => {
     for (const c of CLASSES) {
       expect(classById(c.id)).toEqual(c);
@@ -337,7 +340,59 @@ describe('classById/powerByName integridade', () => {
 
   it('todo poder de assinatura de classe existe no catálogo', () => {
     for (const c of CLASSES) {
-      expect(powerByName(c.signature)).not.toBeNull();
+      expect(powerById(c.signatureId)).not.toBeNull();
     }
+  });
+});
+
+/**
+ * O motivo de `classId`/`raceId`/`powerIds` existirem: enquanto as regras
+ * dependiam de `hero.className === 'Mago'`, traduzir uma palavra do
+ * catálogo mudaria dano, desligaria passiva e sumiria com os poderes do
+ * herói — em silêncio, porque toda busca por nome termina em `?? null`.
+ */
+describe('identidade separada do texto de tela', () => {
+  const MAGO = classByName('Mago')!;
+
+  function magoNovo(): Hero {
+    return buildHero({ name: 'Aria', race: HUMANO, cls: MAGO, debuff: SEM_DEBUFF, chosenPowerIds: [] }, seededRng(2));
+  }
+
+  it('o herói criado hoje guarda id de classe, de raça e dos poderes', () => {
+    const hero = magoNovo();
+
+    expect(hero.classId).toBe('mago');
+    expect(hero.raceId).toBe('humano');
+    expect(hero.powerIds).toEqual(['bola_de_fogo']);
+  });
+
+  it('com o id no lugar, o nome pode estar em qualquer idioma', () => {
+    const traduzido: Hero = { ...magoNovo(), className: 'Wizard', race: 'Human' };
+
+    // A afinidade do mago com cajado é 100; sem o id, `classByName('Wizard')`
+    // devolveria null e cairia no 100 genérico — o mesmo número por acaso.
+    // Por isso o teste usa uma arma de afinidade baixa, onde os dois casos
+    // se separam.
+    const comEspada: Hero = { ...traduzido, equip: { ...traduzido.equip, arma: { ...traduzido.equip.arma!, templateId: 'espada' } } };
+
+    expect(weaponAffinityPct(comEspada)).toBe(30);
+    expect(heroPowers(traduzido).map((p) => p.id)).toEqual(['bola_de_fogo']);
+  });
+
+  it('save gravado antes dos ids continua funcionando e ganha os ids', () => {
+    const novo = magoNovo();
+    // Como um save que já está na nuvem: só nome, nenhum id.
+    const { classId, raceId, powerIds, ...comoEstavaNaNuvem } = novo;
+    void classId;
+    void raceId;
+    void powerIds;
+
+    const carregado = hydrateSavedHero(comoEstavaNaNuvem as Hero);
+
+    expect(carregado.classId).toBe('mago');
+    expect(carregado.raceId).toBe('humano');
+    expect(carregado.powerIds).toEqual(['bola_de_fogo']);
+    // E as regras já funcionavam antes de gravar de novo, pelo nome.
+    expect(heroPowers(comoEstavaNaNuvem as Hero).map((p) => p.id)).toEqual(['bola_de_fogo']);
   });
 });

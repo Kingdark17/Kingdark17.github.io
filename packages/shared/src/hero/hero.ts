@@ -3,7 +3,11 @@ import { RARITIES } from '../items/rarity.js';
 import { templateById, type ItemCategory } from '../items/templates.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import {
+  classById,
   classByName,
+  idDaClasse,
+  idDaRaca,
+  powerById,
   FIRST_NAMES,
   LEGACY_DEBUFF_EFFECTS,
   powerByName,
@@ -62,11 +66,20 @@ export interface Hero extends HeroCore {
   raceIcon: string;
   className: string;
   classIcon: string;
+  /**
+   * Identidade que as **regras** usam. Opcionais porque os saves que já
+   * estão na nuvem não têm — quem chega sem eles é resolvido pelo nome uma
+   * vez (`idDaClasse`/`idDaRaca`) e passa a gravar o id no próximo save.
+   */
+  classId?: string;
+  raceId?: string;
   xp: number;
   xpNext: number;
   attrPoints: number;
   gold: number;
   powerNames: string[];
+  /** Idem: id é o que vale, `powerNames` fica pro save antigo e pra exibição. */
+  powerIds?: string[];
   debuff: Debuff;
   killCount: number;
   hp: number;
@@ -79,8 +92,12 @@ export interface Hero extends HeroCore {
   npcBlessing?: { combats: number; dodge: number };
 }
 
-export function heroPowers(hero: Pick<Hero, 'powerNames'>): Power[] {
-  return hero.powerNames.map((name) => powerByName(name)).filter((p): p is Power => p !== null);
+export function heroPowers(hero: Pick<Hero, 'powerNames' | 'powerIds'>): Power[] {
+  // Save novo traz ids; o que veio de antes só tem nome. Sem este `??` a
+  // troca de idioma faria `powerByName` devolver null pra tudo e o herói
+  // perderia todos os poderes calado.
+  const ids = hero.powerIds ?? hero.powerNames.map((name) => powerByName(name)?.id).filter((id): id is string => !!id);
+  return ids.map((id) => powerById(id)).filter((p): p is Power => p !== null);
 }
 
 /**
@@ -102,8 +119,8 @@ export interface HeroCreation {
   race: (typeof RACES)[number];
   cls: ClassDef;
   debuff: Debuff;
-  /** Nomes dos poderes escolhidos pelo jogador (a assinatura da classe entra automaticamente). */
-  chosenPowerNames: string[];
+  /** Ids dos poderes escolhidos pelo jogador (a assinatura da classe entra automaticamente). */
+  chosenPowerIds: string[];
   attrs?: Attributes;
 }
 
@@ -114,10 +131,13 @@ export function buildHero(creation: HeroCreation, rng: Rng = defaultRng): Hero {
   const startWeapon: Item = { ...instantiate(weaponTemplate, RARITIES[0] as (typeof RARITIES)[number]), equipped: true };
 
   // poder de assinatura da classe (automático) + os escolhidos na criação, sem duplicar
-  const powerNames = [creation.cls.signature];
-  for (const name of creation.chosenPowerNames) {
-    if (name !== creation.cls.signature) powerNames.push(name);
+  const powerIds = [creation.cls.signatureId];
+  for (const id of creation.chosenPowerIds) {
+    if (id !== creation.cls.signatureId) powerIds.push(id);
   }
+  // `powerNames` continua gravado porque é o que o save antigo tem e o que
+  // qualquer leitor de fora (o resumo de `/api/characters`) sabe ler.
+  const powerNames = powerIds.map((id) => powerById(id)?.name ?? id);
 
   // Sem anotar `equip` como HeroCore aqui: isso faria o compilador estreitar
   // o tipo para EquippableItem (o mínimo que derivedStats() exige) e perder
@@ -134,11 +154,14 @@ export function buildHero(creation: HeroCreation, rng: Rng = defaultRng): Hero {
     raceIcon: creation.race.icon,
     className: creation.cls.name,
     classIcon: creation.cls.icon,
+    classId: creation.cls.id,
+    raceId: creation.race.id,
     xp: 0,
     xpNext: xpForLevel(1),
     attrPoints: 0,
     gold: 30 + randomInt(21, rng),
     powerNames,
+    powerIds,
     debuff: creation.debuff,
     killCount: 0,
     derived,
@@ -298,10 +321,10 @@ export function hasDebuffEffect(hero: Pick<Hero, 'debuff'> | null | undefined, e
 // ---------- afinidade de arma ----------
 
 /** % de eficiência do herói com a arma equipada, conforme a classe. 100% se não houver afinidade definida. */
-export function weaponAffinityPct(hero: Pick<Hero, 'className' | 'equip'>): number {
+export function weaponAffinityPct(hero: Pick<Hero, 'className' | 'classId' | 'equip'>): number {
   const weapon = hero.equip.arma;
   if (!weapon) return 100;
-  const cls = classByName(hero.className);
+  const cls = classById(idDaClasse(hero) ?? '');
   const pct = cls?.affinity[weapon.templateId];
   return pct ?? 100;
 }
@@ -317,6 +340,8 @@ export interface Companion {
   race: string;
   className: string;
   classIcon: string;
+  /** Igual ao herói: é o id que as regras de combate olham. */
+  classId?: string;
   hp: number;
   maxHp: number;
   attack: number;
@@ -329,19 +354,20 @@ export interface Companion {
   combatsLeft?: number;
 }
 
+/** Por id da classe, não pelo nome — ver a nota em `catalog.ts`. */
 const COMPANION_ROLES: Record<string, { ability: string; desc: string }> = {
-  Guerreiro: { ability: 'Proteção', desc: 'Pode interceptar ataques contra o herói.' },
-  Mago: { ability: 'Rajada Arcana', desc: 'Seus ataques ignoram parte da resistência.' },
-  Ladino: { ability: 'Ataque Furtivo', desc: 'Pode causar um segundo golpe.' },
-  Clérigo: { ability: 'Prece Curativa', desc: 'Pode recuperar a Vida do herói.' },
-  Bárbaro: { ability: 'Fúria', desc: 'Causa mais dano quando está ferido.' },
-  Arqueiro: { ability: 'Tiro Crítico', desc: 'Possui chance elevada de dano crítico.' },
-  Paladino: { ability: 'Proteção Sagrada', desc: 'Protege a equipe e resiste a golpes.' },
-  Necromante: { ability: 'Maldição', desc: 'Enfraquece criaturas durante a batalha.' },
-  Druida: { ability: 'Esporos', desc: 'Pode causar dano contínuo e auxiliar aliados.' },
-  Monge: { ability: 'Golpe Atordoante', desc: 'Pode impedir a reação do inimigo.' },
-  Bardo: { ability: 'Canção de Batalha', desc: 'Inspira os aliados durante o combate.' },
-  Caçador: { ability: 'Flecha Serrilhada', desc: 'Possui chance elevada de causar sangramento.' },
+  guerreiro: { ability: 'Proteção', desc: 'Pode interceptar ataques contra o herói.' },
+  mago: { ability: 'Rajada Arcana', desc: 'Seus ataques ignoram parte da resistência.' },
+  ladino: { ability: 'Ataque Furtivo', desc: 'Pode causar um segundo golpe.' },
+  clerigo: { ability: 'Prece Curativa', desc: 'Pode recuperar a Vida do herói.' },
+  barbaro: { ability: 'Fúria', desc: 'Causa mais dano quando está ferido.' },
+  arqueiro: { ability: 'Tiro Crítico', desc: 'Possui chance elevada de dano crítico.' },
+  paladino: { ability: 'Proteção Sagrada', desc: 'Protege a equipe e resiste a golpes.' },
+  necromante: { ability: 'Maldição', desc: 'Enfraquece criaturas durante a batalha.' },
+  druida: { ability: 'Esporos', desc: 'Pode causar dano contínuo e auxiliar aliados.' },
+  monge: { ability: 'Golpe Atordoante', desc: 'Pode impedir a reação do inimigo.' },
+  bardo: { ability: 'Canção de Batalha', desc: 'Inspira os aliados durante o combate.' },
+  cacador: { ability: 'Flecha Serrilhada', desc: 'Possui chance elevada de causar sangramento.' },
 };
 
 export function generateCompanion(rng: Rng = defaultRng): Companion {
@@ -353,7 +379,7 @@ export function generateCompanion(rng: Rng = defaultRng): Companion {
   for (const key of Object.keys(cls.bias) as AttrKey[]) attrs[key] += cls.bias[key] ?? 0;
 
   const maxHp = 18 + attrs.constituicao * 3;
-  const role = COMPANION_ROLES[cls.name] ?? { ability: 'Ataque', desc: 'Ajuda durante o combate.' };
+  const role = COMPANION_ROLES[cls.id] ?? { ability: 'Ataque', desc: 'Ajuda durante o combate.' };
 
   return {
     name: `${pick(FIRST_NAMES, rng)} ${pick(SURNAMES, rng)}`,
@@ -361,6 +387,7 @@ export function generateCompanion(rng: Rng = defaultRng): Companion {
     race: race.name,
     className: cls.name,
     classIcon: cls.icon,
+    classId: cls.id,
     hp: maxHp,
     maxHp,
     attack: 4 + Math.floor((attrs.forca + attrs.destreza) / 3),
@@ -378,19 +405,29 @@ export function generateCompanion(rng: Rng = defaultRng): Companion {
  */
 export function hydrateSavedHero(hero: Hero): Hero {
   const equip: HeroEquipment = { arma: hero.equip?.arma ?? null, secundaria: hero.equip?.secundaria ?? null, armadura: hero.equip?.armadura ?? null, acessorio: hero.equip?.acessorio ?? null };
-  let powerNames = hero.powerNames?.length ? hero.powerNames : [];
-  if (!powerNames.length) {
-    const cls = classByName(hero.className);
-    const signature = cls ? powerByName(cls.signature) : null;
-    powerNames = signature ? [signature.name] : [];
-  }
+
+  // Identidade resolvida uma vez, na entrada: o save que veio de antes só
+  // tem nome, e a partir daqui o resto do jogo só precisa olhar o id.
+  const classId = idDaClasse(hero) ?? undefined;
+  const raceId = idDaRaca(hero) ?? undefined;
+  const cls = classById(classId ?? '');
+
+  let powerIds = hero.powerIds?.length
+    ? hero.powerIds
+    : (hero.powerNames ?? []).map((name) => powerByName(name)?.id).filter((id): id is string => !!id);
+  if (!powerIds.length && cls) powerIds = [cls.signatureId];
 
   return recomputeDerived({
     ...hero,
     equip,
     attrPoints: hero.attrPoints || 0,
     buffs: {},
-    powerNames,
+    classId,
+    raceId,
+    powerIds,
+    // Regenerados do catálogo, não copiados do save: assim o nome mostrado
+    // acompanha o catálogo em vez de ficar congelado no que foi gravado.
+    powerNames: powerIds.map((id) => powerById(id)?.name).filter((name): name is string => !!name),
   });
 }
 

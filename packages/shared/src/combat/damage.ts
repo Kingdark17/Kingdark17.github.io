@@ -1,4 +1,4 @@
-import { classByName } from '../hero/catalog.js';
+import { classById, idDaClasse } from '../hero/catalog.js';
 import { hasDebuffEffect, type Hero } from '../hero/hero.js';
 import type { AffinityType } from '../monsters/species.js';
 import { decrementField, setStatusField, type CombatMonster } from './monster-state.js';
@@ -29,7 +29,7 @@ export function otherEquipAtk(hero: Hero): number {
     if (!item?.stats.ataque) continue;
     let pct = 100;
     if (slot === 'secundaria') {
-      const affinity = classByName(hero.className)?.affinity[item.templateId];
+      const affinity = classById(idDaClasse(hero) ?? '')?.affinity[item.templateId];
       if (affinity != null) pct = affinity;
     }
     sum += Math.round((item.stats.ataque * pct) / 100);

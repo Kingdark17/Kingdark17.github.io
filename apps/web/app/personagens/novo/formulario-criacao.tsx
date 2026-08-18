@@ -14,7 +14,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { ATTR_KEYS, ATTR_LABELS, CLASSES, RACES, powerByName, type ClassDef, type Race } from '@rpg-legend/shared';
+import { ATTR_KEYS, ATTR_LABELS, CLASSES, RACES, powerById, type ClassDef, type Race } from '@rpg-legend/shared';
 import { ErroDaApi } from '@/lib/api/client';
 import { gravarSave } from '@/lib/api/save';
 import { criacaoVazia, faltaParaComecar, rolarAtributosSePossivel, rolarTudo, sortearPoderes, type Criacao } from '@/lib/jogo/criacao';
@@ -74,7 +74,7 @@ export function FormularioCriacao({ slot }: { slot: number }) {
     }
   }
 
-  const assinatura = criacao.classe ? powerByName(criacao.classe.signature) : null;
+  const assinatura = criacao.classe ? powerById(criacao.classe.signatureId) : null;
 
   return (
     <>

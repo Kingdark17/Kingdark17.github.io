@@ -35,7 +35,7 @@ export function montarSaveInicial(criacao: Criacao, rng: Rng = defaultRng): Save
       race: criacao.raca,
       cls: criacao.classe,
       debuff: criacao.fraqueza,
-      chosenPowerNames: criacao.poderes.map((poder) => poder.name),
+      chosenPowerIds: criacao.poderes.map((poder) => poder.id),
       attrs: criacao.atributos,
     },
     rng,

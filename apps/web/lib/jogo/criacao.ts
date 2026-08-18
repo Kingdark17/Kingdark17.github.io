@@ -53,7 +53,7 @@ function sortear<T>(lista: readonly T[], rng: Rng): T {
 
 /** Dois poderes distintos, nunca o de assinatura da classe (que já vem de graça). */
 export function sortearPoderes(classe: ClassDef, rng: Rng = defaultRng): Power[] {
-  const disponiveis = POWERS.filter((poder) => poder.name !== classe.signature);
+  const disponiveis = POWERS.filter((poder) => poder.id !== classe.signatureId);
   const embaralhados = [...disponiveis].sort(() => rng() - 0.5);
   return embaralhados.slice(0, QUANTIDADE_DE_PODERES_EXTRAS);
 }

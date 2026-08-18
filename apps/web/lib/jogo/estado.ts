@@ -21,6 +21,7 @@ import {
   defaultRng,
   generateCityLayout,
   generateDungeonFloor,
+  hydrateSavedHero,
   inBounds,
   isBossFloor,
   onFloorReached,
@@ -123,7 +124,18 @@ function temCidade(save: SaveCarregado): save is SaveCarregado & { cityMap: City
  * monstros — é o que `applySave()` (`ui.js`) faz quando o save traz `map` e
  * `pos`. Save antigo sem mapa cai no caminho de gerar um andar novo.
  */
-export function retomarSave(save: SaveCarregado, rng: Rng = defaultRng): EstadoDoJogo {
+export function retomarSave(entrada: SaveCarregado, rng: Rng = defaultRng): EstadoDoJogo {
+  // Único ponto em que o save vem de fora, e por isso o único lugar que
+  // normaliza: `hydrateSavedHero` resolve aqui a identidade que os saves
+  // antigos não têm (`classId`, `raceId`, `powerIds`, a partir dos nomes
+  // gravados). Depois deste ponto o resto do jogo só olha id — que é o que
+  // deixa o nome mudar de idioma sem mexer em regra nenhuma.
+  //
+  // Não fica em `comuns()` de propósito: aquilo também roda em transição
+  // de dentro do jogo (`voltarParaCidade`), e refazer o herói a cada saída
+  // de masmorra não é normalizar, é mexer no que já estava certo.
+  const save: SaveCarregado = { ...entrada, hero: hydrateSavedHero(entrada.hero) };
+
   if (save.mapMode !== 'dungeon') return entrarNaCidade(save);
 
   if (Array.isArray(save.map) && save.map.length > 0 && save.pos) {

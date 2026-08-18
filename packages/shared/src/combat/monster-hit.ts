@@ -1,3 +1,4 @@
+import { idDaClasse } from '../hero/catalog.js';
 import { equipmentBonus } from '../hero/derived.js';
 import { hasDebuffEffect, type Companion, type Hero } from '../hero/hero.js';
 import { defaultRng, randomInt, type Rng } from '../rng.js';
@@ -98,7 +99,7 @@ function resolveAttackMultiplier(monster: CombatMonsterView, hero: Hero, rng: Rn
 /** Sorteia se o monstro mira num companheiro defensor, num companheiro qualquer, ou no herói (`null`). */
 function selectTargetPool(party: readonly Companion[], rng: Rng): Companion[] | null {
   const livingParty = party.filter((m) => m.hp > 0);
-  const defenders = livingParty.filter((m) => (m.stance || 'equilibrada') === 'defensiva' || m.className === 'Guerreiro');
+  const defenders = livingParty.filter((m) => (m.stance || 'equilibrada') === 'defensiva' || idDaClasse(m) === 'guerreiro');
 
   if (defenders.length && rng() < 0.55) return defenders;
   if (livingParty.length && rng() < 0.3) return livingParty;
@@ -141,7 +142,7 @@ function resolveHeroDamage(hero: Hero, monster: CombatMonsterView, attackMult: n
   if (hasDebuffEffect(nextHero, 'physicalVulnerability')) dmg = Math.max(1, Math.round(dmg * 1.2));
 
   let defensivePassiveTriggered = false;
-  if (nextHero.className === 'Guerreiro' && rng() < 0.2) {
+  if (idDaClasse(nextHero) === 'guerreiro' && rng() < 0.2) {
     dmg = Math.max(1, Math.round(dmg * 0.6));
     defensivePassiveTriggered = true;
   }

@@ -1,3 +1,4 @@
+import { idDaClasse } from '../hero/catalog.js';
 import type { Companion } from '../hero/hero.js';
 import type { Hero } from '../hero/hero.js';
 import { defaultRng, randomInt, type Rng } from '../rng.js';
@@ -52,7 +53,8 @@ export function applyPartyTurn(
     if (member.hp <= 0 || nextMonster.hp <= 0) continue;
 
     const stance = member.stance || 'equilibrada';
-    const isCleric = member.className === 'Clérigo' || member.className === 'Clerigo';
+    const classe = idDaClasse(member);
+    const isCleric = classe === 'clerigo';
 
     if (stance === 'suporte' && rng() < (isCleric ? 0.65 : 0.4)) {
       const heal = Math.max(4, Math.round((member.attrs?.sabedoria ?? 8) * 0.7));
@@ -69,44 +71,44 @@ export function applyPartyTurn(
     let dmg = Math.max(2, (member.attack || 5) + randomInt(5, rng));
     if (stance === 'agressiva') dmg = Math.round(dmg * 1.3);
     if (stance === 'defensiva' || stance === 'suporte') dmg = Math.round(dmg * 0.8);
-    if (member.className === 'Mago') dmg = Math.round(dmg * 1.2);
+    if (classe === 'mago') dmg = Math.round(dmg * 1.2);
 
     let passive: PartyPassiveKind | undefined;
-    if (member.className === 'Ladino' && rng() < 0.25) {
+    if (classe === 'ladino' && rng() < 0.25) {
       dmg = Math.round(dmg * 1.65);
       passive = 'ladino';
     }
-    if ((member.className === 'Bárbaro' || member.className === 'Barbaro') && member.hp < member.maxHp / 2) {
+    if (classe === 'barbaro' && member.hp < member.maxHp / 2) {
       dmg = Math.round(dmg * 1.35);
       passive = 'barbaro';
     }
-    if (member.className === 'Arqueiro' && rng() < 0.25) {
+    if (classe === 'arqueiro' && rng() < 0.25) {
       dmg = Math.round(dmg * 1.5);
       passive = 'arqueiro';
     }
 
     let status = nextMonster.status;
-    if (member.className === 'Necromante' && rng() < 0.3) {
+    if (classe === 'necromante' && rng() < 0.3) {
       status = setStatusField(status, 'enfraquecido', { turns: 2, amount: 0.2 });
       passive = 'necromante';
     }
-    if (member.className === 'Druida' && rng() < 0.3) {
+    if (classe === 'druida' && rng() < 0.3) {
       status = setStatusField(status, 'veneno', { turns: 3, dmg: Math.max(2, Math.round(dmg * 0.2)) });
       passive = 'druida';
     }
-    if (member.className === 'Monge' && rng() < 0.22) {
+    if (classe === 'monge' && rng() < 0.22) {
       status = setStatusField(status, 'atordoado', (status?.atordoado ?? 0) + 1);
       passive = 'monge';
     }
-    if (member.className === 'Bardo' && rng() < 0.3) {
+    if (classe === 'bardo' && rng() < 0.3) {
       status = setStatusField(status, 'vulneravel', { turns: 2, amount: 0.15 });
       passive = 'bardo';
     }
-    if ((member.className === 'Caçador' || member.className === 'Cacador') && rng() < 0.3) {
+    if (classe === 'cacador' && rng() < 0.3) {
       status = setStatusField(status, 'sangramento', { turns: 3, dmg: Math.max(2, Math.round(dmg * 0.2)) });
       passive = 'cacador';
     }
-    if (member.className === 'Paladino' && rng() < 0.25) {
+    if (classe === 'paladino' && rng() < 0.25) {
       const paladinHeal = Math.max(3, Math.round(dmg * 0.2));
       nextHero = { ...nextHero, hp: Math.min(nextHero.maxHp, nextHero.hp + paladinHeal) };
       passive = 'paladino';

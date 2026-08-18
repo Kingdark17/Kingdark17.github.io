@@ -14,7 +14,7 @@ const SEM_DEBUFF = DEBUFFS.find((d) => !d.effect)!;
 
 function heroiDe(className: string): Hero {
   const cls = classByName(className)!;
-  return buildHero({ name: 'T', race: HUMANO, cls, debuff: SEM_DEBUFF, chosenPowerNames: [] }, seededRng(1));
+  return buildHero({ name: 'T', race: HUMANO, cls, debuff: SEM_DEBUFF, chosenPowerIds: [] }, seededRng(1));
 }
 
 function monstro(): CombatMonster {
@@ -115,8 +115,15 @@ describe('triggerEnemyClassPower', () => {
 });
 
 describe('applyPartyTurn', () => {
+  /**
+   * O companheiro sorteado já vem com `classId`. Trocar só o `className`
+   * no override não bastaria: `idDaClasse` prefere o id, então a passiva
+   * testada seria a da classe sorteada — o teste passaria a medir outra
+   * coisa. Por isso o id acompanha o nome aqui.
+   */
   function membro(overrides: Partial<Companion> = {}): Companion {
-    return { ...generateCompanion(seededRng(1)), stance: 'equilibrada', hp: 20, maxHp: 20, ...overrides };
+    const base: Companion = { ...generateCompanion(seededRng(1)), stance: 'equilibrada', hp: 20, maxHp: 20, ...overrides };
+    return { ...base, classId: overrides.classId ?? classByName(base.className)?.id };
   }
 
   it('postura suporte cura o herói em vez de atacar', () => {

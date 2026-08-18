@@ -741,6 +741,87 @@ gastar CPU à toa ou deixar banda na mesa.
 
 ---
 
+## Trocar o idioma do jogo — o que estava no caminho
+
+Você pediu isso em 2026-08-18. **Não havia rastro no repo**: nenhum dos
+167 commits, nem o `CLAUDE.md`, nem estas notas, nem o cliente antigo
+tinham qualquer sinal de idioma, tradução ou seletor. Está registrado
+agora.
+
+### O texto não era o problema. As regras eram.
+
+Antes de traduzir uma palavra, uma coisa precisava mudar: **as regras do
+jogo consultavam o texto em português**.
+
+| Onde | O que fazia |
+|---|---|
+| `combat/party.ts` | onze comparações `member.className === 'Clérigo'`, `'Mago'`, `'Bárbaro'`… |
+| `combat/resolve-attack.ts` | `'Mago'`, `'Bárbaro'`, `'Arqueiro'` |
+| `combat/monster-hit.ts` | `'Guerreiro'`, duas vezes |
+| `combat/damage.ts` | `classByName(hero.className)` decidia afinidade de arma |
+| `hero/catalog.ts` | `CLASS_PASSIVES` chaveado pelo nome |
+| `hero/hero.ts` | `COMPANION_ROLES` chaveado pelo nome; poderes resolvidos por `powerByName` |
+
+Renomear `Mago` para `Mage` teria mudado dano, desligado a cura do
+clérigo, sumido com a passiva do guerreiro e **tirado todos os poderes do
+herói** — sem erro nenhum, porque toda busca por nome termina em `?? null`
+ou num `.filter()`. O rastro disso já estava visível: alguém tinha
+escrito `'Clérigo' || 'Clerigo'` e `'Bárbaro' || 'Barbaro'` quando um
+acento sumiu de um save.
+
+Itens e monstros já faziam certo (`templateId`, `speciesId`): identidade
+por id, nome montado na hora de mostrar. Classe, raça e poder não.
+
+### O que mudou
+
+Classe, raça e poder já tinham `id` no catálogo — o save é que guardava só
+o nome. Agora:
+
+- **As regras só olham id.** `idDaClasse`/`idDaRaca` resolvem quem chega
+  sem ele, e são o **único** lugar onde a compatibilidade com save antigo
+  mora.
+- `ClassDef.signature` (nome do poder) virou `signatureId`.
+- `Hero` e `Companion` ganharam `classId`, `raceId`, `powerIds` —
+  opcionais, porque os saves que já estão na nuvem não têm.
+- `hydrateSavedHero` preenche os ids a partir dos nomes gravados, **uma
+  vez, na entrada do save** (`retomarSave`). Não fica em `comuns()` de
+  propósito: aquilo também roda em transição de dentro do jogo
+  (`voltarParaCidade`), e refazer o herói a cada saída de masmorra não é
+  normalizar, é mexer no que já estava certo — o teste da derrota pegou
+  isso.
+- `powerNames` passou a ser **regenerado do catálogo** no carregamento, em
+  vez de copiado do save. É o que faz o nome mostrado acompanhar o idioma
+  em vez de ficar congelado no que foi gravado.
+
+Nada disso mexe na validação anti-trapaça: `isValidSave` só exige
+`hero.name`/`attrs`/`equip`, e `isValidTransition` olha nível, ouro,
+andar, inventário e atributos.
+
+**Uma armadilha que o teste do bárbaro revelou:** onde os dois campos
+existem, o id ganha. Um fixture que trocava só o `className` continuava
+com o `classId` da classe sorteada, e a passiva testada nunca disparava —
+o teste passou a medir outra coisa sem falhar. Vale pra qualquer código
+que construa herói ou companheiro: **mudar o nome sem mudar o id não muda
+nada.**
+
+### O que falta pra trocar de idioma de fato
+
+O caminho está aberto, mas o texto ainda está escrito dentro do código.
+Falta decidir e fazer:
+
+1. **Onde mora o catálogo de textos.** A engine não pode importar React
+   nem DOM, e o servidor valida jogada com ela — então o texto pode ser
+   dado dentro de `packages/shared`, mas não pode virar dependência de
+   framework.
+2. **Trocar ou acrescentar.** "Trocar" (o jogo passa a ser em inglês) e
+   "acrescentar" (seletor pt/en) dão trabalhos diferentes: o segundo
+   precisa de preferência guardada e de tudo em duas línguas.
+3. **O que fica de fora.** Nome de item, monstro e sala já sai do
+   catálogo por id, então acompanha. Nome de herói e mensagem de chat são
+   do jogador — esses nunca se traduzem.
+
+---
+
 ## Fase 5 — Neon → Supabase
 
 Decidido por você em 2026-08-17. O que já está feito não precisa de

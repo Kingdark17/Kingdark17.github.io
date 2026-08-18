@@ -1,3 +1,4 @@
+import { idDaClasse } from '../hero/catalog.js';
 import { equipmentBonus } from '../hero/derived.js';
 import { hasDebuffEffect, weaponAffinityPct, type Hero } from '../hero/hero.js';
 import type { ProcTemplate } from '../items/templates.js';
@@ -65,7 +66,7 @@ export function resolveAttack(
   const rng = options.rng ?? defaultRng;
   const petCritico = options.petCriticoBonus ?? 0;
 
-  const isMage = hero.className === 'Mago';
+  const isMage = idDaClasse(hero) === 'mago';
   const magicalAttack = isMage && attackStyle === 'magic';
 
   if (magicalAttack && hero.mp < MAGIC_ATTACK_COST) {
@@ -109,7 +110,7 @@ export function resolveAttack(
   }
 
   let forcaMult = buffs.forcaTurns && buffs.forcaTurns > 0 ? 1 + (buffs.forcaAmount ?? 0) : 1;
-  if ((heroAfterCost.className === 'Bárbaro' || heroAfterCost.className === 'Barbaro') && heroAfterCost.hp < heroAfterCost.maxHp * 0.5) {
+  if (idDaClasse(heroAfterCost) === 'barbaro' && heroAfterCost.hp < heroAfterCost.maxHp * 0.5) {
     forcaMult *= 1.35;
   }
 
@@ -130,7 +131,7 @@ export function resolveAttack(
     nextMonster = { ...monster, ...mod.monster };
   }
 
-  const critChance = (d.critico + (bonus.critico ?? 0) + petCritico + (heroAfterCost.className === 'Arqueiro' ? 8 : 0)) / 100;
+  const critChance = (d.critico + (bonus.critico ?? 0) + petCritico + (idDaClasse(heroAfterCost) === 'arqueiro' ? 8 : 0)) / 100;
   const isCrit = guaranteedCrit || rng() < critChance || roll === 20;
   if (isCrit) dmg = Math.round(dmg * 1.6);
 
