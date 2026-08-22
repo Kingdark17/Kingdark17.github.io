@@ -99,6 +99,39 @@ RPG.UI = (function(){
     creation.attrs = RPG.Player.rollAttrs(creation.race, creation.cls, creation.debuff);
     renderAttrsResult();
   }
+  // a animacao de roleta, tirada de dentro do "Rolar Tudo" para os botoes de
+  // regirar usarem a mesma -- mesma sensacao, um lugar so pra mexer.
+  // `amostra` e opcional: nos atributos nao ha lista pra piscar, entao o
+  // botao so pulsa com o proprio texto.
+  function animarRoleta(btn, amostra, voltas, aoTerminar){
+    var original = btn.textContent, count = 0;
+    btn.classList.add('rolling'); btn.disabled = true;
+    var timer = setInterval(function(){
+      if(amostra){ var flavor = pick(amostra); btn.textContent = flavor.icon+' '+flavor.name; }
+      if(++count >= voltas){
+        clearInterval(timer);
+        btn.classList.remove('rolling'); btn.textContent = original; btn.disabled = false;
+        aoTerminar(); clearError(); atualizarRegiros();
+      }
+    }, 70);
+  }
+  // regirar poder precisa da classe (o sorteio exclui o poder de assinatura
+  // dela) e regirar atributo precisa de raca, classe e fraqueza -- sem isso
+  // o sorteio estoura. Em vez de deixar quebrar, o botao fica desligado ate
+  // haver o que sortear.
+  function atualizarRegiros(){
+    var pronto = {
+      rerollPowersBtn: !!creation.cls,
+      rerollDebuffBtn: true,
+      rerollAttrsBtn: !!(creation.race && creation.cls && creation.debuff)
+    };
+    Object.keys(pronto).forEach(function(id){
+      var btn = document.getElementById(id);
+      if(!btn) return;
+      btn.disabled = !pronto[id];
+      btn.classList.toggle('roulette-used', !pronto[id]);
+    });
+  }
 
   function renderCreationScreen(){
     var accountUser = (RPG.Account && RPG.Account.currentUser && RPG.Account.currentUser()) || null;
@@ -114,6 +147,7 @@ RPG.UI = (function(){
       Array.prototype.forEach.call(document.getElementById('raceGrid').children, function(c){ c.classList.remove('selected'); });
       card.classList.add('selected'); clearError();
       rerollAttrsIfReady();
+      atualizarRegiros();
     });
     buildPickGrid('classGrid', RPG.Player.CLASSES, function(it, card){
       creation.cls = it;
@@ -121,25 +155,35 @@ RPG.UI = (function(){
       card.classList.add('selected'); clearError();
       if(creation.powers.length) rerollPowers(); else renderPowerGrid();
       rerollAttrsIfReady();
+      atualizarRegiros();
     });
     renderPowerGrid();
     renderDebuffResult();
     renderAttrsResult();
 
-    allBtn.onclick=function(){
-      var btn=this, original=btn.textContent, count=0;
-      btn.classList.add('rolling'); btn.disabled=true;
-      var flavorPool = RPG.Player.CLASSES;
-      var timer=setInterval(function(){
-        var flavor=pick(flavorPool); btn.textContent=flavor.icon+' '+flavor.name;
-        if(++count>=14){
-          clearInterval(timer);
-          btn.classList.remove('rolling'); btn.textContent=original; btn.disabled=false;
-          rollEverything();
-          clearError();
-        }
-      },70);
+    allBtn.onclick=function(){ animarRoleta(this, RPG.Player.CLASSES, 14, rollEverything); };
+
+    // Regiros por secao: pra quem nao gostou so da fraqueza nao precisar
+    // sortear tudo de novo. Menos voltas que o "Rolar Tudo" porque sao um
+    // ajuste, nao o momento da criacao.
+    document.getElementById('rerollPowersBtn').onclick=function(){
+      animarRoleta(this, RPG.Player.POWERS, 8, rerollPowers);
     };
+    document.getElementById('rerollDebuffBtn').onclick=function(){
+      animarRoleta(this, RPG.Player.DEBUFFS, 8, function(){
+        creation.debuff = pick(RPG.Player.DEBUFFS);
+        renderDebuffResult();
+        // atributo depende da fraqueza (a tela diz isso), entao acompanha
+        rerollAttrsIfReady();
+      });
+    };
+    document.getElementById('rerollAttrsBtn').onclick=function(){
+      animarRoleta(this, null, 8, function(){
+        creation.attrs = RPG.Player.rollAttrs(creation.race, creation.cls, creation.debuff);
+        renderAttrsResult();
+      });
+    };
+    atualizarRegiros();
 
     document.getElementById('nameInput').oninput = function(e){ creation.name = e.target.value; clearError(); };
   }
