@@ -27,7 +27,10 @@
     "db:ping": "node scripts/testa-conexao.mjs",
     "db:audit": "node scripts/confere-supabase.mjs",
     "db:smoke": "ts-node --project tsconfig.json scripts/prova-app-supabase.ts",
-    "db:verify-migrations": "node scripts/verifica-migracao.mjs"
+    "db:verify-migrations": "node scripts/verifica-migracao.mjs",
+    "email:dns": "node scripts/confere-dns.mjs rpglegend.com.br",
+    "email:key": "node scripts/confere-resend.mjs",
+    "email:test": "node scripts/envia-teste.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

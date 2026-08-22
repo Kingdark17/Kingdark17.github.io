@@ -10,9 +10,11 @@
  * o envio passar a funcionar sem reiniciar o processo. `fetch` entra
  * injetável só pra o teste não sair pra internet.
  *
- * NÃO VERIFICADO CONTRA O RESEND DE VERDADE: sem chave de API não dá pra
- * confirmar que a requisição é aceita ponta a ponta. O que os testes
- * cobrem é o formato do payload e o tratamento de erro/ausência de config.
+ * VERIFICADO PONTA A PONTA em 22/08/2026, com o domínio rpglegend.com.br já
+ * verificado no Resend: `scripts/envia-teste.mjs` instancia esta mesma classe
+ * e manda e-mail de verdade — o Resend aceitou. Os testes unitários cobrem o
+ * formato do payload e o tratamento de erro; o script cobre o caminho real,
+ * e é o que rodar de novo se alguém mexer no envio.
  */
 
 import { Logger } from '@nestjs/common';

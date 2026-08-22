@@ -985,11 +985,66 @@ modo dev:
 
 ---
 
+## E-mail saindo de verdade (2026-08-22)
+
+Domínio `rpglegend.com.br`, registrado no Registro.br, verificado no Resend
+(região São Paulo). O envio foi provado ponta a ponta com a classe real, não
+com uma cópia do request: `pnpm --filter api email:test seu@email.com`
+instancia o `ResendEmailSender` do `dist` e manda de verdade.
+
+Três atalhos novos, no padrão dos `db:*`:
+
+| Comando | Pra quê |
+|---|---|
+| `email:dns` | o DNS já tem o que o Resend precisa? Pergunta pro 8.8.8.8, não pro resolvedor do provedor |
+| `email:key` | a `RESEND_API_KEY` é válida? Distingue "chave errada" de "chave só de envio" |
+| `email:test` | manda e-mail de verdade pela classe de produção |
+
+### O formato dos registros mudou, e a documentação velha engana
+
+O Resend hoje pede **DKIM em TXT** (`resend._domainkey`) mais **dois CNAME**
+(`send` e `rsend`, apontando pra `*.forge.rmta.net`). O par MX + TXT/SPF em
+`send.` que a documentação antiga descreve **não é mais isso**. O
+`confere-dns.mjs` aceita os dois formatos de propósito, pra não reprovar
+quem seguiu a tela que viu.
+
+### Duas horas perdidas por olhar o servidor errado
+
+Quando você cria uma zona própria, o Registro.br **muda os servidores de
+nome da zona** — de `auto.dns.br` (a zona padrão anti-spoofing deles) para
+`sec.dns.br` (a sua). Um verificador que fixe os IPs dos servidores antigos
+responde `ENOTFOUND` pra sempre, mesmo com tudo publicado e correto.
+
+Foi exatamente o que aconteceu aqui: 24 checagens em 2h, todas negativas,
+enquanto os registros já estavam no ar. **Sempre reconsultar `NS` antes de
+perguntar qualquer coisa** — é o que o `confere-dns.mjs` faz.
+
+### O que a zona nova perdeu
+
+A zona padrão do Registro.br trazia `v=spf1 -all`, `MX 0 .` e
+`v=DMARC1; p=reject;` — a configuração "este domínio não manda nem recebe
+e-mail". Criar zona própria **substituiu tudo**, e os três sumiram.
+
+Nenhum atrapalha o envio (o SPF do Resend vive no subdomínio `send.`, e o
+DMARC passava por DKIM de qualquer jeito). Mas vale recolocar o DMARC —
+começando em `p=none` pra ler relatório antes de mandar rejeitar, já que
+`p=reject` faz e-mail com problema **sumir calado** em vez de cair no spam.
+
+### A chave é só de envio, e isso é de propósito
+
+A `RESEND_API_KEY` tem permissão `Sending access`. Ela envia e não faz mais
+nada — não lê domínio, não mexe na conta. Consequência prática: qualquer
+script que tente `GET /domains` com ela leva `401 restricted_api_key`. Isso
+é a chave **certa**, não uma chave quebrada; o `confere-resend.mjs` trata os
+dois casos separado porque confundir os dois custa tempo.
+
+---
+
 ## Travado esperando você
 
 | O quê | Pra quê | Sem isso |
 |---|---|---|
-| `RESEND_API_KEY` + `EMAIL_FROM` | confirmar e-mail e reset de senha | o fluxo inteiro funciona e grava o token, só não sai e-mail (o original se comporta igual) |
+| ~~`RESEND_API_KEY` + `EMAIL_FROM`~~ | confirmar e-mail e reset de senha | **resolvido em 2026-08-22** — domínio `rpglegend.com.br` verificado, envio provado ponta a ponta |
 | `DATABASE_URL` de staging | rodar tudo contra banco real | ~~PGlite cobre a maior parte~~ **resolvido em 2026-08-18**: o Supabase serve de staging |
 | onde a API vai rodar | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | o código dos dois já existe (`lerTrustProxy` em `bootstrap.ts`); falta só o valor, que depende da hospedagem. Sem `TRUST_PROXY=1` atrás de proxy, ver bug #7 |
 | arte em camadas | paperdoll PixiJS | fase 4 inteira parada |
