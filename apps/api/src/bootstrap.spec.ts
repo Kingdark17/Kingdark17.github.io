@@ -12,7 +12,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import request from 'supertest';
 
 import { AppModule } from './app.module';
-import { MAX_BODY_BYTES, configureApp } from './bootstrap';
+import { MAX_BODY_BYTES, configureApp, lerTrustProxy } from './bootstrap';
 import { servidorDe } from './testing/servidor';
 
 describe('configureApp', () => {
@@ -75,5 +75,36 @@ describe('configureApp', () => {
 
     expect(response.status).toBe(503);
     expect(response.body).toEqual({ error: 'O banco de dados de contas ainda não foi configurado.' });
+  });
+});
+
+describe('lerTrustProxy', () => {
+  // `null` significa "não mexer no Express", que é o comportamento de
+  // hoje: correto pra quem expõe o processo direto, e o único padrão
+  // seguro — ligado sem proxy na frente, qualquer cliente escolheria o
+  // próprio IP pelo cabeçalho e o teto por IP sumiria.
+  it.each([undefined, '', '   ', 'false'])('não mexe em nada com %p', (valor) => {
+    expect(lerTrustProxy(valor)).toBeNull();
+  });
+
+  it('aceita o número de proxies à frente', () => {
+    expect(lerTrustProxy('1')).toBe(1);
+    expect(lerTrustProxy(' 2 ')).toBe(2);
+  });
+
+  it('aceita `true` pra confiar em todos', () => {
+    expect(lerTrustProxy('true')).toBe(true);
+  });
+
+  it('passa adiante o que o Express souber interpretar', () => {
+    expect(lerTrustProxy('loopback')).toBe('loopback');
+    expect(lerTrustProxy('10.0.0.1, 10.0.0.2')).toBe('10.0.0.1, 10.0.0.2');
+  });
+
+  // Número quebrado não vira `NaN` silencioso: segue como texto, e o
+  // Express reclama alto em vez de o teto virar uma incógnita.
+  it('não transforma número inválido em NaN', () => {
+    expect(lerTrustProxy('1.5')).toBe('1.5');
+    expect(lerTrustProxy('-1')).toBe('-1');
   });
 });

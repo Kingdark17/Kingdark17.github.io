@@ -1,0 +1,38 @@
+# O contexto do build é a raiz do repositório (ver apps/api/Dockerfile),
+# então tudo que não for necessário pra API precisa ser barrado aqui —
+# senão vira upload e cache invalidado a cada build.
+
+.git
+.github
+.claude
+
+# Instalados dentro da imagem, a partir do lockfile. Copiar os de fora
+# quebraria: os binários nativos são os do Windows/macOS de quem constrói.
+**/node_modules
+
+# Recompilados dentro da imagem.
+**/dist
+**/.next
+**/*.tsbuildinfo
+
+# Segredos. O .gitignore já os barra do git; aqui é a outra porta.
+**/.env
+**/.env.*
+
+# O jogo atual é servido estaticamente pelo GitHub Pages e não tem nada
+# que fazer dentro da API.
+rpg-legend
+
+# O front tem imagem própria (Vercel); só o package.json dele entra, e o
+# Dockerfile copia esse explicitamente.
+apps/web/app
+apps/web/lib
+apps/web/public
+apps/web/components
+
+# Banco de desenvolvimento em disco, testes e documentação.
+**/.pglite-dev
+**/test
+**/*.spec.ts
+*.md
+!README.md

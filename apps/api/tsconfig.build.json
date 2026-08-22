@@ -1,6 +1,25 @@
 {
   "extends": "./tsconfig.json",
+  // `rootDir` fixo em `src`, senão o TypeScript infere a raiz comum de tudo
+  // que ele compila. Como `drizzle.config.ts` e `scripts/` moram na raiz do
+  // pacote, a raiz inferida virava o pacote inteiro e a saída ia parar em
+  // `dist/src/main.js` — enquanto `start:prod` chama `node dist/main`. Nunca
+  // deu erro porque até agora a API só rodou em modo dev.
+  "compilerOptions": {
+    "rootDir": "./src",
+    // Dentro do `dist` de propósito. O `nest-cli.json` tem
+    // `deleteOutDir: true`, então o `dist` some a cada build; com o cache
+    // incremental fora dele, o TypeScript apagava a saída, consultava um
+    // cache que dizia "tudo compilado" e **não emitia nada** — build
+    // "bem-sucedido" com a pasta vazia. Guardados juntos, os dois são
+    // limpos juntos.
+    "tsBuildInfoFile": "./dist/tsconfig.build.tsbuildinfo"
+  },
   // `src/db/testing/` sobe um Postgres em WASM pros testes de integração;
   // depende de devDependencies e não pode ir pro build de produção.
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "src/db/testing/**"]
+  //
+  // `scripts/` e `drizzle.config.ts` são ferramenta de desenvolvimento:
+  // ficam fora do build de produção, mas continuam checados pelo
+  // `pnpm typecheck`, que usa o `tsconfig.json` e não este arquivo.
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "src/db/testing/**", "scripts/**", "drizzle.config.ts"]
 }

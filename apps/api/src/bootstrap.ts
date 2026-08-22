@@ -26,7 +26,38 @@ import { NoStoreInterceptor } from './common/no-store.interceptor';
  */
 export const MAX_BODY_BYTES = 700_000;
 
+/**
+ * Traduz `TRUST_PROXY` pro que o Express espera, ou `null` pra não mexer.
+ *
+ * **Por que é opt-in e não ligado sempre.** As duas pontas erram feio:
+ *
+ * - Desligado atrás de proxy, `req.ip` é o IP do proxy. O teto de 12
+ *   tentativas por minuto do `IpRateLimitGuard` passa a ser somado entre
+ *   os jogadores, e meia dúzia deles logando junto tranca o login geral.
+ * - Ligado sem proxy na frente, qualquer cliente manda o cabeçalho
+ *   `X-Forwarded-For` que quiser e escolhe o próprio IP — o teto deixa de
+ *   existir, que é pior que o primeiro caso.
+ *
+ * Não há como adivinhar qual é o certo lendo o processo: depende de onde
+ * ele foi hospedado. Daí ser uma decisão declarada no ambiente, com o
+ * padrão sendo o comportamento de hoje.
+ *
+ * Valores: um número (quantos proxies confiar — `1` serve pra
+ * praticamente toda hospedagem gerenciada), `true` (confia em todos, só
+ * se você souber o que está fazendo), ou qualquer expressão que o Express
+ * aceite (`loopback`, lista de IPs/CIDRs separada por vírgula).
+ */
+export function lerTrustProxy(bruto = process.env.TRUST_PROXY): boolean | number | string | null {
+  const valor = bruto?.trim();
+  if (!valor || valor === 'false') return null;
+  if (valor === 'true') return true;
+  const numero = Number(valor);
+  return Number.isInteger(numero) && numero >= 0 ? numero : valor;
+}
+
 export function configureApp(app: NestExpressApplication): NestExpressApplication {
+  const trustProxy = lerTrustProxy();
+  if (trustProxy !== null) app.set('trust proxy', trustProxy);
   app.useBodyParser('json', { limit: MAX_BODY_BYTES });
   app.enableCors({
     origin: process.env.ALLOWED_ORIGIN || '*',

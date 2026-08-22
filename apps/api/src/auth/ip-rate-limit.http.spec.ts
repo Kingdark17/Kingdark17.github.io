@@ -47,3 +47,51 @@ describe('rate limit por IP nas rotas de conta', () => {
     expect((await request(server).get('/api/account/status')).status).toBe(200);
   });
 });
+
+/**
+ * O teto é por IP, e atrás de proxy o IP que o Express vê é o do proxy —
+ * o que faria as 12 tentativas serem somadas entre os jogadores. Os dois
+ * testes abaixo existem em par de propósito: um mostra o estrago, o
+ * outro mostra o conserto. Ver `lerTrustProxy` em `bootstrap.ts`.
+ */
+describe('atrás de proxy', () => {
+  const guardado = process.env.TRUST_PROXY;
+
+  const subir = async (): Promise<INestApplication> => {
+    const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
+    const app = configureApp(moduleRef.createNestApplication());
+    await app.init();
+    return app;
+  };
+
+  const tentarComo = (app: INestApplication, ip: string) =>
+    request(servidorDe(app)).post('/api/account/login').set('X-Forwarded-For', ip).send({ username: 'aria', password: 'segredo123' });
+
+  afterEach(() => {
+    if (guardado === undefined) delete process.env.TRUST_PROXY;
+    else process.env.TRUST_PROXY = guardado;
+  });
+
+  it('sem TRUST_PROXY, um jogador sozinho tranca o login dos outros', async () => {
+    delete process.env.TRUST_PROXY;
+    const app = await subir();
+
+    for (let i = 0; i < IP_ATTEMPT_LIMIT; i += 1) expect((await tentarComo(app, '203.0.113.7')).status).not.toBe(429);
+
+    // Outro jogador, outro IP — e mesmo assim barrado, porque o contador
+    // ficou na chave do proxy. É o comportamento que o TRUST_PROXY corrige.
+    expect((await tentarComo(app, '203.0.113.9')).status).toBe(429);
+    await app.close();
+  });
+
+  it('com TRUST_PROXY, cada jogador tem o teto dele', async () => {
+    process.env.TRUST_PROXY = '1';
+    const app = await subir();
+
+    for (let i = 0; i < IP_ATTEMPT_LIMIT; i += 1) expect((await tentarComo(app, '203.0.113.7')).status).not.toBe(429);
+
+    expect((await tentarComo(app, '203.0.113.7')).status).toBe(429);
+    expect((await tentarComo(app, '203.0.113.9')).status).not.toBe(429);
+    await app.close();
+  });
+});

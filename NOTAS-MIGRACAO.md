@@ -21,7 +21,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
 | 4 — paperdoll PixiJS | não começou |
-| 5 — **Neon → Supabase** | **começada em 2026-08-17**: base de migração versionada e provada igual à produção, acesso público do Supabase fechado por migração. Falta rodar contra o Supabase — ver "Fase 5" |
+| 5 — **Neon → Supabase** | **pronta em 2026-08-18**: banco criado (Postgres 17.6, `sa-east-1`), migrações aplicadas e conferidas contra o banco real, acesso público fechado inclusive pras tabelas futuras. O jogo no ar **continua no Neon** — o Supabase está vazio e é o ambiente novo, não uma virada. Ver "Fase 5" |
 | 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
 
 ### Fase 2 — o que já existe no Nest
@@ -892,24 +892,96 @@ Roda dentro de um `DO` que só age se o papel `anon` existir, então em
 PGlite, Neon ou Postgres local é um nada-a-fazer — o que o teste de
 comparação de schema comprova, porque aplica esse arquivo também.
 
-### O que falta, e as duas decisões que faltam com ele
+### Rodado em 2026-08-18 — e o que apareceu no caminho
 
-`pnpm db:migrate` (novo) aplica as migrações contra a `DATABASE_URL` do
-ambiente. Falta rodar — e antes disso, decidir:
+Escolha feita: **banco novo e vazio**, só pro ambiente novo. O jogo no ar
+continua no Neon e nenhuma conta real se moveu.
 
-1. **O que o Supabase recebe primeiro.** Banco novo e vazio só pro
-   ambiente novo (o jogo no ar continua no Neon, nenhuma conta se mexe);
-   ou uma cópia dos dados reais via `pg_dump` (dá pra testar com dados de
-   verdade, e as duas bases divergem a partir da cópia); ou a virada
-   completa, com o servidor antigo apontando pro Supabase também — aí é
-   conta de gente real mudando de casa, com janela de indisponibilidade e
-   caminho de volta preparado.
-2. **Se a foto de perfil vai junto pro Storage** ou fica pra uma etapa
-   própria. Hoje ela é base64 numa coluna de texto; já não sai de lá numa
-   lista (ver "Segundo corte"), mas o lugar dela é o Storage.
+O `pnpm db:migrate` aplicou as três migrações contra o Supabase
+(`sa-east-1`). Conferido no banco de verdade, não no "applied
+successfully": 7 tabelas, 9 FKs com `ON DELETE CASCADE`, os índices, RLS
+ligado, e o app escrevendo e lendo pelo `schema.ts` real (defaults,
+`jsonb` ida e volta, `Date`, cascade). Repetir o comando não muda nada.
+
+**A `0001` não bastava.** Ela revoga o acesso de `anon`/`authenticated`
+tabela por tabela, pelo nome — o que protege as sete de hoje e mais nada.
+O Supabase deixa um `ALTER DEFAULT PRIVILEGES` do papel `postgres` dando
+`arwdDxtm` a `anon` em **toda tabela nova** do schema `public`. Não foi
+deduzido: uma tabela criada no banco nascia legível **e gravável** pela
+chave pública. A `0002` muda o padrão, em vez de depender de alguém
+lembrar de revogar a cada migração futura.
+
+**Isto só dá pra testar contra um Supabase real** — no PGlite dos testes
+não existe papel `anon`. Daí os scripts em `apps/api/scripts/`, com
+`pnpm --filter api db:audit` sendo o que precisa rodar depois de qualquer
+migração que crie tabela. Ele não pergunta ao Postgres se o privilégio
+foi revogado: vira o papel `anon` e tenta ler e-mail e hash de `users`.
+
+**O drizzle-kit carrega o `.env` sozinho.** Descoberto aqui: com um
+`apps/api/.env` presente, `db:migrate` e `db:push` vão nele sem ninguém
+exportar variável nenhuma. Variável já exportada no ambiente ganha do
+arquivo. O `drizzle.config.ts` passou a imprimir o host de destino antes
+de agir, porque "eu achei que estava no banco de teste" precisa ser
+perceptível **antes**.
+
+### O que ficou de fora, de propósito
+
+**A foto de perfil continua base64 numa coluna de texto.** Já não sai de
+lá numa lista (ver "Segundo corte"), mas o lugar dela é o Supabase
+Storage. Ficou pra etapa própria — e agora está **destravada**, porque o
+projeto no Supabase existe. Só passa a valer de fato quando a API nova
+subir.
 
 **A regra de sempre continua:** nunca apontar `drizzle-kit push`/`migrate`
 pro banco de produção sem decisão explícita.
+
+---
+
+## A imagem da API (2026-08-18)
+
+```
+docker build -f apps/api/Dockerfile -t rpg-legend-api .
+```
+
+**O ponto na raiz não é descuido.** `@rpg-legend/shared` é `workspace:*`
+e não existe dentro de `apps/api/`, então o contexto do build tem que ser
+o repositório inteiro. Hospedagem que só sabe apontar pra uma subpasta
+não constrói isto.
+
+Três estágios: `deps` instala só produção
+(`--prod --filter api... --ignore-scripts`, 144 pacotes, 68 MB), `builder`
+compila com tudo (sem `--ignore-scripts`, senão o esbuild que o tsup usa
+fica sem binário nativo), e `runner` junta os dois `dist` por cima do
+`deps`.
+
+### O que foi verificado, e o que não
+
+**Não há Docker nesta máquina**, então a imagem nunca foi construída. O
+primeiro `docker build` é o teste dela.
+
+O que foi verificado de verdade, rodando: o `--prod --filter api...`
+instala e resolve o `@rpg-legend/shared`; o layout resultante roda com
+`node dist/main` e responde em `/health`; e `pnpm --filter api... build`
+constrói o shared antes da API. Ou seja, cada comando do Dockerfile foi
+exercitado fora dele.
+
+### Dois bugs de build que apareceram junto
+
+Os dois existiam antes, e nenhum aparecia porque a API só tinha rodado em
+modo dev:
+
+1. **`node dist/main` não funcionava.** O `drizzle.config.ts` mora na raiz
+   do pacote e entrava no build, o que empurrava a raiz inferida pelo
+   TypeScript pra o pacote inteiro e a saída pra `dist/src/main.js` —
+   enquanto `start:prod` chama `dist/main`. Resolvido fixando `rootDir`
+   em `src` no `tsconfig.build.json`, o que também tirou `drizzle.config.js`
+   e os scripts de dev da imagem de produção.
+2. **`nest build` dizendo "Done" sem gerar nada.** O cache incremental
+   (`.tsbuildinfo`) ficava fora do `dist`, e o `nest-cli.json` tem
+   `deleteOutDir: true`: apagava a saída, lia um cache que dizia "tudo
+   compilado" e não emitia arquivo nenhum. Silencioso — sai com código 0.
+   Resolvido pondo o cache dentro do `dist`, pra os dois serem limpos
+   juntos.
 
 ---
 
@@ -918,8 +990,9 @@ pro banco de produção sem decisão explícita.
 | O quê | Pra quê | Sem isso |
 |---|---|---|
 | `RESEND_API_KEY` + `EMAIL_FROM` | confirmar e-mail e reset de senha | o fluxo inteiro funciona e grava o token, só não sai e-mail (o original se comporta igual) |
-| `DATABASE_URL` de staging | rodar tudo contra banco real | PGlite cobre a maior parte, mas não pega diferença de versão/extensão do Neon |
-| onde a API vai rodar | ligar `trust proxy`, apertar `ALLOWED_ORIGIN` | ver bug #7 |
+| `DATABASE_URL` de staging | rodar tudo contra banco real | ~~PGlite cobre a maior parte~~ **resolvido em 2026-08-18**: o Supabase serve de staging |
+| onde a API vai rodar | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | o código dos dois já existe (`lerTrustProxy` em `bootstrap.ts`); falta só o valor, que depende da hospedagem. Sem `TRUST_PROXY=1` atrás de proxy, ver bug #7 |
+| arte em camadas | paperdoll PixiJS | fase 4 inteira parada |
 
 **Regra que continua valendo:** nunca criar conta de teste no servidor de
 produção pra depurar, e nunca apontar `drizzle-kit push`/`migrate` pro
@@ -964,6 +1037,7 @@ substituídos pelo estado do anfitrião.
 | `PUBLIC_GAME_URL` | `https://kingdark17.github.io/rpg-legend/` | monta o link dos e-mails; formato `?verify=` / `?reset=` é o que o cliente lê |
 | `RESEND_API_KEY` / `EMAIL_FROM` | — | sem as duas, e-mail não sai (só avisa no log) |
 | `REDIS_URL` | — | sem ela, tentativas por IP e presença ficam **no processo**, como antes: correto com uma instância, errado com duas |
+| `TRUST_PROXY` | desligado | **ligue com `1` em qualquer hospedagem gerenciada.** Desligado atrás de proxy, o teto de 12 tentativas por minuto é somado entre os jogadores e meia dúzia deles tranca o login geral. Ligado sem proxy na frente é pior: o cliente escolhe o próprio IP pelo cabeçalho e o teto some. Por isso não tem padrão esperto — é declaração de onde o processo está |
 | `PORT` | 3000 | — |
 
 ---
