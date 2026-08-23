@@ -30,6 +30,12 @@ export function Entrada() {
       <Link className={styles.semConta} href="/menu">
         Jogar sem conta
       </Link>
+      {/* Único caminho até `/redefinir-senha`: é este link que faz a API
+          mandar o e-mail que leva pra lá. Sem ele, aquela página existiria
+          sem nenhuma forma de ser alcançada. */}
+      <Link className={styles.semConta} href="/esqueci-senha">
+        Esqueci minha senha
+      </Link>
     </FormularioLogin>
   );
 }

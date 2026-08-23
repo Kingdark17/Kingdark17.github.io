@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 
+import { rotaDoLinkDeEmail } from '@/lib/api/email';
 import { usuarioDaSessao } from '@/lib/api/sessao-servidor';
 import { Entrada } from './entrada';
 import styles from './entrada.module.css';
@@ -19,8 +20,23 @@ import styles from './entrada.module.css';
  * **Entrar não é obrigatório.** O "Jogar sem conta" leva direto ao menu; a
  * conta serve pra guardar progresso na nuvem e pra jogar acompanhado, não
  * pra liberar o jogo.
+ *
+ * Também é aqui que caem os links de e-mail: a API os monta como
+ * `BASE/?verify=TOKEN`, formato herdado do jogo antigo e mantido pra uma
+ * API só poder atender os dois clientes.
  */
-export default async function Portao() {
+export default async function Portao({
+  searchParams,
+}: Readonly<{
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}>) {
+  // Antes da sessão, e não depois: quem confirma e-mail normalmente **está**
+  // logado, e o `redirect('/menu')` abaixo engoliria o token junto com a
+  // busca. O link morreria sem erro nenhum na tela — a pessoa veria o menu,
+  // acharia que deu certo, e a conta continuaria sem confirmar.
+  const desvio = rotaDoLinkDeEmail(await searchParams);
+  if (desvio) redirect(desvio);
+
   if (await usuarioDaSessao()) redirect('/menu');
 
   return (

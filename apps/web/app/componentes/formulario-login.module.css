@@ -80,3 +80,16 @@
   color: var(--parchment);
   font-size: 0.9rem;
 }
+
+/* Mesma caixa do `.erro`, na cor oposta. Nasceu com as telas de confirmar
+   e-mail e trocar senha, que terminam em "deu certo" — até então nenhuma
+   tela precisava dizer isso, só o contrário. */
+.sucesso {
+  margin: 1rem 0 0;
+  padding: 0.6rem 0.75rem;
+  background: rgba(74, 128, 115, 0.25);
+  border: 1px solid var(--mystic);
+  border-radius: 0.3rem;
+  color: var(--parchment);
+  font-size: 0.9rem;
+}

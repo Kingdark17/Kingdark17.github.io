@@ -14,6 +14,8 @@
 import { useEffect, useState } from 'react';
 
 import { sair, usuarioAtual, type Usuario } from '@/lib/api/account';
+import { ErroDaApi } from '@/lib/api/client';
+import { reenviarConfirmacao } from '@/lib/api/email';
 import { Avatar, NomeColorido } from '../componentes/avatar';
 import { FormularioLogin } from '../componentes/formulario-login';
 import { PainelPerfil } from './painel-perfil';
@@ -23,6 +25,7 @@ export function PainelConta() {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [ocupado, setOcupado] = useState(false);
   const [carregandoSessao, setCarregandoSessao] = useState(true);
+  const [recadoDoEmail, setRecadoDoEmail] = useState('');
 
   // Sessão guardada de uma visita anterior: só o servidor sabe se ainda vale.
   // Sem token, `usuarioAtual()` já rejeita sozinho (ver `chamarApi`).
@@ -32,6 +35,19 @@ export function PainelConta() {
       .catch(() => undefined)
       .finally(() => setCarregandoSessao(false));
   }, []);
+
+  async function aoReenviar() {
+    setOcupado(true);
+    setRecadoDoEmail('');
+    try {
+      await reenviarConfirmacao();
+      setRecadoDoEmail('Link novo enviado. Confira sua caixa de entrada.');
+    } catch (falha) {
+      setRecadoDoEmail(falha instanceof ErroDaApi ? falha.message : 'Não foi possível reenviar agora.');
+    } finally {
+      setOcupado(false);
+    }
+  }
 
   async function aoSair() {
     setOcupado(true);
@@ -73,8 +89,18 @@ export function PainelConta() {
           <span>{usuario.isAdmin ? 'sim' : 'não'}</span>
         </p>
         {!usuario.emailVerified && usuario.email && (
-          <p className={styles.aviso}>Confirme seu e-mail pelo link que enviamos.</p>
+          <>
+            <p className={styles.aviso}>Confirme seu e-mail pelo link que enviamos.</p>
+            {/* O link vale uma hora. Sem este botão, quem abrisse o e-mail no
+                dia seguinte ficaria com a conta pra sempre sem confirmar, e a
+                única saída seria trocar o e-mail pelo mesmo endereço — que
+                por acaso reenvia, mas ninguém adivinharia isso. */}
+            <button type="button" className={styles.botao} onClick={aoReenviar} disabled={ocupado}>
+              Reenviar confirmação
+            </button>
+          </>
         )}
+        {recadoDoEmail && <p className={styles.aviso}>{recadoDoEmail}</p>}
         <div className={styles.acoes}>
           <button type="button" className={styles.botao} onClick={aoSair} disabled={ocupado}>
             Sair

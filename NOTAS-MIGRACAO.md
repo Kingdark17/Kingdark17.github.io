@@ -717,10 +717,32 @@ rodar contra um Redis real.
 - **A foto ainda mora no Postgres como base64.** Não sai mais de lá numa
   lista, mas guardar imagem em coluna de texto é remendo — o lugar dela é
   o Supabase Storage, que é a fase 5.
-- **Nenhuma resposta da API sai comprimida** — falta decidir, não falta
-  fazer (ver abaixo).
+- ~~**Nenhuma resposta da API sai comprimida.**~~ **Resolvido em
+  2026-08-22:** a borda da Cloudflare, na frente do Render, já entrega tudo
+  em Brotli. Não há nada a fazer — e fazer pioraria. Ver abaixo.
 
-### Compressão das respostas — decisão pendente
+### Compressão das respostas — RESOLVIDO em 2026-08-22: não fazer nada
+
+A decisão dependia de onde a API ia rodar. Ela roda no Render, e o Render
+fica atrás da Cloudflare. Medido em produção, pedindo `Accept-Encoding:
+gzip, br, zstd`:
+
+| Rota | Cru | Resposta |
+|---|---|---|
+| `/health` | 116 B | `Content-Encoding: br`, 85 B |
+| `/api/account/status` | 36 B | `br` |
+| `/api/rooms` | 12 B | `br` |
+
+A borda comprime com Brotli **inclusive respostas minúsculas**. Ligar o
+`compression` do Express pioraria: o Node gastaria CPU aplicando gzip, e a
+Cloudflare repassaria isso em vez de aplicar Brotli, que comprime melhor.
+Trocaríamos CPU por uma compressão pior.
+
+**Só reabrir se a API sair do Render** — num container cru ninguém comprime,
+e aí a dependência passa a valer. O texto abaixo é o raciocínio original,
+mantido porque é o que torna essa reabertura possível sem refazer a análise.
+
+### Compressão das respostas — o raciocínio original
 
 `configureApp` não liga compressão nenhuma. Todo JSON sai cru: o save de
 ~6 KB a cada `GET /api/save` e a cada autosave, mais `/api/friends` e as
@@ -1379,21 +1401,71 @@ Provado depois de subir:
 | preflight `OPTIONS` | `204`, com `POST` e `Content-Type` liberados |
 | `POST /api/account/login` errado | `401`, `{"error":"Usuário ou senha incorretos."}`, sem `Set-Cookie` |
 
-### Buraco conhecido: o e-mail de confirmação não serve pro front novo
+### O login foi testado num navegador de verdade, e passou
 
-Duas peças faltando, e consertar uma sozinha não resolve:
+Em 2026-08-22, conta criada e sessão aberta em `novo.rpglegend.com.br`
+contra a API em `api.rpglegend.com.br`. **Era o último elo nunca
+verificado**: até aqui tudo que se sabia do cookie vinha de teste de
+cabeçalho e de suíte, nunca de um navegador.
 
-1. `PUBLIC_GAME_URL` não está definida no Render, então
-   `normalizePublicGameUrl` cai no padrão `https://rpglegend.com.br/rpg-legend/`
-   — **o jogo antigo**, que lê o `?verify=` mas pergunta pro servidor velho,
-   num banco onde o token não existe.
-2. **O front novo não lê `?verify=` nem `?reset=`.** Não há nada em
-   `apps/web` que olhe esses parâmetros. Apontar a variável pra cá faria o
-   link chegar e não acontecer nada.
+O que ficou provado de uma vez: cookie `httpOnly` emitido por um
+subdomínio e devolvido por outro, `SameSite=lax` valendo por serem o mesmo
+domínio registrável, `Secure` sobre HTTPS de verdade, `credentials:
+'include'` casando com um `ALLOWED_ORIGIN` específico, e a gravação
+chegando no Supabase. Nenhuma dessas peças tinha sido exercitada em
+conjunto fora da máquina.
 
-Não bloqueia o teste de entrar: `register()` já abre sessão na hora
-(`auth.service.ts:82`) e `login()` não checa `emailVerified`. Bloqueia só
-confirmar e-mail e redefinir senha pelo front novo.
+É a validação da decisão de arquitetura tomada semanas antes — manter auth
+própria com scrypt em vez de Supabase Auth, e pôr front e API sob o mesmo
+domínio registrável em vez de aceitar `.vercel.app`.
+
+### ~~Buraco~~: o link de e-mail agora funciona no front novo (2026-08-22)
+
+Estava faltando dos dois lados: `PUBLIC_GAME_URL` não definida no Render
+(caindo no padrão, que aponta pro **jogo antigo**), e nenhuma linha em
+`apps/web` lendo `?verify=` ou `?reset=`. Consertar um sozinho não
+resolveria.
+
+**Onde o link cai.** A API continua montando `BASE/?verify=TOKEN` — formato
+herdado do `handleEmailLink` do jogo antigo, **mantido de propósito** pra
+uma API só poder atender os dois clientes, que é o que a fase 2 previa.
+Quem traduz o formato pras rotas do front é `rotaDoLinkDeEmail()` em
+`lib/api/email.ts`, não a API.
+
+**A armadilha que decidiu o desenho.** O portão redireciona pra `/menu`
+quem tem sessão. Se o desvio do link viesse depois dessa checagem, o token
+seria engolido junto com a busca — e sem erro nenhum: a pessoa veria o
+menu, acharia que confirmou, e a conta continuaria pendente. Quem confirma
+e-mail normalmente **está** logado, então esse é o caminho comum, não o
+raro. Por isso o desvio é a primeira coisa que `app/page.tsx` faz.
+
+**Por que confirmar no cliente e não no servidor.** Seria mais simples
+confirmar durante a renderização, e funcionaria sem JavaScript. Mas o token
+é de uso único, e varredor de link de caixa de entrada corporativa abre
+todo endereço que chega: ele gastaria a confirmação antes da pessoa, que
+veria "link inválido" num link que nunca usou. Varredor quase nunca executa
+JavaScript. Também há uma trava (`useRef`) contra o efeito rodar duas vezes
+no modo estrito — sem ela, a segunda chamada falha e troca o sucesso na
+tela por um erro falso.
+
+**Duas entradas que não existiam.** `/redefinir-senha` nasceria
+inalcançável: nada no front chamava `request-password-reset`, então o link
+que ela espera nunca seria enviado. Daí a `/esqueci-senha` e o link no
+portão. E o "Reenviar confirmação" na página de conta, porque o link vale
+uma hora — sem ele, e-mail lido no dia seguinte deixaria a conta pendente
+pra sempre.
+
+**Confirmado no código, contra a minha própria suspeita:** trocar a senha
+apaga todas as sessões do usuário, na mesma transação
+(`drizzle-account-email-repository.ts`, `consumePasswordReset`). A tela diz
+isso, porque quem acabou de recuperar o acesso precisa entender por que foi
+deslogado dos outros aparelhos.
+
+Rotas provadas em produção com entradas inofensivas: `verify-email` e
+`reset-password` com token falso devolvem `400` com a mensagem exata que as
+telas mostram; `request-password-reset` com e-mail inexistente devolve
+`200` com a frase vaga de propósito — a rota não pode virar um verificador
+de quais e-mails têm conta.
 
 ---
 
