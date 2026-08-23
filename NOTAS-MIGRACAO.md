@@ -710,16 +710,64 @@ rodar contra um Redis real.
   processo, então dois jogadores em instâncias diferentes não entram na
   mesma sala. Precisa do adaptador Redis do socket.io e de um Redis de
   verdade pra verificar.
-- **O estado inteiro viaja a cada ação no co-op.** A foto saiu, que era o
-  pedaço grande, mas o mapa continua indo por completo a cada passo. Só
-  vale mexer junto das salas: o formato do que trafega e onde a sala mora
-  são a mesma decisão.
+- **O estado inteiro viaja a cada ação no co-op.** ~~Só vale mexer junto
+  das salas.~~ **Revisto em 2026-08-22:** com o código na frente, onde a
+  sala *mora* e o que *trafega* são camadas separadas. Primeiro corte
+  feito — ver "A mochila parou de viajar" abaixo. O mapa completo a cada
+  passo continua de pé.
 - **A foto ainda mora no Postgres como base64.** Não sai mais de lá numa
   lista, mas guardar imagem em coluna de texto é remendo — o lugar dela é
   o Supabase Storage, que é a fase 5.
 - ~~**Nenhuma resposta da API sai comprimida.**~~ **Resolvido em
   2026-08-22:** a borda da Cloudflare, na frente do Render, já entrega tudo
   em Brotli. Não há nada a fazer — e fazer pioraria. Ver abaixo.
+
+### A mochila parou de viajar pro parceiro (2026-08-22)
+
+**Medido antes de mexer.** Montando o pacote de `instantaneoDaSala` a partir
+de saves reais:
+
+| Save | Mochila | Pacote inteiro |
+|---|---|---|
+| `save-mochila` (6 itens) | 808 B | 4.609 B |
+| `save-tutorial` (76 itens) | **10.555 B** | **14.035 B** |
+| `save-masmorra-2` (1 item) | 135 B | 4.358 B |
+
+Com a mochila cheia, ela era **75% do pacote** — e esse pacote sai a cada
+ação de jogo, nos dois sentidos.
+
+**E ninguém do outro lado lê.** Varrido o front inteiro: o único leitor de
+`inventory` num perfil de sala é `aplicarRemoto`, e ele usa
+`perfis[meuPapel]` — o próprio. O cartão do parceiro mostra cosméticos,
+nome, nível e classe. `party`, idem.
+
+**A armadilha que decidiu o desenho.** O recorte tem que ser **por
+destinatário**, não global. O front faz `meuPerfil.inventory ?? []`: um
+perfil próprio chegando sem `inventory` não é "sem novidade", é
+"esvaziou" — e isso voltaria no `state` seguinte como perda de verdade.
+Cada jogador recebe o próprio perfil inteiro e o do parceiro enxuto.
+
+Por isso nasceram `toPeerProfile`, `RoomRegistry.profilesForRole` e
+`relayPorPapel` no gateway: um pacote só não serve pros dois.
+
+**Ganho medido depois**, comparando os dois perfis inteiros contra próprio
+inteiro + parceiro enxuto:
+
+| Save | Antes | Depois | |
+|---|---|---|---|
+| `save-mochila` | 6.928 B | 6.096 B | −12% |
+| `save-tutorial` | 25.780 B | 15.201 B | **−41%** |
+| `save-masmorra-2` | 5.618 B | 5.459 B | −3% |
+
+O corte escala com o tamanho da mochila, que é exatamente quando pesa.
+
+**O que sobrou de gordura, e por que não cortei sozinho.** Os 15 KB que
+restam no pior caso são quase todos a mochila do *próprio* jogador, ecoada
+de volta. Dá pra tirar — `sanitizeProfile` só faz `.slice(0, 120)` nela, sem
+validar item nenhum, então o eco praticamente não corrige nada. Mas isso
+tira a mochila do contrato autoritativo do co-op, e ainda exige mudar
+`aplicarRemoto` pra cair no local em vez de `?? []`. É decisão, não
+digitação.
 
 ### Compressão das respostas — RESOLVIDO em 2026-08-22: não fazer nada
 

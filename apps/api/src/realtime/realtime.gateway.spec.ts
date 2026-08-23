@@ -85,6 +85,48 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
     expect((await stateRelayed).state.floor).toBe(10000);
   });
 
+  // O pacote de `state` sai a cada ação de jogo. Medido num save com 76
+  // itens, ele era 14 KB, dos quais 10,5 KB eram a mochila — que o
+  // destinatário não lê em lugar nenhum. O recorte tem que ser por
+  // destinatário: mandar o enxuto pros dois faria o front esvaziar a mochila
+  // de quem recebesse o próprio perfil sem ela (`meuPerfil.inventory ?? []`).
+  it('manda a mochila só pro dono dela, nunca pro parceiro', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'MOC001', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    const guest = connect();
+    await waitFor(guest, 'connect');
+    guest.emit('join', { room: 'MOC001', name: 'Bree' });
+    await waitFor(host, 'hello');
+
+    // Os dois com mochila, pra dar pra distinguir a de cada um no pacote.
+    host.emit('profile', { room: 'MOC001', profile: { name: 'Aria', inventory: [{ uid: 'do-anfitriao' }] } });
+    await waitFor(host, 'profile-accepted');
+    guest.emit('profile', { room: 'MOC001', profile: { name: 'Bree', inventory: [{ uid: 'do-convidado' }] } });
+    await waitFor(guest, 'profile-accepted');
+
+    type Perfil = { name: string; inventory?: unknown[] };
+    type Pacote = { state: { profiles: Record<string, Perfil> } };
+
+    const paraOConvidado = waitFor<Pacote>(guest, 'state');
+    host.emit('state', { room: 'MOC001', turn: 1, state: { pos: { x: 1, y: 1 }, floor: 1 } });
+    const paraOAnfitriao = await waitFor<Pacote>(host, 'authoritative');
+
+    // Quem mandou recebe a própria mochila de volta — é assim que o front se
+    // corrige contra o saneamento.
+    expect(paraOAnfitriao.state.profiles['1'].inventory).toEqual([{ uid: 'do-anfitriao' }]);
+    expect(paraOAnfitriao.state.profiles['2']).not.toHaveProperty('inventory');
+
+    // E o parceiro recebe a dele, não a do outro.
+    const recebido = await paraOConvidado;
+    expect(recebido.state.profiles['2'].inventory).toEqual([{ uid: 'do-convidado' }]);
+    expect(recebido.state.profiles['1']).not.toHaveProperty('inventory');
+    // O nome continua vindo dos dois: é o que a tela do parceiro mostra.
+    expect(recebido.state.profiles['1'].name).toBe('Aria');
+  });
+
   it('recusa sala inexistente e sala cheia com mensagem', async () => {
     const perdido = connect();
     await waitFor(perdido, 'connect');

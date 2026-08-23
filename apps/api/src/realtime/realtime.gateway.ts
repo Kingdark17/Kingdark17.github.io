@@ -38,7 +38,16 @@ import { RateLimiter } from '../common/rate-limiter';
 import { OnlineUsersRegistry } from '../social/online-users-registry';
 import { SocialService } from '../social/social.service';
 import { clampInt } from './numeric';
-import { HOST_ROLE, GUEST_ROLE, RoomRegistry, normalizePlayerName, normalizeRoomCode, type Room, type RoomRole } from './room-registry';
+import {
+  HOST_ROLE,
+  GUEST_ROLE,
+  RoomRegistry,
+  normalizePlayerName,
+  normalizeRoomCode,
+  type Room,
+  type RoomRole,
+  type RoomState,
+} from './room-registry';
 import { isUiAction, sanitizeUiActionPayload } from './ui-action';
 import { comoTexto } from '../common/texto';
 
@@ -267,7 +276,14 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     if (!seat) return;
 
     const profile = this.rooms.applyProfile(seat.room, seat.role, body?.profile);
-    this.relay(seat.room, socket, 'profile', { room: seat.room.code, role: seat.role, profile });
+    // Pro parceiro vai a versão enxuta: a tela dele lê nome, nível, classe e
+    // cosméticos, e nunca a mochila. Pra quem mandou volta o perfil inteiro,
+    // que é o que o front usa pra se corrigir contra o saneamento.
+    this.relay(seat.room, socket, 'profile', {
+      room: seat.room.code,
+      role: seat.role,
+      profile: this.rooms.peerProfileOf(seat.room, seat.role),
+    });
     socket.emit('profile-accepted', { room: seat.room.code, role: seat.role, profile });
   }
 
@@ -277,13 +293,14 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     if (!seat || seat.role !== HOST_ROLE) return;
 
     if (body?.state) this.rooms.applyState(seat.room, HOST_ROLE, body.state);
-    this.relay(seat.room, socket, 'welcome', {
+    const turnoInicial = clampInt(body?.turn, 1, MAX_TURN);
+    this.relayPorPapel(seat.room, socket, 'welcome', (papel) => ({
       room: seat.room.code,
       role: HOST_ROLE,
-      state: seat.room.state,
-      profiles: this.rooms.publicProfiles(seat.room),
-      turn: clampInt(body?.turn, 1, MAX_TURN),
-    });
+      state: this.estadoPara(seat.room, seat.room.state, papel),
+      profiles: this.rooms.profilesForRole(seat.room, papel),
+      turn: turnoInicial,
+    }));
   }
 
   @SubscribeMessage('state')
@@ -293,8 +310,21 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
     const state = this.rooms.applyState(seat.room, seat.role, body?.state);
     const turn = clampInt(body?.turn, 1, MAX_TURN);
-    this.relay(seat.room, socket, 'state', { room: seat.room.code, role: seat.role, state, turn });
-    socket.emit('authoritative', { room: seat.room.code, role: seat.role, state, turn });
+    // Este é o caminho quente: sai a cada ação de jogo. Medido num save com
+    // 76 itens, o pacote era 14 KB, dos quais 10,5 KB eram a mochila que o
+    // destinatário não lê. Por isso o perfil vai recortado por papel.
+    this.relayPorPapel(seat.room, socket, 'state', (papel) => ({
+      room: seat.room.code,
+      role: seat.role,
+      state: this.estadoPara(seat.room, state, papel),
+      turn,
+    }));
+    socket.emit('authoritative', {
+      room: seat.room.code,
+      role: seat.role,
+      state: this.estadoPara(seat.room, state, seat.role),
+      turn,
+    });
   }
 
   @SubscribeMessage('move-lock')
@@ -348,6 +378,24 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
   private relay(room: Room, sender: Socket, event: string, payload: unknown): void {
     for (const peer of this.rooms.peersOf(room, sender.id)) peer.emit(event, payload);
+  }
+
+  /**
+   * Como `relay`, mas monta um pacote por destinatário.
+   *
+   * Existe porque o perfil passou a ser recortado por papel: cada jogador
+   * recebe o próprio inteiro e o do parceiro sem mochila nem grupo. Um
+   * pacote só não serve pros dois.
+   */
+  private relayPorPapel(room: Room, sender: Socket, event: string, montar: (papel: RoomRole) => unknown): void {
+    for (const membro of this.rooms.peerMembersOf(room, sender.id)) {
+      membro.connection.emit(event, montar(membro.role));
+    }
+  }
+
+  /** O estado com os perfis recortados pra quem vai receber. */
+  private estadoPara(room: Room, estado: RoomState | null, papel: RoomRole): RoomState | null {
+    return estado ? { ...estado, profiles: this.rooms.profilesForRole(room, papel) } : estado;
   }
 
   private senderOf(socket: Socket): { id: number; username: string } | null {

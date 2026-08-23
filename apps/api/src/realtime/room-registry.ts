@@ -13,7 +13,7 @@
  */
 
 import { clampInt, cloneJson } from './numeric';
-import { sanitizeProfile, toPublicProfile, type PublicProfile, type SanitizedProfile } from './sanitize';
+import { sanitizeProfile, toPeerProfile, toPublicProfile, type PeerProfile, type PublicProfile, type SanitizedProfile } from './sanitize';
 import { comoTexto } from '../common/texto';
 
 export type RoomRole = 1 | 2;
@@ -150,6 +150,16 @@ export class RoomRegistry {
     return room.members.filter((member) => member.connection.id !== senderConnectionId).map((member) => member.connection);
   }
 
+  /**
+   * Como `peersOf`, mas com o papel de cada um. Quem monta um pacote
+   * diferente por destinatário precisa saber pra quem está mandando — e
+   * desde que o perfil passou a ser recortado por papel, é o caso do
+   * `state` e do `welcome`.
+   */
+  peerMembersOf(room: Room, senderConnectionId: string): RoomMember[] {
+    return room.members.filter((member) => member.connection.id !== senderConnectionId);
+  }
+
   leave(connectionId: string): LeaveRoomResult | null {
     const membership = this.membership.get(connectionId);
     this.membership.delete(connectionId);
@@ -214,6 +224,37 @@ export class RoomRegistry {
       if (profile) result[role] = toPublicProfile(profile);
     }
     return result;
+  }
+
+  /**
+   * Os perfis como **quem tem o papel `role`** deve recebê-los: o dele
+   * inteiro, o do parceiro sem mochila nem grupo.
+   *
+   * O recorte é por destinatário porque os dois lados leem coisas
+   * diferentes do mesmo pacote. Quem recebe usa `perfis[meuPapel]` pra
+   * corrigir o próprio herói e a própria mochila contra a versão
+   * autoritativa (`aplicarRemoto`, no front); do parceiro, a tela lê só
+   * nome, nível, classe e cosméticos.
+   *
+   * **Mandar o enxuto pra todo mundo apagaria mochila.** O front faz
+   * `meuPerfil.inventory ?? []`, então um perfil próprio sem `inventory`
+   * não é "sem novidade", é "esvaziou" — e isso viajaria de volta no
+   * próximo `state`, virando perda de verdade.
+   */
+  profilesForRole(room: Room, role: RoomRole): Record<string, PublicProfile | PeerProfile> {
+    const result: Record<string, PublicProfile | PeerProfile> = {};
+    for (const chave of Object.keys(room.profiles)) {
+      const papel = Number(chave) as RoomRole;
+      const profile = room.profiles[papel];
+      if (profile) result[chave] = papel === role ? toPublicProfile(profile) : toPeerProfile(profile);
+    }
+    return result;
+  }
+
+  /** O perfil de um papel na forma que o parceiro recebe. */
+  peerProfileOf(room: Room, role: RoomRole): PeerProfile | null {
+    const profile = room.profiles[role];
+    return profile ? toPeerProfile(profile) : null;
   }
 
   /** `type:'profile'`: aceita o perfil saneado e devolve a versão pública. */

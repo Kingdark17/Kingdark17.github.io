@@ -200,3 +200,31 @@ export function toPublicProfile(profile: SanitizedProfile): PublicProfile {
     publicProfile: profile.publicProfile,
   };
 }
+
+/**
+ * O perfil do **parceiro**, com só o que a tela do outro jogador de fato lê:
+ * nome, cosméticos e o herói (dele saem nível e classe no cartão).
+ *
+ * Sai a mochila e sai o grupo. Não é economia teórica — medido num save com
+ * 76 itens, a mochila sozinha era 10,5 KB de um pacote de 14 KB, e esse
+ * pacote sai **a cada ação de jogo**. Nada em `apps/web` lê `inventory` nem
+ * `party` de um perfil de sala que não seja o próprio: o único leitor é
+ * `aplicarRemoto`, e ele usa `perfis[meuPapel]`.
+ *
+ * Por isso o recorte é **por destinatário**, e não global — ver
+ * `RoomRegistry.profilesForRole`. Mandar o enxuto pra todo mundo apagaria a
+ * mochila de quem recebesse o próprio perfil sem ela.
+ */
+export interface PeerProfile {
+  name: string;
+  hero: Record<string, unknown>;
+  publicProfile: PublicCosmetics | null;
+}
+
+export function toPeerProfile(profile: SanitizedProfile): PeerProfile {
+  return {
+    name: profile.name,
+    hero: profile.hero,
+    publicProfile: profile.publicProfile,
+  };
+}

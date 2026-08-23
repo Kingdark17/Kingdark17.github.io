@@ -192,6 +192,59 @@ describe('RoomRegistry — perfis', () => {
     expect(Object.keys(registry.publicProfiles(room)).sort()).toEqual(['1', '2']);
     expect(registry.publicProfiles(room)['2'].name).toBe('Bree');
   });
+
+  describe('profilesForRole — o recorte por destinatário', () => {
+    function salaComDois() {
+      const { registry, room } = createdRegistry();
+      registry.join('ABC123', fakeConnection('guest'), { admin: false });
+      registry.applyProfile(room, HOST_ROLE, { name: 'Aria', inventory: [{ uid: 'a' }, { uid: 'b' }], party: [{ maxHp: 10 }] });
+      registry.applyProfile(room, GUEST_ROLE, { name: 'Bree', inventory: [{ uid: 'c' }], party: [{ maxHp: 20 }] });
+      return { registry, room };
+    }
+
+    it('devolve o próprio perfil inteiro', () => {
+      const { registry, room } = salaComDois();
+      const paraOAnfitriao = registry.profilesForRole(room, HOST_ROLE)['1'];
+
+      expect(paraOAnfitriao.name).toBe('Aria');
+      expect(paraOAnfitriao).toHaveProperty('inventory');
+      expect(paraOAnfitriao).toHaveProperty('party');
+    });
+
+    // O corte que motivou tudo: num save com 76 itens a mochila era 10,5 KB
+    // de um pacote de 14 KB, e o pacote sai a cada ação de jogo. Nada no
+    // front lê a mochila do parceiro — só nome, nível, classe e cosméticos.
+    it('devolve o perfil do parceiro sem mochila nem grupo', () => {
+      const { registry, room } = salaComDois();
+      const oParceiro = registry.profilesForRole(room, HOST_ROLE)['2'];
+
+      expect(oParceiro.name).toBe('Bree');
+      expect(oParceiro).not.toHaveProperty('inventory');
+      expect(oParceiro).not.toHaveProperty('party');
+      // O que sobra é exatamente o que a tela do outro jogador consome.
+      expect(oParceiro).toHaveProperty('hero');
+      expect(oParceiro).toHaveProperty('publicProfile');
+    });
+
+    // Se o recorte fosse global em vez de por destinatário, quem recebesse o
+    // próprio perfil sem `inventory` teria a mochila esvaziada: o front faz
+    // `meuPerfil.inventory ?? []`, e isso voltaria no `state` seguinte como
+    // perda de verdade.
+    it('cada papel recebe o seu inteiro, e nunca o do outro', () => {
+      const { registry, room } = salaComDois();
+      const paraOConvidado = registry.profilesForRole(room, GUEST_ROLE);
+
+      expect(paraOConvidado['2']).toHaveProperty('inventory');
+      expect(paraOConvidado['1']).not.toHaveProperty('inventory');
+    });
+
+    it('não inventa papel que não está na sala', () => {
+      const { registry, room } = createdRegistry();
+      registry.applyProfile(room, HOST_ROLE, { name: 'Aria' });
+
+      expect(Object.keys(registry.profilesForRole(room, HOST_ROLE))).toEqual(['1']);
+    });
+  });
 });
 
 describe('RoomRegistry — estado autoritativo', () => {
