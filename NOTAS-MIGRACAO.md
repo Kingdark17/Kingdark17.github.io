@@ -1145,6 +1145,76 @@ motivo no `title` — botão que some não ensina nada a quem procura por ele.
 
 ---
 
+## Publicar a API no Render — a receita (decidido em 2026-08-22)
+
+Escolhido o Render porque o servidor antigo já mora lá: mesma conta, mesmo
+painel, nada novo pra aprender. É **serviço novo e separado**, não troca do
+que existe.
+
+### O que subir agora não é a virada
+
+```
+jogo no ar  →  RPG-Legend-Server (Render)  →  Neon      ← jogadores de verdade
+API nova    →  serviço novo                →  Supabase  ← vazio
+```
+
+A API nova aponta pro Supabase, que tem o schema e **nenhuma conta**. O que
+sobe é ambiente de teste com endereço público, rodando em paralelo. A
+virada — mover os dados e apontar o jogo pra cá — é decisão de depois.
+
+### Configuração do serviço
+
+| Campo | Valor |
+|---|---|
+| Tipo | Web Service |
+| Repositório | `Kingdark17/Kingdark17.github.io`, branch `main` |
+| Runtime | Docker |
+| Dockerfile Path | `apps/api/Dockerfile` |
+| **Docker Build Context** | **`.` (a raiz)** |
+| Health check | `/health` |
+
+**O contexto na raiz não é opcional.** `@rpg-legend/shared` é `workspace:*`,
+e a API não compila sem o pacote irmão, que não existe dentro de
+`apps/api/`. Plataforma apontada só pra subpasta não constrói isto.
+
+### Variáveis de ambiente
+
+| Variável | Valor | Por quê |
+|---|---|---|
+| `DATABASE_URL` | Session pooler do Supabase | porta 5432, host `.pooler.supabase.com` |
+| `TRUST_PROXY` | `1` | **obrigatório no Render.** Sem, o teto de 12 tentativas/min vira global e meia dúzia de jogadores tranca o login de todos |
+| `COOKIE_SECURE` | `true` | produção é HTTPS |
+| `COOKIE_DOMAIN` | `.rpglegend.com.br` | pro cookie valer no front e na API |
+| `SAVE_SIGNING_SECRET` | 64 hex aleatórios | sem ele cai pro `DATABASE_URL`; explícito é melhor, e permite trocar o banco sem invalidar save |
+| `RESEND_API_KEY` / `EMAIL_FROM` | os mesmos do `.env` | |
+| `ALLOWED_ORIGIN` | **deixar vazio por ora** | ver abaixo |
+| `ADMIN_USERNAME` | `ADM` (padrão) | |
+| `REDIS_URL` | vazio | sem ele, rate limit e presença ficam no processo: correto com uma instância |
+| `PORT` | o Render define | |
+
+### A ordem importa: API antes do front deixa `ALLOWED_ORIGIN` em aberto
+
+O front novo ainda não está publicado, então não há origem pra declarar.
+Enquanto `ALLOWED_ORIGIN` estiver vazia, `lerCors()` cai no `*` sem
+credenciais — a API funciona, mas **o cookie de sessão não atravessa
+origem**. É inofensivo agora porque nada consome a API ainda.
+
+Sequência: subir a API → conferir `/health` → publicar o front → aí sim
+preencher `ALLOWED_ORIGIN` com a origem dele e reiniciar.
+
+### Domínio
+
+`api.rpglegend.com.br`, criado na Cloudflare como CNAME pro endereço que o
+Render dá, **com a nuvem cinza**. Não é preferência: o cookie de sessão só
+é de primeira parte se front e API dividirem o domínio registrável.
+
+### O plano grátis dorme
+
+Depois de 15 min parado, a primeira visita leva ~30s. Aceitável enquanto é
+ambiente de teste; inaceitável quando virar o jogo de verdade.
+
+---
+
 ## Travado esperando você
 
 | O quê | Pra quê | Sem isso |
