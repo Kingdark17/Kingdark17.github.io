@@ -1208,10 +1208,192 @@ preencher `ALLOWED_ORIGIN` com a origem dele e reiniciar.
 Render dá, **com a nuvem cinza**. Não é preferência: o cookie de sessão só
 é de primeira parte se front e API dividirem o domínio registrável.
 
+### O health check é `/health`, e o Render sugere `/healthz`
+
+O campo vem com `/healthz` escrito em cinza. É sugestão do painel, e não
+serve aqui: a rota é `/health` (`status.controller.ts`, `@Controller()` sem
+prefixo). Aceitar a sugestão dá 404 a cada checagem, o Render marca o
+serviço como doente em laço e derruba o deploy sozinho — parecendo defeito
+do código.
+
+### Auto-Deploy fica em "On Commit" (decidido em 2026-08-22)
+
+Este repositório serve duas coisas: a API e o jogo antigo em `rpg-legend/`,
+que o GitHub Pages publica. Com "On Commit", **todo commit de arte ou de
+texto do jogo reconstrói e reinicia a API**, mesmo sem tocar em uma linha
+dela.
+
+Escolhido assim mesmo, porque a alternativa é pior no momento errado:
+filtrar por caminho (`Build Filters` → `Included Paths`) faz uma mudança
+real da API não subir quando o caminho não estiver na lista, e isso **não
+dá erro** — a API só continua velha, em silêncio. É a mesma família de bug
+do `?v=` esquecido no `index.html`, que já custou caro aqui.
+
+Enquanto nada consome a API, um restart a mais não custa nada. **Revisar
+quando o front novo estiver no ar:** aí um commit de sprite derruba a
+sessão de quem estiver jogando, e o filtro passa a valer o risco. Dá pra
+ligar depois em Settings, sem recriar o serviço. Os caminhos, se for ligar,
+são os que o Dockerfile copia:
+
+```
+apps/api/**   packages/shared/**   apps/web/package.json
+package.json   pnpm-lock.yaml   pnpm-workspace.yaml
+```
+
 ### O plano grátis dorme
 
 Depois de 15 min parado, a primeira visita leva ~30s. Aceitável enquanto é
 ambiente de teste; inaceitável quando virar o jogo de verdade.
+
+### Feito em 2026-08-22: está no ar
+
+Serviço `rpg-legend-api`, região Virginia, plano grátis. Subiu de primeira —
+o Dockerfile nunca tinha sido construído em lugar nenhum, porque não há
+Docker nesta máquina.
+
+Conferido de fora, não pelo log do painel:
+
+| Prova | Resultado |
+|---|---|
+| `GET /health` | `200` em 0,46s |
+| Banco | `configured: true, connected: true` — o Supabase respondeu de dentro do Render |
+| CORS sem `ALLOWED_ORIGIN` | `access-control-allow-origin: *`, sem `allow-credentials` |
+| `GET /api/account/me` sem sessão | `401` |
+| socket.io | handshake OK, `maxPayload: 524288`, upgrade disponível |
+
+O `maxPayload` bater com os 512 KB do gateway é o que prova que subiu a
+nossa configuração, e não o padrão da biblioteca.
+
+Endereço: **`https://api.rpglegend.com.br`** (CNAME → `rpg-legend-api.onrender.com`,
+nuvem cinza). `ALLOWED_ORIGIN` continua vazia de propósito, esperando o front.
+
+### A pegadinha do certificado: o Render também roda atrás da Cloudflare
+
+Ao conferir o `api.` recém-criado, o certificado apresentado era
+`rpglegend.com.br` + `*.rpglegend.com.br`, emitido pela Google Trust
+Services **quase três horas antes de o serviço existir**. Parece
+impossível, e a explicação importa:
+
+`rpg-legend-api.onrender.com` responde com `Server: cloudflare` e `CF-RAY`
+— **o Render é cliente da Cloudflare**. Como a nossa zona também está lá e
+o Universal SSL dela emitiu um curinga quando a zona ativou, a borda da
+Cloudflare já tinha certificado válido pro `api.` antes de o Render pedir
+o dele.
+
+Consequência prática: **o HTTPS funciona antes de o Render terminar de
+emitir**, e o certificado que aparece num teste externo pode não ser o do
+Render. Não confundir isso com proxy ligado por engano — a prova de que a
+nuvem está cinza é o IP resolvido ser `216.24.57.x` (Render) em vez de
+`104.x`/`172.67.x` (Cloudflare), e a resposta trazer
+`x-render-origin-server: Render`.
+
+### Verificação que falha na primeira tentativa é normal
+
+O "We weren't able to verify" aparece quando se clica em `Verify` antes de
+o registro estar publicado. Não é erro de configuração: criar o registro na
+Cloudflare e clicar em `Retry Verification` resolve em segundos. O aviso de
+"24 horas ou mais" do painel é texto genérico, escrito pra DNS lento.
+
+---
+
+## O `www` quem resolve é a Cloudflare, não o GitHub (2026-08-22)
+
+O GitHub Pages emite certificado pro apex sozinho, mas **não incluiu o
+`www`**: passadas duas horas com o DNS já correto, ele chegou a *reemitir*
+o certificado do apex e mesmo assim deixou o `www` de fora. Quem abrisse
+`https://www.rpglegend.com.br` recebia `SEC_E_WRONG_PRINCIPAL` — o
+servidor apresentava o `*.github.io`, que obviamente não casa.
+
+Pior: o único caminho que funcionava era `http://www`, e o 301 do GitHub
+apontava pra **`http://`** do apex. Como navegador moderno tenta HTTPS
+primeiro, quase todo mundo batia no erro de certificado antes de chegar
+nesse redirecionamento.
+
+**Resolvido sem depender do GitHub.** A zona já tinha um certificado
+curinga (`rpglegend.com.br` + `*.rpglegend.com.br`, Google Trust Services)
+emitido pelo Universal SSL quando ela ativou. Basta a Cloudflare atender o
+`www` pra esse certificado valer:
+
+1. **Rules → Redirect Rules**, modelo pronto "Redirecionar de WWW para a
+   raiz": padrão `https://www.*` → destino `https://${1}`, 301.
+2. Marcar **"Preservar string de consulta"** — o curinga captura só
+   esquema, host e caminho. Sem essa caixa, um link de e-mail com `www`
+   chega no jogo **sem o `?verify=`**: conta não confirmada, nenhum erro
+   na tela.
+3. Só então trocar o registro `www` pra **nuvem laranja**.
+
+**A ordem não é estética.** Com a laranja ligada antes da regra existir, a
+Cloudflare passa a buscar no GitHub usando o nome `www.rpglegend.com.br`,
+o GitHub responde com o `*.github.io`, a Cloudflare recusa e o visitante
+recebe **erro 526** — pior que o erro original. Com a regra no lugar, ela
+responde na borda e nunca fala com o GitHub.
+
+Provado depois de ligar:
+
+| Entrada | Saída |
+|---|---|
+| `https://www/` | 301 → `https://rpglegend.com.br/` |
+| `https://www/rpg-legend/` | 301, caminho preservado |
+| `https://www/rpg-legend/?verify=X` | 301, `?verify=X` preservado |
+| `http://www/rpg-legend/` | 301 direto pro **https** |
+| ponta a ponta | `200`, 36 KB, `<title>RPG Legend</title>` |
+
+O `http` ter funcionado foi bônus — a regra pegou os dois esquemas, então
+`Always Use HTTPS` não foi preciso. E o rebaixamento pra `http` que o
+GitHub fazia sumiu junto.
+
+**Consequência:** o `www` não depende mais do certificado do GitHub, e o
+vigia que esperava por ele foi desligado. Se algum dia o `www` voltar a
+falhar, o suspeito é a regra da Cloudflare ou a nuvem ter voltado pra
+cinza — não o GitHub.
+
+---
+
+## O front novo está no ar (2026-08-22)
+
+`novo.rpglegend.com.br`, Vercel, projeto `rpg-legend-web`. Subdomínio
+porque o apex continua com o jogo antigo — e porque **`.vercel.app` não
+serviria**: o cookie de sessão é emitido com `Domain=.rpglegend.com.br` e
+o navegador simplesmente não o guardaria num domínio de outra gente.
+
+Configuração da Vercel: Root Directory `apps/web`, preset Next.js, e a
+opção de **incluir arquivos fora da Root Directory ligada** — mesmo motivo
+do contexto `.` no Render, o `@rpg-legend/shared` mora fora. Uma variável
+só: `NEXT_PUBLIC_API_URL=https://api.rpglegend.com.br`.
+
+**Cuidado ao importar:** a Vercel varre o repositório e detecta `apps/api`
+como projeto NestJS primeiro, já com o preset errado preenchido. Publicar
+assim tenta empacotar o Nest como função serverless — que não segura
+conexão WebSocket aberta, e levaria o multiplayer junto. Trocar Root
+Directory **e** preset antes de clicar em Deploy.
+
+Provado depois de subir:
+
+| Prova | Resultado |
+|---|---|
+| `/` | `200`, 8,4 KB, 0,67s, certificado próprio Let's Encrypt |
+| `/menu` | `X-Vercel-Cache: PRERENDER` — continua estática |
+| `NEXT_PUBLIC_API_URL` | achada embutida no chunk; `127.0.0.1:3000` não aparece em lugar nenhum |
+| CORS com a origem certa | `allow-origin` específico + `allow-credentials: true` + `vary: Origin` |
+| CORS de origem intrusa | não refletida |
+| preflight `OPTIONS` | `204`, com `POST` e `Content-Type` liberados |
+| `POST /api/account/login` errado | `401`, `{"error":"Usuário ou senha incorretos."}`, sem `Set-Cookie` |
+
+### Buraco conhecido: o e-mail de confirmação não serve pro front novo
+
+Duas peças faltando, e consertar uma sozinha não resolve:
+
+1. `PUBLIC_GAME_URL` não está definida no Render, então
+   `normalizePublicGameUrl` cai no padrão `https://rpglegend.com.br/rpg-legend/`
+   — **o jogo antigo**, que lê o `?verify=` mas pergunta pro servidor velho,
+   num banco onde o token não existe.
+2. **O front novo não lê `?verify=` nem `?reset=`.** Não há nada em
+   `apps/web` que olhe esses parâmetros. Apontar a variável pra cá faria o
+   link chegar e não acontecer nada.
+
+Não bloqueia o teste de entrar: `register()` já abre sessão na hora
+(`auth.service.ts:82`) e `login()` não checa `emailVerified`. Bloqueia só
+confirmar e-mail e redefinir senha pelo front novo.
 
 ---
 
@@ -1221,7 +1403,7 @@ ambiente de teste; inaceitável quando virar o jogo de verdade.
 |---|---|---|
 | ~~`RESEND_API_KEY` + `EMAIL_FROM`~~ | confirmar e-mail e reset de senha | **resolvido em 2026-08-22** — domínio `rpglegend.com.br` verificado, envio provado ponta a ponta |
 | `DATABASE_URL` de staging | rodar tudo contra banco real | ~~PGlite cobre a maior parte~~ **resolvido em 2026-08-18**: o Supabase serve de staging |
-| onde a API vai rodar | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | o código dos dois já existe (`lerTrustProxy` em `bootstrap.ts`); falta só o valor, que depende da hospedagem. Sem `TRUST_PROXY=1` atrás de proxy, ver bug #7. **Agora também decide o login:** o cookie de sessão exige `api.rpglegend.com.br` com o front em `rpglegend.com.br` — domínios separados matam o login em Safari e Firefox |
+| ~~onde a API vai rodar~~ | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | **resolvido em 2026-08-22** — Render, em `api.rpglegend.com.br`, com `TRUST_PROXY=1`. Falta só `ALLOWED_ORIGIN`, que espera o front existir pra ter uma origem pra declarar |
 | arte em camadas | paperdoll PixiJS | fase 4 inteira parada |
 
 **Regra que continua valendo:** nunca criar conta de teste no servidor de
