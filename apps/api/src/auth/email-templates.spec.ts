@@ -6,6 +6,21 @@ describe('normalizePublicGameUrl', () => {
     expect(normalizePublicGameUrl(undefined)).toBe(DEFAULT_PUBLIC_GAME_URL.replace(/\/$/, ''));
     expect(normalizePublicGameUrl('')).toBe(DEFAULT_PUBLIC_GAME_URL.replace(/\/$/, ''));
   });
+
+  // O teste acima usa a constante nos dois lados, entao passa com qualquer
+  // valor que ela tenha. Este prega o endereco de verdade: e' o que vai no
+  // e-mail de confirmacao e de troca de senha, e apontar pro lugar errado
+  // nao da erro em lugar nenhum — o link so' nao funciona pra quem clicar.
+  it('o padrao e o dominio proprio, no caminho completo do jogo', () => {
+    expect(DEFAULT_PUBLIC_GAME_URL).toBe('https://rpglegend.com.br/rpg-legend/');
+  });
+
+  // A raiz do dominio redireciona pra ca', mas por JavaScript, e o link
+  // visivel de reserva nao leva a busca junto. Quem tiver JS desligado
+  // perderia o ?verify= no caminho. Por isso o padrao aponta direto.
+  it('nao aponta pra raiz do dominio, que depende de redirecionamento', () => {
+    expect(DEFAULT_PUBLIC_GAME_URL).toContain('/rpg-legend/');
+  });
 });
 
 describe('emailLink', () => {

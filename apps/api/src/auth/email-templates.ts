@@ -16,7 +16,18 @@ export interface EmailTemplate {
   html: string;
 }
 
-export const DEFAULT_PUBLIC_GAME_URL = 'https://kingdark17.github.io/rpg-legend/';
+/**
+ * Domínio próprio desde 22/08/2026 — `rpglegend.com.br` atende pelo GitHub
+ * Pages, com certificado emitido.
+ *
+ * Aponta pro caminho completo do jogo, e **não** pra raiz do domínio, mesmo
+ * a raiz redirecionando pra cá. O redirecionamento de lá é feito por
+ * JavaScript, e o link visível de reserva não carrega a busca junto: quem
+ * tiver JS desligado clicaria nele e perderia o `?verify=` no caminho,
+ * ficando com a conta sem confirmar e sem erro nenhum na tela. Link de
+ * e-mail é o pior lugar possível pra depender de salto.
+ */
+export const DEFAULT_PUBLIC_GAME_URL = 'https://rpglegend.com.br/rpg-legend/';
 
 export function normalizePublicGameUrl(value: string | undefined): string {
   return (value || DEFAULT_PUBLIC_GAME_URL).replace(/\/$/, '');
