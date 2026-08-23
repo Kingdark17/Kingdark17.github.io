@@ -32,6 +32,8 @@ import { ConnectedSocket, MessageBody, OnGatewayDisconnect, SubscribeMessage, We
 import type { Socket } from 'socket.io';
 
 import { AuthService } from '../auth/auth.service';
+import { lerTokenDoCookie } from '../auth/session-cookie';
+import { lerCors } from '../bootstrap';
 import { RateLimiter } from '../common/rate-limiter';
 import { OnlineUsersRegistry } from '../social/online-users-registry';
 import { SocialService } from '../social/social.service';
@@ -60,8 +62,11 @@ interface SocketState {
   username?: string;
 }
 
+// `lerCors()` em vez de `origin` solto: sem `credentials`, o navegador não
+// anexa o cookie de sessão ao handshake, e o `auth` do front novo — que
+// manda o corpo vazio de propósito — nunca autenticaria.
 @WebSocketGateway({
-  cors: { origin: process.env.ALLOWED_ORIGIN || '*' },
+  cors: lerCors(),
   maxHttpBufferSize: 512 * 1024,
 })
 export class RealtimeGateway implements OnGatewayDisconnect {
@@ -101,10 +106,22 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
   // ---------------------------------------------------------------- social
 
+  /**
+   * Token do corpo, ou o cookie de sessão que veio no handshake.
+   *
+   * Navegador não consegue ler cookie `httpOnly`, então o front novo manda
+   * `auth` com o corpo vazio — quem prova a identidade é o cookie que o
+   * próprio navegador anexou ao abrir a conexão. O corpo continua valendo
+   * pro cliente antigo e pra qualquer coisa que não seja navegador.
+   */
+  private tokenDaConexao(socket: Socket, body: { token?: unknown }): string {
+    return comoTexto(body?.token) || lerTokenDoCookie(socket.handshake.headers.cookie);
+  }
+
   @SubscribeMessage('auth')
   async handleAuth(@ConnectedSocket() socket: Socket, @MessageBody() body: { token?: unknown }): Promise<void> {
     await this.guard(socket, 'auth', null, async () => {
-      const result = await this.auth.me(comoTexto(body?.token));
+      const result = await this.auth.me(this.tokenDaConexao(socket, body));
       if (result.kind !== 'ok') {
         socket.emit('auth-error', {});
         return;
@@ -206,7 +223,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     if (!code) return;
 
     await this.guard(socket, 'create', code, async () => {
-      const admin = await this.isAdminToken(body?.accountToken);
+      const admin = await this.isAdminToken(this.tokenDaConexao(socket, { token: body?.accountToken }));
       const result = this.rooms.create(code, socket, {
         admin,
         isPublic: !!body?.public,
@@ -229,7 +246,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     if (!code) return;
 
     await this.guard(socket, 'join', code, async () => {
-      const admin = await this.isAdminToken(body?.accountToken);
+      const admin = await this.isAdminToken(this.tokenDaConexao(socket, { token: body?.accountToken }));
       const result = this.rooms.join(code, socket, { admin });
       if (result.kind === 'not-found') {
         socket.emit('error', { room: code, message: 'Sala não encontrada.' });
@@ -350,7 +367,14 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     return { room, role: membership.role };
   }
 
-  /** `isAdminToken()` do original: token de conta, não a sessão do socket. */
+  /**
+   * `isAdminToken()` do original: identidade de conta, não a sessão do
+   * socket — daí não usar o `state.userId` que o `auth` já resolveu.
+   *
+   * Quem chama passa por `tokenDaConexao`, então o cookie cobre o front
+   * novo (que não tem token pra mandar) sem tirar o `accountToken` do
+   * corpo, que o cliente antigo continua enviando.
+   */
   private async isAdminToken(token: unknown): Promise<boolean> {
     const result = await this.auth.me(comoTexto(token));
     return result.kind === 'ok' && result.user.isAdmin;

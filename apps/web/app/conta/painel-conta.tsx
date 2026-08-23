@@ -1,28 +1,26 @@
 'use client';
 
 /**
- * Entrar, cadastrar e sair — primeira tela real da fase 3.
+ * Perfil, e o formulário de entrada pra quem chegar aqui deslogado.
  *
- * Client Component inteiro de propósito: o token vive no navegador (ver
- * `lib/api/session.ts`), então não há nada que o servidor do Next possa
- * renderizar sabendo quem é o jogador. Server Component aqui só adiantaria
- * uma casca vazia.
+ * Continua Client Component, mas por outro motivo que no começo. Antes era
+ * porque o token vivia no `localStorage` e nada fora do navegador
+ * conseguia lê-lo. Agora a sessão é cookie e o servidor **sabe** quem é o
+ * jogador — quem depende disso é o portão em `app/page.tsx`, que decide no
+ * servidor. Aqui o que exige cliente é a interação: editar perfil, trocar
+ * avatar, sair.
  */
 
 import { useEffect, useState } from 'react';
 
-import { cadastrar, entrar, sair, usuarioAtual, type Usuario } from '@/lib/api/account';
-import { ErroDaApi } from '@/lib/api/client';
+import { sair, usuarioAtual, type Usuario } from '@/lib/api/account';
 import { Avatar, NomeColorido } from '../componentes/avatar';
+import { FormularioLogin } from '../componentes/formulario-login';
 import { PainelPerfil } from './painel-perfil';
 import styles from './conta.module.css';
 
-type Modo = 'entrar' | 'cadastrar';
-
 export function PainelConta() {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
-  const [modo, setModo] = useState<Modo>('entrar');
-  const [erro, setErro] = useState('');
   const [ocupado, setOcupado] = useState(false);
   const [carregandoSessao, setCarregandoSessao] = useState(true);
 
@@ -35,29 +33,14 @@ export function PainelConta() {
       .finally(() => setCarregandoSessao(false));
   }, []);
 
-  async function aoEnviar(evento: React.FormEvent<HTMLFormElement>) {
-    evento.preventDefault();
-    const dados = new FormData(evento.currentTarget);
-    setErro('');
+  async function aoSair() {
     setOcupado(true);
     try {
-      const entrada = {
-        username: String(dados.get('username') ?? ''),
-        password: String(dados.get('password') ?? ''),
-      };
-      setUsuario(modo === 'entrar' ? await entrar(entrada) : await cadastrar({ ...entrada, email: String(dados.get('email') ?? '') }));
-    } catch (falha) {
-      setErro(falha instanceof ErroDaApi ? falha.message : 'Erro inesperado.');
+      await sair();
+      setUsuario(null);
     } finally {
       setOcupado(false);
     }
-  }
-
-  async function aoSair() {
-    setOcupado(true);
-    await sair();
-    setUsuario(null);
-    setOcupado(false);
   }
 
   if (carregandoSessao) {
@@ -105,49 +88,7 @@ export function PainelConta() {
 
   return (
     <div className={styles.painel}>
-      <h1 className={styles.titulo}>{modo === 'entrar' ? 'Entrar na conta' : 'Criar conta'}</h1>
-      <form onSubmit={aoEnviar}>
-        <label className={styles.campo}>
-          <span className={styles.rotulo}>{modo === 'entrar' ? 'Usuário ou e-mail' : 'Usuário'}</span>
-          <input className={styles.entrada} name="username" autoComplete="username" required />
-        </label>
-
-        {modo === 'cadastrar' && (
-          <label className={styles.campo}>
-            <span className={styles.rotulo}>E-mail</span>
-            <input className={styles.entrada} name="email" type="email" autoComplete="email" required />
-          </label>
-        )}
-
-        <label className={styles.campo}>
-          <span className={styles.rotulo}>Senha</span>
-          <input
-            className={styles.entrada}
-            name="password"
-            type="password"
-            autoComplete={modo === 'entrar' ? 'current-password' : 'new-password'}
-            required
-          />
-        </label>
-
-        <div className={styles.acoes}>
-          <button type="submit" className={styles.botao} disabled={ocupado}>
-            {modo === 'entrar' ? 'Entrar' : 'Cadastrar'}
-          </button>
-          <button
-            type="button"
-            className={styles.alternar}
-            onClick={() => {
-              setModo(modo === 'entrar' ? 'cadastrar' : 'entrar');
-              setErro('');
-            }}
-          >
-            {modo === 'entrar' ? 'Criar uma conta' : 'Já tenho conta'}
-          </button>
-        </div>
-      </form>
-
-      {erro && <p className={styles.erro}>{erro}</p>}
+      <FormularioLogin aoEntrar={setUsuario} />
     </div>
   );
 }

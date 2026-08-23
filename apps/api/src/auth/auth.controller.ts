@@ -8,11 +8,12 @@
  * já mora em `AuthService`.
  */
 
-import { Body, Controller, Get, Headers, HttpCode, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
+import type { Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
-import { extractBearerToken } from './bearer-token';
 import { IpRateLimitGuard } from './ip-rate-limit.guard';
+import { NOME_DO_COOKIE, extrairTokenDaSessao, opcoesDeRemocao, opcoesDoCookie } from './session-cookie';
 import { comoTexto } from '../common/texto';
 
 interface RegisterBody {
@@ -30,10 +31,21 @@ interface LoginBody {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  /**
+   * O token continua saindo no corpo além de virar cookie. Não é descuido:
+   * o evento `auth` do socket e qualquer cliente que não seja navegador
+   * ainda mandam token na mão, e cortar isso agora quebraria os dois. Quem
+   * é navegador passa a ignorar o campo e deixar o cookie trabalhar — é o
+   * front que para de guardar, não a API que para de emitir.
+   */
+  private entregarSessao(res: Response, token: string) {
+    res.cookie(NOME_DO_COOKIE, token, opcoesDoCookie());
+  }
+
   @Post('register')
   @UseGuards(IpRateLimitGuard)
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() body: RegisterBody) {
+  async register(@Body() body: RegisterBody, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.register({
       username: comoTexto(body.username),
       email: comoTexto(body.email),
@@ -49,6 +61,7 @@ export class AuthController {
       case 'username-or-email-taken':
         throw new HttpException({ error: 'Esse nome de usuário ou e-mail já está sendo usado.' }, HttpStatus.CONFLICT);
       case 'registered':
+        this.entregarSessao(res, result.token);
         return { token: result.token, user: result.user };
     }
   }
@@ -56,7 +69,7 @@ export class AuthController {
   @Post('login')
   @UseGuards(IpRateLimitGuard)
   @HttpCode(HttpStatus.OK)
-  async login(@Body() body: LoginBody) {
+  async login(@Body() body: LoginBody, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.login({
       username: comoTexto(body.username),
       password: comoTexto(body.password),
@@ -64,20 +77,24 @@ export class AuthController {
     if (result.kind === 'invalid-credentials') {
       throw new HttpException({ error: 'Usuário ou senha incorretos.' }, HttpStatus.UNAUTHORIZED);
     }
+    this.entregarSessao(res, result.token);
     return { token: result.token, user: result.user };
   }
 
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  async logout(@Headers('authorization') authorization: string | undefined) {
-    await this.authService.logout(extractBearerToken(authorization));
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    await this.authService.logout(extrairTokenDaSessao(req));
+    // O cookie cai mesmo se a sessão no banco já tinha expirado: o jogador
+    // pediu pra sair, e sair não pode depender de a sessão ainda existir.
+    res.clearCookie(NOME_DO_COOKIE, opcoesDeRemocao());
     return { ok: true };
   }
 
   @Get('me')
   @HttpCode(HttpStatus.OK)
-  async me(@Headers('authorization') authorization: string | undefined) {
-    const result = await this.authService.me(extractBearerToken(authorization));
+  async me(@Req() req: Request) {
+    const result = await this.authService.me(extrairTokenDaSessao(req));
     if (result.kind === 'unauthenticated') {
       throw new HttpException({ error: 'Entre novamente na sua conta.' }, HttpStatus.UNAUTHORIZED);
     }

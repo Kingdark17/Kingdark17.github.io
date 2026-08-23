@@ -1,50 +1,33 @@
-import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
-import styles from './page.module.css';
+import { usuarioDaSessao } from '@/lib/api/sessao-servidor';
+import { Entrada } from './entrada';
+import styles from './entrada.module.css';
 
 /**
- * Menu principal. Substitui a página de fumaça da fase 0, que existia só
- * pra provar que `@rpg-legend/shared` atravessava servidor e cliente — o
- * jogo inteiro faz essa prova agora.
+ * O portão: primeira tela de quem abre o jogo.
  *
- * Server Component, sem uma linha de JS próprio: os cinco destinos são
- * iguais pra todo mundo, e a entrada dos cartões é CSS. Chegou a ser
- * Motion; medido, custava ~106 KB de JavaScript na primeira página que
- * qualquer pessoa abre, por um fade de quatro cartões. É a mesma regra
- * que já valia pros loops decorativos do jogo.
+ * Decide **no servidor**, lendo o cookie de sessão. É o que a troca do
+ * `localStorage` por cookie comprou: quem já entrou nunca vê formulário de
+ * login piscando antes de o JavaScript descobrir que havia sessão, porque
+ * a resposta que sai daqui já é o redirecionamento.
+ *
+ * Esta rota é dinâmica por definição — ler cookie impede prerender. Por
+ * isso o menu mora em `/menu` e não aqui: lá o conteúdo é igual pra todo
+ * mundo e segue estático, sem uma linha de JS.
+ *
+ * **Entrar não é obrigatório.** O "Jogar sem conta" leva direto ao menu; a
+ * conta serve pra guardar progresso na nuvem e pra jogar acompanhado, não
+ * pra liberar o jogo.
  */
+export default async function Portao() {
+  if (await usuarioDaSessao()) redirect('/menu');
 
-const DESTINOS = [
-  { href: '/personagens', icone: '⚔️', titulo: 'Jogar', texto: 'Escolha um personagem e volte pra masmorra.' },
-  { href: '/personagens/novo', icone: '✨', titulo: 'Novo personagem', texto: 'Raça, classe, fraqueza e poderes.' },
-  { href: '/multiplayer', icone: '👥', titulo: 'Jogar com alguém', texto: 'Crie uma sala ou entre na de um amigo.' },
-  { href: '/amigos', icone: '💬', titulo: 'Amigos', texto: 'Adicione jogadores e converse.' },
-  { href: '/conta', icone: '🎭', titulo: 'Conta e perfil', texto: 'Foto, moldura, cor do nome, pet e loja.' },
-];
-
-export default function Page() {
   return (
-    <main className={styles.main}>
-      <div className={styles.menu}>
-        <h1 className={styles.marca}>RPG Legend</h1>
-        <p className={styles.subtitulo}>Uma masmorra diferente a cada descida.</p>
-
-        <nav className={styles.destinos}>
-          {DESTINOS.map((destino, indice) => (
-            <Link
-              key={destino.href}
-              href={destino.href}
-              className={styles.destino}
-              style={{ animationDelay: `${indice * 60}ms` }}
-            >
-              <span className={styles.iconeDoDestino} aria-hidden>
-                {destino.icone}
-              </span>
-              <span className={styles.tituloDoDestino}>{destino.titulo}</span>
-              <span className={styles.textoDoDestino}>{destino.texto}</span>
-            </Link>
-          ))}
-        </nav>
+    <main className={styles.tela}>
+      <div className={styles.cartao}>
+        <p className={styles.marca}>RPG Legend</p>
+        <Entrada />
       </div>
     </main>
   );

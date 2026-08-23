@@ -19,7 +19,6 @@
 import type { Socket } from 'socket.io-client';
 
 import { urlDaApi } from '../api/client';
-import { lerToken } from '../api/session';
 
 export type PapelNaSala = 1 | 2;
 
@@ -146,31 +145,36 @@ function baseUrl(): string {
 export function conectar(): void {
   if (socket || ligando) return;
 
-  const token = lerToken();
-  if (!token) {
-    mudar({ erro: 'Entre na sua conta para jogar com alguém.' });
-    return;
-  }
-
+  // Antes dava pra recusar aqui mesmo, lendo o token do `localStorage`.
+  // Com a sessão em cookie `httpOnly` o JavaScript não enxerga mais nada,
+  // então quem decide se a identidade vale é o servidor: a conexão abre e
+  // um `auth-error` volta se não houver sessão.
   ligando = true;
   mudar({ fase: 'conectando', erro: '' });
   void import('socket.io-client')
-    .then(({ io }) => ligar(io(baseUrl(), { transports: ['websocket'], forceNew: true }), token))
+    // `withCredentials` é o que faz o navegador anexar o cookie ao
+    // handshake. Sem isso a conexão sobe anônima e o `auth` sempre falha.
+    .then(({ io }) => ligar(io(baseUrl(), { transports: ['websocket'], forceNew: true, withCredentials: true })))
     .catch(() => mudar({ fase: 'desligado', erro: 'Não foi possível carregar o modo online.' }))
     .finally(() => {
       ligando = false;
     });
 }
 
-function ligar(conexao: Socket, token: string): void {
+function ligar(conexao: Socket): void {
   socket = conexao;
 
-  conexao.on('connect', () => conexao.emit('auth', { token }));
+  // Corpo vazio de propósito: a prova de identidade é o cookie que o
+  // navegador anexou ao handshake, e o gateway lê de lá. O campo `token`
+  // do evento continua existindo pro cliente antigo, que ainda o manda.
+  conexao.on('connect', () => conexao.emit('auth', {}));
   conexao.on('connect_error', () => mudar({ fase: 'desligado', erro: 'Não foi possível falar com o servidor.' }));
   conexao.on('disconnect', () => mudar({ fase: 'desligado', codigo: '', papel: null, perfis: {}, remoto: null }));
 
   conexao.on('authed', (dados: { username?: string }) => mudar({ fase: 'conectado', eu: dados?.username ?? '', erro: '' }));
-  conexao.on('auth-error', () => mudar({ fase: 'desligado', erro: 'Sua sessão expirou. Entre de novo.' }));
+  // Cobre os dois casos agora: sessão vencida e nunca ter entrado. O
+  // segundo era barrado antes de conectar, quando dava pra ler o token.
+  conexao.on('auth-error', () => mudar({ fase: 'desligado', erro: 'Entre na sua conta para jogar com alguém.' }));
 
   conexao.on('created', (dados: { room?: string }) =>
     mudar({ fase: 'esperando', codigo: dados?.room ?? '', papel: PAPEL_ANFITRIAO, erro: '' }),
@@ -280,12 +284,14 @@ export function sairDaSala(): void {
   conectar();
 }
 
+// Sem `accountToken`: ele servia pro gateway checar se quem cria a sala é
+// ADM, e essa checagem passou a sair do cookie do handshake.
 export function criarSala(codigo: string, opcoes: { publica: boolean; nome: string }): void {
-  socket?.emit('create', { room: codigo, name: opcoes.nome, public: opcoes.publica, accountToken: lerToken() ?? '' });
+  socket?.emit('create', { room: codigo, name: opcoes.nome, public: opcoes.publica });
 }
 
 export function entrarNaSala(codigo: string, nome: string): void {
-  socket?.emit('join', { room: codigo, name: nome, accountToken: lerToken() ?? '' });
+  socket?.emit('join', { room: codigo, name: nome });
 }
 
 export function mandarPerfil(perfil: unknown): void {

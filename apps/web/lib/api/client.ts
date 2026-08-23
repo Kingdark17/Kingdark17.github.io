@@ -6,8 +6,6 @@
  * o cliente as repassa em vez de inventar texto próprio.
  */
 
-import { lerToken } from './session';
-
 export class ErroDaApi extends Error {
   constructor(
     message: string,
@@ -34,7 +32,12 @@ export function urlDaApi(caminho: string): string {
 interface Opcoes {
   method?: 'GET' | 'POST' | 'PUT';
   body?: unknown;
-  /** Manda o token da sessão. Rota pública não precisa. */
+  /**
+   * Marca que a rota exige sessão. Não muda mais o que é enviado — o
+   * cookie vai em toda chamada, decidido pelo navegador — mas continua
+   * declarando a intenção no ponto de uso, e é o que permite traduzir um
+   * 401 em "entre na sua conta" em vez de "erro inesperado".
+   */
   autenticado?: boolean;
 }
 
@@ -44,22 +47,16 @@ export async function chamarApi<T>(caminho: string, opcoes: Opcoes = {}): Promis
   const headers: Record<string, string> = {};
   if (opcoes.body !== undefined) headers['Content-Type'] = 'application/json';
 
-  // Sem token a chamada já falha aqui, como rejeição da promessa. Evita
-  // mandar `Bearer ` vazio pro servidor e, do lado da tela, deixa o
-  // "você não está logado" cair no mesmo `.catch` de qualquer outro erro —
-  // sem `setState` síncrono dentro de `useEffect`.
-  if (opcoes.autenticado) {
-    const token = lerToken();
-    if (!token) throw new ErroDaApi(SEM_SESSAO, 401);
-    headers.Authorization = `Bearer ${token}`;
-  }
-
   let resposta: Response;
   try {
     resposta = await fetch(`${baseUrl()}${caminho}`, {
       method: opcoes.method ?? 'GET',
       headers,
       body: opcoes.body === undefined ? undefined : JSON.stringify(opcoes.body),
+      // O token virou cookie httpOnly: o JavaScript não o enxerga mais, e
+      // sem `include` o navegador não anexa cookie em chamada de outra
+      // origem. Sem esta linha, toda rota protegida responde 401.
+      credentials: 'include',
     });
   } catch {
     throw new ErroDaApi('Não foi possível falar com o servidor.', 0);
@@ -70,7 +67,11 @@ export async function chamarApi<T>(caminho: string, opcoes: Opcoes = {}): Promis
 
   if (!resposta.ok) {
     const mensagem = (corpo as { error?: unknown }).error;
-    throw new ErroDaApi(typeof mensagem === 'string' ? mensagem : 'Erro inesperado no servidor.', resposta.status);
+    if (typeof mensagem === 'string') throw new ErroDaApi(mensagem, resposta.status);
+    // 401 sem corpo é sessão ausente ou vencida — dizer isso vale mais que
+    // "erro inesperado", que manda o jogador procurar defeito onde não tem.
+    const generico = opcoes.autenticado && resposta.status === 401 ? SEM_SESSAO : 'Erro inesperado no servidor.';
+    throw new ErroDaApi(generico, resposta.status);
   }
   return corpo as T;
 }

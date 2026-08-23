@@ -55,12 +55,34 @@ export function lerTrustProxy(bruto = process.env.TRUST_PROXY): boolean | number
   return Number.isInteger(numero) && numero >= 0 ? numero : valor;
 }
 
+/**
+ * Origem e credenciais do CORS, que são um par e não duas opções soltas.
+ *
+ * A especificação do Fetch **proíbe** responder `Access-Control-Allow-Origin: *`
+ * junto de `Access-Control-Allow-Credentials: true`. O navegador não avisa: ele
+ * descarta a resposta inteira. Como o cookie de sessão só viaja com
+ * credenciais, ligar um sem o outro dá um login que falha em silêncio.
+ *
+ * Daí a regra: **credenciais só quando a origem é declarada.** Sem
+ * `ALLOWED_ORIGIN`, cai no `*` de sempre e o cookie não atravessa origem —
+ * é o comportamento de hoje, preservado de propósito pra nada quebrar
+ * enquanto a hospedagem não estiver decidida.
+ *
+ * Pra desenvolver com o Next em outra porta, declare a origem dele:
+ * `ALLOWED_ORIGIN=http://localhost:3000`.
+ */
+export function lerCors(bruto = process.env.ALLOWED_ORIGIN): { origin: string; credentials: boolean } {
+  const origem = bruto?.trim();
+  if (!origem || origem === '*') return { origin: '*', credentials: false };
+  return { origin: origem, credentials: true };
+}
+
 export function configureApp(app: NestExpressApplication): NestExpressApplication {
   const trustProxy = lerTrustProxy();
   if (trustProxy !== null) app.set('trust proxy', trustProxy);
   app.useBodyParser('json', { limit: MAX_BODY_BYTES });
   app.enableCors({
-    origin: process.env.ALLOWED_ORIGIN || '*',
+    ...lerCors(),
     methods: 'GET,POST,PUT,OPTIONS',
     allowedHeaders: 'Content-Type, Authorization',
   });

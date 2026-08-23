@@ -12,7 +12,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import request from 'supertest';
 
 import { AppModule } from './app.module';
-import { MAX_BODY_BYTES, configureApp, lerTrustProxy } from './bootstrap';
+import { MAX_BODY_BYTES, configureApp, lerCors, lerTrustProxy } from './bootstrap';
 import { servidorDe } from './testing/servidor';
 
 describe('configureApp', () => {
@@ -75,6 +75,37 @@ describe('configureApp', () => {
 
     expect(response.status).toBe(503);
     expect(response.body).toEqual({ error: 'O banco de dados de contas ainda não foi configurado.' });
+  });
+});
+
+describe('lerCors', () => {
+  // Sem origem declarada, nada muda em relação a hoje: `*` e sem
+  // credenciais. É o que mantém o cliente atual funcionando enquanto a
+  // hospedagem da API não está decidida.
+  it.each([undefined, '', '   ', '*'])('cai no aberto e sem credenciais com %p', (valor) => {
+    expect(lerCors(valor)).toEqual({ origin: '*', credentials: false });
+  });
+
+  it('origem declarada liga as credenciais, que é o que faz o cookie viajar', () => {
+    expect(lerCors('https://rpglegend.com.br')).toEqual({
+      origin: 'https://rpglegend.com.br',
+      credentials: true,
+    });
+    expect(lerCors('  http://localhost:3000  ')).toEqual({
+      origin: 'http://localhost:3000',
+      credentials: true,
+    });
+  });
+
+  // A especificação do Fetch proíbe `Allow-Origin: *` junto de
+  // `Allow-Credentials: true`; o navegador descarta a resposta inteira sem
+  // avisar. Este teste existe pra essa combinação nunca ser possível de
+  // montar por acidente ao mexer na função.
+  it('nunca devolve `*` com credenciais ligadas', () => {
+    for (const valor of [undefined, '', '*', 'https://exemplo.com', 'http://localhost:3000']) {
+      const cors = lerCors(valor);
+      expect(cors.origin === '*' && cors.credentials).toBe(false);
+    }
   });
 });
 

@@ -1,0 +1,37 @@
+.tela {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+.cartao {
+  width: min(26rem, 100%);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 2rem 1.75rem;
+}
+
+/* A marca é `<p>` e não `<h1>`: o `<h1>` desta tela é o título do
+   formulário ("Entrar na conta" / "Criar conta"), que muda com o modo.
+   Dois `<h1>` competindo confundem leitor de tela. */
+.marca {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.9rem, 6vw, 2.5rem);
+  color: var(--gold-bright);
+  text-align: center;
+  margin: 0 0 0.35rem;
+  line-height: 1.1;
+}
+
+.semConta {
+  margin-left: auto;
+  color: var(--parchment-dim);
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.semConta:hover {
+  color: var(--parchment);
+}

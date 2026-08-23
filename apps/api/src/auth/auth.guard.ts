@@ -9,8 +9,8 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import type { Request } from 'express';
 
 import { AuthService } from './auth.service';
-import { extractBearerToken } from './bearer-token';
 import type { SafeUser } from './cosmetics';
+import { extrairTokenDaSessao } from './session-cookie';
 
 export type RequestWithUser = Request & { user?: SafeUser };
 
@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
-    const result = await this.authService.me(extractBearerToken(request.headers.authorization));
+    const result = await this.authService.me(extrairTokenDaSessao(request));
     if (result.kind === 'unauthenticated') {
       throw new UnauthorizedException({ error: 'Entre novamente na sua conta.' });
     }

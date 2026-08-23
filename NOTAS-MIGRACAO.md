@@ -1040,13 +1040,118 @@ dois casos separado porque confundir os dois custa tempo.
 
 ---
 
+## A sessão saiu do localStorage e virou cookie (2026-08-22)
+
+Pedido original: "um menu de login antes de tudo". O formulário já existia
+em `/conta`; o que não existia era como decidir **no servidor** se há
+sessão — e sem isso toda tela que dependa de login vira Client Component
+que pisca o formulário antes de descobrir que o jogador já estava logado.
+
+A causa era o token morar no `localStorage`: nada fora do navegador
+alcança aquilo. Trocado por cookie `httpOnly`, que de quebra tira o token
+do alcance de XSS — risco que o próprio `lib/api/session.ts` admitia.
+
+### O que mudou
+
+| Camada | O quê |
+|---|---|
+| `auth/session-cookie.ts` | novo: emite, lê e apaga o cookie |
+| `auth.guard.ts`, `auth.controller.ts` | leem cookie, com `Bearer` de reserva |
+| `bootstrap.ts` | `lerCors()` — origem e credenciais viraram um par só |
+| `realtime.gateway.ts` | `auth`, `create` e `join` aceitam o cookie do handshake |
+| `lib/api/client.ts` | `credentials: 'include'` |
+| `lib/api/session.ts` | **apagado** — não há mais token pra guardar |
+| `lib/rede/sala.ts` | socket com `withCredentials`, `auth` de corpo vazio |
+
+O `Bearer` continua aceito de propósito: o cliente antigo e qualquer coisa
+que não seja navegador ainda mandam token na mão.
+
+### A raiz virou portão, o menu foi pra `/menu`
+
+Ler cookie impede prerender. Se o portão e o menu dividissem a rota, o
+menu — que é igual pra todo mundo — viraria dinâmico de graça, jogando
+fora o "Server Component sem uma linha de JS" do quinto corte. Separados:
+
+```
+ƒ /       portão, dinâmico, decide no servidor
+○ /menu   menu, estático, zero JS
+```
+
+**Entrar não é obrigatório**: o "Jogar sem conta" leva direto ao menu.
+
+### Cookie exige mesmo site — e isso decide a hospedagem
+
+Dois fatos que só aparecem em produção, os dois silenciosos:
+
+1. A spec do Fetch **proíbe** `Allow-Origin: *` com
+   `Allow-Credentials: true`. O navegador descarta a resposta sem avisar.
+   Daí `lerCors()` só ligar credenciais quando a origem é declarada.
+2. Front e API em domínios diferentes tornam o cookie de terceiros, e
+   Safari e Firefox o descartam por padrão. **A API precisa atender em
+   `api.rpglegend.com.br`, com o front em `rpglegend.com.br`.** Vercel +
+   Render em domínios separados não funciona.
+
+Em produção: `COOKIE_SECURE=true`, `COOKIE_DOMAIN=.rpglegend.com.br`,
+`ALLOWED_ORIGIN=https://rpglegend.com.br`.
+
+### A API nunca leu o `.env` (achado no caminho)
+
+Não havia `dotenv` nem `ConfigModule`. O `.env` existia desde a fase 5 e
+era lido pelo `drizzle-kit`, que carrega sozinho, e pelos scripts, que
+fazem o parsing na mão — **nunca pelo processo da API**, que subia sem
+`DATABASE_URL` e respondia `{"configured":false}` em desenvolvimento.
+
+Resolvido com `import 'dotenv/config'` no topo do `main.ts`. **A ordem é
+obrigatória:** decorador é avaliado ao importar o módulo, e o
+`@WebSocketGateway({ cors: lerCors() })` lê o ambiente nesse instante — se
+o `.env` entrar depois, o gateway já congelou a configuração errada.
+
+### Portas em desenvolvimento
+
+Os dois caíam na 3000. O front foi pra **3001** (`next dev -p 3001`), a API
+ficou com a 3000, e `ALLOWED_ORIGIN=http://localhost:3001` no `.env` é o
+que faz o cookie atravessar.
+
+### A fonte de título virou Jacquard 12
+
+Blackletter pixelada, só nos 23 usos de `--font-display`. Não foi pros 74
+usos de `--font-mono` de propósito: aqueles vão de 8,5px a 11px, e
+blackletter nesse tamanho é borrão.
+
+A troca saiu **mais leve**, ao contrário do que a estimativa dizia: 89,1 KB
+→ **70,5 KB** no caminho crítico. Os 110 KB que assustavam eram o `.ttf`
+cru do CDN do Google; subsetado pelo `next/font` o arquivo tem 6,7 KB, e a
+Cinzel carregava dois pesos contra o único da Jacquard.
+
+**Ela não tem negrito.** Título nasce com `font-weight: bold` pela folha do
+navegador, e negrito inventado empasta desenho pixelado — daí o
+`h1..h6 { font-weight: 400 }` no `globals.css`.
+
+### As regiradas por seção que faltavam na criação
+
+O front novo só tinha "Rolar Tudo". Os três botões por seção (poderes,
+fraqueza, atributos) existiam no jogo vanilla e nunca foram portados.
+
+Uma regra aqui não é óbvia e está no `ui.js` original: **regirar a fraqueza
+regira os atributos junto**, porque eles são calculados a partir dela —
+deixar a fraqueza nova com os atributos velhos mostraria números que não
+correspondem a nada. Regirar os poderes não mexe em mais nada, porque poder
+não entra nesse cálculo.
+
+Pré-requisitos, iguais aos do original: poderes precisam de classe;
+atributos precisam de raça, classe e fraqueza; fraqueza não precisa de
+nada. Botão sem pré-requisito atendido fica **visível e opaco**, com o
+motivo no `title` — botão que some não ensina nada a quem procura por ele.
+
+---
+
 ## Travado esperando você
 
 | O quê | Pra quê | Sem isso |
 |---|---|---|
 | ~~`RESEND_API_KEY` + `EMAIL_FROM`~~ | confirmar e-mail e reset de senha | **resolvido em 2026-08-22** — domínio `rpglegend.com.br` verificado, envio provado ponta a ponta |
 | `DATABASE_URL` de staging | rodar tudo contra banco real | ~~PGlite cobre a maior parte~~ **resolvido em 2026-08-18**: o Supabase serve de staging |
-| onde a API vai rodar | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | o código dos dois já existe (`lerTrustProxy` em `bootstrap.ts`); falta só o valor, que depende da hospedagem. Sem `TRUST_PROXY=1` atrás de proxy, ver bug #7 |
+| onde a API vai rodar | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | o código dos dois já existe (`lerTrustProxy` em `bootstrap.ts`); falta só o valor, que depende da hospedagem. Sem `TRUST_PROXY=1` atrás de proxy, ver bug #7. **Agora também decide o login:** o cookie de sessão exige `api.rpglegend.com.br` com o front em `rpglegend.com.br` — domínios separados matam o login em Safari e Firefox |
 | arte em camadas | paperdoll PixiJS | fase 4 inteira parada |
 
 **Regra que continua valendo:** nunca criar conta de teste no servidor de
@@ -1088,7 +1193,9 @@ substituídos pelo estado do anfitrião.
 | `DATABASE_SSL` | ligado | só desliga com o literal `false` |
 | `ADMIN_USERNAME` | `ADM` | conta que ganha cosméticos de ADM e modo GOD no multiplayer |
 | `SAVE_SIGNING_SECRET` | cai pra `DATABASE_URL`, depois pra aleatório | **se cair no aleatório, assinatura de save não sobrevive a reinício** |
-| `ALLOWED_ORIGIN` | `*` | CORS |
+| `ALLOWED_ORIGIN` | `*` | CORS — e **é o que liga `credentials`**. Enquanto for `*`, o navegador recusa mandar o cookie de sessão e o login não funciona entre origens. Em desenvolvimento: `http://localhost:3001` |
+| `COOKIE_SECURE` | desligado | só o literal `true` liga. Desligado por padrão porque `localhost` é http e o navegador recusaria um cookie `Secure` |
+| `COOKIE_DOMAIN` | vazio | `.rpglegend.com.br` em produção, pra o cookie valer no front e na API ao mesmo tempo. Vazio em desenvolvimento (portas diferentes já compartilham cookie) |
 | `PUBLIC_GAME_URL` | `https://kingdark17.github.io/rpg-legend/` | monta o link dos e-mails; formato `?verify=` / `?reset=` é o que o cliente lê |
 | `RESEND_API_KEY` / `EMAIL_FROM` | — | sem as duas, e-mail não sai (só avisa no log) |
 | `REDIS_URL` | — | sem ela, tentativas por IP e presença ficam **no processo**, como antes: correto com uma instância, errado com duas |

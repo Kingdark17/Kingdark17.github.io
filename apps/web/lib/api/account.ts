@@ -9,7 +9,6 @@
  */
 
 import { chamarApi } from './client';
-import { apagarToken, guardarToken } from './session';
 
 export interface Cosmeticos {
   frames: string[];
@@ -30,31 +29,34 @@ export interface Usuario {
   cosmetics: Cosmeticos;
 }
 
-interface RespostaComToken {
-  token: string;
+/**
+ * A API ainda devolve `token` no corpo, pro cliente antigo e pra quem não
+ * é navegador. Aqui o campo é ignorado de propósito: a sessão chega pelo
+ * `Set-Cookie` da mesma resposta, e guardar uma cópia legível por
+ * JavaScript devolveria exatamente o risco de XSS que a troca eliminou.
+ */
+interface RespostaDeSessao {
   user: Usuario;
 }
 
 export async function cadastrar(dados: { username: string; email: string; password: string }): Promise<Usuario> {
-  const resposta = await chamarApi<RespostaComToken>('/api/account/register', { method: 'POST', body: dados });
-  guardarToken(resposta.token);
+  const resposta = await chamarApi<RespostaDeSessao>('/api/account/register', { method: 'POST', body: dados });
   return resposta.user;
 }
 
 export async function entrar(dados: { username: string; password: string }): Promise<Usuario> {
-  const resposta = await chamarApi<RespostaComToken>('/api/account/login', { method: 'POST', body: dados });
-  guardarToken(resposta.token);
+  const resposta = await chamarApi<RespostaDeSessao>('/api/account/login', { method: 'POST', body: dados });
   return resposta.user;
 }
 
+/**
+ * Quem apaga o cookie é o servidor, no `Set-Cookie` da resposta — o
+ * navegador não consegue apagar cookie `httpOnly` sozinho. Se a chamada
+ * falhar, a sessão continua de pé: é o preço de não ter mais uma cópia
+ * local pra descartar por conta própria.
+ */
 export async function sair(): Promise<void> {
-  try {
-    await chamarApi('/api/account/logout', { method: 'POST', autenticado: true });
-  } finally {
-    // Sessão local sempre cai, mesmo se a chamada falhar — senão o jogador
-    // fica preso numa sessão que ele já mandou encerrar.
-    apagarToken();
-  }
+  await chamarApi('/api/account/logout', { method: 'POST', autenticado: true });
 }
 
 export async function usuarioAtual(): Promise<Usuario> {

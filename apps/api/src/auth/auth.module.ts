@@ -14,9 +14,7 @@ import { DrizzleUsersRepository } from './drizzle-users-repository';
 import { ResendEmailSender } from './email-sender';
 import { normalizePublicGameUrl } from './email-templates';
 import { AUTH_RATE_LIMITER, IP_ATTEMPT_LIMIT, IP_WINDOW_MS } from './ip-rate-limit.guard';
-
-/** Mesma validade de sessão do accounts.js original: `NOW()+INTERVAL '30 days'`. */
-const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+import { SESSION_TTL_MS } from './tokens';
 
 function adminUsername(): string {
   return process.env.ADMIN_USERNAME || 'ADM';
