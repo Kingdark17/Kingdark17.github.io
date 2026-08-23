@@ -45,6 +45,23 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* A fonte de título (Jacquard 12) existe num peso só. Título nasce com
+   `font-weight: bold` pela folha do navegador, e negrito que a fonte não
+   tem o navegador desenha na marra, engrossando o traço — numa blackletter
+   pixelada isso empasta os vãos e apaga a forma da letra.
+
+   Vale pra todos: hoje todo `<h1>`–`<h6>` do app usa `--font-display`. Se
+   um dia aparecer título com a fonte de corpo e ele precisar de negrito de
+   verdade, é aqui que a exceção entra. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400;
+}
+
 /* A arte do jogo é pixel art: nunca deixar o navegador suavizar na escala. */
 .pixelated {
   image-rendering: pixelated;
