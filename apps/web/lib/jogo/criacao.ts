@@ -58,6 +58,15 @@ export function sortearPoderes(classe: ClassDef, rng: Rng = defaultRng): Power[]
   return embaralhados.slice(0, QUANTIDADE_DE_PODERES_EXTRAS);
 }
 
+/**
+ * Uma fraqueza qualquer. Existe separado do `rolarTudo` porque a tela
+ * deixa regirar só esta seção — e quem regira a fraqueza precisa regirar
+ * os atributos junto, que dependem dela.
+ */
+export function sortearFraqueza(rng: Rng = defaultRng): Debuff {
+  return sortear(DEBUFFS, rng);
+}
+
 /** Os atributos dependem de raça, classe e fraqueza: só rola quando os três existem. */
 export function rolarAtributosSePossivel(criacao: Criacao, rng: Rng = defaultRng): Attributes | null {
   if (!criacao.raca || !criacao.classe || !criacao.fraqueza) return null;

@@ -17,7 +17,15 @@ import { useState } from 'react';
 import { ATTR_KEYS, ATTR_LABELS, CLASSES, RACES, powerById, type ClassDef, type Race } from '@rpg-legend/shared';
 import { ErroDaApi } from '@/lib/api/client';
 import { gravarSave } from '@/lib/api/save';
-import { criacaoVazia, faltaParaComecar, rolarAtributosSePossivel, rolarTudo, sortearPoderes, type Criacao } from '@/lib/jogo/criacao';
+import {
+  criacaoVazia,
+  faltaParaComecar,
+  rolarAtributosSePossivel,
+  rolarTudo,
+  sortearFraqueza,
+  sortearPoderes,
+  type Criacao,
+} from '@/lib/jogo/criacao';
 import { montarSaveInicial } from '@/lib/jogo/save-inicial';
 import styles from './criacao.module.css';
 
@@ -57,6 +65,34 @@ export function FormularioCriacao({ slot }: { slot: number }) {
     setCriacao((atual) => rolarTudo(atual.nome));
   }
 
+  // As três regiradas por seção, iguais às do jogo em produção. Servem pra
+  // ajustar um resultado sem perder os outros — quem gostou da fraqueza
+  // mas não dos poderes não precisa rolar tudo de novo e recomeçar.
+
+  /** Poderes não entram no cálculo de atributo, então nada mais muda. */
+  function regirarPoderes() {
+    setErro('');
+    setCriacao((atual) => (atual.classe ? { ...atual, poderes: sortearPoderes(atual.classe) } : atual));
+  }
+
+  /**
+   * Atributo depende da fraqueza — a própria tela diz isso. Deixar a
+   * fraqueza nova com os atributos velhos mostraria números que não
+   * correspondem a nada.
+   */
+  function regirarFraqueza() {
+    setErro('');
+    setCriacao((atual) => {
+      const proxima = { ...atual, fraqueza: sortearFraqueza() };
+      return { ...proxima, atributos: rolarAtributosSePossivel(proxima) };
+    });
+  }
+
+  function regirarAtributos() {
+    setErro('');
+    setCriacao((atual) => ({ ...atual, atributos: rolarAtributosSePossivel(atual) ?? atual.atributos }));
+  }
+
   async function comecar() {
     const falta = faltaParaComecar(criacao);
     if (falta) {
@@ -75,6 +111,11 @@ export function FormularioCriacao({ slot }: { slot: number }) {
   }
 
   const assinatura = criacao.classe ? powerById(criacao.classe.signatureId) : null;
+
+  // Mesmo pré-requisito que `rolarAtributosSePossivel` checa por dentro. Sem
+  // isso o botão ficaria clicável e não faria nada, que é pior que estar
+  // desligado com o motivo escrito.
+  const podeRolarAtributos = Boolean(criacao.raca && criacao.classe && criacao.fraqueza);
 
   return (
     <>
@@ -134,7 +175,18 @@ export function FormularioCriacao({ slot }: { slot: number }) {
       </section>
 
       <section className={styles.secao}>
-        <h2 className={styles.tituloSecao}>Poderes</h2>
+        <div className={styles.cabecalhoSecao}>
+          <h2 className={styles.tituloSecao}>Poderes</h2>
+          <button
+            type="button"
+            className={styles.regirar}
+            onClick={regirarPoderes}
+            disabled={!criacao.classe || salvando}
+            title={criacao.classe ? undefined : 'Escolha uma classe primeiro'}
+          >
+            🎲 Girar
+          </button>
+        </div>
         {assinatura || criacao.poderes.length > 0 ? (
           <ul className={styles.grade}>
             {assinatura && (
@@ -158,7 +210,14 @@ export function FormularioCriacao({ slot }: { slot: number }) {
       </section>
 
       <section className={styles.secao}>
-        <h2 className={styles.tituloSecao}>Fraqueza</h2>
+        <div className={styles.cabecalhoSecao}>
+          <h2 className={styles.tituloSecao}>Fraqueza</h2>
+          {/* Sem pré-requisito: a fraqueza não depende de raça nem classe,
+              e é o que o jogo em produção faz. */}
+          <button type="button" className={styles.regirar} onClick={regirarFraqueza} disabled={salvando}>
+            🎲 Girar
+          </button>
+        </div>
         {criacao.fraqueza ? (
           <div className={styles.sorteado}>
             <span className={styles.icone}>{criacao.fraqueza.icon}</span>
@@ -171,7 +230,18 @@ export function FormularioCriacao({ slot }: { slot: number }) {
       </section>
 
       <section className={styles.secao}>
-        <h2 className={styles.tituloSecao}>Atributos</h2>
+        <div className={styles.cabecalhoSecao}>
+          <h2 className={styles.tituloSecao}>Atributos</h2>
+          <button
+            type="button"
+            className={styles.regirar}
+            onClick={regirarAtributos}
+            disabled={!podeRolarAtributos || salvando}
+            title={podeRolarAtributos ? undefined : 'Precisa de raça, classe e fraqueza'}
+          >
+            🎲 Girar
+          </button>
+        </div>
         {criacao.atributos ? (
           <ul className={styles.gradeAtributos}>
             {ATTR_KEYS.map((chave) => (
