@@ -12,6 +12,12 @@
  * mexia na música; os efeitos eram liga/desliga. Divergir aqui é o que
  * qualquer pessoa espera de um controle de volume.
  *
+ * Os efeitos ainda passam por um ganho próprio antes do mestre, pra tela
+ * de Configurações poder abaixar só eles. A ordem importa: **efeitos →
+ * barramento de efeitos → mestre → compressor**, e a música entra direto
+ * no mestre. Assim o controle geral continua sendo um só, e o dos efeitos
+ * é um corte por cima dele — nunca um segundo volume competindo.
+ *
  * Nada disto pode rodar no servidor: só existe quando o navegador chama.
  */
 
@@ -19,6 +25,7 @@ import { assinarPreferencia, lerPreferencia } from './preferencia';
 
 let contexto: AudioContext | null = null;
 let mestre: GainNode | null = null;
+let barramentoDeEfeitos: GainNode | null = null;
 
 /** O ganho do original (`music.js`), mantido pra a música soar igual. */
 const TETO = 0.48;
@@ -26,6 +33,10 @@ const TETO = 0.48;
 function volumeAtual(): number {
   const preferencia = lerPreferencia();
   return preferencia.ligado ? preferencia.volume : 0;
+}
+
+function volumeDosEfeitos(): number {
+  return lerPreferencia().efeitos;
 }
 
 /**
@@ -49,12 +60,16 @@ export function audio(): AudioContext | null {
     const ganhoDoEco = contexto.createGain();
     ganhoDoEco.gain.value = 0.16;
 
+    barramentoDeEfeitos = contexto.createGain();
+    barramentoDeEfeitos.connect(mestre);
+
     mestre.connect(compressor);
     compressor.connect(contexto.destination);
     mestre.connect(eco);
     eco.connect(ganhoDoEco);
     ganhoDoEco.connect(compressor);
     mestre.gain.value = volumeAtual() * TETO;
+    barramentoDeEfeitos.gain.value = volumeDosEfeitos();
 
     assinarPreferencia(aplicarVolume);
   } catch {
@@ -68,14 +83,31 @@ export function saidaMestre(): GainNode | null {
   return mestre;
 }
 
+/** Onde os efeitos entram. É o mestre com um ganho a mais no caminho. */
+export function saidaDeEfeitos(): GainNode | null {
+  audio();
+  return barramentoDeEfeitos;
+}
+
 export function aplicarVolume(): void {
-  if (!contexto || !mestre) return;
-  mestre.gain.cancelScheduledValues(contexto.currentTime);
-  mestre.gain.linearRampToValueAtTime(volumeAtual() * TETO, contexto.currentTime + 0.2);
+  if (!contexto || !mestre || !barramentoDeEfeitos) return;
+  const agora = contexto.currentTime;
+  // Rampa em vez de salto: mexer no ganho de um nó que já está tocando
+  // estala. Os 0.2 s são curtos o bastante pra arrastar o controle
+  // deslizante e ouvir a mudança junto.
+  mestre.gain.cancelScheduledValues(agora);
+  mestre.gain.linearRampToValueAtTime(volumeAtual() * TETO, agora + 0.2);
+  barramentoDeEfeitos.gain.cancelScheduledValues(agora);
+  barramentoDeEfeitos.gain.linearRampToValueAtTime(volumeDosEfeitos(), agora + 0.2);
 }
 
 export function estaMudo(): boolean {
   return volumeAtual() <= 0;
+}
+
+/** Mudo pros efeitos: ou o geral está zerado, ou os efeitos estão. */
+export function efeitosMudos(): boolean {
+  return estaMudo() || volumeDosEfeitos() <= 0;
 }
 
 /**

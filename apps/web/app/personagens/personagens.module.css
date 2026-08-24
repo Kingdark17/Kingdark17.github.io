@@ -1,6 +1,25 @@
 .tela {
+  composes: fundo from '../acabamento.module.css';
   min-height: 100dvh;
   padding: 2.5rem 1rem;
+}
+
+.atalhos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+}
+
+/* Com borda, e não sublinhado como o `.botaoDiscreto`: este é o **único**
+   caminho pro co-op no site inteiro desde que o menu virou três botões.
+   Link de texto no meio da página seria fácil demais de não ver. */
+.atalhoCoop {
+  composes: botao from '../acabamento.module.css';
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+  text-decoration: none;
 }
 
 .conteudo {

@@ -1,0 +1,83 @@
+/* =========================================================
+   O acabamento do jogo antigo, portado de rpg-legend/css/style.css.
+
+   A paleta nova já era idêntica à velha — os tokens do `globals.css`
+   saíram de lá um a um. O que faltava era o **acabamento**: painel com
+   degradê em vez de cor chapada, moldura interna dourada, título em
+   versalete espaçado com fio embaixo, botão com brilho ao passar o mouse.
+   É isso que fazia a tela antiga parecer um jogo e a nova parecer um
+   formulário.
+
+   Mora num módulo próprio, e não em classe global, porque o resto do app
+   é CSS Modules: quem quiser o acabamento escreve
+
+       .meuPainel { composes: painel from '../acabamento.module.css'; }
+
+   e continua livre pra mexer em tamanho, espaçamento e grade sem tocar
+   aqui. Classe global valeria pro app inteiro e tiraria essa liberdade.
+   ========================================================= */
+
+.painel {
+  position: relative;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
+}
+
+/* A moldura interna. Fina, encostada na borda, e é ela que dá a impressão
+   de metal batido em vez de caixa desenhada.
+
+   `pointer-events: none` não é enfeite: pseudo-elemento posicionado pinta
+   por cima do conteúdo em fluxo, e sem isso a moldura engoliria o clique
+   de qualquer botão que encostasse nela. */
+.painel::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(201, 162, 39, 0.12);
+  border-radius: 0.25rem;
+  pointer-events: none;
+}
+
+.tituloDePainel {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  border-bottom: 1px solid var(--line);
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.5rem;
+}
+
+.botao {
+  background: linear-gradient(180deg, #2a2118, #1a140e);
+  border: 1px solid var(--gold);
+  border-radius: 0.25rem;
+  color: var(--parchment);
+  font: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.botao:hover:not(:disabled),
+.botao:focus-visible {
+  box-shadow: 0 0 14px rgba(201, 162, 39, 0.3);
+  color: var(--gold-bright);
+}
+
+.botao:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* O fundo da página: dois clarões nos cantos opostos por cima da tinta.
+   Sozinho o `--ink` chapado é o que mais denuncia "página web" numa tela
+   que devia parecer masmorra. */
+.fundo {
+  background:
+    radial-gradient(ellipse at 20% -10%, rgba(201, 162, 39, 0.08), transparent 45%),
+    radial-gradient(ellipse at 100% 110%, rgba(74, 128, 115, 0.1), transparent 50%),
+    var(--ink);
+}

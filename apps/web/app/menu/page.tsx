@@ -1,56 +1,78 @@
+/* eslint-disable @next/next/no-img-element */
+
 import Link from 'next/link';
 
+import { AtalhosDoCanto } from './atalhos-do-canto';
 import styles from './menu.module.css';
 
 /**
- * Menu principal. Substitui a página de fumaça da fase 0, que existia só
- * pra provar que `@rpg-legend/shared` atravessava servidor e cliente — o
- * jogo inteiro faz essa prova agora.
+ * Menu principal, no layout do esboço: brasão em cima, três botões
+ * empilhados com "Jogar" em destaque, o mascote ao lado e os dois atalhos
+ * no canto.
  *
- * Server Component, sem uma linha de JS próprio: os cinco destinos são
- * iguais pra todo mundo, e a entrada dos cartões é CSS. Chegou a ser
- * Motion; medido, custava ~106 KB de JavaScript na primeira página que
- * qualquer pessoa abre, por um fade de quatro cartões. É a mesma regra
- * que já valia pros loops decorativos do jogo.
+ * **Server Component estático.** Só `AtalhosDoCanto` é ilha, porque só ele
+ * depende de quem está logado. Os botões são `<Link>`, o mascote é CSS —
+ * nenhum dos dois manda JavaScript.
  *
  * **Mora em `/menu`, e não na raiz, exatamente pra continuar assim.** A
  * raiz virou o portão de login, que lê cookie e por isso não pode ser
  * prerenderizada. Deixar as duas coisas na mesma rota tornaria esta página
- * dinâmica junto — de graça, já que os destinos aqui são iguais pra todo
- * mundo. Separadas, o portão paga o custo dele e o menu segue estático.
+ * dinâmica junto, de graça.
+ *
+ * Não há `<h1>` com o nome do jogo: o brasão já traz "RPG LEGEND" escrito
+ * na fita, e repetir embaixo em Jacquard seria dizer duas vezes. O `alt`
+ * da imagem é que carrega o nome pra quem lê por leitor de tela.
  */
 
 const DESTINOS = [
-  { href: '/personagens', icone: '⚔️', titulo: 'Jogar', texto: 'Escolha um personagem e volte pra masmorra.' },
-  { href: '/personagens/novo', icone: '✨', titulo: 'Novo personagem', texto: 'Raça, classe, fraqueza e poderes.' },
-  { href: '/multiplayer', icone: '👥', titulo: 'Jogar com alguém', texto: 'Crie uma sala ou entre na de um amigo.' },
-  { href: '/amigos', icone: '💬', titulo: 'Amigos', texto: 'Adicione jogadores e converse.' },
-  { href: '/conta', icone: '🎭', titulo: 'Conta e perfil', texto: 'Foto, moldura, cor do nome, pet e loja.' },
+  { href: '/personagens', titulo: 'Jogar', forte: true },
+  { href: '/configuracoes', titulo: 'Configurações', forte: false },
+  { href: '/loja', titulo: 'Loja', forte: false },
 ];
 
 export default function Page() {
   return (
-    <main className={styles.main}>
-      <div className={styles.menu}>
-        <h1 className={styles.marca}>RPG Legend</h1>
-        <p className={styles.subtitulo}>Uma masmorra diferente a cada descida.</p>
+    <main className={styles.tela}>
+      <AtalhosDoCanto />
 
-        <nav className={styles.destinos}>
-          {DESTINOS.map((destino, indice) => (
+      <div className={styles.coluna}>
+        {/* `<img>` cru, e não `next/image`: o brasão é pixel art, e o
+            otimizador reamostra pra largura do dispositivo — o que borra
+            exatamente as bordas duras que fazem o desenho. São 16 KB, não
+            há o que otimizar. Mesmo motivo do `avatar.tsx`. */}
+        <img
+          className={`${styles.brasao} pixelated`}
+          src="/img/branding/logo.png"
+          width={724}
+          height={724}
+          alt="RPG Legend"
+        />
+
+        <nav className={styles.botoes} aria-label="Menu principal">
+          {DESTINOS.map((destino) => (
             <Link
               key={destino.href}
               href={destino.href}
-              className={styles.destino}
-              style={{ animationDelay: `${indice * 60}ms` }}
+              className={`${styles.botao} ${destino.forte ? styles.botaoForte : ''}`}
             >
-              <span className={styles.iconeDoDestino} aria-hidden>
-                {destino.icone}
-              </span>
-              <span className={styles.tituloDoDestino}>{destino.titulo}</span>
-              <span className={styles.textoDoDestino}>{destino.texto}</span>
+              {destino.titulo}
             </Link>
           ))}
         </nav>
+      </div>
+
+      {/* Fora da coluna: o gato mora no canto de baixo à direita, o mesmo
+          da tela de jogo (`.bichinho` em `jogo.module.css`), pra o mascote
+          estar sempre no mesmo lugar.
+
+          Decorativo: `aria-hidden` porque um gato que só faz carinho não é
+          informação, e o `<button>` sem `onClick` existe só pra o `:active`
+          do CSS valer no toque também. */}
+      <div className={styles.mascote} aria-hidden>
+        <button type="button" className={styles.gato} tabIndex={-1}>
+          <span className={styles.gatoRosto}>🐈‍⬛</span>
+          <span className={styles.gatoCoracao}>❤</span>
+        </button>
       </div>
     </main>
   );

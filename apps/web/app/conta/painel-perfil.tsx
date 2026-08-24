@@ -1,33 +1,24 @@
 'use client';
 
 /**
- * Personalização do perfil e loja de cosméticos — os modais
- * `profileEditorModal` e `profileShopModal` do cliente antigo.
+ * Personalização do perfil — o modal `profileEditorModal` do cliente
+ * antigo. **Só o escolher**: comprar mudou de endereço e agora é `/loja`.
  *
- * Duas regras do servidor moldam a tela:
- *
- * 1. Só dá pra **escolher** o que a conta já desbloqueou (`owned`), então
- *    os seletores listam só isso — o resto vive na loja.
- * 2. A compra sai do **ouro do personagem**, não de uma carteira da conta.
- *    Por isso a loja pede o slot antes de deixar comprar, e o ouro
- *    mostrado é o do slot escolhido.
+ * Estavam juntos aqui porque vieram juntos do mesmo modal, mas são coisas
+ * diferentes — uma gasta ouro do personagem, a outra troca o que aparece
+ * no seu nome. Separados, esta tela nem precisa mais buscar o catálogo:
+ * a regra do servidor é que só dá pra **escolher** o que a conta já
+ * desbloqueou, e essa lista já vem em `usuario.cosmetics`.
  */
 
-import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 import { PET_ICONS, type PetId } from '@rpg-legend/shared';
 
 import type { Usuario } from '@/lib/api/account';
-import { listarPersonagens, type ResumoPersonagem } from '@/lib/api/characters';
 import { ErroDaApi } from '@/lib/api/client';
-import {
-  catalogoDeCosmeticos,
-  comprarCosmetico,
-  salvarPerfil,
-  type Catalogo,
-  type ItemDeCosmetico,
-  type PerfilEscolhido,
-} from '@/lib/api/perfil';
+import { salvarPerfil, type PerfilEscolhido } from '@/lib/api/perfil';
 import { Avatar, NomeColorido } from '../componentes/avatar';
 import { comprimirFoto, FotoInvalidaError } from './comprimir-foto';
 import styles from './conta.module.css';
@@ -89,29 +80,12 @@ interface Props {
 }
 
 export function PainelPerfil({ usuario, onUsuario }: Props) {
-  const [catalogo, setCatalogo] = useState<Catalogo | null>(null);
-  const [personagens, setPersonagens] = useState<ResumoPersonagem[]>([]);
-  const [slot, setSlot] = useState<number | null>(null);
   const [escolha, setEscolha] = useState<PerfilEscolhido>(() => perfilDe(usuario));
   const [recado, setRecado] = useState('');
   const [erro, setErro] = useState('');
   const [ocupado, setOcupado] = useState(false);
 
-  useEffect(() => {
-    catalogoDeCosmeticos()
-      .then(setCatalogo)
-      .catch((falha) => setErro(falha instanceof ErroDaApi ? falha.message : 'Não foi possível abrir a loja.'));
-
-    listarPersonagens()
-      .then((lista) => {
-        setPersonagens(lista.characters);
-        setSlot(lista.characters[0]?.slot ?? null);
-      })
-      .catch(() => undefined);
-  }, []);
-
-  const donoDe = catalogo?.owned ?? usuario.cosmetics;
-  const escolhido = personagens.find((personagem) => personagem.slot === slot) ?? null;
+  const donoDe = usuario.cosmetics;
 
   function adotar(atualizado: Usuario, mensagem: string) {
     onUsuario(atualizado);
@@ -147,27 +121,6 @@ export function PainelPerfil({ usuario, onUsuario }: Props) {
 
   function aoSalvar() {
     void comAviso(async () => adotar(await salvarPerfil(escolha), 'Perfil atualizado.'));
-  }
-
-  function aoComprar(item: ItemDeCosmetico) {
-    if (slot === null) {
-      setErro('Selecione um personagem antes de comprar.');
-      return;
-    }
-    void comAviso(async () => {
-      const compra = await comprarCosmetico(item.id, slot);
-      const atualizado = await catalogoDeCosmeticos();
-      setCatalogo(atualizado);
-      // O ouro do personagem mudou no servidor; a lista de slots repete o resumo.
-      setPersonagens((await listarPersonagens()).characters);
-      adotar(compra.user, `${item.name} desbloqueado por ${item.price} de ouro.`);
-    });
-  }
-
-  function possui(item: ItemDeCosmetico): boolean {
-    if (item.type === 'frame') return donoDe.frames.includes(item.value);
-    if (item.type === 'color') return donoDe.colors.includes(item.value);
-    return donoDe.pets.includes(item.value);
   }
 
   return (
@@ -245,53 +198,10 @@ export function PainelPerfil({ usuario, onUsuario }: Props) {
         <button type="button" className={styles.botao} onClick={aoSalvar} disabled={ocupado}>
           Salvar perfil
         </button>
+        <Link href="/loja" className={styles.alternar}>
+          Quer mais opções? Ir à loja
+        </Link>
       </div>
-
-      <h2 className={styles.subtitulo}>Loja de cosméticos</h2>
-
-      {personagens.length === 0 ? (
-        <p className={styles.aviso}>Crie um personagem e salve na nuvem antes de comprar — o ouro sai dele.</p>
-      ) : (
-        <label className={styles.campo}>
-          <span className={styles.rotulo}>Ouro de qual personagem?</span>
-          <select className={styles.entrada} value={slot ?? ''} onChange={(evento) => setSlot(Number(evento.target.value))}>
-            {personagens.map((personagem) => (
-              <option key={personagem.slot} value={personagem.slot}>
-                Slot {personagem.slot} · {personagem.name} · nível {personagem.level}
-              </option>
-            ))}
-          </select>
-        </label>
-      )}
-
-      {escolhido && <p className={styles.legendaDaPrevia}>Comprando com o ouro de {escolhido.name}.</p>}
-
-      {!catalogo ? (
-        <p className={styles.legendaDaPrevia}>Carregando a loja…</p>
-      ) : (
-        <ul className={styles.vitrine}>
-          {catalogo.catalog.map((item) => {
-            const jaTem = possui(item);
-            return (
-              <li key={item.id} className={styles.cosmetico}>
-                <span className={styles.iconeDoCosmetico} aria-hidden>
-                  {item.icon}
-                </span>
-                <span className={styles.nomeDoCosmetico}>{item.name}</span>
-                <span className={styles.precoDoCosmetico}>{item.adminOnly ? 'exclusivo do ADM' : `${item.price} ouro`}</span>
-                <button
-                  type="button"
-                  className={styles.botaoDaLoja}
-                  onClick={() => aoComprar(item)}
-                  disabled={ocupado || jaTem || personagens.length === 0}
-                >
-                  {jaTem ? 'já é seu' : 'Comprar'}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
 
       {recado && <p className={styles.aviso}>{recado}</p>}
       {erro && <p className={styles.erro}>{erro}</p>}

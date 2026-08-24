@@ -3,11 +3,12 @@
  * frequências, durações e ondas, pra soar igual ao que já está no ar.
  *
  * O original tocava direto no `destination` do próprio contexto; aqui vão
- * pelo ganho mestre (ver `audio.ts`), então o controle de volume vale
- * pra eles também.
+ * pelo barramento de efeitos (ver `audio.ts`), que por sua vez vai pro
+ * mestre — então tanto o volume geral quanto o controle de efeitos da tela
+ * de Configurações valem pra eles.
  */
 
-import { audio, estaMudo, saidaMestre } from './audio';
+import { audio, efeitosMudos, saidaDeEfeitos } from './audio';
 
 export type Efeito = 'hit' | 'crit' | 'miss' | 'gold' | 'buy' | 'sell' | 'door' | 'levelup' | 'victory' | 'defeat' | 'step' | 'heal';
 
@@ -46,7 +47,7 @@ const EFEITOS: Record<Efeito, Beep[]> = {
 
 function soar({ hz, duracao, onda, ganho }: Beep): void {
   const c = audio();
-  const saida = saidaMestre();
+  const saida = saidaDeEfeitos();
   if (!c || !saida) return;
 
   try {
@@ -66,6 +67,6 @@ function soar({ hz, duracao, onda, ganho }: Beep): void {
 }
 
 export function tocar(efeito: Efeito): void {
-  if (estaMudo()) return;
+  if (efeitosMudos()) return;
   for (const nota of EFEITOS[efeito]) soar(nota);
 }

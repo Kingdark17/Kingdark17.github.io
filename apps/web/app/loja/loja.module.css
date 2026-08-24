@@ -1,0 +1,138 @@
+.tela {
+  composes: fundo from '../acabamento.module.css';
+  min-height: 100dvh;
+  display: grid;
+  place-items: start center;
+  padding: 2rem 1rem;
+}
+
+.painel {
+  composes: painel from '../acabamento.module.css';
+  width: min(46rem, 100%);
+  padding: 1.75rem;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.titulo {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 1.9rem;
+  margin: 0;
+}
+
+.voltar {
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+}
+
+.voltar:hover {
+  color: var(--gold-bright);
+}
+
+.prateleira {
+  composes: tituloDePainel from '../acabamento.module.css';
+  font-size: 0.95rem;
+  margin-top: 1.75rem;
+}
+
+.campo {
+  display: block;
+  margin-bottom: 0.9rem;
+}
+
+.rotulo {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  margin-bottom: 0.3rem;
+}
+
+.entrada {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  color: var(--parchment);
+  font: inherit;
+}
+
+.entrada:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+.legenda {
+  color: var(--parchment-dim);
+  font-size: 0.8rem;
+  margin: 0.2rem 0 0;
+}
+
+.aviso {
+  margin: 1rem 0 0;
+  padding: 0.6rem 0.75rem;
+  background: rgba(201, 162, 39, 0.12);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.erro {
+  margin: 1rem 0 0;
+  padding: 0.6rem 0.75rem;
+  background: rgba(138, 43, 43, 0.25);
+  border: 1px solid var(--blood);
+  border-radius: 0.3rem;
+  color: var(--parchment);
+  font-size: 0.9rem;
+}
+
+.vitrine {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0.5rem;
+}
+
+.cosmetico {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.2rem 0.6rem;
+  padding: 0.6rem 0.7rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+}
+
+.iconeDoCosmetico {
+  grid-row: span 2;
+  font-size: 1.5rem;
+}
+
+.nomeDoCosmetico {
+  font-size: 0.85rem;
+}
+
+.precoDoCosmetico {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  color: var(--gold-bright);
+}
+
+.botaoDaLoja {
+  composes: botao from '../acabamento.module.css';
+  grid-column: 1 / -1;
+  margin-top: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.72rem;
+}

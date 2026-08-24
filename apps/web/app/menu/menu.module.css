@@ -1,87 +1,196 @@
-.main {
+.tela {
+  composes: fundo from '../acabamento.module.css';
+  position: relative;
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  padding: 2.5rem 1.25rem;
-  background:
-    radial-gradient(circle at 64% 42%, rgba(37, 48, 70, 0.72), transparent 38%),
-    linear-gradient(135deg, #0c0f16, #151b27 58%, #0d1119);
+  /* A sobra embaixo é o lugar do gato: sem ela, numa tela baixa o último
+     botão desceria pra debaixo dele. Reservar o espaço no `padding` é o
+     que impede a sobreposição sem tirar o mascote do canto. */
+  padding: 2rem 1.25rem 8rem;
 }
 
-.menu {
-  width: min(46rem, 100%);
-  text-align: center;
+.coluna {
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+  width: min(44rem, 100%);
 }
 
-.marca {
-  font-family: var(--font-display), Georgia, serif;
-  color: var(--gold-bright);
-  font-size: clamp(2rem, 7vw, 3.25rem);
-  letter-spacing: 0.06em;
-  margin: 0;
-  text-shadow: 0 0 1.5rem rgba(201, 162, 39, 0.35);
+.brasao {
+  width: clamp(9rem, 30vw, 14rem);
+  height: auto;
+  filter: drop-shadow(0 0 1.75rem rgba(201, 162, 39, 0.28));
 }
 
-.subtitulo {
-  color: var(--parchment-dim);
-  margin: 0.4rem 0 2.25rem;
-}
-
-.destinos {
+.botoes {
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  width: min(22rem, 100%);
 }
 
-.destino {
-  display: grid;
-  gap: 0.2rem;
-  justify-items: center;
-  padding: 1.2rem 1rem;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 0.5rem;
-  color: var(--parchment);
+.botao {
+  composes: botao from '../acabamento.module.css';
+  padding: 0.85rem 1.25rem;
+  text-align: center;
   text-decoration: none;
-  transition: border-color 0.15s ease;
-  animation: entrada 0.24s ease-out backwards;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.15rem;
 }
 
-/* `backwards` guarda o estado inicial durante o `animation-delay`; sem
-   ele o cartão pisca visível antes de começar a subir. */
-@keyframes entrada {
-  from {
-    opacity: 0;
-    transform: translateY(0.6rem);
+/* "Jogar em destaque": ouro chapado em vez do degrade escuro dos outros.
+   O contraste é o que faz o olho pousar nele primeiro, sem precisar de
+   tamanho diferente — três botões de alturas diferentes desalinhariam a
+   pilha. */
+.botaoForte {
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  border-color: var(--gold-bright);
+  color: var(--ink);
+}
+
+.botaoForte:hover,
+.botaoForte:focus-visible {
+  color: var(--ink);
+  box-shadow: 0 0 18px rgba(232, 198, 90, 0.45);
+}
+
+/* ---------- o mascote ---------- */
+
+/* `absolute` e não `fixed` como o pet da partida: o menu cabe numa tela só
+   e não rola, então prender na janela não compraria nada e ainda tiraria o
+   gato do fluxo em telas muito baixas. */
+.mascote {
+  position: absolute;
+  right: clamp(1rem, 4vw, 2.5rem);
+  bottom: clamp(1rem, 4vw, 2rem);
+  display: grid;
+  place-items: center;
+}
+
+/**
+ * A animação de clique é `transition`, e não `animation`, e isso é
+ * deliberado: `animation` ligada a `:active` morre no instante em que o
+ * dedo sai: some o pulo, que é justamente a parte boa. A transição de
+ * volta continua rodando depois de soltar, e a curva com overshoot
+ * (`cubic-bezier` passando de 1) faz o gato ultrapassar o tamanho normal e
+ * assentar — é o pulo, sem uma linha de JavaScript.
+ *
+ * A ida é curta (70 ms) e a volta longa (520 ms): apertar tem que parecer
+ * instantâneo, soltar tem que parecer elástico.
+ */
+.gato {
+  background: none;
+  border: none;
+  padding: 0;
+  position: relative;
+  cursor: pointer;
+  line-height: 1;
+  transform: scale(1);
+  transition: transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gato:active {
+  transform: scale(0.82) translateY(0.35rem);
+  transition-duration: 70ms;
+}
+
+.gatoRosto {
+  display: block;
+  font-size: clamp(3rem, 11vw, 4.5rem);
+  /* Balanço parado, pra ele não parecer um adesivo enquanto ninguém clica. */
+  animation: respirar 3.4s ease-in-out infinite;
+}
+
+@keyframes respirar {
+  50% {
+    transform: translateY(-0.2rem) rotate(-3deg);
   }
 }
 
-/* Entrada é enfeite: quem pediu menos movimento recebe o cartão pronto. */
+.gatoCoracao {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 1.25rem;
+  color: var(--ember);
+  opacity: 0;
+  transform: translate(-50%, 0);
+  transition: opacity 380ms ease, transform 380ms ease;
+}
+
+.gato:active .gatoCoracao {
+  opacity: 1;
+  transform: translate(-50%, -1.6rem);
+  transition-duration: 220ms;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .destino {
+  .gatoRosto {
     animation: none;
   }
 }
 
-.destino:hover,
-.destino:focus-visible {
+/* ---------- atalhos do canto ---------- */
+
+.canto {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: grid;
+  gap: 0.6rem;
+  justify-items: center;
+}
+
+.atalho {
+  composes: painel from '../acabamento.module.css';
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  text-decoration: none;
+  color: var(--parchment);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.atalho:hover,
+.atalho:focus-visible {
   border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(201, 162, 39, 0.28);
 }
 
-.iconeDoDestino {
-  font-size: 1.9rem;
+/* A moldura interna do painel é apertada demais num quadrado de 3rem —
+   encosta no ícone e vira sujeira. Aqui o painel entra só pelo degrade. */
+.atalho::before {
+  display: none;
+}
+
+.rostoDoAtalho {
+  font-size: 1.35rem;
   line-height: 1;
-  margin-bottom: 0.35rem;
 }
 
-.tituloDoDestino {
-  font-family: var(--font-display), Georgia, serif;
-  color: var(--gold-bright);
-  font-size: 1.05rem;
+.selo {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.35rem;
+  min-width: 1.15rem;
+  padding: 0 0.25rem;
+  border-radius: 0.6rem;
+  background: var(--ember);
+  color: var(--parchment);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  line-height: 1.15rem;
+  text-align: center;
 }
 
-.textoDoDestino {
-  color: var(--parchment-dim);
-  font-size: 0.82rem;
-  line-height: 1.35;
+/* Texto que só o leitor de tela pega: `display:none` seria pulado por ele
+   também, e é justamente quem precisa da informação. */
+.soPraLeitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
