@@ -282,6 +282,98 @@
   box-shadow: inset 0 0 0 1px var(--gold-bright);
 }
 
+/* Cor por tipo de sala.
+ *
+ * Os valores são os mesmos de `rpg-legend/css/style.css` (`.tile.npc`,
+ * `.tile.treasure`, ...), copiados de propósito: quem já jogava reconhece
+ * o mapa de imediato, e não há por que inventar uma segunda paleta pro
+ * mesmo jogo.
+ *
+ * Só entra em `.visitada`. A silhueta de uma sala conhecida diz que ela
+ * existe, não o que tem dentro — pintá-la entregaria o baú e o chefe antes
+ * de chegar lá. O original separava igual: `room-dim` era cinza chapado.
+ *
+ * A cor nunca é o único sinal: o ícone fica dentro da célula e o
+ * `aria-label` diz o nome da sala, pra quem não distingue as cores ou ouve
+ * a tela em vez de ver. */
+.visitada[data-tipo='start'] {
+  background: #2a2c37;
+}
+
+.visitada[data-tipo='normal'] {
+  background: #22242e;
+}
+
+.visitada[data-tipo='npc'] {
+  background: #26313a;
+}
+
+.visitada[data-tipo='treasure'] {
+  background: #332b1c;
+}
+
+.visitada[data-tipo='monster'] {
+  background: #331d1d;
+}
+
+.visitada[data-tipo='boss'] {
+  background: #3a1414;
+  box-shadow: inset 0 0 8px rgba(192, 83, 47, 0.5);
+}
+
+.visitada[data-tipo='stairs'] {
+  background: #1a2836;
+}
+
+.visitada[data-tipo='exit'] {
+  background: #1f2e29;
+}
+
+.visitada[data-tipo='event'] {
+  background: #2a2233;
+}
+
+/* Cidade */
+.visitada[data-tipo='shop'] {
+  background: #2c2818;
+}
+
+.visitada[data-tipo='blacksmith'] {
+  background: #26262c;
+}
+
+.visitada[data-tipo='tavern'] {
+  background: #2c1f1a;
+}
+
+.visitada[data-tipo='gate'] {
+  background: #1c2a24;
+}
+
+.visitada[data-tipo='questboard'] {
+  background: #202a1e;
+}
+
+/* Sala que já entregou o que tinha: baú aberto, monstro derrotado, evento
+   resolvido. Apagar é o que deixa "ainda tem coisa lá" visível de relance,
+   sem precisar reentrar em cada sala pra lembrar. Mesmo valor do
+   `.tile.collected` do original. */
+.esgotada {
+  opacity: 0.4;
+}
+
+/* O chefe derrotado perde o brilho junto com a cor — senão a sala continua
+   gritando perigo depois de resolvida. */
+.esgotada[data-tipo='boss'] {
+  box-shadow: none;
+}
+
+/* A célula onde o jogador está nunca apaga, mesmo já resolvida: ela precisa
+   continuar sendo a mais legível da grade. */
+.aqui.esgotada {
+  opacity: 1;
+}
+
 .legenda {
   list-style: none;
   display: flex;

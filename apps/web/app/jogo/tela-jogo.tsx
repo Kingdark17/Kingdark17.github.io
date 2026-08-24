@@ -475,6 +475,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
           linhas={estado.mapRows}
           colunas={estado.mapCols}
           icone={visual.icone}
+          rotulo={visual.rotulo}
+          gasta={visual.gasta}
           descricao={`Mapa: ${visual.lugar}`}
         />
 

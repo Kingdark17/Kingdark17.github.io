@@ -36,6 +36,16 @@ export interface Apresentacao {
   textoDeEntrada: (celula: CelulaDoMapa) => string;
   /** Nome curto pra citar a sala de fora dela ("um baú fechado"), usado nas pistas de porta. */
   rotulo: (celula: CelulaDoMapa) => string;
+  /**
+   * Sala que já entregou o que tinha: baú aberto, monstro derrotado. O
+   * minimapa a apaga, como o `.tile.collected` do original fazia — é o que
+   * separa "ainda tem coisa lá" de "já limpei" sem precisar entrar de novo.
+   *
+   * Mora aqui, e não no componente, pelo mesmo motivo que `icone`: só a
+   * masmorra tem esse estado, e o `as` que descobre isso fica confinado
+   * neste módulo.
+   */
+  gasta: (celula: CelulaDoMapa) => boolean;
 }
 
 const LEGENDA_DA_CIDADE: Array<[string, string]> = [
@@ -68,6 +78,9 @@ export function apresentacaoDe(estado: EstadoDoJogo): Apresentacao {
       descricao: (celula) => cityRoomDesc(celula as CityCell),
       textoDeEntrada: (celula) => cityEntryText(celula as CityCell),
       rotulo: (celula) => cityShortLabel(celula as CityCell),
+      // Nada na cidade se esgota: a loja repõe estoque, a taverna sempre
+      // atende. `CityCell` não tem `collected` nem `beaten`.
+      gasta: () => false,
     };
   }
 
@@ -78,5 +91,9 @@ export function apresentacaoDe(estado: EstadoDoJogo): Apresentacao {
     descricao: (celula) => roomDesc(celula as DungeonCell),
     textoDeEntrada: (celula) => entryText(celula as DungeonCell),
     rotulo: (celula) => shortLabel(celula as DungeonCell),
+    gasta: (celula) => {
+      const sala = celula as DungeonCell;
+      return Boolean(sala.collected || sala.beaten || sala.resolved);
+    },
   };
 }

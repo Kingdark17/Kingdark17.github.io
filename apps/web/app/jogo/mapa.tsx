@@ -3,8 +3,14 @@
  * sala vizinha de uma visitada aparece como silhueta, e o resto não
  * aparece. A regra mora em `isKnown()` na engine.
  *
- * O ícone vem de fora (`apresentacaoDe`) porque cidade e masmorra desenham
- * a mesma grade com catálogos diferentes.
+ * O ícone, o rótulo e o "já esvaziei" vêm de fora (`apresentacaoDe`) porque
+ * cidade e masmorra desenham a mesma grade com catálogos diferentes.
+ *
+ * **A cor só entra em sala visitada.** A silhueta de uma sala vizinha diz
+ * que ela existe, não o que tem dentro — pintá-la pelo tipo entregaria o
+ * baú e o chefe antes de o jogador chegar lá, que é justamente o que a
+ * neblina existe pra impedir. O original fazia a mesma separação:
+ * `room-dim` era cinza chapado, e só `room-known` ganhava a classe do tipo.
  */
 
 import { isKnown } from '@rpg-legend/shared';
@@ -18,10 +24,13 @@ interface Props {
   linhas: number;
   colunas: number;
   icone: (celula: CelulaDoMapa) => string;
+  /** Nome curto da sala, pra quem lê a tela por leitor de tela em vez de cor. */
+  rotulo: (celula: CelulaDoMapa) => string;
+  gasta: (celula: CelulaDoMapa) => boolean;
   descricao: string;
 }
 
-export function Mapa({ grade, posicao, linhas, colunas, icone, descricao }: Props) {
+export function Mapa({ grade, posicao, linhas, colunas, icone, rotulo, gasta, descricao }: Readonly<Props>) {
   return (
     <div className={styles.grade} style={{ gridTemplateColumns: `repeat(${colunas}, minmax(0, 1fr))` }} role="grid" aria-label={descricao}>
       {grade.slice(0, linhas).flatMap((linha, y) =>
@@ -35,18 +44,48 @@ export function Mapa({ grade, posicao, linhas, colunas, icone, descricao }: Prop
           else if (conhecida) classe = styles.conhecida;
           else if (!vazia) classe = styles.desconhecida;
 
+          const esgotada = Boolean(celula.visited) && gasta(celula);
+
+          let dentro = '';
+          if (aqui) dentro = '🧍';
+          else if (celula.visited) dentro = icone(celula);
+
           return (
             <div
               key={`${x},${y}`}
               role="gridcell"
-              aria-label={celula.visited ? `${x},${y}: visitada` : `${x},${y}`}
-              className={`${styles.celula} ${classe} ${aqui ? styles.aqui : ''}`}
+              // A cor distingue sala de sala pra quem enxerga; o rótulo faz
+              // o mesmo trabalho pra quem não. Sem ele, a informação que a
+              // cor passou a carregar simplesmente não existiria no áudio.
+              aria-label={legendaDaCelula({ x, y, aqui, vazia, visitada: !!celula.visited, conhecida, esgotada, rotulo: rotulo(celula) })}
+              data-tipo={celula.visited ? celula.type : undefined}
+              className={`${styles.celula} ${classe} ${aqui ? styles.aqui : ''} ${esgotada ? styles.esgotada : ''}`}
             >
-              {aqui ? '🧍' : celula.visited ? icone(celula) : ''}
+              {dentro}
             </div>
           );
         }),
       )}
     </div>
   );
+}
+
+interface DadosDaCelula {
+  x: number;
+  y: number;
+  aqui: boolean;
+  vazia: boolean;
+  visitada: boolean;
+  conhecida: boolean;
+  esgotada: boolean;
+  rotulo: string;
+}
+
+function legendaDaCelula(dados: DadosDaCelula): string {
+  const onde = `${dados.x},${dados.y}`;
+  if (dados.vazia) return `${onde}: vazio`;
+  if (dados.aqui) return `${onde}: você está aqui`;
+  if (dados.visitada) return `${onde}: ${dados.rotulo}${dados.esgotada ? ', já resolvida' : ''}`;
+  if (dados.conhecida) return `${onde}: sala conhecida, ainda não visitada`;
+  return `${onde}: inexplorado`;
 }
