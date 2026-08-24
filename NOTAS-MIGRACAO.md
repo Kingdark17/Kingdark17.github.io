@@ -20,7 +20,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 1 — engine em `packages/shared` | pronta (326 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
-| 4 — paperdoll PixiJS | não começou |
+| 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64 instaladas e o boneco montado na criação de personagem. **Sem PixiJS** — ver "Fase 4". Falta o boneco dentro da partida, 6 raças e 4 armas sem arte |
 | 5 — **Neon → Supabase** | **pronta em 2026-08-18**: banco criado (Postgres 17.6, `sa-east-1`), migrações aplicadas e conferidas contra o banco real, acesso público fechado inclusive pras tabelas futuras. O jogo no ar **continua no Neon** — o Supabase está vazio e é o ambiente novo, não uma virada. Ver "Fase 5" |
 | 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
 
@@ -333,6 +333,72 @@ idênticos, com o `serviceUsed` gravado dentro do `cityMap`. O item no save cont
 sendo só `uid/templateId/rarity/stats/value/equipped` — o catálogo não
 entra. E a arte serve de `/img/...` no build do Next (conferido com
 `next start` + `curl`, 200 e `image/png`).
+
+---
+
+## Fase 4 — paperdoll (começou em 2026-08-24)
+
+### O PixiJS não entrou, e a decisão foi consciente
+
+A tabela de decisões da migração fixa PixiJS pro personagem 2D. Continua
+valendo **pro boneco que se mexe**. A prévia da criação de personagem, que é
+o que existe hoje, é um empilhamento parado de até cinco imagens de 64×64 —
+Pixi custaria ~400 KB de JavaScript pra fazer o que `position:absolute` já
+faz, e `image-rendering:pixelated` sai mais fiel que reamostragem de
+textura. Quando o boneco precisar animar ou receber filtro, o Pixi entra e
+substitui `app/componentes/paperdoll.tsx`.
+
+### O nome do arquivo é o id do catálogo
+
+`corpo/humano.png`, `corpo/elfo_negro.png`, `arma/espada.png` — os nomes são
+**exatamente** os ids de `RACES[].id` e `CLASSES[].weaponTemplate`. Sem
+tabela de tradução no meio, não há como as duas listas divergirem em
+silêncio. Ao acrescentar arte, o nome sai do catálogo, não do gosto de quem
+desenhou: os arquivos chegaram como `nigga_elf_body.png`, `calca-base.png`
+(que desenha calça, mas o irmão `cat_add__body.png` não desenha corpo
+nenhum, e sim orelhas) e foram todos rebatizados na entrada.
+
+### A ausência de arte é dado, não acidente
+
+`lib/paperdoll/camadas.ts` lista à mão o que existe. O navegador não enxerga
+o disco: pedir `corpo/anao.png` sem saber se existe rende 404 e um quadrado
+quebrado. A tela pergunta antes de desenhar, e a legenda embaixo do boneco
+diz **qual** peça falta em vez de deixar o jogador achando que quebrou.
+
+Faltam 6 das 12 raças (anão, orc, draconato, goblin, fada, celestial) e 4
+das 6 armas iniciais (adaga, maça, machado, arco).
+
+### Por que a prévia mora na criação, e não na lista de personagens
+
+`/personagens` recebe só `raceIcon` — um emoji — e nenhum equipamento. Isso
+é de propósito, e tem teste garantindo:
+`drizzle-game.integration.spec.ts` afirma que mapa e inventário **não saem
+do Postgres** pra desenhar um card. Paperdoll ali significaria alargar esse
+payload. Já `/personagens/novo` tem a raça viva no estado do React, e o
+boneco atualiza a cada clique sem buscar nada.
+
+### `felino` e `morto_vivo` não recebem cabelo
+
+O corpo dos dois já resolve a cabeça — orelhas e pelo num, caveira no outro.
+Cabelo humano por cima fica grotesco, então `SEM_CABELO` em `camadas.ts` os
+exclui. É a única regra de composição que não sai direto do catálogo.
+
+### `gif.mjs`: mais um codec na mão
+
+A arte do pet slime veio em GIF animado de 17 quadros. Não há ImageMagick
+nem ffmpeg nesta máquina — e `convert` no PATH do Windows é o utilitário de
+disco (FAT→NTFS), não o do ImageMagick. `apps/api/scripts/gif.mjs` decodifica
+GIF sem dependência, pelo mesmo motivo que `png.mjs` existe.
+
+Ele compõe o descarte (`disposal`) antes de devolver o quadro: quadro de GIF
+quase nunca é a imagem inteira, é um retângulo colado por cima do anterior,
+e quem grava o quadro cru acaba com sprite pela metade.
+
+**A grama do slime não sai.** O corpo e a grama dividem a mesma rampa de
+verde (só 3 cores são exclusivas do cenário, e são as florzinhas), e não há
+faixa vazia pra cortar na horizontal porque as flores estão espalhadas entre
+o slime e o chão. Instalado com a base, ao contrário do dragão. Tirar exige
+redesenhar o sprite.
 
 ---
 
@@ -1588,7 +1654,7 @@ de quais e-mails têm conta.
 | ~~`RESEND_API_KEY` + `EMAIL_FROM`~~ | confirmar e-mail e reset de senha | **resolvido em 2026-08-22** — domínio `rpglegend.com.br` verificado, envio provado ponta a ponta |
 | `DATABASE_URL` de staging | rodar tudo contra banco real | ~~PGlite cobre a maior parte~~ **resolvido em 2026-08-18**: o Supabase serve de staging |
 | ~~onde a API vai rodar~~ | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | **resolvido em 2026-08-22** — Render, em `api.rpglegend.com.br`, com `TRUST_PROXY=1`. Falta só `ALLOWED_ORIGIN`, que espera o front existir pra ter uma origem pra declarar |
-| arte em camadas | paperdoll PixiJS | fase 4 inteira parada |
+| arte em camadas | paperdoll | **destravado em 2026-08-24** — 14 camadas chegaram. Ainda faltam 6 raças (anão, orc, draconato, goblin, fada, celestial) e 4 armas (adaga, maça, machado, arco) |
 
 **Regra que continua valendo:** nunca criar conta de teste no servidor de
 produção pra depurar, e nunca apontar `drizzle-kit push`/`migrate` pro

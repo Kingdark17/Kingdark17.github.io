@@ -16,6 +16,7 @@ import { useState } from 'react';
 
 import { ATTR_KEYS, ATTR_LABELS, CLASSES, RACES, powerById, type ClassDef, type Race } from '@rpg-legend/shared';
 import { ErroDaApi } from '@/lib/api/client';
+import { ARMAS, CORPOS } from '@/lib/paperdoll/camadas';
 import { gravarSave } from '@/lib/api/save';
 import {
   criacaoVazia,
@@ -27,7 +28,24 @@ import {
   type Criacao,
 } from '@/lib/jogo/criacao';
 import { montarSaveInicial } from '@/lib/jogo/save-inicial';
+import { Paperdoll } from '../../componentes/paperdoll';
 import styles from './criacao.module.css';
+
+/**
+ * O que dizer embaixo do boneco. A arte está chegando por partes, e a
+ * legenda diz **qual** parte falta em vez de deixar o jogador achando que
+ * a tela quebrou — seis das doze raças ainda não têm corpo, e só espada e
+ * cajado têm camada de arma.
+ */
+function legendaDoBoneco(raca: Race | null, classe: ClassDef | null): string {
+  if (!raca) return 'Escolha uma raça para ver seu herói.';
+  if (!CORPOS.has(raca.id)) return `${raca.name} ainda não tem corpo desenhado.`;
+  if (classe && !ARMAS.has(classe.weaponTemplate)) {
+    return `${raca.name} · ${classe.name} — a arma inicial ainda não tem camada.`;
+  }
+  if (!classe) return `${raca.name} · escolha uma classe para ver a arma.`;
+  return `${raca.name} · ${classe.name}`;
+}
 
 const AVISOS: Record<NonNullable<ReturnType<typeof faltaParaComecar>>, string> = {
   nome: 'Dê um nome ao seu herói.',
@@ -132,6 +150,21 @@ export function FormularioCriacao({ slot }: { slot: number }) {
             }}
           />
         </label>
+      </section>
+
+      <section className={styles.secao}>
+        <div className={styles.previa}>
+          <Paperdoll
+            raca={criacao.raca?.id ?? null}
+            arma={criacao.classe?.weaponTemplate ?? null}
+            reserva={
+              <span className={styles.reservaDoBoneco} aria-hidden>
+                {criacao.raca?.icon ?? '❔'}
+              </span>
+            }
+          />
+          <p className={styles.legendaDoBoneco}>{legendaDoBoneco(criacao.raca, criacao.classe)}</p>
+        </div>
       </section>
 
       <section className={styles.secao}>
