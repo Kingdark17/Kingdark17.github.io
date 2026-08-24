@@ -71,7 +71,7 @@ export function AtalhosEMascote() {
       <nav className={styles.canto} aria-label="Sua conta e suas conversas">
         <Link href="/conta" className={styles.atalho} title="Conta e perfil">
           {usuario ? (
-            <Avatar url={usuario.avatarUrl} frame={usuario.frame} nome={usuario.username} lado={38} />
+            <Avatar url={usuario.avatarUrl} frame={usuario.frame} nome={usuario.username} lado={44} />
           ) : (
             <span className={styles.rostoDoAtalho} aria-hidden>
               👤

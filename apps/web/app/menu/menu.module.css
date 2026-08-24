@@ -7,35 +7,44 @@
   /* A sobra embaixo é o lugar do gato: sem ela, numa tela baixa o último
      botão desceria pra debaixo dele. Reservar o espaço no `padding` é o
      que impede a sobreposição sem tirar o mascote do canto. */
-  padding: 2rem 1.25rem 8rem;
+  padding: 2rem 1.25rem 9rem;
 }
 
 .coluna {
   display: grid;
   justify-items: center;
-  gap: 1.5rem;
-  width: min(44rem, 100%);
+  gap: 2rem;
+  width: min(48rem, 100%);
 }
 
+/**
+ * `vmin` e não `vw`, e é o que permite o brasão ser grande sem risco.
+ *
+ * O menu cabe numa tela só e não rola: com `vw`, uma janela larga e baixa
+ * (1920×700, monitor ultrawide, navegador com muitas abas) daria um brasão
+ * dimensionado pela largura que empurraria os botões pra fora da tela. Com
+ * `vmin` ele encolhe junto com a altura, então o teto de 20rem só é
+ * alcançado quando há altura pra sustentá-lo.
+ */
 .brasao {
-  width: clamp(9rem, 30vw, 14rem);
+  width: clamp(9rem, 30vmin, 20rem);
   height: auto;
-  filter: drop-shadow(0 0 1.75rem rgba(201, 162, 39, 0.28));
+  filter: drop-shadow(0 0 2.25rem rgba(201, 162, 39, 0.3));
 }
 
 .botoes {
   display: grid;
-  gap: 0.75rem;
-  width: min(22rem, 100%);
+  gap: 0.9rem;
+  width: min(26rem, 100%);
 }
 
 .botao {
   composes: botao from '../acabamento.module.css';
-  padding: 0.85rem 1.25rem;
+  padding: 1.05rem 1.5rem;
   text-align: center;
   text-decoration: none;
   font-family: var(--font-display), Georgia, serif;
-  font-size: 1.15rem;
+  font-size: 1.45rem;
 }
 
 /* "Jogar em destaque": ouro chapado em vez do degrade escuro dos outros.
@@ -95,17 +104,17 @@
 
 .gatoRosto {
   display: block;
-  font-size: clamp(3rem, 11vw, 4.5rem);
+  font-size: clamp(3rem, 11vmin, 5.5rem);
   /* Balanço parado, pra ele não parecer um adesivo enquanto ninguém clica. */
   animation: respirar 3.4s ease-in-out infinite;
 }
 
-/* Os pets com arte própria (hoje só o dragão filhote). Mesmo tamanho do
-   emoji, pra trocar de pet não mexer no tamanho do canto. */
+/* Os pets com arte própria (hoje o dragão filhote e o slime). Mesmo tamanho
+   do emoji, pra trocar de pet não mexer no tamanho do canto. */
 .gatoArte {
   display: block;
-  width: clamp(3.4rem, 12vw, 5rem);
-  height: clamp(3.4rem, 12vw, 5rem);
+  width: clamp(3.4rem, 12vmin, 6rem);
+  height: clamp(3.4rem, 12vmin, 6rem);
   object-fit: contain;
   pointer-events: none;
   animation: respirar 3.4s ease-in-out infinite;
@@ -159,8 +168,8 @@
   composes: painel from '../acabamento.module.css';
   display: grid;
   place-items: center;
-  width: 3rem;
-  height: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
   text-decoration: none;
   color: var(--parchment);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -179,7 +188,7 @@
 }
 
 .rostoDoAtalho {
-  font-size: 1.35rem;
+  font-size: 1.6rem;
   line-height: 1;
 }
 
