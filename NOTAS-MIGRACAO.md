@@ -799,6 +799,27 @@ sabia da sala. `tela-jogo.tsx` zera a referência quando a fase vira
 `desligado`, obrigando a próxima sincronização a levar a mochila inteira —
 sem isso, o servidor voltaria sem mochila e o eco esvaziaria a do jogador.
 
+### Regra de ordem: quem tolera sobe primeiro
+
+Este corte mexeu nos dois lados, e front e API publicam **separado** — o
+mesmo push dispara Vercel e Render, que terminam quando terminam.
+
+Se o front tivesse chegado primeiro, ele omitiria a mochila e a API velha
+leria ausência como "esvaziou": o eco voltaria vazio e apagaria a mochila
+de quem estivesse jogando. Deu certo por sorte, não por desenho — o Render
+terminou antes.
+
+**A regra que fica:** quando cliente e servidor mudam de acordo juntos,
+sobe primeiro o lado que **tolera os dois formatos**. Aqui era a API, que
+aceita o pacote com e sem mochila. Se só um dos lados puder ir primeiro e
+não houver lado tolerante, o jeito é dividir em dois deploys: primeiro
+ensinar o servidor a aceitar o formato novo, depois passar o cliente a
+usá-lo.
+
+Provado na API publicada com `scratchpad/prova-mochila.mjs`, que cria uma
+sala efêmera, manda perfil com mochila e depois um `state` sem — e confere
+que o eco manteve. Não cria conta e não escreve no banco.
+
 ### O corte inteiro, que ficou de fora de propósito
 
 Tirar a mochila do contrato do co-op nos dois sentidos valeria −62% por
