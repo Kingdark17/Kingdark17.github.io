@@ -13,12 +13,9 @@ import { useEffect, useState } from 'react';
 
 import { petIcon, type PetId } from '@rpg-legend/shared';
 
+import { ROSTOS_DE_PET } from '@/lib/pets/rostos';
 import { tocar } from '@/lib/som/efeitos';
 import styles from './jogo.module.css';
-
-const ROSTOS: Partial<Record<PetId, { normal: string; coracao: string }>> = {
-  baby_dragon: { normal: '/img/pets/dragon-normal.png', coracao: '/img/pets/dragon-heart.png' },
-};
 
 const DURACAO_DO_CARINHO_MS = 1200;
 
@@ -33,7 +30,7 @@ export function BichoDeEstimacao({ pet }: { pet: PetId | null }) {
 
   if (!pet) return null;
 
-  const rosto = ROSTOS[pet];
+  const rosto = ROSTOS_DE_PET[pet];
 
   return (
     <button

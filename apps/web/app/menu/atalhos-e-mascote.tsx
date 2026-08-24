@@ -28,14 +28,10 @@ import { petIcon, type PetId } from '@rpg-legend/shared';
 
 import { usuarioAtual, type Usuario } from '@/lib/api/account';
 import { listarAmigos } from '@/lib/api/amigos';
+import { ROSTOS_DE_PET } from '@/lib/pets/rostos';
 import { tocar } from '@/lib/som/efeitos';
 import { Avatar } from '../componentes/avatar';
 import styles from './menu.module.css';
-
-/** Os pets com arte própria. O resto é emoji, igual dentro da partida. */
-const ROSTOS: Partial<Record<PetId, { normal: string; coracao: string }>> = {
-  baby_dragon: { normal: '/img/pets/dragon-normal.png', coracao: '/img/pets/dragon-heart.png' },
-};
 
 /**
  * Sem pet escolhido — ou sem sessão — fica o gato preto do esboço. É o
@@ -68,7 +64,7 @@ export function AtalhosEMascote() {
   }, [carinho]);
 
   const pet = usuario?.pet && usuario.pet !== 'none' ? (usuario.pet as PetId) : null;
-  const rosto = pet ? ROSTOS[pet] : undefined;
+  const rosto = pet ? ROSTOS_DE_PET[pet] : undefined;
 
   return (
     <>
