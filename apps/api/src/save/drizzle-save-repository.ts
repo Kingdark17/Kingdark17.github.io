@@ -21,20 +21,39 @@ const HISTORY_THROTTLE_MS = 15 * 60 * 1000;
 /**
  * Remonta, dentro do Postgres, um objeto só com o que o resumo lê. O save
  * inteiro — herói, inventário, missões e o mapa do andar — fica no banco
- * em vez de atravessar a rede uma vez por slot pra virar seis campos.
+ * em vez de atravessar a rede uma vez por slot pra virar um punhado de
+ * campos.
  *
  * `jsonb_build_object` em vez de colunas soltas de propósito: assim o
  * `data` que chega tem a mesma forma do save, e o `heroFieldsOf` do
  * service continua sendo o único lugar que lê esses campos. Uma segunda
  * leitura, escrita em SQL, é uma que pode discordar da primeira.
+ *
+ * **`equip` traz só o `templateId` de cada slot, e mantém o formato
+ * aninhado do save de propósito** — `{arma: {templateId}}`, e não
+ * `{arma: 'espada'}`. Achatar aqui faria o `data` deixar de ter a forma do
+ * save, que é justamente o que sustenta a regra do parágrafo acima.
+ *
+ * Cresceu em 2026-08-24 pra o seletor de personagem poder desenhar o
+ * boneco: raça e três `templateId`. São textos curtos, e o que o teste de
+ * integração protege continua valendo — mapa e inventário **não** saem do
+ * banco. Ao acrescentar campo aqui, medir contra essa régua, não contra a
+ * contagem.
  */
 const RESUMO_DO_HEROI = sql<unknown>`jsonb_build_object(
   'hero', jsonb_build_object(
     'name', ${cloudSaves.data} #> '{hero,name}',
+    'race', ${cloudSaves.data} #> '{hero,race}',
+    'raceId', ${cloudSaves.data} #> '{hero,raceId}',
     'raceIcon', ${cloudSaves.data} #> '{hero,raceIcon}',
     'className', ${cloudSaves.data} #> '{hero,className}',
     'classIcon', ${cloudSaves.data} #> '{hero,classIcon}',
-    'level', ${cloudSaves.data} #> '{hero,level}'
+    'level', ${cloudSaves.data} #> '{hero,level}',
+    'equip', jsonb_build_object(
+      'arma', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,arma,templateId}'),
+      'armadura', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,armadura,templateId}'),
+      'secundaria', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,secundaria,templateId}')
+    )
   ),
   'floor', ${cloudSaves.data} #> '{floor}'
 )`;

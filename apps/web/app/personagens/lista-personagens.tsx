@@ -12,8 +12,11 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import { idDaRaca } from '@rpg-legend/shared';
+
 import { apagarPersonagem, listarPersonagens, type ResumoPersonagem } from '@/lib/api/characters';
 import { ErroDaApi } from '@/lib/api/client';
+import { Paperdoll } from '../componentes/paperdoll';
 import styles from './personagens.module.css';
 
 function dataCurta(iso: string): string {
@@ -85,6 +88,26 @@ export function ListaPersonagens() {
           return (
             <li key={slot} className={styles.slot}>
               <p className={styles.numeroSlot}>Slot {slot}</p>
+
+              {/* O mesmo balão da criação e do painel da partida: é o
+                  personagem que a pessoa montou, e reconhecê-lo de relance
+                  é metade do motivo de haver um seletor. `idDaRaca` porque
+                  o save grava a raça pelo nome, e só os novos têm `raceId`. */}
+              <div className={styles.retratoDoSlot}>
+                <Paperdoll
+                  raca={idDaRaca(personagem)}
+                  arma={personagem.equip?.arma}
+                  armadura={personagem.equip?.armadura}
+                  secundaria={personagem.equip?.secundaria}
+                  lado={104}
+                  reserva={
+                    <span className={styles.reservaDoSlot} aria-hidden>
+                      {personagem.raceIcon || '❔'}
+                    </span>
+                  }
+                />
+              </div>
+
               <h2 className={styles.nome}>{personagem.name || 'Sem nome'}</h2>
               <p className={styles.classe}>{personagem.className || 'Classe desconhecida'}</p>
 

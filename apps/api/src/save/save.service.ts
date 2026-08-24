@@ -14,15 +14,26 @@ import { signSave, validSignature, type JsonValue } from '../auth/save-signature
 import type { SaveRepository } from './save-repository';
 import { comoTexto } from '../common/texto';
 
+/** O que o card precisa pra desenhar o boneco. `null` = slot vazio ou item sem template. */
+export interface SummaryEquip {
+  arma: string | null;
+  armadura: string | null;
+  secundaria: string | null;
+}
+
 export interface CharacterSummary {
   slot: number;
   updatedAt: Date;
   name: string;
+  /** Nome da raça ("Elfo Negro"). Os dois viajam porque `raceId` falta nos saves antigos. */
+  race: string;
+  raceId: string;
   raceIcon: string;
   className: string;
   classIcon: string;
   level: number;
   floor: number;
+  equip: SummaryEquip;
 }
 
 export type GetSaveResult = { kind: 'invalid-slot' } | { kind: 'empty' } | { kind: 'ok'; save: unknown; signature: string; updatedAt: Date };
@@ -44,16 +55,32 @@ export type HistoryResult = { kind: 'invalid-slot' } | { kind: 'ok'; versions: {
 export type RestoreResult =
   { kind: 'invalid-slot' } | { kind: 'invalid-version' } | { kind: 'not-found' } | { kind: 'ok'; save: unknown; signature: string };
 
+/** `hero.equip.<slot>.templateId`, ou `null` quando o slot está vazio. */
+function templateDoSlot(equip: unknown, slot: string): string | null {
+  if (!equip || typeof equip !== 'object') return null;
+  const item = (equip as Record<string, unknown>)[slot];
+  if (!item || typeof item !== 'object') return null;
+  const id = (item as Record<string, unknown>).templateId;
+  return typeof id === 'string' ? id : null;
+}
+
 function heroFieldsOf(data: unknown): Omit<CharacterSummary, 'slot' | 'updatedAt'> {
   const save = data && typeof data === 'object' ? (data as Record<string, unknown>) : {};
   const hero = save.hero && typeof save.hero === 'object' ? (save.hero as Record<string, unknown>) : {};
   return {
     name: typeof hero.name === 'string' ? hero.name : '',
+    race: typeof hero.race === 'string' ? hero.race : '',
+    raceId: typeof hero.raceId === 'string' ? hero.raceId : '',
     raceIcon: typeof hero.raceIcon === 'string' ? hero.raceIcon : '',
     className: typeof hero.className === 'string' ? hero.className : '',
     classIcon: typeof hero.classIcon === 'string' ? hero.classIcon : '',
     level: Number(hero.level) || 1,
     floor: Number(save.floor) || 1,
+    equip: {
+      arma: templateDoSlot(hero.equip, 'arma'),
+      armadura: templateDoSlot(hero.equip, 'armadura'),
+      secundaria: templateDoSlot(hero.equip, 'secundaria'),
+    },
   };
 }
 

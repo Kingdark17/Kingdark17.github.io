@@ -8,6 +8,13 @@
 
 import { chamarApi } from './client';
 
+/** `templateId` de cada slot, pro card desenhar o boneco equipado. */
+export interface EquipDoResumo {
+  arma: string | null;
+  armadura: string | null;
+  secundaria: string | null;
+}
+
 export interface ResumoPersonagem {
   slot: number;
   name: string;
@@ -17,6 +24,15 @@ export interface ResumoPersonagem {
   level: number;
   floor: number;
   updatedAt: string;
+  /**
+   * Opcionais porque o front e a API sobem separados — Vercel e Render não
+   * combinam relógio. Um front novo contra uma API que ainda não devolve
+   * estes campos recebe `undefined`, e o card cai no emoji da raça em vez
+   * de quebrar. Nasceram juntos em 2026-08-24.
+   */
+  race?: string;
+  raceId?: string;
+  equip?: EquipDoResumo;
 }
 
 export interface ListaPersonagens {

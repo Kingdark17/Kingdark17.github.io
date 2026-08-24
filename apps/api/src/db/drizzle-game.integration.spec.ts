@@ -74,7 +74,17 @@ describe('DrizzleSaveRepository', () => {
       conta.id,
       1,
       {
-        hero: { name: 'Aria', raceIcon: '🧝', className: 'Mago', classIcon: '🔮', level: 7, gold: 999, equip: {} },
+        hero: {
+          name: 'Aria',
+          race: 'Elfo',
+          raceId: 'elfo',
+          raceIcon: '🧝',
+          className: 'Mago',
+          classIcon: '🔮',
+          level: 7,
+          gold: 999,
+          equip: { arma: { templateId: 'cajado', uid: 'a1', equipped: true } },
+        },
         inventory: [],
         party: [],
         floor: 4,
@@ -86,13 +96,32 @@ describe('DrizzleSaveRepository', () => {
 
     const [linha] = await saves.listHeads(conta.id);
 
-    // Os seis campos do card chegam...
-    expect(linha.data).toEqual({ hero: { name: 'Aria', raceIcon: '🧝', className: 'Mago', classIcon: '🔮', level: 7 }, floor: 4 });
-    // ...e o resto some dentro do Postgres, que é o ponto: o mapa e o
-    // inventário não têm por que sair do banco pra desenhar um card.
+    // Os campos do card chegam — e só o `templateId` de cada slot de
+    // equipamento, não o item inteiro: o card desenha o boneco, não a ficha.
+    expect(linha.data).toEqual({
+      hero: {
+        name: 'Aria',
+        race: 'Elfo',
+        raceId: 'elfo',
+        raceIcon: '🧝',
+        className: 'Mago',
+        classIcon: '🔮',
+        level: 7,
+        equip: {
+          arma: { templateId: 'cajado' },
+          armadura: { templateId: null },
+          secundaria: { templateId: null },
+        },
+      },
+      floor: 4,
+    });
+    // ...e o resto some dentro do Postgres, que é o ponto e continua sendo
+    // depois do resumo crescer: o mapa e o inventário não têm por que sair
+    // do banco pra desenhar um card, nem o ouro, nem o `uid` do item.
     const cru = JSON.stringify(linha.data);
     expect(cru).not.toContain('map');
     expect(cru).not.toContain('999');
+    expect(cru).not.toContain('a1');
   });
 
   it('gravar de novo no mesmo slot sobrescreve, não duplica linha', async () => {

@@ -18,7 +18,7 @@ export interface CharacterHeadRow {
   slot: number;
   updatedAt: Date;
   /**
-   * Só `{hero: {name, raceIcon, className, classIcon, level}, floor}` —
+   * Só `{hero: {name, race, raceId, raceIcon, className, classIcon, level, equip}, floor}` —
    * os seis campos que o card mostra. Ler os quatro slots por completo
    * pra montar esse resumo é o mesmo desperdício da foto em base64 no
    * `/api/friends`.

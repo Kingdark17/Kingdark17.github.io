@@ -20,7 +20,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 1 — engine em `packages/shared` | pronta (326 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
-| 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64, boneco na criação de personagem **e no painel do herói durante a partida**, este com o equipamento de verdade. **Sem PixiJS** — ver "Fase 4". Faltam 6 raças, 4 armas e 2 armaduras sem arte |
+| 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64, boneco na criação, no seletor de personagem e no painel do herói durante a partida — os dois últimos com o equipamento de verdade. **Sem PixiJS** — ver "Fase 4". Faltam 6 raças, 4 armas e 2 armaduras sem arte |
 | 5 — **Neon → Supabase** | **pronta em 2026-08-18**: banco criado (Postgres 17.6, `sa-east-1`), migrações aplicadas e conferidas contra o banco real, acesso público fechado inclusive pras tabelas futuras. O jogo no ar **continua no Neon** — o Supabase está vazio e é o ambiente novo, não uma virada. Ver "Fase 5" |
 | 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
 
@@ -368,14 +368,28 @@ diz **qual** peça falta em vez de deixar o jogador achando que quebrou.
 Faltam 6 das 12 raças (anão, orc, draconato, goblin, fada, celestial) e 4
 das 6 armas iniciais (adaga, maça, machado, arco).
 
-### Por que a prévia mora na criação, e não na lista de personagens
+### O resumo do personagem cresceu, e a régua não é a contagem de campos
 
-`/personagens` recebe só `raceIcon` — um emoji — e nenhum equipamento. Isso
-é de propósito, e tem teste garantindo:
-`drizzle-game.integration.spec.ts` afirma que mapa e inventário **não saem
-do Postgres** pra desenhar um card. Paperdoll ali significaria alargar esse
-payload. Já `/personagens/novo` tem a raça viva no estado do React, e o
-boneco atualiza a cada clique sem buscar nada.
+`/personagens` recebia só `raceIcon` — um emoji — e nenhum equipamento, e a
+projeção SQL em `drizzle-save-repository.ts` existe pra o save inteiro nunca
+atravessar a rede. Pôr o boneco no seletor exigiu alargá-la: `race`,
+`raceId` e o `templateId` dos três slots de equipamento.
+
+**O que o teste de integração protege continua de pé** — mapa, inventário,
+ouro e até o `uid` do item seguem morrendo dentro do Postgres, e o teste
+passou a afirmar isso também. A régua pra acrescentar campo aqui é essa, não
+"quantos campos já tem": texto curto que o card desenha, sim; estrutura que
+o card não lê, não.
+
+`equip` mantém o formato aninhado do save (`{arma: {templateId}}`, e não
+`{arma: 'espada'}`) porque é o que sustenta a regra do arquivo: o `data` que
+chega tem a mesma forma do save, então `heroFieldsOf` continua sendo o único
+lugar que lê esses campos.
+
+No front os campos novos são **opcionais**. Vercel e Render sobem separados,
+e um front novo contra uma API velha recebe `undefined` — o card cai no
+emoji da raça em vez de quebrar. É a regra de sempre: quando o contrato muda
+dos dois lados, o lado tolerante vai primeiro.
 
 ### Na criação o boneco mostra a classe; na partida, o equipamento
 
