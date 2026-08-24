@@ -2,17 +2,18 @@
 
 import Link from 'next/link';
 
-import { AtalhosDoCanto } from './atalhos-do-canto';
+import { AtalhosEMascote } from './atalhos-e-mascote';
 import styles from './menu.module.css';
 
 /**
  * Menu principal, no layout do esboço: brasão em cima, três botões
- * empilhados com "Jogar" em destaque, o mascote ao lado e os dois atalhos
- * no canto.
+ * empilhados com "Jogar" em destaque, o mascote num canto e os dois
+ * atalhos no outro.
  *
- * **Server Component estático.** Só `AtalhosDoCanto` é ilha, porque só ele
- * depende de quem está logado. Os botões são `<Link>`, o mascote é CSS —
- * nenhum dos dois manda JavaScript.
+ * **Server Component estático.** Só `AtalhosEMascote` é ilha, porque só ela
+ * depende de quem está logado — a foto do perfil, os pedidos de amizade e
+ * qual pet o jogador escolheu. Os botões são `<Link>` e não mandam
+ * JavaScript nenhum.
  *
  * **Mora em `/menu`, e não na raiz, exatamente pra continuar assim.** A
  * raiz virou o portão de login, que lê cookie e por isso não pode ser
@@ -33,7 +34,7 @@ const DESTINOS = [
 export default function Page() {
   return (
     <main className={styles.tela}>
-      <AtalhosDoCanto />
+      <AtalhosEMascote />
 
       <div className={styles.coluna}>
         {/* `<img>` cru, e não `next/image`: o brasão é pixel art, e o
@@ -59,20 +60,6 @@ export default function Page() {
             </Link>
           ))}
         </nav>
-      </div>
-
-      {/* Fora da coluna: o gato mora no canto de baixo à direita, o mesmo
-          da tela de jogo (`.bichinho` em `jogo.module.css`), pra o mascote
-          estar sempre no mesmo lugar.
-
-          Decorativo: `aria-hidden` porque um gato que só faz carinho não é
-          informação, e o `<button>` sem `onClick` existe só pra o `:active`
-          do CSS valer no toque também. */}
-      <div className={styles.mascote} aria-hidden>
-        <button type="button" className={styles.gato} tabIndex={-1}>
-          <span className={styles.gatoRosto}>🐈‍⬛</span>
-          <span className={styles.gatoCoracao}>❤</span>
-        </button>
       </div>
     </main>
   );

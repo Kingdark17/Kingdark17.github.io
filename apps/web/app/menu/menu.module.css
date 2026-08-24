@@ -68,12 +68,11 @@
 }
 
 /**
- * A animação de clique é `transition`, e não `animation`, e isso é
- * deliberado: `animation` ligada a `:active` morre no instante em que o
- * dedo sai: some o pulo, que é justamente a parte boa. A transição de
- * volta continua rodando depois de soltar, e a curva com overshoot
- * (`cubic-bezier` passando de 1) faz o gato ultrapassar o tamanho normal e
- * assentar — é o pulo, sem uma linha de JavaScript.
+ * O aperto é `transition`, e não `animation`, e isso é deliberado:
+ * `animation` ligada a `:active` morre no instante em que o dedo sai —
+ * some o pulo, que é justamente a parte boa. A transição de volta continua
+ * rodando depois de soltar, e a curva com overshoot (`cubic-bezier`
+ * passando de 1) faz o mascote ultrapassar o tamanho normal e assentar.
  *
  * A ida é curta (70 ms) e a volta longa (520 ms): apertar tem que parecer
  * instantâneo, soltar tem que parecer elástico.
@@ -101,12 +100,26 @@
   animation: respirar 3.4s ease-in-out infinite;
 }
 
+/* Os pets com arte própria (hoje só o dragão filhote). Mesmo tamanho do
+   emoji, pra trocar de pet não mexer no tamanho do canto. */
+.gatoArte {
+  display: block;
+  width: clamp(3.4rem, 12vw, 5rem);
+  height: clamp(3.4rem, 12vw, 5rem);
+  object-fit: contain;
+  pointer-events: none;
+  animation: respirar 3.4s ease-in-out infinite;
+}
+
 @keyframes respirar {
   50% {
     transform: translateY(-0.2rem) rotate(-3deg);
   }
 }
 
+/* O coração é o único que precisa de estado: fica de pé por 1,2 s depois
+   do clique, como o da partida. Preso ao `:active` ele sumiria junto com o
+   dedo, e o carinho passaria despercebido num toque rápido. */
 .gatoCoracao {
   position: absolute;
   top: 0;
@@ -118,14 +131,15 @@
   transition: opacity 380ms ease, transform 380ms ease;
 }
 
-.gato:active .gatoCoracao {
+.gatoCoracaoVisivel {
   opacity: 1;
-  transform: translate(-50%, -1.6rem);
+  transform: translate(-50%, -1.8rem);
   transition-duration: 220ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gatoRosto {
+  .gatoRosto,
+  .gatoArte {
     animation: none;
   }
 }
