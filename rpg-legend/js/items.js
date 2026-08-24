@@ -20,7 +20,7 @@ RPG.Items = (function(){
   var TEMPLATES = [
     { id:'espada', name:'Espada', icon:'<img src="img/weapons/espada.png?v=20260809c" class="weapon-icon-img" alt="Espada">', category:'arma', desc:'Uma lâmina equilibrada para combate corpo a corpo.', base:{ataque:4}, value:22,
       proc:{ chance:0.15, effect:'queimadura', label:'Queimadura', icon:'\ud83d\udd25' } },
-    { id:'machado', name:'Machado de Guerra', icon:'<img src="img/weapons/machado.png?v=20260809c" class="weapon-icon-img" alt="Machado">', category:'arma', desc:'Pesado e brutal, favorece a força bruta.', base:{ataque:6, velocidade:-1}, value:26,
+    { id:'machado', name:'Machado de Guerra', icon:'<img src="img/weapons/machado.png?v=20260824a" class="weapon-icon-img" alt="Machado">', category:'arma', desc:'Pesado e brutal, favorece a força bruta.', base:{ataque:6, velocidade:-1}, value:26,
       proc:{ chance:0.12, effect:'atordoar', label:'Atordoar', icon:'\ud83d\udcab' } },
     { id:'adaga', name:'Adaga Sombria', icon:'<img src="img/weapons/adaga.png?v=20260809c" class="weapon-icon-img" alt="Adaga">', category:'arma', desc:'Rápida e precisa, ideal para golpes furtivos.', base:{ataque:3, critico:8}, value:20,
       proc:{ chance:0.15, effect:'sangramento', label:'Sangramento', icon:'\ud83e\ude78' } },
