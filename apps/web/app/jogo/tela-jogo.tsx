@@ -19,7 +19,7 @@
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { DIR_LABEL, displayName, type Direction, type PetId } from '@rpg-legend/shared';
+import { DIR_LABEL, displayName, type Direction, type Item, type PetId } from '@rpg-legend/shared';
 import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
@@ -105,6 +105,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const abriu = useRef(false);
   const cosmeticos = useRef<CosmeticosDoJogador | null>(null);
   const ultimoRemoto = useRef<Record<string, unknown> | null>(null);
+  /** A mochila da última sincronização — o que permite omiti-la quando não mudou. */
+  const mochilaEnviada = useRef<readonly Item[] | null>(null);
 
   useTrilha(temaDaCena(estado, tela));
 
@@ -188,12 +190,24 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const sincronizar = useCallback(
     (atual: EstadoDoJogo, abrindo = false) => {
       if (!emCoop || !sala.papel) return;
-      const pacote = instantaneoDaSala(atual, sala.papel, atual.hero.name, cosmeticos.current);
+      const pacote = instantaneoDaSala(atual, sala.papel, atual.hero.name, cosmeticos.current, mochilaEnviada.current);
+      // Marcado só depois de montar o pacote: se marcasse antes, a primeira
+      // sincronização já acharia que a mochila tinha ido, e o servidor
+      // ficaria sem ela — devolvendo vazio no eco e apagando a do jogador.
+      mochilaEnviada.current = atual.inventory;
       if (abrindo) abrirAventura(pacote, sala.turno);
       else mandarEstado(pacote, sala.turno);
     },
     [emCoop, sala.papel, sala.turno],
   );
+
+  // Conexão caída apaga o que o servidor sabia da sala. Esquecer o que já
+  // foi enviado obriga a próxima sincronização a levar a mochila inteira de
+  // novo — sem isto, o servidor voltaria sem mochila nenhuma e o eco
+  // esvaziaria a do jogador.
+  useEffect(() => {
+    if (sala.fase === 'desligado') mochilaEnviada.current = null;
+  }, [sala.fase]);
 
   // Quem conduz abre a aventura assim que o save carrega; quem acompanha
   // manda o próprio perfil e espera o `welcome`.

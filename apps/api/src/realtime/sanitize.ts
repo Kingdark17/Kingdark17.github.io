@@ -174,7 +174,16 @@ export function sanitizeProfile(profile: unknown, previous: SanitizedProfile | n
   return {
     name: (comoTexto(source.name) || 'Aventureiro').slice(0, 20),
     hero: result.hero,
-    inventory: Array.isArray(source.inventory) ? cloneJson(source.inventory).slice(0, 120) : [],
+    // Mochila ausente = **não mudou**, e a já aceita continua valendo —
+    // mesmo acordo do `publicProfile` logo abaixo, e pela mesma razão: ela
+    // é o pedaço grande do pacote (10,5 KB num save com 76 itens) e não
+    // muda quando o jogador só anda ou luta. Assim ela atravessa a rede
+    // quando de fato muda, e não a cada ação.
+    //
+    // Mochila **vazia** é diferente de ausente: `[]` é um array, e é
+    // aceito como esvaziar de verdade. Só o que não é array conta como
+    // "sem novidade".
+    inventory: Array.isArray(source.inventory) ? cloneJson(source.inventory).slice(0, 120) : (previous?.inventory ?? []),
     party: sanitizeParty(source.party),
     baseAttrs: result.baseAttrs,
     // Sem cosmético novo, o já aceito continua valendo: assim o avatar

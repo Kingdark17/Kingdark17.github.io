@@ -43,6 +43,49 @@ describe('instantaneoDaSala', () => {
     expect(Object.keys(perfis)).toEqual(['2']);
   });
 
+  describe('a mochila só viaja quando muda', () => {
+    function perfilDoPacote(pacote: Record<string, unknown>, papel = 1): Record<string, unknown> {
+      return (pacote.profiles as Record<string, Record<string, unknown>>)[String(papel)];
+    }
+
+    it('vai inteira quando nada foi enviado ainda', () => {
+      const estado = cidade();
+      const perfil = perfilDoPacote(instantaneoDaSala(estado, 1, 'Aria', COSMETICOS, null));
+
+      expect(perfil.inventory).toBe(estado.inventory);
+    });
+
+    // O ganho: andar, lutar ou abrir porta não mexem na mochila, e ela é o
+    // pedaço grande do pacote — 10,5 KB de 14 KB num save com 76 itens.
+    it('sai do pacote quando é a mesma de antes', () => {
+      const estado = cidade();
+      const perfil = perfilDoPacote(instantaneoDaSala(estado, 1, 'Aria', COSMETICOS, estado.inventory));
+
+      expect(perfil).not.toHaveProperty('inventory');
+      // O resto do perfil continua indo: o herói muda a cada golpe.
+      expect(perfil.hero).toBe(estado.hero);
+      expect(perfil.party).toBe(estado.party);
+    });
+
+    it('volta a viajar assim que muda', () => {
+      const estado = cidade();
+      const outra = [...estado.inventory];
+      const perfil = perfilDoPacote(instantaneoDaSala(estado, 1, 'Aria', COSMETICOS, outra));
+
+      // Mesmo conteúdo, referência diferente: a engine troca o array ao
+      // mudar, então referência é o sinal — e errar pro lado de enviar
+      // demais custa banda, enquanto errar pro outro custa a mochila.
+      expect(perfil.inventory).toBe(estado.inventory);
+    });
+
+    // Sem argumento nenhum é o mesmo que "não sei o que o servidor tem", e
+    // aí manda. É o que mantém as chamadas antigas de 4 argumentos corretas.
+    it('manda quando não recebe a referência anterior', () => {
+      const estado = cidade();
+      expect(perfilDoPacote(instantaneoDaSala(estado, 1, 'Aria', COSMETICOS))).toHaveProperty('inventory');
+    });
+  });
+
   it('o cosmético viaja junto do perfil', () => {
     const pacote = instantaneoDaSala(cidade(), 1, 'Aria', COSMETICOS);
     const meu = (pacote.profiles as Record<string, { publicProfile: unknown }>)['1'];

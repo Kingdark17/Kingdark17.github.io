@@ -34,13 +34,33 @@ export interface CosmeticosDoJogador {
  * Monta o que vai pro servidor. `profiles` leva só o **meu** papel: o do
  * parceiro o servidor já tem, e reenviá-lo abriria caminho pra um cliente
  * reescrever o herói do outro.
+ *
+ * `mochilaJaEnviada` é a mochila da última sincronização. Quando ela é a
+ * mesma, o campo **sai do pacote**: o servidor entende ausência como "não
+ * mudou" e mantém a que já aceitou. Medido num save com 76 itens, a mochila
+ * era 10,5 KB de um pacote de 14 KB — e andar, lutar ou abrir uma porta não
+ * mexem nela. É o mesmo acordo que o cosmético já tinha.
+ *
+ * A comparação é por **referência**, e funciona porque a engine troca o
+ * array ao mudar e devolve o mesmo quando não muda (ver `mochila.ts`).
+ * Passar `null` força o envio — é o que se usa depois de uma reconexão,
+ * quando não dá pra saber o que o servidor ainda tem.
  */
 export function instantaneoDaSala(
   estado: EstadoDoJogo,
   papel: number,
   nome: string,
   cosmeticos: CosmeticosDoJogador | null,
+  mochilaJaEnviada?: readonly Item[] | null,
 ): Record<string, unknown> {
+  const perfil: Record<string, unknown> = {
+    name: estado.hero.name,
+    hero: estado.hero,
+    party: estado.party,
+    publicProfile: cosmeticos,
+  };
+  if (estado.inventory !== mochilaJaEnviada) perfil.inventory = estado.inventory;
+
   return {
     quests: estado.quests,
     floor: estado.floor,
@@ -49,15 +69,7 @@ export function instantaneoDaSala(
     mapRows: estado.mapRows,
     mapCols: estado.mapCols,
     pos: estado.pos,
-    profiles: {
-      [papel]: {
-        name: estado.hero.name,
-        hero: estado.hero,
-        inventory: estado.inventory,
-        party: estado.party,
-        publicProfile: cosmeticos,
-      },
-    },
+    profiles: { [papel]: perfil },
   };
 }
 

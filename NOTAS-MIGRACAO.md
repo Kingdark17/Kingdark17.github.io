@@ -761,13 +761,56 @@ inteiro + parceiro enxuto:
 
 O corte escala com o tamanho da mochila, que é exatamente quando pesa.
 
-**O que sobrou de gordura, e por que não cortei sozinho.** Os 15 KB que
-restam no pior caso são quase todos a mochila do *próprio* jogador, ecoada
-de volta. Dá pra tirar — `sanitizeProfile` só faz `.slice(0, 120)` nela, sem
-validar item nenhum, então o eco praticamente não corrige nada. Mas isso
-tira a mochila do contrato autoritativo do co-op, e ainda exige mudar
-`aplicarRemoto` pra cair no local em vez de `?? []`. É decisão, não
-digitação.
+### E depois parou de subir a cada ação (2026-08-23)
+
+Continuação do corte acima, pelo outro lado: a mochila do **próprio**
+jogador, que subia inteira a cada ação.
+
+**O erro que eu ia cometer.** A ideia óbvia era o cliente parar de mandar e
+o servidor continuar ecoando a que tem guardada. Isso **desfaria itens
+catados**: sem receber atualização, a cópia do servidor envelhece, e o eco
+faria o cliente adotar uma mochila antiga. Subir e descer estão amarrados —
+não dá pra cortar um lado sozinho.
+
+**O que dava pra cortar sem risco.** O cliente omite a mochila quando ela é
+a mesma do último envio; o servidor entende ausência como "não mudou" e
+mantém a que já aceitou. É **exatamente o acordo que o cosmético já
+tinha** (`sanitizeProfile`), e pelo mesmo motivo. Andar, lutar e abrir
+porta não mexem na mochila, então a maioria das ações passa a não carregá-la.
+
+Medido na subida:
+
+| Save | Mochila mudou | Não mudou | |
+|---|---|---|---|
+| `save-mochila` (6 itens) | 4.664 B | 3.843 B | −18% |
+| `save-tutorial` (76 itens) | 14.090 B | 3.522 B | **−75%** |
+| `save-masmorra-2` (1 item) | 4.413 B | 4.265 B | −3% |
+
+**Vazio é diferente de ausente.** `[]` é array e esvazia de verdade —
+vender tudo é jogada legítima. Só o que não é array conta como "sem
+novidade". Tem teste pros dois.
+
+**A comparação é por referência**, e vale porque a engine troca o array ao
+mudar e devolve o mesmo quando não muda (`mochila.ts`). Errar pro lado de
+enviar demais custa banda; errar pro outro custa a mochila do jogador.
+
+**A rede de segurança da reconexão.** Conexão caída apaga o que o servidor
+sabia da sala. `tela-jogo.tsx` zera a referência quando a fase vira
+`desligado`, obrigando a próxima sincronização a levar a mochila inteira —
+sem isso, o servidor voltaria sem mochila e o eco esvaziaria a do jogador.
+
+### O corte inteiro, que ficou de fora de propósito
+
+Tirar a mochila do contrato do co-op nos dois sentidos valeria −62% por
+ação em vez dos ganhos acima. **Não foi feito** porque `js/multiplayer.js`
+faz `s.inventory = own.inventory || []`: o jogo antigo esvaziaria a mochila
+de todo mundo se algum dia apontasse pra esta API — que é o caminho de
+migração mais seguro, trocar o servidor antes do cliente. O corte de hoje e
+o de ontem **não** afetam o cliente antigo: ele lê só o próprio perfil no
+`applyState`, e o `renderRemote` desenha `RPG.state`, não o do parceiro.
+
+Se o jogo antigo for aposentado sem nunca falar com esta API, o corte
+inteiro volta à mesa.
 
 ### Compressão das respostas — RESOLVIDO em 2026-08-22: não fazer nada
 

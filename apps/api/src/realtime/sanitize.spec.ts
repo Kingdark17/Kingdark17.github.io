@@ -125,9 +125,29 @@ describe('sanitizeProfile', () => {
     expect(result.inventory).toHaveLength(120);
   });
 
-  it('devolve inventário vazio quando não é array', () => {
+  it('devolve inventário vazio quando não é array e não há anterior', () => {
     const result = sanitizeProfile({ inventory: 'nao é array' }, null, false);
     expect(result.inventory).toEqual([]);
+  });
+
+  // O cliente omite a mochila quando ela não mudou — ela é o pedaço grande
+  // do pacote (10,5 KB de 14 KB num save com 76 itens) e andar ou lutar não
+  // mexem nela. Ausência tem que significar "continua a mesma": entendê-la
+  // como "esvaziou" devolveria vazio no eco e apagaria a mochila do jogador.
+  it('mantém a mochila já aceita quando o pacote não traz uma', () => {
+    const antes = sanitizeProfile({ inventory: [{ uid: 'espada' }] }, null, false);
+    const depois = sanitizeProfile({ name: 'Aria' }, antes, false);
+
+    expect(depois.inventory).toEqual([{ uid: 'espada' }]);
+  });
+
+  // Vazia é diferente de ausente: `[]` é um array, e esvaziar a mochila é
+  // uma jogada legítima — vender tudo, por exemplo.
+  it('aceita esvaziar de verdade quando vem um array vazio', () => {
+    const antes = sanitizeProfile({ inventory: [{ uid: 'espada' }] }, null, false);
+    const depois = sanitizeProfile({ inventory: [] }, antes, false);
+
+    expect(depois.inventory).toEqual([]);
   });
 });
 
