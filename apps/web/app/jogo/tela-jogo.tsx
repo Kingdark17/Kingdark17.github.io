@@ -17,6 +17,7 @@
  */
 
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { DIR_LABEL, displayName, type Direction, type Item, type PetId } from '@rpg-legend/shared';
@@ -35,7 +36,7 @@ import { tocar } from '@/lib/som/efeitos';
 import { useTrilha } from '@/lib/som/use-trilha';
 import type { Tema } from '@/lib/som/musica';
 import { marcar, type Recado } from '@/lib/jogo/tutorial';
-import { abrirAventura, assinar, instantanea, mandarEstado, mandarPerfil, PAPEL_ANFITRIAO, travarParceiro } from '@/lib/rede/sala';
+import { abrirAventura, assinar, instantanea, mandarEstado, mandarPerfil, PAPEL_ANFITRIAO, sairDaSala, travarParceiro } from '@/lib/rede/sala';
 import { useSala } from '@/lib/rede/use-sala';
 import type { Combate } from '@/lib/jogo/combate';
 import { BichoDeEstimacao } from './bicho-de-estimacao';
@@ -84,6 +85,7 @@ const DIRECOES: { direcao: Direction; classe: string; seta: string }[] = [
 type EstadoDoSalvamento = 'parado' | 'salvando' | 'salvo';
 
 export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: string }) {
+  const router = useRouter();
   const sala = useSala();
   const emCoop = !!codigoDaSala && sala.codigo === codigoDaSala;
   const conduzo = !emCoop || sala.papel === PAPEL_ANFITRIAO;
@@ -99,6 +101,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const [admin, setAdmin] = useState(false);
   const [recado, setRecado] = useState<Recado | null>(null);
   const [guiaAberto, setGuiaAberto] = useState(false);
+  const [confirmandoSaida, setConfirmandoSaida] = useState(false);
+  const [saindo, setSaindo] = useState(false);
 
   const assinatura = useRef('');
   const precisaSalvar = useRef(false);
@@ -151,16 +155,20 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     void import('./tela-combate');
   }, []);
 
+  /** Devolve se gravou. Quem sai da partida precisa saber: navegar depois
+      de uma gravação que falhou joga fora o progresso em silêncio. */
   const salvar = useCallback(
-    async (paraGravar: EstadoDoJogo) => {
+    async (paraGravar: EstadoDoJogo): Promise<boolean> => {
       setSalvamento('salvando');
       try {
         const resposta = await gravarSave({ slot, save: paraGravar, baseSignature: assinatura.current });
         assinatura.current = resposta.signature;
         setSalvamento('salvo');
+        return true;
       } catch (falha) {
         setSalvamento('parado');
         setErro(falha instanceof ErroDaApi ? falha.message : 'Erro inesperado ao salvar.');
+        return false;
       }
     },
     [slot],
@@ -208,6 +216,35 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   useEffect(() => {
     if (sala.fase === 'desligado') mochilaEnviada.current = null;
   }, [sala.fase]);
+
+  /**
+   * Sair da partida. Grava o passo que ainda estiver na fila antes de
+   * navegar — o salvamento é adiado 2,5 s, então sair logo depois de andar
+   * perderia essa jogada sem avisar. **Se a gravação falhar, não sai**: a
+   * mensagem de erro fica na tela e o jogador decide.
+   *
+   * Em co-op não há o que gravar (a sessão nunca é gravada, por decisão),
+   * mas há uma sala pra desfazer: sem `sairDaSala()` o parceiro ficaria
+   * esperando alguém que já foi embora.
+   */
+  async function sairDaPartida() {
+    if (!estado || saindo) return;
+    setSaindo(true);
+
+    if (emCoop) {
+      sairDaSala();
+    } else if (precisaSalvar.current) {
+      precisaSalvar.current = false;
+      if (!(await salvar(estado))) {
+        precisaSalvar.current = true;
+        setSaindo(false);
+        setConfirmandoSaida(false);
+        return;
+      }
+    }
+
+    router.push('/menu');
+  }
 
   // Quem conduz abre a aventura assim que o save carrega; quem acompanha
   // manda o próprio perfil e espera o `welcome`.
@@ -548,7 +585,34 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               🛠️ ADM
             </button>
           )}
+
+          <button type="button" className={styles.botao} onClick={() => setConfirmandoSaida(true)} disabled={saindo}>
+            🚪 Sair
+          </button>
         </div>
+
+        {/* Confirmação na própria tela, e não `window.confirm`: o mesmo
+            motivo da exclusão de personagem — o `confirm` trava a página
+            inteira e não dá pra ler direito no celular. E aqui ele
+            atrapalharia mais, porque a mensagem muda conforme o modo. */}
+        {confirmandoSaida && (
+          <div className={styles.confirmacaoDeSaida} role="dialog" aria-label="Sair da partida?">
+            <p className={styles.perguntaDeSaida}>Sair da partida?</p>
+            <p className={styles.detalheDaSaida}>
+              {emCoop
+                ? 'A sala se desfaz e seu parceiro volta a jogar sozinho. O progresso desta sessão não é gravado — seu personagem continua como estava antes de você entrar.'
+                : 'Seu progresso é gravado na nuvem antes de sair.'}
+            </p>
+            <div className={styles.botoesDaSaida}>
+              <button type="button" className={styles.botao} onClick={() => void sairDaPartida()} disabled={saindo}>
+                {saindo ? 'Saindo…' : 'Sim, sair'}
+              </button>
+              <button type="button" className={styles.botao} onClick={() => setConfirmandoSaida(false)} disabled={saindo}>
+                Continuar jogando
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className={styles.bussola}>
           {DIRECOES.map(({ direcao, classe, seta }) => (

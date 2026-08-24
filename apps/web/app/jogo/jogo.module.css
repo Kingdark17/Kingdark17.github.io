@@ -993,3 +993,56 @@
   line-height: 1;
   cursor: pointer;
 }
+
+/* ---------- retrato do herói (paperdoll no painel) ---------- */
+
+/* O balão: o mesmo disco escuro da criação de personagem, pra o jogador
+   reconhecer que é a mesma figura que ele montou. A arte é clara e sumiria
+   contra o painel sem algo atrás. */
+.retratoDoHeroi {
+  display: grid;
+  justify-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.retratoDoHeroi > :first-child {
+  background: radial-gradient(circle at 50% 62%, rgba(201, 162, 39, 0.14), transparent 62%), var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.reservaDoRetrato {
+  font-size: 2.75rem;
+  line-height: 1;
+  opacity: 0.5;
+}
+
+/* ---------- sair da partida ---------- */
+
+.confirmacaoDeSaida {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+}
+
+.perguntaDeSaida {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.detalheDaSaida {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  line-height: 1.4;
+}
+
+.botoesDaSaida {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

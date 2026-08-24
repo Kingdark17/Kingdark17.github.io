@@ -20,7 +20,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 1 — engine em `packages/shared` | pronta (326 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
-| 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64 instaladas e o boneco montado na criação de personagem. **Sem PixiJS** — ver "Fase 4". Falta o boneco dentro da partida, 6 raças e 4 armas sem arte |
+| 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64, boneco na criação de personagem **e no painel do herói durante a partida**, este com o equipamento de verdade. **Sem PixiJS** — ver "Fase 4". Faltam 6 raças, 4 armas e 2 armaduras sem arte |
 | 5 — **Neon → Supabase** | **pronta em 2026-08-18**: banco criado (Postgres 17.6, `sa-east-1`), migrações aplicadas e conferidas contra o banco real, acesso público fechado inclusive pras tabelas futuras. O jogo no ar **continua no Neon** — o Supabase está vazio e é o ambiente novo, não uma virada. Ver "Fase 5" |
 | 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
 
@@ -376,6 +376,30 @@ das 6 armas iniciais (adaga, maça, machado, arco).
 do Postgres** pra desenhar um card. Paperdoll ali significaria alargar esse
 payload. Já `/personagens/novo` tem a raça viva no estado do React, e o
 boneco atualiza a cada clique sem buscar nada.
+
+### Na criação o boneco mostra a classe; na partida, o equipamento
+
+São dois casos diferentes de propósito. Em `/personagens/novo` ainda não há
+personagem, então a arma vem de `CLASSES[].weaponTemplate` — a inicial da
+classe. No painel do herói o boneco lê `hero.equip.arma`, `.armadura` e
+`.secundaria`: trocar de espada na mochila muda o que aparece.
+
+**O herói grava `race` como nome ("Elfo Negro"), não como id.** O paperdoll
+chaveia por id, então quem resolve é `idDaRaca()` da engine, que prefere
+`raceId` e cai no nome pros saves antigos que ainda não têm o campo. Ler
+`hero.race` direto funcionaria hoje e quebraria no dia em que os nomes forem
+traduzidos.
+
+### Sair da partida grava antes, e não sai se a gravação falhar
+
+O autosave é adiado 2,5 s depois do último passo. Sair logo depois de andar
+perderia essa jogada em silêncio, então o botão força a gravação pendente
+antes de navegar. Por isso `salvar()` passou a devolver se gravou: navegar
+depois de uma falha jogaria o progresso fora sem ninguém ver.
+
+Em co-op não há o que gravar — a sessão nunca é gravada, por decisão —, mas
+há sala pra desfazer: sem `sairDaSala()` o parceiro ficaria esperando alguém
+que já foi embora.
 
 ### `felino` e `morto_vivo` não recebem cabelo
 

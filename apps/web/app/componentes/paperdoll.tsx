@@ -25,8 +25,8 @@ interface Props extends Vestimenta {
   reserva?: React.ReactNode;
 }
 
-export function Paperdoll({ raca, arma, lado = 192, reserva = null }: Props) {
-  const camadas = montarCamadas({ raca, arma });
+export function Paperdoll({ raca, arma, armadura, secundaria, lado = 192, reserva = null }: Readonly<Props>) {
+  const camadas = montarCamadas({ raca, arma, armadura, secundaria });
 
   if (camadas.length === 0) {
     return (

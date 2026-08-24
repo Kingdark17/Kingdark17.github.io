@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { ATTR_KEYS, ATTR_LABELS, type Hero } from '@rpg-legend/shared';
+import { ATTR_KEYS, ATTR_LABELS, idDaRaca, type Hero } from '@rpg-legend/shared';
 
 import { tocar } from '@/lib/som/efeitos';
+import { Paperdoll } from '../componentes/paperdoll';
 import styles from './jogo.module.css';
 
 function porcentagem(atual: number, maximo: number): string {
@@ -34,6 +35,26 @@ export function PainelHeroi({ hero }: { hero: Hero }) {
         if (evento.currentTarget === evento.target) setSubiu(false);
       }}
     >
+      {/* O boneco vestido com o que **está equipado agora**, e não com a
+          arma inicial da classe: trocar de espada na mochila muda o que
+          aparece aqui. `idDaRaca` porque o herói grava `race` como nome
+          ("Elfo Negro") e só os saves novos trazem `raceId` — a função
+          resolve os dois. */}
+      <div className={styles.retratoDoHeroi}>
+        <Paperdoll
+          raca={idDaRaca(hero)}
+          arma={hero.equip.arma?.templateId}
+          armadura={hero.equip.armadura?.templateId}
+          secundaria={hero.equip.secundaria?.templateId}
+          lado={132}
+          reserva={
+            <span className={styles.reservaDoRetrato} aria-hidden>
+              {hero.raceIcon}
+            </span>
+          }
+        />
+      </div>
+
       <h2 className={styles.nomeHeroi}>{hero.name}</h2>
       <p className={styles.classeHeroi}>
         {hero.raceIcon} {hero.race} · {hero.classIcon} {hero.className} · nível {hero.level}
