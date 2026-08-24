@@ -11,6 +11,7 @@
  * avatar, sair.
  */
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { sair, usuarioAtual, type Usuario } from '@/lib/api/account';
@@ -101,9 +102,17 @@ export function PainelConta() {
           </>
         )}
         {recadoDoEmail && <p className={styles.aviso}>{recadoDoEmail}</p>}
+        {/* "Voltar" e "Sair da conta" lado a lado, e com esses nomes: o
+            botão daqui só dizia "Sair", e desde que o menu virou três
+            botões esta tela se chega pelo ícone do canto e não tinha
+            caminho de volta. Duas saídas com o mesmo rótulo seriam pior
+            que nenhuma. */}
         <div className={styles.acoes}>
-          <button type="button" className={styles.botao} onClick={aoSair} disabled={ocupado}>
-            Sair
+          <Link href="/menu" className={styles.botao}>
+            Voltar ao menu
+          </Link>
+          <button type="button" className={styles.botaoSecundario} onClick={aoSair} disabled={ocupado}>
+            Sair da conta
           </button>
         </div>
 

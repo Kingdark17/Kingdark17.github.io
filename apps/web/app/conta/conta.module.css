@@ -58,7 +58,13 @@
   margin-top: 1.2rem;
 }
 
+/* Serve `<button>` e `<link>`: "Voltar ao menu" é navegação de verdade e
+   precisa continuar sendo âncora, mas tem que parecer o mesmo botão. Daí o
+   `inline-flex` e o `text-decoration` explícitos, que o `<button>` já tinha
+   de graça e a âncora não. */
 .botao {
+  display: inline-flex;
+  align-items: center;
   padding: 0.55rem 1.1rem;
   background: var(--gold);
   color: var(--ink);
@@ -66,12 +72,24 @@
   border-radius: 0.3rem;
   font: inherit;
   font-weight: 600;
+  text-decoration: none;
   cursor: pointer;
 }
 
 .botao:disabled {
   opacity: 0.55;
   cursor: progress;
+}
+
+/* Sair da conta é raro e não deve competir com "Voltar ao menu", mas
+   também não pode virar link sublinhado: é a ação que derruba a sessão, e
+   precisa continuar parecendo botão. Daí o acabamento escuro com borda
+   dourada, secundário ao ouro chapado do vizinho. */
+.botaoSecundario {
+  composes: botao from '../acabamento.module.css';
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  text-decoration: none;
 }
 
 .alternar {

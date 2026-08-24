@@ -3,6 +3,20 @@
   padding: 2rem 1rem;
 }
 
+/* Mesma largura de `.colunas`, pro link nascer alinhado com a borda
+   esquerda dos painéis em vez de flutuar na margem da página. */
+.voltar {
+  display: block;
+  width: min(64rem, 100%);
+  margin: 0 auto 1rem;
+  color: var(--parchment-dim);
+  font-size: 0.9rem;
+}
+
+.voltar:hover {
+  color: var(--gold-bright);
+}
+
 .colunas {
   width: min(64rem, 100%);
   margin: 0 auto;
