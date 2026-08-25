@@ -14,7 +14,7 @@ import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { Client } from 'pg';
 
-import { autorizaApagar, conferir, conferirSchemas, copiar, limparDestino, TABELAS_EM_ORDEM } from './copia';
+import { autorizaApagar, conferir, conferirSchemas, copiar, limparDestino, TABELAS_EM_ORDEM, TIPOS_COM_PRECISAO } from './copia';
 import { ORIGINAL_DDL } from '../testing/original-ddl';
 
 jest.setTimeout(120_000);
@@ -49,7 +49,13 @@ async function subirBanco(): Promise<Banco> {
 
   for (const comando of ORIGINAL_DDL) await pglite.exec(comando);
 
-  const cliente = new Client({ connectionString: `postgres://postgres:postgres@127.0.0.1:${porta}/postgres` });
+  // `types` igual ao da CLI de propósito: sem isso o teste roda com um
+  // cliente diferente do que vira produção, e foi assim que a perda de
+  // microssegundo passou batido aqui e só apareceu na virada de verdade.
+  const cliente = new Client({
+    connectionString: `postgres://postgres:postgres@127.0.0.1:${porta}/postgres`,
+    types: TIPOS_COM_PRECISAO,
+  });
   await cliente.connect();
 
   return {
@@ -90,6 +96,11 @@ async function semear(cliente: Client): Promise<void> {
       ],
     );
   }
+
+  // Microssegundo cravado à mão. O `now()` do PGlite quase sempre traz as
+  // seis casas, mas "quase sempre" é como se escreve teste que pisca. Este
+  // valor é o da virada real, onde a truncagem apareceu pela primeira vez.
+  await cliente.query(`update users set created_at = '2026-08-10 14:21:32.826884+00' where id = 1`);
 
   await cliente.query(`insert into sessions (token_hash, user_id, expires_at) values ($1, 1, now() + interval '7 days')`, ['a'.repeat(64)]);
   await cliente.query(`insert into sessions (token_hash, user_id, expires_at) values ($1, 2, now() + interval '7 days')`, ['b'.repeat(64)]);
@@ -176,6 +187,28 @@ describe('cópia Neon → Supabase', () => {
     for (const linha of linhas) {
       expect({ tabela: linha.tabela, bate: linha.bate }).toEqual({ tabela: linha.tabela, bate: true });
     }
+  });
+
+  /**
+   * A armadilha 5, e ela escapou desta suíte uma vez.
+   *
+   * O Postgres guarda tempo em microssegundo; o `Date` do JS só chega a
+   * milissegundo. Com o `pg` convertendo `timestamptz` em `Date`,
+   * `12:53:15.421396` chegava no destino como `12:53:15.421` — sem erro,
+   * sem mudar contagem. Na virada de verdade as sete tabelas com data
+   * divergiram de uma vez, e foi isto.
+   *
+   * O teste antigo não pegava porque o `Client` daqui não usava o mesmo
+   * `types` da CLI. Agora usa, e este caso prende o comportamento.
+   */
+  it('o microssegundo do timestamp sobrevive — `Date` do JS truncaria', async () => {
+    const { rows } = await destino.cliente.query<{ criado: string }>(`select created_at::text as criado from users where id = 1`);
+    // Passando por `Date`, isto viraria `...32.826`. As três últimas casas
+    // são a prova.
+    expect(rows[0].criado).toContain('14:21:32.826884');
+
+    const iguais = await conferir(origem.cliente, destino.cliente);
+    expect(iguais.find((l) => l.tabela === 'users')?.bate).toBe(true);
   });
 
   it('o `jsonb` que começa com array chegou como JSON, não como array do Postgres', async () => {

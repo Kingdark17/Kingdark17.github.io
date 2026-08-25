@@ -44,6 +44,7 @@
 import { Client } from 'pg';
 
 import {
+  TIPOS_COM_PRECISAO,
   autorizaApagar,
   conferir,
   copiar,
@@ -186,8 +187,11 @@ async function main(): Promise<number> {
   // barreira que nunca foi testada não é barreira. Não é escape de
   // produção: Neon e Supabase exigem SSL e recusam a conexão sem ele.
   const ssl = process.env.SEM_SSL ? undefined : { rejectUnauthorized: false };
-  const origem = new Client({ connectionString: origemUrl, ssl });
-  const destino = new Client({ connectionString: destinoUrl, ssl });
+
+  // `types` não é detalhe: sem ele o `pg` devolve `timestamptz` como `Date`
+  // e trunca o microssegundo na leitura. Ver armadilha 5 em `copia.ts`.
+  const origem = new Client({ connectionString: origemUrl, ssl, types: TIPOS_COM_PRECISAO });
+  const destino = new Client({ connectionString: destinoUrl, ssl, types: TIPOS_COM_PRECISAO });
 
   await origem.connect();
   await destino.connect();

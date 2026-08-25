@@ -36,17 +36,51 @@
  *    virada é cosmético comprado e perdido. A impressão digital agora é a
  *    linha inteira, com as colunas em ordem alfabética.
  *
+ * 5. **`Date` do JavaScript trunca microssegundo.** O Postgres guarda
+ *    tempo com precisão de microssegundo; o `Date` do JS só chega a
+ *    milissegundo. Deixar o `pg` converter `timestamptz` em `Date`
+ *    transforma `14:21:32.826884` em `14:21:32.826` — e a perda acontece
+ *    na **leitura**, antes de o valor sequer sair pro destino. Não dá erro,
+ *    não muda contagem, e só aparece porque a conferência compara a linha
+ *    inteira como texto. Pego numa virada de verdade, com as sete tabelas
+ *    divergindo de uma vez. Ver `TIPOS_COM_PRECISAO` — quem monta o
+ *    `Client` **precisa** passar isso.
+ *
  * Rodar de novo não duplica nada nos dois modos, o que permite retomar uma
  * cópia interrompida sem limpar o destino. Mas **`inserir` re-executado não
  * traz alteração**: ele pula a linha que já existe, e `cloud_saves` é a
  * mesma chave com `data` novo a cada save. Cópia quente termina em
  * `espelhar`, nunca num segundo `inserir`.
  */
+import { types as tiposDoPg } from 'pg';
 
 /** O bastante de um cliente `pg` pra este arquivo — e o que o PGlite atrás do socket também entrega. */
 export interface Consultavel {
   query<T = Record<string, unknown>>(texto: string, valores?: unknown[]): Promise<{ rows: T[]; rowCount: number | null }>;
 }
+
+/**
+ * `date`, `time`, `timestamp`, `timestamptz`, `timetz` — os tipos que o
+ * `pg` converteria em `Date` e, no caminho, truncaria.
+ */
+const OIDS_DE_TEMPO = new Set([1082, 1083, 1114, 1184, 1266]);
+
+/**
+ * Entrega tempo como o **texto cru** que o Postgres mandou, em vez de
+ * `Date`. É a armadilha 5 do cabeçalho: `Date` guarda milissegundo, o
+ * Postgres guarda microssegundo, e a conversão joga fora o que não cabe.
+ *
+ * Devolvendo texto, o valor volta pro destino como o mesmo literal que
+ * saiu da origem — o Postgres reinterpreta com a precisão inteira, e a
+ * conferência passa a comparar dado, não resíduo de conversão.
+ *
+ * Vale pra `date` e `time` também. Eles não perdem nada hoje, mas ficar
+ * escolhendo quais tipos merecem cuidado é como a armadilha 4 nasceu.
+ */
+export const TIPOS_COM_PRECISAO = {
+  getTypeParser: ((oid: number, formato?: never) =>
+    OIDS_DE_TEMPO.has(oid) ? (valor: string) => valor : tiposDoPg.getTypeParser(oid, formato)) as typeof tiposDoPg.getTypeParser,
+};
 
 /**
  * Ordem de inserção. `users` primeiro porque as outras seis apontam pra
@@ -516,14 +550,20 @@ async function impressaoDe(cliente: Consultavel, tabela: Tabela, colunas: string
 }
 
 /**
- * Normaliza o que muda o texto de um `timestamptz` sem mudar o instante.
- * Sem isto, dois bancos com fuso ou `DateStyle` diferentes renderiam a
- * mesma data de formas diferentes e a conferência acusaria divergência que
- * não existe.
+ * Normaliza o que muda o **texto** de um valor sem mudar o valor. Sem isto,
+ * dois bancos com fuso, `DateStyle` ou precisão de float diferentes
+ * renderiam o mesmo dado de formas diferentes e a conferência acusaria
+ * divergência que não existe.
+ *
+ * `extra_float_digits` entrou depois de medir a virada de verdade: o Neon
+ * (Postgres 18) vinha com `1` e o Supabase (17) com `0`. Não foi o que
+ * causou a divergência daquele dia — foi a armadilha 5 — mas é uma mina
+ * armada, porque muda como `real`/`double precision` são impressos.
  */
 async function normalizar(cliente: Consultavel): Promise<void> {
   await cliente.query(`set time zone 'UTC'`);
   await cliente.query(`set datestyle to 'ISO, YMD'`);
+  await cliente.query(`set extra_float_digits to 1`);
 }
 
 /**
