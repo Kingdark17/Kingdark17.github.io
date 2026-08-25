@@ -6,7 +6,12 @@
  * confiar no "0 erros". Quem vira um banco com contas de gente dentro
  * precisa de prova, não de ausência de exceção.
  *
- * Três armadilhas moram aqui, e cada uma já derrubou migração de alguém:
+ * **Dois modos, e escolher errado é o jeito mais fácil de errar aqui.**
+ * `inserir` (padrão) só acrescenta o que falta e nunca sobrescreve — certo
+ * pra destino vazio. `espelhar` deixa o destino idêntico à origem:
+ * acrescenta, atualiza e apaga. Ver `ModoDeCopia`.
+ *
+ * Quatro armadilhas moram aqui, e cada uma já derrubou migração de alguém:
  *
  * 1. **Sequence não anda sozinha.** Inserir linha com `id` explícito não
  *    move a sequence do `bigserial`. O banco novo entregaria `id = 1` no
@@ -25,9 +30,17 @@
  *    JSON. Toda coluna `json`/`jsonb` sai daqui como texto com `::jsonb`
  *    explícito.
  *
- * A cópia é re-executável: `ON CONFLICT DO NOTHING` em cima da chave
- * primária. Rodar duas vezes não duplica nada, o que permite retomar uma
- * cópia interrompida sem limpar o destino.
+ * 4. **Conferência com lista de colunas escolhida a dedo mente.** A
+ *    primeira versão comparava só "o que importa" — hash de senha, save,
+ *    corpo da mensagem — e deixou passar um `pet` desatualizado, que numa
+ *    virada é cosmético comprado e perdido. A impressão digital agora é a
+ *    linha inteira, com as colunas em ordem alfabética.
+ *
+ * Rodar de novo não duplica nada nos dois modos, o que permite retomar uma
+ * cópia interrompida sem limpar o destino. Mas **`inserir` re-executado não
+ * traz alteração**: ele pula a linha que já existe, e `cloud_saves` é a
+ * mesma chave com `data` novo a cada save. Cópia quente termina em
+ * `espelhar`, nunca num segundo `inserir`.
  */
 
 /** O bastante de um cliente `pg` pra este arquivo — e o que o PGlite atrás do socket também entrega. */
@@ -67,9 +80,26 @@ const SEQUENCES: ReadonlyArray<{ tabela: Tabela; coluna: string }> = [
 /** Teto do protocolo do Postgres: 65535 parâmetros por comando. Fica bem abaixo. */
 const TETO_DE_PARAMETROS = 30000;
 
+/**
+ * `inserir` só acrescenta o que falta: nunca toca em linha que já está no
+ * destino. É o certo pra um destino vazio, e é o padrão porque não
+ * sobrescreve nada por engano.
+ *
+ * `espelhar` deixa o destino **idêntico** à origem: acrescenta, atualiza o
+ * que mudou e **apaga o que sumiu**.
+ *
+ * A diferença importa mais do que parece. `cloud_saves` é a mesma chave
+ * `(user_id, slot)` com `data` novo a cada save — num destino que já tem a
+ * linha, `inserir` a pula e o save fica velho. Rodar `inserir` de novo pra
+ * "pegar o atraso" não pega alteração nenhuma.
+ */
+export type ModoDeCopia = 'inserir' | 'espelhar';
+
 export interface OpcoesDeCopia {
   /** Sem isto, nada é escrito — só lê e relata. É o padrão de propósito. */
   escrever?: boolean;
+  /** Ver `ModoDeCopia`. Padrão `inserir`, que é o que não sobrescreve. */
+  modo?: ModoDeCopia;
   /** Linhas por lote. Save é `jsonb` grande; 200 segura a memória sem virar lerdeza. */
   lote?: number;
   /** Recebe cada linha de progresso. Sem isto, o módulo não imprime nada. */
@@ -81,7 +111,11 @@ export interface ResumoDaTabela {
   naOrigem: number;
   noDestinoAntes: number;
   inseridas: number;
-  /** Linhas que a origem tinha e o destino já possuía (conflito de chave). */
+  /** Linhas que existiam no destino e foram sobrescritas. Só em `espelhar`. */
+  atualizadas: number;
+  /** Linhas do destino cuja chave sumiu da origem. Só em `espelhar`. */
+  apagadas: number;
+  /** Linhas que a origem tinha e o destino já possuía sem mudança. */
   puladas: number;
 }
 
@@ -160,8 +194,15 @@ const cit = (nome: string) => `"${nome}"`;
  * primária — é o que faz `friend_requests` (que tem a única `from_id,
  * to_id` além do `id`) se comportar na re-execução.
  */
-async function inserirLote(destino: Consultavel, tabela: string, colunas: Coluna[], linhas: Array<Record<string, unknown>>): Promise<number> {
-  if (linhas.length === 0) return 0;
+async function inserirLote(
+  destino: Consultavel,
+  tabela: string,
+  colunas: Coluna[],
+  chave: string[],
+  linhas: Array<Record<string, unknown>>,
+  modo: ModoDeCopia,
+): Promise<{ inseridas: number; atualizadas: number }> {
+  if (linhas.length === 0) return { inseridas: 0, atualizadas: 0 };
 
   const valores: unknown[] = [];
   const grupos = linhas.map((linha) => {
@@ -175,12 +216,72 @@ async function inserirLote(destino: Consultavel, tabela: string, colunas: Coluna
     return `(${marcadores.join(', ')})`;
   });
 
-  const sql = `insert into public."${tabela}" (${colunas.map((c) => cit(c.nome)).join(', ')})
-               values ${grupos.join(', ')}
-               on conflict do nothing`;
+  const cabeca = `insert into public."${tabela}" (${colunas.map((c) => cit(c.nome)).join(', ')})
+                  values ${grupos.join(', ')}`;
 
-  const { rowCount } = await destino.query(sql, valores);
-  return rowCount ?? 0;
+  if (modo === 'inserir') {
+    const { rowCount } = await destino.query(`${cabeca} on conflict do nothing`, valores);
+    return { inseridas: rowCount ?? 0, atualizadas: 0 };
+  }
+
+  const naChave = new Set(chave);
+  const atribuicoes = colunas.filter((c) => !naChave.has(c.nome)).map((c) => `${cit(c.nome)} = excluded.${cit(c.nome)}`);
+
+  // Tabela feita só de chave não tem o que atualizar — `DO UPDATE SET`
+  // vazio é erro de sintaxe, então ela volta pro `DO NOTHING`.
+  if (atribuicoes.length === 0) {
+    const { rowCount } = await destino.query(`${cabeca} on conflict do nothing`, valores);
+    return { inseridas: rowCount ?? 0, atualizadas: 0 };
+  }
+
+  // `xmax = 0` é o jeito de saber se a linha nasceu ou foi sobrescrita:
+  // num INSERT de verdade não há transação que a tenha travado antes, e o
+  // `rowCount` de um upsert soma os dois casos sem distinguir.
+  const { rows } = await destino.query<{ inserida: boolean }>(
+    `${cabeca}
+     on conflict (${chave.map(cit).join(', ')}) do update set ${atribuicoes.join(', ')}
+     returning (xmax = 0) as inserida`,
+    valores,
+  );
+
+  const inseridas = rows.filter((r) => r.inserida).length;
+  return { inseridas, atualizadas: rows.length - inseridas };
+}
+
+/**
+ * Apaga do destino as linhas cuja chave não existe mais na origem.
+ *
+ * Lê as duas listas de chaves inteiras na memória. Aguenta bem um banco do
+ * tamanho deste jogo; não aguentaria milhões de linhas, e é o limite que
+ * este arquivo assume de propósito em vez de esconder.
+ */
+async function apagarSobrando(origem: Consultavel, destino: Consultavel, tabela: string, chave: string[], escrever: boolean): Promise<number> {
+  const lista = chave.map(cit).join(', ');
+  // Os dois lados são Postgres lidos pelo mesmo driver, então o mesmo tipo
+  // de coluna volta na mesma forma dos dois — o que faz esta marca servir
+  // de identidade sem precisar normalizar nada.
+  const marca = (linha: Record<string, unknown>) => JSON.stringify(chave.map((c) => linha[c]));
+
+  const daOrigem = new Set((await origem.query<Record<string, unknown>>(`select ${lista} from public."${tabela}"`)).rows.map(marca));
+  const doDestino = (await destino.query<Record<string, unknown>>(`select ${lista} from public."${tabela}"`)).rows;
+
+  const sobrando = doDestino.filter((linha) => !daOrigem.has(marca(linha)));
+  if (sobrando.length === 0 || !escrever) return sobrando.length;
+
+  const porVez = Math.max(1, Math.floor(TETO_DE_PARAMETROS / chave.length));
+  for (let i = 0; i < sobrando.length; i += porVez) {
+    const valores: unknown[] = [];
+    const tuplas = sobrando.slice(i, i + porVez).map((linha) => {
+      const marcadores = chave.map((c) => {
+        valores.push(linha[c]);
+        return `$${valores.length}`;
+      });
+      return `(${marcadores.join(', ')})`;
+    });
+    await destino.query(`delete from public."${tabela}" where (${lista}) in (${tuplas.join(', ')})`, valores);
+  }
+
+  return sobrando.length;
 }
 
 /**
@@ -260,6 +361,7 @@ export async function corrigirSequences(destino: Consultavel, escrever: boolean)
  */
 export async function copiar(origem: Consultavel, destino: Consultavel, opcoes: OpcoesDeCopia = {}): Promise<RelatorioDeCopia> {
   const escrever = opcoes.escrever === true;
+  const modo: ModoDeCopia = opcoes.modo ?? 'inserir';
   const lote = opcoes.lote ?? 200;
   const andar = opcoes.aoAndar ?? (() => {});
 
@@ -279,18 +381,34 @@ export async function copiar(origem: Consultavel, destino: Consultavel, opcoes: 
     const noDestinoAntes = await contar(destino, tabela);
 
     let inseridas = 0;
+    let atualizadas = 0;
     let lidas = 0;
+
+    // Apagar antes de inserir, e não depois: em `friend_requests` um par
+    // `(from_id, to_id)` recriado com id novo violaria a única se a linha
+    // velha ainda estivesse lá.
+    const apagadas = modo === 'espelhar' ? await apagarSobrando(origem, destino, tabela, chave, escrever) : 0;
 
     if (escrever) {
       const porLote = Math.max(1, Math.min(lote, Math.floor(TETO_DE_PARAMETROS / colunas.length)));
       for await (const linhas of lerEmLotes(origem, tabela, colunas, chave, porLote)) {
-        inseridas += await inserirLote(destino, tabela, colunas, linhas);
+        const feito = await inserirLote(destino, tabela, colunas, chave, linhas, modo);
+        inseridas += feito.inseridas;
+        atualizadas += feito.atualizadas;
         lidas += linhas.length;
-        andar(`  ${tabela}: ${lidas}/${naOrigem} lidas, ${inseridas} inseridas`);
+        andar(`  ${tabela}: ${lidas}/${naOrigem} lidas, ${inseridas} novas, ${atualizadas} atualizadas`);
       }
     }
 
-    tabelas.push({ tabela, naOrigem, noDestinoAntes, inseridas, puladas: escrever ? lidas - inseridas : 0 });
+    tabelas.push({
+      tabela,
+      naOrigem,
+      noDestinoAntes,
+      inseridas,
+      atualizadas,
+      apagadas,
+      puladas: escrever ? lidas - inseridas - atualizadas : 0,
+    });
   }
 
   const sequences = await corrigirSequences(destino, escrever);
@@ -302,37 +420,37 @@ export interface LinhaDeConferencia {
   tabela: Tabela;
   origem: number;
   destino: number;
-  /** `md5` do conteúdo que importa, dos dois lados. `null` quando a tabela está vazia nos dois. */
+  /** `md5` da linha inteira, dos dois lados. `null` quando a tabela está vazia nos dois. */
   digestOrigem: string | null;
   digestDestino: string | null;
   bate: boolean;
 }
 
 /**
- * O que cada tabela precisa provar que sobreviveu. Não é a linha inteira:
- * é o que perder seria estrago de verdade — hash e sal de senha, o save
- * do jogador, o corpo da mensagem. `data::text` de `jsonb` é determinístico
- * (o Postgres guarda as chaves ordenadas), então o `md5` compara conteúdo,
- * não formatação.
+ * A impressão digital é a **linha inteira**, e essa escolha custou um
+ * teste vermelho pra ficar clara.
+ *
+ * A primeira versão listava à mão o "que importa" — hash de senha, save,
+ * corpo da mensagem. Aí um `pet` alterado passou pela conferência sem
+ * levantar nada: a coluna não estava na lista. Numa virada isso significa
+ * aprovar um destino onde o jogador perdeu o cosmético que comprou. Lista
+ * escolhida a dedo é lista que envelhece sem avisar.
+ *
+ * `row(...)::text` monta a linha com as colunas **em ordem alfabética**,
+ * não na ordem física da tabela: origem e destino nasceram de DDLs
+ * diferentes e podem ter ordenado as colunas diferente, o que faria um
+ * `t.*::text` divergir com dado idêntico.
  */
-const IMPRESSAO: Record<Tabela, { expressao: string; ordem: string }> = {
-  users: {
-    expressao: `id || '|' || username || '|' || password_hash || '|' || password_salt || '|' || coalesce(email, '') || '|' || md5(cosmetics::text)`,
-    ordem: 'id',
-  },
-  sessions: { expressao: `token_hash || '|' || user_id`, ordem: 'token_hash' },
-  cloud_saves: { expressao: `user_id || '|' || slot || '|' || md5(data::text)`, ordem: 'user_id, slot' },
-  cloud_save_history: { expressao: `id || '|' || user_id || '|' || slot || '|' || md5(data::text)`, ordem: 'id' },
-  friend_requests: { expressao: `id || '|' || from_id || '|' || to_id`, ordem: 'id' },
-  friendships: { expressao: `user_id || '|' || friend_id`, ordem: 'user_id, friend_id' },
-  chat_messages: { expressao: `id || '|' || sender_id || '|' || recipient_id || '|' || md5(body)`, ordem: 'id' },
-};
+async function impressaoDe(cliente: Consultavel, tabela: Tabela, colunas: string[], chave: string[]): Promise<{ n: number; digest: string | null }> {
+  const lista = [...colunas]
+    .sort((a, b) => a.localeCompare(b))
+    .map(cit)
+    .join(', ');
+  const ordem = chave.map(cit).join(', ');
 
-async function impressaoDe(cliente: Consultavel, tabela: Tabela): Promise<{ n: number; digest: string | null }> {
-  const { expressao, ordem } = IMPRESSAO[tabela];
   const { rows } = await cliente.query<{ n: string; digest: string | null }>(
     `select count(*)::text as n,
-            md5(coalesce(string_agg(${expressao}, chr(10) order by ${ordem}), '')) as digest
+            md5(coalesce(string_agg(md5(row(${lista})::text), chr(10) order by ${ordem}), '')) as digest
        from public."${tabela}"`,
   );
   const n = Number(rows[0].n);
@@ -340,16 +458,36 @@ async function impressaoDe(cliente: Consultavel, tabela: Tabela): Promise<{ n: n
 }
 
 /**
- * A prova de que a cópia valeu: mesma contagem **e** mesmo `md5` do
- * conteúdo que importa, tabela por tabela. Contagem sozinha não pega
- * truncamento de texto nem `jsonb` remontado errado.
+ * Normaliza o que muda o texto de um `timestamptz` sem mudar o instante.
+ * Sem isto, dois bancos com fuso ou `DateStyle` diferentes renderiam a
+ * mesma data de formas diferentes e a conferência acusaria divergência que
+ * não existe.
+ */
+async function normalizar(cliente: Consultavel): Promise<void> {
+  await cliente.query(`set time zone 'UTC'`);
+  await cliente.query(`set datestyle to 'ISO, YMD'`);
+}
+
+/**
+ * A prova de que a cópia valeu: mesma contagem **e** mesmo `md5` da linha
+ * inteira, tabela por tabela. Contagem sozinha não pega texto truncado,
+ * `jsonb` remontado errado nem coluna que ficou pra trás.
  */
 export async function conferir(origem: Consultavel, destino: Consultavel): Promise<LinhaDeConferencia[]> {
+  await normalizar(origem);
+  await normalizar(destino);
+
   const saida: LinhaDeConferencia[] = [];
 
   for (const tabela of TABELAS_EM_ORDEM) {
-    const a = await impressaoDe(origem, tabela);
-    const b = await impressaoDe(destino, tabela);
+    // As colunas da origem, não as do destino: coluna a mais no destino
+    // nasce com default e não é perda. Coluna a menos o `conferirSchemas`
+    // já teria recusado.
+    const colunas = (await colunasDe(origem, tabela)).map((c) => c.nome);
+    const chave = await chavePrimariaDe(origem, tabela);
+
+    const a = await impressaoDe(origem, tabela, colunas, chave);
+    const b = await impressaoDe(destino, tabela, colunas, chave);
     saida.push({
       tabela,
       origem: a.n,

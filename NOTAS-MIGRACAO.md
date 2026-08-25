@@ -1205,13 +1205,44 @@ sobrando no destino é aceita de propósito: nasce com o default.
 sai daqui como texto com `::jsonb` explícito, e a semente do teste tem um
 `cloud_save_history.data` que é array no topo justamente pra provar isso.
 
+### Dois modos, e escolher errado é o erro fácil
+
+`inserir` (padrão) só acrescenta o que falta e nunca sobrescreve. `espelhar`
+(`--espelhar`) deixa o destino idêntico à origem: acrescenta, atualiza o que
+mudou e **apaga o que sumiu**.
+
+**A armadilha:** `ON CONFLICT DO NOTHING` pula a linha que já existe — e
+`cloud_saves` é a mesma chave `(user_id, slot)` com `data` novo a cada save.
+Rodar `inserir` de novo pra "pegar o atraso" **não traz alteração nenhuma**.
+Isso não é detalhe de implementação: é a diferença entre uma cópia quente
+que termina certa e uma que entrega save velho pra todo mundo.
+
+Escrito como teste, não como aviso: um caso altera um save na origem, roda
+`inserir`, e **exige** que o destino continue com o valor antigo.
+
+Consequência prática: cópia quente termina em `espelhar` depois de congelar
+a escrita, nunca num segundo `inserir`.
+
 ### O que a conferência prova
 
 Contagem sozinha não pega texto truncado nem `jsonb` remontado errado.
-`conferir()` compara, dos dois lados, o `md5` do que perder seria estrago
-de verdade: hash e sal de senha, o save do jogador (`md5(data::text)` —
-determinístico, porque o Postgres guarda as chaves do `jsonb` ordenadas),
-e o corpo da mensagem.
+`conferir()` compara o `md5` da **linha inteira**, dos dois lados.
+
+Linha inteira, e não uma lista escolhida a dedo — essa escolha custou um
+teste vermelho pra ficar clara. A primeira versão listava à mão "o que
+importa" (hash de senha, save, corpo da mensagem), e um `pet` alterado
+passou pela conferência sem levantar nada: a coluna não estava na lista.
+Numa virada isso é aprovar um destino onde o jogador perdeu o cosmético que
+comprou. **Lista escolhida a dedo é lista que envelhece sem avisar.**
+
+Dois cuidados que a linha inteira exige:
+
+- `row(...)::text` com as colunas em **ordem alfabética**, não `t.*::text`.
+  Origem e destino nasceram de DDLs diferentes e podem ter a ordem física
+  das colunas diferente — o que faria dado idêntico divergir.
+- `SET TIME ZONE 'UTC'` e `DateStyle ISO` nos dois antes de comparar. Fuso
+  ou `DateStyle` diferentes renderizam o mesmo `timestamptz` de formas
+  diferentes, e a conferência acusaria divergência que não existe.
 
 ### As barreiras da CLI
 
@@ -1224,22 +1255,32 @@ Com `--escrever` ele **ainda** exige `--confirmo=<host do destino>`, e o
 host tem que bater. Digitar o host da origem por engano é recusado antes de
 qualquer conexão — provado na mão.
 
-A cópia é re-executável (`ON CONFLICT DO NOTHING` sobre a chave), então uma
-cópia interrompida se retoma sem limpar o destino. É de propósito não ter
-transação única: prender as sete tabelas num lock durante a cópia inteira
-seria pior que retomar.
+Rodar de novo não duplica nada nos dois modos, então uma cópia interrompida
+se retoma sem limpar o destino. É de propósito não ter transação única:
+prender as sete tabelas num lock durante a cópia inteira seria pior que
+retomar.
+
+`--espelhar` apaga **antes** de inserir, e não depois: em `friend_requests`
+um par `(from_id, to_id)` recriado com id novo violaria a única se a linha
+velha ainda estivesse lá.
 
 ### O que continua em aberto
 
 Nada disto decide a virada. Falta decidir:
 
 1. **A janela de escrita.** Quem estiver jogando continua gravando no Neon
-   durante a cópia. Tudo que cair depois do retrato se perde, a menos que
-   haja congelamento ou segunda passada.
+   durante a cópia. O `--espelhar` dá o caminho — pré-copiar quente (longo,
+   sem parar o jogo), congelar a escrita, e fechar com `--espelhar`, que
+   reconcilia alteração e remoção. A janela vira o tempo do espelho, não o
+   da cópia inteira. **Falta decidir se vale congelar, e por quanto.**
 2. **As sessões.** Copiar (ninguém desloga) ou não copiar (todo mundo
    entra de novo). O copiador leva `sessions` junto hoje.
 3. **A volta atrás.** Depois que o jogo apontar pro Supabase, o que gravar
    lá fica órfão se a decisão for voltar.
+
+Limite assumido de propósito: `--espelhar` lê as duas listas de chaves
+inteiras na memória pra achar o que apagar. Aguenta bem um banco do tamanho
+deste jogo; não aguentaria milhões de linhas.
 
 ### Achado de fora do assunto: `noImplicitAny: false` esconde `any`
 

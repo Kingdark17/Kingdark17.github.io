@@ -213,6 +213,79 @@ describe('cópia Neon → Supabase', () => {
     expect(Number(rows[0].id)).toBe(4);
   });
 
+  /**
+   * O buraco do modo `inserir`, escrito como teste em vez de como aviso.
+   *
+   * `ON CONFLICT DO NOTHING` pula a linha que já existe — e `cloud_saves`
+   * é a mesma chave `(user_id, slot)` com `data` novo a cada save. Numa
+   * cópia quente, tudo que o jogador gravar depois da passada fica velho
+   * no destino, e a segunda passada **não** conserta.
+   */
+  it('modo inserir NÃO traz alteração de linha existente — é o limite dele', async () => {
+    // O teste da sequence deixou um usuário que só existe no destino. Sai
+    // daqui pra diferença medida abaixo ser só a alteração, e não ele.
+    await destino.cliente.query(`delete from users where username = 'recem_chegado'`);
+
+    await origem.cliente.query(`update cloud_saves set data = jsonb_set(data, '{floor}', '99') where user_id = 1 and slot = 1`);
+    await origem.cliente.query(`update users set pet = 'slime' where id = 1`);
+
+    await copiar(origem.cliente, destino.cliente, { escrever: true });
+
+    const { rows } = await destino.cliente.query<{ floor: number }>(
+      `select (data->>'floor')::int as floor from cloud_saves where user_id = 1 and slot = 1`,
+    );
+    expect(rows[0].floor).toBe(3);
+
+    const linhas = await conferir(origem.cliente, destino.cliente);
+    expect(linhas.find((l) => l.tabela === 'cloud_saves')?.bate).toBe(false);
+    expect(linhas.find((l) => l.tabela === 'users')?.bate).toBe(false);
+  });
+
+  it('modo espelhar traz a alteração e a conferência volta a bater', async () => {
+    await copiar(origem.cliente, destino.cliente, { escrever: true, modo: 'espelhar' });
+
+    const { rows } = await destino.cliente.query<{ floor: number }>(
+      `select (data->>'floor')::int as floor from cloud_saves where user_id = 1 and slot = 1`,
+    );
+    expect(rows[0].floor).toBe(99);
+
+    for (const linha of await conferir(origem.cliente, destino.cliente)) {
+      expect({ tabela: linha.tabela, bate: linha.bate }).toEqual({ tabela: linha.tabela, bate: true });
+    }
+  });
+
+  /**
+   * Apagar na origem também não se propaga sozinho. `espelhar` remove do
+   * destino a linha cuja chave sumiu — sem isso, um pedido de amizade
+   * recusado voltaria a existir depois da virada.
+   */
+  it('modo espelhar apaga no destino o que sumiu na origem', async () => {
+    await origem.cliente.query(`delete from friend_requests where from_id = 1 and to_id = 3`);
+    await origem.cliente.query(`delete from sessions where user_id = 2`);
+
+    const relatorio = await copiar(origem.cliente, destino.cliente, { escrever: true, modo: 'espelhar' });
+
+    expect(relatorio.tabelas.find((t) => t.tabela === 'friend_requests')?.apagadas).toBe(1);
+    expect(relatorio.tabelas.find((t) => t.tabela === 'sessions')?.apagadas).toBe(1);
+
+    for (const linha of await conferir(origem.cliente, destino.cliente)) {
+      expect({ tabela: linha.tabela, bate: linha.bate }).toEqual({ tabela: linha.tabela, bate: true });
+    }
+  });
+
+  it('espelhar em ensaio continua sem escrever nada', async () => {
+    await origem.cliente.query(`update users set name_color = '#ff0000' where id = 3`);
+
+    const relatorio = await copiar(origem.cliente, destino.cliente, { modo: 'espelhar' });
+    expect(relatorio.escreveu).toBe(false);
+
+    const { rows } = await destino.cliente.query<{ cor: string }>(`select name_color as cor from users where id = 3`);
+    expect(rows[0].cor).toBe('#e8d7a5');
+
+    // Devolve a origem ao estado espelhado, pro teste seguinte não herdar diferença.
+    await copiar(origem.cliente, destino.cliente, { escrever: true, modo: 'espelhar' });
+  });
+
   it('recusa a cópia quando falta coluna no destino', async () => {
     await destino.cliente.query(`alter table users drop column pet`);
     try {

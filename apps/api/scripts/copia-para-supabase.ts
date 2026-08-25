@@ -1,10 +1,22 @@
 /**
  * A CLI da cópia Neon → Supabase.
  *
- * Uso:
- *   ORIGEM_URL=... DESTINO_URL=... pnpm --filter api db:copia
- *   ORIGEM_URL=... DESTINO_URL=... pnpm --filter api db:copia -- --escrever --confirmo=<host>
- *   ORIGEM_URL=... DESTINO_URL=... pnpm --filter api db:copia -- --conferir
+ * Uso (sempre com ORIGEM_URL e DESTINO_URL no ambiente):
+ *   pnpm --filter api db:copia                                    ensaio
+ *   pnpm --filter api db:copia -- --escrever --confirmo=<host>    copia o que falta
+ *   pnpm --filter api db:copia -- --espelhar                      ensaio do espelho
+ *   pnpm --filter api db:copia -- --escrever --confirmo=<host> --espelhar
+ *   pnpm --filter api db:copia -- --conferir                      só compara
+ *
+ * Dois modos de cópia, e a diferença decide a virada:
+ *
+ * - **padrão (`inserir`)**: só acrescenta o que falta. Nunca sobrescreve.
+ *   Certo pra destino vazio. Rodar de novo pra "pegar o atraso" **não
+ *   traz alteração nenhuma** — `cloud_saves` é a mesma chave com `data`
+ *   novo, e ele pula.
+ * - **`--espelhar`**: deixa o destino idêntico à origem — acrescenta,
+ *   atualiza o que mudou e apaga o que sumiu. É o que fecha uma cópia
+ *   quente depois de congelar a escrita.
  *
  * **Não lê o `.env`.** O drizzle-kit lê, e foi exatamente isso que já
  * quase mandou um comando pro banco errado (ver "Fase 5" nas notas). Aqui
@@ -19,11 +31,16 @@
  */
 import { Client } from 'pg';
 
-import { conferir, copiar, type LinhaDeConferencia, type RelatorioDeCopia } from '../src/db/migracao/copia';
+import { conferir, copiar, type LinhaDeConferencia, type ModoDeCopia, type RelatorioDeCopia } from '../src/db/migracao/copia';
 
 const args = process.argv.slice(2);
 const temFlag = (nome: string) => args.includes(`--${nome}`);
-const valorDaFlag = (nome: string) => args.find((a) => a.startsWith(`--${nome}=`))?.split('=').slice(1).join('=');
+const valorDaFlag = (nome: string) =>
+  args
+    .find((a) => a.startsWith(`--${nome}=`))
+    ?.split('=')
+    .slice(1)
+    .join('=');
 
 function exigirUrl(nome: string): string {
   const valor = process.env[nome];
@@ -53,12 +70,12 @@ function hostDe(url: string): string {
 }
 
 function tabelaDeCopia(relatorio: RelatorioDeCopia): void {
-  console.log('\n  tabela                origem   destino(antes)   inseridas   puladas');
-  console.log('  ' + '-'.repeat(68));
+  console.log('\n  tabela                origem   destino    novas   atualiz.   apagadas   iguais');
+  console.log('  ' + '-'.repeat(76));
   for (const t of relatorio.tabelas) {
     console.log(
-      `  ${t.tabela.padEnd(20)}${String(t.naOrigem).padStart(7)}${String(t.noDestinoAntes).padStart(17)}` +
-        `${String(t.inseridas).padStart(12)}${String(t.puladas).padStart(10)}`,
+      `  ${t.tabela.padEnd(20)}${String(t.naOrigem).padStart(7)}${String(t.noDestinoAntes).padStart(9)}` +
+        `${String(t.inseridas).padStart(9)}${String(t.atualizadas).padStart(11)}${String(t.apagadas).padStart(11)}${String(t.puladas).padStart(9)}`,
     );
   }
 
@@ -92,10 +109,20 @@ async function main(): Promise<number> {
 
   const escrever = temFlag('escrever');
   const soConferir = temFlag('conferir');
+  const modo: ModoDeCopia = temFlag('espelhar') ? 'espelhar' : 'inserir';
 
+  const comoEsta = soConferir ? 'só conferir' : escrever ? 'ESCREVENDO' : 'ensaio (nada é escrito)';
   console.log(`  origem : ${apelidoDe(origemUrl)}`);
   console.log(`  destino: ${apelidoDe(destinoUrl)}`);
-  console.log(`  modo   : ${soConferir ? 'só conferir' : escrever ? 'ESCREVENDO' : 'ensaio (nada é escrito)'}\n`);
+  console.log(`  modo   : ${comoEsta}`);
+  if (!soConferir) {
+    console.log(
+      modo === 'espelhar'
+        ? '  cópia  : espelhar — acrescenta, ATUALIZA o que mudou e APAGA o que sumiu da origem'
+        : '  cópia  : inserir — só acrescenta o que falta; não atualiza nem apaga nada',
+    );
+  }
+  console.log('');
 
   if (escrever && !soConferir) {
     const confirmado = valorDaFlag('confirmo');
@@ -122,6 +149,7 @@ async function main(): Promise<number> {
 
     const relatorio = await copiar(origem, destino, {
       escrever,
+      modo,
       aoAndar: (texto) => process.stdout.write(`\r${texto.padEnd(70)}`),
     });
     if (escrever) process.stdout.write('\n');
@@ -129,7 +157,9 @@ async function main(): Promise<number> {
     tabelaDeCopia(relatorio);
 
     if (!escrever) {
-      console.log('\nEnsaio: nenhuma linha foi escrita. Pra valer, acrescente --escrever --confirmo=' + hostDe(destinoUrl));
+      const espelharAviso = modo === 'espelhar' ? ' (em `espelhar`, a coluna "apagadas" é o que ele APAGARIA)' : '';
+      console.log(`\nEnsaio: nenhuma linha foi escrita${espelharAviso}.`);
+      console.log(`Pra valer: --escrever --confirmo=${hostDe(destinoUrl)}${modo === 'espelhar' ? ' --espelhar' : ''}`);
       return 0;
     }
 
