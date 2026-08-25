@@ -68,7 +68,7 @@
 }
 
 .numeroSlot {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--parchment-dim);
@@ -106,7 +106,7 @@
 }
 
 .chave {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.07em;
   color: var(--parchment-dim);
@@ -151,7 +151,7 @@
 }
 
 .atualizado {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--parchment-dim);
   margin: 0 0 0.75rem;
 }
@@ -182,14 +182,12 @@
   margin: 0.25rem 0 0.6rem;
 }
 
-.retratoDoSlot > :first-child {
-  background: radial-gradient(circle at 50% 62%, rgba(201, 162, 39, 0.14), transparent 62%), var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 50%;
-}
-
 .reservaDoSlot {
   font-size: 2.25rem;
   line-height: 1;
   opacity: 0.5;
+}
+
+.balaoDoBoneco {
+  composes: balao from '../acabamento.module.css';
 }

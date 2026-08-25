@@ -155,6 +155,7 @@ export function FormularioCriacao({ slot }: { slot: number }) {
       <section className={styles.secao}>
         <div className={styles.previa}>
           <Paperdoll
+            className={styles.balaoDoBoneco}
             raca={criacao.raca?.id ?? null}
             arma={criacao.classe?.weaponTemplate ?? null}
             reserva={

@@ -125,7 +125,7 @@
 
 .precoDoCosmetico {
   font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--gold-bright);
 }
 
@@ -134,5 +134,5 @@
   grid-column: 1 / -1;
   margin-top: 0.4rem;
   padding: 0.35rem 0.6rem;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
 }

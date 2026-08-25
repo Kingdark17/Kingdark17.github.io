@@ -23,21 +23,30 @@ interface Props extends Vestimenta {
   lado?: number;
   /** Mostrado quando a raça ainda não tem corpo desenhado. */
   reserva?: React.ReactNode;
+  /**
+   * Classe do chamador, aplicada na raiz — é por onde entra o balão
+   * (`composes: balao from acabamento.module.css`). Existe pra as telas
+   * não precisarem alcançar aqui dentro com `> :first-child`, que é um
+   * seletor que quebra em silêncio no dia em que a raiz deixar de ser o
+   * primeiro filho do contêiner.
+   */
+  className?: string;
 }
 
-export function Paperdoll({ raca, arma, armadura, secundaria, lado = 192, reserva = null }: Readonly<Props>) {
+export function Paperdoll({ raca, arma, armadura, secundaria, lado = 192, reserva = null, className = '' }: Readonly<Props>) {
   const camadas = montarCamadas({ raca, arma, armadura, secundaria });
+  const classes = `${styles.boneco} ${className}`.trim();
 
   if (camadas.length === 0) {
     return (
-      <div className={styles.boneco} style={{ width: lado, height: lado }}>
+      <div className={classes} style={{ width: lado, height: lado }}>
         {reserva}
       </div>
     );
   }
 
   return (
-    <div className={styles.boneco} style={{ width: lado, height: lado }}>
+    <div className={classes} style={{ width: lado, height: lado }}>
       {camadas.map((camada) => (
         // `alt` vazio de propósito: as camadas juntas são uma figura só, e
         // quem lê a tela não ganha nada ouvindo "corpo, calça, roupa,

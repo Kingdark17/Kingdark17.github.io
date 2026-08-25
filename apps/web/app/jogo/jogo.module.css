@@ -1,4 +1,5 @@
 .tela {
+  composes: fundo from '../acabamento.module.css';
   min-height: 100dvh;
   padding: 2rem 1rem;
 }
@@ -19,9 +20,7 @@
 }
 
 .painel {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 0.5rem;
+  composes: painel from '../acabamento.module.css';
   padding: 1.1rem;
 }
 
@@ -45,7 +44,7 @@
 .rotuloBarra {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--parchment-dim);
   margin-bottom: 0.2rem;
 }
@@ -236,7 +235,7 @@
 .pistasDasPortas {
   color: var(--parchment-dim);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 0.02em;
   line-height: 1.6;
   margin: 0;
@@ -381,7 +380,7 @@
   gap: 0.25rem 0.9rem;
   padding: 0;
   margin: -0.85rem 0 1.25rem;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--parchment-dim);
 }
 
@@ -537,18 +536,18 @@
 }
 
 .metaItem {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--parchment-dim);
 }
 
 .statsItem {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--parchment);
 }
 
 .rodapeItem {
   font-family: var(--font-mono), monospace;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: var(--gold-bright);
   margin-top: 0.2rem;
 }
@@ -569,7 +568,7 @@
   border-radius: 0.25rem;
   color: var(--parchment-dim);
   font: inherit;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   padding: 0.2rem 0.45rem;
   cursor: pointer;
 }
@@ -678,7 +677,7 @@
 }
 
 .marcador {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   padding: 0.1rem 0.45rem;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -713,7 +712,7 @@
 
 .custoDeMana {
   color: var(--parchment-dim);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
 }
 
 .acoesDaExploracao {
@@ -729,7 +728,7 @@
   color: var(--ink);
   border-radius: 0.8rem;
   font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   padding: 0 0.4rem;
   margin-left: 0.35rem;
 }
@@ -944,7 +943,7 @@
 
 .dicaDoPasso {
   color: var(--parchment-dim);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   margin: 0.1rem 0 0;
 }
 
@@ -1005,12 +1004,6 @@
   margin-bottom: 0.75rem;
 }
 
-.retratoDoHeroi > :first-child {
-  background: radial-gradient(circle at 50% 62%, rgba(201, 162, 39, 0.14), transparent 62%), var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 50%;
-}
-
 .reservaDoRetrato {
   font-size: 2.75rem;
   line-height: 1;
@@ -1045,4 +1038,38 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.balaoDoBoneco {
+  composes: balao from '../acabamento.module.css';
+}
+
+/* ---------- pixel art do minimapa ---------- */
+
+/* 80% da célula, e não 100%: a arte precisa de folga pra a cor de fundo do
+   tipo continuar aparecendo em volta. É a cor que diz "que sala é essa" de
+   longe, quando o ícone já está pequeno demais pra ler. */
+.arteDaSala,
+.marcadorDoJogador {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+/* O jogador ocupa a célula inteira: ele é o único que precisa ler de
+   relance, e não concorre com cor de tipo — a célula onde ele está já tem
+   contorno próprio. */
+.marcadorDoJogador {
+  width: 95%;
+  height: 95%;
+}
+
+.arteDaLegenda {
+  width: 1.15rem;
+  height: 1.15rem;
+  object-fit: contain;
+  image-rendering: pixelated;
+  flex-shrink: 0;
 }

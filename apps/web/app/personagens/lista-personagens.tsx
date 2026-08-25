@@ -95,6 +95,7 @@ export function ListaPersonagens() {
                   o save grava a raça pelo nome, e só os novos têm `raceId`. */}
               <div className={styles.retratoDoSlot}>
                 <Paperdoll
+                  className={styles.balaoDoBoneco}
                   raca={idDaRaca(personagem)}
                   arma={personagem.equip?.arma}
                   armadura={personagem.equip?.armadura}

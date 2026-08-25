@@ -42,6 +42,7 @@ export function PainelHeroi({ hero }: { hero: Hero }) {
           resolve os dois. */}
       <div className={styles.retratoDoHeroi}>
         <Paperdoll
+          className={styles.balaoDoBoneco}
           raca={idDaRaca(hero)}
           arma={hero.equip.arma?.templateId}
           armadura={hero.equip.armadura?.templateId}

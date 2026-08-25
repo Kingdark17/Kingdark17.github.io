@@ -16,6 +16,8 @@
  * dela — `interagir` devolve qual, e `conteudoDaTela` escolhe.
  */
 
+/* eslint-disable @next/next/no-img-element */
+
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -25,6 +27,7 @@ import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { apresentacaoDe } from '@/lib/jogo/apresentacao';
+import { arteDoTipo } from '@/lib/jogo/icones-do-mapa';
 import { andar, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
 import { abrirAdm } from '@/lib/jogo/adm';
@@ -517,13 +520,19 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
           descricao={`Mapa: ${visual.lugar}`}
         />
 
+        {/* A legenda desenha a mesma arte da grade, resolvida pelo mesmo
+            `arteDoTipo` — antes era uma segunda lista de emoji escrita à
+            mão. O nome fica de pé mesmo se um tipo novo chegar sem arte. */}
         <ul className={styles.legenda}>
-          {visual.legenda.map(([icone, nome]) => (
-            <li key={nome} className={styles.itemLegenda}>
-              <span aria-hidden>{icone}</span>
-              <span>{nome}</span>
-            </li>
-          ))}
+          {visual.legenda.map(([tipo, nome]) => {
+            const arte = arteDoTipo(tipo);
+            return (
+              <li key={nome} className={styles.itemLegenda}>
+                {arte && <img className={styles.arteDaLegenda} src={arte} alt="" aria-hidden />}
+                <span>{nome}</span>
+              </li>
+            );
+          })}
         </ul>
 
         {alvoDaPergunta && perguntando && (

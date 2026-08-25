@@ -72,6 +72,24 @@
   cursor: default;
 }
 
+/**
+ * O balão do boneco: o disco escuro atrás do paperdoll.
+ *
+ * Mora aqui porque **três telas mostram o mesmo boneco** — criação,
+ * seletor e painel da partida — e reconhecer que é a mesma figura é metade
+ * do ponto. Com uma cópia do estilo em cada módulo, mexer no balão de uma
+ * tela e esquecer das outras deixaria os três diferentes sem ninguém notar
+ * até trocar de tela.
+ *
+ * Redondo, e não quadrado, pra não competir com a moldura do painel que
+ * costuma estar em volta.
+ */
+.balao {
+  background: radial-gradient(circle at 50% 62%, rgba(201, 162, 39, 0.14), transparent 62%), var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
 /* O fundo da página: dois clarões nos cantos opostos por cima da tinta.
    Sozinho o `--ink` chapado é o que mais denuncia "página web" numa tela
    que devia parecer masmorra. */

@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 /**
  * Minimapa com a mesma neblina do original: sala visitada aparece inteira,
  * sala vizinha de uma visitada aparece como silhueta, e o resto não
@@ -16,6 +18,7 @@
 import { isKnown } from '@rpg-legend/shared';
 
 import type { CelulaDoMapa, Posicao } from '@/lib/jogo/estado';
+import { arteDoTipo, MARCADOR_DO_JOGADOR } from '@/lib/jogo/icones-do-mapa';
 import styles from './jogo.module.css';
 
 interface Props {
@@ -46,9 +49,11 @@ export function Mapa({ grade, posicao, linhas, colunas, icone, rotulo, gasta, de
 
           const esgotada = Boolean(celula.visited) && gasta(celula);
 
-          let dentro = '';
-          if (aqui) dentro = '🧍';
-          else if (celula.visited) dentro = icone(celula);
+          // Arte quando existe, emoji quando não — o mesmo arranjo do
+          // paperdoll e dos pets. `aria-hidden` nos dois: quem lê a tela
+          // recebe a sala pelo `aria-label` da célula, e ouvir "baú" duas
+          // vezes seguidas é pior que ouvir uma.
+          const arte = celula.visited ? arteDoTipo(celula.type) : null;
 
           return (
             <div
@@ -61,7 +66,9 @@ export function Mapa({ grade, posicao, linhas, colunas, icone, rotulo, gasta, de
               data-tipo={celula.visited ? celula.type : undefined}
               className={`${styles.celula} ${classe} ${aqui ? styles.aqui : ''} ${esgotada ? styles.esgotada : ''}`}
             >
-              {dentro}
+              {aqui && <img className={styles.marcadorDoJogador} src={MARCADOR_DO_JOGADOR} alt="" aria-hidden />}
+              {!aqui && arte && <img className={styles.arteDaSala} src={arte} alt="" aria-hidden />}
+              {!aqui && !arte && celula.visited && icone(celula)}
             </div>
           );
         }),

@@ -135,7 +135,7 @@
 }
 
 .descricao {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: var(--parchment-dim);
   display: block;
   margin-top: 0.2rem;
@@ -184,7 +184,7 @@
 
 .chaveAtributo {
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--parchment-dim);
@@ -241,15 +241,6 @@
   gap: 0.6rem;
 }
 
-/* O boneco parado sobre um disco escuro: a arte é clara e some contra o
-   painel se não tiver algo atrás. Redondo, e não quadrado, pra não parecer
-   uma segunda moldura competindo com a do painel. */
-.previa > :first-child {
-  background: radial-gradient(circle at 50% 62%, rgba(201, 162, 39, 0.12), transparent 62%), var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 50%;
-}
-
 .reservaDoBoneco {
   font-size: 3.5rem;
   line-height: 1;
@@ -261,4 +252,8 @@
   color: var(--parchment-dim);
   font-size: 0.85rem;
   text-align: center;
+}
+
+.balaoDoBoneco {
+  composes: balao from '../../acabamento.module.css';
 }

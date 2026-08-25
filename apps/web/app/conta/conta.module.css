@@ -1,4 +1,5 @@
 .tela {
+  composes: fundo from '../acabamento.module.css';
   min-height: 100dvh;
   display: grid;
   place-items: center;
@@ -10,10 +11,8 @@
 }
 
 .painel {
+  composes: painel from '../acabamento.module.css';
   width: min(28rem, 100%);
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 0.5rem;
   padding: 1.75rem;
 }
 
@@ -137,7 +136,7 @@
   color: var(--parchment-dim);
 }
 
-/* ---------- perfil e loja de cosméticos ---------- */
+/* ---------- personalização do perfil ---------- */
 
 .subtitulo {
   font-family: var(--font-display), Georgia, serif;
@@ -167,62 +166,4 @@
   color: var(--parchment-dim);
   font-size: 0.8rem;
   margin: 0.2rem 0 0;
-}
-
-.vitrine {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-  gap: 0.5rem;
-}
-
-.cosmetico {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 0.2rem 0.6rem;
-  padding: 0.6rem 0.7rem;
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 0.35rem;
-}
-
-.iconeDoCosmetico {
-  grid-row: span 2;
-  font-size: 1.5rem;
-}
-
-.nomeDoCosmetico {
-  font-size: 0.85rem;
-}
-
-.precoDoCosmetico {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
-  color: var(--gold-bright);
-}
-
-.botaoDaLoja {
-  grid-column: 1 / -1;
-  margin-top: 0.4rem;
-  padding: 0.3rem 0.6rem;
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 0.25rem;
-  color: var(--parchment);
-  font: inherit;
-  font-size: 0.75rem;
-  cursor: pointer;
-}
-
-.botaoDaLoja:hover:not(:disabled) {
-  border-color: var(--gold);
-  color: var(--gold-bright);
-}
-
-.botaoDaLoja:disabled {
-  opacity: 0.45;
-  cursor: default;
 }

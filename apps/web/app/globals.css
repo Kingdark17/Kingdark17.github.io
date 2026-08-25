@@ -38,10 +38,35 @@ body {
   padding: 0;
 }
 
+/**
+ * Entrelinha e tamanho base.
+ *
+ * O app tinha **27 declarações abaixo de 0,8 rem**, uma em 0,65 rem (10,4 px),
+ * e nenhuma entrelinha declarada — o corpo herdava `line-height: normal`
+ * (~1,2), que é aperto de título aplicado a texto corrido. O contraste foi
+ * medido e está bom (pior caso 5,92:1, contra os 4,5 que a norma pede), então
+ * o que atrapalhava a leitura era tamanho e aperto, não cor.
+ *
+ * A entrelinha de 1,55 resolve a parte do aperto e **vale pra tudo**, porque
+ * `line-height` é herdado.
+ *
+ * O `font-size: 17px` aqui **não** vale pra tudo, e é importante não se
+ * enganar com isso: `rem` mede contra o `<html>`, não contra o `body`. As
+ * ~138 declarações em `rem` espalhadas pelos CSS modules continuam medindo
+ * contra os 16 px do navegador. Estes 17 px só alcançam quem não declara
+ * tamanho nenhum.
+ *
+ * Mexer nisso de verdade é mexer no `:root`, e aí duas coisas vêm junto: todo
+ * `rem` de largura/respiro cresce igual, e os 4 `@media` em `rem` **não**
+ * crescem (media query mede contra os 16 px iniciais, por especificação), o
+ * que exige subir os breakpoints na mesma proporção. Decisão em aberto.
+ */
 body {
   background: var(--ink);
   color: var(--parchment);
   font-family: var(--font-body), Georgia, serif;
+  font-size: 17px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -60,6 +85,7 @@ h4,
 h5,
 h6 {
   font-weight: 400;
+  line-height: 1.2;
 }
 
 /* A arte do jogo é pixel art: nunca deixar o navegador suavizar na escala. */

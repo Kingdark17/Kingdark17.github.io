@@ -29,7 +29,7 @@ import type { CelulaDoMapa, EstadoDoJogo } from './estado';
 export interface Apresentacao {
   /** Nome do lugar inteiro: "Cidade Inicial" ou "Masmorra — Andar 3". */
   lugar: string;
-  /** Legenda do minimapa, na ordem em que o original mostrava. */
+  /** Legenda do minimapa: `[tipo de sala, nome]`, na ordem que o original mostrava. */
   legenda: Array<[string, string]>;
   icone: (celula: CelulaDoMapa) => string;
   descricao: (celula: CelulaDoMapa) => string;
@@ -48,25 +48,37 @@ export interface Apresentacao {
   gasta: (celula: CelulaDoMapa) => boolean;
 }
 
+/**
+ * A legenda é `[tipo de sala, nome]`, e não `[emoji, nome]` como era.
+ *
+ * O emoji aqui era uma segunda lista, escrita à mão em paralelo à da engine
+ * (`iconFor`/`cityIconFor`). As duas concordavam, mas concordavam por
+ * disciplina, não por construção — e uma delas já dizia o que a grade nunca
+ * desenhou: **👾 pra "Monstro"**. `iconFor` devolve o ícone da espécie do
+ * monstro daquela sala, então 👾 não aparecia em lugar nenhum do mapa.
+ *
+ * Com o tipo como chave, legenda e grade passam a resolver o desenho pelo
+ * mesmo `arteDoTipo`, e é a primeira vez que as duas batem de verdade.
+ */
 const LEGENDA_DA_CIDADE: Array<[string, string]> = [
-  ['🚀', 'Início'],
-  ['🧙', 'NPC'],
-  ['🏵', 'Vendedor'],
-  ['🔨', 'Ferreiro'],
-  ['🍺', 'Taverna'],
-  ['📜', 'Missões'],
-  ['🌟', 'Portão da Masmorra'],
+  ['start', 'Início'],
+  ['npc', 'NPC'],
+  ['shop', 'Vendedor'],
+  ['blacksmith', 'Ferreiro'],
+  ['tavern', 'Taverna'],
+  ['questboard', 'Missões'],
+  ['gate', 'Portão da Masmorra'],
 ];
 
 const LEGENDA_DA_MASMORRA: Array<[string, string]> = [
-  ['🚀', 'Início'],
-  ['🧙', 'NPC'],
-  ['🧰', 'Baú'],
-  ['👾', 'Monstro'],
-  ['👑', 'Chefe'],
-  ['⬇️', 'Escadas'],
-  ['🚪', 'Saída'],
-  ['❓', 'Evento'],
+  ['start', 'Início'],
+  ['npc', 'NPC'],
+  ['treasure', 'Baú'],
+  ['monster', 'Monstro'],
+  ['boss', 'Chefe'],
+  ['stairs', 'Escadas'],
+  ['exit', 'Saída'],
+  ['event', 'Evento'],
 ];
 
 export function apresentacaoDe(estado: EstadoDoJogo): Apresentacao {

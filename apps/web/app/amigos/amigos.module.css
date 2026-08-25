@@ -1,4 +1,5 @@
 .tela {
+  composes: fundo from '../acabamento.module.css';
   min-height: 100dvh;
   padding: 2rem 1rem;
 }
@@ -33,9 +34,7 @@
 }
 
 .painel {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 0.5rem;
+  composes: painel from '../acabamento.module.css';
   padding: 1.25rem;
 }
 
@@ -98,7 +97,7 @@
   border-radius: 0.25rem;
   color: var(--parchment-dim);
   font: inherit;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   padding: 0.2rem 0.5rem;
   cursor: pointer;
 }
@@ -138,12 +137,12 @@
 }
 
 .online {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: #8cff98;
 }
 
 .offline {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--parchment-dim);
 }
 
@@ -208,7 +207,7 @@
 
 .horaDaMensagem {
   font-family: var(--font-mono), monospace;
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   color: var(--parchment-dim);
 }
 

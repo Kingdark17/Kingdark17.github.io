@@ -192,18 +192,20 @@
   line-height: 1;
 }
 
+/* A bolinha cresceu junto com o texto: com `line-height` fixo em 1,15rem e
+   fonte em 0,8rem o número encostava na borda de cima e de baixo. */
 .selo {
   position: absolute;
-  top: -0.35rem;
-  right: -0.35rem;
-  min-width: 1.15rem;
-  padding: 0 0.25rem;
-  border-radius: 0.6rem;
+  top: -0.4rem;
+  right: -0.4rem;
+  min-width: 1.35rem;
+  padding: 0 0.3rem;
+  border-radius: 0.7rem;
   background: var(--ember);
   color: var(--parchment);
   font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
-  line-height: 1.15rem;
+  font-size: 0.8rem;
+  line-height: 1.35rem;
   text-align: center;
 }
 
