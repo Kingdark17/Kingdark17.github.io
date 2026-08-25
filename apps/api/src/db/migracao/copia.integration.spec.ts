@@ -14,7 +14,7 @@ import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { Client } from 'pg';
 
-import { conferir, conferirSchemas, copiar, TABELAS_EM_ORDEM } from './copia';
+import { autorizaApagar, conferir, conferirSchemas, copiar, limparDestino, TABELAS_EM_ORDEM } from './copia';
 import { ORIGINAL_DDL } from '../testing/original-ddl';
 
 jest.setTimeout(120_000);
@@ -294,5 +294,86 @@ describe('cópia Neon → Supabase', () => {
     } finally {
       await destino.cliente.query(`alter table users add column pet varchar(32) not null default 'none'`);
     }
+  });
+
+  /**
+   * A limpeza do destino existe pelo caso real desta virada: o Supabase
+   * tem a conta de teste do login de 22/08. Destino sujo + modo `inserir`
+   * pode pular um jogador real cujo `id` bata com o da conta de teste.
+   */
+  describe('limpar o destino antes de copiar', () => {
+    it('em ensaio, conta o que apagaria e não apaga', async () => {
+      const antes = await contar(destino.cliente, 'users');
+      expect(antes).toBeGreaterThan(0);
+
+      const relatorio = await limparDestino(destino.cliente, false);
+
+      expect(relatorio.apagou).toBe(false);
+      expect(relatorio.total).toBeGreaterThan(0);
+      expect(relatorio.porTabela.find((t) => t.tabela === 'users')?.linhas).toBe(antes);
+      expect(await contar(destino.cliente, 'users')).toBe(antes);
+    });
+
+    it('esvazia as sete e zera as sequences', async () => {
+      const relatorio = await limparDestino(destino.cliente, true);
+      expect(relatorio.apagou).toBe(true);
+
+      for (const tabela of TABELAS_EM_ORDEM) {
+        expect(await contar(destino.cliente, tabela)).toBe(0);
+      }
+
+      // `RESTART IDENTITY` é metade do serviço: sem ele o destino ficaria
+      // vazio mas com a sequence adiantada, e o primeiro cadastro pularia ids.
+      const { rows } = await destino.cliente.query<{ id: string }>(
+        `insert into users (username, password_hash, password_salt) values ('depois_da_limpeza', 'h', 's') returning id::text`,
+      );
+      expect(Number(rows[0].id)).toBe(1);
+    });
+
+    /**
+     * A barreira que separa o usuário de apagar um banco. Cada caso aqui
+     * é um jeito real de errar: esquecer a flag, herdar um número de uma
+     * execução anterior, ou estar apontado pro banco errado — que aparece
+     * como contagem inesperada.
+     */
+    describe('a barreira do --apagando', () => {
+      it('recusa quando a flag não veio', () => {
+        expect(autorizaApagar(2, undefined)).toEqual({ ok: false, motivo: 'faltou', total: 2 });
+      });
+
+      it('recusa string vazia — `--apagando=` sem número', () => {
+        expect(autorizaApagar(2, '')).toEqual({ ok: false, motivo: 'faltou', total: 2 });
+      });
+
+      it('recusa número diferente do que está no banco', () => {
+        expect(autorizaApagar(2, '999')).toEqual({ ok: false, motivo: 'nao-bate', total: 2, declarado: '999' });
+      });
+
+      it('recusa quando o destino tem MAIS do que o esperado — o sintoma de banco errado', () => {
+        expect(autorizaApagar(4312, '2')).toEqual({ ok: false, motivo: 'nao-bate', total: 4312, declarado: '2' });
+      });
+
+      it('recusa lixo que não é número', () => {
+        expect(autorizaApagar(2, 'dois')).toEqual({ ok: false, motivo: 'nao-bate', total: 2, declarado: 'dois' });
+      });
+
+      it('aceita só o número exato', () => {
+        expect(autorizaApagar(2, '2')).toEqual({ ok: true });
+        expect(autorizaApagar(0, '0')).toEqual({ ok: true });
+      });
+    });
+
+    it('e a cópia num destino recém-limpo entrega tudo como novo', async () => {
+      await limparDestino(destino.cliente, true);
+
+      const relatorio = await copiar(origem.cliente, destino.cliente, { escrever: true, modo: 'espelhar' });
+
+      expect(relatorio.tabelas.every((t) => t.atualizadas === 0 && t.apagadas === 0)).toBe(true);
+      expect(relatorio.tabelas.find((t) => t.tabela === 'users')?.inseridas).toBe(3);
+
+      for (const linha of await conferir(origem.cliente, destino.cliente)) {
+        expect({ tabela: linha.tabela, bate: linha.bate }).toEqual({ tabela: linha.tabela, bate: true });
+      }
+    });
   });
 });

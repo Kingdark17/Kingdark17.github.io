@@ -1244,6 +1244,29 @@ Dois cuidados que a linha inteira exige:
   ou `DateStyle` diferentes renderizam o mesmo `timestamptz` de formas
   diferentes, e a conferência acusaria divergência que não existe.
 
+### Esvaziar o destino, e por que isso ganhou comando próprio
+
+**O Supabase não nasce vazio pra esta virada.** A conta criada no navegador
+em 22/08, pra provar o login, mora lá.
+
+Isso é pior do que parece com o modo `inserir`: se aquela conta ficou com um
+`id` que um jogador real também tem no Neon, o `ON CONFLICT DO NOTHING`
+**pula o jogador real e mantém a conta de teste** — e a contagem final
+bateria assim mesmo. Conta real perdida, conferência aprovando.
+
+`--limpar-destino` faz `TRUNCATE` nas sete com `RESTART IDENTITY` (que zera
+as sequences junto, deixando o estado de banco recém-criado). Não é SQL
+solto digitado na hora justamente porque a hora é ruim pra digitar SQL.
+
+**A barreira dele é declarar o número de linhas** (`--apagando=<n>`), além
+de repetir o host. Se o número não bater com o que está no banco, ele para.
+Contagem inesperada é o sintoma de estar apontado pro banco errado, e
+repetir só o host não pegaria isso.
+
+Esvaziar **não dispensa o `--espelhar`**: "vazio no começo" não sobrevive a
+uma segunda tentativa, e cópia interrompida e retomada encontra destino
+sujo. Os dois juntos.
+
 ### As barreiras da CLI
 
 **O script não lê o `.env`**, e isso é reação direta ao que a fase 5
@@ -1254,6 +1277,11 @@ descobriu (o drizzle-kit lê sozinho). As duas pontas vêm de `ORIGEM_URL` e
 Com `--escrever` ele **ainda** exige `--confirmo=<host do destino>`, e o
 host tem que bater. Digitar o host da origem por engano é recusado antes de
 qualquer conexão — provado na mão.
+
+`SEM_SSL=1` existe pra Postgres local, e existe por um motivo específico:
+sem ele não dá pra exercitar a CLI contra um banco descartável, e barreira
+que nunca rodou não é barreira. Não é escape de produção — Neon e Supabase
+exigem SSL e recusam a conexão sem ele.
 
 Rodar de novo não duplica nada nos dois modos, então uma cópia interrompida
 se retoma sem limpar o destino. É de propósito não ter transação única:

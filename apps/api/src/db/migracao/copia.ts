@@ -188,6 +188,64 @@ export async function conferirSchemas(origem: Consultavel, destino: Consultavel)
 /** Nome citado de coluna, pra montar SQL sem sustos com maiúscula ou palavra reservada. */
 const cit = (nome: string) => `"${nome}"`;
 
+export interface RelatorioDaLimpeza {
+  apagou: boolean;
+  porTabela: Array<{ tabela: Tabela; linhas: number }>;
+  total: number;
+}
+
+/**
+ * Esvazia o destino antes de uma cópia — as sete tabelas de uma vez.
+ *
+ * `TRUNCATE` num único comando com todas as tabelas dispensa ordem de
+ * chave estrangeira, e o `RESTART IDENTITY` zera as sequences junto, que é
+ * exatamente o estado de banco recém-criado.
+ *
+ * Existe porque o Supabase **não está vazio**: a conta de teste do login
+ * de 22/08 mora lá. Com o destino sujo, uma cópia em modo `inserir` pode
+ * pular um jogador real cujo `id` bata com o da conta de teste — e a
+ * contagem final bateria assim mesmo.
+ *
+ * Sem `apagar: true` não destrói nada: só conta e relata o que apagaria.
+ */
+export type VereditoDaLimpeza =
+  { ok: true } | { ok: false; motivo: 'faltou'; total: number } | { ok: false; motivo: 'nao-bate'; total: number; declarado: string };
+
+/**
+ * A barreira do apagar: além de repetir o host do destino, é preciso
+ * declarar **quantas linhas** se está destruindo.
+ *
+ * Não é cerimônia. Repetir o host não pega o caso de estar no banco certo
+ * com conteúdo inesperado — e contagem inesperada é justamente o sintoma
+ * de estar apontado pro lugar errado. Se o destino tiver 400 linhas quando
+ * você esperava 2, o número não bate e o comando morre.
+ *
+ * Mora aqui, e não na CLI, porque barreira sem teste não é barreira — e
+ * testar isto pela CLI custaria subir banco e processo pra cada caso.
+ */
+export function autorizaApagar(total: number, declarado: string | undefined): VereditoDaLimpeza {
+  if (declarado === undefined || declarado === '') return { ok: false, motivo: 'faltou', total };
+  if (Number(declarado) !== total) return { ok: false, motivo: 'nao-bate', total, declarado };
+  return { ok: true };
+}
+
+export async function limparDestino(destino: Consultavel, apagar: boolean): Promise<RelatorioDaLimpeza> {
+  const porTabela: RelatorioDaLimpeza['porTabela'] = [];
+
+  for (const tabela of TABELAS_EM_ORDEM) {
+    porTabela.push({ tabela, linhas: await contar(destino, tabela) });
+  }
+
+  const total = porTabela.reduce((soma, t) => soma + t.linhas, 0);
+
+  if (apagar) {
+    const lista = TABELAS_EM_ORDEM.map((t) => `public."${t}"`).join(', ');
+    await destino.query(`truncate ${lista} restart identity cascade`);
+  }
+
+  return { apagou: apagar, porTabela, total };
+}
+
 /**
  * Um lote de linhas viram um único INSERT parametrizado. `ON CONFLICT DO
  * NOTHING` sem alvo cobre qualquer restrição única da tabela, não só a
