@@ -3,567 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RPG Legend</title>
+<title>RPG Legend mudou de endereço</title>
 <link rel="icon" type="image/png" href="img/branding/favicon.png?v=20260809a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20260810j">
-<link rel="stylesheet" href="css/animations.css?v=20260802c">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<!--
+  Esta página substitui o jogo antigo no momento da virada Neon -> Supabase.
+
+  O jogo antigo NÃO ficou "quebrado por acaso": o servidor dele foi
+  suspenso de propósito, e sem servidor ele não faz login nem salva. Deixar
+  a tela de sempre aqui só produziria erro sem explicação, então ela sai e
+  esta entra.
+
+  O original está no histórico do git — `git revert` do commit da virada
+  traz ele de volta inteiro. Os arquivos do jogo (js/, css/, img/)
+  continuam onde estavam.
+
+  A query string é repassada pro endereço novo. Isso não é enfeite: se
+  algum link de e-mail antigo apontar pra cá com `?verify=` ou `?reset=`,
+  perder o token deixaria a conta presa sem confirmar e sem erro na tela.
+-->
 <style>
-  #accountAvatar{border-radius:50%;object-fit:cover;background:#111;border:3px solid #8b6f3d;vertical-align:middle;margin-right:8px}
-  #accountLogged[data-frame="silver"] #accountAvatar{border-color:#d8dee9;box-shadow:0 0 10px #d8dee9}
-  #accountLogged[data-frame="gold"] #accountAvatar{border-color:#ffd166;box-shadow:0 0 12px #ffd166}
-  #accountLogged[data-frame="arcane"] #accountAvatar{border-color:#b084ff;box-shadow:0 0 14px #8a5cff}
-  #accountLogged[data-frame="emerald"] #accountAvatar,#publicProfileCard[data-frame="emerald"] #publicProfileAvatar,.menu-side-account[data-frame="emerald"] .menu-account-avatar{border-color:#37df8b;box-shadow:0 0 13px #20b86c}
-  #accountLogged[data-frame="crimson"] #accountAvatar,#publicProfileCard[data-frame="crimson"] #publicProfileAvatar,.menu-side-account[data-frame="crimson"] .menu-account-avatar{border-color:#ff5568;box-shadow:0 0 13px #d51f3a}
-  #accountLogged[data-frame="obsidian"] #accountAvatar,#publicProfileCard[data-frame="obsidian"] #publicProfileAvatar,.menu-side-account[data-frame="obsidian"] .menu-account-avatar{border-color:#8f82ad;box-shadow:0 0 15px #08070c,0 0 5px #9a8bb8}
-  #accountLogged[data-frame="celestial"] #accountAvatar,#publicProfileCard[data-frame="celestial"] #publicProfileAvatar,.menu-side-account[data-frame="celestial"] .menu-account-avatar{border-color:#e9f7ff;box-shadow:0 0 8px #fff,0 0 18px #5bbcff}
-  @keyframes rgbGlow{0%{border-color:#ff4d4d;box-shadow:0 0 15px #ff4d4d}25%{border-color:#ffe34d;box-shadow:0 0 15px #ffe34d}50%{border-color:#4dff88;box-shadow:0 0 15px #4dff88}75%{border-color:#4da6ff;box-shadow:0 0 15px #4da6ff}100%{border-color:#d94dff;box-shadow:0 0 15px #d94dff}}
-  @keyframes rgbText{0%{color:#ff5c5c}20%{color:#ffd95c}40%{color:#66ff8c}60%{color:#5cecff}80%{color:#a875ff}100%{color:#ff68c8}}
-  #accountLogged[data-frame="rgb"] #accountAvatar,#publicProfileCard[data-frame="rgb"] #publicProfileAvatar,.menu-side-account[data-frame="rgb"] .menu-account-avatar{animation:rgbGlow 2.2s linear infinite}
-  .rgb-name{animation:rgbText 2.2s linear infinite!important;text-shadow:0 0 10px currentColor}
-  #publicProfileCard{gap:14px;align-items:center}
-  #publicProfileAvatar{border-radius:50%;object-fit:cover;background:#111;border:4px solid #8b6f3d}
-  #publicProfileCard[data-frame="silver"] #publicProfileAvatar{border-color:#d8dee9;box-shadow:0 0 10px #d8dee9}
-  #publicProfileCard[data-frame="gold"] #publicProfileAvatar{border-color:#ffd166;box-shadow:0 0 12px #ffd166}
-  #publicProfileCard[data-frame="arcane"] #publicProfileAvatar{border-color:#b084ff;box-shadow:0 0 14px #8a5cff}
-  #profilePetWidget{position:fixed;right:18px;bottom:18px;width:68px;height:68px;border-radius:50%;z-index:90;font-size:34px;border:2px solid #c99b3d;background:#171923;box-shadow:0 0 16px #000;cursor:pointer}
-  #profilePetWidget .pet-heart{position:absolute;left:25px;top:10px;font-size:18px;pointer-events:none;transition:transform .8s ease-out,opacity .8s ease-out}
-  #profilePetWidget .pet-icon-img{width:56px;height:56px;object-fit:contain;image-rendering:pixelated;pointer-events:none}
-  @media(max-width:640px){
-    #profilePetWidget{width:44px;height:44px;right:8px;bottom:8px;font-size:22px;opacity:.6;transition:opacity .2s}
-    #profilePetWidget:active,#profilePetWidget.pet-active{opacity:1}
-    #profilePetWidget .pet-icon-img{width:36px;height:36px}
+  :root{
+    --ink:#12141c;
+    --painel:#1b1f2b;
+    --ouro:#c99b3d;
+    --ouro-claro:#e8c65a;
+    --pergaminho:#ecdfc0;
+    --pergaminho-fraco:#b9ab86;
   }
-  #menuScreen.main-menu-layout{position:fixed;inset:0;z-index:50;width:100vw;height:100vh;max-width:none;min-height:100vh;margin:0;padding:34px 34px 34px 190px;overflow:auto;border:0;border-radius:0;box-sizing:border-box;background:radial-gradient(circle at 64% 42%,rgba(37,48,70,.72),transparent 38%),linear-gradient(135deg,#0c0f16,#151b27 58%,#0d1119)}
-  .main-menu-sidebar{position:absolute;inset:0 auto 0 0;width:154px;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d1018,#111620);border-right:1px solid rgba(209,164,75,.35);box-shadow:12px 0 34px rgba(0,0,0,.28);z-index:2}
-  .main-menu-sidebar::after{content:"";position:absolute;right:-2px;top:0;width:2px;height:100%;background:linear-gradient(transparent,#b99245 12% 88%,transparent);opacity:.75}
-  .menu-side-tab{appearance:none;border:0;border-bottom:1px solid rgba(255,255,255,.06);background:transparent;color:#d8c99c;min-height:126px;padding:16px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-family:'Cinzel',serif;letter-spacing:1.5px;font-size:11px;cursor:pointer;transition:background .2s,color .2s,transform .2s;position:relative}
-  .menu-side-tab::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tab-color)}
-  .menu-side-tab:hover,.menu-side-tab:focus-visible{background:color-mix(in srgb,var(--tab-color) 16%,transparent);color:#fff;transform:translateX(3px);outline:none}
-  .menu-side-icon{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;font-size:25px;background:#171c28;border:1px solid var(--tab-color);box-shadow:0 8px 20px rgba(0,0,0,.25)}
-  .menu-side-account .menu-side-icon{background:transparent;border:0;box-shadow:none;border-radius:0}
-  .menu-side-play,.menu-side-account,.menu-side-social,.menu-side-settings,.menu-side-shop,.menu-side-credits{--tab-color:#b99245}
-  .menu-side-social .menu-side-icon{position:relative}
-  .menu-side-social .social-badge{position:absolute;top:-4px;right:-4px}
-  .menu-account-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#171923;border:2px solid #b99245;display:none}
-  .menu-account-avatar.visible{display:block}.menu-account-fallback.hidden{display:none}.menu-side-name{max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .main-menu-stage{width:100%;min-height:calc(100vh - 68px);display:grid;place-items:center}.main-menu-card{width:min(100%,570px);padding:30px 26px 24px;border:1px solid rgba(209,164,75,.42);border-radius:10px;background:linear-gradient(145deg,rgba(31,38,56,.98),rgba(23,28,41,.98));box-shadow:0 24px 70px rgba(0,0,0,.38),inset 0 0 0 5px rgba(255,255,255,.015)}
-  .main-menu-card .menu-list{margin-top:30px}.main-menu-card .menu-list .rune-btn{min-height:62px}.main-menu-card .menu-list .menu-secondary-action{border-color:rgba(209,164,75,.35)}
-  #menuScreen.sidebar-collapsed{padding-left:108px}.sidebar-collapsed .main-menu-sidebar{width:72px}.sidebar-collapsed .menu-side-tab>span:last-child{display:none}.sidebar-collapsed .menu-side-tab{min-height:126px}.sidebar-collapsed .menu-side-icon{width:43px;height:43px}
-  @media(max-width:760px){#menuScreen.main-menu-layout,#menuScreen.sidebar-collapsed{padding:120px 15px 22px;min-height:auto}.main-menu-sidebar,.sidebar-collapsed .main-menu-sidebar{inset:0 0 auto 0;width:auto;height:98px;flex-direction:row;border-right:0;border-bottom:1px solid rgba(209,164,75,.35)}.main-menu-sidebar::after{right:0;top:auto;bottom:-2px;width:100%;height:3px;background:linear-gradient(90deg,#e33b34 0 20%,#e98a2f 20% 40%,#3478db 40% 60%,#1aa16d 60% 80%,#9b6437 80%)}.menu-side-tab,.sidebar-collapsed .menu-side-tab{flex:1;min-height:98px;padding:8px 3px;border-bottom:0;border-right:1px solid rgba(255,255,255,.05);font-size:8px;letter-spacing:.4px}.sidebar-collapsed .menu-side-tab>span:last-child{display:block}.menu-side-tab::before{display:none}.menu-side-icon,.sidebar-collapsed .menu-side-icon{width:39px;height:39px;border-radius:11px;font-size:19px}.menu-account-avatar{width:38px;height:38px}.menu-side-name{max-width:65px}.main-menu-stage{min-height:500px}.main-menu-card{padding:24px 15px 18px}}
-  @media(max-width:760px){.main-menu-sidebar::after{background:linear-gradient(90deg,transparent,#b99245 12% 88%,transparent)}}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%}
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%,rgba(201,155,61,.10),transparent 45%),
+      radial-gradient(ellipse at 100% 110%,rgba(74,128,115,.10),transparent 50%),
+      var(--ink);
+    color:var(--pergaminho);
+    font-family:'EB Garamond',Georgia,serif;
+    font-size:17px;
+    line-height:1.6;
+    display:grid;
+    place-items:center;
+    padding:2rem 1.25rem;
+  }
+  .cartao{
+    width:min(34rem,100%);
+    background:linear-gradient(180deg,var(--painel),#232838);
+    border:1px solid rgba(201,155,61,.35);
+    border-radius:.5rem;
+    padding:clamp(1.5rem,5vw,2.5rem);
+    text-align:center;
+    position:relative;
+  }
+  .cartao::before{
+    content:'';position:absolute;inset:5px;
+    border:1px solid rgba(201,155,61,.14);
+    border-radius:.35rem;pointer-events:none;
+  }
+  .brasao{width:clamp(4.5rem,18vw,6.5rem);height:auto;margin-bottom:1rem;filter:drop-shadow(0 0 1.5rem rgba(201,155,61,.35))}
+  h1{
+    font-family:'Cinzel',Georgia,serif;
+    font-weight:700;
+    font-size:clamp(1.5rem,5vw,2rem);
+    line-height:1.2;
+    margin:0 0 .75rem;
+    color:var(--ouro-claro);
+    text-wrap:balance;
+  }
+  p{margin:0 0 1rem;color:var(--pergaminho-fraco)}
+  p.forte{color:var(--pergaminho)}
+  .ir{
+    display:inline-block;
+    margin:.5rem 0 1rem;
+    padding:.85rem 2rem;
+    background:linear-gradient(180deg,var(--ouro-claro),var(--ouro));
+    border:1px solid var(--ouro-claro);
+    border-radius:.3rem;
+    color:#1a140e;
+    font-family:'Cinzel',Georgia,serif;
+    font-weight:700;
+    font-size:1.15rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    text-decoration:none;
+  }
+  .ir:hover,.ir:focus-visible{box-shadow:0 0 18px rgba(232,198,90,.45)}
+  .ir:focus-visible{outline:2px solid var(--pergaminho);outline-offset:3px}
+  .conta{
+    margin-top:1.25rem;
+    padding-top:1rem;
+    border-top:1px solid rgba(201,155,61,.2);
+    font-size:.95rem;
+  }
+  .contagem{font-variant-numeric:tabular-nums;color:var(--ouro)}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
+  <main class="cartao">
+    <img class="brasao" src="img/branding/logo.png?v=20260809a" alt="RPG Legend">
 
-  <header class="title-bar">
-    <div class="title-bar-brand">
-      <img src="img/branding/logo.png?v=20260809a" class="title-bar-logo" alt="RPG Legend">
-      <div>
-        <h1>RPG Legend</h1>
-        <div class="sub" id="headerSub">menu principal</div>
-      </div>
-    </div>
-    <div class="header-actions">
-      <button class="rune-btn small hidden" id="adminPanelBtn">🛠 ADM</button>
-      <button class="rune-btn small hidden" id="tutorialGuideBtn">📖 Guia</button>
-      <button class="rune-btn small hidden" id="gameSettingsBtn">⚙ Configurações</button>
-      <button class="rune-btn small hidden" id="gameMainMenuBtn">☰ Menu Principal</button>
-      <button class="rune-btn small hidden" id="newHeroBtn">&#9876; Criar Novo Personagem</button>
-    </div>
-  </header>
+    <h1>O jogo mudou de endereço</h1>
 
-  <!-- ============ MENU PRINCIPAL ============ -->
-  <section id="menuScreen" class="panel main-menu-layout">
-    <nav class="main-menu-sidebar" aria-label="Navegação principal">
-      <button class="menu-side-tab menu-side-play" id="btnPlayTab" type="button" aria-expanded="true" aria-label="Abrir ou recolher menu lateral"><span class="menu-side-icon">☰</span><span>Menu</span></button>
-      <button class="menu-side-tab menu-side-account" id="btnAccount" type="button"><span class="menu-side-icon"><img id="menuAccountAvatar" class="menu-account-avatar" alt="Foto da conta"><span id="menuAccountFallback" class="menu-account-fallback">👤</span></span><span class="menu-side-name" id="menuAccountName">Conta</span></button>
-      <button class="menu-side-tab menu-side-social hidden" id="btnSocialTab" type="button"><span class="menu-side-icon">💬<span class="social-badge hidden" id="socialTabBadge">0</span></span><span>Amigos</span></button>
-      <button class="menu-side-tab menu-side-settings" id="btnSettings" type="button"><span class="menu-side-icon">⚙</span><span>Configurações</span></button>
-      <button class="menu-side-tab menu-side-shop" id="btnProfileShop" type="button"><span class="menu-side-icon">🛒</span><span>Loja</span></button>
-      <button class="menu-side-tab menu-side-credits" id="btnCredits" type="button"><span class="menu-side-icon">📜</span><span>Créditos</span></button>
-    </nav>
-    <div class="main-menu-stage"><div class="main-menu-card">
-      <img src="img/branding/logo.png?v=20260809a" class="menu-logo" alt="RPG Legend">
-      <div class="menu-title">RPG Legend</div>
-      <div class="menu-sub">aventura &middot; exploração &middot; progressão</div>
-      <div class="menu-list">
-        <button class="rune-btn" id="btnCharacters">Jogars</button>
-        <button class="rune-btn" id="btnMultiplayer">Multiplayer (Beta)</button>
-        <button class="rune-btn ghost menu-secondary-action" id="btnExitGame">Sair</button>
-      </div>
-      <div class="menu-note hidden" id="exitNote">Pode fechar esta aba com segurança — seu progresso já foi salvo automaticamente.</div>
-    </div>
-    </div>
-</section>
+    <p class="forte">O RPG Legend agora fica em <strong>rpglegend.com.br</strong>.</p>
 
-<!-- ============ CONTA DO JOGADOR ============ -->
-<div class="modal-overlay hidden" id="accountModal">
-  <div class="modal-box account-box">
-    <div class="modal-header"><h2>👤 Conta do Jogador</h2><button class="modal-close" id="closeAccountBtn">&times;</button></div>
-    <div id="accountGuest">
-      <p class="account-help">Crie uma conta para guardar seu progresso na nuvem e recuperá-lo em outro aparelho.</p>
-      <label class="multi-label">Nome ou e-mail<input id="accountUsername" class="name-input" maxlength="254" autocomplete="username" placeholder="Nome da conta ou e-mail"></label>
-      <label class="multi-label">E-mail para criar conta<input id="accountEmail" class="name-input" type="email" maxlength="254" autocomplete="email" placeholder="voce@exemplo.com"></label>
-      <label class="multi-label">Senha<input id="accountPassword" class="name-input" type="password" maxlength="128" autocomplete="current-password" placeholder="Mínimo de 8 caracteres"></label>
-      <div class="account-actions"><button class="rune-btn" id="accountLoginBtn">Entrar</button><button class="rune-btn" id="accountRegisterBtn">Criar Conta</button><button class="rune-btn ghost" id="forgotPasswordBtn">Esqueci a Senha</button></div>
-    </div>
-    <div id="accountLogged" class="hidden">
-      <div class="account-welcome"><img id="accountAvatar" class="hidden" alt="Foto do perfil" width="56" height="56"> Conectado como <b id="accountName">—</b></div>
-      <p class="account-help" id="accountEmailStatus"></p>
-      <div class="account-actions"><button class="rune-btn small" id="openProfileEditorBtn">Editar Perfil</button><button class="rune-btn small" id="resendVerificationBtn">Reenviar Confirmação</button></div>
-      <div class="creation-step" id="legacyEmailBox">
-        <div class="step-title">E-mail da Conta</div>
-        <label class="multi-label">E-mail<input id="profileAccountEmail" class="name-input" type="email" maxlength="254"></label>
-        <label class="multi-label">Senha atual<input id="profileEmailPassword" class="name-input" type="password" maxlength="128"></label>
-        <button class="rune-btn small" id="accountEmailSaveBtn">Cadastrar ou Alterar E-mail</button>
-      </div>
-      <p class="account-help">O jogo salva automaticamente na nuvem. Você também pode forçar o envio ou recuperar o último progresso.</p>
-      <div class="account-actions"><button class="rune-btn" id="cloudSaveBtn">Salvar na Nuvem</button><button class="rune-btn" id="cloudLoadBtn">Carregar da Nuvem</button><button class="rune-btn" id="cloudRestoreBtn">Restaurar Versão Anterior</button><button class="rune-btn ghost" id="accountLogoutBtn">Sair da Conta</button></div>
-    </div>
-    <div id="accountMessage" class="account-message"></div>
-  </div>
-</div>
-
-<!-- ============ EDIÇÃO DO PERFIL ============ -->
-<div class="modal-overlay hidden" id="profileEditorModal">
-  <div class="modal-box account-box">
-    <div class="modal-header"><h2>🎨 Editar Perfil</h2><button class="modal-close" id="closeProfileEditorBtn">&times;</button></div>
-    <p class="account-help">Personalize como sua conta aparece para os outros jogadores.</p>
-    <div class="creation-step">
-      <label class="multi-label">Foto do computador<input id="profileAvatarFile" class="name-input" type="file" accept="image/png,image/jpeg,image/webp"></label>
-      <label class="multi-label">Ou link HTTPS da foto<input id="profileAvatarUrl" class="name-input" maxlength="500" placeholder="https://..."></label>
-      <label class="multi-label">Moldura<select id="profileFrame" class="name-input"></select></label>
-      <label class="multi-label">Cor do nome<select id="profileNameColor" class="name-input"></select></label>
-      <label class="multi-label">Pet equipado<select id="profilePet" class="name-input"></select></label>
-      <button class="rune-btn" id="profileSaveBtn">Salvar Perfil</button>
-    </div>
-    <div id="profileMessage" class="account-message"></div>
-  </div>
-</div>
-
-<!-- ============ LOJA DE PERSONALIZAÇÕES ============ -->
-<div class="modal-overlay hidden" id="profileShopModal">
-  <div class="modal-box account-box">
-    <div class="modal-header"><h2>🛒 Loja de Personalizações</h2><button class="modal-close" id="closeProfileShopBtn">&times;</button></div>
-    <p class="account-help">Use o ouro do seu personagem oficial para desbloquear pets, molduras e cores de nome permanentes.</p>
-    <div class="item-grid" id="profileShopList"></div>
-    <div id="shopMessage" class="account-message"></div>
-  </div>
-</div>
-
-<!-- ============ PAINEL ADM ============ -->
-<div class="modal-overlay hidden" id="adminPanelModal">
-  <div class="modal-box account-box">
-    <div class="modal-header"><h2>🛠 Painel ADM</h2><button class="modal-close" id="closeAdminPanelBtn">&times;</button></div>
-    <p class="account-help">Edita o personagem atual diretamente. So visivel para a conta admin.</p>
-    <div class="creation-step admin-grid">
-      <label class="multi-label">Vida<input id="admHp" class="name-input" type="number"></label>
-      <label class="multi-label">Vida maxima<input id="admMaxHp" class="name-input" type="number"></label>
-      <label class="multi-label">Mana<input id="admMp" class="name-input" type="number"></label>
-      <label class="multi-label">Mana maxima<input id="admMaxMp" class="name-input" type="number"></label>
-      <label class="multi-label">Ouro<input id="admGold" class="name-input" type="number"></label>
-      <label class="multi-label">Nivel<input id="admLevel" class="name-input" type="number" min="1"></label>
-      <label class="multi-label">XP<input id="admXp" class="name-input" type="number" min="0"></label>
-      <label class="multi-label">Pontos de atributo<input id="admAttrPoints" class="name-input" type="number" min="0"></label>
-      <label class="multi-label">Forca<input id="admForca" class="name-input" type="number" min="1"></label>
-      <label class="multi-label">Destreza<input id="admDestreza" class="name-input" type="number" min="1"></label>
-      <label class="multi-label">Constituicao<input id="admConstituicao" class="name-input" type="number" min="1"></label>
-      <label class="multi-label">Intelecto<input id="admIntelecto" class="name-input" type="number" min="1"></label>
-      <label class="multi-label">Sabedoria<input id="admSabedoria" class="name-input" type="number" min="1"></label>
-      <label class="multi-label">Carisma<input id="admCarisma" class="name-input" type="number" min="1"></label>
-    </div>
-    <button class="rune-btn" id="admApplyBtn">Aplicar Alteracoes</button>
-    <button class="rune-btn" id="admGodBtn">♾ Modo Infinito (status + itens)</button>
-    <div id="adminPanelMessage" class="account-message"></div>
-  </div>
-</div>
-
-<!-- ============ PERSONAGENS ============ -->
-<div class="modal-overlay hidden" id="characterModal">
-  <div class="modal-box character-modal-box">
-    <div class="modal-header"><h2>👤 Personagens</h2><button class="modal-close" id="closeCharacterModalBtn">&times;</button></div>
-    <p class="multiplayer-help">Escolha um personagem para continuar ou crie um novo em um slot vazio.</p>
-    <div class="character-slots" id="characterSlots"></div>
-    <div class="account-message" id="characterModalMessage"></div>
-  </div>
-</div>
-
-<!-- ============ MULTIPLAYER ============ -->
-<div class="modal-overlay hidden" id="multiplayerModal">
-  <div class="modal-box multiplayer-box">
-    <div class="modal-header"><h2>⚔ Multiplayer Cooperativo</h2><button class="modal-close" id="closeMultiplayerBtn">&times;</button></div>
-    <div id="multiplayerForm">
-      <p class="multiplayer-help">Crie uma sala e envie o código ao outro jogador. Cada participante entra com o próprio herói.</p>
-      <label class="multi-label">Seu nome<input id="multiplayerName" class="name-input" maxlength="20" placeholder="Ex: Pedro"></label>
-      <label class="multi-label">Código da sala<input id="multiplayerRoom" class="name-input room-code" maxlength="6" placeholder="Ex: DRAGAO"></label>
-      <label class="multi-label mp-public-toggle"><input type="checkbox" id="mpPublicToggle"> Sala pública (aparece na lista para todos)</label>
-      <div class="multi-actions"><button class="rune-btn" id="createRoomBtn">Criar Sala</button><button class="rune-btn" id="joinRoomBtn">Entrar na Sala</button></div>
-      <div class="mp-public-rooms">
-        <div class="mp-public-rooms-head"><span>Salas Públicas</span><button class="rune-btn ghost small" id="mpRefreshRoomsBtn" type="button">🔄 Atualizar</button></div>
-        <div class="mp-public-rooms-list" id="mpPublicRoomsList"></div>
-      </div>
-    </div>
-    <div id="multiplayerLobby" class="multiplayer-lobby hidden">
-      <div class="mp-lobby-code">
-        <span class="mp-lobby-code-label">Código da sala</span>
-        <div class="mp-lobby-code-value" id="mpLobbyCode">------</div>
-        <button class="rune-btn ghost small" id="mpLobbyCopyBtn" type="button">📋 Copiar código</button>
-      </div>
-      <div class="mp-lobby-status" id="mpLobbyStatus">Conectando...</div>
-      <div id="multiplayerProfiles" class="item-grid"></div>
-      <div class="multi-actions">
-        <button class="rune-btn hidden" id="mpLobbyStartBtn" type="button">Começar Aventura</button>
-        <button class="rune-btn ghost" id="mpLobbyLeaveBtn" type="button">Sair da Sala</button>
-      </div>
-    </div>
-    <div id="multiplayerMessage" class="multiplayer-message">Nenhuma sala conectada.</div>
-  </div>
-</div>
-
-<div class="modal-overlay hidden" id="publicProfileModal">
-  <div class="modal-box account-box">
-    <div class="modal-header"><h2>Perfil do Jogador</h2><button class="modal-close" id="closePublicProfileBtn">&times;</button></div>
-    <div class="account-welcome" id="publicProfileCard" data-frame="none">
-      <img id="publicProfileAvatar" class="hidden" alt="Foto do jogador" width="84" height="84">
-      <b id="publicProfileName">Aventureiro</b>
-    </div>
-    <p class="account-help" id="publicProfilePet"></p>
-  </div>
-</div>
-
-<div id="multiplayerStatus" class="multiplayer-status hidden"></div>
-
-<!-- ============ CONFIGURAÇÕES ============ -->
-  <section id="settingsPanel" class="panel hidden">
-    <h2>Configurações</h2>
-    <div class="settings-row">
-      <span>Efeitos sonoros</span>
-      <label><input type="checkbox" id="soundToggle" checked> Ativado</label>
-    </div>
-    <div class="settings-row">
-      <span>Volume da música</span>
-      <label><input type="range" id="musicVolume" min="0" max="100" value="28" aria-label="Volume da música"></label>
-    </div>
-    <div class="backup-settings">
-      <div class="backup-title">Progresso Online</div>
-      <p>Seu personagem é salvo automaticamente na conta. Entre com a mesma conta em outro aparelho para continuar de onde parou.</p>
-    </div>
-    <div class="creation-footer">
-      <div></div>
-      <button class="rune-btn" id="settingsBackBtn">Voltar ao Menu</button>
-    </div>
-  </section>
-
-<!-- ============ CRÉDITOS ============ -->
-  <section id="creditsPanel" class="panel hidden">
-    <h2>Créditos</h2>
-    <p style="font-size:14px; color:var(--parchment-dim); line-height:1.6;">
-      <b style="color:var(--gold-bright);">RPG Legend</b> foi construído inteiramente em HTML, CSS e
-      JavaScript puro, sem frameworks. Mapas de cidade e masmorra são gerados
-      proceduralmente a cada partida, com dificuldade crescente por andar,
-      chefes periódicos, itens com raridade, comércio, missões e progressão de nível.
+    <p>
+      Esta página é a versão antiga e não funciona mais — o servidor dela foi desligado.
     </p>
-    <div class="creation-footer">
-      <div></div>
-      <button class="rune-btn" id="creditsBackBtn">Voltar ao Menu</button>
-    </div>
-  </section>
 
-<!-- ============ CRIAÇÃO DE PERSONAGEM ============ -->
-  <section id="creationScreen" class="panel hidden">
-    <h2>Crie seu Personagem</h2>
-    <div class="creation-step">
-      <div class="step-title">Nome</div>
-      <div class="step-sub">Como seu herói será lembrado nas tavernas e masmorras</div>
-      <input type="text" id="nameInput" class="name-input" placeholder="Ex: Aldric Pedraverde" maxlength="28">
-    </div>
-    <div class="creation-step">
-      <div class="step-title">Roleta do Destino</div>
-      <div class="step-sub">Sorteia raça, classe, poderes, fraqueza e atributos de uma vez. Você ainda pode trocar a raça ou a classe clicando nos cards abaixo depois de girar.</div>
-      <button class="rune-btn roulette-btn" id="rollAllBtn">🎲 Rolar Tudo</button>
-    </div>
-    <div class="creation-step">
-      <div class="step-title">Raça</div>
-      <div class="step-sub">Escolha uma ou deixe a roleta decidir</div>
-      <div class="pick-grid" id="raceGrid"></div>
-    </div>
-    <div class="creation-step">
-      <div class="step-title">Classe</div>
-      <div class="step-sub">Escolha uma ou deixe a roleta decidir</div>
-      <div class="pick-grid" id="classGrid"></div>
-    </div>
-    <div class="creation-step">
-      <div class="step-title">Poderes</div>
-      <div class="power-hint">Sua classe concede 1 poder exclusivo. A Roleta do Destino sorteia 2 poderes adicionais.</div>
-      <button class="rune-btn small roulette-btn" id="rerollPowersBtn">🎲 Regirar Poderes</button>
-      <div class="pick-grid" id="powerGrid"></div>
-    </div>
-    <div class="creation-step">
-      <div class="step-title">Fraqueza</div>
-      <div class="step-sub">Todo herói carrega um fardo, sorteado pela Roleta do Destino.</div>
-      <button class="rune-btn small roulette-btn" id="rerollDebuffBtn">🎲 Regirar Fraqueza</button>
-      <div class="pick-grid" id="debuffGrid"></div>
-    </div>
-    <div class="creation-step">
-      <div class="step-title">Características</div>
-      <div class="step-sub">Atributos sorteados pela Roleta do Destino (consideram raça, classe e fraqueza).</div>
-      <button class="rune-btn small roulette-btn" id="rerollAttrsBtn">🎲 Rolar de Novo</button>
-      <div class="attr-grid" id="creationAttrGrid"></div>
-    </div>
-    <div class="creation-step tutorial-choice">
-      <label><input type="checkbox" id="tutorialEnabled" checked> <b>Ativar tutorial</b></label>
-      <div class="step-sub">Receba dicas durante os primeiros passos. Você poderá consultar o Guia a qualquer momento.</div>
-    </div>
-    <div class="creation-footer">
-      <div class="creation-error" id="creationError"></div>
-      <button class="rune-btn" id="startAdventureBtn">Começar Aventura &#8594;</button>
-    </div>
-  </section>
+    <a class="ir" id="ir" href="https://rpglegend.com.br/">Ir para o jogo</a>
 
-  <!-- ============ TELA DE JOGO ============ -->
-  <div id="gameScreen" class="hidden">
-    <div class="layout">
+    <p class="conta">
+      <strong>Sua conta e seus personagens foram junto.</strong>
+      Entre com o mesmo usuário e senha de sempre.
+    </p>
 
-      <aside class="panel" id="playerPanel">
-        <h2>Ficha do Aventureiro</h2>
-        <div class="hero-id">
-          <div class="hero-avatar" id="heroAvatar">&#9876;</div>
-          <div>
-            <div class="hero-name" id="heroName">-</div>
-            <div class="hero-class" id="heroClass">-</div>
-          </div>
-        </div>
+    <p id="aviso" class="conta" hidden>
+      Levando você em <span class="contagem" id="segundos">8</span>s…
+    </p>
+  </main>
 
-        <div class="level-row"><span>Personagem</span><b id="heroLevel">Nível 1</b></div>
-        <div class="gold-display"><span class="icon">&#128176;</span><span id="goldText">0</span></div>
+<script>
+  (function () {
+    'use strict';
 
-        <div class="stat-row">
-          <div class="stat-label-row"><span>Vida</span><span id="hpText">-</span></div>
-          <div class="bar-track"><div class="bar-fill hp" id="hpBar" style="width:100%"></div></div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-label-row"><span>Mana</span><span id="mpText">-</span></div>
-          <div class="bar-track"><div class="bar-fill mp" id="mpBar" style="width:100%"></div></div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-label-row"><span>XP</span><span id="xpText">-</span></div>
-          <div class="bar-track xp-track"><div class="bar-fill xp" id="xpBar" style="width:0%"></div></div>
-        </div>
+    // A query string vai junto. Se um link de e-mail antigo apontar pra cá
+    // com `?verify=` ou `?reset=`, perder o token prenderia a conta.
+    var destino = 'https://rpglegend.com.br/' + window.location.search + window.location.hash;
+    var link = document.getElementById('ir');
+    link.href = destino;
 
-        <div class="attr-grid" id="attrGrid"></div>
+    // A contagem só aparece se houver JS pra cumpri-la — sem isso ela
+    // prometeria algo que nunca acontece, e o botão ficaria parecendo
+    // opcional quando é o único caminho.
+    var aviso = document.getElementById('aviso');
+    var campo = document.getElementById('segundos');
+    var restam = 8;
+    aviso.hidden = false;
 
-        <div class="stat-label-row" style="margin-top:12px;"><span>Fraqueza</span></div>
-        <div id="debuffList"></div>
+    var relogio = setInterval(function () {
+      restam -= 1;
+      campo.textContent = String(restam);
+      if (restam <= 0) {
+        clearInterval(relogio);
+        window.location.replace(destino);
+      }
+    }, 1000);
 
-        <div id="activeEffectsSection" class="hidden">
-          <div class="stat-label-row" style="margin-top:12px;"><span>Efeitos Ativos</span></div>
-          <div id="activeEffectsList"></div>
-        </div>
-
-      </aside>
-
-      <main>
-        <section class="panel">
-          <h2>Exploração</h2>
-          <div class="location-tag" id="locationTag">Cidade Inicial</div>
-          <div class="map-toolbar">
-            <div class="legend" id="mapLegend"></div>
-          </div>
-
-          <div class="explore-stage">
-            <div class="story-box">
-              <div class="npc-card" id="npcCard" style="display:none;">
-                <div class="npc-portrait" id="npcPortrait">&#129497;</div>
-                <div>
-                  <div class="npc-name" id="npcName">-</div>
-                  <div class="npc-role" id="npcRole">-</div>
-                </div>
-              </div>
-              <div id="sceneText"></div>
-              <div class="dialogue-controls hidden" id="dialogueControlsWrap">
-                <button id="npcActionBtn" class="hidden">Solicitar Serviço</button>
-                <button id="dialogueNextBtn">Continuar &#8594;</button>
-                <button id="dialogueCloseBtn">Encerrar</button>
-              </div>
-            </div>
-            <div class="combat-scene hidden" id="combatScene"></div>
-            <div class="minimap-wrap">
-              <div class="minimap-label">Mapa</div>
-              <div class="map-grid" id="mapGrid"></div>
-            </div>
-          </div>
-
-          <div id="controlsArea"></div>
-        </section>
-
-        <div class="lower-panels">
-          <section class="panel dice-tray">
-            <h2>Rolagens</h2>
-            <div class="roll-stage">
-              <div class="die-perspective"><div class="roll-die" id="rollDie">-</div></div>
-              <div class="roll-info" id="rollInfo">As rolagens de combate e negociação aparecem aqui.</div>
-            </div>
-          </section>
-
-          <section class="panel event-log">
-            <h2>Diário de Aventura</h2>
-            <div class="log-list" id="logList"></div>
-          </section>
-        </div>
-      </main>
-
-      <aside class="panel equipment-panel">
-        <h2>Equipamentos</h2>
-        <div class="equip-slots" id="equipSlots"></div>
-        <div class="panel-btn-row equipment-backpack">
-          <button id="backpackBtn">&#127890; Mochila <span class="badge" id="itemCount">0</span></button>
-        </div>
-        <div class="stat-label-row equipment-powers-title"><span>Poderes</span></div>
-        <div id="powersList"></div>
-        <div id="partySection" class="hidden">
-          <div class="stat-label-row equipment-party-title"><span>Equipe</span></div>
-          <div class="party-list" id="partyList"></div>
-        </div>
-      </aside>
-
-    </div>
-  </div>
-</div>
-
-<!-- ============ MODAL: MOCHILA ============ -->
-<div class="modal-overlay hidden" id="backpackModal">
-  <div class="modal-box inventory-modal-box">
-    <div class="modal-header">
-      <h2>&#127890; Mochila</h2>
-      <button class="modal-close" id="closeModalBtn">&times;</button>
-    </div>
-    <div class="item-browser-layout">
-      <div class="item-browser-list">
-        <div class="tab-row" id="invTabs"></div>
-        <div class="item-grid" id="itemGrid"></div>
-      </div>
-      <aside class="item-detail item-detail-pane" id="itemDetail" style="display:none;"></aside>
-    </div>
-  </div>
-</div>
-
-<!-- ============ MODAL: COMERCIANTE ============ -->
-<div class="modal-overlay hidden" id="merchantModal">
-  <div class="modal-box merchant-modal-box">
-    <div class="modal-header">
-      <h2 id="merchantTitle">&#127349; Vendedor</h2>
-      <button class="modal-close" id="closeMerchantBtn">&times;</button>
-    </div>
-    <div class="item-browser-layout merchant-browser-layout">
-      <div class="item-browser-list">
-        <div class="gold-display"><span class="icon">&#128176;</span><span id="merchantGoldText">0</span></div>
-        <div class="merchant-action-row">
-          <button class="rune-btn small" id="merchantRestockBtn">Renovar Estoque</button>
-          <button class="rune-btn small hidden forge-menu-btn" id="merchantForgeOpenBtn">⚒️ Abrir Reforja</button>
-          <div class="merchant-negotiation hidden" id="merchantNegotiation"></div>
-        </div>
-        <div class="creation-step merchant-section">
-          <div class="step-title">Itens a Venda</div>
-          <div class="item-grid" id="merchantBuyGrid"></div>
-        </div>
-        <div class="creation-step merchant-section">
-          <div class="step-title">Vender da Mochila</div>
-          <div class="item-grid" id="merchantSellGrid"></div>
-        </div>
-        <div class="creation-step merchant-section forge-mini-menu hidden" id="merchantForgeSection">
-          <div class="step-title">Reforjar Equipamento</div>
-          <div class="step-sub">Desequipe o item e selecione-o abaixo.</div>
-          <div class="item-grid" id="merchantForgeGrid"></div>
-        </div>
-      </div>
-      <aside class="item-detail item-detail-pane" id="merchantItemDetail"></aside>
-    </div>
-  </div>
-</div>
-
-<!-- ============ MODAL: QUADRO DE MISSOES ============ -->
-<div class="modal-overlay hidden" id="questModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h2>&#128220; Quadro de Missões</h2>
-      <button class="modal-close" id="closeQuestBtn">&times;</button>
-    </div>
-    <div id="questList"></div>
-  </div>
-</div>
-
-<!-- ============ MODAL: TUTORIAL E GUIA ============ -->
-<div class="modal-overlay hidden" id="tutorialModal">
-  <div class="modal-box tutorial-box">
-    <div class="modal-header"><h2>📖 Guia do Aventureiro</h2><button class="modal-close" id="closeTutorialBtn">&times;</button></div>
-    <div id="tutorialProgress"></div>
-    <div class="tutorial-guide-grid" id="tutorialGuideContent"></div>
-  </div>
-</div>
-<div class="tutorial-toast hidden" id="tutorialToast"><b id="tutorialToastTitle"></b><span id="tutorialToastText"></span><button id="tutorialToastClose">×</button></div>
-<button class="hidden" id="profilePetWidget" type="button" aria-label="Interagir com seu pet"><span id="profilePetIcon">🐔</span></button>
-
-<!-- ============ SOCIAL: AMIGOS E CHAT ============ -->
-<button class="social-launcher hidden" id="socialLauncherBtn" type="button" aria-label="Amigos">
-  💬<span class="social-badge hidden" id="socialBadge">0</span>
-</button>
-<div class="social-panel hidden" id="socialPanel">
-  <div class="social-panel-header">
-    <h3>Amigos</h3>
-    <button class="modal-close" id="socialPanelCloseBtn" type="button">&times;</button>
-  </div>
-  <div class="social-add-row">
-    <input id="socialAddInput" class="name-input" maxlength="24" placeholder="Nome de usuário">
-    <button class="rune-btn small" id="socialAddBtn" type="button">Adicionar</button>
-  </div>
-  <div class="social-form-message" id="socialFormMessage"></div>
-  <div class="social-section hidden" id="socialIncomingSection">
-    <div class="social-section-title">Pedidos recebidos</div>
-    <div id="socialIncomingList" class="social-list"></div>
-  </div>
-  <div class="social-section">
-    <div class="social-section-title">Amigos</div>
-    <div id="socialFriendsList" class="social-list"><div class="social-empty">Você ainda não tem amigos adicionados.</div></div>
-  </div>
-</div>
-<div class="social-chats" id="socialChats"></div>
-<div class="room-invite-toast hidden" id="roomInviteToast">
-  <div class="room-invite-text"></div>
-  <div class="room-invite-actions">
-    <button class="rune-btn small" id="roomInviteAcceptBtn" type="button">Aceitar</button>
-    <button class="rune-btn ghost small" id="roomInviteDeclineBtn" type="button">Recusar</button>
-  </div>
-</div>
-
-<!-- Scripts: a ordem não afeta as definições (tudo se anexa ao objeto global RPG),
-     mas main.js precisa ser o último por depender de todos os outros. -->
-<script src="js/items.js?v=20260824a"></script>
-<script src="js/monsters.js?v=20260803b"></script>
-<script src="js/narrator.js?v=20260802c"></script>
-<script src="js/player.js?v=20260810a"></script>
-<script src="js/map.js?v=20260802c"></script>
-<script src="js/events.js?v=20260803a"></script>
-<script src="js/npc-services.js?v=20260802c"></script>
-<script src="js/city.js?v=20260810a"></script>
-<script src="js/dungeon.js?v=20260810b"></script>
-<script src="js/combat.js?v=20260810b"></script>
-<script src="js/inventory.js?v=20260803e"></script>
-<script src="js/shop.js?v=20260810a"></script>
-<script src="js/quests.js?v=20260803a"></script>
-<script src="js/effects.js?v=20260802c"></script>
-<script src="js/music.js?v=20260803b"></script>
-<script src="js/save.js?v=20260810a"></script>
-<script src="js/tutorial.js?v=20260802d"></script>
-<script src="js/ui.js?v=20260822a"></script>
-<script src="js/multiplayer-config.js?v=20260802c"></script>
-<script src="js/pets.js?v=20260810a"></script>
-<script src="js/account.js?v=20260810a"></script>
-<script src="js/admin-panel.js?v=20260804a"></script>
-<script src="js/multiplayer.js?v=20260810f"></script>
-<script src="js/social.js?v=20260810d"></script>
-<script src="js/main.js?v=20260810b"></script>
+    // Quem clicar não precisa esperar a contagem.
+    link.addEventListener('click', function () { clearInterval(relogio); });
+  })();
+</script>
 </body>
 </html>
