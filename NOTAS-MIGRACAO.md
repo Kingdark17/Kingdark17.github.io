@@ -8,7 +8,7 @@ credencial, armadilhas de deploy e o contrato de rede do multiplayer.
 **O que NÃO entra:** decisão de arquitetura fechada (isso é `CLAUDE.md`) e
 nada que o código ou o `git log` já contem sozinhos.
 
-Última atualização: 2026-08-16.
+Última atualização: 2026-08-24.
 
 ---
 
@@ -21,7 +21,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
 | 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64, boneco na criação, no seletor de personagem e no painel do herói durante a partida — os dois últimos com o equipamento de verdade. **Sem PixiJS** — ver "Fase 4". Faltam 6 raças, 4 armas e 2 armaduras sem arte |
-| 5 — **Neon → Supabase** | **pronta em 2026-08-18**: banco criado (Postgres 17.6, `sa-east-1`), migrações aplicadas e conferidas contra o banco real, acesso público fechado inclusive pras tabelas futuras. O jogo no ar **continua no Neon** — o Supabase está vazio e é o ambiente novo, não uma virada. Ver "Fase 5" |
+| 5 — **Neon → Supabase** | **pronta em 2026-08-18**: banco criado (Postgres 17.6, `sa-east-1`), migrações aplicadas e conferidas contra o banco real, acesso público fechado inclusive pras tabelas futuras. O jogo no ar **continua no Neon** — o Supabase está vazio e é o ambiente novo, não uma virada. O copiador da virada existe desde 2026-08-24, com ensaio e conferência; a virada em si segue sem decisão. Ver "Fase 5" e "O copiador da virada" |
 | 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
 
 ### Fase 2 — o que já existe no Nest
@@ -1172,6 +1172,85 @@ subir.
 
 **A regra de sempre continua:** nunca apontar `drizzle-kit push`/`migrate`
 pro banco de produção sem decisão explícita.
+
+---
+
+## O copiador da virada (2026-08-24)
+
+A fase 5 criou o ambiente. **A virada — mover as contas reais e apontar o
+jogo pra cá — continua sem data e sem decisão.** O que existe agora é a
+peça que qualquer versão dela precisa: o copiador, com ensaio e
+conferência, exercitado contra dois Postgres de verdade.
+
+`pnpm --filter api db:copia`, com a lógica em `src/db/migracao/copia.ts`.
+
+### Três armadilhas, e por que cada uma está no código
+
+**A sequence não anda sozinha.** Inserir linha com `id` explícito não move
+a sequence do `bigserial`. O banco novo entregaria `id = 1` no próximo
+cadastro e colidiria com o usuário 1 recém-copiado. Isso **não aparece na
+cópia** — aparece no primeiro jogador que criar conta depois da virada, e
+aí o estrago já está feito. Daí `corrigirSequences` não ser opcional, e o
+teste que prova isso ser o mais importante do arquivo: ele insere um
+usuário no destino e exige que o id seja 4, não 1.
+
+**Coluna a menos no destino é perda silenciosa.** A produção nasceu do
+`init()` do servidor antigo, o Supabase nasceu das migrações do drizzle.
+`conferirSchemas` compara as duas pontas e **recusa** a cópia se faltar
+coluna no destino — copiar assim jogaria dado fora sem erro nenhum. Coluna
+sobrando no destino é aceita de propósito: nasce com o default.
+
+**`jsonb` que começa com array vira array do Postgres.** O `pg` converte
+`Array` de JS pra literal de array, não pra JSON. Toda coluna `json`/`jsonb`
+sai daqui como texto com `::jsonb` explícito, e a semente do teste tem um
+`cloud_save_history.data` que é array no topo justamente pra provar isso.
+
+### O que a conferência prova
+
+Contagem sozinha não pega texto truncado nem `jsonb` remontado errado.
+`conferir()` compara, dos dois lados, o `md5` do que perder seria estrago
+de verdade: hash e sal de senha, o save do jogador (`md5(data::text)` —
+determinístico, porque o Postgres guarda as chaves do `jsonb` ordenadas),
+e o corpo da mensagem.
+
+### As barreiras da CLI
+
+**O script não lê o `.env`**, e isso é reação direta ao que a fase 5
+descobriu (o drizzle-kit lê sozinho). As duas pontas vêm de `ORIGEM_URL` e
+`DESTINO_URL` ou ele não roda. Recusa se as duas forem iguais. Sem
+`--escrever` é ensaio: lê, conta e relata sem gravar.
+
+Com `--escrever` ele **ainda** exige `--confirmo=<host do destino>`, e o
+host tem que bater. Digitar o host da origem por engano é recusado antes de
+qualquer conexão — provado na mão.
+
+A cópia é re-executável (`ON CONFLICT DO NOTHING` sobre a chave), então uma
+cópia interrompida se retoma sem limpar o destino. É de propósito não ter
+transação única: prender as sete tabelas num lock durante a cópia inteira
+seria pior que retomar.
+
+### O que continua em aberto
+
+Nada disto decide a virada. Falta decidir:
+
+1. **A janela de escrita.** Quem estiver jogando continua gravando no Neon
+   durante a cópia. Tudo que cair depois do retrato se perde, a menos que
+   haja congelamento ou segunda passada.
+2. **As sessões.** Copiar (ninguém desloga) ou não copiar (todo mundo
+   entra de novo). O copiador leva `sessions` junto hoje.
+3. **A volta atrás.** Depois que o jogo apontar pro Supabase, o que gravar
+   lá fica órfão se a decisão for voltar.
+
+### Achado de fora do assunto: `noImplicitAny: false` esconde `any`
+
+O `apps/api/tsconfig.json` tem `noImplicitAny: false`. Consequência que
+apareceu aqui: quando a inferência **fecha um ciclo** (uma variável é lida
+pra montar a consulta e reescrita com o resultado dela), o TS resolve
+entregando `any` **em silêncio** — o `pnpm typecheck` passa e o tipo some.
+Quem pegou foi o `eslint` com as regras tipadas, não o `tsc`.
+
+Vale como regra geral neste pacote: `typecheck` verde não é prova de que há
+tipo. Anotação explícita corta o ciclo.
 
 ---
 
