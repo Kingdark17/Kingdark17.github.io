@@ -8,7 +8,6 @@
  */
 
 import Image from 'next/image';
-import type { ReactNode } from 'react';
 
 import { itemView, statTags, tierFor, type Item } from '@rpg-legend/shared';
 
@@ -26,11 +25,17 @@ interface Props {
   rodape?: string;
   selecionado?: boolean;
   onClick?: () => void;
-  /** Botões sob a carta, quando o item aceita mais de uma ação (equipar na principal ou na secundária, usar, descartar). */
-  acoes?: ReactNode;
 }
 
-export function CartaItem({ item, rodape, selecionado, onClick, acoes }: Props) {
+/**
+ * Carta de item: sprite, nome com a cor da raridade, tier e atributos.
+ *
+ * **A carta não age.** Ela mostra e, quando clicável, seleciona — quem
+ * equipa, usa e descarta é a ficha ao lado (`ficha-item.tsx`). Antes cada
+ * carta carregava os próprios botões, o que enchia a grade de "Equipar /
+ * Descartar" repetidos e espalhava a mesma ação por dezenas de lugares.
+ */
+export function CartaItem({ item, rodape, selecionado, onClick }: Readonly<Props>) {
   const visao = itemView(item);
   const tier = tierFor(item);
   const tags = statTags(item);
@@ -57,19 +62,21 @@ export function CartaItem({ item, rodape, selecionado, onClick, acoes }: Props) 
     </>
   );
 
-  if (acoes) {
-    return (
-      <div className={styles.cartaItem}>
-        {conteudo}
-        <div className={styles.acoesDaCarta}>{acoes}</div>
-      </div>
-    );
-  }
+  /* A tarja lateral com a cor da raridade — do jogo antigo
+     (`.item-card { border-left: 3px solid }`). Dá a raridade de longe, sem
+     precisar ler o nome, que é o que faz uma grade de 76 itens ser
+     varrível. O nome continua colorido: a cor nunca é o único sinal. */
+  const tarja = { borderLeftColor: `var(${visao.rarityColorVar})` };
 
-  if (!onClick) return <div className={styles.cartaItem}>{conteudo}</div>;
+  if (!onClick) return <div className={styles.cartaItem} style={tarja}>{conteudo}</div>;
 
   return (
-    <button type="button" className={`${styles.cartaItem} ${styles.cartaClicavel} ${selecionado ? styles.cartaSelecionada : ''}`} onClick={onClick}>
+    <button
+      type="button"
+      style={tarja}
+      className={`${styles.cartaItem} ${styles.cartaClicavel} ${selecionado ? styles.cartaSelecionada : ''}`}
+      onClick={onClick}
+    >
       {conteudo}
     </button>
   );
