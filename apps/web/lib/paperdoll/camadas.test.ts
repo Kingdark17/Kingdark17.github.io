@@ -46,6 +46,19 @@ describe('montarCamadas', () => {
     });
 
     /**
+     * O caminho inteiro, pasta incluída.
+     *
+     * Os outros testes casam só pelo nome do arquivo, e por isso nenhum
+     * deles reclamou quando a pasta saiu de `acessorio/` pra `traco/` — o
+     * caminho teria ficado errado e a suíte, verde. Caminho errado aqui não
+     * dá exceção: dá 404 e um quadrado quebrado na tela, que é exatamente o
+     * que a lista escrita à mão deste módulo existe pra evitar.
+     */
+    it('o caminho do traço aponta pra pasta que existe no disco', () => {
+      expect(montarCamadas({ raca: 'felino' })).toContain('/img/paperdoll/traco/orelhas-de-gato.png');
+    });
+
+    /**
      * O motivo de a camada existir.
      *
      * A armadura de placas tem capacete. Desenhada por último, ela cobre a

@@ -52,10 +52,11 @@ export const ARMADURAS: ReadonlySet<string> = new Set(['placas']);
  * humano de armadura. A pessoa escolheu a raça e deixaria de vê-la
  * justamente quando o personagem fica mais forte.
  *
- * Moram em `acessorio/` por acidente de quando a arte chegou, antes de
- * saber o que eram. O nome da pasta é o único resto disso.
+ * Moram em `traco/`. Estiveram em `acessorio/` enquanto ninguém sabia o
+ * que eram — nome que confundia com o slot de acessório equipável, que é
+ * outra coisa e nem tem camada (ver o bloco acima).
  */
-const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([['felino', 'acessorio/orelhas-de-gato.png']]);
+const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([['felino', 'traco/orelhas-de-gato.png']]);
 
 /**
  * Mão secundária. Hoje só o escudo — e ele é `category: 'armadura'` nos
