@@ -25,7 +25,8 @@ import { destinoDoPortao } from '@/lib/auth/portao';
 const NOME_DO_COOKIE = 'rpg_sessao';
 
 export function proxy(request: NextRequest) {
-  const destino = destinoDoPortao(request.nextUrl.pathname, request.cookies.has(NOME_DO_COOKIE));
+  const { pathname, search } = request.nextUrl;
+  const destino = destinoDoPortao(pathname, search, request.cookies.has(NOME_DO_COOKIE));
   if (!destino) return NextResponse.next();
   return NextResponse.redirect(new URL(destino, request.url));
 }

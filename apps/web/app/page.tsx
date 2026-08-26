@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation';
 
-import { rotaDoLinkDeEmail } from '@/lib/api/email';
+import { primeiro, rotaDoLinkDeEmail } from '@/lib/api/email';
 import { usuarioDaSessao } from '@/lib/api/sessao-servidor';
+import { PARAMETRO_DE_VOLTA, rotaDeVolta } from '@/lib/auth/portao';
 import { Entrada } from './entrada';
 import styles from './entrada.module.css';
 
@@ -40,16 +41,24 @@ export default async function Portao({
   // logado, e o `redirect('/menu')` abaixo engoliria o token junto com a
   // busca. O link morreria sem erro nenhum na tela — a pessoa veria o menu,
   // acharia que deu certo, e a conta continuaria sem confirmar.
-  const desvio = rotaDoLinkDeEmail(await searchParams);
+  const busca = await searchParams;
+  const desvio = rotaDoLinkDeEmail(busca);
   if (desvio) redirect(desvio);
 
-  if (await usuarioDaSessao()) redirect('/menu');
+  // Onde a pessoa estava indo quando o portão a interrompeu. Já vem
+  // higienizado — `rotaDeVolta` recusa endereço de fora, que é como se
+  // transformaria este parâmetro em roubo de senha.
+  const destino = rotaDeVolta(primeiro(busca[PARAMETRO_DE_VOLTA]));
+
+  // Quem já tem sessão e caiu aqui com um `?de=` volta pra onde ia, não
+  // pro menu: é o caso de quem entrou noutra aba e recarregou esta.
+  if (await usuarioDaSessao()) redirect(destino);
 
   return (
     <main className={styles.tela}>
       <div className={styles.cartao}>
         <p className={styles.marca}>RPG Legend</p>
-        <Entrada />
+        <Entrada destino={destino} />
       </div>
     </main>
   );

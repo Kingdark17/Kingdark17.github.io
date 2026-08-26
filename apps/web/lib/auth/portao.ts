@@ -38,6 +38,52 @@ export function ehRotaPublica(caminho: string): boolean {
   return ROTAS_PUBLICAS.includes(normalizar(caminho));
 }
 
+/** Onde o portão guarda de onde a pessoa veio. */
+export const PARAMETRO_DE_VOLTA = 'de';
+
+/** Quem entra sem ter sido barrado antes vai pro menu. */
+export const DESTINO_PADRAO = '/menu';
+
+/**
+ * Base impossível de existir, usada só pra resolver um caminho relativo e
+ * perguntar se ele continua apontando pra cá.
+ */
+const BASE_INVENTADA = 'http://portao.invalido';
+
+/**
+ * Para onde mandar quem acabou de entrar, dado o `?de=` que veio na URL.
+ *
+ * **Isto é uma barreira de redirecionamento aberto, não uma conveniência.**
+ * O valor vem da barra de endereço, então qualquer um consegue montar
+ * `/?de=https://site-falso/entre` e mandar pro seu jogador. Ele veria o
+ * portão legítimo, no domínio legítimo, digitaria a senha certa — e seria
+ * cuspido num clone. É assim que se rouba conta sem invadir nada.
+ *
+ * A defesa é resolver o valor contra uma base inventada e exigir que a
+ * origem continue sendo ela. Isso derruba de uma vez `https://outro`,
+ * `//outro` (que herda o esquema) e `/\outro` — a barra invertida vira
+ * barra na normalização de URL, então o terceiro é o segundo disfarçado.
+ * Testar prefixo à mão pega os dois primeiros e esquece o terceiro.
+ *
+ * Voltar pra uma rota pública também é recusado: mandar de volta pro
+ * portão depois de entrar é laço, e é o que `?de=/` pediria.
+ */
+export function rotaDeVolta(cru: string | undefined): string {
+  if (!cru?.startsWith('/')) return DESTINO_PADRAO;
+
+  let alvo: URL;
+  try {
+    alvo = new URL(cru, BASE_INVENTADA);
+  } catch {
+    return DESTINO_PADRAO;
+  }
+
+  if (alvo.origin !== BASE_INVENTADA) return DESTINO_PADRAO;
+  if (ehRotaPublica(alvo.pathname)) return DESTINO_PADRAO;
+
+  return `${alvo.pathname}${alvo.search}`;
+}
+
 /**
  * Pra onde mandar quem pediu `caminho`, ou `null` pra deixar passar.
  *
@@ -49,13 +95,17 @@ export function ehRotaPublica(caminho: string): boolean {
  * 401, e o `/` confere pelo `usuarioDaSessao()` antes de mostrar o
  * formulário.
  *
- * O resíduo, anotado de propósito: cookie **vencido** passa pelo portão e
- * a pessoa chega no menu, onde as chamadas falham com "Entre na sua conta
- * para continuar." em vez de voltar pro login sozinha. É o mesmo
- * comportamento de hoje, não uma piora — mas é o próximo buraco a fechar.
+ * Cookie **vencido** passa por aqui, porque daqui ele é indistinguível de
+ * um válido. Quem fecha esse buraco é o `chamarApi`: o primeiro 401 numa
+ * rota autenticada devolve a pessoa pro portão, pelo mesmo `?de=` que esta
+ * função monta. Os dois caminhos convergem de propósito.
+ *
+ * O `?de=` leva caminho **e** busca: quem clicou em `/loja?item=42` volta
+ * pro item, não pra vitrine.
  */
-export function destinoDoPortao(caminho: string, temSessao: boolean): string | null {
+export function destinoDoPortao(caminho: string, busca: string, temSessao: boolean): string | null {
   if (ehRotaPublica(caminho)) return null;
   if (temSessao) return null;
-  return '/';
+  const de = encodeURIComponent(caminho + busca);
+  return `/?${PARAMETRO_DE_VOLTA}=${de}`;
 }

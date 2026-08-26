@@ -6,6 +6,8 @@
  * o cliente as repassa em vez de inventar texto próprio.
  */
 
+import { PARAMETRO_DE_VOLTA } from '@/lib/auth/portao';
+
 export class ErroDaApi extends Error {
   constructor(
     message: string,
@@ -43,6 +45,40 @@ interface Opcoes {
 
 export const SEM_SESSAO = 'Entre na sua conta para continuar.';
 
+/**
+ * A decisão, separada do efeito pra poder ser testada.
+ *
+ * Só 401 **em rota que declarou precisar de sessão**. As rotas de e-mail
+ * não declaram, de propósito (ver `email.ts`): um 401 lá é link vencido,
+ * e mandar pro login quem acabou de perder o acesso à conta seria pedir
+ * exatamente o que a pessoa não consegue fazer.
+ */
+export function sessaoExpirou(status: number, autenticado: boolean | undefined): boolean {
+  return status === 401 && autenticado === true;
+}
+
+/**
+ * Devolve a pessoa pro portão quando a sessão morreu no meio do caminho.
+ *
+ * Existe porque o `proxy.ts` não consegue fazer isso sozinho: da borda, um
+ * cookie vencido é idêntico a um válido, e distinguir custaria uma chamada
+ * à API a cada navegação — numa API que hiberna até 50 segundos. Então o
+ * portão deixa passar, e o primeiro 401 real corrige.
+ *
+ * `replace` e não `assign`: a tela que já não funciona não merece uma
+ * entrada no histórico, senão o "voltar" do navegador cai nela de novo.
+ */
+function voltarProPortao(): void {
+  if (typeof window === 'undefined') return;
+
+  const { pathname, search } = window.location;
+  // Já estar no portão e receber 401 é possível — e redirecionar pra ele
+  // seria laço.
+  if (pathname === '/') return;
+
+  window.location.replace(`/?${PARAMETRO_DE_VOLTA}=${encodeURIComponent(pathname + search)}`);
+}
+
 export async function chamarApi<T>(caminho: string, opcoes: Opcoes = {}): Promise<T> {
   const headers: Record<string, string> = {};
   if (opcoes.body !== undefined) headers['Content-Type'] = 'application/json';
@@ -66,6 +102,12 @@ export async function chamarApi<T>(caminho: string, opcoes: Opcoes = {}): Promis
   const corpo = texto ? (JSON.parse(texto) as unknown) : {};
 
   if (!resposta.ok) {
+    // Antes de montar a mensagem: se a sessão morreu, a tela certa é o
+    // portão, não um recado vermelho numa tela que não funciona mais. O
+    // `throw` continua acontecendo — a navegação não é instantânea, e quem
+    // chamou não pode seguir como se tivesse dado certo.
+    if (sessaoExpirou(resposta.status, opcoes.autenticado)) voltarProPortao();
+
     const mensagem = (corpo as { error?: unknown }).error;
     if (typeof mensagem === 'string') throw new ErroDaApi(mensagem, resposta.status);
     // 401 sem corpo é sessão ausente ou vencida — dizer isso vale mais que
