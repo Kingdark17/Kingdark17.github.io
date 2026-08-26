@@ -45,6 +45,7 @@ import {
   normalizePlayerName,
   normalizeRoomCode,
   type Room,
+  type RoomMember,
   type RoomRole,
   type RoomState,
 } from './room-registry';
@@ -294,11 +295,13 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
     if (body?.state) this.rooms.applyState(seat.room, HOST_ROLE, body.state);
     const turnoInicial = clampInt(body?.turn, 1, MAX_TURN);
-    this.relayPorPapel(seat.room, socket, 'welcome', (papel) => ({
+    // `welcome` é a sincronização cheia da sala: mochila vai sempre, ainda
+    // que o servidor ache que já mandou. É o que cura quem reconecta.
+    this.relayPorMembro(seat.room, socket, 'welcome', (membro) => ({
       room: seat.room.code,
       role: HOST_ROLE,
-      state: this.estadoPara(seat.room, seat.room.state, papel),
-      profiles: this.rooms.profilesForRole(seat.room, papel),
+      state: this.estadoPara(seat.room, seat.room.state, membro, true),
+      profiles: this.rooms.profilesForMember(seat.room, membro, true),
       turn: turnoInicial,
     }));
   }
@@ -310,19 +313,21 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
     const state = this.rooms.applyState(seat.room, seat.role, body?.state);
     const turn = clampInt(body?.turn, 1, MAX_TURN);
-    // Este é o caminho quente: sai a cada ação de jogo. Medido num save com
-    // 76 itens, o pacote era 14 KB, dos quais 10,5 KB eram a mochila que o
-    // destinatário não lê. Por isso o perfil vai recortado por papel.
-    this.relayPorPapel(seat.room, socket, 'state', (papel) => ({
+    // Este é o caminho quente: sai a cada ação de jogo, nos dois sentidos.
+    // Medido num save de andar 8 com 76 itens, eram 20,3 KB por lado, dos
+    // quais 11,5 KB a mochila de quem recebe — ecoada de volta sem ter
+    // mudado. O perfil vai recortado por destinatário, e a mochila só
+    // quando é outra (ver `profilesForMember`).
+    this.relayPorMembro(seat.room, socket, 'state', (membro) => ({
       room: seat.room.code,
       role: seat.role,
-      state: this.estadoPara(seat.room, state, papel),
+      state: this.estadoPara(seat.room, state, membro),
       turn,
     }));
     socket.emit('authoritative', {
       room: seat.room.code,
       role: seat.role,
-      state: this.estadoPara(seat.room, state, seat.role),
+      state: this.estadoPara(seat.room, state, seat.member),
       turn,
     });
   }
@@ -383,19 +388,21 @@ export class RealtimeGateway implements OnGatewayDisconnect {
   /**
    * Como `relay`, mas monta um pacote por destinatário.
    *
-   * Existe porque o perfil passou a ser recortado por papel: cada jogador
-   * recebe o próprio inteiro e o do parceiro sem mochila nem grupo. Um
-   * pacote só não serve pros dois.
+   * Existe porque o perfil é recortado por destinatário: cada jogador
+   * recebe o próprio e o do parceiro sem mochila nem grupo. Um pacote só
+   * não serve pros dois — e desde que a própria mochila só viaja quando
+   * muda, o recorte depende da **conexão**, não do papel: é ela que sabe o
+   * que já recebeu.
    */
-  private relayPorPapel(room: Room, sender: Socket, event: string, montar: (papel: RoomRole) => unknown): void {
+  private relayPorMembro(room: Room, sender: Socket, event: string, montar: (membro: RoomMember) => unknown): void {
     for (const membro of this.rooms.peerMembersOf(room, sender.id)) {
-      membro.connection.emit(event, montar(membro.role));
+      membro.connection.emit(event, montar(membro));
     }
   }
 
   /** O estado com os perfis recortados pra quem vai receber. */
-  private estadoPara(room: Room, estado: RoomState | null, papel: RoomRole): RoomState | null {
-    return estado ? { ...estado, profiles: this.rooms.profilesForRole(room, papel) } : estado;
+  private estadoPara(room: Room, estado: RoomState | null, membro: RoomMember, forcarMochila = false): RoomState | null {
+    return estado ? { ...estado, profiles: this.rooms.profilesForMember(room, membro, forcarMochila) } : estado;
   }
 
   private senderOf(socket: Socket): { id: number; username: string } | null {
@@ -405,14 +412,16 @@ export class RealtimeGateway implements OnGatewayDisconnect {
   }
 
   /** Resolve sala + papel do remetente, checando que ele é mesmo dessa sala. */
-  private seatOf(socket: Socket, rawCode: unknown): { room: Room; role: RoomRole } | null {
+  private seatOf(socket: Socket, rawCode: unknown): { room: Room; role: RoomRole; member: RoomMember } | null {
     const code = normalizeRoomCode(rawCode);
     if (!code) return null;
     const membership = this.rooms.membershipOf(socket.id);
     if (!membership || membership.code !== code) return null;
     const room = this.rooms.get(code);
     if (!room) return null;
-    return { room, role: membership.role };
+    const member = this.rooms.memberOf(room, socket.id);
+    if (!member) return null;
+    return { room, role: membership.role, member };
   }
 
   /**

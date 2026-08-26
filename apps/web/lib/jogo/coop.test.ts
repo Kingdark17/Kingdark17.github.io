@@ -141,4 +141,23 @@ describe('aplicarRemoto', () => {
 
     expect(depois.inventory).toEqual([]);
   });
+
+  /**
+   * O par do teste acima, e a diferença que segura a regra inteira:
+   * mochila **vazia** é esvaziar de verdade; mochila **ausente** é "não
+   * mudou". O servidor parou de reenviá-la a cada ação (eram 11,5 KB de um
+   * pacote de 20,3 KB, ecoados sem novidade), e ler ausência como `[]`
+   * apagaria a mochila do jogador a cada passo — e a perda viajaria de
+   * volta na sincronização seguinte, virando definitiva.
+   */
+  it('mochila ausente no perfil mantém a que eu já tinha', () => {
+    const meu = cidade();
+    const semMochila: PerfilNaSala = { ...perfilDe(meu) };
+    delete semMochila.inventory;
+
+    const depois = aplicarRemoto(meu, instantaneoDaSala(cidade('Bree', 9), 1, 'Bree', null), semMochila);
+
+    expect(depois.inventory).toBe(meu.inventory);
+    expect(depois.inventory.length).toBeGreaterThan(0);
+  });
 });

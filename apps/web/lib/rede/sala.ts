@@ -37,7 +37,17 @@ export interface CosmeticosPublicos {
 export interface PerfilNaSala {
   name: string;
   hero: Record<string, unknown>;
-  inventory: unknown[];
+  /**
+   * **Ausente quer dizer "não mudou"**, nunca "esvaziou" — a mesma regra
+   * que a subida já usa (`instantaneoDaSala`). O servidor só reenvia a
+   * mochila quando ela é outra; eram 11,5 KB de um pacote de 20,3 KB,
+   * ecoados a cada ação de jogo sem novidade nenhuma.
+   *
+   * Quem preserva a anterior é `comMochilaPreservada`, aqui na fronteira,
+   * pra que ninguém mais no front precise saber disso. O perfil do
+   * parceiro nunca tem mochila, por outro motivo (a tela dele não lê).
+   */
+  inventory?: unknown[];
   party: Record<string, unknown>[];
   publicProfile: CosmeticosPublicos | null;
 }
@@ -121,8 +131,37 @@ function comFotoAbsoluta(perfil: PerfilNaSala): PerfilNaSala {
   return { ...perfil, publicProfile: { ...cosmeticos, avatarUrl: urlDaApi(cosmeticos.avatarUrl) } };
 }
 
+/**
+ * Perfil sem `inventory` mantém a mochila que já estava guardada.
+ *
+ * **É aqui que a regra mora, e só aqui.** Nada mais no front lê a mochila
+ * de um perfil de sala — o cartão do parceiro lê nome, nível, classe e
+ * cosméticos, e quem devolve a mochila pro jogo é `aplicarRemoto`, a partir
+ * do que esta função guardou. Deixar o instantâneo completo poupa todo o
+ * resto de conhecer o acordo.
+ *
+ * Substituir o objeto inteiro seria perder a mochila em silêncio, e ela
+ * voltaria vazia pro servidor na sincronização seguinte — perda de verdade,
+ * não de tela. É a mesma armadilha que `sanitizeProfile` documenta do lado
+ * de lá; o remédio tinha que existir dos dois.
+ *
+ * Pura e exportada de propósito: é a regra que, errada, apaga mochila, e
+ * dentro do módulo do socket ela não teria como ser testada.
+ */
+export function preservarMochila(
+  anteriores: Partial<Record<PapelNaSala, PerfilNaSala>>,
+  papel: number,
+  recebido: PerfilNaSala,
+): PerfilNaSala {
+  // `undefined` é "não mudou"; `[]` é esvaziar de verdade, e passa reto.
+  if (recebido.inventory !== undefined) return recebido;
+  const anterior = anteriores[papel as PapelNaSala];
+  if (anterior?.inventory === undefined) return recebido;
+  return { ...recebido, inventory: anterior.inventory };
+}
+
 function guardarPerfil(papel: number, perfil: PerfilNaSala): Partial<Record<PapelNaSala, PerfilNaSala>> {
-  return { ...instantaneo.perfis, [papel]: comFotoAbsoluta(perfil) };
+  return { ...instantaneo.perfis, [papel]: preservarMochila(instantaneo.perfis, papel, comFotoAbsoluta(perfil)) };
 }
 
 function mudar(mudanca: Partial<EstadoDaSala>): void {
@@ -254,7 +293,10 @@ function adotarRemoto(
     ? {
         ...instantaneo.perfis,
         ...(Object.fromEntries(
-          Object.entries(perfisRecebidos).map(([papel, perfil]) => [Number(papel), comFotoAbsoluta(perfil)]),
+          Object.entries(perfisRecebidos).map(([papel, perfil]) => [
+            Number(papel),
+            preservarMochila(instantaneo.perfis, Number(papel), comFotoAbsoluta(perfil)),
+          ]),
         ) as Partial<Record<PapelNaSala, PerfilNaSala>>),
       }
     : instantaneo.perfis;

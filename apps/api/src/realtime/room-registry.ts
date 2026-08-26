@@ -13,7 +13,16 @@
  */
 
 import { clampInt, cloneJson } from './numeric';
-import { sanitizeProfile, toPeerProfile, toPublicProfile, type PeerProfile, type PublicProfile, type SanitizedProfile } from './sanitize';
+import {
+  sanitizeProfile,
+  toOwnProfile,
+  toPeerProfile,
+  toPublicProfile,
+  type OwnProfile,
+  type PeerProfile,
+  type PublicProfile,
+  type SanitizedProfile,
+} from './sanitize';
 import { comoTexto } from '../common/texto';
 
 export type RoomRole = 1 | 2;
@@ -40,12 +49,24 @@ export type RoomState = Record<string, unknown>;
 export interface RoomMember {
   connection: RoomConnection;
   role: RoomRole;
+  /**
+   * Qual versão da própria mochila esta conexão já recebeu. Ausente = nunca
+   * recebeu nenhuma, então a próxima vai inteira — é o que faz uma
+   * reconexão se curar sozinha. Ver `profilesForMember`.
+   */
+  inventorySent?: number;
 }
 
 export interface Room {
   code: string;
   members: RoomMember[];
   profiles: Partial<Record<RoomRole, SanitizedProfile>>;
+  /**
+   * Sobe um a cada mochila **nova** aceita de um papel. Serve só pra
+   * comparar com o `inventorySent` de cada conexão; o número em si não
+   * significa nada e não vai pro fio.
+   */
+  inventoryVersions: Partial<Record<RoomRole, number>>;
   state: RoomState | null;
   adminRoles: Partial<Record<RoomRole, boolean>>;
   isPublic: boolean;
@@ -121,6 +142,7 @@ export class RoomRegistry {
       code,
       members: [{ connection, role: HOST_ROLE }],
       profiles: {},
+      inventoryVersions: {},
       state: null,
       adminRoles: { [HOST_ROLE]: options.admin },
       isPublic: options.isPublic,
@@ -208,6 +230,14 @@ export class RoomRegistry {
     delete room.profiles[anterior];
     room.adminRoles[HOST_ROLE] = room.adminRoles[anterior];
     delete room.adminRoles[anterior];
+    room.inventoryVersions[HOST_ROLE] = room.inventoryVersions[anterior];
+    delete room.inventoryVersions[anterior];
+
+    // Esquece o que já mandou: a mochila dele mudou de papel, e as versões
+    // dos dois papéis não têm relação nenhuma entre si. Sem isto, uma
+    // colisão de número faria o próximo pacote omitir a mochila achando que
+    // ela já foi — e omitir sem ter mandado é apagar.
+    delete sucessor.inventorySent;
 
     return { connection: sucessor.connection, from: anterior, to: HOST_ROLE };
   }
@@ -227,8 +257,8 @@ export class RoomRegistry {
   }
 
   /**
-   * Os perfis como **quem tem o papel `role`** deve recebê-los: o dele
-   * inteiro, o do parceiro sem mochila nem grupo.
+   * Os perfis como **esta conexão** deve recebê-los: o dela, o do parceiro
+   * sem mochila nem grupo.
    *
    * O recorte é por destinatário porque os dois lados leem coisas
    * diferentes do mesmo pacote. Quem recebe usa `perfis[meuPapel]` pra
@@ -236,19 +266,36 @@ export class RoomRegistry {
    * autoritativa (`aplicarRemoto`, no front); do parceiro, a tela lê só
    * nome, nível, classe e cosméticos.
    *
-   * **Mandar o enxuto pra todo mundo apagaria mochila.** O front faz
-   * `meuPerfil.inventory ?? []`, então um perfil próprio sem `inventory`
-   * não é "sem novidade", é "esvaziou" — e isso viajaria de volta no
-   * próximo `state`, virando perda de verdade.
+   * A própria mochila só vai **quando mudou** — mesma regra que a subida já
+   * tem (`instantaneoDaSala`, no front) e que `sanitizeProfile` já entende
+   * ("ausente = não mudou"). Era 57% do pacote indo e voltando sem
+   * novidade nenhuma; ver `toOwnProfile`.
+   *
+   * É por conexão, e não por papel, porque a resposta depende do que
+   * **aquela conexão** já recebeu. Quem reconecta entra como membro novo,
+   * sem `inventorySent`, e a primeira mensagem já leva a mochila inteira.
+   *
+   * `forcarMochila` é pra `welcome`: ele é a sincronização cheia, e quem
+   * acabou de entrar não tem o que preservar.
    */
-  profilesForRole(room: Room, role: RoomRole): Record<string, PublicProfile | PeerProfile> {
-    const result: Record<string, PublicProfile | PeerProfile> = {};
+  profilesForMember(room: Room, member: RoomMember, forcarMochila = false): Record<string, OwnProfile | PeerProfile> {
+    const versao = room.inventoryVersions[member.role] ?? 0;
+    const mandarMochila = forcarMochila || member.inventorySent !== versao;
+
+    const result: Record<string, OwnProfile | PeerProfile> = {};
     for (const chave of Object.keys(room.profiles)) {
       const papel = Number(chave) as RoomRole;
       const profile = room.profiles[papel];
-      if (profile) result[chave] = papel === role ? toPublicProfile(profile) : toPeerProfile(profile);
+      if (profile) result[chave] = papel === member.role ? toOwnProfile(profile, mandarMochila) : toPeerProfile(profile);
     }
+
+    if (mandarMochila) member.inventorySent = versao;
     return result;
+  }
+
+  /** O membro de uma conexão dentro da sala — quem monta pacote precisa dele. */
+  memberOf(room: Room, connectionId: string): RoomMember | undefined {
+    return room.members.find((member) => member.connection.id === connectionId);
   }
 
   /** O perfil de um papel na forma que o parceiro recebe. */
@@ -257,11 +304,31 @@ export class RoomRegistry {
     return profile ? toPeerProfile(profile) : null;
   }
 
-  /** `type:'profile'`: aceita o perfil saneado e devolve a versão pública. */
+  /**
+   * `type:'profile'`: aceita o perfil saneado e devolve a versão pública —
+   * **com mochila**, sempre. É a resposta a uma submissão explícita de
+   * perfil, e é onde o cliente se corrige contra o saneamento.
+   */
   applyProfile(room: Room, role: RoomRole, candidate: unknown): PublicProfile {
-    const accepted = sanitizeProfile(candidate, room.profiles[role] ?? null, this.isAdmin(room, role));
-    room.profiles[role] = accepted;
-    return toPublicProfile(accepted);
+    return toPublicProfile(this.aceitarPerfil(room, role, candidate));
+  }
+
+  /**
+   * Guarda o perfil saneado e marca se a mochila é nova.
+   *
+   * A comparação é por **identidade de array**, não por conteúdo, e é
+   * exata: `sanitizeProfile` devolve o *mesmo* array quando a mochila não
+   * veio no pacote, e um clone novo quando veio. Comparar o conteúdo seria
+   * varrer 120 itens a cada ação pra descobrir o que a referência já diz.
+   */
+  private aceitarPerfil(room: Room, role: RoomRole, candidate: unknown): SanitizedProfile {
+    const anterior = room.profiles[role] ?? null;
+    const aceito = sanitizeProfile(candidate, anterior, this.isAdmin(room, role));
+    room.profiles[role] = aceito;
+    if (!anterior || aceito.inventory !== anterior.inventory) {
+      room.inventoryVersions[role] = (room.inventoryVersions[role] ?? 0) + 1;
+    }
+    return aceito;
   }
 
   /**
@@ -274,9 +341,7 @@ export class RoomRegistry {
 
     const incomingProfiles = state.profiles as Record<string, unknown> | undefined;
     const incoming = incomingProfiles ? incomingProfiles[String(role)] : undefined;
-    if (incoming) {
-      room.profiles[role] = sanitizeProfile(incoming, room.profiles[role] ?? null, this.isAdmin(room, role));
-    }
+    if (incoming) this.aceitarPerfil(room, role, incoming);
     state.profiles = this.publicProfiles(room);
 
     state.floor = clampInt(state.floor, 1, MAX_FLOOR);

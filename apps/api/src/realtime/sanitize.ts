@@ -211,6 +211,27 @@ export function toPublicProfile(profile: SanitizedProfile): PublicProfile {
 }
 
 /**
+ * O próprio perfil **sem a mochila** — ausência quer dizer "não mudou",
+ * exatamente como já quer dizer na subida (ver `sanitizeProfile`).
+ *
+ * A regra existia só num sentido. O cliente já omite a mochila quando ela
+ * não mudou (`instantaneoDaSala`, no front), mas o servidor devolvia o
+ * perfil próprio inteiro a cada ação: medido num save de andar 8 com 76
+ * itens, eram 11,5 KB de um pacote de 20,3 KB — **57%**, e ida e volta, o
+ * jogo todo. O recorte por papel tirou a mochila *do parceiro*; a que
+ * sobrou viajando é a sua própria, ecoada de volta sem ter mudado.
+ *
+ * Quem decide se ela vai é `RoomRegistry`, que sabe o que já mandou pra
+ * cada conexão — ver `profilesForMember`.
+ */
+export type OwnProfile = PublicProfile | Omit<PublicProfile, 'inventory'>;
+
+export function toOwnProfile(profile: SanitizedProfile, comMochila: boolean): OwnProfile {
+  const { inventory, ...semMochila } = toPublicProfile(profile);
+  return comMochila ? { ...semMochila, inventory } : semMochila;
+}
+
+/**
  * O perfil do **parceiro**, com só o que a tela do outro jogador de fato lê:
  * nome, cosméticos e o herói (dele saem nível e classe no cartão).
  *

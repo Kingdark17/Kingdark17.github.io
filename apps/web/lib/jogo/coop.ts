@@ -89,10 +89,14 @@ export function aplicarRemoto(local: EstadoDoJogo, remoto: Record<string, unknow
     if (remoto[campo] !== undefined) compartilhado[campo] = remoto[campo];
   }
 
+  // Mochila ausente é "não mudou", nunca "esvaziou". Quem preenche a
+  // ausência é `preservarMochila`, na fronteira do socket, então na prática
+  // ela chega aqui completa — mas o campo é opcional, e ler opcional como
+  // `[]` seria dizer "esvaziou" para um pacote que não disse nada.
   const proprio = meuPerfil
     ? {
         hero: meuPerfil.hero as unknown as Hero,
-        inventory: (meuPerfil.inventory ?? []) as Item[],
+        inventory: (meuPerfil.inventory ?? local.inventory) as Item[],
         party: (meuPerfil.party ?? []) as unknown as Companion[],
       }
     : { hero: local.hero, inventory: local.inventory, party: local.party };

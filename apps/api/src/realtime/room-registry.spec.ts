@@ -193,18 +193,22 @@ describe('RoomRegistry — perfis', () => {
     expect(registry.publicProfiles(room)['2'].name).toBe('Bree');
   });
 
-  describe('profilesForRole — o recorte por destinatário', () => {
+  describe('profilesForMember — o recorte por destinatário', () => {
     function salaComDois() {
       const { registry, room } = createdRegistry();
       registry.join('ABC123', fakeConnection('guest'), { admin: false });
       registry.applyProfile(room, HOST_ROLE, { name: 'Aria', inventory: [{ uid: 'a' }, { uid: 'b' }], party: [{ maxHp: 10 }] });
       registry.applyProfile(room, GUEST_ROLE, { name: 'Bree', inventory: [{ uid: 'c' }], party: [{ maxHp: 20 }] });
-      return { registry, room };
+
+      const anfitriao = registry.memberOf(room, 'host');
+      const convidado = registry.memberOf(room, 'guest');
+      if (!anfitriao || !convidado) throw new Error('esperava os dois membros na sala');
+      return { registry, room, anfitriao, convidado };
     }
 
     it('devolve o próprio perfil inteiro', () => {
-      const { registry, room } = salaComDois();
-      const paraOAnfitriao = registry.profilesForRole(room, HOST_ROLE)['1'];
+      const { registry, room, anfitriao } = salaComDois();
+      const paraOAnfitriao = registry.profilesForMember(room, anfitriao)['1'];
 
       expect(paraOAnfitriao.name).toBe('Aria');
       expect(paraOAnfitriao).toHaveProperty('inventory');
@@ -215,8 +219,8 @@ describe('RoomRegistry — perfis', () => {
     // de um pacote de 14 KB, e o pacote sai a cada ação de jogo. Nada no
     // front lê a mochila do parceiro — só nome, nível, classe e cosméticos.
     it('devolve o perfil do parceiro sem mochila nem grupo', () => {
-      const { registry, room } = salaComDois();
-      const oParceiro = registry.profilesForRole(room, HOST_ROLE)['2'];
+      const { registry, room, anfitriao } = salaComDois();
+      const oParceiro = registry.profilesForMember(room, anfitriao)['2'];
 
       expect(oParceiro.name).toBe('Bree');
       expect(oParceiro).not.toHaveProperty('inventory');
@@ -230,19 +234,98 @@ describe('RoomRegistry — perfis', () => {
     // próprio perfil sem `inventory` teria a mochila esvaziada: o front faz
     // `meuPerfil.inventory ?? []`, e isso voltaria no `state` seguinte como
     // perda de verdade.
-    it('cada papel recebe o seu inteiro, e nunca o do outro', () => {
-      const { registry, room } = salaComDois();
-      const paraOConvidado = registry.profilesForRole(room, GUEST_ROLE);
+    it('cada papel recebe o seu, e nunca o do outro', () => {
+      const { registry, room, convidado } = salaComDois();
+      const paraOConvidado = registry.profilesForMember(room, convidado);
 
       expect(paraOConvidado['2']).toHaveProperty('inventory');
       expect(paraOConvidado['1']).not.toHaveProperty('inventory');
     });
 
     it('não inventa papel que não está na sala', () => {
-      const { registry, room } = createdRegistry();
+      const { registry, room, host } = createdRegistry();
       registry.applyProfile(room, HOST_ROLE, { name: 'Aria' });
+      const membro = registry.memberOf(room, host.id);
+      if (!membro) throw new Error('esperava o membro na sala');
 
-      expect(Object.keys(registry.profilesForRole(room, HOST_ROLE))).toEqual(['1']);
+      expect(Object.keys(registry.profilesForMember(room, membro))).toEqual(['1']);
+    });
+
+    describe('a própria mochila só viaja quando muda', () => {
+      it('vai na primeira vez e some na segunda', () => {
+        const { registry, room, anfitriao } = salaComDois();
+
+        expect(registry.profilesForMember(room, anfitriao)['1']).toHaveProperty('inventory');
+        expect(registry.profilesForMember(room, anfitriao)['1']).not.toHaveProperty('inventory');
+        expect(registry.profilesForMember(room, anfitriao)['1']).not.toHaveProperty('inventory');
+      });
+
+      it('volta a viajar quando é outra', () => {
+        const { registry, room, anfitriao } = salaComDois();
+        registry.profilesForMember(room, anfitriao);
+
+        registry.applyState(room, HOST_ROLE, { profiles: { 1: { name: 'Aria', inventory: [{ uid: 'z' }] } } });
+        const depois = registry.profilesForMember(room, anfitriao)['1'] as { inventory?: { uid: string }[] };
+
+        expect(depois.inventory).toEqual([{ uid: 'z' }]);
+      });
+
+      // O outro lado da regra, e o que a torna segura: estado sem `inventory`
+      // é "não mexi na mochila", não "esvaziei". `sanitizeProfile` devolve o
+      // mesmo array, e a versão não sobe — senão a mochila viajaria a cada
+      // ação de novo, que é justamente o que se quer evitar.
+      it('estado sem mochila não conta como mochila nova', () => {
+        const { registry, room, anfitriao } = salaComDois();
+        registry.profilesForMember(room, anfitriao);
+
+        registry.applyState(room, HOST_ROLE, { profiles: { 1: { name: 'Aria' } } });
+
+        expect(registry.profilesForMember(room, anfitriao)['1']).not.toHaveProperty('inventory');
+        expect(room.profiles[HOST_ROLE]?.inventory).toHaveLength(2);
+      });
+
+      // `welcome` é a sincronização cheia: quem chega (ou volta) não tem o
+      // que preservar, e omitir ali seria mandar o parceiro jogar sem mochila.
+      it('welcome leva a mochila mesmo já tendo mandado', () => {
+        const { registry, room, anfitriao } = salaComDois();
+        registry.profilesForMember(room, anfitriao);
+
+        expect(registry.profilesForMember(room, anfitriao, true)['1']).toHaveProperty('inventory');
+      });
+
+      // A conta é da conexão, não do papel: é isto que faz uma reconexão se
+      // curar sozinha, sem evento nenhum de ressincronia.
+      it('quem reconecta recebe a mochila inteira de novo', () => {
+        const { registry, room, convidado } = salaComDois();
+        expect(registry.profilesForMember(room, convidado)['2']).toHaveProperty('inventory');
+        expect(registry.profilesForMember(room, convidado)['2']).not.toHaveProperty('inventory');
+
+        registry.leave('guest');
+        registry.join('ABC123', fakeConnection('guest-2'), { admin: false });
+        const devolta = registry.memberOf(room, 'guest-2');
+        if (!devolta) throw new Error('esperava o membro de volta');
+
+        expect(registry.profilesForMember(room, devolta)['2']).toHaveProperty('inventory');
+      });
+
+      it('uma conexão ter recebido não cala a mochila da outra', () => {
+        const { registry, room, anfitriao, convidado } = salaComDois();
+        registry.profilesForMember(room, anfitriao);
+
+        expect(registry.profilesForMember(room, convidado)['2']).toHaveProperty('inventory');
+      });
+
+      // Promoção troca o papel da conexão, e as versões dos dois papéis não
+      // têm relação entre si: sem esquecer o que já foi mandado, uma colisão
+      // de número omitiria a mochila sem nunca tê-la mandado naquele papel.
+      it('promovido a anfitrião recebe a mochila de novo', () => {
+        const { registry, room, convidado } = salaComDois();
+        registry.profilesForMember(room, convidado);
+        registry.leave('host');
+
+        expect(convidado.role).toBe(HOST_ROLE);
+        expect(registry.profilesForMember(room, convidado)['1']).toHaveProperty('inventory');
+      });
     });
   });
 });

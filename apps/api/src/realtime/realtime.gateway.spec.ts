@@ -127,6 +127,76 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
     expect(recebido.state.profiles['1'].name).toBe('Aria');
   });
 
+  /**
+   * O caminho quente inteiro, no fio de verdade.
+   *
+   * Medido num save de andar 8 com 76 itens, o pacote de `state` era 20,3 KB
+   * por lado e 11,5 KB disso era a mochila de **quem recebe** — devolvida
+   * pelo servidor a cada ação sem ter mudado. Andar, lutar e abrir porta não
+   * mexem na mochila; ela agora só viaja quando é outra.
+   */
+  it('a mochila de quem recebe não volta a cada ação, e volta quando muda', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'ECO001', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    host.emit('profile', { room: 'ECO001', profile: { name: 'Aria', inventory: [{ uid: 'a' }, { uid: 'b' }] } });
+    await waitFor(host, 'profile-accepted');
+
+    type Pacote = { state: { profiles: Record<string, { inventory?: unknown[] }> } };
+    const andar = async () => {
+      host.emit('state', { room: 'ECO001', turn: 1, state: { pos: { x: 1, y: 1 }, floor: 1 } });
+      return (await waitFor<Pacote>(host, 'authoritative')).state.profiles['1'];
+    };
+
+    // A primeira leva; as seguintes, não — ausência quer dizer "não mudou".
+    expect(await andar()).toHaveProperty('inventory');
+    expect(await andar()).not.toHaveProperty('inventory');
+    expect(await andar()).not.toHaveProperty('inventory');
+
+    // Pegou um item: volta a viajar, uma vez.
+    host.emit('state', {
+      room: 'ECO001',
+      turn: 2,
+      state: { pos: { x: 1, y: 1 }, floor: 1, profiles: { 1: { name: 'Aria', inventory: [{ uid: 'a' }, { uid: 'b' }, { uid: 'c' }] } } },
+    });
+    const comItemNovo = await waitFor<Pacote>(host, 'authoritative');
+    expect(comItemNovo.state.profiles['1'].inventory).toHaveLength(3);
+    expect(await andar()).not.toHaveProperty('inventory');
+  });
+
+  /**
+   * `welcome` é a sincronização cheia. Omitir a mochila ali mandaria o
+   * parceiro jogar sem mochila — e ele a devolveria vazia na primeira
+   * sincronização, virando perda de verdade.
+   */
+  it('welcome leva a mochila mesmo depois de o servidor já tê-la mandado', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'WEL001', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    const guest = connect();
+    await waitFor(guest, 'connect');
+    guest.emit('join', { room: 'WEL001', name: 'Bree' });
+    await waitFor(host, 'hello');
+
+    guest.emit('profile', { room: 'WEL001', profile: { name: 'Bree', inventory: [{ uid: 'da-bree' }] } });
+    await waitFor(guest, 'profile-accepted');
+
+    type Pacote = { state: { profiles: Record<string, { inventory?: unknown[] }> } };
+
+    // Uma ação primeiro, pra o servidor marcar que já mandou a mochila dela.
+    const primeiro = waitFor<Pacote>(guest, 'state');
+    host.emit('state', { room: 'WEL001', turn: 1, state: { pos: { x: 1, y: 1 }, floor: 1 } });
+    expect((await primeiro).state.profiles['2']).toHaveProperty('inventory');
+
+    const boasVindas = waitFor<Pacote>(guest, 'welcome');
+    host.emit('welcome', { room: 'WEL001', turn: 1, state: { pos: { x: 2, y: 2 }, floor: 1 } });
+    expect((await boasVindas).state.profiles['2'].inventory).toEqual([{ uid: 'da-bree' }]);
+  });
+
   it('recusa sala inexistente e sala cheia com mensagem', async () => {
     const perdido = connect();
     await waitFor(perdido, 'connect');
