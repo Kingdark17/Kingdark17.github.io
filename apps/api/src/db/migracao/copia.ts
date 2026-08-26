@@ -65,6 +65,9 @@ export interface Consultavel {
  */
 const OIDS_DE_TEMPO = new Set([1082, 1083, 1114, 1184, 1266]);
 
+/** O que o `pg` chama pra cada coluna: texto cru entra, valor tipado sai. */
+type Analisador = (valor: string) => unknown;
+
 /**
  * Entrega tempo como o **texto cru** que o Postgres mandou, em vez de
  * `Date`. É a armadilha 5 do cabeçalho: `Date` guarda milissegundo, o
@@ -78,8 +81,11 @@ const OIDS_DE_TEMPO = new Set([1082, 1083, 1114, 1184, 1266]);
  * escolhendo quais tipos merecem cuidado é como a armadilha 4 nasceu.
  */
 export const TIPOS_COM_PRECISAO = {
+  // O cast do padrão é porque `@types/pg` declara `getTypeParser` como
+  // `any`; sem ele o lint acusa retorno inseguro, e com razão — `any`
+  // atravessando daqui apagaria a checagem do resto do arquivo.
   getTypeParser: ((oid: number, formato?: never) =>
-    OIDS_DE_TEMPO.has(oid) ? (valor: string) => valor : tiposDoPg.getTypeParser(oid, formato)) as typeof tiposDoPg.getTypeParser,
+    OIDS_DE_TEMPO.has(oid) ? (valor: string) => valor : (tiposDoPg.getTypeParser(oid, formato) as Analisador)) as typeof tiposDoPg.getTypeParser,
 };
 
 /**
