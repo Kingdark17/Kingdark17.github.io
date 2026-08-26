@@ -33,14 +33,29 @@ export const ARMAS: ReadonlySet<string> = new Set(['espada', 'cajado']);
 export const ARMADURAS: ReadonlySet<string> = new Set(['placas']);
 
 /**
- * **Acessório não tem camada nenhuma, e nem conjunto aqui.** Os quatro que
- * existem — `anel_som`, `amuleto_sab`, `bota_vento`, `colar_forca` — são
- * anel, amuleto, botas e colar: nada que mude a silhueta o bastante pra
- * valer uma camada. `montarCamadas` não os menciona de propósito.
- *
- * Há um `acessorio/orelhas-de-gato.png` no repositório que **não
- * corresponde a item nenhum** e nunca é desenhado. Ou vira item, ou sai.
+ * **Acessório equipável não tem camada, e nem conjunto aqui.** Os quatro
+ * que existem — `anel_som`, `amuleto_sab`, `bota_vento`, `colar_forca` —
+ * são anel, amuleto, botas e colar: nada que mude a silhueta o bastante
+ * pra valer uma camada. `montarCamadas` não os menciona de propósito.
  */
+
+/**
+ * O que a raça **não perde ao vestir armadura**.
+ *
+ * As orelhas do felino são a primeira; virão outras, uma por raça com
+ * traço marcante. Elas não são item nem equipamento — ninguém as escolhe,
+ * nem as tira. Vêm da raça e ficam.
+ *
+ * **Desenhadas por último entre as do corpo, depois da armadura e do
+ * cabelo.** É o ponto inteiro: o capacete da armadura de placas cobre a
+ * cabeça, e sem esta camada por cima o felino de armadura fica idêntico ao
+ * humano de armadura. A pessoa escolheu a raça e deixaria de vê-la
+ * justamente quando o personagem fica mais forte.
+ *
+ * Moram em `acessorio/` por acidente de quando a arte chegou, antes de
+ * saber o que eram. O nome da pasta é o único resto disso.
+ */
+const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([['felino', 'acessorio/orelhas-de-gato.png']]);
 
 /**
  * Mão secundária. Hoje só o escudo — e ele é `category: 'armadura'` nos
@@ -72,9 +87,15 @@ export interface Vestimenta {
  * "não há como desenhar isto" — sem raça, ou raça sem corpo.
  *
  * A ordem é a de vestir: corpo, calça, roupa, armadura por cima da roupa,
- * cabelo, escudo, e a arma na frente de tudo. É a mesma que o
- * `monta-paperdoll.mjs` recebe na linha de comando, e trocá-la aqui sem
- * trocar lá faz a conferência mentir.
+ * cabelo, **o traço da raça por cima do capacete**, escudo, e a arma na
+ * frente de tudo. É a mesma que o `monta-paperdoll.mjs` recebe na linha de
+ * comando, e trocá-la aqui sem passar na mesma ordem lá faz a conferência
+ * mentir.
+ *
+ * O traço vem depois da armadura e do cabelo de propósito — ver
+ * `TRACOS_DE_RACA`. Antes do escudo e da arma porque esses são objetos
+ * segurados na frente do corpo, e orelha atravessando escudo seria pior
+ * que capacete cobrindo orelha.
  */
 export function montarCamadas({ raca, arma, armadura, secundaria }: Vestimenta): string[] {
   if (!raca || !CORPOS.has(raca)) return [];
@@ -83,6 +104,10 @@ export function montarCamadas({ raca, arma, armadura, secundaria }: Vestimenta):
 
   if (armadura && ARMADURAS.has(armadura)) camadas.push(`${RAIZ}/armadura/${armadura}.png`);
   if (!SEM_CABELO.has(raca)) camadas.push(`${RAIZ}/cabelo/masculino.png`);
+
+  const traco = TRACOS_DE_RACA.get(raca);
+  if (traco) camadas.push(`${RAIZ}/${traco}`);
+
   if (secundaria && SECUNDARIAS.has(secundaria)) camadas.push(`${RAIZ}/secundaria/${secundaria}.png`);
   if (arma && ARMAS.has(arma)) camadas.push(`${RAIZ}/arma/${arma}.png`);
 
