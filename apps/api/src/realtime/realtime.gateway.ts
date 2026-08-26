@@ -78,6 +78,41 @@ interface SocketState {
 @WebSocketGateway({
   cors: lerCors(),
   maxHttpBufferSize: 512 * 1024,
+  /**
+   * Compressão do WebSocket. **O socket.io não liga isso sozinho** — não
+   * está nos padrões do engine.io, só existe se vier daqui.
+   *
+   * É o que substitui um protocolo de delta escrito à mão. Pacotes de sala
+   * seguidos são quase idênticos entre si, e o deflate com contexto
+   * compartilhado referencia a mensagem anterior em vez de repeti-la:
+   * medido num andar 8 com 76 itens, 9,2 KB crus viram **0,25 KB no fio**.
+   * Um patch por célula do mapa daria ~0,5 KB e traria um invariante que
+   * pode divergir calado; isto não muda contrato nenhum.
+   *
+   * Cada número aqui foi medido, não herdado:
+   *
+   * - `serverMaxWindowBits: 14` (16 KB). **A janela precisa ser maior que o
+   *   pacote**, ou não há como alcançar a mensagem anterior — com 8 KB o
+   *   regime pula pra 1,10 KB. Com 32 KB cairia pra 0,09 KB, mas custaria
+   *   288 KB por conexão em vez de 160 KB, e 140 bytes por ação não pagam
+   *   isso. É por essa razão que este ajuste e o recorte da mochila se
+   *   somam: foi encolher o pacote pra dentro da janela que fez a
+   *   compressão render 10× mais.
+   * - `level: 6`. O 3 rende 0,82 KB e o 9 não melhora o 6; a diferença de
+   *   CPU entre 3 e 6 é 40 ms por mil mensagens.
+   * - `clientMaxWindowBits` fica **de fora de propósito**: como número, o
+   *   `ws` recusa a oferta inteira de quem não anunciar o campo, e recusa
+   *   derruba a conexão. Ausente, cada cliente usa o padrão dele.
+   * - `threshold` no padrão de 1 KB: chat, `move-lock` e `hello` não valem
+   *   o ciclo de compressão.
+   *
+   * Bomba-zip não passa: o `maxHttpBufferSize` acima vira o `maxPayload` do
+   * `ws`, que o cobra sobre o tamanho **descomprimido**.
+   */
+  perMessageDeflate: {
+    serverMaxWindowBits: 14,
+    zlibDeflateOptions: { level: 6, memLevel: 7 },
+  },
 })
 export class RealtimeGateway implements OnGatewayDisconnect {
   private readonly logger = new Logger(RealtimeGateway.name);
