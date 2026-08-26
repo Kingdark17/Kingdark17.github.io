@@ -27,9 +27,6 @@ export function Entrada() {
         router.push('/menu');
       }}
     >
-      <Link className={styles.semConta} href="/menu">
-        Jogar sem conta
-      </Link>
       {/* Único caminho até `/redefinir-senha`: é este link que faz a API
           mandar o e-mail que leva pra lá. Sem ele, aquela página existiria
           sem nenhuma forma de ser alcançada. */}

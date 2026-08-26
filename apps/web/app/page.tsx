@@ -17,9 +17,15 @@ import styles from './entrada.module.css';
  * isso o menu mora em `/menu` e não aqui: lá o conteúdo é igual pra todo
  * mundo e segue estático, sem uma linha de JS.
  *
- * **Entrar não é obrigatório.** O "Jogar sem conta" leva direto ao menu; a
- * conta serve pra guardar progresso na nuvem e pra jogar acompanhado, não
- * pra liberar o jogo.
+ * **Entrar é obrigatório desde 25/08/2026.** Antes havia um "Jogar sem
+ * conta" que levava direto ao menu. Ele saiu porque prometia o que não
+ * dava: `/api/save` responde 401 sem sessão e este front não tem save
+ * local, então quem entrava por ali jogava sem conseguir salvar nada e
+ * perdia tudo no primeiro F5, sem aviso nenhum.
+ *
+ * Quem faz o bloqueio de verdade é o `proxy.ts` na raiz do pacote — tirar
+ * o botão sozinho não bastava, porque `/menu` continuava alcançável por
+ * URL digitada e por favorito antigo.
  *
  * Também é aqui que caem os links de e-mail: a API os monta como
  * `BASE/?verify=TOKEN`, formato herdado do jogo antigo e mantido pra uma
