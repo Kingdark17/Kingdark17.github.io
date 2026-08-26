@@ -20,7 +20,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 1 — engine em `packages/shared` | pronta (326 testes) |
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
-| 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64, boneco na criação, no seletor de personagem e no painel do herói durante a partida — os dois últimos com o equipamento de verdade. **Sem PixiJS** — ver "Fase 4". Faltam 6 raças, 4 armas e 2 armaduras sem arte |
+| 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64, boneco na criação, no seletor de personagem e no painel do herói durante a partida — os dois últimos com o equipamento de verdade. **Sem PixiJS** — ver "Fase 4". Faltam 6 raças, 6 armas e 2 armaduras sem arte |
 | 5 — **Neon → Supabase** | **pronta em 2026-08-18**: banco criado (Postgres 17.6, `sa-east-1`), migrações aplicadas e conferidas contra o banco real, acesso público fechado inclusive pras tabelas futuras. O jogo no ar **continua no Neon** — o Supabase está vazio e é o ambiente novo, não uma virada. O copiador da virada existe desde 2026-08-24, com ensaio e conferência; a virada em si segue sem decisão. Ver "Fase 5" e "O copiador da virada" |
 | 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
 
@@ -365,8 +365,15 @@ o disco: pedir `corpo/anao.png` sem saber se existe rende 404 e um quadrado
 quebrado. A tela pergunta antes de desenhar, e a legenda embaixo do boneco
 diz **qual** peça falta em vez de deixar o jogador achando que quebrou.
 
-Faltam 6 das 12 raças (anão, orc, draconato, goblin, fada, celestial) e 4
-das 6 armas iniciais (adaga, maça, machado, arco).
+Faltam 6 das 12 raças (anão, orc, draconato, goblin, fada, celestial) e 6
+das 8 armas do catálogo (adaga, maça, machado, arco, marreta, violão).
+
+**Este parágrafo dizia "4 das 6 armas iniciais" até 26/08/2026, e errava
+duas vezes.** As armas iniciais de classe são **sete**, não seis — o
+`violão` é uma delas e ficava de fora da conta. E o `camadas.ts` não
+filtra por arma inicial: ele pergunta pelo que o herói tem **equipado**,
+que pode ser qualquer uma das oito do catálogo, `marreta` inclusive. A
+conta que importa pro trabalho é a de oito.
 
 ### O resumo do personagem cresceu, e a régua não é a contagem de campos
 
@@ -1840,7 +1847,7 @@ de quais e-mails têm conta.
 | ~~`RESEND_API_KEY` + `EMAIL_FROM`~~ | confirmar e-mail e reset de senha | **resolvido em 2026-08-22** — domínio `rpglegend.com.br` verificado, envio provado ponta a ponta |
 | `DATABASE_URL` de staging | rodar tudo contra banco real | ~~PGlite cobre a maior parte~~ **resolvido em 2026-08-18**: o Supabase serve de staging |
 | ~~onde a API vai rodar~~ | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | **resolvido em 2026-08-22** — Render, em `api.rpglegend.com.br`, com `TRUST_PROXY=1`. Falta só `ALLOWED_ORIGIN`, que espera o front existir pra ter uma origem pra declarar |
-| arte em camadas | paperdoll | **destravado em 2026-08-24** — 14 camadas chegaram. Ainda faltam 6 raças (anão, orc, draconato, goblin, fada, celestial) e 4 armas (adaga, maça, machado, arco) |
+| arte em camadas | paperdoll | **destravado em 2026-08-24** — 14 camadas chegaram. Ainda faltam 6 raças (anão, orc, draconato, goblin, fada, celestial), 6 armas (adaga, maça, machado, arco, marreta, violão) e 2 armaduras (couro, robe) |
 
 **Regra que continua valendo:** nunca criar conta de teste no servidor de
 produção pra depurar, e nunca apontar `drizzle-kit push`/`migrate` pro

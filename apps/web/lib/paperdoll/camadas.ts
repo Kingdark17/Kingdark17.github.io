@@ -18,11 +18,29 @@ const RAIZ = '/img/paperdoll';
 /** Raças com corpo desenhado. Faltam anao, orc, draconato, goblin, fada, celestial. */
 export const CORPOS: ReadonlySet<string> = new Set(['humano', 'elfo', 'elfo_negro', 'meio_elfo', 'felino', 'morto_vivo']);
 
-/** Armas com camada. Faltam adaga, maca, machado, arco. */
+/**
+ * Armas com camada. Faltam **seis**: adaga, maca, machado, arco, marreta e
+ * violao.
+ *
+ * O comentário dizia quatro até 26/08/2026 e esquecia `marreta` e
+ * `violao` — que existem em `items/templates.ts` como qualquer outra. Lista
+ * escrita à mão envelhece calada, e a de "o que falta" envelhece pior:
+ * ninguém a lê pra descobrir que está errada, só pra planejar o trabalho.
+ */
 export const ARMAS: ReadonlySet<string> = new Set(['espada', 'cajado']);
 
 /** Armaduras com camada. Faltam couro e robe. */
 export const ARMADURAS: ReadonlySet<string> = new Set(['placas']);
+
+/**
+ * **Acessório não tem camada nenhuma, e nem conjunto aqui.** Os quatro que
+ * existem — `anel_som`, `amuleto_sab`, `bota_vento`, `colar_forca` — são
+ * anel, amuleto, botas e colar: nada que mude a silhueta o bastante pra
+ * valer uma camada. `montarCamadas` não os menciona de propósito.
+ *
+ * Há um `acessorio/orelhas-de-gato.png` no repositório que **não
+ * corresponde a item nenhum** e nunca é desenhado. Ou vira item, ou sai.
+ */
 
 /**
  * Mão secundária. Hoje só o escudo — e ele é `category: 'armadura'` nos
