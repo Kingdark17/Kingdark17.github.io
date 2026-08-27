@@ -32,7 +32,7 @@ export interface Passo {
 
 /** Textos iguais aos do original, na mesma ordem. */
 export const PASSOS: Passo[] = [
-  { id: 'move', icone: '🧭', nome: 'Dê o primeiro passo', dica: 'Use os botões de direção para andar.' },
+  { id: 'move', icone: '🧭', nome: 'Dê o primeiro passo', dica: 'Use WASD, as setas do teclado ou os botões de direção para andar.' },
   { id: 'inventory', icone: '🎒', nome: 'Abra a mochila', dica: 'Selecione um item para ver atributos, comparar, equipar, usar ou descartar.' },
   { id: 'npc', icone: '🧙', nome: 'Converse com um NPC', dica: 'NPCs podem curar, negociar, revelar o mapa ou entrar temporariamente na equipe.' },
   { id: 'shop', icone: '🏵️', nome: 'Visite uma loja', dica: 'Compare o item da loja com o equipado. Carisma melhora seus descontos.' },
@@ -43,7 +43,7 @@ export const PASSOS: Passo[] = [
 export const GUIAS: { titulo: string; texto: string }[] = [
   {
     titulo: '🧭 Movimentação',
-    texto: 'Use os controles de direção. Ao escolher “Não” em NPCs, lojas e saídas, você pode atravessar sem interagir.',
+    texto: 'Use WASD, as setas ou os controles. Ao escolher “Não” em NPCs, lojas e saídas, você pode atravessar sem interagir.',
   },
   {
     titulo: '⚔️ Combate',

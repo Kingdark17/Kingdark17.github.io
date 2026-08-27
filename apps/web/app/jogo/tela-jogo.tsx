@@ -35,6 +35,7 @@ import { aplicarRemoto, instantaneoDaSala, type CosmeticosDoJogador } from '@/li
 import { anotar, type Anotacao } from '@/lib/jogo/diario';
 import { abrirMochila } from '@/lib/jogo/mochila';
 import { narrar } from '@/lib/jogo/narrador';
+import { direcaoDaTecla, estaDigitando } from '@/lib/jogo/teclado';
 import { monstroAtual } from '@/lib/jogo/combate';
 import { tocar } from '@/lib/som/efeitos';
 import { useTrilha } from '@/lib/som/use-trilha';
@@ -410,6 +411,48 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     entrar(estado, direcao);
   }
 
+  /**
+   * WASD e setas andam, como `bindKeyboard()` fazia em `js/ui.js`. O
+   * cliente antigo tinha teclado desde sempre e o front novo nasceu só
+   * com os botões.
+   *
+   * A jogada entra por `ref` em vez de por dependência do efeito: `mover`
+   * é redefinida a cada render, e listá-la nas dependências assinaria e
+   * desassinaria a `window` a cada passo dado. O `ref` é reatribuído
+   * depois de todo render, então nunca sobra closure velha.
+   */
+  const jogadaDoTeclado = useRef<(direcao: Direction) => boolean>(() => false);
+
+  useEffect(() => {
+    jogadaDoTeclado.current = (direcao) => {
+      // As mesmas condições que apagam os botões da bússola. Teclado que
+      // anda com o botão desabilitado é teclado que burla a tela — no
+      // co-op ele mexeria no mapa do parceiro fora da vez.
+      if (tela || guiaAberto || diarioAberto || confirmandoSaida) return false;
+      if (!estado || perguntando !== null || !conduzo) return false;
+
+      // Daqui pra baixo a tecla é do jogo, mesmo sem porta desse lado:
+      // seta que ora anda e ora rola a página é pior que seta que não faz
+      // nada. Fora da exploração ela continua rolando normalmente.
+      if (podeAndar(estado, direcao)) mover(direcao);
+      return true;
+    };
+  });
+
+  useEffect(() => {
+    function aoTeclar(evento: KeyboardEvent) {
+      if (estaDigitando(evento.target as HTMLElement | null)) return;
+
+      const direcao = direcaoDaTecla(evento);
+      if (!direcao) return;
+
+      if (jogadaDoTeclado.current(direcao)) evento.preventDefault();
+    }
+
+    window.addEventListener('keydown', aoTeclar);
+    return () => window.removeEventListener('keydown', aoTeclar);
+  }, []);
+
   function recusar() {
     if (!estado || !perguntando) return;
 
@@ -696,6 +739,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
                 </button>
               ))}
             </div>
+
+            {/* O original mostrava a mesma dica embaixo dos botões. Só
+                aparece onde há teclado: no celular ela seria mentira. */}
+            <p className={styles.dicaDoTeclado}>Use WASD ou as setas do teclado.</p>
 
             {/* Botão, e não `title` no ícone: a legenda tem que abrir no
                 toque também, e um alvo de 15px não é alvo de dedo. */}

@@ -1077,6 +1077,22 @@
   grid-row: 3;
 }
 
+/* Escondida onde não há teclado. Num celular a dica seria mentira, e
+   ocuparia a linha logo abaixo dos controles que a pessoa está usando. */
+.dicaDoTeclado {
+  display: none;
+  font-size: 0.75rem;
+  color: var(--parchment-dim);
+  text-align: center;
+  margin: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dicaDoTeclado {
+    display: block;
+  }
+}
+
 .botaoDirecao {
   background: var(--panel);
   border: 1px solid var(--line);
