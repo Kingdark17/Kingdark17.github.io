@@ -26,6 +26,7 @@
 
 import { Controller, Get, Inject } from '@nestjs/common';
 
+import { ArmazenamentoNulo, criarArmazenamento } from '../arquivos/armazenamento';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { RoomRegistry } from '../realtime/room-registry';
 import { REDIS, type ClienteRedis } from '../shared-state/cliente-redis';
@@ -66,6 +67,10 @@ export class StatusController {
       // `redis.configured` é também o interruptor da persistência de sala:
       // é ele que decide qual depósito o `RoomRegistry` recebe.
       redis,
+      // Sem isto, foto nova continua indo pro Postgres e nada avisa: o
+      // caminho de falha do armazenamento é justamente voltar a gravar no
+      // banco, de propósito. Silêncio idêntico ao do caso que funciona.
+      storage: { configured: !(criarArmazenamento() instanceof ArmazenamentoNulo) },
       socket: this.gateway.diagnosticoDoSocket,
     };
   }

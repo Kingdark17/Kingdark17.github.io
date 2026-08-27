@@ -28,6 +28,7 @@
     "db:audit": "node scripts/confere-supabase.mjs",
     "db:smoke": "ts-node --project tsconfig.json scripts/prova-app-supabase.ts",
     "db:copia": "ts-node --project tsconfig.json scripts/copia-para-supabase.ts",
+    "fotos:migra": "ts-node --project tsconfig.json scripts/migra-fotos-para-storage.ts",
     "db:verify-migrations": "node scripts/verifica-migracao.mjs",
     "email:dns": "node scripts/confere-dns.mjs rpglegend.com.br",
     "email:key": "node scripts/confere-resend.mjs",

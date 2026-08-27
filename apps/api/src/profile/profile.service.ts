@@ -16,6 +16,8 @@ import {
 } from '../auth/cosmetics';
 import { isValidSlot } from '../auth/validation';
 import { signSave, type JsonValue } from '../auth/save-signature';
+import { ArmazenamentoNulo, caminhoDaFoto, type ArmazenamentoDeArquivos } from '../arquivos/armazenamento';
+import { decodeAvatar } from '../social/avatar';
 import type { ProfileRepository } from './profile-repository';
 import { comoTexto } from '../common/texto';
 
@@ -45,6 +47,7 @@ export class ProfileService {
     private readonly repo: ProfileRepository,
     private readonly adminUsername: string,
     private readonly signingSecret: string,
+    private readonly armazenamento: ArmazenamentoDeArquivos = new ArmazenamentoNulo(),
   ) {}
 
   listCatalog(isAdmin: boolean, cosmetics: Cosmetics): { catalog: ProfileCatalogItem[]; owned: Cosmetics } {
@@ -72,8 +75,52 @@ export class ProfileService {
       return { kind: 'not-unlocked' };
     }
 
-    const account = await this.repo.updateProfile(userId, { avatarUrl, frame, nameColor, pet });
+    const guardado = uploadedPhoto ? await this.subirFoto(userId, avatarUrl) : avatarUrl;
+
+    const account = await this.repo.updateProfile(userId, { avatarUrl: guardado, frame, nameColor, pet });
     return { kind: 'ok', user: safeUser(account, this.adminUsername) };
+  }
+
+  /**
+   * A foto sai do JSON e vira objeto no Storage — e o que fica no banco é
+   * um `https://` de menos de cem caracteres.
+   *
+   * Isso funciona sem tocar em mais nada porque o resto do código já sabe
+   * lidar com link externo: `REMOTE_PHOTO_PATTERN` aceita, a lista de
+   * amigos devolve no campo `url`, e o navegador busca direto. O `data:`
+   * era o caso especial, não o link.
+   *
+   * **Falha volta pro banco em vez de recusar a troca.** Storage fora do
+   * ar, chave errada ou balde inexistente devolvem o `data:` original, e
+   * aí a foto é guardada como sempre foi. A pessoa não perde a ação por
+   * causa de infraestrutura, e a rota `/api/users/:username/avatar`
+   * continua servindo esse caso. Mesmo acordo do depósito de salas.
+   */
+  private async subirFoto(userId: number, dataUrl: string): Promise<string> {
+    const foto = decodeAvatar(dataUrl);
+    if (!foto) return dataUrl;
+
+    try {
+      const caminho = caminhoDaFoto(userId, foto.bytes, foto.mime);
+      const endereco = await this.armazenamento.guardar(caminho, foto.bytes, foto.mime);
+      await this.limparFotosAntigas(userId, caminho);
+      return endereco;
+    } catch {
+      return dataUrl;
+    }
+  }
+
+  /**
+   * O nome do objeto é o hash do conteúdo, então trocar de foto **cria**
+   * um objeto novo em vez de substituir. Sem esta varrida, cada troca
+   * deixaria até 400 KB pra trás pra sempre.
+   *
+   * Roda depois de o novo já estar no ar: se falhar, sobra lixo — nunca
+   * fica a pessoa sem foto.
+   */
+  private async limparFotosAntigas(userId: number, manter: string): Promise<void> {
+    const antigos = await this.armazenamento.listar(`${userId}/`);
+    await Promise.all(antigos.filter((caminho) => caminho !== manter).map((caminho) => this.armazenamento.apagar(caminho)));
   }
 
   async purchase(userId: number, input: { id?: unknown; slot?: unknown }, isAdmin: boolean): Promise<PurchaseResult> {

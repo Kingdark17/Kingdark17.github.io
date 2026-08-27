@@ -60,6 +60,18 @@ describe('StatusController', () => {
     expect(response.body).toHaveProperty('branch');
   });
 
+  /**
+   * O caminho de falha do armazenamento é **voltar a gravar no banco**, de
+   * propósito — a pessoa não perde a troca de foto por causa de
+   * infraestrutura. O efeito colateral é que variável ausente não faz
+   * barulho nenhum. Este campo é o que faz.
+   */
+  it('/health diz se o armazenamento de fotos está configurado', async () => {
+    const response = await request(servidorDe(app)).get('/health');
+
+    expect(response.body).toMatchObject({ storage: { configured: false } });
+  });
+
   it('/health traz o contador de compressão do socket', async () => {
     const response = await request(servidorDe(app)).get('/health');
 

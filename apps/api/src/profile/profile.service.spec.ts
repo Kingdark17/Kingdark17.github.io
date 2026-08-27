@@ -170,3 +170,125 @@ describe('ProfileService.purchase', () => {
     expect(result).toEqual({ kind: 'already-owned' });
   });
 });
+
+/**
+ * A foto sai do Postgres e vira objeto no Storage.
+ *
+ * O que prende o comportamento não é "chamou o `guardar`", e sim **o que
+ * fica gravado na coluna**: era o `data:` inteiro, de até 400 KB, e passa
+ * a ser um `https://` curto. É a coluna que a lista de amigos lê.
+ */
+describe('ProfileService.updateProfile — foto no Storage', () => {
+  const FOTO = 'data:image/png;base64,aGVsbG8=';
+
+  class ArmazenamentoDeMentira {
+    guardados: { caminho: string; bytes: Buffer }[] = [];
+    apagados: string[] = [];
+    existentes: string[] = [];
+    quebrado = false;
+
+    guardar(caminho: string, bytes: Buffer): Promise<string> {
+      if (this.quebrado) return Promise.reject(new Error('Storage fora do ar'));
+      this.guardados.push({ caminho, bytes });
+      return Promise.resolve(this.endereco(caminho));
+    }
+
+    apagar(caminho: string): Promise<void> {
+      this.apagados.push(caminho);
+      return Promise.resolve();
+    }
+
+    listar(prefixo: string): Promise<string[]> {
+      return Promise.resolve(this.existentes.filter((caminho) => caminho.startsWith(prefixo)));
+    }
+
+    endereco(caminho: string): string {
+      return `https://projeto.supabase.co/storage/v1/object/public/avatares/${caminho}`;
+    }
+  }
+
+  function comArmazenamento() {
+    const repo = new FakeProfileRepository();
+    const armazenamento = new ArmazenamentoDeMentira();
+    repo.users.set(USER_ID, makeAccount());
+    return { repo, armazenamento, service: new ProfileService(repo, ADMIN_USERNAME, SECRET, armazenamento) };
+  }
+
+  it('grava o endereço no banco, não os bytes', async () => {
+    const { service, repo, armazenamento } = comArmazenamento();
+
+    await service.updateProfile(USER_ID, defaultCosmetics(), { avatarUrl: FOTO });
+
+    expect(armazenamento.guardados).toHaveLength(1);
+    expect(repo.users.get(USER_ID)?.avatarUrl).toBe(armazenamento.endereco(armazenamento.guardados[0].caminho));
+    expect(repo.users.get(USER_ID)?.avatarUrl).not.toContain('base64');
+  });
+
+  /**
+   * Nome por hash faz troca de foto **criar** objeto, não substituir. Sem
+   * a varrida, cada troca deixaria até 400 KB pra trás pra sempre.
+   */
+  it('apaga a foto anterior da pessoa, e só a dela', async () => {
+    const { service, armazenamento } = comArmazenamento();
+    armazenamento.existentes = ['1/antiga.png', '2/de-outra-pessoa.png'];
+
+    await service.updateProfile(USER_ID, defaultCosmetics(), { avatarUrl: FOTO });
+
+    expect(armazenamento.apagados).toEqual(['1/antiga.png']);
+  });
+
+  it('não apaga a que acabou de subir', async () => {
+    const { service, armazenamento } = comArmazenamento();
+    await service.updateProfile(USER_ID, defaultCosmetics(), { avatarUrl: FOTO });
+
+    armazenamento.existentes = [armazenamento.guardados[0].caminho];
+    armazenamento.apagados = [];
+    await service.updateProfile(USER_ID, defaultCosmetics(), { avatarUrl: FOTO });
+
+    expect(armazenamento.apagados).toEqual([]);
+  });
+
+  /**
+   * Infraestrutura fora do ar não pode custar a ação que a pessoa pediu:
+   * volta a guardar no banco, como antes do Storage existir, e a rota
+   * `/api/users/:username/avatar` continua servindo esse caso.
+   */
+  it('Storage fora do ar guarda no banco em vez de recusar a troca', async () => {
+    const { service, repo, armazenamento } = comArmazenamento();
+    armazenamento.quebrado = true;
+
+    const result = await service.updateProfile(USER_ID, defaultCosmetics(), { avatarUrl: FOTO });
+
+    expect(result.kind).toBe('ok');
+    expect(repo.users.get(USER_ID)?.avatarUrl).toBe(FOTO);
+  });
+
+  it('sem armazenamento configurado, o comportamento é o de sempre', async () => {
+    const repo = new FakeProfileRepository();
+    repo.users.set(USER_ID, makeAccount());
+    const service = new ProfileService(repo, ADMIN_USERNAME, SECRET);
+
+    await service.updateProfile(USER_ID, defaultCosmetics(), { avatarUrl: FOTO });
+
+    expect(repo.users.get(USER_ID)?.avatarUrl).toBe(FOTO);
+  });
+
+  /** Link que a pessoa digitou não é nosso: passa direto, sem subir nada. */
+  it('link externo não vai parar no Storage', async () => {
+    const { service, repo, armazenamento } = comArmazenamento();
+
+    await service.updateProfile(USER_ID, defaultCosmetics(), { avatarUrl: 'https://outro.site/foto.png' });
+
+    expect(armazenamento.guardados).toEqual([]);
+    expect(repo.users.get(USER_ID)?.avatarUrl).toBe('https://outro.site/foto.png');
+  });
+
+  it('foto inválida continua sendo recusada antes de tocar no Storage', async () => {
+    const { service, armazenamento } = comArmazenamento();
+
+    const result = await service.updateProfile(USER_ID, defaultCosmetics(), { avatarUrl: 'javascript:alert(1)' });
+
+    expect(result.kind).toBe('invalid-avatar');
+    expect(armazenamento.guardados).toEqual([]);
+  });
+});
