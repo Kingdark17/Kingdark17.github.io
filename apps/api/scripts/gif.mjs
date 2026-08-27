@@ -169,7 +169,15 @@ export function lerGif(bruto) {
         };
         pos += 1 + tamanho + 1;
       } else {
-        pos = juntarSubBlocos(bruto, pos + 1).pos;
+        // `pos` já está no byte de tamanho do primeiro sub-bloco, que é
+        // exatamente onde `juntarSubBlocos` começa a ler — igual à leitura
+        // dos dados da imagem lá embaixo. Somar 1 aqui pulava esse byte e
+        // fazia o primeiro byte de dado ser lido como tamanho, jogando a
+        // posição pra dentro do lixo. O sintoma é "marcador desconhecido"
+        // num offset qualquer, e **só aparece em GIF que tem extensão** —
+        // ou seja, em todo GIF exportado com laço (`NETSCAPE2.0`), que é o
+        // que qualquer editor de pixel art escreve por padrão.
+        pos = juntarSubBlocos(bruto, pos).pos;
       }
       continue;
     }
