@@ -54,7 +54,38 @@ if (escrever && confirmado !== host) {
   process.exit(1);
 }
 
+/**
+ * Sobe e apaga um objeto de nada, só pra saber se a chave e o balde
+ * funcionam **antes** de a primeira foto de alguém depender disso.
+ *
+ * O ensaio existe pra ensaiar tudo o que dá. Sem esta prova, chave errada
+ * só apareceria mais tarde — e o caminho de falha do armazenamento é
+ * silencioso de propósito (volta a gravar no banco), então ninguém veria.
+ */
+async function provarConexao(): Promise<boolean> {
+  const caminho = '_prova/conexao.txt';
+  try {
+    await armazenamento.guardar(caminho, Buffer.from('prova'), 'text/plain');
+    await armazenamento.apagar(caminho);
+    console.log('Storage respondeu: chave e balde OK.\n');
+    return true;
+  } catch (erro) {
+    console.error(`Storage recusou: ${erro instanceof Error ? erro.message : String(erro)}`);
+    console.error('Confira a SUPABASE_SERVICE_KEY e se o balde existe com o nome de SUPABASE_BUCKET.\n');
+    return false;
+  }
+}
+
 async function principal(): Promise<void> {
+  const conectado = await provarConexao();
+  // No ensaio continua mesmo assim — a contagem de fotos ainda é útil e
+  // não depende do Storage. Pra valer, para: com a chave errada, toda
+  // foto falharia uma a uma.
+  if (!conectado) {
+    if (escrever) return;
+    process.exitCode = 1;
+  }
+
   const cliente = new Client({ connectionString: bancoUrl });
   await cliente.connect();
 
