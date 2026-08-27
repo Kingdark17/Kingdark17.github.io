@@ -1,42 +1,41 @@
 /**
- * Que camadas de paperdoll existem em `public/img/paperdoll/`, e em que
- * ordem elas se empilham.
+ * Que camadas de paperdoll existem, e em que ordem elas se empilham.
  *
- * **A lista é escrita à mão, e tem que ser.** O navegador não enxerga o
- * disco: pedir `corpo/anao.png` sem saber se existe rende um 404 e um
- * quadrado quebrado na tela. Aqui a ausência é dado, não acidente — a
- * tela pergunta antes de desenhar e mostra outra coisa quando não há arte.
+ * **O que existe em disco não mora mais aqui.** `disponivel.ts` é gerado
+ * por `scripts/gera-camadas.mjs` a partir de `public/img/paperdoll/`, e
+ * `disponivel.test.ts` falha se o gerado e o disco divergirem. Antes esta
+ * lista era escrita à mão, e o preço aparecia no lugar errado: soltar um
+ * sprite novo não bastava — tinha que lembrar de editar um `Set`. Os
+ * comentários de "faltam tais e tais" também envelheciam calados, e já
+ * estiveram errados (o de armas dizia quatro quando eram seis).
+ *
+ * A lista continua existindo porque o navegador não enxerga o disco: pedir
+ * `corpo/anao.png` sem saber se existe rende 404 e um quadrado quebrado na
+ * tela. A ausência é dado, não acidente — a tela pergunta antes de
+ * desenhar e mostra outra coisa quando não há arte.
+ *
+ * O que **fica** escrito à mão são as decisões, não o inventário:
+ * `TRACOS_DE_RACA` (que arquivo pertence a que raça) e `SEM_CABELO`. Essas
+ * o disco não tem como responder.
  *
  * Os nomes de arquivo são **exatamente os ids do catálogo da engine**
  * (`RACES` em `packages/shared/src/hero/catalog.ts`, `weaponTemplate` em
  * `CLASSES`). Isso é de propósito: sem tabela de tradução no meio, não há
- * como as duas listas divergirem em silêncio.
+ * como as duas listas divergirem em silêncio — e há teste conferindo.
  */
+
+import { ARMADURAS, ARMAS, CORPOS, SECUNDARIAS } from './disponivel';
+
+export { ARMADURAS, ARMAS, CORPOS, SECUNDARIAS };
 
 const RAIZ = '/img/paperdoll';
 
-/** Raças com corpo desenhado. Faltam anao, orc, draconato, goblin, fada, celestial. */
-export const CORPOS: ReadonlySet<string> = new Set(['humano', 'elfo', 'elfo_negro', 'meio_elfo', 'felino', 'morto_vivo']);
-
 /**
- * Armas com camada. Faltam **seis**: adaga, maca, machado, arco, marreta e
- * violao.
- *
- * O comentário dizia quatro até 26/08/2026 e esquecia `marreta` e
- * `violao` — que existem em `items/templates.ts` como qualquer outra. Lista
- * escrita à mão envelhece calada, e a de "o que falta" envelhece pior:
- * ninguém a lê pra descobrir que está errada, só pra planejar o trabalho.
- */
-export const ARMAS: ReadonlySet<string> = new Set(['espada', 'cajado']);
-
-/** Armaduras com camada. Faltam couro e robe. */
-export const ARMADURAS: ReadonlySet<string> = new Set(['placas']);
-
-/**
- * **Acessório equipável não tem camada, e nem conjunto aqui.** Os quatro
- * que existem — `anel_som`, `amuleto_sab`, `bota_vento`, `colar_forca` —
- * são anel, amuleto, botas e colar: nada que mude a silhueta o bastante
- * pra valer uma camada. `montarCamadas` não os menciona de propósito.
+ * **Acessório equipável não tem camada.** Os quatro que existem —
+ * `anel_som`, `amuleto_sab`, `bota_vento`, `colar_forca` — são anel,
+ * amuleto, botas e colar: nada que mude a silhueta o bastante pra valer
+ * uma camada. `montarCamadas` não os menciona de propósito, e é por isso
+ * que a pasta de traços se chama `traco/` e não `acessorio/`.
  */
 
 /**
@@ -52,18 +51,12 @@ export const ARMADURAS: ReadonlySet<string> = new Set(['placas']);
  * humano de armadura. A pessoa escolheu a raça e deixaria de vê-la
  * justamente quando o personagem fica mais forte.
  *
- * Moram em `traco/`. Estiveram em `acessorio/` enquanto ninguém sabia o
- * que eram — nome que confundia com o slot de acessório equipável, que é
- * outra coisa e nem tem camada (ver o bloco acima).
+ * Este mapa é escrito à mão porque é **decisão**: `orelhas-de-gato.png`
+ * não diz "felino" em lugar nenhum. O disco lista os arquivos
+ * (`ARQUIVOS_DE_TRACO`); quem os liga a uma raça é aqui, e há teste
+ * conferindo que todo caminho citado existe.
  */
-const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([['felino', 'traco/orelhas-de-gato.png']]);
-
-/**
- * Mão secundária. Hoje só o escudo — e ele é `category: 'armadura'` nos
- * templates, mas `equipItem` o manda pro slot `secundaria` (ver o caso
- * especial em `hero.ts`). Quem lê daqui usa o slot, não a categoria.
- */
-export const SECUNDARIAS: ReadonlySet<string> = new Set(['escudo']);
+export const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([['felino', 'traco/orelhas-de-gato.png']]);
 
 /**
  * Corpos que já vêm com a cabeça resolvida: o felino tem orelhas e pelo
@@ -71,6 +64,9 @@ export const SECUNDARIAS: ReadonlySet<string> = new Set(['escudo']);
  * grotesco, então nem entra.
  */
 const SEM_CABELO: ReadonlySet<string> = new Set(['felino', 'morto_vivo']);
+
+/** O único cabelo desenhado até agora. Ver `CABELOS` no arquivo gerado. */
+const CABELO_PADRAO = 'masculino';
 
 export interface Vestimenta {
   /** Id da raça (`RACES[].id`). */
@@ -104,7 +100,7 @@ export function montarCamadas({ raca, arma, armadura, secundaria }: Vestimenta):
   const camadas = [`${RAIZ}/corpo/${raca}.png`, `${RAIZ}/base/calca.png`, `${RAIZ}/base/roupa.png`];
 
   if (armadura && ARMADURAS.has(armadura)) camadas.push(`${RAIZ}/armadura/${armadura}.png`);
-  if (!SEM_CABELO.has(raca)) camadas.push(`${RAIZ}/cabelo/masculino.png`);
+  if (!SEM_CABELO.has(raca)) camadas.push(`${RAIZ}/cabelo/${CABELO_PADRAO}.png`);
 
   const traco = TRACOS_DE_RACA.get(raca);
   if (traco) camadas.push(`${RAIZ}/${traco}`);
