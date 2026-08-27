@@ -1840,10 +1840,51 @@ de quais e-mails têm conta.
 
 ---
 
+## O `/health` passa a dizer quem está no ar (2026-08-27)
+
+Duas coisas foram entregues em 2026-08-26 e ficaram **inertes em produção
+sem ninguém perceber**: a compressão do socket, que não aparecia negociada
+no handshake, e a persistência de sala, que depende de uma `REDIS_URL` que
+ainda não foi posta. O problema comum às duas não era o código — era não
+haver como perguntar ao servidor o que ele estava fazendo. `version`
+respondia `nest-phase-2`, uma constante escrita à mão, igual pro commit de
+hoje e pro de duas semanas atrás.
+
+O corpo do `/health` ganhou três campos. Os antigos ficaram onde estavam.
+
+| Campo | Responde | Por que não dava pra saber antes |
+|---|---|---|
+| `commit` / `branch` | qual build está rodando | `RENDER_GIT_COMMIT`/`RENDER_GIT_BRANCH` são injetados pelo Render em build e runtime. Antes, o único jeito era ler o SHA na aba Deploys — e selo verde de "Live" não prova que a variável que você acabou de mexer entrou |
+| `redis: {configured, connected}` | a `REDIS_URL` chegou até o processo, e o serviço responde | é o mesmo interruptor da persistência de sala: com cliente o registro usa `DepositoNoRedis`, sem cliente usa `DepositoNulo`. Como o depósito **engole os próprios erros de propósito** (Redis fora não pode recusar partida), sala que não sobrevive ao deploy não faz barulho em lugar nenhum |
+| `socket: {conexoes, comprimidas}` | quantas conexões negociaram `permessage-deflate` desde que o processo subiu | de fora, o handshake volta `101` sem `Sec-WebSocket-Extensions` tanto se o deploy é velho quanto se um proxy tirou a extensão — e **não existe endereço da API que não passe por proxy**: `rpg-legend-api.onrender.com` também responde `Server: cloudflare` |
+
+`redis.connected` é medido na hora com um `EXISTS` numa chave que ninguém
+escreve — ida e volta de verdade, custo constante, sem deixar rastro. É a
+mesma correção do bug #6: flag gravada no boot continua dizendo `true`
+depois do serviço cair.
+
+Os contadores de socket zeram junto com o processo, e isso é proposital:
+falam sempre da build que está rodando agora.
+
+### Como ler
+
+- **`comprimidas` sobe junto com `conexoes`** → a compressão está valendo.
+- **`conexoes` sobe e `comprimidas` fica em zero** → a config do gateway
+  não é a culpada (há teste ponta a ponta em `realtime.gateway.spec.ts`
+  provando que ela negocia sem proxy no meio); olhar o proxy.
+- **`commit` diferente do `git rev-parse --short HEAD`** → o deploy não
+  pegou. Nada além disso precisa ser investigado ainda.
+- **`commit: null`** → o campo não achou a variável; aí o problema é
+  aqui, não no deploy.
+
+---
+
 ## Travado esperando você
 
 | O quê | Pra quê | Sem isso |
 |---|---|---|
+| `REDIS_URL` no Render | sala sobreviver ao redeploy | metade servidor fica inerte: `DepositoNulo`, e todo deploy apaga partida em andamento. A metade do cliente (lembrar a sala, `rejoin` ao reconectar) já vale sozinha. Conferível em `/health` → `redis.configured` |
+| Build Filters no Render | parar de redeployar a API em commit que só mexe no front | só pelo painel — não há `render.yaml`. Incluir `apps/api/**`, `packages/shared/**`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `package.json`. A Vercel tem o problema espelhado (`Ignored Build Step`) |
 | ~~`RESEND_API_KEY` + `EMAIL_FROM`~~ | confirmar e-mail e reset de senha | **resolvido em 2026-08-22** — domínio `rpglegend.com.br` verificado, envio provado ponta a ponta |
 | `DATABASE_URL` de staging | rodar tudo contra banco real | ~~PGlite cobre a maior parte~~ **resolvido em 2026-08-18**: o Supabase serve de staging |
 | ~~onde a API vai rodar~~ | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | **resolvido em 2026-08-22** — Render, em `api.rpglegend.com.br`, com `TRUST_PROXY=1`. Falta só `ALLOWED_ORIGIN`, que espera o front existir pra ter uma origem pra declarar |

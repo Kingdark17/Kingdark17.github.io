@@ -12,6 +12,7 @@
 
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import request from 'supertest';
 import { io, type Socket as ClientSocket } from 'socket.io-client';
 
 import { AppModule } from '../app.module';
@@ -393,5 +394,54 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
 
     await waitFor(client, 'auth-error');
     expect(client.connected).toBe(true);
+  });
+
+  /**
+   * A prova local de que o `perMessageDeflate` do gateway vale — e a régua
+   * pra ler o mesmo campo em produção.
+   *
+   * De fora não dá pra saber: o handshake volta `101` sem
+   * `Sec-WebSocket-Extensions` tanto quando o deploy é velho quanto quando
+   * um proxy tira a extensão no caminho, e todo endereço da API passa por
+   * proxy. Aqui não há proxy nenhum. Se este teste passa e a produção
+   * responde `comprimidas: 0`, a config não é a culpada.
+   *
+   * O delta, e não o total: os contadores são do processo inteiro e os
+   * testes acima já abriram conexões.
+   */
+  it('o /health enxerga a compressão que o socket negociou', async () => {
+    const antes = (await request(servidorDe(app)).get('/health')).body as { socket: { conexoes: number; comprimidas: number } };
+
+    const client = connect();
+    await waitFor(client, 'connect');
+
+    const depois = (await request(servidorDe(app)).get('/health')).body as { socket: { conexoes: number; comprimidas: number } };
+
+    expect(depois.socket.conexoes).toBe(antes.socket.conexoes + 1);
+    expect(depois.socket.comprimidas).toBe(antes.socket.comprimidas + 1);
+  });
+
+  it('conexão sem compressão é contada, mas não como comprimida', async () => {
+    const antes = (await request(servidorDe(app)).get('/health')).body as { socket: { conexoes: number; comprimidas: number } };
+
+    // O `ws` cliente oferece `permessage-deflate` por padrão; recusar aqui
+    // é o que separa "o servidor conta tudo" de "o servidor conta o que
+    // realmente foi negociado". Sem este caso, um contador que só somasse
+    // conexões passaria pelo teste de cima.
+    const client = io(url, {
+      transports: ['websocket'],
+      forceNew: true,
+      // O `ws` documenta `perMessageDeflate` como `Boolean|Object`
+      // (`websocket.js:659`) e o engine.io-client repassa a opção sem
+      // tocar; só o tipo do cliente não modela o booleano.
+      perMessageDeflate: false as unknown as { threshold: number },
+    });
+    clients.push(client);
+    await waitFor(client, 'connect');
+
+    const depois = (await request(servidorDe(app)).get('/health')).body as { socket: { conexoes: number; comprimidas: number } };
+
+    expect(depois.socket.conexoes).toBe(antes.socket.conexoes + 1);
+    expect(depois.socket.comprimidas).toBe(antes.socket.comprimidas);
   });
 });

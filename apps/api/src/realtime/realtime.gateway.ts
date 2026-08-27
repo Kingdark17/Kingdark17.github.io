@@ -72,6 +72,45 @@ interface SocketState {
   username?: string;
 }
 
+/**
+ * Quantas conexões chegaram desde que o processo subiu e quantas
+ * negociaram compressão — a única forma de responder, com fato, se o
+ * `perMessageDeflate` lá embaixo está valendo em produção.
+ *
+ * De fora não dá: o handshake volta `101` sem `Sec-WebSocket-Extensions`
+ * tanto se o deploy não pegou quanto se um proxy no caminho tirou a
+ * extensão, e não há endereço da API que não passe pelo proxy. De dentro
+ * dá, porque quem negocia é o `ws` deste processo.
+ *
+ * Os contadores zeram junto com o processo, e isso é bom: eles falam
+ * sempre da build que está rodando agora, nunca da anterior.
+ */
+export interface DiagnosticoDoSocket {
+  conexoes: number;
+  comprimidas: number;
+}
+
+/**
+ * O `ws` guarda o que negociou em `WebSocket#extensions` — string vazia
+ * quando não houve acordo. O engine.io guarda esse socket no transporte.
+ *
+ * Nenhum dos dois tipos declara o caminho, daí o molde estreito e o
+ * `try`: isto roda em toda conexão e **nunca** pode ser o motivo de uma
+ * conexão falhar. Diagnóstico que derruba o que diagnostica não presta.
+ *
+ * O front fixa `transports: ['websocket']`, então o transporte já é o
+ * definitivo aqui — não há upgrade de polling depois pra perder de vista.
+ */
+function negociouCompressao(socket: Socket): boolean {
+  try {
+    const transporte = socket.conn?.transport as { socket?: { extensions?: unknown } } | undefined;
+    const extensoes = transporte?.socket?.extensions;
+    return typeof extensoes === 'string' && extensoes.includes('permessage-deflate');
+  } catch {
+    return false;
+  }
+}
+
 // `lerCors()` em vez de `origin` solto: sem `credentials`, o navegador não
 // anexa o cookie de sessão ao handshake, e o `auth` do front novo — que
 // manda o corpo vazio de propósito — nunca autenticaria.
@@ -117,6 +156,12 @@ interface SocketState {
 export class RealtimeGateway implements OnGatewayDisconnect {
   private readonly logger = new Logger(RealtimeGateway.name);
   private readonly limiter = new RateLimiter(SOCKET_MESSAGE_LIMIT, SOCKET_WINDOW_MS);
+  private readonly socketsVistos: DiagnosticoDoSocket = { conexoes: 0, comprimidas: 0 };
+
+  /** Cópia, não o objeto: o `/health` lê, não mexe. */
+  get diagnosticoDoSocket(): DiagnosticoDoSocket {
+    return { ...this.socketsVistos };
+  }
 
   constructor(
     private readonly auth: AuthService,
@@ -126,6 +171,9 @@ export class RealtimeGateway implements OnGatewayDisconnect {
   ) {}
 
   handleConnection(socket: Socket): void {
+    this.socketsVistos.conexoes += 1;
+    if (negociouCompressao(socket)) this.socketsVistos.comprimidas += 1;
+
     // Middleware de socket vale pra todo pacote que chega, igual ao teto
     // que o original checava no topo do `ws.on('message')`.
     socket.use((_packet, next) => {

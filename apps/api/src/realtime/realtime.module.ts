@@ -37,7 +37,8 @@ import { RoomsController } from './rooms.controller';
     },
     RealtimeGateway,
   ],
-  // `/health` conta as salas abertas a partir do mesmo registro.
-  exports: [RoomRegistry],
+  // `/health` conta as salas abertas a partir do mesmo registro, e lê no
+  // gateway se a compressão do socket foi negociada de verdade.
+  exports: [RoomRegistry, RealtimeGateway],
 })
 export class RealtimeModule {}

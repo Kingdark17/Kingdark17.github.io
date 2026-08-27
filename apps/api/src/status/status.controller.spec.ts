@@ -36,4 +36,40 @@ describe('StatusController', () => {
       accounts: { configured: false, connected: false },
     });
   });
+
+  /**
+   * Sem `REDIS_URL` a sala não sobrevive a um deploy, e o depósito engole
+   * o próprio erro de propósito — o silêncio é igualzinho ao do caso em
+   * que tudo funciona. Este campo é o que separa os dois.
+   */
+  it('/health diz se o Redis chegou até o processo', async () => {
+    const response = await request(servidorDe(app)).get('/health');
+
+    expect(response.body).toMatchObject({ redis: { configured: false, connected: false } });
+  });
+
+  /**
+   * Sem as variáveis do host, `null`. O que importa é que os campos
+   * **apareçam** no corpo: `undefined` sumiria do JSON e o campo pareceria
+   * nunca ter existido — a mesma falha calada que ele veio consertar.
+   */
+  it('/health traz commit e branch, ainda que vazios fora do host', async () => {
+    const response = await request(servidorDe(app)).get('/health');
+
+    expect(response.body).toHaveProperty('commit');
+    expect(response.body).toHaveProperty('branch');
+  });
+
+  it('/health traz o contador de compressão do socket', async () => {
+    const response = await request(servidorDe(app)).get('/health');
+
+    expect((response.body as { socket: unknown }).socket).toEqual({ conexoes: 0, comprimidas: 0 });
+  });
+
+  /** Quem já lê o corpo antigo não pode quebrar por causa dos campos novos. */
+  it('/health mantém os campos que o original respondia', async () => {
+    const response = await request(servidorDe(app)).get('/health');
+
+    expect(response.body).toMatchObject({ online: true, validation: true, version: 'nest-phase-2' });
+  });
 });
