@@ -19,6 +19,53 @@
   }
 }
 
+/* ---------- a tela de exploração ----------
+ *
+ * A hierarquia aqui é deliberada e mudou: **texto, ficha, mapa**, nessa
+ * ordem. Antes o mapa ocupava a largura inteira da coluna direita e a
+ * narração vinha antes dele em corpo 0,9 e cor apagada — o efeito era um
+ * tabuleiro com uma legenda em cima, e não uma cena que se lê.
+ *
+ * O mapa não encolheu por gosto: ele é 6×6 e não ganha nada em ser
+ * grande. O que ele ganha é estar colado nos controles de movimento. */
+.exploracao {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.cena {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Duas colunas só quando sobra largura pra narração continuar com linha
+   legível. Abaixo disso o bloco de navegação desce inteiro — e continua
+   pequeno, porque quem limita a largura dele é o `max-width`, não a
+   coluna. */
+@media (min-width: 68rem) {
+  .cena {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+  }
+}
+
+.narracao {
+  min-width: 0;
+
+  /* Gancho da textura de fundo. Assim que o PNG existir em `public/`,
+     basta declarar `--textura-da-cena: url('/img/…png')` em `.tela` e ela
+     entra sem mexer em mais nada aqui. Fica `none` até lá justamente pra
+     não pedir um arquivo que ainda não existe. */
+  background-image: var(--textura-da-cena, none);
+}
+
+.navegacao {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  max-width: 16rem;
+}
+
 .painel {
   composes: painel from '../acabamento.module.css';
   padding: 1.1rem;
@@ -101,14 +148,26 @@
   font-size: 1.15rem;
 }
 
+/* O título da sala na exploração — só ali. As outras telas seguem usando
+   `.local` no tamanho de cabeçalho de painel. */
+.tituloDaCena {
+  font-size: 1.55rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Corpo de texto de verdade: cor cheia, corpo maior e linha limitada a
+   65ch. Era `0.9rem` em `--parchment-dim`, o mesmo tratamento de uma
+   nota de rodapé — a história do jogo lida como legenda. */
 .descricaoLocal {
-  color: var(--parchment-dim);
-  font-size: 0.9rem;
-  margin: 0 0 1rem;
+  color: var(--parchment);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 65ch;
+  margin: 0 0 1.25rem;
 }
 
 .linhaDaCena {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.7rem;
 }
 
 /* ---- efeitos de combate (portados de css/animations.css) ---- */
@@ -250,7 +309,6 @@
 .grade {
   display: grid;
   gap: 3px;
-  margin-bottom: 1.25rem;
   background: #05060a;
   border: 1px solid var(--line);
   border-radius: 4px;
@@ -391,13 +449,31 @@
   opacity: 1;
 }
 
+/* Aberta por botão, não mais sempre na tela: é consulta de quem chegou
+   agora, e ficava ocupando espaço permanente de quem já sabe as cores. */
+.chaveDaLegenda {
+  background: none;
+  border: 0;
+  color: var(--parchment-dim);
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.1rem 0;
+  cursor: pointer;
+  justify-self: start;
+}
+
+.chaveDaLegenda:hover,
+.chaveDaLegenda:focus-visible {
+  color: var(--gold-bright);
+}
+
 .legenda {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem 0.9rem;
   padding: 0;
-  margin: -0.85rem 0 1.25rem;
+  margin: 0;
   font-size: 0.8rem;
   color: var(--parchment-dim);
 }
@@ -958,12 +1034,27 @@
   margin-left: 0.35rem;
 }
 
+/* A contagem do diário não puxa atenção como a de pontos de atributo:
+   ninguém *precisa* abrir o diário. É informação, não chamado. */
+.marcaDoDiario {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--parchment-dim);
+  border-radius: 0.8rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  padding: 0 0.4rem;
+  margin-left: 0.35rem;
+}
+
+/* Centralizada porque agora fica logo abaixo do mapa, e os dois têm que
+   ler como um bloco só — alinhada à esquerda ela parecia solta. */
 .bussola {
   display: grid;
   grid-template-columns: repeat(3, 3.2rem);
   grid-template-rows: repeat(3, 3.2rem);
   gap: 0.35rem;
-  justify-content: start;
+  justify-content: center;
 }
 
 .norte {
@@ -1169,6 +1260,41 @@
   color: var(--parchment-dim);
   font-size: 0.8rem;
   margin: 0.1rem 0 0;
+}
+
+/* ---------- diário de aventura ----------
+ *
+ * Reaproveita `.nomeDoPasso` e `.dicaDoPasso` de propósito: é a mesma
+ * figura de "linha com ícone, título e detalhe" que o guia usa, e duas
+ * escalas de texto diferentes pro mesmo padrão só criariam divergência. */
+
+.diario {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.anotacao {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 0.7rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+}
+
+/* A mais recente é a primeira, e é a que a pessoa abriu o diário pra ver. */
+.anotacao:first-child {
+  border-color: var(--gold);
+}
+
+.iconeDaAnotacao {
+  font-size: 1.2rem;
+  line-height: 1.3;
 }
 
 .gradeDoGuia {

@@ -32,6 +32,7 @@ import { andar, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type Estad
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
 import { abrirAdm } from '@/lib/jogo/adm';
 import { aplicarRemoto, instantaneoDaSala, type CosmeticosDoJogador } from '@/lib/jogo/coop';
+import { anotar, type Anotacao } from '@/lib/jogo/diario';
 import { abrirMochila } from '@/lib/jogo/mochila';
 import { narrar } from '@/lib/jogo/narrador';
 import { monstroAtual } from '@/lib/jogo/combate';
@@ -71,6 +72,7 @@ function Abrindo() {
 const TelaAdm = dynamic(() => import('./tela-adm').then((m) => m.TelaAdm), { ssr: false, loading: Abrindo });
 const TelaCombate = dynamic(() => import('./tela-combate').then((m) => m.TelaCombate), { ssr: false, loading: Abrindo });
 const TelaDialogo = dynamic(() => import('./tela-dialogo').then((m) => m.TelaDialogo), { ssr: false, loading: Abrindo });
+const TelaDiario = dynamic(() => import('./tela-diario').then((m) => m.TelaDiario), { ssr: false, loading: Abrindo });
 const TelaEvento = dynamic(() => import('./tela-evento').then((m) => m.TelaEvento), { ssr: false, loading: Abrindo });
 const TelaGuia = dynamic(() => import('./tela-guia').then((m) => m.TelaGuia), { ssr: false, loading: Abrindo });
 const TelaLoja = dynamic(() => import('./tela-loja').then((m) => m.TelaLoja), { ssr: false, loading: Abrindo });
@@ -103,7 +105,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const [pet, setPet] = useState<PetId | null>(null);
   const [admin, setAdmin] = useState(false);
   const [recado, setRecado] = useState<Recado | null>(null);
+  const [diario, setDiario] = useState<Anotacao[]>([]);
   const [guiaAberto, setGuiaAberto] = useState(false);
+  const [diarioAberto, setDiarioAberto] = useState(false);
+  const [legendaAberta, setLegendaAberta] = useState(false);
   const [confirmandoSaida, setConfirmandoSaida] = useState(false);
   const [saindo, setSaindo] = useState(false);
 
@@ -306,11 +311,29 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     });
   }, [emCoop]);
 
+  /**
+   * As duas portas por onde acontecimento chega ao jogador — e é por isso
+   * que o diário escreve daqui, e não de um gerador próprio: assim ele
+   * registra **exatamente** o que foi mostrado. Diário que discorda da
+   * tela seria pior que diário nenhum.
+   *
+   * `null` só limpa a caixa; não é acontecimento e não vira linha.
+   */
+  function avisar(proximo: Aviso | null) {
+    setAviso(proximo);
+    if (proximo) setDiario((atual) => anotar(atual, proximo));
+  }
+
+  function recadar(proximo: Recado | null) {
+    setRecado(proximo);
+    if (proximo) setDiario((atual) => anotar(atual, { icone: '✨', ...proximo }));
+  }
+
   function registrarMudanca(proximo: EstadoDoJogo, avisoNovo: Aviso | null) {
     precisaSalvar.current = true;
     setSalvamento('parado');
     setEstado(proximo);
-    setAviso(avisoNovo);
+    avisar(avisoNovo);
     setPerguntando(null);
     sincronizar(proximo);
   }
@@ -329,7 +352,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     tocar(resultado.som ?? 'step');
 
     registrarMudanca(resultado.estado, resultado.aviso);
-    setRecado(resultado.recado ?? passo.recado);
+    recadar(resultado.recado ?? passo.recado);
     setTela(resultado.tela);
   }
 
@@ -337,7 +360,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     const passo = marcar(atual, 'inventory');
     if (passo.recado) {
       setEstado(passo.estado);
-      setRecado(passo.recado);
+      recadar(passo.recado);
       precisaSalvar.current = true;
     }
     setTela({ tipo: 'mochila', mochila: abrirMochila(passo.estado) });
@@ -360,7 +383,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   function fechar(estadoFinal: EstadoDoJogo, avisoFinal: Aviso | null = null) {
     setTela(null);
     setEstado(estadoFinal);
-    setAviso(avisoFinal);
+    avisar(avisoFinal);
     precisaSalvar.current = true;
     setSalvamento('parado');
     sincronizar(estadoFinal);
@@ -395,7 +418,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
 
     if (!alvo || !atravessaSemInteragir(alvo)) {
       setPerguntando(null);
-      setAviso({ icone: '🚶', titulo: 'Você recua', texto: 'Você decide não entrar e recua um passo.' });
+      avisar({ icone: '🚶', titulo: 'Você recua', texto: 'Você decide não entrar e recua um passo.' });
       return;
     }
 
@@ -498,6 +521,19 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     );
   }
 
+  // Tela própria, mas não tela cheia: a ficha do herói continua ao lado,
+  // igual ao guia e à mochila. Ler o diário é conferir o que aconteceu com
+  // *este* personagem — esconder os atributos enquanto isso não ajuda.
+  if (diarioAberto) {
+    return (
+      <div className={styles.conteudo}>
+        <PainelHeroi hero={estado.hero} />
+        <TelaDiario anotacoes={diario} onFechar={() => setDiarioAberto(false)} />
+        {enfeites}
+      </div>
+    );
+  }
+
   if (tela) {
     return (
       <div className={styles.conteudo}>
@@ -516,148 +552,179 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     <div className={styles.conteudo}>
       <PainelHeroi hero={estado.hero} />
 
-      <section>
-        <h1 className={styles.local}>{visual.lugar}</h1>
-        {narracao && (
-          <div className={styles.descricaoLocal}>
-            <p className={styles.linhaDaCena}>{narracao.ambiente}</p>
-            {narracao.conteudo && (
-              <p className={styles.linhaDaCena}>
-                <TextoDoJogo>{narracao.conteudo}</TextoDoJogo>
-              </p>
-            )}
-            <p className={styles.pistasDasPortas}>{narracao.portas.join(' ')}</p>
-          </div>
-        )}
-
-        <Mapa
-          grade={estado.map}
-          posicao={estado.pos}
-          linhas={estado.mapRows}
-          colunas={estado.mapCols}
-          icone={visual.icone}
-          rotulo={visual.rotulo}
-          gasta={visual.gasta}
-          descricao={`Mapa: ${visual.lugar}`}
-        />
-
-        {/* A legenda desenha a mesma arte da grade, resolvida pelo mesmo
-            `arteDoTipo` — antes era uma segunda lista de emoji escrita à
-            mão. O nome fica de pé mesmo se um tipo novo chegar sem arte. */}
-        <ul className={styles.legenda}>
-          {visual.legenda.map(([tipo, nome]) => {
-            const arte = arteDoTipo(tipo);
-            return (
-              <li key={nome} className={styles.itemLegenda}>
-                {arte && <img className={styles.arteDaLegenda} src={arte} alt="" aria-hidden />}
-                <span>{nome}</span>
-              </li>
-            );
-          })}
-        </ul>
-
-        {alvoDaPergunta && perguntando && (
-          <div className={styles.caixa} role="dialog" aria-label="Entrar na sala?">
-            <span className={styles.iconeCaixa} aria-hidden>
-              {visual.icone(alvoDaPergunta) || '🚪'}
-            </span>
-            <div>
-              <p className={styles.textoCaixa}>
-                <TextoDoJogo>{visual.textoDeEntrada(alvoDaPergunta)}</TextoDoJogo>
-              </p>
-              <div className={styles.escolhas}>
-                <button type="button" className={`${styles.botao} ${styles.botaoPrincipal}`} onClick={() => entrar(estado, perguntando)}>
-                  Sim
-                </button>
-                <button type="button" className={styles.botao} onClick={recusar}>
-                  Não
-                </button>
+      <section className={styles.exploracao}>
+        {/* A narração vem antes do mapa no HTML, e não só no desenho: é o
+            texto que a pessoa lê pra decidir a próxima porta. O mapa é
+            consulta, e consulta vem depois — inclusive pra quem ouve a
+            tela em vez de ver. */}
+        <div className={styles.cena}>
+          <div className={styles.narracao}>
+            <h1 className={`${styles.local} ${styles.tituloDaCena}`}>{visual.lugar}</h1>
+            {narracao && (
+              <div className={styles.descricaoLocal}>
+                <p className={styles.linhaDaCena}>{narracao.ambiente}</p>
+                {narracao.conteudo && (
+                  <p className={styles.linhaDaCena}>
+                    <TextoDoJogo>{narracao.conteudo}</TextoDoJogo>
+                  </p>
+                )}
+                <p className={styles.pistasDasPortas}>{narracao.portas.join(' ')}</p>
               </div>
-            </div>
-          </div>
-        )}
+            )}
 
-        {aviso && !perguntando && (
-          <div className={styles.caixa} role="status">
-            <span className={styles.iconeCaixa} aria-hidden>
-              {aviso.icone}
-            </span>
-            <div>
-              <h2 className={styles.tituloCaixa}>{aviso.titulo}</h2>
-              <p className={styles.textoCaixa}>
-                <TextoDoJogo>{aviso.texto}</TextoDoJogo>
-              </p>
-            </div>
-          </div>
-        )}
+            {alvoDaPergunta && perguntando && (
+              <div className={styles.caixa} role="dialog" aria-label="Entrar na sala?">
+                <span className={styles.iconeCaixa} aria-hidden>
+                  {visual.icone(alvoDaPergunta) || '🚪'}
+                </span>
+                <div>
+                  <p className={styles.textoCaixa}>
+                    <TextoDoJogo>{visual.textoDeEntrada(alvoDaPergunta)}</TextoDoJogo>
+                  </p>
+                  <div className={styles.escolhas}>
+                    <button type="button" className={`${styles.botao} ${styles.botaoPrincipal}`} onClick={() => entrar(estado, perguntando)}>
+                      Sim
+                    </button>
+                    <button type="button" className={styles.botao} onClick={recusar}>
+                      Não
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
-        {/* A mochila não é sala: abre por botão, e continua acessível com a
-            pergunta "deseja entrar?" na tela — beber uma poção antes de
-            encarar o monstro é justamente quando ela serve. */}
-        <div className={styles.acoesDaExploracao}>
-          <button
-            type="button"
-            className={`${styles.botao} ${estado.hero.attrPoints > 0 ? styles.botaoPrincipal : ''}`}
-            onClick={() => abrirTelaDaMochila(estado)}
-          >
-            🎒 Mochila
-            {estado.hero.attrPoints > 0 && <span className={styles.marcaDePontos}>{estado.hero.attrPoints}</span>}
-          </button>
+            {aviso && !perguntando && (
+              <div className={styles.caixa} role="status">
+                <span className={styles.iconeCaixa} aria-hidden>
+                  {aviso.icone}
+                </span>
+                <div>
+                  <h2 className={styles.tituloCaixa}>{aviso.titulo}</h2>
+                  <p className={styles.textoCaixa}>
+                    <TextoDoJogo>{aviso.texto}</TextoDoJogo>
+                  </p>
+                </div>
+              </div>
+            )}
 
-          <button type="button" className={styles.botao} onClick={() => setGuiaAberto(true)}>
-            📖 Guia
-          </button>
-
-          <ControleDeSom />
-
-          {admin && (
-            <button type="button" className={styles.botao} onClick={() => setTela({ tipo: 'adm', adm: abrirAdm(estado) })}>
-              🛠️ ADM
-            </button>
-          )}
-
-          <button type="button" className={styles.botao} onClick={() => setConfirmandoSaida(true)} disabled={saindo}>
-            🚪 Sair
-          </button>
-        </div>
-
-        {/* Confirmação na própria tela, e não `window.confirm`: o mesmo
-            motivo da exclusão de personagem — o `confirm` trava a página
-            inteira e não dá pra ler direito no celular. E aqui ele
-            atrapalharia mais, porque a mensagem muda conforme o modo. */}
-        {confirmandoSaida && (
-          <div className={styles.confirmacaoDeSaida} role="dialog" aria-label="Sair da partida?">
-            <p className={styles.perguntaDeSaida}>Sair da partida?</p>
-            <p className={styles.detalheDaSaida}>
-              {emCoop
-                ? 'A sala se desfaz e seu parceiro volta a jogar sozinho. O progresso desta sessão não é gravado — seu personagem continua como estava antes de você entrar.'
-                : 'Seu progresso é gravado na nuvem antes de sair.'}
-            </p>
-            <div className={styles.botoesDaSaida}>
-              <button type="button" className={styles.botao} onClick={() => void sairDaPartida()} disabled={saindo}>
-                {saindo ? 'Saindo…' : 'Sim, sair'}
+            {/* A mochila não é sala: abre por botão, e continua acessível com a
+                pergunta "deseja entrar?" na tela — beber uma poção antes de
+                encarar o monstro é justamente quando ela serve. */}
+            <div className={styles.acoesDaExploracao}>
+              <button
+                type="button"
+                className={`${styles.botao} ${estado.hero.attrPoints > 0 ? styles.botaoPrincipal : ''}`}
+                onClick={() => abrirTelaDaMochila(estado)}
+              >
+                🎒 Mochila
+                {estado.hero.attrPoints > 0 && <span className={styles.marcaDePontos}>{estado.hero.attrPoints}</span>}
               </button>
-              <button type="button" className={styles.botao} onClick={() => setConfirmandoSaida(false)} disabled={saindo}>
-                Continuar jogando
+
+              <button type="button" className={styles.botao} onClick={() => setDiarioAberto(true)}>
+                📜 Diário
+                {diario.length > 0 && <span className={styles.marcaDoDiario}>{diario.length}</span>}
+              </button>
+
+              <button type="button" className={styles.botao} onClick={() => setGuiaAberto(true)}>
+                📖 Guia
+              </button>
+
+              <ControleDeSom />
+
+              {admin && (
+                <button type="button" className={styles.botao} onClick={() => setTela({ tipo: 'adm', adm: abrirAdm(estado) })}>
+                  🛠️ ADM
+                </button>
+              )}
+
+              <button type="button" className={styles.botao} onClick={() => setConfirmandoSaida(true)} disabled={saindo}>
+                🚪 Sair
               </button>
             </div>
-          </div>
-        )}
 
-        <div className={styles.bussola}>
-          {DIRECOES.map(({ direcao, classe, seta }) => (
+            {/* Confirmação na própria tela, e não `window.confirm`: o mesmo
+                motivo da exclusão de personagem — o `confirm` trava a página
+                inteira e não dá pra ler direito no celular. E aqui ele
+                atrapalharia mais, porque a mensagem muda conforme o modo. */}
+            {confirmandoSaida && (
+              <div className={styles.confirmacaoDeSaida} role="dialog" aria-label="Sair da partida?">
+                <p className={styles.perguntaDeSaida}>Sair da partida?</p>
+                <p className={styles.detalheDaSaida}>
+                  {emCoop
+                    ? 'A sala se desfaz e seu parceiro volta a jogar sozinho. O progresso desta sessão não é gravado — seu personagem continua como estava antes de você entrar.'
+                    : 'Seu progresso é gravado na nuvem antes de sair.'}
+                </p>
+                <div className={styles.botoesDaSaida}>
+                  <button type="button" className={styles.botao} onClick={() => void sairDaPartida()} disabled={saindo}>
+                    {saindo ? 'Saindo…' : 'Sim, sair'}
+                  </button>
+                  <button type="button" className={styles.botao} onClick={() => setConfirmandoSaida(false)} disabled={saindo}>
+                    Continuar jogando
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Mapa e bússola formam um bloco só. Separados — como estavam,
+              com a bússola lá embaixo depois dos botões — olhar onde dá pra
+              ir e clicar pra ir viravam dois movimentos de olho na tela. */}
+          <aside className={styles.navegacao} aria-label="Mapa e movimento">
+            <Mapa
+              grade={estado.map}
+              posicao={estado.pos}
+              linhas={estado.mapRows}
+              colunas={estado.mapCols}
+              icone={visual.icone}
+              rotulo={visual.rotulo}
+              gasta={visual.gasta}
+              descricao={`Mapa: ${visual.lugar}`}
+            />
+
+            <div className={styles.bussola}>
+              {DIRECOES.map(({ direcao, classe, seta }) => (
+                <button
+                  key={direcao}
+                  type="button"
+                  className={`${styles.botaoDirecao} ${classe}`}
+                  onClick={() => mover(direcao)}
+                  disabled={!podeAndar(estado, direcao) || perguntando !== null || !conduzo}
+                  aria-label={DIR_LABEL[direcao]}
+                  title={DIR_LABEL[direcao]}
+                >
+                  {seta}
+                </button>
+              ))}
+            </div>
+
+            {/* Botão, e não `title` no ícone: a legenda tem que abrir no
+                toque também, e um alvo de 15px não é alvo de dedo. */}
             <button
-              key={direcao}
               type="button"
-              className={`${styles.botaoDirecao} ${classe}`}
-              onClick={() => mover(direcao)}
-              disabled={!podeAndar(estado, direcao) || perguntando !== null || !conduzo}
-              aria-label={DIR_LABEL[direcao]}
-              title={DIR_LABEL[direcao]}
+              className={styles.chaveDaLegenda}
+              aria-expanded={legendaAberta}
+              onClick={() => setLegendaAberta((aberta) => !aberta)}
             >
-              {seta}
+              {legendaAberta ? '▾ Legenda' : '▸ Legenda'}
             </button>
-          ))}
+
+            {/* A legenda desenha a mesma arte da grade, resolvida pelo mesmo
+                `arteDoTipo` — antes era uma segunda lista de emoji escrita à
+                mão. O nome fica de pé mesmo se um tipo novo chegar sem arte. */}
+            {legendaAberta && (
+              <ul className={styles.legenda}>
+                {visual.legenda.map(([tipo, nome]) => {
+                  const arte = arteDoTipo(tipo);
+                  return (
+                    <li key={nome} className={styles.itemLegenda}>
+                      {arte && <img className={styles.arteDaLegenda} src={arte} alt="" aria-hidden />}
+                      <span>{nome}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </aside>
         </div>
 
         <p className={styles.estadoSalvamento}>
