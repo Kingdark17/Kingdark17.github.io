@@ -1050,12 +1050,11 @@
   border-color: var(--gold-bright);
 }
 
+/* Só a medida: fundo, pixelização e o laço dos quadros vêm do
+   `sprite-de-pet.module.css`, que é quem sabe tocar a tira. */
 .rostoDoBichinho {
   width: 3.5rem;
   height: 3.5rem;
-  object-fit: contain;
-  image-rendering: pixelated;
-  pointer-events: none;
 }
 
 .coracao {

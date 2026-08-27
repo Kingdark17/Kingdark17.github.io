@@ -1,0 +1,60 @@
+/*
+ * A tira anda por porcentagem, e a conta importa.
+ *
+ * Com a tira medindo `quadros × 100%` da caixa, `background-position-x: P%`
+ * desloca `P% × (caixa − tira)`, ou seja `−P% × (quadros − 1) × caixa`.
+ * Então 0% mostra o primeiro quadro e 100% mostra o último — os extremos
+ * caem certos sozinhos, sem ninguém escrever um pixel.
+ *
+ * `jump-none` é o que fecha: ele para em `quadros` valores **incluindo os
+ * dois extremos**, cada um por 1/quadros da duração. O `steps()` comum
+ * (`jump-end`) nunca chega no 100%, e aí o último quadro do desenho não
+ * aparece nunca — some justamente a pose final, que é a que o jogador
+ * espera ver quando faz carinho.
+ *
+ * Nada aqui tem medida absoluta: quem dá largura e altura é a tela que usa.
+ */
+
+.sprite {
+  display: block;
+  background-image: var(--tira);
+  background-repeat: no-repeat;
+  background-size: calc(var(--quadros) * 100%) 100%;
+  background-position-x: 0%;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.emLaco,
+.umaVez {
+  animation-name: correQuadros;
+  animation-duration: var(--duracao);
+  animation-timing-function: steps(var(--quadros), jump-none);
+}
+
+.emLaco {
+  animation-iteration-count: infinite;
+}
+
+/* `forwards` para no último quadro em vez de voltar ao primeiro: se o
+   temporizador do carinho atrasar um instante, o pet segura a pose em vez
+   de recomeçar o pulo e dar um solavanco. */
+.umaVez {
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes correQuadros {
+  to {
+    background-position-x: 100%;
+  }
+}
+
+/* Quem pediu menos movimento fica com o primeiro quadro, que é uma pose
+   legível por si — o slime dormindo, não um meio-pulo. */
+@media (prefers-reduced-motion: reduce) {
+  .emLaco,
+  .umaVez {
+    animation: none;
+  }
+}

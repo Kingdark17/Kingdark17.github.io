@@ -110,13 +110,24 @@
 }
 
 /* Os pets com arte própria (hoje o dragão filhote e o slime). Mesmo tamanho
-   do emoji, pra trocar de pet não mexer no tamanho do canto. */
+   do emoji, pra trocar de pet não mexer no tamanho do canto.
+
+   Só a medida: o resto vem do `sprite-de-pet.module.css`. E o balanço saiu
+   daqui de propósito — ver `.gatoRespira`. */
 .gatoArte {
   display: block;
   width: clamp(3.4rem, 12vmin, 6rem);
   height: clamp(3.4rem, 12vmin, 6rem);
-  object-fit: contain;
-  pointer-events: none;
+}
+
+/* O balanço que dá vida a quem **não** se mexe sozinho.
+
+   Fica numa classe separada porque só a arte parada o recebe: pet com tira
+   de sprites já tem movimento próprio, e os dois juntos seriam dois
+   compassos concorrendo no mesmo bicho. Também não dá pra empilhar os dois
+   na mesma regra — `animation` é uma propriedade só, e a última declarada
+   apagaria a outra. */
+.gatoRespira {
   animation: respirar 3.4s ease-in-out infinite;
 }
 
@@ -148,7 +159,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .gatoRosto,
-  .gatoArte {
+  .gatoRespira {
     animation: none;
   }
 }

@@ -19,8 +19,6 @@
  * servidor.
  */
 
-/* eslint-disable @next/next/no-img-element */
-
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -31,6 +29,7 @@ import { listarAmigos } from '@/lib/api/amigos';
 import { ROSTOS_DE_PET } from '@/lib/pets/rostos';
 import { tocar } from '@/lib/som/efeitos';
 import { Avatar } from '../componentes/avatar';
+import { SpriteDePet } from '../componentes/sprite-de-pet';
 import styles from './menu.module.css';
 
 /**
@@ -40,7 +39,11 @@ import styles from './menu.module.css';
  */
 const GATO_DA_CASA = '🐈‍⬛';
 
-/** O mesmo tempo do carinho na tela de jogo (`bicho-de-estimacao.tsx`). */
+/**
+ * O mesmo tempo do carinho na tela de jogo (`bicho-de-estimacao.tsx`), e
+ * pela mesma regra: vale só pra arte parada. Pet com tira dita o próprio
+ * tempo, senão a reação cortaria no meio ou ficaria congelada esperando.
+ */
 const DURACAO_DO_CARINHO_MS = 1200;
 
 export function AtalhosEMascote() {
@@ -57,14 +60,15 @@ export function AtalhosEMascote() {
       .catch(() => undefined);
   }, []);
 
-  useEffect(() => {
-    if (!carinho) return;
-    const relogio = setTimeout(() => setCarinho(false), DURACAO_DO_CARINHO_MS);
-    return () => clearTimeout(relogio);
-  }, [carinho]);
-
   const pet = usuario?.pet && usuario.pet !== 'none' ? (usuario.pet as PetId) : null;
   const rosto = pet ? ROSTOS_DE_PET[pet] : undefined;
+  const duracaoDoCarinho = rosto?.coracao.duracaoMs || DURACAO_DO_CARINHO_MS;
+
+  useEffect(() => {
+    if (!carinho) return;
+    const relogio = setTimeout(() => setCarinho(false), duracaoDoCarinho);
+    return () => clearTimeout(relogio);
+  }, [carinho, duracaoDoCarinho]);
 
   return (
     <>
@@ -106,7 +110,14 @@ export function AtalhosEMascote() {
           aria-label={pet ? 'Fazer carinho no seu pet' : 'Fazer carinho no gato'}
         >
           {rosto ? (
-            <img className={`${styles.gatoArte} pixelated`} src={carinho ? rosto.coracao : rosto.normal} alt="" />
+            <SpriteDePet
+              // `gatoRespira` só na arte parada: quem tem tira já se mexe
+              // sozinho, e o balanço por cima daria dois movimentos
+              // sobrepostos, cada um no seu compasso.
+              className={`${styles.gatoArte} ${rosto.normal.quadros > 1 ? '' : styles.gatoRespira}`}
+              animacao={carinho ? rosto.coracao : rosto.normal}
+              umaVez={carinho}
+            />
           ) : (
             <span className={styles.gatoRosto} aria-hidden>
               {pet ? petIcon(pet) : GATO_DA_CASA}

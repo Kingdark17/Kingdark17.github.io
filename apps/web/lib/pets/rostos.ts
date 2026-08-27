@@ -1,7 +1,7 @@
 import type { PetId } from '@rpg-legend/shared';
 
 /**
- * Os pets que têm arte própria, com o rosto normal e o de carinho.
+ * Os pets que têm arte própria, com o estado parado e o de carinho.
  *
  * Quem não está aqui cai no emoji de `petIcon()` — é o padrão, não uma
  * falta: `PET_ICONS` cobre os nove pets, e a arte vai chegando aos poucos.
@@ -14,21 +14,49 @@ import type { PetId } from '@rpg-legend/shared';
  *
  * Os caminhos são de `public/`, servidos pelo Next a partir da raiz.
  */
-export interface RostoDePet {
-  normal: string;
-  coracao: string;
+
+/**
+ * Uma tira de sprites: os quadros lado a lado num PNG só, que o CSS
+ * percorre com `steps()`. Arte parada é o mesmo formato com um quadro.
+ *
+ * `quadros` e `duracaoMs` **têm que bater com o arquivo**, e é por isso
+ * que quem escreve esses números é o `gera-sprites-de-pet.mjs`, não a mão:
+ * errar aqui não quebra nada, só faz a animação cortar quadro ou mostrar
+ * vazio no fim — defeito que passa em revisão e só aparece na tela.
+ */
+export interface Animacao {
+  src: string;
+  quadros: number;
+  /** A volta inteira. Ignorado quando há só um quadro. */
+  duracaoMs: number;
 }
 
+export interface RostoDePet {
+  normal: Animacao;
+  coracao: Animacao;
+}
+
+const parado = (src: string): Animacao => ({ src, quadros: 1, duracaoMs: 0 });
+
 export const ROSTOS_DE_PET: Partial<Record<PetId, RostoDePet>> = {
-  baby_dragon: { normal: '/img/pets/dragon-normal.png', coracao: '/img/pets/dragon-heart.png' },
+  baby_dragon: {
+    normal: parado('/img/pets/dragon-normal.png'),
+    coracao: parado('/img/pets/dragon-heart.png'),
+  },
   /**
-   * O "coração" do slime é o quadro de sorriso mais aberto da animação
-   * original, não um rosto de coração desenhado — o GIF que veio é um pulo,
-   * e não tinha essa pose. Enche o mesmo papel: muda de cara no carinho.
+   * O slime dorme parado (com o `zZ`) e pula quando recebe carinho.
    *
    * Vem com a base de grama junto, ao contrário do dragão. Não é escolha:
    * o corpo e a grama dividem a mesma rampa de verde, então não há recorte
    * possível sem redesenhar o sprite.
+   *
+   * Os 24 quadros do carinho vieram de 18 no GIF: lá o atraso variava
+   * entre 50 ms e 100 ms, e como `steps()` divide em fatias iguais, o
+   * quadro de 100 ms entra duas vezes. O ritmo sai idêntico ao do
+   * desenho — ver `gera-sprites-de-pet.mjs`.
    */
-  slime: { normal: '/img/pets/slime-normal.png', coracao: '/img/pets/slime-heart.png' },
+  slime: {
+    normal: { src: '/img/pets/slime-normal.png', quadros: 12, duracaoMs: 1920 },
+    coracao: { src: '/img/pets/slime-heart.png', quadros: 24, duracaoMs: 1200 },
+  },
 };
