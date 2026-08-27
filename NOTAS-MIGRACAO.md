@@ -21,8 +21,8 @@ nada que o código ou o `git log` já contem sozinhos.
 | 2 — Nest ainda no Neon | porte **completo**, verificado contra Postgres real |
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
 | 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64, boneco na criação, no seletor de personagem e no painel do herói durante a partida — os dois últimos com o equipamento de verdade. **Sem PixiJS** — ver "Fase 4". Faltam 6 raças, 6 armas e 2 armaduras sem arte |
-| 5 — **Neon → Supabase** | **pronta em 2026-08-18**: banco criado (Postgres 17.6, `sa-east-1`), migrações aplicadas e conferidas contra o banco real, acesso público fechado inclusive pras tabelas futuras. O jogo no ar **continua no Neon** — o Supabase está vazio e é o ambiente novo, não uma virada. O copiador da virada existe desde 2026-08-24, com ensaio e conferência; a virada em si segue sem decisão. Ver "Fase 5" e "O copiador da virada" |
-| 6 — otimização | **em andamento** — JS e fonte cortados e medidos, foto de perfil e save inteiro fora do JSON, teto por IP e presença no Redis, `pnpm lint` verde. Faltam as salas no Redis e a compressão, as duas dependendo de onde a API vai rodar |
+| 5 — **Neon → Supabase** | **concluída.** Banco criado em 2026-08-18 (Postgres 17.6, `sa-east-1`); **a virada aconteceu em 2026-08-25** e o Supabase passou a ser produção. Em 2026-08-27 a conferência mostrou destino ≥ origem nas sete tabelas e **o projeto do Neon foi apagado** — ele havia deixado de ser rollback: voltar custaria os dados criados depois da virada. Ver "Fase 5" e "O copiador da virada" |
+| 6 — otimização | **em andamento** — JS e fonte cortados e medidos, save inteiro fora do JSON, teto por IP e presença no Redis, salas no Redis (sobrevivem a deploy e a hibernação), foto de perfil fora do banco e no Supabase Storage, `pnpm lint` verde. **A compressão do socket está no código e não vale**: o proxy tira a extensão do handshake — ver "O `/health` passa a dizer quem está no ar" |
 
 ### Fase 2 — o que já existe no Nest
 
@@ -1879,12 +1879,55 @@ falam sempre da build que está rodando agora.
 
 ---
 
+## Os filtros de deploy (2026-08-27)
+
+Commit que mexe só na API redeployava o front, e vice-versa. Os dois lados
+foram configurados e **provados com experimento controlado**, porque olhar
+o toggle não bastou — ver abaixo.
+
+**Render** (`rpg-legend-api` → Settings → Build Filters → Included Paths).
+Os caminhos saem do que o `apps/api/Dockerfile` realmente copia, não de
+chute — `turbo.json` e `tsconfig.base.json` ficam de fora porque nunca
+entram na imagem:
+
+```
+apps/api/**   packages/shared/**   package.json
+pnpm-lock.yaml   pnpm-workspace.yaml   .dockerignore
+```
+
+Root Directory tem que continuar **vazio**: o contexto do Docker é a raiz
+do repositório, porque `@rpg-legend/shared` é `workspace:*`.
+
+**Vercel** (`rpg-legend-web`): Root Directory `apps/web`, *Include files
+outside the root directory* **ligado** (sem isso o front não enxerga
+`packages/shared`) e o **Skip Deployments** embutido **ligado**. O
+`Ignored Build Step` fica em `Automatic`: o próprio painel avisa que
+**`turbo-ignore` está deprecado** em favor do toggle.
+
+### O confundidor que fez parecer quebrado
+
+Três commits só de API tinham construído o front assim mesmo, o que lia
+como "o toggle não faz nada". **Os três também mexiam no
+`NOTAS-MIGRACAO.md`, na raiz do repositório** — e com "include files
+outside root directory" ligado, mudança na raiz conta.
+
+O teste que separou: `47afd1d` (só `apps/api/scripts/`, nada na raiz) →
+Render construiu, Vercel pulou. `b783cdd` (só `apps/web/`) → Vercel
+construiu, Render não. As quatro células como previstas.
+
+**Consequência prática:** editar este arquivo junto com código de API
+custa um deploy de front à toa. Vale deixar edição só de documentação em
+commit separado.
+
+---
+
 ## Travado esperando você
 
 | O quê | Pra quê | Sem isso |
 |---|---|---|
-| `REDIS_URL` no Render | sala sobreviver ao redeploy | metade servidor fica inerte: `DepositoNulo`, e todo deploy apaga partida em andamento. A metade do cliente (lembrar a sala, `rejoin` ao reconectar) já vale sozinha. Conferível em `/health` → `redis.configured` |
-| Build Filters no Render | parar de redeployar a API em commit que só mexe no front | só pelo painel — não há `render.yaml`. Incluir `apps/api/**`, `packages/shared/**`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `package.json`. A Vercel tem o problema espelhado (`Ignored Build Step`) |
+| ~~`REDIS_URL` no Render~~ | sala sobreviver ao redeploy | **resolvido em 2026-08-27** — instância **Key Value** (o Render não chama mais de Redis), plano free. Sem persistência em disco e tudo bem: o que importa é sobreviver ao reinício *da API*, e o Key Value é serviço à parte. De brinde, a hibernação do plano free também parou de matar partida |
+| ~~Build Filters no Render~~ | parar de redeployar a API em commit que só mexe no front | **resolvido em 2026-08-27**, junto com o Skip Deployments da Vercel. Ver "Os filtros de deploy" |
+| ~~Supabase Storage~~ | tirar a foto de perfil de dentro do Postgres | **resolvido em 2026-08-27** — balde `avatares`, público, objeto nomeado pelo hash do conteúdo. **O Storage recusa a chave nova (`sb_secret_…`) com `Invalid Compact JWS`**: ele quer JWT, e só a `service_role` legada (`eyJ…`) serve |
 | ~~`RESEND_API_KEY` + `EMAIL_FROM`~~ | confirmar e-mail e reset de senha | **resolvido em 2026-08-22** — domínio `rpglegend.com.br` verificado, envio provado ponta a ponta |
 | `DATABASE_URL` de staging | rodar tudo contra banco real | ~~PGlite cobre a maior parte~~ **resolvido em 2026-08-18**: o Supabase serve de staging |
 | ~~onde a API vai rodar~~ | definir `TRUST_PROXY` e `ALLOWED_ORIGIN`, decidir a compressão | **resolvido em 2026-08-22** — Render, em `api.rpglegend.com.br`, com `TRUST_PROXY=1`. Falta só `ALLOWED_ORIGIN`, que espera o front existir pra ter uma origem pra declarar |
@@ -1945,6 +1988,13 @@ substituídos pelo estado do anfitrião.
 - **`rpg-legend/server/` neste repo é cópia velha.** O servidor real está
   em `github.com/Kingdark17/RPG-Legend-Server` e tem coisa que a cópia não
   tem. Nunca usar a cópia como referência.
+- **Mensagem de erro do PowerShell devolve a linha que falhou.** Um
+  `$env:X = $env:postgresql://...` digitado errado imprimiu a string de
+  conexão inteira, senha inclusa, dentro do texto do erro — e ela foi
+  parar num chat sem ninguém ter colado segredo de propósito. A senha do
+  Supabase foi rotacionada duas vezes por isso (25/08 e 27/08). Ao passar
+  comando com credencial, prefira `Read-Host`: o valor vai num prompt, não
+  na linha de comando, e erro nenhum consegue ecoá-lo.
 - **Cache-busting do jogo legado:** editar `.js`/`.css` em `rpg-legend/`
   exige bumpar o `?v=` no `index.html` no mesmo commit. Vale também pro
   `src` das imagens em `items.js`.
