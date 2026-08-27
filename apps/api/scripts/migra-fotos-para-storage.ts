@@ -70,8 +70,18 @@ async function provarConexao(): Promise<boolean> {
     console.log('Storage respondeu: chave e balde OK.\n');
     return true;
   } catch (erro) {
-    console.error(`Storage recusou: ${erro instanceof Error ? erro.message : String(erro)}`);
-    console.error('Confira a SUPABASE_SERVICE_KEY e se o balde existe com o nome de SUPABASE_BUCKET.\n');
+    // A mensagem do `guardar` já começa com "Storage recusou (400): ...";
+    // prefixar de novo saía repetido na tela.
+    console.error(erro instanceof Error ? erro.message : String(erro));
+    // `Invalid Compact JWS` merece dica própria: quer dizer que o Storage
+    // esperava um JWT e recebeu outra coisa. A chave nova (`sb_secret_...`)
+    // é opaca, não JWT — a que serve aqui é a `service_role` legada, que
+    // começa com `eyJ`.
+    if (erro instanceof Error && erro.message.includes('Compact JWS')) {
+      console.error('Isso é chave no formato errado: use a `service_role` legada (começa com `eyJ`), não a `sb_secret_`.\n');
+    } else {
+      console.error('Confira a SUPABASE_SERVICE_KEY e se o balde existe com o nome de SUPABASE_BUCKET.\n');
+    }
     return false;
   }
 }
