@@ -15,15 +15,28 @@
 import { Module } from '@nestjs/common';
 
 import { AuthModule } from '../auth/auth.module';
+import { REDIS, type ClienteRedis } from '../shared-state/cliente-redis';
+import { SharedStateModule } from '../shared-state/shared-state.module';
 import { SocialModule } from '../social/social.module';
+import { DepositoNoRedis, DepositoNulo } from './deposito-de-salas';
 import { RealtimeGateway } from './realtime.gateway';
 import { RoomRegistry } from './room-registry';
 import { RoomsController } from './rooms.controller';
 
 @Module({
-  imports: [AuthModule, SocialModule],
+  imports: [AuthModule, SocialModule, SharedStateModule],
   controllers: [RoomsController],
-  providers: [{ provide: RoomRegistry, useFactory: () => new RoomRegistry() }, RealtimeGateway],
+  providers: [
+    {
+      // Com `REDIS_URL`, a sala sobrevive a um reinício da API: hoje todo
+      // deploy apaga as partidas em andamento junto com o processo. Sem a
+      // variável, `DepositoNulo` e tudo se comporta como antes.
+      provide: RoomRegistry,
+      useFactory: (redis: ClienteRedis | null) => new RoomRegistry(redis ? new DepositoNoRedis(redis) : new DepositoNulo()),
+      inject: [REDIS],
+    },
+    RealtimeGateway,
+  ],
   // `/health` conta as salas abertas a partir do mesmo registro.
   exports: [RoomRegistry],
 })

@@ -21,6 +21,7 @@ type Ouvinte = (canal: string, mensagem: string) => void;
 export class RedisDeMentira {
   readonly contadores = new Map<string, number>();
   readonly conjuntos = new Map<string, Set<string>>();
+  readonly textos = new Map<string, string>();
   readonly prazos = new Map<string, number>();
   readonly ouvintes: { canal: string; ouvinte: Ouvinte }[] = [];
   /** Ligue pra simular Redis fora do ar. */
@@ -35,6 +36,7 @@ export class RedisDeMentira {
       this.prazos.delete(chave);
       this.contadores.delete(chave);
       this.conjuntos.delete(chave);
+      this.textos.delete(chave);
     }
   }
 
@@ -82,9 +84,27 @@ class ClienteDeMentira implements ClienteRedis {
     let achadas = 0;
     for (const chave of chaves) {
       this.servidor.conferirPrazo(chave);
-      if (this.servidor.contadores.has(chave) || this.servidor.conjuntos.has(chave)) achadas += 1;
+      if (this.servidor.contadores.has(chave) || this.servidor.conjuntos.has(chave) || this.servidor.textos.has(chave)) achadas += 1;
     }
     return this.servidor.responder(achadas);
+  }
+
+  get(chave: string): Promise<string | null> {
+    this.servidor.conferirPrazo(chave);
+    return this.servidor.responder(this.servidor.textos.get(chave) ?? null);
+  }
+
+  set(chave: string, valor: string, _modo: 'PX', milissegundos: number): Promise<unknown> {
+    this.servidor.textos.set(chave, valor);
+    // `SET ... PX` marca o prazo na hora, sempre — ao contrário do
+    // `INCR`+`PEXPIRE` do contador, onde só a primeira da janela marca.
+    this.servidor.prazos.set(chave, this.servidor.agora() + milissegundos);
+    return this.servidor.responder('OK');
+  }
+
+  del(chave: string): Promise<number> {
+    this.servidor.prazos.delete(chave);
+    return this.servidor.responder(this.servidor.textos.delete(chave) ? 1 : 0);
   }
 
   smembers(chave: string): Promise<string[]> {

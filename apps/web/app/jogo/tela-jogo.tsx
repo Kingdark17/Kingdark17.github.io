@@ -212,12 +212,25 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     [emCoop, sala.papel, sala.turno],
   );
 
-  // Conexão caída apaga o que o servidor sabia da sala. Esquecer o que já
-  // foi enviado obriga a próxima sincronização a levar a mochila inteira de
-  // novo — sem isto, o servidor voltaria sem mochila nenhuma e o eco
-  // esvaziaria a do jogador.
+  /**
+   * Conexão caída apaga o que o servidor sabia da sala.
+   *
+   * Esquecer a mochila enviada obriga a próxima sincronização a levá-la
+   * inteira de novo — sem isto o servidor voltaria sem mochila nenhuma e o
+   * eco esvaziaria a do jogador.
+   *
+   * `abriu` também precisa voltar a `false`, e por motivo parecido: o
+   * servidor **não guarda perfil entre reinícios** (é decisão de segurança,
+   * ver `deposito-de-salas.ts`), então quem volta pra sala precisa reenviar
+   * o seu. Enquanto essa trava ficava ligada pra sempre, a reconexão
+   * devolvia a sala e não devolvia o jogo: ninguém reenviava perfil e o
+   * anfitrião não reabria a aventura.
+   */
   useEffect(() => {
-    if (sala.fase === 'desligado') mochilaEnviada.current = null;
+    if (sala.fase === 'desligado' || sala.fase === 'reconectando') {
+      mochilaEnviada.current = null;
+      abriu.current = false;
+    }
   }, [sala.fase]);
 
   /**
@@ -249,10 +262,18 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     router.push('/menu');
   }
 
-  // Quem conduz abre a aventura assim que o save carrega; quem acompanha
-  // manda o próprio perfil e espera o `welcome`.
+  /**
+   * Quem conduz abre a aventura assim que o save carrega; quem acompanha
+   * manda o próprio perfil e espera o `welcome`.
+   *
+   * Roda de novo depois de uma reconexão, porque `abriu` é zerado na queda
+   * (ver acima). A fase entra na conta pra isso não disparar no meio do
+   * caminho: durante `reconectando` o papel antigo ainda está na sessão, e
+   * mandar perfil por um socket caído não chega em ninguém.
+   */
   useEffect(() => {
-    if (!emCoop || !estado || !sala.papel || abriu.current) return;
+    const naSala = sala.fase === 'esperando' || sala.fase === 'jogando';
+    if (!emCoop || !estado || !sala.papel || !naSala || abriu.current) return;
     abriu.current = true;
 
     mandarPerfil({
@@ -263,7 +284,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
       publicProfile: cosmeticos.current,
     });
     if (sala.papel === PAPEL_ANFITRIAO) sincronizar(estado, true);
-  }, [emCoop, estado, sala.papel, sincronizar]);
+  }, [emCoop, estado, sala.papel, sala.fase, sincronizar]);
 
   /**
    * Estado que chegou do parceiro. O herói continua sendo o meu: quem o

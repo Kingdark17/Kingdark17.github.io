@@ -269,6 +269,10 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
     await this.guard(socket, 'create', code, async () => {
       const admin = await this.isAdminToken(this.tokenDaConexao(socket, { token: body?.accountToken }));
+      // Antes de criar, procura no depósito: se a API reiniciou no meio da
+      // partida, o mundo da sala está lá esperando e criar por cima o
+      // apagaria. Ver `deposito-de-salas.ts`.
+      await this.rooms.hidratar(code);
       const result = this.rooms.create(code, socket, {
         admin,
         isPublic: !!body?.public,
@@ -278,7 +282,9 @@ export class RealtimeGateway implements OnGatewayDisconnect {
         socket.emit('error', { room: code, message: 'Sala já existe.' });
         return;
       }
-      socket.emit('created', { room: code });
+      // `resumida` avisa o front de que o mapa veio de volta: ele reenvia o
+      // próprio perfil (que de propósito não sobrevive) e reabre a aventura.
+      socket.emit('created', { room: code, resumida: result.resumida });
     });
   }
 
@@ -292,6 +298,10 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
     await this.guard(socket, 'join', code, async () => {
       const admin = await this.isAdminToken(this.tokenDaConexao(socket, { token: body?.accountToken }));
+      // Mesmo motivo do `create`: sem isto, quem volta primeiro depois de
+      // um reinício ouve "Sala não encontrada" e teria que esperar o
+      // parceiro recriar — uma corrida que ninguém sabe que está correndo.
+      await this.rooms.hidratar(code);
       const result = this.rooms.join(code, socket, { admin });
       if (result.kind === 'not-found') {
         socket.emit('error', { room: code, message: 'Sala não encontrada.' });
@@ -303,6 +313,70 @@ export class RealtimeGateway implements OnGatewayDisconnect {
       }
       const name = normalizePlayerName(body?.name);
       for (const peer of result.peers) peer.emit('hello', { room: code, name, role: result.role });
+
+      /**
+       * **E pra quem entrou, com o papel dele.**
+       *
+       * Faltava, e não era detalhe: o front só descobre o próprio papel por
+       * aqui (`created` cobre só quem cria), e sem papel nada em
+       * `tela-jogo.tsx` roda — `sincronizar` e a adoção do estado remoto
+       * abrem os dois com `if (!sala.papel) return`. O convidado entrava na
+       * sala e não sincronizava nada.
+       *
+       * O front já esperava por isto: o ramo `souEu` do ouvinte de `hello`
+       * ("Você entrou na sala.") nunca tinha como disparar.
+       */
+      socket.emit('hello', { room: code, name, role: result.role });
+    });
+  }
+
+  /**
+   * Voltar pra sala em que se estava, depois de a conexão cair.
+   *
+   * Existe pra o front não ter que adivinhar entre `create` e `join`. Ele
+   * não tem como saber: depois de um reinício da API a sala pode estar
+   * viva (o parceiro voltou antes), retomada do depósito (ninguém voltou
+   * ainda) ou perdida (sem `REDIS_URL`). Se cada lado escolhesse sozinho,
+   * os dois voltando ao mesmo tempo dariam "Sala já existe" pra um deles —
+   * uma corrida decidida por latência de rede.
+   *
+   * Aqui é uma mensagem só e o servidor resolve, que é onde a informação
+   * está: existe → entra (sala vazia entrega o papel 1, ver `join`);
+   * não existe → cria.
+   */
+  @SubscribeMessage('rejoin')
+  async handleRejoin(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() body: { room?: unknown; name?: unknown; public?: unknown; accountToken?: unknown },
+  ): Promise<void> {
+    const code = normalizeRoomCode(body?.room);
+    if (!code) return;
+
+    await this.guard(socket, 'rejoin', code, async () => {
+      const admin = await this.isAdminToken(this.tokenDaConexao(socket, { token: body?.accountToken }));
+      const name = normalizePlayerName(body?.name);
+      await this.rooms.hidratar(code);
+
+      const resultado = this.rooms.get(code)
+        ? this.rooms.join(code, socket, { admin })
+        : this.rooms.create(code, socket, { admin, isPublic: !!body?.public, hostName: name });
+
+      if (resultado.kind === 'full') {
+        socket.emit('error', { room: code, message: 'Sala cheia.' });
+        return;
+      }
+      if (resultado.kind !== 'joined' && resultado.kind !== 'created') {
+        socket.emit('error', { room: code, message: 'Não foi possível voltar para a sala.' });
+        return;
+      }
+
+      const role = resultado.kind === 'created' ? HOST_ROLE : resultado.role;
+      if (resultado.kind === 'joined') {
+        for (const peer of resultado.peers) peer.emit('hello', { room: code, name, role });
+      }
+      // Mesmo evento do `join`: pro front, voltar e entrar são a mesma
+      // coisa — ele recebe o papel e refaz o que precisa a partir dele.
+      socket.emit('hello', { room: code, name, role });
     });
   }
 

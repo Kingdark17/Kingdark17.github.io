@@ -24,6 +24,10 @@
 export interface ClienteRedis {
   incr(key: string): Promise<number>;
   pexpire(key: string, milissegundos: number): Promise<number>;
+  get(key: string): Promise<string | null>;
+  /** `PX` porque toda chave guardada aqui tem prazo — nada mora pra sempre. */
+  set(key: string, valor: string, modo: 'PX', milissegundos: number): Promise<unknown>;
+  del(key: string): Promise<number>;
   sadd(key: string, member: string): Promise<number>;
   srem(key: string, member: string): Promise<number>;
   exists(...keys: string[]): Promise<number>;

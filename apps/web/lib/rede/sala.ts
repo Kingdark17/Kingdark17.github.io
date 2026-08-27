@@ -66,7 +66,12 @@ export interface MensagemRecebida {
   quando: string;
 }
 
-export type FaseDaSala = 'desligado' | 'conectando' | 'conectado' | 'esperando' | 'jogando';
+/**
+ * `reconectando` é a queda com sala guardada: a conexão caiu, mas a
+ * sessão sabe onde estava e vai voltar sozinha. `desligado` é o fim de
+ * verdade — sem sala, ou porque a pessoa saiu.
+ */
+export type FaseDaSala = 'desligado' | 'conectando' | 'reconectando' | 'conectado' | 'esperando' | 'jogando';
 
 export interface EstadoDaSala {
   fase: FaseDaSala;
@@ -107,6 +112,21 @@ type Ouvinte = () => void;
 let socket: Socket | null = null;
 /** Segura chamadas de `conectar()` durante o `import()` do cliente socket. */
 let ligando = false;
+
+/**
+ * Onde eu estava quando a conexão caiu.
+ *
+ * Fica fora do instantâneo de propósito: é memória da sessão, não estado
+ * de tela. Enquanto isto tem valor, uma reconexão volta pra sala sozinha —
+ * é o que faz um deploy da API (ou um túnel que piscou) deixar de acabar
+ * com a partida. Antes, **qualquer** queda apagava `codigo` e `papel`, e
+ * os dois jogadores caíam pra "conectado" sem sala, tendo que redigitar o
+ * código.
+ *
+ * Zerado só quando a pessoa sai de propósito (`sairDaSala`,
+ * `desconectar`) — aí não há o que retomar.
+ */
+let ondeEuEstava: { codigo: string; nome: string; publica: boolean } | null = null;
 let instantaneo: EstadoDaSala = VAZIO;
 const ouvintes = new Set<Ouvinte>();
 
@@ -208,9 +228,26 @@ function ligar(conexao: Socket): void {
   // do evento continua existindo pro cliente antigo, que ainda o manda.
   conexao.on('connect', () => conexao.emit('auth', {}));
   conexao.on('connect_error', () => mudar({ fase: 'desligado', erro: 'Não foi possível falar com o servidor.' }));
-  conexao.on('disconnect', () => mudar({ fase: 'desligado', codigo: '', papel: null, perfis: {}, remoto: null }));
 
-  conexao.on('authed', (dados: { username?: string }) => mudar({ fase: 'conectado', eu: dados?.username ?? '', erro: '' }));
+  // A queda **não** apaga mais a sala. `perfis` e `remoto` saem porque
+  // ficaram velhos (o servidor não guarda perfil entre reinícios, de
+  // propósito), mas o código e o papel ficam pra `authed` poder voltar.
+  conexao.on('disconnect', () =>
+    mudar(
+      ondeEuEstava
+        ? { fase: 'reconectando', perfis: {}, remoto: null, recado: 'Conexão caiu. Voltando para a sala…' }
+        : { fase: 'desligado', codigo: '', papel: null, perfis: {}, remoto: null },
+    ),
+  );
+
+  conexao.on('authed', (dados: { username?: string }) => {
+    mudar({ fase: 'conectado', eu: dados?.username ?? '', erro: '' });
+    // Uma mensagem só: quem decide entre entrar e recriar é o servidor,
+    // que é quem sabe se a sala sobreviveu. Ver `handleRejoin`.
+    if (ondeEuEstava) {
+      conexao.emit('rejoin', { room: ondeEuEstava.codigo, name: ondeEuEstava.nome, public: ondeEuEstava.publica });
+    }
+  });
   // Cobre os dois casos agora: sessão vencida e nunca ter entrado. O
   // segundo era barrado antes de conectar, quando dava pra ler o token.
   conexao.on('auth-error', () => mudar({ fase: 'desligado', erro: 'Entre na sua conta para jogar com alguém.' }));
@@ -311,6 +348,9 @@ function adotarRemoto(
 }
 
 export function desconectar(): void {
+  // Sair de propósito zera a memória: não há o que retomar, e sem isto a
+  // próxima conexão voltaria sozinha pra uma sala que a pessoa fechou.
+  ondeEuEstava = null;
   socket?.disconnect();
   socket = null;
   instantaneo = VAZIO;
@@ -319,6 +359,7 @@ export function desconectar(): void {
 
 /** Sai da sala mas mantém a conexão — dá pra criar outra sem reconectar. */
 export function sairDaSala(): void {
+  ondeEuEstava = null;
   socket?.disconnect();
   socket = null;
   instantaneo = { ...VAZIO, eu: instantaneo.eu };
@@ -329,10 +370,12 @@ export function sairDaSala(): void {
 // Sem `accountToken`: ele servia pro gateway checar se quem cria a sala é
 // ADM, e essa checagem passou a sair do cookie do handshake.
 export function criarSala(codigo: string, opcoes: { publica: boolean; nome: string }): void {
+  ondeEuEstava = { codigo, nome: opcoes.nome, publica: opcoes.publica };
   socket?.emit('create', { room: codigo, name: opcoes.nome, public: opcoes.publica });
 }
 
 export function entrarNaSala(codigo: string, nome: string): void {
+  ondeEuEstava = { codigo, nome, publica: false };
   socket?.emit('join', { room: codigo, name: nome });
 }
 

@@ -12,6 +12,7 @@
  * substituir — nada mais do relay guarda estado de sala.
  */
 
+import { deInstantaneo, DepositoNulo, paraInstantaneo, type DepositoDeSalas } from './deposito-de-salas';
 import { clampInt, cloneJson } from './numeric';
 import {
   sanitizeProfile,
@@ -83,7 +84,9 @@ export interface PublicRoomSummary {
   hostName: string;
 }
 
-export type CreateRoomResult = { kind: 'created'; room: Room } | { kind: 'already-exists' };
+export type CreateRoomResult =
+  /** `resumida` quando o mundo veio do depósito — o anfitrião voltando depois de um reinício. */
+  { kind: 'created'; room: Room; resumida: boolean } | { kind: 'already-exists' };
 
 export type JoinRoomResult = { kind: 'joined'; room: Room; role: RoomRole; peers: RoomConnection[] } | { kind: 'not-found' } | { kind: 'full' };
 
@@ -110,8 +113,40 @@ export class RoomRegistry {
   /** conexão -> sala/papel, no lugar do `ws.room`/`ws.role` do original. */
   private readonly membership = new Map<string, RoomMembership>();
 
+  /**
+   * Onde a sala espera enquanto o processo não está de pé. `DepositoNulo`
+   * sem `REDIS_URL`, e aí tudo se comporta como sempre se comportou.
+   *
+   * O processo continua sendo a verdade **enquanto está vivo**: o depósito
+   * é escrita passante, não fonte de leitura no caminho quente. Só o
+   * `hidratar` lê, e só quando a sala não está aqui.
+   */
+  constructor(private readonly deposito: DepositoDeSalas = new DepositoNulo()) {}
+
   get size(): number {
     return this.rooms.size;
+  }
+
+  /**
+   * Traz de volta uma sala que o reinício levou, se houver.
+   *
+   * Chamado antes de `create` e `join`. Não faz nada quando a sala já está
+   * no processo — o que está em memória é mais novo que o instantâneo, por
+   * construção.
+   */
+  async hidratar(code: string): Promise<void> {
+    if (this.rooms.has(code)) return;
+    const instantaneo = await this.deposito.carregar(code);
+    if (!instantaneo) return;
+    // Outra conexão pode ter criado a sala enquanto o `await` acima
+    // corria; quem chegou primeiro fica.
+    if (this.rooms.has(code)) return;
+    this.rooms.set(code, deInstantaneo(instantaneo));
+  }
+
+  /** Escrita passante. Falha do Redis não pode derrubar a jogada em curso. */
+  private gravar(room: Room): void {
+    void this.deposito.guardar(paraInstantaneo(room));
   }
 
   get(code: string): Room | undefined {
@@ -138,33 +173,64 @@ export class RoomRegistry {
     if (existing && existing.members.length) return { kind: 'already-exists' };
 
     this.forget(connection.id);
+
+    /**
+     * Sala presente e vazia só acontece por retomada (`hidratar`) — quando
+     * a última pessoa sai de verdade, `leave` a apaga. Então aqui o mundo
+     * dela é preservado: é o anfitrião voltando depois de um deploy, e
+     * jogar fora o mapa seria desfazer exatamente o que o depósito salvou.
+     *
+     * O que **não** é preservado é gente: perfil e marca de ADM saem do
+     * instantâneo e continuam vazios aqui. Ver `deposito-de-salas.ts`.
+     */
     const room: Room = {
       code,
       members: [{ connection, role: HOST_ROLE }],
       profiles: {},
       inventoryVersions: {},
-      state: null,
+      state: existing?.state ?? null,
       adminRoles: { [HOST_ROLE]: options.admin },
+      // Nome e visibilidade vêm de quem está criando agora, não do
+      // instantâneo: quem digita o código é o anfitrião de agora, e pode
+      // nem ser a mesma pessoa. Só o mundo atravessa.
       isPublic: options.isPublic,
       hostName: options.hostName,
     };
     this.rooms.set(code, room);
     this.membership.set(connection.id, { code, role: HOST_ROLE });
-    return { kind: 'created', room };
+    this.gravar(room);
+    return { kind: 'created', room, resumida: !!existing };
   }
 
   join(code: string, connection: RoomConnection, options: { admin: boolean }): JoinRoomResult {
     const room = this.rooms.get(code);
-    if (!room || !room.members.length) return { kind: 'not-found' };
+    if (!room) return { kind: 'not-found' };
     if (room.members.length >= MAX_ROOM_SIZE) return { kind: 'full' };
 
     this.forget(connection.id);
-    // Quem entra é sempre papel 2. Sala sem anfitrião não existe mais: se
-    // o papel 1 cai, `leave()` promove quem ficou (ver ali).
-    room.adminRoles[GUEST_ROLE] = options.admin;
-    room.members.push({ connection, role: GUEST_ROLE });
-    this.membership.set(connection.id, { code, role: GUEST_ROLE });
-    return { kind: 'joined', room, role: GUEST_ROLE, peers: this.peersOf(room, connection.id) };
+
+    /**
+     * **Sala vazia entrega o papel 1 a quem chegar.**
+     *
+     * Vazia só acontece por retomada (`hidratar`) — quando a última pessoa
+     * sai de verdade, `leave` apaga a sala. Depois de um reinício, os dois
+     * jogadores voltam ao mesmo tempo e não há como saber quem chega
+     * primeiro; se quem chegasse recebesse sempre o papel 2, a sala
+     * nasceria sem anfitrião e travaria, que é exatamente o defeito que
+     * `promoverSobrevivente` existe pra consertar do outro lado.
+     *
+     * Antes daqui vinha um `!room.members.length` que devolvia
+     * `not-found` — sala retomada era invisível pra quem tentava entrar, e
+     * o convidado teria que esperar o anfitrião recriar primeiro, sem
+     * ninguém saber que havia uma ordem obrigatória.
+     */
+    const role: RoomRole = room.members.length === 0 ? HOST_ROLE : GUEST_ROLE;
+    room.adminRoles[role] = options.admin;
+    room.members.push({ connection, role });
+    this.membership.set(connection.id, { code, role });
+    // Renova o prazo: sala com gente dentro não pode expirar embaixo deles.
+    this.gravar(room);
+    return { kind: 'joined', room, role, peers: this.peersOf(room, connection.id) };
   }
 
   /** Todo mundo na sala menos quem mandou a mensagem — o `relay()` do original. */
@@ -193,15 +259,22 @@ export class RoomRegistry {
     room.members = room.members.filter((member) => member.connection.id !== connectionId);
     if (!room.members.length) {
       this.rooms.delete(membership.code);
+      // Saída de verdade apaga o instantâneo também. O depósito existe pra
+      // cobrir queda e redeploy, não pra ressuscitar sala que a última
+      // pessoa fechou de propósito — e sem isto o código ficaria preso
+      // por meia hora, recusando quem quisesse reusá-lo.
+      void this.deposito.esquecer(membership.code);
       return { code: membership.code, role: membership.role, remaining: [] };
     }
 
-    return {
+    const resultado = {
       code: membership.code,
       role: membership.role,
       remaining: room.members.map((member) => member.connection),
       ...(membership.role === HOST_ROLE ? { promoted: this.promoverSobrevivente(room) } : {}),
     };
+    this.gravar(room);
+    return resultado;
   }
 
   /**
@@ -368,6 +441,9 @@ export class RoomRegistry {
     }
 
     room.state = state;
+    // O caminho quente: sai a cada ação. A gravação é passante e sem
+    // `await` — o jogo não espera o Redis pra seguir.
+    this.gravar(room);
     return state;
   }
 

@@ -62,7 +62,9 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
     const host = connect();
     await waitFor(host, 'connect');
     host.emit('create', { room: 'ABC123', name: 'Aria', public: true });
-    expect(await waitFor(host, 'created')).toEqual({ room: 'ABC123' });
+    // `resumida: false` porque a sala nasce agora. `true` só quando o mundo
+    // veio do depósito depois de um reinício da API.
+    expect(await waitFor(host, 'created')).toEqual({ room: 'ABC123', resumida: false });
 
     const guest = connect();
     await waitFor(guest, 'connect');
@@ -195,6 +197,70 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
     const boasVindas = waitFor<Pacote>(guest, 'welcome');
     host.emit('welcome', { room: 'WEL001', turn: 1, state: { pos: { x: 2, y: 2 }, floor: 1 } });
     expect((await boasVindas).state.profiles['2'].inventory).toEqual([{ uid: 'da-bree' }]);
+  });
+
+  /**
+   * Quem entra precisa saber o próprio papel — e não sabia.
+   *
+   * O `created` só cobre quem cria; o `hello` ia só pros outros. Sem papel,
+   * `tela-jogo.tsx` barra tudo: `sincronizar` e a adoção do estado remoto
+   * abrem os dois com `if (!sala.papel) return`. O convidado entrava e não
+   * sincronizava nada — e o ramo "Você entrou na sala." do front nunca
+   * tinha como disparar.
+   */
+  it('quem entra recebe o próprio papel', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'PAP001', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    const guest = connect();
+    await waitFor(guest, 'connect');
+    const meuHello = waitFor<{ room: string; role: number }>(guest, 'hello');
+    guest.emit('join', { room: 'PAP001', name: 'Bree' });
+
+    expect(await meuHello).toEqual({ room: 'PAP001', name: 'Bree', role: 2 });
+  });
+
+  /**
+   * `rejoin` numa sala que o reinício levou. Sem `REDIS_URL` (que é o caso
+   * aqui) o mundo não volta, mas a sala é recriada e quem voltou conduz —
+   * o que importa é que ninguém fica de fora ouvindo "Sala não encontrada".
+   */
+  it('voltar pra sala que sumiu recria e devolve o papel 1', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'VOL001', name: 'Aria' });
+    await waitFor(host, 'created');
+    host.disconnect();
+
+    const devolta = connect();
+    await waitFor(devolta, 'connect');
+    const meuHello = waitFor<{ role: number }>(devolta, 'hello');
+    devolta.emit('rejoin', { room: 'VOL001', name: 'Aria' });
+
+    expect((await meuHello).role).toBe(1);
+  });
+
+  /**
+   * O outro caminho do mesmo `rejoin`: o parceiro voltou primeiro e a sala
+   * está viva. Quem chega entra nela em vez de tentar criar por cima — é a
+   * corrida que o evento existe pra tirar.
+   */
+  it('voltar pra sala que o parceiro segurou entra nela, sem "já existe"', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'VOL002', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    const devolta = connect();
+    await waitFor(devolta, 'connect');
+    const avisoDoParceiro = waitFor<{ name: string; role: number }>(host, 'hello');
+    const meuHello = waitFor<{ role: number }>(devolta, 'hello');
+    devolta.emit('rejoin', { room: 'VOL002', name: 'Bree' });
+
+    expect((await meuHello).role).toBe(2);
+    expect(await avisoDoParceiro).toEqual({ room: 'VOL002', name: 'Bree', role: 2 });
   });
 
   it('recusa sala inexistente e sala cheia com mensagem', async () => {
