@@ -41,6 +41,20 @@ describe('direcaoDaTecla', () => {
     expect(direcaoDaTecla({ key: 'W' })).toBe('N');
     expect(direcaoDaTecla({ key: 'ArrowUp' })).toBe('N');
   });
+
+  /**
+   * Tecla segurada repete ~30x por segundo, e cada repetição seria um
+   * passo inteiro. Pior que o gasto: reiniciava o adiamento do
+   * salvamento antes dele vencer, e o progresso nunca ia pra nuvem.
+   */
+  it('ignora a auto-repetição da tecla segurada', () => {
+    expect(direcaoDaTecla({ key: 'w', repeat: true })).toBeNull();
+    expect(direcaoDaTecla({ key: 'ArrowLeft', repeat: true })).toBeNull();
+  });
+
+  it('o primeiro toque continua andando — só a repetição dele é que não', () => {
+    expect(direcaoDaTecla({ key: 'w', repeat: false })).toBe('N');
+  });
 });
 
 describe('estaDigitando', () => {

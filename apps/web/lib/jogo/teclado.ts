@@ -36,6 +36,8 @@ export interface TeclaPressionada {
   ctrlKey?: boolean;
   metaKey?: boolean;
   altKey?: boolean;
+  /** `true` quando o evento veio da auto-repetição da tecla segurada. */
+  repeat?: boolean;
 }
 
 /**
@@ -45,8 +47,19 @@ export interface TeclaPressionada {
  *
  * Shift fica de fora da lista porque não muda o sentido de nenhuma dessas
  * teclas, e segurar Shift sem querer enquanto anda é comum.
+ *
+ * **A repetição também não é jogada.** Tecla segurada repete no ritmo do
+ * sistema — perto de 30 vezes por segundo — e cada repetição seria um
+ * passo inteiro: clone do estado, mapa reconstruído, sala resolvida, som
+ * e um render da tela. O botão da bússola não consegue fazer isso, um
+ * clique é um passo, e o teclado tem que valer o mesmo.
+ *
+ * O efeito pior não era o gasto: o salvamento é adiado 2,5 s **depois da
+ * última mudança**, então enquanto a tecla ficava presa o temporizador
+ * era reiniciado antes de vencer e o progresso nunca ia pra nuvem.
  */
 export function direcaoDaTecla(tecla: TeclaPressionada): Direction | null {
+  if (tecla.repeat) return null;
   if (tecla.ctrlKey || tecla.metaKey || tecla.altKey) return null;
   return DIRECAO_POR_TECLA[tecla.key.toLowerCase()] ?? null;
 }

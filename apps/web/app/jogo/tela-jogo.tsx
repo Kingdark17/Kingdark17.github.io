@@ -81,6 +81,15 @@ const TelaMissoes = dynamic(() => import('./tela-missoes').then((m) => m.TelaMis
 
 const ESPERA_ANTES_DE_SALVAR_MS = 2500;
 
+/**
+ * Teto do adiamento, contado desde a primeira mudança ainda não gravada.
+ *
+ * Sem ele o adiamento não tem fim: cada passo reinicia os 2,5 s, então
+ * quem joga sem parar nunca grava. É o pior caso de perda por aba
+ * fechada, travada ou derrubada — dez segundos, não a sessão.
+ */
+const ESPERA_MAXIMA_MS = 10000;
+
 const DIRECOES: { direcao: Direction; classe: string; seta: string }[] = [
   { direcao: 'N', classe: styles.norte, seta: '↑' },
   { direcao: 'W', classe: styles.oeste, seta: '←' },
@@ -115,6 +124,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
 
   const assinatura = useRef('');
   const precisaSalvar = useRef(false);
+  /** Quando começou a espera atual. `0` = não há nada esperando pra gravar. */
+  const esperandoDesde = useRef(0);
   const abriu = useRef(false);
   const cosmeticos = useRef<CosmeticosDoJogador | null>(null);
   const ultimoRemoto = useRef<Record<string, unknown> | null>(null);
@@ -194,10 +205,23 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
    */
   useEffect(() => {
     if (!estado || !precisaSalvar.current || emCoop) return;
+
+    // O adiamento é reiniciado a cada mudança, então jogo sem pausa
+    // conseguia empurrar a gravação pra sempre — bastava não parar 2,5 s.
+    // Quem descobriu isso foi a tecla segurada, que mudava o estado 30
+    // vezes por segundo, mas a falha não era dela: combate encadeado ou
+    // uma sequência de compras chegam no mesmo lugar. O teto conta desde
+    // a **primeira** mudança ainda não gravada, então o pior caso é
+    // perder ESPERA_MAXIMA_MS de jogo, não a sessão inteira.
+    esperandoDesde.current ||= Date.now();
+    const jaEsperou = Date.now() - esperandoDesde.current;
+    const espera = Math.max(0, Math.min(ESPERA_ANTES_DE_SALVAR_MS, ESPERA_MAXIMA_MS - jaEsperou));
+
     const relogio = setTimeout(() => {
       precisaSalvar.current = false;
+      esperandoDesde.current = 0;
       void salvar(estado);
-    }, ESPERA_ANTES_DE_SALVAR_MS);
+    }, espera);
     return () => clearTimeout(relogio);
   }, [estado, salvar, emCoop]);
 
@@ -257,6 +281,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
       sairDaSala();
     } else if (precisaSalvar.current) {
       precisaSalvar.current = false;
+      esperandoDesde.current = 0;
       if (!(await salvar(estado))) {
         precisaSalvar.current = true;
         setSaindo(false);
