@@ -669,7 +669,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               </button>
 
               <button type="button" className={styles.botao} onClick={() => setGuiaAberto(true)}>
-                📖 Guia
+                <img className={styles.iconeDeBotao} src="/img/ui/guia.png" alt="" aria-hidden />
+                Guia
               </button>
 
               <ControleDeSom />
@@ -680,8 +681,20 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
                 </button>
               )}
 
-              <button type="button" className={styles.botao} onClick={() => setConfirmandoSaida(true)} disabled={saindo}>
-                🚪 Sair
+              {/* As duas portas empilhadas, e não troca de `src` no hover:
+                  assim as duas carregam junto com a página e a primeira
+                  passada do mouse não espera download nem pisca. */}
+              <button
+                type="button"
+                className={`${styles.botao} ${styles.botaoSair}`}
+                onClick={() => setConfirmandoSaida(true)}
+                disabled={saindo}
+              >
+                <span className={styles.porta} aria-hidden>
+                  <img className={styles.portaFechada} src="/img/ui/porta.png" alt="" />
+                  <img className={styles.portaAberta} src="/img/ui/porta-aberta.png" alt="" />
+                </span>
+                Sair
               </button>
             </div>
 

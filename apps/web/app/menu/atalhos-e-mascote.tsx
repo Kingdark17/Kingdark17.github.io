@@ -85,9 +85,7 @@ export function AtalhosEMascote() {
         </Link>
 
         <Link href="/amigos" className={styles.atalho} title="Amigos e conversas">
-          <span className={styles.rostoDoAtalho} aria-hidden>
-            ✉️
-          </span>
+          <span className={styles.cartaDoAtalho} aria-hidden />
           {pedidos > 0 && (
             <span className={styles.selo} aria-hidden>
               {pedidos}
@@ -127,6 +125,15 @@ export function AtalhosEMascote() {
             ❤
           </span>
         </button>
+
+        {/* O chão vem depois do bicho no HTML de propósito: a lombada é
+            desenhada em perspectiva, então a frente dela passa na frente
+            dos pés e é isso que dá a impressão de estar pisando em cima,
+            e não coladinho atrás.
+
+            Fora do botão porque `.gato:active` encolhe quem está dentro —
+            a terra afundando junto com o pulo quebraria o chão. */}
+        <span className={styles.chaoDoMascote} aria-hidden />
       </div>
     </>
   );

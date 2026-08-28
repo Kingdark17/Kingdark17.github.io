@@ -72,8 +72,29 @@
   position: absolute;
   right: clamp(1rem, 4vw, 2.5rem);
   bottom: clamp(1rem, 4vw, 2rem);
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* O chão embaixo do mascote.
+ *
+ * O PNG tem 48x48 mas a terra ocupa só as linhas 21 a 47 — é uma lombada
+ * vista em perspectiva, com a metade de cima do quadro vazia. Daí a caixa
+ * ter a proporção 48x27 e o fundo ser ancorado embaixo: a parte
+ * transparente fica fora da caixa em vez de virar espaço morto empurrando
+ * o bicho pra cima.
+ *
+ * A margem negativa é o quanto os pés afundam atrás da frente da lombada.
+ * Sem ela o bicho fica equilibrado na beirada. */
+.chaoDoMascote {
+  width: clamp(3.4rem, 12vmin, 6rem);
+  aspect-ratio: 48 / 27;
+  margin-top: -0.8rem;
+  background: url('/img/pets/plataforma.png') no-repeat bottom center;
+  background-size: 100% auto;
+  image-rendering: pixelated;
+  pointer-events: none;
 }
 
 /**
@@ -201,6 +222,19 @@
 .rostoDoAtalho {
   font-size: 1.6rem;
   line-height: 1;
+}
+
+/* A cartinha em pixel art no lugar do ✉️.
+ *
+ * Fundo de CSS e não `<img>`: aqui não vale a pena o `next/image` (a
+ * otimização borraria pixel art) nem abrir exceção de lint no arquivo
+ * inteiro por causa de um ícone. O nome do atalho pro leitor de tela
+ * continua no `.soPraLeitor` logo abaixo, então nada se perde. */
+.cartaDoAtalho {
+  width: 1.9rem;
+  aspect-ratio: 32 / 24;
+  background: url('/img/ui/carta.png') no-repeat center / contain;
+  image-rendering: pixelated;
 }
 
 /* A bolinha cresceu junto com o texto: com `line-height` fixo em 1,15rem e
