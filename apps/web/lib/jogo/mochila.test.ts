@@ -37,6 +37,19 @@ function comItens(...itens: Item[]): Mochila {
   return abrirMochila(cidade(itens));
 }
 
+/**
+ * Herói com uma arma de **uma** mão na principal, e os itens dados na mochila.
+ *
+ * `cidade()` sorteia a classe, e sete das doze começam com arma de duas mãos
+ * (arco, cajado, machado, violão) — que agora recusam a secundária. Sem fixar
+ * a arma, todo teste de mão secundária passa a depender do sorteio, e um dia
+ * quebra por um motivo que não tem nada a ver com o que ele testa.
+ */
+function comMaoLivre(...itens: Item[]): Mochila {
+  const espada = item('espada');
+  return equipar(comItens(espada, ...itens), espada);
+}
+
 function guardado(mochila: Mochila, alvo: Item): Item {
   const achado = mochila.estado.inventory.find((it) => it.uid === alvo.uid);
   if (!achado) throw new Error('o item sumiu da mochila');
@@ -92,7 +105,7 @@ describe('equipar', () => {
 
   it('escudo vai pra mão secundária', () => {
     const escudo = item('escudo');
-    const depois = equipar(comItens(escudo), escudo, 'secundaria');
+    const depois = equipar(comMaoLivre(escudo), escudo, 'secundaria');
 
     expect(depois.estado.hero.equip.secundaria?.uid).toBe(escudo.uid);
     expect(depois.log[0]).toContain('mão secundária');
@@ -103,6 +116,45 @@ describe('equipar', () => {
     const antes = comItens(arco);
 
     expect(equipar(antes, arco, 'secundaria').estado.hero).toBe(antes.estado.hero);
+  });
+
+  describe('arma de duas mãos', () => {
+    it('equipar o violão devolve o escudo pra mochila, e avisa', () => {
+      const escudo = item('escudo');
+      const violao = item('violao');
+      const comEscudo = equipar(comMaoLivre(escudo, violao), escudo, 'secundaria');
+
+      const depois = equipar(comEscudo, violao);
+
+      expect(depois.estado.hero.equip.arma?.uid).toBe(violao.uid);
+      expect(depois.estado.hero.equip.secundaria).toBeNull();
+      // O ponto do recolhimento: a peça não some, volta pra lista desmarcada.
+      expect(guardado(depois, escudo).equipped).toBe(false);
+      expect(depois.log.join(' ')).toContain('volta para a mochila');
+    });
+
+    it('com o violão na mão, o escudo é recusado dizendo qual arma ocupa', () => {
+      const escudo = item('escudo');
+      const violao = item('violao');
+      const antes = equipar(comItens(escudo, violao), violao);
+
+      const depois = equipar(antes, escudo);
+
+      expect(depois.estado.hero).toBe(antes.estado.hero);
+      expect(depois.log[0]).toContain('Violão');
+      expect(depois.log[0]).not.toContain('não vai nesse espaço');
+    });
+
+    it('trocar de arma sem ser de duas mãos não mexe na secundária', () => {
+      const escudo = item('escudo');
+      const maca = item('maca');
+      const comEscudo = equipar(comMaoLivre(escudo, maca), escudo, 'secundaria');
+
+      const depois = equipar(comEscudo, maca);
+
+      expect(depois.estado.hero.equip.secundaria?.uid).toBe(escudo.uid);
+      expect(depois.log.join(' ')).not.toContain('volta para a mochila');
+    });
   });
 });
 

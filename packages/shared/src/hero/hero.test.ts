@@ -209,9 +209,52 @@ describe('equipamento', () => {
     expect(isOffhandEligible(instantiate(templateById('arco')!, RARITIES[0]!))).toBe(false);
   });
 
-  it('isTwoHanded aceita arco, cajado e machado', () => {
+  it('isTwoHanded aceita arco, cajado, machado e violão', () => {
     expect(isTwoHanded(machado())).toBe(true);
+    expect(isTwoHanded(instantiate(templateById('violao')!, RARITIES[0]!))).toBe(true);
     expect(isTwoHanded(instantiate(templateById('espada')!, RARITIES[0]!))).toBe(false);
+    // Pesada, mas ninguém decidiu que ocupa as duas mãos — ver a lista.
+    expect(isTwoHanded(instantiate(templateById('marreta')!, RARITIES[0]!))).toBe(false);
+  });
+
+  /**
+   * A regra das duas mãos existiu escrita e desligada: `isTwoHanded` estava
+   * exportada e não era chamada por ninguém, então dava pra andar de machado
+   * e escudo. Estes testes são o que prende a regra ligada.
+   */
+  describe('arma de duas mãos', () => {
+    it('equipar a arma de duas mãos esvazia a secundária', () => {
+      const comEscudo = equipItem(novoHeroi(), escudo()).hero;
+      expect(comEscudo.equip.secundaria?.templateId).toBe('escudo');
+
+      const { hero: depois, equipped } = equipItem(comEscudo, machado());
+      expect(equipped).toBe(true);
+      expect(depois.equip.arma?.templateId).toBe('machado');
+      expect(depois.equip.secundaria).toBeNull();
+    });
+
+    it('com arma de duas mãos na principal, a secundária recusa — e diz por quê', () => {
+      const comMachado = equipItem(novoHeroi(), machado()).hero;
+      const { hero: depois, equipped, reason } = equipItem(comMachado, escudo());
+
+      expect(equipped).toBe(false);
+      expect(reason).toBe('two_handed_weapon');
+      expect(depois).toBe(comMachado); // recusa não mexe no herói
+    });
+
+    it('a recusa é da arma, não da classe: com arma de uma mão o escudo entra', () => {
+      const comEspada = equipItem(novoHeroi(), instantiate(templateById('espada')!, RARITIES[0]!)).hero;
+      const { equipped } = equipItem(comEspada, escudo());
+
+      expect(equipped).toBe(true);
+    });
+
+    it('trocar a arma de duas mãos por uma de uma mão devolve a mão secundária', () => {
+      const comMachado = equipItem(novoHeroi(), machado()).hero;
+      const comEspada = equipItem(comMachado, instantiate(templateById('espada')!, RARITIES[0]!)).hero;
+
+      expect(equipItem(comEspada, escudo()).equipped).toBe(true);
+    });
   });
 
   it('equipa arma no slot arma e recalcula derivados', () => {

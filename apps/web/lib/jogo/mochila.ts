@@ -57,14 +57,32 @@ export function slotDoItem(estado: EstadoDoJogo, item: Item): EquipSlot | null {
 }
 
 export function equipar(mochila: Mochila, item: Item, slot?: EquipSlot): Mochila {
+  const naMaoAntes = mochila.estado.hero.equip;
   const resultado = equipItem(mochila.estado.hero, item, slot);
-  if (!resultado.equipped) return { ...mochila, log: [`${displayName(item)} não vai nesse espaço.`] };
+  if (!resultado.equipped) {
+    // A peça cabe no slot e mesmo assim foi recusada: dizer "não vai nesse
+    // espaço" faria a pessoa procurar defeito no escudo, e o problema é a arma.
+    const recusa =
+      resultado.reason === 'two_handed_weapon'
+        ? `Suas duas mãos estão ocupadas com ${displayName(naMaoAntes.arma as Item)}.`
+        : `${displayName(item)} não vai nesse espaço.`;
+    return { ...mochila, log: [recusa] };
+  }
 
   const destino = equippedSlot(resultado.hero, item);
-  return {
-    estado: trocaDeEquipamento(mochila.estado, resultado.hero),
-    log: [`Você equipa ${displayName(item)}${destino === 'secundaria' ? ' na mão secundária' : ''}.`],
-  };
+  const log = [`Você equipa ${displayName(item)}${destino === 'secundaria' ? ' na mão secundária' : ''}.`];
+
+  // Arma de duas mãos esvazia a secundária. `trocaDeEquipamento` já devolve a
+  // peça pro inventário; o que falta é avisar, senão o escudo some da ficha
+  // sem explicação e parece bug.
+  // `destino === 'arma'` importa: trocar uma peça da secundária por outra
+  // também deixa a anterior sem slot, e ali o motivo não é este.
+  const largado = naMaoAntes.secundaria as Item | null;
+  if (destino === 'arma' && largado && !equippedSlot(resultado.hero, largado)) {
+    log.push(`${displayName(largado)} volta para a mochila: essa arma ocupa as duas mãos.`);
+  }
+
+  return { estado: trocaDeEquipamento(mochila.estado, resultado.hero), log };
 }
 
 export function desequipar(mochila: Mochila, slot: EquipSlot): Mochila {

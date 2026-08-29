@@ -238,7 +238,21 @@ export function gainXP(hero: Hero, amount: number): { hero: Hero; leveledUp: boo
 // ---------- equipamento ----------
 
 const OFFHAND_WEAPON_IDS = new Set(['espada', 'adaga', 'maca']);
-const TWO_HANDED_WEAPON_IDS = new Set(['arco', 'cajado', 'machado']);
+
+/**
+ * Armas que ocupam as duas mãos, e por isso não convivem com nada na
+ * secundária.
+ *
+ * `violao` entra aqui a pedido do Breno: o bardo toca com as duas mãos e não
+ * deveria aparecer de escudo. É regra de arma, não de classe — qualquer um
+ * que pegue o violão fica sem a mão secundária, e o bardo com uma espada
+ * continua podendo usar escudo. O jogo não bloqueia arma por classe (só varia
+ * a eficiência, ver `weaponAffinityPct`), e esta lista não abre exceção nisso.
+ *
+ * `marreta` **não** está aqui. Parece de duas mãos pelo peso, mas isso é
+ * decisão de quem desenha, não dedução minha — some quando alguém decidir.
+ */
+const TWO_HANDED_WEAPON_IDS = new Set(['arco', 'cajado', 'machado', 'violao']);
 
 export function isOffhandEligible(item: Item | null | undefined): boolean {
   if (!item) return false;
@@ -247,6 +261,13 @@ export function isOffhandEligible(item: Item | null | undefined): boolean {
   return template?.category === 'arma' && OFFHAND_WEAPON_IDS.has(item.templateId);
 }
 
+/**
+ * Ocupa as duas mãos? Ver {@link TWO_HANDED_WEAPON_IDS}.
+ *
+ * Esta função existiu por um bom tempo exportada e **nunca chamada** — a
+ * lista estava escrita, o teste passava e a regra não valia nada no jogo:
+ * dava pra andar de arco e escudo. Quem a usa hoje é `equipItem`.
+ */
 export function isTwoHanded(item: Item | null | undefined): boolean {
   if (!item) return false;
   const template = templateById(item.templateId);
@@ -265,6 +286,12 @@ export function equippedSlot(hero: Pick<Hero, 'equip'>, item: Item): EquipSlot |
 export interface EquipResult {
   hero: Hero;
   equipped: boolean;
+  /**
+   * Por que não deu, quando `equipped` é `false`. Só existe pro caso que
+   * precisa de explicação na tela: a peça **cabe** naquele slot, e mesmo
+   * assim foi recusada. "Não vai nesse espaço" seria mentira ali.
+   */
+  reason?: 'two_handed_weapon';
 }
 
 /** Regra de qual slot aceita qual item — a mesma checagem que `equipItem()` usava inline. */
@@ -279,6 +306,12 @@ function slotAccepts(slot: EquipSlot, item: Item, category: ItemCategory): boole
  * Equipa um item num slot. Devolve `equipped: false` sem alterar o herói
  * quando a peça não pode ir naquele slot (categoria errada, secundária sem
  * elegibilidade). Não muta `item` nem `hero`.
+ *
+ * **A arma principal manda nas duas mãos.** Equipar uma arma de duas mãos
+ * esvazia a secundária — o que estava lá volta pra mochila; tentar ocupar a
+ * secundária com uma arma de duas mãos na principal é recusado. O outro
+ * arranjo (o escudo expulsar a arma) seria pior: tirar a arma de alguém pra
+ * caber um escudo é surpresa, e a arma é a peça que a pessoa escolheu.
  */
 export function equipItem(hero: Hero, item: Item, requestedSlot?: EquipSlot): EquipResult {
   const template = templateById(item.templateId);
@@ -287,6 +320,7 @@ export function equipItem(hero: Hero, item: Item, requestedSlot?: EquipSlot): Eq
 
   const slot: EquipSlot = requestedSlot ?? (item.templateId === 'escudo' ? 'secundaria' : equippableCategory);
   if (!slotAccepts(slot, item, equippableCategory)) return { hero, equipped: false };
+  if (slot === 'secundaria' && isTwoHanded(hero.equip.arma)) return { hero, equipped: false, reason: 'two_handed_weapon' };
 
   const equip: HeroEquipment = { ...hero.equip };
   for (const otherSlot of EQUIP_SLOTS) {
@@ -295,6 +329,9 @@ export function equipItem(hero: Hero, item: Item, requestedSlot?: EquipSlot): Eq
     if (current === item) equip[otherSlot] = null;
   }
   equip[slot] = { ...item, equipped: true };
+  // Quem recolhe a peça expulsa é a camada de mochila, que já devolve pro
+  // inventário tudo que saiu de um slot (`trocaDeEquipamento`).
+  if (slot === 'arma' && isTwoHanded(item)) equip.secundaria = null;
 
   return { hero: recomputeDerived({ ...hero, equip }), equipped: true };
 }
