@@ -45,6 +45,12 @@ export function getDb(): Database {
   pool = new Pool({
     connectionString,
     ssl: process.env.DATABASE_SSL === 'false' ? false : { rejectUnauthorized: false },
+    // O banco de desenvolvimento (`pnpm --filter api dev:db`) é PGlite
+    // atrás de um servidor de socket que atende **uma conexão por vez**:
+    // com o pool padrão de 10 as consultas concorrentes derrubam umas às
+    // outras com ECONNRESET, e a API responde 500 sem motivo aparente.
+    // Em produção a variável não existe e o padrão do `pg` vale.
+    ...(process.env.DATABASE_POOL_MAX ? { max: Number(process.env.DATABASE_POOL_MAX) } : {}),
   });
   db = drizzle(pool, { schema });
   return db;
