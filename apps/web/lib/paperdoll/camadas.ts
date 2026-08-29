@@ -99,8 +99,15 @@ export function montarCamadas({ raca, arma, armadura, secundaria }: Vestimenta):
 
   const camadas = [`${RAIZ}/corpo/${raca}.png`, `${RAIZ}/base/calca.png`, `${RAIZ}/base/roupa.png`];
 
-  if (armadura && ARMADURAS.has(armadura)) camadas.push(`${RAIZ}/armadura/${armadura}.png`);
+  // O cabelo vem **antes** da armadura: assim a peça cobre o cabelo, em vez
+  // de o cabelo cair por cima do peitoral e das ombreiras. Com uma camada
+  // só é o arranjo certo, e foi o que o Breno pediu.
+  //
+  // O correto de verdade seriam duas camadas — costas atrás de tudo, frente
+  // por cima —, que é o que cabelo longo pede. Custa um PNG a mais por
+  // penteado, e a hora de fazer isso é quando existir penteado longo.
   if (!SEM_CABELO.has(raca)) camadas.push(`${RAIZ}/cabelo/${CABELO_PADRAO}.png`);
+  if (armadura && ARMADURAS.has(armadura)) camadas.push(`${RAIZ}/armadura/${armadura}.png`);
 
   const traco = TRACOS_DE_RACA.get(raca);
   if (traco) camadas.push(`${RAIZ}/${traco}`);

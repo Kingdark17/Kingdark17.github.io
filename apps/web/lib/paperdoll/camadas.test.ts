@@ -90,5 +90,17 @@ describe('montarCamadas', () => {
         expect(montarCamadas({ raca })).toEqual([]);
       }
     });
+
+    /**
+     * A ordem entre cabelo e armadura já esteve invertida, e nada acusou:
+     * o boneco só ficava com o cabelo caindo por cima do peitoral. Com uma
+     * camada de cabelo só, a peça tem que cobrir — é o que dá pra fazer sem
+     * separar frente e costas do penteado.
+     */
+    it('a armadura cobre o cabelo, e não o contrário', () => {
+      const camadas = montarCamadas({ raca: 'humano', armadura: 'placas' });
+
+      expect(posicao(camadas, 'cabelo/')).toBeLessThan(posicao(camadas, 'armadura/placas'));
+    });
   });
 });
