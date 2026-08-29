@@ -895,6 +895,27 @@
   margin: 0;
 }
 
+/* Aviso das duas mãos.
+ *
+ * Fica com a mesma moldura do painel de impacto e a borda âmbar do lado
+ * esquerdo: é a única coisa na ficha que exige uma escolha, e precisa se
+ * distinguir dos números sem virar um alerta vermelho — não há erro nenhum
+ * aqui, só uma troca a decidir. */
+.avisoDasMaos {
+  /* Linha inteira dentro de `.acoesDaFicha`, que é flex com wrap: o aviso
+     tem que ficar acima dos botões, não ao lado de um deles. */
+  flex: 1 0 100%;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--ember, #c0532f);
+  border-radius: 0.3rem;
+  background: rgba(0, 0, 0, 0.24);
+  color: var(--parchment);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+}
+
 .listaDoImpacto {
   list-style: none;
   margin: 0;

@@ -133,6 +133,25 @@ describe('impactoDaPeca', () => {
     expect(impacto!.linhas.map((l) => l.rotulo)).not.toContain('Dano físico');
   });
 
+  /**
+   * O escudo é recusado enquanto o bardo segura o violão, e a tela oferece a
+   * troca inteira. Se o painel medisse só o escudo, prometeria a defesa que
+   * entra e esconderia o ataque que sai junto — o botão faria uma coisa e os
+   * números diriam outra, que é o defeito que este módulo existe pra evitar.
+   */
+  it('com as duas mãos ocupadas, mede a troca que o botão oferece', () => {
+    const bardo = heroi('bardo');
+    expect(bardo.equip.arma?.templateId).toBe('violao');
+
+    const impacto = impactoDaPeca(bardo, peca('escudo'));
+    const ataque = linha(impacto, 'Ataque');
+
+    expect(impacto?.acao).toBe('equipar');
+    expect(linha(impacto, 'Defesa')!.depois).toBeGreaterThan(linha(impacto, 'Defesa')!.antes);
+    // A perda do violão aparece, em vez de ficar escondida atrás do escudo.
+    expect(ataque!.depois).toBeLessThan(ataque!.antes);
+  });
+
   /** Trocar de arma compara com a que já está na mão, não com mão vazia. */
   it('trocar de arma mede contra a arma que está equipada', () => {
     const hero = heroi('guerreiro');

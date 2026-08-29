@@ -21,6 +21,7 @@ import {
   equipItem,
   equippedSlot,
   isOffhandEligible,
+  isTwoHanded,
   itemCategory,
   removeByUid,
   spendAttrPoint,
@@ -113,6 +114,43 @@ export function usar(mochila: Mochila, item: Item): Mochila {
 /** Item na mão secundária: só escudo e arma leve (`isOffhandEligible`). */
 export function aceitaMaoSecundaria(item: Item): boolean {
   return item.templateId === 'escudo' || (itemCategory(item) === 'arma' && isOffhandEligible(item));
+}
+
+/**
+ * A arma de duas mãos que está impedindo esta peça de ir pra mão secundária,
+ * ou `null` quando não há impedimento — a peça não vai pra secundária, já
+ * está vestida, ou a mão principal não ocupa as duas.
+ *
+ * A tela pergunta isso **antes** de mostrar o botão de equipar: o jogador
+ * merece ver o aviso e escolher, em vez de clicar e levar uma recusa.
+ */
+export function armaQueOcupaAsMaos(estado: EstadoDoJogo, item: Item): Item | null {
+  if (equippedSlot(estado.hero, item)) return null;
+  if (!aceitaMaoSecundaria(item)) return null;
+
+  const arma = estado.hero.equip.arma as Item | null;
+  return isTwoHanded(arma) ? arma : null;
+}
+
+/**
+ * Guarda a arma de duas mãos e põe a peça na secundária — a saída que o
+ * aviso oferece quando as duas mãos estão ocupadas.
+ *
+ * Existe separada de `equipar()` de propósito: a troca só acontece quando o
+ * jogador clica no botão que diz o que vai acontecer. `equipar()` continua
+ * recusando calado, e é ela que o resto do jogo chama.
+ */
+export function equiparNoLugarDaArma(mochila: Mochila, item: Item): Mochila {
+  const arma = armaQueOcupaAsMaos(mochila.estado, item);
+  if (!arma) return equipar(mochila, item, 'secundaria');
+
+  const resultado = equipItem(unequipItem(mochila.estado.hero, 'arma'), item, 'secundaria');
+  if (!resultado.equipped) return { ...mochila, log: [`${displayName(item)} não vai nesse espaço.`] };
+
+  return {
+    estado: trocaDeEquipamento(mochila.estado, resultado.hero),
+    log: [`Você guarda ${displayName(arma)} e equipa ${displayName(item)} na mão secundária.`],
+  };
 }
 
 /** Jogar fora tira do slot antes de tirar da mochila — senão a peça sumia da lista e continuava vestida. */

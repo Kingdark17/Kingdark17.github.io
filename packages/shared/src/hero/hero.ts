@@ -443,6 +443,12 @@ export function generateCompanion(rng: Rng = defaultRng): Companion {
 export function hydrateSavedHero(hero: Hero): Hero {
   const equip: HeroEquipment = { arma: hero.equip?.arma ?? null, secundaria: hero.equip?.secundaria ?? null, armadura: hero.equip?.armadura ?? null, acessorio: hero.equip?.acessorio ?? null };
 
+  // Save gravado antes de a regra das duas mãos existir: dava pra andar de
+  // arco **e** escudo, e esse par continuaria valendo pra sempre em quem já
+  // estava assim. A peça não some — ela segue na lista de itens do save, e a
+  // mochila remarca o `equipped` de todo mundo a partir dos slots.
+  if (isTwoHanded(equip.arma)) equip.secundaria = null;
+
   // Identidade resolvida uma vez, na entrada: o save que veio de antes só
   // tem nome, e a partir daqui o resto do jogo só precisa olhar o id.
   const classId = idDaClasse(hero) ?? undefined;

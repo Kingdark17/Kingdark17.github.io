@@ -135,7 +135,16 @@ export function impactoDaPeca(hero: Hero, item: Item, slotDesejado?: EquipSlot):
   }
 
   const resultado = equipItem(hero, item, slotDesejado);
-  if (!resultado.equipped) return null;
+  if (resultado.equipped) return { acao: 'equipar', linhas: diferencas(retrato(hero), retrato(resultado.hero)) };
 
-  return { acao: 'equipar', linhas: diferencas(retrato(hero), retrato(resultado.hero)) };
+  // Recusada porque a arma ocupa as duas mãos. O que a tela oferece ali é a
+  // troca inteira — guardar a arma e vestir a peça —, então é dela que os
+  // números têm que falar. Medir o escudo sozinho prometeria a defesa que
+  // entra e esconderia o ataque que sai junto.
+  if (resultado.reason === 'two_handed_weapon') {
+    const trocado = equipItem(unequipItem(hero, 'arma'), item, 'secundaria');
+    if (trocado.equipped) return { acao: 'equipar', linhas: diferencas(retrato(hero), retrato(trocado.hero)) };
+  }
+
+  return null;
 }

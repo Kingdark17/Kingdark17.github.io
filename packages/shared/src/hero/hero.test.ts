@@ -249,6 +249,15 @@ describe('equipamento', () => {
       expect(equipped).toBe(true);
     });
 
+    it('save de antes da regra chega normalizado: arco e escudo viram só arco', () => {
+      const comMachado = equipItem(novoHeroi(), machado()).hero;
+      // O par ilegal só existe em save gravado antes da regra — aqui é
+      // montado à mão porque `equipItem` não deixa mais chegar nesse estado.
+      const comoEstavaNoSave: Hero = { ...comMachado, equip: { ...comMachado.equip, secundaria: escudo() } };
+
+      expect(hydrateSavedHero(comoEstavaNoSave).equip.secundaria).toBeNull();
+    });
+
     it('trocar a arma de duas mãos por uma de uma mão devolve a mão secundária', () => {
       const comMachado = equipItem(novoHeroi(), machado()).hero;
       const comEspada = equipItem(comMachado, instantiate(templateById('espada')!, RARITIES[0]!)).hero;

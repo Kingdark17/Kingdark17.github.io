@@ -7,9 +7,11 @@ import { entrarNaCidade, type EstadoNaCidade } from './estado';
 import {
   abrirMochila,
   aceitaMaoSecundaria,
+  armaQueOcupaAsMaos,
   descartar,
   desequipar,
   equipar,
+  equiparNoLugarDaArma,
   gastarPonto,
   podeEquipar,
   podeUsar,
@@ -143,6 +145,40 @@ describe('equipar', () => {
       expect(depois.estado.hero).toBe(antes.estado.hero);
       expect(depois.log[0]).toContain('Violão');
       expect(depois.log[0]).not.toContain('não vai nesse espaço');
+    });
+
+    it('a tela sabe qual arma está ocupando, antes de qualquer clique', () => {
+      const escudo = item('escudo');
+      const violao = item('violao');
+      const comViolao = equipar(comItens(escudo, violao), violao);
+
+      expect(armaQueOcupaAsMaos(comViolao.estado, escudo)?.uid).toBe(violao.uid);
+      // Peça que nem vai pra secundária não tem conflito nenhum a mostrar.
+      expect(armaQueOcupaAsMaos(comViolao.estado, item('placas'))).toBeNull();
+      // Nem a arma que está ocupando: ela já está vestida.
+      expect(armaQueOcupaAsMaos(comViolao.estado, violao)).toBeNull();
+      expect(armaQueOcupaAsMaos(comMaoLivre(escudo).estado, escudo)).toBeNull();
+    });
+
+    it('confirmando, a arma vai pra mochila e o escudo entra na secundária', () => {
+      const escudo = item('escudo');
+      const violao = item('violao');
+      const comViolao = equipar(comItens(escudo, violao), violao);
+
+      const depois = equiparNoLugarDaArma(comViolao, escudo);
+
+      expect(depois.estado.hero.equip.secundaria?.uid).toBe(escudo.uid);
+      expect(depois.estado.hero.equip.arma).toBeNull();
+      expect(guardado(depois, violao).equipped).toBe(false);
+      expect(depois.log[0]).toContain('Violão');
+    });
+
+    it('sem conflito, confirmar é só equipar na secundária', () => {
+      const escudo = item('escudo');
+      const depois = equiparNoLugarDaArma(comMaoLivre(escudo), escudo);
+
+      expect(depois.estado.hero.equip.secundaria?.uid).toBe(escudo.uid);
+      expect(depois.estado.hero.equip.arma).not.toBeNull();
     });
 
     it('trocar de arma sem ser de duas mãos não mexe na secundária', () => {

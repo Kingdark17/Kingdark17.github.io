@@ -20,6 +20,7 @@ import {
   ATTR_KEYS,
   ATTR_LABELS,
   CATEGORY_LABELS,
+  displayName,
   EQUIP_SLOTS,
   itemCategory,
   type AttrKey,
@@ -30,9 +31,11 @@ import {
 
 import {
   aceitaMaoSecundaria,
+  armaQueOcupaAsMaos,
   descartar,
   desequipar,
   equipar,
+  equiparNoLugarDaArma,
   gastarPonto,
   podeEquipar,
   podeUsar,
@@ -186,25 +189,52 @@ interface AcoesProps {
  *
  * Descartar limpa a seleção porque a peça deixa de existir; as outras
  * ações a mantêm, e a ficha se reescreve sozinha ao redor da mesma peça.
+ *
+ * **Duas mãos ocupadas não vira botão morto.** Com uma arma de duas mãos na
+ * mão principal, a mão secundária está fechada — e um "Equipar" que só
+ * responde com recusa é pior que não existir. No lugar dele vem o aviso
+ * dizendo qual arma ocupa, e um botão que diz o que vai acontecer se for
+ * clicado. Não clicar é a resposta "não": nada acontece sozinho.
  */
 function AcoesDaPeca({ mochila, item, onAgir, onSumir }: Readonly<AcoesProps>) {
   const slot = slotDoItem(mochila.estado, item);
+  const armaOcupando = armaQueOcupaAsMaos(mochila.estado, item);
+  // Arma leve ainda tem pra onde ir com as mãos ocupadas: a mão principal,
+  // trocando pela arma de duas mãos. O escudo não — só existe pra secundária.
+  const temOutroSlot = itemCategory(item) === 'arma';
 
   return (
     <>
+      {armaOcupando && (
+        <p className={styles.avisoDasMaos}>
+          {displayName(armaOcupando)} ocupa as duas mãos. Para usar {displayName(item)} na mão secundária, a arma vai para a mochila.
+        </p>
+      )}
+
       {slot ? (
         <button type="button" className={styles.botao} onClick={() => onAgir(desequipar(mochila, slot))}>
           Guardar
         </button>
       ) : (
-        podeEquipar(item) && (
+        podeEquipar(item) &&
+        (!armaOcupando || temOutroSlot) && (
           <button type="button" className={styles.botao} onClick={() => onAgir(equipar(mochila, item))}>
             Equipar
           </button>
         )
       )}
 
-      {!slot && aceitaMaoSecundaria(item) && (
+      {armaOcupando && (
+        <button
+          type="button"
+          className={`${styles.botao} ${styles.botaoPrincipal}`}
+          onClick={() => onAgir(equiparNoLugarDaArma(mochila, item))}
+        >
+          Guardar {displayName(armaOcupando)} e equipar
+        </button>
+      )}
+
+      {!slot && !armaOcupando && aceitaMaoSecundaria(item) && (
         <button type="button" className={styles.botaoDiscreto} onClick={() => onAgir(equipar(mochila, item, 'secundaria'))}>
           Mão secundária
         </button>
