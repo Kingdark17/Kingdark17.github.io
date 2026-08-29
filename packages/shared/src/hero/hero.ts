@@ -249,10 +249,11 @@ const OFFHAND_WEAPON_IDS = new Set(['espada', 'adaga', 'maca']);
  * continua podendo usar escudo. O jogo não bloqueia arma por classe (só varia
  * a eficiência, ver `weaponAffinityPct`), e esta lista não abre exceção nisso.
  *
- * `marreta` **não** está aqui. Parece de duas mãos pelo peso, mas isso é
- * decisão de quem desenha, não dedução minha — some quando alguém decidir.
+ * `marreta` entra como arma pesada (também decisão do Breno): é a mais
+ * pesada do catálogo — 7 de ataque e −2 de velocidade — e agora paga por
+ * isso com a mão secundária, em vez de ser a única pesada que não pagava.
  */
-const TWO_HANDED_WEAPON_IDS = new Set(['arco', 'cajado', 'machado', 'violao']);
+const TWO_HANDED_WEAPON_IDS = new Set(['arco', 'cajado', 'machado', 'marreta', 'violao']);
 
 export function isOffhandEligible(item: Item | null | undefined): boolean {
   if (!item) return false;

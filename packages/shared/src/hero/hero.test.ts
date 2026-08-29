@@ -21,7 +21,7 @@ import {
 } from './hero.js';
 import { seededRng } from '../rng.js';
 import { instantiate } from '../items/item.js';
-import { templateById } from '../items/templates.js';
+import { TEMPLATES, templateById } from '../items/templates.js';
 import { RARITIES } from '../items/rarity.js';
 
 const HUMANO = raceByName('Humano')!;
@@ -209,12 +209,22 @@ describe('equipamento', () => {
     expect(isOffhandEligible(instantiate(templateById('arco')!, RARITIES[0]!))).toBe(false);
   });
 
-  it('isTwoHanded aceita arco, cajado, machado e violão', () => {
-    expect(isTwoHanded(machado())).toBe(true);
-    expect(isTwoHanded(instantiate(templateById('violao')!, RARITIES[0]!))).toBe(true);
-    expect(isTwoHanded(instantiate(templateById('espada')!, RARITIES[0]!))).toBe(false);
-    // Pesada, mas ninguém decidiu que ocupa as duas mãos — ver a lista.
-    expect(isTwoHanded(instantiate(templateById('marreta')!, RARITIES[0]!))).toBe(false);
+  it('isTwoHanded aceita as pesadas e o violão, não as leves', () => {
+    for (const id of ['arco', 'cajado', 'machado', 'marreta', 'violao']) {
+      expect(isTwoHanded(instantiate(templateById(id)!, RARITIES[0]!))).toBe(true);
+    }
+    // As três leves são justamente as que cabem na secundária.
+    for (const id of ['espada', 'adaga', 'maca']) {
+      expect(isTwoHanded(instantiate(templateById(id)!, RARITIES[0]!))).toBe(false);
+    }
+  });
+
+  /** Nenhuma arma pode ser as duas coisas — seria "cabe na secundária, mas ocupa as duas mãos". */
+  it('nenhuma arma é leve e pesada ao mesmo tempo', () => {
+    for (const template of TEMPLATES.filter((t) => t.category === 'arma')) {
+      const arma = instantiate(template, RARITIES[0]!);
+      expect(isTwoHanded(arma) && isOffhandEligible(arma)).toBe(false);
+    }
   });
 
   /**
