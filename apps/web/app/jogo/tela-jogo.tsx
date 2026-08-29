@@ -745,6 +745,18 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
                 </div>
               </div>
             )}
+
+            {/* Fica dentro da narração, e não depois da cena: solto lá
+                embaixo ele caía **abaixo do bloco mais alto** — como a
+                navegação é mais alta que o texto, sobravam trezentos
+                pixels de nada entre os botões e esta linha. */}
+            <p className={styles.estadoSalvamento}>
+              {emCoop && `Sala ${sala.codigo} · ${conduzo ? 'você conduz a exploração' : 'o anfitrião conduz'} · o progresso desta sessão não é gravado`}
+              {!emCoop && salvamento === 'salvando' && 'Salvando na nuvem…'}
+              {!emCoop && salvamento === 'salvo' && 'Progresso salvo na nuvem.'}
+            </p>
+
+            {erro && <p className={styles.erro}>{erro}</p>}
           </div>
 
           {/* Mapa e bússola formam um bloco só. Separados — como estavam,
@@ -811,14 +823,6 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             )}
           </aside>
         </div>
-
-        <p className={styles.estadoSalvamento}>
-          {emCoop && `Sala ${sala.codigo} · ${conduzo ? 'você conduz a exploração' : 'o anfitrião conduz'} · o progresso desta sessão não é gravado`}
-          {!emCoop && salvamento === 'salvando' && 'Salvando na nuvem…'}
-          {!emCoop && salvamento === 'salvo' && 'Progresso salvo na nuvem.'}
-        </p>
-
-        {erro && <p className={styles.erro}>{erro}</p>}
       </section>
 
       {enfeites}
