@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { ATTR_KEYS, ATTR_LABELS, idDaRaca, type Hero } from '@rpg-legend/shared';
 
+import { sinaisDoHeroi } from '@/lib/paperdoll/sinais';
 import { tocar } from '@/lib/som/efeitos';
 import { Paperdoll } from '../componentes/paperdoll';
 import styles from './jogo.module.css';
@@ -12,9 +13,21 @@ function porcentagem(atual: number, maximo: number): string {
   return `${maximo > 0 ? Math.max(0, Math.min(100, (atual / maximo) * 100)) : 0}%`;
 }
 
+/**
+ * Duas voltas da piscada de `paperdoll.module.css` (0,42 s cada).
+ *
+ * O número está nos dois lugares e não tem como não estar: o CSS precisa
+ * dele pro ritmo e o JS pra saber quando desligar. Se um dia divergirem, a
+ * piscada acaba um pouco antes ou depois — nada quebra.
+ */
+const DURACAO_DA_PISCADA_MS = 840;
+
 export function PainelHeroi({ hero }: { hero: Hero }) {
   const [subiu, setSubiu] = useState(false);
   const nivelAnterior = useRef(hero.level);
+  const [ferido, setFerido] = useState(false);
+  const vidaAnterior = useRef(hero.hp);
+  const relogioDoDano = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // O painel percebe o nível novo sozinho, como o `renderHero()` do
   // cliente antigo: subir de nível acontece no combate, na mochila e no
@@ -26,6 +39,46 @@ export function PainelHeroi({ hero }: { hero: Hero }) {
     }
     nivelAnterior.current = hero.level;
   }, [hero.level]);
+
+  /**
+   * Levar dano é **acontecimento, não estado**: a vida cair de 40 pra 32
+   * não deixa rastro nenhum no herói depois. Por isso a comparação é aqui,
+   * com o que a tela mostrou da última vez — o mesmo desenho da piscada de
+   * nível, pelo mesmo motivo: combate, veneno e painel ADM tiram vida, e
+   * nenhum dos três precisa saber que o boneco pisca.
+   *
+   * Só a queda liga. Poção e descanso sobem a vida e não são golpe.
+   */
+  /**
+   * Quem desliga a piscada é o relógio, e **não** `onAnimationEnd`.
+   *
+   * Duas razões, e a primeira é um bug: com `prefers-reduced-motion` a
+   * animação não roda, `animationend` nunca chega e o sinal ficaria preso
+   * em ligado pra sempre. A segunda é que a respiração é infinita e
+   * dispara `animationend` a cada volta — daria pra filtrar pelo nome, mas
+   * CSS Modules embaralha nome de `@keyframes` na build, e a comparação
+   * quebraria em produção sem quebrar em desenvolvimento.
+   *
+   * O relógio mora numa `ref`, **fora da limpeza do efeito**. Com ele na
+   * limpeza, tomar um golpe e beber uma poção em seguida cancelava o
+   * relógio sem marcar outro, e a piscada ficava acesa pra sempre: a
+   * segunda passagem do efeito limpa, vê que a vida subiu e sai sem
+   * remarcar. Fora dela, cada golpe reinicia a contagem e apanhar em
+   * sequência estica a piscada — que é o que se quer ver.
+   */
+  useEffect(() => {
+    const caiu = hero.hp < vidaAnterior.current;
+    vidaAnterior.current = hero.hp;
+
+    if (caiu) {
+      setFerido(true);
+      if (relogioDoDano.current !== null) clearTimeout(relogioDoDano.current);
+      relogioDoDano.current = setTimeout(() => setFerido(false), DURACAO_DA_PISCADA_MS);
+    }
+  }, [hero.hp]);
+
+  // Sair da tela no meio da piscada não pode deixar relógio solto.
+  useEffect(() => () => clearTimeout(relogioDoDano.current ?? undefined), []);
 
   return (
     <aside
@@ -48,6 +101,7 @@ export function PainelHeroi({ hero }: { hero: Hero }) {
           armadura={hero.equip.armadura?.templateId}
           secundaria={hero.equip.secundaria?.templateId}
           lado={132}
+          sinais={{ ...sinaisDoHeroi(hero), ferido }}
           reserva={
             <span className={styles.reservaDoRetrato} aria-hidden>
               {hero.raceIcon}

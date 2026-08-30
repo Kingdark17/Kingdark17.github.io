@@ -101,6 +101,9 @@ export function ListaPersonagens() {
                   armadura={personagem.equip?.armadura}
                   secundaria={personagem.equip?.secundaria}
                   lado={104}
+                  // Um atraso por slot: sem ele os três bonecos sobem e
+                  // descem no mesmo instante e parecem uma engrenagem.
+                  sinais={{ vivo: true, atraso: slot * 430 }}
                   reserva={
                     <span className={styles.reservaDoSlot} aria-hidden>
                       {personagem.raceIcon || '❔'}

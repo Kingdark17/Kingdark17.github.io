@@ -158,6 +158,7 @@ export function FormularioCriacao({ slot }: { slot: number }) {
             className={styles.balaoDoBoneco}
             raca={criacao.raca?.id ?? null}
             arma={criacao.classe?.weaponTemplate ?? null}
+            sinais={{ vivo: true }}
             reserva={
               <span className={styles.reservaDoBoneco} aria-hidden>
                 {criacao.raca?.icon ?? '❔'}

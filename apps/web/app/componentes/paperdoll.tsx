@@ -1,21 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
 
 /**
- * O boneco: as camadas do paperdoll empilhadas.
+ * O boneco: as camadas do paperdoll empilhadas, e o que ele sente.
  *
  * **`<img>` em posição absoluta, e não PixiJS nem `<canvas>`.** A tabela de
- * decisões da migração fixa PixiJS pro personagem 2D, e continua valendo
- * pro boneco que se mexe — mas isto aqui é um empilhamento parado de até
- * cinco imagens de 64×64. Pixi custaria ~400 KB de JavaScript pra fazer o
- * que o navegador já faz de graça, e `image-rendering: pixelated` sai mais
- * fiel que reamostragem de textura. Quando o boneco precisar animar ou
- * receber filtro, o Pixi entra — e este componente é o que ele substitui.
+ * decisões da migração fixa PixiJS pro personagem 2D, e continua valendo —
+ * mas pro boneco que **troca de quadro**, que é o que o CSS não faz.
+ * Respirar parado é mover o boneco inteiro; brilho, tinta e piscada de dano
+ * são filtro sobre a imagem. O navegador faz os quatro sozinho, e
+ * `image-rendering: pixelated` sai mais fiel que reamostragem de textura.
+ * O Pixi entra quando existir arte de quadros — golpe, andar —, e este
+ * componente é o que ele substitui então.
  *
  * Sem estado e sem efeito: é Server Component onde o chamador for servidor,
- * e não manda uma linha de JS quando é.
+ * e não manda uma linha de JS quando é. Os sinais chegam prontos por
+ * propriedade e viram atributo de dado; **toda** a animação está no CSS.
  */
 
 import { montarCamadas, type Vestimenta } from '@/lib/paperdoll/camadas';
+import { corDaAura, type SinaisVitais } from '@/lib/paperdoll/sinais';
 import styles from './paperdoll.module.css';
 
 interface Props extends Vestimenta {
@@ -31,9 +34,23 @@ interface Props extends Vestimenta {
    * primeiro filho do contêiner.
    */
   className?: string;
+  /**
+   * O que o boneco sente — ver `lib/paperdoll/sinais.ts`. Omitido, ele fica
+   * parado como antes: é o que serve pra ícone e pra retrato de lista.
+   */
+  sinais?: SinaisVitais;
 }
 
-export function Paperdoll({ raca, arma, armadura, secundaria, lado = 192, reserva = null, className = '' }: Readonly<Props>) {
+export function Paperdoll({
+  raca,
+  arma,
+  armadura,
+  secundaria,
+  lado = 192,
+  reserva = null,
+  className = '',
+  sinais = {},
+}: Readonly<Props>) {
   const camadas = montarCamadas({ raca, arma, armadura, secundaria });
   const classes = `${styles.boneco} ${className}`.trim();
 
@@ -45,14 +62,34 @@ export function Paperdoll({ raca, arma, armadura, secundaria, lado = 192, reserv
     );
   }
 
+  const aura = corDaAura(sinais.aura);
+
   return (
     <div className={classes} style={{ width: lado, height: lado }}>
-      {camadas.map((camada) => (
-        // `alt` vazio de propósito: as camadas juntas são uma figura só, e
-        // quem lê a tela não ganha nada ouvindo "corpo, calça, roupa,
-        // cabelo, espada". Quem descreve o boneco é o chamador.
-        <img key={camada} className={styles.camada} src={camada} alt="" width={64} height={64} />
-      ))}
+      {/* Dois invólucros, e cada um com um tipo de efeito só. `filter` é
+          uma propriedade só: brilho e tinta na mesma lista brigariam com a
+          piscada de dano, que anima justamente `filter`. Separando, o CSS
+          compõe sozinho e nenhum efeito apaga o outro. */}
+      <div
+        className={styles.aura}
+        data-aura={aura ? '' : undefined}
+        data-envenenado={sinais.envenenado ? '' : undefined}
+        style={aura ? ({ '--cor-da-aura': `var(${aura})` } as React.CSSProperties) : undefined}
+      >
+        <div
+          className={styles.pilha}
+          data-respira={sinais.vivo ? '' : undefined}
+          data-ferido={sinais.ferido ? '' : undefined}
+          style={sinais.atraso ? ({ '--atraso-da-respiracao': `${sinais.atraso}ms` } as React.CSSProperties) : undefined}
+        >
+          {camadas.map((camada) => (
+            // `alt` vazio de propósito: as camadas juntas são uma figura só, e
+            // quem lê a tela não ganha nada ouvindo "corpo, calça, roupa,
+            // cabelo, espada". Quem descreve o boneco é o chamador.
+            <img key={camada} className={styles.camada} src={camada} alt="" width={64} height={64} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
