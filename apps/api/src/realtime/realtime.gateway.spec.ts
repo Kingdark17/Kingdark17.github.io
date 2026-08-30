@@ -10,6 +10,8 @@
  * `room-registry.spec.ts`).
  */
 
+import zlib from 'node:zlib';
+
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
@@ -30,6 +32,17 @@ function waitFor<T = unknown>(socket: ClientSocket, event: string, timeoutMs = 5
   });
 }
 
+/** O lado do navegador, no mínimo que este teste precisa. */
+async function inflarUmaMensagem(bytes: Buffer): Promise<string> {
+  const inflate = zlib.createInflateRaw({ windowBits: 15 });
+  const saida: Buffer[] = [];
+  inflate.on('data', (pedaco: Buffer) => saida.push(pedaco));
+  inflate.write(bytes);
+  await new Promise<void>((pronto) => inflate.flush(zlib.constants.Z_SYNC_FLUSH, () => pronto()));
+  inflate.destroy();
+  return Buffer.concat(saida).toString('utf8');
+}
+
 describe('RealtimeGateway (socket.io de verdade)', () => {
   let app: INestApplication;
   let url: string;
@@ -37,6 +50,17 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
 
   function connect(): ClientSocket {
     const client = io(url, { transports: ['websocket'], forceNew: true });
+    clients.push(client);
+    return client;
+  }
+
+  /**
+   * Conexão que anuncia saber inflar o pacote da sala, como o front faz.
+   * Ver `compressao.ts`: é o `auth` do handshake que liga a compressão da
+   * aplicação, porque o servidor decide no `handleConnection`.
+   */
+  function connectComZ(): ClientSocket {
+    const client = io(url, { transports: ['websocket'], forceNew: true, auth: { z: 1 } });
     clients.push(client);
     return client;
   }
@@ -167,6 +191,67 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
     const comItemNovo = await waitFor<Pacote>(host, 'authoritative');
     expect(comItemNovo.state.profiles['1'].inventory).toHaveLength(3);
     expect(await andar()).not.toHaveProperty('inventory');
+  });
+
+  /**
+   * A compressão da aplicação, ponta a ponta pelo socket.io de verdade.
+   *
+   * O que este teste prende, e que os de `compressao.spec.ts` não alcançam:
+   * o pacote chega no evento `z` em vez do `state`, atravessa a
+   * serialização binária do socket.io inteira, e volta a ser o mesmo JSON.
+   */
+  it('quem anuncia z recebe o pacote comprimido, e ele volta idêntico', async () => {
+    const host = connectComZ();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'ZIP001', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    const estado = { pos: { x: 3, y: 4 }, floor: 8, mapa: Array.from({ length: 49 }, (_, i) => ({ id: i, rotulo: `Sala ${i}` })) };
+    host.emit('state', { room: 'ZIP001', turn: 7, state: estado });
+
+    const pacote = await waitFor<{ e: string; b: ArrayBuffer | Buffer; n: number }>(host, 'z');
+    expect(pacote.e).toBe('authoritative');
+
+    const bytes = Buffer.isBuffer(pacote.b) ? pacote.b : Buffer.from(pacote.b);
+    // Fluxo, e não `inflateRawSync`: o que sai de um `Z_SYNC_FLUSH` é um
+    // bloco no meio de um fluxo que continua, não um arquivo terminado —
+    // a versão síncrona reclama de fim de arquivo inesperado, com razão.
+    const json = await inflarUmaMensagem(bytes);
+    expect(Buffer.byteLength(json, 'utf8')).toBe(pacote.n);
+
+    const lido = JSON.parse(json) as { room: string; turn: number; state: { floor: number } };
+    expect(lido.room).toBe('ZIP001');
+    expect(lido.turn).toBe(7);
+    expect(lido.state.floor).toBe(8);
+
+    // E o prêmio: o que foi no fio é uma fração do JSON que ele carrega.
+    expect(bytes.length * 4).toBeLessThan(pacote.n);
+  });
+
+  /**
+   * O cliente que não anuncia nada não pode receber binário na cara — é o
+   * jogador de navegador antigo, e o cliente legado em `rpg-legend/`.
+   */
+  it('quem não anuncia continua recebendo o JSON de sempre', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'ZIP002', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    host.emit('state', { room: 'ZIP002', turn: 2, state: { pos: { x: 1, y: 1 }, floor: 1 } });
+
+    const pacote = await waitFor<{ state: { floor: number } }>(host, 'authoritative');
+    expect(pacote.state.floor).toBe(1);
+  });
+
+  it('o /health conta as conexões que falam o formato comprimido', async () => {
+    const antes = (await request(servidorDe(app)).get('/health')).body as { socket: { deflatePorDentro: number } };
+
+    const cliente = connectComZ();
+    await waitFor(cliente, 'connect');
+
+    const depois = (await request(servidorDe(app)).get('/health')).body as { socket: { deflatePorDentro: number } };
+    expect(depois.socket.deflatePorDentro).toBe(antes.socket.deflatePorDentro + 1);
   });
 
   /**

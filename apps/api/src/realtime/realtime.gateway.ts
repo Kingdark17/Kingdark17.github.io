@@ -37,6 +37,7 @@ import { lerCors } from '../bootstrap';
 import { RateLimiter } from '../common/rate-limiter';
 import { OnlineUsersRegistry } from '../social/online-users-registry';
 import { SocialService } from '../social/social.service';
+import { FluxoDeCompressao } from './compressao';
 import { clampInt } from './numeric';
 import {
   HOST_ROLE,
@@ -45,6 +46,7 @@ import {
   normalizePlayerName,
   normalizeRoomCode,
   type Room,
+  type RoomConnection,
   type RoomMember,
   type RoomRole,
   type RoomState,
@@ -73,6 +75,16 @@ interface SocketState {
 }
 
 /**
+ * Eventos que passam pela compressão da aplicação.
+ *
+ * Só o caminho quente: são os três que carregam o estado inteiro da sala.
+ * `chat`, `move-lock`, `hello` e companhia têm poucas centenas de bytes —
+ * comprimir custaria mais ciclo do que economiza byte, e ainda gastaria
+ * contexto da janela com dado que não se repete.
+ */
+const EVENTOS_COMPRIMIDOS = new Set(['state', 'authoritative', 'welcome']);
+
+/**
  * Quantas conexões chegaram desde que o processo subiu e quantas
  * negociaram compressão — a única forma de responder, com fato, se o
  * `perMessageDeflate` lá embaixo está valendo em produção.
@@ -84,10 +96,19 @@ interface SocketState {
  *
  * Os contadores zeram junto com o processo, e isso é bom: eles falam
  * sempre da build que está rodando agora, nunca da anterior.
+ *
+ * `comprimidas` responde pelo WebSocket e **fica em zero em produção de
+ * propósito** — o proxy tira a extensão e não há como impedir. Quem
+ * responde pela compressão que de fato acontece é `deflatePorDentro`, que
+ * conta as conexões falando o formato de `compressao.ts`. As duas medem
+ * coisas diferentes e as duas precisam existir: se um dia a primeira sair
+ * do zero, é sinal de que o proxy mudou e dá pra reavaliar a segunda.
  */
 export interface DiagnosticoDoSocket {
   conexoes: number;
   comprimidas: number;
+  /** Conexões que anunciaram saber descomprimir o pacote da aplicação. */
+  deflatePorDentro: number;
 }
 
 /**
@@ -156,7 +177,18 @@ function negociouCompressao(socket: Socket): boolean {
 export class RealtimeGateway implements OnGatewayDisconnect {
   private readonly logger = new Logger(RealtimeGateway.name);
   private readonly limiter = new RateLimiter(SOCKET_MESSAGE_LIMIT, SOCKET_WINDOW_MS);
-  private readonly socketsVistos: DiagnosticoDoSocket = { conexoes: 0, comprimidas: 0 };
+  private readonly socketsVistos: DiagnosticoDoSocket = { conexoes: 0, comprimidas: 0, deflatePorDentro: 0 };
+
+  /**
+   * O fluxo de deflate de cada conexão que anunciou saber descomprimir.
+   *
+   * Num mapa, e não em `socket.data`: `RoomConnection` é estreita de
+   * propósito (`id` e `emit`) pro registro de salas ser testável com
+   * dublês, e alargá-la pra caber isto contaminaria a costura inteira por
+   * causa de um detalhe de transporte. A chave é o `socket.id`, e quem
+   * apaga é `handleDisconnect` — cada fluxo segura ~160 KB de contexto.
+   */
+  private readonly fluxos = new Map<string, FluxoDeCompressao>();
 
   /** Cópia, não o objeto: o `/health` lê, não mexe. */
   get diagnosticoDoSocket(): DiagnosticoDoSocket {
@@ -174,6 +206,14 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     this.socketsVistos.conexoes += 1;
     if (negociouCompressao(socket)) this.socketsVistos.comprimidas += 1;
 
+    // Compressão da aplicação: só pra quem anunciou que sabe descomprimir.
+    // O cliente antigo e o navegador sem `DecompressionStream` não mandam
+    // nada aqui e continuam recebendo JSON cru — ver `compressao.ts`.
+    if (socket.handshake.auth?.z === 1) {
+      this.fluxos.set(socket.id, new FluxoDeCompressao());
+      this.socketsVistos.deflatePorDentro += 1;
+    }
+
     // Middleware de socket vale pra todo pacote que chega, igual ao teto
     // que o original checava no topo do `ws.on('message')`.
     socket.use((_packet, next) => {
@@ -186,6 +226,10 @@ export class RealtimeGateway implements OnGatewayDisconnect {
   }
 
   handleDisconnect(socket: Socket): void {
+    // Antes de tudo: o fluxo segura um contexto de deflate de ~160 KB.
+    // Deixá-lo pendurado seria um vazamento por partida jogada.
+    this.fluxos.get(socket.id)?.encerrar();
+    this.fluxos.delete(socket.id);
     this.limiter.forget(socket.id);
     this.online.remove(socket.id);
     const left = this.rooms.leave(socket.id);
@@ -481,7 +525,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
       state: this.estadoPara(seat.room, state, membro),
       turn,
     }));
-    socket.emit('authoritative', {
+    this.emitir(socket, 'authoritative', {
       room: seat.room.code,
       role: seat.role,
       state: this.estadoPara(seat.room, state, seat.member),
@@ -538,8 +582,32 @@ export class RealtimeGateway implements OnGatewayDisconnect {
 
   // -------------------------------------------------------------- internos
 
+  /**
+   * A única saída de mensagem do gateway.
+   *
+   * Passa pela compressão da aplicação quando o evento é do caminho quente
+   * **e** a conexão anunciou que sabe descomprimir; nos outros casos emite
+   * o JSON como sempre. Ter um lugar só importa: a compressão compartilha
+   * contexto entre mensagens, e um `emit` direto no meio do caminho quente
+   * furaria a fila que preserva a ordem (ver `compressao.ts`).
+   *
+   * Falhar comprimindo não custa a mensagem: cai no caminho cru.
+   */
+  private emitir(destino: RoomConnection, event: string, payload: unknown): void {
+    const fluxo = this.fluxos.get(destino.id);
+    if (!fluxo || !EVENTOS_COMPRIMIDOS.has(event)) {
+      destino.emit(event, payload);
+      return;
+    }
+
+    fluxo.enfileirar(event, payload, (pacote) => {
+      if (pacote) destino.emit('z', pacote);
+      else destino.emit(event, payload);
+    });
+  }
+
   private relay(room: Room, sender: Socket, event: string, payload: unknown): void {
-    for (const peer of this.rooms.peersOf(room, sender.id)) peer.emit(event, payload);
+    for (const peer of this.rooms.peersOf(room, sender.id)) this.emitir(peer, event, payload);
   }
 
   /**
@@ -553,7 +621,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
    */
   private relayPorMembro(room: Room, sender: Socket, event: string, montar: (membro: RoomMember) => unknown): void {
     for (const membro of this.rooms.peerMembersOf(room, sender.id)) {
-      membro.connection.emit(event, montar(membro));
+      this.emitir(membro.connection, event, montar(membro));
     }
   }
 

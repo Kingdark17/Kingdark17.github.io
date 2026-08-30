@@ -19,6 +19,7 @@
 import type { Socket } from 'socket.io-client';
 
 import { urlDaApi } from '../api/client';
+import { Descompressor, suportaDeflate, type PacoteComprimido } from './descomprimir';
 
 export type PapelNaSala = 1 | 2;
 
@@ -213,7 +214,21 @@ export function conectar(): void {
   void import('socket.io-client')
     // `withCredentials` é o que faz o navegador anexar o cookie ao
     // handshake. Sem isso a conexão sobe anônima e o `auth` sempre falha.
-    .then(({ io }) => ligar(io(baseUrl(), { transports: ['websocket'], forceNew: true, withCredentials: true })))
+    //
+    // `auth: { z: 1 }` anuncia que sabemos inflar o pacote da sala. Vai no
+    // handshake, e não num evento depois, porque o servidor decide no
+    // `handleConnection` — mensagem posterior chegaria tarde demais pro
+    // `welcome`. Navegador sem `deflate-raw` não anuncia e recebe cru.
+    .then(({ io }) =>
+      ligar(
+        io(baseUrl(), {
+          transports: ['websocket'],
+          forceNew: true,
+          withCredentials: true,
+          ...(suportaDeflate() ? { auth: { z: 1 } } : {}),
+        }),
+      ),
+    )
     .catch(() => mudar({ fase: 'desligado', erro: 'Não foi possível carregar o modo online.' }))
     .finally(() => {
       ligando = false;
@@ -291,6 +306,19 @@ function ligar(conexao: Socket): void {
   // Eco da própria sincronização: o servidor devolve o que aceitou. Não
   // muda de fase — quem abre a aventura é o `welcome` do parceiro.
   conexao.on('authoritative', (dados: { state?: Record<string, unknown>; turn?: number }) => adotarRemoto(dados, null));
+
+  // Os três de cima, comprimidos. O servidor só manda `z` pra quem anunciou
+  // `auth: { z: 1 }`, então aqui ou chega comprimido ou chega cru — nunca
+  // os dois pro mesmo evento. Ver `descomprimir.ts`.
+  const descompressor = suportaDeflate() ? new Descompressor() : null;
+  conexao.on('z', (pacote: PacoteComprimido) => {
+    if (!descompressor || !pacote?.e) return;
+    void descompressor.ler(pacote).then((json) => {
+      if (json === null) return;
+      const dados = JSON.parse(json) as { state?: Record<string, unknown>; profiles?: Record<string, PerfilNaSala>; turn?: number };
+      adotarRemoto(dados, pacote.e === 'authoritative' ? null : 'jogando');
+    });
+  });
 
   conexao.on('move-lock', () => mudar({ travado: true }));
   conexao.on('peer-left', () => mudar({ fase: 'esperando', recado: 'Seu parceiro saiu da sala.', travado: false }));

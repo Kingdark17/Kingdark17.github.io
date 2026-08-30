@@ -22,7 +22,7 @@ nada que o código ou o `git log` já contem sozinhos.
 | 3 — front Next | **pronta**: conta, personagem, cidade, masmorra, combate, loja/ferreiro, NPCs, quadro de missões, eventos, mochila, level up manual, perfil/cosméticos, amigos e chat, guia, painel ADM, multiplayer co-op, trilha e efeitos sonoros, narração das salas |
 | 4 — paperdoll | **começou em 2026-08-24**: 14 camadas de 64×64, boneco na criação, no seletor de personagem e no painel do herói durante a partida — os dois últimos com o equipamento de verdade. **Sem PixiJS** — ver "Fase 4". Faltam 6 raças, 6 armas e 2 armaduras sem arte |
 | 5 — **Neon → Supabase** | **concluída.** Banco criado em 2026-08-18 (Postgres 17.6, `sa-east-1`); **a virada aconteceu em 2026-08-25** e o Supabase passou a ser produção. Em 2026-08-27 a conferência mostrou destino ≥ origem nas sete tabelas e **o projeto do Neon foi apagado** — ele havia deixado de ser rollback: voltar custaria os dados criados depois da virada. Ver "Fase 5" e "O copiador da virada" |
-| 6 — otimização | **em andamento** — JS e fonte cortados e medidos, save inteiro fora do JSON, teto por IP e presença no Redis, salas no Redis (sobrevivem a deploy e a hibernação), foto de perfil fora do banco e no Supabase Storage, `pnpm lint` verde. **A compressão do socket está no código e não vale**: o proxy tira a extensão do handshake — ver "O `/health` passa a dizer quem está no ar" |
+| 6 — otimização | **em andamento** — JS e fonte cortados e medidos, save inteiro fora do JSON, teto por IP e presença no Redis, salas no Redis (sobrevivem a deploy e a hibernação), foto de perfil fora do banco e no Supabase Storage, `pnpm lint` verde. **A compressão do socket foi refeita por dentro da mensagem em 2026-08-30**, porque o proxy nunca deixou a do WebSocket passar — ver "A compressão que o proxy não vê" |
 
 ### Fase 2 — o que já existe no Nest
 
@@ -1876,6 +1876,74 @@ falam sempre da build que está rodando agora.
   pegou. Nada além disso precisa ser investigado ainda.
 - **`commit: null`** → o campo não achou a variável; aí o problema é
   aqui, não no deploy.
+
+---
+
+## A compressão que o proxy não vê (2026-08-30)
+
+O `perMessageDeflate` do gateway estava certo e **nunca valeu em
+produção**. Medido no dia, com handshake na mão:
+
+```
+$ curl -i -H "Upgrade: websocket" -H "Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits" …
+HTTP/1.1 101 Switching Protocols
+Server: cloudflare
+```
+
+Sem `Sec-WebSocket-Extensions` na resposta — nos **dois** endereços,
+`api.rpglegend.com.br` e `rpg-legend-api.onrender.com`. Os dois respondem
+`Server: cloudflare`: o Render também fica atrás da Cloudflare, então não
+existe endereço da API que escape do proxy. Não há o que configurar.
+
+A saída foi comprimir onde o proxy não mexe: **o corpo da mensagem**. Um
+fluxo de deflate por conexão no servidor (`realtime/compressao.ts`), um
+`DecompressionStream('deflate-raw')` por conexão no cliente
+(`lib/rede/descomprimir.ts`), evento `z` no lugar de `state`/
+`authoritative`/`welcome`. Pro Cloudflare são bytes opacos.
+
+### Por que fluxo por conexão, e não um deflate por mensagem
+
+Medido com um pacote real de andar 8 (hero + mapa, já sem a mochila que o
+recorte tira), 30 ações:
+
+| regime | por ação | ganho |
+|---|---|---|
+| cru — o que ia no fio até aqui | 10,8 KB | — |
+| deflate por mensagem | 1,9 KB | 5,8× |
+| deflate com contexto compartilhado | **0,2 KB** | **56×** |
+
+Quase 10× entre os dois últimos, porque pacotes de sala seguidos são quase
+idênticos e o contexto referencia a mensagem anterior em vez de repeti-la.
+Um deflate por mensagem ficaria **pior** que o protocolo de delta que já
+tinha sido descartado por trazer invariante arriscado: custo sem prêmio.
+
+### As duas armadilhas
+
+1. **A janela precisa ser maior que o pacote.** Com `windowBits: 14` são
+   16 KB. Na primeira medição o pacote tinha 21,4 KB (a mochila entrou por
+   engano) e o ganho despencou de 56× pra **10,9×** — não há como alcançar
+   a mensagem anterior de fora da janela. É por isso que o recorte da
+   mochila e a compressão se somam; um não é enfeite do outro.
+
+2. **A ordem virou invariante.** Contexto compartilhado quer dizer que a
+   mensagem N só se descomprime depois da N−1. `flush` é assíncrono dos
+   dois lados, e duas chamadas concorrentes comprimiriam numa ordem e
+   entregariam noutra — dali em diante o outro lado decodifica lixo *com
+   cara de estado bom*, que é o pior tipo de falha. Os dois lados têm uma
+   fila encadeada por conexão, e teste que dispara tudo junto pra provar.
+
+### O que fazer se aparecer errado
+
+- **`/health` → `socket.deflatePorDentro`** conta as conexões que
+  anunciaram saber inflar. Zero com gente jogando = o front não está
+  mandando `auth: { z: 1 }`, ou o navegador não tem `deflate-raw`.
+- **`socket.comprimidas` continua em zero** e está certo: ele mede o
+  `permessage-deflate` do WebSocket, que o proxy mata. Se um dia sair do
+  zero, o proxy mudou e dá pra reavaliar.
+- **Cliente que não anuncia recebe JSON cru**, como antes. Navegador velho
+  e o cliente legado em `rpg-legend/` seguem funcionando.
+- **Fronteira é o campo `n`** (tamanho antes de comprimir), não o pedaço
+  que o fluxo devolve: nada promete "um pedaço por mensagem".
 
 ---
 

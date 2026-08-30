@@ -72,10 +72,16 @@ describe('StatusController', () => {
     expect(response.body).toMatchObject({ storage: { configured: false } });
   });
 
-  it('/health traz o contador de compressão do socket', async () => {
+  /**
+   * Os dois contadores medem coisas diferentes e os dois precisam sair.
+   * `comprimidas` é o `permessage-deflate` do WebSocket, que fica em zero
+   * em produção porque o proxy tira a extensão; `deflatePorDentro` é a
+   * compressão da aplicação, que é a que de fato acontece lá.
+   */
+  it('/health traz os dois contadores de compressão do socket', async () => {
     const response = await request(servidorDe(app)).get('/health');
 
-    expect((response.body as { socket: unknown }).socket).toEqual({ conexoes: 0, comprimidas: 0 });
+    expect((response.body as { socket: unknown }).socket).toEqual({ conexoes: 0, comprimidas: 0, deflatePorDentro: 0 });
   });
 
   /** Quem já lê o corpo antigo não pode quebrar por causa dos campos novos. */
