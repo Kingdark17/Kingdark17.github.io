@@ -817,18 +817,34 @@ rodar contra um Redis real.
 
 ### O que ainda falta na fase 6
 
-- **Salas no Redis.** `RoomRegistry` guarda estado e conexões no
-  processo, então dois jogadores em instâncias diferentes não entram na
-  mesma sala. Precisa do adaptador Redis do socket.io e de um Redis de
-  verdade pra verificar.
-- **O estado inteiro viaja a cada ação no co-op.** ~~Só vale mexer junto
-  das salas.~~ **Revisto em 2026-08-22:** com o código na frente, onde a
-  sala *mora* e o que *trafega* são camadas separadas. Primeiro corte
-  feito — ver "A mochila parou de viajar" abaixo. O mapa completo a cada
-  passo continua de pé.
-- **A foto ainda mora no Postgres como base64.** Não sai mais de lá numa
-  lista, mas guardar imagem em coluna de texto é remendo — o lugar dela é
-  o Supabase Storage, que é a fase 5.
+- **Salas no Redis — o que sobrou da fase 6.** O *mundo* da sala já
+  sobrevive a deploy e a hibernação (`deposito-de-salas.ts`, resolvido em
+  2026-08-27), mas o `RoomRegistry` ainda guarda as **conexões** no
+  processo: dois jogadores em instâncias diferentes não entrariam na mesma
+  sala. Precisa do adaptador Redis do socket.io.
+
+  **Está latente, não quebrado:** o Render roda uma instância só, então
+  hoje não há duas pra divergir. Vira problema no dia em que houver — e é
+  bom lembrar que a compressão e a omissão do mapa guardam estado **por
+  conexão** (`mapSent`, `inventorySent`, o fluxo de deflate), que é o lado
+  certo pra escalar: cada conexão fala com o processo que a atende.
+- ~~**O estado inteiro viaja a cada ação no co-op.**~~ **Fechado em
+  2026-08-31.** Foram três cortes, cada um numa camada diferente, e é por
+  isso que eles se somam: a mochila parou de viajar (ver abaixo), o mapa
+  parou de viajar (`mapaParaMembro`) e o que sobrou passou a ir comprimido
+  (`compressao.ts`). Medido em 30 ações de uma sessão, um jogador:
+
+  | | cru | no fio |
+  |---|---|---|
+  | antes de tudo | 325,3 KB | 325,3 KB |
+  | só com a compressão | 325,3 KB | 5,8 KB |
+  | com a omissão do mapa | 50,3 KB | **3,2 KB** |
+
+  **101× no total.** A omissão ainda ganha em cima da compressão porque as
+  duas atacam coisas diferentes: uma encolhe o que vai, a outra faz não ir.
+- ~~**A foto ainda mora no Postgres como base64.**~~ **Resolvido em
+  2026-08-27** — balde `avatares` no Supabase Storage. Ver a tabela em
+  "Travado esperando você".
 - ~~**Nenhuma resposta da API sai comprimida.**~~ **Resolvido em
   2026-08-22:** a borda da Cloudflare, na frente do Render, já entrega tudo
   em Brotli. Não há nada a fazer — e fazer pioraria. Ver abaixo.
