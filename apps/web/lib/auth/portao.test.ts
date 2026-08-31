@@ -33,6 +33,20 @@ describe('ehRotaPublica', () => {
   it('tela inventada agora nasce fechada', () => {
     expect(ehRotaPublica('/tela-que-ainda-nao-existe')).toBe(false);
   });
+
+  /**
+   * A lista inteira, escrita à mão.
+   *
+   * Os testes acima percorrem `ROTAS_PUBLICAS`, então **acrescentar** uma
+   * rota a ela passa sozinho — a suíte só provaria que a rota nova é
+   * pública, que é o que quem a acrescentou já queria. Este aqui obriga a
+   * edição a ser deliberada: abrir uma tela sem sessão passa a exigir
+   * mexer no teste e escrever o motivo, que é o preço certo pra tirar o
+   * cadeado de alguma coisa.
+   */
+  it('abrir rota nova exige mexer aqui também', () => {
+    expect([...ROTAS_PUBLICAS]).toEqual(['/', '/confirmar-email', '/esqueci-senha', '/redefinir-senha', '/versao']);
+  });
 });
 
 describe('rotaDeVolta', () => {

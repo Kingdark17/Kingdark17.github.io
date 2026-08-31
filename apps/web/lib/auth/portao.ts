@@ -14,14 +14,20 @@
  */
 
 /**
- * As quatro telas que existem justamente pra quem **não** tem sessão.
+ * O que passa sem sessão.
  *
- * `/` é o portão. As outras três são pontas de link de e-mail ou caminho
- * até um: barrar qualquer uma delas quebraria a confirmação de conta e a
- * redefinição de senha — que é exatamente o momento em que a pessoa não
- * consegue entrar.
+ * `/` é o portão. As três seguintes são pontas de link de e-mail ou
+ * caminho até um: barrar qualquer uma delas quebraria a confirmação de
+ * conta e a redefinição de senha — que é exatamente o momento em que a
+ * pessoa não consegue entrar.
+ *
+ * `/versao` é a última, e é a única que não é tela: ela diz qual build
+ * está no ar (ver `app/versao/route.ts`). Precisa ser pública porque a
+ * pergunta que ela responde — "o deploy pegou?" — costuma ser feita
+ * justamente de fora, por quem não tem sessão nenhuma, e um `307` não
+ * responde. Não expõe nada: o commit é de repositório público.
  */
-export const ROTAS_PUBLICAS: readonly string[] = ['/', '/confirmar-email', '/esqueci-senha', '/redefinir-senha'];
+export const ROTAS_PUBLICAS: readonly string[] = ['/', '/confirmar-email', '/esqueci-senha', '/redefinir-senha', '/versao'];
 
 /**
  * Tira a barra final antes de comparar. O Next normaliza isso com um 308
