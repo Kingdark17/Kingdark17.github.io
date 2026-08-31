@@ -85,10 +85,27 @@ describe('montarCamadas', () => {
      * antes de tudo e este teste prende isso.
      */
     it('traço sem corpo não desenha nada', () => {
-      for (const raca of ['anao', 'orc', 'draconato', 'goblin', 'fada', 'celestial']) {
+      for (const raca of ['anao', 'orc', 'goblin', 'fada']) {
         expect(CORPOS.has(raca)).toBe(false);
         expect(montarCamadas({ raca })).toEqual([]);
       }
+    });
+
+    /**
+     * Chegaram junto com os corpos, e é o par que importa: o corpo já
+     * traz chifres e auréola desenhados, e o traço é a **segunda** cópia
+     * deles, pra sobreviver ao capacete. Sem o traço, o draconato de
+     * armadura de placas fica idêntico ao humano de armadura de placas —
+     * a pessoa escolheu a raça e a perderia de vista.
+     */
+    it.each([
+      ['draconato', 'chifres-de-dragao'],
+      ['celestial', 'aureola'],
+    ])('o %s leva o traço por cima da armadura', (raca, arquivo) => {
+      const camadas = montarCamadas({ raca, armadura: 'placas' });
+
+      expect(camadas).toContain(`/img/paperdoll/traco/${arquivo}.png`);
+      expect(posicao(camadas, arquivo)).toBeGreaterThan(posicao(camadas, 'armadura/placas'));
     });
 
     /**

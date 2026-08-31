@@ -56,7 +56,11 @@ const RAIZ = '/img/paperdoll';
  * (`ARQUIVOS_DE_TRACO`); quem os liga a uma raça é aqui, e há teste
  * conferindo que todo caminho citado existe.
  */
-export const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([['felino', 'traco/orelhas-de-gato.png']]);
+export const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([
+  ['felino', 'traco/orelhas-de-gato.png'],
+  ['draconato', 'traco/chifres-de-dragao.png'],
+  ['celestial', 'traco/aureola.png'],
+]);
 
 /**
  * Corpos que já vêm com a cabeça resolvida: o felino tem orelhas e pelo

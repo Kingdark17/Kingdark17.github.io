@@ -13,8 +13,8 @@
  * silêncio.
  */
 
-/** Raças com corpo desenhado. (6 em `public/img/paperdoll/corpo/`) */
-export const CORPOS: ReadonlySet<string> = new Set(['elfo', 'elfo_negro', 'felino', 'humano', 'meio_elfo', 'morto_vivo']);
+/** Raças com corpo desenhado. (8 em `public/img/paperdoll/corpo/`) */
+export const CORPOS: ReadonlySet<string> = new Set(['celestial', 'draconato', 'elfo', 'elfo_negro', 'felino', 'humano', 'meio_elfo', 'morto_vivo']);
 
 /** Armas com camada — o nome do arquivo é o `templateId`. (3 em `public/img/paperdoll/arma/`) */
 export const ARMAS: ReadonlySet<string> = new Set(['adaga', 'cajado', 'espada']);
@@ -28,5 +28,5 @@ export const SECUNDARIAS: ReadonlySet<string> = new Set(['adaga', 'escudo']);
 /** Cabelos disponíveis. (1 em `public/img/paperdoll/cabelo/`) */
 export const CABELOS: ReadonlySet<string> = new Set(['masculino']);
 
-/** Arquivos de traço de raça, pelo nome — ver `TRACOS_DE_RACA`. (1 em `public/img/paperdoll/traco/`) */
-export const ARQUIVOS_DE_TRACO: ReadonlySet<string> = new Set(['orelhas-de-gato']);
+/** Arquivos de traço de raça, pelo nome — ver `TRACOS_DE_RACA`. (3 em `public/img/paperdoll/traco/`) */
+export const ARQUIVOS_DE_TRACO: ReadonlySet<string> = new Set(['aureola', 'chifres-de-dragao', 'orelhas-de-gato']);
