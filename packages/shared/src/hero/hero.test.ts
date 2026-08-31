@@ -164,6 +164,64 @@ describe('spendAttrPoint', () => {
 });
 
 describe('gainXP', () => {
+  /**
+   * O laço de subir de nível roda no navegador de quem está jogando, e as
+   * entradas nem sempre vêm do jogo: save corrompido e painel ADM escrevem
+   * XP na mão. `Infinity` satisfaz `xp >= xpNext` pra sempre — era uma aba
+   * travada esperando o número errado.
+   *
+   * Cada teste aqui é um número que, sem as guardas, ou trava ou envenena
+   * o save em silêncio. O `timeout` curto é de propósito: se alguém tirar
+   * o teto, isto falha por tempo em vez de rodar pra sempre no CI.
+   */
+  describe('número insano não trava nem envenena', () => {
+    /**
+     * `Infinity` nem chega no laço: é recusado na entrada e vale zero.
+     * Melhor que deixá-lo entrar e parar no teto — XP infinito não é um
+     * ganho grande demais, é um ganho que não existe, e conceder 500
+     * níveis por causa dele seria transformar um dado estragado em prêmio.
+     */
+    it('XP infinito não vale nada, em vez de girar pra sempre', { timeout: 3000 }, () => {
+      const hero = novoHeroi();
+      const { hero: depois, levels, leveledUp } = gainXP(hero, Number.POSITIVE_INFINITY);
+
+      expect(levels).toBe(0);
+      expect(leveledUp).toBe(false);
+      expect(depois.xp).toBe(hero.xp);
+      expect(depois.level).toBe(hero.level);
+    });
+
+    it('NaN não vira XP nem contamina o herói', () => {
+      const { hero: depois, leveledUp } = gainXP(novoHeroi(), Number.NaN);
+
+      expect(leveledUp).toBe(false);
+      expect(depois.xp).toBe(0);
+    });
+
+    it('XP absurdo no save para no teto, sem varrer o número inteiro', { timeout: 3000 }, () => {
+      const hero = { ...novoHeroi(), xp: 1e18 };
+      const { hero: depois, levels } = gainXP(hero, 0);
+
+      expect(levels).toBe(500);
+      expect(Number.isFinite(depois.xp)).toBe(true);
+    });
+
+    /** `xpNext` zerado se cura na primeira volta, porque `xpForLevel` dá 40 no mínimo. */
+    it('xpNext estragado não vira laço infinito', { timeout: 3000 }, () => {
+      const hero = { ...novoHeroi(), xpNext: 0 };
+      const { hero: depois } = gainXP(hero, 10);
+
+      expect(depois.xpNext).toBeGreaterThanOrEqual(40);
+    });
+
+    it('negativo é tratado como zero, e não como XP ao contrário', () => {
+      const { hero: depois } = gainXP(novoHeroi(), -5000);
+
+      expect(depois.xp).toBe(0);
+      expect(depois.level).toBe(1);
+    });
+  });
+
   it('não sobe de nível sem XP suficiente', () => {
     const hero = novoHeroi();
     const { hero: depois, leveledUp } = gainXP(hero, 1);

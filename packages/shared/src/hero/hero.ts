@@ -212,17 +212,48 @@ export function spendAttrPoint(hero: Hero, key: AttrKey): Hero {
 }
 
 /**
+ * Teto de níveis numa chamada só.
+ *
+ * `xpForLevel` nunca desce de 40, então com número são o laço abaixo
+ * sempre termina. O que ele não aguenta é número **insano**: `Infinity`
+ * satisfaz `xp >= xpNext` pra sempre e trava a aba, e um `xp` na casa dos
+ * quatrilhões roda centenas de milhões de voltas antes de parar.
+ *
+ * Nada disso vem de jogar: monstro dá dezenas de XP, missão dá centenas.
+ * Vem de save corrompido e do painel ADM, que escreve XP na mão. O caminho
+ * do co-op já está coberto — `sanitize.ts` trava `hero.xp` em
+ * `[0, xpNext]` —, mas o solo passa direto, e é justamente onde o
+ * travamento aparece na cara de quem está jogando.
+ *
+ * 500 é inalcançável de propósito: subir 500 níveis de uma vez custaria
+ * uns 4,4 milhões de XP acumulados. Quem chegar aqui não está jogando.
+ */
+const MAX_NIVEIS_POR_GANHO = 500;
+
+/** Número de jogo que veio de fora: finito e não negativo, ou o padrão. */
+function numeroSao(valor: number, padrao: number): number {
+  return Number.isFinite(valor) && valor >= 0 ? valor : padrao;
+}
+
+/**
  * Aplica XP e sobe de nível quantas vezes o total permitir. Nenhum atributo
  * sobe sozinho — o jogador ganha 2 pontos por nível para distribuir.
+ *
+ * As entradas são checadas porque esta função roda no navegador de quem
+ * joga: um `NaN` que passasse daqui envenenaria o save calado, e um
+ * `Infinity` travaria a aba. Ver {@link MAX_NIVEIS_POR_GANHO}.
  */
 export function gainXP(hero: Hero, amount: number): { hero: Hero; leveledUp: boolean; levels: number } {
-  let xp = hero.xp + amount;
+  let xp = numeroSao(hero.xp, 0) + numeroSao(amount, 0);
   let level = hero.level;
-  let xpNext = hero.xpNext;
+  // Um `xpNext` zerado ou estragado se conserta na primeira volta, porque
+  // `xpForLevel` devolve pelo menos 40 — mas sem este piso a primeira
+  // comparação seria contra lixo.
+  let xpNext = numeroSao(hero.xpNext, xpForLevel(numeroSao(level, 1)));
   let attrPoints = hero.attrPoints;
   let levels = 0;
 
-  while (xp >= xpNext) {
+  while (xp >= xpNext && levels < MAX_NIVEIS_POR_GANHO) {
     xp -= xpNext;
     level += 1;
     xpNext = xpForLevel(level);
