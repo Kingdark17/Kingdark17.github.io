@@ -66,6 +66,24 @@ export const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([
  * Corpos que já vêm com a cabeça resolvida: o felino tem orelhas e pelo
  * próprios, o morto-vivo é caveira. Cabelo humano por cima dos dois fica
  * grotesco, então nem entra.
+ *
+ * **O critério não é o gosto de quem lê o código, é como a arte foi
+ * desenhada.** Quem leva cabelo tem uma calota parcial no topo da cabeça,
+ * esperando a camada; quem não leva tem a cabeça inteira resolvida.
+ * Contando os pixels do topo (linhas 6–10) dá pra separar os dois grupos:
+ *
+ * | corpo | topo escuro | topo claro | |
+ * |---|---|---|---|
+ * | elfo | 10 | 26 | leva |
+ * | meio_elfo | 4 | 36 | leva |
+ * | draconato | 10 | 30 | leva |
+ * | celestial | 4 | 36 | leva |
+ * | felino | 32 | 26 | **não** — pelo denso |
+ * | morto_vivo | 0 | 48 | **não** — caveira lisa |
+ *
+ * Foi assim que o draconato e o celestial entraram sem entrar aqui: os
+ * perfis deles são os do elfo e os do meio-elfo, e nenhum se parece com os
+ * dois de baixo. Raça nova se decide medindo, não chutando.
  */
 const SEM_CABELO: ReadonlySet<string> = new Set(['felino', 'morto_vivo']);
 

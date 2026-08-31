@@ -39,6 +39,22 @@ describe('montarCamadas', () => {
     expect(posicao(montarCamadas({ raca: 'morto_vivo' }), 'cabelo/')).toBe(-1);
   });
 
+  /**
+   * O outro lado da mesma decisão, e o que impede que ela vire acidente.
+   *
+   * Draconato e Celestial *parecem* candidatos ao `SEM_CABELO` — um tem
+   * chifres, o outro auréola —, e a tentação de acrescentá-los é real. Mas
+   * a arte diz o contrário: contando os pixels do topo da cabeça, o
+   * draconato tem o perfil do elfo (10 escuros / 30 claros) e o celestial
+   * tem exatamente o do meio-elfo (4 / 36); nenhum se parece com a caveira
+   * lisa do morto-vivo (0 / 48) nem com o pelo do felino (32 / 26). O
+   * Breno desenhou as duas cabeças com a calota parcial que espera a
+   * camada. Ver a tabela em `SEM_CABELO`.
+   */
+  it.each(['draconato', 'celestial'])('%s leva cabelo — a cabeça foi desenhada esperando por ele', (raca) => {
+    expect(posicao(montarCamadas({ raca }), 'cabelo/')).toBeGreaterThan(-1);
+  });
+
   describe('traço da raça', () => {
     it('o felino leva as orelhas; quem não tem traço não ganha camada extra', () => {
       expect(posicao(montarCamadas({ raca: 'felino' }), 'orelhas-de-gato')).toBeGreaterThan(-1);
