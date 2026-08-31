@@ -194,6 +194,64 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
   });
 
   /**
+   * O mapa é 91% do pacote e quase nunca muda — atacar, usar poção e
+   * comprar não mexem numa célula. Ele ia inteiro a cada ação.
+   *
+   * É omissão de **campo**, não patch de célula: ou vai todo, ou não vai
+   * nada. É o que impede os dois jogadores de acabarem com mapas
+   * diferentes, que foi o motivo de o patch por célula ter sido descartado.
+   */
+  it('o mapa não volta a cada ação, e volta quando muda', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'MAP001', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    type Pacote = { state: { map?: unknown[][] } };
+    const mapa = (n: number) => [[{ id: 'a', visto: true }], [{ id: 'b', visto: n > 1 }]];
+
+    const sincronizar = async (corpo: Record<string, unknown>) => {
+      host.emit('state', { room: 'MAP001', turn: 1, ...corpo });
+      return (await waitFor<Pacote>(host, 'authoritative')).state;
+    };
+
+    // A primeira leva o mapa; as seguintes, não — ausência é "não mudou".
+    expect(await sincronizar({ state: { pos: { x: 1, y: 1 }, floor: 1, map: mapa(1) } })).toHaveProperty('map');
+    expect(await sincronizar({ state: { pos: { x: 2, y: 1 }, floor: 1, map: mapa(1) } })).not.toHaveProperty('map');
+    expect(await sincronizar({ state: { pos: { x: 3, y: 1 }, floor: 1, map: mapa(1) } })).not.toHaveProperty('map');
+
+    // Abriu uma sala nova: o mapa mudou e volta a viajar, uma vez.
+    const comSalaNova = await sincronizar({ state: { pos: { x: 3, y: 2 }, floor: 1, map: mapa(2) } });
+    expect(comSalaNova.map).toEqual(mapa(2));
+    expect(await sincronizar({ state: { pos: { x: 4, y: 2 }, floor: 1, map: mapa(2) } })).not.toHaveProperty('map');
+  });
+
+  /**
+   * `welcome` é a sincronização cheia, e é o que cura quem reconecta. Sem
+   * o mapa ali, quem acabou de entrar jogaria sem masmorra nenhuma.
+   */
+  it('welcome leva o mapa mesmo depois de o servidor já tê-lo mandado', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'MAP002', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    const mapa = [[{ id: 'a' }]];
+    host.emit('state', { room: 'MAP002', turn: 1, state: { pos: { x: 1, y: 1 }, floor: 1, map: mapa } });
+    await waitFor(host, 'authoritative');
+
+    const guest = connect();
+    await waitFor(guest, 'connect');
+    guest.emit('join', { room: 'MAP002', name: 'Bree' });
+    await waitFor(guest, 'hello');
+
+    host.emit('welcome', { room: 'MAP002', turn: 1 });
+    const recebido = await waitFor<{ state: { map?: unknown } }>(guest, 'welcome');
+
+    expect(recebido.state.map).toEqual(mapa);
+  });
+
+  /**
    * A compressão da aplicação, ponta a ponta pelo socket.io de verdade.
    *
    * O que este teste prende, e que os de `compressao.spec.ts` não alcançam:

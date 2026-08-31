@@ -76,13 +76,33 @@ export function instantaneoDaSala(
 /**
  * Aplica o estado que veio da sala por cima do local.
  *
- * Devolve o estado local intacto quando o pacote não traz mapa ou posição
- * — sincronização pela metade não pode apagar a masmorra de ninguém.
+ * **Mapa ausente é "não mudou", igual à mochila.** O servidor só manda o
+ * mapa quando esta conexão ainda não tem a versão dele (ver
+ * `mapaParaMembro`), porque ele é 91% do pacote e quase nunca muda: atacar,
+ * usar poção e comprar não mexem numa célula. Antes, ausência aqui fazia a
+ * função devolver o estado local inteiro — e a sincronização toda era
+ * jogada fora junto, posição, andar e perfis inclusive.
+ *
+ * O que sobrou da guarda antiga continua valendo: sem mapa **nenhum** —
+ * nem no pacote, nem no local — não há o que aplicar. Sincronização pela
+ * metade não pode apagar a masmorra de ninguém.
  */
 export function aplicarRemoto(local: EstadoDoJogo, remoto: Record<string, unknown>, meuPerfil: PerfilNaSala | undefined): EstadoDoJogo {
-  const mapa = remoto.map;
+  const veioMapa = Array.isArray(remoto.map) && remoto.map.length > 0;
+  const mapa = veioMapa ? remoto.map : local.map;
   const pos = remoto.pos as Posicao | undefined;
   if (!Array.isArray(mapa) || !mapa.length || !pos) return local;
+
+  /**
+   * Trocar de modo **exige** mapa no pacote: cidade e masmorra têm células
+   * de formato diferente, e reaproveitar o mapa local sob o modo novo faria
+   * a tela ler sala de masmorra como quadra de cidade. Na prática não
+   * acontece — mudar de modo muda o mapa, então a versão sobe e o servidor
+   * manda —, mas o dia em que acontecer tem que ser um pacote ignorado, e
+   * não uma tela lendo lixo.
+   */
+  const modo = (remoto.mapMode as string | undefined) ?? local.mapMode;
+  if (modo !== local.mapMode && !veioMapa) return local;
 
   const compartilhado: Record<string, unknown> = {};
   for (const campo of CAMPOS_COMPARTILHADOS) {
@@ -111,7 +131,10 @@ export function aplicarRemoto(local: EstadoDoJogo, remoto: Record<string, unknow
     pos,
   };
 
-  return remoto.mapMode === 'dungeon'
+  // `modo`, e não `remoto.mapMode`: ler o campo direto faria um pacote sem
+  // ele cair no `else` e virar cidade — um jeito silencioso de teleportar
+  // alguém pra fora da masmorra.
+  return modo === 'dungeon'
     ? { ...base, mapMode: 'dungeon', map: mapa as DungeonCell[][] }
     : { ...base, mapMode: 'city', map: mapa as CityCell[][] };
 }

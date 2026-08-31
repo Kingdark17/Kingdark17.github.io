@@ -125,12 +125,59 @@ describe('aplicarRemoto', () => {
     expect(depois.inventory).toBe(meu.inventory);
   });
 
-  it('pacote sem mapa ou sem posição não apaga a masmorra de ninguém', () => {
+  it('pacote sem posição não apaga a masmorra de ninguém', () => {
     const meu = entrarNaMasmorra(cidade(), seededRng(3));
 
+    // Sem posição não há o que aplicar, com ou sem mapa no pacote.
     expect(aplicarRemoto(meu, { floor: 9 }, perfilDe(meu))).toBe(meu);
-    expect(aplicarRemoto(meu, { map: [], pos: { x: 0, y: 0 } }, perfilDe(meu))).toBe(meu);
     expect(aplicarRemoto(meu, { map: meu.map }, perfilDe(meu))).toBe(meu);
+  });
+
+  /**
+   * O outro lado da omissão do mapa (ver `mapaParaMembro`, na API): o mapa
+   * é 91% do pacote e quase nunca muda, então o servidor para de mandá-lo
+   * quando esta conexão já tem a versão.
+   *
+   * Antes, ausência aqui fazia a função devolver o estado local inteiro — e
+   * a sincronização toda ia junto pro lixo: posição, andar, perfis. Estes
+   * testes prendem a regra nova: **ausente é "não mudou"**, e o que o
+   * pacote de fato traz continua sendo aplicado.
+   */
+  describe('mapa ausente', () => {
+    it('mantém o mapa local e aplica o resto do pacote', () => {
+      const meu = entrarNaMasmorra(cidade(), seededRng(3));
+
+      const depois = aplicarRemoto(meu, { pos: { x: 2, y: 1 }, floor: 9, mapMode: meu.mapMode }, perfilDe(meu));
+
+      expect(depois).not.toBe(meu);
+      expect(depois.map).toBe(meu.map);
+      expect(depois.floor).toBe(9);
+      expect(depois.pos).toEqual({ x: 2, y: 1 });
+    });
+
+    it('mapa vazio conta como ausente — ninguém tem masmorra de zero salas', () => {
+      const meu = entrarNaMasmorra(cidade(), seededRng(3));
+
+      expect(aplicarRemoto(meu, { map: [], pos: { x: 0, y: 0 }, mapMode: meu.mapMode }, perfilDe(meu)).map).toBe(meu.map);
+    });
+
+    /**
+     * Cidade e masmorra têm células de formato diferente. Reaproveitar o
+     * mapa local sob o modo novo faria a tela ler sala de masmorra como
+     * quadra de cidade — pacote ignorado é a resposta certa.
+     */
+    it('trocar de modo sem trazer mapa é pacote ignorado', () => {
+      const meu = entrarNaMasmorra(cidade(), seededRng(3));
+
+      expect(aplicarRemoto(meu, { pos: { x: 1, y: 1 }, mapMode: 'city' }, perfilDe(meu))).toBe(meu);
+    });
+
+    /** Sem `mapMode` no pacote, vale o local — ler o campo direto jogaria todo mundo pra cidade. */
+    it('sem mapMode, o modo local se mantém', () => {
+      const meu = entrarNaMasmorra(cidade(), seededRng(3));
+
+      expect(aplicarRemoto(meu, { pos: { x: 1, y: 1 } }, perfilDe(meu)).mapMode).toBe('dungeon');
+    });
   });
 
   it('a mochila que volta é a que o servidor devolveu no meu perfil', () => {

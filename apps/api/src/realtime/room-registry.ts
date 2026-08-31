@@ -56,6 +56,12 @@ export interface RoomMember {
    * reconexão se curar sozinha. Ver `profilesForMember`.
    */
   inventorySent?: number;
+  /**
+   * Qual versão do mapa esta conexão já recebeu. Ausente = nenhuma, então o
+   * próximo pacote vai com o mapa inteiro — é o que cura uma reconexão.
+   * Ver `mapaParaMembro`.
+   */
+  mapSent?: number;
 }
 
 export interface Room {
@@ -68,6 +74,18 @@ export interface Room {
    * significa nada e não vai pro fio.
    */
   inventoryVersions: Partial<Record<RoomRole, number>>;
+  /**
+   * Sobe a cada mapa **diferente** aceito. Igual a `inventoryVersions`: só
+   * serve pra comparar com o `mapSent` de cada conexão, e o número em si
+   * não vai pro fio.
+   */
+  mapVersion: number;
+  /**
+   * O mapa aceito, já em texto. É como se compara sem varrer 49 células a
+   * cada ação — e o custo é zero de verdade, porque o pacote ia ser
+   * serializado de qualquer jeito pra ir pro fio.
+   */
+  mapSerializado: string;
   state: RoomState | null;
   adminRoles: Partial<Record<RoomRole, boolean>>;
   isPublic: boolean;
@@ -188,6 +206,12 @@ export class RoomRegistry {
       members: [{ connection, role: HOST_ROLE }],
       profiles: {},
       inventoryVersions: {},
+      // Zerados mesmo quando o mundo é retomado: ninguém aqui recebeu mapa
+      // nenhum ainda, e `mapSent` ausente já garante que o primeiro pacote
+      // vá inteiro. Começar com o serializado do estado retomado só
+      // pouparia uma comparação e arriscaria calar o primeiro envio.
+      mapVersion: 0,
+      mapSerializado: '',
       state: existing?.state ?? null,
       adminRoles: { [HOST_ROLE]: options.admin },
       // Nome e visibilidade vêm de quem está criando agora, não do
@@ -366,6 +390,41 @@ export class RoomRegistry {
     return result;
   }
 
+  /**
+   * O estado como **esta conexão** deve recebê-lo: sem o mapa quando ela já
+   * tem essa versão.
+   *
+   * O mapa é **91% do pacote** — medido num andar 8 com 7×7 salas: 10,8 KB
+   * viram 1,0 KB sem ele. E ele quase nunca muda: atacar, usar poção,
+   * comprar e conversar não mexem numa célula sequer. Ia inteiro a cada
+   * ação, pros dois lados.
+   *
+   * **É omissão de campo, não patch de célula.** A diferença é o que torna
+   * isto seguro: ou o mapa vai todo, ou não vai nada. Um patch por célula
+   * daria menos bytes, mas criaria o jeito de os dois jogadores acabarem
+   * com mapas diferentes sem ninguém perceber — e foi por isso que ele foi
+   * descartado antes. Aqui, quando muda, o mapa é substituído por inteiro.
+   *
+   * É por conexão e não por papel pelo mesmo motivo da mochila: quem
+   * reconecta entra sem `mapSent` e a primeira mensagem já leva tudo.
+   *
+   * `forcarMapa` é pra `welcome`, a sincronização cheia.
+   */
+  mapaParaMembro(room: Room, estado: RoomState, member: RoomMember, forcarMapa = false): RoomState {
+    if (forcarMapa || member.mapSent !== room.mapVersion) {
+      member.mapSent = room.mapVersion;
+      return estado;
+    }
+
+    // Cópia sem a chave, em vez de `map: undefined`: `JSON.stringify` come
+    // `undefined`, então o fio ficaria igual — mas o objeto não, e um teste
+    // que perguntasse `'map' in state` responderia o contrário do que vai
+    // acontecer na rede.
+    const semMapa = { ...estado };
+    delete semMapa.map;
+    return semMapa;
+  }
+
   /** O membro de uma conexão dentro da sala — quem monta pacote precisa dele. */
   memberOf(room: Room, connectionId: string): RoomMember | undefined {
     return room.members.find((member) => member.connection.id === connectionId);
@@ -438,6 +497,14 @@ export class RoomRegistry {
     if (Array.isArray(state.map)) {
       const linhas = state.map as unknown[];
       state.map = linhas.slice(0, MAX_MAP_SIZE).map((row) => (Array.isArray(row) ? (row as unknown[]).slice(0, MAX_MAP_SIZE) : []));
+    }
+
+    // Depois do recorte, e não antes: o que vale comparar é o mapa que vai
+    // ser guardado e enviado, não o que o cliente mandou.
+    const serializado = JSON.stringify(state.map ?? null);
+    if (serializado !== room.mapSerializado) {
+      room.mapSerializado = serializado;
+      room.mapVersion += 1;
     }
 
     room.state = state;

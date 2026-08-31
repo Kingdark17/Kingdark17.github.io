@@ -80,9 +80,14 @@ export function paraInstantaneo(room: Room): InstantaneoDeSala {
 /**
  * A sala como ela renasce: com o mundo de volta e **vazia de gente**.
  *
- * `members`, `profiles`, `adminRoles` e `inventoryVersions` começam do
- * zero de propósito. Quem entrar depois é tratado como quem entra numa
- * sala nova — que é exatamente o que a pessoa é.
+ * `members`, `profiles`, `adminRoles`, `inventoryVersions` e as versões do
+ * mapa começam do zero de propósito. Quem entrar depois é tratado como
+ * quem entra numa sala nova — que é exatamente o que a pessoa é.
+ *
+ * `mapSerializado` vazio também é escolha: mesmo com o mundo de volta,
+ * ninguém aqui recebeu mapa nenhum, e começar com ele preenchido só
+ * pouparia uma comparação — ao custo de a primeira sincronização depois de
+ * um deploy poder sair sem o mapa que ela existe pra entregar.
  */
 export function deInstantaneo(instantaneo: InstantaneoDeSala): Room {
   return {
@@ -90,6 +95,8 @@ export function deInstantaneo(instantaneo: InstantaneoDeSala): Room {
     members: [],
     profiles: {},
     inventoryVersions: {},
+    mapVersion: 0,
+    mapSerializado: '',
     state: instantaneo.state,
     adminRoles: {},
     isPublic: instantaneo.isPublic,

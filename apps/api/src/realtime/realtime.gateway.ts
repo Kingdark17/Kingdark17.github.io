@@ -625,9 +625,19 @@ export class RealtimeGateway implements OnGatewayDisconnect {
     }
   }
 
-  /** O estado com os perfis recortados pra quem vai receber. */
-  private estadoPara(room: Room, estado: RoomState | null, membro: RoomMember, forcarMochila = false): RoomState | null {
-    return estado ? { ...estado, profiles: this.rooms.profilesForMember(room, membro, forcarMochila) } : estado;
+  /**
+   * O estado recortado pra quem vai receber: os perfis dele, e o mapa só
+   * quando esta conexão ainda não tem esta versão.
+   *
+   * O mesmo interruptor liga os dois recortes porque eles têm a mesma
+   * pergunta por trás — "o que **esta** conexão ainda não sabe?" — e o
+   * mesmo momento de desligar: `welcome` é sincronização cheia e manda
+   * tudo, sempre.
+   */
+  private estadoPara(room: Room, estado: RoomState | null, membro: RoomMember, sincronizacaoCheia = false): RoomState | null {
+    if (!estado) return estado;
+    const recortado = this.rooms.mapaParaMembro(room, estado, membro, sincronizacaoCheia);
+    return { ...recortado, profiles: this.rooms.profilesForMember(room, membro, sincronizacaoCheia) };
   }
 
   private senderOf(socket: Socket): { id: number; username: string } | null {
