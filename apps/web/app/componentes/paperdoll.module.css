@@ -10,9 +10,33 @@
    que é quem anima `filter`. Juntos, um sobrescreveria o outro no meio da
    animação e o veneno sumiria a cada golpe levado. */
 .aura,
-.pilha {
+.pilha,
+.pernas,
+.tronco {
   position: absolute;
   inset: 0;
+}
+
+/* ---------- o corte na cintura ----------
+ *
+ * A pilha inteira é desenhada duas vezes e cada cópia mostra metade: as
+ * pernas ficam paradas, o tronco respira. É o que o Breno pediu, e é como
+ * idle de sprite sempre foi — o boneco inteiro subindo parece que flutua.
+ *
+ * **A altura do corte não foi chutada.** Medindo as artes linha a linha,
+ * a calça começa em y=47 e a roupa e a armadura terminam em y=49 (de 64).
+ * A cintura é ali: 48/64 = 75%.
+ *
+ * As pernas começam **antes** do corte do tronco de propósito. Sem essa
+ * sobra, o tronco subindo abriria uma faixa transparente na cintura e o
+ * boneco pareceria cortado ao meio. Com ela, o que aparece na emenda é o
+ * pedaço parado da calça — que é justamente o que não deveria se mexer. */
+.tronco .camada {
+  clip-path: inset(0 0 25% 0);
+}
+
+.pernas .camada {
+  clip-path: inset(71.875% 0 0 0); /* y=46: dois pixels de sobra sobre o corte */
 }
 
 /* Todas as camadas ocupam a mesma caixa: é o que faz o registro dos 64×64
@@ -45,7 +69,7 @@
   }
 }
 
-.pilha[data-respira] {
+.tronco {
   animation: respirar 1.4s steps(2, jump-none) infinite alternate;
   /* Negativo: a animação já começa adiantada em vez de esperar pra
      arrancar. Numa grade de bonecos, esperar deixaria todos parados no
@@ -60,59 +84,70 @@
  * piscando enquanto apanhar, porque o painel só solta o sinal quando o
  * castigo para (`DURACAO_DA_PISCADA_MS` em `painel-heroi.tsx`).
  *
- * `brightness` alto com `sepia` e matiz puxada pro vermelho tinge a
- * silhueta inteira sem precisar de uma segunda arte "machucada". */
+ * **A tinta é parcial de propósito.** A primeira versão usava
+ * `brightness(2.4) saturate(7)` e levava o boneco pro vermelho puro: some
+ * o desenho, e o que pisca é um borrão com a silhueta certa. `sepia`
+ * parcial achata pra um tom só, a matiz leva esse tom pro vermelho e o
+ * brilho dá o susto — a arte continua legível por baixo.
+ *
+ * O tempo também era parte do estouro: a tinta ficava acesa em 40% do
+ * ciclo, o que de golpe não tem nada; parece o boneco pegando fogo. Agora
+ * são ~120 ms acesa e 300 ms limpa, que é o ritmo de piscada de dano.
+ *
+ * Sem `steps()` aqui: com dois patamares e o corte de 28% pra 29%, a
+ * troca já é seca, e `steps(1, end)` sobre estes patamares segurava a
+ * tinta pelo quadro inteiro — parte de por que ficou tão forte. */
 @keyframes piscarDeDano {
   0%,
+  28% {
+    filter: sepia(0.55) saturate(2.2) hue-rotate(-28deg) brightness(1.15);
+  }
+  29%,
   100% {
     filter: none;
-  }
-  20%,
-  60% {
-    filter: brightness(2.4) sepia(1) saturate(7) hue-rotate(-35deg);
   }
 }
 
 .pilha[data-ferido] {
-  animation: piscarDeDano 0.42s steps(1, end) infinite;
+  animation: piscarDeDano 0.42s linear infinite;
 }
 
-/* Ferido e vivo ao mesmo tempo: as duas animações convivem porque mexem em
-   propriedades diferentes (uma em `transform`, outra em `filter`) — mas
-   precisam estar na mesma declaração, senão a segunda regra apaga a
-   primeira. */
-.pilha[data-respira][data-ferido] {
-  animation:
-    respirar 1.4s steps(2, jump-none) infinite alternate,
-    piscarDeDano 0.42s steps(1, end) infinite;
-  /* Só a respiração leva atraso; a piscada tem que sair na hora do golpe. */
-  animation-delay: calc(-1 * var(--atraso-da-respiracao, 0ms)), 0ms;
-}
+/* A piscada mora na `.pilha`, que embrulha as duas metades: assim o tronco
+   e as pernas piscam juntos, e as duas animações nem se encontram — cada
+   uma está num elemento. Enquanto respiração e piscada dividiam o mesmo
+   seletor, era preciso repetir a lista inteira de `animation` só pra elas
+   conviverem, e esquecer disso apagaria uma das duas em silêncio. */
 
 /* ---------- aura de raridade e veneno ----------
  *
  * As combinações estão escritas à mão porque `filter` é uma lista só:
  * compor por variável exigiria valor vazio válido, que não existe. Três
- * regras explícitas dizem mais e não têm como sair errado. */
+ * regras explícitas dizem mais e não têm como sair errado.
+ *
+ * **`hue-rotate` sozinho era a ferramenta errada pro veneno.** Ele gira
+ * *todas* as matizes: o vermelho do escudo virava outra cor, o dourado da
+ * armadura também, e o boneco saía irreconhecível em vez de esverdeado.
+ * `sepia` parcial primeiro achata pra um tom só — aí o giro tinge esse tom
+ * e o resto da arte sobrevive. Parcial, e não `sepia(1)`, pra ainda sobrar
+ * diferença entre pele, metal e pano. */
 .aura[data-aura] {
   filter: drop-shadow(0 0 0.3rem var(--cor-da-aura));
 }
 
 .aura[data-envenenado] {
-  filter: hue-rotate(62deg) saturate(1.5) brightness(0.94);
+  filter: sepia(0.45) hue-rotate(55deg) saturate(1.25) brightness(0.96);
 }
 
 .aura[data-aura][data-envenenado] {
-  filter: hue-rotate(62deg) saturate(1.5) brightness(0.94) drop-shadow(0 0 0.3rem var(--cor-da-aura));
+  filter: sepia(0.45) hue-rotate(55deg) saturate(1.25) brightness(0.96) drop-shadow(0 0 0.3rem var(--cor-da-aura));
 }
 
 /* Quem pediu menos movimento fica sem o balanço e sem a piscada. O brilho
    e a tinta ficam: são estado, não animação — dizem o que está
    acontecendo com o personagem e nenhum deles se mexe. */
 @media (prefers-reduced-motion: reduce) {
-  .pilha[data-respira],
-  .pilha[data-ferido],
-  .pilha[data-respira][data-ferido] {
+  .tronco,
+  .pilha[data-ferido] {
     animation: none;
   }
 }

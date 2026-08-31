@@ -41,6 +41,17 @@ interface Props extends Vestimenta {
   sinais?: SinaisVitais;
 }
 
+/**
+ * As camadas viradas em `<img>`.
+ *
+ * `alt` vazio de propósito: as camadas juntas são uma figura só, e quem lê
+ * a tela não ganha nada ouvindo "corpo, calça, roupa, cabelo, espada".
+ * Quem descreve o boneco é o chamador.
+ */
+function empilhar(camadas: string[]) {
+  return camadas.map((camada) => <img key={camada} className={styles.camada} src={camada} alt="" width={64} height={64} />);
+}
+
 export function Paperdoll({
   raca,
   arma,
@@ -76,18 +87,29 @@ export function Paperdoll({
         data-envenenado={sinais.envenenado ? '' : undefined}
         style={aura ? ({ '--cor-da-aura': `var(${aura})` } as React.CSSProperties) : undefined}
       >
-        <div
-          className={styles.pilha}
-          data-respira={sinais.vivo ? '' : undefined}
-          data-ferido={sinais.ferido ? '' : undefined}
-          style={sinais.atraso ? ({ '--atraso-da-respiracao': `${sinais.atraso}ms` } as React.CSSProperties) : undefined}
-        >
-          {camadas.map((camada) => (
-            // `alt` vazio de propósito: as camadas juntas são uma figura só, e
-            // quem lê a tela não ganha nada ouvindo "corpo, calça, roupa,
-            // cabelo, espada". Quem descreve o boneco é o chamador.
-            <img key={camada} className={styles.camada} src={camada} alt="" width={64} height={64} />
-          ))}
+        <div className={styles.pilha} data-ferido={sinais.ferido ? '' : undefined}>
+          {sinais.vivo ? (
+            <>
+              {/* A mesma pilha duas vezes, recortada na cintura: embaixo as
+                  pernas, paradas; em cima o tronco, que é o que respira.
+                  Pedido do Breno, e ele tem razão — o boneco inteiro subindo
+                  parece que flutua; com o pé plantado, parece que respira.
+
+                  Custa nó de DOM, não download: são as mesmas URLs, e o
+                  navegador busca cada arte uma vez só. */}
+              <div className={styles.pernas}>{empilhar(camadas)}</div>
+              <div
+                className={styles.tronco}
+                style={sinais.atraso ? ({ '--atraso-da-respiracao': `${sinais.atraso}ms` } as React.CSSProperties) : undefined}
+              >
+                {empilhar(camadas)}
+              </div>
+            </>
+          ) : (
+            // Parado, uma pilha só: sem animação o recorte não teria o que
+            // esconder, e duplicar arriscaria uma emenda visível de graça.
+            empilhar(camadas)
+          )}
         </div>
       </div>
     </div>
