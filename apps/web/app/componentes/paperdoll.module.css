@@ -11,6 +11,7 @@
    animação e o veneno sumiria a cada golpe levado. */
 .aura,
 .pilha,
+.golpe,
 .pernas,
 .tronco,
 .maos {
@@ -91,9 +92,9 @@
 
 /* ---------- o golpe ----------
  *
- * A arma gira em torno do punho e volta. **Não é arte de quadros** — é a
- * camada que já existe, girada; o Pixi continua reservado pro dia em que
- * houver poses desenhadas.
+ * A arma gira em torno do punho e volta, e o corpo se inclina junto. **Não
+ * é arte de quadros** — são as camadas que já existem; o Pixi continua
+ * reservado pro dia em que houver poses desenhadas.
  *
  * **O pivô foi medido, não chutado.** As três armas desenhadas (espada,
  * cajado, adaga) apontam pra direções diferentes, mas todas passam pelo
@@ -102,38 +103,75 @@
  * é daí que a arma gira. Pivô no centro da caixa faria a lâmina sair da
  * mão no meio do movimento.
  *
- * Três poses e cortes secos, como a piscada de dano logo abaixo — é o
- * mesmo recurso e pelo mesmo motivo: golpe de sprite nunca teve
- * interpolação, e `steps()` sobre patamares já discretos só atrapalha.
+ * **O sentido é anti-horário porque o cajado manda.** A primeira versão
+ * girava pra direita e o Breno viu na gravação: no pico, a ponta do cajado
+ * ficava sobre os olhos. Não era só amplitude — medindo quantos dos 362
+ * pixels do rosto cada ângulo cobre:
  *
- * **A direção sai da mesma medição.** A lâmina sai do punho pra cima e pra
- * esquerda (a espada ocupa x 6..23, y 31..47, e o punho fica em 19,6/43,4),
- * ou seja aponta pras 10h30. Girar pouco no sentido horário só a levanta
- * até a vertical, o que lê como comemoração e não como golpe; passar dela
- * é que faz a arma **atravessar o corpo** da esquerda pra direita, que é o
- * corte que se reconhece. Daí recuar 25° e cortar 65°: recua pra fora,
- * varre a frente, volta.
+ * | ângulo | −60° | −45° | 0° | +25° | +45° | +65° |
+ * |---|---|---|---|---|---|---|
+ * | espada | 0 | 0 | 0 | 0 | 0 | 0 |
+ * | cajado | 0 | 0 | 0 | 73 | **114** | 57 |
+ *
+ * O cajado tem braço de 37,6 px contra 18,4 da espada, então é o único que
+ * alcança a cabeça — e pra qualquer ângulo horário ele passa por cima dela.
+ * Anti-horário não encosta no rosto com arma nenhuma. Daí −50°: dentro da
+ * faixa pedida e com folga dos dois lados.
+ *
+ * Custo aceito: a −50° a ponta do cajado sai 16 px da moldura de 64. Não há
+ * `overflow: hidden` na cadeia até `.balao`, então ela desenha fora do
+ * círculo do retrato de propósito.
+ *
+ * **Ida e volta espelhadas, sem parada no meio.** A versão anterior tinha
+ * três poses com cortes secos, à moda de sprite — e na gravação lia como
+ * "sobe, congela, teleporta de volta". Agora é um arco só: 0% → pico em
+ * 50% → 0% de novo, com `ease-in-out`, que dá a mesma duração pra ida e pra
+ * volta e desacelera nas duas pontas.
  *
  * Ângulos em variável porque são gosto, não medida: dá pra afinar sem
  * mexer na animação. */
 @keyframes golpear {
-  0%,
-  14% {
-    transform: rotate(var(--recuo-do-golpe, -25deg));
+  0% {
+    transform: rotate(0deg);
   }
-  15%,
-  48% {
-    transform: rotate(var(--alcance-do-golpe, 65deg));
+  50% {
+    transform: rotate(var(--alcance-do-golpe, -50deg));
   }
-  49%,
   100% {
     transform: rotate(0deg);
   }
 }
 
-.maos[data-atacando] .camada[data-arma] {
+/* O passo: o corpo inteiro se inclina pro lado do golpe e volta.
+ *
+ * **Num invólucro próprio, e não no tronco.** O tronco já anima `transform`
+ * pra respirar, e duas animações da mesma propriedade no mesmo elemento não
+ * se compõem — a segunda apaga a primeira, e a respiração sumiria a cada
+ * golpe. Em elementos aninhados as duas se multiplicam, que é o que se
+ * quer. Foi por não ter resolvido isto que o passo ficou de fora da
+ * primeira versão.
+ *
+ * Vai pra esquerda porque é pra onde a arma varre: inclinar contra o golpe
+ * pareceria recuar dele. */
+@keyframes avancar {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(var(--avanco-do-golpe, -5px), 1px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.golpe[data-atacando] {
+  animation: avancar 0.38s ease-in-out infinite;
+}
+
+.golpe[data-atacando] .camada[data-arma] {
   transform-origin: 31.4% 68.6%;
-  animation: golpear 0.38s linear;
+  animation: golpear 0.38s ease-in-out infinite;
 }
 
 /* ---------- piscada de dano ----------
@@ -208,7 +246,8 @@
   .tronco,
   .maos,
   .pilha[data-ferido],
-  .maos[data-atacando] .camada[data-arma] {
+  .golpe[data-atacando],
+  .golpe[data-atacando] .camada[data-arma] {
     animation: none;
   }
 }

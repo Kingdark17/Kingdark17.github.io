@@ -116,7 +116,12 @@ export function Paperdoll({
           style={sinais.atraso ? ({ '--atraso-da-respiracao': `${sinais.atraso}ms` } as React.CSSProperties) : undefined}
         >
           {sinais.vivo ? (
-            <>
+            /* O invólucro do golpe embrulha o boneco todo: é ele que se
+               inclina pro lado da arma. Precisa ser um elemento à parte
+               porque o tronco já anima `transform` pra respirar, e duas
+               animações da mesma propriedade no mesmo elemento não se
+               compõem — uma apaga a outra. Aninhadas, se multiplicam. */
+            <div className={styles.golpe} data-atacando={sinais.atacando ? '' : undefined}>
               {/* A mesma pilha duas vezes, recortada na cintura: embaixo as
                   pernas, paradas; em cima o tronco, que é o que respira.
                   Pedido do Breno, e ele tem razão — o boneco inteiro subindo
@@ -130,12 +135,8 @@ export function Paperdoll({
                   tronco. Ficam num invólucro próprio porque a arma gira e o
                   tronco sobe — duas animações de `transform`, que num
                   elemento só uma apagaria a outra. */}
-              {nasMaos.length > 0 && (
-                <div className={styles.maos} data-atacando={sinais.atacando ? '' : undefined}>
-                  {empilhar(nasMaos)}
-                </div>
-              )}
-            </>
+              {nasMaos.length > 0 && <div className={styles.maos}>{empilhar(nasMaos)}</div>}
+            </div>
           ) : (
             // Parado, uma pilha só: sem animação o recorte não teria o que
             // esconder, e duplicar arriscaria uma emenda visível de graça.

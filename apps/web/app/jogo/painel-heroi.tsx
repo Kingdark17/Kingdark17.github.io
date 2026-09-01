@@ -26,10 +26,10 @@ const DURACAO_DA_PISCADA_MS = 840;
  * Um pouco **menos** que a volta do giro em `paperdoll.module.css` (0,38 s).
  *
  * De propósito: o giro é infinito e quem o desliga é este relógio, então
- * onde ele desliga importa. Em 360 ms a animação está em 95% — dentro do
- * trecho já parado (49%–100%) — e a arma some do ar exatamente onde ela
- * ficaria. Desligar depois da volta pegaria o recuo do segundo ciclo, e a
- * lâmina daria um pulo pra voltar ao lugar.
+ * onde ele desliga importa. Em 360 ms a animação está em 94,7% do arco de
+ * ida e volta — com o `ease-in-out`, sobra cerca de 1° de rotação, que
+ * ninguém vê sumir. Desligar **depois** da volta pegaria o começo do
+ * segundo arco, e aí a arma daria um pulo pra voltar ao lugar.
  */
 const DURACAO_DO_GOLPE_MS = 360;
 
