@@ -1961,7 +1961,36 @@ tinha sido descartado por trazer invariante arriscado: custo sem prêmio.
 - **Fronteira é o campo `n`** (tamanho antes de comprimir), não o pedaço
   que o fluxo devolve: nada promete "um pedaço por mensagem".
 
----
+### Provado num navegador de verdade (2026-09-01)
+
+Até aqui o `DecompressionStream('deflate-raw')` só tinha rodado no Node,
+pela suíte. **Era o elo nunca exercitado**: nada garantia que um navegador
+de verdade negociasse e inflasse o formato. Medido em produção
+(`rpglegend.com.br`, commit `867652c`), Opera GX, sala solo:
+
+| Prova | Onde | Resultado |
+|---|---|---|
+| o cliente anuncia | quadro do handshake | `↑ 40{"z":1}` |
+| o servidor abre o fluxo | `/health` | `deflatePorDentro: 2` de `conexoes: 2` |
+| o proxy continua matando o do WebSocket | `/health` | `comprimidas: 0`, como previsto |
+| os pacotes saem comprimidos | quadros `z` | 9 × `451-["z",{"e":"authoritative",…}]` |
+
+**O comprimento do quadro de texto é medida grátis.** Ele é fixo menos o
+`n`: `451-["z",{"e":"authoritative","b":{"_placeholder":true,"num":0},"n":`
++ `}]` dá 70 bytes. Logo **74 bytes ⇒ `n` de 4 dígitos**, ou seja pacote
+cru entre 1 e 10 KB; 75 seria 5 dígitos, o regime de quem está levando o
+mapa. Dá pra ler o recorte do mapa acontecendo sem abrir pacote nenhum.
+
+### `welcome` não volta pra quem mandou
+
+Custou uma rodada de teste: a sala parecia muda depois de entrar. Não
+estava. `handleWelcome` só repassa pros **parceiros** — anfitrião sozinho
+não repassa pra ninguém. Quem devolve ao próprio remetente é `handleState`,
+com o `authoritative`.
+
+Consequência pra quem for testar: **entrar na sala não gera pacote `z`
+nenhum**. É preciso agir — andar, lutar, usar item. Vale também como
+lembrete de que `welcome` é sincronização de chegada do outro, não eco.
 
 ## Os filtros de deploy (2026-08-27)
 
