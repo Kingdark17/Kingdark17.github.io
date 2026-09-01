@@ -139,3 +139,34 @@ export function montarCamadas({ raca, arma, armadura, secundaria }: Vestimenta):
 
   return camadas;
 }
+
+/**
+ * O que está **na mão**, e não vestido no corpo.
+ *
+ * A distinção existe por causa do corte na cintura: o corpo é desenhado
+ * duas vezes e cada cópia mostra metade, mas objeto segurado não pode ser
+ * partido assim. Medindo as artes, a adaga ocupa y 40..48 e o corte fica em
+ * 48 — as linhas 46 e 47 caíam na cópia do tronco, que sobe 2 px ao
+ * respirar, e a 48 na das pernas, que não sobe. A lâmina se rasgava.
+ *
+ * É também o que permite girar a arma: camada partida em duas cópias
+ * recortadas não tem como rodar em torno de um pivô só.
+ *
+ * O prefixo é comparado contra `RAIZ` em vez de ser escrito de novo do
+ * outro lado: quem monta o caminho é esta função, e o dia em que a pasta
+ * mudar de nome as duas mudam juntas.
+ */
+export function ehSegurada(camada: string): boolean {
+  return camada.startsWith(`${RAIZ}/arma/`) || camada.startsWith(`${RAIZ}/secundaria/`);
+}
+
+/**
+ * A camada da mão principal — a única que gira no golpe.
+ *
+ * O escudo fica parado de propósito: ele é defesa, e vê-lo girando junto
+ * faria o boneco parecer que está batendo com os dois braços ao mesmo
+ * tempo.
+ */
+export function ehArma(camada: string): boolean {
+  return camada.startsWith(`${RAIZ}/arma/`);
+}

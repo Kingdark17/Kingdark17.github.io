@@ -17,7 +17,7 @@
  * propriedade e viram atributo de dado; **toda** a animação está no CSS.
  */
 
-import { montarCamadas, type Vestimenta } from '@/lib/paperdoll/camadas';
+import { ehArma, ehSegurada, montarCamadas, type Vestimenta } from '@/lib/paperdoll/camadas';
 import { corDaAura, type SinaisVitais } from '@/lib/paperdoll/sinais';
 import styles from './paperdoll.module.css';
 
@@ -49,7 +49,20 @@ interface Props extends Vestimenta {
  * Quem descreve o boneco é o chamador.
  */
 function empilhar(camadas: string[]) {
-  return camadas.map((camada) => <img key={camada} className={styles.camada} src={camada} alt="" width={64} height={64} />);
+  return camadas.map((camada) => (
+    // `data-arma` só na mão principal: é ela que gira no golpe, e o CSS
+    // precisa alcançá-la sem depender de ser "a última", que é verdade hoje
+    // e deixaria de ser no dia em que uma camada nova entrar depois.
+    <img
+      key={camada}
+      className={styles.camada}
+      data-arma={ehArma(camada) ? '' : undefined}
+      src={camada}
+      alt=""
+      width={64}
+      height={64}
+    />
+  ));
 }
 
 export function Paperdoll({
@@ -75,6 +88,12 @@ export function Paperdoll({
 
   const aura = corDaAura(sinais.aura);
 
+  // O que está vestido é recortado na cintura; o que está na mão, não. Ver
+  // `ehSegurada`: a adaga cruza a linha do corte e se rasgava na
+  // respiração, e camada partida em duas cópias não teria como girar.
+  const doCorpo = camadas.filter((camada) => !ehSegurada(camada));
+  const nasMaos = camadas.filter(ehSegurada);
+
   return (
     <div className={classes} style={{ width: lado, height: lado }}>
       {/* Dois invólucros, e cada um com um tipo de efeito só. `filter` é
@@ -87,7 +106,15 @@ export function Paperdoll({
         data-envenenado={sinais.envenenado ? '' : undefined}
         style={aura ? ({ '--cor-da-aura': `var(${aura})` } as React.CSSProperties) : undefined}
       >
-        <div className={styles.pilha} data-ferido={sinais.ferido ? '' : undefined}>
+        <div
+          className={styles.pilha}
+          data-ferido={sinais.ferido ? '' : undefined}
+          // O atraso mora aqui, e não no tronco: as mãos respiram no mesmo
+          // compasso e precisam do mesmo valor. Variável de CSS herda, então
+          // declarar no pai comum é o que garante que os dois nunca
+          // dessincronizem — arma descolando do punho seria o sintoma.
+          style={sinais.atraso ? ({ '--atraso-da-respiracao': `${sinais.atraso}ms` } as React.CSSProperties) : undefined}
+        >
           {sinais.vivo ? (
             <>
               {/* A mesma pilha duas vezes, recortada na cintura: embaixo as
@@ -97,13 +124,17 @@ export function Paperdoll({
 
                   Custa nó de DOM, não download: são as mesmas URLs, e o
                   navegador busca cada arte uma vez só. */}
-              <div className={styles.pernas}>{empilhar(camadas)}</div>
-              <div
-                className={styles.tronco}
-                style={sinais.atraso ? ({ '--atraso-da-respiracao': `${sinais.atraso}ms` } as React.CSSProperties) : undefined}
-              >
-                {empilhar(camadas)}
-              </div>
+              <div className={styles.pernas}>{empilhar(doCorpo)}</div>
+              <div className={styles.tronco}>{empilhar(doCorpo)}</div>
+              {/* As mãos: inteiras, por cima de tudo, respirando junto com o
+                  tronco. Ficam num invólucro próprio porque a arma gira e o
+                  tronco sobe — duas animações de `transform`, que num
+                  elemento só uma apagaria a outra. */}
+              {nasMaos.length > 0 && (
+                <div className={styles.maos} data-atacando={sinais.atacando ? '' : undefined}>
+                  {empilhar(nasMaos)}
+                </div>
+              )}
             </>
           ) : (
             // Parado, uma pilha só: sem animação o recorte não teria o que

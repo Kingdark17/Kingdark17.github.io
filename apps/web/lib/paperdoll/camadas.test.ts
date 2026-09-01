@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ARMADURAS, ARMAS, CORPOS, montarCamadas } from './camadas';
+import { ARMADURAS, ARMAS, CORPOS, ehArma, ehSegurada, montarCamadas } from './camadas';
 
 /** Onde a peça aparece na pilha, ou -1. Trás para frente. */
 function posicao(camadas: string[], trecho: string): number {
@@ -135,5 +135,54 @@ describe('montarCamadas', () => {
 
       expect(posicao(camadas, 'cabelo/')).toBeLessThan(posicao(camadas, 'armadura/placas'));
     });
+  });
+});
+
+/**
+ * O que fica **na mão** sai do corte da cintura e é desenhado inteiro.
+ *
+ * Duas coisas dependem disso. A primeira é um defeito que existia calado:
+ * a adaga ocupa y 40..48 e o corte fica em 48, então as linhas 46 e 47 dela
+ * iam na cópia do tronco — que sobe 2 px ao respirar — e a 48 na das
+ * pernas, que não sobe; a lâmina se rasgava. A segunda é o giro do golpe:
+ * camada partida em duas cópias recortadas não tem como rodar em torno de
+ * um pivô só.
+ */
+describe('o que está na mão', () => {
+  const vestido = montarCamadas({ raca: 'humano', armadura: 'placas', arma: 'espada', secundaria: 'escudo' });
+
+  it('arma e escudo contam como segurados; o resto, não', () => {
+    expect(vestido.filter(ehSegurada)).toEqual(['/img/paperdoll/secundaria/escudo.png', '/img/paperdoll/arma/espada.png']);
+  });
+
+  it('nenhuma peça vestida entra na conta', () => {
+    for (const camada of vestido.filter((c) => !ehSegurada(c))) {
+      expect(camada).toMatch(/\/(corpo|base|cabelo|armadura|traco)\//);
+    }
+  });
+
+  /**
+   * Só a mão principal gira. O escudo é defesa: vê-lo girando junto faria
+   * o boneco parecer que bate com os dois braços ao mesmo tempo.
+   */
+  it('só a mão principal gira', () => {
+    expect(vestido.filter(ehArma)).toEqual(['/img/paperdoll/arma/espada.png']);
+    expect(ehArma('/img/paperdoll/secundaria/escudo.png')).toBe(false);
+  });
+
+  /**
+   * `secundaria/adaga.png` e `arma/adaga.png` existem os dois. Um prefixo
+   * frouxo — procurar só por "adaga", ou por "arma" em qualquer posição —
+   * confundiria a adaga de mão secundária com a principal, e o escudo
+   * começaria a girar junto.
+   */
+  it('a adaga na mão secundária não é a arma que gira', () => {
+    expect(ehSegurada('/img/paperdoll/secundaria/adaga.png')).toBe(true);
+    expect(ehArma('/img/paperdoll/secundaria/adaga.png')).toBe(false);
+    expect(ehArma('/img/paperdoll/arma/adaga.png')).toBe(true);
+  });
+
+  it('sem nada na mão, não há camada segurada', () => {
+    expect(montarCamadas({ raca: 'humano' }).filter(ehSegurada)).toEqual([]);
   });
 });

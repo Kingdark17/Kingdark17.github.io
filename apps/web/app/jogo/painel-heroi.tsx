@@ -22,12 +22,35 @@ function porcentagem(atual: number, maximo: number): string {
  */
 const DURACAO_DA_PISCADA_MS = 840;
 
-export function PainelHeroi({ hero }: { hero: Hero }) {
+/**
+ * Um pouco **menos** que a volta do giro em `paperdoll.module.css` (0,38 s).
+ *
+ * De propósito: o giro é infinito e quem o desliga é este relógio, então
+ * onde ele desliga importa. Em 360 ms a animação está em 95% — dentro do
+ * trecho já parado (49%–100%) — e a arma some do ar exatamente onde ela
+ * ficaria. Desligar depois da volta pegaria o recuo do segundo ciclo, e a
+ * lâmina daria um pulo pra voltar ao lugar.
+ */
+const DURACAO_DO_GOLPE_MS = 360;
+
+interface Props {
+  hero: Hero;
+  /**
+   * Quantos golpes o herói já acertou nesta sessão. Só o **aumento**
+   * importa; o número em si não significa nada e não é exibido.
+   */
+  golpes?: number;
+}
+
+export function PainelHeroi({ hero, golpes = 0 }: Readonly<Props>) {
   const [subiu, setSubiu] = useState(false);
   const nivelAnterior = useRef(hero.level);
   const [ferido, setFerido] = useState(false);
   const vidaAnterior = useRef(hero.hp);
   const relogioDoDano = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [atacando, setAtacando] = useState(false);
+  const golpesAnteriores = useRef(golpes);
+  const relogioDoGolpe = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // O painel percebe o nível novo sozinho, como o `renderHero()` do
   // cliente antigo: subir de nível acontece no combate, na mochila e no
@@ -77,8 +100,32 @@ export function PainelHeroi({ hero }: { hero: Hero }) {
     }
   }, [hero.hp]);
 
-  // Sair da tela no meio da piscada não pode deixar relógio solto.
-  useEffect(() => () => clearTimeout(relogioDoDano.current ?? undefined), []);
+  /**
+   * O golpe, pelo mesmo desenho da piscada: acertar é acontecimento, e o
+   * contador que sobe é o rastro que a tela de combate deixa.
+   *
+   * Comparar com o valor anterior, e não reagir a "maior que zero", é o que
+   * faz o segundo golpe da mesma luta girar a arma de novo.
+   */
+  useEffect(() => {
+    const acertou = golpes > golpesAnteriores.current;
+    golpesAnteriores.current = golpes;
+
+    if (acertou) {
+      setAtacando(true);
+      if (relogioDoGolpe.current !== null) clearTimeout(relogioDoGolpe.current);
+      relogioDoGolpe.current = setTimeout(() => setAtacando(false), DURACAO_DO_GOLPE_MS);
+    }
+  }, [golpes]);
+
+  // Sair da tela no meio da piscada ou do giro não pode deixar relógio solto.
+  useEffect(
+    () => () => {
+      clearTimeout(relogioDoDano.current ?? undefined);
+      clearTimeout(relogioDoGolpe.current ?? undefined);
+    },
+    [],
+  );
 
   return (
     <aside
@@ -101,7 +148,7 @@ export function PainelHeroi({ hero }: { hero: Hero }) {
           armadura={hero.equip.armadura?.templateId}
           secundaria={hero.equip.secundaria?.templateId}
           lado={132}
-          sinais={{ ...sinaisDoHeroi(hero), ferido }}
+          sinais={{ ...sinaisDoHeroi(hero), ferido, atacando }}
           reserva={
             <span className={styles.reservaDoRetrato} aria-hidden>
               {hero.raceIcon}

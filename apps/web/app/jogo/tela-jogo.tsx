@@ -121,6 +121,12 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const [legendaAberta, setLegendaAberta] = useState(false);
   const [confirmandoSaida, setConfirmandoSaida] = useState(false);
   const [saindo, setSaindo] = useState(false);
+  /**
+   * Golpes acertados, só pra o boneco girar a arma. O número não é exibido
+   * e não entra no save — é um rastro de acontecimento, como a piscada de
+   * dano, e mora aqui porque é aqui que a tela de combate reporta o turno.
+   */
+  const [golpes, setGolpes] = useState(0);
 
   const assinatura = useRef('');
   const precisaSalvar = useRef(false);
@@ -507,7 +513,15 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
         return (
           <TelaCombate
             combate={aberta.combate}
-            onCombate={(proximo) => seguir({ tipo: 'combate', combate: proximo }, proximo.estado)}
+            onCombate={(proximo) => {
+              // Número flutuante sobre o inimigo é o que a regra já sabe
+              // sobre "o herói acertou" — ler isso é melhor que inventar um
+              // campo novo, e melhor que a tela deduzir do texto do log.
+              // A lista zera a cada ação, então não há acerto contado duas
+              // vezes.
+              if (proximo.flutuantes.some((numero) => numero.alvo === 'inimigo')) setGolpes((quantos) => quantos + 1);
+              seguir({ tipo: 'combate', combate: proximo }, proximo.estado);
+            }}
             onEncerrar={(final) => fechar(final.estado, avisoDoFim(final))}
           />
         );
@@ -605,7 +619,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   if (tela) {
     return (
       <div className={styles.conteudo}>
-        <PainelHeroi hero={estado.hero} />
+        {/* Só aqui o contador de golpes vale a pena: é a única ramificação
+            que pode ter a tela de combate aberta. Nas outras o painel fica
+            com o padrão e o boneco não gira — não há o que girar por. */}
+        <PainelHeroi hero={estado.hero} golpes={golpes} />
         {conteudoDaTela(tela)}
         {enfeites}
       </div>

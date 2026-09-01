@@ -22,6 +22,15 @@ export interface SinaisVitais {
   vivo?: boolean;
   /** Piscada de dano — transitória, ligada e desligada por quem exibe. */
   ferido?: boolean;
+  /**
+   * O golpe: a arma gira em torno do punho e volta. Transitório, igual a
+   * `ferido`, e pelo mesmo motivo — acertar não deixa rastro no herói.
+   *
+   * **Não é o Pixi entrando pela porta dos fundos.** Isto gira uma camada
+   * que já existe; continua sem haver arte de quadros, e o dia em que
+   * houver é o dia em que o Pixi substitui este componente.
+   */
+  atacando?: boolean;
   /** Tinta esverdeada enquanto o veneno durar. */
   envenenado?: boolean;
   /** Raridade da melhor peça equipada; vira o brilho ao redor do boneco. */

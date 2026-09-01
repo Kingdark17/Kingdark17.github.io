@@ -12,7 +12,8 @@
 .aura,
 .pilha,
 .pernas,
-.tronco {
+.tronco,
+.maos {
   position: absolute;
   inset: 0;
 }
@@ -38,6 +39,12 @@
 .pernas .camada {
   clip-path: inset(71.875% 0 0 0); /* y=46: dois pixels de sobra sobre o corte */
 }
+
+/* O que está na mão **não** é recortado: ver `ehSegurada`, em `camadas.ts`.
+   A adaga ocupa y 40..48 e o corte fica em 48, então as linhas 46 e 47 dela
+   iam na cópia do tronco — que sobe 2 px ao respirar — e a 48 na das
+   pernas, que não sobe. A lâmina se rasgava a cada respiração, e ninguém
+   tinha percebido porque só acontece com arma curta. */
 
 /* Todas as camadas ocupam a mesma caixa: é o que faz o registro dos 64×64
    valer. Qualquer margem ou deslocamento aqui desalinharia a espada do
@@ -69,12 +76,64 @@
   }
 }
 
-.tronco {
+/* Tronco e mãos respiram **com a mesma declaração e o mesmo atraso**. É o
+   que mantém a arma colada no punho: qualquer diferença aqui apareceria
+   como a lâmina descolando da mão uma vez por segundo. O atraso é herdado
+   da `.pilha`, o pai comum, justamente pra não haver dois valores. */
+.tronco,
+.maos {
   animation: respirar 1.4s steps(2, jump-none) infinite alternate;
   /* Negativo: a animação já começa adiantada em vez de esperar pra
      arrancar. Numa grade de bonecos, esperar deixaria todos parados no
      primeiro segundo — que é justamente quando alguém está olhando. */
   animation-delay: calc(-1 * var(--atraso-da-respiracao, 0ms));
+}
+
+/* ---------- o golpe ----------
+ *
+ * A arma gira em torno do punho e volta. **Não é arte de quadros** — é a
+ * camada que já existe, girada; o Pixi continua reservado pro dia em que
+ * houver poses desenhadas.
+ *
+ * **O pivô foi medido, não chutado.** As três armas desenhadas (espada,
+ * cajado, adaga) apontam pra direções diferentes, mas todas passam pelo
+ * cabo dentro da mão. Cruzando as máscaras opacas das três sobram 5 pixels,
+ * em x 19..20 e y 42..45 de 64 — o punho. O centroide dá 31,4% / 68,6%, e
+ * é daí que a arma gira. Pivô no centro da caixa faria a lâmina sair da
+ * mão no meio do movimento.
+ *
+ * Três poses e cortes secos, como a piscada de dano logo abaixo — é o
+ * mesmo recurso e pelo mesmo motivo: golpe de sprite nunca teve
+ * interpolação, e `steps()` sobre patamares já discretos só atrapalha.
+ *
+ * **A direção sai da mesma medição.** A lâmina sai do punho pra cima e pra
+ * esquerda (a espada ocupa x 6..23, y 31..47, e o punho fica em 19,6/43,4),
+ * ou seja aponta pras 10h30. Girar pouco no sentido horário só a levanta
+ * até a vertical, o que lê como comemoração e não como golpe; passar dela
+ * é que faz a arma **atravessar o corpo** da esquerda pra direita, que é o
+ * corte que se reconhece. Daí recuar 25° e cortar 65°: recua pra fora,
+ * varre a frente, volta.
+ *
+ * Ângulos em variável porque são gosto, não medida: dá pra afinar sem
+ * mexer na animação. */
+@keyframes golpear {
+  0%,
+  14% {
+    transform: rotate(var(--recuo-do-golpe, -25deg));
+  }
+  15%,
+  48% {
+    transform: rotate(var(--alcance-do-golpe, 65deg));
+  }
+  49%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.maos[data-atacando] .camada[data-arma] {
+  transform-origin: 31.4% 68.6%;
+  animation: golpear 0.38s linear;
 }
 
 /* ---------- piscada de dano ----------
@@ -147,7 +206,9 @@
    acontecendo com o personagem e nenhum deles se mexe. */
 @media (prefers-reduced-motion: reduce) {
   .tronco,
-  .pilha[data-ferido] {
+  .maos,
+  .pilha[data-ferido],
+  .maos[data-atacando] .camada[data-arma] {
     animation: none;
   }
 }
