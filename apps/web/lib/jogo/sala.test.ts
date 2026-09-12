@@ -210,7 +210,9 @@ describe('interagir na masmorra', () => {
     expect(estado.map).toBe(naSala.map);
     expect(tela?.tipo).toBe('combate');
     if (tela?.tipo !== 'combate') return;
-    expect(tela.combate.fase).toBe('encontro');
+    // Já em `combate`, e não numa fase de confirmação: a pergunta "deseja
+    // entrar?" da porta é a única decisão, e ela já foi tomada aqui.
+    expect(tela.combate.fase).toBe('combate');
   });
 
   it('o mímico já entra em combate junto com a revelação', () => {

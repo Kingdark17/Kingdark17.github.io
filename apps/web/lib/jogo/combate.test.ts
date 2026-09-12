@@ -70,15 +70,28 @@ function salaDepois(combate: Combate): DungeonCell {
 }
 
 function emCombate(estado: EstadoNaMasmorra): Combate {
-  return comecarCombate(iniciarEncontro(estado));
+  return iniciarEncontro(estado);
 }
 
 describe('iniciarEncontro', () => {
+  /**
+   * Entrar na sala já é entrar na luta. A tela "Fulano aparece! O que você
+   * faz? [Lutar] [Fugir]" foi tirada porque não decidia nada: a pergunta de
+   * entrar já é feita na porta, e Fugir continua dentro do combate.
+   */
+  it('a sala já abre em combate, sem tela de confirmação', () => {
+    expect(iniciarEncontro(comSalaDeMonstro()).fase).toBe('combate');
+  });
+
   it('anuncia a criatura pelo nome quando é uma só', () => {
     const combate = iniciarEncontro(comSalaDeMonstro());
 
-    expect(combate.fase).toBe('encontro');
-    expect(combate.log[0]).toContain('aparece! O que você faz?');
+    expect(combate.log[0]).toContain('aparece!');
+  });
+
+  /** Sem botões na tela, texto que pergunta "o que você faz?" vira mentira. */
+  it('a abertura não pergunta mais nada', () => {
+    expect(iniciarEncontro(comSalaDeMonstro()).log.join(' ')).not.toContain('O que você faz');
   });
 
   it('anuncia o tamanho do grupo quando é mais de uma', () => {
@@ -86,9 +99,21 @@ describe('iniciarEncontro', () => {
 
     expect(combate.log[0]).toContain('grupo de 2 criaturas');
   });
+
+  /**
+   * `comecarCombate` declara vitória quando não há criatura. Passar por ele
+   * aqui faria a sala vazia abrir com "Continuar", como se algo tivesse
+   * sido ganho — a tela tem a própria frase pra isso.
+   */
+  it('sala sem criatura não conta como vitória', () => {
+    const vazia = iniciarEncontro(comSalaDeMonstro({ monsters: [] }));
+
+    expect(vazia.fase).toBe('combate');
+    expect(vazia.log[0]).toContain('vazia');
+  });
 });
 
-describe('comecarCombate', () => {
+describe('o preparo da luta', () => {
   it('zera os buffs herdados do combate anterior', () => {
     const combate = emCombate(comSalaDeMonstro({}, { buffs: { critNext: true, forcaTurns: 3 } }));
 
@@ -101,7 +126,8 @@ describe('comecarCombate', () => {
 
     expect(combate.estado.hero.buffs?.esquivaAmount).toBe(20);
     expect(combate.estado.hero.npcBlessing).toBeUndefined();
-    expect(combate.log[0]).toContain('bênção');
+    // `join`, e não `log[0]`: a abertura da sala agora vem antes da bênção.
+    expect(combate.log.join(' ')).toContain('bênção');
   });
 
   it('bênção de vários combates só perde uma carga', () => {
@@ -202,11 +228,19 @@ describe('fugir', () => {
     expect(monstroAtual(combate.estado)?.hp).toBe(40);
   });
 
-  it('falhar antes do primeiro golpe joga o jogador direto na luta', () => {
-    const combate = fugir(iniciarEncontro(comSalaDeMonstro({ monsters: [monstro({ speed: 99 })] })), 1, NUNCA);
+  /**
+   * A regra virou uma só. Com a tela de encontro havia uma exceção: falhar
+   * antes do primeiro golpe só começava a luta, sem a criatura revidar —
+   * uma tentativa de graça. Sem a tela, falhar custa o turno sempre.
+   */
+  it('falhar custa o turno, mesmo na primeira tentativa', () => {
+    const inicio = iniciarEncontro(comSalaDeMonstro({ monsters: [monstro({ speed: 99 })] }));
+    const combate = fugir(inicio, 1, NUNCA);
 
     expect(combate.fase).toBe('combate');
-    expect(combate.log.some((linha) => linha.includes('A fuga falha'))).toBe(true);
+    expect(combate.log.some((linha) => linha.includes('não conseguiu fugir'))).toBe(true);
+    // O turno foi gasto: `turnoDosOutros` escreve o que a criatura fez.
+    expect(combate.log.length).toBeGreaterThan(1);
   });
 });
 
@@ -278,15 +312,15 @@ describe('bônus de pet', () => {
     const poder = poderDeDano(estado);
 
     // `SEMPRE` faz o sorteio de 5% da coruja cair sempre dentro da chance.
-    const comCoruja = usarPoder(comecarCombate(iniciarEncontro(estado, 'owl')), poder, SEMPRE);
-    const semPet = usarPoder(comecarCombate(iniciarEncontro(estado)), poder, SEMPRE);
+    const comCoruja = usarPoder(iniciarEncontro(estado, 'owl'), poder, SEMPRE);
+    const semPet = usarPoder(iniciarEncontro(estado), poder, SEMPRE);
 
     expect(comCoruja.estado.hero.mp).toBe(estado.hero.mp);
     expect(semPet.estado.hero.mp).toBeLessThan(estado.hero.mp);
   });
 
   it('o pet acompanha o combate inteiro, não só o primeiro golpe', () => {
-    const combate = comecarCombate(iniciarEncontro(comSalaDeMonstro(), 'admin_dragon'));
+    const combate = iniciarEncontro(comSalaDeMonstro(), 'admin_dragon');
 
     expect(atacar(combate, 10, 'normal', NUNCA).pet).toBe('admin_dragon');
   });
@@ -299,7 +333,7 @@ describe('bônus de pet', () => {
 describe('som e números flutuantes', () => {
   /** Criatura resistente: o teste é sobre o som do golpe, não sobre matá-la. */
   function lutaLonga() {
-    return comecarCombate(iniciarEncontro(comSalaDeMonstro({ monsters: [monstro({ hp: 900, maxHp: 900 })] })));
+    return iniciarEncontro(comSalaDeMonstro({ monsters: [monstro({ hp: 900, maxHp: 900 })] }));
   }
 
   it('acerto, crítico e erro têm som próprio', () => {
@@ -312,7 +346,7 @@ describe('som e números flutuantes', () => {
 
   it('vencer troca o som do golpe pelo da vitória', () => {
     // A criatura padrão tem 40 de vida e não sobrevive ao crítico.
-    expect(atacar(comecarCombate(iniciarEncontro(comSalaDeMonstro())), 20, 'normal', NUNCA).som).toBe('victory');
+    expect(atacar(iniciarEncontro(comSalaDeMonstro()), 20, 'normal', NUNCA).som).toBe('victory');
   });
 
   it('o golpe vira número na tela, e o erro não', () => {

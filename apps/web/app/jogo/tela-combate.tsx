@@ -27,7 +27,7 @@ import { useRef, useState } from 'react';
 
 import { heroPowers, powerManaCost, type CombatMonsterView, type Power } from '@rpg-legend/shared';
 
-import { atacar, comecarCombate, fugir, inimigosRestantes, monstroAtual, usarPoder, type Combate, type Flutuante } from '@/lib/jogo/combate';
+import { atacar, fugir, inimigosRestantes, monstroAtual, usarPoder, type Combate, type Flutuante } from '@/lib/jogo/combate';
 import { tocar } from '@/lib/som/efeitos';
 import styles from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
@@ -211,19 +211,6 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
         <div className={styles.escolhas}>
           <button type="button" className={`${styles.botao} ${styles.botaoPrincipal}`} onClick={() => onEncerrar(combate)}>
             Continuar
-          </button>
-        </div>
-      ) : combate.fase === 'encontro' ? (
-        <div className={styles.escolhas}>
-          <button
-            type="button"
-            className={`${styles.botao} ${styles.botaoPrincipal}`}
-            onClick={() => avancar(comecarCombate(combate))}
-          >
-            Lutar
-          </button>
-          <button type="button" className={styles.botao} onClick={() => avancar(fugir(combate, rolarD20()))}>
-            Fugir
           </button>
         </div>
       ) : (

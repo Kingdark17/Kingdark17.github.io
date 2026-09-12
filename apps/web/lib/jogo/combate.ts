@@ -63,11 +63,20 @@ import {
 } from './estado';
 
 /**
- * `encontro` é a pergunta "lutar ou fugir" antes do primeiro golpe;
- * `combate` é a luta em si. Os três finais dizem à tela o que mostrar e
- * que o combate acabou.
+ * `combate` é a luta; os três finais dizem à tela o que mostrar e que ela
+ * acabou.
+ *
+ * **Havia uma fase `encontro` antes desta, e ela foi tirada.** Era a tela
+ * "Fulano aparece! O que você faz? [Lutar] [Fugir]", e o Breno apontou que
+ * ela não decidia nada: a pergunta de entrar na sala já tinha sido feita na
+ * porta, e "Fugir" continua existindo dentro da luta. Custava um clique por
+ * combate pra repetir uma escolha já feita.
+ *
+ * O que se perdeu junto: naquela fase, falhar a fuga só começava a luta,
+ * sem a criatura revidar — era uma tentativa de graça. Agora vale a regra
+ * única, a mesma do resto do combate: falhar custa o turno.
  */
-export type FaseDoCombate = 'encontro' | 'combate' | 'vitoria' | 'fuga' | 'derrota';
+export type FaseDoCombate = 'combate' | 'vitoria' | 'fuga' | 'derrota';
 
 export interface Combate {
   estado: EstadoDoJogo;
@@ -163,16 +172,32 @@ function despirView(monstro: CombatMonster): CombatMonster {
 
 // ---------- entrada e saída ----------
 
+/**
+ * Entrar na sala **já é entrar na luta** — ver `FaseDoCombate`.
+ *
+ * A abertura perdeu o "O que você faz?" junto com os botões: sem pergunta
+ * na tela, o texto que pergunta vira mentira. Quem diz o que fazer agora é
+ * a linha que `comecarCombate` escreve logo abaixo ("Ataque, use um poder
+ * ou tente fugir"), e ela já existia.
+ */
 export function iniciarEncontro(estado: EstadoNaMasmorra, pet: PetId | null = null): Combate {
   const monstro = monstroAtual(estado);
   const restantes = inimigosRestantes(estado);
   const abertura = !monstro
     ? 'A sala está vazia.'
     : restantes > 1
-      ? `Um grupo de ${restantes} criaturas aparece! O que você faz?`
-      : `${monstro.name} aparece! O que você faz?`;
+      ? `Um grupo de ${restantes} criaturas aparece!`
+      : `${monstro.name} aparece!`;
 
-  return { estado, fase: 'encontro', log: [abertura], dado: null, loot: null, pet, som: null, flutuantes: [] };
+  const aberto: Combate = { estado, fase: 'combate', log: [abertura], dado: null, loot: null, pet, som: null, flutuantes: [] };
+
+  // Sala sem criatura não vira vitória: `comecarCombate` a declararia
+  // ganha, e a tela mostraria "Continuar" no lugar de "A sala está vazia".
+  // O combate nunca começou — não há o que celebrar.
+  if (!monstro) return aberto;
+
+  const comecado = comecarCombate(aberto);
+  return { ...comecado, log: [abertura, ...comecado.log] };
 }
 
 /**
@@ -297,8 +322,12 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
 }
 
 /**
- * Fugir. No encontro (antes do primeiro golpe) falhar joga o jogador
- * direto na luta; já dentro do combate, falhar custa o turno.
+ * Fugir. Falhar **custa o turno**: a equipe age e a criatura revida.
+ *
+ * Antes havia uma exceção pra primeira tentativa, feita da tela de
+ * encontro: ali falhar só começava a luta, de graça. A tela saiu (ver
+ * `FaseDoCombate`) e a exceção com ela — a saída grátis de uma sala de
+ * monstro continua existindo, mas na porta, no "deseja entrar?".
  */
 export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Combate {
   const estado = exigirMasmorra(combate);
@@ -320,11 +349,6 @@ export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Co
   }
 
   const log = [`Você rolou ${roll}${comBonus} e não conseguiu fugir.`];
-
-  if (combate.fase === 'encontro') {
-    const comecado = comecarCombate({ ...combate, log: [] });
-    return { ...comecado, dado: roll, log: [...log, 'A fuga falha! A criatura parte para cima de você.', ...comecado.log] };
-  }
 
   return turnoDosOutros({ ...combate, dado: roll, log }, rng);
 }
