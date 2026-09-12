@@ -44,12 +44,14 @@ describe('montarCamadas', () => {
    *
    * Draconato e Celestial *parecem* candidatos ao `SEM_CABELO` — um tem
    * chifres, o outro auréola —, e a tentação de acrescentá-los é real. Mas
-   * a arte diz o contrário: contando os pixels do topo da cabeça, o
-   * draconato tem o perfil do elfo (10 escuros / 30 claros) e o celestial
-   * tem exatamente o do meio-elfo (4 / 36); nenhum se parece com a caveira
-   * lisa do morto-vivo (0 / 48) nem com o pelo do felino (32 / 26). O
-   * Breno desenhou as duas cabeças com a calota parcial que espera a
-   * camada. Ver a tabela em `SEM_CABELO`.
+   * a arte diz o contrário: o Breno desenhou as duas cabeças com a calota
+   * parcial que espera a camada, e nenhuma das duas resolve a cabeça
+   * sozinha como o pelo do felino ou a caveira do morto-vivo.
+   *
+   * Este comentário já citou uma contagem de pixels claros e escuros do
+   * topo como prova. **Ela não provava nada** — mede tinta, não forma; ver
+   * `SEM_CABELO`, onde o orc em duas cores derrubou o método. A decisão
+   * segue a mesma, o argumento é que estava errado.
    */
   it.each(['draconato', 'celestial'])('%s leva cabelo — a cabeça foi desenhada esperando por ele', (raca) => {
     expect(posicao(montarCamadas({ raca }), 'cabelo/')).toBeGreaterThan(-1);
@@ -101,10 +103,23 @@ describe('montarCamadas', () => {
      * antes de tudo e este teste prende isso.
      */
     it('traço sem corpo não desenha nada', () => {
-      for (const raca of ['anao', 'orc', 'goblin', 'fada']) {
+      // Encolhe conforme a arte chega: o orc e o goblin saíram daqui quando
+      // os corpos deles entraram. Sobram anão e fada.
+      for (const raca of ['anao', 'fada']) {
         expect(CORPOS.has(raca)).toBe(false);
         expect(montarCamadas({ raca })).toEqual([]);
       }
+    });
+
+    /**
+     * Cabeça humanoide comum espera a camada de cabelo — só pelo denso
+     * (felino) e caveira lisa (morto_vivo) resolvem a cabeça sozinhos. Ver
+     * `SEM_CABELO`, e por que a contagem de pixels claros/escuros que já
+     * decidiu isso não serve.
+     */
+    it.each(['goblin', 'orc'])('o %s leva cabelo, como as outras cabeças humanoides', (raca) => {
+      expect(CORPOS.has(raca)).toBe(true);
+      expect(montarCamadas({ raca })).toContain('/img/paperdoll/cabelo/masculino.png');
     });
 
     /**

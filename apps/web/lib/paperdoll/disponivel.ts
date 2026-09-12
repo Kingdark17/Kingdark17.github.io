@@ -13,8 +13,8 @@
  * silêncio.
  */
 
-/** Raças com corpo desenhado. (8 em `public/img/paperdoll/corpo/`) */
-export const CORPOS: ReadonlySet<string> = new Set(['celestial', 'draconato', 'elfo', 'elfo_negro', 'felino', 'humano', 'meio_elfo', 'morto_vivo']);
+/** Raças com corpo desenhado. (10 em `public/img/paperdoll/corpo/`) */
+export const CORPOS: ReadonlySet<string> = new Set(['celestial', 'draconato', 'elfo', 'elfo_negro', 'felino', 'goblin', 'humano', 'meio_elfo', 'morto_vivo', 'orc']);
 
 /** Armas com camada — o nome do arquivo é o `templateId`. (3 em `public/img/paperdoll/arma/`) */
 export const ARMAS: ReadonlySet<string> = new Set(['adaga', 'cajado', 'espada']);

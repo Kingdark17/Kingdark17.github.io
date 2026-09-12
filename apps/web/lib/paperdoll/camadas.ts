@@ -70,20 +70,17 @@ export const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([
  * **O critério não é o gosto de quem lê o código, é como a arte foi
  * desenhada.** Quem leva cabelo tem uma calota parcial no topo da cabeça,
  * esperando a camada; quem não leva tem a cabeça inteira resolvida.
- * Contando os pixels do topo (linhas 6–10) dá pra separar os dois grupos:
  *
- * | corpo | topo escuro | topo claro | |
- * |---|---|---|---|
- * | elfo | 10 | 26 | leva |
- * | meio_elfo | 4 | 36 | leva |
- * | draconato | 10 | 30 | leva |
- * | celestial | 4 | 36 | leva |
- * | felino | 32 | 26 | **não** — pelo denso |
- * | morto_vivo | 0 | 48 | **não** — caveira lisa |
+ * Já se contou os pixels claros e escuros do topo (linhas 6–10) pra separar
+ * os dois grupos, e **essa conta não presta** — ela mede tinta, não
+ * anatomia. Quem revelou isso foi o orc: o Breno mandou o mesmo desenho em
+ * duas cores, e o verde e o cinza caíram em grupos diferentes sendo pixel
+ * por pixel a mesma silhueta. O número servia pro draconato por sorte, e
+ * teria mentido aqui.
  *
- * Foi assim que o draconato e o celestial entraram sem entrar aqui: os
- * perfis deles são os do elfo e os do meio-elfo, e nenhum se parece com os
- * dois de baixo. Raça nova se decide medindo, não chutando.
+ * O que decide é a **forma**: pelo denso (felino) e caveira lisa
+ * (morto_vivo) resolvem a cabeça sozinhos; cabeça humanoide comum espera a
+ * camada. Goblin e orc são cabeça humanoide comum, então levam.
  */
 const SEM_CABELO: ReadonlySet<string> = new Set(['felino', 'morto_vivo']);
 
