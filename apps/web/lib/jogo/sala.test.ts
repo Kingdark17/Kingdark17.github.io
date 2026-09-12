@@ -60,6 +60,16 @@ describe('precisaConfirmar', () => {
     expect(precisaConfirmar(sala('monster', { beaten: true }))).toBe(false);
     expect(precisaConfirmar(sala('treasure', { collected: false }))).toBe(true);
   });
+
+  /**
+   * O evento era o único que ficava de fora da regra acima, e o preço era
+   * cobrado duas vezes: perguntava "deseja investigar?" e, no sim, abria a
+   * tela inteira do altar pra dizer que já tinha sido resolvido.
+   */
+  it('evento já resolvido não pergunta; o que ainda não foi, pergunta', () => {
+    expect(precisaConfirmar(sala('event', { resolved: true }))).toBe(false);
+    expect(precisaConfirmar(sala('event', { resolved: false }))).toBe(true);
+  });
 });
 
 describe('atravessaSemInteragir', () => {
@@ -219,5 +229,36 @@ describe('interagir na masmorra', () => {
     expect(tela?.tipo).toBe('evento');
     if (tela?.tipo !== 'evento') return;
     expect(tela.evento.resolvido).toBe(false);
+  });
+
+  /**
+   * Passar de novo por um evento já resolvido não abre tela nenhuma — vira
+   * aviso, igual ao baú vazio e à sala de monstro já batida. A tela que
+   * existia ali só tinha um botão "Continuar" e a frase de que não havia
+   * nada: dois cliques cobrados por nada.
+   */
+  it('evento já resolvido vira aviso, e não tela', () => {
+    const resolvido = comSalaAtual(emCimaDe(masmorraNoAndar(2), 'event'), { resolved: true });
+
+    const { tela, aviso } = interagir(resolvido);
+
+    expect(tela).toBeNull();
+    expect(aviso?.texto).toContain('já resolveu');
+  });
+
+  /**
+   * O título é o do próprio evento, e não um "Sala Vazia" genérico: quem
+   * passa de novo pelo Altar Antigo reconhece qual sala era, que é a única
+   * informação que sobrou pra dar.
+   */
+  it('o aviso mantém o nome do evento que estava ali', () => {
+    const masmorra = emCimaDe(masmorraNoAndar(2), 'event');
+    const original = interagir(masmorra);
+    if (original.tela?.tipo !== 'evento') throw new Error('esperava a tela do evento');
+
+    const { aviso } = interagir(comSalaAtual(masmorra, { resolved: true }));
+
+    expect(aviso?.titulo).toBe(original.tela.evento.template.title);
+    expect(aviso?.icone).toBe(original.tela.evento.template.icon);
   });
 });

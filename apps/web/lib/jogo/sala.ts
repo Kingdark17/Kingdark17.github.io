@@ -121,9 +121,19 @@ const PEDEM_CONFIRMACAO = new Set([
 /** Dizer "não" nestas salas atravessa em vez de recuar — senão a saída da masmorra viraria um muro no caminho da escada. */
 const ATRAVESSAM_SEM_INTERAGIR = new Set(['npc', 'shop', 'blacksmith', 'tavern', 'questboard', 'treasure', 'event', 'exit']);
 
+/**
+ * Sala já resolvida não pergunta nada: não há o que decidir.
+ *
+ * O evento estava de fora desta lista e era o único — baú coletado e
+ * monstro batido já dispensavam a pergunta desde sempre. O preço era
+ * cobrado duas vezes no mesmo passo: perguntava "deseja investigar?" e,
+ * no sim, abria a tela inteira do altar só pra dizer que já tinha sido
+ * resolvido.
+ */
 export function precisaConfirmar(celula: CelulaDoMapa): boolean {
   if (celula.type === 'treasure' && celula.collected) return false;
   if ((celula.type === 'monster' || celula.type === 'boss') && celula.beaten) return false;
+  if (celula.type === 'event' && celula.resolved) return false;
   return PEDEM_CONFIRMACAO.has(celula.type);
 }
 
@@ -224,7 +234,25 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): Reso
       return abrirConversa(estado);
     case 'event': {
       const evento = abrirEvento(estado);
-      return evento ? { estado, aviso: null, tela: { tipo: 'evento', evento } } : { estado, aviso: null, tela: null };
+      if (!evento) return { estado, aviso: null, tela: null };
+
+      // Já resolvido vira aviso, e não tela — o mesmo que o baú vazio e a
+      // sala de monstro já batida fazem logo acima. A tela só tinha um
+      // botão "Continuar" e uma frase dizendo que não havia nada; abrir
+      // uma tela cheia pra isso é cobrar dois cliques por nada.
+      //
+      // O ícone e o título saem do próprio evento em vez de um texto
+      // genérico: quem passa de novo pelo Altar Antigo reconhece qual sala
+      // era, que é a informação que sobrou pra dar.
+      if (evento.resolvido) {
+        return {
+          estado,
+          aviso: aviso(evento.template.icon, evento.template.title, 'Você já resolveu o que havia aqui.'),
+          tela: null,
+        };
+      }
+
+      return { estado, aviso: null, tela: { tipo: 'evento', evento } };
     }
     case 'start':
       return { estado, aviso: aviso('🚀', 'Ponto de Partida', 'Foi aqui que você chegou neste andar.'), tela: null };
