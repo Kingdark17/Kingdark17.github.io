@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ARMADURAS, ARMAS, CORPOS, ehArma, ehSegurada, montarCamadas } from './camadas';
+import { ARMADURAS, ARMAS, CORPOS, ehSegurada, maoDaCamada, montarCamadas } from './camadas';
 
 /** Onde a peça aparece na pilha, ou -1. Trás para frente. */
 function posicao(camadas: string[], trecho: string): number {
@@ -177,24 +177,42 @@ describe('o que está na mão', () => {
   });
 
   /**
-   * Só a mão principal gira. O escudo é defesa: vê-lo girando junto faria
-   * o boneco parecer que bate com os dois braços ao mesmo tempo.
+   * O escudo é defesa e fica parado; a adaga da mão secundária é arma e
+   * gira. A checagem antiga olhava só a pasta, então prendia as duas
+   * juntas — era o bug que o Breno abriu como "arma na segunda mão não tem
+   * animação de ataque".
    */
-  it('só a mão principal gira', () => {
-    expect(vestido.filter(ehArma)).toEqual(['/img/paperdoll/arma/espada.png']);
-    expect(ehArma('/img/paperdoll/secundaria/escudo.png')).toBe(false);
+  it('cada mão sabe se é arma, e o escudo não é', () => {
+    expect(maoDaCamada('/img/paperdoll/arma/espada.png')).toBe('principal');
+    expect(maoDaCamada('/img/paperdoll/secundaria/adaga.png')).toBe('secundaria');
+    expect(maoDaCamada('/img/paperdoll/secundaria/escudo.png')).toBeNull();
+  });
+
+  /** Peça vestida não gira, por mais que esteja na pilha. */
+  it('o que não está na mão não gira', () => {
+    for (const camada of vestido.filter((c) => !ehSegurada(c))) {
+      expect(maoDaCamada(camada)).toBeNull();
+    }
   });
 
   /**
-   * `secundaria/adaga.png` e `arma/adaga.png` existem os dois. Um prefixo
-   * frouxo — procurar só por "adaga", ou por "arma" em qualquer posição —
-   * confundiria a adaga de mão secundária com a principal, e o escudo
-   * começaria a girar junto.
+   * `secundaria/adaga.png` e `arma/adaga.png` existem os dois e são a mesma
+   * arte. Quem decide o pivô é a **pasta**, porque os punhos são pontos
+   * diferentes — 31,4%/68,6% contra 72,6%/70,1%. Trocar os dois faria a
+   * lâmina girar em torno do braço errado.
    */
-  it('a adaga na mão secundária não é a arma que gira', () => {
-    expect(ehSegurada('/img/paperdoll/secundaria/adaga.png')).toBe(true);
-    expect(ehArma('/img/paperdoll/secundaria/adaga.png')).toBe(false);
-    expect(ehArma('/img/paperdoll/arma/adaga.png')).toBe(true);
+  it('a mesma adaga gira em torno de punhos diferentes em cada mão', () => {
+    expect(maoDaCamada('/img/paperdoll/arma/adaga.png')).toBe('principal');
+    expect(maoDaCamada('/img/paperdoll/secundaria/adaga.png')).toBe('secundaria');
+  });
+
+  /**
+   * Quem responde é o catálogo, não o nome do arquivo: o dia em que um item
+   * novo puder ir pra mão secundária, ele acerta sozinho. Um id que não
+   * existe no catálogo não é arma — e não pode explodir.
+   */
+  it('id desconhecido na mão secundária não gira nem quebra', () => {
+    expect(maoDaCamada('/img/paperdoll/secundaria/coisa_que_nao_existe.png')).toBeNull();
   });
 
   it('sem nada na mão, não há camada segurada', () => {

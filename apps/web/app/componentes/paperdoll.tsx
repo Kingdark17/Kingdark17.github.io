@@ -17,7 +17,7 @@
  * propriedade e viram atributo de dado; **toda** a animação está no CSS.
  */
 
-import { ehArma, ehSegurada, montarCamadas, type Vestimenta } from '@/lib/paperdoll/camadas';
+import { ehSegurada, maoDaCamada, montarCamadas, type Vestimenta } from '@/lib/paperdoll/camadas';
 import { corDaAura, type SinaisVitais } from '@/lib/paperdoll/sinais';
 import styles from './paperdoll.module.css';
 
@@ -50,13 +50,14 @@ interface Props extends Vestimenta {
  */
 function empilhar(camadas: string[]) {
   return camadas.map((camada) => (
-    // `data-arma` só na mão principal: é ela que gira no golpe, e o CSS
-    // precisa alcançá-la sem depender de ser "a última", que é verdade hoje
+    // `data-arma` guarda **qual mão**, e não só "é arma": cada punho tem
+    // pivô e sentido próprios, e o CSS escolhe por esse valor. Assim a
+    // camada é alcançada sem depender de ser "a última", que é verdade hoje
     // e deixaria de ser no dia em que uma camada nova entrar depois.
     <img
       key={camada}
       className={styles.camada}
-      data-arma={ehArma(camada) ? '' : undefined}
+      data-arma={maoDaCamada(camada) ?? undefined}
       src={camada}
       alt=""
       width={64}
@@ -109,10 +110,6 @@ export function Paperdoll({
         <div
           className={styles.pilha}
           data-ferido={sinais.ferido ? '' : undefined}
-          // O atraso mora aqui, e não no tronco: as mãos respiram no mesmo
-          // compasso e precisam do mesmo valor. Variável de CSS herda, então
-          // declarar no pai comum é o que garante que os dois nunca
-          // dessincronizem — arma descolando do punho seria o sintoma.
           style={sinais.atraso ? ({ '--atraso-da-respiracao': `${sinais.atraso}ms` } as React.CSSProperties) : undefined}
         >
           {sinais.vivo ? (
@@ -130,12 +127,23 @@ export function Paperdoll({
                   Custa nó de DOM, não download: são as mesmas URLs, e o
                   navegador busca cada arte uma vez só. */}
               <div className={styles.pernas}>{empilhar(doCorpo)}</div>
-              <div className={styles.tronco}>{empilhar(doCorpo)}</div>
-              {/* As mãos: inteiras, por cima de tudo, respirando junto com o
-                  tronco. Ficam num invólucro próprio porque a arma gira e o
-                  tronco sobe — duas animações de `transform`, que num
-                  elemento só uma apagaria a outra. */}
-              {nasMaos.length > 0 && <div className={styles.maos}>{empilhar(nasMaos)}</div>}
+              {/* As mãos moram **dentro** do tronco, e não ao lado dele.
+                  Duas animações iguais em elementos irmãos não são a mesma
+                  animação: cada uma começa quando o seu elemento aparece, e
+                  `.maos` só aparece quando há algo na mão — equipar uma arma
+                  no meio da partida montava o invólucro depois, com a
+                  respiração fora de fase pra sempre. Era isso que o Breno
+                  via como arma descolando do punho.
+
+                  Aninhado, não há segunda animação: a mão herda o transform
+                  do tronco, que é o "mesmo referencial de tempo" que ele
+                  pediu — não por acerto de relógio, mas por não haver dois.
+                  O recorte da cintura vira `>` no CSS pra não alcançar o que
+                  está aqui dentro. */}
+              <div className={styles.tronco}>
+                {empilhar(doCorpo)}
+                {nasMaos.length > 0 && <div className={styles.maos}>{empilhar(nasMaos)}</div>}
+              </div>
             </div>
           ) : (
             // Parado, uma pilha só: sem animação o recorte não teria o que

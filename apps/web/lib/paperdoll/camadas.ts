@@ -24,6 +24,8 @@
  * como as duas listas divergirem em silêncio — e há teste conferindo.
  */
 
+import { templateById } from '@rpg-legend/shared';
+
 import { ARMADURAS, ARMAS, CORPOS, SECUNDARIAS } from './disponivel';
 
 export { ARMADURAS, ARMAS, CORPOS, SECUNDARIAS };
@@ -157,13 +159,31 @@ export function ehSegurada(camada: string): boolean {
   return camada.startsWith(`${RAIZ}/arma/`) || camada.startsWith(`${RAIZ}/secundaria/`);
 }
 
+export type MaoDaCamada = 'principal' | 'secundaria';
+
 /**
- * A camada da mão principal — a única que gira no golpe.
+ * Qual mão esta camada gira no golpe, ou `null` se ela não gira.
  *
- * O escudo fica parado de propósito: ele é defesa, e vê-lo girando junto
- * faria o boneco parecer que está batendo com os dois braços ao mesmo
- * tempo.
+ * As duas mãos têm punho próprio e sentido próprio — os valores estão em
+ * `paperdoll.module.css`, medidos. Por isso devolve **qual** mão em vez de
+ * um sim/não: com um booleano só, a arma da mão secundária giraria em
+ * torno do punho da principal e sairia voando pelo meio do corpo.
+ *
+ * **Quem decide é o catálogo, não o nome do arquivo.** A pasta
+ * `secundaria/` guarda adaga e escudo, e só o primeiro é arma. Perguntar
+ * `templateById(...)?.category` mantém a regra num lugar só: o dia em que
+ * um item novo puder ir pra mão secundária, ele acerta sozinho.
+ *
+ * O escudo fica parado porque não é arma — era essa a intenção desde o
+ * começo, mas a checagem antiga olhava só a pasta e prendia a adaga da mão
+ * secundária junto com ele.
  */
-export function ehArma(camada: string): boolean {
-  return camada.startsWith(`${RAIZ}/arma/`);
+export function maoDaCamada(camada: string): MaoDaCamada | null {
+  if (camada.startsWith(`${RAIZ}/arma/`)) return 'principal';
+
+  const prefixo = `${RAIZ}/secundaria/`;
+  if (!camada.startsWith(prefixo)) return null;
+
+  const id = camada.slice(prefixo.length).replace(/\.png$/, '');
+  return templateById(id)?.category === 'arma' ? 'secundaria' : null;
 }
