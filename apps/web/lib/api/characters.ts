@@ -13,6 +13,8 @@ export interface EquipDoResumo {
   arma: string | null;
   armadura: string | null;
   secundaria: string | null;
+  /** Opcional: save antigo e API antiga não mandam, e o card só não desenha. */
+  acessorio?: string | null;
 }
 
 export interface ResumoPersonagem {

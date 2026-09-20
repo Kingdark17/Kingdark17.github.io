@@ -34,6 +34,9 @@ export const ADICIONAIS_DE_TRONCO: ReadonlySet<string> = new Set(['robe']);
 /** Parte da armadura que se desenha por cima, na cabeça. Pelo `templateId`. (2 em `public/img/paperdoll/hadd/`) */
 export const ADICIONAIS_DE_CABECA: ReadonlySet<string> = new Set(['placas', 'robe']);
 
+/** Acessórios com camada — o nome do arquivo é o `templateId`. (2 em `public/img/paperdoll/acessorio/`) */
+export const ACESSORIOS: ReadonlySet<string> = new Set(['amuleto_sab', 'colar_forca']);
+
 /** O que a mão secundária pode segurar. (2 em `public/img/paperdoll/secundaria/`) */
 export const SECUNDARIAS: ReadonlySet<string> = new Set(['adaga', 'escudo']);
 

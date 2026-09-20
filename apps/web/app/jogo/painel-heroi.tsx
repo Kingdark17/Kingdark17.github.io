@@ -147,6 +147,7 @@ export function PainelHeroi({ hero, golpes = 0 }: Readonly<Props>) {
           arma={hero.equip.arma?.templateId}
           armadura={hero.equip.armadura?.templateId}
           secundaria={hero.equip.secundaria?.templateId}
+          acessorio={hero.equip.acessorio?.templateId}
           lado={132}
           sinais={{ ...sinaisDoHeroi(hero), ferido, atacando }}
           reserva={

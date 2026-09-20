@@ -60,6 +60,7 @@ export const PASTAS = [
   { pasta: 'ladd', constante: 'ADICIONAIS_DE_PERNA', doc: 'Parte da armadura que se desenha por cima, na perna. Pelo `templateId`.' },
   { pasta: 'badd', constante: 'ADICIONAIS_DE_TRONCO', doc: 'Parte da armadura que se desenha por cima, no tronco. Pelo `templateId`.' },
   { pasta: 'hadd', constante: 'ADICIONAIS_DE_CABECA', doc: 'Parte da armadura que se desenha por cima, na cabeça. Pelo `templateId`.' },
+  { pasta: 'acessorio', constante: 'ACESSORIOS', doc: 'Acessórios com camada — o nome do arquivo é o `templateId`.' },
   { pasta: 'secundaria', constante: 'SECUNDARIAS', doc: 'O que a mão secundária pode segurar.' },
   { pasta: 'cabelo', constante: 'CABELOS', doc: 'Cabelos disponíveis.' },
   { pasta: 'traco', constante: 'ARQUIVOS_DE_TRACO', doc: 'Arquivos de traço de raça, pelo nome — ver `TRACOS_DE_RACA`.' },

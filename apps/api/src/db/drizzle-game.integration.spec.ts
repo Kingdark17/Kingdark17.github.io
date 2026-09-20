@@ -111,6 +111,10 @@ describe('DrizzleSaveRepository', () => {
           arma: { templateId: 'cajado' },
           armadura: { templateId: null },
           secundaria: { templateId: null },
+          // Entrou quando o acessório ganhou camada de paperdoll: sem ele
+          // aqui, o card da lista desenharia um boneco diferente do painel
+          // do jogo pro mesmo personagem.
+          acessorio: { templateId: null },
         },
       },
       floor: 4,

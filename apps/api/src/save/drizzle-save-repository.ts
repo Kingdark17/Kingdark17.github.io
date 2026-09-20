@@ -52,7 +52,8 @@ const RESUMO_DO_HEROI = sql<unknown>`jsonb_build_object(
     'equip', jsonb_build_object(
       'arma', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,arma,templateId}'),
       'armadura', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,armadura,templateId}'),
-      'secundaria', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,secundaria,templateId}')
+      'secundaria', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,secundaria,templateId}'),
+      'acessorio', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,acessorio,templateId}')
     )
   ),
   'floor', ${cloudSaves.data} #> '{floor}'

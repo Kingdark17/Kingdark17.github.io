@@ -27,6 +27,7 @@
 import { templateById } from '@rpg-legend/shared';
 
 import {
+  ACESSORIOS,
   ADICIONAIS_DE_CABECA,
   ADICIONAIS_DE_PERNA,
   ADICIONAIS_DE_TRONCO,
@@ -37,16 +38,37 @@ import {
   SECUNDARIAS,
 } from './disponivel';
 
-export { ADICIONAIS_DE_CABECA, ADICIONAIS_DE_PERNA, ADICIONAIS_DE_TRONCO, ARMADURAS, ARMAS, CORPOS, COSTAS, SECUNDARIAS };
+export {
+  ACESSORIOS,
+  ADICIONAIS_DE_CABECA,
+  ADICIONAIS_DE_PERNA,
+  ADICIONAIS_DE_TRONCO,
+  ARMADURAS,
+  ARMAS,
+  CORPOS,
+  COSTAS,
+  SECUNDARIAS,
+};
 
 const RAIZ = '/img/paperdoll';
 
 /**
- * **Acessório equipável não tem camada.** Os quatro que existem —
- * `anel_som`, `amuleto_sab`, `bota_vento`, `colar_forca` — são anel,
- * amuleto, botas e colar: nada que mude a silhueta o bastante pra valer
- * uma camada. `montarCamadas` não os menciona de propósito, e é por isso
- * que a pasta de traços se chama `traco/` e não `acessorio/`.
+ * **Acessório tem camada — e este comentário já dizia o contrário.**
+ *
+ * A versão antiga argumentava que anel, amuleto, botas e colar não mudam a
+ * silhueta o bastante pra valer uma camada. Era uma decisão defensável
+ * enquanto não havia arte; o Breno pediu a camada no doc e desenhou os dois
+ * amuletos, o que encerra o argumento. É por isso que a pasta de traços se
+ * chama `traco/` e não `acessorio/` — o nome estava reservado, e agora é
+ * usado pelo que ele diz.
+ *
+ * **Por cima da armadura**, e isso foi decidido olhando: por baixo do
+ * peitoral de placas o amuleto some inteiro, e uma camada que não aparece
+ * pra quem veste armadura não serve de nada. Por cima ele lê como pingente
+ * sobre a couraça, que é o que se espera.
+ *
+ * Continua antes do traço da raça: o traço é o último de propósito (ver
+ * `TRACOS_DE_RACA`), e equipamento não passa na frente de quem a pessoa é.
  */
 
 /**
@@ -107,6 +129,8 @@ export interface Vestimenta {
   armadura?: string | null;
   /** `templateId` do que está no slot `secundaria`. */
   secundaria?: string | null;
+  /** `templateId` do que está no slot `acessorio`. */
+  acessorio?: string | null;
 }
 
 /**
@@ -124,7 +148,7 @@ export interface Vestimenta {
  * segurados na frente do corpo, e orelha atravessando escudo seria pior
  * que capacete cobrindo orelha.
  */
-export function montarCamadas({ raca, arma, armadura, secundaria }: Vestimenta): string[] {
+export function montarCamadas({ raca, arma, armadura, secundaria, acessorio }: Vestimenta): string[] {
   if (!raca || !CORPOS.has(raca)) return [];
 
   const camadas: string[] = [];
@@ -154,6 +178,10 @@ export function montarCamadas({ raca, arma, armadura, secundaria }: Vestimenta):
     if (ADICIONAIS_DE_TRONCO.has(armadura)) camadas.push(`${RAIZ}/badd/${armadura}.png`);
     if (ADICIONAIS_DE_CABECA.has(armadura)) camadas.push(`${RAIZ}/hadd/${armadura}.png`);
   }
+
+  // O acessório vem por cima da armadura — ver o comentário logo acima de
+  // `TRACOS_DE_RACA`: por baixo do peitoral ele some inteiro.
+  if (acessorio && ACESSORIOS.has(acessorio)) camadas.push(`${RAIZ}/acessorio/${acessorio}.png`);
 
   // O traço da raça vem **depois de toda a armadura**, adicionais
   // inclusive. É o ponto dele: sobreviver à peça. Pôr o `hadd` por cima

@@ -19,6 +19,13 @@ export interface SummaryEquip {
   arma: string | null;
   armadura: string | null;
   secundaria: string | null;
+  /**
+   * Acessório ganhou camada de paperdoll depois dos outros três. Sem ele
+   * aqui, o card da lista desenharia um boneco **diferente** do painel do
+   * jogo pro mesmo personagem — o amuleto aparece lá dentro e some na
+   * lista, sem nada explicando.
+   */
+  acessorio: string | null;
 }
 
 export interface CharacterSummary {
@@ -80,6 +87,7 @@ function heroFieldsOf(data: unknown): Omit<CharacterSummary, 'slot' | 'updatedAt
       arma: templateDoSlot(hero.equip, 'arma'),
       armadura: templateDoSlot(hero.equip, 'armadura'),
       secundaria: templateDoSlot(hero.equip, 'secundaria'),
+      acessorio: templateDoSlot(hero.equip, 'acessorio'),
     },
   };
 }

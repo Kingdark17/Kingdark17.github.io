@@ -220,6 +220,31 @@ describe('as partes da armadura', () => {
   });
 
   /**
+   * O acessório vai **por cima** da armadura, e isso foi decidido olhando
+   * a tela: por baixo do peitoral de placas o amuleto some inteiro, e uma
+   * camada que não aparece pra quem veste armadura não serve de nada.
+   */
+  it('o acessório fica por cima da armadura inteira', () => {
+    const comTudo = montarCamadas({ raca: 'humano', armadura: 'placas', acessorio: 'amuleto_sab' });
+
+    expect(comTudo).toContain('/img/paperdoll/acessorio/amuleto_sab.png');
+    expect(posicao(comTudo, 'armadura/placas')).toBeLessThan(posicao(comTudo, 'acessorio/'));
+    expect(posicao(comTudo, 'hadd/placas')).toBeLessThan(posicao(comTudo, 'acessorio/'));
+  });
+
+  /** Mas nunca na frente do traço: equipamento não passa na frente de quem a pessoa é. */
+  it('o traço da raça continua por cima do acessório', () => {
+    const felino = montarCamadas({ raca: 'felino', acessorio: 'amuleto_sab' });
+
+    expect(posicao(felino, 'acessorio/')).toBeLessThan(posicao(felino, 'orelhas-de-gato'));
+  });
+
+  /** Acessório sem arte — anel e botas ainda não têm — não vira 404. */
+  it('acessório sem camada desenhada não entra', () => {
+    expect(montarCamadas({ raca: 'humano', acessorio: 'anel_som' }).some((c) => c.includes('/acessorio/'))).toBe(false);
+  });
+
+  /**
    * Asa e cauda saem das costas: desenhá-las depois do corpo faria a asa
    * passar por cima do peito. Ainda não há arte — o que este teste prende é
    * a **guarda**, pra que a camada não apareça antes do arquivo existir.
