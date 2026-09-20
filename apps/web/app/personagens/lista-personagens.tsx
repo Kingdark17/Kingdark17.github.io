@@ -101,6 +101,7 @@ export function ListaPersonagens() {
                   armadura={personagem.equip?.armadura}
                   elmo={personagem.equip?.elmo}
                   calca={personagem.equip?.calca}
+                  botas={personagem.equip?.botas}
                   secundaria={personagem.equip?.secundaria}
                   acessorio={personagem.equip?.acessorio}
                   cabelo={personagem.hair}

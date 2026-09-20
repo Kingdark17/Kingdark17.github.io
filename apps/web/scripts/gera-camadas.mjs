@@ -60,6 +60,7 @@ export const PASTAS = [
   { pasta: 'ladd', constante: 'ADICIONAIS_DE_PERNA', doc: 'Parte da armadura que se desenha por cima, na perna. Pelo `templateId`.' },
   { pasta: 'badd', constante: 'ADICIONAIS_DE_TRONCO', doc: 'Parte da armadura que se desenha por cima, no tronco. Pelo `templateId`.' },
   { pasta: 'hadd', constante: 'ADICIONAIS_DE_CABECA', doc: 'Parte da armadura que se desenha por cima, na cabeça. Pelo `templateId`.' },
+  { pasta: 'botas', constante: 'BOTAS', doc: 'Calçado com camada — o nome do arquivo é o `templateId`.' },
   { pasta: 'acessorio', constante: 'ACESSORIOS', doc: 'Acessórios com camada — o nome do arquivo é o `templateId`.' },
   { pasta: 'secundaria', constante: 'SECUNDARIAS', doc: 'O que a mão secundária pode segurar.' },
   { pasta: 'cabelo', constante: 'CABELOS', doc: 'Cabelos disponíveis.' },
@@ -119,23 +120,54 @@ ${blocos.join('\n\n')}
 // é o teste que funciona nas duas, e mantém o módulo importável pelo teste
 // sem escrever arquivo nenhum.
 /**
+ * Em que lista cada slot procura a sua arte — o mesmo pareamento que
+ * `montarCamadas` faz na hora de vestir.
+ *
+ * Existe porque **slot e pasta deixaram de ser a mesma palavra**: elmo,
+ * perneira e peitoral são todos `category: 'armadura'` no catálogo, e
+ * desenham em `hadd/`, `ladd/` e `armadura/`. Sem este mapa a conta abaixo
+ * procurava os três em `armadura/` e dizia que faltavam — quatro peças
+ * dadas como não desenhadas no dia seguinte ao de elas entrarem.
+ */
+const LISTA_DO_SLOT = {
+  arma: 'ARMAS',
+  secundaria: 'SECUNDARIAS',
+  armadura: 'ARMADURAS',
+  elmo: 'ADICIONAIS_DE_CABECA',
+  calca: 'ADICIONAIS_DE_PERNA',
+  botas: 'BOTAS',
+  acessorio: 'ACESSORIOS',
+};
+
+/**
  * O que a engine conhece e o disco ainda não tem.
  *
  * Isto já foi comentário no código (`Faltam anao, orc, ...`) e envelheceu
  * calado — o de armas dizia quatro quando eram seis, e ninguém lê um
  * comentário desses pra descobrir que está errado, só pra planejar o
  * trabalho. Agora é uma conta contra o catálogo, feita na hora.
+ *
+ * A pergunta é **por slot, não por categoria**: o que decide onde a peça
+ * desenha é `slotForTemplate`, que é o mesmo que o jogo chama pra equipar.
+ *
+ * `secundaria` só lista quem **declara** o slot (hoje, o escudo). Arma de
+ * uma mão pode ir pra mão secundária sem declarar nada, e pedir sprite de
+ * canhoto pra todas encheria o relatório de trabalho que ninguém pediu.
  */
 async function oQueFalta(inventario) {
-  const { RACES, TEMPLATES } = await import('@rpg-legend/shared');
+  const { RACES, TEMPLATES, isEquippable, slotForTemplate } = await import('@rpg-legend/shared');
 
-  const armas = TEMPLATES.filter((t) => t.category === 'arma').map((t) => t.id);
-  const armaduras = TEMPLATES.filter((t) => t.category === 'armadura' && t.id !== 'escudo').map((t) => t.id);
+  const faltamPorSlot = new Map(Object.keys(LISTA_DO_SLOT).map((slot) => [slot, []]));
+  for (const template of TEMPLATES) {
+    if (!isEquippable(template.category)) continue;
+    const slot = slotForTemplate(template);
+    const lista = inventario[LISTA_DO_SLOT[slot]];
+    if (lista && !lista.has(template.id)) faltamPorSlot.get(slot).push(template.id);
+  }
 
   return [
     { o_que: 'corpo', faltam: RACES.map((r) => r.id).filter((id) => !inventario.CORPOS.has(id)) },
-    { o_que: 'arma', faltam: armas.filter((id) => !inventario.ARMAS.has(id)) },
-    { o_que: 'armadura', faltam: armaduras.filter((id) => !inventario.ARMADURAS.has(id)) },
+    ...[...faltamPorSlot].map(([slot, faltam]) => ({ o_que: slot, faltam })),
   ];
 }
 

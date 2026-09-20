@@ -40,10 +40,12 @@ const HISTORY_THROTTLE_MS = 15 * 60 * 1000;
  * banco. Ao acrescentar campo aqui, medir contra essa régua, não contra a
  * contagem.
  *
- * A régua já recusou um campo: quando a armadura virou quatro peças
- * (2026-09-20), `elmo` e `calca` entraram porque desenham, e `botas` ficou
- * de fora porque ainda não tem camada. "Está no herói" não é motivo; "o
- * card não consegue desenhar sem isto" é.
+ * A régua já recusou um campo e depois o aceitou: quando a armadura virou
+ * quatro peças (2026-09-20), `elmo` e `calca` entraram porque desenham, e
+ * `botas` ficou de fora porque ainda não tinha camada. A arte chegou no
+ * mesmo dia e a bota entrou. "Está no herói" não é motivo; "o card não
+ * consegue desenhar sem isto" é — e é uma pergunta que se refaz a cada
+ * sprite novo, não uma lista fechada.
  */
 const RESUMO_DO_HEROI = sql<unknown>`jsonb_build_object(
   'hero', jsonb_build_object(
@@ -61,7 +63,8 @@ const RESUMO_DO_HEROI = sql<unknown>`jsonb_build_object(
       'secundaria', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,secundaria,templateId}'),
       'acessorio', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,acessorio,templateId}'),
       'elmo', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,elmo,templateId}'),
-      'calca', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,calca,templateId}')
+      'calca', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,calca,templateId}'),
+      'botas', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,botas,templateId}')
     )
   ),
   'floor', ${cloudSaves.data} #> '{floor}'

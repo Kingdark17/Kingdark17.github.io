@@ -18,6 +18,8 @@ export interface EquipDoResumo {
   /** Idem — nasceram quando a armadura virou quatro peças (2026-09-20). */
   elmo?: string | null;
   calca?: string | null;
+  /** Idem — a bota só ganhou camada quando a arte chegou, dias depois. */
+  botas?: string | null;
 }
 
 export interface ResumoPersonagem {

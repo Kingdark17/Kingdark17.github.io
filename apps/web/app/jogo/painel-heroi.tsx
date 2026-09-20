@@ -148,6 +148,7 @@ export function PainelHeroi({ hero, golpes = 0 }: Readonly<Props>) {
           armadura={hero.equip.armadura?.templateId}
           elmo={hero.equip.elmo?.templateId}
           calca={hero.equip.calca?.templateId}
+          botas={hero.equip.botas?.templateId}
           secundaria={hero.equip.secundaria?.templateId}
           acessorio={hero.equip.acessorio?.templateId}
           cabelo={hero.hair}

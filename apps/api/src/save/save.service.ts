@@ -30,12 +30,14 @@ export interface SummaryEquip {
   elmo: string | null;
   calca: string | null;
   /**
-   * **Botas não estão aqui, e a ausência é a regra funcionando.** O resumo
-   * carrega o que o card precisa pra *desenhar*, e botas ainda não têm
-   * camada — só o ícone chegou. Campo que não vira pixel é peso morto numa
-   * projeção que existe justamente pra não trazer o save inteiro. Entram no
-   * dia em que `botas_body.png` chegar.
+   * **Botas entraram porque a camada chegou, e não porque o herói as tem.**
+   * Ficaram de fora quando a armadura virou quatro peças: só o ícone
+   * existia, e campo que não vira pixel é peso morto numa projeção que
+   * existe justamente pra não trazer o save inteiro. `botas_body.png` veio
+   * no mesmo dia e a régua mudou de resposta sozinha — é ela funcionando,
+   * não uma exceção a ela.
    */
+  botas: string | null;
 }
 
 export interface CharacterSummary {
@@ -103,6 +105,7 @@ function heroFieldsOf(data: unknown): Omit<CharacterSummary, 'slot' | 'updatedAt
       acessorio: templateDoSlot(hero.equip, 'acessorio'),
       elmo: templateDoSlot(hero.equip, 'elmo'),
       calca: templateDoSlot(hero.equip, 'calca'),
+      botas: templateDoSlot(hero.equip, 'botas'),
     },
   };
 }

@@ -285,13 +285,43 @@ describe('as partes da armadura', () => {
 
   /**
    * Peça equipada sem arte não desenha nada e não quebra. É o caso da
-   * maioria: as botas têm item e não têm camada, e é assim que elas devem
-   * se comportar até o `_body` chegar.
+   * armadura de couro: ela tem item, tem ícone e não tem `_body`, e é assim
+   * que ela deve se comportar até a camada chegar.
    */
   it('peça equipada num slot sem arte não inventa camada', () => {
     const semArte = montarCamadas({ raca: 'humano', armadura: 'couro', elmo: 'couro', calca: 'couro' });
 
     expect(semArte.some((c) => c.includes('/armadura/') || c.includes('add/'))).toBe(false);
+  });
+
+  it('a bota desenha pelo slot dela', () => {
+    const calcado = montarCamadas({ raca: 'humano', botas: 'botas' });
+
+    expect(calcado).toContain('/img/paperdoll/botas/botas.png');
+  });
+
+  /**
+   * **A bota vem depois da perneira, e é a única peça fora da ordem
+   * baixo-pra-cima.**
+   *
+   * Não é descuido: as duas perneiras que existem desenham o próprio
+   * calçado até a mesma linha em que a bota acaba. Sob elas a bota some
+   * inteira — desenhado e conferido, "sob placas" saiu pixel por pixel
+   * igual a "sem bota" —, e um slot que não muda nada pra quem veste
+   * perneira não valeria a arte.
+   *
+   * Este teste é o que impede a ordem de ser "arrumada" mais tarde por
+   * alguém lendo a lista e achando que o pé deveria vir antes da canela.
+   */
+  it('a bota fica por cima da perneira, senão não apareceria', () => {
+    const camadas = montarCamadas({ ...conjuntoDePlacas, botas: 'botas' });
+
+    expect(posicao(camadas, 'ladd/placas_calca')).toBeLessThan(posicao(camadas, 'botas/botas'));
+  });
+
+  /** As Botas do Vento têm item e slot, e ainda não têm `_body`. */
+  it('bota sem camada desenhada não entra', () => {
+    expect(montarCamadas({ raca: 'humano', botas: 'bota_vento' }).some((c) => c.includes('/botas/'))).toBe(false);
   });
 
   /** Sem armadura equipada, parte de armadura nenhuma entra. */
@@ -319,7 +349,7 @@ describe('as partes da armadura', () => {
     expect(posicao(felino, 'acessorio/')).toBeLessThan(posicao(felino, 'orelhas-de-gato'));
   });
 
-  /** Acessório sem arte — anel e botas ainda não têm — não vira 404. */
+  /** Acessório sem arte — o Anel das Sombras ainda não tem — não vira 404. */
   it('acessório sem camada desenhada não entra', () => {
     expect(montarCamadas({ raca: 'humano', acessorio: 'anel_som' }).some((c) => c.includes('/acessorio/'))).toBe(false);
   });

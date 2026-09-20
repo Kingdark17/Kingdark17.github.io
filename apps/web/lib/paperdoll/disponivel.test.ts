@@ -14,8 +14,10 @@ import {
   ARMADURAS,
   ARMAS,
   ARQUIVOS_DE_TRACO,
+  BOTAS,
   CABELOS,
   CORPOS,
+  COSTAS,
   SECUNDARIAS,
 } from './disponivel';
 import { TRACOS_DE_RACA } from './camadas';
@@ -44,10 +46,23 @@ function daLista(conjunto: ReadonlySet<string>): string[] {
 }
 
 describe('disponivel.ts bate com o disco', () => {
+  /**
+   * **Todas as pastas do gerador, não algumas.** Esta lista tinha seis das
+   * doze: `back`, `ladd`, `badd`, `hadd`, `acessorio` e `botas` ficavam de
+   * fora, e é justamente nelas que a arte nova cai hoje. Soltar um
+   * `hadd/elmo_novo.png` e esquecer de regerar passava batido — o sprite
+   * existia no disco e nunca chegava na tela, sem ninguém reclamando.
+   */
   const pastas: ReadonlyArray<[string, ReadonlySet<string>]> = [
+    ['back', COSTAS],
     ['corpo', CORPOS],
     ['arma', ARMAS],
     ['armadura', ARMADURAS],
+    ['ladd', ADICIONAIS_DE_PERNA],
+    ['badd', ADICIONAIS_DE_TRONCO],
+    ['hadd', ADICIONAIS_DE_CABECA],
+    ['botas', BOTAS],
+    ['acessorio', ACESSORIOS],
     ['secundaria', SECUNDARIAS],
     ['cabelo', CABELOS],
     ['traco', ARQUIVOS_DE_TRACO],
@@ -97,8 +112,8 @@ describe('os nomes dos arquivos são ids da engine', () => {
   const AINDA_SEM_ITEM = new Set(['robe_chapeu']);
 
   /**
-   * Isto cobria só arma, armadura e secundária, e as quatro pastas que
-   * nasceram depois — `ladd`, `badd`, `hadd` e `acessorio` — ficaram fora
+   * Isto cobria só arma, armadura e secundária, e as pastas que nasceram
+   * depois — `ladd`, `badd`, `hadd`, `acessorio` e `botas` — ficaram fora
    * do contrato que o próprio bloco existe pra prender. Um `ladd/plaças.png`
    * entrava na lista e não desenhava, calado.
    */
@@ -112,6 +127,7 @@ describe('os nomes dos arquivos são ids da engine', () => {
       ...ADICIONAIS_DE_PERNA,
       ...ADICIONAIS_DE_TRONCO,
       ...ADICIONAIS_DE_CABECA,
+      ...BOTAS,
     ];
 
     for (const id of daArte) {

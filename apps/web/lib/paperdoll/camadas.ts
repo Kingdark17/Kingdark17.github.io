@@ -33,6 +33,7 @@ import {
   ADICIONAIS_DE_TRONCO,
   ARMADURAS,
   ARMAS,
+  BOTAS,
   CABELOS,
   CORPOS,
   COSTAS,
@@ -46,6 +47,7 @@ export {
   ADICIONAIS_DE_TRONCO,
   ARMADURAS,
   ARMAS,
+  BOTAS,
   CABELOS,
   CORPOS,
   COSTAS,
@@ -164,6 +166,8 @@ export interface Vestimenta {
   elmo?: string | null;
   /** `templateId` do que está no slot `calca`. */
   calca?: string | null;
+  /** `templateId` do que está no slot `botas`. */
+  botas?: string | null;
   /** `templateId` do que está no slot `secundaria`. */
   secundaria?: string | null;
   /** `templateId` do que está no slot `acessorio`. */
@@ -198,7 +202,7 @@ function vestir(camadas: string[], pasta: string, id: string | null | undefined,
  * segurados na frente do corpo, e orelha atravessando escudo seria pior
  * que capacete cobrindo orelha.
  */
-export function montarCamadas({ raca, arma, armadura, elmo, calca, secundaria, acessorio, cabelo }: Vestimenta): string[] {
+export function montarCamadas({ raca, arma, armadura, elmo, calca, botas, secundaria, acessorio, cabelo }: Vestimenta): string[] {
   if (!raca || !CORPOS.has(raca)) return [];
 
   const camadas: string[] = [];
@@ -236,10 +240,19 @@ export function montarCamadas({ raca, arma, armadura, elmo, calca, secundaria, a
   //
   // Ausência é o caso comum e não é erro: quase todo mundo anda sem elmo.
   //
-  // **Botas não aparecem aqui** — chegou `botas_icon.png` e não chegou o
-  // `_body`. O item existe, veste e conta atributo; o boneco só não muda.
-  // Quando a arte vier, é mais uma linha desta lista.
+  // **A bota vem depois da perneira, e é a peça mais baixa do boneco.**
+  // Parece fora de ordem numa lista que sobe do pé pra cabeça, e é
+  // deliberado: as duas perneiras que existem — `placas_calca` e
+  // `robe_calca` — desenham o próprio calçado até a linha 61, a mesma em
+  // que a bota acaba. Sob elas a bota some inteira; foi conferido
+  // desenhando as quatro combinações, e "sob placas" saiu pixel por pixel
+  // igual a "sem bota". Um slot que não muda nada pra quem veste perneira
+  // não valeria a arte.
+  //
+  // O preço é o oposto e é menor: com placas, o pé de aço da perneira dá
+  // lugar à bota de couro. Quem calçou a bota pediu por isso.
   vestir(camadas, 'ladd', calca, ADICIONAIS_DE_PERNA);
+  vestir(camadas, 'botas', botas, BOTAS);
   vestir(camadas, 'armadura', armadura, ARMADURAS);
   vestir(camadas, 'badd', armadura, ADICIONAIS_DE_TRONCO);
   vestir(camadas, 'hadd', elmo, ADICIONAIS_DE_CABECA);
