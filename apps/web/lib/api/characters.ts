@@ -15,6 +15,9 @@ export interface EquipDoResumo {
   secundaria: string | null;
   /** Opcional: save antigo e API antiga não mandam, e o card só não desenha. */
   acessorio?: string | null;
+  /** Idem — nasceram quando a armadura virou quatro peças (2026-09-20). */
+  elmo?: string | null;
+  calca?: string | null;
 }
 
 export interface ResumoPersonagem {

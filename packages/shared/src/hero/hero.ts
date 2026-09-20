@@ -1,6 +1,6 @@
 import { instantiate, type Item } from '../items/item.js';
 import { RARITIES } from '../items/rarity.js';
-import { templateById, type ItemCategory } from '../items/templates.js';
+import { isEquippable, slotForTemplate, templateById, type ItemTemplate } from '../items/templates.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import {
   classById,
@@ -142,7 +142,7 @@ export function buildHero(creation: HeroCreation, rng: Rng = defaultRng): Hero {
   // Sem anotar `equip` como HeroCore aqui: isso faria o compilador estreitar
   // o tipo para EquippableItem (o mínimo que derivedStats() exige) e perder
   // uid/templateId/equipped do Item de verdade antes do spread abaixo.
-  const equip: HeroEquipment = { arma: startWeapon, secundaria: null, armadura: null, acessorio: null };
+  const equip: HeroEquipment = { arma: startWeapon, secundaria: null, elmo: null, armadura: null, calca: null, botas: null, acessorio: null };
   const derived = derivedStats({ level: 1, attrs, equip });
 
   return {
@@ -326,12 +326,19 @@ export interface EquipResult {
   reason?: 'two_handed_weapon';
 }
 
-/** Regra de qual slot aceita qual item — a mesma checagem que `equipItem()` usava inline. */
-function slotAccepts(slot: EquipSlot, item: Item, category: ItemCategory): boolean {
+/**
+ * Regra de qual slot aceita qual peça: o slot que o template declara, e
+ * mais nenhum.
+ *
+ * A mão secundária é a única exceção, e é exceção de verdade: ela aceita o
+ * escudo e a arma leve, duas peças que vestem noutro lugar por padrão. As
+ * outras quatro linhas que havia aqui — uma por slot, com o escudo escrito
+ * à mão — viraram a comparação única de baixo quando o template passou a
+ * dizer onde veste (`slotForTemplate`).
+ */
+function slotAccepts(slot: EquipSlot, item: Item, template: ItemTemplate): boolean {
   if (slot === 'secundaria') return isOffhandEligible(item);
-  if (slot === 'arma') return category === 'arma';
-  if (slot === 'armadura') return category === 'armadura' && item.templateId !== 'escudo';
-  return category === 'acessorio'; // slot === 'acessorio'
+  return slotForTemplate(template) === slot;
 }
 
 /**
@@ -347,11 +354,10 @@ function slotAccepts(slot: EquipSlot, item: Item, category: ItemCategory): boole
  */
 export function equipItem(hero: Hero, item: Item, requestedSlot?: EquipSlot): EquipResult {
   const template = templateById(item.templateId);
-  const equippableCategory = template && (template.category === 'arma' || template.category === 'armadura' || template.category === 'acessorio') ? template.category : null;
-  if (!equippableCategory) return { hero, equipped: false };
+  if (!template || !isEquippable(template.category)) return { hero, equipped: false };
 
-  const slot: EquipSlot = requestedSlot ?? (item.templateId === 'escudo' ? 'secundaria' : equippableCategory);
-  if (!slotAccepts(slot, item, equippableCategory)) return { hero, equipped: false };
+  const slot: EquipSlot = requestedSlot ?? slotForTemplate(template);
+  if (!slotAccepts(slot, item, template)) return { hero, equipped: false };
   if (slot === 'secundaria' && isTwoHanded(hero.equip.arma)) return { hero, equipped: false, reason: 'two_handed_weapon' };
 
   const equip: HeroEquipment = { ...hero.equip };

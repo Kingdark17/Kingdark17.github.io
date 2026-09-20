@@ -162,56 +162,78 @@ describe('montarCamadas', () => {
  * desenhado entre duas partes.
  */
 describe('as partes da armadura', () => {
-  const comRobe = montarCamadas({ raca: 'humano', armadura: 'robe' });
+  const conjuntoDePlacas = { raca: 'humano', armadura: 'placas', elmo: 'placas_elmo', calca: 'placas_calca' };
 
-  it('o robe traz tronco e cabeça além da peça base', () => {
+  /**
+   * A divisão de 2026-09-20: até então `ladd` e `hadd` saíam do **mesmo**
+   * `templateId` da armadura. Agora cada camada responde ao seu slot, e é
+   * isso que faz elmo e perneira serem peças que se acham separadas.
+   */
+  it('cada camada vem do seu próprio slot', () => {
+    const camadas = montarCamadas(conjuntoDePlacas);
+
+    expect(camadas).toContain('/img/paperdoll/armadura/placas.png');
+    expect(camadas).toContain('/img/paperdoll/hadd/placas_elmo.png');
+    expect(camadas).toContain('/img/paperdoll/ladd/placas_calca.png');
+  });
+
+  it('elmo e perneira desenham sem peitoral nenhum', () => {
+    const soElmo = montarCamadas({ raca: 'humano', elmo: 'placas_elmo' });
+
+    expect(soElmo).toContain('/img/paperdoll/hadd/placas_elmo.png');
+    expect(soElmo.some((c) => c.includes('/armadura/'))).toBe(false);
+  });
+
+  /**
+   * O chapéu do mago vinha junto com o robe, porque os dois eram a mesma
+   * peça: quem vestisse o Robe Arcano ganhava o chapéu de brinde, fosse da
+   * classe que fosse, com a aba tapando o rosto. Agora ele é do slot de
+   * elmo, e quem quiser chapéu veste chapéu.
+   *
+   * (O item ainda não existe — veio o `_body` e não veio o ícone —, então
+   * hoje o efeito prático é o chapéu não aparecer mais sozinho.)
+   */
+  it('o robe não traz mais chapéu de brinde', () => {
+    const comRobe = montarCamadas({ raca: 'humano', armadura: 'robe' });
+
     expect(comRobe).toContain('/img/paperdoll/armadura/robe.png');
     expect(comRobe).toContain('/img/paperdoll/badd/robe.png');
-    expect(comRobe).toContain('/img/paperdoll/hadd/robe.png');
+    expect(comRobe.some((c) => c.includes('/hadd/'))).toBe(false);
   });
 
   /** Perna primeiro, depois tronco, depois cabeça: de baixo pra cima. */
-  it('as partes vêm depois da peça base, de baixo pra cima', () => {
-    expect(posicao(comRobe, 'armadura/robe')).toBeLessThan(posicao(comRobe, 'badd/robe'));
-    expect(posicao(comRobe, 'badd/robe')).toBeLessThan(posicao(comRobe, 'hadd/robe'));
+  it('as camadas se empilham de baixo pra cima', () => {
+    const camadas = montarCamadas({ ...conjuntoDePlacas, armadura: 'robe' });
+
+    expect(posicao(camadas, 'ladd/placas_calca')).toBeLessThan(posicao(camadas, 'armadura/robe'));
+    expect(posicao(camadas, 'armadura/robe')).toBeLessThan(posicao(camadas, 'badd/robe'));
+    expect(posicao(camadas, 'badd/robe')).toBeLessThan(posicao(camadas, 'hadd/placas_elmo'));
   });
 
   /**
    * O que mantém o traço valendo.
    *
-   * O chapéu do mago cobre o rosto inteiro. Se o `hadd` fosse desenhado
-   * depois do traço, o felino de chapéu voltaria a ser indistinguível do
-   * humano de chapéu — e é exatamente isso que a camada de traço existe pra
-   * impedir. Conferido na tela: as orelhas saem por cima da aba.
+   * Peça de cabeça cobre o rosto inteiro. Se o `hadd` fosse desenhado
+   * depois do traço, o felino de elmo voltaria a ser indistinguível do
+   * humano de elmo — e é exatamente isso que a camada de traço existe pra
+   * impedir. Conferido na tela com o chapéu do mago: as orelhas saem por
+   * cima da aba.
    */
   it('o traço da raça sobrevive à parte de cabeça da armadura', () => {
-    const felino = montarCamadas({ raca: 'felino', armadura: 'robe' });
+    const felino = montarCamadas({ raca: 'felino', elmo: 'placas_elmo' });
 
-    expect(posicao(felino, 'hadd/robe')).toBeLessThan(posicao(felino, 'orelhas-de-gato'));
+    expect(posicao(felino, 'hadd/placas_elmo')).toBeLessThan(posicao(felino, 'orelhas-de-gato'));
   });
 
   /**
-   * Peça pode ter uma parte, duas, as três ou nenhuma, e cada uma entra
-   * sozinha. As placas têm elmo e calça desenhados e **não** têm parte de
-   * tronco: quem desenha o tronco ali é a própria peça base.
-   *
-   * Este teste já usou as placas como exemplo de armadura *sem* partes —
-   * e envelheceu no dia em que o elmo e a calça chegaram. Agora ele afirma
-   * o que é estrutural: só entra o que existe em disco.
+   * Peça equipada sem arte não desenha nada e não quebra. É o caso da
+   * maioria: as botas têm item e não têm camada, e é assim que elas devem
+   * se comportar até o `_body` chegar.
    */
-  it('entra só a parte que existe, e nenhuma a mais', () => {
-    const placas = montarCamadas({ raca: 'humano', armadura: 'placas' });
+  it('peça equipada num slot sem arte não inventa camada', () => {
+    const semArte = montarCamadas({ raca: 'humano', armadura: 'couro', elmo: 'couro', calca: 'couro' });
 
-    expect(placas).toContain('/img/paperdoll/ladd/placas.png');
-    expect(placas).toContain('/img/paperdoll/hadd/placas.png');
-    expect(placas.some((c) => c.includes('/badd/'))).toBe(false);
-  });
-
-  /** Armadura sem camada nenhuma não inventa parte. */
-  it('peça sem arte não inventa camada', () => {
-    const couro = montarCamadas({ raca: 'humano', armadura: 'couro' });
-
-    expect(couro.some((c) => c.includes('/armadura/') || c.includes('add/'))).toBe(false);
+    expect(semArte.some((c) => c.includes('/armadura/') || c.includes('add/'))).toBe(false);
   });
 
   /** Sem armadura equipada, parte de armadura nenhuma entra. */

@@ -1,4 +1,4 @@
-import type { ItemStatKey } from '../hero/stats.js';
+import type { EquipSlot, ItemStatKey } from '../hero/stats.js';
 
 export const ITEM_CATEGORIES = [
   'arma',
@@ -79,9 +79,35 @@ export interface ItemTemplate {
    * carrega só o `templateId` e a UI resolve o sprite na hora de desenhar.
    */
   sprite: string;
+  /**
+   * Em que slot esta peça veste, quando não é o slot de mesmo nome da
+   * categoria.
+   *
+   * Nasceu porque a armadura deixou de ser uma peça só: elmo, peitoral,
+   * calça e botas são todos `category: 'armadura'` — é o que mantém loja e
+   * loot escolhendo por categoria sem saber que a divisão existe —, mas
+   * cada um veste num lugar diferente.
+   *
+   * De quebra, ele engole a exceção do escudo, que antes estava escrita à
+   * mão em dois lugares (`equipItem` decidindo o slot e `slotAccepts`
+   * recusando-o na armadura). Uma regra em dois lugares é uma regra que
+   * pode discordar de si mesma.
+   */
+  slot?: EquipSlot;
   base: StatBlock;
   value: number;
   proc?: ProcTemplate;
+}
+
+/**
+ * Onde a peça veste. É a categoria, salvo quando o template diz outra coisa.
+ *
+ * Só vale pra equipamento: consumível e material não têm slot, e chamar
+ * isto com um deles devolve a categoria, que não é um `EquipSlot` válido.
+ * Quem pergunta já filtrou por `isEquippable` antes.
+ */
+export function slotForTemplate(template: ItemTemplate): EquipSlot {
+  return template.slot ?? (template.category as EquipSlot);
 }
 
 const BURN: ProcTemplate = {
@@ -181,6 +207,9 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     category: 'armadura',
     desc: 'Pesado, mas confiável contra golpes diretos.',
     sprite: 'armor/escudo.png',
+    // Armadura pela categoria (é assim que a loja e o loot o encontram),
+    // mas veste na mão secundária. Antes isto era um `if` pelo id.
+    slot: 'secundaria',
     base: { defesa: 5, velocidade: -1 },
     value: 24,
   },
@@ -195,12 +224,32 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   },
   {
     id: 'placas',
-    name: 'Armadura de Placas',
+    name: 'Peitoral de Placas',
     category: 'armadura',
     desc: 'Proteção pesada, reduz agilidade.',
     sprite: 'armor/placas.png',
-    base: { defesa: 7, esquiva: -2 },
-    value: 30,
+    base: { defesa: 4, esquiva: -1 },
+    value: 17,
+  },
+  {
+    id: 'placas_elmo',
+    name: 'Elmo de Placas',
+    category: 'armadura',
+    desc: 'Aço fechado, com uma pedra vermelha na testa.',
+    sprite: 'armor/placas_elmo.png',
+    slot: 'elmo',
+    base: { defesa: 1 },
+    value: 5,
+  },
+  {
+    id: 'placas_calca',
+    name: 'Perneira de Placas',
+    category: 'armadura',
+    desc: 'Placas sobrepostas que protegem a perna inteira.',
+    sprite: 'armor/placas_calca.png',
+    slot: 'calca',
+    base: { defesa: 2, esquiva: -1 },
+    value: 8,
   },
   {
     id: 'robe',
@@ -208,8 +257,28 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     category: 'armadura',
     desc: 'Tecido enfeitiçado que amplia o poder mágico.',
     sprite: 'armor/robe.png',
-    base: { defesa: 2, mana: 10 },
-    value: 26,
+    base: { defesa: 1, mana: 7 },
+    value: 18,
+  },
+  {
+    id: 'robe_calca',
+    name: 'Calça de Mago',
+    category: 'armadura',
+    desc: 'Saiote pesado de veludo, preso por uma fivela dourada.',
+    sprite: 'armor/robe_calca.png',
+    slot: 'calca',
+    base: { defesa: 1, mana: 3 },
+    value: 8,
+  },
+  {
+    id: 'botas',
+    name: 'Botas Reforçadas',
+    category: 'armadura',
+    desc: 'Aço nos dedos e sola macia — protegem sem prender o passo.',
+    sprite: 'armor/botas.png',
+    slot: 'botas',
+    base: { defesa: 1, velocidade: 1 },
+    value: 14,
   },
 
   // ---------- acessórios ----------
@@ -237,6 +306,11 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     category: 'acessorio',
     desc: 'Passos leves como brisa de outono.',
     sprite: 'accessories/bota_vento.png',
+    // Sempre foram botas; vestiam no acessório porque slot de pé não
+    // existia. Agora existe. Quem já as tem no acessório continua com elas
+    // lá e com os atributos contando — nada revalida o save — e elas
+    // descem pro pé sozinhas no primeiro guardar-e-equipar.
+    slot: 'botas',
     base: { velocidade: 3, esquiva: 1 },
     value: 18,
   },

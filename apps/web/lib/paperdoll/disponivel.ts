@@ -26,13 +26,13 @@ export const ARMAS: ReadonlySet<string> = new Set(['adaga', 'arco', 'cajado', 'e
 export const ARMADURAS: ReadonlySet<string> = new Set(['placas', 'robe']);
 
 /** Parte da armadura que se desenha por cima, na perna. Pelo `templateId`. (2 em `public/img/paperdoll/ladd/`) */
-export const ADICIONAIS_DE_PERNA: ReadonlySet<string> = new Set(['placas', 'robe']);
+export const ADICIONAIS_DE_PERNA: ReadonlySet<string> = new Set(['placas_calca', 'robe_calca']);
 
 /** Parte da armadura que se desenha por cima, no tronco. Pelo `templateId`. (1 em `public/img/paperdoll/badd/`) */
 export const ADICIONAIS_DE_TRONCO: ReadonlySet<string> = new Set(['robe']);
 
 /** Parte da armadura que se desenha por cima, na cabeça. Pelo `templateId`. (2 em `public/img/paperdoll/hadd/`) */
-export const ADICIONAIS_DE_CABECA: ReadonlySet<string> = new Set(['placas', 'robe']);
+export const ADICIONAIS_DE_CABECA: ReadonlySet<string> = new Set(['placas_elmo', 'robe_chapeu']);
 
 /** Acessórios com camada — o nome do arquivo é o `templateId`. (2 em `public/img/paperdoll/acessorio/`) */
 export const ACESSORIOS: ReadonlySet<string> = new Set(['amuleto_sab', 'colar_forca']);

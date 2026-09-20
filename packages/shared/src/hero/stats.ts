@@ -19,7 +19,21 @@ export type AttrKey = (typeof ATTR_KEYS)[number];
 
 export type Attributes = Record<AttrKey, number>;
 
-export const EQUIP_SLOTS = ['arma', 'secundaria', 'armadura', 'acessorio'] as const;
+/**
+ * Os slots que o herói veste, **da cabeça aos pés** — a ordem é a que a
+ * mochila desenha a grade de "Equipado" (`tela-mochila.tsx`), e é o único
+ * motivo de ela não ser alfabética.
+ *
+ * Elmo, calça e botas nasceram em 2026-09-20, quando a armadura deixou de
+ * ser uma peça só. Nada mais precisou mudar de forma pra acompanhar: quem
+ * soma atributo (`equipmentStat`), quem procura a peça (`equippedSlot`) e
+ * quem recolhe o que saiu do slot (`trocaDeEquipamento`) sempre varreram
+ * esta lista em vez de citar os slots pelo nome.
+ *
+ * `Equipment` é `Partial` de propósito — save antigo não tem as chaves
+ * novas, e chega aqui com elas faltando em vez de quebrar.
+ */
+export const EQUIP_SLOTS = ['arma', 'secundaria', 'elmo', 'armadura', 'calca', 'botas', 'acessorio'] as const;
 
 export type EquipSlot = (typeof EQUIP_SLOTS)[number];
 

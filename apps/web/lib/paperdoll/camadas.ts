@@ -125,12 +125,27 @@ export interface Vestimenta {
   raca: string | null;
   /** `templateId` do que está na mão principal. */
   arma?: string | null;
-  /** `templateId` do que está no slot `armadura`. */
+  /** `templateId` do que está no slot `armadura` — o peitoral. */
   armadura?: string | null;
+  /** `templateId` do que está no slot `elmo`. */
+  elmo?: string | null;
+  /** `templateId` do que está no slot `calca`. */
+  calca?: string | null;
   /** `templateId` do que está no slot `secundaria`. */
   secundaria?: string | null;
   /** `templateId` do que está no slot `acessorio`. */
   acessorio?: string | null;
+}
+
+/**
+ * Acrescenta `pasta/<id>.png` à pilha, quando há peça e há arte pra ela.
+ *
+ * O `disponivel` é o que o gerador leu do disco: peça equipada sem arte
+ * simplesmente não desenha, em vez de pedir um `.png` que não existe e
+ * deixar um quadrado quebrado no boneco. É o caso da maioria das armas.
+ */
+function vestir(camadas: string[], pasta: string, id: string | null | undefined, disponivel: ReadonlySet<string>): void {
+  if (id && disponivel.has(id)) camadas.push(`${RAIZ}/${pasta}/${id}.png`);
 }
 
 /**
@@ -148,7 +163,7 @@ export interface Vestimenta {
  * segurados na frente do corpo, e orelha atravessando escudo seria pior
  * que capacete cobrindo orelha.
  */
-export function montarCamadas({ raca, arma, armadura, secundaria, acessorio }: Vestimenta): string[] {
+export function montarCamadas({ raca, arma, armadura, elmo, calca, secundaria, acessorio }: Vestimenta): string[] {
   if (!raca || !CORPOS.has(raca)) return [];
 
   const camadas: string[] = [];
@@ -168,20 +183,30 @@ export function montarCamadas({ raca, arma, armadura, secundaria, acessorio }: V
   // penteado, e a hora de fazer isso é quando existir penteado longo.
   if (!SEM_CABELO.has(raca)) camadas.push(`${RAIZ}/cabelo/${CABELO_PADRAO}.png`);
 
-  if (armadura) {
-    if (ARMADURAS.has(armadura)) camadas.push(`${RAIZ}/armadura/${armadura}.png`);
-
-    // As partes da peça, de baixo pra cima. Uma armadura pode ter zero,
-    // uma ou as três — o manto do mago tem só a do tronco, e o chapéu dele
-    // é a da cabeça. Ausência é o caso comum e não é erro.
-    if (ADICIONAIS_DE_PERNA.has(armadura)) camadas.push(`${RAIZ}/ladd/${armadura}.png`);
-    if (ADICIONAIS_DE_TRONCO.has(armadura)) camadas.push(`${RAIZ}/badd/${armadura}.png`);
-    if (ADICIONAIS_DE_CABECA.has(armadura)) camadas.push(`${RAIZ}/hadd/${armadura}.png`);
-  }
+  // Daqui pra baixo é a ordem de vestir, escrita como uma lista. Cada
+  // linha é "esta peça, nesta pasta" — e a ordem das linhas **é** a ordem
+  // das camadas, que é a única coisa que importa e a mais fácil de quebrar
+  // sem perceber. Eram sete `if` quase idênticos antes.
+  //
+  // Até 2026-09-20 perneira, tronco e elmo saíam todos do **mesmo**
+  // `templateId`: a armadura era um item só e `ladd`/`hadd` eram partes
+  // dela. Agora cada uma responde pelo seu próprio slot. `badd` continua
+  // atrelado à armadura porque ele é o tronco — é o próprio peitoral, não
+  // uma peça à parte.
+  //
+  // Ausência é o caso comum e não é erro: quase todo mundo anda sem elmo.
+  //
+  // **Botas não aparecem aqui** — chegou `botas_icon.png` e não chegou o
+  // `_body`. O item existe, veste e conta atributo; o boneco só não muda.
+  // Quando a arte vier, é mais uma linha desta lista.
+  vestir(camadas, 'ladd', calca, ADICIONAIS_DE_PERNA);
+  vestir(camadas, 'armadura', armadura, ARMADURAS);
+  vestir(camadas, 'badd', armadura, ADICIONAIS_DE_TRONCO);
+  vestir(camadas, 'hadd', elmo, ADICIONAIS_DE_CABECA);
 
   // O acessório vem por cima da armadura — ver o comentário logo acima de
   // `TRACOS_DE_RACA`: por baixo do peitoral ele some inteiro.
-  if (acessorio && ACESSORIOS.has(acessorio)) camadas.push(`${RAIZ}/acessorio/${acessorio}.png`);
+  vestir(camadas, 'acessorio', acessorio, ACESSORIOS);
 
   // O traço da raça vem **depois de toda a armadura**, adicionais
   // inclusive. É o ponto dele: sobreviver à peça. Pôr o `hadd` por cima
@@ -190,8 +215,8 @@ export function montarCamadas({ raca, arma, armadura, secundaria, acessorio }: V
   const traco = TRACOS_DE_RACA.get(raca);
   if (traco) camadas.push(`${RAIZ}/${traco}`);
 
-  if (secundaria && SECUNDARIAS.has(secundaria)) camadas.push(`${RAIZ}/secundaria/${secundaria}.png`);
-  if (arma && ARMAS.has(arma)) camadas.push(`${RAIZ}/arma/${arma}.png`);
+  vestir(camadas, 'secundaria', secundaria, SECUNDARIAS);
+  vestir(camadas, 'arma', arma, ARMAS);
 
   return camadas;
 }

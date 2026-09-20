@@ -39,6 +39,11 @@ const HISTORY_THROTTLE_MS = 15 * 60 * 1000;
  * integração protege continua valendo — mapa e inventário **não** saem do
  * banco. Ao acrescentar campo aqui, medir contra essa régua, não contra a
  * contagem.
+ *
+ * A régua já recusou um campo: quando a armadura virou quatro peças
+ * (2026-09-20), `elmo` e `calca` entraram porque desenham, e `botas` ficou
+ * de fora porque ainda não tem camada. "Está no herói" não é motivo; "o
+ * card não consegue desenhar sem isto" é.
  */
 const RESUMO_DO_HEROI = sql<unknown>`jsonb_build_object(
   'hero', jsonb_build_object(
@@ -53,7 +58,9 @@ const RESUMO_DO_HEROI = sql<unknown>`jsonb_build_object(
       'arma', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,arma,templateId}'),
       'armadura', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,armadura,templateId}'),
       'secundaria', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,secundaria,templateId}'),
-      'acessorio', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,acessorio,templateId}')
+      'acessorio', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,acessorio,templateId}'),
+      'elmo', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,elmo,templateId}'),
+      'calca', jsonb_build_object('templateId', ${cloudSaves.data} #> '{hero,equip,calca,templateId}')
     )
   ),
   'floor', ${cloudSaves.data} #> '{floor}'

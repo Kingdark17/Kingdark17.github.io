@@ -6,7 +6,18 @@ import { describe, expect, it } from 'vitest';
 
 import { RACES, TEMPLATES } from '@rpg-legend/shared';
 
-import { ARMADURAS, ARMAS, ARQUIVOS_DE_TRACO, CABELOS, CORPOS, SECUNDARIAS } from './disponivel';
+import {
+  ACESSORIOS,
+  ADICIONAIS_DE_CABECA,
+  ADICIONAIS_DE_PERNA,
+  ADICIONAIS_DE_TRONCO,
+  ARMADURAS,
+  ARMAS,
+  ARQUIVOS_DE_TRACO,
+  CABELOS,
+  CORPOS,
+  SECUNDARIAS,
+} from './disponivel';
 import { TRACOS_DE_RACA } from './camadas';
 
 const RAIZ_DA_ARTE = fileURLToPath(new URL('../../public/img/paperdoll', import.meta.url));
@@ -73,11 +84,46 @@ describe('os nomes dos arquivos são ids da engine', () => {
     for (const corpo of CORPOS) expect({ corpo, ehRaca: racas.has(corpo) }).toEqual({ corpo, ehRaca: true });
   });
 
-  it('toda arma, armadura e secundária é um templateId', () => {
+  /**
+   * Arte que ainda não virou item. **Não é uma lista de escape pra erro de
+   * digitação** — é o caso em que o `_body` chegou antes do ícone, e um
+   * item sem ícone fica invisível na mochila.
+   *
+   * O chapéu do mago é o único: desenhava de brinde junto com o robe até a
+   * armadura se dividir em peças (2026-09-20), e agora espera o
+   * `mago_chapeu_icon` pra virar item do slot de elmo. Quando o ícone
+   * chegar, some daqui.
+   */
+  const AINDA_SEM_ITEM = new Set(['robe_chapeu']);
+
+  /**
+   * Isto cobria só arma, armadura e secundária, e as quatro pastas que
+   * nasceram depois — `ladd`, `badd`, `hadd` e `acessorio` — ficaram fora
+   * do contrato que o próprio bloco existe pra prender. Um `ladd/plaças.png`
+   * entrava na lista e não desenhava, calado.
+   */
+  it('toda peça equipável é um templateId', () => {
     const templates = new Set(TEMPLATES.map((template) => template.id));
-    for (const id of [...ARMAS, ...ARMADURAS, ...SECUNDARIAS]) {
+    const daArte = [
+      ...ARMAS,
+      ...ARMADURAS,
+      ...SECUNDARIAS,
+      ...ACESSORIOS,
+      ...ADICIONAIS_DE_PERNA,
+      ...ADICIONAIS_DE_TRONCO,
+      ...ADICIONAIS_DE_CABECA,
+    ];
+
+    for (const id of daArte) {
+      if (AINDA_SEM_ITEM.has(id)) continue;
       expect({ id, ehTemplate: templates.has(id) }).toEqual({ id, ehTemplate: true });
     }
+  });
+
+  /** Exceção que sobrou na lista depois de virar item é lixo, e some. */
+  it('a lista de arte sem item não guarda id que já virou item', () => {
+    const templates = new Set(TEMPLATES.map((template) => template.id));
+    expect([...AINDA_SEM_ITEM].filter((id) => templates.has(id))).toEqual([]);
   });
 });
 

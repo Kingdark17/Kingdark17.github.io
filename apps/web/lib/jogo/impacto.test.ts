@@ -50,10 +50,14 @@ describe('impactoDaPeca', () => {
   });
 
   /**
-   * `placas` é `{ defesa: 7, esquiva: -2 }` — a peça sobe uma coisa e baixa
+   * `placas` é `{ defesa: 4, esquiva: -1 }` — a peça sobe uma coisa e baixa
    * outra. É o caso que o painel existe pra resolver: sem ele, o jogador
    * veste a armadura e só descobre a perda de esquiva no combate seguinte,
    * sem ligar uma coisa à outra.
+   *
+   * Os números eram `{ defesa: 7, esquiva: -2 }` até 2026-09-20, quando o
+   * conjunto se dividiu em peitoral, elmo e perneira. Os 7 e os -2 não
+   * sumiram: agora estão espalhados pelas três peças.
    */
   it('mostra o que melhora e o que piora na mesma peça', () => {
     const impacto = impactoDaPeca(heroi('guerreiro'), peca('placas'));
@@ -61,7 +65,7 @@ describe('impactoDaPeca', () => {
     expect(impacto?.acao).toBe('equipar');
 
     const defesa = linha(impacto, 'Defesa');
-    expect(defesa).toEqual({ rotulo: 'Defesa', antes: 0, depois: 7 });
+    expect(defesa).toEqual({ rotulo: 'Defesa', antes: 0, depois: 4 });
 
     const esquiva = linha(impacto, 'Esquiva');
     expect(esquiva).toBeDefined();

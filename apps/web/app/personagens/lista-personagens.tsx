@@ -99,6 +99,8 @@ export function ListaPersonagens() {
                   raca={idDaRaca(personagem)}
                   arma={personagem.equip?.arma}
                   armadura={personagem.equip?.armadura}
+                  elmo={personagem.equip?.elmo}
+                  calca={personagem.equip?.calca}
                   secundaria={personagem.equip?.secundaria}
                   acessorio={personagem.equip?.acessorio}
                   lado={104}

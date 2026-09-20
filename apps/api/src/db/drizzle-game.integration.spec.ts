@@ -115,6 +115,11 @@ describe('DrizzleSaveRepository', () => {
           // aqui, o card da lista desenharia um boneco diferente do painel
           // do jogo pro mesmo personagem.
           acessorio: { templateId: null },
+          // Idem, quando a armadura virou quatro peças. **`botas` não está
+          // aqui de propósito**: elas ainda não têm camada, e o resumo só
+          // carrega o que o card usa pra desenhar.
+          elmo: { templateId: null },
+          calca: { templateId: null },
         },
       },
       floor: 4,

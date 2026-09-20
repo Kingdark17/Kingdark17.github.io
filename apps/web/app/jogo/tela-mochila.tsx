@@ -47,10 +47,18 @@ import { CartaItem } from './carta-item';
 import { FichaItem } from './ficha-item';
 import styles from './jogo.module.css';
 
+/**
+ * `Record<EquipSlot, …>` de propósito, e não um `Partial`: slot novo na
+ * engine sem rótulo aqui vira erro de compilação, em vez de uma carta
+ * escrita `undefined` na grade de Equipado.
+ */
 const ROTULO_DO_SLOT: Record<EquipSlot, string> = {
   arma: 'Arma',
   secundaria: 'Secundária',
-  armadura: 'Armadura',
+  elmo: 'Elmo',
+  armadura: 'Peitoral',
+  calca: 'Perneira',
+  botas: 'Botas',
   acessorio: 'Acessório',
 };
 

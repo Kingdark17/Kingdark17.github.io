@@ -19,6 +19,7 @@ import {
   weaponAffinityPct,
   type Hero,
 } from './hero.js';
+import { equipmentBonus } from './derived.js';
 import { seededRng } from '../rng.js';
 import { instantiate } from '../items/item.js';
 import { TEMPLATES, templateById } from '../items/templates.js';
@@ -376,6 +377,88 @@ describe('equipamento', () => {
     const arma = hero.equip.arma!;
     expect(equippedSlot(hero, arma)).toBe('arma');
     expect(equippedSlot(hero, { ...arma })).toBe('arma'); // referência diferente, mesmo uid
+  });
+
+  /**
+   * A armadura deixou de ser uma peça só em 2026-09-20. Elmo, peitoral,
+   * calça e botas continuam todos `category: 'armadura'` — é o que mantém
+   * loja e loot escolhendo por categoria sem saber da divisão — e o slot
+   * de cada um vem do template.
+   */
+  describe('armadura em quatro peças', () => {
+    function peca(id: string): ReturnType<typeof instantiate> {
+      return instantiate(templateById(id)!, RARITIES[0]!, { rng: seededRng(1) });
+    }
+
+    it('as quatro são categoria armadura e mesmo assim vestem em slots diferentes', () => {
+      for (const id of ['placas', 'placas_elmo', 'placas_calca', 'botas']) {
+        expect(templateById(id)!.category).toBe('armadura');
+      }
+
+      let hero = novoHeroi();
+      for (const id of ['placas', 'placas_elmo', 'placas_calca', 'botas']) {
+        const resultado = equipItem(hero, peca(id));
+        expect(resultado.equipped).toBe(true);
+        hero = resultado.hero;
+      }
+
+      expect(hero.equip.armadura?.templateId).toBe('placas');
+      expect(hero.equip.elmo?.templateId).toBe('placas_elmo');
+      expect(hero.equip.calca?.templateId).toBe('placas_calca');
+      expect(hero.equip.botas?.templateId).toBe('botas');
+    });
+
+    it('o conjunto inteiro vale o mesmo que a armadura valia sozinha', () => {
+      const soma = ['placas', 'placas_elmo', 'placas_calca']
+        .map((id) => templateById(id)!.base)
+        .reduce<{ defesa: number; esquiva: number }>(
+          (total, base) => ({ defesa: total.defesa + (base.defesa ?? 0), esquiva: total.esquiva + (base.esquiva ?? 0) }),
+          { defesa: 0, esquiva: 0 },
+        );
+
+      // Era `{ defesa: 7, esquiva: -2 }` numa peça só. A divisão redistribui,
+      // não inventa nem some com nada.
+      expect(soma).toEqual({ defesa: 7, esquiva: -2 });
+    });
+
+    it('elmo não entra no peitoral, e vice-versa', () => {
+      const hero = novoHeroi();
+      expect(equipItem(hero, peca('placas_elmo'), 'armadura').equipped).toBe(false);
+      expect(equipItem(hero, peca('placas'), 'elmo').equipped).toBe(false);
+    });
+
+    /**
+     * Quem consome defesa é `equipmentBonus`, não `derived` — `DerivedStats`
+     * não tem defesa, e quem a lê é `monster-hit.ts`, como
+     * `Math.floor(bonus.defesa / 3)` de redução de dano.
+     *
+     * Por isso o teste soma pelos slots em vez de comparar derivados: era
+     * assim que a peça única contava, e é assim que as três precisam contar
+     * agora. Vestir o conjunto tem que dar exatamente o mesmo 7 de antes.
+     */
+    it('os slots novos entram na soma de equipamento', () => {
+      let hero = novoHeroi();
+      expect(equipmentBonus(hero.equip).defesa).toBe(0);
+
+      for (const id of ['placas', 'placas_elmo', 'placas_calca']) {
+        hero = equipItem(hero, peca(id)).hero;
+      }
+      expect(equipmentBonus(hero.equip).defesa).toBe(7);
+    });
+
+    /**
+     * O par de botas que existe desde o jogo original vestia no acessório
+     * porque não havia slot de pé. Save antigo não é revalidado, então elas
+     * continuam funcionando onde estão — este teste prende só o destino
+     * novo, que é o que muda.
+     */
+    it('Botas do Vento descem do acessório pro pé', () => {
+      const hero = novoHeroi();
+      const { hero: depois, equipped } = equipItem(hero, peca('bota_vento'));
+      expect(equipped).toBe(true);
+      expect(depois.equip.botas?.templateId).toBe('bota_vento');
+      expect(depois.equip.acessorio ?? null).toBeNull();
+    });
   });
 });
 

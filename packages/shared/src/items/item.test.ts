@@ -15,9 +15,30 @@ function espada(rarityId = 'comum'): Item {
   return instantiate(template, rarity, { rng: seededRng(1), now: fixedNow });
 }
 
+/**
+ * Os 24 itens que vieram do `js/items.js` do jogo original. A lista é
+ * fechada e não cresce: item novo entra no catálogo, não aqui.
+ */
+const DO_JOGO_ORIGINAL = [
+  'espada', 'machado', 'adaga', 'arco', 'cajado', 'maca', 'marreta', 'violao',
+  'escudo', 'couro', 'placas', 'robe',
+  'anel_som', 'amuleto_sab', 'bota_vento', 'colar_forca',
+  'pot_vida', 'pot_mana', 'pergaminho',
+  'minerio', 'essencia', 'catalisador_mitico', 'pedra_protecao', 'couro_bruto',
+];
+
 describe('catálogo', () => {
-  it('mantém os 24 templates do jogo original', () => {
-    expect(TEMPLATES).toHaveLength(24);
+  /**
+   * Isto já foi `toHaveLength(24)`, que dizia a coisa errada de dois
+   * jeitos: reclamava de item novo (legítimo) e **não** reclamaria se a
+   * espada sumisse e uma banana entrasse no lugar. O que precisa valer é
+   * que nada do save antigo virou `templateById(...) === undefined` — item
+   * some do catálogo e a peça na mochila de alguém fica sem nome, sem
+   * ícone e sem slot.
+   */
+  it('não perde nenhum dos 24 itens do jogo original', () => {
+    const ids = new Set(TEMPLATES.map((t) => t.id));
+    expect(DO_JOGO_ORIGINAL.filter((id) => !ids.has(id))).toEqual([]);
   });
 
   it('não tem id de template duplicado', () => {
