@@ -31,15 +31,35 @@ export const ARQUIVO_GERADO = join(AQUI, '..', 'lib', 'paperdoll', 'disponivel.t
 /**
  * As pastas cujo conteúdo vira lista, e o nome da constante de cada uma.
  *
+ * **A pasta é o tipo da camada; o arquivo é o id.** O vocabulário é o do
+ * Breno, escrito no doc dele, pra arte nova cair na pasta óbvia sem tabela
+ * de tradução:
+ *
+ * | pasta | o que é | nomeado por |
+ * |---|---|---|
+ * | `back` | asa, cauda — atrás do corpo | id da raça |
+ * | `ladd` | parte da armadura na perna | `templateId` |
+ * | `badd` | parte da armadura no tronco | `templateId` |
+ * | `hadd` | parte da armadura na cabeça | `templateId` |
+ * | `traco` | o "add" da raça, que sobrevive à armadura | nome livre |
+ *
+ * Os três `add` existem porque uma peça de armadura nem sempre é uma
+ * camada só: o manto tem o contorno e o preenchimento, e o dia em que algo
+ * precisar ser desenhado **entre** eles, achatar teria impedido.
+ *
  * `base/` fica de fora: calça e roupa entram sempre, não são escolha de
  * ninguém. `traco/` entra como lista de arquivos, e não de ids, porque
  * `orelhas-de-gato.png` não diz "felino" — quem liga raça a traço é o mapa
  * escrito à mão em `camadas.ts`, que é decisão e não inventário.
  */
 export const PASTAS = [
+  { pasta: 'back', constante: 'COSTAS', doc: 'O que fica **atrás** do corpo — asa, cauda. Pelo id da raça.' },
   { pasta: 'corpo', constante: 'CORPOS', doc: 'Raças com corpo desenhado.' },
   { pasta: 'arma', constante: 'ARMAS', doc: 'Armas com camada — o nome do arquivo é o `templateId`.' },
   { pasta: 'armadura', constante: 'ARMADURAS', doc: 'Armaduras com camada.' },
+  { pasta: 'ladd', constante: 'ADICIONAIS_DE_PERNA', doc: 'Parte da armadura que se desenha por cima, na perna. Pelo `templateId`.' },
+  { pasta: 'badd', constante: 'ADICIONAIS_DE_TRONCO', doc: 'Parte da armadura que se desenha por cima, no tronco. Pelo `templateId`.' },
+  { pasta: 'hadd', constante: 'ADICIONAIS_DE_CABECA', doc: 'Parte da armadura que se desenha por cima, na cabeça. Pelo `templateId`.' },
   { pasta: 'secundaria', constante: 'SECUNDARIAS', doc: 'O que a mão secundária pode segurar.' },
   { pasta: 'cabelo', constante: 'CABELOS', doc: 'Cabelos disponíveis.' },
   { pasta: 'traco', constante: 'ARQUIVOS_DE_TRACO', doc: 'Arquivos de traço de raça, pelo nome — ver `TRACOS_DE_RACA`.' },

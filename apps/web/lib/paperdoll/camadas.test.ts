@@ -154,6 +154,70 @@ describe('montarCamadas', () => {
 });
 
 /**
+ * As partes de uma peça de armadura — o vocabulário do doc do Breno.
+ *
+ * Uma armadura nem sempre é uma camada só: o manto do mago tem contorno e
+ * preenchimento, e o chapéu é a parte de cabeça da mesma peça. Achatar tudo
+ * num PNG dá a mesma tela **hoje** e impede, pra sempre, que algo seja
+ * desenhado entre duas partes.
+ */
+describe('as partes da armadura', () => {
+  const comRobe = montarCamadas({ raca: 'humano', armadura: 'robe' });
+
+  it('o robe traz tronco e cabeça além da peça base', () => {
+    expect(comRobe).toContain('/img/paperdoll/armadura/robe.png');
+    expect(comRobe).toContain('/img/paperdoll/badd/robe.png');
+    expect(comRobe).toContain('/img/paperdoll/hadd/robe.png');
+  });
+
+  /** Perna primeiro, depois tronco, depois cabeça: de baixo pra cima. */
+  it('as partes vêm depois da peça base, de baixo pra cima', () => {
+    expect(posicao(comRobe, 'armadura/robe')).toBeLessThan(posicao(comRobe, 'badd/robe'));
+    expect(posicao(comRobe, 'badd/robe')).toBeLessThan(posicao(comRobe, 'hadd/robe'));
+  });
+
+  /**
+   * O que mantém o traço valendo.
+   *
+   * O chapéu do mago cobre o rosto inteiro. Se o `hadd` fosse desenhado
+   * depois do traço, o felino de chapéu voltaria a ser indistinguível do
+   * humano de chapéu — e é exatamente isso que a camada de traço existe pra
+   * impedir. Conferido na tela: as orelhas saem por cima da aba.
+   */
+  it('o traço da raça sobrevive à parte de cabeça da armadura', () => {
+    const felino = montarCamadas({ raca: 'felino', armadura: 'robe' });
+
+    expect(posicao(felino, 'hadd/robe')).toBeLessThan(posicao(felino, 'orelhas-de-gato'));
+  });
+
+  /** Armadura sem partes é o caso comum, e não é erro. */
+  it('peça sem partes desenhadas não inventa camada', () => {
+    const placas = montarCamadas({ raca: 'humano', armadura: 'placas' });
+
+    expect(placas.some((c) => c.includes('/badd/') || c.includes('/hadd/') || c.includes('/ladd/'))).toBe(false);
+  });
+
+  /** Sem armadura equipada, parte de armadura nenhuma entra. */
+  it('sem armadura não há partes', () => {
+    expect(montarCamadas({ raca: 'humano' }).some((c) => c.includes('add/'))).toBe(false);
+  });
+
+  /**
+   * Asa e cauda saem das costas: desenhá-las depois do corpo faria a asa
+   * passar por cima do peito. Ainda não há arte — o que este teste prende é
+   * a **guarda**, pra que a camada não apareça antes do arquivo existir.
+   */
+  it('o que fica atrás do corpo vem antes dele, e só quando existe', () => {
+    for (const raca of CORPOS) {
+      const camadas = montarCamadas({ raca });
+      const costas = posicao(camadas, 'back/');
+      if (costas === -1) continue;
+      expect(costas).toBeLessThan(posicao(camadas, 'corpo/'));
+    }
+  });
+});
+
+/**
  * O que fica **na mão** sai do corte da cintura e é desenhado inteiro.
  *
  * Duas coisas dependem disso. A primeira é um defeito que existia calado:

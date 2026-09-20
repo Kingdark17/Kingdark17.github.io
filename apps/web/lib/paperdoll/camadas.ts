@@ -26,9 +26,18 @@
 
 import { templateById } from '@rpg-legend/shared';
 
-import { ARMADURAS, ARMAS, CORPOS, SECUNDARIAS } from './disponivel';
+import {
+  ADICIONAIS_DE_CABECA,
+  ADICIONAIS_DE_PERNA,
+  ADICIONAIS_DE_TRONCO,
+  ARMADURAS,
+  ARMAS,
+  CORPOS,
+  COSTAS,
+  SECUNDARIAS,
+} from './disponivel';
 
-export { ARMADURAS, ARMAS, CORPOS, SECUNDARIAS };
+export { ADICIONAIS_DE_CABECA, ADICIONAIS_DE_PERNA, ADICIONAIS_DE_TRONCO, ARMADURAS, ARMAS, CORPOS, COSTAS, SECUNDARIAS };
 
 const RAIZ = '/img/paperdoll';
 
@@ -118,7 +127,13 @@ export interface Vestimenta {
 export function montarCamadas({ raca, arma, armadura, secundaria }: Vestimenta): string[] {
   if (!raca || !CORPOS.has(raca)) return [];
 
-  const camadas = [`${RAIZ}/corpo/${raca}.png`, `${RAIZ}/base/calca.png`, `${RAIZ}/base/roupa.png`];
+  const camadas: string[] = [];
+
+  // Atrás de tudo, inclusive do corpo: asa e cauda saem das costas, então
+  // desenhá-las depois faria a asa passar por cima do peito.
+  if (COSTAS.has(raca)) camadas.push(`${RAIZ}/back/${raca}.png`);
+
+  camadas.push(`${RAIZ}/corpo/${raca}.png`, `${RAIZ}/base/calca.png`, `${RAIZ}/base/roupa.png`);
 
   // O cabelo vem **antes** da armadura: assim a peça cobre o cabelo, em vez
   // de o cabelo cair por cima do peitoral e das ombreiras. Com uma camada
@@ -128,8 +143,22 @@ export function montarCamadas({ raca, arma, armadura, secundaria }: Vestimenta):
   // por cima —, que é o que cabelo longo pede. Custa um PNG a mais por
   // penteado, e a hora de fazer isso é quando existir penteado longo.
   if (!SEM_CABELO.has(raca)) camadas.push(`${RAIZ}/cabelo/${CABELO_PADRAO}.png`);
-  if (armadura && ARMADURAS.has(armadura)) camadas.push(`${RAIZ}/armadura/${armadura}.png`);
 
+  if (armadura) {
+    if (ARMADURAS.has(armadura)) camadas.push(`${RAIZ}/armadura/${armadura}.png`);
+
+    // As partes da peça, de baixo pra cima. Uma armadura pode ter zero,
+    // uma ou as três — o manto do mago tem só a do tronco, e o chapéu dele
+    // é a da cabeça. Ausência é o caso comum e não é erro.
+    if (ADICIONAIS_DE_PERNA.has(armadura)) camadas.push(`${RAIZ}/ladd/${armadura}.png`);
+    if (ADICIONAIS_DE_TRONCO.has(armadura)) camadas.push(`${RAIZ}/badd/${armadura}.png`);
+    if (ADICIONAIS_DE_CABECA.has(armadura)) camadas.push(`${RAIZ}/hadd/${armadura}.png`);
+  }
+
+  // O traço da raça vem **depois de toda a armadura**, adicionais
+  // inclusive. É o ponto dele: sobreviver à peça. Pôr o `hadd` por cima
+  // desfaria exatamente o que o traço existe pra garantir — o felino de
+  // chapéu voltaria a ser indistinguível do humano de chapéu.
   const traco = TRACOS_DE_RACA.get(raca);
   if (traco) camadas.push(`${RAIZ}/${traco}`);
 
