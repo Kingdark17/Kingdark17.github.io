@@ -19,20 +19,20 @@ export const COSTAS: ReadonlySet<string> = new Set([]);
 /** Raças com corpo desenhado. (10 em `public/img/paperdoll/corpo/`) */
 export const CORPOS: ReadonlySet<string> = new Set(['celestial', 'draconato', 'elfo', 'elfo_negro', 'felino', 'goblin', 'humano', 'meio_elfo', 'morto_vivo', 'orc']);
 
-/** Armas com camada — o nome do arquivo é o `templateId`. (3 em `public/img/paperdoll/arma/`) */
-export const ARMAS: ReadonlySet<string> = new Set(['adaga', 'cajado', 'espada']);
+/** Armas com camada — o nome do arquivo é o `templateId`. (4 em `public/img/paperdoll/arma/`) */
+export const ARMAS: ReadonlySet<string> = new Set(['adaga', 'arco', 'cajado', 'espada']);
 
 /** Armaduras com camada. (2 em `public/img/paperdoll/armadura/`) */
 export const ARMADURAS: ReadonlySet<string> = new Set(['placas', 'robe']);
 
-/** Parte da armadura que se desenha por cima, na perna. Pelo `templateId`. (0 em `public/img/paperdoll/ladd/`) */
-export const ADICIONAIS_DE_PERNA: ReadonlySet<string> = new Set([]);
+/** Parte da armadura que se desenha por cima, na perna. Pelo `templateId`. (2 em `public/img/paperdoll/ladd/`) */
+export const ADICIONAIS_DE_PERNA: ReadonlySet<string> = new Set(['placas', 'robe']);
 
 /** Parte da armadura que se desenha por cima, no tronco. Pelo `templateId`. (1 em `public/img/paperdoll/badd/`) */
 export const ADICIONAIS_DE_TRONCO: ReadonlySet<string> = new Set(['robe']);
 
-/** Parte da armadura que se desenha por cima, na cabeça. Pelo `templateId`. (1 em `public/img/paperdoll/hadd/`) */
-export const ADICIONAIS_DE_CABECA: ReadonlySet<string> = new Set(['robe']);
+/** Parte da armadura que se desenha por cima, na cabeça. Pelo `templateId`. (2 em `public/img/paperdoll/hadd/`) */
+export const ADICIONAIS_DE_CABECA: ReadonlySet<string> = new Set(['placas', 'robe']);
 
 /** O que a mão secundária pode segurar. (2 em `public/img/paperdoll/secundaria/`) */
 export const SECUNDARIAS: ReadonlySet<string> = new Set(['adaga', 'escudo']);

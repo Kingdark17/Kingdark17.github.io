@@ -190,11 +190,28 @@ describe('as partes da armadura', () => {
     expect(posicao(felino, 'hadd/robe')).toBeLessThan(posicao(felino, 'orelhas-de-gato'));
   });
 
-  /** Armadura sem partes é o caso comum, e não é erro. */
-  it('peça sem partes desenhadas não inventa camada', () => {
+  /**
+   * Peça pode ter uma parte, duas, as três ou nenhuma, e cada uma entra
+   * sozinha. As placas têm elmo e calça desenhados e **não** têm parte de
+   * tronco: quem desenha o tronco ali é a própria peça base.
+   *
+   * Este teste já usou as placas como exemplo de armadura *sem* partes —
+   * e envelheceu no dia em que o elmo e a calça chegaram. Agora ele afirma
+   * o que é estrutural: só entra o que existe em disco.
+   */
+  it('entra só a parte que existe, e nenhuma a mais', () => {
     const placas = montarCamadas({ raca: 'humano', armadura: 'placas' });
 
-    expect(placas.some((c) => c.includes('/badd/') || c.includes('/hadd/') || c.includes('/ladd/'))).toBe(false);
+    expect(placas).toContain('/img/paperdoll/ladd/placas.png');
+    expect(placas).toContain('/img/paperdoll/hadd/placas.png');
+    expect(placas.some((c) => c.includes('/badd/'))).toBe(false);
+  });
+
+  /** Armadura sem camada nenhuma não inventa parte. */
+  it('peça sem arte não inventa camada', () => {
+    const couro = montarCamadas({ raca: 'humano', armadura: 'couro' });
+
+    expect(couro.some((c) => c.includes('/armadura/') || c.includes('add/'))).toBe(false);
   });
 
   /** Sem armadura equipada, parte de armadura nenhuma entra. */
@@ -236,7 +253,7 @@ describe('o que está na mão', () => {
 
   it('nenhuma peça vestida entra na conta', () => {
     for (const camada of vestido.filter((c) => !ehSegurada(c))) {
-      expect(camada).toMatch(/\/(corpo|base|cabelo|armadura|traco)\//);
+      expect(camada).toMatch(/\/(back|corpo|base|cabelo|armadura|ladd|badd|hadd|traco)\//);
     }
   });
 
