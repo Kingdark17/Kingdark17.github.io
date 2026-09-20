@@ -46,18 +46,11 @@
 }
 
 .botao {
-  padding: 0.55rem 1.1rem;
-  background: var(--gold);
-  color: var(--ink);
-  border: none;
-  border-radius: 0.3rem;
-  font: inherit;
+  composes: botao from '../acabamento.module.css';
   font-weight: 600;
-  cursor: pointer;
 }
 
 .botao:disabled {
-  opacity: 0.55;
   cursor: progress;
 }
 

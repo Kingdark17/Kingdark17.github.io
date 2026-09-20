@@ -75,41 +75,14 @@
 }
 
 .botao {
-  padding: 0.45rem 1rem;
-  background: var(--gold);
-  color: var(--ink);
-  border: none;
-  border-radius: 0.3rem;
-  font: inherit;
+  composes: botao from '../acabamento.module.css';
   font-size: 0.85rem;
   font-weight: 600;
-  cursor: pointer;
-}
-
-.botao:disabled {
-  opacity: 0.5;
-  cursor: default;
 }
 
 .botaoDiscreto {
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 0.25rem;
-  color: var(--parchment-dim);
-  font: inherit;
+  composes: botaoDiscreto from '../acabamento.module.css';
   font-size: 0.8rem;
-  padding: 0.2rem 0.5rem;
-  cursor: pointer;
-}
-
-.botaoDiscreto:hover:not(:disabled) {
-  border-color: var(--gold);
-  color: var(--gold-bright);
-}
-
-.botaoDiscreto:disabled {
-  opacity: 0.45;
-  cursor: default;
 }
 
 .listaDePessoas {

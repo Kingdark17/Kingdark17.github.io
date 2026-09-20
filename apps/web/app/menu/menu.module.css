@@ -47,20 +47,21 @@
   font-size: 1.45rem;
 }
 
-/* "Jogar em destaque": ouro chapado em vez do degrade escuro dos outros.
-   O contraste é o que faz o olho pousar nele primeiro, sem precisar de
-   tamanho diferente — três botões de alturas diferentes desalinhariam a
-   pilha. */
+/* "Jogar em destaque". Era ouro chapado contra o degradê escuro dos
+   outros dois; com a pedra em todo botão, o contraste passou a ser a
+   letra — dourada, em negrito, com um halo que segue o recorte da pedra
+   em vez da caixa. O motivo original continua valendo: os três botões
+   têm que ter a mesma altura, senão a pilha desalinha. */
 .botaoForte {
-  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
-  border-color: var(--gold-bright);
-  color: var(--ink);
+  color: var(--gold-bright);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(232, 198, 90, 0.55);
 }
 
 .botaoForte:hover,
 .botaoForte:focus-visible {
-  color: var(--ink);
-  box-shadow: 0 0 18px rgba(232, 198, 90, 0.45);
+  color: var(--gold-bright);
+  filter: brightness(1.25) drop-shadow(0 0 6px rgba(232, 198, 90, 0.4));
 }
 
 /* ---------- o mascote ---------- */

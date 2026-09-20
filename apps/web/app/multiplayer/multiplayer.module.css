@@ -103,62 +103,24 @@
 }
 
 .botao {
-  padding: 0.5rem 1.1rem;
-  background: var(--gold);
-  color: var(--ink);
-  border: none;
-  border-radius: 0.3rem;
-  font: inherit;
+  composes: botao from '../acabamento.module.css';
   font-size: 0.88rem;
   font-weight: 600;
-  cursor: pointer;
 }
 
-.botao:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
-
+/* Vazado era "a mesma coisa sem o preenchimento dourado". Sem dourado
+   chapado em lugar nenhum, ele virou a pedra apagada, como o discreto —
+   a classe fica porque o `margin-left: auto` do discreto não serve aqui. */
 .botaoVazado {
-  padding: 0.5rem 1.1rem;
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 0.3rem;
-  color: var(--parchment);
-  font: inherit;
+  composes: botaoDiscreto from '../acabamento.module.css';
   font-size: 0.88rem;
-  cursor: pointer;
-}
-
-.botaoVazado:hover:not(:disabled) {
-  border-color: var(--gold);
-}
-
-.botaoVazado:disabled {
-  opacity: 0.45;
-  cursor: default;
+  color: var(--parchment);
 }
 
 .botaoDiscreto {
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 0.25rem;
-  color: var(--parchment-dim);
-  font: inherit;
+  composes: botaoDiscreto from '../acabamento.module.css';
   font-size: 0.8rem;
-  padding: 0.2rem 0.5rem;
-  cursor: pointer;
   margin-left: auto;
-}
-
-.botaoDiscreto:hover:not(:disabled) {
-  border-color: var(--gold);
-  color: var(--gold-bright);
-}
-
-.botaoDiscreto:disabled {
-  opacity: 0.4;
-  cursor: default;
 }
 
 .lista {

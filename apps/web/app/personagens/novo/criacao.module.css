@@ -198,25 +198,19 @@
 }
 
 .botao {
-  padding: 0.6rem 1.2rem;
-  background: var(--gold);
-  color: var(--ink);
-  border: none;
-  border-radius: 0.3rem;
-  font: inherit;
+  composes: botao from '../../acabamento.module.css';
   font-weight: 600;
-  cursor: pointer;
 }
 
 .botao:disabled {
-  opacity: 0.55;
   cursor: not-allowed;
 }
 
+/* Era o mesmo botão com o dourado trocado por painel escuro. Agora é a
+   pedra apagada — a mesma distinção, no material novo. */
 .botaoSecundario {
-  background: var(--panel-2);
-  color: var(--parchment);
-  border: 1px solid var(--line);
+  composes: botaoDiscreto from '../../acabamento.module.css';
+  font-weight: 400;
 }
 
 .erro {

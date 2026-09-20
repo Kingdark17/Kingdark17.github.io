@@ -547,24 +547,18 @@
   margin-top: 0.7rem;
 }
 
+/* A pedra do `acabamento` — o `padding` some junto com a borda de 1px:
+   as tampas da arte (16px à esquerda, 20px à direita) já são o recuo. */
 .botao {
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 0.3rem;
-  color: var(--parchment);
-  font: inherit;
+  composes: botao from '../acabamento.module.css';
   font-size: 0.85rem;
-  padding: 0.4rem 0.9rem;
-  cursor: pointer;
 }
 
-.botao:hover {
-  border-color: var(--gold);
-}
-
+/* Sem preenchimento dourado: a pedra é o material de todo botão agora, e
+   quem manda na tela se marca pela letra. */
 .botaoPrincipal {
-  border-color: var(--gold);
   color: var(--gold-bright);
+  font-weight: 600;
 }
 
 /* Arte no lugar do emoji, nos botões que já ganharam a sua.
@@ -968,19 +962,8 @@
 }
 
 .botaoDiscreto {
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 0.25rem;
-  color: var(--parchment-dim);
-  font: inherit;
+  composes: botaoDiscreto from '../acabamento.module.css';
   font-size: 0.8rem;
-  padding: 0.2rem 0.45rem;
-  cursor: pointer;
-}
-
-.botaoDiscreto:hover {
-  border-color: var(--gold);
-  color: var(--gold-bright);
 }
 
 .slotVazio {

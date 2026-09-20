@@ -49,27 +49,81 @@
   padding-bottom: 0.5rem;
 }
 
+/**
+ * O botão de pedra, em 9-slice.
+ *
+ * A arte do Breno é 58×21 e **não** era fatiável como veio: o musgo está
+ * espalhado pelo meio também, e repetir aquele miolo vira papel de parede
+ * — conferido na tela antes de decidir. As folhas em `img/ui/botao*.png`
+ * são remontadas a partir dela pra que o que sobra entre os cortes seja
+ * uma faixa de pedra pura; as duas pontas, que é onde o musgo é desenhado
+ * de verdade, ficam intactas. Ver `NOTAS-MIGRACAO.md`.
+ *
+ * Os números do `slice` **são** a geometria da folha (40×21) e não podem
+ * ser mexidos sozinhos: mudar um aqui sem regerar a folha corta a arte no
+ * lugar errado. O miolo vertical é a linha 9 e tem 1 px de altura de
+ * propósito — período de 1 px não tem como formar listra quando o botão
+ * cresce, e ele cresce sempre que tem texto dentro.
+ *
+ * `border-width` igual ao `slice` desenha a arte em 1:1. É o tamanho que
+ * deixa o botão com a mesma altura que ele já tinha; pra engrossar, os
+ * dois valores sobem juntos na mesma proporção.
+ */
 .botao {
-  background: linear-gradient(180deg, #2a2118, #1a140e);
-  border: 1px solid var(--gold);
-  border-radius: 0.25rem;
+  /* `inline-flex` porque metade destes botões é `<Link>`, e `<a>` nasce
+     inline — onde borda de 9/11px não empurra a linha e vaza por cima do
+     texto vizinho. Com a borda de 1px que havia antes dava pra não notar;
+     com a arte, não dá. O `conta.module.css` já fazia isto sozinho pelo
+     mesmo motivo, e agora é uma regra só. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border-style: solid;
+  border-width: 9px 20px 11px 16px;
+  border-image-source: url('/img/ui/botao.png');
+  border-image-slice: 9 20 11 16 fill;
+  border-image-repeat: repeat;
+  border-radius: 0;
+  image-rendering: pixelated;
   color: var(--parchment);
   font: inherit;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  padding: 0 0.2rem;
   cursor: pointer;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: filter 0.12s ease, color 0.12s ease;
 }
 
+/* `filter` e não `box-shadow`: a pedra tem canto transparente, e sombra de
+   caixa desenharia um halo retangular em volta de um botão que não é
+   retangular. `brightness` segue o alfa da arte. */
 .botao:hover:not(:disabled),
 .botao:focus-visible {
-  box-shadow: 0 0 14px rgba(201, 162, 39, 0.3);
+  filter: brightness(1.18);
   color: var(--gold-bright);
+}
+
+/* A terceira arte do Breno: topo e base com a mesma luz, que é o que faz
+   pedra parecer afundada. */
+.botao:active:not(:disabled) {
+  border-image-source: url('/img/ui/botao-apertado.png');
+  filter: none;
 }
 
 .botao:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+/**
+ * A variante apagada (`button_menu_dark_layout`), pro botão que existe mas
+ * não quer atenção — "Cancelar", "Voltar", "Apagar".
+ */
+.botaoDiscreto {
+  composes: botao;
+  border-image-source: url('/img/ui/botao-escuro.png');
+  color: var(--parchment-dim);
 }
 
 /**

@@ -1992,6 +1992,45 @@ Consequência pra quem for testar: **entrar na sala não gera pacote `z`
 nenhum**. É preciso agir — andar, lutar, usar item. Vale também como
 lembrete de que `welcome` é sincronização de chegada do outro, não eco.
 
+## O botão de pedra não era fatiável como veio (2026-09-20)
+
+A arte do Breno (`button_menu_layout.png`, 58×21, mais as variantes escura
+e apertada) parecia um 9-slice pronto. Não era: o musgo está espalhado
+**pelo meio também**, não só nas bordas.
+
+| Medida | Valor |
+| a arte tem musgo em | 42 das 58 colunas |
+| maior faixa de pedra pura | 4 px (colunas 34–37) |
+| repetindo o miolo como veio | dá pra contar as repetições — vira papel de parede |
+
+O `border-image` do CSS só sabe repetir o que sobra **entre** os cortes, e
+não deixa escolher outra faixa. Então as folhas em `apps/web/public/img/ui/`
+são **remontadas** a partir da arte:
+
+    [col 0..15 tampa esquerda][col 34..37 pedra pura][col 38..57 tampa direita]
+
+40×21, cortes `9 20 11 16`. Perde-se o musgo esparso do miolo (1–2 px por
+coluna); ganha-se botão de qualquer largura sem listra, e as duas pontas —
+onde o musgo é desenhado de verdade — ficam intactas.
+
+### A linha 9, e por que não a 7
+
+O botão fica mais alto que os 21 px da arte assim que tem texto dentro, então
+o miolo **vertical** repete sempre, não só em caso de borda. Ele tem 1 px de
+altura de propósito: período de 1 px não tem como formar padrão.
+
+A linha 7 parecia servir e não servia. Na arte apertada ela cai numa fronteira
+de luz — `60,60,73,73` nas quatro colunas do miolo — e vira listra vertical de
+4 px quando repete. A 9 é uniforme nas três artes. **Foi visto na tela antes de
+trocar**, não deduzido.
+
+### Se a arte for redesenhada
+
+Os números do `border-image-slice` no `acabamento.module.css` **são** a
+geometria da folha. Mexer num sem regerar a folha corta a arte no lugar
+errado, e o resultado não é erro de compilação — é um botão torto que ninguém
+liga à mudança.
+
 ## Os filtros de deploy (2026-08-27)
 
 Commit que mexe só na API redeployava o front, e vice-versa. Os dois lados

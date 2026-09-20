@@ -120,30 +120,20 @@
 }
 
 .botao {
-  padding: 0.45rem 0.9rem;
-  background: var(--gold);
-  color: var(--ink);
-  border: none;
-  border-radius: 0.3rem;
-  font: inherit;
+  composes: botao from '../acabamento.module.css';
+  font-size: 0.85rem;
   font-weight: 600;
-  cursor: pointer;
+  text-decoration: none;
 }
 
 .botao:disabled {
-  opacity: 0.55;
   cursor: progress;
 }
 
 .botaoDiscreto {
-  background: none;
-  border: none;
-  color: var(--parchment-dim);
-  font: inherit;
+  composes: botaoDiscreto from '../acabamento.module.css';
   font-size: 0.85rem;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0;
+  text-decoration: none;
 }
 
 .botaoPerigo {

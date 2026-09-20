@@ -292,7 +292,10 @@ export function FormularioCriacao({ slot }: { slot: number }) {
       </section>
 
       <div className={styles.acoes}>
-        <button type="button" className={`${styles.botao} ${styles.botaoSecundario}`} onClick={rolar} disabled={salvando}>
+        {/* Só `botaoSecundario`: ele já traz o botão inteiro por `composes`.
+            Passar os dois faria duas regras disputarem a mesma arte com a
+            mesma especificidade, e quem ganha viraria ordem de arquivo. */}
+        <button type="button" className={styles.botaoSecundario} onClick={rolar} disabled={salvando}>
           🎲 Rolar Tudo
         </button>
         <button type="button" className={styles.botao} onClick={comecar} disabled={salvando}>
