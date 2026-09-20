@@ -65,9 +65,16 @@
  * propósito — período de 1 px não tem como formar listra quando o botão
  * cresce, e ele cresce sempre que tem texto dentro.
  *
- * `border-width` igual ao `slice` desenha a arte em 1:1. É o tamanho que
- * deixa o botão com a mesma altura que ele já tinha; pra engrossar, os
- * dois valores sobem juntos na mesma proporção.
+ * **`border-width` é a escala da arte** — é o único jeito de ampliá-la, e
+ * por isso ele não acompanha o `slice`. Aqui é 2× (18/40/22/32 contra
+ * 9/20/11/16), e a escala precisa ser inteira: fração borra o pixel.
+ *
+ * Já foi 1:1, e estava errado. Num botão de 370px de largura as tampas com
+ * musgo somavam 36px — 10% do botão —, e o resto era a faixa de pedra lisa
+ * esticada: laje cinza com pontinhos verdes nos cantos. Todo o resto da
+ * arte do jogo é ampliada (o boneco é 4×); chrome de UI em 1:1 num celular
+ * é microscópica. O menu sobe pra 3× por conta própria, porque lá os
+ * botões são largos e a tampa precisa pesar mais.
  */
 .botao {
   /* `inline-flex` porque metade destes botões é `<Link>`, e `<a>` nasce
@@ -80,7 +87,7 @@
   justify-content: center;
   background: none;
   border-style: solid;
-  border-width: 9px 20px 11px 16px;
+  border-width: 18px 40px 22px 32px;
   border-image-source: url('/img/ui/botao.png');
   border-image-slice: 9 20 11 16 fill;
   border-image-repeat: repeat;

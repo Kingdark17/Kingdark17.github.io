@@ -40,7 +40,15 @@
 
 .botao {
   composes: botao from '../acabamento.module.css';
-  padding: 1.05rem 1.5rem;
+  /* 3× em vez do 2× do acabamento: aqui o botão ocupa a largura da tela, e
+     quanto mais largo ele fica, menor a fração dele que tem musgo — o
+     musgo só existe nas duas pontas da arte. Com 3× as tampas somam 108px
+     e voltam a pesar. */
+  border-width: 27px 60px 33px 48px;
+  /* O recuo agora vem da borda: 48px de um lado, 60px do outro, 27 e 33 em
+     cima e embaixo. Somar `padding` por cima deixaria o botão com 126px de
+     altura. */
+  padding: 0;
   text-align: center;
   text-decoration: none;
   font-family: var(--font-display), Georgia, serif;
