@@ -33,6 +33,7 @@ import {
   ADICIONAIS_DE_TRONCO,
   ARMADURAS,
   ARMAS,
+  CABELOS,
   CORPOS,
   COSTAS,
   SECUNDARIAS,
@@ -45,6 +46,7 @@ export {
   ADICIONAIS_DE_TRONCO,
   ARMADURAS,
   ARMAS,
+  CABELOS,
   CORPOS,
   COSTAS,
   SECUNDARIAS,
@@ -115,10 +117,41 @@ export const TRACOS_DE_RACA: ReadonlyMap<string, string> = new Map([
  * (morto_vivo) resolvem a cabeça sozinhos; cabeça humanoide comum espera a
  * camada. Goblin e orc são cabeça humanoide comum, então levam.
  */
-const SEM_CABELO: ReadonlySet<string> = new Set(['felino', 'morto_vivo']);
+export const SEM_CABELO: ReadonlySet<string> = new Set(['felino', 'morto_vivo']);
 
-/** O único cabelo desenhado até agora. Ver `CABELOS` no arquivo gerado. */
-const CABELO_PADRAO = 'masculino';
+/**
+ * O penteado de quem não escolheu — todo personagem criado antes de a
+ * escolha existir. Trocar isto mudaria a cara de gente que já joga, então
+ * é o mesmo desenho que sempre foi o único.
+ *
+ * Ele se chamava `masculino` e virou `curto` junto com a escolha. Gênero é
+ * outro eixo, e é item separado no doc do Breno: é o **corpo** que muda,
+ * não o cabelo. Renomear custou um `git mv` porque nenhum save guardava o
+ * id ainda; depois disso teria custado migração.
+ */
+export const CABELO_PADRAO = 'curto';
+
+/** Penteado válido, ou o padrão. Raça sem cabelo desenhado devolve nada. */
+export function cabeloDe(raca: string, escolhido?: string | null): string | null {
+  if (SEM_CABELO.has(raca)) return null;
+  return escolhido && CABELOS.has(escolhido) ? escolhido : CABELO_PADRAO;
+}
+
+/**
+ * Os penteados que a criação oferece, **do mais curto pro mais longo** —
+ * que é a ordem em que a pessoa compara. `CABELOS` não serve pra isso: é
+ * um `Set` lido do disco, e sai alfabético (curto, longo, medio).
+ *
+ * Mora aqui, e não na tela, pelo mesmo motivo de `TRACOS_DE_RACA`: é
+ * tabela escrita à mão que o disco não tem como responder sozinho, e
+ * tabela escrita à mão precisa de teste. `camadas.test.ts` confere os dois
+ * lados — que todo id listado tem arte, e que toda arte está listada.
+ */
+export const PENTEADOS: ReadonlyArray<{ id: string; nome: string }> = [
+  { id: 'curto', nome: 'Curto' },
+  { id: 'medio', nome: 'Médio' },
+  { id: 'longo', nome: 'Longo' },
+].filter((penteado) => CABELOS.has(penteado.id));
 
 export interface Vestimenta {
   /** Id da raça (`RACES[].id`). */
@@ -135,6 +168,8 @@ export interface Vestimenta {
   secundaria?: string | null;
   /** `templateId` do que está no slot `acessorio`. */
   acessorio?: string | null;
+  /** Penteado escolhido na criação. Sem escolha, vai o padrão. */
+  cabelo?: string | null;
 }
 
 /**
@@ -163,7 +198,7 @@ function vestir(camadas: string[], pasta: string, id: string | null | undefined,
  * segurados na frente do corpo, e orelha atravessando escudo seria pior
  * que capacete cobrindo orelha.
  */
-export function montarCamadas({ raca, arma, armadura, elmo, calca, secundaria, acessorio }: Vestimenta): string[] {
+export function montarCamadas({ raca, arma, armadura, elmo, calca, secundaria, acessorio, cabelo }: Vestimenta): string[] {
   if (!raca || !CORPOS.has(raca)) return [];
 
   const camadas: string[] = [];
@@ -178,10 +213,15 @@ export function montarCamadas({ raca, arma, armadura, elmo, calca, secundaria, a
   // de o cabelo cair por cima do peitoral e das ombreiras. Com uma camada
   // só é o arranjo certo, e foi o que o Breno pediu.
   //
-  // O correto de verdade seriam duas camadas — costas atrás de tudo, frente
-  // por cima —, que é o que cabelo longo pede. Custa um PNG a mais por
-  // penteado, e a hora de fazer isso é quando existir penteado longo.
-  if (!SEM_CABELO.has(raca)) camadas.push(`${RAIZ}/cabelo/${CABELO_PADRAO}.png`);
+  // Aqui dizia que penteado longo ia exigir duas camadas — uma atrás de
+  // tudo, outra por cima — e que a hora de fazer isso seria quando
+  // existisse um. Existe (`longo`), e **não exigiu**: ele desce até a
+  // linha 32 e a roupa começa na 26, então as sete linhas de sobreposição
+  // caem na altura do ombro, onde cabelo por cima é o certo. Conferido na
+  // tela com placas e com o robe. O aviso valeria pra cabelo na cintura;
+  // este vai no queixo.
+  const penteado = cabeloDe(raca, cabelo);
+  if (penteado) camadas.push(`${RAIZ}/cabelo/${penteado}.png`);
 
   // Daqui pra baixo é a ordem de vestir, escrita como uma lista. Cada
   // linha é "esta peça, nesta pasta" — e a ordem das linhas **é** a ordem

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ARMADURAS, ARMAS, CORPOS, ehSegurada, maoDaCamada, montarCamadas } from './camadas';
+import { ARMADURAS, ARMAS, CABELO_PADRAO, CABELOS, CORPOS, PENTEADOS, ehSegurada, maoDaCamada, montarCamadas } from './camadas';
 
 /** Onde a peça aparece na pilha, ou -1. Trás para frente. */
 function posicao(camadas: string[], trecho: string): number {
@@ -18,7 +18,7 @@ describe('montarCamadas', () => {
       '/img/paperdoll/corpo/humano.png',
       '/img/paperdoll/base/calca.png',
       '/img/paperdoll/base/roupa.png',
-      '/img/paperdoll/cabelo/masculino.png',
+      '/img/paperdoll/cabelo/curto.png',
     ]);
   });
 
@@ -119,7 +119,7 @@ describe('montarCamadas', () => {
      */
     it.each(['goblin', 'orc'])('o %s leva cabelo, como as outras cabeças humanoides', (raca) => {
       expect(CORPOS.has(raca)).toBe(true);
-      expect(montarCamadas({ raca })).toContain('/img/paperdoll/cabelo/masculino.png');
+      expect(montarCamadas({ raca })).toContain('/img/paperdoll/cabelo/curto.png');
     });
 
     /**
@@ -149,6 +149,64 @@ describe('montarCamadas', () => {
       const camadas = montarCamadas({ raca: 'humano', armadura: 'placas' });
 
       expect(posicao(camadas, 'cabelo/')).toBeLessThan(posicao(camadas, 'armadura/placas'));
+    });
+  });
+
+  /**
+   * O penteado virou escolha em 2026-09-20. Antes havia um só, chumbado.
+   */
+  describe('escolha de penteado', () => {
+    it('o escolhido é o que desenha', () => {
+      expect(montarCamadas({ raca: 'humano', cabelo: 'longo' })).toContain('/img/paperdoll/cabelo/longo.png');
+      expect(montarCamadas({ raca: 'humano', cabelo: 'medio' })).toContain('/img/paperdoll/cabelo/medio.png');
+    });
+
+    /**
+     * Ninguém que já tem personagem escolheu penteado — o campo nasceu
+     * depois deles. Cair no padrão é o que impede a leva inteira de ficar
+     * careca de um dia pro outro.
+     */
+    it('sem escolha, e com escolha que não existe, vai o padrão', () => {
+      for (const cabelo of [undefined, null, '', 'moicano_de_fogo']) {
+        expect(montarCamadas({ raca: 'humano', cabelo })).toContain(`/img/paperdoll/cabelo/${CABELO_PADRAO}.png`);
+      }
+    });
+
+    /** Raça sem cabelo desenhado ignora a escolha em vez de obedecer. */
+    it('felino e morto-vivo continuam sem cabelo, mesmo escolhendo', () => {
+      expect(posicao(montarCamadas({ raca: 'felino', cabelo: 'longo' }), 'cabelo/')).toBe(-1);
+      expect(posicao(montarCamadas({ raca: 'morto_vivo', cabelo: 'longo' }), 'cabelo/')).toBe(-1);
+    });
+
+    /**
+     * O comentário do módulo previa que penteado longo exigiria duas
+     * camadas — uma atrás do corpo, outra na frente — e que a hora seria
+     * quando existisse um. Existe, e não exigiu: ele desce até a linha 32
+     * e a roupa começa na 26, então a sobreposição cai na altura do ombro,
+     * onde cabelo por cima é o certo. Este teste prende o arranjo que foi
+     * conferido na tela; se um penteado na cintura chegar, ele quebra o
+     * raciocínio e não o teste — por isso o comentário ficou no módulo.
+     */
+    /**
+     * Tabela escrita à mão contra o disco, nos dois sentidos. Faltando um
+     * lado, a falha é silenciosa: id sem arte vira 404 na amostra da
+     * criação, e arte sem id some da lista sem ninguém perceber que o
+     * penteado novo nunca apareceu pra escolher.
+     */
+    it('a lista da criação e a arte no disco cobrem uma à outra', () => {
+      expect(PENTEADOS.map((p) => p.id).sort()).toEqual([...CABELOS].sort());
+    });
+
+    it('o padrão está entre os que dá pra escolher', () => {
+      expect(PENTEADOS.map((p) => p.id)).toContain(CABELO_PADRAO);
+    });
+
+    it('todo penteado usa uma camada só, na mesma posição da pilha', () => {
+      for (const cabelo of CABELOS) {
+        const camadas = montarCamadas({ raca: 'humano', cabelo, armadura: 'placas' });
+        expect(camadas.filter((c) => c.includes('/cabelo/'))).toHaveLength(1);
+        expect(posicao(camadas, 'cabelo/')).toBeLessThan(posicao(camadas, 'armadura/placas'));
+      }
     });
   });
 });

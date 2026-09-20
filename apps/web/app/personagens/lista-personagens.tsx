@@ -103,6 +103,7 @@ export function ListaPersonagens() {
                   calca={personagem.equip?.calca}
                   secundaria={personagem.equip?.secundaria}
                   acessorio={personagem.equip?.acessorio}
+                  cabelo={personagem.hair}
                   lado={104}
                   // Um atraso por slot: sem ele os três bonecos sobem e
                   // descem no mesmo instante e parecem uma engrenagem.

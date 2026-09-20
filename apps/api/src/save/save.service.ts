@@ -48,6 +48,8 @@ export interface CharacterSummary {
   raceIcon: string;
   className: string;
   classIcon: string;
+  /** Penteado escolhido na criação. Vazio = nunca escolheu, e o card desenha o padrão. */
+  hair: string;
   level: number;
   floor: number;
   equip: SummaryEquip;
@@ -91,6 +93,7 @@ function heroFieldsOf(data: unknown): Omit<CharacterSummary, 'slot' | 'updatedAt
     raceIcon: typeof hero.raceIcon === 'string' ? hero.raceIcon : '',
     className: typeof hero.className === 'string' ? hero.className : '',
     classIcon: typeof hero.classIcon === 'string' ? hero.classIcon : '',
+    hair: typeof hero.hair === 'string' ? hero.hair : '',
     level: Number(hero.level) || 1,
     floor: Number(save.floor) || 1,
     equip: {

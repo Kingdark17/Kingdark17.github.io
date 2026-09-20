@@ -73,6 +73,15 @@ export interface Hero extends HeroCore {
    */
   classId?: string;
   raceId?: string;
+  /**
+   * Penteado escolhido na criação. **Só aparência** — nenhuma regra lê
+   * isto, e está aqui porque é o save que precisa lembrar.
+   *
+   * Opcional pelo mesmo motivo dos dois de cima: quem já tem personagem
+   * não escolheu nada, e cai no padrão do paperdoll em vez de ficar
+   * careca. Raça sem cabelo desenhado (felino, morto-vivo) ignora o campo.
+   */
+  hair?: string;
   xp: number;
   xpNext: number;
   attrPoints: number;
@@ -122,6 +131,8 @@ export interface HeroCreation {
   /** Ids dos poderes escolhidos pelo jogador (a assinatura da classe entra automaticamente). */
   chosenPowerIds: string[];
   attrs?: Attributes;
+  /** Penteado. Opcional: sem escolha, o paperdoll usa o padrão dele. */
+  hair?: string;
 }
 
 export function buildHero(creation: HeroCreation, rng: Rng = defaultRng): Hero {
@@ -156,6 +167,7 @@ export function buildHero(creation: HeroCreation, rng: Rng = defaultRng): Hero {
     classIcon: creation.cls.icon,
     classId: creation.cls.id,
     raceId: creation.race.id,
+    ...(creation.hair ? { hair: creation.hair } : {}),
     xp: 0,
     xpNext: xpForLevel(1),
     attrPoints: 0,

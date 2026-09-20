@@ -16,7 +16,7 @@ import { useState } from 'react';
 
 import { ATTR_KEYS, ATTR_LABELS, CLASSES, RACES, powerById, type ClassDef, type Race } from '@rpg-legend/shared';
 import { ErroDaApi } from '@/lib/api/client';
-import { ARMAS, CORPOS } from '@/lib/paperdoll/camadas';
+import { ARMAS, CABELO_PADRAO, CORPOS, PENTEADOS, SEM_CABELO } from '@/lib/paperdoll/camadas';
 import { gravarSave } from '@/lib/api/save';
 import {
   criacaoVazia,
@@ -80,7 +80,9 @@ export function FormularioCriacao({ slot }: { slot: number }) {
 
   function rolar() {
     setErro('');
-    setCriacao((atual) => rolarTudo(atual.nome));
+    // O penteado sobrevive ao sorteio: "Rolar Tudo" é pra resolver o que
+    // afeta o jogo, e trocar a cara de quem já escolheu uma é surpresa.
+    setCriacao((atual) => ({ ...rolarTudo(atual.nome), cabelo: atual.cabelo }));
   }
 
   // As três regiradas por seção, iguais às do jogo em produção. Servem pra
@@ -158,6 +160,7 @@ export function FormularioCriacao({ slot }: { slot: number }) {
             className={styles.balaoDoBoneco}
             raca={criacao.raca?.id ?? null}
             arma={criacao.classe?.weaponTemplate ?? null}
+            cabelo={criacao.cabelo}
             sinais={{ vivo: true }}
             reserva={
               <span className={styles.reservaDoBoneco} aria-hidden>
@@ -188,6 +191,37 @@ export function FormularioCriacao({ slot }: { slot: number }) {
           ))}
         </ul>
       </section>
+
+      {/* A seção só existe pra quem leva cabelo desenhado. Felino e
+          morto-vivo têm a cabeça resolvida na própria arte, e oferecer
+          penteado que não vai aparecer seria mentir pro jogador. */}
+      {criacao.raca && !SEM_CABELO.has(criacao.raca.id) && (
+        <section className={styles.secao}>
+          <h2 className={styles.tituloSecao}>Cabelo</h2>
+          <ul className={styles.gradeDeCabelo}>
+            {PENTEADOS.map((penteado) => {
+              const escolhido = (criacao.cabelo ?? CABELO_PADRAO) === penteado.id;
+              return (
+                <li key={penteado.id}>
+                  <button
+                    type="button"
+                    className={`${styles.carta} ${styles.cartaDeCabelo} ${escolhido ? styles.cartaEscolhida : ''}`}
+                    aria-pressed={escolhido}
+                    onClick={() => setCriacao((atual) => ({ ...atual, cabelo: penteado.id }))}
+                  >
+                    <span
+                      className={styles.amostraDeCabelo}
+                      style={{ backgroundImage: `url('/img/paperdoll/cabelo/${penteado.id}.png'), url('/img/paperdoll/corpo/${criacao.raca?.id}.png')` }}
+                      aria-hidden
+                    />
+                    <span className={styles.nomeCarta}>{penteado.nome}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
 
       <section className={styles.secao}>
         <h2 className={styles.tituloSecao}>Classe</h2>

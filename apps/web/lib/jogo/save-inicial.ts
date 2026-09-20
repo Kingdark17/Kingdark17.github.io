@@ -37,6 +37,11 @@ export function montarSaveInicial(criacao: Criacao, rng: Rng = defaultRng): Save
       debuff: criacao.fraqueza,
       chosenPowerIds: criacao.poderes.map((poder) => poder.id),
       attrs: criacao.atributos,
+      // `?? undefined` e não `?? PADRAO`: quem não escolheu não grava
+      // penteado nenhum, e o paperdoll resolve o padrão na hora de
+      // desenhar. Gravar o padrão faria o save mentir que houve escolha —
+      // e prenderia o personagem ao penteado de hoje se o padrão mudasse.
+      hair: criacao.cabelo ?? undefined,
     },
     rng,
   );

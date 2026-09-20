@@ -123,6 +123,44 @@
   box-shadow: inset 0 0 0 1px var(--gold-bright);
 }
 
+/* Cartas estreitas: a de cabelo não tem descrição, só a amostra e o nome,
+   e no molde de 11rem da `.grade` sobrariam três buracos numa linha. */
+.gradeDeCabelo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  gap: 0.6rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cartaDeCabelo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  text-align: center;
+}
+
+/**
+ * A amostra: o penteado desenhado sobre a cabeça da raça escolhida, em vez
+ * de flutuando sozinho — cabelo recortado do crânio não se compara bem.
+ *
+ * São as duas artes de 64×64 empilhadas como fundo (o cabelo primeiro, que
+ * em `background-image` é quem fica por cima) e ampliadas 2×, com a janela
+ * recortada na cabeça: 40×34 px da arte a partir da coluna 12. Os números
+ * saem da medida dos sprites — o cabelo ocupa as colunas 18–45 e desce até
+ * a linha 32 no penteado mais longo.
+ */
+.amostraDeCabelo {
+  width: 80px;
+  height: 68px;
+  background-repeat: no-repeat;
+  background-size: 128px 128px;
+  background-position: -24px 0;
+  image-rendering: pixelated;
+}
+
 .icone {
   font-size: 1.3rem;
   display: block;

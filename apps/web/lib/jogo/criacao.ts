@@ -41,10 +41,16 @@ export interface Criacao {
   poderes: Power[];
   fraqueza: Debuff | null;
   atributos: Attributes | null;
+  /**
+   * Penteado. **Não entra em `faltaParaComecar`**: começa no padrão e só
+   * muda se a pessoa quiser. Travar o botão de começar por causa de
+   * aparência seria cobrar uma decisão que o jogo não precisa.
+   */
+  cabelo: string | null;
 }
 
 export function criacaoVazia(nome: string): Criacao {
-  return { nome, raca: null, classe: null, poderes: [], fraqueza: null, atributos: null };
+  return { nome, raca: null, classe: null, poderes: [], fraqueza: null, atributos: null, cabelo: null };
 }
 
 function sortear<T>(lista: readonly T[], rng: Rng): T {
@@ -78,7 +84,11 @@ export function rolarTudo(nome: string, rng: Rng = defaultRng): Criacao {
   const raca = sortear(RACES, rng);
   const classe = sortear(CLASSES, rng);
   const fraqueza = sortear(DEBUFFS, rng);
-  const parcial: Criacao = { nome, raca, classe, poderes: sortearPoderes(classe, rng), fraqueza, atributos: null };
+  // Nasce sem penteado escolhido, e **quem preserva a escolha anterior é a
+  // tela** (`formulario-criacao.tsx`), que é quem tem o estado de antes.
+  // "Rolar Tudo" resolve o que afeta o jogo; trocar a cara de quem já
+  // tinha escolhido uma seria surpresa, não conveniência.
+  const parcial: Criacao = { nome, raca, classe, poderes: sortearPoderes(classe, rng), fraqueza, atributos: null, cabelo: null };
   return { ...parcial, atributos: rolarAtributosSePossivel(parcial, rng) };
 }
 

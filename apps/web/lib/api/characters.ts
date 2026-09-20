@@ -38,6 +38,8 @@ export interface ResumoPersonagem {
   race?: string;
   raceId?: string;
   equip?: EquipDoResumo;
+  /** Penteado. Ausente ou vazio = o card desenha o padrão. */
+  hair?: string;
 }
 
 export interface ListaPersonagens {

@@ -106,6 +106,9 @@ describe('DrizzleSaveRepository', () => {
         raceIcon: '🧝',
         className: 'Mago',
         classIcon: '🔮',
+        // Este save é de antes de o penteado virar escolha — `null` aqui é
+        // o caso de todo personagem que já existe, e o card cai no padrão.
+        hair: null,
         level: 7,
         equip: {
           arma: { templateId: 'cajado' },

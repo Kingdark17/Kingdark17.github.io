@@ -40,8 +40,8 @@ export const ACESSORIOS: ReadonlySet<string> = new Set(['amuleto_sab', 'colar_fo
 /** O que a mão secundária pode segurar. (2 em `public/img/paperdoll/secundaria/`) */
 export const SECUNDARIAS: ReadonlySet<string> = new Set(['adaga', 'escudo']);
 
-/** Cabelos disponíveis. (1 em `public/img/paperdoll/cabelo/`) */
-export const CABELOS: ReadonlySet<string> = new Set(['masculino']);
+/** Cabelos disponíveis. (3 em `public/img/paperdoll/cabelo/`) */
+export const CABELOS: ReadonlySet<string> = new Set(['curto', 'longo', 'medio']);
 
 /** Arquivos de traço de raça, pelo nome — ver `TRACOS_DE_RACA`. (3 em `public/img/paperdoll/traco/`) */
 export const ARQUIVOS_DE_TRACO: ReadonlySet<string> = new Set(['aureola', 'chifres-de-dragao', 'orelhas-de-gato']);

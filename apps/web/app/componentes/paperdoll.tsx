@@ -74,12 +74,13 @@ export function Paperdoll({
   calca,
   secundaria,
   acessorio,
+  cabelo,
   lado = 192,
   reserva = null,
   className = '',
   sinais = {},
 }: Readonly<Props>) {
-  const camadas = montarCamadas({ raca, arma, armadura, elmo, calca, secundaria, acessorio });
+  const camadas = montarCamadas({ raca, arma, armadura, elmo, calca, secundaria, acessorio, cabelo });
   const classes = `${styles.boneco} ${className}`.trim();
 
   if (camadas.length === 0) {
