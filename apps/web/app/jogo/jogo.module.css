@@ -391,68 +391,77 @@
  * o mapa de imediato, e não há por que inventar uma segunda paleta pro
  * mesmo jogo.
  *
- * Só entra em `.visitada`. A silhueta de uma sala conhecida diz que ela
- * existe, não o que tem dentro — pintá-la entregaria o baú e o chefe antes
- * de chegar lá. O original separava igual: `room-dim` era cinza chapado.
+ * Entra onde houver `data-tipo`, e o `mapa.tsx` só põe o atributo quando o
+ * jogador já sabe o que tem na sala — visitada, ou revelada pelo
+ * prisioneiro ou pela caixa de "deseja entrar?". Silhueta de vizinha
+ * continua cinza chapada: ela diz que a sala existe, não o que tem dentro,
+ * e pintá-la entregaria o baú e o chefe antes de chegar lá. O original
+ * separava igual, com `room-dim`.
+ *
+ * O seletor já foi `.visitada[data-tipo=...]`, com a classe e o atributo
+ * dizendo a mesma coisa. Quando `data-tipo` passou a valer também pra sala
+ * revelada, a classe virou a metade errada da dupla — sala revelada fica
+ * com a cor do tipo, e é a opacidade do `.conhecida` que diz que ninguém
+ * pisou lá ainda.
  *
  * A cor nunca é o único sinal: o ícone fica dentro da célula e o
  * `aria-label` diz o nome da sala, pra quem não distingue as cores ou ouve
  * a tela em vez de ver. */
-.visitada[data-tipo='start'] {
+.celula[data-tipo='start'] {
   background: #2a2c37;
 }
 
-.visitada[data-tipo='normal'] {
+.celula[data-tipo='normal'] {
   background: #22242e;
 }
 
-.visitada[data-tipo='npc'] {
+.celula[data-tipo='npc'] {
   background: #26313a;
 }
 
-.visitada[data-tipo='treasure'] {
+.celula[data-tipo='treasure'] {
   background: #332b1c;
 }
 
-.visitada[data-tipo='monster'] {
+.celula[data-tipo='monster'] {
   background: #331d1d;
 }
 
-.visitada[data-tipo='boss'] {
+.celula[data-tipo='boss'] {
   background: #3a1414;
   box-shadow: inset 0 0 8px rgba(192, 83, 47, 0.5);
 }
 
-.visitada[data-tipo='stairs'] {
+.celula[data-tipo='stairs'] {
   background: #1a2836;
 }
 
-.visitada[data-tipo='exit'] {
+.celula[data-tipo='exit'] {
   background: #1f2e29;
 }
 
-.visitada[data-tipo='event'] {
+.celula[data-tipo='event'] {
   background: #2a2233;
 }
 
 /* Cidade */
-.visitada[data-tipo='shop'] {
+.celula[data-tipo='shop'] {
   background: #2c2818;
 }
 
-.visitada[data-tipo='blacksmith'] {
+.celula[data-tipo='blacksmith'] {
   background: #26262c;
 }
 
-.visitada[data-tipo='tavern'] {
+.celula[data-tipo='tavern'] {
   background: #2c1f1a;
 }
 
-.visitada[data-tipo='gate'] {
+.celula[data-tipo='gate'] {
   background: #1c2a24;
 }
 
-.visitada[data-tipo='questboard'] {
+.celula[data-tipo='questboard'] {
   background: #202a1e;
 }
 
