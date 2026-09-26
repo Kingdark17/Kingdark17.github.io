@@ -11,6 +11,7 @@ import {
   FIRST_NAMES,
   LEGACY_DEBUFF_EFFECTS,
   powerByName,
+  POWERS,
   RACES,
   CLASSES,
   SURNAMES,
@@ -50,6 +51,13 @@ export interface HeroBuffs {
   shield?: number;
   poisonTurns?: number;
   poisonDmg?: number;
+  /**
+   * Canção de Batalha: multiplica o dano do herói e dos companheiros. Cai
+   * uma vez por **rodada**, no turno da equipe (`applyPartyTurn`) — e não no
+   * ataque do herói, como a força, porque ela vale pra quem não é ele.
+   */
+  inspiracaoTurns?: number;
+  inspiracaoAmount?: number;
 }
 
 /**
@@ -101,12 +109,19 @@ export interface Hero extends HeroCore {
   npcBlessing?: { combats: number; dodge: number };
 }
 
-export function heroPowers(hero: Pick<Hero, 'powerNames' | 'powerIds'>): Power[] {
+export function heroPowers(hero: Pick<Hero, 'powerNames' | 'powerIds' | 'className' | 'classId'>): Power[] {
   // Save novo traz ids; o que veio de antes só tem nome. Sem este `??` a
   // troca de idioma faria `powerByName` devolver null pra tudo e o herói
   // perderia todos os poderes calado.
   const ids = hero.powerIds ?? hero.powerNames.map((name) => powerByName(name)?.id).filter((id): id is string => !!id);
-  return ids.map((id) => powerById(id)).filter((p): p is Power => p !== null);
+  const escolhidos = ids.map((id) => powerById(id)).filter((p): p is Power => p !== null);
+
+  // Os poderes que a classe dá (`soDaClasse`) não moram no save: entram aqui,
+  // pelo id da classe. É o que faz a Canção de Batalha chegar ao bardo criado
+  // antes de ela existir, sem migração nenhuma.
+  const classe = idDaClasse(hero);
+  const daClasse = POWERS.filter((p) => p.soDaClasse && p.soDaClasse === classe && !ids.includes(p.id));
+  return [...escolhidos, ...daClasse];
 }
 
 /**

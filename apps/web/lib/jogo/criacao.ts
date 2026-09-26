@@ -57,9 +57,13 @@ function sortear<T>(lista: readonly T[], rng: Rng): T {
   return lista[Math.floor(rng() * lista.length)];
 }
 
-/** Dois poderes distintos, nunca o de assinatura da classe (que já vem de graça). */
+/**
+ * Dois poderes distintos, nunca o de assinatura da classe (que já vem de
+ * graça) nem um que seja **só de outra classe** (`soDaClasse`) — a Canção de
+ * Batalha é do bardo, e ele a ganha pela classe, não pelo sorteio.
+ */
 export function sortearPoderes(classe: ClassDef, rng: Rng = defaultRng): Power[] {
-  const disponiveis = POWERS.filter((poder) => poder.id !== classe.signatureId);
+  const disponiveis = POWERS.filter((poder) => poder.id !== classe.signatureId && !poder.soDaClasse);
   const embaralhados = [...disponiveis].sort(() => rng() - 0.5);
   return embaralhados.slice(0, QUANTIDADE_DE_PODERES_EXTRAS);
 }

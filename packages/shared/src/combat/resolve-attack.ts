@@ -1,4 +1,4 @@
-import { idDaClasse } from '../hero/catalog.js';
+import { classById, idDaClasse } from '../hero/catalog.js';
 import { equipmentBonus } from '../hero/derived.js';
 import { hasDebuffEffect, weaponAffinityPct, type Hero } from '../hero/hero.js';
 import type { ProcTemplate } from '../items/templates.js';
@@ -8,7 +8,75 @@ import { modifyDamageByAffinity, otherEquipAtk, weaponAtkContribution } from './
 import type { CombatMonsterView } from './monster-state.js';
 import { applyWeaponProc } from './weapon-proc.js';
 
-export type AttackStyle = 'normal' | 'magic' | 'physical';
+/**
+ * `normal` e `physical` são o mesmo golpe pra quem não é mago; pro mago, o
+ * `physical` é o golpe de cajado, com metade do dano físico. `ranged` é o
+ * tiro de arco do arqueiro e do caçador — dano de golpe físico, dado de
+ * classe.
+ */
+export type AttackStyle = 'normal' | 'magic' | 'physical' | 'ranged';
+
+export type LadosDoDado = 6 | 20;
+
+/**
+ * **O dado que este ataque rola**: d6 no ataque que combina com a classe,
+ * d20 em todo o resto — `ClassDef.ataquePrincipal`.
+ *
+ * Mora na engine, e não na tela, porque é regra: a tela pergunta aqui qual
+ * dado girar, `resolveAttack` pergunta aqui como ler o número, e um servidor
+ * que um dia conferir a jogada pergunta a mesma coisa. Três respostas
+ * escritas em três lugares iam discordar.
+ */
+export function ladosDoAtaque(hero: Hero, estilo: AttackStyle): LadosDoDado {
+  const principal = classById(idDaClasse(hero) ?? '')?.ataquePrincipal;
+  if (estilo === 'magic') return principal === 'magico' ? 6 : 20;
+  if (estilo === 'ranged') return principal === 'distancia' && hero.equip.arma?.templateId === 'arco' ? 6 : 20;
+  return principal === 'fisico' ? 6 : 20;
+}
+
+export interface AtaqueDisponivel {
+  estilo: AttackStyle;
+  lados: LadosDoDado;
+  /** Mana gasta ao atacar — só o ataque mágico cobra. */
+  custo: number;
+}
+
+/**
+ * Os botões de ataque desta classe, **o da classe primeiro**.
+ *
+ * "Todos têm a opção ataque físico", diz o doc — então o físico está sempre
+ * na lista; quem tem outro ataque principal o tem **antes** dele. Pro
+ * arqueiro de arco o físico em d20 perde sempre pro tiro em d6 (o dano é o
+ * mesmo), mas é o que a regra pede, e é o único que sobra se ele largar o
+ * arco.
+ *
+ * Substitui o `hero.className === 'Mago'` que a tela fazia: regra de
+ * classe olha o id.
+ */
+export function ataquesDisponiveis(hero: Hero): AtaqueDisponivel[] {
+  const principal = classById(idDaClasse(hero) ?? '')?.ataquePrincipal;
+  const ataques: AtaqueDisponivel[] = [];
+  if (principal === 'magico') ataques.push({ estilo: 'magic', lados: 6, custo: MAGIC_ATTACK_COST });
+  if (principal === 'distancia' && hero.equip.arma?.templateId === 'arco') ataques.push({ estilo: 'ranged', lados: 6, custo: 0 });
+  const fisico: AttackStyle = principal === 'magico' ? 'physical' : 'normal';
+  ataques.push({ estilo: fisico, lados: ladosDoAtaque(hero, fisico), custo: 0 });
+  return ataques;
+}
+
+/**
+ * Converte um modificador escrito em pontos de d20 pro dado que está
+ * rolando. O d20 fica **exatamente** como era (`pontos * 20 / 20`); o d6
+ * recebe a mesma fatia de probabilidade, arredondada pra face inteira.
+ */
+function emFaces(pontosDeD20: number, lados: LadosDoDado): number {
+  return Math.round((pontosDeD20 * lados) / 20);
+}
+
+/**
+ * A face mínima pra acertar, antes de buff e debuff: 11 no d20 (50%), 3 no
+ * d6 (67%). O d6 existe pra acertar **mais** — foi o pedido.
+ */
+const ALVO_DE_ACERTO: Record<LadosDoDado, number> = { 20: 11, 6: 3 };
 
 export interface ResolveAttackOptions {
   rng?: Rng;
@@ -66,6 +134,15 @@ export function resolveAttack(
   const rng = options.rng ?? defaultRng;
   const petCritico = options.petCriticoBonus ?? 0;
 
+  // Um número fora do dado é defeito de quem chamou — a tela rolando d20
+  // pra um ataque de d6. Corrigir em silêncio esconderia o defeito, e um
+  // servidor que confira a jogada vai querer exatamente esta recusa. Vem
+  // antes da mana: a rolagem é inválida com ou sem ela.
+  const lados = ladosDoAtaque(hero, attackStyle);
+  if (!Number.isInteger(roll) || roll < 1 || roll > lados) {
+    throw new RangeError(`rolagem ${roll} não existe num d${lados} (ataque ${attackStyle})`);
+  }
+
   const isMage = idDaClasse(hero) === 'mago';
   const magicalAttack = isMage && attackStyle === 'magic';
 
@@ -80,20 +157,28 @@ export function resolveAttack(
   const buffs = heroAfterCost.buffs ?? {};
   const guaranteedCrit = !!buffs.critNext;
 
-  let hitTarget = 11;
+  // Precisão e Visão Fraca foram escritas em pontos de d20 e continuam
+  // valendo neles; no d6 viram a fatia equivalente (ver `emFaces`). O mínimo
+  // de 4 do d20 — errar só no 1, 2 e 3 — vira errar só no 1.
+  let hitTarget = ALVO_DE_ACERTO[lados];
   if (buffs.precisaoTurns && buffs.precisaoTurns > 0) {
-    hitTarget = Math.max(4, hitTarget - Math.floor((buffs.precisaoAmount ?? 0) / 5));
+    hitTarget = Math.max(1 + emFaces(3, lados), hitTarget - emFaces(Math.floor((buffs.precisaoAmount ?? 0) / 5), lados));
   }
   const weapon = heroAfterCost.equip.arma;
   if (hasDebuffEffect(heroAfterCost, 'rangedPenalty') && weapon && (weapon.templateId === 'arco' || weapon.templateId === 'cajado')) {
-    hitTarget += 2;
+    hitTarget += emFaces(2, lados);
   }
+
+  // **O 6 do d6 não é crítico.** O 20 natural crita e fura a esquiva do
+  // ágil; dar isso ao 6 triplicaria os críticos automáticos (5% → 16,7%), e
+  // o pedido foi acertar mais, não critar mais.
+  const vinteNatural = lados === 20 && roll === 20;
 
   let hit = roll >= hitTarget || guaranteedCrit;
   let dodgedByAgility = false;
   // O escudo de esquiva do "guaranteedCrit" também pula essa checagem — um
   // crítico garantido não pode ser esquivado pelo monstro.
-  if (hit && !guaranteedCrit && roll !== 20 && monster.behavior === 'agil' && rng() < 0.15) {
+  if (hit && !guaranteedCrit && !vinteNatural && monster.behavior === 'agil' && rng() < 0.15) {
     hit = false;
     dodgedByAgility = true;
   }
@@ -114,25 +199,29 @@ export function resolveAttack(
     forcaMult *= 1.35;
   }
 
+  // Canção de Batalha: ao contrário da força, vale pro golpe mágico também —
+  // é música, não músculo. Quem a desconta é o turno da equipe, não este.
+  const inspiracao = buffs.inspiracaoTurns && buffs.inspiracaoTurns > 0 ? 1 + (buffs.inspiracaoAmount ?? 0) : 1;
+
   const base = 3 + randomInt(6, rng);
   let dmg: number;
   let nextMonster: CombatMonsterView;
 
   if (magicalAttack) {
-    dmg = Math.round(base + d.dmgMagico + weaponAtkContribution(heroAfterCost, affinity) + otherEquipAtk(heroAfterCost));
+    dmg = Math.round((base + d.dmgMagico + weaponAtkContribution(heroAfterCost, affinity) + otherEquipAtk(heroAfterCost)) * inspiracao);
     const mod = modifyDamageByAffinity(monster, monster.species.weakness, monster.species.resistance, dmg, 'magico', isMage);
     dmg = mod.dmg;
     nextMonster = { ...monster, ...mod.monster };
   } else {
     const physicalBase = isMage && attackStyle === 'physical' ? Math.round(d.dmgFisico * 0.5) : d.dmgFisico;
-    dmg = Math.round((base + physicalBase + weaponAtkContribution(heroAfterCost, affinity) + otherEquipAtk(heroAfterCost)) * forcaMult);
+    dmg = Math.round((base + physicalBase + weaponAtkContribution(heroAfterCost, affinity) + otherEquipAtk(heroAfterCost)) * forcaMult * inspiracao);
     const mod = modifyDamageByAffinity(monster, monster.species.weakness, monster.species.resistance, dmg, 'fisico', false);
     dmg = mod.dmg;
     nextMonster = { ...monster, ...mod.monster };
   }
 
   const critChance = (d.critico + (bonus.critico ?? 0) + petCritico + (idDaClasse(heroAfterCost) === 'arqueiro' ? 8 : 0)) / 100;
-  const isCrit = guaranteedCrit || rng() < critChance || roll === 20;
+  const isCrit = guaranteedCrit || rng() < critChance || vinteNatural;
   if (isCrit) dmg = Math.round(dmg * 1.6);
 
   nextMonster = { ...nextMonster, hp: nextMonster.hp - dmg };

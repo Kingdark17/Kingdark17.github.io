@@ -1089,6 +1089,13 @@
   margin: 0;
 }
 
+/* "d6"/"d20" menor e apagado ao lado do número: é contexto, não resultado.
+   Sem ele, "5" num d6 (acerto folgado) e "5" num d20 (erro) pareciam iguais. */
+.ladosDoDado {
+  font-size: 0.75em;
+  color: var(--parchment-dim);
+}
+
 .log {
   list-style: none;
   padding: 0.75rem 1rem;

@@ -197,6 +197,35 @@ describe('applyMonsterHit — ataque ao herói: esquiva', () => {
   });
 });
 
+/**
+ * A ação "Esquivar" (`attemptDodge`) rolou bem: o golpe **desta rodada** no
+ * herói erra, sem sorteio de esquiva — e sem gastar o que o herói guarda pro
+ * próximo golpe.
+ */
+describe('applyMonsterHit — esquiva rolada', () => {
+  it('o golpe no herói erra, mesmo com rng que acertaria', () => {
+    const hero = heroFixture();
+    // agressivo(0.99) -> pool(sem equipe) -> o próximo seria o dodge, e 0.99 acertaria
+    const result = applyMonsterHit(hero, [], monsterFixture(), { rng: sequenceRng([0.99, 0.99, 0]), esquivaCerta: true });
+    expect(result.outcome).toBe('dodged');
+    expect(result.hero.hp).toBe(hero.hp);
+  });
+
+  it('não gasta o Passo Veloz nem o escudo — não foram eles que salvaram', () => {
+    const hero = heroFixture({ hero: { buffs: { esquivaTurns: 3, esquivaAmount: 20, shield: 0.5 } } });
+    const result = applyMonsterHit(hero, [], monsterFixture(), { rng: sequenceRng([0.99]), esquivaCerta: true });
+    expect(result.hero.buffs?.esquivaTurns).toBe(3);
+    expect(result.hero.buffs?.shield).toBe(0.5);
+  });
+
+  it('se o monstro mira um companheiro, a esquiva do herói não o protege', () => {
+    const defensor = companionFixture({ stance: 'defensiva' });
+    // agressivo(0.99) -> pool defensor(0 < 0.55) -> alvo(0) -> dano(0)
+    const result = applyMonsterHit(heroFixture(), [defensor], monsterFixture(), { rng: sequenceRng([0.99, 0, 0, 0]), esquivaCerta: true });
+    expect(result.outcome).toBe('hit_party');
+  });
+});
+
 describe('applyMonsterHit — dano base ao herói', () => {
   it('bate o valor calculado à mão: sem equipamento, sem debuff', () => {
     const hero = heroFixture();

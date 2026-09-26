@@ -9,6 +9,16 @@ export interface MonsterHitOptions {
   rng?: Rng;
   /** Bônus de esquiva vindo do sistema de pets (ainda não portado) — 0 se ausente. */
   petEsquivaBonus?: number;
+  /**
+   * O herói rolou "Esquivar" com sucesso nesta rodada (`attemptDodge`): se
+   * o golpe for nele, erra. Vale **só esta rodada** — se o monstro estiver
+   * atordoado, lento demais ou mirar um companheiro, a esquiva se perde,
+   * como se perde um passo pro lado quando ninguém ataca.
+   *
+   * Opção, e não buff no herói, por causa do campo único de esquiva em
+   * `HeroBuffs` — ver `combat/dodge.ts`.
+   */
+  esquivaCerta?: boolean;
 }
 
 export type MonsterHitOutcome = 'stunned' | 'lento_skip' | 'hit_party' | 'dodged' | 'hit_hero';
@@ -230,6 +240,21 @@ export function applyMonsterHit(
       targetIndex,
       heroDefeated: false,
       partyMemberDefeated: updatedTarget.hp <= 0,
+      enemyClassPowerTriggered: mult.enemyClassPowerTriggered,
+      rageTriggered: mult.rageTriggered,
+    };
+  }
+
+  // A esquiva rolada pula o cálculo inteiro: não gasta o turno de Passo
+  // Veloz nem o escudo, que ficam pro próximo golpe — não foram eles que
+  // salvaram o herói.
+  if (options.esquivaCerta) {
+    return {
+      monster: mult.monster,
+      hero: mult.hero,
+      party: [...party],
+      outcome: 'dodged',
+      heroDefeated: false,
       enemyClassPowerTriggered: mult.enemyClassPowerTriggered,
       rageTriggered: mult.rageTriggered,
     };

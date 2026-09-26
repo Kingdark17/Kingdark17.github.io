@@ -626,3 +626,34 @@ describe('identidade separada do texto de tela', () => {
     expect(heroPowers(comoEstavaNaNuvem as Hero).map((p) => p.id)).toEqual(['bola_de_fogo']);
   });
 });
+
+/**
+ * Poder que a classe dá (`soDaClasse`) — hoje, a Canção de Batalha do bardo.
+ * Não mora no save: `heroPowers` a acrescenta pela classe, e por isso chega
+ * a quem criou o bardo antes de ela existir.
+ */
+describe('heroPowers — poder da classe', () => {
+  const bardo = (extra: Partial<Hero> = {}): Hero => ({
+    ...buildHero({ name: 'B', race: RACES[0]!, cls: classById('bardo')!, debuff: DEBUFFS[0]!, chosenPowerIds: [] }, seededRng(2)),
+    ...extra,
+  });
+
+  it('o bardo tem a canção sem ela estar no save', () => {
+    const hero = bardo();
+    expect(hero.powerIds).not.toContain('cancao_de_batalha');
+    expect(heroPowers(hero).map((p) => p.id)).toContain('cancao_de_batalha');
+  });
+
+  it('chega ao bardo de save antigo, que só tem o nome da classe', () => {
+    const { classId, powerIds, ...antigo } = bardo();
+    void classId;
+    void powerIds;
+    expect(heroPowers(antigo as Hero).map((p) => p.id)).toContain('cancao_de_batalha');
+  });
+
+  it('não aparece duas vezes, nem pra quem não é bardo', () => {
+    const jaTinha = bardo({ powerIds: ['cancao_debilitante', 'cancao_de_batalha'] });
+    expect(heroPowers(jaTinha).filter((p) => p.id === 'cancao_de_batalha')).toHaveLength(1);
+    expect(heroPowers(novoHeroi()).map((p) => p.id)).not.toContain('cancao_de_batalha');
+  });
+});

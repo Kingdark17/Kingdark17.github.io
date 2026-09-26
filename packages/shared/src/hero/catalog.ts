@@ -38,21 +38,33 @@ export interface ClassDef {
   /** Id do poder de assinatura — resolvido via {@link powerById}. */
   signatureId: string;
   affinity: Record<string, number>;
+  /**
+   * O ataque que **combina com a classe**, e que por isso rola d6 em vez de
+   * d20 — ver `ladosDoAtaque` em `combat/resolve-attack.ts`.
+   *
+   * Regra do doc do Breno ("arma define dado"), com a leitura fechada pelo
+   * Pedro em 2026-09-26: o "cavaleiro" é o guerreiro e o "algoz" é o ladino;
+   * o d6 existe pra tornar **mais provável acertar** o ataque coerente com a
+   * classe. Quem não tem campo aqui rola d20 em tudo, como sempre rolou.
+   *
+   * `distancia` só vale com arco na mão: "tiro" sem arco não é nada.
+   */
+  ataquePrincipal?: 'fisico' | 'magico' | 'distancia';
 }
 
 export const CLASSES: readonly ClassDef[] = [
-  { id: 'guerreiro', name: 'Guerreiro', icon: '⚔️', weaponTemplate: 'espada', bias: { forca: 3, constituicao: 2 }, desc: 'Combate corpo a corpo, resistente na linha de frente.', signatureId: 'golpe_poderoso', affinity: { espada: 100, machado: 90, maca: 70, adaga: 55, arco: 50, cajado: 25, marreta: 90, violao: 20 } },
-  { id: 'mago', name: 'Mago', icon: '🧙', weaponTemplate: 'cajado', bias: { intelecto: 3, sabedoria: 1 }, desc: 'Magias ofensivas e controle de mana.', signatureId: 'bola_de_fogo', affinity: { cajado: 100, maca: 55, adaga: 45, arco: 40, espada: 30, machado: 20, marreta: 20, violao: 30 } },
-  { id: 'ladino', name: 'Ladino', icon: '🗡', weaponTemplate: 'adaga', bias: { destreza: 3, carisma: 1 }, desc: 'Furtividade, críticos e agilidade.', signatureId: 'furtividade_sombria', affinity: { adaga: 100, arco: 80, espada: 55, maca: 40, machado: 40, cajado: 30, marreta: 40, violao: 45 } },
+  { id: 'guerreiro', name: 'Guerreiro', icon: '⚔️', weaponTemplate: 'espada', bias: { forca: 3, constituicao: 2 }, desc: 'Combate corpo a corpo, resistente na linha de frente.', signatureId: 'golpe_poderoso', affinity: { espada: 100, machado: 90, maca: 70, adaga: 55, arco: 50, cajado: 25, marreta: 90, violao: 20 }, ataquePrincipal: 'fisico' },
+  { id: 'mago', name: 'Mago', icon: '🧙', weaponTemplate: 'cajado', bias: { intelecto: 3, sabedoria: 1 }, desc: 'Magias ofensivas e controle de mana.', signatureId: 'bola_de_fogo', affinity: { cajado: 100, maca: 55, adaga: 45, arco: 40, espada: 30, machado: 20, marreta: 20, violao: 30 }, ataquePrincipal: 'magico' },
+  { id: 'ladino', name: 'Ladino', icon: '🗡', weaponTemplate: 'adaga', bias: { destreza: 3, carisma: 1 }, desc: 'Furtividade, críticos e agilidade.', signatureId: 'furtividade_sombria', affinity: { adaga: 100, arco: 80, espada: 55, maca: 40, machado: 40, cajado: 30, marreta: 40, violao: 45 }, ataquePrincipal: 'fisico' },
   { id: 'clerigo', name: 'Clérigo', icon: '✝️', weaponTemplate: 'maca', bias: { sabedoria: 3, constituicao: 1 }, desc: 'Cura aliados e resiste a corrupção.', signatureId: 'cura_menor', affinity: { maca: 100, cajado: 70, espada: 50, adaga: 40, arco: 35, machado: 30, marreta: 30, violao: 35 } },
   { id: 'barbaro', name: 'Bárbaro', icon: '🪓', weaponTemplate: 'machado', bias: { forca: 4 }, desc: 'Fúria bruta, dano massivo corpo a corpo.', signatureId: 'grito_de_guerra', affinity: { machado: 100, espada: 85, maca: 55, adaga: 45, arco: 35, cajado: 15, marreta: 100, violao: 15 } },
-  { id: 'arqueiro', name: 'Arqueiro', icon: '🏹', weaponTemplate: 'arco', bias: { destreza: 3, sabedoria: 1 }, desc: 'Precisão a distância e mobilidade.', signatureId: 'tiro_certeiro', affinity: { arco: 100, adaga: 70, espada: 50, maca: 40, machado: 35, cajado: 25, marreta: 35, violao: 35 } },
+  { id: 'arqueiro', name: 'Arqueiro', icon: '🏹', weaponTemplate: 'arco', bias: { destreza: 3, sabedoria: 1 }, desc: 'Precisão a distância e mobilidade.', signatureId: 'tiro_certeiro', affinity: { arco: 100, adaga: 70, espada: 50, maca: 40, machado: 35, cajado: 25, marreta: 35, violao: 35 }, ataquePrincipal: 'distancia' },
   { id: 'paladino', name: 'Paladino', icon: '🛡️', weaponTemplate: 'espada', bias: { forca: 2, sabedoria: 2, constituicao: 1 }, desc: 'Defensor sagrado que combina resistência e cura.', signatureId: 'julgamento_sagrado', affinity: { espada: 100, maca: 90, machado: 65, cajado: 60, adaga: 40, arco: 35, marreta: 65, violao: 35 } },
   { id: 'necromante', name: 'Necromante', icon: '☠️', weaponTemplate: 'cajado', bias: { intelecto: 3, constituicao: 1 }, desc: 'Conjura maldições e drena a força dos inimigos.', signatureId: 'maldicao_sombria', affinity: { cajado: 100, adaga: 75, maca: 55, espada: 40, arco: 35, machado: 25, marreta: 25, violao: 40 } },
   { id: 'druida', name: 'Druida', icon: '🌿', weaponTemplate: 'cajado', bias: { sabedoria: 3, constituicao: 1 }, desc: 'Controla a natureza, venenos e magia de cura.', signatureId: 'esporos_venenosos', affinity: { cajado: 100, maca: 75, arco: 65, adaga: 50, espada: 35, machado: 35, marreta: 35, violao: 55 } },
   { id: 'monge', name: 'Monge', icon: '🥋', weaponTemplate: 'maca', bias: { destreza: 2, sabedoria: 2 }, desc: 'Lutador disciplinado que domina corpo e espírito.', signatureId: 'golpe_atordoante', affinity: { maca: 100, adaga: 85, cajado: 70, espada: 55, machado: 40, arco: 40, marreta: 40, violao: 45 } },
   { id: 'bardo', name: 'Bardo', icon: '🎵', weaponTemplate: 'violao', bias: { carisma: 3, destreza: 1 }, desc: 'Usa música para fortalecer aliados e enfraquecer inimigos.', signatureId: 'cancao_debilitante', affinity: { adaga: 100, arco: 80, espada: 65, cajado: 65, maca: 50, machado: 30, marreta: 30, violao: 100 } },
-  { id: 'cacador', name: 'Caçador', icon: '🐺', weaponTemplate: 'arco', bias: { destreza: 2, sabedoria: 2 }, desc: 'Especialista em rastrear e sangrar criaturas.', signatureId: 'flecha_serrilhada', affinity: { arco: 100, adaga: 85, espada: 60, machado: 50, maca: 35, cajado: 25, marreta: 50, violao: 40 } },
+  { id: 'cacador', name: 'Caçador', icon: '🐺', weaponTemplate: 'arco', bias: { destreza: 2, sabedoria: 2 }, desc: 'Especialista em rastrear e sangrar criaturas.', signatureId: 'flecha_serrilhada', affinity: { arco: 100, adaga: 85, espada: 60, machado: 50, maca: 35, cajado: 25, marreta: 50, violao: 40 }, ataquePrincipal: 'distancia' },
 ];
 
 export type PowerType =
@@ -63,7 +75,9 @@ export type PowerType =
   | 'buff_precisao'
   | 'buff_forca'
   | 'buff_esquiva'
-  | 'escudo';
+  | 'escudo'
+  /** Fortalece o herói **e** os companheiros — o único buff que chega em alguém além de quem lança. */
+  | 'buff_grupo';
 
 export type PowerStatus = 'queimadura' | 'enfraquecido' | 'veneno' | 'atordoado' | 'vulneravel' | 'sangramento' | 'lento';
 
@@ -80,6 +94,12 @@ export interface Power {
   dotRatio?: number;
   amount?: number;
   healRatio?: number;
+  /**
+   * Poder que **a classe dá**, a todo herói dela, e que ninguém mais sorteia.
+   * `heroPowers` o acrescenta pelo id da classe na hora de listar — por isso
+   * chega também a quem já tinha o personagem, sem migrar save.
+   */
+  soDaClasse?: string;
 }
 
 export const POWERS: readonly Power[] = [
@@ -99,6 +119,12 @@ export const POWERS: readonly Power[] = [
   { id: 'flecha_serrilhada', name: 'Flecha Serrilhada', icon: '🩸', desc: 'Causa dano físico e sangramento por 3 turnos.', cost: 9, type: 'dano_fisico', power: 1.25, status: 'sangramento', turns: 3, dotRatio: 0.2 },
   { id: 'rajada_glacial', name: 'Rajada Glacial', icon: '❄️', desc: 'Causa dano mágico e deixa o inimigo lento.', cost: 12, type: 'dano_magico', power: 1.3, status: 'lento', turns: 3, amount: 0.2 },
   { id: 'renovacao_natural', name: 'Renovação Natural', icon: '🌱', desc: 'Cura poderosa para o herói, companheiros e parceiro online.', cost: 15, type: 'cura', power: 1.8 },
+  // O apoio que a descrição do bardo sempre prometeu ("fortalecer aliados")
+  // e nada no jogo fazia: a assinatura e a passiva dele só enfraquecem o
+  // inimigo. Pedido do doc do Breno, 2026-09-26. Um pouco menos que o Grito
+  // de Guerra (+30%, só o herói, só físico) porque chega na equipe inteira
+  // e vale pra golpe mágico também.
+  { id: 'cancao_de_batalha', name: 'Canção de Batalha', icon: '🎼', desc: 'Inspira você e os companheiros: +25% de dano por 3 rodadas.', cost: 10, type: 'buff_grupo', turns: 3, amount: 0.25, soDaClasse: 'bardo' },
 ];
 
 export type DebuffEffect =

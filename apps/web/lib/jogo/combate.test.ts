@@ -1,8 +1,31 @@
 import { describe, expect, it } from 'vitest';
 
-import { heroPowers, seededRng, type DungeonCell, type Hero, type MonsterInstance, type Rng } from '@rpg-legend/shared';
+import {
+  heroPowers,
+  instantiate,
+  powerById,
+  RARITIES,
+  seededRng,
+  templateById,
+  type DungeonCell,
+  type Hero,
+  type MonsterInstance,
+  type Rng,
+} from '@rpg-legend/shared';
 
-import { atacar, comecarCombate, fugir, iniciarEncontro, monstroAtual, salaDeCombate, usarPoder, type Combate } from './combate';
+import {
+  atacar,
+  comecarCombate,
+  consumiveisDoCombate,
+  esquivar,
+  fugir,
+  iniciarEncontro,
+  monstroAtual,
+  salaDeCombate,
+  usarItem,
+  usarPoder,
+  type Combate,
+} from './combate';
 import { rolarTudo } from './criacao';
 import { celulaAtual, retomarSave, substituirCelulaAtual, type EstadoNaMasmorra } from './estado';
 import { montarSaveInicial } from './save-inicial';
@@ -143,7 +166,8 @@ describe('atacar', () => {
     const criatura = salaDepois(combate).monsters?.[0];
 
     expect(criatura?.hp).toBeLessThan(40);
-    expect(combate.dado).toBe(20);
+    // Com os lados: "20" num d6 não existiria, e "5" é acerto no d6 e erro no d20.
+    expect(combate.dado).toEqual({ valor: 20, lados: 20 });
   });
 
   it('não guarda no save os campos derivados da espécie', () => {
@@ -312,8 +336,8 @@ describe('bônus de pet', () => {
     const poder = poderDeDano(estado);
 
     // `SEMPRE` faz o sorteio de 5% da coruja cair sempre dentro da chance.
-    const comCoruja = usarPoder(iniciarEncontro(estado, 'owl'), poder, SEMPRE);
-    const semPet = usarPoder(iniciarEncontro(estado), poder, SEMPRE);
+    const comCoruja = usarPoder(iniciarEncontro(estado, 'owl'), poder, SEMPRE).combate;
+    const semPet = usarPoder(iniciarEncontro(estado), poder, SEMPRE).combate;
 
     expect(comCoruja.estado.hero.mp).toBe(estado.hero.mp);
     expect(semPet.estado.hero.mp).toBeLessThan(estado.hero.mp);
@@ -378,5 +402,106 @@ describe('som e números flutuantes', () => {
     const turno = atacar(lutaLonga(), 10, 'normal', NUNCA);
 
     expect(turno.flutuantes.some((numero) => numero.alvo === 'heroi')).toBe(true);
+  });
+});
+
+/** Criatura que não morre no primeiro golpe — os testes abaixo falam do turno seguinte. */
+function comMonstroDuro(hero: Partial<Hero> = {}) {
+  return comSalaDeMonstro({ monsters: [monstro({ hp: 999, maxHp: 999 })] }, hero);
+}
+
+describe('fugir depois de acertar', () => {
+  /**
+   * Falhar a fuga herdava o som e o número do golpe anterior: repetia o
+   * "crit", mostrava de novo o dano no inimigo e girava a arma do boneco —
+   * um ataque que não houve.
+   */
+  it('não repete o som nem o número do golpe anterior', () => {
+    const acerto = atacar(iniciarEncontro(comMonstroDuro()), 20, 'normal', NUNCA);
+    expect(acerto.som).toBe('crit');
+    expect(acerto.flutuantes.some((f) => f.alvo === 'inimigo')).toBe(true);
+
+    const fuga = fugir(acerto, 1, NUNCA);
+    expect(fuga.fase).toBe('combate');
+    expect(fuga.som).not.toBe('crit');
+    expect(fuga.flutuantes.some((f) => f.alvo === 'inimigo')).toBe(false);
+    expect(fuga.dado).toEqual({ valor: 1, lados: 20 });
+  });
+});
+
+describe('esquivar', () => {
+  it('rolou bem: o golpe desta rodada erra, mesmo com a sorte que acertaria', () => {
+    const combate = iniciarEncontro(comMonstroDuro());
+    const depois = esquivar(combate, 20, NUNCA);
+
+    expect(depois.estado.hero.hp).toBe(combate.estado.hero.hp);
+    // "Você desvia do ataque", e não só "desvia": a linha da rolagem diz
+    // "se prepara para desviar" e passaria por qualquer coisa mais frouxa.
+    expect(depois.log.join(' ')).toContain('Você desvia do ataque');
+    expect(depois.dado).toEqual({ valor: 20, lados: 20 });
+  });
+
+  it('rolou mal: perdeu o turno, e o golpe vem', () => {
+    const combate = iniciarEncontro(comMonstroDuro());
+    const depois = esquivar(combate, 1, NUNCA);
+
+    expect(depois.estado.hero.hp).toBeLessThan(combate.estado.hero.hp);
+  });
+
+  it('não ataca: a criatura sai com a mesma vida', () => {
+    const combate = iniciarEncontro(comMonstroDuro());
+    const depois = esquivar(combate, 20, NUNCA);
+    expect(monstroAtual(depois.estado)?.hp).toBe(monstroAtual(combate.estado)?.hp);
+  });
+});
+
+describe('usar item na luta', () => {
+  const pocao = () => instantiate(templateById('pot_vida')!, RARITIES[0]!);
+
+  function comPocao(item = pocao()) {
+    const estado = comMonstroDuro({ hp: 500, maxHp: 999 });
+    return { combate: iniciarEncontro({ ...estado, inventory: [...estado.inventory, item] }), item };
+  }
+
+  it('só oferece o que faz alguma coisa', () => {
+    const { combate, item } = comPocao();
+    expect(consumiveisDoCombate(combate).map((i) => i.uid)).toContain(item.uid);
+    expect(consumiveisDoCombate(combate).every((i) => i.stats.cura || i.stats.curaMana)).toBe(true);
+  });
+
+  it('cura, some da mochila e gasta o turno — a criatura revida', () => {
+    const { combate, item } = comPocao();
+    const depois = usarItem(combate, item, NUNCA);
+
+    expect(depois.estado.inventory.some((i) => i.uid === item.uid)).toBe(false);
+    expect(depois.log.join(' ')).toContain('Você usa');
+    expect(depois.log.join(' ')).toContain('acerta você');
+  });
+
+  it('item que não está na mochila é recusado sem gastar o turno', () => {
+    const { combate } = comPocao();
+    const fantasma = pocao();
+    const depois = usarItem(combate, fantasma, NUNCA);
+
+    expect(depois.estado).toBe(combate.estado);
+    expect(depois.log).toEqual([expect.stringContaining('não faz nada agora')]);
+  });
+});
+
+describe('cura que vai pro parceiro', () => {
+  it('poder de cura manda a parte da equipe; poder de dano não manda nada', () => {
+    const combate = iniciarEncontro(comMonstroDuro({ mp: 50, maxMp: 50 }));
+
+    const cura = usarPoder(combate, powerById('cura_menor')!, NUNCA);
+    expect(cura.curaDoParceiro).toBeGreaterThan(0);
+
+    const dano = usarPoder(combate, powerById('bola_de_fogo')!, NUNCA);
+    expect(dano.curaDoParceiro).toBe(0);
+  });
+
+  it('a quantia não fica guardada no combate', () => {
+    const combate = iniciarEncontro(comMonstroDuro({ mp: 50, maxMp: 50 }));
+    const { combate: depois } = usarPoder(combate, powerById('cura_menor')!, NUNCA);
+    expect('curaDoParceiro' in depois).toBe(false);
   });
 });

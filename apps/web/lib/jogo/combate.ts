@@ -26,11 +26,13 @@ import {
   applyMonsterHit,
   applyNpcBlessing,
   applyPartyTurn,
+  attemptDodge,
   attemptFlee,
   defaultRng,
   displayName,
   freshCombatMonster,
   gainXP,
+  ladosDoAtaque,
   monsterView,
   onItemCollected,
   onMonsterKilled,
@@ -61,6 +63,7 @@ import {
   type EstadoDoJogo,
   type EstadoNaMasmorra,
 } from './estado';
+import { podeUsar, usar } from './mochila';
 
 /**
  * `combate` é a luta; os três finais dizem à tela o que mostrar e que ela
@@ -83,8 +86,12 @@ export interface Combate {
   fase: FaseDoCombate;
   /** O que aconteceu na última ação, em ordem — vira o log da tela. */
   log: string[];
-  /** Último d20 rolado, pra tela poder mostrar o dado. */
-  dado: number | null;
+  /**
+   * Último dado rolado, pra tela mostrar. Carrega **quantos lados** desde que
+   * a classe passou a rolar d6 no ataque dela: "🎲 5" num d6 é um acerto
+   * folgado, num d20 é um erro, e a tela não tinha como saber qual.
+   */
+  dado: Rolagem | null;
   /** Item achado ao vencer, pra tela dar destaque. */
   loot: Item | null;
   /** Pet cosmético da conta, pelos bônus de crítico/esquiva/cura/mana. */
@@ -105,6 +112,11 @@ export interface Combate {
    * `log`.
    */
   flutuantes: Flutuante[];
+}
+
+export interface Rolagem {
+  valor: number;
+  lados: number;
 }
 
 export interface Flutuante {
@@ -249,10 +261,11 @@ export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng:
   if (veneno.defeated) return derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng);
 
   const ataque = resolveAttack(veneno.hero, monstro, roll, estilo, { rng, petCriticoBonus: petBonus(combate.pet).critico ?? 0 });
+  const dado: Rolagem = { valor: roll, lados: ladosDoAtaque(veneno.hero, estilo) };
 
   if (ataque.outcome === 'no_mana') {
     // Turno não passa: o original só avisa e devolve o controle.
-    return { ...combate, estado: { ...estado, hero: veneno.hero }, dado: roll, log: ['Mana insuficiente. Use o ataque físico.'], som: null, flutuantes: [] };
+    return { ...combate, estado: { ...estado, hero: veneno.hero }, dado, log: ['Mana insuficiente. Use o ataque físico.'], som: null, flutuantes: [] };
   }
 
   if (ataque.outcome === 'hit') {
@@ -269,7 +282,7 @@ export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng:
   const depois: Combate = {
     ...combate,
     estado: comMonstro({ ...estado, hero: ataque.hero }, ataque.monster),
-    dado: roll,
+    dado,
     log,
     som: somDoGolpe(ataque.outcome === 'hit', ataque.isCrit),
     flutuantes:
@@ -282,15 +295,33 @@ export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng:
   return turnoDosOutros(depois, rng);
 }
 
-export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng): Combate {
+/**
+ * O que `usarPoder` devolve: o combate, e **quanto a cura deste poder manda
+ * pro parceiro online**.
+ *
+ * A quantia vem ao lado do `Combate`, e não dentro dele, de propósito: o
+ * combate vai pro estado da tela e é espalhado (`...combate`) a cada ação;
+ * um campo ali dentro ficaria parado com o valor da última cura, pronto pra
+ * ser reenviado por engano. Quem chama tira a quantia, manda, e guarda só o
+ * combate.
+ */
+export interface ResultadoDoPoder {
+  combate: Combate;
+  /** Zero quando o poder não curou. É a mesma parte que os companheiros recebem. */
+  curaDoParceiro: number;
+}
+
+export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng): ResultadoDoPoder {
+  const semCura = (fim: Combate): ResultadoDoPoder => ({ combate: fim, curaDoParceiro: 0 });
+
   const estado = exigirMasmorra(combate);
   const monstro = monstroAtual(estado);
-  if (!monstro) return combate;
+  if (!monstro) return semCura(combate);
 
   const veneno = tickHeroStatus(estado.hero);
   const log: string[] = [];
   if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
-  if (veneno.defeated) return derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng);
+  if (veneno.defeated) return semCura(derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng));
 
   const bonus = petBonus(combate.pet);
   const uso = castPower(veneno.hero, estado.party, monstro, poder, {
@@ -300,7 +331,7 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
   });
 
   if (uso.outcome === 'no_mana') {
-    return { ...combate, estado: { ...estado, hero: veneno.hero }, log: [`Mana insuficiente para usar ${poder.name}.`], som: null, flutuantes: [] };
+    return semCura({ ...combate, estado: { ...estado, hero: veneno.hero }, log: [`Mana insuficiente para usar ${poder.name}.`], som: null, flutuantes: [] });
   }
 
   if (uso.outcome === 'damage') log.push(`Você usa ${poder.name} e causa ${uso.damage} de dano!`);
@@ -317,8 +348,9 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
     flutuantes: uso.outcome === 'damage' ? [{ texto: `${poder.icon} -${uso.damage}`, tom: 'critico', alvo: 'inimigo' }] : [],
   };
 
-  if (uso.monsterDefeated) return derrotarMonstro(depois, monstro, rng);
-  return turnoDosOutros(depois, rng);
+  const curaDoParceiro = uso.outcome === 'heal' ? (uso.allyHealed ?? 0) : 0;
+  const fim = uso.monsterDefeated ? derrotarMonstro(depois, monstro, rng) : turnoDosOutros(depois, rng);
+  return { combate: fim, curaDoParceiro };
 }
 
 /**
@@ -336,12 +368,13 @@ export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Co
 
   const tentativa = attemptFlee(estado.hero, monstro, roll);
   const comBonus = tentativa.bonus ? ` (+${tentativa.bonus} por velocidade)` : '';
+  const dado: Rolagem = { valor: roll, lados: 20 };
 
   if (tentativa.success) {
     return {
       ...combate,
       fase: 'fuga',
-      dado: roll,
+      dado,
       log: [`Você rolou ${roll}${comBonus} e fugiu com sucesso.`, 'Você escapa da batalha, ofegante.'],
       som: 'door',
       flutuantes: [],
@@ -350,13 +383,92 @@ export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Co
 
   const log = [`Você rolou ${roll}${comBonus} e não conseguiu fugir.`];
 
-  return turnoDosOutros({ ...combate, dado: roll, log }, rng);
+  // `som` e `flutuantes` zerados aqui, e não herdados: sem isso, falhar a
+  // fuga logo depois de um acerto repetia o som do golpe, mostrava de novo
+  // o número no inimigo e girava a arma do boneco — um ataque fantasma. É a
+  // disciplina que `Combate.som` pede e que só esta ação não cumpria.
+  return turnoDosOutros({ ...combate, dado, log, som: null, flutuantes: [] }, rng);
+}
+
+/**
+ * Esquivar: rola o d20 como a fuga (`attemptDodge`). Deu certo, o golpe da
+ * criatura **nesta rodada** erra você; não deu, você perdeu o turno à toa.
+ * Nos dois casos não há ataque seu — é a troca.
+ *
+ * Roda o veneno antes, como atacar e usar poder: é uma ação que gasta o
+ * turno, e o veneno corrói a cada turno gasto.
+ */
+export function esquivar(combate: Combate, roll: number, rng: Rng = defaultRng): Combate {
+  const estado = exigirMasmorra(combate);
+  const monstro = monstroAtual(estado);
+  if (!monstro) return combate;
+
+  const veneno = tickHeroStatus(estado.hero);
+  const log: string[] = [];
+  if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
+  if (veneno.defeated) return derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng);
+
+  const tentativa = attemptDodge(veneno.hero, monstro, roll);
+  const comBonus = tentativa.bonus ? ` (+${tentativa.bonus} por velocidade)` : '';
+  log.push(
+    tentativa.success
+      ? `Você rolou ${roll}${comBonus} e se prepara para desviar.`
+      : `Você rolou ${roll}${comBonus} e não consegue se preparar a tempo.`,
+  );
+
+  return turnoDosOutros(
+    { ...combate, estado: { ...estado, hero: veneno.hero }, dado: { valor: roll, lados: 20 }, log, som: null, flutuantes: [] },
+    rng,
+    { esquivaCerta: tentativa.success },
+  );
+}
+
+/** Os consumíveis que dá pra usar agora — o mesmo filtro do botão "Usar" da mochila. */
+export function consumiveisDoCombate(combate: Combate): Item[] {
+  return combate.estado.inventory.filter(podeUsar);
+}
+
+/**
+ * Usar um consumível no meio da luta. **Gasta o turno**, como toda ação: a
+ * equipe age e a criatura revida — beber poção não é de graça.
+ *
+ * A regra de quanto cura é a da mochila (`usar`), chamada daqui, e não
+ * copiada: o texto do log e o "não faz nada agora" saem iguais nas duas
+ * telas.
+ *
+ * Item que não faz nada não gasta o turno — mesma disciplina da falta de
+ * mana: a ação foi recusada, não tentada.
+ */
+export function usarItem(combate: Combate, item: Item, rng: Rng = defaultRng): Combate {
+  const estado = exigirMasmorra(combate);
+  const monstro = monstroAtual(estado);
+  if (!monstro) return combate;
+
+  if (!podeUsar(item) || !estado.inventory.some((atual) => atual.uid === item.uid)) {
+    return { ...combate, log: [`${displayName(item)} não faz nada agora.`], som: null, flutuantes: [] };
+  }
+
+  const veneno = tickHeroStatus(estado.hero);
+  const log: string[] = [];
+  if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
+  if (veneno.defeated) return derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng);
+
+  const usado = usar({ estado: { ...estado, hero: veneno.hero }, log: [] }, item);
+  if (usado.estado.mapMode !== 'dungeon') return combate;
+  log.push(...usado.log);
+
+  return turnoDosOutros({ ...combate, estado: usado.estado, dado: null, log, som: null, flutuantes: [] }, rng);
 }
 
 // ---------- turno de quem não é o jogador ----------
 
+interface OpcoesDaRodada {
+  /** O herói rolou "Esquivar" com sucesso: o golpe desta rodada nele erra. */
+  esquivaCerta?: boolean;
+}
+
 /** Equipe → dano contínuo no monstro → golpe do monstro. É a ordem exata do original. */
-function turnoDosOutros(combate: Combate, rng: Rng): Combate {
+function turnoDosOutros(combate: Combate, rng: Rng, opcoes: OpcoesDaRodada = {}): Combate {
   const estado = exigirMasmorra(combate);
   const monstro = monstroAtual(estado);
   if (!monstro) return combate;
@@ -381,6 +493,7 @@ function turnoDosOutros(combate: Combate, rng: Rng): Combate {
   const golpe = applyMonsterHit(comEquipe.hero, comEquipe.party, monsterView(dot.monster), {
     rng,
     petEsquivaBonus: petBonus(combate.pet).esquiva ?? 0,
+    esquivaCerta: opcoes.esquivaCerta,
   });
   log.push(textoDoGolpe(golpe, monstro.name));
 

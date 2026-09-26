@@ -155,6 +155,11 @@ function applyBuff(hero: Hero, power: Power): Hero['buffs'] {
     case 'escudo':
       buffs.shield = power.amount;
       break;
+    case 'buff_grupo':
+      // Mora no herói, mas vale pra equipe: `applyPartyTurn` lê daqui.
+      buffs.inspiracaoTurns = power.turns;
+      buffs.inspiracaoAmount = power.amount;
+      break;
   }
 
   return buffs;

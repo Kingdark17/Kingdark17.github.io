@@ -25,6 +25,7 @@ const DESLIGADO: EstadoDaSala = {
   travado: false,
   convite: null,
   mensagem: null,
+  curaRecebida: null,
   recado: '',
   erro: '',
 };

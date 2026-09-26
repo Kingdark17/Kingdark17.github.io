@@ -159,6 +159,36 @@ describe('applyPartyTurn', () => {
     expect(dmgFerido).toBeGreaterThan(dmgSaudavel);
   });
 
+  /**
+   * A Canção de Batalha do herói bardo. É o único buff de herói que a
+   * equipe sente, e o único que se desconta por **rodada**, aqui.
+   */
+  describe('Canção de Batalha', () => {
+    const inspirado = (turnos: number) => ({ ...heroiDe('Bardo'), buffs: { inspiracaoTurns: turnos, inspiracaoAmount: 0.25 } });
+
+    it('o companheiro bate 25% mais forte', () => {
+      const guerreiro = membro({ className: 'Guerreiro' });
+      const dano = (hero: ReturnType<typeof heroiDe>) => {
+        const r = applyPartyTurn(hero, [guerreiro], monstro(), () => 0.5); // acerta, sem proc
+        return r.outcomes[0]?.kind === 'hit' ? r.outcomes[0].amount : 0;
+      };
+      const sem = dano(heroiDe('Bardo'));
+      expect(sem).toBeGreaterThan(0);
+      expect(dano(inspirado(3))).toBe(Math.round(sem * 1.25));
+    });
+
+    it('cai uma rodada por turno da equipe — com ou sem equipe', () => {
+      expect(applyPartyTurn(inspirado(3), [membro()], monstro(), () => 0.5).hero.buffs?.inspiracaoTurns).toBe(2);
+      expect(applyPartyTurn(inspirado(3), [], monstro(), () => 0.5).hero.buffs?.inspiracaoTurns).toBe(2);
+      expect(applyPartyTurn(inspirado(1), [], monstro(), () => 0.5).hero.buffs?.inspiracaoTurns).toBe(0);
+    });
+
+    it('acabada, não mexe em nada', () => {
+      const hero = { ...heroiDe('Bardo'), buffs: { inspiracaoTurns: 0, inspiracaoAmount: 0.25 } };
+      expect(applyPartyTurn(hero, [], monstro(), () => 0.5).hero.buffs?.inspiracaoTurns).toBe(0);
+    });
+  });
+
   it('não muta hero, party nem monster recebidos', () => {
     const hero = heroiDe('Guerreiro');
     const party = [membro({ className: 'Necromante' })];

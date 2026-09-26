@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { CLASSES, DEBUFFS, POWERS, RACES, type Rng } from '@rpg-legend/shared';
+import { CLASSES, DEBUFFS, POWERS, RACES, seededRng, type Rng } from '@rpg-legend/shared';
 
 import { criacaoVazia, faltaParaComecar, rolarAtributosSePossivel, rolarTudo, sortearPoderes } from './criacao';
 import { CriacaoIncompletaError, montarSaveInicial } from './save-inicial';
@@ -22,6 +22,22 @@ describe('sortearPoderes', () => {
       for (let tentativa = 0; tentativa < 20; tentativa += 1) {
         const ids = sortearPoderes(classe, Math.random).map((poder) => poder.id);
         expect(ids).not.toContain(classe.signatureId);
+      }
+    }
+  });
+
+  /**
+   * A Canção de Batalha é do bardo, pela classe (`soDaClasse`). Sorteada
+   * pra um guerreiro, o apoio do bardo deixaria de ser do bardo — e pro
+   * próprio bardo ela viria duplicada.
+   */
+  it('nunca sorteia poder que é só de uma classe', () => {
+    const exclusivos = POWERS.filter((poder) => poder.soDaClasse).map((poder) => poder.id);
+    expect(exclusivos).toContain('cancao_de_batalha');
+    for (const classe of CLASSES) {
+      for (let semente = 0; semente < 200; semente += 1) {
+        const ids = sortearPoderes(classe, seededRng(semente)).map((poder) => poder.id);
+        for (const id of exclusivos) expect(ids).not.toContain(id);
       }
     }
   });

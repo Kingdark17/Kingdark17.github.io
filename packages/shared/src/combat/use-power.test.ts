@@ -206,6 +206,18 @@ describe('castPower — buffs', () => {
 
     expect(resultado.monster).toBe(monstro);
   });
+
+  it('a Canção de Batalha guarda a inspiração no herói, e não mexe em mais nada dele', () => {
+    const cancao = poder('cancao_de_batalha');
+    const hero = heroFixture({ hero: { buffs: { forcaTurns: 2, forcaAmount: 0.3 } } });
+    const resultado = castPower(hero, [], monsterFixture(), cancao);
+
+    expect(resultado.outcome).toBe('buff');
+    expect(resultado.hero.buffs?.inspiracaoTurns).toBe(3);
+    expect(resultado.hero.buffs?.inspiracaoAmount).toBe(0.25);
+    // Soma com o Grito de Guerra em vez de apagá-lo.
+    expect(resultado.hero.buffs?.forcaTurns).toBe(2);
+  });
 });
 
 describe('castPower — não muta a entrada', () => {

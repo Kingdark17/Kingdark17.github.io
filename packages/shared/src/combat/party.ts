@@ -49,6 +49,11 @@ export function applyPartyTurn(
   const outcomes: PartyMemberOutcome[] = [];
   let totalDamage = 0;
 
+  // A Canção de Batalha do herói bardo chega aqui: é o único buff de herói
+  // que a equipe sente.
+  const buffs = hero.buffs ?? {};
+  const inspiracao = buffs.inspiracaoTurns && buffs.inspiracaoTurns > 0 ? 1 + (buffs.inspiracaoAmount ?? 0) : 1;
+
   for (const member of party) {
     if (member.hp <= 0 || nextMonster.hp <= 0) continue;
 
@@ -72,6 +77,7 @@ export function applyPartyTurn(
     if (stance === 'agressiva') dmg = Math.round(dmg * 1.3);
     if (stance === 'defensiva' || stance === 'suporte') dmg = Math.round(dmg * 0.8);
     if (classe === 'mago') dmg = Math.round(dmg * 1.2);
+    if (inspiracao > 1) dmg = Math.round(dmg * inspiracao);
 
     let passive: PartyPassiveKind | undefined;
     if (classe === 'ladino' && rng() < 0.25) {
@@ -117,6 +123,15 @@ export function applyPartyTurn(
     nextMonster = { ...nextMonster, status, hp: nextMonster.hp - dmg };
     totalDamage += dmg;
     outcomes.push({ member, kind: 'hit', amount: dmg, passive });
+  }
+
+  // A canção dura **rodadas**, e este é o único passo que acontece uma vez
+  // por rodada — com ou sem equipe, tenha o herói atacado, curado ou
+  // fugido. Descontar no ataque do herói, como a força, faria a canção
+  // durar pra sempre enquanto ele só lançasse poderes.
+  if (inspiracao > 1) {
+    const agora = nextHero.buffs ?? {};
+    nextHero = { ...nextHero, buffs: { ...agora, inspiracaoTurns: (agora.inspiracaoTurns ?? 1) - 1 } };
   }
 
   return { hero: nextHero, monster: nextMonster, outcomes, totalDamage, defeated: nextMonster.hp <= 0 };

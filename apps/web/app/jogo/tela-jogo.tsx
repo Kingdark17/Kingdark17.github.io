@@ -41,7 +41,18 @@ import { tocar } from '@/lib/som/efeitos';
 import { useTrilha } from '@/lib/som/use-trilha';
 import type { Tema } from '@/lib/som/musica';
 import { marcar, type Recado } from '@/lib/jogo/tutorial';
-import { abrirAventura, assinar, instantanea, mandarEstado, mandarPerfil, PAPEL_ANFITRIAO, sairDaSala, travarParceiro } from '@/lib/rede/sala';
+import { curarNaTela, curarPeloParceiro } from '@/lib/jogo/cura-do-parceiro';
+import {
+  abrirAventura,
+  assinar,
+  instantanea,
+  mandarCura,
+  mandarEstado,
+  mandarPerfil,
+  PAPEL_ANFITRIAO,
+  sairDaSala,
+  travarParceiro,
+} from '@/lib/rede/sala';
 import { useSala } from '@/lib/rede/use-sala';
 import type { Combate } from '@/lib/jogo/combate';
 import { BichoDeEstimacao } from './bicho-de-estimacao';
@@ -135,6 +146,13 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const abriu = useRef(false);
   const cosmeticos = useRef<CosmeticosDoJogador | null>(null);
   const ultimoRemoto = useRef<Record<string, unknown> | null>(null);
+  /**
+   * A última cura do parceiro já aplicada. Começa na que já estava na sessão
+   * ao montar: voltar pra esta tela não pode reaplicar uma cura antiga.
+   */
+  const ultimaCura = useRef(instantanea().curaRecebida?.id ?? 0);
+  /** O estado já desenhado, pra quem chega de fora do React (a sessão de rede). */
+  const estadoDesenhado = useRef<EstadoDoJogo | null>(null);
   /** A mochila da última sincronização — o que permite omiti-la quando não mudou. */
   const mochilaEnviada = useRef<readonly Item[] | null>(null);
 
@@ -343,6 +361,45 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     });
   }, [emCoop]);
 
+  useEffect(() => {
+    estadoDesenhado.current = estado;
+  });
+
+  /**
+   * Cura que o parceiro mandou (Cura Menor, Renovação Natural). Aplicada no
+   * meu herói — no estado do jogo **e** na tela aberta, que guarda cópia
+   * própria (ver `curarNaTela`).
+   *
+   * **Sincroniza em seguida, e não é enfeite.** Quem devolve o meu herói a
+   * cada pacote do parceiro é o servidor (`aplicarRemoto` usa o meu perfil
+   * como ele o conhece): cura que ficasse só aqui seria desfeita no próximo
+   * passo de quem conduz.
+   *
+   * A vida sobe por atualização funcional; o quanto curou e o pacote saem
+   * do estado desenhado. Com a vida já cheia não há cura, e não há aviso.
+   */
+  useEffect(() => {
+    if (!emCoop) return;
+    return assinar(() => {
+      const cura = instantanea().curaRecebida;
+      if (!cura || cura.id === ultimaCura.current) return;
+      ultimaCura.current = cura.id;
+
+      const desenhado = estadoDesenhado.current;
+      if (!desenhado) return;
+      const { estado: curado, curou } = curarPeloParceiro(desenhado, cura.quantia);
+      if (curou === 0) return;
+
+      setEstado((atual) => (atual ? curarPeloParceiro(atual, cura.quantia).estado : atual));
+      setTela((aberta) => (aberta ? curarNaTela(aberta, cura.quantia) : aberta));
+      sincronizar(curado);
+
+      const recebida = { titulo: 'Cura do parceiro', texto: `Seu parceiro cura você em ${curou} de Vida.` };
+      setRecado(recebida);
+      setDiario((atual) => anotar(atual, { icone: '✨', ...recebida }));
+    });
+  }, [emCoop, sincronizar]);
+
   /**
    * As duas portas por onde acontecimento chega ao jogador — e é por isso
    * que o diário escreve daqui, e não de um gerador próprio: assim ele
@@ -523,6 +580,11 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               seguir({ tipo: 'combate', combate: proximo }, proximo.estado);
             }}
             onEncerrar={(final) => fechar(final.estado, avisoDoFim(final))}
+            // Solo, a cura não tem pra quem ir: os companheiros já a
+            // receberam dentro do próprio `castPower`.
+            onCuraDoParceiro={(quantia) => {
+              if (emCoop) mandarCura(quantia);
+            }}
           />
         );
       case 'loja':

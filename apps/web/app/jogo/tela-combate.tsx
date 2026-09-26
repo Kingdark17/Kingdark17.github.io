@@ -25,14 +25,33 @@ import { AnimatePresence, LazyMotion, MotionConfig } from 'motion/react';
 import * as m from 'motion/react-m';
 import { useRef, useState } from 'react';
 
-import { heroPowers, powerManaCost, type CombatMonsterView, type Power } from '@rpg-legend/shared';
+import {
+  ataquesDisponiveis,
+  displayName,
+  heroPowers,
+  powerManaCost,
+  type AtaqueDisponivel,
+  type CombatMonsterView,
+  type Item,
+  type Power,
+} from '@rpg-legend/shared';
 
-import { atacar, fugir, inimigosRestantes, monstroAtual, usarPoder, type Combate, type Flutuante } from '@/lib/jogo/combate';
+import {
+  atacar,
+  consumiveisDoCombate,
+  esquivar,
+  fugir,
+  inimigosRestantes,
+  monstroAtual,
+  usarItem,
+  usarPoder,
+  type Combate,
+  type Flutuante,
+} from '@/lib/jogo/combate';
 import { tocar } from '@/lib/som/efeitos';
 import styles from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
 
-const LADOS_DO_DADO = 20;
 const LINHAS_DO_LOG = 8;
 
 const carregarAnimacoes = () => import('./animacoes-do-log').then((modulo) => modulo.default);
@@ -68,8 +87,37 @@ const ROTULOS_DE_STATUS: Record<string, string> = {
   lento: '❄️ Lento',
 };
 
-function rolarD20(): number {
-  return Math.floor(Math.random() * LADOS_DO_DADO) + 1;
+/**
+ * O dado sai daqui e não de dentro da engine — a tela mostra o número, e é
+ * o mesmo número que um dia o servidor vai conferir. **Quantos lados** vem
+ * da engine (`ataquesDisponiveis`): a tela não decide sozinha quem rola d6.
+ */
+function rolar(lados: number): number {
+  return Math.floor(Math.random() * lados) + 1;
+}
+
+/** O nome do botão diz o dado — "d6" é a promessa de acertar mais. */
+function rotuloDoAtaque(ataque: AtaqueDisponivel): string {
+  const dado = `d${ataque.lados}`;
+  if (ataque.estilo === 'magic') return `Ataque Mágico (${dado} · ${ataque.custo} MP)`;
+  if (ataque.estilo === 'ranged') return `Tiro (${dado})`;
+  return `Ataque Físico (${dado})`;
+}
+
+/**
+ * Consumíveis iguais viram um botão só, com a contagem. Cinco poções de vida
+ * são uma escolha ("beber uma"), não cinco — e cinco botões iguais
+ * empurrariam os poderes pra fora da tela no celular.
+ */
+function agruparConsumiveis(itens: Item[]): Array<{ item: Item; nome: string; quantos: number }> {
+  const grupos = new Map<string, { item: Item; nome: string; quantos: number }>();
+  for (const item of itens) {
+    const nome = displayName(item);
+    const grupo = grupos.get(nome);
+    if (grupo) grupo.quantos += 1;
+    else grupos.set(nome, { item, nome, quantos: 1 });
+  }
+  return [...grupos.values()];
 }
 
 function statusAtivos(monstro: CombatMonsterView): string[] {
@@ -83,9 +131,14 @@ interface Props {
   combate: Combate;
   onCombate: (proximo: Combate) => void;
   onEncerrar: (final: Combate) => void;
+  /**
+   * Um poder de cura foi lançado: esta é a parte do parceiro online. Quem
+   * sabe se há parceiro é a tela de jogo — esta tela só avisa.
+   */
+  onCuraDoParceiro?: (quantia: number) => void;
 }
 
-export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
+export function TelaCombate({ combate, onCombate, onEncerrar, onCuraDoParceiro }: Props) {
   const [historico, setHistorico] = useState<LinhaDoLog[]>(() => combate.log.map((texto, indice) => ({ id: indice, texto })));
   const [naTela, setNaTela] = useState<NumeroNaTela[]>([]);
   const [tremida, setTremida] = useState(false);
@@ -115,8 +168,15 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
     onCombate(proximo);
   }
 
-  const ehMago = hero.className === 'Mago';
+  const ataques = ataquesDisponiveis(hero);
   const poderes: Power[] = heroPowers(hero);
+  const consumiveis = agruparConsumiveis(consumiveisDoCombate(combate));
+
+  function lancar(poder: Power) {
+    const { combate: proximo, curaDoParceiro } = usarPoder(combate, poder);
+    if (curaDoParceiro > 0) onCuraDoParceiro?.(curaDoParceiro);
+    avancar(proximo);
+  }
 
   if (!monstro && !acabou) return <p className={styles.erro}>A sala está vazia.</p>;
 
@@ -179,8 +239,8 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
       )}
 
       {combate.dado !== null && !acabou && (
-        <p className={styles.dado} aria-label={`Dado: ${combate.dado}`}>
-          🎲 {combate.dado}
+        <p className={styles.dado} aria-label={`Dado de ${combate.dado.lados} lados: ${combate.dado.valor}`}>
+          🎲 <span className={styles.ladosDoDado}>d{combate.dado.lados}</span> {combate.dado.valor}
         </p>
       )}
 
@@ -216,30 +276,28 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
       ) : (
         <>
           <div className={styles.escolhas}>
-            {ehMago ? (
-              <>
-                <button
-                  type="button"
-                  className={`${styles.botao} ${styles.botaoPrincipal}`}
-                  onClick={() => avancar(atacar(combate, rolarD20(), 'magic'))}
-                  disabled={hero.mp < 5}
-                >
-                  Ataque Mágico (d20 · 5 MP)
-                </button>
-                <button type="button" className={styles.botao} onClick={() => avancar(atacar(combate, rolarD20(), 'physical'))}>
-                  Ataque Físico (d20)
-                </button>
-              </>
-            ) : (
+            {/* O ataque da classe vem primeiro e em destaque — é o que rola
+                d6. `ataquesDisponiveis` já devolve nessa ordem. */}
+            {ataques.map((ataque, indice) => (
               <button
+                key={ataque.estilo}
                 type="button"
-                className={`${styles.botao} ${styles.botaoPrincipal}`}
-                onClick={() => avancar(atacar(combate, rolarD20(), 'normal'))}
+                className={indice === 0 ? `${styles.botao} ${styles.botaoPrincipal}` : styles.botao}
+                onClick={() => avancar(atacar(combate, rolar(ataque.lados), ataque.estilo))}
+                disabled={hero.mp < ataque.custo}
               >
-                Atacar (d20)
+                {rotuloDoAtaque(ataque)}
               </button>
-            )}
-            <button type="button" className={styles.botao} onClick={() => avancar(fugir(combate, rolarD20()))}>
+            ))}
+            <button
+              type="button"
+              className={styles.botao}
+              onClick={() => avancar(esquivar(combate, rolar(20)))}
+              title="Rola o d20 com o bônus de velocidade: 12 ou mais, e o golpe desta rodada erra você. Você não ataca."
+            >
+              Esquivar (d20)
+            </button>
+            <button type="button" className={styles.botao} onClick={() => avancar(fugir(combate, rolar(20)))}>
               Fugir da Batalha
             </button>
           </div>
@@ -253,7 +311,7 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
                     key={poder.id}
                     type="button"
                     className={styles.botao}
-                    onClick={() => avancar(usarPoder(combate, poder))}
+                    onClick={() => lancar(poder)}
                     disabled={hero.mp < custo}
                     title={poder.desc}
                   >
@@ -261,6 +319,19 @@ export function TelaCombate({ combate, onCombate, onEncerrar }: Props) {
                   </button>
                 );
               })}
+            </div>
+          )}
+
+          {/* Consumíveis gastam o turno, como toda ação. Só aparecem os que
+              fazem alguma coisa — o mesmo filtro do "Usar" da mochila. */}
+          {consumiveis.length > 0 && (
+            <div className={styles.escolhas}>
+              {consumiveis.map(({ item, nome, quantos }) => (
+                <button key={nome} type="button" className={styles.botaoDiscreto} onClick={() => avancar(usarItem(combate, item))}>
+                  Usar {nome}
+                  {quantos > 1 ? <span className={styles.custoDeMana}> ×{quantos}</span> : null}
+                </button>
+              ))}
             </div>
           )}
         </>

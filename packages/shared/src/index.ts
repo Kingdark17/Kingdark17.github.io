@@ -33,6 +33,7 @@ export * from './combat/resolve-attack.js';
 export * from './combat/monster-hit.js';
 export * from './combat/use-power.js';
 export * from './combat/flee.js';
+export * from './combat/dodge.js';
 
 export * from './events/events.js';
 

@@ -89,6 +89,12 @@ export interface EstadoDaSala {
   convite: Convite | null;
   /** Última mensagem de amigo empurrada pelo servidor. */
   mensagem: MensagemRecebida | null;
+  /**
+   * Última cura que o parceiro mandou (`team-heal`). O `id` sobe a cada
+   * uma: duas curas seguidas do mesmo tamanho são duas curas, e só o valor
+   * não deixaria a tela distinguir a segunda da primeira.
+   */
+  curaRecebida: { quantia: number; id: number } | null;
   recado: string;
   erro: string;
 }
@@ -104,9 +110,13 @@ const VAZIO: EstadoDaSala = {
   travado: false,
   convite: null,
   mensagem: null,
+  curaRecebida: null,
   recado: '',
   erro: '',
 };
+
+/** Numera as curas recebidas — ver `EstadoDaSala.curaRecebida`. */
+let curasRecebidas = 0;
 
 type Ouvinte = () => void;
 
@@ -321,6 +331,14 @@ function ligar(conexao: Socket): void {
   });
 
   conexao.on('move-lock', () => mudar({ travado: true }));
+  // O servidor já limita a quantia (0 a 500) antes de repassar; o `Number`
+  // aqui só protege o tipo. Quem aplica é a tela de jogo, no próprio herói.
+  conexao.on('team-heal', (dados: { amount?: unknown }) => {
+    const quantia = Number(dados?.amount);
+    if (!Number.isFinite(quantia) || quantia <= 0) return;
+    curasRecebidas += 1;
+    mudar({ curaRecebida: { quantia, id: curasRecebidas } });
+  });
   conexao.on('peer-left', () => mudar({ fase: 'esperando', recado: 'Seu parceiro saiu da sala.', travado: false }));
 
   conexao.on('role-changed', (dados: { role?: number }) =>
@@ -422,6 +440,15 @@ export function abrirAventura(estado: unknown, turno: number): void {
 export function mandarEstado(estado: unknown, turno: number): void {
   if (!instantaneo.codigo) return;
   socket?.emit('state', { room: instantaneo.codigo, state: estado, turn: turno });
+}
+
+/**
+ * Manda uma cura pro parceiro (`team-heal`). O servidor só repassa — não
+ * sabe de poder nem de herói —, e o parceiro aplica no dele.
+ */
+export function mandarCura(quantia: number): void {
+  if (!instantaneo.codigo || quantia <= 0) return;
+  socket?.emit('team-heal', { room: instantaneo.codigo, amount: Math.floor(quantia) });
 }
 
 export function travarParceiro(): void {
