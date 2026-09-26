@@ -193,6 +193,44 @@ describe('RoomRegistry — perfis', () => {
     expect(registry.publicProfiles(room)['2'].name).toBe('Bree');
   });
 
+  describe('curarPerfil — a cura do parceiro', () => {
+    function convidadoCom(hp: number) {
+      const { registry, room } = createdRegistry();
+      registry.join('ABC123', fakeConnection('guest'), { admin: false });
+      registry.applyProfile(room, GUEST_ROLE, { name: 'Bree', hero: { hp, attrs: { constituicao: 10 } }, inventory: [{ uid: 'c' }] });
+      return { registry, room, antes: room.profiles[GUEST_ROLE]! };
+    }
+
+    it('sobe a vida até o máximo, sem passar', () => {
+      const { registry, room, antes } = convidadoCom(5);
+      registry.curarPerfil(room, GUEST_ROLE, 30);
+      expect(room.profiles[GUEST_ROLE]?.hero.hp).toBe(35);
+
+      registry.curarPerfil(room, GUEST_ROLE, 9999);
+      expect(room.profiles[GUEST_ROLE]?.hero.hp).toBe(antes.hero.maxHp);
+    });
+
+    // Pacotes na fila da compressão seguram o herói anterior; mudar o objeto
+    // por baixo mudaria o que eles vão mandar.
+    it('troca o herói por outro objeto, e a mochila continua a mesma', () => {
+      const { registry, room, antes } = convidadoCom(5);
+      registry.curarPerfil(room, GUEST_ROLE, 10);
+
+      expect(antes.hero.hp).toBe(5);
+      expect(room.profiles[GUEST_ROLE]?.inventory).toBe(antes.inventory);
+    });
+
+    it('sem perfil, ou com cura zero, não faz nada', () => {
+      const { registry, room } = createdRegistry();
+      registry.curarPerfil(room, GUEST_ROLE, 30);
+      expect(room.profiles[GUEST_ROLE]).toBeUndefined();
+
+      const { registry: outro, room: sala, antes } = convidadoCom(5);
+      outro.curarPerfil(sala, GUEST_ROLE, 0);
+      expect(sala.profiles[GUEST_ROLE]).toBe(antes);
+    });
+  });
+
   describe('profilesForMember — o recorte por destinatário', () => {
     function salaComDois() {
       const { registry, room } = createdRegistry();

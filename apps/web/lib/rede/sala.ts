@@ -443,8 +443,10 @@ export function mandarEstado(estado: unknown, turno: number): void {
 }
 
 /**
- * Manda uma cura pro parceiro (`team-heal`). O servidor só repassa — não
- * sabe de poder nem de herói —, e o parceiro aplica no dele.
+ * Manda uma cura pro parceiro (`team-heal`). O servidor cura o perfil que
+ * guarda dele e repassa; o parceiro aplica no próprio estado, pra ver na
+ * hora. **Tem que sair antes do `state` da mesma jogada** — é assim que o
+ * pacote seguinte já leva o parceiro curado.
  */
 export function mandarCura(quantia: number): void {
   if (!instantaneo.codigo || quantia <= 0) return;

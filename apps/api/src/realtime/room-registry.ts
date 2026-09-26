@@ -464,6 +464,29 @@ export class RoomRegistry {
   }
 
   /**
+   * `team-heal`: a cura do parceiro entra **no perfil guardado** de quem
+   * recebe, até a vida máxima.
+   *
+   * Só repassar não bastava. Quem devolve o herói a cada pacote é este
+   * perfil (`profilesForMember`), e o pacote que o anfitrião manda logo
+   * depois da cura é montado antes de o convidado ter tempo de responder:
+   * chegava com a vida velha e desfazia a cura. E o convidado responder com
+   * o estado inteiro era pior — o mapa dele ainda era o de antes do golpe,
+   * e o servidor aceitava, voltando a sala que a equipe acabara de limpar.
+   * Curando aqui, antes do repasse, o pacote seguinte já sai certo.
+   *
+   * Objeto novo, e não mutação: pacotes já enfileirados na compressão
+   * seguram referência pro herói anterior.
+   */
+  curarPerfil(room: Room, role: RoomRole, quantia: number): void {
+    const perfil = room.profiles[role];
+    if (!perfil || quantia <= 0) return;
+    const { hp, maxHp } = perfil.hero;
+    if (typeof hp !== 'number' || typeof maxHp !== 'number' || hp >= maxHp) return;
+    room.profiles[role] = { ...perfil, hero: { ...perfil.hero, hp: Math.min(maxHp, hp + quantia) } };
+  }
+
+  /**
    * `type:'state'`/`welcome`: porta do `sanitizeState()`. Sanea o perfil
    * embutido, recorta o mapa e — para o convidado — devolve posição/andar
    * do estado autoritativo em vez do que ele mandou.

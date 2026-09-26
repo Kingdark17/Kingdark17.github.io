@@ -174,6 +174,8 @@ export function TelaCombate({ combate, onCombate, onEncerrar, onCuraDoParceiro }
 
   function lancar(poder: Power) {
     const { combate: proximo, curaDoParceiro } = usarPoder(combate, poder);
+    // Antes do `avancar`, que é quem manda o estado desta jogada: o servidor
+    // precisa curar o parceiro antes de montar esse pacote (ver `mandarCura`).
     if (curaDoParceiro > 0) onCuraDoParceiro?.(curaDoParceiro);
     avancar(proximo);
   }

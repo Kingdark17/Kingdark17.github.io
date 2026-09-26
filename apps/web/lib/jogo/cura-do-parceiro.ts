@@ -8,9 +8,11 @@
  * dá pra fazer sem combate compartilhado (que não existe: só quem conduz
  * luta). Decidido com o Pedro em 2026-09-26.
  *
- * Quem cura é quem lança, na luta dele; quem recebe aplica **no próprio
- * herói** — o servidor só aceita de cada jogador o perfil dele mesmo, então
- * escrever no herói do outro não chegaria a lugar nenhum.
+ * Quem cura é quem lança, na luta dele. Quem guarda a cura é o servidor,
+ * que a aplica no perfil de quem recebe antes de repassar (`curarPerfil`,
+ * na API). Quem recebe aplica também **no próprio estado**, só pra ver na
+ * hora — e não sincroniza: o próximo pacote do parceiro já traz o herói
+ * curado.
  */
 
 import type { EstadoDoJogo } from './estado';

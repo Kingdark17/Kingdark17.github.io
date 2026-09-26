@@ -557,11 +557,11 @@ export class RealtimeGateway implements OnGatewayDisconnect {
   handleTeamHeal(@ConnectedSocket() socket: Socket, @MessageBody() body: { room?: unknown; amount?: unknown }): void {
     const seat = this.seatOf(socket, body?.room);
     if (!seat) return;
-    this.relay(seat.room, socket, 'team-heal', {
-      room: seat.room.code,
-      role: seat.role,
-      amount: clampInt(body?.amount, 0, MAX_HEAL),
-    });
+    const amount = clampInt(body?.amount, 0, MAX_HEAL);
+    // Antes do repasse: o `state` que o anfitrião manda em seguida tem que
+    // sair com o parceiro já curado (ver `curarPerfil`).
+    for (const membro of this.rooms.peerMembersOf(seat.room, socket.id)) this.rooms.curarPerfil(seat.room, membro.role, amount);
+    this.relay(seat.room, socket, 'team-heal', { room: seat.room.code, role: seat.role, amount });
   }
 
   @SubscribeMessage('boss-advance-request')

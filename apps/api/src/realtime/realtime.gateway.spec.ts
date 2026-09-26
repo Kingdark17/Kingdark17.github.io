@@ -489,6 +489,43 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
     expect(recebidos).toEqual([]);
   });
 
+  /**
+   * A cura entra no perfil guardado **antes** do repasse. O anfitrião manda
+   * o `state` logo depois da cura, e é esse pacote que devolve o herói ao
+   * convidado: saindo com a vida velha, ele desfazia a cura na tela dele.
+   */
+  it('team-heal cura o perfil guardado do parceiro, e o state seguinte já sai curado', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'CUR001', name: 'Aria' });
+    await waitFor(host, 'created');
+
+    const guest = connect();
+    await waitFor(guest, 'connect');
+    guest.emit('join', { room: 'CUR001', name: 'Bree' });
+    await waitFor(host, 'hello');
+
+    type Heroi = { hp: number; maxHp: number };
+    guest.emit('profile', { room: 'CUR001', profile: { name: 'Bree', hero: { hp: 5, attrs: { constituicao: 10 } } } });
+    const { profile } = await waitFor<{ profile: { hero: Heroi } }>(guest, 'profile-accepted');
+    expect(profile.hero.hp).toBe(5);
+
+    type Pacote = { state: { profiles: Record<string, { hero: Heroi }> } };
+    const cura = waitFor(guest, 'team-heal');
+    const pacote = waitFor<Pacote>(guest, 'state');
+    host.emit('team-heal', { room: 'CUR001', amount: 30 });
+    host.emit('state', { room: 'CUR001', turn: 1, state: { pos: { x: 1, y: 1 }, floor: 1 } });
+
+    expect(await cura).toEqual({ room: 'CUR001', role: 1, amount: 30 });
+    expect((await pacote).state.profiles['2'].hero.hp).toBe(35);
+
+    // Perto do máximo, para no máximo.
+    const cheio = waitFor<Pacote>(guest, 'state');
+    host.emit('team-heal', { room: 'CUR001', amount: 500 });
+    host.emit('state', { room: 'CUR001', turn: 2, state: { pos: { x: 1, y: 1 }, floor: 1 } });
+    expect((await cheio).state.profiles['2'].hero.hp).toBe(profile.hero.maxHp);
+  });
+
   it('mensagem de sala de quem não está na sala é ignorada', async () => {
     const host = connect();
     await waitFor(host, 'connect');

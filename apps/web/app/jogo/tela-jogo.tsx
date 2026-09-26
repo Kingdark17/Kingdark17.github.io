@@ -370,12 +370,13 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
    * meu herói — no estado do jogo **e** na tela aberta, que guarda cópia
    * própria (ver `curarNaTela`).
    *
-   * **Sincroniza em seguida, e não é enfeite.** Quem devolve o meu herói a
-   * cada pacote do parceiro é o servidor (`aplicarRemoto` usa o meu perfil
-   * como ele o conhece): cura que ficasse só aqui seria desfeita no próximo
-   * passo de quem conduz.
+   * **Não sincroniza, e de propósito.** O servidor já curou o meu perfil
+   * antes de repassar (`curarPerfil`, na API), e o pacote que o parceiro
+   * manda logo em seguida me devolve o herói curado. Mandar o estado daqui
+   * levava junto o mapa de antes do golpe dele — o servidor aceitava, e a
+   * sala que a equipe acabara de limpar voltava pros dois.
    *
-   * A vida sobe por atualização funcional; o quanto curou e o pacote saem
+   * A vida sobe por atualização funcional; o quanto curou, pro aviso, sai
    * do estado desenhado. Com a vida já cheia não há cura, e não há aviso.
    */
   useEffect(() => {
@@ -387,18 +388,17 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
 
       const desenhado = estadoDesenhado.current;
       if (!desenhado) return;
-      const { estado: curado, curou } = curarPeloParceiro(desenhado, cura.quantia);
+      const { curou } = curarPeloParceiro(desenhado, cura.quantia);
       if (curou === 0) return;
 
       setEstado((atual) => (atual ? curarPeloParceiro(atual, cura.quantia).estado : atual));
       setTela((aberta) => (aberta ? curarNaTela(aberta, cura.quantia) : aberta));
-      sincronizar(curado);
 
       const recebida = { titulo: 'Cura do parceiro', texto: `Seu parceiro cura você em ${curou} de Vida.` };
       setRecado(recebida);
       setDiario((atual) => anotar(atual, { icone: '✨', ...recebida }));
     });
-  }, [emCoop, sincronizar]);
+  }, [emCoop]);
 
   /**
    * As duas portas por onde acontecimento chega ao jogador — e é por isso
