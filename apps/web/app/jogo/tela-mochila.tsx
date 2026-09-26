@@ -46,6 +46,7 @@ import {
 import { CartaItem } from './carta-item';
 import { FichaItem } from './ficha-item';
 import styles from './jogo.module.css';
+import { useFichaAVista } from './use-ficha-a-vista';
 
 /**
  * `Record<EquipSlot, …>` de propósito, e não um `Partial`: slot novo na
@@ -85,6 +86,7 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
    * ficha passa sozinha de "Se você equipar" pra "Se você guardar".
    */
   const [selecionado, setSelecionado] = useState<string | null>(null);
+  const ficha = useFichaAVista(selecionado);
 
   const { hero, inventory } = mochila.estado;
   const guardados = inventory.filter((item) => !item.equipped && (aba === 'todos' || itemCategory(item) === aba));
@@ -172,7 +174,7 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
           )}
         </div>
 
-        <aside className={styles.fichaDoItem} aria-label="Detalhes da peça">
+        <aside ref={ficha} className={styles.fichaDoItem} aria-label="Detalhes da peça">
           <FichaItem
             item={aberta}
             hero={hero}

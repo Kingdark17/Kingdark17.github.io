@@ -37,6 +37,7 @@ import {
 import { CartaItem } from './carta-item';
 import { FichaItem } from './ficha-item';
 import styles from './jogo.module.css';
+import { useFichaAVista } from './use-ficha-a-vista';
 
 const LADOS_DO_DADO = 20;
 
@@ -68,6 +69,7 @@ export function TelaLoja({ loja, onLoja, onFechar }: Props) {
    * sumir (aí a ficha simplesmente esvazia).
    */
   const [selecionado, setSelecionado] = useState<string | null>(null);
+  const ficha = useFichaAVista(selecionado);
 
   const ehFerreiro = loja.kind === 'blacksmith';
   const aVenda = estoque(loja);
@@ -164,7 +166,7 @@ export function TelaLoja({ loja, onLoja, onFechar }: Props) {
           )}
         </div>
 
-        <aside className={styles.fichaDoItem} aria-label="Detalhes da peça">
+        <aside ref={ficha} className={styles.fichaDoItem} aria-label="Detalhes da peça">
           {aberta ? (
             <FichaItem
               item={aberta}
