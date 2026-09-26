@@ -28,29 +28,33 @@ import { templateById } from '@rpg-legend/shared';
 
 import {
   ACESSORIOS,
-  ADICIONAIS_DE_CABECA,
-  ADICIONAIS_DE_PERNA,
-  ADICIONAIS_DE_TRONCO,
   ARMADURAS,
   ARMAS,
   BOTAS,
   CABELOS,
+  CALCAS,
   CORPOS,
   COSTAS,
+  COSTAS_DA_PERNEIRA,
+  COSTAS_DO_ELMO,
+  COSTAS_DO_PEITORAL,
+  ELMOS,
   SECUNDARIAS,
 } from './disponivel';
 
 export {
   ACESSORIOS,
-  ADICIONAIS_DE_CABECA,
-  ADICIONAIS_DE_PERNA,
-  ADICIONAIS_DE_TRONCO,
   ARMADURAS,
   ARMAS,
   BOTAS,
   CABELOS,
+  CALCAS,
   CORPOS,
   COSTAS,
+  COSTAS_DA_PERNEIRA,
+  COSTAS_DO_ELMO,
+  COSTAS_DO_PEITORAL,
+  ELMOS,
   SECUNDARIAS,
 };
 
@@ -191,85 +195,77 @@ function vestir(camadas: string[], pasta: string, id: string | null | undefined,
  * Os caminhos das camadas, de trás para frente. Lista vazia quer dizer
  * "não há como desenhar isto" — sem raça, ou raça sem corpo.
  *
- * A ordem é a de vestir: corpo, calça, roupa, armadura por cima da roupa,
- * cabelo, **o traço da raça por cima do capacete**, escudo, e a arma na
- * frente de tudo. É a mesma que o `monta-paperdoll.mjs` recebe na linha de
- * comando, e trocá-la aqui sem passar na mesma ordem lá faz a conferência
- * mentir.
+ * **Esta é a lista numerada do doc do Breno**, "Lembrando da ordem das
+ * layers", nas treze linhas dela e na mesma ordem. Ele desenha contando com
+ * ela; qualquer troca aqui é uma discordância com quem fez a arte, e tem
+ * que passar por ele antes.
  *
- * O traço vem depois da armadura e do cabelo de propósito — ver
- * `TRACOS_DE_RACA`. Antes do escudo e da arma porque esses são objetos
- * segurados na frente do corpo, e orelha atravessando escudo seria pior
- * que capacete cobrindo orelha.
+ * O que o corpo separa é o ponto inteiro: uma peça não é uma camada só. O
+ * manto tem costas e peito, e o corpo passa **no meio** — `badd` atrás,
+ * `armadura` na frente. O chapéu tem aba de trás e copa, e a cabeça passa
+ * no meio. Foi lendo isso ao contrário — como "adicional por cima" — que o
+ * mago ficou sem rosto e sem mãos por seis dias, uma laje roxa de chapéu.
+ *
+ * O traço da raça (11) vem depois de toda a armadura, elmo inclusive: é o
+ * ponto dele, sobreviver à peça, senão o felino de elmo volta a ser
+ * indistinguível do humano de elmo. E antes das armas (12, 13), que são
+ * objetos segurados na frente do corpo — orelha atravessando escudo seria
+ * pior que elmo cobrindo orelha.
+ *
+ * O acessório não está nas treze do doc. Entra entre o elmo e o traço, que
+ * é onde ele aparece: por baixo do peitoral de placas o amuleto some.
  */
 export function montarCamadas({ raca, arma, armadura, elmo, calca, botas, secundaria, acessorio, cabelo }: Vestimenta): string[] {
   if (!raca || !CORPOS.has(raca)) return [];
 
   const camadas: string[] = [];
 
-  // Atrás de tudo, inclusive do corpo: asa e cauda saem das costas, então
-  // desenhá-las depois faria a asa passar por cima do peito.
+  // 1-4: tudo que fica **atrás do corpo**. Asa e cauda saem das costas; as
+  // três partes `add` são o verso da peça, que o tronco e a cabeça tapam
+  // pela frente.
   if (COSTAS.has(raca)) camadas.push(`${RAIZ}/back/${raca}.png`);
+  vestir(camadas, 'hadd', elmo, COSTAS_DO_ELMO);
+  vestir(camadas, 'badd', armadura, COSTAS_DO_PEITORAL);
+  vestir(camadas, 'ladd', calca, COSTAS_DA_PERNEIRA);
 
+  // 5: o corpo, com a roupa de baixo que todo mundo tem. `base/` não é
+  // escolha de ninguém — é o que impede o boneco de ficar pelado quando o
+  // slot está vazio.
   camadas.push(`${RAIZ}/corpo/${raca}.png`, `${RAIZ}/base/calca.png`, `${RAIZ}/base/roupa.png`);
 
-  // O cabelo vem **antes** da armadura: assim a peça cobre o cabelo, em vez
-  // de o cabelo cair por cima do peitoral e das ombreiras. Com uma camada
-  // só é o arranjo certo, e foi o que o Breno pediu.
+  // 6-8: o que se veste, de baixo pra cima.
   //
-  // Aqui dizia que penteado longo ia exigir duas camadas — uma atrás de
-  // tudo, outra por cima — e que a hora de fazer isso seria quando
-  // existisse um. Existe (`longo`), e **não exigiu**: ele desce até a
-  // linha 32 e a roupa começa na 26, então as sete linhas de sobreposição
-  // caem na altura do ombro, onde cabelo por cima é o certo. Conferido na
-  // tela com placas e com o robe. O aviso valeria pra cabelo na cintura;
-  // este vai no queixo.
+  // A bota (7) vem depois da perneira (6), e não antes, embora seja a peça
+  // mais baixa: as duas perneiras que existem desenham o próprio calçado
+  // até a linha 61, a mesma em que a bota acaba. Sob elas a bota some
+  // inteira — conferido desenhando as quatro combinações, e "sob placas"
+  // saiu pixel por pixel igual a "sem bota". O doc pede o mesmo, com
+  // outras palavras: "acima da calça e abaixo do peitoral/manto".
+  vestir(camadas, 'calca', calca, CALCAS);
+  vestir(camadas, 'botas', botas, BOTAS);
+  vestir(camadas, 'armadura', armadura, ARMADURAS);
+
+  // 9: o cabelo cai **por cima** do peitoral, e isso mudou com o doc — até
+  // 2026-09-26 ele vinha antes da armadura, que cobria o penteado. Com o
+  // `longo` a diferença aparece: ele desce até a linha 32, a gola do manto
+  // começa na 26, e as sete linhas de sobreposição são cabelo no ombro.
   const penteado = cabeloDe(raca, cabelo);
   if (penteado) camadas.push(`${RAIZ}/cabelo/${penteado}.png`);
 
-  // Daqui pra baixo é a ordem de vestir, escrita como uma lista. Cada
-  // linha é "esta peça, nesta pasta" — e a ordem das linhas **é** a ordem
-  // das camadas, que é a única coisa que importa e a mais fácil de quebrar
-  // sem perceber. Eram sete `if` quase idênticos antes.
-  //
-  // Até 2026-09-20 perneira, tronco e elmo saíam todos do **mesmo**
-  // `templateId`: a armadura era um item só e `ladd`/`hadd` eram partes
-  // dela. Agora cada uma responde pelo seu próprio slot. `badd` continua
-  // atrelado à armadura porque ele é o tronco — é o próprio peitoral, não
-  // uma peça à parte.
-  //
-  // Ausência é o caso comum e não é erro: quase todo mundo anda sem elmo.
-  //
-  // **A bota vem depois da perneira, e é a peça mais baixa do boneco.**
-  // Parece fora de ordem numa lista que sobe do pé pra cabeça, e é
-  // deliberado: as duas perneiras que existem — `placas_calca` e
-  // `robe_calca` — desenham o próprio calçado até a linha 61, a mesma em
-  // que a bota acaba. Sob elas a bota some inteira; foi conferido
-  // desenhando as quatro combinações, e "sob placas" saiu pixel por pixel
-  // igual a "sem bota". Um slot que não muda nada pra quem veste perneira
-  // não valeria a arte.
-  //
-  // O preço é o oposto e é menor: com placas, o pé de aço da perneira dá
-  // lugar à bota de couro. Quem calçou a bota pediu por isso.
-  vestir(camadas, 'ladd', calca, ADICIONAIS_DE_PERNA);
-  vestir(camadas, 'botas', botas, BOTAS);
-  vestir(camadas, 'armadura', armadura, ARMADURAS);
-  vestir(camadas, 'badd', armadura, ADICIONAIS_DE_TRONCO);
-  vestir(camadas, 'hadd', elmo, ADICIONAIS_DE_CABECA);
+  // 10: o elmo por cima do cabelo — é o que faz chapéu parecer vestido, e
+  // não colado atrás da franja.
+  vestir(camadas, 'elmo', elmo, ELMOS);
 
-  // O acessório vem por cima da armadura — ver o comentário logo acima de
-  // `TRACOS_DE_RACA`: por baixo do peitoral ele some inteiro.
   vestir(camadas, 'acessorio', acessorio, ACESSORIOS);
 
-  // O traço da raça vem **depois de toda a armadura**, adicionais
-  // inclusive. É o ponto dele: sobreviver à peça. Pôr o `hadd` por cima
-  // desfaria exatamente o que o traço existe pra garantir — o felino de
-  // chapéu voltaria a ser indistinguível do humano de chapéu.
+  // 11
   const traco = TRACOS_DE_RACA.get(raca);
   if (traco) camadas.push(`${RAIZ}/${traco}`);
 
-  vestir(camadas, 'secundaria', secundaria, SECUNDARIAS);
+  // 12, 13: a mão secundária na frente da principal, que é a ordem do doc —
+  // escudo na frente do corpo, e da espada.
   vestir(camadas, 'arma', arma, ARMAS);
+  vestir(camadas, 'secundaria', secundaria, SECUNDARIAS);
 
   return camadas;
 }

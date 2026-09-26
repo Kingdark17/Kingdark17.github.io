@@ -8,16 +8,18 @@ import { RACES, TEMPLATES } from '@rpg-legend/shared';
 
 import {
   ACESSORIOS,
-  ADICIONAIS_DE_CABECA,
-  ADICIONAIS_DE_PERNA,
-  ADICIONAIS_DE_TRONCO,
   ARMADURAS,
   ARMAS,
   ARQUIVOS_DE_TRACO,
   BOTAS,
   CABELOS,
+  CALCAS,
   CORPOS,
   COSTAS,
+  COSTAS_DA_PERNEIRA,
+  COSTAS_DO_ELMO,
+  COSTAS_DO_PEITORAL,
+  ELMOS,
   SECUNDARIAS,
 } from './disponivel';
 import { TRACOS_DE_RACA } from './camadas';
@@ -35,7 +37,11 @@ const REGENERE = 'rode `node scripts/gera-camadas.mjs` em apps/web';
  * leitores independentes do mesmo disco, que é o que dá valor à comparação.
  */
 function noDisco(pasta: string): string[] {
-  return readdirSync(join(RAIZ_DA_ARTE, pasta))
+  // Pasta sem arte não existe num clone: git não guarda pasta vazia. Hoje é
+  // o caso de `ladd/`, que espera o primeiro `_ladd_body` do Breno.
+  const caminho = join(RAIZ_DA_ARTE, pasta);
+  if (!existsSync(caminho)) return [];
+  return readdirSync(caminho)
     .filter((nome) => nome.endsWith('.png'))
     .map((nome) => nome.slice(0, -'.png'.length))
     .sort();
@@ -47,25 +53,28 @@ function daLista(conjunto: ReadonlySet<string>): string[] {
 
 describe('disponivel.ts bate com o disco', () => {
   /**
-   * **Todas as pastas do gerador, não algumas.** Esta lista tinha seis das
-   * doze: `back`, `ladd`, `badd`, `hadd`, `acessorio` e `botas` ficavam de
-   * fora, e é justamente nelas que a arte nova cai hoje. Soltar um
-   * `hadd/elmo_novo.png` e esquecer de regerar passava batido — o sprite
-   * existia no disco e nunca chegava na tela, sem ninguém reclamando.
+   * **Todas as pastas do gerador, não algumas**, e na ordem em que elas se
+   * empilham. Esta lista tinha seis das doze: `back`, `ladd`, `badd`,
+   * `hadd`, `acessorio` e `botas` ficavam de fora, e é justamente nelas que
+   * a arte nova cai. Soltar um `hadd/elmo_novo.png` e esquecer de regerar
+   * passava batido — o sprite existia no disco e nunca chegava na tela, sem
+   * ninguém reclamando.
    */
   const pastas: ReadonlyArray<[string, ReadonlySet<string>]> = [
     ['back', COSTAS],
+    ['hadd', COSTAS_DO_ELMO],
+    ['badd', COSTAS_DO_PEITORAL],
+    ['ladd', COSTAS_DA_PERNEIRA],
     ['corpo', CORPOS],
-    ['arma', ARMAS],
-    ['armadura', ARMADURAS],
-    ['ladd', ADICIONAIS_DE_PERNA],
-    ['badd', ADICIONAIS_DE_TRONCO],
-    ['hadd', ADICIONAIS_DE_CABECA],
+    ['calca', CALCAS],
     ['botas', BOTAS],
-    ['acessorio', ACESSORIOS],
-    ['secundaria', SECUNDARIAS],
+    ['armadura', ARMADURAS],
     ['cabelo', CABELOS],
+    ['elmo', ELMOS],
+    ['acessorio', ACESSORIOS],
     ['traco', ARQUIVOS_DE_TRACO],
+    ['arma', ARMAS],
+    ['secundaria', SECUNDARIAS],
   ];
 
   /**
@@ -113,9 +122,8 @@ describe('os nomes dos arquivos são ids da engine', () => {
 
   /**
    * Isto cobria só arma, armadura e secundária, e as pastas que nasceram
-   * depois — `ladd`, `badd`, `hadd`, `acessorio` e `botas` — ficaram fora
-   * do contrato que o próprio bloco existe pra prender. Um `ladd/plaças.png`
-   * entrava na lista e não desenhava, calado.
+   * depois ficaram fora do contrato que o próprio bloco existe pra prender.
+   * Um `calca/plaças.png` entrava na lista e não desenhava, calado.
    */
   it('toda peça equipável é um templateId', () => {
     const templates = new Set(TEMPLATES.map((template) => template.id));
@@ -124,10 +132,12 @@ describe('os nomes dos arquivos são ids da engine', () => {
       ...ARMADURAS,
       ...SECUNDARIAS,
       ...ACESSORIOS,
-      ...ADICIONAIS_DE_PERNA,
-      ...ADICIONAIS_DE_TRONCO,
-      ...ADICIONAIS_DE_CABECA,
+      ...CALCAS,
+      ...ELMOS,
       ...BOTAS,
+      ...COSTAS_DA_PERNEIRA,
+      ...COSTAS_DO_PEITORAL,
+      ...COSTAS_DO_ELMO,
     ];
 
     for (const id of daArte) {

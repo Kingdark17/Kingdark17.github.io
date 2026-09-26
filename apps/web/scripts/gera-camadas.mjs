@@ -31,21 +31,34 @@ export const ARQUIVO_GERADO = join(AQUI, '..', 'lib', 'paperdoll', 'disponivel.t
 /**
  * As pastas cujo conteúdo vira lista, e o nome da constante de cada uma.
  *
- * **A pasta é o tipo da camada; o arquivo é o id.** O vocabulário é o do
- * Breno, escrito no doc dele, pra arte nova cair na pasta óbvia sem tabela
- * de tradução:
+ * **A ordem desta lista é a ordem das camadas**, de trás pra frente, e é a
+ * do doc do Breno — as treze numeradas em "Lembrando da ordem das layers".
+ * `montarCamadas` desenha nesta ordem, e um teste confere que as duas não
+ * se descolam.
  *
- * | pasta | o que é | nomeado por |
+ * **A pasta é o tipo da camada; o arquivo é o id.** O vocabulário também é
+ * o dele, pra arte nova cair na pasta óbvia sem tabela de tradução — e o
+ * sufixo do arquivo que ele entrega **diz a pasta**:
+ *
+ * | arquivo dele | pasta | o que é |
  * |---|---|---|
- * | `back` | asa, cauda — atrás do corpo | id da raça |
- * | `ladd` | parte da armadura na perna | `templateId` |
- * | `badd` | parte da armadura no tronco | `templateId` |
- * | `hadd` | parte da armadura na cabeça | `templateId` |
- * | `traco` | o "add" da raça, que sobrevive à armadura | nome livre |
+ * | `X_back_body.png` | `back` | asa, cauda da raça — atrás de tudo |
+ * | `X_hadd_body.png` | `hadd` | a parte do elmo que fica **atrás** da cabeça |
+ * | `X_badd_body.png` | `badd` | a parte do peitoral que fica **atrás** do tronco |
+ * | `X_ladd_body.png` | `ladd` | a parte da perneira que fica **atrás** da perna |
+ * | `X_body.png` | a pasta do slot | a peça em si |
+ * | `X_add_body.png` | `traco` | chifre, auréola — sobrevive à armadura |
+ * | `X_icon.png` | `img/armor/` | o ícone da mochila |
  *
- * Os três `add` existem porque uma peça de armadura nem sempre é uma
- * camada só: o manto tem o contorno e o preenchimento, e o dia em que algo
- * precisar ser desenhado **entre** eles, achatar teria impedido.
+ * **Os três `add` são a parte de trás, e não um adicional por cima.** Esta
+ * tabela dizia o contrário até 2026-09-26, e o preço foi visível: o manto
+ * do mago desenhava as costas por cima do peito, e quem vestia o Robe
+ * Arcano ficava sem rosto e sem mãos — uma laje roxa com chapéu. Foi assim
+ * que o Breno printou no doc ("Erro de layer").
+ *
+ * Eles existem porque uma peça não é uma camada só: o corpo tem que passar
+ * **no meio** do manto, com as costas atrás e o peito na frente. Achatar
+ * num PNG só é justamente o que impediria isso.
  *
  * `base/` fica de fora: calça e roupa entram sempre, não são escolha de
  * ninguém. `traco/` entra como lista de arquivos, e não de ids, porque
@@ -53,18 +66,20 @@ export const ARQUIVO_GERADO = join(AQUI, '..', 'lib', 'paperdoll', 'disponivel.t
  * escrito à mão em `camadas.ts`, que é decisão e não inventário.
  */
 export const PASTAS = [
-  { pasta: 'back', constante: 'COSTAS', doc: 'O que fica **atrás** do corpo — asa, cauda. Pelo id da raça.' },
+  { pasta: 'back', constante: 'COSTAS', doc: 'Asa e cauda da raça, atrás de tudo. Pelo id da raça.' },
+  { pasta: 'hadd', constante: 'COSTAS_DO_ELMO', doc: 'A parte do elmo que fica **atrás** da cabeça. Pelo `templateId`.' },
+  { pasta: 'badd', constante: 'COSTAS_DO_PEITORAL', doc: 'A parte do peitoral que fica **atrás** do tronco. Pelo `templateId`.' },
+  { pasta: 'ladd', constante: 'COSTAS_DA_PERNEIRA', doc: 'A parte da perneira que fica **atrás** da perna. Pelo `templateId`.' },
   { pasta: 'corpo', constante: 'CORPOS', doc: 'Raças com corpo desenhado.' },
-  { pasta: 'arma', constante: 'ARMAS', doc: 'Armas com camada — o nome do arquivo é o `templateId`.' },
-  { pasta: 'armadura', constante: 'ARMADURAS', doc: 'Armaduras com camada.' },
-  { pasta: 'ladd', constante: 'ADICIONAIS_DE_PERNA', doc: 'Parte da armadura que se desenha por cima, na perna. Pelo `templateId`.' },
-  { pasta: 'badd', constante: 'ADICIONAIS_DE_TRONCO', doc: 'Parte da armadura que se desenha por cima, no tronco. Pelo `templateId`.' },
-  { pasta: 'hadd', constante: 'ADICIONAIS_DE_CABECA', doc: 'Parte da armadura que se desenha por cima, na cabeça. Pelo `templateId`.' },
+  { pasta: 'calca', constante: 'CALCAS', doc: 'Perneira e calça com camada. Pelo `templateId`.' },
   { pasta: 'botas', constante: 'BOTAS', doc: 'Calçado com camada — o nome do arquivo é o `templateId`.' },
-  { pasta: 'acessorio', constante: 'ACESSORIOS', doc: 'Acessórios com camada — o nome do arquivo é o `templateId`.' },
-  { pasta: 'secundaria', constante: 'SECUNDARIAS', doc: 'O que a mão secundária pode segurar.' },
+  { pasta: 'armadura', constante: 'ARMADURAS', doc: 'Peitoral e manto com camada.' },
   { pasta: 'cabelo', constante: 'CABELOS', doc: 'Cabelos disponíveis.' },
+  { pasta: 'elmo', constante: 'ELMOS', doc: 'Elmo e chapéu com camada. Pelo `templateId`.' },
+  { pasta: 'acessorio', constante: 'ACESSORIOS', doc: 'Acessórios com camada — o nome do arquivo é o `templateId`.' },
   { pasta: 'traco', constante: 'ARQUIVOS_DE_TRACO', doc: 'Arquivos de traço de raça, pelo nome — ver `TRACOS_DE_RACA`.' },
+  { pasta: 'arma', constante: 'ARMAS', doc: 'Armas com camada — o nome do arquivo é o `templateId`.' },
+  { pasta: 'secundaria', constante: 'SECUNDARIAS', doc: 'O que a mão secundária pode segurar.' },
 ];
 
 /** Os `.png` de uma pasta, sem extensão, em ordem alfabética estável. */
@@ -123,18 +138,18 @@ ${blocos.join('\n\n')}
  * Em que lista cada slot procura a sua arte — o mesmo pareamento que
  * `montarCamadas` faz na hora de vestir.
  *
- * Existe porque **slot e pasta deixaram de ser a mesma palavra**: elmo,
- * perneira e peitoral são todos `category: 'armadura'` no catálogo, e
- * desenham em `hadd/`, `ladd/` e `armadura/`. Sem este mapa a conta abaixo
- * procurava os três em `armadura/` e dizia que faltavam — quatro peças
+ * Existe porque **slot e categoria deixaram de ser a mesma palavra**: elmo,
+ * perneira, bota e peitoral são todos `category: 'armadura'` no catálogo, e
+ * desenham em quatro pastas diferentes. Sem este mapa a conta abaixo
+ * procurava os quatro em `armadura/` e dizia que faltavam — quatro peças
  * dadas como não desenhadas no dia seguinte ao de elas entrarem.
  */
 const LISTA_DO_SLOT = {
   arma: 'ARMAS',
   secundaria: 'SECUNDARIAS',
   armadura: 'ARMADURAS',
-  elmo: 'ADICIONAIS_DE_CABECA',
-  calca: 'ADICIONAIS_DE_PERNA',
+  elmo: 'ELMOS',
+  calca: 'CALCAS',
   botas: 'BOTAS',
   acessorio: 'ACESSORIOS',
 };

@@ -140,15 +140,16 @@ describe('montarCamadas', () => {
     });
 
     /**
-     * A ordem entre cabelo e armadura já esteve invertida, e nada acusou:
-     * o boneco só ficava com o cabelo caindo por cima do peitoral. Com uma
-     * camada de cabelo só, a peça tem que cobrir — é o que dá pra fazer sem
-     * separar frente e costas do penteado.
+     * **O cabelo cai por cima do peitoral**, e este teste já disse o
+     * contrário. A ordem do doc é peitoral (8), cabelo (9), elmo (10): o
+     * penteado fica entre a armadura e o capacete, que é onde cabelo fica
+     * numa pessoa vestida.
      */
-    it('a armadura cobre o cabelo, e não o contrário', () => {
-      const camadas = montarCamadas({ raca: 'humano', armadura: 'placas' });
+    it('o cabelo cai por cima do peitoral, e o elmo por cima do cabelo', () => {
+      const camadas = montarCamadas({ raca: 'humano', armadura: 'placas', elmo: 'placas_elmo' });
 
-      expect(posicao(camadas, 'cabelo/')).toBeLessThan(posicao(camadas, 'armadura/placas'));
+      expect(posicao(camadas, 'armadura/placas')).toBeLessThan(posicao(camadas, 'cabelo/'));
+      expect(posicao(camadas, 'cabelo/')).toBeLessThan(posicao(camadas, 'elmo/placas_elmo'));
     });
   });
 
@@ -205,7 +206,7 @@ describe('montarCamadas', () => {
       for (const cabelo of CABELOS) {
         const camadas = montarCamadas({ raca: 'humano', cabelo, armadura: 'placas' });
         expect(camadas.filter((c) => c.includes('/cabelo/'))).toHaveLength(1);
-        expect(posicao(camadas, 'cabelo/')).toBeLessThan(posicao(camadas, 'armadura/placas'));
+        expect(posicao(camadas, 'armadura/placas')).toBeLessThan(posicao(camadas, 'cabelo/'));
       }
     });
   });
@@ -214,16 +215,16 @@ describe('montarCamadas', () => {
 /**
  * As partes de uma peça de armadura — o vocabulário do doc do Breno.
  *
- * Uma armadura nem sempre é uma camada só: o manto do mago tem contorno e
- * preenchimento, e o chapéu é a parte de cabeça da mesma peça. Achatar tudo
- * num PNG dá a mesma tela **hoje** e impede, pra sempre, que algo seja
- * desenhado entre duas partes.
+ * Uma peça não é uma camada só, e o corpo passa **no meio**: o manto tem
+ * costas (`badd`) e peito (`armadura`), o chapéu tem aba de trás (`hadd`) e
+ * copa (`elmo`). Achatar num PNG só daria a mesma tela num boneco parado e
+ * impediria, pra sempre, o tronco de aparecer entre as duas metades.
  */
 describe('as partes da armadura', () => {
   const conjuntoDePlacas = { raca: 'humano', armadura: 'placas', elmo: 'placas_elmo', calca: 'placas_calca' };
 
   /**
-   * A divisão de 2026-09-20: até então `ladd` e `hadd` saíam do **mesmo**
+   * A divisão de 2026-09-20: até então perneira e elmo saíam do **mesmo**
    * `templateId` da armadura. Agora cada camada responde ao seu slot, e é
    * isso que faz elmo e perneira serem peças que se acham separadas.
    */
@@ -231,14 +232,14 @@ describe('as partes da armadura', () => {
     const camadas = montarCamadas(conjuntoDePlacas);
 
     expect(camadas).toContain('/img/paperdoll/armadura/placas.png');
-    expect(camadas).toContain('/img/paperdoll/hadd/placas_elmo.png');
-    expect(camadas).toContain('/img/paperdoll/ladd/placas_calca.png');
+    expect(camadas).toContain('/img/paperdoll/elmo/placas_elmo.png');
+    expect(camadas).toContain('/img/paperdoll/calca/placas_calca.png');
   });
 
   it('elmo e perneira desenham sem peitoral nenhum', () => {
     const soElmo = montarCamadas({ raca: 'humano', elmo: 'placas_elmo' });
 
-    expect(soElmo).toContain('/img/paperdoll/hadd/placas_elmo.png');
+    expect(soElmo).toContain('/img/paperdoll/elmo/placas_elmo.png');
     expect(soElmo.some((c) => c.includes('/armadura/'))).toBe(false);
   });
 
@@ -247,25 +248,39 @@ describe('as partes da armadura', () => {
    * peça: quem vestisse o Robe Arcano ganhava o chapéu de brinde, fosse da
    * classe que fosse, com a aba tapando o rosto. Agora ele é do slot de
    * elmo, e quem quiser chapéu veste chapéu.
-   *
-   * (O item ainda não existe — veio o `_body` e não veio o ícone —, então
-   * hoje o efeito prático é o chapéu não aparecer mais sozinho.)
    */
   it('o robe não traz mais chapéu de brinde', () => {
     const comRobe = montarCamadas({ raca: 'humano', armadura: 'robe' });
 
     expect(comRobe).toContain('/img/paperdoll/armadura/robe.png');
     expect(comRobe).toContain('/img/paperdoll/badd/robe.png');
+    expect(comRobe.some((c) => c.includes('/elmo/'))).toBe(false);
     expect(comRobe.some((c) => c.includes('/hadd/'))).toBe(false);
   });
 
-  /** Perna primeiro, depois tronco, depois cabeça: de baixo pra cima. */
-  it('as camadas se empilham de baixo pra cima', () => {
-    const camadas = montarCamadas({ ...conjuntoDePlacas, armadura: 'robe' });
+  /**
+   * **O corpo no meio da peça**, que é a razão de as partes existirem.
+   *
+   * As costas do manto ficam atrás do corpo e o peito na frente; ler isso
+   * ao contrário é o que deixou o mago sem rosto e sem mãos, uma laje roxa,
+   * até 2026-09-26. Este teste é o que impede a inversão de voltar.
+   */
+  it('a parte de trás da peça fica atrás do corpo, e a da frente na frente', () => {
+    const camadas = montarCamadas({ ...conjuntoDePlacas, armadura: 'robe', elmo: 'robe_chapeu' });
 
-    expect(posicao(camadas, 'ladd/placas_calca')).toBeLessThan(posicao(camadas, 'armadura/robe'));
-    expect(posicao(camadas, 'armadura/robe')).toBeLessThan(posicao(camadas, 'badd/robe'));
-    expect(posicao(camadas, 'badd/robe')).toBeLessThan(posicao(camadas, 'hadd/placas_elmo'));
+    expect(posicao(camadas, 'badd/robe')).toBeLessThan(posicao(camadas, 'corpo/humano'));
+    expect(posicao(camadas, 'hadd/robe_chapeu')).toBeLessThan(posicao(camadas, 'corpo/humano'));
+    expect(posicao(camadas, 'corpo/humano')).toBeLessThan(posicao(camadas, 'armadura/robe'));
+    expect(posicao(camadas, 'corpo/humano')).toBeLessThan(posicao(camadas, 'elmo/robe_chapeu'));
+  });
+
+  /** Perna, bota, peitoral, elmo: de baixo pra cima, as camadas 6 a 10 do doc. */
+  it('as camadas se empilham de baixo pra cima', () => {
+    const camadas = montarCamadas({ ...conjuntoDePlacas, armadura: 'robe', botas: 'botas' });
+
+    expect(posicao(camadas, 'calca/placas_calca')).toBeLessThan(posicao(camadas, 'botas/botas'));
+    expect(posicao(camadas, 'botas/botas')).toBeLessThan(posicao(camadas, 'armadura/robe'));
+    expect(posicao(camadas, 'armadura/robe')).toBeLessThan(posicao(camadas, 'elmo/placas_elmo'));
   });
 
   /**
@@ -280,7 +295,7 @@ describe('as partes da armadura', () => {
   it('o traço da raça sobrevive à parte de cabeça da armadura', () => {
     const felino = montarCamadas({ raca: 'felino', elmo: 'placas_elmo' });
 
-    expect(posicao(felino, 'hadd/placas_elmo')).toBeLessThan(posicao(felino, 'orelhas-de-gato'));
+    expect(posicao(felino, 'elmo/placas_elmo')).toBeLessThan(posicao(felino, 'orelhas-de-gato'));
   });
 
   /**
@@ -291,7 +306,7 @@ describe('as partes da armadura', () => {
   it('peça equipada num slot sem arte não inventa camada', () => {
     const semArte = montarCamadas({ raca: 'humano', armadura: 'couro', elmo: 'couro', calca: 'couro' });
 
-    expect(semArte.some((c) => c.includes('/armadura/') || c.includes('add/'))).toBe(false);
+    expect(semArte.some((c) => /\/(armadura|elmo|calca|hadd|badd|ladd)\//.test(c))).toBe(false);
   });
 
   it('a bota desenha pelo slot dela', () => {
@@ -316,7 +331,7 @@ describe('as partes da armadura', () => {
   it('a bota fica por cima da perneira, senão não apareceria', () => {
     const camadas = montarCamadas({ ...conjuntoDePlacas, botas: 'botas' });
 
-    expect(posicao(camadas, 'ladd/placas_calca')).toBeLessThan(posicao(camadas, 'botas/botas'));
+    expect(posicao(camadas, 'calca/placas_calca')).toBeLessThan(posicao(camadas, 'botas/botas'));
   });
 
   /** As Botas do Vento têm item e slot, e ainda não têm `_body`. */
@@ -335,11 +350,14 @@ describe('as partes da armadura', () => {
    * camada que não aparece pra quem veste armadura não serve de nada.
    */
   it('o acessório fica por cima da armadura inteira', () => {
-    const comTudo = montarCamadas({ raca: 'humano', armadura: 'placas', acessorio: 'amuleto_sab' });
+    // Com elmo equipado de verdade: sem ele, `posicao(..., 'elmo/')` dá -1 e
+    // a segunda linha passaria sem conferir nada — e passou assim um tempo.
+    const comTudo = montarCamadas({ raca: 'humano', armadura: 'placas', elmo: 'placas_elmo', acessorio: 'amuleto_sab' });
 
     expect(comTudo).toContain('/img/paperdoll/acessorio/amuleto_sab.png');
     expect(posicao(comTudo, 'armadura/placas')).toBeLessThan(posicao(comTudo, 'acessorio/'));
-    expect(posicao(comTudo, 'hadd/placas')).toBeLessThan(posicao(comTudo, 'acessorio/'));
+    expect(posicao(comTudo, 'elmo/placas_elmo')).toBeGreaterThan(-1);
+    expect(posicao(comTudo, 'elmo/placas_elmo')).toBeLessThan(posicao(comTudo, 'acessorio/'));
   });
 
   /** Mas nunca na frente do traço: equipamento não passa na frente de quem a pessoa é. */
@@ -382,13 +400,17 @@ describe('as partes da armadura', () => {
 describe('o que está na mão', () => {
   const vestido = montarCamadas({ raca: 'humano', armadura: 'placas', arma: 'espada', secundaria: 'escudo' });
 
+  /**
+   * Principal antes da secundária: camadas 12 e 13 do doc. O escudo fica
+   * na frente da espada — e na frente do corpo, que é pra isso que ele serve.
+   */
   it('arma e escudo contam como segurados; o resto, não', () => {
-    expect(vestido.filter(ehSegurada)).toEqual(['/img/paperdoll/secundaria/escudo.png', '/img/paperdoll/arma/espada.png']);
+    expect(vestido.filter(ehSegurada)).toEqual(['/img/paperdoll/arma/espada.png', '/img/paperdoll/secundaria/escudo.png']);
   });
 
   it('nenhuma peça vestida entra na conta', () => {
     for (const camada of vestido.filter((c) => !ehSegurada(c))) {
-      expect(camada).toMatch(/\/(back|corpo|base|cabelo|armadura|ladd|badd|hadd|traco)\//);
+      expect(camada).toMatch(/\/(back|hadd|badd|ladd|corpo|base|calca|botas|armadura|cabelo|elmo|acessorio|traco)\//);
     }
   });
 
