@@ -125,14 +125,27 @@ export function applyPartyTurn(
     outcomes.push({ member, kind: 'hit', amount: dmg, passive });
   }
 
-  // A canção dura **rodadas**, e este é o único passo que acontece uma vez
-  // por rodada — com ou sem equipe, tenha o herói atacado, curado ou
-  // fugido. Descontar no ataque do herói, como a força, faria a canção
-  // durar pra sempre enquanto ele só lançasse poderes.
-  if (inspiracao > 1) {
-    const agora = nextHero.buffs ?? {};
-    nextHero = { ...nextHero, buffs: { ...agora, inspiracaoTurns: (agora.inspiracaoTurns ?? 1) - 1 } };
-  }
+  nextHero = passarRodadaDaCancao(nextHero);
 
   return { hero: nextHero, monster: nextMonster, outcomes, totalDamage, defeated: nextMonster.hp <= 0 };
+}
+
+/**
+ * Desconta uma rodada da Canção de Batalha.
+ *
+ * A canção dura **rodadas**, não golpes: descontar no ataque do herói, como
+ * a força, faria ela durar pra sempre enquanto ele só lançasse poderes. O
+ * turno da equipe (`applyPartyTurn`) chama isto sozinho, porque toda rodada
+ * que continua passa por ele — com ou sem equipe, tenha o herói atacado,
+ * curado ou fugido.
+ *
+ * **A rodada em que o herói mata não passa por ele**: a equipe não age
+ * contra um monstro morto. Quem orquestra chama isto nesse caso. Sem essa
+ * chamada, cada morte numa sala de vários monstros dava uma rodada de
+ * canção de graça.
+ */
+export function passarRodadaDaCancao(hero: Hero): Hero {
+  const buffs = hero.buffs;
+  if (!buffs?.inspiracaoTurns || buffs.inspiracaoTurns <= 0) return hero;
+  return { ...hero, buffs: { ...buffs, inspiracaoTurns: buffs.inspiracaoTurns - 1 } };
 }

@@ -36,6 +36,7 @@ import {
   monsterView,
   onItemCollected,
   onMonsterKilled,
+  passarRodadaDaCancao,
   petBonus,
   randomItem,
   resolveAttack,
@@ -258,7 +259,7 @@ export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng:
   const veneno = tickHeroStatus(estado.hero);
   const log: string[] = [];
   if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
-  if (veneno.defeated) return derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng);
+  if (veneno.defeated) return morteNoVeneno(combate, veneno.hero, log, rng);
 
   const ataque = resolveAttack(veneno.hero, monstro, roll, estilo, { rng, petCriticoBonus: petBonus(combate.pet).critico ?? 0 });
   const dado: Rolagem = { valor: roll, lados: ladosDoAtaque(veneno.hero, estilo) };
@@ -291,7 +292,7 @@ export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng:
         : [],
   };
 
-  if (ataque.monsterDefeated) return derrotarMonstro(depois, monstro, rng);
+  if (ataque.monsterDefeated) return heroiMatou(depois, monstro, rng);
   return turnoDosOutros(depois, rng);
 }
 
@@ -321,7 +322,7 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
   const veneno = tickHeroStatus(estado.hero);
   const log: string[] = [];
   if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
-  if (veneno.defeated) return semCura(derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng));
+  if (veneno.defeated) return semCura(morteNoVeneno(combate, veneno.hero, log, rng));
 
   const bonus = petBonus(combate.pet);
   const uso = castPower(veneno.hero, estado.party, monstro, poder, {
@@ -349,7 +350,7 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
   };
 
   const curaDoParceiro = uso.outcome === 'heal' ? (uso.allyHealed ?? 0) : 0;
-  const fim = uso.monsterDefeated ? derrotarMonstro(depois, monstro, rng) : turnoDosOutros(depois, rng);
+  const fim = uso.monsterDefeated ? heroiMatou(depois, monstro, rng) : turnoDosOutros(depois, rng);
   return { combate: fim, curaDoParceiro };
 }
 
@@ -406,7 +407,7 @@ export function esquivar(combate: Combate, roll: number, rng: Rng = defaultRng):
   const veneno = tickHeroStatus(estado.hero);
   const log: string[] = [];
   if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
-  if (veneno.defeated) return derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng);
+  if (veneno.defeated) return morteNoVeneno(combate, veneno.hero, log, rng);
 
   const tentativa = attemptDodge(veneno.hero, monstro, roll);
   const comBonus = tentativa.bonus ? ` (+${tentativa.bonus} por velocidade)` : '';
@@ -451,7 +452,7 @@ export function usarItem(combate: Combate, item: Item, rng: Rng = defaultRng): C
   const veneno = tickHeroStatus(estado.hero);
   const log: string[] = [];
   if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
-  if (veneno.defeated) return derrota({ ...combate, estado: { ...estado, hero: veneno.hero } }, log, rng);
+  if (veneno.defeated) return morteNoVeneno(combate, veneno.hero, log, rng);
 
   const usado = usar({ estado: { ...estado, hero: veneno.hero }, log: [] }, item);
   if (usado.estado.mapMode !== 'dungeon') return combate;
@@ -525,6 +526,27 @@ function textoDoGolpe(golpe: ReturnType<typeof applyMonsterHit>, nome: string): 
 }
 
 // ---------- fim de combate ----------
+
+/**
+ * O golpe (ou poder) do herói matou: a rodada acaba aqui, sem turno da
+ * equipe — e é nele que a Canção de Batalha desconta. Sem esta volta, cada
+ * morte numa sala de vários monstros dava uma rodada de canção de graça.
+ */
+function heroiMatou(combate: Combate, abatido: CombatMonsterView, rng: Rng): Combate {
+  const estado = exigirMasmorra(combate);
+  return derrotarMonstro({ ...combate, estado: { ...estado, hero: passarRodadaDaCancao(estado.hero) } }, abatido, rng);
+}
+
+/**
+ * O veneno matou antes da ação, então ela não aconteceu. `dado`, `som` e
+ * `flutuantes` zerados pelo motivo de `fugir`: herdados da ação anterior,
+ * repetiam o número no inimigo, a tremida e o giro de arma do boneco — um
+ * ataque fantasma na hora de morrer.
+ */
+function morteNoVeneno(combate: Combate, hero: Hero, log: string[], rng: Rng): Combate {
+  const estado = exigirMasmorra(combate);
+  return derrota({ ...combate, estado: { ...estado, hero }, dado: null, som: null, flutuantes: [] }, log, rng);
+}
 
 function derrotarMonstro(combate: Combate, abatido: CombatMonsterView, rng: Rng): Combate {
   const estado = exigirMasmorra(combate);

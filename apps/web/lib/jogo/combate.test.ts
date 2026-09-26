@@ -9,6 +9,7 @@ import {
   templateById,
   type DungeonCell,
   type Hero,
+  type Item,
   type MonsterInstance,
   type Rng,
 } from '@rpg-legend/shared';
@@ -485,6 +486,68 @@ describe('usar item na luta', () => {
 
     expect(depois.estado).toBe(combate.estado);
     expect(depois.log).toEqual([expect.stringContaining('não faz nada agora')]);
+  });
+});
+
+describe('morrer de veneno', () => {
+  /**
+   * O veneno mata antes da ação, então ela não acontece. Herdar o que a ação
+   * anterior deixou repetia o número no inimigo, a tremida e o giro de arma
+   * — o mesmo ataque fantasma que a fuga tinha, nas outras quatro portas.
+   */
+  function envenenadoDepoisDeAcertar(): { combate: Combate; item: Item } {
+    const pocao = instantiate(templateById('pot_vida')!, RARITIES[0]!);
+    const estado = comMonstroDuro({ mp: 50, maxMp: 50 });
+    const acerto = atacar(iniciarEncontro({ ...estado, inventory: [...estado.inventory, pocao] }), 20, 'normal', NUNCA);
+    expect(acerto.flutuantes.some((f) => f.alvo === 'inimigo')).toBe(true);
+
+    const agora = acerto.estado as EstadoNaMasmorra;
+    const hero = { ...agora.hero, hp: 5, buffs: { poisonTurns: 2, poisonDmg: 99 } };
+    return { combate: { ...acerto, estado: { ...agora, hero } }, item: pocao };
+  }
+
+  const acoes: [string, (combate: Combate, item: Item) => Combate][] = [
+    ['atacar', (combate) => atacar(combate, 20, 'normal', NUNCA)],
+    ['usar poder', (combate) => usarPoder(combate, powerById('cura_menor')!, NUNCA).combate],
+    ['esquivar', (combate) => esquivar(combate, 20, NUNCA)],
+    ['usar item', (combate, item) => usarItem(combate, item, NUNCA)],
+  ];
+
+  it.each(acoes)('%s: não herda número, dado nem golpe da ação anterior', (_nome, agir) => {
+    const { combate, item } = envenenadoDepoisDeAcertar();
+    const fim = agir(combate, item);
+
+    expect(fim.fase).toBe('derrota');
+    expect(fim.flutuantes).toEqual([]);
+    expect(fim.dado).toBeNull();
+    expect(fim.som).toBe('defeat');
+  });
+});
+
+describe('Canção de Batalha numa sala de vários monstros', () => {
+  /**
+   * A canção desconta no turno da equipe, e a rodada em que o herói mata não
+   * tem turno da equipe. Sem o desconto ali, cada morte no meio da fila era
+   * uma rodada de canção de graça.
+   */
+  function cantandoContraDois(hero: Partial<Hero> = {}): Combate {
+    const inicio = iniciarEncontro(comSalaDeMonstro({ monsters: [monstro({ hp: 1 }), monstro()] }, hero));
+    const estado = inicio.estado as EstadoNaMasmorra;
+    return { ...inicio, estado: { ...estado, hero: { ...estado.hero, buffs: { inspiracaoTurns: 2, inspiracaoAmount: 0.25 } } } };
+  }
+
+  it('matar com o golpe conta a rodada', () => {
+    const depois = atacar(cantandoContraDois(), 20, 'normal', NUNCA);
+
+    expect(salaDepois(depois).monsterIndex).toBe(1);
+    expect(depois.estado.hero.buffs?.inspiracaoTurns).toBe(1);
+  });
+
+  it('matar com poder conta a rodada', () => {
+    const { combate: depois } = usarPoder(cantandoContraDois({ mp: 50, maxMp: 50 }), powerById('bola_de_fogo')!, NUNCA);
+
+    expect(salaDepois(depois).monsterIndex).toBe(1);
+    expect(depois.estado.hero.buffs?.inspiracaoTurns).toBe(1);
   });
 });
 

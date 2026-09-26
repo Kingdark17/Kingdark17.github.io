@@ -200,7 +200,8 @@ export function resolveAttack(
   }
 
   // Canção de Batalha: ao contrário da força, vale pro golpe mágico também —
-  // é música, não músculo. Quem a desconta é o turno da equipe, não este.
+  // é música, não músculo. Quem a desconta é a rodada, não o golpe (ver
+  // `passarRodadaDaCancao`).
   const inspiracao = buffs.inspiracaoTurns && buffs.inspiracaoTurns > 0 ? 1 + (buffs.inspiracaoAmount ?? 0) : 1;
 
   const base = 3 + randomInt(6, rng);

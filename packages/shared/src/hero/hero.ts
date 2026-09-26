@@ -53,8 +53,8 @@ export interface HeroBuffs {
   poisonDmg?: number;
   /**
    * Canção de Batalha: multiplica o dano do herói e dos companheiros. Cai
-   * uma vez por **rodada**, no turno da equipe (`applyPartyTurn`) — e não no
-   * ataque do herói, como a força, porque ela vale pra quem não é ele.
+   * uma vez por **rodada** (`passarRodadaDaCancao`) — e não no ataque do
+   * herói, como a força, porque ela vale pra quem não é ele.
    */
   inspiracaoTurns?: number;
   inspiracaoAmount?: number;

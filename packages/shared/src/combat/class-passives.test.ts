@@ -6,7 +6,7 @@ import { seededRng } from '../rng.js';
 import { generate, generateBoss } from '../monsters/generate.js';
 import { freshCombatMonster, type CombatMonster } from './monster-state.js';
 import { applyHeroClassPassive, triggerEnemyClassPower } from './class-passives.js';
-import { applyPartyTurn } from './party.js';
+import { applyPartyTurn, passarRodadaDaCancao } from './party.js';
 import { tickHeroStatus } from './hero-status.js';
 
 const HUMANO = raceByName('Humano')!;
@@ -186,6 +186,17 @@ describe('applyPartyTurn', () => {
     it('acabada, não mexe em nada', () => {
       const hero = { ...heroiDe('Bardo'), buffs: { inspiracaoTurns: 0, inspiracaoAmount: 0.25 } };
       expect(applyPartyTurn(hero, [], monstro(), () => 0.5).hero.buffs?.inspiracaoTurns).toBe(0);
+    });
+
+    // A rodada em que o herói mata não tem turno da equipe: quem orquestra
+    // chama esta direto. É a mesma conta, e por isso a mesma função.
+    it('passarRodadaDaCancao desconta uma, e sem canção devolve o mesmo herói', () => {
+      expect(passarRodadaDaCancao(inspirado(3)).buffs?.inspiracaoTurns).toBe(2);
+      expect(passarRodadaDaCancao(inspirado(1)).buffs?.inspiracaoTurns).toBe(0);
+      const semCancao = heroiDe('Bardo');
+      expect(passarRodadaDaCancao(semCancao)).toBe(semCancao);
+      const acabada = inspirado(0);
+      expect(passarRodadaDaCancao(acabada)).toBe(acabada);
     });
   });
 
