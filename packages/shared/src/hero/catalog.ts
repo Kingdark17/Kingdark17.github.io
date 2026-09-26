@@ -6,18 +6,27 @@ export interface Race {
   icon: string;
   desc: string;
   bonus: Partial<Record<AttrKey, number>>;
+  /**
+   * Raça de corpo pequeno — anão, fada e goblin, pelo doc do Breno.
+   *
+   * Mora na engine, e não só no paperdoll que hoje é quem usa, porque o
+   * mesmo doc já pede a regra seguinte: "equipamentos pesados dão o dobro
+   * de lentidão para raças pequenas". Essa é de combate, e a tela não pode
+   * ser a única a saber quem é pequeno.
+   */
+  porte?: 'pequeno';
 }
 
 export const RACES: readonly Race[] = [
   { id: 'humano', name: 'Humano', icon: '🧑', desc: 'Versátil e equilibrado em todos os atributos.', bonus: { forca: 1, destreza: 1, constituicao: 1, intelecto: 1, sabedoria: 1, carisma: 1 } },
   { id: 'elfo', name: 'Elfo', icon: '🧝', desc: 'Ágil e perceptivo, porém de constituição frágil.', bonus: { destreza: 2, intelecto: 1, constituicao: -1 } },
-  { id: 'anao', name: 'Anão', icon: '⛏️', desc: 'Resistente e forte, mas pouco ágil.', bonus: { constituicao: 2, forca: 1, destreza: -1 } },
+  { id: 'anao', name: 'Anão', icon: '⛏️', desc: 'Resistente e forte, mas pouco ágil.', bonus: { constituicao: 2, forca: 1, destreza: -1 }, porte: 'pequeno' },
   { id: 'orc', name: 'Orc', icon: '👹', desc: 'Força bruta acima da média, raciocínio mais lento.', bonus: { forca: 3, intelecto: -1 } },
   { id: 'elfo_negro', name: 'Elfo Negro', icon: '🦇', desc: 'Mente afiada e reflexos rápidos, porém frio com estranhos.', bonus: { intelecto: 2, destreza: 1, carisma: -1 } },
   { id: 'meio_elfo', name: 'Meio-Elfo', icon: '🍃', desc: 'Carismático e sábio, herda o melhor de dois mundos.', bonus: { carisma: 1, sabedoria: 1 } },
   { id: 'draconato', name: 'Draconato', icon: '🐲', desc: 'Muito forte e resistente, mas pouco carismático.', bonus: { forca: 2, constituicao: 2, carisma: -1 } },
-  { id: 'goblin', name: 'Goblin', icon: '👺', desc: 'Ágil e esperto, porém fisicamente frágil.', bonus: { destreza: 2, intelecto: 1, constituicao: -1 } },
-  { id: 'fada', name: 'Fada', icon: '🧚', desc: 'Possui grande magia e carisma, mas pouca força.', bonus: { intelecto: 2, carisma: 2, forca: -2 } },
+  { id: 'goblin', name: 'Goblin', icon: '👺', desc: 'Ágil e esperto, porém fisicamente frágil.', bonus: { destreza: 2, intelecto: 1, constituicao: -1 }, porte: 'pequeno' },
+  { id: 'fada', name: 'Fada', icon: '🧚', desc: 'Possui grande magia e carisma, mas pouca força.', bonus: { intelecto: 2, carisma: 2, forca: -2 }, porte: 'pequeno' },
   { id: 'morto_vivo', name: 'Morto-vivo', icon: '💀', desc: 'Muito resistente, mas pouco sábio e carismático.', bonus: { constituicao: 3, carisma: -2, sabedoria: -1 } },
   { id: 'felino', name: 'Felino', icon: '🐱', desc: 'Reflexos excelentes, embora suporte menos golpes pesados.', bonus: { destreza: 3, constituicao: -1 } },
   { id: 'celestial', name: 'Celestial', icon: '😇', desc: 'Sábio e carismático, mas menos adaptado à força bruta.', bonus: { sabedoria: 2, carisma: 2, forca: -1 } },

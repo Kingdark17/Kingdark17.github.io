@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ARMADURAS, ARMAS, CABELO_PADRAO, CABELOS, CORPOS, PENTEADOS, ehSegurada, maoDaCamada, montarCamadas } from './camadas';
+import { ARMADURAS, ARMAS, CABELO_PADRAO, CABELOS, CORPOS, PENTEADOS, ehPequeno, ehSegurada, maoDaCamada, montarCamadas } from './camadas';
 
 /** Onde a peça aparece na pilha, ou -1. Trás para frente. */
 function posicao(camadas: string[], trecho: string): number {
@@ -455,5 +455,31 @@ describe('o que está na mão', () => {
 
   it('sem nada na mão, não há camada segurada', () => {
     expect(montarCamadas({ raca: 'humano' }).filter(ehSegurada)).toEqual([]);
+  });
+});
+
+/**
+ * Corpo pequeno — anão, fada e goblin, os três que o doc do Breno lista. A
+ * resposta vem do catálogo da engine (`Race.porte`), que é onde a regra de
+ * combate futura ("equipamento pesado pesa em dobro pro pequeno") vai
+ * procurar também.
+ */
+describe('ehPequeno', () => {
+  it('são exatamente os três do doc', () => {
+    expect(['anao', 'fada', 'goblin'].every(ehPequeno)).toBe(true);
+    for (const raca of ['humano', 'elfo', 'orc', 'felino', 'draconato', 'celestial', 'morto_vivo']) {
+      expect({ raca, pequeno: ehPequeno(raca) }).toEqual({ raca, pequeno: false });
+    }
+  });
+
+  /** O elfo tem o mesmo bônus de atributo que o goblin — e não é pequeno. */
+  it('não se confunde com quem tem os mesmos números', () => {
+    expect(ehPequeno('elfo')).toBe(false);
+  });
+
+  it('sem raça, ou raça que não existe, não é pequeno', () => {
+    expect(ehPequeno(null)).toBe(false);
+    expect(ehPequeno(undefined)).toBe(false);
+    expect(ehPequeno('dragao_gigante')).toBe(false);
   });
 });

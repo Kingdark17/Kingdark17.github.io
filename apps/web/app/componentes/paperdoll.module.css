@@ -277,6 +277,22 @@
   filter: sepia(0.45) hue-rotate(55deg) saturate(1.25) brightness(0.96) drop-shadow(0 0 0.3rem var(--cor-da-aura));
 }
 
+/* ---------- corpo pequeno ----------
+ *
+ * Anão, fada e goblin (`ehPequeno`): a imagem final inteira a 3/4, **com os
+ * pés no chão** — escolha do Pedro, 2026-09-26. A origem é a sola: a arte
+ * termina na linha 61, então a borda de baixo do pé é 62/64 = 96,875%.
+ * Encolher pelo centro deixaria o pequeno flutuando no meio do balão.
+ *
+ * Na `.aura`, e não na raiz: a raiz carrega o balão do chamador, que tem
+ * de continuar do tamanho de sempre. E a `.aura` é o único invólucro sem
+ * `transform` animado — no tronco a escala brigaria com a respiração, no
+ * `.golpe` com o avanço, porque `transform` é uma propriedade só. */
+.boneco[data-porte='pequeno'] > .aura {
+  transform: scale(0.75);
+  transform-origin: 50% 96.875%;
+}
+
 /* Quem pediu menos movimento fica sem o balanço e sem a piscada. O brilho
    e a tinta ficam: são estado, não animação — dizem o que está
    acontecendo com o personagem e nenhum deles se mexe. */

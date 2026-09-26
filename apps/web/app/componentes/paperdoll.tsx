@@ -17,7 +17,7 @@
  * propriedade e viram atributo de dado; **toda** a animação está no CSS.
  */
 
-import { ehSegurada, maoDaCamada, montarCamadas, type Vestimenta } from '@/lib/paperdoll/camadas';
+import { ehPequeno, ehSegurada, maoDaCamada, montarCamadas, type Vestimenta } from '@/lib/paperdoll/camadas';
 import { corDaAura, type SinaisVitais } from '@/lib/paperdoll/sinais';
 import styles from './paperdoll.module.css';
 
@@ -101,7 +101,7 @@ export function Paperdoll({
   const nasMaos = camadas.filter(ehSegurada);
 
   return (
-    <div className={classes} style={{ width: lado, height: lado }}>
+    <div className={classes} style={{ width: lado, height: lado }} data-porte={ehPequeno(raca) ? 'pequeno' : undefined}>
       {/* Dois invólucros, e cada um com um tipo de efeito só. `filter` é
           uma propriedade só: brilho e tinta na mesma lista brigariam com a
           piscada de dano, que anima justamente `filter`. Separando, o CSS

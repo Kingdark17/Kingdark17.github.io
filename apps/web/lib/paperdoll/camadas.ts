@@ -24,7 +24,7 @@
  * como as duas listas divergirem em silêncio — e há teste conferindo.
  */
 
-import { templateById } from '@rpg-legend/shared';
+import { raceById, templateById } from '@rpg-legend/shared';
 
 import {
   ACESSORIOS,
@@ -136,6 +136,19 @@ export const SEM_CABELO: ReadonlySet<string> = new Set(['felino', 'morto_vivo'])
  * id ainda; depois disso teria custado migração.
  */
 export const CABELO_PADRAO = 'curto';
+
+/**
+ * O boneco desenha menor? — anão, fada e goblin, pelo `porte` do catálogo.
+ *
+ * Todos os corpos ocupam as mesmas linhas 6 a 61; o goblin tem a altura do
+ * humano, só é mais largo. Então "corpo pequeno" não vem da arte: é a
+ * **imagem final inteira** que encolhe, com o equipamento junto — o que o
+ * doc chama de "reduzir a resolução da imagem final". Encolher o corpo e
+ * deixar o peitoral do tamanho de gente desalinharia tudo.
+ */
+export function ehPequeno(raca: string | null | undefined): boolean {
+  return !!raca && raceById(raca)?.porte === 'pequeno';
+}
 
 /** Penteado válido, ou o padrão. Raça sem cabelo desenhado devolve nada. */
 export function cabeloDe(raca: string, escolhido?: string | null): string | null {
