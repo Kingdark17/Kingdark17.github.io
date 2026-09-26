@@ -262,6 +262,11 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     // divisão — 2 de defesa, 10 de mana, 26 de ouro —, a mesma regra das
     // placas. Peito é a peça maior, depois perna, depois cabeça: 5/3/2 aqui,
     // 4/2/1 de defesa lá.
+    //
+    // **Mexer aqui não mexe em robe que já existe.** `instantiate` copia os
+    // atributos pro item quando ele nasce, e o equipamento soma `item.stats`,
+    // não o catálogo. Quem já tinha o robe segue com 7; só os novos saem com
+    // 5. O commit que trouxe o chapéu diz o contrário — está errado.
     base: { defesa: 1, mana: 5 },
     value: 13,
   },
