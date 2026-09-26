@@ -421,6 +421,33 @@ describe('equipamento', () => {
       expect(soma).toEqual({ defesa: 7, esquiva: -2 });
     });
 
+    /**
+     * A mesma regra pro mago, e ouro incluso. O chapéu virou item em
+     * 2026-09-26 **tirando** do manto — foi a escolha, contra somar por
+     * cima —, então as três peças têm que dar o robe de antes da divisão:
+     * `{ defesa: 2, mana: 10 }`, 26 de ouro.
+     */
+    it('o conjunto do mago também vale o que o robe valia sozinho', () => {
+      const pecas = ['robe', 'robe_calca', 'robe_chapeu'].map((id) => templateById(id)!);
+      const soma = pecas.reduce<{ defesa: number; mana: number; valor: number }>(
+        (total, t) => ({
+          defesa: total.defesa + (t.base.defesa ?? 0),
+          mana: total.mana + (t.base.mana ?? 0),
+          valor: total.valor + t.value,
+        }),
+        { defesa: 0, mana: 0, valor: 0 },
+      );
+
+      expect(soma).toEqual({ defesa: 2, mana: 10, valor: 26 });
+    });
+
+    it('o chapéu de mago veste na cabeça', () => {
+      const vestido = equipItem(novoHeroi(), peca('robe_chapeu'));
+
+      expect(vestido.equipped).toBe(true);
+      expect(vestido.hero.equip.elmo?.templateId).toBe('robe_chapeu');
+    });
+
     it('elmo não entra no peitoral, e vice-versa', () => {
       const hero = novoHeroi();
       expect(equipItem(hero, peca('placas_elmo'), 'armadura').equipped).toBe(false);

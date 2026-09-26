@@ -113,12 +113,11 @@ describe('os nomes dos arquivos são ids da engine', () => {
    * digitação** — é o caso em que o `_body` chegou antes do ícone, e um
    * item sem ícone fica invisível na mochila.
    *
-   * O chapéu do mago é o único: desenhava de brinde junto com o robe até a
-   * armadura se dividir em peças (2026-09-20), e agora espera o
-   * `mago_chapeu_icon` pra virar item do slot de elmo. Quando o ícone
-   * chegar, some daqui.
+   * Vazia desde 2026-09-26. O chapéu do mago morou aqui seis dias — a arte
+   * veio antes do `mago_chapeu_icon` —, e saiu quando o ícone chegou. O
+   * mecanismo fica: é assim que o Breno costuma entregar.
    */
-  const AINDA_SEM_ITEM = new Set(['robe_chapeu']);
+  const AINDA_SEM_ITEM = new Set<string>([]);
 
   /**
    * Isto cobria só arma, armadura e secundária, e as pastas que nasceram

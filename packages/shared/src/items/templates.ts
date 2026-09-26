@@ -257,8 +257,13 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     category: 'armadura',
     desc: 'Tecido enfeitiçado que amplia o poder mágico.',
     sprite: 'armor/robe.png',
-    base: { defesa: 1, mana: 7 },
-    value: 18,
+    // Era 7 de mana e 18 de ouro até o chapéu virar item (2026-09-26). O
+    // conjunto do mago continua somando o que o robe inteiro somava antes da
+    // divisão — 2 de defesa, 10 de mana, 26 de ouro —, a mesma regra das
+    // placas. Peito é a peça maior, depois perna, depois cabeça: 5/3/2 aqui,
+    // 4/2/1 de defesa lá.
+    base: { defesa: 1, mana: 5 },
+    value: 13,
   },
   {
     id: 'robe_calca',
@@ -269,6 +274,16 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     slot: 'calca',
     base: { defesa: 1, mana: 3 },
     value: 8,
+  },
+  {
+    id: 'robe_chapeu',
+    name: 'Chapéu de Mago',
+    category: 'armadura',
+    desc: 'Feltro escuro e aba larga, com uma estrela dourada presa na ponta.',
+    sprite: 'armor/robe_chapeu.png',
+    slot: 'elmo',
+    base: { mana: 2 },
+    value: 5,
   },
   {
     id: 'botas',
