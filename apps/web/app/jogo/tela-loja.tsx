@@ -157,7 +157,7 @@ export function TelaLoja({ loja, onLoja, onFechar }: Props) {
                 <CartaItem
                   key={item.uid}
                   item={item}
-                  rodape={`vende por ${precoDeVenda(item)}`}
+                  rodape={`vende por ${precoDeVenda(item)} ouro`}
                   selecionado={item.uid === selecionado}
                   onClick={() => setSelecionado(item.uid)}
                 />

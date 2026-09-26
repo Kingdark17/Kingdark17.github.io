@@ -6,6 +6,13 @@
    ========================================================= */
 
 :root {
+  /* O jogo só tem tema escuro, e isto avisa o navegador. Sem a declaração,
+     o que ele desenha sozinho saía claro: a barra de rolagem da lista da
+     loja e da mochila era branca no painel escuro, e o mesmo valia pro
+     preenchimento automático do login, a caixinha de marcar e o trilho do
+     volume. Texto e fundo não mudam — o `body` já declara os dois. */
+  color-scheme: dark;
+
   --ink: #10121a;
   --panel: #1d2230;
   --panel-2: #242a3a;

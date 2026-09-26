@@ -70,7 +70,9 @@ export function FichaItem({ item, hero, acoes }: Readonly<Props>) {
           <p className={styles.metaDaFicha}>
             {CATEGORY_LABELS[visao.category]} · {visao.rarityLabel}
             {tier ? ` · Tier ${tier}` : ''}
-            {` · ${visao.value} ouro`}
+            {/* Inquebrável entre número e unidade: na coluna estreita o
+                "16" ficava no fim de uma linha e o "ouro" sozinho na outra. */}
+            {` · ${visao.value}\u00a0ouro`}
           </p>
         </div>
       </header>

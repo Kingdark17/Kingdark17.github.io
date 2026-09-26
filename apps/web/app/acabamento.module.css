@@ -85,6 +85,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* O preço do flex: texto vira item anônimo, e o espaço no fim dele some.
+     "Bola de Fogo <span>(14 MP)</span>" saía "BOLA DE FOGO(14 MP)" — e o
+     mesmo no "×3" dos itens, nos pontos de atributo e na forja. O `gap` é
+     quem separa texto de elemento, em todo botão de pedra; espaço no JSX
+     entre os dois não faz nada aqui, e margem entre eles dobraria. */
+  gap: 0.35em;
   background: none;
   border-style: solid;
   border-width: 18px 40px 22px 32px;

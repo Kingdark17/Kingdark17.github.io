@@ -143,8 +143,16 @@
   margin: 0;
 }
 
+/* Altura da linha inteira: o `<li>` estica até a carta mais alta, mas o
+   botão dentro dele ficava do tamanho do próprio texto, e a de descrição
+   curta (Anão, Mago) acabava mais baixa que as vizinhas — a borda de baixo
+   da linha saía em degrau. Flex em coluna porque botão alto centraliza o
+   conteúdo na vertical; assim o texto continua no topo, alinhado. */
 .carta {
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   text-align: left;
   background: var(--panel);
   border: 1px solid var(--line);
