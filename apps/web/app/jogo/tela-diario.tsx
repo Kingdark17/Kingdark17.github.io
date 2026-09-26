@@ -14,6 +14,7 @@
 
 import type { Anotacao } from '@/lib/jogo/diario';
 import styles from './jogo.module.css';
+import { TextoDoJogo } from './texto-do-jogo';
 
 export function TelaDiario({ anotacoes, onFechar }: { anotacoes: Anotacao[]; onFechar: () => void }) {
   return (
@@ -37,7 +38,12 @@ export function TelaDiario({ anotacoes, onFechar }: { anotacoes: Anotacao[]; onF
               </span>
               <div>
                 <strong className={styles.nomeDoPasso}>{anotacao.titulo}</strong>
-                <p className={styles.dicaDoPasso}>{anotacao.texto}</p>
+                {/* O texto é o mesmo que o aviso mostrou, com o `<b>` da
+                    engine no meio — sem o `TextoDoJogo` ele aparecia cru,
+                    tag e tudo. O Breno printou no doc ("Erro de texto"). */}
+                <p className={styles.dicaDoPasso}>
+                  <TextoDoJogo>{anotacao.texto}</TextoDoJogo>
+                </p>
               </div>
             </li>
           ))}

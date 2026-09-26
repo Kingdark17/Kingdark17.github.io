@@ -583,7 +583,9 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
         <div className={styles.recado} role="status">
           <span className={styles.textoDoRecado}>
             <strong>{recado.titulo}</strong>
-            <span>{recado.texto}</span>
+            <span>
+              <TextoDoJogo>{recado.texto}</TextoDoJogo>
+            </span>
           </span>
           <button type="button" className={styles.fecharRecado} onClick={() => setRecado(null)} aria-label="Fechar aviso">
             ×
