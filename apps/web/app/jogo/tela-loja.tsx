@@ -7,6 +7,14 @@
  * O original é um modal com três grades (comprar, vender, reforjar) e um
  * painel de detalhe. Aqui as três grades continuam, mas a reforja aparece
  * só no ferreiro, como lá.
+ *
+ * **Clicar na carta seleciona; quem compra e vende é a ficha ao lado.** Era
+ * o pedido do doc do Breno ("botão de confirmar pra quando quiser
+ * vender/comprar"), e é o molde que o resto do jogo já seguia: a mochila
+ * funciona assim, o jogo antigo também, e a própria `CartaItem` avisa que
+ * "a carta não age". Só esta tela agia no primeiro clique — um toque sem
+ * querer vendia a peça, sem volta. Agora o botão diz o preço e a ficha
+ * mostra o que a peça muda em você antes de você pagar.
  */
 
 import { useState } from 'react';
@@ -27,6 +35,7 @@ import {
   type Loja,
 } from '@/lib/jogo/loja';
 import { CartaItem } from './carta-item';
+import { FichaItem } from './ficha-item';
 import styles from './jogo.module.css';
 
 const LADOS_DO_DADO = 20;
@@ -52,13 +61,35 @@ interface Props {
 
 export function TelaLoja({ loja, onLoja, onFechar }: Props) {
   const [paraReforjar, setParaReforjar] = useState<string | null>(null);
+  /**
+   * A peça aberta na ficha, pelo `uid` — igual à mochila. O preço e o ouro
+   * são lidos **a cada desenho**, nunca guardados no clique: renovar o
+   * estoque ou rolar a pechincha no meio muda os dois, e a peça pode até
+   * sumir (aí a ficha simplesmente esvazia).
+   */
+  const [selecionado, setSelecionado] = useState<string | null>(null);
 
   const ehFerreiro = loja.kind === 'blacksmith';
   const aVenda = estoque(loja);
   const paraVender = vendaveis(loja);
   const daForja = reforjaveis(loja);
-  const selecionado = daForja.find((item) => item.uid === paraReforjar) ?? null;
+  const naForja = daForja.find((item) => item.uid === paraReforjar) ?? null;
   const renovacao = precoDaRenovacao(loja);
+  const ouro = loja.estado.hero.gold;
+
+  const aComprar = aVenda.find((item) => item.uid === selecionado) ?? null;
+  const aVender = aComprar ? null : (paraVender.find((item) => item.uid === selecionado) ?? null);
+  const aberta = aComprar ?? aVender;
+
+  /**
+   * Toda compra e venda **fecha a ficha**. Comprar leva a peça pra mochila;
+   * se ela continuasse aberta, o mesmo botão viraria "Vender" embaixo do
+   * dedo, e um duplo-clique compraria e venderia de uma vez.
+   */
+  function agir(proxima: Loja) {
+    setSelecionado(null);
+    onLoja(proxima);
+  }
 
   return (
     <section className={styles.loja}>
@@ -94,35 +125,65 @@ export function TelaLoja({ loja, onLoja, onFechar }: Props) {
         </button>
       </div>
 
-      <h2 className={styles.tituloDaSecao}>À venda</h2>
-      {aVenda.length === 0 ? (
-        <p className={styles.vazio}>O estoque acabou. Renove para ver mercadoria nova.</p>
-      ) : (
-        <div className={styles.gradeDeItens}>
-          {aVenda.map((item) => {
-            const preco = precoDeCompra(loja, item);
-            return (
-              <CartaItem
-                key={item.uid}
-                item={item}
-                rodape={`${preco} ouro · comprar`}
-                onClick={loja.estado.hero.gold >= preco ? () => onLoja(comprar(loja, item)) : undefined}
-              />
-            );
-          })}
-        </div>
-      )}
+      <div className={styles.navegadorDeItens}>
+        <div className={styles.listaDeItens}>
+          <h2 className={styles.tituloDaSecao}>À venda</h2>
+          {aVenda.length === 0 ? (
+            <p className={styles.vazio}>O estoque acabou. Renove para ver mercadoria nova.</p>
+          ) : (
+            <div className={styles.gradeDeItens}>
+              {/* Toda carta é clicável, inclusive a que você não pode pagar:
+                  ver o que ela faz é de graça. Quem trava é o botão da ficha. */}
+              {aVenda.map((item) => (
+                <CartaItem
+                  key={item.uid}
+                  item={item}
+                  rodape={`${precoDeCompra(loja, item)} ouro`}
+                  selecionado={item.uid === selecionado}
+                  onClick={() => setSelecionado(item.uid)}
+                />
+              ))}
+            </div>
+          )}
 
-      <h2 className={styles.tituloDaSecao}>Sua mochila</h2>
-      {paraVender.length === 0 ? (
-        <p className={styles.vazio}>Nada para vender.</p>
-      ) : (
-        <div className={styles.gradeDeItens}>
-          {paraVender.map((item) => (
-            <CartaItem key={item.uid} item={item} rodape={`${precoDeVenda(item)} ouro · vender`} onClick={() => onLoja(vender(loja, item))} />
-          ))}
+          <h2 className={styles.tituloDaSecao}>Sua mochila</h2>
+          {paraVender.length === 0 ? (
+            <p className={styles.vazio}>Nada para vender.</p>
+          ) : (
+            <div className={styles.gradeDeItens}>
+              {paraVender.map((item) => (
+                <CartaItem
+                  key={item.uid}
+                  item={item}
+                  rodape={`vende por ${precoDeVenda(item)}`}
+                  selecionado={item.uid === selecionado}
+                  onClick={() => setSelecionado(item.uid)}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      )}
+
+        <aside className={styles.fichaDoItem} aria-label="Detalhes da peça">
+          {aberta ? (
+            <FichaItem
+              item={aberta}
+              hero={loja.estado.hero}
+              acoes={
+                aComprar ? (
+                  <BotaoDeCompra preco={precoDeCompra(loja, aComprar)} ouro={ouro} onComprar={() => agir(comprar(loja, aComprar))} />
+                ) : (
+                  <button type="button" className={styles.botao} onClick={() => agir(vender(loja, aVender as Item))}>
+                    Vender por {precoDeVenda(aVender as Item)} ouro
+                  </button>
+                )
+              }
+            />
+          ) : (
+            <p className={styles.fichaVazia}>Escolha uma peça à venda ou da sua mochila para ver o preço e o que ela muda em você.</p>
+          )}
+        </aside>
+      </div>
 
       {ehFerreiro && (
         <>
@@ -143,12 +204,29 @@ export function TelaLoja({ loja, onLoja, onFechar }: Props) {
                 ))}
               </div>
 
-              {selecionado && <PainelDaForja loja={loja} item={selecionado} onLoja={onLoja} />}
+              {naForja && <PainelDaForja loja={loja} item={naForja} onLoja={onLoja} />}
             </>
           )}
         </>
       )}
     </section>
+  );
+}
+
+/**
+ * O botão de confirmar compra. Sem ouro ele fica desabilitado **e diz
+ * quanto falta** — botão cinza sem explicação faz a pessoa procurar o
+ * defeito na tela, não no bolso.
+ */
+function BotaoDeCompra({ preco, ouro, onComprar }: Readonly<{ preco: number; ouro: number; onComprar: () => void }>) {
+  const falta = preco - ouro;
+  return (
+    <>
+      {falta > 0 && <p className={styles.avisoDasMaos}>Faltam {falta} de ouro.</p>}
+      <button type="button" className={`${styles.botao} ${styles.botaoPrincipal}`} onClick={onComprar} disabled={falta > 0}>
+        Comprar por {preco} ouro
+      </button>
+    </>
   );
 }
 
