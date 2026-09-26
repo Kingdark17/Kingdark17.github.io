@@ -3,9 +3,51 @@
   padding: 2.5rem 1rem;
 }
 
+/* 72rem e não mais 60: a prévia ganhou coluna própria, e sem o espaço extra
+   as raças e classes cairiam de cinco cartas por linha pra três. Com 72, a
+   coluna do formulário fica com quatro. Em tela estreita é 100% igual. */
 .conteudo {
-  width: min(60rem, 100%);
+  width: min(72rem, 100%);
   margin: 0 auto;
+}
+
+/* ---------- prévia ao lado das listas ----------
+ *
+ * O mesmo desenho da ficha do herói no jogo (`.conteudo` em
+ * `jogo.module.css`): uma coluna, e duas a partir de 60rem. Abaixo disso
+ * não cabe — o boneco de 192px mais a borda do balão comeria a largura de
+ * uma carta —, e a prévia volta pro topo, que é onde a ordem do DOM já a
+ * põe. */
+.criacao {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.colunaDaPrevia {
+  margin-bottom: 0.25rem;
+}
+
+.colunaDoFormulario {
+  min-width: 0;
+}
+
+@media (min-width: 60rem) {
+  .criacao {
+    grid-template-columns: 15rem minmax(0, 1fr);
+    align-items: start;
+  }
+
+  /* Presa enquanto a página rola: é o ponto de estar do lado. Sem isto ela
+     sumia de novo ao descer até a Classe — só trocaria o topo pela lateral.
+     `align-items: start` acima é o que deixa o `sticky` funcionar num item
+     de grid (esticado, ele teria a altura da coluna inteira e não teria
+     por onde deslizar). */
+  .colunaDaPrevia {
+    position: sticky;
+    top: 1.5rem;
+    margin-bottom: 0;
+  }
 }
 
 .titulo {

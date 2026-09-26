@@ -138,23 +138,18 @@ export function FormularioCriacao({ slot }: { slot: number }) {
   const podeRolarAtributos = Boolean(criacao.raca && criacao.classe && criacao.fraqueza);
 
   return (
-    <>
-      <section className={styles.secao}>
-        <label className={styles.campo}>
-          <span className={styles.rotulo}>Nome do herói</span>
-          <input
-            className={styles.entrada}
-            value={criacao.nome}
-            maxLength={20}
-            onChange={(evento) => {
-              setErro('');
-              setCriacao((atual) => ({ ...atual, nome: evento.target.value }));
-            }}
-          />
-        </label>
-      </section>
-
-      <section className={styles.secao}>
+    // A prévia vai **ao lado** das listas, e não em cima delas — pedido do
+    // doc do Breno. Em cima, ela saía da tela antes de a pessoa chegar na
+    // Classe, que é justamente o que troca a arma do boneco. Do lado, e
+    // presa enquanto a página rola, ela acompanha cada escolha.
+    //
+    // À esquerda e primeiro no DOM, igual à ficha do herói no jogo: é o
+    // mesmo boneco nas duas telas, e reconhecer que é a mesma figura é
+    // metade do ponto (ver `.balao` em `acabamento.module.css`). No celular
+    // não cabe coluna, e ela volta pro topo — que é onde a ordem do DOM a
+    // põe sem truque de `order`.
+    <div className={styles.criacao}>
+      <aside className={styles.colunaDaPrevia} aria-label="Prévia do herói">
         <div className={styles.previa}>
           <Paperdoll
             className={styles.balaoDoBoneco}
@@ -170,176 +165,193 @@ export function FormularioCriacao({ slot }: { slot: number }) {
           />
           <p className={styles.legendaDoBoneco}>{legendaDoBoneco(criacao.raca, criacao.classe)}</p>
         </div>
-      </section>
+      </aside>
 
-      <section className={styles.secao}>
-        <h2 className={styles.tituloSecao}>Raça</h2>
-        <ul className={styles.grade}>
-          {RACES.map((raca) => (
-            <li key={raca.id}>
-              <button
-                type="button"
-                className={`${styles.carta} ${criacao.raca?.id === raca.id ? styles.cartaEscolhida : ''}`}
-                aria-pressed={criacao.raca?.id === raca.id}
-                onClick={() => escolherRaca(raca)}
-              >
-                <span className={styles.icone}>{raca.icon}</span>
-                <span className={styles.nomeCarta}>{raca.name}</span>
-                <span className={styles.descricao}>{raca.desc}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* A seção só existe pra quem leva cabelo desenhado. Felino e
-          morto-vivo têm a cabeça resolvida na própria arte, e oferecer
-          penteado que não vai aparecer seria mentir pro jogador. */}
-      {criacao.raca && !SEM_CABELO.has(criacao.raca.id) && (
+      <div className={styles.colunaDoFormulario}>
         <section className={styles.secao}>
-          <h2 className={styles.tituloSecao}>Cabelo</h2>
-          <ul className={styles.gradeDeCabelo}>
-            {PENTEADOS.map((penteado) => {
-              const escolhido = (criacao.cabelo ?? CABELO_PADRAO) === penteado.id;
-              return (
-                <li key={penteado.id}>
-                  <button
-                    type="button"
-                    className={`${styles.carta} ${styles.cartaDeCabelo} ${escolhido ? styles.cartaEscolhida : ''}`}
-                    aria-pressed={escolhido}
-                    onClick={() => setCriacao((atual) => ({ ...atual, cabelo: penteado.id }))}
-                  >
-                    <span
-                      className={styles.amostraDeCabelo}
-                      style={{ backgroundImage: `url('/img/paperdoll/cabelo/${penteado.id}.png'), url('/img/paperdoll/corpo/${criacao.raca?.id}.png')` }}
-                      aria-hidden
-                    />
-                    <span className={styles.nomeCarta}>{penteado.nome}</span>
-                  </button>
-                </li>
-              );
-            })}
+          <label className={styles.campo}>
+            <span className={styles.rotulo}>Nome do herói</span>
+            <input
+              className={styles.entrada}
+              value={criacao.nome}
+              maxLength={20}
+              onChange={(evento) => {
+                setErro('');
+                setCriacao((atual) => ({ ...atual, nome: evento.target.value }));
+              }}
+            />
+          </label>
+        </section>
+
+        <section className={styles.secao}>
+          <h2 className={styles.tituloSecao}>Raça</h2>
+          <ul className={styles.grade}>
+            {RACES.map((raca) => (
+              <li key={raca.id}>
+                <button
+                  type="button"
+                  className={`${styles.carta} ${criacao.raca?.id === raca.id ? styles.cartaEscolhida : ''}`}
+                  aria-pressed={criacao.raca?.id === raca.id}
+                  onClick={() => escolherRaca(raca)}
+                >
+                  <span className={styles.icone}>{raca.icon}</span>
+                  <span className={styles.nomeCarta}>{raca.name}</span>
+                  <span className={styles.descricao}>{raca.desc}</span>
+                </button>
+              </li>
+            ))}
           </ul>
         </section>
-      )}
 
-      <section className={styles.secao}>
-        <h2 className={styles.tituloSecao}>Classe</h2>
-        <ul className={styles.grade}>
-          {CLASSES.map((classe) => (
-            <li key={classe.id}>
-              <button
-                type="button"
-                className={`${styles.carta} ${criacao.classe?.id === classe.id ? styles.cartaEscolhida : ''}`}
-                aria-pressed={criacao.classe?.id === classe.id}
-                onClick={() => escolherClasse(classe)}
-              >
-                <span className={styles.icone}>{classe.icon}</span>
-                <span className={styles.nomeCarta}>{classe.name}</span>
-                <span className={styles.descricao}>{classe.desc}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
+        {/* A seção só existe pra quem leva cabelo desenhado. Felino e
+            morto-vivo têm a cabeça resolvida na própria arte, e oferecer
+            penteado que não vai aparecer seria mentir pro jogador. */}
+        {criacao.raca && !SEM_CABELO.has(criacao.raca.id) && (
+          <section className={styles.secao}>
+            <h2 className={styles.tituloSecao}>Cabelo</h2>
+            <ul className={styles.gradeDeCabelo}>
+              {PENTEADOS.map((penteado) => {
+                const escolhido = (criacao.cabelo ?? CABELO_PADRAO) === penteado.id;
+                return (
+                  <li key={penteado.id}>
+                    <button
+                      type="button"
+                      className={`${styles.carta} ${styles.cartaDeCabelo} ${escolhido ? styles.cartaEscolhida : ''}`}
+                      aria-pressed={escolhido}
+                      onClick={() => setCriacao((atual) => ({ ...atual, cabelo: penteado.id }))}
+                    >
+                      <span
+                        className={styles.amostraDeCabelo}
+                        style={{ backgroundImage: `url('/img/paperdoll/cabelo/${penteado.id}.png'), url('/img/paperdoll/corpo/${criacao.raca?.id}.png')` }}
+                        aria-hidden
+                      />
+                      <span className={styles.nomeCarta}>{penteado.nome}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
 
-      <section className={styles.secao}>
-        <div className={styles.cabecalhoSecao}>
-          <h2 className={styles.tituloSecao}>Poderes</h2>
-          <button
-            type="button"
-            className={styles.regirar}
-            onClick={regirarPoderes}
-            disabled={!criacao.classe || salvando}
-            title={criacao.classe ? undefined : 'Escolha uma classe primeiro'}
-          >
-            🎲 Girar
-          </button>
-        </div>
-        {assinatura || criacao.poderes.length > 0 ? (
+        <section className={styles.secao}>
+          <h2 className={styles.tituloSecao}>Classe</h2>
           <ul className={styles.grade}>
-            {assinatura && (
-              <li className={styles.sorteado}>
-                <span className={styles.icone}>{assinatura.icon}</span>
-                <span className={styles.nomeCarta}>{assinatura.name}</span>
-                <span className={styles.descricao}>poder da classe</span>
-              </li>
-            )}
-            {criacao.poderes.map((poder) => (
-              <li key={poder.name} className={styles.sorteado}>
-                <span className={styles.icone}>{poder.icon}</span>
-                <span className={styles.nomeCarta}>{poder.name}</span>
-                <span className={styles.descricao}>poder da roleta</span>
+            {CLASSES.map((classe) => (
+              <li key={classe.id}>
+                <button
+                  type="button"
+                  className={`${styles.carta} ${criacao.classe?.id === classe.id ? styles.cartaEscolhida : ''}`}
+                  aria-pressed={criacao.classe?.id === classe.id}
+                  onClick={() => escolherClasse(classe)}
+                >
+                  <span className={styles.icone}>{classe.icon}</span>
+                  <span className={styles.nomeCarta}>{classe.name}</span>
+                  <span className={styles.descricao}>{classe.desc}</span>
+                </button>
               </li>
             ))}
           </ul>
-        ) : (
-          <p className={styles.placeholder}>Gire a Roleta do Destino para descobrir seus dois poderes adicionais.</p>
-        )}
-      </section>
+        </section>
 
-      <section className={styles.secao}>
-        <div className={styles.cabecalhoSecao}>
-          <h2 className={styles.tituloSecao}>Fraqueza</h2>
-          {/* Sem pré-requisito: a fraqueza não depende de raça nem classe,
-              e é o que o jogo em produção faz. */}
-          <button type="button" className={styles.regirar} onClick={regirarFraqueza} disabled={salvando}>
-            🎲 Girar
-          </button>
-        </div>
-        {criacao.fraqueza ? (
-          <div className={styles.sorteado}>
-            <span className={styles.icone}>{criacao.fraqueza.icon}</span>
-            <span className={styles.nomeCarta}>{criacao.fraqueza.name}</span>
-            <span className={styles.descricao}>{criacao.fraqueza.desc}</span>
+        <section className={styles.secao}>
+          <div className={styles.cabecalhoSecao}>
+            <h2 className={styles.tituloSecao}>Poderes</h2>
+            <button
+              type="button"
+              className={styles.regirar}
+              onClick={regirarPoderes}
+              disabled={!criacao.classe || salvando}
+              title={criacao.classe ? undefined : 'Escolha uma classe primeiro'}
+            >
+              🎲 Girar
+            </button>
           </div>
-        ) : (
-          <p className={styles.placeholder}>Gire a Roleta do Destino para descobrir sua fraqueza.</p>
-        )}
-      </section>
+          {assinatura || criacao.poderes.length > 0 ? (
+            <ul className={styles.grade}>
+              {assinatura && (
+                <li className={styles.sorteado}>
+                  <span className={styles.icone}>{assinatura.icon}</span>
+                  <span className={styles.nomeCarta}>{assinatura.name}</span>
+                  <span className={styles.descricao}>poder da classe</span>
+                </li>
+              )}
+              {criacao.poderes.map((poder) => (
+                <li key={poder.name} className={styles.sorteado}>
+                  <span className={styles.icone}>{poder.icon}</span>
+                  <span className={styles.nomeCarta}>{poder.name}</span>
+                  <span className={styles.descricao}>poder da roleta</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.placeholder}>Gire a Roleta do Destino para descobrir seus dois poderes adicionais.</p>
+          )}
+        </section>
 
-      <section className={styles.secao}>
-        <div className={styles.cabecalhoSecao}>
-          <h2 className={styles.tituloSecao}>Atributos</h2>
-          <button
-            type="button"
-            className={styles.regirar}
-            onClick={regirarAtributos}
-            disabled={!podeRolarAtributos || salvando}
-            title={podeRolarAtributos ? undefined : 'Precisa de raça, classe e fraqueza'}
-          >
-            🎲 Girar
+        <section className={styles.secao}>
+          <div className={styles.cabecalhoSecao}>
+            <h2 className={styles.tituloSecao}>Fraqueza</h2>
+            {/* Sem pré-requisito: a fraqueza não depende de raça nem classe,
+                e é o que o jogo em produção faz. */}
+            <button type="button" className={styles.regirar} onClick={regirarFraqueza} disabled={salvando}>
+              🎲 Girar
+            </button>
+          </div>
+          {criacao.fraqueza ? (
+            <div className={styles.sorteado}>
+              <span className={styles.icone}>{criacao.fraqueza.icon}</span>
+              <span className={styles.nomeCarta}>{criacao.fraqueza.name}</span>
+              <span className={styles.descricao}>{criacao.fraqueza.desc}</span>
+            </div>
+          ) : (
+            <p className={styles.placeholder}>Gire a Roleta do Destino para descobrir sua fraqueza.</p>
+          )}
+        </section>
+
+        <section className={styles.secao}>
+          <div className={styles.cabecalhoSecao}>
+            <h2 className={styles.tituloSecao}>Atributos</h2>
+            <button
+              type="button"
+              className={styles.regirar}
+              onClick={regirarAtributos}
+              disabled={!podeRolarAtributos || salvando}
+              title={podeRolarAtributos ? undefined : 'Precisa de raça, classe e fraqueza'}
+            >
+              🎲 Girar
+            </button>
+          </div>
+          {criacao.atributos ? (
+            <ul className={styles.gradeAtributos}>
+              {ATTR_KEYS.map((chave) => (
+                <li key={chave} className={styles.atributo}>
+                  <span className={styles.valorAtributo}>{criacao.atributos?.[chave]}</span>
+                  <span className={styles.chaveAtributo}>{ATTR_LABELS[chave]}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.placeholder}>Gire a Roleta do Destino para sortear suas características.</p>
+          )}
+        </section>
+
+        <div className={styles.acoes}>
+          {/* Só `botaoSecundario`: ele já traz o botão inteiro por `composes`.
+              Passar os dois faria duas regras disputarem a mesma arte com a
+              mesma especificidade, e quem ganha viraria ordem de arquivo. */}
+          <button type="button" className={styles.botaoSecundario} onClick={rolar} disabled={salvando}>
+            🎲 Rolar Tudo
+          </button>
+          <button type="button" className={styles.botao} onClick={comecar} disabled={salvando}>
+            {salvando ? 'Salvando…' : 'Começar aventura'}
           </button>
         </div>
-        {criacao.atributos ? (
-          <ul className={styles.gradeAtributos}>
-            {ATTR_KEYS.map((chave) => (
-              <li key={chave} className={styles.atributo}>
-                <span className={styles.valorAtributo}>{criacao.atributos?.[chave]}</span>
-                <span className={styles.chaveAtributo}>{ATTR_LABELS[chave]}</span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className={styles.placeholder}>Gire a Roleta do Destino para sortear suas características.</p>
-        )}
-      </section>
 
-      <div className={styles.acoes}>
-        {/* Só `botaoSecundario`: ele já traz o botão inteiro por `composes`.
-            Passar os dois faria duas regras disputarem a mesma arte com a
-            mesma especificidade, e quem ganha viraria ordem de arquivo. */}
-        <button type="button" className={styles.botaoSecundario} onClick={rolar} disabled={salvando}>
-          🎲 Rolar Tudo
-        </button>
-        <button type="button" className={styles.botao} onClick={comecar} disabled={salvando}>
-          {salvando ? 'Salvando…' : 'Começar aventura'}
-        </button>
+        <p className={styles.dica}>Rolar Tudo também sorteia raça e classe — depois disso você ainda pode trocar as duas.</p>
+
+        {erro && <p className={styles.erro}>{erro}</p>}
       </div>
-
-      <p className={styles.dica}>Rolar Tudo também sorteia raça e classe — depois disso você ainda pode trocar as duas.</p>
-
-      {erro && <p className={styles.erro}>{erro}</p>}
-    </>
+    </div>
   );
 }
