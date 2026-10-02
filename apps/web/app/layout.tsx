@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { Jacquard_12, EB_Garamond, JetBrains_Mono } from 'next/font/google';
+import { EB_Garamond, JetBrains_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 
 import './globals.css';
 
@@ -16,23 +17,31 @@ import './globals.css';
 // Os pesos abaixo são os que o CSS de fato seleciona. Já saíram daqui, por
 // não terem quem os pedisse: Garamond itálico e JetBrains 600.
 //
-// A fonte de título era Cinzel (pesos 500 e 700). Trocada pela Jacquard 12 em
-// 2026-08-22, e a troca saiu **mais barata**: 89,1 KB → 70,5 KB no caminho
-// crítico, porque uma família de um peso só substituiu uma de dois.
-
-// Jacquard 12 é blackletter pixelada e existe **num peso só (400)**. Isso
-// tem uma consequência que não aparece no CSS: `<h1>`/`<h2>` já nascem com
-// `font-weight: bold` pela folha de estilo do navegador, então todo título
-// pediria 700 de uma fonte que não tem. O navegador então *finge* o negrito
-// engrossando o traço na força bruta — num desenho pixelado isso empasta os
-// vãos e some com a forma da letra.
+// A fonte de título foi Cinzel, depois Jacquard 12 (2026-08-22), e desde
+// 2026-10-01 é a **Alkhemikal**, de jeti — escolhida pelo Breno entre três
+// opções "legíveis": a Jacquard era a blackletter que ninguém lia. Das
+// outras duas, a Alagard não tem nenhum acento e a Pixel Takhisis é paga
+// pra uso comercial.
 //
-// Por isso o `globals.css` fixa `font-weight: 400` em quem usa
-// `--font-display`. Ao acrescentar título novo, herdar a regra em vez de
-// pedir peso.
-const jacquard = Jacquard_12({
-  subsets: ['latin'],
-  weight: ['400'],
+// **Licença CC BY 4.0: o crédito é obrigatório**, e está nas Configurações.
+// Não tirar de lá sem pôr em outro lugar visível.
+//
+// Local, e não do Google: ela não está lá. O arquivo é WOFF 1 gerado da TTF
+// original (cada tabela em zlib, conferida byte a byte na volta): 44,7 KB
+// viraram 10,7 KB, uns 4 KB a mais que a Jacquard no caminho crítico.
+//
+// É pixel art com grade de 16 px por em: nítida em 16, 32 e 48 px, um pouco
+// irregular nos tamanhos quebrados.
+//
+// E existe **num peso só (400)**. `<h1>`/`<h2>` nascem com `font-weight:
+// bold` pela folha do navegador, e pedir um peso que a fonte não tem faz o
+// navegador *fingir* o negrito, engrossando o traço na força bruta — num
+// desenho pixelado isso empasta os vãos e some com a forma da letra. Por
+// isso o `globals.css` fixa `font-weight: 400` em quem usa `--font-display`.
+// Ao acrescentar título novo, herdar a regra em vez de pedir peso.
+const alkhemikal = localFont({
+  src: './fontes/alkhemikal.woff',
+  weight: '400',
   variable: '--font-display',
   display: 'swap',
 });
@@ -61,7 +70,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${jacquard.variable} ${garamond.variable} ${jetbrains.variable}`}>
+      <body className={`${alkhemikal.variable} ${garamond.variable} ${jetbrains.variable}`}>
         {children}
       </body>
     </html>

@@ -109,6 +109,21 @@ export function PainelConfiguracoes() {
       <p className={styles.nota}>
         A preferência é deste aparelho, não da conta: quem joga no celular e no computador ajusta cada um do seu jeito.
       </p>
+
+      {/* Obrigatório: a licença CC BY 4.0 da fonte de título pede crédito
+          visível ao autor (ver `layout.tsx`). */}
+      <h2 className={styles.secao}>Créditos</h2>
+      <p className={styles.credito}>
+        Fonte dos títulos:{' '}
+        <a href="https://www.dafont.com/alkhemikal.font" target="_blank" rel="noreferrer">
+          Alkhemikal
+        </a>
+        , de jeti, sob a licença{' '}
+        <a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noreferrer">
+          CC BY 4.0
+        </a>
+        .
+      </p>
     </section>
   );
 }

@@ -21,7 +21,7 @@ import styles from './menu.module.css';
  * dinâmica junto, de graça.
  *
  * Não há `<h1>` com o nome do jogo: o brasão já traz "RPG LEGEND" escrito
- * na fita, e repetir embaixo em Jacquard seria dizer duas vezes. O `alt`
+ * na fita, e repetir embaixo na fonte de título seria dizer duas vezes. O `alt`
  * da imagem é que carrega o nome pra quem lê por leitor de tela.
  */
 

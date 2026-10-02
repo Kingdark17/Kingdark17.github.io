@@ -57,12 +57,15 @@
 
 /* "Jogar em destaque". Era ouro chapado contra o degradê escuro dos
    outros dois; com a pedra em todo botão, o contraste passou a ser a
-   letra — dourada, em negrito, com um halo que segue o recorte da pedra
-   em vez da caixa. O motivo original continua valendo: os três botões
-   têm que ter a mesma altura, senão a pilha desalinha. */
+   letra — dourada, com um halo que segue o recorte da pedra em vez da
+   caixa. O motivo original continua valendo: os três botões têm que ter a
+   mesma altura, senão a pilha desalinha.
+
+   **Sem negrito.** A fonte de título tem um peso só, e o 700 que estava
+   aqui virava negrito falso — o navegador engrossa o traço na marra, e
+   na Alkhemikal isso borra o pixel (ver `globals.css`). */
 .botaoForte {
   color: var(--gold-bright);
-  font-weight: 700;
   text-shadow: 0 0 10px rgba(232, 198, 90, 0.55);
 }
 

@@ -99,3 +99,19 @@
   color: var(--parchment-dim);
   line-height: 1.4;
 }
+
+.credito {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  line-height: 1.4;
+}
+
+.credito a {
+  color: var(--parchment);
+}
+
+.credito a:hover,
+.credito a:focus-visible {
+  color: var(--gold-bright);
+}
