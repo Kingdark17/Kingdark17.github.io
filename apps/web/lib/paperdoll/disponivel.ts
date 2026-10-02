@@ -13,8 +13,8 @@
  * silêncio.
  */
 
-/** Asa e cauda da raça, atrás de tudo. Pelo id da raça. (3 em `public/img/paperdoll/back/`) */
-export const COSTAS: ReadonlySet<string> = new Set(['celestial', 'draconato', 'felino']);
+/** Asa e cauda da raça, atrás de tudo. Pelo id da raça. (4 em `public/img/paperdoll/back/`) */
+export const COSTAS: ReadonlySet<string> = new Set(['celestial', 'draconato', 'fada', 'felino']);
 
 /** A parte do elmo que fica **atrás** da cabeça. Pelo `templateId`. (1 em `public/img/paperdoll/hadd/`) */
 export const COSTAS_DO_ELMO: ReadonlySet<string> = new Set(['robe_chapeu']);
@@ -25,8 +25,8 @@ export const COSTAS_DO_PEITORAL: ReadonlySet<string> = new Set(['robe']);
 /** A parte da perneira que fica **atrás** da perna. Pelo `templateId`. (0 em `public/img/paperdoll/ladd/`) */
 export const COSTAS_DA_PERNEIRA: ReadonlySet<string> = new Set([]);
 
-/** Raças com corpo desenhado. (10 em `public/img/paperdoll/corpo/`) */
-export const CORPOS: ReadonlySet<string> = new Set(['celestial', 'draconato', 'elfo', 'elfo_negro', 'felino', 'goblin', 'humano', 'meio_elfo', 'morto_vivo', 'orc']);
+/** Raças com corpo desenhado. (11 em `public/img/paperdoll/corpo/`) */
+export const CORPOS: ReadonlySet<string> = new Set(['celestial', 'draconato', 'elfo', 'elfo_negro', 'fada', 'felino', 'goblin', 'humano', 'meio_elfo', 'morto_vivo', 'orc']);
 
 /** Perneira e calça com camada. Pelo `templateId`. (2 em `public/img/paperdoll/calca/`) */
 export const CALCAS: ReadonlySet<string> = new Set(['placas_calca', 'robe_calca']);

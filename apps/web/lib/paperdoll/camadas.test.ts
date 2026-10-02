@@ -103,9 +103,9 @@ describe('montarCamadas', () => {
      * antes de tudo e este teste prende isso.
      */
     it('traço sem corpo não desenha nada', () => {
-      // Encolhe conforme a arte chega: o orc e o goblin saíram daqui quando
-      // os corpos deles entraram. Sobram anão e fada.
-      for (const raca of ['anao', 'fada']) {
+      // Encolhe conforme a arte chega: o orc, o goblin e a fada saíram daqui
+      // quando os corpos deles entraram. Sobra o anão.
+      for (const raca of ['anao']) {
         expect(CORPOS.has(raca)).toBe(false);
         expect(montarCamadas({ raca })).toEqual([]);
       }
