@@ -15,6 +15,7 @@
 
 import {
   buyPrice,
+  concordar,
   defaultRng,
   discountForRoll,
   displayName,
@@ -103,7 +104,8 @@ export function comprar(loja: Loja, item: Item): Loja {
   const compra = resolveBuy(loja.estado.hero, loja.estado.inventory, sala.forSale ?? [], item, loja.desconto);
 
   if (compra.outcome.kind === 'insufficient_gold') {
-    return { ...loja, log: [`Ouro insuficiente: ${displayName(item)} custa ${compra.outcome.required}.`] };
+    const custa = concordar(item, ['custa', 'custa', 'custam', 'custam']);
+    return { ...loja, log: [`Ouro insuficiente: ${displayName(item)} ${custa} ${compra.outcome.required}.`] };
   }
 
   return {

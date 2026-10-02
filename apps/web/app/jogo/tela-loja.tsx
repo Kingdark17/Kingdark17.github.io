@@ -19,7 +19,7 @@
 
 import { useState } from 'react';
 
-import { FORGE_MATERIALS, itemView, templateById, tierFor, tierRank, TIER_ORDER, type Item } from '@rpg-legend/shared';
+import { concordar, FORGE_MATERIALS, itemView, templateById, tierFor, tierRank, TIER_ORDER, type Item } from '@rpg-legend/shared';
 
 import {
   comprar,
@@ -238,7 +238,14 @@ function PainelDaForja({ loja, item, onLoja }: { loja: Loja; item: Item; onLoja:
   const pity = item.reforgeFails ?? 0;
   const noMaximo = tierRank(item) === TIER_ORDER.length - 1;
 
-  if (noMaximo) return <p className={styles.vazio}>🏆 {itemView(item).name} já alcançou o tier MAX.</p>;
+  if (noMaximo) {
+    const alcancou = concordar(item, ['alcançou', 'alcançou', 'alcançaram', 'alcançaram']);
+    return (
+      <p className={styles.vazio}>
+        🏆 {itemView(item).name} já {alcancou} o tier MAX.
+      </p>
+    );
+  }
 
   return (
     <div className={styles.caixa}>

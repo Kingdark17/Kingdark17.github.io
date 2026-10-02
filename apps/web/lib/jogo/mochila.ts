@@ -15,6 +15,7 @@
 
 import {
   addItem,
+  concordar,
   consumeItem,
   displayName,
   EQUIP_SLOTS,
@@ -66,7 +67,7 @@ export function equipar(mochila: Mochila, item: Item, slot?: EquipSlot): Mochila
     const recusa =
       resultado.reason === 'two_handed_weapon'
         ? `Suas duas mãos estão ocupadas com ${displayName(naMaoAntes.arma as Item)}.`
-        : `${displayName(item)} não vai nesse espaço.`;
+        : `${displayName(item)} ${concordar(item, ['não vai', 'não vai', 'não vão', 'não vão'])} nesse espaço.`;
     return { ...mochila, log: [recusa] };
   }
 

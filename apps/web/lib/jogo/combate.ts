@@ -28,6 +28,7 @@ import {
   applyPartyTurn,
   attemptDodge,
   attemptFlee,
+  concordar,
   defaultRng,
   displayName,
   freshCombatMonster,
@@ -602,7 +603,8 @@ function limparSala(combate: Combate, abatido: CombatMonsterView, rng: Rng): Com
     log.push(`Com a sala livre de perigo, você encontra mais ${bonus.gold} de ouro escondido.`);
   } else if (bonus && 'item' in bonus) {
     inventory = addItem(inventory, bonus.item);
-    log.push(`Com a sala livre de perigo, você encontra ${displayName(bonus.item)} escondido.`);
+    const escondido = concordar(bonus.item, ['escondido', 'escondida', 'escondidos', 'escondidas']);
+    log.push(`Com a sala livre de perigo, você encontra ${displayName(bonus.item)} ${escondido}.`);
   }
 
   const limpo = substituirCelulaAtual(

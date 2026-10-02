@@ -16,6 +16,7 @@
 
 import {
   addItem,
+  concordar,
   defaultRng,
   displayName,
   generateMimic,
@@ -320,7 +321,11 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng, pet: 
       { ...estado, inventory: addItem(estado.inventory, item), quests: onItemCollected(estado.quests) },
       aberto,
     ),
-    aviso: aviso('🧰', 'Baú Encontrado', `<b>${displayName(item)}</b> foi adicionado à sua mochila.`),
+    aviso: aviso(
+      '🧰',
+      'Baú Encontrado',
+      `<b>${displayName(item)}</b> ${concordar(item, ['foi adicionado', 'foi adicionada', 'foram adicionados', 'foram adicionadas'])} à sua mochila.`,
+    ),
     tela: null,
     som: 'buy',
   };

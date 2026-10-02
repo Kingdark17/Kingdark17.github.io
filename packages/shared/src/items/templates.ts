@@ -65,9 +65,29 @@ export interface ProcTemplate {
   icon: string;
 }
 
+/** Gênero gramatical do nome de um item. */
+export type Genero = 'm' | 'f';
+
+/**
+ * As quatro formas de uma palavra que concorda com o nome de um item:
+ * masculino, feminino e os dois plurais. Ver `concordar` em `item.ts`.
+ */
+export type Formas = readonly [m: string, f: string, mp: string, fp: string];
+
 export interface ItemTemplate {
   id: string;
   name: string;
+  /**
+   * Gênero e número do nome: é com eles que a raridade e as frases do jogo
+   * concordam — "Espada Lendária", "Botas Raras", "Poção de Vida
+   * escondida".
+   *
+   * Obrigatório de propósito: item novo sem gênero não compila, em vez de
+   * virar uma "Espada Raro" que ninguém nota.
+   */
+  genero: Genero;
+  /** O nome está no plural: "Botas Reforçadas Raras", não "Botas Reforçadas Rara". */
+  plural?: true;
   category: ItemCategory;
   desc: string;
   /**
@@ -123,6 +143,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'espada',
     name: 'Espada',
+    genero: 'f',
     category: 'arma',
     desc: 'Uma lâmina equilibrada para combate corpo a corpo.',
     sprite: 'weapons/espada.png',
@@ -133,6 +154,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'machado',
     name: 'Machado de Guerra',
+    genero: 'm',
     category: 'arma',
     desc: 'Pesado e brutal, favorece a força bruta.',
     sprite: 'weapons/machado.png',
@@ -143,6 +165,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'adaga',
     name: 'Adaga Sombria',
+    genero: 'f',
     category: 'arma',
     desc: 'Rápida e precisa, ideal para golpes furtivos.',
     sprite: 'weapons/adaga.png',
@@ -153,6 +176,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'arco',
     name: 'Arco Longo',
+    genero: 'm',
     category: 'arma',
     desc: 'Ataques precisos a distância.',
     sprite: 'weapons/arco.png',
@@ -162,6 +186,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'cajado',
     name: 'Cajado Arcano',
+    genero: 'm',
     category: 'arma',
     desc: 'Canaliza energia mágica em combate.',
     sprite: 'weapons/cajado.png',
@@ -172,6 +197,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'maca',
     name: 'Maça Sagrada',
+    genero: 'f',
     category: 'arma',
     desc: 'Abençoada, favorece curandeiros.',
     sprite: 'weapons/maca.png',
@@ -182,6 +208,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'marreta',
     name: 'Marreta de Guerra',
+    genero: 'f',
     category: 'arma',
     desc: 'Um golpe pesado o suficiente para rachar armaduras.',
     sprite: 'weapons/marreta.png',
@@ -192,6 +219,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'violao',
     name: 'Violão Encantado',
+    genero: 'm',
     category: 'arma',
     desc: 'Acordes que vibram no ar e atordoam quem ousar se aproximar.',
     sprite: 'weapons/violao.png',
@@ -204,6 +232,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'escudo',
     name: 'Escudo de Carvalho',
+    genero: 'm',
     category: 'armadura',
     desc: 'Pesado, mas confiável contra golpes diretos.',
     sprite: 'armor/escudo.png',
@@ -216,6 +245,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'couro',
     name: 'Armadura de Couro Batido',
+    genero: 'f',
     category: 'armadura',
     desc: 'Leve o suficiente para não atrapalhar reflexos.',
     sprite: 'armor/couro.png',
@@ -225,6 +255,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'placas',
     name: 'Peitoral de Placas',
+    genero: 'm',
     category: 'armadura',
     desc: 'Proteção pesada, reduz agilidade.',
     sprite: 'armor/placas.png',
@@ -234,6 +265,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'placas_elmo',
     name: 'Elmo de Placas',
+    genero: 'm',
     category: 'armadura',
     desc: 'Aço fechado, com uma pedra vermelha na testa.',
     sprite: 'armor/placas_elmo.png',
@@ -244,6 +276,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'placas_calca',
     name: 'Perneira de Placas',
+    genero: 'f',
     category: 'armadura',
     desc: 'Placas sobrepostas que protegem a perna inteira.',
     sprite: 'armor/placas_calca.png',
@@ -254,6 +287,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'robe',
     name: 'Robe Arcano',
+    genero: 'm',
     category: 'armadura',
     desc: 'Tecido enfeitiçado que amplia o poder mágico.',
     sprite: 'armor/robe.png',
@@ -273,6 +307,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'robe_calca',
     name: 'Calça de Mago',
+    genero: 'f',
     category: 'armadura',
     desc: 'Saiote pesado de veludo, preso por uma fivela dourada.',
     sprite: 'armor/robe_calca.png',
@@ -283,6 +318,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'robe_chapeu',
     name: 'Chapéu de Mago',
+    genero: 'm',
     category: 'armadura',
     desc: 'Feltro escuro e aba larga, com uma estrela dourada presa na ponta.',
     sprite: 'armor/robe_chapeu.png',
@@ -293,6 +329,8 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'botas',
     name: 'Botas Reforçadas',
+    genero: 'f',
+    plural: true,
     category: 'armadura',
     desc: 'Aço nos dedos e sola macia — protegem sem prender o passo.',
     sprite: 'armor/botas.png',
@@ -305,6 +343,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'anel_som',
     name: 'Anel das Sombras',
+    genero: 'm',
     category: 'acessorio',
     desc: 'Sussurra segredos no escuro.',
     sprite: 'accessories/anel_som.png',
@@ -314,6 +353,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'amuleto_sab',
     name: 'Amuleto da Sabedoria',
+    genero: 'm',
     category: 'acessorio',
     desc: 'Pertenceu a um oráculo esquecido.',
     sprite: 'accessories/amuleto_sab.png',
@@ -323,6 +363,8 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'bota_vento',
     name: 'Botas do Vento',
+    genero: 'f',
+    plural: true,
     category: 'acessorio',
     desc: 'Passos leves como brisa de outono.',
     sprite: 'accessories/bota_vento.png',
@@ -337,6 +379,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'colar_forca',
     name: 'Colar da Força Ancestral',
+    genero: 'm',
     category: 'acessorio',
     desc: 'Pulsa com poder antigo.',
     sprite: 'accessories/colar_forca.png',
@@ -348,6 +391,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'pot_vida',
     name: 'Poção de Vida',
+    genero: 'f',
     category: 'consumivel',
     desc: 'Restaura uma quantidade de vida ao ser bebida.',
     sprite: 'potions/cura.png',
@@ -357,6 +401,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'pot_mana',
     name: 'Poção de Mana',
+    genero: 'f',
     category: 'consumivel',
     desc: 'Restaura uma quantidade de mana.',
     sprite: 'potions/mana.png',
@@ -366,6 +411,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'pergaminho',
     name: 'Pergaminho Selado',
+    genero: 'm',
     category: 'consumivel',
     desc: 'Contém um feitiço de propósito desconhecido.',
     sprite: 'scrolls/pergaminho.png',
@@ -377,6 +423,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'minerio',
     name: 'Minério Bruto',
+    genero: 'm',
     category: 'material',
     desc: 'Pode ser vendido a um ferreiro.',
     sprite: 'materials/minerio.png',
@@ -386,6 +433,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'essencia',
     name: 'Essência Arcana',
+    genero: 'f',
     category: 'material',
     desc: 'Resíduo de magia cristalizado.',
     sprite: 'materials/essencia.png',
@@ -395,6 +443,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'catalisador_mitico',
     name: 'Catalisador Mítico',
+    genero: 'm',
     category: 'material',
     desc: 'Catalisador raro que aumenta muito a chance de elevar o tier na reforja.',
     sprite: 'materials/catalisador_mitico.png',
@@ -404,6 +453,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'pedra_protecao',
     name: 'Pedra de Proteção',
+    genero: 'f',
     category: 'material',
     desc: 'Protege o equipamento: uma reforja feita com ela nunca reduz o tier.',
     sprite: 'materials/pedra_protecao.png',
@@ -413,6 +463,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   {
     id: 'couro_bruto',
     name: 'Couro de Fera',
+    genero: 'm',
     category: 'material',
     desc: 'Material usado em armaduras leves.',
     sprite: 'materials/couro_bruto.png',

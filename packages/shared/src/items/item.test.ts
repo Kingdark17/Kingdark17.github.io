@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { seededRng } from '../rng.js';
-import { displayName, instantiate, itemView, randomItem, statTags, type Item } from './item.js';
+import { concordar, displayName, instantiate, itemView, randomItem, statTags, type Item } from './item.js';
 import { RARITIES, pickRarity, rarityById, rarityWeights } from './rarity.js';
 import { TEMPLATES, templateById, templatesByCategory } from './templates.js';
 import { powerScore, reforge, tierFor, tierFromScore, tierInfo } from './tiers.js';
@@ -88,12 +88,26 @@ describe('instantiate', () => {
 });
 
 describe('nome e visão derivados', () => {
-  it('não prefixa item comum', () => {
+  it('não marca item comum', () => {
     expect(displayName(espada('comum'))).toBe('Espada');
   });
 
-  it('prefixa com o rótulo da raridade', () => {
-    expect(displayName(espada('lendario'))).toBe('Lendário Espada');
+  it('põe a raridade depois do nome, no gênero dele', () => {
+    expect(displayName(espada('lendario'))).toBe('Espada Lendária');
+    expect(displayName({ templateId: 'cajado', rarity: 'lendario' })).toBe('Cajado Arcano Lendário');
+    expect(displayName({ templateId: 'pot_mana', rarity: 'incomum' })).toBe('Poção de Mana Incomum');
+  });
+
+  it('e no número dele', () => {
+    expect(displayName({ templateId: 'botas', rarity: 'raro' })).toBe('Botas Reforçadas Raras');
+    expect(displayName({ templateId: 'bota_vento', rarity: 'incomum' })).toBe('Botas do Vento Incomuns');
+  });
+
+  it('concordar escolhe a forma pelo gênero e número do item', () => {
+    const formas = ['escondido', 'escondida', 'escondidos', 'escondidas'] as const;
+    expect(concordar({ templateId: 'cajado' }, formas)).toBe('escondido');
+    expect(concordar({ templateId: 'adaga' }, formas)).toBe('escondida');
+    expect(concordar({ templateId: 'botas' }, formas)).toBe('escondidas');
   });
 
   it('itemView remonta o que foi tirado do item', () => {

@@ -105,6 +105,13 @@ describe('equipar', () => {
     expect(depois.log[0]).toContain('não vai nesse espaço');
   });
 
+  it('a recusa concorda com o nome da peça, raridade e verbo', () => {
+    const botas = item('botas', 2);
+    const depois = equipar(comItens(botas), botas, 'arma');
+
+    expect(depois.log[0]).toBe('Botas Reforçadas Raras não vão nesse espaço.');
+  });
+
   it('escudo vai pra mão secundária', () => {
     const escudo = item('escudo');
     const depois = equipar(comMaoLivre(escudo), escudo, 'secundaria');

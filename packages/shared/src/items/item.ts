@@ -7,6 +7,7 @@ import {
   TEMPLATES,
   templatesByCategory,
   type AnyStatKey,
+  type Formas,
   type ItemCategory,
   type ItemTemplate,
   type ProcTemplate,
@@ -60,12 +61,29 @@ export function itemTemplate(item: Pick<Item, 'templateId'>): ItemTemplate {
   return template;
 }
 
-/** Nome exibido: raridade + nome do template. Comum não recebe prefixo. */
+/**
+ * Escolhe, das quatro formas de uma palavra, a que concorda com o nome do
+ * item: `concordar(item, ['escondido', 'escondida', 'escondidos', 'escondidas'])`.
+ */
+export function concordar(item: Pick<Item, 'templateId'>, [m, f, mp, fp]: Formas): string {
+  const { genero, plural } = itemTemplate(item);
+  if (genero === 'f') return plural ? fp : f;
+  return plural ? mp : m;
+}
+
+/**
+ * Nome exibido: o do template, e a raridade depois, concordando com ele —
+ * "Poção de Mana Incomum", "Espada Lendária", "Botas Reforçadas Raras".
+ * Comum não ganha nada.
+ *
+ * Até 2026-10 a raridade vinha antes e sempre no masculino ("Lendário
+ * Espada"), herança do `items.js` do jogo antigo.
+ */
 export function displayName(item: Pick<Item, 'templateId' | 'rarity'>): string {
   const template = itemTemplate(item);
   const rarity = rarityById(item.rarity);
   if (!rarity || rarity.id === 'comum') return template.name;
-  return `${rarity.label} ${template.name}`;
+  return `${template.name} ${concordar(item, rarity.adjetivo)}`;
 }
 
 export function itemView(item: Item): ItemView {

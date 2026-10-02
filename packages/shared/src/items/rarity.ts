@@ -1,4 +1,5 @@
 import { defaultRng, type Rng } from '../rng.js';
+import type { Formas } from './templates.js';
 
 export const RARITY_IDS = ['comum', 'incomum', 'raro', 'epico', 'lendario', 'mitico'] as const;
 
@@ -6,7 +7,10 @@ export type RarityId = (typeof RARITY_IDS)[number];
 
 export interface Rarity {
   id: RarityId;
+  /** O nome do tier, sozinho: "Lendário". É o da linha de baixo da carta e da ficha. */
   label: string;
+  /** A raridade depois do nome do item, concordando com ele: "Espada Lendária", "Botas Lendárias". */
+  adjetivo: Formas;
   /** Token CSS — a engine não sabe a cor, só o nome da variável. */
   colorVar: string;
   /** Multiplicador aplicado aos stats e ao valor do item. */
@@ -15,12 +19,12 @@ export interface Rarity {
 }
 
 export const RARITIES: readonly Rarity[] = [
-  { id: 'comum', label: 'Comum', colorVar: '--r-comum', mult: 1.0, weight: 45 },
-  { id: 'incomum', label: 'Incomum', colorVar: '--r-incomum', mult: 1.3, weight: 28 },
-  { id: 'raro', label: 'Raro', colorVar: '--r-raro', mult: 1.7, weight: 16 },
-  { id: 'epico', label: 'Épico', colorVar: '--r-epico', mult: 2.2, weight: 7 },
-  { id: 'lendario', label: 'Lendário', colorVar: '--r-lendario', mult: 3.0, weight: 1.2 },
-  { id: 'mitico', label: 'Mítico', colorVar: '--r-mitico', mult: 4.0, weight: 0.35 },
+  { id: 'comum', label: 'Comum', adjetivo: ['Comum', 'Comum', 'Comuns', 'Comuns'], colorVar: '--r-comum', mult: 1.0, weight: 45 },
+  { id: 'incomum', label: 'Incomum', adjetivo: ['Incomum', 'Incomum', 'Incomuns', 'Incomuns'], colorVar: '--r-incomum', mult: 1.3, weight: 28 },
+  { id: 'raro', label: 'Raro', adjetivo: ['Raro', 'Rara', 'Raros', 'Raras'], colorVar: '--r-raro', mult: 1.7, weight: 16 },
+  { id: 'epico', label: 'Épico', adjetivo: ['Épico', 'Épica', 'Épicos', 'Épicas'], colorVar: '--r-epico', mult: 2.2, weight: 7 },
+  { id: 'lendario', label: 'Lendário', adjetivo: ['Lendário', 'Lendária', 'Lendários', 'Lendárias'], colorVar: '--r-lendario', mult: 3.0, weight: 1.2 },
+  { id: 'mitico', label: 'Mítico', adjetivo: ['Mítico', 'Mítica', 'Míticos', 'Míticas'], colorVar: '--r-mitico', mult: 4.0, weight: 0.35 },
 ];
 
 export function rarityById(id: string): Rarity | null {
