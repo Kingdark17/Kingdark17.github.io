@@ -103,6 +103,12 @@ describe('nome e visão derivados', () => {
     expect(displayName({ templateId: 'bota_vento', rarity: 'incomum' })).toBe('Botas do Vento Incomuns');
   });
 
+  it('a raridade da linha de baixo concorda como a do nome', () => {
+    expect(itemView(espada('mitico')).rarityLabel).toBe('Mítica');
+    expect(itemView(instantiate(templateById('cajado')!, rarityById('mitico')!)).rarityLabel).toBe('Mítico');
+    expect(itemView(instantiate(templateById('botas')!, rarityById('raro')!)).rarityLabel).toBe('Raras');
+  });
+
   it('concordar escolhe a forma pelo gênero e número do item', () => {
     const formas = ['escondido', 'escondida', 'escondidos', 'escondidas'] as const;
     expect(concordar({ templateId: 'cajado' }, formas)).toBe('escondido');

@@ -7,9 +7,13 @@ export type RarityId = (typeof RARITY_IDS)[number];
 
 export interface Rarity {
   id: RarityId;
-  /** O nome do tier, sozinho: "Lendário". É o da linha de baixo da carta e da ficha. */
+  /** O nome do tier, sozinho e sem item: "Lendário". */
   label: string;
-  /** A raridade depois do nome do item, concordando com ele: "Espada Lendária", "Botas Lendárias". */
+  /**
+   * A raridade concordando com o item: depois do nome ("Espada Lendária",
+   * "Botas Lendárias") e na linha de baixo da carta e da ficha
+   * (`ItemView.rarityLabel`).
+   */
   adjetivo: Formas;
   /** Token CSS — a engine não sabe a cor, só o nome da variável. */
   colorVar: string;

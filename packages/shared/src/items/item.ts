@@ -50,6 +50,10 @@ export interface ItemView extends Item {
   desc: string;
   sprite: string;
   category: ItemCategory;
+  /**
+   * A raridade no gênero e número do item, como no nome: "Espada Mítica"
+   * com "Mítica · Tier SS" embaixo, não "Mítico".
+   */
   rarityLabel: string;
   rarityColorVar: string;
   proc: (ProcTemplate & { chance: number }) | null;
@@ -97,7 +101,7 @@ export function itemView(item: Item): ItemView {
     desc: template.desc,
     sprite: template.sprite,
     category: template.category,
-    rarityLabel: rarity.label,
+    rarityLabel: concordar(item, rarity.adjetivo),
     rarityColorVar: rarity.colorVar,
     proc:
       template.proc && item.procChance !== undefined
