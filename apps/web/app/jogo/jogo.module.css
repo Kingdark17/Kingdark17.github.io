@@ -687,6 +687,100 @@
   color: var(--parchment);
 }
 
+/* ---------- mochila: o boneco e os espaços em volta ----------
+ *
+ * Três colunas: o que veste à esquerda, da cabeça aos pés; o boneco no
+ * meio; o que vai nas mãos à direita. Cada espaço ocupa a área da grade com
+ * o nome do próprio slot (`gridArea`, em `equipamento.tsx`), então trocar
+ * um espaço de lado é mexer só aqui.
+ *
+ * Responde à largura da **coluna**, e não da tela: a lista divide a linha
+ * com a ficha, e é ela que fica estreita. Abaixo de 30rem o boneco sobe e
+ * os espaços viram duas colunas embaixo dele.
+ *
+ * Mora antes de `.cartaClicavel` e `.cartaSelecionada` de propósito: o
+ * `border` daqui viria depois e apagaria a borda dourada da seleção. */
+.equipamento {
+  container-type: inline-size;
+}
+
+.gradeDoEquipamento {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas:
+    'elmo boneco arma'
+    'armadura boneco secundaria'
+    'calca boneco acessorio'
+    'botas boneco .';
+  gap: 0.5rem 0.9rem;
+  align-items: center;
+}
+
+.bonecoDoEquipamento {
+  grid-area: boneco;
+  justify-self: center;
+}
+
+@container (max-width: 30rem) {
+  .gradeDoEquipamento {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'boneco boneco'
+      'elmo arma'
+      'armadura secundaria'
+      'calca acessorio'
+      'botas .';
+  }
+}
+
+/* A moldura e a tarja de raridade são as da carta de item: a peça tem que
+   ser reconhecida como a mesma coisa no corpo e na mochila. */
+.espaco {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3.6rem;
+  padding: 0.5rem 0.6rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--r-comum);
+  border-radius: 0.4rem;
+  font: inherit;
+  color: var(--parchment);
+  text-align: left;
+}
+
+.espacoVazio {
+  border: 1px dashed var(--line);
+  opacity: 0.6;
+}
+
+.molduraDoSprite {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px dashed var(--line);
+  border-radius: 0.3rem;
+}
+
+.textoDoEspaco {
+  display: grid;
+  min-width: 0;
+}
+
+.rotuloDoEspaco {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--parchment-dim);
+}
+
+.nomeDoEspaco {
+  font-size: 0.85rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
 .cartaClicavel {
   cursor: pointer;
 }
@@ -965,13 +1059,6 @@
 .botaoDiscreto {
   composes: botaoDiscreto from '../acabamento.module.css';
   font-size: 0.8rem;
-}
-
-.slotVazio {
-  border-style: dashed;
-  opacity: 0.55;
-  min-height: 5rem;
-  align-content: center;
 }
 
 .listaDeMissoes {

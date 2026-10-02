@@ -24,7 +24,6 @@ import {
   EQUIP_SLOTS,
   itemCategory,
   type AttrKey,
-  type EquipSlot,
   type Item,
   type ItemCategory,
 } from '@rpg-legend/shared';
@@ -44,24 +43,10 @@ import {
   type Mochila,
 } from '@/lib/jogo/mochila';
 import { CartaItem } from './carta-item';
+import { Equipamento } from './equipamento';
 import { FichaItem } from './ficha-item';
 import styles from './jogo.module.css';
 import { useFichaAVista } from './use-ficha-a-vista';
-
-/**
- * `Record<EquipSlot, …>` de propósito, e não um `Partial`: slot novo na
- * engine sem rótulo aqui vira erro de compilação, em vez de uma carta
- * escrita `undefined` na grade de Equipado.
- */
-const ROTULO_DO_SLOT: Record<EquipSlot, string> = {
-  arma: 'Arma',
-  secundaria: 'Secundária',
-  elmo: 'Elmo',
-  armadura: 'Peitoral',
-  calca: 'Perneira',
-  botas: 'Botas',
-  acessorio: 'Acessório',
-};
 
 type Aba = 'todos' | ItemCategory;
 
@@ -92,9 +77,8 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
   const guardados = inventory.filter((item) => !item.equipped && (aba === 'todos' || itemCategory(item) === aba));
   const resposta = mochila.log[mochila.log.length - 1];
 
-  const vestidos = EQUIP_SLOTS.map((slot) => ({ slot, peca: hero.equip[slot] as Item | null }));
-  const aberta =
-    inventory.find((item) => item.uid === selecionado) ?? vestidos.find(({ peca }) => peca?.uid === selecionado)?.peca ?? null;
+  const vestidos = EQUIP_SLOTS.map((slot) => hero.equip[slot] as Item | null);
+  const aberta = inventory.find((item) => item.uid === selecionado) ?? vestidos.find((peca) => peca?.uid === selecionado) ?? null;
 
   return (
     <section className={styles.loja}>
@@ -111,24 +95,7 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
       <div className={styles.navegadorDeItens}>
         <div className={styles.listaDeItens}>
           <h2 className={styles.tituloDaSecao}>Equipado</h2>
-          <div className={styles.gradeDeItens}>
-            {vestidos.map(({ slot, peca }) =>
-              peca ? (
-                <CartaItem
-                  key={slot}
-                  item={peca}
-                  rodape={ROTULO_DO_SLOT[slot]}
-                  selecionado={peca.uid === selecionado}
-                  onClick={() => setSelecionado(peca.uid)}
-                />
-              ) : (
-                <div key={slot} className={`${styles.cartaItem} ${styles.slotVazio}`}>
-                  <span className={styles.metaItem}>{ROTULO_DO_SLOT[slot]}</span>
-                  <span className={styles.nomeItem}>vazio</span>
-                </div>
-              ),
-            )}
-          </div>
+          <Equipamento hero={hero} selecionado={selecionado} onEscolher={setSelecionado} />
 
           {hero.attrPoints > 0 && (
             <>
