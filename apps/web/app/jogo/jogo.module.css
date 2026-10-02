@@ -916,6 +916,18 @@
   align-content: start;
 }
 
+/* A ficha da mochila, que mora **dentro** de uma coluna que já rola.
+ *
+ * O `overflow-y: auto` acima é da loja, onde a ficha é a coluna inteira.
+ * Aqui ele virava rolagem dentro de rolagem, e pior: item de grade que rola
+ * pode encolher até zero, então a grade da coluna espremia a ficha no que
+ * sobrava embaixo do boneco — "Se você equipar" e os botões só apareciam
+ * rolando a caixinha. Sem ele a ficha tem a altura do que mostra e quem rola
+ * é a coluna, como na página de arranjo. */
+.fichaNaColuna {
+  overflow-y: visible;
+}
+
 /* Sem peça escolhida a ficha diz o que fazer, em vez de ficar um retângulo
    vazio que parece defeito. */
 .fichaVazia {

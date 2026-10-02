@@ -98,7 +98,7 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
 
           {/* Embaixo do boneco, e não numa coluna própria: "Se você equipar"
               fala do corpo que está logo acima. */}
-          <aside ref={ficha} className={styles.fichaDoItem} aria-label="Detalhes da peça">
+          <aside ref={ficha} className={`${styles.fichaDoItem} ${styles.fichaNaColuna}`} aria-label="Detalhes da peça">
             <FichaItem
               item={aberta}
               hero={hero}
