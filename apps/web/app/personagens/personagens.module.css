@@ -112,11 +112,16 @@
   color: var(--parchment-dim);
 }
 
+/* Empilhados, cada um na largura do cartão. Lado a lado não cabiam: as
+   pontas da pedra levam 72 px por botão, e "Jogar" + "Apagar" davam uns
+   285 px num cartão de ~229 por dentro — vazavam pra fora dele, e "Sim,
+   apagar" + "Cancelar" ainda mais. Pedido do doc do Breno. */
 .rodapeSlot {
   margin-top: auto;
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
 }
 
 .botao {
