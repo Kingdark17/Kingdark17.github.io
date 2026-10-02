@@ -883,6 +883,13 @@
   .listaDeItens,
   .fichaDoItem {
     overflow-y: visible;
+  }
+
+  /* Só a lista: o 0,5rem dela é a folga da barra de rolagem, que aqui não
+     existe mais. A ficha tem moldura, e o 1rem dela é margem de verdade —
+     zerado junto, os quadros de atributo e o "Se você equipar" encostavam
+     na borda direita, com a esquerda intacta. */
+  .listaDeItens {
     padding-right: 0;
   }
 }
