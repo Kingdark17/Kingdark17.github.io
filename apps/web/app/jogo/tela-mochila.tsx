@@ -1,32 +1,27 @@
 'use client';
 
 /**
- * Mochila e ficha: o que está equipado, o que está guardado, e os pontos
- * de atributo esperando pra serem gastos.
+ * Mochila e ficha: o que está equipado e o que está guardado.
  *
- * O level up do jogo é manual — 2 pontos por nível, distribuídos aqui.
- * Sem esta tela o jogador subia de nível e os pontos ficavam parados.
+ * **O arranjo é o "Assim" do usuário** (2026-10-02, montado na página de
+ * arranjo da mochila): a coluna larga tem o boneco com os espaços e, logo
+ * embaixo, a ficha da peça escolhida; a estreita tem o guardado, com as abas
+ * em texto. Antes o guardado vinha depois do boneco na coluna larga e só
+ * aparecia rolando, enquanto a coluna da ficha ficava quase vazia.
  *
- * **Duas colunas, como no jogo antigo** (`.item-browser-layout`): a grade
- * seleciona, a ficha ao lado mostra o que a peça faz e é de onde as ações
- * saem. A altura é travada e a rolagem acontece por dentro, então a
- * mochila é uma janela sobre o jogo em vez de uma página que cresce até o
- * topo ficar longe.
+ * A grade seleciona, a ficha mostra o que a peça faz e é de onde as ações
+ * saem. A altura é travada e a rolagem acontece por dentro de cada coluna,
+ * então a mochila é uma janela sobre o jogo em vez de uma página que cresce
+ * até o topo ficar longe.
+ *
+ * Os pontos de atributo não moram mais aqui: com a mochila aberta o painel
+ * do herói perde o retrato (o boneco já está no meio) e ganha um "+" ao lado
+ * de cada atributo. Ver `PainelHeroi` e `tela-jogo.tsx`.
  */
 
 import { useState } from 'react';
 
-import {
-  ATTR_KEYS,
-  ATTR_LABELS,
-  CATEGORY_LABELS,
-  displayName,
-  EQUIP_SLOTS,
-  itemCategory,
-  type AttrKey,
-  type Item,
-  type ItemCategory,
-} from '@rpg-legend/shared';
+import { CATEGORY_LABELS, displayName, EQUIP_SLOTS, itemCategory, type Item, type ItemCategory } from '@rpg-legend/shared';
 
 import {
   aceitaMaoSecundaria,
@@ -35,7 +30,6 @@ import {
   desequipar,
   equipar,
   equiparNoLugarDaArma,
-  gastarPonto,
   podeEquipar,
   podeUsar,
   slotDoItem,
@@ -71,7 +65,10 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
    * ficha passa sozinha de "Se você equipar" pra "Se você guardar".
    */
   const [selecionado, setSelecionado] = useState<string | null>(null);
-  const ficha = useFichaAVista(selecionado);
+  // `sempre`: a ficha mora embaixo do boneco, numa coluna que rola. Escolher
+  // uma carta no guardado, à direita, a deixaria fora da vista também no
+  // computador.
+  const ficha = useFichaAVista(selecionado, { sempre: true });
 
   const { hero, inventory } = mochila.estado;
   const guardados = inventory.filter((item) => !item.equipped && (aba === 'todos' || itemCategory(item) === aba));
@@ -99,27 +96,30 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
           <h2 className={styles.tituloDaSecao}>Equipado</h2>
           <Equipamento hero={hero} selecionado={selecionado} onEscolher={setSelecionado} />
 
-          {hero.attrPoints > 0 && (
-            <>
-              <h2 className={styles.tituloDaSecao}>Subiu de nível: {hero.attrPoints} ponto(s) para distribuir</h2>
-              <div className={styles.escolhas}>
-                {ATTR_KEYS.map((chave: AttrKey) => (
-                  <button key={chave} type="button" className={styles.botao} onClick={() => onMochila(gastarPonto(mochila, chave))}>
-                    + {ATTR_LABELS[chave]} <span className={styles.custoDeMana}>({hero.attrs[chave]})</span>
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
+          {/* Embaixo do boneco, e não numa coluna própria: "Se você equipar"
+              fala do corpo que está logo acima. */}
+          <aside ref={ficha} className={styles.fichaDoItem} aria-label="Detalhes da peça">
+            <FichaItem
+              item={aberta}
+              hero={hero}
+              acoes={aberta && <AcoesDaPeca mochila={mochila} item={aberta} onAgir={onMochila} onSumir={() => setSelecionado(null)} />}
+            />
+          </aside>
+        </div>
 
+        <div className={styles.listaDeItens}>
           <h2 className={styles.tituloDaSecao}>Guardado</h2>
-          <div className={styles.escolhas}>
+          {/* Texto, e não pedra: na coluna estreita os botões de pedra saíam
+              um por linha, de larguras diferentes, e empurravam as cartas
+              pra baixo. Pedra em duas por linha não cabe — "Consumível" não
+              entra em meia coluna com a arte no dobro. */}
+          <div className={styles.abasDeTexto}>
             {ABAS.map((opcao) => (
               <button
                 key={opcao}
                 type="button"
                 aria-pressed={aba === opcao}
-                className={`${styles.botao} ${aba === opcao ? styles.botaoPrincipal : ''}`}
+                className={styles.abaDeTexto}
                 onClick={() => setAba(opcao)}
               >
                 {rotuloDaAba(opcao)}
@@ -142,14 +142,6 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
             </div>
           )}
         </div>
-
-        <aside ref={ficha} className={styles.fichaDoItem} aria-label="Detalhes da peça">
-          <FichaItem
-            item={aberta}
-            hero={hero}
-            acoes={aberta && <AcoesDaPeca mochila={mochila} item={aberta} onAgir={onMochila} onSumir={() => setSelecionado(null)} />}
-          />
-        </aside>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { ATTR_KEYS, ATTR_LABELS, idDaRaca, type Hero } from '@rpg-legend/shared';
+import { ATTR_KEYS, ATTR_LABELS, idDaRaca, type AttrKey, type Hero } from '@rpg-legend/shared';
 
 import { sinaisDoHeroi } from '@/lib/paperdoll/sinais';
 import { tocar } from '@/lib/som/efeitos';
@@ -40,9 +40,18 @@ interface Props {
    * importa; o número em si não significa nada e não é exibido.
    */
   golpes?: number;
+  /**
+   * Gastar um ponto de atributo. Só chega com a **mochila aberta**, que é
+   * onde o level up acontece: ali o boneco já está no meio da tela, então o
+   * painel tira o retrato e põe um "+" ao lado de cada atributo enquanto
+   * houver ponto. Arranjo "Assim" do usuário, 2026-10-02.
+   */
+  onPonto?: (chave: AttrKey) => void;
 }
 
-export function PainelHeroi({ hero, golpes = 0 }: Readonly<Props>) {
+export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
+  const naMochila = onPonto !== undefined;
+  const comPontos = naMochila && hero.attrPoints > 0;
   const [subiu, setSubiu] = useState(false);
   const nivelAnterior = useRef(hero.level);
   const [ferido, setFerido] = useState(false);
@@ -139,28 +148,32 @@ export function PainelHeroi({ hero, golpes = 0 }: Readonly<Props>) {
           arma inicial da classe: trocar de espada na mochila muda o que
           aparece aqui. `idDaRaca` porque o herói grava `race` como nome
           ("Elfo Negro") e só os saves novos trazem `raceId` — a função
-          resolve os dois. */}
-      <div className={styles.retratoDoHeroi}>
-        <Paperdoll
-          className={styles.balaoDoBoneco}
-          raca={idDaRaca(hero)}
-          arma={hero.equip.arma?.templateId}
-          armadura={hero.equip.armadura?.templateId}
-          elmo={hero.equip.elmo?.templateId}
-          calca={hero.equip.calca?.templateId}
-          botas={hero.equip.botas?.templateId}
-          secundaria={hero.equip.secundaria?.templateId}
-          acessorio={hero.equip.acessorio?.templateId}
-          cabelo={hero.hair}
-          lado={132}
-          sinais={{ ...sinaisDoHeroi(hero), ferido, atacando }}
-          reserva={
-            <span className={styles.reservaDoRetrato} aria-hidden>
-              {hero.raceIcon}
-            </span>
-          }
-        />
-      </div>
+          resolve os dois.
+          Com a mochila aberta ele sai: o mesmo boneco já está no meio da
+          tela, maior, com os espaços em volta. */}
+      {!naMochila && (
+        <div className={styles.retratoDoHeroi}>
+          <Paperdoll
+            className={styles.balaoDoBoneco}
+            raca={idDaRaca(hero)}
+            arma={hero.equip.arma?.templateId}
+            armadura={hero.equip.armadura?.templateId}
+            elmo={hero.equip.elmo?.templateId}
+            calca={hero.equip.calca?.templateId}
+            botas={hero.equip.botas?.templateId}
+            secundaria={hero.equip.secundaria?.templateId}
+            acessorio={hero.equip.acessorio?.templateId}
+            cabelo={hero.hair}
+            lado={132}
+            sinais={{ ...sinaisDoHeroi(hero), ferido, atacando }}
+            reserva={
+              <span className={styles.reservaDoRetrato} aria-hidden>
+                {hero.raceIcon}
+              </span>
+            }
+          />
+        </div>
+      )}
 
       <h2 className={styles.nomeHeroi}>{hero.name}</h2>
       <p className={styles.classeHeroi}>
@@ -191,11 +204,31 @@ export function PainelHeroi({ hero, golpes = 0 }: Readonly<Props>) {
         </div>
       </div>
 
+      {comPontos && (
+        <p className={styles.pontosParaDistribuir}>
+          Subiu de nível: {hero.attrPoints} {hero.attrPoints === 1 ? 'ponto' : 'pontos'}
+        </p>
+      )}
+
       <ul className={styles.listaAtributos}>
         {ATTR_KEYS.map((chave) => (
           <li key={chave} className={styles.linhaAtributo}>
             <span className={styles.chave}>{ATTR_LABELS[chave]}</span>
-            <span className={styles.valor}>{hero.attrs[chave]}</span>
+            {comPontos ? (
+              <span className={styles.valorComPonto}>
+                <span className={styles.valor}>{hero.attrs[chave]}</span>
+                <button
+                  type="button"
+                  className={styles.maisUmPonto}
+                  onClick={() => onPonto(chave)}
+                  aria-label={`Mais um ponto em ${ATTR_LABELS[chave]}`}
+                >
+                  +
+                </button>
+              </span>
+            ) : (
+              <span className={styles.valor}>{hero.attrs[chave]}</span>
+            )}
           </li>
         ))}
         <li className={styles.linhaAtributo}>

@@ -168,6 +168,43 @@
   color: var(--parchment);
 }
 
+/* Os pontos de nível, com a mochila aberta: o aviso logo acima dos
+   atributos e um "+" ao lado de cada um. Fica perto do número que ele
+   muda, e o painel não cresce — seis botões de pedra aqui ocupariam três
+   linhas. A margem negativa encosta o aviso na lista, que já traz 1rem
+   de respiro em cima. */
+.pontosParaDistribuir {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 0.95rem;
+  margin: 1rem 0 -0.4rem;
+}
+
+.valorComPonto {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.maisUmPonto {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  font: 600 0.9rem/1 var(--font-mono), monospace;
+  color: var(--ink);
+  background: var(--gold);
+  border: 0;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.maisUmPonto:hover,
+.maisUmPonto:focus-visible {
+  background: var(--gold-bright);
+}
+
 .local {
   font-family: var(--font-display), Georgia, serif;
   color: var(--gold-bright);
@@ -909,6 +946,39 @@
   .listaDeItens {
     padding-right: 0;
   }
+}
+
+/* As abas do guardado, em texto. Ficam na coluna estreita, onde a pedra
+   saía um botão por linha. O fio dourado embaixo marca a aba aberta, como o
+   `tituloDePainel` marca o título — mesma linguagem, sem ocupar a altura de
+   três linhas de pedra. */
+.abasDeTexto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 1.1rem;
+}
+
+.abaDeTexto {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 0.25rem 0;
+  font: inherit;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--parchment-dim);
+  cursor: pointer;
+}
+
+.abaDeTexto:hover,
+.abaDeTexto:focus-visible {
+  color: var(--parchment);
+}
+
+.abaDeTexto[aria-pressed='true'] {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold);
 }
 
 .cabecalhoDaFicha {

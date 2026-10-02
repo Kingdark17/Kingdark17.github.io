@@ -33,7 +33,7 @@ import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type Te
 import { abrirAdm } from '@/lib/jogo/adm';
 import { aplicarRemoto, instantaneoDaSala, type CosmeticosDoJogador } from '@/lib/jogo/coop';
 import { anotar, type Anotacao } from '@/lib/jogo/diario';
-import { abrirMochila } from '@/lib/jogo/mochila';
+import { abrirMochila, gastarPonto } from '@/lib/jogo/mochila';
 import { narrar } from '@/lib/jogo/narrador';
 import { direcaoDaTecla, estaDigitando } from '@/lib/jogo/teclado';
 import { monstroAtual } from '@/lib/jogo/combate';
@@ -686,7 +686,18 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
         {/* Só aqui o contador de golpes vale a pena: é a única ramificação
             que pode ter a tela de combate aberta. Nas outras o painel fica
             com o padrão e o boneco não gira — não há o que girar por. */}
-        <PainelHeroi hero={estado.hero} golpes={golpes} />
+        <PainelHeroi
+          hero={estado.hero}
+          golpes={golpes}
+          onPonto={
+            tela.tipo === 'mochila'
+              ? (chave) => {
+                  const proxima = gastarPonto(tela.mochila, chave);
+                  seguir({ tipo: 'mochila', mochila: proxima }, proxima.estado);
+                }
+              : undefined
+          }
+        />
         {conteudoDaTela(tela)}
         {enfeites}
       </div>
