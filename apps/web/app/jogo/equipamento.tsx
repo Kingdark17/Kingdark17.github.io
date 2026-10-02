@@ -98,11 +98,9 @@ function Espaco({ slot, peca, selecionado, onEscolher }: Readonly<EspacoProps>) 
   if (!peca) {
     return (
       <div className={`${styles.espaco} ${styles.espacoVazio}`} style={lugar}>
+        <span className={styles.rotuloDoEspaco}>{ROTULO_DO_SLOT[slot]}</span>
         <span className={styles.molduraDoSprite} aria-hidden />
-        <span className={styles.textoDoEspaco}>
-          <span className={styles.rotuloDoEspaco}>{ROTULO_DO_SLOT[slot]}</span>
-          <span className={styles.nomeDoEspaco}>vazio</span>
-        </span>
+        <span className={styles.nomeDoEspaco}>vazio</span>
       </div>
     );
   }
@@ -116,12 +114,10 @@ function Espaco({ slot, peca, selecionado, onEscolher }: Readonly<EspacoProps>) 
       aria-pressed={peca.uid === selecionado}
       onClick={() => onEscolher(peca.uid)}
     >
+      <span className={styles.rotuloDoEspaco}>{ROTULO_DO_SLOT[slot]}</span>
       <Image className={styles.spriteItem} src={spriteDoItem(peca)} alt="" width={LADO_DO_SPRITE} height={LADO_DO_SPRITE} unoptimized />
-      <span className={styles.textoDoEspaco}>
-        <span className={styles.rotuloDoEspaco}>{ROTULO_DO_SLOT[slot]}</span>
-        <span className={styles.nomeDoEspaco} style={{ color: `var(${visao.rarityColorVar})` }}>
-          {visao.name}
-        </span>
+      <span className={styles.nomeDoEspaco} style={{ color: `var(${visao.rarityColorVar})` }}>
+        {visao.name}
       </span>
     </button>
   );

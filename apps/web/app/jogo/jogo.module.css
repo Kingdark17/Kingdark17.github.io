@@ -734,13 +734,17 @@
 }
 
 /* A moldura e a tarja de raridade são as da carta de item: a peça tem que
-   ser reconhecida como a mesma coisa no corpo e na mochila. */
+   ser reconhecida como a mesma coisa no corpo e na mochila.
+
+   O rótulo vai **numa linha só dele**, em cima, na largura inteira. Ao lado
+   do sprite sobravam ~80 px, e "SECUNDÁRIA" em maiúscula espaçada passava
+   da borda — e, como a lista rola por dentro, o que passa da borda vira
+   barra de rolagem horizontal. */
 .espaco {
   display: grid;
   grid-template-columns: 2.5rem minmax(0, 1fr);
   align-items: center;
-  gap: 0.6rem;
-  min-height: 3.6rem;
+  gap: 0.25rem 0.6rem;
   padding: 0.5rem 0.6rem;
   background: var(--panel);
   border: 1px solid var(--line);
@@ -763,12 +767,8 @@
   border-radius: 0.3rem;
 }
 
-.textoDoEspaco {
-  display: grid;
-  min-width: 0;
-}
-
 .rotuloDoEspaco {
+  grid-column: 1 / -1;
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.07em;
