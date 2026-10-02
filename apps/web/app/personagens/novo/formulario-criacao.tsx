@@ -194,7 +194,22 @@ export function FormularioCriacao({ slot }: { slot: number }) {
                   aria-pressed={criacao.raca?.id === raca.id}
                   onClick={() => escolherRaca(raca)}
                 >
-                  <span className={styles.icone}>{raca.icon}</span>
+                  {/* O corpo da raça no lugar do emoji, pedido do doc do
+                      Breno: asa, cauda e orelha dizem mais que o 🧝. Com o
+                      cabelo escolhido, pra carta já ser o seu herói; parado,
+                      porque doze bonecos respirando juntos viram ruído. O
+                      emoji fica de reserva pra raça ainda sem corpo. */}
+                  <Paperdoll
+                    className={styles.figuraDaRaca}
+                    raca={raca.id}
+                    cabelo={criacao.cabelo}
+                    lado={128}
+                    reserva={
+                      <span className={styles.reservaDaRaca} aria-hidden>
+                        {raca.icon}
+                      </span>
+                    }
+                  />
                   <span className={styles.nomeCarta}>{raca.name}</span>
                   <span className={styles.descricao}>{raca.desc}</span>
                 </button>

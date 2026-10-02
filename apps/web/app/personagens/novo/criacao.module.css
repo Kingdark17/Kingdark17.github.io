@@ -217,6 +217,19 @@
   margin-bottom: 0.2rem;
 }
 
+/* O boneco da raça no topo da carta. 128 px é o sprite a 2×, inteiro e
+   nítido; menor que isso a asa da fada e a orelha do goblin somem. */
+.figuraDaRaca {
+  align-self: center;
+  margin-bottom: 0.35rem;
+}
+
+.reservaDaRaca {
+  font-size: 2.75rem;
+  line-height: 1;
+  opacity: 0.5;
+}
+
 .nomeCarta {
   font-weight: 600;
   display: block;
