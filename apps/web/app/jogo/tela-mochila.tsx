@@ -84,10 +84,12 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
     <section className={styles.loja}>
       <header className={styles.cabecalhoLoja}>
         <h1 className={styles.local}>🎒 Mochila</h1>
-        <p className={styles.ouro}>💰 {hero.gold} ouro</p>
-        <button type="button" className={styles.botao} onClick={() => onFechar(mochila)}>
-          Fechar
-        </button>
+        <div className={styles.ladoDoCabecalho}>
+          <p className={styles.ouro}>💰 {hero.gold} ouro</p>
+          <button type="button" className={styles.botao} onClick={() => onFechar(mochila)}>
+            Fechar
+          </button>
+        </div>
       </header>
 
       {resposta && <p className={styles.linhaDoLog}>{resposta}</p>}

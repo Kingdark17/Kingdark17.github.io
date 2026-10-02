@@ -97,10 +97,12 @@ export function TelaLoja({ loja, onLoja, onFechar }: Props) {
     <section className={styles.loja}>
       <header className={styles.cabecalhoLoja}>
         <h1 className={styles.local}>{ehFerreiro ? '🔨 Ferreiro' : '🏵 Vendedor Itinerante'}</h1>
-        <p className={styles.ouro}>💰 {loja.estado.hero.gold} ouro</p>
-        <button type="button" className={styles.botao} onClick={() => onFechar(loja)}>
-          Sair
-        </button>
+        <div className={styles.ladoDoCabecalho}>
+          <p className={styles.ouro}>💰 {loja.estado.hero.gold} ouro</p>
+          <button type="button" className={styles.botao} onClick={() => onFechar(loja)}>
+            Sair
+          </button>
+        </div>
       </header>
 
       <p className={styles.linhaDoLog}>{loja.log[loja.log.length - 1]}</p>

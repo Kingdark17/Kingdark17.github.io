@@ -22,10 +22,12 @@ export function TelaMissoes({ quadro, onQuadro, onFechar }: Props) {
     <section className={styles.loja}>
       <header className={styles.cabecalhoLoja}>
         <h1 className={styles.local}>📜 Quadro de Missões</h1>
-        <p className={styles.ouro}>💰 {quadro.estado.hero.gold} ouro</p>
-        <button type="button" className={styles.botao} onClick={() => onFechar(quadro)}>
-          Sair
-        </button>
+        <div className={styles.ladoDoCabecalho}>
+          <p className={styles.ouro}>💰 {quadro.estado.hero.gold} ouro</p>
+          <button type="button" className={styles.botao} onClick={() => onFechar(quadro)}>
+            Sair
+          </button>
+        </div>
       </header>
 
       <p className={styles.linhaDoLog}>{quadro.log[quadro.log.length - 1]}</p>

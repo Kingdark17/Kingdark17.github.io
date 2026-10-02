@@ -20,12 +20,14 @@ export function TelaGuia({ estado, onFechar }: { estado: EstadoDoJogo; onFechar:
     <section className={styles.loja}>
       <header className={styles.cabecalhoLoja}>
         <h1 className={styles.local}>📖 Guia do Aventureiro</h1>
-        <p className={styles.ouro}>
-          {feitos}/{PASSOS.length}
-        </p>
-        <button type="button" className={styles.botao} onClick={onFechar}>
-          Fechar
-        </button>
+        <div className={styles.ladoDoCabecalho}>
+          <p className={styles.ouro}>
+            {feitos}/{PASSOS.length}
+          </p>
+          <button type="button" className={styles.botao} onClick={onFechar}>
+            Fechar
+          </button>
+        </div>
       </header>
 
       <h2 className={styles.tituloDaSecao}>Primeiros Passos</h2>

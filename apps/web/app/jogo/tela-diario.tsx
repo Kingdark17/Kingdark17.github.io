@@ -21,10 +21,12 @@ export function TelaDiario({ anotacoes, onFechar }: { anotacoes: Anotacao[]; onF
     <section className={styles.loja}>
       <header className={styles.cabecalhoLoja}>
         <h1 className={styles.local}>📜 Diário de Aventura</h1>
-        <p className={styles.ouro}>{anotacoes.length}</p>
-        <button type="button" className={styles.botao} onClick={onFechar}>
-          Fechar
-        </button>
+        <div className={styles.ladoDoCabecalho}>
+          <p className={styles.ouro}>{anotacoes.length}</p>
+          <button type="button" className={styles.botao} onClick={onFechar}>
+            Fechar
+          </button>
+        </div>
       </header>
 
       {anotacoes.length === 0 ? (
