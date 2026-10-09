@@ -24,12 +24,15 @@ import {
   generateCityLayout,
   generateDungeonFloor,
   hydrateSavedHero,
+  idDaClasse,
   inBounds,
   isBossFloor,
   legacyProgress,
   normalizeProgress,
   normalizeRun,
   onFloorReached,
+  teacherAppears,
+  teacherFor,
   withGuild,
   type CityCell,
   type Companion,
@@ -245,8 +248,21 @@ export function temChefeVivo(estado: EstadoNaMasmorra): boolean {
   return estado.map.some((linha) => linha.some((celula) => celula.type === 'boss' && !celula.beaten));
 }
 
+/**
+ * O professor de classe, se ele aparece neste andar pra este herói (ver
+ * `hero/teachers.ts`). O `rng` só é gasto quando ele pode aparecer — fora
+ * da faixa de andares ou sem a maestria, o andar sai igual ao de antes.
+ */
+function professorDoAndar(hero: Hero, floor: number, rng: Rng): { classId: string; number: 1 | 2 } | undefined {
+  const professor = teacherFor(hero, floor);
+  const classe = idDaClasse(hero);
+  if (!professor || !classe || !teacherAppears(professor, floor, rng())) return undefined;
+  return { classId: classe, number: professor.number };
+}
+
 function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng): EstadoNaMasmorra {
-  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, { rng, run: base.masmorra });
+  const teacher = professorDoAndar(base.hero, floor, rng);
+  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, { rng, run: base.masmorra, teacher });
   const inicio = { x: andar.start.x, y: andar.start.y };
 
   return {

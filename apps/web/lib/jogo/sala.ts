@@ -42,6 +42,7 @@ import { abrirLoja, type Loja } from './loja';
 import type { Mochila } from './mochila';
 import { abrirQuadro, type Quadro } from './missoes';
 import { abrirPortao, type Portao } from './portao';
+import { abrirProfessor, type Professor } from './professor';
 import { tocarTotem, type Totem } from './totem';
 import { marcar, type PassoDoTutorial, type Recado, type ResultadoDoPasso } from './tutorial';
 import {
@@ -81,7 +82,8 @@ export type TelaAberta =
   | { tipo: 'adm'; adm: Adm }
   | { tipo: 'guilda'; guilda: Guilda }
   | { tipo: 'portao'; portao: Portao }
-  | { tipo: 'totem'; totem: Totem };
+  | { tipo: 'totem'; totem: Totem }
+  | { tipo: 'professor'; professor: Professor };
 
 export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;
@@ -131,10 +133,11 @@ const PEDEM_CONFIRMACAO = new Set([
   'exit',
   'stairs',
   'totem',
+  'teacher',
 ]);
 
 /** Dizer "não" nestas salas atravessa em vez de recuar — senão a saída da masmorra viraria um muro no caminho da escada. */
-const ATRAVESSAM_SEM_INTERAGIR = new Set(['npc', 'shop', 'blacksmith', 'tavern', 'questboard', 'guild', 'treasure', 'event', 'exit', 'totem']);
+const ATRAVESSAM_SEM_INTERAGIR = new Set(['npc', 'shop', 'blacksmith', 'tavern', 'questboard', 'guild', 'treasure', 'event', 'exit', 'totem', 'teacher']);
 
 /**
  * Sala já resolvida não pergunta nada: não há o que decidir.
@@ -149,6 +152,7 @@ export function precisaConfirmar(celula: CelulaDoMapa): boolean {
   if (celula.type === 'treasure' && celula.collected) return false;
   if ((celula.type === 'monster' || celula.type === 'boss') && celula.beaten) return false;
   if (celula.type === 'event' && celula.resolved) return false;
+  if (celula.type === 'teacher' && celula.teacher?.taught) return false;
   return PEDEM_CONFIRMACAO.has(celula.type);
 }
 
@@ -267,6 +271,13 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): Reso
       // totem aberto não pode perder o andar marcado.
       const totem = tocarTotem(estado);
       return { estado: totem.estado, aviso: null, tela: { tipo: 'totem', totem } };
+    }
+    case 'teacher': {
+      if (celula.teacher?.taught) {
+        return { estado, aviso: aviso('🎓', 'Sala do Mestre', 'O mestre já seguiu caminho. Ficaram as marcas do treino no chão.'), tela: null };
+      }
+      const professor = abrirProfessor(estado);
+      return professor ? { estado, aviso: null, tela: { tipo: 'professor', professor } } : { estado, aviso: null, tela: null };
     }
     case 'event': {
       const evento = abrirEvento(estado);

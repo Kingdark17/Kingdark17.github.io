@@ -92,6 +92,7 @@ const TelaLoja = dynamic(() => import('./tela-loja').then((m) => m.TelaLoja), { 
 const TelaMissoes = dynamic(() => import('./tela-missoes').then((m) => m.TelaMissoes), { ssr: false, loading: Abrindo });
 const TelaPortao = dynamic(() => import('./tela-portao').then((m) => m.TelaPortao), { ssr: false, loading: Abrindo });
 const TelaTotem = dynamic(() => import('./tela-totem').then((m) => m.TelaTotem), { ssr: false, loading: Abrindo });
+const TelaProfessor = dynamic(() => import('./tela-professor').then((m) => m.TelaProfessor), { ssr: false, loading: Abrindo });
 
 const ESPERA_ANTES_DE_SALVAR_MS = 2500;
 
@@ -661,6 +662,14 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               recadar(entrada.recado);
             }}
             onFechar={() => fechar(aberta.portao.estado)}
+          />
+        );
+      case 'professor':
+        return (
+          <TelaProfessor
+            professor={aberta.professor}
+            onProfessor={(proximo) => seguir({ tipo: 'professor', professor: proximo }, proximo.estado)}
+            onFechar={(final) => fechar(final.estado)}
           />
         );
       case 'totem':

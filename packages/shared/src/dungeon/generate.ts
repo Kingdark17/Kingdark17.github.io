@@ -11,6 +11,7 @@
  */
 
 import { randomEventTemplate, type EventTemplateId } from '../events/events.js';
+import { classById } from '../hero/catalog.js';
 import { generate as generateMonster, generateBoss, monsterView, type MonsterInstance } from '../monsters/generate.js';
 import { randomItem, type Item } from '../items/item.js';
 import type { NpcService } from '../npc/npc-services.js';
@@ -18,7 +19,16 @@ import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import { DEFAULT_RUN, dungeonById, effectiveFloor, isTotemFloor, type DungeonRun } from './dungeons.js';
 import { distancesFrom, generateRoomGraph, DIR_VECTORS, type Direction, type RoomCell, type RoomGraph } from './graph.js';
 
-export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit' | 'totem';
+export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit' | 'totem' | 'teacher';
+
+/** O professor de classe numa sala (ver `hero/teachers.ts`). */
+export interface DungeonTeacher {
+  /** A classe dele, que é a de quem conduzia quando o andar nasceu. */
+  classId: string;
+  number: 1 | 2;
+  /** Já ensinou: a sala vira só uma sala. */
+  taught?: boolean;
+}
 
 interface NpcTemplate {
   name: string;
@@ -84,6 +94,7 @@ export interface DungeonCell extends RoomCell {
   collected?: boolean;
   distanceFromStart?: number;
   startBranch?: string;
+  teacher?: DungeonTeacher;
 }
 
 export interface DungeonFloor {
@@ -136,6 +147,11 @@ export interface DungeonGenerateOptions {
   now?: () => number;
   /** Qual masmorra e em que dificuldade. Ausente, Floresta Normal — que é a masmorra de antes. */
   run?: DungeonRun;
+  /**
+   * Põe o professor de classe neste andar. Quem chama decide, porque
+   * depende do herói (maestria, quem já encontrou) e o andar não sabe dele.
+   */
+  teacher?: Omit<DungeonTeacher, 'taught'>;
 }
 
 interface DistantRoomsResult {
@@ -306,6 +322,10 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
   // Sem sorteio: o totem é sempre a mesma coisa, e não gastar `rng` aqui
   // deixa os andares que não têm totem iguais aos de antes.
   if (isTotemFloor(floor)) place('totem', 1);
+  if (options.teacher) {
+    const sala = place('teacher', 1)[0];
+    if (sala) sala.teacher = { classId: options.teacher.classId, number: options.teacher.number };
+  }
 
   // Sempre reserva salas para escada e saída; em andares de chefe, reserva
   // uma terceira sala para o chefe.
@@ -333,7 +353,12 @@ export function iconFor(cell: DungeonCell): string {
   if (cell.type === 'monster') return cell.beaten || !cell.monsters?.length ? '' : monsterView(cell.monsters[cell.monsterIndex || 0] as MonsterInstance).icon;
   if (cell.type === 'boss') return cell.beaten ? '' : '👑';
   if (cell.type === 'event') return cell.resolved ? '' : '❓';
+  if (cell.type === 'teacher') return cell.teacher?.taught ? '' : '🎓';
   return ICONES_FIXOS[cell.type] ?? '';
+}
+
+function nomeDoMestre(cell: DungeonCell): string {
+  return `um mestre ${(classById(cell.teacher?.classId ?? '')?.name ?? '').toLowerCase()}`.trim();
 }
 
 export function shortLabel(cell: DungeonCell): string {
@@ -343,6 +368,7 @@ export function shortLabel(cell: DungeonCell): string {
   }
   if (cell.type === 'boss') return cell.beaten ? 'um covil agora silencioso' : 'uma presença poderosa e perigosa';
   if (cell.type === 'event') return cell.resolved ? 'vestígios de um acontecimento' : 'algo incomum';
+  if (cell.type === 'teacher') return cell.teacher?.taught ? 'uma sala onde alguém ensinou' : nomeDoMestre(cell);
   const labels: Partial<Record<DungeonRoomType, string>> = {
     npc: 'alguém parado por perto',
     treasure: cell.collected ? 'um baú já vazio' : 'um baú fechado',
@@ -369,6 +395,11 @@ export function roomDesc(cell: DungeonCell): string {
       : `Uma presença imensa e hostil domina esta câmara: <b>${monsterView(cell.monsters?.[0] as MonsterInstance).name}</b>.`;
   }
   if (cell.type === 'event') return cell.resolved ? 'O acontecimento desta sala já chegou ao fim.' : 'Algo incomum nesta sala convida a uma escolha.';
+  if (cell.type === 'teacher') {
+    return cell.teacher?.taught
+      ? 'O mestre seguiu caminho. Ficaram as marcas do treino no chão.'
+      : `Encostado na parede, ${nomeDoMestre(cell)} observa você com atenção.`;
+  }
   const descs: Partial<Record<DungeonRoomType, string>> = {
     npc: 'Alguém está parado por aqui.',
     treasure: cell.collected ? 'Um baú vazio jaz aberto no chão.' : 'Um baú de madeira reforçada repousa alguns passos à frente.',
@@ -390,5 +421,6 @@ export function entryText(cell: DungeonCell): string {
   if (cell.type === 'stairs') return 'Escadas descem para um andar mais profundo da masmorra. Deseja descer?';
   if (cell.type === 'exit') return 'Um caminho leva de volta à cidade. Deseja sair da masmorra?';
   if (cell.type === 'totem') return 'Um totem antigo brilha nesta sala. Deseja tocá-lo?';
+  if (cell.type === 'teacher') return `${nomeDoMestre(cell).replace(/^um/, 'Um')} espera nesta sala. Deseja falar com ele?`;
   return 'Deseja entrar na sala?';
 }

@@ -181,6 +181,25 @@ describe('generateDungeonFloor — masmorras (2026-10)', () => {
     expect([1, 3, 5].map((andar) => generateDungeonFloor(andar, 6, 6, { rng: seededRng(andar) }).rooms.length)).toEqual([10, 12, 14]);
   });
 
+  it('quem chama pode pôr o professor num andar', () => {
+    const andar = generateDungeonFloor(30, 6, 6, { rng: seededRng(4), teacher: { classId: 'guerreiro', number: 1 } });
+    const salas = andar.rooms.filter((r) => r.type === 'teacher');
+    expect(salas).toHaveLength(1);
+    expect(salas[0]?.teacher).toEqual({ classId: 'guerreiro', number: 1 });
+  });
+
+  it('sem o pedido, não há professor', () => {
+    expect(generateDungeonFloor(30, 6, 6, { rng: seededRng(4) }).rooms.some((r) => r.type === 'teacher')).toBe(false);
+  });
+
+  it('o professor tem ícone e textos próprios, e some depois de ensinar', () => {
+    const mestre = cellFixture({ type: 'teacher', teacher: { classId: 'clerigo', number: 1 } });
+    expect(iconFor(mestre)).toBe('🎓');
+    expect(shortLabel(mestre)).toBe('um mestre clérigo');
+    expect(entryText(mestre)).toBe('Um mestre clérigo espera nesta sala. Deseja falar com ele?');
+    expect(iconFor({ ...mestre, teacher: { classId: 'clerigo', number: 1, taught: true } })).toBe('');
+  });
+
   it('o totem tem ícone e textos próprios', () => {
     const totem = cellFixture({ type: 'totem' });
     expect(iconFor(totem)).toBe('🗿');

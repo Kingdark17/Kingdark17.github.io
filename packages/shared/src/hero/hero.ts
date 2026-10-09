@@ -107,6 +107,8 @@ export interface Hero extends HeroCore {
    * `killCount` na primeira carga, e herói novo já nasce com 0.
    */
   masteryBattles?: number;
+  /** Professores de classe já encontrados: 0, 1 ou 2 (ver `teachers.ts`). Ausente = 0. */
+  teachersMet?: number;
   hp: number;
   mp: number;
   maxHp: number;
