@@ -1199,6 +1199,20 @@
   border-bottom: 0;
 }
 
+/* A linha de base de um flex com imagem na frente é o pé da imagem, e o
+   rótulo "Arma" descia até lá, abaixo do nome. Centrado, fica no meio do
+   sprite, junto do nome. */
+.linhaDaArma {
+  align-items: center;
+}
+
+/* "(8" numa linha e "MP)" na outra, na ficha estreita. Só aqui: o mesmo
+   custoDeMana leva "(80 ouro · você tem 3)" no botão da forja, que precisa
+   quebrar no celular. */
+.custoDoPoder {
+  white-space: nowrap;
+}
+
 .rotuloDaGuilda {
   font-family: var(--font-mono), monospace;
   font-size: 0.66rem;

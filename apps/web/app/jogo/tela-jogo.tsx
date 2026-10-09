@@ -632,7 +632,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
         return (
           <TelaGuilda
             guilda={aberta.guilda}
-            onGuilda={(proxima) => seguir({ tipo: 'guilda', guilda: proxima }, proxima.estado)}
+            onGuilda={(proxima) => {
+              seguir({ tipo: 'guilda', guilda: proxima }, proxima.estado);
+              if (proxima.recado) recadar(proxima.recado);
+            }}
             onFechar={(final) => fechar(final.estado)}
           />
         );

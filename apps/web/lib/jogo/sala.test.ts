@@ -156,6 +156,32 @@ describe('o Aprendiz na cidade', () => {
     expect(aviso?.texto).toContain('Guilda');
   });
 
+  it('barrado no portão, o Aprendiz não fecha "Entre na masmorra"', () => {
+    const { estado, recado } = interagir(emCimaDe(cidadeDoAprendiz(), 'gate'), seededRng(1));
+
+    expect(recado).toBeNull();
+    expect(estado.tutorial?.completed.dungeon).toBeUndefined();
+  });
+
+  it('entrar na guilda não fecha "Treine na Guilda"; o treino fecha', () => {
+    const { tela, recado, estado } = interagir(emCimaDe(cidadeDoAprendiz(), 'guild'));
+    if (tela?.tipo !== 'guilda') throw new Error('esperava a guilda');
+
+    expect(recado).toBeNull();
+    expect(estado.tutorial?.completed.guild).toBeUndefined();
+
+    const treinada = treinar(tela.guilda, CLASSES[0]!);
+    expect(treinada.recado?.titulo).toContain('Etapa concluída');
+    expect(treinada.estado.tutorial?.completed.guild).toBe(true);
+  });
+
+  it('quem já tem classe fecha "Treine na Guilda" só de entrar: não há o que treinar', () => {
+    const { recado, estado } = interagir(emCimaDe(cidadeNova(), 'guild'));
+
+    expect(recado?.titulo).toContain('Etapa concluída');
+    expect(estado.tutorial?.completed.guild).toBe(true);
+  });
+
   it('depois da guilda, o mesmo portão abre', () => {
     const { tela } = interagir(emCimaDe(cidadeDoAprendiz(), 'guild'));
     if (tela?.tipo !== 'guilda') throw new Error('esperava a guilda');

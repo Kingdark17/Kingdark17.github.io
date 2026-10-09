@@ -175,7 +175,11 @@ function comEtapaDaSala(estado: EstadoDoJogo, rng: Rng): ResultadoDoPasso {
 
   // Sala de monstro já limpa não conta como "comece um combate".
   const jaBatida = passo === 'combat' && (celula as DungeonCell).beaten;
-  return jaBatida ? { estado, recado: null } : marcar(estado, passo, rng);
+  // O Aprendiz barrado no portão não entrou na masmorra, e entrar na guilda
+  // não é treinar: pra ele, "Treine na Guilda" fecha no treino, em `treinar`.
+  // Quem já tem classe fecha a da guilda só de entrar — não há o que treinar.
+  const aprendiz = (passo === 'dungeon' || passo === 'guild') && !hasClass(estado.hero);
+  return jaBatida || aprendiz ? { estado, recado: null } : marcar(estado, passo, rng);
 }
 
 function naCidade(estado: EstadoNaCidade, rng: Rng): ResolucaoDaSala {

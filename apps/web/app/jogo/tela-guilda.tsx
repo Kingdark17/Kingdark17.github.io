@@ -119,7 +119,7 @@ function FichaDaClasse({ classe, onTreinar }: Readonly<{ classe: ClassDef; onTre
         <h4 className={styles.tituloDoImpacto}>O que a guilda ensina</h4>
         <ul className={styles.listaDoImpacto}>
           {arma && (
-            <li className={styles.linhaDaGuilda}>
+            <li className={`${styles.linhaDaGuilda} ${styles.linhaDaArma}`}>
               <span className={styles.rotuloDaGuilda}>Arma</span>
               <span className={styles.armaDaGuilda}>
                 <Image className={styles.spriteItem} src={`/img/${arma.sprite}`} alt="" width={32} height={32} unoptimized />
@@ -131,7 +131,7 @@ function FichaDaClasse({ classe, onTreinar }: Readonly<{ classe: ClassDef; onTre
             <li key={poder.id} className={styles.linhaDaGuilda}>
               <span className={styles.rotuloDaGuilda}>Poder</span>
               <span>
-                {poder.icon} {poder.name} <span className={styles.custoDeMana}>({poder.cost} MP)</span>
+                {poder.icon} {poder.name} <span className={`${styles.custoDeMana} ${styles.custoDoPoder}`}>({poder.cost} MP)</span>
                 <span className={styles.descricaoDoPoder}>{poder.desc}</span>
               </span>
             </li>

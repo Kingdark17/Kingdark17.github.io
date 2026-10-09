@@ -12,26 +12,32 @@
  * precisa: abrir, treinar e dizer o que aconteceu.
  */
 
-import { addItem, displayName, hasClass, powerById, trainAtGuild, type ClassDef } from '@rpg-legend/shared';
+import { addItem, defaultRng, displayName, hasClass, powerById, trainAtGuild, type ClassDef, type Rng } from '@rpg-legend/shared';
 
 import type { EstadoDoJogo } from './estado';
+import { marcar, type Recado } from './tutorial';
 
 export interface Guilda {
   estado: EstadoDoJogo;
   log: string[];
+  /** A etapa "Treine na Guilda" fechada pelo treino de agora, pra tela mostrar o aviso curto. */
+  recado: Recado | null;
 }
 
 export function abrirGuilda(estado: EstadoDoJogo): Guilda {
-  return { estado, log: [] };
+  return { estado, log: [], recado: null };
 }
 
 /**
  * Treina na classe escolhida. Quem já tem classe não troca: a guilda diz
  * qual é, e nada muda — trocar de classe é outra decisão, que ninguém pediu.
+ *
+ * É aqui, e não na porta, que o Aprendiz fecha a etapa "Treine na Guilda"
+ * do tutorial. `rng` só sorteia a poção do prêmio, se esta for a última.
  */
-export function treinar(guilda: Guilda, classe: ClassDef): Guilda {
+export function treinar(guilda: Guilda, classe: ClassDef, rng: Rng = defaultRng): Guilda {
   const { hero, inventory } = guilda.estado;
-  if (hasClass(hero)) return { ...guilda, log: [`Você já treinou como ${hero.className}.`] };
+  if (hasClass(hero)) return { ...guilda, log: [`Você já treinou como ${hero.className}.`], recado: null };
 
   const { hero: treinado, toInventory } = trainAtGuild(hero, classe);
   const poder = powerById(classe.signatureId)?.name ?? classe.signatureId;
@@ -40,8 +46,10 @@ export function treinar(guilda: Guilda, classe: ClassDef): Guilda {
   // saber — senão parece que a guilda não deu arma nenhuma.
   if (toInventory) log.push(`${displayName(toInventory)} vai para a mochila: sua mão já estava ocupada.`);
 
-  return {
-    estado: { ...guilda.estado, hero: treinado, inventory: toInventory ? addItem(inventory, toInventory) : inventory },
-    log,
-  };
+  const etapa = marcar(
+    { ...guilda.estado, hero: treinado, inventory: toInventory ? addItem(inventory, toInventory) : inventory },
+    'guild',
+    rng,
+  );
+  return { estado: etapa.estado, log, recado: etapa.recado };
 }
