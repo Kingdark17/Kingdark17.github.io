@@ -627,7 +627,10 @@ export function generateCompanion(rng: Rng = defaultRng): Companion {
  * a entrada.
  */
 export function hydrateSavedHero(hero: Hero): Hero {
-  const equip: HeroEquipment = { arma: hero.equip?.arma ?? null, secundaria: hero.equip?.secundaria ?? null, armadura: hero.equip?.armadura ?? null, acessorio: hero.equip?.acessorio ?? null };
+  // Todos os slots, pela lista: escrita à mão, ela parou nos quatro de antes
+  // de 2026-09, e elmo, perneira e botas vestidos sumiam a cada carregamento.
+  const equip: HeroEquipment = {};
+  for (const slot of EQUIP_SLOTS) equip[slot] = hero.equip?.[slot] ?? null;
 
   // Save gravado antes de a regra das duas mãos existir: dava pra andar de
   // arco **e** escudo, e esse par continuaria valendo pra sempre em quem já

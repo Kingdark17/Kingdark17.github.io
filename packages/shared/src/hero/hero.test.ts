@@ -25,6 +25,7 @@ import {
   type Hero,
 } from './hero.js';
 import { equipmentBonus } from './derived.js';
+import { EQUIP_SLOTS } from './stats.js';
 import { seededRng } from '../rng.js';
 import { instantiate } from '../items/item.js';
 import { TEMPLATES, templateById } from '../items/templates.js';
@@ -550,6 +551,31 @@ describe('hydrateSavedHero', () => {
     const hidratado = hydrateSavedHero(legado);
     expect(hidratado.equip.secundaria).toBeNull();
     expect(hidratado.buffs).toEqual({});
+  });
+
+  /**
+   * O defeito: a hidratação remontava o equipamento só com arma, secundária,
+   * peitoral e acessório — os slots de antes de 2026-09. Elmo, perneira e
+   * botas vestidos sumiam do corpo a cada vez que o jogo carregava o save.
+   */
+  it('mantém elmo, perneira e botas vestidos', () => {
+    let hero = novoHeroi();
+    for (const id of ['placas_elmo', 'placas_calca', 'botas']) {
+      hero = equipItem(hero, instantiate(templateById(id)!, RARITIES[0]!)).hero;
+    }
+    const hidratado = hydrateSavedHero(hero);
+
+    expect(hidratado.equip.elmo?.templateId).toBe('placas_elmo');
+    expect(hidratado.equip.calca?.templateId).toBe('placas_calca');
+    expect(hidratado.equip.botas?.templateId).toBe('botas');
+    expect(hidratado.derived).toEqual(hero.derived);
+  });
+
+  it('todo slot que o save não tem vira null, não undefined', () => {
+    const hero = novoHeroi();
+    const legado = { ...hero, equip: { arma: hero.equip.arma } } as unknown as Hero;
+    const hidratado = hydrateSavedHero(legado);
+    for (const slot of EQUIP_SLOTS) expect(hidratado.equip[slot]).toBeDefined();
   });
 
   it('restaura o poder de assinatura quando powerNames está vazio', () => {
