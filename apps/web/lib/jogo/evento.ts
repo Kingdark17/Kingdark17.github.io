@@ -21,7 +21,7 @@ import {
   type Rng,
 } from '@rpg-legend/shared';
 
-import { celulaAtual, substituirCelulaAtual, type EstadoNaMasmorra } from './estado';
+import { andarDeForca, celulaAtual, substituirCelulaAtual, type EstadoNaMasmorra } from './estado';
 
 export interface Escolha {
   id: EventChoiceId;
@@ -74,7 +74,7 @@ export function escolhas(evento: Evento): Escolha[] {
 export function escolher(evento: Evento, escolha: EventChoiceId, rng: Rng = defaultRng): Evento {
   if (evento.resolvido) return evento;
 
-  const resultado = resolveEvent(evento.estado.hero, evento.estado.floor, escolha, { rng });
+  const resultado = resolveEvent(evento.estado.hero, andarDeForca(evento.estado), escolha, { rng });
   const mensagem = narrar(resultado.outcome) + narrarXp(resultado.xp);
 
   if (!resultado.resolved) {

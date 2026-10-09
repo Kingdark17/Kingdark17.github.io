@@ -50,7 +50,7 @@ export const PASSOS: Passo[] = [
   { id: 'inventory', icone: '🎒', nome: 'Abra a mochila', dica: 'Selecione um item para ver atributos, comparar, equipar, usar ou descartar.' },
   { id: 'npc', icone: '🧙', nome: 'Converse com um NPC', dica: 'NPCs podem curar, negociar, revelar o mapa ou entrar temporariamente na equipe.' },
   { id: 'shop', icone: '🏵️', nome: 'Visite uma loja', dica: 'Compare o item da loja com o equipado. Carisma melhora seus descontos.' },
-  { id: 'dungeon', icone: '🏰', nome: 'Entre na masmorra', dica: 'Explore antes de usar a saída ou a escada. O mapa oculta salas ainda desconhecidas.' },
+  { id: 'dungeon', icone: '🏰', nome: 'Entre na masmorra', dica: 'Atravesse o portão da cidade e escolha a masmorra. Lá dentro, explore antes de usar a saída ou a escada: o mapa oculta salas ainda desconhecidas.' },
   { id: 'combat', icone: '⚔️', nome: 'Comece um combate', dica: 'Observe fraquezas e resistências. Poderes gastam Mana e podem aplicar debuffs.' },
 ];
 

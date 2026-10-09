@@ -1069,6 +1069,18 @@
   color: var(--parchment);
 }
 
+/* O portão: masmorra, dificuldade e entrada, um grupo embaixo do outro. */
+.grupoDoPortao {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.escolhasDoPortao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 .iconeDaCarta {
   font-size: 1.8rem;
   line-height: 1.2;

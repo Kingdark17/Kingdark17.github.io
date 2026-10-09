@@ -4,6 +4,7 @@ import { DIR_OPP, DIR_VECTORS, seededRng, type Direction } from '@rpg-legend/sha
 
 import {
   andar,
+  andarDeForca,
   celulaAtual,
   descerEscada,
   entrarNaCidade,
@@ -235,6 +236,49 @@ describe('descerEscada', () => {
     };
 
     expect(descerEscada(semChefe, seededRng(5)).kind).toBe('desceu');
+  });
+
+  it('no andar 100 não há mais pra onde descer', () => {
+    const masmorra = masmorraNoAndar(100);
+    const semChefe: EstadoNaMasmorra = {
+      ...masmorra,
+      map: masmorra.map.map((linha) => linha.map((celula) => (celula.type === 'boss' ? { ...celula, beaten: true } : celula))),
+    };
+
+    expect(descerEscada(semChefe, seededRng(5)).kind).toBe('fundo');
+  });
+
+  it('o andar seguinte continua na mesma masmorra e dificuldade', () => {
+    const naCaverna = entrarNaMasmorra(estadoNovo(), seededRng(4), { dungeon: 'caverna', difficulty: 'pesadelo' });
+    const resultado = descerEscada(naCaverna, seededRng(5));
+    if (resultado.kind !== 'desceu') throw new Error('esperava descer');
+
+    expect(resultado.estado.masmorra).toEqual({ dungeon: 'caverna', difficulty: 'pesadelo' });
+  });
+});
+
+describe('masmorras (2026-10)', () => {
+  it('save de antes das masmorras vira Floresta Normal, no mesmo andar, com os totens que já passou', () => {
+    const antigo = { ...masmorraNoAndar(37), masmorra: undefined, progresso: undefined };
+    const estado = retomarSave(antigo, seededRng(2));
+
+    expect(estado.floor).toBe(37);
+    expect(estado.masmorra).toEqual({ dungeon: 'floresta', difficulty: 'normal' });
+    expect(estado.progresso).toEqual({ cleared: [], totems: { 'floresta:normal': [20] } });
+  });
+
+  it('save novo guarda o progresso que tem, sem refazer pelo andar', () => {
+    const progresso = { cleared: ['floresta:normal'], totems: {} };
+    expect(retomarSave({ ...saveNovo(), floor: 50, mapMode: 'city', progresso }).progresso).toEqual(progresso);
+  });
+
+  it('o andar de força soma o degrau da masmorra', () => {
+    const naCaverna = entrarNaMasmorra(estadoNovo(), seededRng(4), { dungeon: 'caverna', difficulty: 'normal' });
+    expect(andarDeForca(naCaverna)).toBe(15);
+  });
+
+  it('entrar por um totem começa naquele andar', () => {
+    expect(entrarNaMasmorra(estadoNovo(), seededRng(4), { dungeon: 'floresta', difficulty: 'normal' }, 40).floor).toBe(40);
   });
 });
 

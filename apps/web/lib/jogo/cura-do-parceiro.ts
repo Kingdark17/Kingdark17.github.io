@@ -59,5 +59,9 @@ export function curarNaTela(aberta: TelaAberta, quantia: number): TelaAberta {
       return { ...aberta, adm: { ...aberta.adm, estado: curarPeloParceiro(aberta.adm.estado, quantia).estado } };
     case 'guilda':
       return { ...aberta, guilda: { ...aberta.guilda, estado: curarPeloParceiro(aberta.guilda.estado, quantia).estado } };
+    case 'portao':
+      return { ...aberta, portao: { ...aberta.portao, estado: curarPeloParceiro(aberta.portao.estado, quantia).estado } };
+    case 'totem':
+      return { ...aberta, totem: { ...aberta.totem, estado: curarPeloParceiro(aberta.totem.estado, quantia).estado } };
   }
 }

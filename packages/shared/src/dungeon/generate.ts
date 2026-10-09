@@ -15,9 +15,10 @@ import { generate as generateMonster, generateBoss, monsterView, type MonsterIns
 import { randomItem, type Item } from '../items/item.js';
 import type { NpcService } from '../npc/npc-services.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
+import { DEFAULT_RUN, dungeonById, effectiveFloor, isTotemFloor, type DungeonRun } from './dungeons.js';
 import { distancesFrom, generateRoomGraph, DIR_VECTORS, type Direction, type RoomCell, type RoomGraph } from './graph.js';
 
-export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit';
+export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit' | 'totem';
 
 interface NpcTemplate {
   name: string;
@@ -133,6 +134,8 @@ export interface DungeonGenerateOptions {
   rng?: Rng;
   /** Injetável para os `uid` de item gerados ficarem reproduzíveis em teste — mesmo padrão de `InstantiateOptions.now`. */
   now?: () => number;
+  /** Qual masmorra e em que dificuldade. Ausente, Floresta Normal — que é a masmorra de antes. */
+  run?: DungeonRun;
 }
 
 interface DistantRoomsResult {
@@ -208,12 +211,16 @@ function reserveDistant(
   return cell;
 }
 
-/** Gera os monstros de cada sala sorteada como `monster`, com chance de recompensa extra em salas com mais de um inimigo. */
-function populateMonsterRooms(rooms: DungeonCell[], floor: number, rng: Rng, now?: () => number): void {
+/**
+ * Gera os monstros de cada sala sorteada como `monster`, com chance de
+ * recompensa extra em salas com mais de um inimigo. `floor` aqui é o andar
+ * **de força** (`effectiveFloor`), e `species`, as da masmorra.
+ */
+function populateMonsterRooms(rooms: DungeonCell[], floor: number, species: readonly string[], rng: Rng, now?: () => number): void {
   for (const cell of rooms) {
     const groupSize = monsterGroupSize(floor, rng);
     cell.monsters = [];
-    for (let i = 0; i < groupSize; i++) cell.monsters.push(generateMonster(floor, { rng }));
+    for (let i = 0; i < groupSize; i++) cell.monsters.push(generateMonster(floor, { rng, species }));
     cell.monsterIndex = 0;
     cell.beaten = false;
     if (groupSize > 1 && rng() < 0.35) {
@@ -222,9 +229,9 @@ function populateMonsterRooms(rooms: DungeonCell[], floor: number, rng: Rng, now
   }
 }
 
-function placeBoss(bossRoom: DungeonCell | undefined, floor: number, rng: Rng): void {
+function placeBoss(bossRoom: DungeonCell | undefined, floor: number, main: boolean, species: readonly string[], rng: Rng): void {
   if (!bossRoom) return;
-  bossRoom.monsters = [generateBoss(floor, { rng })];
+  bossRoom.monsters = [generateBoss(floor, { rng, species, main })];
   bossRoom.monsterIndex = 0;
   bossRoom.beaten = false;
 }
@@ -250,15 +257,33 @@ function populateRoomContent(rooms: DungeonCell[], floor: number, rng: Rng, now?
 }
 
 /**
+ * Teto de salas por andar. Era 22, e um andar fundo tinha umas 11 batalhas;
+ * com 100 andares por masmorra o usuário pediu andares menores (2026-10-09),
+ * e 14 dá umas 5. Os andares 1 a 5 não chegam no teto e saem iguais a antes.
+ */
+const MAX_ROOMS = 14;
+
+/** Teto de baús por andar, cortado junto com as salas: era 5. */
+const MAX_TREASURES = 3;
+
+/**
  * Gera um andar completo: grafo de salas, escada e saída reservadas nas
  * rotas mais distantes do início (pra obrigar exploração antes de descer ou
- * voltar), e o conteúdo de cada sala restante (NPC, evento, tesouro,
+ * voltar), e o conteúdo de cada sala restante (NPC, evento, tesouro, totem,
  * monstros, chefe em andar de chefe).
+ *
+ * Dois andares em jogo: `floor`, o andar em que o jogador está, decide o
+ * tamanho, o totem e onde há chefe; o andar **de força** (`effectiveFloor`,
+ * pela masmorra e dificuldade de `options.run`) decide os monstros, o ouro e
+ * os itens.
  */
 export function generateDungeonFloor(floor: number, rows: number, cols: number, options: DungeonGenerateOptions = {}): DungeonFloor {
   const rng = options.rng ?? defaultRng;
   const { now } = options;
-  const roomCount = Math.min(22, 9 + floor);
+  const run = options.run ?? DEFAULT_RUN;
+  const forca = effectiveFloor(run, floor);
+  const species = dungeonById(run.dungeon)?.species ?? [];
+  const roomCount = Math.min(MAX_ROOMS, 9 + floor);
 
   const { res, distances, distantRooms, pool } = resolveDistantRooms(rows, cols, roomCount, rng);
 
@@ -277,17 +302,20 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
 
   place('npc', 1 + (rng() < 0.5 ? 1 : 0));
   place('event', 1 + (floor >= 4 && rng() < 0.4 ? 1 : 0));
-  place('treasure', 2 + Math.min(3, Math.floor(floor / 3)));
+  place('treasure', Math.min(MAX_TREASURES, 2 + Math.floor(floor / 3)));
+  // Sem sorteio: o totem é sempre a mesma coisa, e não gastar `rng` aqui
+  // deixa os andares que não têm totem iguais aos de antes.
+  if (isTotemFloor(floor)) place('totem', 1);
 
   // Sempre reserva salas para escada e saída; em andares de chefe, reserva
   // uma terceira sala para o chefe.
   const reservedRooms = isBossFloor(floor) ? 1 : 0;
   const monsterRoomCount = Math.min(pool.length - reservedRooms, 3 + Math.floor((floor - 1) * 1.3));
-  populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), floor, rng, now);
+  populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), forca, species, rng, now);
 
-  if (isBossFloor(floor)) placeBoss(place('boss', 1)[0], floor, rng);
+  if (isBossFloor(floor)) placeBoss(place('boss', 1)[0], forca, floor % 10 === 0, species, rng);
 
-  populateRoomContent(res.rooms as DungeonCell[], floor, rng, now);
+  populateRoomContent(res.rooms as DungeonCell[], forca, rng, now);
 
   return { grid: res.grid as DungeonCell[][], rooms: res.rooms as DungeonCell[], start: res.start as DungeonCell };
 }
@@ -297,16 +325,15 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
 // `document`/`RPG.UI` (legenda do mapa, título da tela) fica em `handleEnter`
 // e `refreshPresentation` no original — não migra pra cá.
 
+/** Ícone das salas que não mudam depois de visitadas. */
+const ICONES_FIXOS: Partial<Record<DungeonRoomType, string>> = { npc: '🧙', stairs: '⬇️', exit: '🚪', start: '🚀', totem: '🗿' };
+
 export function iconFor(cell: DungeonCell): string {
-  if (cell.type === 'npc') return '🧙';
   if (cell.type === 'treasure') return cell.collected ? '' : '🧰';
   if (cell.type === 'monster') return cell.beaten || !cell.monsters?.length ? '' : monsterView(cell.monsters[cell.monsterIndex || 0] as MonsterInstance).icon;
   if (cell.type === 'boss') return cell.beaten ? '' : '👑';
   if (cell.type === 'event') return cell.resolved ? '' : '❓';
-  if (cell.type === 'stairs') return '⬇️';
-  if (cell.type === 'exit') return '🚪';
-  if (cell.type === 'start') return '🚀';
-  return '';
+  return ICONES_FIXOS[cell.type] ?? '';
 }
 
 export function shortLabel(cell: DungeonCell): string {
@@ -323,6 +350,7 @@ export function shortLabel(cell: DungeonCell): string {
     exit: 'o caminho de volta à cidade',
     start: 'o ponto de partida',
     normal: 'uma sala vazia',
+    totem: 'um totem antigo',
   };
   return labels[cell.type] ?? 'uma sala';
 }
@@ -348,6 +376,7 @@ export function roomDesc(cell: DungeonCell): string {
     exit: 'Um caminho iluminado sobe de volta em direção à cidade.',
     start: 'Foi aqui que você chegou a este andar.',
     normal: 'O ar aqui é frio e cheira a pedra úmida. Nada de especial nesta sala.',
+    totem: 'Um totem de pedra pulsa com uma luz calma. Quem o toca pode voltar a este andar pelo portão da cidade.',
   };
   return descs[cell.type] ?? '';
 }
@@ -360,5 +389,6 @@ export function entryText(cell: DungeonCell): string {
   if (cell.type === 'event') return 'Algo incomum aguarda nesta sala. Deseja investigar?';
   if (cell.type === 'stairs') return 'Escadas descem para um andar mais profundo da masmorra. Deseja descer?';
   if (cell.type === 'exit') return 'Um caminho leva de volta à cidade. Deseja sair da masmorra?';
+  if (cell.type === 'totem') return 'Um totem antigo brilha nesta sala. Deseja tocá-lo?';
   return 'Deseja entrar na sala?';
 }

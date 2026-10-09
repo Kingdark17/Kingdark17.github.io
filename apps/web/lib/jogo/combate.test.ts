@@ -8,6 +8,7 @@ import {
   seededRng,
   templateById,
   type DungeonCell,
+  type DungeonRun,
   type Hero,
   type Item,
   type MonsterInstance,
@@ -315,6 +316,49 @@ describe('derrota', () => {
 
     expect(combate.fase).toBe('derrota');
     expect(combate.estado.hero.masteryBattles).toBe(4);
+  });
+});
+
+describe('o fim da masmorra', () => {
+  function noChefeDoAndar(floor: number, masmorra: DungeonRun = { dungeon: 'floresta', difficulty: 'normal' }, nivel = 1): EstadoNaMasmorra {
+    const save = saveSorteado('Aria', seededRng(11), seededRng(11));
+    const estado = retomarSave({ ...save, floor, mapMode: 'dungeon', masmorra, progresso: { cleared: [], totems: {} } }, seededRng(11));
+    if (estado.mapMode !== 'dungeon') throw new Error('esperava a masmorra');
+    const chefe = estado.map.flat().find((celula) => celula.type === 'boss');
+    if (!chefe) throw new Error('andar sem chefe');
+    const posicionado: EstadoNaMasmorra = { ...estado, pos: { x: chefe.x, y: chefe.y }, hero: { ...estado.hero, hp: 999, maxHp: 999, level: nivel } };
+    return substituirCelulaAtual(posicionado, { ...chefe, monsters: [monstro({ hp: 1, isBoss: true })], monsterIndex: 0, beaten: false });
+  }
+
+  it('vencer o chefe do andar 100 zera a masmorra e leva o grupo pra cidade', () => {
+    const combate = atacar(emCombate(noChefeDoAndar(100)), 20, 'normal', NUNCA);
+
+    expect(combate.fase).toBe('vitoria');
+    expect(combate.estado.mapMode).toBe('city');
+    expect(combate.estado.progresso.cleared).toEqual(['floresta:normal']);
+    expect(combate.log.some((linha) => linha.includes('zerou Floresta · Normal'))).toBe(true);
+  });
+
+  it('o diário diz o que abriu: a dificuldade seguinte e, no Normal, a próxima masmorra', () => {
+    const fraco = atacar(emCombate(noChefeDoAndar(100)), 20, 'normal', NUNCA).log;
+    expect(fraco).toContain('Floresta no Difícil está aberta no portão.');
+    expect(fraco).toContain('A Caverna abre a partir do nível 15.');
+
+    const forte = atacar(emCombate(noChefeDoAndar(100, undefined, 20)), 20, 'normal', NUNCA).log;
+    expect(forte).toContain('A Caverna está aberta no portão.');
+  });
+
+  it('zerar o Pesadelo não abre dificuldade nem masmorra nova', () => {
+    const log = atacar(emCombate(noChefeDoAndar(100, { dungeon: 'floresta', difficulty: 'pesadelo' })), 20, 'normal', NUNCA).log;
+    expect(log.some((linha) => linha.includes('aberta no portão') || linha.includes('abre a partir'))).toBe(false);
+  });
+
+  it('o chefe do andar 95 continua levando pro 96', () => {
+    const combate = atacar(emCombate(noChefeDoAndar(95)), 20, 'normal', NUNCA);
+
+    expect(combate.estado.mapMode).toBe('dungeon');
+    expect(combate.estado.floor).toBe(96);
+    expect(combate.estado.progresso.cleared).toEqual([]);
   });
 });
 

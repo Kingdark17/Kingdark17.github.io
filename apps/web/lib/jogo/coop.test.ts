@@ -35,6 +35,22 @@ describe('instantaneoDaSala', () => {
     expect(pacote.mapMode).toBe('city');
   });
 
+  it('a masmorra e a dificuldade viajam junto do andar', () => {
+    const naCaverna = entrarNaMasmorra(cidade(), seededRng(3), { dungeon: 'caverna', difficulty: 'dificil' });
+
+    expect(instantaneoDaSala(naCaverna, 1, 'Aria', COSMETICOS).masmorra).toEqual({ dungeon: 'caverna', difficulty: 'dificil' });
+  });
+
+  it('o parceiro adota a masmorra de quem conduz, mas o progresso continua o dele', () => {
+    const doOutro = entrarNaMasmorra(cidade('Bree', 9), seededRng(9), { dungeon: 'torre', difficulty: 'normal' });
+    const meu = entrarNaMasmorra({ ...cidade(), progresso: { cleared: ['floresta:normal'], totems: {} } }, seededRng(3));
+
+    const aplicado = aplicarRemoto(meu, instantaneoDaSala(doOutro, 1, 'Bree', COSMETICOS), undefined);
+
+    expect(aplicado.masmorra).toEqual({ dungeon: 'torre', difficulty: 'normal' });
+    expect(aplicado.progresso).toBe(meu.progresso);
+  });
+
   it('manda só o próprio papel em profiles', () => {
     const pacote = instantaneoDaSala(cidade(), 2, 'Aria', COSMETICOS);
     const perfis = pacote.profiles as Record<string, unknown>;

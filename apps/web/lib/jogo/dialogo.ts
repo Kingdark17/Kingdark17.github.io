@@ -25,7 +25,7 @@ import {
   type Rng,
 } from '@rpg-legend/shared';
 
-import { celulaAtual, substituirCelulaAtual, type EstadoDoJogo } from './estado';
+import { andarDeForca, celulaAtual, substituirCelulaAtual, type EstadoDoJogo } from './estado';
 
 /** Cidade e masmorra guardam o mesmo formato de NPC, com o mesmo serviço. */
 export type Npc = CityNpc | DungeonNpc;
@@ -93,7 +93,7 @@ type AcaoDeServico = (estado: EstadoDoJogo, rng: Rng) => ResultadoDoServico;
 
 const ACOES: Record<NpcService, AcaoDeServico> = {
   heal: (estado) => {
-    const cura = resolveHeal(estado.hero, estado.floor);
+    const cura = resolveHeal(estado.hero, andarDeForca(estado));
     if (cura.outcome.kind === 'insufficient_gold') {
       return { estado, usado: false, mensagem: `Você precisa de ${cura.outcome.required} de ouro para ser tratado.` };
     }
@@ -117,7 +117,7 @@ const ACOES: Record<NpcService, AcaoDeServico> = {
   },
 
   barter: (estado, rng) => {
-    const troca = resolveBarter(estado.inventory, estado.floor, { rng });
+    const troca = resolveBarter(estado.inventory, andarDeForca(estado), { rng });
     if (troca.outcome.kind === 'no_material') {
       return { estado, usado: false, mensagem: 'Você não tem nenhum material para trocar.' };
     }

@@ -31,7 +31,7 @@ import {
   type ShopKind,
 } from '@rpg-legend/shared';
 
-import { celulaAtual, substituirCelulaAtual, type EstadoNaCidade } from './estado';
+import { andarDeForca, celulaAtual, substituirCelulaAtual, type EstadoNaCidade } from './estado';
 
 export interface Loja {
   estado: EstadoNaCidade;
@@ -49,7 +49,7 @@ export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = def
   const sala = celulaAtual(estado) as CityCell;
   const comEstoque = sala.forSale?.length
     ? estado
-    : substituirCelulaAtual(estado, { ...sala, forSale: rollStock(kind, estado.floor, { rng }) });
+    : substituirCelulaAtual(estado, { ...sala, forSale: rollStock(kind, andarDeForca(estado), { rng }) });
 
   return {
     estado: comEstoque,
@@ -80,7 +80,7 @@ export function precoDeVenda(item: Item): number {
 }
 
 export function precoDaRenovacao(loja: Loja): number {
-  return 10 + loja.estado.floor * 3 + loja.renovacoes * 10;
+  return 10 + andarDeForca(loja.estado) * 3 + loja.renovacoes * 10;
 }
 
 /** Rola o d20 da pechincha. A rolagem vem de fora, como no combate. */
@@ -130,7 +130,7 @@ export function vender(loja: Loja, item: Item): Loja {
 
 export function renovarEstoque(loja: Loja, rng: Rng = defaultRng): Loja {
   const sala = celulaAtual(loja.estado) as CityCell;
-  const renovacao = resolveRestock(loja.estado.hero, loja.kind, loja.estado.floor, loja.renovacoes, { rng });
+  const renovacao = resolveRestock(loja.estado.hero, loja.kind, andarDeForca(loja.estado), loja.renovacoes, { rng });
 
   if (renovacao.outcome.kind === 'insufficient_gold') {
     return { ...loja, log: [`Renovar o estoque custa ${renovacao.outcome.required} de ouro.`] };

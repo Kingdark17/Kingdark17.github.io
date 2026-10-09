@@ -55,10 +55,28 @@ export interface MonsterInstance {
 
 export interface GenerateOptions {
   rng?: Rng;
+  /**
+   * Ids das espécies que podem sair. Cada masmorra tem as suas
+   * (`dungeon/dungeons.ts`); ausente, vazio ou sem nenhum id conhecido, vale
+   * a lista inteira — que é como era antes das masmorras.
+   */
+  species?: readonly string[];
+  /**
+   * Só pro chefe: chefe principal ou não. Ausente, é `floor % 10 === 0`. A
+   * masmorra passa o andar **de força** em `floor`, que não é o andar em
+   * que o jogador está, e quem decide se é chefe principal é o andar real.
+   */
+  main?: boolean;
 }
 
-export function generate(floor: number, { rng = defaultRng }: GenerateOptions = {}): MonsterInstance {
-  const species = pick(SPECIES, rng);
+function especiesPermitidas(ids: readonly string[] | undefined): readonly Species[] {
+  if (!ids?.length) return SPECIES;
+  const permitidas = SPECIES.filter((especie) => ids.includes(especie.id));
+  return permitidas.length ? permitidas : SPECIES;
+}
+
+export function generate(floor: number, { rng = defaultRng, species: ids }: GenerateOptions = {}): MonsterInstance {
+  const species = pick(especiesPermitidas(ids), rng);
   const enemyClass = pick(ENEMY_CLASSES, rng);
   const scale = 1 + (floor - 1) * 0.27;
   const hp = Math.round(species.baseHp * scale * enemyClass.hpMult) + randomInt(4, rng);
@@ -78,10 +96,10 @@ export function generate(floor: number, { rng = defaultRng }: GenerateOptions = 
 }
 
 /** Mini-chefe a cada 5 andares, chefe principal a cada 10 (`floor % 10 === 0`). */
-export function generateBoss(floor: number, { rng = defaultRng }: GenerateOptions = {}): MonsterInstance {
-  const species = pick(SPECIES, rng);
+export function generateBoss(floor: number, { rng = defaultRng, species: ids, main }: GenerateOptions = {}): MonsterInstance {
+  const species = pick(especiesPermitidas(ids), rng);
   const enemyClass = pick(ENEMY_CLASSES, rng);
-  const isMain = floor % 10 === 0;
+  const isMain = main ?? floor % 10 === 0;
   const title = pick(BOSS_TITLES, rng);
   const mult = isMain ? 3.2 : 2.1;
   const hp = Math.round(species.baseHp * (1 + (floor - 1) * 0.27) * mult * enemyClass.hpMult) + 20;
@@ -110,8 +128,8 @@ export function generateBoss(floor: number, { rng = defaultRng }: GenerateOption
  * só troca a fachada — fraqueza, resistência e classe de inimigo continuam as
  * do sorteio original, então dois mímicos podem ter pontos fracos diferentes.
  */
-export function generateMimic(floor: number, { rng = defaultRng }: GenerateOptions = {}): MonsterInstance {
-  const base = generate(floor + 1, { rng });
+export function generateMimic(floor: number, { rng = defaultRng, species }: GenerateOptions = {}): MonsterInstance {
+  const base = generate(floor + 1, { rng, species });
   const hp = Math.round(base.hp * 1.45);
 
   return {

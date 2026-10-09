@@ -71,6 +71,21 @@ describe('generate', () => {
   });
 });
 
+describe('espécies permitidas', () => {
+  it('só sorteia entre as espécies pedidas', () => {
+    for (let seed = 1; seed <= 30; seed++) {
+      expect(['morcego', 'zumbi']).toContain(generate(5, { rng: seededRng(seed), species: ['morcego', 'zumbi'] }).speciesId);
+      expect(generateBoss(5, { rng: seededRng(seed), species: ['orc'] }).speciesId).toBe('orc');
+      expect(generateMimic(5, { rng: seededRng(seed), species: ['slime'] }).speciesId).toBe('slime');
+    }
+  });
+
+  it('lista vazia ou só com id desconhecido vale a lista inteira, sem quebrar', () => {
+    expect(generate(5, { rng: seededRng(4), species: [] })).toEqual(generate(5, { rng: seededRng(4) }));
+    expect(generate(5, { rng: seededRng(4), species: ['dragao_de_papel'] })).toEqual(generate(5, { rng: seededRng(4) }));
+  });
+});
+
 describe('generateBoss', () => {
   it('marca chefe principal só em andar múltiplo de 10', () => {
     expect(generateBoss(10, { rng: seededRng(1) }).isMainBoss).toBe(true);
@@ -83,6 +98,11 @@ describe('generateBoss', () => {
     const principal = generateBoss(10, { rng: seededRng(3) });
     // ambos usam o mesmo seed, então a espécie/classe sorteada é igual
     expect(principal.hp).toBeGreaterThan(mini.hp);
+  });
+
+  it('quem chama pode decidir o chefe principal: a masmorra decide pelo andar real, não pelo de força', () => {
+    expect(generateBoss(24, { rng: seededRng(1), main: true }).isMainBoss).toBe(true);
+    expect(generateBoss(20, { rng: seededRng(1), main: false }).isMainBoss).toBe(false);
   });
 
   it('guarda o título sorteado em vez de resortear a cada view', () => {

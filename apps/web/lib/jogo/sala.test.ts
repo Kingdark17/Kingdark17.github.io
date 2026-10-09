@@ -12,6 +12,7 @@ import {
 } from './estado';
 import { treinar } from './guilda';
 import { saveSorteado } from './heroi-sorteado';
+import { entrar } from './portao';
 import { atravessaSemInteragir, interagir, precisaConfirmar } from './sala';
 import { montarSaveInicial } from './save-inicial';
 
@@ -85,12 +86,35 @@ describe('atravessaSemInteragir', () => {
 });
 
 describe('interagir na cidade', () => {
-  it('o portão leva pra masmorra no andar 1', () => {
-    const { estado, aviso } = interagir(emCimaDe(cidadeNova(), 'gate'), seededRng(1));
+  it('o portão abre a escolha de masmorra, sem descer ainda', () => {
+    const naPorta = emCimaDe(cidadeNova(), 'gate');
+    const { estado, tela } = interagir(naPorta, seededRng(1));
 
-    expect(estado.mapMode).toBe('dungeon');
-    expect(estado.floor).toBe(1);
-    expect(aviso?.titulo).toBe('Portão da Masmorra');
+    expect(estado.mapMode).toBe('city');
+    expect(tela?.tipo).toBe('portao');
+  });
+
+  it('do portão se entra na Floresta Normal, pelo andar 1', () => {
+    const { tela } = interagir(emCimaDe(cidadeNova(), 'gate'), seededRng(1));
+    if (tela?.tipo !== 'portao') throw new Error('esperava o portão');
+
+    const entrada = entrar(tela.portao, seededRng(1));
+
+    expect(entrada?.estado.mapMode).toBe('dungeon');
+    expect(entrada?.estado.floor).toBe(1);
+    expect(entrada?.estado.masmorra).toEqual({ dungeon: 'floresta', difficulty: 'normal' });
+  });
+
+  it('abrir o portão e desistir não fecha "Entre na masmorra"; atravessar fecha', () => {
+    const { tela, recado, estado } = interagir(emCimaDe(cidadeNova(), 'gate'), seededRng(1));
+    if (tela?.tipo !== 'portao') throw new Error('esperava o portão');
+
+    expect(recado).toBeNull();
+    expect(estado.tutorial?.completed.dungeon).toBeUndefined();
+
+    const entrada = entrar(tela.portao, seededRng(1));
+    expect(entrada?.recado?.titulo).toContain('Etapa concluída');
+    expect(entrada?.estado.tutorial?.completed.dungeon).toBe(true);
   });
 
   it('a taverna recupera vida e mana', () => {
@@ -187,7 +211,7 @@ describe('o Aprendiz na cidade', () => {
     if (tela?.tipo !== 'guilda') throw new Error('esperava a guilda');
     const treinado = treinar(tela.guilda, CLASSES[0]!).estado as EstadoNaCidade;
 
-    expect(interagir(emCimaDe(treinado, 'gate'), seededRng(1)).estado.mapMode).toBe('dungeon');
+    expect(interagir(emCimaDe(treinado, 'gate'), seededRng(1)).tela?.tipo).toBe('portao');
   });
 
   it('a cidade de um save de antes da guilda ganha a guilda ao carregar', () => {

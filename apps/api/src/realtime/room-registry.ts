@@ -512,6 +512,9 @@ export class RoomRegistry {
       // posição ainda não existe; aqui só copia se houver o que copiar.
       state.pos = authoritative.pos === undefined ? undefined : cloneJson(authoritative.pos);
       state.floor = authoritative.floor;
+      // O andar sozinho não diz onde se está: o 7 da Torre não é o 7 da
+      // Floresta. Quem escolhe a masmorra é quem conduz (2026-10-09).
+      state.masmorra = authoritative.masmorra === undefined ? undefined : cloneJson(authoritative.masmorra);
       state.mapMode = authoritative.mapMode;
       state.mapRows = authoritative.mapRows;
       state.mapCols = authoritative.mapCols;

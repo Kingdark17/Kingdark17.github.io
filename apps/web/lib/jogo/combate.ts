@@ -30,10 +30,16 @@ import {
   attemptFlee,
   concordar,
   defaultRng,
+  DIFFICULTIES,
   displayName,
+  DUNGEON_FLOORS,
+  dungeonById,
+  DUNGEONS,
   freshCombatMonster,
   gainXP,
   ladosDoAtaque,
+  lockReason,
+  markCleared,
   monsterView,
   onItemCollected,
   onMonsterKilled,
@@ -41,6 +47,7 @@ import {
   petBonus,
   randomItem,
   resolveAttack,
+  runName,
   tickHeroStatus,
   tickMonsterDot,
   castPower,
@@ -50,6 +57,7 @@ import {
   type CombatMonsterView,
   type Companion,
   type DungeonCell,
+  type DungeonProgress,
   type Hero,
   type Item,
   type PetId,
@@ -59,6 +67,7 @@ import {
 
 import type { Efeito } from '@/lib/som/efeitos';
 import {
+  andarDeForca,
   avancarAndar,
   celulaAtual,
   substituirCelulaAtual,
@@ -593,7 +602,7 @@ function limparSala(combate: Combate, abatido: CombatMonsterView, rng: Rng): Com
   let loot: Item | null = null;
 
   if (rng() < (sala.type === 'boss' ? CHANCE_DE_LOOT_CHEFE : CHANCE_DE_LOOT_NORMAL)) {
-    loot = randomItem({ floor: estado.floor, rng });
+    loot = randomItem({ floor: andarDeForca(estado), rng });
     inventory = addItem(inventory, loot);
     quests = onItemCollected(quests);
     log.push(`Encontrou ${displayName(loot)} após a batalha.`);
@@ -620,6 +629,8 @@ function limparSala(combate: Combate, abatido: CombatMonsterView, rng: Rng): Com
     { ...sala, beaten: true, bonusTreasure: undefined },
   );
 
+  if (sala.type === 'boss' && estado.floor >= DUNGEON_FLOORS) return zerar(combate, limpo, abatido, log, loot);
+
   if (sala.type === 'boss') {
     const proximo = avancarAndar(limpo, rng);
     log.push(`Após vencer ${abatido.name}, o grupo avança automaticamente para o Andar ${proximo.floor}.`);
@@ -627,6 +638,34 @@ function limparSala(combate: Combate, abatido: CombatMonsterView, rng: Rng): Com
   }
 
   return { ...combate, estado: limpo, fase: 'vitoria', log, loot, som: 'victory' };
+}
+
+/**
+ * O chefe do andar 100 caiu: a masmorra está zerada nesta dificuldade. O
+ * grupo volta pra cidade, e o diário diz o que abriu no portão — a
+ * dificuldade seguinte e, no Normal, a próxima masmorra.
+ */
+function zerar(combate: Combate, limpo: EstadoNaMasmorra, abatido: CombatMonsterView, log: string[], loot: Item | null): Combate {
+  const progresso = markCleared(limpo.progresso, limpo.masmorra);
+  log.push(`Você venceu ${abatido.name} e zerou ${runName(limpo.masmorra)}!`);
+  for (const aberto of abertosAoZerar(limpo, progresso)) log.push(aberto);
+  log.push('O caminho de volta se abre, e o grupo retorna à cidade.');
+  return { ...combate, estado: voltarParaCidade({ ...limpo, progresso }), fase: 'vitoria', log, loot, som: 'victory' };
+}
+
+function abertosAoZerar(estado: EstadoNaMasmorra, progresso: DungeonProgress): string[] {
+  const linhas: string[] = [];
+  const indice = DIFFICULTIES.findIndex((d) => d.id === estado.masmorra.difficulty);
+  const seguinte = DIFFICULTIES[indice + 1];
+  const masmorra = dungeonById(estado.masmorra.dungeon);
+  if (seguinte && masmorra) linhas.push(`${masmorra.name} no ${seguinte.name} está aberta no portão.`);
+
+  const proxima = DUNGEONS.find((d) => d.requires === estado.masmorra.dungeon);
+  if (proxima && estado.masmorra.difficulty === 'normal') {
+    const falta = lockReason(progresso, estado.hero.level, { dungeon: proxima.id, difficulty: 'normal' });
+    linhas.push(falta?.kind === 'level' ? `A ${proxima.name} abre a partir do nível ${falta.minLevel}.` : `A ${proxima.name} está aberta no portão.`);
+  }
+  return linhas;
 }
 
 function despedirTemporarios(party: readonly Companion[]): { party: Companion[]; saindo: Companion[] } {

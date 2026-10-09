@@ -19,6 +19,7 @@ import {
   iconFor,
   isBossFloor,
   roomDesc,
+  runName,
   shortLabel,
   type CityCell,
   type DungeonCell,
@@ -77,6 +78,7 @@ const LEGENDA_DA_MASMORRA: Array<[string, string]> = [
   ['treasure', 'Baú'],
   ['monster', 'Monstro'],
   ['boss', 'Chefe'],
+  ['totem', 'Totem'],
   ['stairs', 'Escadas'],
   ['exit', 'Saída'],
   ['event', 'Evento'],
@@ -98,7 +100,7 @@ export function apresentacaoDe(estado: EstadoDoJogo): Apresentacao {
   }
 
   return {
-    lugar: `Masmorra — Andar ${estado.floor}${isBossFloor(estado.floor) ? ' ⚔️ Andar de Chefe' : ''}`,
+    lugar: `${runName(estado.masmorra)} — Andar ${estado.floor}${isBossFloor(estado.floor) ? ' ⚔️ Andar de Chefe' : ''}`,
     legenda: LEGENDA_DA_MASMORRA,
     icone: (celula) => iconFor(celula as DungeonCell),
     descricao: (celula) => roomDesc(celula as DungeonCell),

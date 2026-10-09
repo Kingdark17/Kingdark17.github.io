@@ -135,6 +135,61 @@ describe('generateDungeonFloor — estrutura do andar', () => {
   });
 });
 
+describe('generateDungeonFloor — masmorras (2026-10)', () => {
+  const CAVERNA = { dungeon: 'caverna', difficulty: 'normal' } as const;
+  const monstrosDe = (andar: ReturnType<typeof generateDungeonFloor>) => andar.rooms.flatMap((r) => r.monsters ?? []);
+
+  it('sem masmorra é a Floresta Normal, com os monstros dela', () => {
+    for (let seed = 1; seed <= 10; seed++) {
+      for (const m of monstrosDe(generateDungeonFloor(8, 6, 6, { rng: seededRng(seed) }))) {
+        expect(['goblin', 'lobo_sombras', 'aranha', 'slime']).toContain(m.speciesId);
+      }
+    }
+  });
+
+  it('cada masmorra só tem as espécies dela', () => {
+    for (let seed = 1; seed <= 10; seed++) {
+      for (const m of monstrosDe(generateDungeonFloor(8, 6, 6, { rng: seededRng(seed), run: CAVERNA }))) {
+        expect(['morcego', 'esqueleto', 'orc', 'zumbi', 'aranha']).toContain(m.speciesId);
+      }
+    }
+  });
+
+  it('os monstros nascem com o andar de força: o 1 da Caverna é o 15', () => {
+    const monstros = monstrosDe(generateDungeonFloor(1, 6, 6, { rng: seededRng(3), run: CAVERNA }));
+    expect(monstros.length).toBeGreaterThan(0);
+    for (const m of monstros) expect(m.floor).toBe(15);
+  });
+
+  it('chefe principal pelo andar real: o 10 da Caverna é andar de força 24 e ainda é chefe principal', () => {
+    const chefe = (andar: number) => generateDungeonFloor(andar, 6, 6, { rng: seededRng(5), run: CAVERNA }).rooms.find((r) => r.type === 'boss')?.monsters?.[0];
+    expect(chefe(10)?.isMainBoss).toBe(true);
+    expect(chefe(15)?.isMainBoss).toBe(false);
+  });
+
+  it('totem nos andares 20, 40, 60 e 80, e só neles', () => {
+    const totens = (andar: number) => generateDungeonFloor(andar, 6, 6, { rng: seededRng(andar) }).rooms.filter((r) => r.type === 'totem').length;
+    expect([20, 40, 60, 80].map(totens)).toEqual([1, 1, 1, 1]);
+    expect([19, 21, 50, 100].map(totens)).toEqual([0, 0, 0, 0]);
+  });
+
+  it('andar fundo é menor: no máximo 14 salas', () => {
+    expect(generateDungeonFloor(60, 6, 6, { rng: seededRng(9) }).rooms).toHaveLength(14);
+  });
+
+  it('os andares 1 a 5 continuam do tamanho de antes', () => {
+    expect([1, 3, 5].map((andar) => generateDungeonFloor(andar, 6, 6, { rng: seededRng(andar) }).rooms.length)).toEqual([10, 12, 14]);
+  });
+
+  it('o totem tem ícone e textos próprios', () => {
+    const totem = cellFixture({ type: 'totem' });
+    expect(iconFor(totem)).toBe('🗿');
+    expect(shortLabel(totem)).toBe('um totem antigo');
+    expect(roomDesc(totem)).toContain('portão da cidade');
+    expect(entryText(totem)).toContain('tocá-lo');
+  });
+});
+
 describe('iconFor / shortLabel / roomDesc / entryText', () => {
   it('sala de monstro: ícone some quando derrotada, texto muda entre 1 e vários inimigos', () => {
     const um = cellFixture({ type: 'monster', monsters: [monsterFixture()], beaten: false });

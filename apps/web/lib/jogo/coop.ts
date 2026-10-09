@@ -14,13 +14,19 @@
  * `apresentacao.ts`.
  */
 
-import type { CityCell, Companion, DungeonCell, Hero, Item, Quest } from '@rpg-legend/shared';
+import { normalizeRun, type CityCell, type Companion, type DungeonCell, type Hero, type Item, type Quest } from '@rpg-legend/shared';
 
 import type { EstadoDoJogo, Posicao } from './estado';
 import type { PerfilNaSala } from '../rede/sala';
 
-/** Os campos que viajam pela rede — os mesmos do `snapshot()` original. */
-const CAMPOS_COMPARTILHADOS = ['quests', 'floor', 'mapMode', 'map', 'mapRows', 'mapCols', 'pos'] as const;
+/**
+ * Os campos que viajam pela rede — os do `snapshot()` original, mais a
+ * masmorra e a dificuldade: o andar sozinho não diz se é o 12 da Floresta
+ * ou da Torre. O **progresso** (totens, masmorras zeradas) fica com cada
+ * um: quem conduz escolhe, e o parceiro acompanha (decisão do usuário,
+ * 2026-10-09).
+ */
+const CAMPOS_COMPARTILHADOS = ['quests', 'floor', 'mapMode', 'map', 'mapRows', 'mapCols', 'pos', 'masmorra'] as const;
 
 export interface CosmeticosDoJogador {
   username: string;
@@ -64,6 +70,7 @@ export function instantaneoDaSala(
   return {
     quests: estado.quests,
     floor: estado.floor,
+    masmorra: estado.masmorra,
     mapMode: estado.mapMode,
     map: estado.map,
     mapRows: estado.mapRows,
@@ -126,6 +133,7 @@ export function aplicarRemoto(local: EstadoDoJogo, remoto: Record<string, unknow
     ...proprio,
     quests: (compartilhado.quests as Quest[] | undefined) ?? local.quests,
     floor: (compartilhado.floor as number | undefined) ?? local.floor,
+    masmorra: compartilhado.masmorra === undefined ? local.masmorra : normalizeRun(compartilhado.masmorra),
     mapRows: (compartilhado.mapRows as number | undefined) ?? local.mapRows,
     mapCols: (compartilhado.mapCols as number | undefined) ?? local.mapCols,
     pos,

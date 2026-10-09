@@ -18,18 +18,25 @@
 
 import {
   DIR_VECTORS,
+  DUNGEON_FLOORS,
   defaultRng,
+  effectiveFloor,
   generateCityLayout,
   generateDungeonFloor,
   hydrateSavedHero,
   inBounds,
   isBossFloor,
+  legacyProgress,
+  normalizeProgress,
+  normalizeRun,
   onFloorReached,
   withGuild,
   type CityCell,
   type Companion,
   type Direction,
   type DungeonCell,
+  type DungeonProgress,
+  type DungeonRun,
   type Hero,
   type Item,
   type Quest,
@@ -67,6 +74,13 @@ interface EstadoBase {
   pos: Posicao;
   /** Progresso dos Primeiros Passos. Ausente em save antigo — `tutorialDe()` cuida disso. */
   tutorial?: Tutorial;
+  /**
+   * A masmorra e a dificuldade da descida atual, ou da última. `floor` é o
+   * andar **dentro** dela. Save de antes das masmorras: Floresta Normal.
+   */
+  masmorra: DungeonRun;
+  /** Masmorras zeradas e totens tocados — o que o portão oferece. */
+  progresso: DungeonProgress;
 }
 
 export interface EstadoNaCidade extends EstadoBase {
@@ -96,6 +110,9 @@ export interface SaveCarregado {
   cityStart?: Posicao | null;
   pos?: Posicao | null;
   tutorial?: Tutorial;
+  /** Ausentes no save de antes das masmorras (2026-10). */
+  masmorra?: DungeonRun;
+  progresso?: DungeonProgress;
 }
 
 function comuns(save: SaveCarregado): Omit<EstadoBase, 'pos'> {
@@ -112,7 +129,18 @@ function comuns(save: SaveCarregado): Omit<EstadoBase, 'pos'> {
     // Só entra no estado se o save já tinha — assim o save de quem nunca
     // mexeu no tutorial não ganha um campo novo à toa.
     ...(save.tutorial ? { tutorial: save.tutorial } : {}),
+    // A masmorra sem fim de antes vira a Floresta Normal, no mesmo andar, e
+    // os totens que o jogador já passou vêm junto (decisão do usuário,
+    // 2026-10-09). Os dois são normalizados porque o save vem da nuvem como
+    // JSON solto.
+    masmorra: normalizeRun(save.masmorra),
+    progresso: save.progresso ? normalizeProgress(save.progresso) : legacyProgress(save.floor),
   };
+}
+
+/** O andar que os monstros, o ouro e os itens enxergam: o real, mais o degrau da masmorra e da dificuldade. */
+export function andarDeForca(estado: Pick<EstadoBase, 'masmorra' | 'floor'>): number {
+  return effectiveFloor(estado.masmorra, estado.floor);
 }
 
 function temCidade(save: SaveCarregado): save is SaveCarregado & { cityMap: CityCell[][]; cityStart: Posicao } {
@@ -172,9 +200,18 @@ export function entrarNaCidade(save: SaveCarregado): EstadoNaCidade {
   return { ...base, mapMode: 'city', map: mapa, cityMap: mapa, cityStart: inicio, pos: posicao };
 }
 
-/** O portão da cidade: sempre entra pelo andar 1, como `enterDungeon()`. */
-export function entrarNaMasmorra(estado: EstadoNaCidade, rng: Rng = defaultRng): EstadoNaMasmorra {
-  return gerarAndar(estado, PRIMEIRO_ANDAR, rng);
+/**
+ * O portão da cidade. Entra na masmorra e dificuldade escolhidas, pelo
+ * andar 1 ou por um totem já tocado. Quem confere se a escolha está aberta
+ * é o portão (`portao.ts`); aqui só se entra.
+ */
+export function entrarNaMasmorra(
+  estado: EstadoNaCidade,
+  rng: Rng = defaultRng,
+  masmorra: DungeonRun = estado.masmorra,
+  andar: number = PRIMEIRO_ANDAR,
+): EstadoNaMasmorra {
+  return gerarAndar({ ...estado, masmorra }, andar, rng);
 }
 
 /** A saída da masmorra devolve o jogador à cidade guardada, no ponto de partida dela. O andar atual não é zerado — só o portão faz isso. */
@@ -182,14 +219,16 @@ export function voltarParaCidade(estado: EstadoNaMasmorra): EstadoNaCidade {
   return entrarNaCidade(estado);
 }
 
-export type ResultadoDaEscada = { kind: 'selado' } | { kind: 'desceu'; estado: EstadoNaMasmorra };
+export type ResultadoDaEscada = { kind: 'selado' } | { kind: 'fundo' } | { kind: 'desceu'; estado: EstadoNaMasmorra };
 
 /**
  * Descer as escadas. Em andar de chefe com o chefe vivo, o caminho fica
- * selado — sem isso dava pra pular todo chefe do jogo andando em volta.
+ * selado — sem isso dava pra pular todo chefe do jogo andando em volta. No
+ * andar 100 não há mais pra onde descer: a masmorra termina no chefe dele.
  */
 export function descerEscada(estado: EstadoNaMasmorra, rng: Rng = defaultRng): ResultadoDaEscada {
   if (isBossFloor(estado.floor) && temChefeVivo(estado)) return { kind: 'selado' };
+  if (estado.floor >= DUNGEON_FLOORS) return { kind: 'fundo' };
   return { kind: 'desceu', estado: avancarAndar(estado, rng) };
 }
 
@@ -207,7 +246,7 @@ export function temChefeVivo(estado: EstadoNaMasmorra): boolean {
 }
 
 function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng): EstadoNaMasmorra {
-  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, { rng });
+  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, { rng, run: base.masmorra });
   const inicio = { x: andar.start.x, y: andar.start.y };
 
   return {

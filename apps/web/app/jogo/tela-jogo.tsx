@@ -90,6 +90,8 @@ const TelaEvento = dynamic(() => import('./tela-evento').then((m) => m.TelaEvent
 const TelaGuia = dynamic(() => import('./tela-guia').then((m) => m.TelaGuia), { ssr: false, loading: Abrindo });
 const TelaLoja = dynamic(() => import('./tela-loja').then((m) => m.TelaLoja), { ssr: false, loading: Abrindo });
 const TelaMissoes = dynamic(() => import('./tela-missoes').then((m) => m.TelaMissoes), { ssr: false, loading: Abrindo });
+const TelaPortao = dynamic(() => import('./tela-portao').then((m) => m.TelaPortao), { ssr: false, loading: Abrindo });
+const TelaTotem = dynamic(() => import('./tela-totem').then((m) => m.TelaTotem), { ssr: false, loading: Abrindo });
 
 const ESPERA_ANTES_DE_SALVAR_MS = 2500;
 
@@ -645,6 +647,31 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             adm={aberta.adm}
             onAdm={(proximo) => seguir({ tipo: 'adm', adm: proximo }, proximo.estado)}
             onFechar={(final) => fechar(final.estado)}
+          />
+        );
+      case 'portao':
+        return (
+          <TelaPortao
+            portao={aberta.portao}
+            // Escolher não muda o save: só a tela. Quem muda é entrar.
+            onPortao={(proximo) => setTela({ tipo: 'portao', portao: proximo })}
+            onEntrar={(entrada) => {
+              tocar('door');
+              fechar(entrada.estado, { icone: '🌟', titulo: 'Portão da Masmorra', texto: entrada.texto });
+              recadar(entrada.recado);
+            }}
+            onFechar={() => fechar(aberta.portao.estado)}
+          />
+        );
+      case 'totem':
+        return (
+          <TelaTotem
+            totem={aberta.totem}
+            onVoltar={(cidade) => {
+              tocar('door');
+              fechar(cidade, { icone: '🗿', titulo: 'Totem Antigo', texto: 'A luz do totem envolve você, e você reaparece na cidade.' });
+            }}
+            onFechar={(final) => fechar(final, { icone: '🗿', titulo: 'Totem Antigo', texto: aberta.totem.texto })}
           />
         );
     }

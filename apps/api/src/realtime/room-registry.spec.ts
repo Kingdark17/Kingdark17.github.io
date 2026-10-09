@@ -411,6 +411,16 @@ describe('RoomRegistry — estado autoritativo', () => {
     expect(guestState.mapCols).toBe(6);
   });
 
+  it('convidado não troca a masmorra: o andar 7 da Torre não é o 7 da Floresta', () => {
+    const { registry, room } = createdRegistry();
+    const floresta = { dungeon: 'floresta', difficulty: 'normal' };
+    registry.applyState(room, HOST_ROLE, { pos: { x: 1, y: 1 }, floor: 7, mapMode: 'dungeon', masmorra: floresta });
+
+    const guestState = registry.applyState(room, GUEST_ROLE, { floor: 7, masmorra: { dungeon: 'torre', difficulty: 'pesadelo' } });
+
+    expect(guestState.masmorra).toEqual(floresta);
+  });
+
   it('convidado que fala antes de existir estado autoritativo mantém o que mandou', () => {
     const { registry, room } = createdRegistry();
     const state = registry.applyState(room, GUEST_ROLE, { pos: { x: 1, y: 1 }, floor: 3 });
