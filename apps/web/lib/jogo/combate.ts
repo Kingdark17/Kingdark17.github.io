@@ -44,6 +44,7 @@ import {
   tickHeroStatus,
   tickMonsterDot,
   castPower,
+  winBattle,
   type AttackStyle,
   type CombatMonster,
   type CombatMonsterView,
@@ -65,6 +66,7 @@ import {
   type EstadoDoJogo,
   type EstadoNaMasmorra,
 } from './estado';
+import { maestriaSubiu } from './maestria';
 import { podeUsar, usar } from './mochila';
 
 /**
@@ -606,6 +608,12 @@ function limparSala(combate: Combate, abatido: CombatMonsterView, rng: Rng): Com
     const escondido = concordar(bonus.item, ['escondido', 'escondida', 'escondidos', 'escondidas']);
     log.push(`Com a sala livre de perigo, você encontra ${displayName(bonus.item)} ${escondido}.`);
   }
+
+  // Maestria: a sala inteira é uma batalha e conta aqui, quando o último
+  // inimigo cai. Fugir e perder não passam por este caminho.
+  const vitoria = winBattle(hero);
+  hero = vitoria.hero;
+  if (vitoria.leveledUp) log.push(maestriaSubiu(hero, vitoria.level));
 
   const limpo = substituirCelulaAtual(
     { ...estado, hero: { ...hero, buffs: {} }, party, inventory, quests },

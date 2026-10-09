@@ -22,6 +22,7 @@ import {
   type Power,
 } from './catalog.js';
 import { derivedStats, xpForLevel } from './derived.js';
+import { veteranMasteryBattles } from './mastery.js';
 import { ATTR_KEYS, emptyAttributes, EQUIP_SLOTS, type AttrKey, type Attributes, type DerivedStats, type EquipSlot, type HeroCore } from './stats.js';
 
 /**
@@ -100,6 +101,12 @@ export interface Hero extends HeroCore {
   powerIds?: string[];
   debuff: Debuff;
   killCount: number;
+  /**
+   * Salas vencidas, a conta da maestria de classe (ver `mastery.ts`).
+   * Opcional porque o save de antes não tem: `hydrateSavedHero` converte o
+   * `killCount` na primeira carga, e herói novo já nasce com 0.
+   */
+  masteryBattles?: number;
   hp: number;
   mp: number;
   maxHp: number;
@@ -192,6 +199,7 @@ export function buildHero(creation: HeroCreation, rng: Rng = defaultRng): Hero {
     powerIds,
     debuff: creation.debuff,
     killCount: 0,
+    masteryBattles: 0,
     derived,
     maxHp: derived.maxHp,
     hp: derived.maxHp,
@@ -266,6 +274,7 @@ export function buildApprentice(creation: ApprenticeCreation, rng: Rng = default
     powerIds: [],
     debuff: creation.debuff,
     killCount: 0,
+    masteryBattles: 0,
     derived,
     maxHp: derived.maxHp,
     hp: derived.maxHp,
@@ -626,6 +635,18 @@ export function generateCompanion(rng: Rng = defaultRng): Companion {
  * atuais (save antigo, ou herói solo reaproveitado no multiplayer). Não muta
  * a entrada.
  */
+/**
+ * A maestria chegou depois de muita gente já ter jogado: quem tem classe e
+ * nenhuma contagem começa com as vitórias de antes, tiradas dos monstros que
+ * derrubou (decisão do usuário, 2026-10-09). Uma vez gravada, a contagem é a
+ * que vale, e o `killCount` não é mais lido pra isso.
+ */
+function maestriaAoCarregar(hero: Hero, temClasse: boolean): number {
+  const gravada = hero.masteryBattles;
+  if (typeof gravada === 'number' && Number.isFinite(gravada) && gravada >= 0) return Math.floor(gravada);
+  return temClasse ? veteranMasteryBattles(hero.killCount) : 0;
+}
+
 export function hydrateSavedHero(hero: Hero): Hero {
   // Todos os slots, pela lista: escrita à mão, ela parou nos quatro de antes
   // de 2026-09, e elmo, perneira e botas vestidos sumiam a cada carregamento.
@@ -656,6 +677,7 @@ export function hydrateSavedHero(hero: Hero): Hero {
     buffs: {},
     classId,
     raceId,
+    masteryBattles: maestriaAoCarregar(hero, cls !== null),
     powerIds,
     // Regenerados do catálogo, não copiados do save: assim o nome mostrado
     // acompanha o catálogo em vez de ficar congelado no que foi gravado.

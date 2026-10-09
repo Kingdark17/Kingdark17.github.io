@@ -53,7 +53,7 @@ export type EventOutcome =
   | { kind: 'declined' }
   | { kind: 'insufficient_gold'; required: number }
   | { kind: 'too_wounded'; required: number }
-  | { kind: 'helped_wounded'; xpGained: number; leveledUp: boolean; levels: number }
+  | { kind: 'helped_wounded' }
   | { kind: 'healed_wounded'; success: boolean; goldGained: number }
   | { kind: 'studied'; success: boolean; item: Item | null }
   | { kind: 'prayed'; success: boolean }
@@ -61,11 +61,33 @@ export type EventOutcome =
   | { kind: 'forced_door'; success: boolean; goldGained: number; hpLost: number }
   | { kind: 'invalid_choice' };
 
+export interface EventXp {
+  gained: number;
+  leveledUp: boolean;
+  levels: number;
+}
+
 export interface EventResolveResult {
   hero: Hero;
   outcome: EventOutcome;
   /** `false` quando a escolha foi rejeitada e nada mudou (ouro/vida insuficiente, escolha desconhecida) — a sala continua sem resolver. */
   resolved: boolean;
+  /** O XP de ter resolvido. `null` quando a escolha foi seguir em frente ou não resolveu nada. */
+  xp: EventXp | null;
+}
+
+/** O que cada escolha faz, antes do XP — que é igual pra todas e vem em `resolveEvent`. */
+type ChoiceResult = Omit<EventResolveResult, 'xp'>;
+
+/**
+ * XP de resolver um evento: o de um monstro do andar, cujo sorteio é
+ * `6 + 3×andar + 0 a 3`. Doc do Breno (2026-10): "Exp: por concluir
+ * qualquer ação no jogo fora batalhas finalizadas (evite dar xp por ações
+ * simples, como conversar com um npc)". O usuário escolheu os eventos entre
+ * as ações de fora da batalha (2026-10-09).
+ */
+export function eventXp(floor: number): number {
+  return 8 + 3 * (Number.isFinite(floor) && floor > 0 ? Math.floor(floor) : 1);
 }
 
 export interface EventResolveOptions {
@@ -74,21 +96,22 @@ export interface EventResolveOptions {
   now?: () => number;
 }
 
-function resolveAjudar(hero: Hero): EventResolveResult {
+function resolveAjudar(hero: Hero): ChoiceResult {
   if (hero.gold < 15) return { hero, outcome: { kind: 'insufficient_gold', required: 15 }, resolved: false };
+  // Os 8 de XP que ajudar dava sozinho viraram o XP de evento, que toda
+  // escolha resolvida ganha.
   const afterCost: Hero = { ...hero, gold: hero.gold - 15, hp: Math.min(hero.maxHp, hero.hp + 20) };
-  const xpResult = gainXP(afterCost, 8);
-  return { hero: xpResult.hero, outcome: { kind: 'helped_wounded', xpGained: 8, leveledUp: xpResult.leveledUp, levels: xpResult.levels }, resolved: true };
+  return { hero: afterCost, outcome: { kind: 'helped_wounded' }, resolved: true };
 }
 
-function resolveCurar(hero: Hero): EventResolveResult {
+function resolveCurar(hero: Hero): ChoiceResult {
   const success = hero.attrs.sabedoria >= 12;
   const nextHero = success ? { ...hero, gold: hero.gold + 30 } : hero;
   return { hero: nextHero, outcome: { kind: 'healed_wounded', success, goldGained: success ? 30 : 0 }, resolved: true };
 }
 
 /** Compartilhada por `estudar` (altar) e `examinar` (porta) — mesma fórmula no original, ver nota de `EventChoiceId`. */
-function resolveEstudarOuExaminar(hero: Hero, floor: number, rng: Rng, now: (() => number) | undefined): EventResolveResult {
+function resolveEstudarOuExaminar(hero: Hero, floor: number, rng: Rng, now: (() => number) | undefined): ChoiceResult {
   const success = hero.attrs.intelecto >= 13;
   if (success) {
     const item = randomItem({ floor, rng, now });
@@ -97,20 +120,20 @@ function resolveEstudarOuExaminar(hero: Hero, floor: number, rng: Rng, now: (() 
   return { hero: { ...hero, mp: Math.max(0, hero.mp - 8) }, outcome: { kind: 'studied', success: false, item: null }, resolved: true };
 }
 
-function resolveRezar(hero: Hero): EventResolveResult {
+function resolveRezar(hero: Hero): ChoiceResult {
   const success = hero.attrs.sabedoria >= 13;
   const nextHero = success ? { ...hero, hp: hero.maxHp, mp: hero.maxMp } : hero;
   return { hero: nextHero, outcome: { kind: 'prayed', success }, resolved: true };
 }
 
-function resolveSacrificar(hero: Hero): EventResolveResult {
+function resolveSacrificar(hero: Hero): ChoiceResult {
   const amount = Math.max(10, Math.floor(hero.maxHp * 0.2));
   if (hero.hp <= amount) return { hero, outcome: { kind: 'too_wounded', required: amount }, resolved: false };
   const nextHero: Hero = { ...hero, hp: hero.hp - amount, attrPoints: (hero.attrPoints || 0) + 1 };
   return { hero: nextHero, outcome: { kind: 'sacrificed', hpLost: amount }, resolved: true };
 }
 
-function resolveForcar(hero: Hero, floor: number): EventResolveResult {
+function resolveForcar(hero: Hero, floor: number): ChoiceResult {
   const success = hero.attrs.forca >= 13;
   if (success) {
     const amount = 18 + floor * 3;
@@ -124,8 +147,20 @@ function resolveForcar(hero: Hero, floor: number): EventResolveResult {
  * certo (`ferido`/`altar`/`porta`) — o original também não confere no
  * `resolve()`, só limita as escolhas possíveis nos botões que `open()`
  * desenha; quem chama aqui tem a mesma responsabilidade.
+ *
+ * Toda escolha que resolve o evento, dê certo ou não, ganha o XP de
+ * {@link eventXp}. Seguir em frente não ganha: não é ação concluída.
  */
 export function resolveEvent(hero: Hero, floor: number, choice: EventChoiceId, options: EventResolveOptions = {}): EventResolveResult {
+  const result = resolveChoice(hero, floor, choice, options);
+  if (!result.resolved || result.outcome.kind === 'declined') return { ...result, xp: null };
+
+  const gained = eventXp(floor);
+  const xpResult = gainXP(result.hero, gained);
+  return { ...result, hero: xpResult.hero, xp: { gained, leveledUp: xpResult.leveledUp, levels: xpResult.levels } };
+}
+
+function resolveChoice(hero: Hero, floor: number, choice: EventChoiceId, options: EventResolveOptions): ChoiceResult {
   const rng = options.rng ?? defaultRng;
 
   if (choice === 'ignorar' || choice === 'desistir') return { hero, outcome: { kind: 'declined' }, resolved: true };

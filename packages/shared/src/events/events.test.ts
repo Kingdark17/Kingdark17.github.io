@@ -5,7 +5,7 @@ import type { Attributes } from '../hero/stats.js';
 import { DEBUFFS } from '../hero/catalog.js';
 import type { Hero, HeroEquipment } from '../hero/hero.js';
 import { seededRng } from '../rng.js';
-import { EVENT_TEMPLATES, eventTemplateById, randomEventTemplate, resolveEvent, type EventChoiceId, type EventTemplateId } from './events.js';
+import { EVENT_TEMPLATES, eventTemplateById, eventXp, randomEventTemplate, resolveEvent, type EventChoiceId, type EventTemplateId } from './events.js';
 
 const SEM_DEBUFF = DEBUFFS.find((d) => !d.effect)!;
 
@@ -76,13 +76,15 @@ describe('resolveEvent — ferido: ajudar', () => {
     expect(result.hero).toBe(hero);
   });
 
-  it('gasta 15 de ouro, cura 20 de vida (sem passar do teto) e dá 8 de XP', () => {
+  it('gasta 15 de ouro, cura 20 de vida (sem passar do teto) e dá o XP de evento', () => {
     const hero = heroFixture({ hero: { gold: 20, hp: 50, maxHp: 100 } });
     const result = resolveEvent(hero, 5, 'ajudar');
     expect(result.resolved).toBe(true);
     expect(result.hero.gold).toBe(5);
     expect(result.hero.hp).toBe(70);
-    expect(result.outcome).toEqual({ kind: 'helped_wounded', xpGained: 8, leveledUp: false, levels: 0 });
+    expect(result.outcome).toEqual({ kind: 'helped_wounded' });
+    expect(result.xp).toEqual({ gained: 23, leveledUp: false, levels: 0 }); // 8 + 3×5
+    expect(result.hero.xp).toBe(23);
   });
 
   it('a cura nunca passa do maxHp', () => {
@@ -113,13 +115,13 @@ describe('resolveEvent — altar: estudar / porta: examinar (mesma fórmula)', (
   const CHOICES: EventChoiceId[] = ['estudar', 'examinar'];
 
   for (const choice of CHOICES) {
-    it(`${choice}: com Intelecto >= 13, ganha um item e o herói fica intocado`, () => {
+    it(`${choice}: com Intelecto >= 13, ganha um item e, fora o XP, o herói fica intocado`, () => {
       const hero = heroFixture({ attrs: { intelecto: 13 } });
       const result = resolveEvent(hero, 5, choice, { rng: seededRng(1) });
       expect(result.outcome.kind).toBe('studied');
       expect(result.outcome.kind === 'studied' && result.outcome.success).toBe(true);
       expect(result.outcome.kind === 'studied' && result.outcome.item).not.toBeNull();
-      expect(result.hero).toBe(hero);
+      expect(result.hero).toEqual({ ...hero, xp: eventXp(5) });
     });
 
     it(`${choice}: com Intelecto < 13, perde 8 de Mana (sem negativo)`, () => {
@@ -140,11 +142,11 @@ describe('resolveEvent — altar: rezar', () => {
     expect(result.hero.mp).toBe(hero.maxMp);
   });
 
-  it('com Sabedoria < 13, nada muda', () => {
+  it('com Sabedoria < 13, nada muda além do XP', () => {
     const hero = heroFixture({ attrs: { sabedoria: 12 }, hero: { hp: 1, mp: 1 } });
     const result = resolveEvent(hero, 5, 'rezar');
     expect(result.outcome).toEqual({ kind: 'prayed', success: false });
-    expect(result.hero).toBe(hero);
+    expect(result.hero).toEqual({ ...hero, xp: eventXp(5) });
   });
 });
 
@@ -195,6 +197,58 @@ describe('resolveEvent — escolha desconhecida', () => {
     expect(result.resolved).toBe(false);
     expect(result.outcome).toEqual({ kind: 'invalid_choice' });
     expect(result.hero).toBe(hero);
+  });
+});
+
+describe('resolveEvent — XP de evento (doc do Breno, 2026-10)', () => {
+  it('é o XP de um monstro do andar: 8 + 3×andar', () => {
+    expect(eventXp(1)).toBe(11);
+    expect(eventXp(10)).toBe(38);
+  });
+
+  it('andar estragado conta como o 1, sem virar NaN no herói', () => {
+    expect(eventXp(Number.NaN)).toBe(11);
+    expect(eventXp(-3)).toBe(11);
+  });
+
+  it('toda escolha que resolve ganha, tenha dado certo ou não', () => {
+    const fracassos: [EventChoiceId, Partial<Attributes>][] = [
+      ['curar', { sabedoria: 1 }],
+      ['estudar', { intelecto: 1 }],
+      ['examinar', { intelecto: 1 }],
+      ['rezar', { sabedoria: 1 }],
+      ['forcar', { forca: 1 }],
+    ];
+    for (const [escolha, attrs] of fracassos) {
+      const result = resolveEvent(heroFixture({ attrs, hero: { hp: 50, maxHp: 100, gold: 50 } }), 10, escolha);
+      expect(result.resolved, escolha).toBe(true);
+      expect(result.xp?.gained, escolha).toBe(38);
+      expect(result.hero.xp, escolha).toBe(38);
+    }
+    expect(resolveEvent(heroFixture({ hero: { hp: 50, maxHp: 100 } }), 10, 'sacrificar').xp?.gained).toBe(38);
+    expect(resolveEvent(heroFixture({ hero: { gold: 50 } }), 10, 'ajudar').xp?.gained).toBe(38);
+  });
+
+  it('seguir em frente não ganha: não é ação concluída', () => {
+    const hero = heroFixture();
+    expect(resolveEvent(hero, 5, 'ignorar').xp).toBeNull();
+    expect(resolveEvent(hero, 5, 'desistir').xp).toBeNull();
+    expect(resolveEvent(hero, 5, 'ignorar').hero).toBe(hero);
+  });
+
+  it('escolha recusada ou desconhecida não ganha nem resolve', () => {
+    const pobre = heroFixture({ hero: { gold: 0 } });
+    expect(resolveEvent(pobre, 5, 'ajudar').xp).toBeNull();
+    expect(resolveEvent(pobre, 5, 'ajudar').hero).toBe(pobre);
+    expect(resolveEvent(heroFixture(), 5, 'bogus' as EventChoiceId).xp).toBeNull();
+  });
+
+  it('o XP pode subir de nível', () => {
+    const hero = heroFixture({ attrs: { forca: 13 }, hero: { xp: 39, xpNext: 40 } });
+    const result = resolveEvent(hero, 1, 'forcar');
+    expect(result.xp).toEqual({ gained: 11, leveledUp: true, levels: 1 });
+    expect(result.hero.level).toBe(2);
+    expect(result.hero.xp).toBe(10);
   });
 });
 

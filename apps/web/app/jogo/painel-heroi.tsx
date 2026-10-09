@@ -6,7 +6,8 @@
  * a classe foi pra Guilda, a criação deixou de mostrá-la, e nenhuma outra
  * tela mostrava. Além dela, o cartão traz o que o painel já tinha — Vida,
  * Mana, XP e atributos — e os poderes. O Ouro saiu: a mochila e a loja o
- * mostram no cabeçalho (o usuário preferiu assim).
+ * mostram no cabeçalho (o usuário preferiu assim). A maestria da classe é a
+ * quarta barra, com o bônus escrito embaixo (2026-10-09).
  *
  * O Aprendiz tem o cartão **provisório**: sem selo, até a Guilda selar no
  * treino. O texto do cartão sai de `lib/jogo/cartao.ts`.
@@ -18,6 +19,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ATTR_KEYS, ATTR_LABELS, hasClass, idDaRaca, type AttrKey, type Hero } from '@rpg-legend/shared';
 
 import { fraquezaNoCartao, poderesNoCartao } from '@/lib/jogo/cartao';
+import { maestriaNoCartao } from '@/lib/jogo/maestria';
 import { sinaisDoHeroi } from '@/lib/paperdoll/sinais';
 import { tocar } from '@/lib/som/efeitos';
 import { Paperdoll } from '../componentes/paperdoll';
@@ -28,18 +30,28 @@ function porcentagem(atual: number, maximo: number): string {
   return `${maximo > 0 ? Math.max(0, Math.min(100, (atual / maximo) * 100)) : 0}%`;
 }
 
-function Medidor({ rotulo, atual, maximo, cor }: Readonly<{ rotulo: string; atual: number; maximo: number; cor: string }>) {
+interface PropsDoMedidor {
+  rotulo: string;
+  atual: number;
+  maximo: number;
+  cor: string;
+  /** O que vai à direita do rótulo, quando não é "atual/máximo" (a maestria no teto diz "máx."). */
+  contagem?: string;
+  /** Uma linha embaixo da barra. */
+  nota?: string;
+}
+
+function Medidor({ rotulo, atual, maximo, cor, contagem, nota }: Readonly<PropsDoMedidor>) {
   return (
     <div>
       <div className={cartao.medidor}>
         <span className={cartao.rotulo}>{rotulo}</span>
-        <span>
-          {atual}/{maximo}
-        </span>
+        <span>{contagem ?? `${atual}/${maximo}`}</span>
       </div>
       <div className={cartao.trilho}>
         <div className={`${cartao.preenchimento} ${cor}`} style={{ width: porcentagem(atual, maximo) }} />
       </div>
+      {nota && <p className={cartao.notaDoMedidor}>{nota}</p>}
     </div>
   );
 }
@@ -86,6 +98,7 @@ export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
   const treinado = hasClass(hero);
   const poderes = poderesNoCartao(hero);
   const fraqueza = fraquezaNoCartao(hero);
+  const maestria = maestriaNoCartao(hero);
   const [subiu, setSubiu] = useState(false);
   const nivelAnterior = useRef(hero.level);
   const [ferido, setFerido] = useState(false);
@@ -231,6 +244,16 @@ export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
         <Medidor rotulo="Vida" atual={hero.hp} maximo={hero.maxHp} cor={cartao.vida} />
         <Medidor rotulo="Mana" atual={hero.mp} maximo={hero.maxMp} cor={cartao.mana} />
         <Medidor rotulo="XP" atual={hero.xp} maximo={hero.xpNext} cor={cartao.xp} />
+        {maestria && (
+          <Medidor
+            rotulo={`Maestria ${maestria.nivel}`}
+            atual={maestria.atual}
+            maximo={maestria.maximo}
+            cor={cartao.maestria}
+            contagem={maestria.contagem}
+            nota={maestria.bonus}
+          />
+        )}
       </div>
 
       {comPontos && (

@@ -4,6 +4,9 @@ import { DEBUFFS, POWERS, type Power } from '../hero/catalog.js';
 import { derivedStats } from '../hero/derived.js';
 import type { Companion, Hero, HeroEquipment } from '../hero/hero.js';
 import type { Attributes } from '../hero/stats.js';
+import { instantiate } from '../items/item.js';
+import { RARITIES } from '../items/rarity.js';
+import { templateById } from '../items/templates.js';
 import { monsterView, type MonsterInstance } from '../monsters/generate.js';
 import type { Rng } from '../rng.js';
 import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from './monster-state.js';
@@ -97,6 +100,23 @@ describe('powerManaCost', () => {
   it('arredonda pra cima os 20% a mais da Mana Instável', () => {
     const hero = heroFixture({ hero: { debuff: MANA_CARA } });
     expect(powerManaCost(hero, { cost: 7 })).toBe(9); // ceil(8.4)
+  });
+});
+
+describe('castPower — maestria', () => {
+  const espada = { ...instantiate(templateById('espada')!, RARITIES[0]!), equipped: true };
+  const machado = { ...instantiate(templateById('machado')!, RARITIES[0]!), equipped: true };
+  const golpe = (hero: Hero) => castPower(hero, [], monsterFixture(), poder('golpe_poderoso'), { rng: sequenceRng([0]) }).damage ?? 0;
+
+  it('com a arma da classe, o dano do poder sobe 2% por nível', () => {
+    const equip = { arma: espada, secundaria: null, armadura: null, acessorio: null };
+    const sem = golpe(heroFixture({ hero: { equip } }));
+    expect(golpe(heroFixture({ hero: { equip, masteryBattles: 550 } }))).toBe(Math.round(sem * 1.2));
+  });
+
+  it('com outra arma, o poder fica igual', () => {
+    const equip = { arma: machado, secundaria: null, armadura: null, acessorio: null };
+    expect(golpe(heroFixture({ hero: { equip, masteryBattles: 550 } }))).toBe(golpe(heroFixture({ hero: { equip } })));
   });
 });
 

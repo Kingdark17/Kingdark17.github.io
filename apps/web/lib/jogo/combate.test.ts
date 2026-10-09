@@ -309,6 +309,55 @@ describe('derrota', () => {
 
     expect(combate.estado.hero.gold).toBe(99500);
   });
+
+  it('perder não conta pra maestria', () => {
+    const combate = atacar(prestesAMorrer({ masteryBattles: 4 }), 20, 'normal', NUNCA);
+
+    expect(combate.fase).toBe('derrota');
+    expect(combate.estado.hero.masteryBattles).toBe(4);
+  });
+});
+
+describe('maestria', () => {
+  it('a sala inteira é uma vitória, mesmo com dois na fila', () => {
+    const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 }), monstro({ hp: 1 })] }, { masteryBattles: 0 });
+
+    const primeiro = atacar(emCombate(inicio), 20, 'normal', NUNCA);
+    expect(primeiro.fase).toBe('combate');
+    expect(primeiro.estado.hero.masteryBattles).toBe(0);
+
+    const segundo = atacar(primeiro, 20, 'normal', NUNCA);
+    expect(segundo.fase).toBe('vitoria');
+    expect(segundo.estado.hero.masteryBattles).toBe(1);
+  });
+
+  it('o chefe conta como qualquer sala', () => {
+    const inicio = comSalaDeMonstro({ type: 'boss', monsters: [monstro({ hp: 1, isBoss: true })] }, { masteryBattles: 3 });
+
+    expect(atacar(emCombate(inicio), 20, 'normal', NUNCA).estado.hero.masteryBattles).toBe(4);
+  });
+
+  it('a vitória que completa o nível vai pro diário', () => {
+    const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 })] }, { masteryBattles: 9 });
+
+    const combate = atacar(emCombate(inicio), 20, 'normal', NUNCA);
+
+    expect(combate.estado.hero.masteryBattles).toBe(10);
+    expect(combate.log.some((linha) => linha.startsWith('Sua maestria de') && linha.includes('nível 1: +2% de dano'))).toBe(true);
+  });
+
+  it('vitória que não completa nível não escreve nada sobre maestria', () => {
+    const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 })] }, { masteryBattles: 3 });
+
+    expect(atacar(emCombate(inicio), 20, 'normal', NUNCA).log.some((linha) => linha.includes('maestria'))).toBe(false);
+  });
+
+  it('fugir não conta', () => {
+    const combate = fugir(emCombate(comSalaDeMonstro({}, { masteryBattles: 4 })), 20, NUNCA);
+
+    expect(combate.fase).toBe('fuga');
+    expect(combate.estado.hero.masteryBattles).toBe(4);
+  });
 });
 
 describe('salaDeCombate', () => {

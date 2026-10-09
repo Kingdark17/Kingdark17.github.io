@@ -1,6 +1,7 @@
 import { classById, idDaClasse } from '../hero/catalog.js';
 import { equipmentBonus } from '../hero/derived.js';
 import { hasDebuffEffect, weaponAffinityPct, type Hero } from '../hero/hero.js';
+import { masteryDamageMult } from '../hero/mastery.js';
 import type { ProcTemplate } from '../items/templates.js';
 import { defaultRng, randomInt, type Rng } from '../rng.js';
 import { applyHeroClassPassive, type HeroClassPassiveResult } from './class-passives.js';
@@ -204,18 +205,21 @@ export function resolveAttack(
   // `passarRodadaDaCancao`).
   const inspiracao = buffs.inspiracaoTurns && buffs.inspiracaoTurns > 0 ? 1 + (buffs.inspiracaoAmount ?? 0) : 1;
 
+  // Maestria: +2% por nível, só com a arma que a classe domina na mão.
+  const maestria = masteryDamageMult(heroAfterCost);
+
   const base = 3 + randomInt(6, rng);
   let dmg: number;
   let nextMonster: CombatMonsterView;
 
   if (magicalAttack) {
-    dmg = Math.round((base + d.dmgMagico + weaponAtkContribution(heroAfterCost, affinity) + otherEquipAtk(heroAfterCost)) * inspiracao);
+    dmg = Math.round((base + d.dmgMagico + weaponAtkContribution(heroAfterCost, affinity) + otherEquipAtk(heroAfterCost)) * inspiracao * maestria);
     const mod = modifyDamageByAffinity(monster, monster.species.weakness, monster.species.resistance, dmg, 'magico', isMage);
     dmg = mod.dmg;
     nextMonster = { ...monster, ...mod.monster };
   } else {
     const physicalBase = isMage && attackStyle === 'physical' ? Math.round(d.dmgFisico * 0.5) : d.dmgFisico;
-    dmg = Math.round((base + physicalBase + weaponAtkContribution(heroAfterCost, affinity) + otherEquipAtk(heroAfterCost)) * forcaMult * inspiracao);
+    dmg = Math.round((base + physicalBase + weaponAtkContribution(heroAfterCost, affinity) + otherEquipAtk(heroAfterCost)) * forcaMult * inspiracao * maestria);
     const mod = modifyDamageByAffinity(monster, monster.species.weakness, monster.species.resistance, dmg, 'fisico', false);
     dmg = mod.dmg;
     nextMonster = { ...monster, ...mod.monster };

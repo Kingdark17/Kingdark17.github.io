@@ -118,6 +118,31 @@ describe('resolveAttack — dano físico puro (sem crit, sem proc, sem passiva)'
   });
 });
 
+describe('resolveAttack — maestria', () => {
+  it('com a arma da classe, +2% por nível: os 27 da espada viram 29 no nível 3', () => {
+    const hero = heroFixture({ className: 'Guerreiro', weaponId: 'espada', hero: { masteryBattles: 60 } });
+    const result = resolveAttack(hero, monsterFixture(), 5, 'normal', { rng: sequenceRng([0, 0.99, 0.99]) });
+    expect(result.damage).toBe(29); // round(27 × 1,06)
+  });
+
+  it('com arma que a classe não domina, a maestria não entra', () => {
+    const sem = heroFixture({ className: 'Guerreiro', weaponId: 'machado' });
+    const com = heroFixture({ className: 'Guerreiro', weaponId: 'machado', hero: { masteryBattles: 550 } });
+    const golpe = (hero: Hero) => resolveAttack(hero, monsterFixture(), 5, 'normal', { rng: sequenceRng([0, 0.99, 0.99]) }).damage;
+    expect(golpe(com)).toBe(golpe(sem));
+  });
+
+  it('vale também pro golpe mágico do mago de cajado', () => {
+    const sem = heroFixture({ className: 'Mago', weaponId: 'cajado' });
+    const com = heroFixture({ className: 'Mago', weaponId: 'cajado', hero: { masteryBattles: 550 } });
+    // O golpe mágico é o ataque principal do mago: d6, e o 5 acerta.
+    const golpe = (hero: Hero) => resolveAttack(hero, monsterFixture(), 5, 'magic', { rng: sequenceRng([0, 0.99, 0.99]) });
+    const semMaestria = golpe(sem);
+    expect(semMaestria.outcome).toBe('hit');
+    expect(golpe(com).damage).toBeGreaterThan(semMaestria.damage ?? 0);
+  });
+});
+
 describe('resolveAttack — mana', () => {
   it('recusa ataque mágico sem mana suficiente, herói fica intocado', () => {
     const hero = heroFixture({ className: 'Mago', weaponId: 'cajado', hero: { mp: 2 } });

@@ -152,6 +152,18 @@
   background: #b8891c;
 }
 
+/* O roxo do selo da Guilda: a maestria é da classe, que a Guilda dá. */
+.maestria {
+  background: #7a3a9e;
+}
+
+/* O bônus da maestria, embaixo da barra dela. */
+.notaDoMedidor {
+  margin: 1px 0 0;
+  font-size: 0.75rem;
+  color: #5a3f2a;
+}
+
 .pontos {
   margin: 0;
   font-family: var(--font-display), Georgia, serif;

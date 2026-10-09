@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { seededRng, type DungeonCell, type EventTemplateId } from '@rpg-legend/shared';
+import { eventXp, seededRng, type DungeonCell, type EventTemplateId } from '@rpg-legend/shared';
 
 import { abrirEvento, escolher, escolhas, ESCOLHAS, type Evento } from './evento';
 import { celulaAtual, retomarSave, substituirCelulaAtual, type EstadoNaMasmorra } from './estado';
@@ -117,5 +117,38 @@ describe('escolher', () => {
 
     expect(depois.estado.hero.hp).toBeLessThan(vidaAntes);
     expect(depois.resolvido).toBe(true);
+  });
+});
+
+describe('XP de evento', () => {
+  it('a escolha resolvida diz quanto XP rendeu', () => {
+    const evento = eventoDe(comEvento(masmorra(), 'ferido', 100));
+    const xp = eventXp(evento.estado.floor);
+
+    const depois = escolher(evento, 'ajudar');
+
+    expect(depois.log[0]).toBe(`Você ajuda o aventureiro. +${xp} XP.`);
+  });
+
+  it('vale também pra escolha que não deu certo', () => {
+    const evento = eventoDe(comEvento(masmorra(), 'porta'));
+    const comForcaBaixa = { ...evento, estado: { ...evento.estado, hero: { ...evento.estado.hero, attrs: { ...evento.estado.hero.attrs, forca: 1 } } } };
+
+    const depois = escolher(comForcaBaixa, 'forcar');
+
+    expect(depois.log[0]).toContain('A porta não cede');
+    expect(depois.log[0]).toContain(`+${eventXp(evento.estado.floor)} XP.`);
+  });
+
+  it('seguir caminho não fala de XP', () => {
+    const depois = escolher(eventoDe(comEvento(masmorra(), 'ferido')), 'ignorar');
+
+    expect(depois.log[0]).toBe('Você segue seu caminho sem se envolver.');
+  });
+
+  it('escolha recusada não fala de XP', () => {
+    const depois = escolher(eventoDe(comEvento(masmorra(), 'ferido', 0)), 'ajudar');
+
+    expect(depois.log[0]).not.toContain('XP');
   });
 });

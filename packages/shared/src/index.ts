@@ -13,6 +13,7 @@ export * from './hero/stats.js';
 export * from './hero/derived.js';
 export * from './hero/catalog.js';
 export * from './hero/hero.js';
+export * from './hero/mastery.js';
 
 export * from './items/rarity.js';
 export * from './items/templates.js';

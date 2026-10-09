@@ -16,6 +16,7 @@
 
 import type { Power } from '../hero/catalog.js';
 import { hasDebuffEffect, type Companion, type Hero } from '../hero/hero.js';
+import { masteryDamageMult } from '../hero/mastery.js';
 import { defaultRng, randomInt, type Rng } from '../rng.js';
 import { modifyDamageByAffinity } from './damage.js';
 import type { CombatMonsterView } from './monster-state.js';
@@ -73,7 +74,9 @@ export function castPower(
 
   if (power.type === 'dano_fisico' || power.type === 'dano_magico') {
     const base = power.type === 'dano_fisico' ? d.dmgFisico : d.dmgMagico;
-    const bruto = Math.round(base * (power.power ?? 1)) + randomInt(6, rng);
+    // Maestria: +2% por nível com a arma da classe na mão, como no golpe.
+    // Fica no golpe do poder; o dano contínuo que ele deixa não muda.
+    const bruto = Math.round((Math.round(base * (power.power ?? 1)) + randomInt(6, rng)) * masteryDamageMult(heroAfterCost));
     const mod = modifyDamageByAffinity(
       monster,
       monster.species.weakness,

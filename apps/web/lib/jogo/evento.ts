@@ -16,6 +16,7 @@ import {
   type EventChoiceId,
   type EventOutcome,
   type EventTemplate,
+  type EventXp,
   type EventTemplateId,
   type Rng,
 } from '@rpg-legend/shared';
@@ -74,7 +75,7 @@ export function escolher(evento: Evento, escolha: EventChoiceId, rng: Rng = defa
   if (evento.resolvido) return evento;
 
   const resultado = resolveEvent(evento.estado.hero, evento.estado.floor, escolha, { rng });
-  const mensagem = narrar(resultado.outcome);
+  const mensagem = narrar(resultado.outcome) + narrarXp(resultado.xp);
 
   if (!resultado.resolved) {
     // Escolha recusada (ouro ou vida insuficiente): a sala continua aberta.
@@ -101,7 +102,7 @@ function narrar(outcome: EventOutcome): string {
     case 'too_wounded':
       return `Você está ferido demais: precisaria de ${outcome.required} de Vida.`;
     case 'helped_wounded':
-      return `Você ajuda o aventureiro e ganha ${outcome.xpGained} XP.${outcome.leveledUp ? ` Subiu ${outcome.levels} nível(is)!` : ''}`;
+      return 'Você ajuda o aventureiro.';
     case 'healed_wounded':
       return outcome.success
         ? `Seus cuidados funcionam. O aventureiro deixa ${outcome.goldGained} de ouro em agradecimento.`
@@ -121,4 +122,11 @@ function narrar(outcome: EventOutcome): string {
     default:
       return 'Nada acontece.';
   }
+}
+
+/** Resolver um evento dá XP, tenha dado certo ou não (ver `eventXp`). */
+function narrarXp(xp: EventXp | null): string {
+  if (!xp) return '';
+  const nivel = xp.leveledUp ? ` Subiu ${xp.levels} nível(is)!` : '';
+  return ` +${xp.gained} XP.${nivel}`;
 }
