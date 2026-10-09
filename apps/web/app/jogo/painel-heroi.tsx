@@ -1,16 +1,47 @@
 'use client';
 
+/**
+ * O painel do herói é o **cartão de guilda** (arte e decisão do usuário,
+ * 2026-10-09), em todas as telas. Ele existe por causa da fraqueza: quando
+ * a classe foi pra Guilda, a criação deixou de mostrá-la, e nenhuma outra
+ * tela mostrava. Além dela, o cartão traz o que o painel já tinha — Vida,
+ * Mana, XP e atributos — e os poderes. O Ouro saiu: a mochila e a loja o
+ * mostram no cabeçalho (o usuário preferiu assim).
+ *
+ * O Aprendiz tem o cartão **provisório**: sem selo, até a Guilda selar no
+ * treino. O texto do cartão sai de `lib/jogo/cartao.ts`.
+ */
+
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
-import { ATTR_KEYS, ATTR_LABELS, idDaRaca, type AttrKey, type Hero } from '@rpg-legend/shared';
+import { ATTR_KEYS, ATTR_LABELS, hasClass, idDaRaca, type AttrKey, type Hero } from '@rpg-legend/shared';
 
+import { fraquezaNoCartao, poderesNoCartao } from '@/lib/jogo/cartao';
 import { sinaisDoHeroi } from '@/lib/paperdoll/sinais';
 import { tocar } from '@/lib/som/efeitos';
 import { Paperdoll } from '../componentes/paperdoll';
+import cartao from './cartao-de-guilda.module.css';
 import styles from './jogo.module.css';
 
 function porcentagem(atual: number, maximo: number): string {
   return `${maximo > 0 ? Math.max(0, Math.min(100, (atual / maximo) * 100)) : 0}%`;
+}
+
+function Medidor({ rotulo, atual, maximo, cor }: Readonly<{ rotulo: string; atual: number; maximo: number; cor: string }>) {
+  return (
+    <div>
+      <div className={cartao.medidor}>
+        <span className={cartao.rotulo}>{rotulo}</span>
+        <span>
+          {atual}/{maximo}
+        </span>
+      </div>
+      <div className={cartao.trilho}>
+        <div className={`${cartao.preenchimento} ${cor}`} style={{ width: porcentagem(atual, maximo) }} />
+      </div>
+    </div>
+  );
 }
 
 /**
@@ -43,7 +74,7 @@ interface Props {
   /**
    * Gastar um ponto de atributo. Só chega com a **mochila aberta**, que é
    * onde o level up acontece: ali o boneco já está no meio da tela, então o
-   * painel tira o retrato e põe um "+" ao lado de cada atributo enquanto
+   * cartão tira o retrato e põe um "+" ao lado de cada atributo enquanto
    * houver ponto. Arranjo "Assim" do usuário, 2026-10-02.
    */
   onPonto?: (chave: AttrKey) => void;
@@ -52,6 +83,9 @@ interface Props {
 export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
   const naMochila = onPonto !== undefined;
   const comPontos = naMochila && hero.attrPoints > 0;
+  const treinado = hasClass(hero);
+  const poderes = poderesNoCartao(hero);
+  const fraqueza = fraquezaNoCartao(hero);
   const [subiu, setSubiu] = useState(false);
   const nivelAnterior = useRef(hero.level);
   const [ferido, setFerido] = useState(false);
@@ -138,12 +172,18 @@ export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
 
   return (
     <aside
-      className={styles.painel}
+      className={cartao.cartao}
+      aria-label={`Cartão de guilda de ${hero.name}`}
       data-subiu-de-nivel={subiu || undefined}
       onAnimationEnd={(evento) => {
         if (evento.currentTarget === evento.target) setSubiu(false);
       }}
     >
+      {/* O selo é da Guilda: o Aprendiz ainda não treinou, e o cartão dele
+          é provisório. Primeiro no HTML, posicionado — a última seção é que
+          leva a folga pra não passar por baixo dele. */}
+      {treinado && <Image className={cartao.selo} src="/img/ui/selo-da-guilda.png" alt="Selo da Guilda" width={28} height={28} unoptimized />}
+
       {/* O boneco vestido com o que **está equipado agora**, e não com a
           arma inicial da classe: trocar de espada na mochila muda o que
           aparece aqui. `idDaRaca` porque o herói grava `race` como nome
@@ -152,96 +192,91 @@ export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
           Com a mochila aberta ele sai: o mesmo boneco já está no meio da
           tela, maior, com os espaços em volta. */}
       {!naMochila && (
-        <div className={styles.retratoDoHeroi}>
-          <Paperdoll
-            className={styles.balaoDoBoneco}
-            raca={idDaRaca(hero)}
-            arma={hero.equip.arma?.templateId}
-            armadura={hero.equip.armadura?.templateId}
-            elmo={hero.equip.elmo?.templateId}
-            calca={hero.equip.calca?.templateId}
-            botas={hero.equip.botas?.templateId}
-            secundaria={hero.equip.secundaria?.templateId}
-            acessorio={hero.equip.acessorio?.templateId}
-            cabelo={hero.hair}
-            lado={132}
-            sinais={{ ...sinaisDoHeroi(hero), ferido, atacando }}
-            reserva={
-              <span className={styles.reservaDoRetrato} aria-hidden>
-                {hero.raceIcon}
-              </span>
-            }
-          />
-        </div>
+        <Paperdoll
+          className={cartao.retrato}
+          raca={idDaRaca(hero)}
+          arma={hero.equip.arma?.templateId}
+          armadura={hero.equip.armadura?.templateId}
+          elmo={hero.equip.elmo?.templateId}
+          calca={hero.equip.calca?.templateId}
+          botas={hero.equip.botas?.templateId}
+          secundaria={hero.equip.secundaria?.templateId}
+          acessorio={hero.equip.acessorio?.templateId}
+          cabelo={hero.hair}
+          lado={132}
+          sinais={{ ...sinaisDoHeroi(hero), ferido, atacando }}
+          reserva={
+            <span className={styles.reservaDoRetrato} aria-hidden>
+              {hero.raceIcon}
+            </span>
+          }
+        />
       )}
 
-      <h2 className={styles.nomeHeroi}>{hero.name}</h2>
-      <p className={styles.classeHeroi}>
-        {hero.raceIcon} {hero.race} · {hero.classIcon} {hero.className} · nível {hero.level}
+      <header className={cartao.topo}>
+        <h2 className={cartao.nome}>{hero.name}</h2>
+        <span className={cartao.nivel}>nível {hero.level}</span>
+      </header>
+      <p className={cartao.linha}>
+        {hero.raceIcon} {hero.race} · {hero.classIcon} {hero.className}
+        {!treinado && (
+          <>
+            {' · '}
+            <span className={cartao.provisorio}>provisório</span>
+          </>
+        )}
       </p>
 
-      <div className={styles.barra}>
-        <div className={styles.rotuloBarra}>
-          <span>Vida</span>
-          <span>
-            {hero.hp}/{hero.maxHp}
-          </span>
-        </div>
-        <div className={styles.trilho}>
-          <div className={`${styles.preenchimento} ${styles.vida}`} style={{ width: porcentagem(hero.hp, hero.maxHp) }} />
-        </div>
-      </div>
-
-      <div className={styles.barra}>
-        <div className={styles.rotuloBarra}>
-          <span>Mana</span>
-          <span>
-            {hero.mp}/{hero.maxMp}
-          </span>
-        </div>
-        <div className={styles.trilho}>
-          <div className={`${styles.preenchimento} ${styles.mana}`} style={{ width: porcentagem(hero.mp, hero.maxMp) }} />
-        </div>
+      <div className={cartao.medidores}>
+        <Medidor rotulo="Vida" atual={hero.hp} maximo={hero.maxHp} cor={cartao.vida} />
+        <Medidor rotulo="Mana" atual={hero.mp} maximo={hero.maxMp} cor={cartao.mana} />
+        <Medidor rotulo="XP" atual={hero.xp} maximo={hero.xpNext} cor={cartao.xp} />
       </div>
 
       {comPontos && (
-        <p className={styles.pontosParaDistribuir}>
+        <p className={cartao.pontos}>
           Subiu de nível: {hero.attrPoints} {hero.attrPoints === 1 ? 'ponto' : 'pontos'}
         </p>
       )}
 
-      <ul className={styles.listaAtributos}>
+      <dl className={cartao.atributos}>
         {ATTR_KEYS.map((chave) => (
-          <li key={chave} className={styles.linhaAtributo}>
-            <span className={styles.chave}>{ATTR_LABELS[chave]}</span>
-            {comPontos ? (
-              <span className={styles.valorComPonto}>
-                <span className={styles.valor}>{hero.attrs[chave]}</span>
-                <button
-                  type="button"
-                  className={styles.maisUmPonto}
-                  onClick={() => onPonto(chave)}
-                  aria-label={`Mais um ponto em ${ATTR_LABELS[chave]}`}
-                >
-                  +
-                </button>
-              </span>
-            ) : (
-              <span className={styles.valor}>{hero.attrs[chave]}</span>
+          <div key={chave} className={cartao.atributo}>
+            <dt>{ATTR_LABELS[chave]}</dt>
+            <dd>{hero.attrs[chave]}</dd>
+            {comPontos && (
+              <button
+                type="button"
+                className={cartao.mais}
+                onClick={() => onPonto(chave)}
+                aria-label={`Mais um ponto em ${ATTR_LABELS[chave]}`}
+              >
+                +
+              </button>
             )}
-          </li>
+          </div>
         ))}
-        <li className={styles.linhaAtributo}>
-          <span className={styles.chave}>Ouro</span>
-          <span className={styles.valor}>{hero.gold}</span>
-        </li>
-        <li className={styles.linhaAtributo}>
-          <span className={styles.chave}>XP</span>
-          <span className={styles.valor}>
-            {hero.xp}/{hero.xpNext}
-          </span>
-        </li>
-      </ul>
+      </dl>
+
+      <section className={cartao.secao}>
+        <h3 className={cartao.rotulo}>{poderes.length > 1 ? 'Poderes' : 'Poder'}</h3>
+        {poderes.map((poder) => (
+          <p key={poder.id}>
+            {poder.icone} {poder.nome} <span className={cartao.custo}>· {poder.custo} MP</span>
+          </p>
+        ))}
+        {poderes.length === 0 && <p className={cartao.provisorio}>{treinado ? 'Nenhum.' : 'Nenhum ainda: a Guilda ensina o primeiro.'}</p>}
+      </section>
+
+      {fraqueza && (
+        <section className={cartao.secao}>
+          <h3 className={cartao.rotulo}>Fraqueza</h3>
+          <p>
+            {fraqueza.icone} {fraqueza.nome}
+          </p>
+          <p className={cartao.efeito}>{fraqueza.efeito}</p>
+        </section>
+      )}
     </aside>
   );
 }

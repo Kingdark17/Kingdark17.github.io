@@ -15,8 +15,9 @@
  * até o topo ficar longe.
  *
  * Os pontos de atributo não moram mais aqui: com a mochila aberta o painel
- * do herói perde o retrato (o boneco já está no meio) e ganha um "+" ao lado
- * de cada atributo. Ver `PainelHeroi` e `tela-jogo.tsx`.
+ * do herói (o cartão de guilda) perde o retrato, porque o boneco já está no
+ * meio, e ganha um "+" ao lado de cada atributo. Ver `PainelHeroi` e
+ * `tela-jogo.tsx`.
  */
 
 import { useState } from 'react';

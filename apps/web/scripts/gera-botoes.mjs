@@ -59,8 +59,9 @@ function paeth(a, b, c) {
   return pa <= pb && pa <= pc ? a : pb <= pc ? b : c;
 }
 
+/** Aceita o caminho ou o PNG já em memória (o `.pixil` traz o PNG embutido). */
 export function lerPng(caminho) {
-  const buf = readFileSync(caminho);
+  const buf = Buffer.isBuffer(caminho) ? caminho : readFileSync(caminho);
   let pos = 8, w = 0, h = 0, cor = 6, idat = [];
   while (pos < buf.length) {
     const len = buf.readUInt32BE(pos);
@@ -155,24 +156,28 @@ function gerar(origem, destino) {
 
 // ---------------------------------------------------------------------
 
-const [origem] = process.argv.slice(2);
-if (!origem) {
-  console.error('uso: node scripts/gera-botoes.mjs <pasta com button_menu_*.png>');
-  console.error('');
-  console.error('Regera apps/web/public/img/ui/botao*.png a partir da arte do Breno.');
-  console.error('Os cortes do CSS (`border-image-slice: 9 20 11 16`) são a geometria');
-  console.error('do que sai daqui — mexer num sem rodar o outro corta a arte torto.');
-  process.exit(1);
-}
+// Só roda chamado direto: `gera-cartao.mjs` importa o leitor e o gravador
+// de PNG daqui, e sem a guarda o import sairia com o "uso:" abaixo.
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  const [origem] = process.argv.slice(2);
+  if (!origem) {
+    console.error('uso: node scripts/gera-botoes.mjs <pasta com button_menu_*.png>');
+    console.error('');
+    console.error('Regera apps/web/public/img/ui/botao*.png a partir da arte do Breno.');
+    console.error('Os cortes do CSS (`border-image-slice: 9 20 11 16`) são a geometria');
+    console.error('do que sai daqui — mexer num sem rodar o outro corta a arte torto.');
+    process.exit(1);
+  }
 
-const UI = fileURLToPath(new URL('../public/img/ui', import.meta.url));
-const ESTADOS = {
-  'botao.png': 'button_menu_layout',
-  'botao-escuro.png': 'button_menu_dark_layout',
-  'botao-apertado.png': 'button_menu_press_layout',
-};
+  const UI = fileURLToPath(new URL('../public/img/ui', import.meta.url));
+  const ESTADOS = {
+    'botao.png': 'button_menu_layout',
+    'botao-escuro.png': 'button_menu_dark_layout',
+    'botao-apertado.png': 'button_menu_press_layout',
+  };
 
-for (const [saida, fonte] of Object.entries(ESTADOS)) {
-  const { L, h, limpos } = gerar(join(origem, `${fonte}.png`), join(UI, saida));
-  console.log(`${saida}: ${L}×${h}, ${limpos} px de musgo tirados da linha ${LINHA_DO_MIOLO}`);
+  for (const [saida, fonte] of Object.entries(ESTADOS)) {
+    const { L, h, limpos } = gerar(join(origem, `${fonte}.png`), join(UI, saida));
+    console.log(`${saida}: ${L}×${h}, ${limpos} px de musgo tirados da linha ${LINHA_DO_MIOLO}`);
+  }
 }

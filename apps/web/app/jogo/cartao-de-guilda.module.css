@@ -1,0 +1,230 @@
+/*
+ * O cartão de guilda — o painel do herói desde 2026-10-09, com a arte do
+ * usuário (`scripts/gera-cartao.mjs`). Em todas as telas; na mochila sem o
+ * retrato, porque o boneco já está no meio.
+ *
+ * O pergaminho é moldura de 9 fatias: borda de 2 px de arte (a volta de
+ * papel e a linha vermelha) e o miolo repetido, tudo em 4×. Assim o cartão
+ * cresce com o que vai escrito sem esticar pixel. O selo é peça à parte e
+ * volta pro canto em que foi desenhado, colado na linha vermelha — por isso
+ * `right: 0; bottom: 0` do lado de dentro da borda.
+ *
+ * As cores moram aqui e não nos tokens do jogo: é tinta sobre papel, e os
+ * tokens são dourado e pergaminho claro sobre fundo escuro — no cartão
+ * sumiriam.
+ */
+
+.cartao {
+  --tinta: #3b2316;
+  --tinta-apagada: #6e5137;
+  --vermelho: #ad3636;
+
+  position: relative;
+  display: grid;
+  gap: 0.45rem;
+  /* Empilhado (tela estreita) ele ocuparia a largura toda, e os atributos
+     se espalhariam por 60rem de papel. */
+  max-width: 32rem;
+  padding: 0.6rem 0.75rem 0.65rem;
+  border: 8px solid var(--vermelho);
+  border-image: url('/img/ui/cartao-de-guilda.png') 8 fill / 8px repeat;
+  background: #d6c19c;
+  image-rendering: pixelated;
+  color: var(--tinta);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.cartao[data-subiu-de-nivel] {
+  animation: piscadaDeNivel 0.9s ease-out;
+}
+
+@keyframes piscadaDeNivel {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(232, 198, 90, 0);
+  }
+  30% {
+    box-shadow: 0 0 26px rgba(232, 198, 90, 0.85);
+  }
+}
+
+.selo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 28px;
+  height: 28px;
+  image-rendering: pixelated;
+}
+
+/* A última seção não passa por baixo do selo. */
+.cartao > :last-child {
+  padding-right: 2.1rem;
+}
+
+/* O mesmo balão redondo de antes, em tom de papel: o disco escuro do
+   painel virava um buraco no pergaminho. */
+.retrato {
+  justify-self: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 62%, rgba(255, 244, 214, 0.55), transparent 62%), rgba(110, 81, 55, 0.22);
+  border: 2px solid rgba(110, 81, 55, 0.45);
+}
+
+.topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.nome {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  color: var(--vermelho);
+  overflow-wrap: anywhere;
+}
+
+.rotulo,
+.nivel,
+.atributos dt {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-apagada);
+}
+
+.nivel {
+  white-space: nowrap;
+}
+
+.linha {
+  margin: -0.25rem 0 0;
+}
+
+.provisorio {
+  font-style: italic;
+  color: var(--tinta-apagada);
+}
+
+.medidores {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.medidor {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.trilho {
+  height: 8px;
+  margin-top: 1px;
+  border-radius: 999px;
+  background: rgba(59, 35, 22, 0.2);
+  border: 1px solid rgba(59, 35, 22, 0.45);
+  overflow: hidden;
+}
+
+.preenchimento {
+  height: 100%;
+}
+
+.vida {
+  background: #a8322f;
+}
+
+.mana {
+  background: #3f6fc4;
+}
+
+.xp {
+  background: #b8891c;
+}
+
+.pontos {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.875rem;
+  color: var(--vermelho);
+}
+
+/* Três por linha, cada número colado no rótulo dele: espalhado, o "9" de
+   FOR ficava encostado no "DES" e parecia ser dele. */
+.atributos {
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  justify-content: space-between;
+  gap: 0.125rem 0.6rem;
+  margin: 0;
+  padding: 0.4rem 0;
+  border-block: 1px solid rgba(110, 81, 55, 0.35);
+}
+
+.atributo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.375rem;
+}
+
+.atributo dd {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* O "+" do nível no vermelho da moldura: o dourado do jogo some no papel. */
+.mais {
+  width: 18px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  align-self: center;
+  padding: 0;
+  font: 600 0.8125rem/1 var(--font-mono), monospace;
+  color: #f6ead0;
+  background: var(--vermelho);
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.mais:hover {
+  background: #c24848;
+}
+
+.mais:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: 1px;
+}
+
+.secao {
+  display: grid;
+  gap: 1px;
+}
+
+.secao p {
+  margin: 0;
+}
+
+.custo {
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--tinta-apagada);
+}
+
+.efeito {
+  font-size: 0.8125rem;
+  color: #5a3f2a;
+}
