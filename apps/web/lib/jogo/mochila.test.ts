@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 
 import { equippedSlot, instantiate, RARITIES, seededRng, templateById, type Item } from '@rpg-legend/shared';
 
-import { rolarTudo } from './criacao';
 import { entrarNaCidade, type EstadoNaCidade } from './estado';
 import {
   abrirMochila,
@@ -18,7 +17,7 @@ import {
   usar,
   type Mochila,
 } from './mochila';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 /** Contador no lugar do relógio: uid reproduzível e sempre diferente do anterior. */
 let sequencia = 0;
@@ -31,7 +30,7 @@ function item(templateId: string, rarityIndex = 0): Item {
 
 function cidade(itens: Item[] = []): EstadoNaCidade {
   const rng = seededRng(5);
-  const base = entrarNaCidade(montarSaveInicial(rolarTudo('Aria', rng), rng));
+  const base = entrarNaCidade(saveSorteado('Aria', rng));
   return { ...base, inventory: itens };
 }
 

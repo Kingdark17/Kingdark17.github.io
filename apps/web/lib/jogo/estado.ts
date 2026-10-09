@@ -25,6 +25,7 @@ import {
   inBounds,
   isBossFloor,
   onFloorReached,
+  withGuild,
   type CityCell,
   type Companion,
   type Direction,
@@ -156,8 +157,10 @@ export function retomarSave(entrada: SaveCarregado, rng: Rng = defaultRng): Esta
 export function entrarNaCidade(save: SaveCarregado): EstadoNaCidade {
   const base = comuns(save);
 
+  // `withGuild`: a cidade de quem já jogava foi gravada antes da Guilda
+  // existir, com uma pracinha vazia no lugar dela.
   const { grid, inicio } = temCidade(save)
-    ? { grid: save.cityMap, inicio: save.cityStart }
+    ? { grid: withGuild(save.cityMap), inicio: save.cityStart }
     : (() => {
         const layout = generateCityLayout(base.mapRows, base.mapCols);
         return { grid: layout.grid, inicio: { x: layout.start.x, y: layout.start.y } };

@@ -2,11 +2,15 @@ import { describe, expect, it } from 'vitest';
 
 import { classById, classByName, CLASSES, DEBUFFS, powerById, powerByName, RACES, raceByName } from './catalog.js';
 import {
+  APPRENTICE,
+  BASE_ATTR,
+  buildApprentice,
   buildHero,
   equipItem,
   equippedSlot,
   gainXP,
   generateCompanion,
+  hasClass,
   hasDebuffEffect,
   heroPowers,
   hydrateSavedHero,
@@ -15,6 +19,7 @@ import {
   recomputeDerived,
   rollAttrs,
   spendAttrPoint,
+  trainAtGuild,
   unequipItem,
   weaponAffinityPct,
   type Hero,
@@ -655,5 +660,70 @@ describe('heroPowers — poder da classe', () => {
     const jaTinha = bardo({ powerIds: ['cancao_debilitante', 'cancao_de_batalha'] });
     expect(heroPowers(jaTinha).filter((p) => p.id === 'cancao_de_batalha')).toHaveLength(1);
     expect(heroPowers(novoHeroi()).map((p) => p.id)).not.toContain('cancao_de_batalha');
+  });
+});
+
+describe('o aprendiz e a guilda', () => {
+  const ORC = raceByName('Orc')!;
+  const MAGO = classByName('Mago')!;
+  const BARBARO = classByName('Bárbaro')!;
+  const SONO_LEVE = DEBUFFS.find((d) => d.id === 'sono_leve')!; // -1 Constituição
+
+  function aprendiz(race = HUMANO, debuff = SEM_DEBUFF): Hero {
+    return buildApprentice({ name: 'Novato', race, debuff }, seededRng(2));
+  }
+
+  it('nasce com 8 em tudo mais o bônus da raça, sem classe, arma nem poder', () => {
+    const orc = aprendiz(ORC);
+
+    expect(orc.attrs).toEqual({ forca: 11, destreza: 8, constituicao: 8, intelecto: 7, sabedoria: 8, carisma: 8 });
+    expect(hasClass(orc)).toBe(false);
+    expect(orc.className).toBe(APPRENTICE.name);
+    expect(orc.equip.arma).toBeNull();
+    expect(heroPowers(orc)).toEqual([]);
+    expect(orc.hp).toBe(orc.maxHp);
+  });
+
+  it('a fraqueza tira o ponto do atributo dela', () => {
+    expect(aprendiz(HUMANO, SONO_LEVE).attrs.constituicao).toBe(BASE_ATTR + 1 - 1);
+  });
+
+  it('a guilda dá o viés da classe, a arma inicial e só o poder da classe', () => {
+    const antes = aprendiz();
+    const { hero, toInventory } = trainAtGuild(antes, MAGO);
+
+    expect(hasClass(hero)).toBe(true);
+    expect(hero.classId).toBe('mago');
+    expect(hero.attrs.intelecto).toBe(antes.attrs.intelecto + 3);
+    expect(hero.attrs.sabedoria).toBe(antes.attrs.sabedoria + 1);
+    expect(hero.equip.arma?.templateId).toBe('cajado');
+    expect(hero.equip.arma?.equipped).toBe(true);
+    expect(toInventory).toBeNull();
+    expect(heroPowers(hero).map((p) => p.id)).toEqual(['bola_de_fogo']);
+    expect(hero.maxMp).toBeGreaterThan(antes.maxMp);
+  });
+
+  it('quem já tem classe sai da guilda como entrou', () => {
+    const guerreiro = novoHeroi();
+    expect(trainAtGuild(guerreiro, MAGO).hero).toBe(guerreiro);
+  });
+
+  it('a arma inicial vai pra mochila quando a mão já está ocupada', () => {
+    const adaga = { ...instantiate(templateById('adaga')!, RARITIES[0]!), equipped: true };
+    const armado = { ...aprendiz(), equip: { ...aprendiz().equip, arma: adaga } };
+    const { hero, toInventory } = trainAtGuild(armado, MAGO);
+
+    expect(hero.equip.arma).toBe(adaga);
+    expect(toInventory?.templateId).toBe('cajado');
+  });
+
+  it('e também quando um escudo impede a arma de duas mãos', () => {
+    const escudo = { ...instantiate(templateById('escudo')!, RARITIES[0]!), equipped: true };
+    const comEscudo = { ...aprendiz(), equip: { ...aprendiz().equip, secundaria: escudo } };
+    const { hero, toInventory } = trainAtGuild(comEscudo, BARBARO);
+
+    expect(hero.equip.arma).toBeNull();
+    expect(hero.equip.secundaria).toBe(escudo);
+    expect(toInventory?.templateId).toBe('machado');
   });
 });

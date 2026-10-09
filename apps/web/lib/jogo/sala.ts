@@ -20,6 +20,7 @@ import {
   defaultRng,
   displayName,
   generateMimic,
+  hasClass,
   onItemCollected,
   randomInt,
   restAtTavern,
@@ -35,6 +36,7 @@ import type { Adm } from './adm';
 import { iniciarEncontro, type Combate } from './combate';
 import { abrirDialogo, type Dialogo } from './dialogo';
 import { abrirEvento, type Evento } from './evento';
+import { abrirGuilda, type Guilda } from './guilda';
 import { abrirLoja, type Loja } from './loja';
 import type { Mochila } from './mochila';
 import { abrirQuadro, type Quadro } from './missoes';
@@ -73,7 +75,8 @@ export type TelaAberta =
   | { tipo: 'missoes'; quadro: Quadro }
   | { tipo: 'evento'; evento: Evento }
   | { tipo: 'mochila'; mochila: Mochila }
-  | { tipo: 'adm'; adm: Adm };
+  | { tipo: 'adm'; adm: Adm }
+  | { tipo: 'guilda'; guilda: Guilda };
 
 export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;
@@ -98,6 +101,7 @@ const PASSO_DA_SALA: Record<string, PassoDoTutorial> = {
   npc: 'npc',
   shop: 'shop',
   blacksmith: 'shop',
+  guild: 'guild',
   gate: 'dungeon',
   monster: 'combat',
   boss: 'combat',
@@ -114,13 +118,14 @@ const PEDEM_CONFIRMACAO = new Set([
   'blacksmith',
   'tavern',
   'questboard',
+  'guild',
   'gate',
   'exit',
   'stairs',
 ]);
 
 /** Dizer "não" nestas salas atravessa em vez de recuar — senão a saída da masmorra viraria um muro no caminho da escada. */
-const ATRAVESSAM_SEM_INTERAGIR = new Set(['npc', 'shop', 'blacksmith', 'tavern', 'questboard', 'treasure', 'event', 'exit']);
+const ATRAVESSAM_SEM_INTERAGIR = new Set(['npc', 'shop', 'blacksmith', 'tavern', 'questboard', 'guild', 'treasure', 'event', 'exit']);
 
 /**
  * Sala já resolvida não pergunta nada: não há o que decidir.
@@ -179,6 +184,19 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResolucaoDaSala {
 
   switch (celula.type) {
     case 'gate': {
+      // O Aprendiz não desce: sem classe ele não tem arma nem poder, e a
+      // Guilda é o primeiro passo do jogo (decisão do usuário, 2026-10-09).
+      if (!hasClass(estado.hero)) {
+        return {
+          estado,
+          aviso: aviso(
+            '🌟',
+            'Portão da Masmorra',
+            'O guarda barra a passagem: a masmorra é só para quem já treinou na Guilda dos Aventureiros, ao lado do caminho até aqui.',
+          ),
+          tela: null,
+        };
+      }
       const dentro = entrarNaMasmorra(estado, rng);
       return {
         estado: dentro,
@@ -202,6 +220,8 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResolucaoDaSala {
       return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'blacksmith', rng) }, som: 'door' };
     case 'questboard':
       return { estado, aviso: null, tela: { tipo: 'missoes', quadro: abrirQuadro(estado, rng) } };
+    case 'guild':
+      return { estado, aviso: null, tela: { tipo: 'guilda', guilda: abrirGuilda(estado) }, som: 'door' };
     case 'npc':
       return abrirConversa(estado);
     case 'start':

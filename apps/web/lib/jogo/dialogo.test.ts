@@ -2,14 +2,13 @@ import { describe, expect, it } from 'vitest';
 
 import { itemCategory, randomItem, seededRng, type CityCell, type DungeonCell, type Item, type NpcService } from '@rpg-legend/shared';
 
-import { rolarTudo } from './criacao';
 import { abrirDialogo, falaAtual, proximaFala, servicoDisponivel, temMaisFalas, usarServico, type Dialogo } from './dialogo';
 import { celulaAtual, entrarNaCidade, retomarSave, substituirCelulaAtual, type EstadoNaCidade, type EstadoNaMasmorra } from './estado';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 function saveNovo() {
   const rng = seededRng(4);
-  return montarSaveInicial(rolarTudo('Aria', rng), rng);
+  return saveSorteado('Aria', rng);
 }
 
 function cidade(): EstadoNaCidade {

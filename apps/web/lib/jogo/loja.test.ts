@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 
 import { instantiate, RARITIES, seededRng, templateById, type CityCell, type Item, type Rng } from '@rpg-legend/shared';
 
-import { rolarTudo } from './criacao';
 import { celulaAtual, entrarNaCidade, substituirCelulaAtual, type EstadoNaCidade } from './estado';
 import {
   abrirLoja,
@@ -18,13 +17,13 @@ import {
   vender,
   type Loja,
 } from './loja';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 const NUNCA: Rng = () => 0.99;
 
 function cidade(ouro = 1000): EstadoNaCidade {
   const rng = seededRng(5);
-  const base = entrarNaCidade(montarSaveInicial(rolarTudo('Aria', rng), rng));
+  const base = entrarNaCidade(saveSorteado('Aria', rng));
   return { ...base, hero: { ...base.hero, gold: ouro } };
 }
 

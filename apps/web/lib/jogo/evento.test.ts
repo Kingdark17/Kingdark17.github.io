@@ -2,14 +2,13 @@ import { describe, expect, it } from 'vitest';
 
 import { seededRng, type DungeonCell, type EventTemplateId } from '@rpg-legend/shared';
 
-import { rolarTudo } from './criacao';
 import { abrirEvento, escolher, escolhas, ESCOLHAS, type Evento } from './evento';
 import { celulaAtual, retomarSave, substituirCelulaAtual, type EstadoNaMasmorra } from './estado';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 function masmorra(): EstadoNaMasmorra {
   const rng = seededRng(4);
-  const estado = retomarSave({ ...montarSaveInicial(rolarTudo('Aria', rng), rng), floor: 2, mapMode: 'dungeon' }, seededRng(11));
+  const estado = retomarSave({ ...saveSorteado('Aria', rng), floor: 2, mapMode: 'dungeon' }, seededRng(11));
   if (estado.mapMode !== 'dungeon') throw new Error('esperava masmorra');
   return estado;
 }

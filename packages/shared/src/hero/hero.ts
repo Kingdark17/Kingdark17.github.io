@@ -18,6 +18,7 @@ import {
   type ClassDef,
   type Debuff,
   type DebuffEffect,
+  type IdentidadeDeClasse,
   type Power,
 } from './catalog.js';
 import { derivedStats, xpForLevel } from './derived.js';
@@ -197,6 +198,126 @@ export function buildHero(creation: HeroCreation, rng: Rng = defaultRng): Hero {
     maxMp: derived.maxMp,
     mp: derived.maxMp,
   };
+}
+
+// ---------- o aprendiz e a guilda ----------
+//
+// Doc do Breno (2026-10): a criação deixa de escolher classe e poderes e de
+// sortear atributos; quem dá classe e poder inicial é o Treinamento de
+// Guilda, na cidade. O herói nasce **Aprendiz**: sem classe, sem arma e sem
+// poder, e o portão da masmorra fica fechado até ele treinar.
+//
+// `buildHero` continua existindo inteiro: é como os personagens de antes
+// nasceram, e os testes montam herói pronto por ele.
+
+/**
+ * A base de quem nasce sem classe. 8 em tudo — o antigo `6 + d6` dava 8,5 de
+ * média —, mais o bônus da raça e menos o ponto da fraqueza. O viés da classe
+ * entra depois, na guilda.
+ */
+export const BASE_ATTR = 8;
+
+export function apprenticeAttrs(race: (typeof RACES)[number], debuff: Debuff): Attributes {
+  const attrs = emptyAttributes();
+  for (const key of ATTR_KEYS) attrs[key] = BASE_ATTR;
+  for (const key of Object.keys(race.bonus) as AttrKey[]) attrs[key] += race.bonus[key] ?? 0;
+  if (debuff.attr) attrs[debuff.attr] -= 1;
+  for (const key of ATTR_KEYS) attrs[key] = clamp(attrs[key], 1, 20);
+  return attrs;
+}
+
+/**
+ * Nome e ícone de quem ainda não treinou. **Não é uma classe**: nenhuma
+ * classe se chama assim, então `idDaClasse` não acha nada e `hasClass` dá
+ * falso. Fica gravado em `className` pra toda tela que mostra a classe —
+ * painel, lista de personagens, o resumo do servidor — ter o que escrever.
+ */
+export const APPRENTICE = { name: 'Aprendiz', icon: '🎒' } as const;
+
+/** O que a criação decide: nome, raça e aparência. A fraqueza é sorteada por quem chama. */
+export interface ApprenticeCreation {
+  name: string;
+  race: (typeof RACES)[number];
+  debuff: Debuff;
+  hair?: string;
+}
+
+export function buildApprentice(creation: ApprenticeCreation, rng: Rng = defaultRng): Hero {
+  const attrs = apprenticeAttrs(creation.race, creation.debuff);
+  const equip: HeroEquipment = { arma: null, secundaria: null, elmo: null, armadura: null, calca: null, botas: null, acessorio: null };
+  const derived = derivedStats({ level: 1, attrs, equip });
+
+  return {
+    level: 1,
+    attrs,
+    equip,
+    name: creation.name,
+    race: creation.race.name,
+    raceIcon: creation.race.icon,
+    className: APPRENTICE.name,
+    classIcon: APPRENTICE.icon,
+    raceId: creation.race.id,
+    ...(creation.hair ? { hair: creation.hair } : {}),
+    xp: 0,
+    xpNext: xpForLevel(1),
+    attrPoints: 0,
+    gold: 30 + randomInt(21, rng),
+    powerNames: [],
+    powerIds: [],
+    debuff: creation.debuff,
+    killCount: 0,
+    derived,
+    maxHp: derived.maxHp,
+    hp: derived.maxHp,
+    maxMp: derived.maxMp,
+    mp: derived.maxMp,
+  };
+}
+
+/** Já treinou na guilda? Pelo id, como toda regra: o Aprendiz não tem. */
+export function hasClass(hero: IdentidadeDeClasse): boolean {
+  return idDaClasse(hero) !== null;
+}
+
+export interface GuildTraining {
+  hero: Hero;
+  /**
+   * A arma inicial da classe, quando ela não coube na mão: o aprendiz pode
+   * ter comprado e vestido uma arma, ou um escudo que impede a de duas mãos.
+   * Quem chama põe na mochila. `null` quando ela já foi pra mão.
+   */
+  toInventory: Item | null;
+}
+
+/**
+ * O Treinamento de Guilda: o Aprendiz vira da classe escolhida. Ganha o viés
+ * de atributos da classe, a arma inicial dela e **só o poder da classe** — os
+ * outros virão dos professores, por maestria (decisão do usuário,
+ * 2026-10-09). Quem já tem classe sai como entrou.
+ */
+export function trainAtGuild(hero: Hero, cls: ClassDef): GuildTraining {
+  if (hasClass(hero)) return { hero, toInventory: null };
+
+  const attrs = { ...hero.attrs };
+  for (const key of Object.keys(cls.bias) as AttrKey[]) attrs[key] = clamp(attrs[key] + (cls.bias[key] ?? 0), 1, 99);
+
+  const template = templateById(cls.weaponTemplate);
+  if (!template) throw new Error(`Arma inicial desconhecida: ${cls.weaponTemplate}`);
+  const arma: Item = instantiate(template, RARITIES[0] as (typeof RARITIES)[number]);
+  // Mão principal livre, e sem escudo no caminho de uma arma de duas mãos.
+  const cabe = !hero.equip.arma && !(isTwoHanded(arma) && hero.equip.secundaria);
+
+  const treinado: Hero = {
+    ...hero,
+    attrs,
+    equip: cabe ? { ...hero.equip, arma: { ...arma, equipped: true } } : hero.equip,
+    className: cls.name,
+    classIcon: cls.icon,
+    classId: cls.id,
+    powerIds: [cls.signatureId],
+    powerNames: [powerById(cls.signatureId)?.name ?? cls.signatureId],
+  };
+  return { hero: recomputeDerived(treinado), toInventory: cabe ? null : arma };
 }
 
 /**

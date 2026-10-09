@@ -27,9 +27,8 @@ import {
   usarPoder,
   type Combate,
 } from './combate';
-import { rolarTudo } from './criacao';
 import { celulaAtual, retomarSave, substituirCelulaAtual, type EstadoNaMasmorra } from './estado';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 /** rng constante: 0 dispara tudo que é chance, 0.99 não dispara nada. */
 const SEMPRE: Rng = () => 0;
@@ -52,7 +51,7 @@ function monstro(overrides: Partial<MonsterInstance> = {}): MonsterInstance {
 }
 
 function masmorraNoAndar(floor: number, seed = 11): EstadoNaMasmorra {
-  const save = montarSaveInicial(rolarTudo('Aria', seededRng(seed)), seededRng(seed));
+  const save = saveSorteado('Aria', seededRng(seed), seededRng(seed));
   const estado = retomarSave({ ...save, floor, mapMode: 'dungeon' }, seededRng(seed));
   if (estado.mapMode !== 'dungeon') throw new Error('esperava cair na masmorra');
   return estado;
@@ -314,7 +313,7 @@ describe('derrota', () => {
 
 describe('salaDeCombate', () => {
   it('não enxerga sala de combate na cidade', () => {
-    const cidade = retomarSave(montarSaveInicial(rolarTudo('Aria', seededRng(1)), seededRng(1)));
+    const cidade = retomarSave(saveSorteado('Aria', seededRng(1), seededRng(1)));
     expect(salaDeCombate(cidade)).toBeNull();
   });
 

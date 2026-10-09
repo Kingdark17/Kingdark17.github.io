@@ -2,8 +2,9 @@
  * Primeiros Passos e Guia do Aventureiro — porta de `js/tutorial.js`.
  *
  * Duas coisas diferentes com o mesmo nome no original: um **guia** de
- * texto que fica disponível pra sempre, e uma **missãozinha** de seis
- * etapas que dá 40 de ouro e uma poção ao completar.
+ * texto que fica disponível pra sempre, e uma **missãozinha** de etapas
+ * que dá 40 de ouro e uma poção ao completar — seis no original, sete
+ * desde que a Guilda entrou.
  *
  * O progresso vive no save (`state.tutorial` no original), então trocar de
  * navegador não recomeça o tutorial. `enabled: false` desliga o
@@ -15,7 +16,7 @@ import { addItem, randomItem, defaultRng, type Item, type Rng } from '@rpg-legen
 
 import type { EstadoDoJogo } from './estado';
 
-export type PassoDoTutorial = 'move' | 'inventory' | 'npc' | 'shop' | 'dungeon' | 'combat';
+export type PassoDoTutorial = 'move' | 'guild' | 'inventory' | 'npc' | 'shop' | 'dungeon' | 'combat';
 
 export interface Tutorial {
   enabled: boolean;
@@ -30,9 +31,22 @@ export interface Passo {
   dica: string;
 }
 
-/** Textos iguais aos do original, na mesma ordem. */
+/**
+ * Textos iguais aos do original, na mesma ordem — mais a Guilda (2026-10),
+ * logo depois do primeiro passo: sem ela o portão não abre, e quem acabou de
+ * nascer Aprendiz precisa saber onde ir antes de tentar a masmorra.
+ *
+ * Quem já tinha fechado as seis etapas e ganhado o prêmio não ganha de novo:
+ * `rewarded` continua valendo, e a Guilda só aparece como etapa por fazer.
+ */
 export const PASSOS: Passo[] = [
   { id: 'move', icone: '🧭', nome: 'Dê o primeiro passo', dica: 'Use WASD, as setas do teclado ou os botões de direção para andar.' },
+  {
+    id: 'guild',
+    icone: '⚜️',
+    nome: 'Treine na Guilda',
+    dica: 'Escolha sua classe na Guilda dos Aventureiros. Sem ela, o portão da masmorra não abre.',
+  },
   { id: 'inventory', icone: '🎒', nome: 'Abra a mochila', dica: 'Selecione um item para ver atributos, comparar, equipar, usar ou descartar.' },
   { id: 'npc', icone: '🧙', nome: 'Converse com um NPC', dica: 'NPCs podem curar, negociar, revelar o mapa ou entrar temporariamente na equipe.' },
   { id: 'shop', icone: '🏵️', nome: 'Visite uma loja', dica: 'Compare o item da loja com o equipado. Carisma melhora seus descontos.' },
@@ -64,7 +78,7 @@ export const GUIAS: { titulo: string; texto: string }[] = [
   { titulo: '💾 Salvamento', texto: 'O progresso vai pra nuvem sozinho alguns segundos depois de cada passo.' },
 ];
 
-/** A recompensa de fechar as seis etapas, igual ao original. */
+/** A recompensa de fechar as etapas, igual à do original (que tinha seis). */
 const OURO_DA_RECOMPENSA = 40;
 
 export interface Recado {

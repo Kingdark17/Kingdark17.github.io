@@ -5,7 +5,17 @@ import type { Attributes } from '../hero/stats.js';
 import { DEBUFFS } from '../hero/catalog.js';
 import type { Companion, Hero, HeroEquipment } from '../hero/hero.js';
 import { DIR_OPP, DIR_VECTORS, type Direction } from '../dungeon/graph.js';
-import { cityEntryText, cityIconFor, cityRoomDesc, cityShortLabel, generateCityLayout, restAtTavern, type CityCell } from './city.js';
+import {
+  cityEntryText,
+  cityIconFor,
+  cityRoomDesc,
+  cityShortLabel,
+  generateCityLayout,
+  GUILD_POS,
+  restAtTavern,
+  withGuild,
+  type CityCell,
+} from './city.js';
 
 const SEM_DEBUFF = DEBUFFS.find((d) => !d.effect)!;
 
@@ -89,11 +99,19 @@ describe('generateCityLayout', () => {
     expect(npcRooms.every((r) => r.npc?.serviceUsed === false)).toBe(true);
   });
 
-  it('todas as salas de tipo fixo (loja/ferreiro/taverna/quadro/portão) existem uma vez cada', () => {
+  it('todas as salas de tipo fixo (loja/ferreiro/taverna/quadro/portão/guilda) existem uma vez cada', () => {
     const layout = generateCityLayout(6, 6);
-    for (const type of ['shop', 'blacksmith', 'tavern', 'questboard', 'gate'] as const) {
+    for (const type of ['shop', 'blacksmith', 'tavern', 'questboard', 'gate', 'guild'] as const) {
       expect(layout.rooms.filter((r) => r.type === type)).toHaveLength(1);
     }
+  });
+
+  it('a guilda tem porta pro caminho do portão', () => {
+    const { grid } = generateCityLayout(6, 6);
+    const guilda = grid[GUILD_POS.y]?.[GUILD_POS.x];
+    expect(guilda?.type).toBe('guild');
+    expect(guilda?.doors.E).toBe(true);
+    expect(grid[GUILD_POS.y]?.[GUILD_POS.x + 1]?.doors.W).toBe(true);
   });
 
   it('portas são sempre simétricas', () => {
@@ -111,6 +129,29 @@ describe('generateCityLayout', () => {
     const a = generateCityLayout(6, 6);
     const b = generateCityLayout(6, 6);
     expect(JSON.stringify(a.grid)).toBe(JSON.stringify(b.grid));
+  });
+});
+
+describe('withGuild', () => {
+  /** A cidade como era gravada antes da guilda: a pracinha vazia no lugar dela. */
+  function cidadeDeAntes() {
+    const { grid } = generateCityLayout(6, 6);
+    return grid.map((linha) => linha.map((cell) => (cell.type === 'guild' ? { ...cell, type: 'normal' as const } : cell)));
+  }
+
+  it('abre a guilda na pracinha de uma cidade gravada antes dela', () => {
+    const antiga = cidadeDeAntes();
+    const nova = withGuild(antiga);
+
+    expect(nova[GUILD_POS.y]?.[GUILD_POS.x]?.type).toBe('guild');
+    expect(nova[GUILD_POS.y]?.[GUILD_POS.x]?.doors).toEqual(antiga[GUILD_POS.y]?.[GUILD_POS.x]?.doors);
+    // O resto da cidade é o mesmo objeto: estoque e salas visitadas ficam.
+    expect(nova[3]).toBe(antiga[3]);
+  });
+
+  it('não mexe numa cidade que já tem a guilda', () => {
+    const { grid } = generateCityLayout(6, 6);
+    expect(withGuild(grid)).toBe(grid);
   });
 });
 

@@ -67,6 +67,7 @@ const LEGENDA_DA_CIDADE: Array<[string, string]> = [
   ['blacksmith', 'Ferreiro'],
   ['tavern', 'Taverna'],
   ['questboard', 'Missões'],
+  ['guild', 'Guilda'],
   ['gate', 'Portão da Masmorra'],
 ];
 

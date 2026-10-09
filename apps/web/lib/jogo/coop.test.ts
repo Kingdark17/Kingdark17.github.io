@@ -3,14 +3,13 @@ import { describe, expect, it } from 'vitest';
 import { seededRng } from '@rpg-legend/shared';
 
 import { aplicarRemoto, instantaneoDaSala } from './coop';
-import { rolarTudo } from './criacao';
 import { entrarNaCidade, entrarNaMasmorra, type EstadoDoJogo, type EstadoNaCidade } from './estado';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 import type { PerfilNaSala } from '../rede/sala';
 
 function cidade(nome = 'Aria', semente = 3): EstadoNaCidade {
   const rng = seededRng(semente);
-  return entrarNaCidade(montarSaveInicial(rolarTudo(nome, rng), rng));
+  return entrarNaCidade(saveSorteado(nome, rng));
 }
 
 function perfilDe(estado: EstadoDoJogo): PerfilNaSala {

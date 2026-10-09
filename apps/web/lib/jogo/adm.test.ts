@@ -3,13 +3,12 @@ import { describe, expect, it } from 'vitest';
 import { seededRng, xpForLevel } from '@rpg-legend/shared';
 
 import { abrirAdm, aplicar, fichaDe, modoInfinito } from './adm';
-import { rolarTudo } from './criacao';
 import { entrarNaCidade, type EstadoNaCidade } from './estado';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 function cidade(): EstadoNaCidade {
   const rng = seededRng(7);
-  return entrarNaCidade(montarSaveInicial(rolarTudo('Aria', rng), rng));
+  return entrarNaCidade(saveSorteado('Aria', rng));
 }
 
 const RNG = seededRng(3);

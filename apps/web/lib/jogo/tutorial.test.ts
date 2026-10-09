@@ -3,15 +3,14 @@ import { describe, expect, it } from 'vitest';
 import { seededRng } from '@rpg-legend/shared';
 
 import { entrarNaCidade, type EstadoDoJogo } from './estado';
-import { rolarTudo } from './criacao';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 import { concluidos, marcar, PASSOS, tutorialDe, type PassoDoTutorial } from './tutorial';
 
 const RNG = seededRng(4);
 
 function cidade(): EstadoDoJogo {
   const rng = seededRng(2);
-  return entrarNaCidade(montarSaveInicial(rolarTudo('Aria', rng), rng));
+  return entrarNaCidade(saveSorteado('Aria', rng));
 }
 
 /** Fecha todas as etapas menos a última, que fica pro teste da recompensa. */

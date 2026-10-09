@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 
 import { DIR_OPP, DIR_VECTORS, seededRng, type Direction } from '@rpg-legend/shared';
 
-import { rolarTudo } from './criacao';
 import {
   andar,
   celulaAtual,
@@ -17,10 +16,10 @@ import {
   type EstadoNaCidade,
   type EstadoNaMasmorra,
 } from './estado';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 function saveNovo() {
-  return montarSaveInicial(rolarTudo('Aria', Math.random), Math.random);
+  return saveSorteado('Aria', Math.random);
 }
 
 function estadoNovo(): EstadoNaCidade {

@@ -16,7 +16,15 @@ import type { Item } from '../items/item.js';
 import type { NpcService } from '../npc/npc-services.js';
 import { DIR_OPP, DIR_VECTORS, type Direction, type RoomCell } from '../dungeon/graph.js';
 
-export type CityRoomType = 'void' | 'start' | 'normal' | 'gate' | 'shop' | 'blacksmith' | 'tavern' | 'questboard' | 'npc';
+export type CityRoomType = 'void' | 'start' | 'normal' | 'gate' | 'shop' | 'blacksmith' | 'tavern' | 'questboard' | 'npc' | 'guild';
+
+/**
+ * Onde fica a Guilda: na pracinha a oeste do caminho do portão, que até
+ * 2026-10 era uma sala vazia. Quem treina passa por ela a caminho da
+ * masmorra. Exportado porque a cidade fica gravada no save, e quem carrega
+ * uma cidade de antes precisa saber onde abrir a porta (`withGuild`).
+ */
+export const GUILD_POS = { x: 2, y: 2 } as const;
 
 export interface CityNpc {
   name: string;
@@ -113,7 +121,7 @@ const LAYOUT: LayoutSpec[] = [
   { x: 5, y: 3, type: 'questboard' },
   { x: 3, y: 4, type: 'npc', npcIndex: 0 },
   { x: 3, y: 5, type: 'npc', npcIndex: 1 },
-  { x: 2, y: 2, type: 'normal' },
+  { ...GUILD_POS, type: 'guild' },
   { x: 4, y: 2, type: 'normal' },
 ];
 
@@ -160,6 +168,20 @@ export function generateCityLayout(rows: number, cols: number): CityLayout {
   return { grid, rooms, start };
 }
 
+/**
+ * A cidade gravada antes de a Guilda existir, com ela no lugar.
+ *
+ * A cidade vai no save, e os personagens de antes guardam a pracinha vazia
+ * onde hoje fica a Guilda. Como o desenho da cidade é fixo, a sala está
+ * sempre lá, com as mesmas portas: basta trocar o tipo. Não mexe em mais
+ * nada — estoque da loja e salas visitadas continuam os de antes. Devolve a
+ * mesma grade quando não há o que mudar.
+ */
+export function withGuild(grid: CityCell[][]): CityCell[][] {
+  if (grid[GUILD_POS.y]?.[GUILD_POS.x]?.type !== 'normal') return grid;
+  return grid.map((linha, y) => (y === GUILD_POS.y ? linha.map((cell, x) => (x === GUILD_POS.x ? { ...cell, type: 'guild' } : cell)) : linha));
+}
+
 /** Restaura Vida e Mana do herói e Vida da equipe inteira — a única regra por trás da taverna. */
 export function restAtTavern(hero: Hero, party: readonly Companion[]): { hero: Hero; party: Companion[] } {
   const nextHero: Hero = { ...hero, hp: hero.maxHp, mp: hero.maxMp };
@@ -178,6 +200,7 @@ export function cityIconFor(cell: CityCell): string {
   if (cell.type === 'questboard') return '📜';
   if (cell.type === 'gate') return '🌟';
   if (cell.type === 'start') return '🚀';
+  if (cell.type === 'guild') return '⚜️';
   return '';
 }
 
@@ -191,6 +214,7 @@ export function cityShortLabel(cell: CityCell): string {
     gate: 'o portão da masmorra',
     start: 'o ponto de partida',
     normal: 'uma sala vazia',
+    guild: 'a Guilda dos Aventureiros',
   };
   return labels[cell.type] ?? 'uma sala';
 }
@@ -205,6 +229,7 @@ export function cityRoomDesc(cell: CityCell): string {
     gate: 'Um portão de pedra antiga marca a entrada da masmorra.',
     start: 'Este foi o ponto onde você chegou à cidade.',
     normal: 'Uma pracinha tranquila, sem nada de especial.',
+    guild: 'Estandartes de todas as classes pendem do salão da Guilda dos Aventureiros.',
   };
   return descs[cell.type] ?? '';
 }
@@ -216,5 +241,6 @@ export function cityEntryText(cell: CityCell): string {
   if (cell.type === 'tavern') return 'Uma taverna aconchegante convida a um descanso. Deseja entrar?';
   if (cell.type === 'questboard') return 'Um quadro de missões está afixado na parede. Deseja ver os anúncios?';
   if (cell.type === 'gate') return 'Um portão misterioso leva à masmorra. Deseja atravessar?';
+  if (cell.type === 'guild') return 'A Guilda dos Aventureiros treina quem vai descer à masmorra. Deseja entrar?';
   return 'Deseja entrar?';
 }

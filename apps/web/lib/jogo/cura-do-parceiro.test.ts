@@ -3,13 +3,12 @@ import { describe, expect, it } from 'vitest';
 import { seededRng } from '@rpg-legend/shared';
 
 import { curarNaTela, curarPeloParceiro, CURA_MAXIMA_DO_PARCEIRO } from './cura-do-parceiro';
-import { rolarTudo } from './criacao';
 import { abrirMochila } from './mochila';
 import { retomarSave } from './estado';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 function estadoFerido(hp = 10) {
-  const save = montarSaveInicial(rolarTudo('Aria', seededRng(4)), seededRng(4));
+  const save = saveSorteado('Aria', seededRng(4), seededRng(4));
   const estado = retomarSave(save, seededRng(4));
   return { ...estado, hero: { ...estado.hero, hp } };
 }

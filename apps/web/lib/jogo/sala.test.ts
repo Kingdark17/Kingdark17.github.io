@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { randomItem, seededRng, type CityCell, type DungeonCell, type DungeonRoomType } from '@rpg-legend/shared';
+import { CLASSES, RACES, randomItem, seededRng, type CityCell, type DungeonCell, type DungeonRoomType } from '@rpg-legend/shared';
 
-import { rolarTudo } from './criacao';
 import {
   celulaAtual,
   entrarNaCidade,
@@ -11,11 +10,13 @@ import {
   type EstadoNaCidade,
   type EstadoNaMasmorra,
 } from './estado';
+import { treinar } from './guilda';
+import { saveSorteado } from './heroi-sorteado';
 import { atravessaSemInteragir, interagir, precisaConfirmar } from './sala';
 import { montarSaveInicial } from './save-inicial';
 
 function saveNovo() {
-  return montarSaveInicial(rolarTudo('Aria', Math.random), Math.random);
+  return saveSorteado('Aria', Math.random);
 }
 
 function cidadeNova(): EstadoNaCidade {
@@ -132,6 +133,43 @@ describe('interagir na cidade', () => {
     expect(tela?.tipo).toBe('dialogo');
     if (tela?.tipo !== 'dialogo') return;
     expect(tela.dialogo.npc.lines.length).toBeGreaterThan(0);
+  });
+
+  it('a guilda abre o treinamento', () => {
+    const { tela } = interagir(emCimaDe(cidadeNova(), 'guild'));
+    expect(tela?.tipo).toBe('guilda');
+  });
+});
+
+describe('o Aprendiz na cidade', () => {
+  function cidadeDoAprendiz(): EstadoNaCidade {
+    return entrarNaCidade(montarSaveInicial({ nome: 'Novato', raca: RACES[0]!, cabelo: null }, seededRng(3)));
+  }
+
+  it('o portão não abre pra quem ainda não treinou', () => {
+    const naPorta = emCimaDe(cidadeDoAprendiz(), 'gate');
+    const { estado, aviso, tela } = interagir(naPorta, seededRng(1));
+
+    expect(estado.mapMode).toBe('city');
+    expect(estado.pos).toEqual(naPorta.pos);
+    expect(tela).toBeNull();
+    expect(aviso?.texto).toContain('Guilda');
+  });
+
+  it('depois da guilda, o mesmo portão abre', () => {
+    const { tela } = interagir(emCimaDe(cidadeDoAprendiz(), 'guild'));
+    if (tela?.tipo !== 'guilda') throw new Error('esperava a guilda');
+    const treinado = treinar(tela.guilda, CLASSES[0]!).estado as EstadoNaCidade;
+
+    expect(interagir(emCimaDe(treinado, 'gate'), seededRng(1)).estado.mapMode).toBe('dungeon');
+  });
+
+  it('a cidade de um save de antes da guilda ganha a guilda ao carregar', () => {
+    const cidade = cidadeNova();
+    const antiga = cidade.map.map((linha) => linha.map((cell) => (cell.type === 'guild' ? { ...cell, type: 'normal' as const } : cell)));
+    const recarregada = retomarSave({ ...saveNovo(), mapMode: 'city', cityMap: antiga, cityStart: cidade.cityStart });
+
+    expect(recarregada.map.flat().some((cell) => cell.type === 'guild')).toBe(true);
   });
 });
 

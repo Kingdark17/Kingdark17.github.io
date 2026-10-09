@@ -1162,6 +1162,65 @@
   gap: 0.4rem;
 }
 
+/* ---------- guilda ----------
+ *
+ * Mesmo molde da loja: cartas de classe na grade, a ficha da escolhida ao
+ * lado. Classe não tem sprite, então o emoji dela ocupa o lugar do item. */
+.textoDaGuilda {
+  margin: 0;
+  max-width: 65ch;
+  color: var(--parchment);
+}
+
+.iconeDaCarta {
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.iconeDaClasse {
+  width: 3.5rem;
+  flex-shrink: 0;
+  font-size: 2.4rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.linhaDaGuilda {
+  display: grid;
+  grid-template-columns: 5.2rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.88rem;
+}
+
+.linhaDaGuilda:last-child {
+  border-bottom: 0;
+}
+
+.rotuloDaGuilda {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+}
+
+.armaDaGuilda {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.descricaoDoPoder {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  line-height: 1.45;
+}
+
 .botaoDiscreto {
   composes: botaoDiscreto from '../acabamento.module.css';
   font-size: 0.8rem;

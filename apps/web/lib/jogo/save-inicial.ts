@@ -5,9 +5,12 @@
  * Fica só no que a API valida hoje (`hero`, `inventory`, `party`,
  * `floor`) mais `quests`. Tutorial, mapa da cidade e quadro de missões
  * entram quando a tela de jogo existir — hoje não haveria quem lesse.
+ *
+ * O herói nasce Aprendiz, sem classe nem arma: quem dá as duas é a Guilda,
+ * e até lá o portão da masmorra não abre (ver `criacao.ts`).
  */
 
-import { addItem, buildHero, randomItem, type Hero, type Item, type Rng, defaultRng } from '@rpg-legend/shared';
+import { addItem, buildApprentice, DEBUFFS, randomItem, type Hero, type Item, type Rng, defaultRng } from '@rpg-legend/shared';
 
 import type { Criacao } from './criacao';
 
@@ -21,22 +24,24 @@ export interface SaveInicial {
 
 export class CriacaoIncompletaError extends Error {
   constructor() {
-    super('Criação incompleta: faltam raça, classe, fraqueza ou atributos.');
+    super('Criação incompleta: falta a raça.');
     this.name = 'CriacaoIncompletaError';
   }
 }
 
 export function montarSaveInicial(criacao: Criacao, rng: Rng = defaultRng): SaveInicial {
-  if (!criacao.raca || !criacao.classe || !criacao.fraqueza || !criacao.atributos) throw new CriacaoIncompletaError();
+  if (!criacao.raca) throw new CriacaoIncompletaError();
 
-  const hero = buildHero(
+  // A fraqueza continua existindo, sorteada — só não aparece mais na
+  // criação (decisão do usuário, 2026-10-09). Atenção: hoje nenhuma outra
+  // tela a mostra, então o jogador não tem como saber qual é a dele.
+  const fraqueza = DEBUFFS[Math.floor(rng() * DEBUFFS.length)] as (typeof DEBUFFS)[number];
+
+  const hero = buildApprentice(
     {
       name: criacao.nome.trim(),
       race: criacao.raca,
-      cls: criacao.classe,
-      debuff: criacao.fraqueza,
-      chosenPowerIds: criacao.poderes.map((poder) => poder.id),
-      attrs: criacao.atributos,
+      debuff: fraqueza,
       // `?? undefined` e não `?? PADRAO`: quem não escolheu não grava
       // penteado nenhum, e o paperdoll resolve o padrão na hora de
       // desenhar. Gravar o padrão faria o save mentir que houve escolha —

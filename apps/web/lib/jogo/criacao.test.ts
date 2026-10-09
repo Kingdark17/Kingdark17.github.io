@@ -1,102 +1,31 @@
 import { describe, expect, it } from 'vitest';
 
-import { CLASSES, DEBUFFS, POWERS, RACES, seededRng, type Rng } from '@rpg-legend/shared';
+import { APPRENTICE, BASE_ATTR, DEBUFFS, hasClass, heroPowers, raceById, seededRng } from '@rpg-legend/shared';
 
-import { criacaoVazia, faltaParaComecar, rolarAtributosSePossivel, rolarTudo, sortearPoderes } from './criacao';
+import { criacaoVazia, faltaParaComecar, type Criacao } from './criacao';
 import { CriacaoIncompletaError, montarSaveInicial } from './save-inicial';
 
-/** Rng determinístico: sempre o mesmo valor, pra o sorteio ser previsível. */
-function rngFixo(valor: number): Rng {
-  return () => valor;
+const ORC = raceById('orc')!;
+
+function pronta(extra: Partial<Criacao> = {}): Criacao {
+  return { ...criacaoVazia('Aria'), raca: ORC, ...extra };
 }
 
-describe('sortearPoderes', () => {
-  it('devolve dois poderes distintos', () => {
-    const poderes = sortearPoderes(CLASSES[0], Math.random);
-    expect(poderes).toHaveLength(2);
-    expect(poderes[0].name).not.toBe(poderes[1].name);
-  });
-
-  it('nunca inclui o poder de assinatura da classe, que já vem de graça', () => {
-    for (const classe of CLASSES) {
-      for (let tentativa = 0; tentativa < 20; tentativa += 1) {
-        const ids = sortearPoderes(classe, Math.random).map((poder) => poder.id);
-        expect(ids).not.toContain(classe.signatureId);
-      }
-    }
-  });
-
-  /**
-   * A Canção de Batalha é do bardo, pela classe (`soDaClasse`). Sorteada
-   * pra um guerreiro, o apoio do bardo deixaria de ser do bardo — e pro
-   * próprio bardo ela viria duplicada.
-   */
-  it('nunca sorteia poder que é só de uma classe', () => {
-    const exclusivos = POWERS.filter((poder) => poder.soDaClasse).map((poder) => poder.id);
-    expect(exclusivos).toContain('cancao_de_batalha');
-    for (const classe of CLASSES) {
-      for (let semente = 0; semente < 200; semente += 1) {
-        const ids = sortearPoderes(classe, seededRng(semente)).map((poder) => poder.id);
-        for (const id of exclusivos) expect(ids).not.toContain(id);
-      }
-    }
-  });
-
-  it('só sorteia poderes que existem no catálogo', () => {
-    const catalogo = new Set(POWERS.map((poder) => poder.name));
-    for (const poder of sortearPoderes(CLASSES[1], Math.random)) {
-      expect(catalogo.has(poder.name)).toBe(true);
-    }
-  });
-});
-
-describe('rolarAtributosSePossivel', () => {
-  it('não rola enquanto faltar raça, classe ou fraqueza', () => {
-    const vazia = criacaoVazia('Aria');
-    expect(rolarAtributosSePossivel(vazia)).toBeNull();
-    expect(rolarAtributosSePossivel({ ...vazia, raca: RACES[0] })).toBeNull();
-    expect(rolarAtributosSePossivel({ ...vazia, raca: RACES[0], classe: CLASSES[0] })).toBeNull();
-  });
-
-  it('rola quando os três existem', () => {
-    const pronta = { ...criacaoVazia('Aria'), raca: RACES[0], classe: CLASSES[0], fraqueza: DEBUFFS[0] };
-    const atributos = rolarAtributosSePossivel(pronta, rngFixo(0.5));
-    expect(atributos).not.toBeNull();
-    expect(Object.values(atributos!).every((valor) => Number.isInteger(valor))).toBe(true);
-  });
-});
-
-describe('rolarTudo', () => {
-  it('preenche tudo de uma vez e preserva o nome digitado', () => {
-    const criacao = rolarTudo('Aria', Math.random);
-
-    expect(criacao.nome).toBe('Aria');
-    expect(criacao.raca).not.toBeNull();
-    expect(criacao.classe).not.toBeNull();
-    expect(criacao.fraqueza).not.toBeNull();
-    expect(criacao.atributos).not.toBeNull();
-    expect(criacao.poderes).toHaveLength(2);
-    expect(faltaParaComecar(criacao)).toBeNull();
-  });
-});
-
 describe('faltaParaComecar', () => {
-  it('cobra na ordem em que o jogador resolve', () => {
+  it('cobra só nome e raça, nessa ordem', () => {
     expect(faltaParaComecar(criacaoVazia('   '))).toBe('nome');
     expect(faltaParaComecar(criacaoVazia('Aria'))).toBe('raca');
-    expect(faltaParaComecar({ ...criacaoVazia('Aria'), raca: RACES[0] })).toBe('classe');
-    expect(faltaParaComecar({ ...criacaoVazia('Aria'), raca: RACES[0], classe: CLASSES[0] })).toBe('sorteio');
+    expect(faltaParaComecar(pronta())).toBeNull();
   });
 
-  it('não libera com só um poder sorteado', () => {
-    const quase = rolarTudo('Aria', Math.random);
-    expect(faltaParaComecar({ ...quase, poderes: quase.poderes.slice(0, 1) })).toBe('sorteio');
+  it('cabelo não trava o começo: começa no padrão', () => {
+    expect(faltaParaComecar(pronta({ cabelo: null }))).toBeNull();
   });
 });
 
 describe('montarSaveInicial', () => {
   it('monta um save que atende ao que a API exige de um save válido', () => {
-    const save = montarSaveInicial(rolarTudo('Aria', Math.random), Math.random);
+    const save = montarSaveInicial(pronta(), Math.random);
 
     // Mesmas condições de `validSave()` no accounts.js original.
     expect(typeof save.hero.name).toBe('string');
@@ -108,28 +37,55 @@ describe('montarSaveInicial', () => {
     expect(save.floor).toBeLessThanOrEqual(10000);
   });
 
-  it('começa no nível 1, com arma da classe e um consumível', () => {
-    const save = montarSaveInicial(rolarTudo('Aria', Math.random), Math.random);
+  it('nasce Aprendiz: nível 1, sem classe, sem arma, sem poder e com um consumível', () => {
+    const { hero, inventory } = montarSaveInicial(pronta(), Math.random);
 
-    expect(save.hero.level).toBe(1);
-    expect(save.hero.equip.arma).toBeTruthy();
-    expect(save.inventory).toHaveLength(1);
+    expect(hero.level).toBe(1);
+    expect(hasClass(hero)).toBe(false);
+    expect(hero.className).toBe(APPRENTICE.name);
+    expect(hero.equip.arma).toBeNull();
+    expect(heroPowers(hero)).toEqual([]);
+    expect(inventory).toHaveLength(1);
   });
 
-  it('o poder de assinatura da classe entra sozinho, além dos dois sorteados', () => {
-    const criacao = rolarTudo('Aria', Math.random);
-    const save = montarSaveInicial(criacao, Math.random);
-
-    expect(save.hero.powerIds).toContain(criacao.classe!.signatureId);
-    expect(save.hero.powerIds).toHaveLength(3);
+  it('atributos sem sorteio: 8 em tudo, mais a raça, menos o ponto da fraqueza', () => {
+    for (let semente = 0; semente < 40; semente += 1) {
+      const { hero } = montarSaveInicial(pronta(), seededRng(semente));
+      const esperado: Record<string, number> = {
+        forca: BASE_ATTR + 3,
+        destreza: BASE_ATTR,
+        constituicao: BASE_ATTR,
+        intelecto: BASE_ATTR - 1,
+        sabedoria: BASE_ATTR,
+        carisma: BASE_ATTR,
+      };
+      if (hero.debuff.attr) esperado[hero.debuff.attr] -= 1;
+      expect(hero.attrs).toEqual(esperado);
+    }
   });
 
-  it('recusa criação incompleta em vez de gravar lixo', () => {
+  it('a fraqueza continua, sorteada do catálogo', () => {
+    const ids = new Set(DEBUFFS.map((fraqueza) => fraqueza.id));
+    const sorteadas = new Set<string>();
+    for (let semente = 0; semente < 60; semente += 1) {
+      const { hero } = montarSaveInicial(pronta(), seededRng(semente));
+      expect(ids.has(hero.debuff.id)).toBe(true);
+      sorteadas.add(hero.debuff.id);
+    }
+    expect(sorteadas.size).toBeGreaterThan(1);
+  });
+
+  it('grava o cabelo só quando a pessoa escolheu', () => {
+    expect(montarSaveInicial(pronta({ cabelo: 'longo' }), Math.random).hero.hair).toBe('longo');
+    expect(montarSaveInicial(pronta(), Math.random).hero).not.toHaveProperty('hair');
+  });
+
+  it('recusa criação sem raça em vez de gravar lixo', () => {
     expect(() => montarSaveInicial(criacaoVazia('Aria'))).toThrow(CriacaoIncompletaError);
   });
 
   it('sobrevive a JSON.stringify — é assim que o save viaja pra API', () => {
-    const save = montarSaveInicial(rolarTudo('Aria', Math.random), Math.random);
+    const save = montarSaveInicial(pronta(), Math.random);
     const ida = JSON.parse(JSON.stringify(save));
 
     expect(ida.hero.name).toBe(save.hero.name);

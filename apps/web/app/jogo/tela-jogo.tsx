@@ -60,6 +60,7 @@ import { ControleDeSom } from './controle-de-som';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
 import { PainelHeroi } from './painel-heroi';
+import { TelaGuilda } from './tela-guilda';
 import { TelaMochila } from './tela-mochila';
 import { TextoDoJogo } from './texto-do-jogo';
 
@@ -624,6 +625,14 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
           <TelaMochila
             mochila={aberta.mochila}
             onMochila={(proxima) => seguir({ tipo: 'mochila', mochila: proxima }, proxima.estado)}
+            onFechar={(final) => fechar(final.estado)}
+          />
+        );
+      case 'guilda':
+        return (
+          <TelaGuilda
+            guilda={aberta.guilda}
+            onGuilda={(proxima) => seguir({ tipo: 'guilda', guilda: proxima }, proxima.estado)}
             onFechar={(final) => fechar(final.estado)}
           />
         );

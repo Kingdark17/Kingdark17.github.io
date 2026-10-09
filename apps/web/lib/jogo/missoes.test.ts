@@ -2,14 +2,13 @@ import { describe, expect, it } from 'vitest';
 
 import { seededRng, type Quest } from '@rpg-legend/shared';
 
-import { rolarTudo } from './criacao';
 import { entrarNaCidade, type EstadoNaCidade } from './estado';
 import { abrirQuadro, missoes, resgatar } from './missoes';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 function cidade(): EstadoNaCidade {
   const rng = seededRng(4);
-  return entrarNaCidade(montarSaveInicial(rolarTudo('Aria', rng), rng));
+  return entrarNaCidade(saveSorteado('Aria', rng));
 }
 
 /** Marca a primeira missão como pronta pra resgate, sem depender de jogar. */

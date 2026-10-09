@@ -2,14 +2,13 @@ import { describe, expect, it } from 'vitest';
 
 import { seededRng } from '@rpg-legend/shared';
 
-import { rolarTudo } from './criacao';
 import { andar, entrarNaCidade, entrarNaMasmorra, revelar, type EstadoDoJogo } from './estado';
 import { narrar } from './narrador';
-import { montarSaveInicial } from './save-inicial';
+import { saveSorteado } from './heroi-sorteado';
 
 function naCidade(): EstadoDoJogo {
   const rng = seededRng(7);
-  return entrarNaCidade(montarSaveInicial(rolarTudo('Aria', rng), rng));
+  return entrarNaCidade(saveSorteado('Aria', rng));
 }
 
 function naMasmorra(): EstadoDoJogo {

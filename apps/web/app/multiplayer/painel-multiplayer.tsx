@@ -12,7 +12,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { PET_ICONS, type PetId } from '@rpg-legend/shared';
+import { hasClass, PET_ICONS, type PetId } from '@rpg-legend/shared';
 
 import { usuarioAtual, type Usuario } from '@/lib/api/account';
 import { listarAmigos, type AmigoPublico } from '@/lib/api/amigos';
@@ -31,6 +31,15 @@ import {
 import { useSala } from '@/lib/rede/use-sala';
 import { Avatar, NomeColorido } from '../componentes/avatar';
 import styles from './multiplayer.module.css';
+
+/**
+ * Aprendiz não entra em sala. O mapa é o de quem cria, e ele pode estar na
+ * masmorra — onde um herói sem classe não tem arma nem poder, e onde a
+ * Guilda, que é o que o deixaria descer, não existe.
+ */
+function podeJogarJunto(personagem: ResumoPersonagem): boolean {
+  return hasClass({ className: personagem.className });
+}
 
 const TAMANHO_DO_CODIGO = 6;
 const LETRAS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -65,7 +74,7 @@ export function PainelMultiplayer() {
     listarPersonagens()
       .then((lista) => {
         setPersonagens(lista.characters);
-        setSlot(lista.characters[0]?.slot ?? null);
+        setSlot((lista.characters.find(podeJogarJunto) ?? lista.characters[0])?.slot ?? null);
       })
       .catch(() => undefined);
   }, []);
@@ -77,7 +86,8 @@ export function PainelMultiplayer() {
     salasPublicas().then(setPublicas).catch(() => undefined);
   }, [sala.fase]);
 
-  const escolhido = personagens.find((p) => p.slot === slot) ?? null;
+  // Só personagem treinado conta como escolhido: é isso que liga os botões de criar e entrar.
+  const escolhido = personagens.find((p) => p.slot === slot && podeJogarJunto(p)) ?? null;
   const naSala = sala.fase === 'esperando' || sala.fase === 'jogando';
 
   function aoCriar() {
@@ -108,16 +118,24 @@ export function PainelMultiplayer() {
           {personagens.length === 0 ? (
             <p className={styles.aviso}>Crie um personagem antes — é ele que entra na sala.</p>
           ) : (
-            <label className={styles.campo}>
-              <span className={styles.rotulo}>Com qual personagem?</span>
-              <select className={styles.entrada} value={slot ?? ''} onChange={(e) => setSlot(Number(e.target.value))}>
-                {personagens.map((personagem) => (
-                  <option key={personagem.slot} value={personagem.slot}>
-                    {personagem.name} · nível {personagem.level}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <>
+              <label className={styles.campo}>
+                <span className={styles.rotulo}>Com qual personagem?</span>
+                <select className={styles.entrada} value={slot ?? ''} onChange={(e) => setSlot(Number(e.target.value))}>
+                  {personagens.map((personagem) => (
+                    <option key={personagem.slot} value={personagem.slot} disabled={!podeJogarJunto(personagem)}>
+                      {personagem.name} · nível {personagem.level}
+                      {podeJogarJunto(personagem) ? '' : ' · Aprendiz, treine na Guilda'}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {!personagens.some(podeJogarJunto) && (
+                <p className={styles.aviso}>
+                  Seus personagens ainda são Aprendizes. Treine um na Guilda dos Aventureiros, na cidade, antes de jogar com alguém.
+                </p>
+              )}
+            </>
           )}
 
           <label className={styles.campo}>
