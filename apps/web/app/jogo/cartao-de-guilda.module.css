@@ -192,7 +192,8 @@
   place-items: center;
   align-self: center;
   padding: 0;
-  font: 600 0.8125rem/1 var(--font-mono), monospace;
+  /* 400: a VT323 só tem um peso, e negrito falso borra o pixel. */
+  font: 400 0.8125rem/1 var(--font-mono), monospace;
   color: #f6ead0;
   background: var(--vermelho);
   border: 0;

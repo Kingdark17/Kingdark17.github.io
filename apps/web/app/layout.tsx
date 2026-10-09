@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { EB_Garamond, JetBrains_Mono } from 'next/font/google';
+import { Pixelify_Sans } from 'next/font/google';
 import localFont from 'next/font/local';
 
 import './globals.css';
@@ -16,6 +16,11 @@ import './globals.css';
 //
 // Os pesos abaixo são os que o CSS de fato seleciona. Já saíram daqui, por
 // não terem quem os pedisse: Garamond itálico e JetBrains 600.
+//
+// **Desde 2026-10-09 as três são pixel**, pedido do doc do Breno ("todas as
+// fontes em pixel"). O usuário escolheu na página de comparação, com textos
+// do jogo: Pixelify Sans no texto e VT323 nos números e rótulos, no lugar
+// da EB Garamond e da JetBrains Mono.
 //
 // A fonte de título foi Cinzel, depois Jacquard 12 (2026-08-22), e desde
 // 2026-10-01 é a **Alkhemikal**, de jeti — escolhida pelo Breno entre três
@@ -46,18 +51,32 @@ const alkhemikal = localFont({
   display: 'swap',
 });
 
-const garamond = EB_Garamond({
+// Fonte variável: um arquivo só cobre o 400 e o 600 que o CSS pede. Sem
+// grade fixa de pixel, então lê bem em qualquer tamanho — os ~138 `rem`
+// espalhados pelos módulos continuam valendo como estão.
+const pixelify = Pixelify_Sans({
   subsets: ['latin'],
-  weight: ['400', '600'],
   variable: '--font-body',
   display: 'swap',
 });
 
-const jetbrains = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400'],
+// Local, e não do Google, por um motivo só: `size-adjust`, que o
+// `next/font/google` não aceita. A VT323 é miúda — no mesmo tamanho, a
+// maiúscula dela tem 0,56 em contra 0,73 da JetBrains —, e o rótulo de
+// 10 px do cartão viraria risco. Aumentada 60%, ela fica do tamanho que o
+// usuário aprovou na comparação (20 px onde a JetBrains tinha 12) sem
+// mexer em cada `font-size` dos módulos.
+//
+// Um peso só (400): nada que use `--font-mono` pode pedir negrito, pelo
+// mesmo motivo da Alkhemikal. O arquivo é o recorte latino do Google
+// Fonts (acentos do português conferidos); licença OFL em
+// `fontes/VT323-OFL.txt`.
+const vt323 = localFont({
+  src: './fontes/vt323.woff2',
+  weight: '400',
   variable: '--font-mono',
   display: 'swap',
+  declarations: [{ prop: 'size-adjust', value: '160%' }],
 });
 
 export const metadata: Metadata = {
@@ -70,7 +89,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${alkhemikal.variable} ${garamond.variable} ${jetbrains.variable}`}>
+      <body className={`${alkhemikal.variable} ${pixelify.variable} ${vt323.variable}`}>
         {children}
       </body>
     </html>

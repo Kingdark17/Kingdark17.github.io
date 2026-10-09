@@ -159,7 +159,8 @@
   color: #ff6b6b;
   font-family: var(--font-mono);
   font-size: 0.82rem;
-  font-weight: 700;
+  /* Sem negrito: a VT323 tem um peso só, e o falso borra o pixel. O
+     tamanho dela já vem 60% maior (`size-adjust` no layout). */
   left: 50%;
   position: absolute;
   top: 2.5rem;
