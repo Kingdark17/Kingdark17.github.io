@@ -20,15 +20,17 @@
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { DIR_LABEL, displayName, type Direction, type Item, type PetId } from '@rpg-legend/shared';
+import { DIR_LABEL, displayName, idDaRaca, type Direction, type Item, type PetId } from '@rpg-legend/shared';
 import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { apresentacaoDe } from '@/lib/jogo/apresentacao';
 import { arteDoTipo } from '@/lib/jogo/icones-do-mapa';
-import { andar, celulaEm, podeAndar, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
+import { DURACAO_DO_PASSO_MS, TEMAS, type Figura } from '@/lib/jogo/desenho-da-sala';
+import { chegada, darPasso, plantaDaSala, type PassoNaSala } from '@/lib/jogo/sala-em-tiles';
+import { andar, celulaAtual, celulaEm, retomarSave, revelar, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
 import { atravessaSemInteragir, interagir, precisaConfirmar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
 import { abrirAdm } from '@/lib/jogo/adm';
 import { aplicarRemoto, instantaneoDaSala, type CosmeticosDoJogador } from '@/lib/jogo/coop';
@@ -56,6 +58,7 @@ import {
 import { useSala } from '@/lib/rede/use-sala';
 import type { Combate } from '@/lib/jogo/combate';
 import { BichoDeEstimacao } from './bicho-de-estimacao';
+import { CenaDaSala } from './cena-da-sala';
 import { ControleDeSom } from './controle-de-som';
 import styles from './jogo.module.css';
 import { Mapa } from './mapa';
@@ -159,6 +162,56 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const estadoDesenhado = useRef<EstadoDoJogo | null>(null);
   /** A mochila da última sincronização — o que permite omiti-la quando não mudou. */
   const mochilaEnviada = useRef<readonly Item[] | null>(null);
+
+  // ------------------------------------------------- o mapa em quadradinhos
+  //
+  // Doc do Breno: "Faça movimentação 2D sobre o mapa, ao invés de pular de
+  // quadro em quadro". O herói anda dentro da sala (`sala-em-tiles.ts`) e,
+  // ao pisar num vão de porta, a sala vizinha vem pelo `mover` de sempre —
+  // as regras de sala não mudaram (decisão do usuário, 2026-10-09).
+  //
+  // Onde ele está dentro da sala não vai pro save: é caminho até a porta.
+
+  const celulaAgora = estado ? celulaAtual(estado) : null;
+  const mapaAgora = estado ? `${estado.mapMode}:${estado.masmorra.dungeon}:${estado.masmorra.difficulty}:${estado.floor}` : '';
+  const salaAgora = estado ? `${mapaAgora}:${estado.pos.x},${estado.pos.y}` : '';
+  const portasAgora = (['N', 'S', 'E', 'W'] as const).filter((d) => celulaAgora?.doors?.[d]).join('');
+  const iconeAgora = estado && celulaAgora ? apresentacaoDe(estado).icone(celulaAgora) : '';
+  const arteAgora = iconeAgora ? arteDoTipo(celulaAgora?.type) : null;
+  const racaAgora = estado ? idDaRaca(estado.hero) : null;
+  const emojiDaRaca = estado?.hero.raceIcon || '🙂';
+
+  const planta = useMemo(
+    () => plantaDaSala(Object.fromEntries([...portasAgora].map((d) => [d, true])), iconeAgora !== ''),
+    [portasAgora, iconeAgora],
+  );
+  const conteudoDaSala = useMemo<Figura | null>(() => (iconeAgora ? { arte: arteAgora, emoji: iconeAgora } : null), [iconeAgora, arteAgora]);
+  // Provisório: o corpo da raça do paperdoll faz o papel do boneco do mapa
+  // até o Breno desenhar o de 4 direções.
+  const heroiNaCena = useMemo<Figura>(() => ({ arte: racaAgora ? `/img/paperdoll/corpo/${racaAgora}.png` : null, emoji: emojiDaRaca }), [racaAgora, emojiDaRaca]);
+
+  /**
+   * O passo dentro da sala, junto da sala a que ele pertence. Trocar de
+   * sala é reposicionar **durante o render** (o padrão do React pra estado
+   * que depende do anterior): quem chegou da sala ao lado aparece na porta
+   * por onde entrou; quem chegou de outro jeito — portão, escada, totem,
+   * derrota — aparece no meio.
+   */
+  const [naSala, setNaSala] = useState<{ sala: string; mapa: string; x: number; y: number; passo: PassoNaSala } | null>(null);
+  if (estado && naSala?.sala !== salaAgora) {
+    const dx = estado.pos.x - (naSala?.x ?? 0);
+    const dy = estado.pos.y - (naSala?.y ?? 0);
+    const vizinha = naSala?.mapa === mapaAgora && Math.abs(dx) + Math.abs(dy) === 1;
+    const veioPor: Direction | null = vizinha ? (dx === 1 ? 'E' : dx === -1 ? 'W' : dy === 1 ? 'S' : 'N') : null;
+    setNaSala({ sala: salaAgora, mapa: mapaAgora, x: estado.pos.x, y: estado.pos.y, passo: chegada(veioPor) });
+  }
+  const passoNaSala = naSala?.sala === salaAgora ? naSala.passo : chegada(null);
+  const ultimoPasso = useRef(0);
+  const repetirPasso = useRef<ReturnType<typeof setInterval> | null>(null);
+  /** O passo mais recente, pra quem chama de fora do render (o botão segurado). */
+  const passoDaVez = useRef<(direcao: Direction) => void>(() => undefined);
+
+  useEffect(() => () => clearInterval(repetirPasso.current ?? undefined), []);
 
   useTrilha(temaDaCena(estado, tela));
 
@@ -504,6 +557,43 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   }
 
   /**
+   * Um passo dentro da sala. Parede vira o boneco; vão de porta é a sala
+   * vizinha, pelo `mover` de sempre — com a pergunta "deseja entrar?" e
+   * tudo. O ritmo é o da animação do passo: segurar a tecla ou o botão
+   * anda, sem atropelar o desenho.
+   */
+  function andarNaSala(direcao: Direction) {
+    if (!estado || !conduzo || perguntando !== null || tela) return;
+    const agora = performance.now();
+    if (agora - ultimoPasso.current < DURACAO_DO_PASSO_MS) return;
+    ultimoPasso.current = agora;
+
+    const resultado = darPasso(planta, passoNaSala, direcao);
+    if (resultado.kind === 'porta') {
+      mover(direcao);
+      return;
+    }
+    if (naSala) setNaSala({ ...naSala, passo: resultado.passo });
+  }
+
+  // O botão segurado chama o passo de um relógio, fora do render: sem este
+  // `ref`, ele andaria com o estado do momento em que o dedo encostou.
+  useEffect(() => {
+    passoDaVez.current = andarNaSala;
+  });
+
+  function segurarDirecao(direcao: Direction) {
+    clearInterval(repetirPasso.current ?? undefined);
+    passoDaVez.current(direcao);
+    repetirPasso.current = setInterval(() => passoDaVez.current(direcao), DURACAO_DO_PASSO_MS);
+  }
+
+  function soltarDirecao() {
+    clearInterval(repetirPasso.current ?? undefined);
+    repetirPasso.current = null;
+  }
+
+  /**
    * WASD e setas andam, como `bindKeyboard()` fazia em `js/ui.js`. O
    * cliente antigo tinha teclado desde sempre e o front novo nasceu só
    * com os botões.
@@ -523,10 +613,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
       if (tela || guiaAberto || diarioAberto || confirmandoSaida) return false;
       if (!estado || perguntando !== null || !conduzo) return false;
 
-      // Daqui pra baixo a tecla é do jogo, mesmo sem porta desse lado:
+      // Daqui pra baixo a tecla é do jogo, mesmo de cara pra parede:
       // seta que ora anda e ora rola a página é pior que seta que não faz
       // nada. Fora da exploração ela continua rolando normalmente.
-      if (podeAndar(estado, direcao)) mover(direcao);
+      andarNaSala(direcao);
       return true;
     };
   });
@@ -768,6 +858,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
         <div className={styles.cena}>
           <div className={styles.narracao}>
             <h1 className={`${styles.local} ${styles.tituloDaCena}`}>{visual.lugar}</h1>
+            <CenaDaSala sala={salaAgora} planta={planta} tema={TEMAS[estado.mapMode === 'dungeon' ? estado.masmorra.dungeon : 'cidade']} conteudo={conteudoDaSala} heroi={heroiNaCena} passo={passoNaSala} />
             {narracao && (
               <div className={styles.descricaoLocal}>
                 <p className={styles.linhaDaCena}>{narracao.ambiente}</p>
@@ -920,8 +1011,20 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
                   key={direcao}
                   type="button"
                   className={`${styles.botaoDirecao} ${classe}`}
-                  onClick={() => mover(direcao)}
-                  disabled={!podeAndar(estado, direcao) || perguntando !== null || !conduzo}
+                  // Segurar anda, como a tecla. O `click` fica pra quem
+                  // aperta pelo teclado (Enter/Espaço no botão): esse não
+                  // passa por `pointerdown`, e `detail` 0 é ele.
+                  onPointerDown={(evento) => {
+                    evento.preventDefault();
+                    segurarDirecao(direcao);
+                  }}
+                  onPointerUp={soltarDirecao}
+                  onPointerLeave={soltarDirecao}
+                  onPointerCancel={soltarDirecao}
+                  onClick={(evento) => {
+                    if (evento.detail === 0) andarNaSala(direcao);
+                  }}
+                  disabled={perguntando !== null || !conduzo}
                   aria-label={DIR_LABEL[direcao]}
                   title={DIR_LABEL[direcao]}
                 >

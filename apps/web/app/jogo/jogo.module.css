@@ -1069,6 +1069,22 @@
   color: var(--parchment);
 }
 
+/* A sala em quadradinhos. A proporção reserva o lugar antes de o PixiJS
+   chegar, pra narração não pular quando o canvas aparece. */
+.cenaDaSala {
+  width: 100%;
+  max-width: 432px;
+  aspect-ratio: 9 / 7;
+  margin: 0 0 0.75rem;
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.cenaDaSala canvas {
+  display: block;
+}
+
 /* O portão: masmorra, dificuldade e entrada, um grupo embaixo do outro. */
 .grupoDoPortao {
   display: grid;
