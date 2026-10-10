@@ -9,8 +9,11 @@
 
 import { FAIXA_CRITICA, type LeituraDaMira } from '@rpg-legend/shared';
 
-/** Quanto o cursor leva pra cruzar a barra inteira, da esquerda pra direita. */
-export const DURACAO_DA_BARRA_MS = 1000;
+/**
+ * Quanto o cursor leva pra cruzar a barra inteira, da esquerda pra direita.
+ * Saiu com 1000 ms; o usuário pediu "um pouco" mais devagar.
+ */
+export const DURACAO_DA_BARRA_MS = 1400;
 
 /**
  * Onde o cursor está `decorrido` ms depois de sair, de 0 a 1. `null` quando
