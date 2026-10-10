@@ -1,0 +1,9 @@
+<!--
+  O serializador da engine (RPGLegend.Engine.Json) lê e escreve os modelos por reflexão, e o GameDataLoader
+  acha os ITableSet por reflexão. Sem isto, o "managed code stripping" do build IL2CPP pode remover campos e
+  tipos que nada referencia diretamente, e o save sairia faltando campos.
+-->
+<linker>
+  <assembly fullname="RPGLegend.Engine" preserve="all" />
+  <assembly fullname="RPGLegend.Engine.Json" preserve="all" />
+</linker>

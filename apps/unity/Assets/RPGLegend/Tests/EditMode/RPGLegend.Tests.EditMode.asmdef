@@ -1,0 +1,19 @@
+{
+  "name": "RPGLegend.Tests.EditMode",
+  "rootNamespace": "RPGLegend.Tests",
+  "references": [
+    "RPGLegend.Engine",
+    "RPGLegend.Engine.Json",
+    "UnityEngine.TestRunner",
+    "UnityEditor.TestRunner"
+  ],
+  "includePlatforms": [ "Editor" ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [ "nunit.framework.dll", "Newtonsoft.Json.dll" ],
+  "autoReferenced": false,
+  "defineConstraints": [ "UNITY_INCLUDE_TESTS" ],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

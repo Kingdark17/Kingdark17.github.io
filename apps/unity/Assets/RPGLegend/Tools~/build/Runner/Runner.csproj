@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Os testes de Assets/RPGLegend/Tests/EditMode rodando fora da Unity, com o NUnitShim. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <AssemblyName>RPGLegend.FixtureRunner</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="../Shim/*.cs" />
+    <Compile Include="../../../Tests/EditMode/**/*.cs" />
+    <ProjectReference Include="../Engine/Engine.csproj" />
+    <ProjectReference Include="../EngineJson/EngineJson.csproj" />
+    <Reference Include="Newtonsoft.Json"><HintPath>../../lib/Newtonsoft.Json.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>

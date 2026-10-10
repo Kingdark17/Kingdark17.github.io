@@ -119,6 +119,23 @@ O jogo está sendo migrado de JS vanilla para um monorepo. Decisões fechadas:
 Ordem das fases: 0 monorepo → 1 engine shared → 2 Nest (ainda no Neon) →
 3 front Next → 4 paperdoll PixiJS → 5 Neon→Supabase → 6 otimização completa.
 
+## Cliente Unity (`apps/unity`)
+Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
+`package.json`, então fica fora do workspace pnpm e do turbo.
+
+- `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
+  paridade exata: mesma entrada → mesmo resultado e a mesma sequência de
+  sorteios do rng. As regras do port estão em `Assets/RPGLegend/PORTING.md`.
+- O contrato entre as duas engines são os casos de `packages/shared/fixtures`
+  (`cd packages/shared && pnpm dlx tsx scripts/gen-fixtures.ts`). **Mudou a
+  engine TS → regenerar os casos e rodar os testes da Unity** (Test Runner →
+  EditMode, ou `bash apps/unity/Assets/RPGLegend/Tools~/run-tests.sh`, que
+  precisa do .NET 8 SDK). O que falhar é o que falta portar para o C#.
+- Comportamento estranho do TS se corrige primeiro no TS (regenera os casos e
+  porta a correção), nunca só de um lado.
+- `Library/`, `Temp/`, `Logs/` e `UserSettings/` são gerados pela Unity e ficam
+  fora do git (`apps/unity/.gitignore`).
+
 ## Armadilha conhecida
 `rpg-legend/server/` neste repo é **cópia desatualizada** do servidor. O real
 está em `github.com/Kingdark17/RPG-Legend-Server` (~565 linhas contra as 141

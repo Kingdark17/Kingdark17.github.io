@@ -1,0 +1,7 @@
+# Saída do dotnet build.
+bin/
+obj/
+
+# O .gitignore da raiz do repositório ignora toda pasta "build/" (saída do turbo e do tsc).
+# Esta aqui é código-fonte (os projetos do executor de testes), então volta para o git.
+!build/

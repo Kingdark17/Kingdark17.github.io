@@ -23,6 +23,9 @@
 # que fazer dentro da API.
 rpg-legend
 
+# O cliente Unity também não (e a Library local da Unity tem vários GB).
+apps/unity
+
 # O front tem imagem própria (Vercel); só o package.json dele entra, e o
 # Dockerfile copia esse explicitamente.
 apps/web/app

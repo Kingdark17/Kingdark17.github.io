@@ -1,0 +1,57 @@
+# Projeto Unity do RPG Legend (cliente baixável).
+# O que a Unity e as IDEs geram sozinhas fica fora do git: a Unity recria tudo ao abrir o projeto.
+# Os padrões começam com "/" para valer só na raiz deste projeto (apps/unity).
+
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# Projetos e soluções que a IDE gera a partir das asmdefs. Só os da raiz: os .csproj de
+# Assets/RPGLegend/Tools~/build são escritos à mão e vão para o git.
+/*.csproj
+/*.unityproj
+/*.sln
+/*.slnx
+/*.suo
+/*.user
+/*.userprefs
+/*.pidb
+/*.booproj
+/*.svd
+/*.pdb
+/*.mdb
+/*.opendb
+/*.VC.db
+
+# Pastas de IDE
+/.vs/
+/.vscode/
+/.idea/
+/.gradle/
+/.consulo/
+/ExportedObj/
+
+# Símbolos de depuração que a Unity importa dentro de Assets
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Relatórios de crash, pacotes exportados e builds de plataforma
+sysinfo.txt
+crashlytics-build.properties
+*.unitypackage
+*.unitypackage.meta
+*.apk
+*.aab
+*.app
+
+# Conteúdo gerado pelo Addressables
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
