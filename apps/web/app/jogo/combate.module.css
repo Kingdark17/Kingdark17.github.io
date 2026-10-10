@@ -1,0 +1,511 @@
+/* =========================================================
+   O combate em primeira pessoa (doc do Breno, regras de 2026-10-09):
+   o cenário do lugar atrás, o monstro grande no meio, a caixa embaixo e
+   o menu Lutar / Poderes / Itens / Fugir, como no Undertale.
+
+   Módulo próprio porque a tela de combate é a única que usa isto. O que
+   é de todo o jogo (botão de pedra, barra de vida, erro) continua em
+   `jogo.module.css`.
+   ========================================================= */
+
+.combate {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.combate[data-tremendo] {
+  animation: tremida 0.3s ease-in-out;
+}
+
+@keyframes tremida {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+/* ---------- o palco ---------- */
+
+/* O cenário é provisório: as cores do tema do mapa (`TEMAS`), em parede
+   em cima e chão embaixo, até o Breno desenhar o fundo de cada masmorra.
+   As cores chegam por variável no `style` do elemento. */
+.palco {
+  position: relative;
+  overflow: hidden;
+  /* Altura fixa pela faixa, e não `aspect-ratio`: com teto de altura, a
+     proporção encolhia a largura e o palco não enchia a coluna. */
+  width: 100%;
+  height: clamp(18rem, 64vw, 23rem);
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
+  /* Parede até 58%, um fio de rodapé, e o chão com juntas de ladrilho. */
+  background:
+    repeating-linear-gradient(90deg, transparent 0 46px, rgba(0, 0, 0, 0.14) 46px 48px) 0 100% / 100% 40% no-repeat,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--parede) 55%, black) 0%,
+      var(--parede) 58%,
+      var(--borda) 58%,
+      var(--borda) 60%,
+      var(--chao) 60%,
+      color-mix(in srgb, var(--chao) 70%, black) 100%
+    );
+  display: grid;
+  grid-template-rows: auto 1fr;
+  justify-items: center;
+  image-rendering: pixelated;
+}
+
+/* A placa do inimigo: nome, vida e o que pesa sobre ele, no alto. */
+.placa {
+  width: min(22rem, calc(100% - 1.5rem));
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem 0.55rem;
+  background: rgba(16, 18, 26, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  text-align: center;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.placaChefe {
+  border-color: var(--gold);
+}
+
+.nome {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.subtitulo {
+  color: var(--parchment-dim);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.vida {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  margin: 0;
+}
+
+.marcadores {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0;
+  margin: 0.15rem 0 0;
+}
+
+.marcador {
+  font-size: 0.75rem;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--parchment);
+  background: rgba(16, 18, 26, 0.6);
+}
+
+/* O monstro em pé no chão, com a sombra embaixo. Emoji provisório até a
+   arte do Breno — grande, porque é ele o centro da tela. */
+.monstro {
+  align-self: end;
+  position: relative;
+  display: grid;
+  justify-items: center;
+  margin-bottom: 5%;
+}
+
+.figura {
+  font-size: clamp(4.5rem, 17vw, 8.5rem);
+  line-height: 1;
+  filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.35));
+  animation: respira 2.6s ease-in-out infinite;
+}
+
+.monstroChefe .figura {
+  font-size: clamp(5.5rem, 21vw, 10.5rem);
+}
+
+.sombra {
+  width: 70%;
+  height: 0.9rem;
+  margin-top: -0.35rem;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5), transparent 70%);
+}
+
+@keyframes respira {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* O golpe que entra: um tremor curto e um clarão, como o inimigo do
+   Undertale quando apanha. */
+.monstro[data-golpeado] .figura {
+  animation: apanha 0.36s steps(6, end);
+}
+
+@keyframes apanha {
+  0% {
+    transform: translateX(0);
+    filter: brightness(2.2);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  50% {
+    transform: translateX(7px);
+    filter: brightness(1.6);
+  }
+  75% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(0);
+    filter: none;
+  }
+}
+
+/* ---------- números que sobem ---------- */
+
+.numeros {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.numero {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translateX(-50%);
+  animation: sobeESome 1s ease-out forwards;
+  color: #ff6b6b;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  /* Sem negrito: a VT323 tem um peso só, e o falso borra o pixel. */
+  white-space: nowrap;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+.numeroCritico {
+  color: #ffd35c;
+  font-size: 1.35rem;
+}
+
+/* Em primeira pessoa o herói não está no palco: o golpe que ele toma
+   aparece embaixo, perto da caixa — é onde ele "está". */
+.numeroNoHeroi {
+  color: #ff9f6b;
+  left: 18%;
+  top: auto;
+  bottom: 0.6rem;
+}
+
+@keyframes sobeESome {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 -46px;
+  }
+}
+
+/* ---------- a caixa ---------- */
+
+.caixa {
+  composes: painel from '../acabamento.module.css';
+  padding: 0.85rem 1rem;
+  min-height: 8.5rem;
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+}
+
+.dado {
+  font-family: var(--font-mono), monospace;
+  font-size: 1rem;
+  color: var(--gold-bright);
+  margin: 0;
+}
+
+.ladosDoDado {
+  font-size: 0.8em;
+  color: var(--parchment-dim);
+}
+
+.registro {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tituloDaCaixa {
+  margin: 0;
+  color: var(--parchment-dim);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ---------- o menu ---------- */
+
+.menu {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+/* A pedra tem tampas de 32+40px; no celular, quatro lado a lado não cabem
+   nessa escala. Abaixo de 30rem o menu vira duas linhas de dois. */
+@media (max-width: 30rem) {
+  .menu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.menu > * {
+  min-width: 0;
+}
+
+.menuAberto {
+  color: var(--gold-bright);
+  filter: brightness(1.18);
+}
+
+/* ---------- o ataque: dado e barra ---------- */
+
+.ataque {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: center;
+}
+
+.tituloDoAtaque {
+  margin: 0;
+  justify-self: start;
+  color: var(--parchment);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.notaDoAtaque {
+  color: var(--parchment-dim);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* O d20: um losango de pedra com o número no meio. */
+.dadoGrande {
+  width: 5.5rem;
+  height: 5.5rem;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: linear-gradient(160deg, #e8dcc0, #b9ab86);
+  clip-path: polygon(50% 0, 100% 28%, 100% 72%, 50% 100%, 0 72%, 0 28%);
+  color: var(--ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 1.9rem;
+  cursor: pointer;
+  transition: filter 0.12s ease;
+}
+
+.dadoGrande:hover:not(:disabled),
+.dadoGrande:focus-visible {
+  filter: brightness(1.12) drop-shadow(0 0 6px rgba(232, 198, 90, 0.7));
+  outline: none;
+}
+
+.dadoGrande:disabled {
+  cursor: default;
+}
+
+.dadoGrande[data-girando] {
+  animation: gira 0.18s linear infinite;
+}
+
+@keyframes gira {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
+.rodapeDoAtaque {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+}
+
+.dica {
+  margin: 0;
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* "(ou Espaço)" só onde há teclado de verdade: no celular a dica quebrava
+   em duas linhas pra falar de uma tecla que não existe. */
+@media (hover: none) {
+  .soComTeclado {
+    display: none;
+  }
+}
+
+.leitura {
+  color: var(--parchment);
+  font-size: 1.05rem;
+}
+
+.leituraCritica {
+  color: var(--gold-bright);
+}
+
+.linhaDaBarra {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.dadoPequeno {
+  flex: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #e8dcc0, #b9ab86);
+  clip-path: polygon(50% 0, 100% 28%, 100% 72%, 50% 100%, 0 72%, 0 28%);
+  color: var(--ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 1.1rem;
+}
+
+/* A barra inteira é o botão: tocar em qualquer ponto dela para o cursor. */
+.barra {
+  position: relative;
+  flex: 1;
+  height: 2.75rem;
+  padding: 0;
+  border: 2px solid #0b0c12;
+  outline: 2px solid var(--line);
+  background: repeating-linear-gradient(90deg, #232838 0 6px, #1f2433 6px 12px);
+  cursor: pointer;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+.barra:focus-visible {
+  outline-color: var(--gold-bright);
+}
+
+/* A zona: mais clara no centro, onde o golpe é mais forte. */
+.zona {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(76, 175, 125, 0.35), rgba(140, 220, 150, 0.85) 50%, rgba(76, 175, 125, 0.35));
+}
+
+.faixaCritica {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--gold-bright);
+  box-shadow: 0 0 6px rgba(232, 198, 90, 0.8);
+}
+
+/* O corredor tem a largura da barra; mover ele em % move o cursor na
+   largura da barra, e não na do próprio cursor. */
+.corredor {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.cursor {
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  bottom: -2px;
+  width: 4px;
+  background: var(--parchment);
+  box-shadow: 0 0 0 1px #0b0c12;
+}
+
+.barra[data-parada] .cursor {
+  animation: pisca 0.16s steps(2, end) 3;
+}
+
+@keyframes pisca {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figura,
+  .monstro[data-golpeado] .figura,
+  .dadoGrande[data-girando],
+  .barra[data-parada] .cursor,
+  .combate[data-tremendo] {
+    animation: none;
+  }
+
+  /* O número continua aparecendo, parado, e some esmaecendo. Não pode
+     ficar sem animação: é o fim dela que o tira da tela. */
+  .numero {
+    animation-name: soSome;
+  }
+}
+
+@keyframes soSome {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

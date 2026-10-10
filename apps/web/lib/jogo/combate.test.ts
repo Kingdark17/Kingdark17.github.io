@@ -11,6 +11,7 @@ import {
   type DungeonRun,
   type Hero,
   type Item,
+  type JogadaDeAtaque,
   type MonsterInstance,
   type Rng,
 } from '@rpg-legend/shared';
@@ -34,6 +35,11 @@ import { saveSorteado } from './heroi-sorteado';
 /** rng constante: 0 dispara tudo que é chance, 0.99 não dispara nada. */
 const SEMPRE: Rng = () => 0;
 const NUNCA: Rng = () => 0.99;
+
+/** 20 no d20 de dano e a barra no centro: acerta sempre, e crita (é a faixa do crítico). */
+const EM_CHEIO: JogadaDeAtaque = { dado: 20, mira: 0.5 };
+/** O cursor passou do fim sem toque: erra sempre. */
+const NO_VAZIO: JogadaDeAtaque = { dado: 1, mira: null };
 
 function monstro(overrides: Partial<MonsterInstance> = {}): MonsterInstance {
   return {
@@ -163,16 +169,16 @@ describe('o preparo da luta', () => {
 
 describe('atacar', () => {
   it('grava o dano na criatura dentro da própria sala', () => {
-    const combate = atacar(emCombate(comSalaDeMonstro()), 20, 'normal', NUNCA);
+    const combate = atacar(emCombate(comSalaDeMonstro()), EM_CHEIO, 'normal', NUNCA);
     const criatura = salaDepois(combate).monsters?.[0];
 
     expect(criatura?.hp).toBeLessThan(40);
-    // Com os lados: "20" num d6 não existiria, e "5" é acerto no d6 e erro no d20.
+    // O dado que a tela mostra depois do golpe é o d20 de dano.
     expect(combate.dado).toEqual({ valor: 20, lados: 20 });
   });
 
   it('não guarda no save os campos derivados da espécie', () => {
-    const combate = atacar(emCombate(comSalaDeMonstro()), 20, 'normal', NUNCA);
+    const combate = atacar(emCombate(comSalaDeMonstro()), EM_CHEIO, 'normal', NUNCA);
     const criatura = salaDepois(combate).monsters?.[0];
 
     expect(criatura).not.toHaveProperty('species');
@@ -185,7 +191,7 @@ describe('atacar', () => {
     const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 })] });
     const ouroAntes = inicio.hero.gold;
 
-    const combate = atacar(emCombate(inicio), 20, 'normal', NUNCA);
+    const combate = atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.fase).toBe('vitoria');
     expect(salaDepois(combate).beaten).toBe(true);
@@ -197,7 +203,7 @@ describe('atacar', () => {
   it('chama o próximo da fila em vez de encerrar quando ainda há inimigo', () => {
     const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 }), monstro()] });
 
-    const combate = atacar(emCombate(inicio), 20, 'normal', NUNCA);
+    const combate = atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.fase).toBe('combate');
     expect(salaDepois(combate).monsterIndex).toBe(1);
@@ -209,7 +215,7 @@ describe('atacar', () => {
     const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 })], bonusTreasure: { gold: 50 } });
     const ouroAntes = inicio.hero.gold;
 
-    const combate = atacar(emCombate(inicio), 20, 'normal', NUNCA);
+    const combate = atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.estado.hero.gold).toBe(ouroAntes + 7 + 50);
     expect(salaDepois(combate).bonusTreasure).toBeUndefined();
@@ -217,7 +223,7 @@ describe('atacar', () => {
 
   it('com sorte alta o inimigo derruba um item', () => {
     const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 })] });
-    const combate = atacar(emCombate(inicio), 20, 'normal', SEMPRE);
+    const combate = atacar(emCombate(inicio), EM_CHEIO, 'normal', SEMPRE);
 
     expect(combate.loot).not.toBeNull();
     expect(combate.estado.inventory).toHaveLength(inicio.inventory.length + 1);
@@ -226,7 +232,7 @@ describe('atacar', () => {
   it('vencer o chefe abre o próximo andar sozinho', () => {
     const inicio = comSalaDeMonstro({ type: 'boss', monsters: [monstro({ hp: 1, isBoss: true })] });
 
-    const combate = atacar(emCombate(inicio), 20, 'normal', NUNCA);
+    const combate = atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.fase).toBe('vitoria');
     expect(combate.estado.floor).toBe(3);
@@ -237,7 +243,7 @@ describe('atacar', () => {
     const inicio = emCombate(comSalaDeMonstro());
     const vidaAntes = monstroAtual(inicio.estado)?.hp;
 
-    atacar(inicio, 20, 'normal', NUNCA);
+    atacar(inicio, EM_CHEIO, 'normal', NUNCA);
 
     expect(monstroAtual(inicio.estado)?.hp).toBe(vidaAntes);
   });
@@ -285,7 +291,7 @@ describe('derrota', () => {
   }
 
   it('leva o grupo de volta pra cidade com 30% da vida', () => {
-    const combate = atacar(prestesAMorrer(), 20, 'normal', NUNCA);
+    const combate = atacar(prestesAMorrer(), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.fase).toBe('derrota');
     expect(combate.estado.mapMode).toBe('city');
@@ -293,26 +299,26 @@ describe('derrota', () => {
   });
 
   it('até o nível 5 não cobra nada', () => {
-    const combate = atacar(prestesAMorrer({ level: 5, gold: 1000 }), 20, 'normal', NUNCA);
+    const combate = atacar(prestesAMorrer({ level: 5, gold: 1000 }), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.estado.hero.gold).toBe(1000);
     expect(combate.log.some((linha) => linha.includes('proteção de iniciante'))).toBe(true);
   });
 
   it('acima do nível 5 leva 10% do ouro', () => {
-    const combate = atacar(prestesAMorrer({ level: 6, gold: 1000 }), 20, 'normal', NUNCA);
+    const combate = atacar(prestesAMorrer({ level: 6, gold: 1000 }), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.estado.hero.gold).toBe(900);
   });
 
   it('a perda de ouro tem teto de 500', () => {
-    const combate = atacar(prestesAMorrer({ level: 20, gold: 100000 }), 20, 'normal', NUNCA);
+    const combate = atacar(prestesAMorrer({ level: 20, gold: 100000 }), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.estado.hero.gold).toBe(99500);
   });
 
   it('perder não conta pra maestria', () => {
-    const combate = atacar(prestesAMorrer({ masteryBattles: 4 }), 20, 'normal', NUNCA);
+    const combate = atacar(prestesAMorrer({ masteryBattles: 4 }), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.fase).toBe('derrota');
     expect(combate.estado.hero.masteryBattles).toBe(4);
@@ -331,7 +337,7 @@ describe('o fim da masmorra', () => {
   }
 
   it('vencer o chefe do andar 100 zera a masmorra e leva o grupo pra cidade', () => {
-    const combate = atacar(emCombate(noChefeDoAndar(100)), 20, 'normal', NUNCA);
+    const combate = atacar(emCombate(noChefeDoAndar(100)), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.fase).toBe('vitoria');
     expect(combate.estado.mapMode).toBe('city');
@@ -340,21 +346,21 @@ describe('o fim da masmorra', () => {
   });
 
   it('o diário diz o que abriu: a dificuldade seguinte e, no Normal, a próxima masmorra', () => {
-    const fraco = atacar(emCombate(noChefeDoAndar(100)), 20, 'normal', NUNCA).log;
+    const fraco = atacar(emCombate(noChefeDoAndar(100)), EM_CHEIO, 'normal', NUNCA).log;
     expect(fraco).toContain('Floresta no Difícil está aberta no portão.');
     expect(fraco).toContain('A Caverna abre a partir do nível 15.');
 
-    const forte = atacar(emCombate(noChefeDoAndar(100, undefined, 20)), 20, 'normal', NUNCA).log;
+    const forte = atacar(emCombate(noChefeDoAndar(100, undefined, 20)), EM_CHEIO, 'normal', NUNCA).log;
     expect(forte).toContain('A Caverna está aberta no portão.');
   });
 
   it('zerar o Pesadelo não abre dificuldade nem masmorra nova', () => {
-    const log = atacar(emCombate(noChefeDoAndar(100, { dungeon: 'floresta', difficulty: 'pesadelo' })), 20, 'normal', NUNCA).log;
+    const log = atacar(emCombate(noChefeDoAndar(100, { dungeon: 'floresta', difficulty: 'pesadelo' })), EM_CHEIO, 'normal', NUNCA).log;
     expect(log.some((linha) => linha.includes('aberta no portão') || linha.includes('abre a partir'))).toBe(false);
   });
 
   it('o chefe do andar 95 continua levando pro 96', () => {
-    const combate = atacar(emCombate(noChefeDoAndar(95)), 20, 'normal', NUNCA);
+    const combate = atacar(emCombate(noChefeDoAndar(95)), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.estado.mapMode).toBe('dungeon');
     expect(combate.estado.floor).toBe(96);
@@ -366,11 +372,11 @@ describe('maestria', () => {
   it('a sala inteira é uma vitória, mesmo com dois na fila', () => {
     const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 }), monstro({ hp: 1 })] }, { masteryBattles: 0 });
 
-    const primeiro = atacar(emCombate(inicio), 20, 'normal', NUNCA);
+    const primeiro = atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA);
     expect(primeiro.fase).toBe('combate');
     expect(primeiro.estado.hero.masteryBattles).toBe(0);
 
-    const segundo = atacar(primeiro, 20, 'normal', NUNCA);
+    const segundo = atacar(primeiro, EM_CHEIO, 'normal', NUNCA);
     expect(segundo.fase).toBe('vitoria');
     expect(segundo.estado.hero.masteryBattles).toBe(1);
   });
@@ -378,13 +384,13 @@ describe('maestria', () => {
   it('o chefe conta como qualquer sala', () => {
     const inicio = comSalaDeMonstro({ type: 'boss', monsters: [monstro({ hp: 1, isBoss: true })] }, { masteryBattles: 3 });
 
-    expect(atacar(emCombate(inicio), 20, 'normal', NUNCA).estado.hero.masteryBattles).toBe(4);
+    expect(atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA).estado.hero.masteryBattles).toBe(4);
   });
 
   it('a vitória que completa o nível vai pro diário', () => {
     const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 })] }, { masteryBattles: 9 });
 
-    const combate = atacar(emCombate(inicio), 20, 'normal', NUNCA);
+    const combate = atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.estado.hero.masteryBattles).toBe(10);
     expect(combate.log.some((linha) => linha.startsWith('Sua maestria de') && linha.includes('nível 1: +2% de dano'))).toBe(true);
@@ -393,7 +399,7 @@ describe('maestria', () => {
   it('vitória que não completa nível não escreve nada sobre maestria', () => {
     const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 })] }, { masteryBattles: 3 });
 
-    expect(atacar(emCombate(inicio), 20, 'normal', NUNCA).log.some((linha) => linha.includes('maestria'))).toBe(false);
+    expect(atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA).log.some((linha) => linha.includes('maestria'))).toBe(false);
   });
 
   it('fugir não conta', () => {
@@ -439,7 +445,7 @@ describe('bônus de pet', () => {
   it('o pet acompanha o combate inteiro, não só o primeiro golpe', () => {
     const combate = iniciarEncontro(comSalaDeMonstro(), 'admin_dragon');
 
-    expect(atacar(combate, 10, 'normal', NUNCA).pet).toBe('admin_dragon');
+    expect(atacar(combate, { dado: 10, mira: null }, 'normal', NUNCA).pet).toBe('admin_dragon');
   });
 
   it('sem pet a luta acontece igual', () => {
@@ -456,25 +462,25 @@ describe('som e números flutuantes', () => {
   it('acerto, crítico e erro têm som próprio', () => {
     const combate = lutaLonga();
 
-    // 20 no d20 é crítico; 1 erra.
-    expect(atacar(combate, 20, 'normal', NUNCA).som).toBe('crit');
-    expect(atacar(combate, 1, 'normal', NUNCA).som).toBe('miss');
+    // A barra no centro crita; sem toque, erra.
+    expect(atacar(combate, EM_CHEIO, 'normal', NUNCA).som).toBe('crit');
+    expect(atacar(combate, NO_VAZIO, 'normal', NUNCA).som).toBe('miss');
   });
 
   it('vencer troca o som do golpe pelo da vitória', () => {
     // A criatura padrão tem 40 de vida e não sobrevive ao crítico.
-    expect(atacar(iniciarEncontro(comSalaDeMonstro()), 20, 'normal', NUNCA).som).toBe('victory');
+    expect(atacar(iniciarEncontro(comSalaDeMonstro()), EM_CHEIO, 'normal', NUNCA).som).toBe('victory');
   });
 
   it('o golpe vira número na tela, e o erro não', () => {
     const combate = lutaLonga();
 
-    const acerto = atacar(combate, 20, 'normal', NUNCA);
+    const acerto = atacar(combate, EM_CHEIO, 'normal', NUNCA);
     const noInimigo = acerto.flutuantes.filter((numero) => numero.alvo === 'inimigo');
     expect(noInimigo).toHaveLength(1);
     expect(noInimigo[0].texto).toContain('CRÍTICO!');
 
-    expect(atacar(combate, 1, 'normal', NUNCA).flutuantes.filter((numero) => numero.alvo === 'inimigo')).toHaveLength(0);
+    expect(atacar(combate, NO_VAZIO, 'normal', NUNCA).flutuantes.filter((numero) => numero.alvo === 'inimigo')).toHaveLength(0);
   });
 
   /**
@@ -483,7 +489,7 @@ describe('som e números flutuantes', () => {
    * repetiria o "crítico" do anterior sem ninguém notar no log.
    */
   it('cada ação começa do zero, sem herdar a anterior', () => {
-    const critico = atacar(lutaLonga(), 20, 'normal', NUNCA);
+    const critico = atacar(lutaLonga(), EM_CHEIO, 'normal', NUNCA);
     expect(critico.som).toBe('crit');
 
     const depois = comecarCombate(critico);
@@ -492,7 +498,7 @@ describe('som e números flutuantes', () => {
   });
 
   it('a criatura acertando o herói também deixa número na tela', () => {
-    const turno = atacar(lutaLonga(), 10, 'normal', NUNCA);
+    const turno = atacar(lutaLonga(), { dado: 10, mira: null }, 'normal', NUNCA);
 
     expect(turno.flutuantes.some((numero) => numero.alvo === 'heroi')).toBe(true);
   });
@@ -510,7 +516,7 @@ describe('fugir depois de acertar', () => {
    * um ataque que não houve.
    */
   it('não repete o som nem o número do golpe anterior', () => {
-    const acerto = atacar(iniciarEncontro(comMonstroDuro()), 20, 'normal', NUNCA);
+    const acerto = atacar(iniciarEncontro(comMonstroDuro()), EM_CHEIO, 'normal', NUNCA);
     expect(acerto.som).toBe('crit');
     expect(acerto.flutuantes.some((f) => f.alvo === 'inimigo')).toBe(true);
 
@@ -590,7 +596,7 @@ describe('morrer de veneno', () => {
   function envenenadoDepoisDeAcertar(): { combate: Combate; item: Item } {
     const pocao = instantiate(templateById('pot_vida')!, RARITIES[0]!);
     const estado = comMonstroDuro({ mp: 50, maxMp: 50 });
-    const acerto = atacar(iniciarEncontro({ ...estado, inventory: [...estado.inventory, pocao] }), 20, 'normal', NUNCA);
+    const acerto = atacar(iniciarEncontro({ ...estado, inventory: [...estado.inventory, pocao] }), EM_CHEIO, 'normal', NUNCA);
     expect(acerto.flutuantes.some((f) => f.alvo === 'inimigo')).toBe(true);
 
     const agora = acerto.estado as EstadoNaMasmorra;
@@ -599,7 +605,7 @@ describe('morrer de veneno', () => {
   }
 
   const acoes: [string, (combate: Combate, item: Item) => Combate][] = [
-    ['atacar', (combate) => atacar(combate, 20, 'normal', NUNCA)],
+    ['atacar', (combate) => atacar(combate, EM_CHEIO, 'normal', NUNCA)],
     ['usar poder', (combate) => usarPoder(combate, powerById('cura_menor')!, NUNCA).combate],
     ['esquivar', (combate) => esquivar(combate, 20, NUNCA)],
     ['usar item', (combate, item) => usarItem(combate, item, NUNCA)],
@@ -629,7 +635,7 @@ describe('Canção de Batalha numa sala de vários monstros', () => {
   }
 
   it('matar com o golpe conta a rodada', () => {
-    const depois = atacar(cantandoContraDois(), 20, 'normal', NUNCA);
+    const depois = atacar(cantandoContraDois(), EM_CHEIO, 'normal', NUNCA);
 
     expect(salaDepois(depois).monsterIndex).toBe(1);
     expect(depois.estado.hero.buffs?.inspiracaoTurns).toBe(1);

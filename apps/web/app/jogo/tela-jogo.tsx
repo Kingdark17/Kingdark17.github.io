@@ -664,6 +664,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
         return (
           <TelaCombate
             combate={aberta.combate}
+            lugar={aberta.combate.estado.mapMode === 'dungeon' ? aberta.combate.estado.masmorra.dungeon : 'cidade'}
             onCombate={(proximo) => {
               // Número flutuante sobre o inimigo é o que a regra já sabe
               // sobre "o herói acertou" — ler isso é melhor que inventar um

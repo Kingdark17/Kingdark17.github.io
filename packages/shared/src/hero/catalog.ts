@@ -48,13 +48,15 @@ export interface ClassDef {
   signatureId: string;
   affinity: Record<string, number>;
   /**
-   * O ataque que **combina com a classe**, e que por isso rola d6 em vez de
-   * d20 — ver `ladosDoAtaque` em `combat/resolve-attack.ts`.
+   * O ataque que **combina com a classe**, e que por isso tem a zona de
+   * acerto maior na barra de mira (2/3 contra metade) — ver `zonaDoAtaque`
+   * em `combat/resolve-attack.ts`.
    *
-   * Regra do doc do Breno ("arma define dado"), com a leitura fechada pelo
-   * Pedro em 2026-09-26: o "cavaleiro" é o guerreiro e o "algoz" é o ladino;
-   * o d6 existe pra tornar **mais provável acertar** o ataque coerente com a
-   * classe. Quem não tem campo aqui rola d20 em tudo, como sempre rolou.
+   * Nasceu da regra "arma define dado" do doc do Breno, fechada pelo Pedro
+   * em 2026-09-26 (o "cavaleiro" é o guerreiro e o "algoz" é o ladino): o
+   * ataque da classe rolava d6 pra **acertar mais**. Em 2026-10-09 o d20
+   * virou o dado de dano de todos e o acerto foi pra barra; a vantagem
+   * ficou, agora como zona maior.
    *
    * `distancia` só vale com arco na mão: "tiro" sem arco não é nada.
    */

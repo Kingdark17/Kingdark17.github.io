@@ -1,12 +1,20 @@
 'use client';
 
 /**
- * A tela de combate. Só desenha e rola o dado — quem decide o que acontece
- * é `lib/jogo/combate.ts`.
+ * A tela de combate, em primeira pessoa como no Undertale (doc do Breno,
+ * regras do usuário em 2026-10-09): o cenário do lugar atrás, o monstro
+ * grande no meio, a caixa embaixo e o menu **Lutar · Poderes · Itens ·
+ * Fugir**. As opções de cada um abrem dentro da caixa; o ataque é o d20 de
+ * dano seguido da barra de mira (`AtaqueComMira`). Não há o minijogo de
+ * desviar — foi decidido assim.
  *
- * O d20 é rolado aqui e passado pra máquina de turnos em vez de sorteado lá
- * dentro: a tela mostra o número que saiu, e é o mesmo número que um dia o
- * servidor vai conferir.
+ * Só desenha e rola o dado — quem decide o que acontece é
+ * `lib/jogo/combate.ts`. Os dados são rolados aqui e passados pra máquina
+ * de turnos em vez de sorteados lá dentro: a tela mostra o número que saiu,
+ * e é o mesmo número que um dia o servidor vai conferir.
+ *
+ * O cenário e o monstro são provisórios: as cores do tema do mapa e o
+ * emoji da espécie, até o Breno desenhar os fundos e os monstros.
  *
  * **É a única tela com Motion, e por um motivo.** O log guarda oito
  * linhas: cada golpe entra embaixo e empurra a mais velha pra fora. Sem
@@ -23,7 +31,7 @@
 
 import { AnimatePresence, LazyMotion, MotionConfig } from 'motion/react';
 import * as m from 'motion/react-m';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 
 import {
   ataquesDisponiveis,
@@ -33,6 +41,7 @@ import {
   type AtaqueDisponivel,
   type CombatMonsterView,
   type Item,
+  type JogadaDeAtaque,
   type Power,
 } from '@rpg-legend/shared';
 
@@ -48,8 +57,11 @@ import {
   type Combate,
   type Flutuante,
 } from '@/lib/jogo/combate';
+import { TEMAS, type LugarDoTema } from '@/lib/jogo/desenho-da-sala';
 import { tocar } from '@/lib/som/efeitos';
-import styles from './jogo.module.css';
+import { AtaqueComMira } from './ataque-com-mira';
+import styles from './combate.module.css';
+import jogo from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
 
 const LINHAS_DO_LOG = 8;
@@ -77,6 +89,14 @@ interface NumeroNaTela extends Flutuante {
   id: number;
 }
 
+/**
+ * O que a caixa mostra: o registro da luta, as opções de um item do menu,
+ * ou o ataque em andamento.
+ */
+type Caixa = { tipo: 'registro' } | { tipo: 'lutar' } | { tipo: 'poderes' } | { tipo: 'itens' } | { tipo: 'ataque'; ataque: AtaqueDisponivel };
+
+const REGISTRO: Caixa = { tipo: 'registro' };
+
 const ROTULOS_DE_STATUS: Record<string, string> = {
   queimadura: '🔥 Queimando',
   sangramento: '🩸 Sangrando',
@@ -87,27 +107,21 @@ const ROTULOS_DE_STATUS: Record<string, string> = {
   lento: '❄️ Lento',
 };
 
-/**
- * O dado sai daqui e não de dentro da engine — a tela mostra o número, e é
- * o mesmo número que um dia o servidor vai conferir. **Quantos lados** vem
- * da engine (`ataquesDisponiveis`): a tela não decide sozinha quem rola d6.
- */
+/** Esquiva e fuga continuam no d20 de sempre. */
 function rolar(lados: number): number {
   return Math.floor(Math.random() * lados) + 1;
 }
 
-/** O nome do botão diz o dado — "d6" é a promessa de acertar mais. */
 function rotuloDoAtaque(ataque: AtaqueDisponivel): string {
-  const dado = `d${ataque.lados}`;
-  if (ataque.estilo === 'magic') return `Ataque Mágico (${dado} · ${ataque.custo} MP)`;
-  if (ataque.estilo === 'ranged') return `Tiro (${dado})`;
-  return `Ataque Físico (${dado})`;
+  if (ataque.estilo === 'magic') return 'Ataque Mágico';
+  if (ataque.estilo === 'ranged') return 'Tiro';
+  return 'Ataque Físico';
 }
 
 /**
  * Consumíveis iguais viram um botão só, com a contagem. Cinco poções de vida
  * são uma escolha ("beber uma"), não cinco — e cinco botões iguais
- * empurrariam os poderes pra fora da tela no celular.
+ * empurrariam o resto pra fora da caixa no celular.
  */
 function agruparConsumiveis(itens: Item[]): Array<{ item: Item; nome: string; quantos: number }> {
   const grupos = new Map<string, { item: Item; nome: string; quantos: number }>();
@@ -127,8 +141,18 @@ function statusAtivos(monstro: CombatMonsterView): string[] {
     .map(([chave]) => ROTULOS_DE_STATUS[chave] ?? chave);
 }
 
+const emHex = (cor: number) => `#${cor.toString(16).padStart(6, '0')}`;
+
+/** As cores do cenário provisório, as mesmas do mapa do lugar. */
+function corDoCenario(lugar: LugarDoTema): CSSProperties {
+  const tema = TEMAS[lugar];
+  return { '--parede': emHex(tema.parede), '--borda': emHex(tema.bordaDaParede), '--chao': emHex(tema.chao) } as CSSProperties;
+}
+
 interface Props {
   combate: Combate;
+  /** Onde a luta acontece — escolhe o cenário atrás do monstro. */
+  lugar: LugarDoTema;
   onCombate: (proximo: Combate) => void;
   onEncerrar: (final: Combate) => void;
   /**
@@ -138,16 +162,34 @@ interface Props {
   onCuraDoParceiro?: (quantia: number) => void;
 }
 
-export function TelaCombate({ combate, onCombate, onEncerrar, onCuraDoParceiro }: Props) {
+export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoParceiro }: Props) {
   const [historico, setHistorico] = useState<LinhaDoLog[]>(() => combate.log.map((texto, indice) => ({ id: indice, texto })));
   const [naTela, setNaTela] = useState<NumeroNaTela[]>([]);
   const [tremida, setTremida] = useState(false);
+  const [golpeado, setGolpeado] = useState(false);
+  const [caixa, setCaixa] = useState<Caixa>(REGISTRO);
+  // O cenário é o de onde a luta começou. Perder (ou zerar a masmorra) leva
+  // o estado pra cidade antes da tela de "Continuar", e o fundo não deve
+  // trocar de lugar no meio do resultado.
+  const [cenario] = useState(lugar);
   const proximoId = useRef(combate.log.length);
 
   const monstro = monstroAtual(combate.estado);
   const hero = combate.estado.hero;
   const restantes = inimigosRestantes(combate.estado);
   const acabou = combate.fase === 'vitoria' || combate.fase === 'fuga' || combate.fase === 'derrota';
+  const atacando = caixa.tipo === 'ataque';
+
+  // Esc fecha as opções e volta pro registro. Não interrompe o ataque: com
+  // o dado girado, desistir seria rolar de novo (ver `AtaqueComMira`).
+  useEffect(() => {
+    if (caixa.tipo === 'registro' || caixa.tipo === 'ataque') return;
+    const tecla = (evento: KeyboardEvent) => {
+      if (evento.key === 'Escape') setCaixa(REGISTRO);
+    };
+    window.addEventListener('keydown', tecla);
+    return () => window.removeEventListener('keydown', tecla);
+  }, [caixa.tipo]);
 
   function avancar(proximo: Combate) {
     // Os ids saem daqui, não de dentro do `setHistorico`: em StrictMode o
@@ -157,14 +199,16 @@ export function TelaCombate({ combate, onCombate, onEncerrar, onCuraDoParceiro }
 
     const numeros = proximo.flutuantes.map((flutuante) => ({ ...flutuante, id: proximoId.current++ }));
     setNaTela((atual) => [...atual, ...numeros]);
-    // A tremida se apaga sozinha no fim da animação (ver `onAnimationEnd`
-    // na seção), que é o equivalente React do `classList.remove` + reflow
+    // A tremida e o clarão se apagam sozinhos no fim da animação (ver os
+    // `onAnimationEnd`), o equivalente React do `classList.remove` + reflow
     // que o cliente antigo fazia à mão.
     if (numeros.some((numero) => numero.alvo === 'heroi')) setTremida(true);
+    if (numeros.some((numero) => numero.alvo === 'inimigo')) setGolpeado(true);
 
     // Aqui e não num efeito: dois acertos seguidos têm o mesmo `som`, e
     // um efeito que observa o valor não tocaria o segundo.
     if (proximo.som) tocar(proximo.som);
+    setCaixa(REGISTRO);
     onCombate(proximo);
   }
 
@@ -180,7 +224,16 @@ export function TelaCombate({ combate, onCombate, onEncerrar, onCuraDoParceiro }
     avancar(proximo);
   }
 
-  if (!monstro && !acabou) return <p className={styles.erro}>A sala está vazia.</p>;
+  function golpear(ataque: AtaqueDisponivel, jogada: JogadaDeAtaque) {
+    avancar(atacar(combate, jogada, ataque.estilo));
+  }
+
+  /** Tocar no item do menu que já está aberto fecha as opções. */
+  function abrir(tipo: 'lutar' | 'poderes' | 'itens') {
+    setCaixa((atual) => (atual.tipo === tipo ? REGISTRO : { tipo }));
+  }
+
+  if (!monstro && !acabou) return <p className={jogo.erro}>A sala está vazia.</p>;
 
   return (
     <section
@@ -190,153 +243,218 @@ export function TelaCombate({ combate, onCombate, onEncerrar, onCuraDoParceiro }
         if (evento.currentTarget === evento.target) setTremida(false);
       }}
     >
-      {/* Os números do golpe. Ficam sobre a cena inteira, como o
-          `#combatScene` do cliente antigo, e cada um se remove quando a
-          própria animação termina. */}
-      <div className={styles.numerosFlutuantes} aria-hidden>
-        {naTela.map((numero) => (
-          <span
-            key={numero.id}
-            className={`${styles.numeroFlutuante} ${numero.tom === 'critico' ? styles.critico : ''} ${numero.alvo === 'heroi' ? styles.noHeroi : ''}`}
-            onAnimationEnd={() => setNaTela((atual) => atual.filter((outro) => outro.id !== numero.id))}
-          >
-            {numero.texto}
-          </span>
-        ))}
+      <div className={styles.palco} style={corDoCenario(cenario)}>
+        {/* Os números do golpe ficam sobre o palco inteiro, e cada um se
+            remove quando a própria animação termina. */}
+        <div className={styles.numeros} aria-hidden>
+          {naTela.map((numero) => (
+            <span
+              key={numero.id}
+              className={`${styles.numero} ${numero.tom === 'critico' ? styles.numeroCritico : ''} ${numero.alvo === 'heroi' ? styles.numeroNoHeroi : ''}`}
+              onAnimationEnd={() => setNaTela((atual) => atual.filter((outro) => outro.id !== numero.id))}
+            >
+              {numero.texto}
+            </span>
+          ))}
+        </div>
+
+        {monstro && !acabou && (
+          <>
+            <div className={`${styles.placa} ${monstro.isBoss ? styles.placaChefe : ''}`}>
+              <h2 className={styles.nome}>
+                {monstro.name}
+                {monstro.isBoss ? ' 👑' : ''}
+              </h2>
+              <p className={styles.subtitulo}>
+                {monstro.enemyClassLabel}
+                {restantes > 1 ? ` · ainda restam ${restantes} nesta sala` : ''}
+              </p>
+              <div className={jogo.trilho}>
+                <div
+                  className={`${jogo.preenchimento} ${jogo.vida}`}
+                  style={{ width: `${Math.max(0, Math.min(100, (monstro.hp / monstro.maxHp) * 100))}%` }}
+                />
+              </div>
+              <p className={styles.vida}>
+                {Math.max(0, monstro.hp)} / {monstro.maxHp}
+              </p>
+              {statusAtivos(monstro).length > 0 && (
+                <ul className={styles.marcadores}>
+                  {statusAtivos(monstro).map((rotulo) => (
+                    <li key={rotulo} className={styles.marcador}>
+                      {rotulo}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div
+              className={`${styles.monstro} ${monstro.isBoss ? styles.monstroChefe : ''}`}
+              data-golpeado={golpeado || undefined}
+              onAnimationEnd={() => setGolpeado(false)}
+              aria-hidden
+            >
+              <span className={styles.figura}>{monstro.icon}</span>
+              <span className={styles.sombra} />
+            </div>
+          </>
+        )}
       </div>
 
-      {monstro && !acabou && (
-        <div className={`${styles.cartaInimigo} ${monstro.isBoss ? styles.cartaChefe : ''}`}>
-          <span className={styles.iconeInimigo} aria-hidden>
-            {monstro.icon}
-          </span>
-          <h2 className={styles.nomeInimigo}>
-            {monstro.name}
-            {monstro.isBoss ? ' 👑' : ''}
-          </h2>
-          <p className={styles.classeInimigo}>{monstro.enemyClassLabel}</p>
+      <div className={styles.caixa}>
+        {caixa.tipo === 'registro' && (
+          <>
+            {combate.dado !== null && !acabou && (
+              <p className={styles.dado} aria-label={`Dado de ${combate.dado.lados} lados: ${combate.dado.valor}`}>
+                🎲 <span className={styles.ladosDoDado}>d{combate.dado.lados}</span> {combate.dado.valor}
+              </p>
+            )}
+            <MotionConfig reducedMotion="user">
+              <LazyMotion features={carregarAnimacoes} strict>
+                <ul className={styles.registro} aria-live="polite">
+                  {/* `initial={false}`: ao abrir a tela as linhas já existentes
+                      aparecem prontas, sem desfilar uma cascata de entrada. */}
+                  <AnimatePresence initial={false}>
+                    {historico.map((linha) => (
+                      <m.li
+                        key={linha.id}
+                        className={jogo.linhaDoLog}
+                        initial={ENTRADA_DA_LINHA}
+                        animate={LINHA_PARADA}
+                        exit={SAIDA_DA_LINHA}
+                        transition={RITMO}
+                      >
+                        <TextoDoJogo>{linha.texto}</TextoDoJogo>
+                      </m.li>
+                    ))}
+                  </AnimatePresence>
+                </ul>
+              </LazyMotion>
+            </MotionConfig>
+          </>
+        )}
 
-          {restantes > 1 && <p className={styles.filaInimigos}>Ainda restam {restantes} inimigos nesta sala</p>}
-
-          <div className={styles.trilho}>
-            <div
-              className={`${styles.preenchimento} ${styles.vida}`}
-              style={{ width: `${Math.max(0, Math.min(100, (monstro.hp / monstro.maxHp) * 100))}%` }}
-            />
-          </div>
-          <p className={styles.vidaInimigo}>
-            {Math.max(0, monstro.hp)} / {monstro.maxHp}
-          </p>
-
-          {statusAtivos(monstro).length > 0 && (
-            <ul className={styles.marcadores}>
-              {statusAtivos(monstro).map((rotulo) => (
-                <li key={rotulo} className={styles.marcador}>
-                  {rotulo}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
-
-      {combate.dado !== null && !acabou && (
-        <p className={styles.dado} aria-label={`Dado de ${combate.dado.lados} lados: ${combate.dado.valor}`}>
-          🎲 <span className={styles.ladosDoDado}>d{combate.dado.lados}</span> {combate.dado.valor}
-        </p>
-      )}
-
-      <MotionConfig reducedMotion="user">
-        <LazyMotion features={carregarAnimacoes} strict>
-          <ul className={styles.log}>
-            {/* `initial={false}`: ao abrir a tela as linhas já existentes
-                aparecem prontas, sem desfilar uma cascata de entrada. */}
-            <AnimatePresence initial={false}>
-              {historico.map((linha) => (
-                <m.li
-                  key={linha.id}
-                  className={styles.linhaDoLog}
-                  initial={ENTRADA_DA_LINHA}
-                  animate={LINHA_PARADA}
-                  exit={SAIDA_DA_LINHA}
-                  transition={RITMO}
+        {caixa.tipo === 'lutar' && (
+          <>
+            <p className={styles.tituloDaCaixa}>Lutar</p>
+            <div className={styles.opcoes}>
+              {/* O ataque da classe vem primeiro e em destaque — é o de zona
+                  maior. `ataquesDisponiveis` já devolve nessa ordem. */}
+              {ataques.map((ataque, indice) => (
+                <button
+                  key={ataque.estilo}
+                  type="button"
+                  className={indice === 0 ? `${jogo.botao} ${jogo.botaoPrincipal}` : jogo.botao}
+                  onClick={() => setCaixa({ tipo: 'ataque', ataque })}
+                  disabled={hero.mp < ataque.custo}
                 >
-                  <TextoDoJogo>{linha.texto}</TextoDoJogo>
-                </m.li>
+                  {rotuloDoAtaque(ataque)}
+                  {ataque.custo > 0 && <span className={jogo.custoDeMana}>({ataque.custo} MP)</span>}
+                </button>
               ))}
-            </AnimatePresence>
-          </ul>
-        </LazyMotion>
-      </MotionConfig>
+              <button
+                type="button"
+                className={jogo.botao}
+                onClick={() => avancar(esquivar(combate, rolar(20)))}
+                title="Rola o d20 com o bônus de velocidade: 12 ou mais, e o golpe desta rodada erra você. Você não ataca."
+              >
+                Esquivar <span className={jogo.custoDeMana}>(d20)</span>
+              </button>
+              <button type="button" className={jogo.botaoDiscreto} onClick={() => setCaixa(REGISTRO)}>
+                Voltar
+              </button>
+            </div>
+          </>
+        )}
+
+        {caixa.tipo === 'poderes' && (
+          <>
+            <p className={styles.tituloDaCaixa}>Poderes</p>
+            <div className={styles.opcoes}>
+              {poderes.map((poder) => {
+                const custo = powerManaCost(hero, poder);
+                return (
+                  <button key={poder.id} type="button" className={jogo.botao} onClick={() => lancar(poder)} disabled={hero.mp < custo} title={poder.desc}>
+                    {poder.icon} {poder.name} <span className={jogo.custoDeMana}>({custo} MP)</span>
+                  </button>
+                );
+              })}
+              <button type="button" className={jogo.botaoDiscreto} onClick={() => setCaixa(REGISTRO)}>
+                Voltar
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* Consumíveis gastam o turno, como toda ação. Só aparecem os que
+            fazem alguma coisa — o mesmo filtro do "Usar" da mochila. */}
+        {caixa.tipo === 'itens' && (
+          <>
+            <p className={styles.tituloDaCaixa}>Itens</p>
+            <div className={styles.opcoes}>
+              {consumiveis.map(({ item, nome, quantos }) => (
+                <button key={nome} type="button" className={jogo.botao} onClick={() => avancar(usarItem(combate, item))}>
+                  Usar {nome}
+                  {quantos > 1 ? <span className={jogo.custoDeMana}>×{quantos}</span> : null}
+                </button>
+              ))}
+              <button type="button" className={jogo.botaoDiscreto} onClick={() => setCaixa(REGISTRO)}>
+                Voltar
+              </button>
+            </div>
+          </>
+        )}
+
+        {caixa.tipo === 'ataque' && (
+          <AtaqueComMira
+            ataque={caixa.ataque}
+            rotulo={rotuloDoAtaque(caixa.ataque)}
+            onFim={(jogada) => golpear(caixa.ataque, jogada)}
+            onVoltar={() => setCaixa({ tipo: 'lutar' })}
+          />
+        )}
+      </div>
 
       {acabou ? (
-        <div className={styles.escolhas}>
-          <button type="button" className={`${styles.botao} ${styles.botaoPrincipal}`} onClick={() => onEncerrar(combate)}>
+        <div className={jogo.escolhas}>
+          <button type="button" className={`${jogo.botao} ${jogo.botaoPrincipal}`} onClick={() => onEncerrar(combate)}>
             Continuar
           </button>
         </div>
       ) : (
-        <>
-          <div className={styles.escolhas}>
-            {/* O ataque da classe vem primeiro e em destaque — é o que rola
-                d6. `ataquesDisponiveis` já devolve nessa ordem. */}
-            {ataques.map((ataque, indice) => (
-              <button
-                key={ataque.estilo}
-                type="button"
-                className={indice === 0 ? `${styles.botao} ${styles.botaoPrincipal}` : styles.botao}
-                onClick={() => avancar(atacar(combate, rolar(ataque.lados), ataque.estilo))}
-                disabled={hero.mp < ataque.custo}
-              >
-                {rotuloDoAtaque(ataque)}
-              </button>
-            ))}
-            <button
-              type="button"
-              className={styles.botao}
-              onClick={() => avancar(esquivar(combate, rolar(20)))}
-              title="Rola o d20 com o bônus de velocidade: 12 ou mais, e o golpe desta rodada erra você. Você não ataca."
-            >
-              Esquivar (d20)
-            </button>
-            <button type="button" className={styles.botao} onClick={() => avancar(fugir(combate, rolar(20)))}>
-              Fugir da Batalha
-            </button>
-          </div>
-
-          {poderes.length > 0 && (
-            <div className={styles.escolhas}>
-              {poderes.map((poder) => {
-                const custo = powerManaCost(hero, poder);
-                return (
-                  <button
-                    key={poder.id}
-                    type="button"
-                    className={styles.botao}
-                    onClick={() => lancar(poder)}
-                    disabled={hero.mp < custo}
-                    title={poder.desc}
-                  >
-                    {poder.icon} {poder.name} <span className={styles.custoDeMana}>({custo} MP)</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Consumíveis gastam o turno, como toda ação. Só aparecem os que
-              fazem alguma coisa — o mesmo filtro do "Usar" da mochila. */}
-          {consumiveis.length > 0 && (
-            <div className={styles.escolhas}>
-              {consumiveis.map(({ item, nome, quantos }) => (
-                <button key={nome} type="button" className={styles.botaoDiscreto} onClick={() => avancar(usarItem(combate, item))}>
-                  Usar {nome}
-                  {quantos > 1 ? <span className={styles.custoDeMana}> ×{quantos}</span> : null}
-                </button>
-              ))}
-            </div>
-          )}
-        </>
+        <nav className={styles.menu} aria-label="Ações do combate">
+          <button
+            type="button"
+            className={`${jogo.botao} ${caixa.tipo === 'lutar' ? styles.menuAberto : ''}`}
+            onClick={() => abrir('lutar')}
+            disabled={atacando}
+            aria-expanded={caixa.tipo === 'lutar'}
+          >
+            Lutar
+          </button>
+          <button
+            type="button"
+            className={`${jogo.botao} ${caixa.tipo === 'poderes' ? styles.menuAberto : ''}`}
+            onClick={() => abrir('poderes')}
+            disabled={atacando || poderes.length === 0}
+            aria-expanded={caixa.tipo === 'poderes'}
+          >
+            Poderes
+          </button>
+          <button
+            type="button"
+            className={`${jogo.botao} ${caixa.tipo === 'itens' ? styles.menuAberto : ''}`}
+            onClick={() => abrir('itens')}
+            disabled={atacando || consumiveis.length === 0}
+            aria-expanded={caixa.tipo === 'itens'}
+          >
+            Itens
+          </button>
+          <button type="button" className={jogo.botao} onClick={() => avancar(fugir(combate, rolar(20)))} disabled={atacando}>
+            Fugir
+          </button>
+        </nav>
       )}
     </section>
   );

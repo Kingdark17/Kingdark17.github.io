@@ -13,7 +13,8 @@
  *
  * A rolagem do d20 entra por parâmetro em vez de ser sorteada aqui — a tela
  * mostra o dado girando antes de saber o resultado, e um dia o servidor vai
- * querer conferir a jogada com o mesmo número.
+ * querer conferir a jogada com o mesmo número. No ataque entra também onde
+ * a barra de mira parou (`JogadaDeAtaque`), pelo mesmo motivo.
  *
  * O pet também entra por parâmetro. Ele é cosmético **da conta**, não do
  * save: o original lia o global `RPG.Account.currentUser()` de dentro do
@@ -37,7 +38,7 @@ import {
   DUNGEONS,
   freshCombatMonster,
   gainXP,
-  ladosDoAtaque,
+  LADOS_DO_DANO,
   lockReason,
   markCleared,
   monsterView,
@@ -60,6 +61,7 @@ import {
   type DungeonProgress,
   type Hero,
   type Item,
+  type JogadaDeAtaque,
   type PetId,
   type Power,
   type Rng,
@@ -100,9 +102,10 @@ export interface Combate {
   /** O que aconteceu na última ação, em ordem — vira o log da tela. */
   log: string[];
   /**
-   * Último dado rolado, pra tela mostrar. Carrega **quantos lados** desde que
-   * a classe passou a rolar d6 no ataque dela: "🎲 5" num d6 é um acerto
-   * folgado, num d20 é um erro, e a tela não tinha como saber qual.
+   * Último dado rolado, pra tela mostrar: o d20 de dano no ataque, o d20 da
+   * esquiva ou da fuga. Carrega quantos lados por herança do tempo em que a
+   * classe rolava d6 no ataque; hoje é sempre 20, mas a tela não precisa
+   * supor.
    */
   dado: Rolagem | null;
   /** Item achado ao vencer, pra tela dar destaque. */
@@ -263,7 +266,11 @@ function somDoGolpe(acertou: boolean, critico: boolean | undefined): Efeito {
   return critico ? 'crit' : 'hit';
 }
 
-export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng: Rng = defaultRng): Combate {
+/**
+ * Atacar: o d20 de dano e a barra de mira já aconteceram na tela, e chegam
+ * aqui em `jogada` (ver `JogadaDeAtaque` na engine).
+ */
+export function atacar(combate: Combate, jogada: JogadaDeAtaque, estilo: AttackStyle, rng: Rng = defaultRng): Combate {
   const estado = exigirMasmorra(combate);
   const monstro = monstroAtual(estado);
   if (!monstro) return combate;
@@ -273,8 +280,8 @@ export function atacar(combate: Combate, roll: number, estilo: AttackStyle, rng:
   if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
   if (veneno.defeated) return morteNoVeneno(combate, veneno.hero, log, rng);
 
-  const ataque = resolveAttack(veneno.hero, monstro, roll, estilo, { rng, petCriticoBonus: petBonus(combate.pet).critico ?? 0 });
-  const dado: Rolagem = { valor: roll, lados: ladosDoAtaque(veneno.hero, estilo) };
+  const ataque = resolveAttack(veneno.hero, monstro, jogada, estilo, { rng, petCriticoBonus: petBonus(combate.pet).critico ?? 0 });
+  const dado: Rolagem = { valor: jogada.dado, lados: LADOS_DO_DANO };
 
   if (ataque.outcome === 'no_mana') {
     // Turno não passa: o original só avisa e devolve o controle.

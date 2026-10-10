@@ -145,95 +145,6 @@
   margin: 0 0 0.7rem;
 }
 
-/* ---- efeitos de combate (portados de css/animations.css) ---- */
-
-.numerosFlutuantes {
-  height: 0;
-  pointer-events: none;
-  position: relative;
-  z-index: 30;
-}
-
-.numeroFlutuante {
-  animation: sobeESome 1s ease-out forwards;
-  color: #ff6b6b;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  /* Sem negrito: a VT323 tem um peso só, e o falso borra o pixel. O
-     tamanho dela já vem 60% maior (`size-adjust` no layout). */
-  left: 50%;
-  position: absolute;
-  top: 2.5rem;
-  white-space: nowrap;
-}
-
-.numeroFlutuante.critico {
-  color: #ffd35c;
-  font-size: 1.06rem;
-}
-
-/* O golpe que o herói toma sobe do outro lado, pra não empilhar com o dele. */
-.numeroFlutuante.noHeroi {
-  color: #ff9f6b;
-  left: 25%;
-  top: 4.5rem;
-}
-
-@keyframes sobeESome {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-46px);
-  }
-}
-
-.combate[data-tremendo] {
-  animation: tremida 0.3s ease-in-out;
-}
-
-@keyframes tremida {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  20% {
-    transform: translateX(-4px);
-  }
-  40% {
-    transform: translateX(4px);
-  }
-  60% {
-    transform: translateX(-3px);
-  }
-  80% {
-    transform: translateX(3px);
-  }
-}
-
-/* Quem pediu menos movimento no sistema continua vendo o número, parado. */
-@media (prefers-reduced-motion: reduce) {
-  .numeroFlutuante {
-    animation-duration: 1s;
-    animation-name: soSome;
-  }
-
-  .combate[data-tremendo] {
-    animation: none;
-  }
-}
-
-@keyframes soSome {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
 .controleDeSom {
   align-items: center;
   display: inline-flex;
@@ -1200,7 +1111,9 @@
   width: 100%;
 }
 
-/* ---------- combate ---------- */
+/* ---------- carta de evento, diálogo e totem ----------
+   O nome das classes é do tempo em que o combate também usava a carta; ele
+   ganhou módulo próprio (`combate.module.css`) e elas ficaram aqui. */
 
 .combate {
   display: grid;
@@ -1215,11 +1128,6 @@
   text-align: center;
 }
 
-.cartaChefe {
-  border-color: var(--gold);
-  box-shadow: inset 0 0 2rem rgba(138, 43, 43, 0.25);
-}
-
 .iconeInimigo {
   font-size: 3rem;
   line-height: 1;
@@ -1232,65 +1140,10 @@
   margin: 0.4rem 0 0.1rem;
 }
 
-.classeInimigo,
-.filaInimigos {
+.classeInimigo {
   color: var(--parchment-dim);
   font-size: 0.8rem;
   margin: 0 0 0.5rem;
-}
-
-.vidaInimigo {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.8rem;
-  color: var(--parchment-dim);
-  margin: 0.3rem 0 0;
-}
-
-.marcadores {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.35rem;
-  padding: 0;
-  margin: 0.6rem 0 0;
-}
-
-.marcador {
-  font-size: 0.8rem;
-  padding: 0.1rem 0.45rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--parchment-dim);
-}
-
-.dado {
-  font-family: var(--font-mono), monospace;
-  font-size: 1.1rem;
-  color: var(--gold-bright);
-  text-align: center;
-  margin: 0;
-}
-
-/* "d6"/"d20" menor e apagado ao lado do número: é contexto, não resultado.
-   Sem ele, "5" num d6 (acerto folgado) e "5" num d20 (erro) pareciam iguais. */
-.ladosDoDado {
-  font-size: 0.75em;
-  color: var(--parchment-dim);
-}
-
-.log {
-  list-style: none;
-  padding: 0.75rem 1rem;
-  margin: 0;
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 0.4rem;
-  font-size: 0.85rem;
-  display: grid;
-  gap: 0.3rem;
-  max-height: 12rem;
-  overflow-y: auto;
 }
 
 .linhaDoLog {
