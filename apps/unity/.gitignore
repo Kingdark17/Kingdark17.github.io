@@ -11,6 +11,8 @@
 /[Uu]ser[Ss]ettings/
 /[Mm]emoryCaptures/
 /[Rr]ecordings/
+# Saída intermediária do Gradle/CMake no build Android (Unity 6).
+/.utmp/
 
 # Projetos e soluções que a IDE gera a partir das asmdefs. Só os da raiz: os .csproj de
 # Assets/RPGLegend/Tools~/build são escritos à mão e vão para o git.

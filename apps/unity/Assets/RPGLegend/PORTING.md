@@ -43,6 +43,14 @@ Build de teste: **RPG Legend > Build de teste (Windows)**. Builda só a cena `Sc
 rodado no Editor. O resultado vai para o Console e para `Builds/Smoke/smoke-report.txt`. O primeiro build
 leva uns 13 minutos (a Unity compila os shaders do zero); os seguintes, bem menos.
 
+No celular: **RPG Legend > Build de teste (Android)**. Builda a mesma cena em IL2CPP/ARM64 (o que a Play
+Store exige) em `apps/unity/Builds/SmokeAndroid/`, instala pelo `adb` no celular ligado no cabo (depuração
+USB ligada e o computador autorizado), abre o app e compara as linhas `[smoke]` do logcat com as do Editor;
+o relatório vai para `Builds/SmokeAndroid/smoke-report.txt` e o app fica aberto no celular. O app de teste
+usa o identificador `br.com.rpglegend.smoke` só durante o build (o definitivo ainda não foi escolhido). Se
+o módulo Android foi instalado com a Unity aberta, feche e abra a Unity antes: sem isso o build "dá certo"
+e não gera APK (o menu avisa). O primeiro build Android leva uns 13 minutos (IL2CPP compila tudo em C++).
+
 ## Estrutura
 
 - `Engine/` — C# puro (.NET Standard 2.1, **C# 9**), sem UnityEngine e sem biblioteca de JSON.
@@ -60,7 +68,8 @@ leva uns 13 minutos (a Unity compila os shaders do zero); os seguintes, bem meno
 - `Resources/GameData/` — a cópia de `packages/shared/fixtures/data`, nas mesmas pastas, que vai no build.
   Não edite à mão: ela sai do menu de atualizar tabelas (ver Tabelas).
 - `EditorTools/` — só Editor (namespace `RPGLegend.EditorTools`, não `Editor`, que colide com
-  `UnityEditor.Editor`): os menus "Atualizar tabelas do jogo" e "Build de teste (Windows)".
+  `UnityEditor.Editor`): os menus "Atualizar tabelas do jogo", "Build de teste (Windows)" e
+  "Build de teste (Android)".
 - `Tests/EditMode/` — os handlers de fixture (`XxxFixtures.cs`), o executor `EngineFixtureTests`, as
   regressões e o `GameDataCopyTests`. Tudo sem UnityEngine: também compila no executor de fora da Unity.
 - `Tools~/` — o executor fora da Unity (projetos .NET, shim do NUnit, scripts `run-tests`).

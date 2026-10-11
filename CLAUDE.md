@@ -145,13 +145,19 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   tabelas do TS → rodar na Unity o menu RPG Legend > Atualizar tabelas do jogo**
   (copia só o que mudou, apaga o que sumiu). O teste `GameDataCopyTests` falha
   enquanto a cópia estiver diferente da origem.
-- Build: Mono, Windows 64 (o IL2CPP não está instalado). O menu RPG Legend >
-  Build de teste (Windows) builda a cena `EngineSmoke` em `apps/unity/Builds/Smoke`
-  (fora do git), roda o .exe em batchmode e confere o relatório dele contra o do
-  Editor; o resultado sai no Console e em `Builds/Smoke/smoke-report.txt`.
-  Celular exige IL2CPP (Android 64 bits; iPhone), e os módulos de Android e iOS
-  ainda não estão instalados. A paridade no celular só vale depois de provada
-  rodando no aparelho.
+- Build: Mono, Windows 64 (o IL2CPP do Windows não está instalado). O menu RPG
+  Legend > Build de teste (Windows) builda a cena `EngineSmoke` em
+  `apps/unity/Builds/Smoke` (fora do git), roda o .exe em batchmode e confere o
+  relatório dele contra o do Editor; o resultado sai no Console e em
+  `Builds/Smoke/smoke-report.txt`.
+- Celular exige IL2CPP. O módulo Android está instalado (iOS não: iPhone fica
+  para depois e precisa de Mac). O menu RPG Legend > Build de teste (Android)
+  builda a mesma cena em IL2CPP/ARM64, instala no celular pelo cabo (depuração
+  USB) e compara o logcat com o Editor. Passou em 2026-10-11 num Samsung Galaxy
+  A30s (as 24 linhas idênticas); os 2.240 casos ainda não rodaram no aparelho.
+  O identificador definitivo do app (o da Play Store, que não muda depois de
+  publicado) ainda não foi escolhido: o build de teste usa
+  `br.com.rpglegend.smoke` só durante o build.
 - Comportamento estranho do TS se corrige primeiro no TS (regenera os casos e
   porta a correção), nunca só de um lado.
 - `Library/`, `Temp/`, `Logs/` e `UserSettings/` são gerados pela Unity e ficam

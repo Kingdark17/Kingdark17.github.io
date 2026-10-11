@@ -72,6 +72,9 @@ namespace RPGLegend.EditorTools
                 targetGroup = BuildTargetGroup.Standalone,
                 options = BuildOptions.None,
             });
+            // O build grava o ProjectSettings.asset no meio do caminho (com o que o Input System põe só durante o
+            // build); salvar de novo deixa no disco o estado de repouso e o git não acusa mudança à toa.
+            AssetDatabase.SaveAssets();
             var resumo = build.summary;
             relatorio.AppendLine("build: " + resumo.result + " em " + (DateTime.Now - inicio).TotalSeconds.ToString("0") + " s, " +
                                  (resumo.totalSize / (1024 * 1024)) + " MB, " + resumo.totalErrors + " erro(s) -> " + exe);
@@ -104,28 +107,40 @@ namespace RPGLegend.EditorTools
             relatorio.AppendLine("executável: saiu com código " + codigo + ". Log: " + log);
 
             // 3. As linhas do executável contra as do Editor.
-            var doExe = File.Exists(log)
-                ? File.ReadAllLines(log).Where(l => l.StartsWith(EngineSmoke.LogPrefix, StringComparison.Ordinal)).Select(l => l.Substring(EngineSmoke.LogPrefix.Length)).ToList()
-                : new List<string>();
+            var doExe = File.Exists(log) ? SmokeLines(File.ReadAllLines(log)) : new List<string>();
+            return CompareWithEditor(doExe, "executável", relatorio) && codigo == 0;
+        }
+
+        /// <summary>As linhas "[smoke]" de um log, sem o prefixo.</summary>
+        internal static List<string> SmokeLines(IEnumerable<string> log) =>
+            log.Where(l => l.StartsWith(EngineSmoke.LogPrefix, StringComparison.Ordinal)).Select(l => l.Substring(EngineSmoke.LogPrefix.Length)).ToList();
+
+        /// <summary>
+        /// Roda o SmokeRun aqui no Editor e compara linha a linha com o que veio do build (<paramref name="quem"/>:
+        /// "executável", "celular"). Escreve as diferenças e o relatório do build. True quando são idênticas e
+        /// terminam em SMOKE OK.
+        /// </summary>
+        internal static bool CompareWithEditor(List<string> doBuild, string quem, StringBuilder relatorio)
+        {
             GameBootstrap.Reload();
             var doEditor = SmokeRun.Run();
 
             int diferentes = 0;
-            for (int i = 0; i < Math.Max(doExe.Count, doEditor.Count); i++)
+            for (int i = 0; i < Math.Max(doBuild.Count, doEditor.Count); i++)
             {
                 var e = i < doEditor.Count ? doEditor[i] : "(nada)";
-                var x = i < doExe.Count ? doExe[i] : "(nada)";
+                var x = i < doBuild.Count ? doBuild[i] : "(nada)";
                 if (e == x) continue;
-                if (diferentes++ == 0) relatorio.AppendLine("linhas diferentes (Editor | executável):");
+                if (diferentes++ == 0) relatorio.AppendLine("linhas diferentes (Editor | " + quem + "):");
                 if (diferentes <= 10) relatorio.AppendLine("  " + (i + 1) + ": " + e + "  |  " + x);
             }
             relatorio.AppendLine(diferentes == 0
-                ? "linhas [smoke]: as " + doExe.Count + " linhas do executável são idênticas às do Editor."
-                : "linhas [smoke]: " + diferentes + " diferente(s) — Editor " + doEditor.Count + ", executável " + doExe.Count + ".");
-            relatorio.AppendLine("relatório do executável:");
-            foreach (var l in doExe) relatorio.AppendLine("  " + l);
+                ? "linhas [smoke]: as " + doBuild.Count + " linhas do " + quem + " são idênticas às do Editor."
+                : "linhas [smoke]: " + diferentes + " diferente(s) — Editor " + doEditor.Count + ", " + quem + " " + doBuild.Count + ".");
+            relatorio.AppendLine("relatório do " + quem + ":");
+            foreach (var l in doBuild) relatorio.AppendLine("  " + l);
 
-            return codigo == 0 && diferentes == 0 && doExe.Count > 0 && SmokeRun.Passed(doExe);
+            return diferentes == 0 && doBuild.Count > 0 && SmokeRun.Passed(doBuild);
         }
     }
 }
