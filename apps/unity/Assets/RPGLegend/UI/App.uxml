@@ -1,0 +1,54 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="project://database/Assets/RPGLegend/UI/Tema.uss" />
+    <ui:VisualElement name="raiz" class="raiz" picking-mode="Ignore">
+
+        <!-- A entrada fica por cima da cena da porta: o cartão à direita e o "toque para entrar" embaixo. -->
+        <ui:VisualElement name="entrada" class="entrada" picking-mode="Ignore">
+            <ui:VisualElement name="cartao-entrada" class="painel cartao-entrada escondido">
+                <ui:VisualElement class="moldura" picking-mode="Ignore" />
+                <ui:Label text="RPG Legend" class="marca" />
+                <ui:Label name="titulo-entrada" text="Entrar na conta" class="titulo" />
+                <ui:TextField name="campo-usuario" label="Usuário ou e-mail" class="campo" />
+                <ui:TextField name="campo-email" label="E-mail" class="campo" />
+                <ui:TextField name="campo-senha" label="Senha" password="true" class="campo" />
+                <ui:Label name="erro-entrada" class="erro" />
+                <ui:VisualElement class="acoes">
+                    <ui:Button name="botao-entrar" text="ENTRAR" class="botao" />
+                    <ui:Button name="botao-alternar" text="Criar uma conta" class="link" />
+                </ui:VisualElement>
+                <ui:Button name="botao-esqueci" text="Esqueci minha senha" class="link link-direita" />
+            </ui:VisualElement>
+            <ui:Label name="toque-para-entrar" text="Toque para entrar" class="toque escondido" />
+        </ui:VisualElement>
+
+        <!-- Menu principal: o brasão à esquerda, os três botões de pedra à direita. -->
+        <ui:VisualElement name="menu" class="tela menu oculto">
+            <ui:VisualElement name="brasao" class="brasao" />
+            <ui:VisualElement class="coluna-menu">
+                <ui:Label name="ola" class="ola" />
+                <ui:Button name="botao-jogar" text="JOGAR" class="botao botao-menu botao-forte" />
+                <ui:Button name="botao-config" text="CONFIGURAÇÕES" class="botao botao-menu" />
+                <ui:Button name="botao-loja" text="LOJA" class="botao botao-menu" />
+            </ui:VisualElement>
+            <ui:Button name="botao-sair" text="Sair da conta" class="link canto" />
+            <!-- Obrigatório: a licença CC BY 4.0 da fonte dos títulos pede crédito visível (ver UI/Fontes). -->
+            <ui:Label name="credito" text="Fonte dos títulos: Alkhemikal, de jeti, sob a licença CC BY 4.0." class="credito" />
+        </ui:VisualElement>
+
+        <!-- Personagens: os até 4 slots da conta, lidos da nuvem. -->
+        <ui:VisualElement name="personagens" class="tela personagens oculto">
+            <ui:VisualElement class="cabecalho">
+                <ui:VisualElement class="cabecalho-textos">
+                    <ui:Label text="Seus personagens" class="titulo-tela" />
+                    <ui:Label text="Cada slot guarda um progresso separado na nuvem." class="subtitulo" />
+                </ui:VisualElement>
+                <ui:Button name="botao-voltar" text="VOLTAR AO MENU" class="botao" />
+            </ui:VisualElement>
+            <ui:Label name="estado-personagens" class="estado" />
+            <ui:VisualElement name="grade" class="grade" />
+        </ui:VisualElement>
+
+        <ui:Label name="aviso" class="aviso escondido" picking-mode="Ignore" />
+        <ui:VisualElement name="veu" class="veu" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

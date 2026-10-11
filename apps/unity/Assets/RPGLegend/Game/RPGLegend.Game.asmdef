@@ -1,7 +1,7 @@
 {
   "name": "RPGLegend.Game",
   "rootNamespace": "RPGLegend.Game",
-  "references": [ "RPGLegend.Engine", "RPGLegend.Engine.Json" ],
+  "references": [ "RPGLegend.Engine", "RPGLegend.Engine.Json", "Unity.InputSystem" ],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

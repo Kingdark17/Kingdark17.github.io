@@ -56,6 +56,25 @@ usa o identificador `br.com.rpglegend.smoke` só durante o build (o definitivo a
 o módulo Android foi instalado com a Unity aberta, feche e abra a Unity antes: sem isso o build "dá certo"
 e não gera APK (o menu avisa). O primeiro build Android leva uns 13 minutos (IL2CPP compila tudo em C++).
 
+O app (telas): a cena `Scenes/App.unity` é a cena do build. Abra e dê Play: porta → entrar → menu →
+personagens. Por padrão fala com a API de produção (a conta do site). Para testar sem tocar em produção, suba
+a API no computador com o banco de desenvolvimento e escolha **RPG Legend > Servidor do jogo > Local**:
+
+```
+cd apps/api && pnpm dev:db        # imprime a DATABASE_URL local (127.0.0.1:5433)
+pnpm --filter api build
+cd apps/api && DOTENV_CONFIG_PATH=/nao/existe/.env DATABASE_URL=<a do dev:db> DATABASE_SSL=false \
+  RESEND_API_KEY= EMAIL_FROM= PORT=3100 SAVE_SIGNING_SECRET=dev-local node dist/main.js
+```
+
+**Nunca suba a API local lendo o `apps/api/.env`**: ele aponta para o banco de produção e tem a chave do
+Resend (criar conta de teste mandaria e-mail de verdade). O `DOTENV_CONFIG_PATH` inexistente impede a
+leitura; `DATABASE_URL` e `RESEND_API_KEY` explícitos são a segunda trava (o dotenv não sobrescreve
+variável já definida). O `/health` local mostra `redis` e `storage` desligados; o de produção, ligados.
+
+Se a cena precisar ser refeita (mudou a montagem em `AppSceneBuilder`), rode **RPG Legend > Montar cena do
+app**: ela recria `Scenes/App.unity` numa cena aditiva, sem mexer na cena aberta.
+
 ## Estrutura
 
 - `Engine/` — C# puro (.NET Standard 2.1, **C# 9**), sem UnityEngine e sem biblioteca de JSON.
@@ -69,13 +88,25 @@ e não gera APK (o menu avisa). O primeiro build Android leva uns 13 minutos (IL
     mostra uid, porque o da arma inicial sai de
     `Rng.Default`/`Date.now` (paridade com o `buildHero` do TS);
   - `EngineSmoke` (MonoBehaviour) mostra o `SmokeRun` na tela e no log (`[smoke] `) e, com `-batchmode`,
-    sai com código 0 ou 1.
-- `Scenes/EngineSmoke.unity` — câmera e `EngineSmoke`; é a cena do build de teste.
+    sai com código 0 ou 1;
+  - `App/` — as telas do app: `AppFlow` (o roteiro: porta → entrar → menu → personagens), `DoorScene` (a
+    cena 2D da porta e as animações), `AppScreens` (a UI em UI Toolkit), `RpgApi` (as rotas da API do site,
+    com token `Bearer`), `Session` (o token nas PlayerPrefs), `ApiConfig` (produção, ou o servidor do menu no
+    Editor, ou `-api <url>` num executável).
+- `Scenes/App.unity` — a cena do build (câmera, porta, telas, `AppFlow`), montada pelo menu
+  "Montar cena do app". `Scenes/EngineSmoke.unity` — câmera e `EngineSmoke`; é a cena dos builds de teste.
+- `UI/` — `App.uxml` (as telas), `Tema.uss` (o visual do site: tokens, botão de pedra em 9-slice, fontes),
+  `PainelDoApp.asset` (1280×720, escala pela altura: a tela é deitada), `Fontes/` (Pixelify Sans e VT323,
+  OFL; Alkhemikal, CC BY 4.0, com crédito obrigatório no rodapé do menu) e `Imagens/` (brasão e botões,
+  copiados de `apps/web/public/img`).
+- `Art/Entrada/` — a arte **provisória** da cena da porta (muralha, céu, folhas, cadeado, corrente, tochas).
+  A definitiva do Breno entra com os mesmos nomes e tamanhos; o `PixelArtImporter` importa tudo de
+  `Art/` e `UI/Imagens/` como pixel art (Point, sem compressão, 1 pixel = 1 unidade).
 - `Resources/GameData/` — a cópia de `packages/shared/fixtures/data`, nas mesmas pastas, que vai no build.
   Não edite à mão: ela sai do menu de atualizar tabelas (ver Tabelas).
 - `EditorTools/` — só Editor (namespace `RPGLegend.EditorTools`, não `Editor`, que colide com
-  `UnityEditor.Editor`): os menus "Atualizar tabelas do jogo", "Build de teste (Windows)" e
-  "Build de teste (Android)".
+  `UnityEditor.Editor`): os menus "Atualizar tabelas do jogo", "Build de teste (Windows)",
+  "Build de teste (Android)", "Montar cena do app" e "Servidor do jogo", e o `PixelArtImporter`.
 - `Fixtures/` — o núcleo dos testes, sem NUnit e sem UnityEngine (assembly `RPGLegend.Fixtures`): os
   handlers de fixture (`XxxFixtures.cs`), o `FixtureRegistry`, a leitura dos casos (`Fixtures`), a
   comparação (`JsonAssert`, `FixtureCheck`) e o relatório de todos os casos (`FixtureSuite`). Só compila no

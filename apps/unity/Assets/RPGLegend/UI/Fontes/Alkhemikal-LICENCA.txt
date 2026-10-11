@@ -1,0 +1,8 @@
+Alkhemikal, de jeti — https://www.dafont.com/alkhemikal.font
+Licença Creative Commons Atribuição 4.0 (CC BY 4.0) — https://creativecommons.org/licenses/by/4.0/deed.pt-br
+
+O crédito ao autor é obrigatório e precisa ficar visível no jogo. No site ele está em Configurações > Créditos;
+no app, no rodapé do menu principal ("Fonte dos títulos: Alkhemikal, de jeti, sob a licença CC BY 4.0.").
+Não tire de lá sem pôr em outro lugar visível.
+
+O arquivo é a TTF original, recuperada do WOFF que o site usa (apps/web/app/fontes/alkhemikal.woff).

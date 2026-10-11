@@ -1,0 +1,475 @@
+/* Visual do app = visual do site: os tokens de apps/web/app/globals.css, o botão de pedra do
+   acabamento.module.css e as três fontes pixel (Pixelify Sans no texto, VT323 nos números,
+   Alkhemikal nos títulos). A tela de referência é 1280×720 (deitada); o PanelSettings escala pela altura. */
+
+:root {
+    --ink: #10121a;
+    --panel: #1d2230;
+    --panel-2: #242a3a;
+    --line: rgba(201, 162, 39, 0.28);
+    --parchment: #ecdfc0;
+    --parchment-dim: #b9ab86;
+    --gold: #c9a227;
+    --gold-bright: #e8c65a;
+    --ember: #c0532f;
+    --blood: #8a2b2b;
+    --contorno: #1a0b09;
+
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-Regular.ttf");
+    -unity-font-definition: initial;
+    color: var(--parchment);
+    font-size: 20px;
+}
+
+.raiz {
+    flex-grow: 1;
+}
+
+/* ---------- títulos (Alkhemikal: um peso só, nunca negrito) ---------- */
+
+.marca,
+.titulo,
+.titulo-tela,
+.nome,
+.toque,
+.retrato-letra {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/Alkhemikal.ttf");
+    -unity-font-definition: initial;
+    -unity-font-style: normal;
+}
+
+/* ---------- painel com moldura interna dourada ---------- */
+
+.painel {
+    background-color: var(--panel);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 6px;
+}
+
+.moldura {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+    border-width: 1px;
+    border-color: rgba(201, 162, 39, 0.12);
+    border-radius: 4px;
+}
+
+/* ---------- entrada (por cima da porta) ---------- */
+
+.entrada {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.cartao-entrada {
+    position: absolute;
+    right: 64px;
+    top: 50%;
+    width: 440px;
+    padding: 24px 28px 20px 28px;
+    translate: 0 -50%;
+    opacity: 1;
+    transition-property: opacity, translate;
+    transition-duration: 0.45s, 0.45s;
+    transition-timing-function: ease-out-cubic, ease-out-cubic;
+}
+
+.cartao-entrada.escondido {
+    opacity: 0;
+    translate: 70px -50%;
+}
+
+.marca {
+    font-size: 44px;
+    color: var(--gold-bright);
+    -unity-text-align: middle-center;
+    margin-bottom: 2px;
+}
+
+.titulo {
+    font-size: 26px;
+    color: var(--gold-bright);
+    margin-bottom: 10px;
+}
+
+.campo {
+    flex-direction: column;
+    margin: 0 0 10px 0;
+}
+
+.campo .unity-base-field__label {
+    min-width: 0;
+    margin: 0 0 4px 0;
+    padding: 0;
+    font-size: 16px;
+    color: var(--parchment-dim);
+}
+
+.campo .unity-base-text-field__input {
+    min-height: 42px;
+    margin: 0;
+    padding: 6px 10px;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+    color: var(--parchment);
+    font-size: 20px;
+    -unity-text-align: middle-left;
+}
+
+.campo .unity-base-text-field__input:focus {
+    border-color: var(--gold);
+}
+
+.erro {
+    display: none;
+    white-space: normal;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    background-color: rgba(138, 43, 43, 0.25);
+    border-width: 1px;
+    border-color: rgba(138, 43, 43, 0.7);
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.erro.visivel {
+    display: flex;
+}
+
+.acoes {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+}
+
+.toque {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 44px;
+    font-size: 34px;
+    color: var(--gold-bright);
+    -unity-text-align: middle-center;
+    text-shadow: 3px 3px 0 var(--contorno);
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 0.6s;
+}
+
+.toque.apagado {
+    opacity: 0.45;
+}
+
+.toque.escondido {
+    opacity: 0;
+}
+
+/* ---------- botão de pedra (9-slice da arte do Breno, 40×21) ---------- */
+/* Os cortes são a geometria da folha (9/20/11/16) e não mudam sozinhos; a escala é inteira para não
+   borrar o pixel. O padding = cortes × escala, para o texto cair no miolo. */
+
+.unity-button.botao {
+    margin: 0;
+    padding: 18px 40px 22px 32px;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
+    background-image: url("project://database/Assets/RPGLegend/UI/Imagens/botao.png");
+    -unity-slice-top: 9;
+    -unity-slice-right: 20;
+    -unity-slice-bottom: 11;
+    -unity-slice-left: 16;
+    -unity-slice-scale: 2px;
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-SemiBold.ttf");
+    -unity-font-definition: initial;
+    font-size: 20px;
+    letter-spacing: 1.6px;
+    color: var(--parchment);
+    -unity-text-align: middle-center;
+    transition-property: color;
+    transition-duration: 0.12s;
+}
+
+.unity-button.botao:hover,
+.unity-button.botao:focus {
+    color: var(--gold-bright);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-button.botao:active {
+    background-image: url("project://database/Assets/RPGLegend/UI/Imagens/botao-apertado.png");
+}
+
+.unity-button.botao:disabled {
+    opacity: 0.55;
+}
+
+.unity-button.link {
+    margin: 0;
+    padding: 4px 2px 2px 2px;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-radius: 0;
+    border-color: rgba(185, 171, 134, 0.6);
+    font-size: 17px;
+    color: var(--parchment-dim);
+}
+
+.unity-button.link:hover,
+.unity-button.link:focus {
+    color: var(--parchment);
+    border-color: var(--parchment);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.link-direita {
+    align-self: flex-end;
+    margin-top: 10px;
+}
+
+/* ---------- telas inteiras (menu, personagens) ---------- */
+
+.tela {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: var(--ink);
+}
+
+.oculto {
+    display: none;
+}
+
+.menu {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 72px 56px 72px;
+}
+
+.brasao {
+    width: 420px;
+    height: 420px;
+    flex-shrink: 0;
+    margin-right: 64px;
+    background-image: url("project://database/Assets/RPGLegend/UI/Imagens/logo.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.coluna-menu {
+    width: 430px;
+}
+
+.ola {
+    margin-bottom: 14px;
+    font-size: 18px;
+    color: var(--parchment-dim);
+    -unity-text-align: middle-center;
+}
+
+.unity-button.botao-menu {
+    margin-bottom: 14px;
+    padding: 27px 60px 33px 48px;
+    -unity-slice-scale: 3px;
+    font-size: 26px;
+}
+
+.unity-button.botao-forte {
+    color: var(--gold-bright);
+}
+
+.canto {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+}
+
+.credito {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 14px;
+    font-size: 16px;
+    color: var(--parchment-dim);
+    -unity-text-align: middle-center;
+}
+
+/* ---------- personagens ---------- */
+
+.personagens {
+    padding: 32px 52px 36px 52px;
+}
+
+.cabecalho {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.titulo-tela {
+    font-size: 40px;
+    color: var(--gold-bright);
+}
+
+.subtitulo {
+    font-size: 17px;
+    color: var(--parchment-dim);
+}
+
+.estado {
+    display: none;
+    white-space: normal;
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: var(--parchment-dim);
+}
+
+.estado.visivel {
+    display: flex;
+}
+
+.estado.falha {
+    padding: 8px 12px;
+    background-color: rgba(138, 43, 43, 0.25);
+    border-width: 1px;
+    border-color: rgba(138, 43, 43, 0.7);
+    border-radius: 4px;
+    color: var(--parchment);
+}
+
+.grade {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.slot {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin: 0 8px;
+    padding: 16px 14px;
+    align-items: center;
+}
+
+.slot-vazio {
+    justify-content: center;
+    background-color: rgba(29, 34, 48, 0.45);
+}
+
+.numero-slot {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: var(--parchment-dim);
+}
+
+.retrato {
+    width: 92px;
+    height: 92px;
+    margin: 8px 0 6px 0;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 46px;
+}
+
+.retrato-letra {
+    font-size: 48px;
+    color: var(--gold);
+}
+
+.nome {
+    font-size: 26px;
+    color: var(--gold-bright);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.classe {
+    font-size: 17px;
+    color: var(--parchment-dim);
+    -unity-text-align: middle-center;
+}
+
+.numeros {
+    flex-direction: row;
+    margin: 8px 0;
+}
+
+.numero {
+    align-items: center;
+    margin: 0 14px;
+}
+
+.valor {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 36px;
+    color: var(--parchment);
+}
+
+.chave {
+    font-size: 14px;
+    color: var(--parchment-dim);
+}
+
+.atualizado {
+    margin-bottom: 10px;
+    font-size: 13px;
+    white-space: normal;
+    color: var(--parchment-dim);
+    -unity-text-align: middle-center;
+}
+
+.unity-button.botao-slot {
+    margin-top: auto;
+    font-size: 17px;
+}
+
+/* ---------- aviso rápido e véu das transições ---------- */
+
+.aviso {
+    position: absolute;
+    left: 50%;
+    bottom: 40px;
+    translate: -50% 0;
+    padding: 10px 18px;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+    font-size: 18px;
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 0.3s;
+}
+
+.aviso.escondido {
+    opacity: 0;
+}
+
+.veu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgb(0, 0, 0);
+    opacity: 1;
+}

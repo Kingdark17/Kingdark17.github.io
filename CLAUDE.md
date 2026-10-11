@@ -161,6 +161,20 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   O identificador definitivo do app (o da Play Store, que não muda depois de
   publicado) ainda não foi escolhido: o build de teste usa
   `br.com.rpglegend.smoke` só durante o build.
+- Telas do app (2026-10-11): cena `Scenes/App.unity` (a do build). Entrada
+  animada estilo Genshin: a câmera se aproxima da porta trancada, o cadeado cai
+  e a porta abre quando a pessoa entra; depois menu e lista de personagens (só
+  leitura). UI Toolkit para as telas + cena 2D para a porta; visual igual ao
+  site; **celular deitado** (só paisagem). A arte da porta é **provisória**
+  (o Breno substitui com os mesmos nomes em `Art/Entrada`). Jogar e criar
+  personagem pelo app ainda dizem "em breve". **Login com Google fica para uma
+  rodada própria** (Google Cloud, rota na API, mudança no banco de produção e
+  regra para e-mail que já tem conta — planejar com o usuário).
+- **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
+  produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
+  a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no
+  PORTING.md). No Editor, o menu RPG Legend > Servidor do jogo escolhe
+  produção ou local.
 - Comportamento estranho do TS se corrige primeiro no TS (regenera os casos e
   porta a correção), nunca só de um lado.
 - `Library/`, `Temp/`, `Logs/` e `UserSettings/` são gerados pela Unity e ficam
