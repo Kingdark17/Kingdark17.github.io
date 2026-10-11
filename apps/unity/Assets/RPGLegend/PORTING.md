@@ -75,6 +75,16 @@ variável já definida). O `/health` local mostra `redis` e `storage` desligados
 Se a cena precisar ser refeita (mudou a montagem em `AppSceneBuilder`), rode **RPG Legend > Montar cena do
 app**: ela recria `Scenes/App.unity` numa cena aditiva, sem mexer na cena aberta.
 
+O app no celular: **RPG Legend > Build do app (Android)** builda `Scenes/App.unity` em IL2CPP/ARM64 em
+`apps/unity/Builds/AppAndroid/`, instala pelo cabo e abre; aponta para a API de produção (é o que fica no
+celular para entrar com a conta de verdade). **RPG Legend > Build do app (Android, API local)** é o mesmo app
+apontando para a API local (símbolo `RPG_API_LOCAL`): o build liga o HTTP sem TLS só para ele e, depois de
+instalar, faz `adb reverse tcp:3100 tcp:3100`, então o `127.0.0.1:3100` do celular chega ao computador pelo
+cabo. São dois apps no celular ("RPG Legend" e "RPG Legend (local)", identificadores
+`br.com.rpglegend.teste` e `br.com.rpglegend.teste.local`, só durante o build), para a sessão de um não
+cair no outro. O relatório vai para `Builds/AppAndroid/build-report.txt` (o menu confere se o app abriu sem
+exceção no log). O primeiro build leva uns 12 minutos; os seguintes, perto de 2.
+
 ## Estrutura
 
 - `Engine/` — C# puro (.NET Standard 2.1, **C# 9**), sem UnityEngine e sem biblioteca de JSON.
@@ -92,7 +102,7 @@ app**: ela recria `Scenes/App.unity` numa cena aditiva, sem mexer na cena aberta
   - `App/` — as telas do app: `AppFlow` (o roteiro: porta → entrar → menu → personagens), `DoorScene` (a
     cena 2D da porta e as animações), `AppScreens` (a UI em UI Toolkit), `RpgApi` (as rotas da API do site,
     com token `Bearer`), `Session` (o token nas PlayerPrefs), `ApiConfig` (produção, ou o servidor do menu no
-    Editor, ou `-api <url>` num executável).
+    Editor, ou `-api <url>` num executável, ou a API local no build com `RPG_API_LOCAL`).
 - `Scenes/App.unity` — a cena do build (câmera, porta, telas, `AppFlow`), montada pelo menu
   "Montar cena do app". `Scenes/EngineSmoke.unity` — câmera e `EngineSmoke`; é a cena dos builds de teste.
 - `UI/` — `App.uxml` (as telas), `Tema.uss` (o visual do site: tokens, botão de pedra em 9-slice, fontes),
@@ -106,7 +116,9 @@ app**: ela recria `Scenes/App.unity` numa cena aditiva, sem mexer na cena aberta
   Não edite à mão: ela sai do menu de atualizar tabelas (ver Tabelas).
 - `EditorTools/` — só Editor (namespace `RPGLegend.EditorTools`, não `Editor`, que colide com
   `UnityEditor.Editor`): os menus "Atualizar tabelas do jogo", "Build de teste (Windows)",
-  "Build de teste (Android)", "Montar cena do app" e "Servidor do jogo", e o `PixelArtImporter`.
+  "Build de teste (Android)", "Build do app (Android)" (e a variante com API local), "Montar cena do app"
+  e "Servidor do jogo", o `AndroidDevice` (o adb e as checagens comuns aos builds de Android) e o
+  `PixelArtImporter`.
 - `Fixtures/` — o núcleo dos testes, sem NUnit e sem UnityEngine (assembly `RPGLegend.Fixtures`): os
   handlers de fixture (`XxxFixtures.cs`), o `FixtureRegistry`, a leitura dos casos (`Fixtures`), a
   comparação (`JsonAssert`, `FixtureCheck`) e o relatório de todos os casos (`FixtureSuite`). Só compila no

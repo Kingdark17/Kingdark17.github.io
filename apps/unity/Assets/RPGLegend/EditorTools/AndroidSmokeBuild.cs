@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using RPGLegend.Game;
@@ -81,42 +80,7 @@ namespace RPGLegend.EditorTools
                 relatorio.AppendLine("A cena " + SmokeBuild.ScenePath + " não existe.");
                 return false;
             }
-            if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Android, BuildTarget.Android))
-            {
-                relatorio.AppendLine("A Unity não tem o módulo Android: instale pelo Unity Hub (Installs > Add modules > " +
-                                     "Android Build Support, com OpenJDK e SDK & NDK Tools) e reinicie a Unity.");
-                return false;
-            }
-            // Com o módulo instalado com a Unity aberta, ela já diz que suporta Android, mas a extensão que faz o
-            // IL2CPP e o Gradle só carrega quando a Unity abre: o build "dá certo" em poucos minutos e não sai APK.
-            // (UAC0005 avisa que a lista pode trazer assemblies já descarregados; aqui só se lê o nome deles.)
-#pragma warning disable UAC0005
-            var extensaoAndroid = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "UnityEditor.Android.Extensions");
-#pragma warning restore UAC0005
-            if (!extensaoAndroid)
-            {
-                relatorio.AppendLine("A extensão do Android não está carregada: feche e abra a Unity de novo (o módulo foi instalado com ela aberta).");
-                return false;
-            }
-            var backend = PlayerSettings.GetScriptingBackend(NamedBuildTarget.Android);
-            if (backend != ScriptingImplementation.IL2CPP)
-            {
-                relatorio.AppendLine("O Android está em " + backend + "; a prova é do IL2CPP (o que a Play Store exige). Troque em Project Settings > Player > Android.");
-                return false;
-            }
-            if ((PlayerSettings.Android.targetArchitectures & AndroidArchitecture.ARM64) == 0)
-            {
-                relatorio.AppendLine("O Android não está gerando ARM64 (" + PlayerSettings.Android.targetArchitectures + "). Marque ARM64 em Project Settings > Player > Android.");
-                return false;
-            }
-            var adb = FindAdb();
-            if (adb == null)
-            {
-                relatorio.AppendLine("Não achei o adb (vem com o módulo Android, em PlaybackEngines/AndroidPlayer/SDK/platform-tools).");
-                return false;
-            }
-            var serial = FindDevice(adb, relatorio);
-            if (serial == null) return false;
+            if (!AndroidDevice.Precheck(relatorio, out var adb, out var serial)) return false;
 
             // 1. Build, numa pasta limpa, com o identificador e o nome do app de teste e os casos de fixtures.
             if (Directory.Exists(pasta)) Directory.Delete(pasta, true);
@@ -166,16 +130,9 @@ namespace RPGLegend.EditorTools
             }
 
             // 2. Instala e abre no celular, com o logcat limpo.
-            var instalacao = Tool(adb, "-s " + serial + " install -r \"" + apk + "\"", 300000);
-            if (!instalacao.Output.Contains("Success"))
-            {
-                relatorio.AppendLine("A instalação no celular falhou: " + instalacao.Output.Trim());
-                return false;
-            }
+            if (!AndroidDevice.Install(adb, serial, apk, relatorio)) return false;
             relatorio.AppendLine("celular " + serial + ": instalado.");
-            Tool(adb, "-s " + serial + " logcat -c", 30000);
-            Tool(adb, "-s " + serial + " shell am force-stop " + TestIdentifier, 30000);
-            Tool(adb, "-s " + serial + " shell monkey -p " + TestIdentifier + " -c android.intent.category.LAUNCHER 1", 30000);
+            AndroidDevice.Launch(adb, serial, TestIdentifier);
 
             // 3. Espera os dois relatórios terminarem no logcat (tag Unity): o smoke e, depois dele, os fixtures.
             var smokeCelular = new List<string>();
@@ -184,7 +141,7 @@ namespace RPGLegend.EditorTools
             while (relogio.ElapsedMilliseconds < LogTimeoutMs)
             {
                 Thread.Sleep(2000);
-                var log = Tool(adb, "-s " + serial + " logcat -d -v raw -s Unity", 30000).Output.Split('\n').Select(l => l.TrimEnd('\r')).ToList();
+                var log = AndroidDevice.UnityLog(adb, serial);
                 smokeCelular = SmokeBuild.SmokeLines(log);
                 fixturesCelular = SmokeBuild.PrefixedLines(log, DeviceTestsPrefix);
                 if (Finished(smokeCelular, SmokeRun.Ok, SmokeRun.FailPrefix) && Finished(fixturesCelular, FixtureSuite.Ok, FixtureSuite.FailPrefix))
@@ -233,70 +190,6 @@ namespace RPGLegend.EditorTools
             Directory.Delete(pasta, true);
             if (File.Exists(pasta + ".meta")) File.Delete(pasta + ".meta");
             AssetDatabase.Refresh();
-        }
-
-        private static string FindDevice(string adb, StringBuilder relatorio)
-        {
-            var linhas = Tool(adb, "devices", 60000).Output.Split('\n').Select(l => l.Trim()).Where(l => l.Contains("\t")).ToList();
-            var prontos = linhas.Where(l => l.EndsWith("\tdevice", StringComparison.Ordinal)).Select(l => l.Split('\t')[0]).ToList();
-            if (prontos.Count > 0)
-            {
-                if (prontos.Count > 1) relatorio.AppendLine("Há " + prontos.Count + " aparelhos; usando " + prontos[0] + ".");
-                return prontos[0];
-            }
-            relatorio.AppendLine(linhas.Any(l => l.EndsWith("\tunauthorized", StringComparison.Ordinal))
-                ? "O celular está no cabo mas não autorizou este computador: desbloqueie a tela e toque em Permitir na pergunta de depuração USB."
-                : "Nenhum celular encontrado. No celular: Configurações > Sobre o telefone > toque 7 vezes em Número da versão; " +
-                  "depois Opções do desenvolvedor > Depuração USB ligada; ligue no cabo e toque em Permitir.");
-            return null;
-        }
-
-        /// <summary>O adb do módulo Android da Unity, ou o do SDK apontado por ANDROID_HOME / ANDROID_SDK_ROOT.</summary>
-        private static string FindAdb()
-        {
-            var exe = Application.platform == RuntimePlatform.WindowsEditor ? "adb.exe" : "adb";
-            var candidatos = new List<string>
-            {
-                Path.Combine(EditorApplication.applicationContentsPath, "PlaybackEngines", "AndroidPlayer", "SDK", "platform-tools", exe),
-            };
-            foreach (var env in new[] { "ANDROID_HOME", "ANDROID_SDK_ROOT" })
-            {
-                var raiz = Environment.GetEnvironmentVariable(env);
-                if (!string.IsNullOrEmpty(raiz)) candidatos.Add(Path.Combine(raiz, "platform-tools", exe));
-            }
-            return candidatos.FirstOrDefault(File.Exists);
-        }
-
-        private struct ToolResult
-        {
-            public int Exit;
-            public string Output;
-        }
-
-        /// <summary>Roda uma ferramenta sem janela e devolve a saída (stdout + stderr) em UTF-8.</summary>
-        private static ToolResult Tool(string file, string args, int timeoutMs)
-        {
-            using (var p = Process.Start(new ProcessStartInfo
-                   {
-                       FileName = file,
-                       Arguments = args,
-                       UseShellExecute = false,
-                       CreateNoWindow = true,
-                       RedirectStandardOutput = true,
-                       RedirectStandardError = true,
-                       StandardOutputEncoding = Encoding.UTF8,
-                       StandardErrorEncoding = Encoding.UTF8,
-                   }))
-            {
-                var saida = p.StandardOutput.ReadToEndAsync();
-                var erro = p.StandardError.ReadToEndAsync();
-                if (!p.WaitForExit(timeoutMs))
-                {
-                    try { p.Kill(); } catch (InvalidOperationException) { }
-                    return new ToolResult { Exit = -1, Output = file + " " + args + ": passou de " + timeoutMs / 1000 + " s" };
-                }
-                return new ToolResult { Exit = p.ExitCode, Output = saida.Result + erro.Result };
-            }
         }
     }
 }

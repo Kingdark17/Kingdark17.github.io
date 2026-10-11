@@ -170,6 +170,10 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   personagem pelo app ainda dizem "em breve". **Login com Google fica para uma
   rodada própria** (Google Cloud, rota na API, mudança no banco de produção e
   regra para e-mail que já tem conta — planejar com o usuário).
+  O menu RPG Legend > Build do app (Android) instala o app de verdade no
+  celular pelo cabo, apontando para produção; a variante "API local" aponta
+  para a API do computador pelo cabo (`adb reverse`). Ainda com identificador
+  de teste (`br.com.rpglegend.teste`) e nome "RPG Legend" só durante o build.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no

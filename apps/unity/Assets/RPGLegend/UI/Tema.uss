@@ -76,9 +76,10 @@
     padding: 24px 28px 20px 28px;
     translate: 0 -50%;
     opacity: 1;
-    transition-property: opacity, translate;
-    transition-duration: 0.45s, 0.45s;
-    transition-timing-function: ease-out-cubic, ease-out-cubic;
+    /* margin-top: a subida do cartão quando o teclado do celular abre (AppScreens.AcompanharTeclado). */
+    transition-property: opacity, translate, margin-top;
+    transition-duration: 0.45s, 0.45s, 0.2s;
+    transition-timing-function: ease-out-cubic, ease-out-cubic, ease-out-cubic;
 }
 
 .cartao-entrada.escondido {

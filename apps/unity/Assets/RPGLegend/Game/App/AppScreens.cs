@@ -18,6 +18,17 @@ namespace RPGLegend.Game.App
         private readonly Button _entrar, _alternar, _esqueci;
         private bool _modoCadastro, _ocupado;
         private int _avisoAtual;
+        private TextField _campoComFoco;
+        private float _subida;
+
+        /// <summary>O espaço entre o campo em que se digita e o topo do teclado.</summary>
+        private const float FolgaDoTeclado = 16f;
+
+        /// <summary>
+        /// Até onde o teclado vai quando o aparelho não diz a altura dele (o Android anterior ao 11 devolve área
+        /// zero): supõe que cobre até 62% da tela deitada, o que sobra para os teclados mais altos.
+        /// </summary>
+        private const float TecladoSemAreaCobre = 0.62f;
 
         /// <summary>usuário, e-mail, senha, é cadastro.</summary>
         public event Action<string, string, string, bool> AoEnviar;
@@ -56,6 +67,16 @@ namespace RPGLegend.Game.App
             {
                 if (_entrada.pickingMode == PickingMode.Position) AoTocar?.Invoke();
             });
+            foreach (var campo in new[] { _usuario, _email, _senha })
+            {
+                var este = campo;
+                este.RegisterCallback<FocusInEvent>(_ => _campoComFoco = este);
+                este.RegisterCallback<FocusOutEvent>(_ =>
+                {
+                    if (_campoComFoco == este) _campoComFoco = null;
+                });
+            }
+            if (TouchScreenKeyboard.isSupported) _cartao.schedule.Execute(AcompanharTeclado).Every(50);
 
             raiz.Q<Button>("botao-jogar").clicked += () => AoJogar?.Invoke();
             raiz.Q<Button>("botao-config").clicked += () => AoEmBreve?.Invoke("As configurações chegam numa próxima versão do app.");
@@ -119,6 +140,35 @@ namespace RPGLegend.Game.App
         {
             if (_ocupado) return;
             AoEnviar?.Invoke(_usuario.value?.Trim() ?? "", _email.value?.Trim() ?? "", _senha.value ?? "", _modoCadastro);
+        }
+
+        /// <summary>
+        /// No celular deitado o teclado cobre a metade de baixo da tela, justo onde fica o cartão. Enquanto ele
+        /// está aberto, o cartão sobe o necessário para o campo em que se digita ficar logo acima do teclado; quando
+        /// fecha, o cartão volta.
+        /// </summary>
+        private void AcompanharTeclado()
+        {
+            float subida = 0f;
+            var campo = _campoComFoco;
+            var area = TouchScreenKeyboard.area;
+            var teclado = campo?.touchScreenKeyboard;
+            bool aberto = campo != null && (area.height > 0f || (teclado != null && teclado.status == TouchScreenKeyboard.Status.Visible));
+            float alturaDaTela = _entrada.layout.height;
+            if (aberto && Screen.height > 0 && alturaDaTela > 0f)
+            {
+                // A área vem em pixels da tela, com o teclado colado embaixo; o painel tem a escala dele.
+                float topoDoTeclado = area.height > 0f
+                    ? (Screen.height - area.height) * (alturaDaTela / Screen.height)
+                    : alturaDaTela * (1f - TecladoSemAreaCobre);
+                // Onde o campo fica com o cartão no lugar (centrado na altura), sem a subida que já houver: a
+                // subida anima, e no meio da animação a posição de agora não serve de base.
+                float baseDoCampo = (alturaDaTela - _cartao.layout.height) / 2f + (campo.worldBound.yMax - _cartao.worldBound.yMin);
+                subida = Mathf.Max(0f, baseDoCampo - (topoDoTeclado - FolgaDoTeclado));
+            }
+            if (Mathf.Abs(subida - _subida) < 0.5f) return;
+            _subida = subida;
+            _cartao.style.marginTop = -subida;
         }
 
         /// <summary>O "Toque para entrar" de quem já tem sessão; enquanto aparece, um toque em qualquer lugar vale.</summary>

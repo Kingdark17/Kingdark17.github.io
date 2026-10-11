@@ -8,11 +8,11 @@ namespace RPGLegend.EditorTools
     /// "RPG Legend > Servidor do jogo": para onde o app aponta quando roda no Editor. Produção é a API do site
     /// (contas de verdade); local é a API rodando no computador, com o banco de desenvolvimento (PGlite), para
     /// testar sem tocar em produção. Fica nas preferências do Editor desta máquina, fora do git; os builds
-    /// sempre apontam para produção (ou para o que vier em <c>-api</c> na linha de comando).
+    /// apontam para produção (menos o "Build do app (Android, API local)", ou o que vier em <c>-api</c>).
     /// </summary>
     public static class ServerMenu
     {
-        public const string Local = "http://127.0.0.1:3100";
+        private const string Local = ApiConfig.Local;
         private const string MenuProducao = "RPG Legend/Servidor do jogo/Produção (api.rpglegend.com.br)";
         private const string MenuLocal = "RPG Legend/Servidor do jogo/Local (127.0.0.1:3100)";
 
