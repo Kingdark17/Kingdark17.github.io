@@ -121,7 +121,7 @@ namespace RPGLegend.EditorTools
             }
             var resumo = build.summary;
             relatorio.AppendLine("build: " + resumo.result + " em " + (DateTime.Now - inicio).TotalSeconds.ToString("0") + " s, " +
-                                 (resumo.totalSize / (1024 * 1024)) + " MB, " + resumo.totalErrors + " erro(s) -> " + apk);
+                                 AndroidDevice.ApkSize(apk) + ", " + resumo.totalErrors + " erro(s) -> " + apk);
             if (resumo.result != BuildResult.Succeeded) return false;
             if (!File.Exists(apk))
             {

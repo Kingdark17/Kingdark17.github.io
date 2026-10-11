@@ -62,6 +62,13 @@ namespace RPGLegend.EditorTools
             return serial != null;
         }
 
+        /// <summary>
+        /// O tamanho do APK gerado, para o relatório. (O totalSize do BuildReport não serve: no Android ele soma
+        /// arquivos intermediários e passa de 900 MB para um APK de 43.)
+        /// </summary>
+        public static string ApkSize(string apk) =>
+            File.Exists(apk) ? (new FileInfo(apk).Length / (1024 * 1024)) + " MB" : "sem APK";
+
         /// <summary>Instala o APK por cima do que houver (mantém os dados do app). Devolve false com o motivo no relatório.</summary>
         public static bool Install(string adb, string serial, string apk, StringBuilder relatorio)
         {
