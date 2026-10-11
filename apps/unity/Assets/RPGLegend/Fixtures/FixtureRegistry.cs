@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
-using NUnit.Framework;
 using RPGLegend.Engine;
 using RPGLegend.Engine.Json;
 
@@ -18,7 +17,7 @@ namespace RPGLegend.Tests
 
         public double NowOrFail()
         {
-            if (Now == null) throw new AssertionException("o porte leu o relógio, mas o caso não traz now");
+            if (Now == null) throw new FixtureFailure("o porte leu o relógio, mas o caso não traz now");
             return Now.Value;
         }
     }
@@ -28,7 +27,7 @@ namespace RPGLegend.Tests
 
     /// <summary>
     /// Os casos de um módulo. Para um módulo novo, crie <c>internal sealed class XxxFixtures : IFixtureModule</c>
-    /// neste assembly: o registro acha sozinho, sem precisar editar este arquivo.
+    /// neste assembly (a pasta Fixtures/): o registro acha sozinho, sem precisar editar este arquivo.
     /// </summary>
     public interface IFixtureModule
     {

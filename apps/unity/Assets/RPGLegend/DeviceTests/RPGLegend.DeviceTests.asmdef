@@ -1,0 +1,14 @@
+{
+  "name": "RPGLegend.DeviceTests",
+  "rootNamespace": "RPGLegend.DeviceTests",
+  "references": [ "RPGLegend.Fixtures", "RPGLegend.Engine", "RPGLegend.Engine.Json" ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [ "UNITY_INCLUDE_TESTS || RPG_DEVICE_TESTS" ],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

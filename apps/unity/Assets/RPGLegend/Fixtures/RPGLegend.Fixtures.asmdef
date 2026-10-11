@@ -1,0 +1,14 @@
+{
+  "name": "RPGLegend.Fixtures",
+  "rootNamespace": "RPGLegend.Tests",
+  "references": [ "RPGLegend.Engine", "RPGLegend.Engine.Json" ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [ "Newtonsoft.Json.dll" ],
+  "autoReferenced": false,
+  "defineConstraints": [ "UNITY_INCLUDE_TESTS || RPG_DEVICE_TESTS" ],
+  "versionDefines": [],
+  "noEngineReferences": true
+}

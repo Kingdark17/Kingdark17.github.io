@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Os testes de Assets/RPGLegend/Tests/EditMode rodando fora da Unity, com o NUnitShim. -->
+  <!-- Os testes de Assets/RPGLegend/Tests/EditMode (e o núcleo deles, Fixtures/) rodando fora da Unity, com o NUnitShim. -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="../Shim/*.cs" />
+    <Compile Include="../../../Fixtures/**/*.cs" />
     <Compile Include="../../../Tests/EditMode/**/*.cs" />
     <ProjectReference Include="../Engine/Engine.csproj" />
     <ProjectReference Include="../EngineJson/EngineJson.csproj" />

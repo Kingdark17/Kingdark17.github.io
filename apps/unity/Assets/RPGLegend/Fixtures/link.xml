@@ -1,0 +1,8 @@
+<!--
+  O FixtureRegistry acha os módulos de caso (IFixtureModule) por reflexão. No build de teste do celular
+  (IL2CPP), o "managed code stripping" removeria essas classes, que nada referencia diretamente.
+  Só vale quando o assembly entra no build, e ele só entra no build de teste (símbolo RPG_DEVICE_TESTS).
+-->
+<linker>
+  <assembly fullname="RPGLegend.Fixtures" preserve="all" />
+</linker>

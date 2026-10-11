@@ -4,6 +4,7 @@
   "references": [
     "RPGLegend.Engine",
     "RPGLegend.Engine.Json",
+    "RPGLegend.Fixtures",
     "UnityEngine.TestRunner",
     "UnityEditor.TestRunner"
   ],

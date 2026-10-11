@@ -13,6 +13,9 @@
 /[Rr]ecordings/
 # Saída intermediária do Gradle/CMake no build Android (Unity 6).
 /.utmp/
+# A cópia temporária dos casos de fixtures que o "Build de teste (Android)" põe no projeto durante o build.
+/Assets/RPGLegend/DeviceTests/Resources/
+/Assets/RPGLegend/DeviceTests/Resources.meta
 
 # Projetos e soluções que a IDE gera a partir das asmdefs. Só os da raiz: os .csproj de
 # Assets/RPGLegend/Tools~/build são escritos à mão e vão para o git.

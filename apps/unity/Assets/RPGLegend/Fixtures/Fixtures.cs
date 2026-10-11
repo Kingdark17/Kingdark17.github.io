@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using NUnit.Framework;
 using RPGLegend.Engine;
 using RPGLegend.Engine.Json;
 
@@ -12,12 +11,25 @@ namespace RPGLegend.Tests
     /// Lê os resultados de referência gerados pelo TypeScript (packages/shared/fixtures).
     /// O projeto Unity mora em apps/unity, dentro do repositório do jogo: a pasta é achada subindo a partir
     /// da pasta atual (na Unity, a raiz do projeto) e, se não der, da pasta do executável. A variável de
-    /// ambiente RPG_FIXTURES_DIR passa por cima das duas.
+    /// ambiente RPG_FIXTURES_DIR passa por cima das duas. No celular não há pasta: o build de teste troca
+    /// <see cref="ReadText"/> por uma leitura dos Resources.
     /// </summary>
     public static class Fixtures
     {
         private static readonly Dictionary<string, JArray> Cases = new Dictionary<string, JArray>();
         private static string _dir;
+
+        /// <summary>
+        /// Texto de um arquivo dos fixtures pelo caminho relativo, com "/" ("combat.json",
+        /// "data/hero/catalog.json"), ou null se não existir. Por padrão lê do disco, a partir de <see cref="Dir"/>.
+        /// </summary>
+        public static Func<string, string> ReadText = ReadFromDisk;
+
+        private static string ReadFromDisk(string relative)
+        {
+            var path = Path.Combine(Dir, relative.Replace('/', Path.DirectorySeparatorChar));
+            return File.Exists(path) ? File.ReadAllText(path) : null;
+        }
 
         public static string Dir
         {
@@ -52,20 +64,16 @@ namespace RPGLegend.Tests
         public static JArray TryLoad(string module)
         {
             if (Cases.TryGetValue(module, out var cached)) return cached;
-            var path = Path.Combine(Dir, module + ".json");
-            if (!File.Exists(path)) return null;
-            var arr = (JArray)JsJson.Parse(File.ReadAllText(path));
+            var text = ReadText(module + ".json");
+            if (text == null) return null;
+            var arr = (JArray)JsJson.Parse(text);
             Cases[module] = arr;
             return arr;
         }
 
         /// <summary>Texto de uma tabela de fixtures/data (ex.: "hero/catalog"), para o GameDataLoader.</summary>
-        public static string ReadTableText(string table)
-        {
-            var file = Path.Combine(Dir, "data", table.Replace('/', Path.DirectorySeparatorChar) + ".json");
-            if (!File.Exists(file)) throw new FileNotFoundException("Tabela não encontrada: " + file);
-            return File.ReadAllText(file);
-        }
+        public static string ReadTableText(string table) =>
+            ReadText("data/" + table + ".json") ?? throw new FileNotFoundException("Tabela não encontrada: data/" + table + ".json");
 
         /// <summary>
         /// O rng de input.rng, contando as chamadas. { seed } é o mulberry32; { sequence } devolve os valores
@@ -75,7 +83,7 @@ namespace RPGLegend.Tests
         public static CountingRng BuildRng(JToken spec)
         {
             if (JsJson.IsUndefined(spec) || spec.Type == JTokenType.Null)
-                return new CountingRng(() => throw new AssertionException("o porte sorteou, mas o caso não traz rng (o TS não sorteou aqui)"));
+                return new CountingRng(() => throw new FixtureFailure("o porte sorteou, mas o caso não traz rng (o TS não sorteou aqui)"));
 
             if (!JsJson.IsUndefined(spec["seed"]))
                 return new CountingRng(Rng.SeededRng(JsJson.ToNumber(spec["seed"])));

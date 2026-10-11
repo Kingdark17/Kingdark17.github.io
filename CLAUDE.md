@@ -153,8 +153,11 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
 - Celular exige IL2CPP. O módulo Android está instalado (iOS não: iPhone fica
   para depois e precisa de Mac). O menu RPG Legend > Build de teste (Android)
   builda a mesma cena em IL2CPP/ARM64, instala no celular pelo cabo (depuração
-  USB) e compara o logcat com o Editor. Passou em 2026-10-11 num Samsung Galaxy
-  A30s (as 24 linhas idênticas); os 2.240 casos ainda não rodaram no aparelho.
+  USB), roda o smoke e todos os casos de fixtures no aparelho e compara o
+  logcat com o Editor. Passou em 2026-10-11 num Samsung Galaxy A30s: as 24
+  linhas do smoke e os 2.237 casos, idênticos ao Editor. Os casos e o código
+  que os roda (`Fixtures/`, `DeviceTests/`) só entram nesse build de teste
+  (símbolo `RPG_DEVICE_TESTS`); o jogo de verdade não leva.
   O identificador definitivo do app (o da Play Store, que não muda depois de
   publicado) ainda não foi escolhido: o build de teste usa
   `br.com.rpglegend.smoke` só durante o build.

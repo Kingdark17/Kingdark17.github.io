@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using RPGLegend.Game;
+using RPGLegend.Tests;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
@@ -17,8 +18,13 @@ namespace RPGLegend.EditorTools
     /// <summary>
     /// "RPG Legend > Build de teste (Android)": builda a cena EngineSmoke para Android (IL2CPP, ARM64) em
     /// apps/unity/Builds/SmokeAndroid, instala no celular ligado no cabo (depuração USB), abre o app e confere
-    /// se as linhas "[smoke]" do logcat são idênticas às do SmokeRun rodado aqui no Editor. É a prova de que o
-    /// IL2CPP e o processador do celular dão os mesmos números que o Editor (e, por tabela, que o TS).
+    /// se as linhas "[smoke]" do logcat são idênticas às do SmokeRun rodado aqui no Editor. O mesmo app roda
+    /// também todos os casos de packages/shared/fixtures (RPGLegend.DeviceTests), e as linhas "[fixtures]"
+    /// têm que bater com as do FixtureSuite rodado aqui. É a prova de que o IL2CPP e o processador do celular
+    /// dão os mesmos números que o Editor (e, por tabela, que o TS).
+    ///
+    /// Os casos entram no build como uma cópia temporária em DeviceTests/Resources/Fixtures (fora do git), com
+    /// o símbolo RPG_DEVICE_TESTS só nesse build: o jogo de verdade não leva nem os casos nem o código deles.
     ///
     /// O app de teste usa um identificador próprio (<see cref="TestIdentifier"/>) só durante o build: o
     /// identificador definitivo do jogo (o da Play Store, que não muda depois de publicado) não é decidido aqui.
@@ -29,7 +35,9 @@ namespace RPGLegend.EditorTools
         public const string TestIdentifier = "br.com.rpglegend.smoke";
         private const string TestProductName = "RPG Legend Smoke";
         private const string ApkName = "RPGLegendSmoke.apk";
-        private const int LogTimeoutMs = 120000;
+        private const string DeviceTestsDefine = "RPG_DEVICE_TESTS";
+        private const string TempResources = "Assets/RPGLegend/DeviceTests/Resources";
+        private const int LogTimeoutMs = 300000;
 
         [MenuItem("RPG Legend/Build de teste (Android)")]
         private static void BuildMenu() => BuildAndCheck();
@@ -81,7 +89,11 @@ namespace RPGLegend.EditorTools
             }
             // Com o módulo instalado com a Unity aberta, ela já diz que suporta Android, mas a extensão que faz o
             // IL2CPP e o Gradle só carrega quando a Unity abre: o build "dá certo" em poucos minutos e não sai APK.
-            if (!AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "UnityEditor.Android.Extensions"))
+            // (UAC0005 avisa que a lista pode trazer assemblies já descarregados; aqui só se lê o nome deles.)
+#pragma warning disable UAC0005
+            var extensaoAndroid = AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "UnityEditor.Android.Extensions");
+#pragma warning restore UAC0005
+            if (!extensaoAndroid)
             {
                 relatorio.AppendLine("A extensão do Android não está carregada: feche e abra a Unity de novo (o módulo foi instalado com ela aberta).");
                 return false;
@@ -106,7 +118,7 @@ namespace RPGLegend.EditorTools
             var serial = FindDevice(adb, relatorio);
             if (serial == null) return false;
 
-            // 1. Build, numa pasta limpa, com o identificador e o nome do app de teste.
+            // 1. Build, numa pasta limpa, com o identificador e o nome do app de teste e os casos de fixtures.
             if (Directory.Exists(pasta)) Directory.Delete(pasta, true);
             var idAntes = PlayerSettings.GetApplicationIdentifier(NamedBuildTarget.Android);
             var nomeAntes = PlayerSettings.productName;
@@ -116,6 +128,8 @@ namespace RPGLegend.EditorTools
             BuildReport build;
             try
             {
+                int casos = CopyFixturesIntoProject();
+                relatorio.AppendLine("casos de fixtures no build: " + casos + " arquivo(s).");
                 PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, TestIdentifier);
                 PlayerSettings.productName = TestProductName;
                 EditorUserBuildSettings.buildAppBundle = false;
@@ -127,6 +141,7 @@ namespace RPGLegend.EditorTools
                     target = BuildTarget.Android,
                     targetGroup = BuildTargetGroup.Android,
                     options = BuildOptions.None,
+                    extraScriptingDefines = new[] { DeviceTestsDefine },
                 });
             }
             finally
@@ -138,6 +153,7 @@ namespace RPGLegend.EditorTools
                 // O build grava o ProjectSettings.asset com o identificador de teste; sem salvar de novo, o disco
                 // ficaria com ele até a próxima vez que a Unity salvasse as configurações.
                 AssetDatabase.SaveAssets();
+                DeleteFixturesCopy();
             }
             var resumo = build.summary;
             relatorio.AppendLine("build: " + resumo.result + " em " + (DateTime.Now - inicio).TotalSeconds.ToString("0") + " s, " +
@@ -161,22 +177,62 @@ namespace RPGLegend.EditorTools
             Tool(adb, "-s " + serial + " shell am force-stop " + TestIdentifier, 30000);
             Tool(adb, "-s " + serial + " shell monkey -p " + TestIdentifier + " -c android.intent.category.LAUNCHER 1", 30000);
 
-            // 3. Espera o relatório terminar no logcat (tag Unity).
-            var doCelular = new List<string>();
+            // 3. Espera os dois relatórios terminarem no logcat (tag Unity): o smoke e, depois dele, os fixtures.
+            var smokeCelular = new List<string>();
+            var fixturesCelular = new List<string>();
             var relogio = Stopwatch.StartNew();
             while (relogio.ElapsedMilliseconds < LogTimeoutMs)
             {
-                Thread.Sleep(1000);
-                var log = Tool(adb, "-s " + serial + " logcat -d -v raw -s Unity", 30000).Output;
-                doCelular = SmokeBuild.SmokeLines(log.Split('\n').Select(l => l.TrimEnd('\r')));
-                if (doCelular.Count > 0 && (SmokeRun.Passed(doCelular) || doCelular[doCelular.Count - 1].StartsWith(SmokeRun.FailPrefix, StringComparison.Ordinal)))
+                Thread.Sleep(2000);
+                var log = Tool(adb, "-s " + serial + " logcat -d -v raw -s Unity", 30000).Output.Split('\n').Select(l => l.TrimEnd('\r')).ToList();
+                smokeCelular = SmokeBuild.SmokeLines(log);
+                fixturesCelular = SmokeBuild.PrefixedLines(log, DeviceTestsPrefix);
+                if (Finished(smokeCelular, SmokeRun.Ok, SmokeRun.FailPrefix) && Finished(fixturesCelular, FixtureSuite.Ok, FixtureSuite.FailPrefix))
                     break;
             }
+            relatorio.AppendLine("celular: relatórios em " + (relogio.ElapsedMilliseconds / 1000) + " s.");
             if (relogio.ElapsedMilliseconds >= LogTimeoutMs)
-                relatorio.AppendLine("O relatório não terminou no logcat em " + LogTimeoutMs / 1000 + " s (" + doCelular.Count + " linha(s) até ali).");
+                relatorio.AppendLine("Os relatórios não terminaram no logcat em " + LogTimeoutMs / 1000 + " s (smoke " + smokeCelular.Count +
+                                     " linha(s), fixtures " + fixturesCelular.Count + ").");
 
             // 4. As linhas do celular contra as do Editor.
-            return SmokeBuild.CompareWithEditor(doCelular, "celular", relatorio);
+            bool smokeOk = SmokeBuild.CompareWithEditor(smokeCelular, "celular", relatorio);
+            bool fixturesOk = SmokeBuild.CompareLines(FixtureSuite.Run(), fixturesCelular, "[fixtures]", "celular", relatorio) && FixtureSuite.Passed(fixturesCelular);
+            return smokeOk && fixturesOk;
+        }
+
+        /// <summary>O prefixo das linhas dos fixtures no log (o mesmo do DeviceFixtures, que não é referenciado daqui).</summary>
+        private const string DeviceTestsPrefix = "[fixtures] ";
+
+        private static bool Finished(List<string> lines, string ok, string failPrefix) =>
+            lines.Count > 0 && (lines[lines.Count - 1] == ok || lines[lines.Count - 1].StartsWith(failPrefix, StringComparison.Ordinal));
+
+        /// <summary>
+        /// Copia os casos (packages/shared/fixtures/*.json, sem a pasta data, que o jogo já tem em
+        /// Resources/GameData) para DeviceTests/Resources/Fixtures e importa. Devolve quantos arquivos.
+        /// </summary>
+        private static int CopyFixturesIntoProject()
+        {
+            var origem = Directory.GetParent(GameDataSync.SourceDir()).FullName;
+            var projeto = Directory.GetParent(Application.dataPath).FullName;
+            var destino = Path.Combine(projeto, TempResources.Replace('/', Path.DirectorySeparatorChar), "Fixtures");
+            DeleteFixturesCopy();
+            Directory.CreateDirectory(destino);
+            var arquivos = Directory.GetFiles(origem, "*.json", SearchOption.TopDirectoryOnly);
+            foreach (var f in arquivos) File.Copy(f, Path.Combine(destino, Path.GetFileName(f)), true);
+            AssetDatabase.Refresh();
+            return arquivos.Length;
+        }
+
+        /// <summary>Apaga a cópia temporária dos casos (com os .meta que a Unity criou) e reimporta.</summary>
+        private static void DeleteFixturesCopy()
+        {
+            var projeto = Directory.GetParent(Application.dataPath).FullName;
+            var pasta = Path.Combine(projeto, TempResources.Replace('/', Path.DirectorySeparatorChar));
+            if (!Directory.Exists(pasta)) return;
+            Directory.Delete(pasta, true);
+            if (File.Exists(pasta + ".meta")) File.Delete(pasta + ".meta");
+            AssetDatabase.Refresh();
         }
 
         private static string FindDevice(string adb, StringBuilder relatorio)

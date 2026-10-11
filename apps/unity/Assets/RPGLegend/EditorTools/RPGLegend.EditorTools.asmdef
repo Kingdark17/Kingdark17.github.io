@@ -1,7 +1,7 @@
 {
   "name": "RPGLegend.EditorTools",
   "rootNamespace": "RPGLegend.EditorTools",
-  "references": [ "RPGLegend.Engine", "RPGLegend.Engine.Json", "RPGLegend.Game" ],
+  "references": [ "RPGLegend.Engine", "RPGLegend.Engine.Json", "RPGLegend.Game", "RPGLegend.Fixtures" ],
   "includePlatforms": [ "Editor" ],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

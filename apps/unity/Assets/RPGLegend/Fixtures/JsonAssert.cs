@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NUnit.Framework;
 using RPGLegend.Engine.Json;
 
 namespace RPGLegend.Tests
@@ -15,7 +14,7 @@ namespace RPGLegend.Tests
         public static void AreEqual(JToken expected, JToken actual, string path)
         {
             var diff = FirstDifference(expected, actual, path);
-            if (diff != null) Assert.Fail(diff);
+            if (diff != null) throw new FixtureFailure(diff);
         }
 
         public static string FirstDifference(JToken e, JToken a, string path)

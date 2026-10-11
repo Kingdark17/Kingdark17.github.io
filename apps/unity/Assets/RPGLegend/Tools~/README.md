@@ -2,7 +2,7 @@
 
 A Unity ignora esta pasta (o nome termina em `~`). Aqui ficam:
 
-- `run-tests.sh` / `run-tests.ps1` — compilam `Engine/`, `EngineJson/` e `Tests/EditMode/` com o .NET 8 SDK
+- `run-tests.sh` / `run-tests.ps1` — compilam `Engine/`, `EngineJson/`, `Fixtures/` e `Tests/EditMode/` com o .NET 8 SDK
   e rodam todos os fixtures do TypeScript (o mesmo teste do Test Runner da Unity, em segundos).
   No Windows: `bash run-tests.sh` no Git Bash, ou `powershell -ExecutionPolicy Bypass -File run-tests.ps1`.
   Sem .NET SDK instalado, eles usam o que vem com a Unity (`Editor/Data/DotNetSdk` do editor instalado

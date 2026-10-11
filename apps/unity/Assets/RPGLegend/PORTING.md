@@ -29,8 +29,8 @@ powershell -ExecutionPolicy Bypass -File Tools~/run-tests.ps1   # o mesmo, no Po
 ```
 
 Placar: `passou` = igual ao TS; `falhou` = diferente (com o diff do JSON); `falta` = ainda não portado.
-Fora da Unity, os testes de `Tests/EditMode` rodam com um substituto mínimo do NUnit
-(`Tools~/build/Shim`), para não depender do nuget.org.
+Fora da Unity, os testes de `Tests/EditMode` (e o núcleo deles, `Fixtures/`) rodam com um substituto
+mínimo do NUnit (`Tools~/build/Shim`), para não depender do nuget.org.
 
 Os dois jeitos leem os casos de `packages/shared/fixtures`, achado subindo a partir da pasta atual;
 a variável `RPG_FIXTURES_DIR` aponta outra pasta. Quando a engine TS mudar, regenere os casos
@@ -45,8 +45,13 @@ leva uns 13 minutos (a Unity compila os shaders do zero); os seguintes, bem meno
 
 No celular: **RPG Legend > Build de teste (Android)**. Builda a mesma cena em IL2CPP/ARM64 (o que a Play
 Store exige) em `apps/unity/Builds/SmokeAndroid/`, instala pelo `adb` no celular ligado no cabo (depuração
-USB ligada e o computador autorizado), abre o app e compara as linhas `[smoke]` do logcat com as do Editor;
-o relatório vai para `Builds/SmokeAndroid/smoke-report.txt` e o app fica aberto no celular. O app de teste
+USB ligada e o computador autorizado), abre o app e compara as linhas `[smoke]` do logcat com as do Editor.
+O mesmo app roda em seguida todos os casos de `packages/shared/fixtures` no aparelho (`DeviceTests/`), e as
+linhas `[fixtures]` (placar por módulo, falhas, total) têm que sair idênticas às do `FixtureSuite` rodado no
+Editor. Os casos entram como cópia temporária em `DeviceTests/Resources/Fixtures` (fora do git, apagada no
+fim) e o código deles só compila com o símbolo `RPG_DEVICE_TESTS`, que só esse build define: o jogo de
+verdade não leva nada disso. O relatório vai para `Builds/SmokeAndroid/smoke-report.txt` e o app fica
+aberto no celular. O app de teste
 usa o identificador `br.com.rpglegend.smoke` só durante o build (o definitivo ainda não foi escolhido). Se
 o módulo Android foi instalado com a Unity aberta, feche e abra a Unity antes: sem isso o build "dá certo"
 e não gera APK (o menu avisa). O primeiro build Android leva uns 13 minutos (IL2CPP compila tudo em C++).
@@ -59,8 +64,9 @@ e não gera APK (o menu avisa). O primeiro build Android leva uns 13 minutos (IL
 - `Game/` — o jogo de verdade, com UnityEngine (assembly `RPGLegend.Game`):
   - `GameBootstrap` carrega as tabelas de `Resources/GameData` antes da primeira cena
     (`RuntimeInitializeOnLoadMethod`), com erro dizendo qual tabela falta;
-  - `SmokeRun` (sem UnityEngine) é uma partida curta e determinística — herói, andar 1, uma luta —
-    com `Rng.SeededRng(42)` e relógio fixo; o relatório não mostra uid, porque o da arma inicial sai de
+  - `SmokeRun` (sem UnityEngine) é uma partida curta e determinística — herói, andar 1 e os monstros do
+    andar, um por um, com o turno do monstro — com `Rng.SeededRng(42)` e relógio fixo; o relatório não
+    mostra uid, porque o da arma inicial sai de
     `Rng.Default`/`Date.now` (paridade com o `buildHero` do TS);
   - `EngineSmoke` (MonoBehaviour) mostra o `SmokeRun` na tela e no log (`[smoke] `) e, com `-batchmode`,
     sai com código 0 ou 1.
@@ -70,8 +76,14 @@ e não gera APK (o menu avisa). O primeiro build Android leva uns 13 minutos (IL
 - `EditorTools/` — só Editor (namespace `RPGLegend.EditorTools`, não `Editor`, que colide com
   `UnityEditor.Editor`): os menus "Atualizar tabelas do jogo", "Build de teste (Windows)" e
   "Build de teste (Android)".
-- `Tests/EditMode/` — os handlers de fixture (`XxxFixtures.cs`), o executor `EngineFixtureTests`, as
-  regressões e o `GameDataCopyTests`. Tudo sem UnityEngine: também compila no executor de fora da Unity.
+- `Fixtures/` — o núcleo dos testes, sem NUnit e sem UnityEngine (assembly `RPGLegend.Fixtures`): os
+  handlers de fixture (`XxxFixtures.cs`), o `FixtureRegistry`, a leitura dos casos (`Fixtures`), a
+  comparação (`JsonAssert`, `FixtureCheck`) e o relatório de todos os casos (`FixtureSuite`). Só compila no
+  Editor (`UNITY_INCLUDE_TESTS`) e no build de teste do celular (`RPG_DEVICE_TESTS`).
+- `DeviceTests/` — `DeviceFixtures`, que roda o `FixtureSuite` no celular (só no build de teste).
+- `Tests/EditMode/` — os testes do Test Runner: `EngineFixtureTests` (um teste por caso, chamando o
+  `FixtureCheck`), as regressões e o `GameDataCopyTests`. Sem UnityEngine: também compila no executor de
+  fora da Unity.
 - `Tools~/` — o executor fora da Unity (projetos .NET, shim do NUnit, scripts `run-tests`).
   A Unity ignora pastas terminadas em `~`.
 
@@ -137,9 +149,11 @@ e não gera APK (o menu avisa). O primeiro build Android leva uns 13 minutos (IL
   `GameDataCopyTests` falha enquanto a cópia estiver diferente da origem, e diz qual arquivo.
 
 ### Fixtures (testes)
-- Um `Tests/EditMode/XxxFixtures.cs` por módulo: `internal sealed class XxxFixtures : IFixtureModule`
+- Um `Fixtures/XxxFixtures.cs` por módulo: `internal sealed class XxxFixtures : IFixtureModule`
   com `Register()` chamando `Fn(modulo, "nomeDaFuncaoNoTS", (args, ctx) => ...)` e
   `Const(modulo, "NOME", () => ...)`. É descoberto sozinho.
+- Nada de NUnit em `Fixtures/` (ele roda no celular): falha é `FixtureFailure`, que o `JsonAssert` e o
+  `ctx.NowOrFail` já lançam.
 - O handler reproduz o **executor** do gerador: lê `args` (com `R<T>`, `Num`, `Str`), chama a
   função portada com `ctx.RngFn` / `ctx.NowOrFail` e devolve o JSON com `W(...)` / `N(...)`.
   `W(null)` = null do JSON; devolver C# `null` = undefined.
