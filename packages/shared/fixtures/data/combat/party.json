@@ -1,0 +1,11 @@
+{
+  "HIT_CHANCE": {
+    "agressiva": 0.88,
+    "defensiva": 0.72,
+    "suporte": 0.82,
+    "equilibrada": 0.82
+  },
+  "$privadas": [
+    "HIT_CHANCE"
+  ]
+}

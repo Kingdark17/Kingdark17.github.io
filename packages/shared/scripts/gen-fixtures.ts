@@ -1,0 +1,2394 @@
+/**
+ * Resultados de referência ("golden fixtures") da engine, pra portá-la pro
+ * C# e conferir o porte caso a caso, com os mesmos números.
+ *
+ *     cd packages/shared
+ *     pnpm dlx tsx scripts/gen-fixtures.ts
+ *
+ * (O tsx não é dependência do pacote; o `dlx` baixa e roda. Neste
+ * workspace o `npx tsx` não o encontra.)
+ *
+ * Grava duas coisas.
+ *
+ * `fixtures/<modulo>.json` — rng, hero, items, monsters, combat, dungeon,
+ * shop, inventory, events, npc, quests, city e pets —, cada um uma lista
+ * de casos `{ "name", "input", "expected" }`.
+ *
+ * `fixtures/data/<caminho do módulo>.json` — as tabelas: toda constante de
+ * nível de módulo cujo valor é só dado (catálogo, número, lista), na ordem
+ * do código-fonte, com as chaves na ordem em que estão escritas. Entram
+ * também as que o módulo não exporta, lidas do código-fonte; essas vêm
+ * listadas em `"$privadas"`. `Set` vira lista, e vem listado em
+ * `"$conjuntos"`. Mapas montados a partir de outra tabela (`RACES_BY_ID`…)
+ * não entram: são índice, não dado.
+ *
+ * `input`
+ * - `fn`: a função exportada que o caso chama. Caso de constante tem
+ *   `const` no lugar de `fn`, e o valor em `expected.value`;
+ * - `args`: os argumentos, pelo nome do parâmetro na assinatura. `count`,
+ *   quando aparece, é quantas vezes seguidas a função foi chamada com o
+ *   mesmo `rng`, e o resultado é a lista dos retornos;
+ * - `rng`: de onde saem os sorteios, quando a função recebe `Rng`.
+ *   `{ "seed": n }` é `seededRng(n)`, o mulberry32 de `src/rng.ts`;
+ *   `{ "sequence": [...] }` devolve os valores em ordem e, acabada a lista,
+ *   repete o último (0 se ela for vazia) — o `sequenceRng` dos testes;
+ * - `now`: o relógio fixo, quando a função monta `uid` de item.
+ *
+ * `expected`
+ * - `result`: o retorno. `"undefined": true` quando a função devolve
+ *   `undefined`, e `throws: { name, message }` quando ela lança;
+ * - `rngCalls`: quantos números a função tirou do `rng`. A ordem e a
+ *   quantidade de sorteios fazem parte do contrato: um porte que tire um
+ *   número a mais desloca todos os seguintes, e o andar inteiro sai outro.
+ *
+ * Em `generateRoomGraph` e `generateDungeonFloor`, `rooms` e `start` vêm
+ * como coordenadas `[x, y]`. No retorno de verdade são as mesmas células de
+ * `grid`, e gravá-las de novo só repetiria o andar.
+ *
+ * JSON não tem `undefined`, `NaN` nem `Infinity`. Campo ausente é campo
+ * `undefined`; número especial vai como `{ "$num": "NaN" }` (ou
+ * `"Infinity"`, `"-Infinity"`), na entrada e na saída.
+ *
+ * **Só a entrada gravada decide o resultado.** Enquanto um caso roda,
+ * `Math.random` e `Date.now` lançam erro: se alguma função sortear ou ler
+ * o relógio por fora do que recebeu, o gerador para, em vez de gravar um
+ * número que o porte não teria como reproduzir. A exceção são os casos de
+ * `buildHero` e `trainAtGuild`, que hoje sorteiam o `uid` da arma inicial
+ * por dentro: eles são pulados (com aviso no terminal) até as duas funções
+ * aceitarem `rng` e `now` pra arma, e entram sozinhos quando aceitarem.
+ *
+ * Os casos reaproveitam os cenários dos `.test.ts` (o mesmo herói, monstro
+ * e sequência de sorteios) e somam bordas — crítico, esquiva, nível alto,
+ * arredondamento — e lotes sorteados com seed fixa.
+ */
+
+import { mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import ts from 'typescript';
+
+import type {
+  AttackStyle,
+  Attributes,
+  CityCell,
+  ClassDef,
+  CombatMonster,
+  CombatMonsterView,
+  Companion,
+  CompanionStance,
+  DungeonCell,
+  DungeonProgress,
+  DungeonRun,
+  EquippableItem,
+  GuildTraining,
+  Hero,
+  HeroBuffs,
+  HeroCreation,
+  HeroEquipment,
+  Item,
+  ItemTemplate,
+  JogadaDeAtaque,
+  MonsterInstance,
+  MonsterStatus,
+  Power,
+  Quest,
+  Rng,
+  RoomCell,
+} from '../src/index.js';
+
+const PACOTE = join(dirname(fileURLToPath(import.meta.url)), '..');
+const DESTINO = join(PACOTE, 'fixtures');
+
+// ---------- armadilhas, antes de a engine carregar ----------
+//
+// `defaultRng` é `Math.random` capturado na carga de `src/rng.ts`, então a
+// troca precisa vir antes do import. Fora dos casos as duas funções se
+// comportam como sempre — o tsx e o Node também as usam.
+
+class SorteioEscondido extends Error {}
+
+const sorteioDeVerdade = Math.random;
+const relogioDeVerdade = Date.now;
+let vigiando = false;
+
+Math.random = () => {
+  if (vigiando) throw new SorteioEscondido('Math.random chamado por dentro da engine, sem rng injetado');
+  return sorteioDeVerdade();
+};
+Date.now = () => {
+  if (vigiando) throw new SorteioEscondido('Date.now chamado por dentro da engine, sem now injetado');
+  return relogioDeVerdade();
+};
+
+const E = await import('../src/index.js');
+
+// ---------- JSON ----------
+
+type Json = unknown;
+
+function substituto(_chave: string, valor: unknown): unknown {
+  return typeof valor === 'number' && !Number.isFinite(valor) ? { $num: String(valor) } : valor;
+}
+
+function restaurador(_chave: string, valor: unknown): unknown {
+  if (valor && typeof valor === 'object' && !Array.isArray(valor)) {
+    const chaves = Object.keys(valor);
+    if (chaves.length === 1 && chaves[0] === '$num') return Number((valor as { $num: string }).$num);
+  }
+  return valor;
+}
+
+/** O valor como vai pro arquivo. */
+function gravavel(valor: unknown): Json {
+  return valor === undefined ? undefined : JSON.parse(JSON.stringify(valor, substituto));
+}
+
+/** O valor como o porte vai lê-lo do arquivo — é isto que a função recebe. */
+function viaJson<T>(valor: T): T {
+  return JSON.parse(JSON.stringify(valor, substituto), restaurador) as T;
+}
+
+// ---------- sorteios ----------
+
+type RngSpec = { seed: number } | { sequence: number[] };
+
+function sequenceRng(valores: readonly number[]): Rng {
+  let i = 0;
+  return () => (i < valores.length ? (valores[i++] as number) : (valores[valores.length - 1] ?? 0));
+}
+
+function contarSorteios(spec: RngSpec): { rng: Rng; chamadas: () => number } {
+  const fonte = 'seed' in spec ? E.seededRng(spec.seed) : sequenceRng(spec.sequence);
+  let chamadas = 0;
+  return {
+    rng: () => {
+      chamadas++;
+      return fonte();
+    },
+    chamadas: () => chamadas,
+  };
+}
+
+// ---------- registro dos casos ----------
+
+interface Caso {
+  name: string;
+  input: Record<string, Json>;
+  expected: Record<string, Json>;
+}
+
+const arquivos = new Map<string, Caso[]>();
+let atual: Caso[] = [];
+let nomesDoModulo = new Set<string>();
+
+function modulo(nome: string): void {
+  atual = [];
+  nomesDoModulo = new Set();
+  arquivos.set(nome, atual);
+}
+
+function registrar(caso: Caso): void {
+  if (nomesDoModulo.has(caso.name)) throw new Error(`caso repetido: ${caso.name}`);
+  nomesDoModulo.add(caso.name);
+  atual.push(caso);
+}
+
+interface Contexto {
+  rng: Rng;
+  now: () => number;
+}
+
+interface Chamada {
+  rng?: RngSpec;
+  now?: number;
+  /**
+   * `'pular'`: se a função sortear ou ler o relógio por fora, o caso fica de
+   * fora com um aviso, em vez de parar o gerador. Só pra função que se sabe
+   * que ainda faz isso — ver o cabeçalho.
+   */
+  seEscondido?: 'pular';
+}
+
+const pulados: string[] = [];
+
+function caso<A extends Record<string, unknown>>(
+  name: string,
+  fn: string,
+  args: A,
+  executar: (a: A, ctx: Contexto) => unknown,
+  chamada: Chamada = {},
+): void {
+  const entrada = viaJson(args);
+  const sorteio = chamada.rng ? contarSorteios(chamada.rng) : null;
+  const ctx: Contexto = {
+    rng:
+      sorteio?.rng ??
+      (() => {
+        throw new SorteioEscondido(`${name}: sorteou sem rng na entrada`);
+      }),
+    now: () => {
+      if (chamada.now === undefined) throw new SorteioEscondido(`${name}: leu o relógio sem now na entrada`);
+      return chamada.now;
+    },
+  };
+
+  let expected: Record<string, Json>;
+  vigiando = true;
+  try {
+    const result = executar(entrada, ctx);
+    expected = result === undefined ? { undefined: true } : { result: gravavel(result) };
+  } catch (erro) {
+    if (erro instanceof SorteioEscondido && chamada.seEscondido === 'pular') {
+      pulados.push(`${name} — ${erro.message}`);
+      return;
+    }
+    if (erro instanceof SorteioEscondido) throw erro;
+    const e = erro as Error;
+    expected = { throws: { name: e.name, message: e.message } };
+  } finally {
+    vigiando = false;
+  }
+  if (sorteio) expected.rngCalls = sorteio.chamadas();
+
+  const input: Record<string, Json> = { fn, args: gravavel(args) };
+  if (chamada.rng) input.rng = chamada.rng;
+  if (chamada.now !== undefined) input.now = chamada.now;
+  registrar({ name, input, expected });
+}
+
+function constante(nome: string, valor: unknown): void {
+  registrar({ name: `${nome} (constante)`, input: { const: nome }, expected: { value: gravavel(valor) } });
+}
+
+// ---------- quem aparece nos casos ----------
+
+/** O relógio fixo dos `uid` de item. */
+const AGORA = 1_700_000_000_000;
+const relogio = () => AGORA;
+
+/**
+ * Sorteador do próprio gerador, pra montar os lotes. Fica fora dos casos:
+ * o que ele decide vai gravado na entrada, e o porte não precisa repeti-lo.
+ */
+const lote = E.seededRng(20261009);
+const umDe = <T>(lista: readonly T[]): T => lista[Math.floor(lote() * lista.length)] as T;
+const entre = (min: number, max: number): number => min + Math.floor(lote() * (max - min + 1));
+const chance = (p: number): boolean => lote() < p;
+
+function item(templateId: string, raridade = 'comum', semente = 1): Item {
+  const template = E.templateById(templateId);
+  const rarity = E.rarityById(raridade);
+  if (!template || !rarity) throw new Error(`item de teste desconhecido: ${templateId}/${raridade}`);
+  return E.instantiate(template, rarity, { rng: E.seededRng(semente), now: relogio });
+}
+
+function atributos(o: Partial<Attributes> = {}): Attributes {
+  return { forca: 10, destreza: 10, constituicao: 10, intelecto: 10, sabedoria: 10, carisma: 10, ...o };
+}
+
+const SLOTS_VAZIOS: HeroEquipment = { arma: null, secundaria: null, elmo: null, armadura: null, calca: null, botas: null, acessorio: null };
+
+interface HeroiDeTeste {
+  /** Id da classe; `null` é o Aprendiz. Padrão: bárbaro, a classe sem ataque principal e sem passiva que sorteie. */
+  classe?: string | null;
+  /** Força o `className` e tira o `classId` — o save de antes dos ids. */
+  nomeDaClasse?: string;
+  /** Id do template, o item pronto, ou `null`. Ausente: a arma inicial da classe. */
+  arma?: string | Item | null;
+  equip?: Partial<HeroEquipment>;
+  attrs?: Partial<Attributes>;
+  level?: number;
+  /** Id do debuff. Padrão: `orgulhoso`, que não tem efeito em combate. */
+  debuff?: string;
+  extra?: Partial<Hero>;
+}
+
+/** Herói montado à mão, como nos testes — sem `buildHero`, que sorteia o `uid` da arma por fora. */
+function heroi(o: HeroiDeTeste = {}): Hero {
+  const cls = o.classe === null ? null : E.classById(o.classe ?? 'barbaro');
+  const attrs = atributos(o.attrs);
+  const arma = o.arma === undefined ? (cls ? item(cls.weaponTemplate) : null) : typeof o.arma === 'string' ? item(o.arma) : o.arma;
+  const equip: HeroEquipment = { ...SLOTS_VAZIOS, arma, ...o.equip };
+  const level = o.level ?? 1;
+  const debuff = E.debuffById(o.debuff ?? 'orgulhoso');
+  if (!debuff) throw new Error(`debuff de teste desconhecido: ${o.debuff}`);
+  const derived = E.derivedStats({ level, attrs, equip });
+  return {
+    level,
+    attrs,
+    equip,
+    name: 'Teste',
+    race: 'Humano',
+    raceIcon: '🧑',
+    className: o.nomeDaClasse ?? cls?.name ?? E.APPRENTICE.name,
+    classIcon: cls?.icon ?? E.APPRENTICE.icon,
+    ...(cls && !o.nomeDaClasse ? { classId: cls.id } : {}),
+    raceId: 'humano',
+    xp: 0,
+    xpNext: E.xpForLevel(level),
+    attrPoints: 0,
+    gold: 100,
+    powerNames: [],
+    powerIds: [],
+    debuff,
+    killCount: 0,
+    masteryBattles: 0,
+    derived,
+    maxHp: derived.maxHp,
+    hp: derived.maxHp,
+    maxMp: derived.maxMp,
+    mp: derived.maxMp,
+    buffs: {},
+    ...o.extra,
+  };
+}
+
+/** Monstro montado à mão, como nos testes: goblin brutamontes do andar 5, 100 de vida. */
+function monstro(o: Partial<CombatMonster> = {}): CombatMonsterView {
+  const instancia: MonsterInstance = {
+    speciesId: 'goblin',
+    enemyClassId: 'brutamontes',
+    floor: 5,
+    hp: 100,
+    maxHp: 100,
+    dmg: 5,
+    speed: 8,
+    xp: 10,
+    gold: 10,
+    isBoss: false,
+  };
+  return E.monsterView({ ...E.freshCombatMonster(instancia), ...o });
+}
+
+function companheiro(classe = 'guerreiro', o: Partial<Companion> = {}): Companion {
+  const cls = E.classById(classe);
+  if (!cls) throw new Error(`classe de teste desconhecida: ${classe}`);
+  return {
+    name: 'Aliado',
+    raceIcon: '🧑',
+    race: 'Humano',
+    className: cls.name,
+    classIcon: cls.icon,
+    classId: cls.id,
+    hp: 20,
+    maxHp: 20,
+    attack: 5,
+    attrs: atributos(),
+    stance: 'equilibrada',
+    ability: '',
+    abilityDesc: '',
+    ...o,
+  };
+}
+
+const CLASSES_IDS = E.CLASSES.map((c) => c.id);
+const ARMAS_IDS = E.templatesByCategory('arma').map((t) => t.id);
+const ESPECIES_IDS = E.SPECIES.map((s) => s.id);
+const CLASSES_DE_INIMIGO = E.ENEMY_CLASSES.map((c) => c.id);
+const DEBUFFS_IDS = E.DEBUFFS.map((d) => d.id);
+const POSTURAS: CompanionStance[] = ['equilibrada', 'agressiva', 'defensiva', 'suporte'];
+
+/** Herói de lote: classe, arma, atributos, nível, armadura e buffs sorteados pelo gerador. */
+function heroiDeLote(): Hero {
+  const classe = chance(0.08) ? null : umDe(CLASSES_IDS);
+  const arma = chance(0.1) ? null : chance(0.6) && classe ? E.classById(classe)!.weaponTemplate : umDe(ARMAS_IDS);
+  const armaduras: Partial<HeroEquipment> = {};
+  if (chance(0.4)) armaduras.armadura = item(umDe(['couro', 'placas', 'robe']), umDe(E.RARITY_IDS), entre(1, 9));
+  if (chance(0.3)) armaduras.elmo = item(umDe(['placas_elmo', 'robe_chapeu']), 'comum', entre(1, 9));
+  if (chance(0.3)) armaduras.acessorio = item(umDe(['anel_som', 'amuleto_sab', 'colar_forca']), umDe(E.RARITY_IDS), entre(1, 9));
+  const level = entre(1, 40);
+  const base = heroi({
+    classe,
+    arma: arma ? item(arma, umDe(E.RARITY_IDS), entre(1, 9)) : null,
+    equip: armaduras,
+    attrs: {
+      forca: entre(3, 25),
+      destreza: entre(3, 25),
+      constituicao: entre(3, 25),
+      intelecto: entre(3, 25),
+      sabedoria: entre(3, 25),
+      carisma: entre(3, 25),
+    },
+    level,
+    debuff: umDe(DEBUFFS_IDS),
+    extra: { masteryBattles: umDe([0, 0, 10, 60, 200, 550]) },
+  });
+  const buffs: HeroBuffs = {};
+  if (chance(0.15)) buffs.critNext = true;
+  if (chance(0.2)) Object.assign(buffs, { precisaoTurns: entre(0, 2), precisaoAmount: umDe([5, 7, 25, 100]) });
+  if (chance(0.2)) Object.assign(buffs, { forcaTurns: entre(0, 3), forcaAmount: 0.3 });
+  if (chance(0.2)) Object.assign(buffs, { esquivaTurns: entre(0, 3), esquivaAmount: 20 });
+  if (chance(0.15)) buffs.shield = 0.5;
+  if (chance(0.15)) Object.assign(buffs, { inspiracaoTurns: entre(1, 3), inspiracaoAmount: 0.25 });
+  return { ...base, hp: entre(1, base.maxHp), mp: entre(0, base.maxMp), buffs };
+}
+
+function statusDeLote(): MonsterStatus {
+  const status: MonsterStatus = {};
+  if (chance(0.15)) status.atordoado = entre(1, 2);
+  if (chance(0.2)) status.lento = { turns: entre(1, 3), amount: 0.2 };
+  if (chance(0.2)) status.enfraquecido = { turns: entre(1, 3), amount: umDe([0.2, 0.25, 0.3]) };
+  if (chance(0.2)) status.vulneravel = { turns: entre(1, 3), amount: umDe([0.15, 0.2]) };
+  if (chance(0.15)) status.veneno = { turns: entre(1, 4), dmg: entre(2, 6) };
+  return status;
+}
+
+function monstroDeLote(): CombatMonsterView {
+  const isBoss = chance(0.2);
+  const maxHp = entre(10, 300);
+  return monstro({
+    speciesId: umDe(ESPECIES_IDS),
+    enemyClassId: umDe(CLASSES_DE_INIMIGO),
+    floor: entre(1, 40),
+    maxHp,
+    hp: entre(1, maxHp),
+    dmg: entre(1, 30),
+    speed: entre(3, 20),
+    isBoss,
+    ...(isBoss ? { isMainBoss: chance(0.5), bossTitle: umDe(E.BOSS_TITLES) } : {}),
+    attackCount: entre(0, 5),
+    guardHits: chance(0.15) ? entre(1, 2) : 0,
+    poisonStrike: chance(0.1),
+    status: statusDeLote(),
+  });
+}
+
+function equipeDeLote(): Companion[] {
+  return Array.from({ length: entre(0, 3) }, () => {
+    const maxHp = entre(15, 40);
+    return companheiro(umDe(CLASSES_IDS), {
+      hp: chance(0.15) ? 0 : entre(1, maxHp),
+      maxHp,
+      attack: entre(3, 12),
+      attrs: atributos({ sabedoria: entre(5, 20) }),
+      stance: umDe(POSTURAS),
+    });
+  });
+}
+
+// ---------- a ordenação do V8 ----------
+
+/**
+ * O `Array.prototype.sort` do V8 (TimSort, `builtins/array-sort.tq`) pra
+ * listas de até 63 itens: um "run" inicial (crescente, ou estritamente
+ * decrescente e então invertido) e o resto entrando por inserção binária.
+ *
+ * O grafo e o andar embaralham com `sort(() => rng() - 0.5)`. Com um
+ * comparador assim o resultado — e **quantos números ele tira do `rng`** —
+ * depende do algoritmo de ordenação, e o `List.Sort` do .NET (introsort)
+ * dá outro. Esta cópia é a referência pro porte: ela é conferida aqui
+ * contra o sort de verdade antes de qualquer arquivo ser gravado, e os
+ * casos de `Array.prototype.sort` em `dungeon.json` gravam a ordem e cada
+ * comparação feita.
+ *
+ * Ela também é estável, como o sort do JS: o `List.Sort` do .NET não é, e a
+ * ordenação das salas distantes depende disso nos empates.
+ */
+function ordenarComoV8<T>(lista: readonly T[], comparar: (a: T, b: T) => number): T[] {
+  const a = lista.slice();
+  const n = a.length;
+  if (n < 2) return a;
+  if (n >= 64) throw new Error('a cópia do sort do V8 só cobre listas de até 63 itens');
+
+  // CountAndMakeRun(0, n)
+  let run = 2;
+  let ordem = comparar(a[1] as T, a[0] as T);
+  const decrescente = ordem < 0;
+  let anterior = a[1] as T;
+  for (let i = 2; i < n; i++) {
+    const corrente = a[i] as T;
+    ordem = comparar(corrente, anterior);
+    if (decrescente ? ordem >= 0 : ordem < 0) break;
+    anterior = corrente;
+    run++;
+  }
+  if (decrescente) a.splice(0, run, ...a.slice(0, run).reverse());
+
+  // BinaryInsertionSort(0, run, n)
+  for (let inicio = run; inicio < n; inicio++) {
+    const pivo = a[inicio] as T;
+    let esquerda = 0;
+    let direita = inicio;
+    while (esquerda < direita) {
+      const meio = esquerda + ((direita - esquerda) >> 1);
+      if (comparar(pivo, a[meio] as T) < 0) direita = meio;
+      else esquerda = meio + 1;
+    }
+    for (let p = inicio; p > esquerda; p--) a[p] = a[p - 1] as T;
+    a[esquerda] = pivo;
+  }
+  return a;
+}
+
+(function conferirOrdenacao(): void {
+  for (let n = 0; n < 64; n++) {
+    for (let seed = 0; seed < 120; seed++) {
+      const indices = Array.from({ length: n }, (_, i) => i);
+      const r1 = E.seededRng(seed);
+      const r2 = E.seededRng(seed);
+      let c1 = 0;
+      let c2 = 0;
+      const deVerdade = indices.slice().sort(() => (c1++, r1() - 0.5));
+      const copia = ordenarComoV8(indices, () => (c2++, r2() - 0.5));
+      if (deVerdade.join() !== copia.join() || c1 !== c2) throw new Error(`a cópia do sort do V8 divergiu: ${n} itens, seed ${seed}`);
+
+      const chaves = indices.map(() => Math.floor(r1() * 4));
+      const estavel = indices.slice().sort((x, y) => (chaves[y] as number) - (chaves[x] as number));
+      if (estavel.join() !== ordenarComoV8(indices, (x, y) => (chaves[y] as number) - (chaves[x] as number)).join()) {
+        throw new Error(`a cópia do sort do V8 divergiu nos empates: ${n} itens, seed ${seed}`);
+      }
+    }
+  }
+})();
+
+// =====================================================================
+// rng
+// =====================================================================
+
+modulo('rng');
+
+for (const [seed, nota] of [
+  [0, ''],
+  [1, ''],
+  [2, ''],
+  [42, ''],
+  [1337, ''],
+  [123456789, ''],
+  [0xdeadbeef, ''],
+  [2 ** 31, ''],
+  [4294967295, ''],
+  [2 ** 32, ' — vira 0 no `>>> 0`'],
+  [-1, ' — vira 4294967295 no `>>> 0`'],
+  [3.7, ' — vira 3 no `>>> 0`'],
+  [1e10, ' — vira 1410065408 no `>>> 0`'],
+] as const) {
+  caso(`seededRng: 12 primeiros valores da seed ${seed}${nota}`, 'seededRng', { seed, count: 12 }, (a) => {
+    const rng = E.seededRng(a.seed);
+    const values = Array.from({ length: a.count }, () => rng());
+    // `u32` é o inteiro de 32 bits antes da divisão por 2^32 — o estado que o porte em uint confere direto.
+    return { values, u32: values.map((v) => v * 4294967296) };
+  });
+}
+
+caso('seededRng: 1000 valores da seed 42', 'seededRng', { seed: 42, count: 1000 }, (a) => {
+  const rng = E.seededRng(a.seed);
+  return Array.from({ length: a.count }, () => rng());
+});
+
+for (const max of [1, 2, 6, 20, 21, 99999]) {
+  caso(`randomInt: max ${max}, 20 sorteios`, 'randomInt', { max, count: 20 }, (a, { rng }) => Array.from({ length: a.count }, () => E.randomInt(a.max, rng)), {
+    rng: { seed: 7 },
+  });
+}
+caso('randomInt: max 0 dá sempre 0', 'randomInt', { max: 0, count: 3 }, (a, { rng }) => Array.from({ length: a.count }, () => E.randomInt(a.max, rng)), {
+  rng: { seed: 7 },
+});
+caso(
+  'randomInt: bordas do [0, 1) com max 6 — 1/6 em ponto flutuante ainda cai no 0',
+  'randomInt',
+  { max: 6, count: 5 },
+  (a, { rng }) => Array.from({ length: a.count }, () => E.randomInt(a.max, rng)),
+  { rng: { sequence: [0, 0.16666666666666666, 0.5, 0.8333333333333334, 0.9999999999999999] } },
+);
+
+caso('pick: 20 escolhas numa lista de 5', 'pick', { list: ['a', 'b', 'c', 'd', 'e'], count: 20 }, (a, { rng }) => Array.from({ length: a.count }, () => E.pick(a.list, rng)), {
+  rng: { seed: 99 },
+});
+caso('pick: lista vazia lança, sem sortear', 'pick', { list: [] as string[] }, (a, { rng }) => E.pick(a.list, rng), { rng: { seed: 1 } });
+
+// =====================================================================
+// hero — stats, derived e o que o combate usa de hero, mastery e catalog
+// =====================================================================
+
+modulo('hero');
+
+constante('ATTR_KEYS', E.ATTR_KEYS);
+constante('EQUIP_SLOTS', E.EQUIP_SLOTS);
+constante('ITEM_STAT_KEYS', E.ITEM_STAT_KEYS);
+constante('CRIT_PENALTY', E.CRIT_PENALTY);
+constante('RACES', E.RACES);
+constante('CLASSES', E.CLASSES);
+constante('POWERS', E.POWERS);
+constante('DEBUFFS', E.DEBUFFS);
+constante('LEGACY_DEBUFF_EFFECTS', E.LEGACY_DEBUFF_EFFECTS);
+constante('CLASS_PASSIVES', E.CLASS_PASSIVES);
+constante('BASE_ATTR', E.BASE_ATTR);
+constante('APPRENTICE', E.APPRENTICE);
+constante('MASTERY_MAX_LEVEL', E.MASTERY_MAX_LEVEL);
+constante('MASTERY_DAMAGE_PER_LEVEL', E.MASTERY_DAMAGE_PER_LEVEL);
+
+caso('emptyAttributes', 'emptyAttributes', {}, () => E.emptyAttributes());
+
+// --- derived ---
+
+for (const level of [1, 2, 10, 100, 500, 501, 1000, 0, -5, 2.7, Number.NaN]) {
+  caso(`equipmentCap: nível ${level}`, 'equipmentCap', { level }, (a) => E.equipmentCap(a.level));
+}
+
+const EQUIP_DE_VIDA: Record<string, EquippableItem | null> = {
+  arma: { stats: { ataque: 5, vida: 300 } },
+  secundaria: null,
+  elmo: { stats: { vida: 100, defesa: 2 } },
+  armadura: { stats: { vida: 400, defesa: 6 } },
+  acessorio: { stats: { vida: -50, esquiva: 3, critico: 4 } },
+};
+caso('equipmentStat: vida sem teto soma tudo, negativo inclusive', 'equipmentStat', { equip: EQUIP_DE_VIDA, key: 'vida' }, (a) => E.equipmentStat(a.equip, 'vida'));
+caso('equipmentStat: vida com teto 550 — negativo vira 0 e o total para no teto', 'equipmentStat', { equip: EQUIP_DE_VIDA, key: 'vida', cap: 550 }, (a) =>
+  E.equipmentStat(a.equip, 'vida', a.cap),
+);
+caso('equipmentStat: item sozinho acima do teto fica no teto', 'equipmentStat', { equip: { armadura: { stats: { vida: 9999 } } }, key: 'vida', cap: 550 }, (a) =>
+  E.equipmentStat(a.equip, 'vida', a.cap),
+);
+caso('equipmentStat: esquiva sem teto', 'equipmentStat', { equip: EQUIP_DE_VIDA, key: 'esquiva' }, (a) => E.equipmentStat(a.equip, 'esquiva'));
+caso('equipmentStat: nada equipado', 'equipmentStat', { equip: {}, key: 'vida', cap: 550 }, (a) => E.equipmentStat(a.equip, 'vida', a.cap));
+caso(
+  'equipmentStat: save editado — string, null, NaN e fração (saneamento, com teto)',
+  'equipmentStat',
+  { equip: { arma: { stats: { vida: '25' } }, elmo: { stats: { vida: null } }, armadura: { stats: { vida: Number.NaN } }, botas: { stats: { vida: 2.9 } }, acessorio: {} }, key: 'vida', cap: 550 },
+  (a) => E.equipmentStat(a.equip as never, 'vida', a.cap),
+);
+caso(
+  'equipmentStat: save editado — string, null, NaN e fração (saneamento, sem teto)',
+  'equipmentStat',
+  { equip: { arma: { stats: { vida: '25' } }, elmo: { stats: { vida: null } }, armadura: { stats: { vida: Number.NaN } }, botas: { stats: { vida: 2.9 } }, acessorio: {} }, key: 'vida' },
+  (a) => E.equipmentStat(a.equip as never, 'vida'),
+);
+caso('equipmentBonus: todos os stats de uma vez', 'equipmentBonus', { equip: EQUIP_DE_VIDA }, (a) => E.equipmentBonus(a.equip));
+
+for (const level of [1, 2, 3, 10, 100, 499, 500, 501, 0, -3, 2.9, Number.NaN]) {
+  caso(`xpForLevel: nível ${level}`, 'xpForLevel', { level }, (a) => E.xpForLevel(a.level));
+}
+for (const value of [10, 11, 12, 9, 8, 7, 1, 0, 20, 21, 99, 10.5, -1, Number.NaN]) {
+  caso(`attrModifier: ${value}${value < 10 ? ' — floor de negativo, não truncamento' : ''}`, 'attrModifier', { value }, (a) => E.attrModifier(a.value));
+}
+caso('totalAttributePoints', 'totalAttributePoints', { attrs: atributos({ forca: 14, carisma: 6 }) }, (a) => E.totalAttributePoints(a.attrs));
+caso('totalAttributePoints: atributo NaN conta 0 (saneamento)', 'totalAttributePoints', { attrs: atributos({ forca: Number.NaN }) }, (a) => E.totalAttributePoints(a.attrs));
+
+const DERIVADOS: Array<[string, { level: number; attrs: Attributes; equip: Record<string, EquippableItem | null> }, { critPenalty?: boolean }?]> = [
+  ['herói base, tudo 10, nível 1', { level: 1, attrs: atributos(), equip: {} }],
+  ['atributos ímpares dão meio ponto de esquiva e crítico', { level: 7, attrs: atributos({ destreza: 13, carisma: 7, constituicao: 15, intelecto: 3 }), equip: {} }],
+  ['penalidade de crítico do Azarado', { level: 1, attrs: atributos({ destreza: 12 }), equip: {} }, { critPenalty: true }],
+  ['crítico com penalidade não fica negativo', { level: 1, attrs: atributos({ destreza: 3 }), equip: {} }, { critPenalty: true }],
+  ['esquiva do equipamento negativa não fica abaixo de 0; velocidade pode', { level: 3, attrs: atributos({ destreza: 4 }), equip: { armadura: { stats: { esquiva: -20, velocidade: -9 } } } }],
+  ['vida e mana de equipamento acima do teto do nível 1', { level: 1, attrs: atributos(), equip: { armadura: { stats: { vida: 5000, mana: 800 } }, acessorio: { stats: { vida: 200 } } } }],
+  ['o mesmo equipamento no nível 100, com teto maior', { level: 100, attrs: atributos(), equip: { armadura: { stats: { vida: 5000, mana: 800 } }, acessorio: { stats: { vida: 200 } } } }],
+  ['nível 500 e atributos 99', { level: 500, attrs: atributos({ forca: 99, destreza: 99, constituicao: 99, intelecto: 99, sabedoria: 99, carisma: 99 }), equip: {} }],
+  ['equipamento de verdade em sete slots', { level: 12, attrs: atributos({ forca: 16 }), equip: { arma: item('espada', 'raro'), secundaria: item('escudo'), elmo: item('placas_elmo'), armadura: item('placas', 'epico'), calca: item('placas_calca'), botas: item('botas'), acessorio: item('colar_forca', 'lendario') } }],
+];
+for (const [nome, hero, options] of DERIVADOS) {
+  caso(`derivedStats: ${nome}`, 'derivedStats', { hero, ...(options ? { options } : {}) }, (a) => E.derivedStats(a.hero as never, (a as { options?: { critPenalty?: boolean } }).options));
+}
+
+// --- maestria ---
+
+for (const level of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1, 2.5, Number.NaN]) {
+  caso(`masteryBattlesFor: nível ${level}`, 'masteryBattlesFor', { level }, (a) => E.masteryBattlesFor(a.level));
+}
+for (const battles of [0, 9, 10, 29, 30, 59, 60, 549, 550, 551, 100000, -5, 59.9, Number.NaN]) {
+  caso(`masteryLevel: ${battles} vitórias`, 'masteryLevel', { battles }, (a) => E.masteryLevel(a.battles));
+}
+for (const masteryBattles of [0, 15, 60, 549, 550, 9999]) {
+  caso(`masteryProgress: ${masteryBattles} vitórias`, 'masteryProgress', { hero: { masteryBattles } }, (a) => E.masteryProgress(a.hero));
+}
+caso('masteryProgress: sem contagem no save', 'masteryProgress', { hero: {} }, (a) => E.masteryProgress(a.hero));
+for (const cls of E.CLASSES) caso(`masteryWeapons: ${cls.id}`, 'masteryWeapons', { cls }, (a) => E.masteryWeapons(a.cls));
+for (const [nome, hero] of [
+  ['guerreiro de espada, 60 vitórias', heroi({ classe: 'guerreiro', arma: 'espada', extra: { masteryBattles: 60 } })],
+  ['guerreiro de machado não domina a arma', heroi({ classe: 'guerreiro', arma: 'machado', extra: { masteryBattles: 550 } })],
+  ['bárbaro de marreta, que também é dele', heroi({ classe: 'barbaro', arma: 'marreta', extra: { masteryBattles: 210 } })],
+  ['mão vazia não é arma da classe', heroi({ classe: 'guerreiro', arma: null, extra: { masteryBattles: 550 } })],
+  ['Aprendiz de espada não tem classe', heroi({ classe: null, arma: 'espada', extra: { masteryBattles: 550 } })],
+  ['save antigo: só o nome "Cacador", sem acento e sem id', heroi({ classe: 'cacador', nomeDaClasse: 'Cacador', arma: 'arco', extra: { masteryBattles: 550 } })],
+] as const) {
+  caso(`wieldsMasteryWeapon: ${nome}`, 'wieldsMasteryWeapon', { hero }, (a) => E.wieldsMasteryWeapon(a.hero));
+  caso(`masteryDamageMult: ${nome}`, 'masteryDamageMult', { hero }, (a) => E.masteryDamageMult(a.hero));
+}
+for (const killCount of [0, 1, 7, 8, 15, 16, 100, 1000, -3, 15.9]) {
+  caso(`veteranMasteryBattles: ${killCount} monstros`, 'veteranMasteryBattles', { killCount }, (a) => E.veteranMasteryBattles(a.killCount));
+}
+caso('winBattle: 9 vitórias viram 10 e sobem o nível', 'winBattle', { hero: heroi({ classe: 'mago', extra: { masteryBattles: 9 } }) }, (a) => E.winBattle(a.hero));
+caso('winBattle: no teto continua contando', 'winBattle', { hero: heroi({ classe: 'mago', extra: { masteryBattles: 550 } }) }, (a) => E.winBattle(a.hero));
+caso('winBattle: Aprendiz não conta', 'winBattle', { hero: heroi({ classe: null, extra: { masteryBattles: 3 } }) }, (a) => E.winBattle(a.hero));
+
+// --- buscas no catálogo (toda regra de classe passa por idDaClasse) ---
+
+for (const id of ['mago', 'cacador', 'nada']) caso(`classById: ${id}`, 'classById', { id }, (a) => E.classById(a.id));
+for (const name of ['Clérigo', 'Clerigo', 'CAÇADOR', 'caçador', 'Aprendiz', '']) caso(`classByName: "${name}"`, 'classByName', { name }, (a) => E.classByName(a.name));
+for (const name of ['Elfo Negro', 'elfo negro', 'Anão', 'Anao', 'Gnomo']) caso(`raceByName: "${name}"`, 'raceByName', { name }, (a) => E.raceByName(a.name));
+for (const id of ['bola_de_fogo', 'nada']) caso(`powerById: ${id}`, 'powerById', { id }, (a) => E.powerById(a.id));
+for (const name of ['Bola de Fogo', 'bola de fogo']) caso(`powerByName: "${name}" (exato, com acento e caixa)`, 'powerByName', { name }, (a) => E.powerByName(a.name));
+for (const id of ['azarado', 'nada']) caso(`debuffById: ${id}`, 'debuffById', { id }, (a) => E.debuffById(a.id));
+for (const classId of ['ladino', 'nada']) caso(`classPassive: ${classId}`, 'classPassive', { classId }, (a) => E.classPassive(a.classId));
+for (const [nome, quem] of [
+  ['classId manda', { classId: 'mago', className: 'Guerreiro' }],
+  ['só o nome, sem acento', { className: 'Cacador' }],
+  ['Aprendiz não é classe', { className: 'Aprendiz' }],
+  ['nada', {}],
+] as const) {
+  caso(`idDaClasse: ${nome}`, 'idDaClasse', { quem }, (a) => E.idDaClasse(a.quem));
+}
+for (const [nome, quem] of [
+  ['raceId manda', { raceId: 'orc', race: 'Elfo' }],
+  ['só o nome', { race: 'Meio-Elfo' }],
+  ['nada', {}],
+] as const) {
+  caso(`idDaRaca: ${nome}`, 'idDaRaca', { quem }, (a) => E.idDaRaca(a.quem));
+}
+
+// --- o que o combate usa de hero.ts ---
+
+for (const [nome, hero, effect] of [
+  ['efeito gravado', { debuff: E.debuffById('visao_fraca') }, 'rangedPenalty'],
+  ['outro efeito', { debuff: E.debuffById('visao_fraca') }, 'critPenalty'],
+  ['save antigo: só o nome, sem acento', { debuff: { id: '', name: 'Visao Fraca', icon: '', desc: '', attr: null } }, 'rangedPenalty'],
+  ['save antigo: Teimoso pelo nome', { debuff: { id: '', name: 'Teimoso', icon: '', desc: '', attr: 'sabedoria' } }, 'fleePenalty'],
+  ['debuff sem efeito', { debuff: E.debuffById('orgulhoso') }, 'critPenalty'],
+  ['herói nulo', null, 'critPenalty'],
+] as const) {
+  caso(`hasDebuffEffect: ${nome}`, 'hasDebuffEffect', { hero, effect }, (a) => E.hasDebuffEffect(a.hero as never, a.effect));
+}
+
+for (const [nome, hero] of [
+  ['mão vazia', heroi({ classe: 'guerreiro', arma: null })],
+  ['guerreiro de espada', heroi({ classe: 'guerreiro', arma: 'espada' })],
+  ['mago de espada', heroi({ classe: 'mago', arma: 'espada' })],
+  ['bardo de violão', heroi({ classe: 'bardo', arma: 'violao' })],
+  ['Aprendiz de espada', heroi({ classe: null, arma: 'espada' })],
+  ['save antigo: "Clerigo" sem acento, de maça', heroi({ classe: 'clerigo', nomeDaClasse: 'Clerigo', arma: 'maca' })],
+] as const) {
+  caso(`weaponAffinityPct: ${nome}`, 'weaponAffinityPct', { hero }, (a) => E.weaponAffinityPct(a.hero));
+}
+
+for (const id of [...ARMAS_IDS, 'escudo', 'couro']) {
+  caso(`isTwoHanded: ${id}`, 'isTwoHanded', { item: item(id) }, (a) => E.isTwoHanded(a.item));
+  caso(`isOffhandEligible: ${id}`, 'isOffhandEligible', { item: item(id) }, (a) => E.isOffhandEligible(a.item));
+}
+caso('isTwoHanded: null', 'isTwoHanded', { item: null }, (a) => E.isTwoHanded(a.item));
+
+{
+  const guerreiro = heroi({ classe: 'guerreiro', arma: 'espada', attrs: { constituicao: 12 } });
+  caso('recomputeDerived: vida máxima maior cura pela diferença', 'recomputeDerived', { hero: { ...guerreiro, attrs: { ...guerreiro.attrs, constituicao: 15 }, hp: 50 } }, (a) =>
+    E.recomputeDerived(a.hero),
+  );
+  caso('recomputeDerived: vida máxima menor só limita, não cura', 'recomputeDerived', { hero: { ...guerreiro, attrs: { ...guerreiro.attrs, constituicao: 5 } } }, (a) =>
+    E.recomputeDerived(a.hero),
+  );
+  caso('recomputeDerived: hp 0 conta como cheio (o `||` do original)', 'recomputeDerived', { hero: { ...guerreiro, hp: 0, mp: 0 } }, (a) => E.recomputeDerived(a.hero));
+  caso('recomputeDerived: com penalidade de crítico', 'recomputeDerived', { hero: guerreiro, options: { critPenalty: true } }, (a) => E.recomputeDerived(a.hero, a.options));
+
+  const xp = (hero: Hero, amount: number) => ({ hero, amount });
+  caso('gainXP: não sobe', 'gainXP', xp(guerreiro, 10), (a) => E.gainXP(a.hero, a.amount));
+  caso('gainXP: exatamente o que falta sobe um nível', 'gainXP', xp(guerreiro, 40), (a) => E.gainXP(a.hero, a.amount));
+  caso('gainXP: vários níveis de uma vez', 'gainXP', xp(guerreiro, 1000), (a) => E.gainXP(a.hero, a.amount));
+  caso('gainXP: um milhão de XP', 'gainXP', xp(guerreiro, 1e6), (a) => E.gainXP(a.hero, a.amount));
+  caso('gainXP: NaN não estraga o save', 'gainXP', xp(guerreiro, Number.NaN), (a) => E.gainXP(a.hero, a.amount));
+  caso('gainXP: Infinity vira 0 em vez de travar', 'gainXP', xp(guerreiro, Number.POSITIVE_INFINITY), (a) => E.gainXP(a.hero, a.amount));
+  caso('gainXP: negativo vira 0', 'gainXP', xp(guerreiro, -50), (a) => E.gainXP(a.hero, a.amount));
+  caso('gainXP: xpNext estragado no save', 'gainXP', xp({ ...guerreiro, xpNext: Number.NaN, xp: 10 }, 35), (a) => E.gainXP(a.hero, a.amount));
+
+  const comPontos = { ...guerreiro, attrPoints: 2 };
+  const gastar = (a: { hero: Hero; key: string }) => E.spendAttrPoint(a.hero, a.key as keyof Attributes);
+  caso('spendAttrPoint: gasta um ponto e recalcula', 'spendAttrPoint', { hero: comPontos, key: 'constituicao' }, gastar);
+  caso('spendAttrPoint: sem pontos devolve igual', 'spendAttrPoint', { hero: guerreiro, key: 'forca' }, gastar);
+  caso('spendAttrPoint: 99 é o teto', 'spendAttrPoint', { hero: { ...comPontos, attrs: { ...comPontos.attrs, forca: 99 } }, key: 'forca' }, gastar);
+  caso('spendAttrPoint: 999 (do painel ADM) cai pra 99', 'spendAttrPoint', { hero: { ...comPontos, attrs: { ...comPontos.attrs, forca: 999 } }, key: 'forca' }, gastar);
+
+  const comEscudo = { ...guerreiro, equip: { ...guerreiro.equip, secundaria: item('escudo') } };
+  caso('equipItem: arma de duas mãos esvazia a secundária', 'equipItem', { hero: comEscudo, item: item('machado') }, (a) => E.equipItem(a.hero, a.item));
+  caso('equipItem: secundária recusada com arma de duas mãos', 'equipItem', { hero: heroi({ classe: 'arqueiro' }), item: item('escudo') }, (a) => E.equipItem(a.hero, a.item));
+  caso('equipItem: adaga na secundária', 'equipItem', { hero: guerreiro, item: item('adaga'), requestedSlot: 'secundaria' }, (a) =>
+    E.equipItem(a.hero, a.item, a.requestedSlot as 'secundaria'),
+  );
+  caso('equipItem: elmo vai pro elmo e recalcula', 'equipItem', { hero: guerreiro, item: item('placas_elmo', 'raro') }, (a) => E.equipItem(a.hero, a.item));
+  caso('equipItem: poção não veste', 'equipItem', { hero: guerreiro, item: item('pot_vida') }, (a) => E.equipItem(a.hero, a.item));
+  caso('equipItem: slot errado', 'equipItem', { hero: guerreiro, item: item('botas'), requestedSlot: 'elmo' }, (a) => E.equipItem(a.hero, a.item, a.requestedSlot as 'elmo'));
+  caso('unequipItem: tira a arma', 'unequipItem', { hero: guerreiro, slot: 'arma' }, (a) => E.unequipItem(a.hero, a.slot as 'arma'));
+}
+
+{
+  const humano = E.raceById('humano')!;
+  const fada = E.raceById('fada')!;
+  const azarado = E.debuffById('azarado')!;
+  const desajeitado = E.debuffById('desajeitado')!;
+  caso('apprenticeAttrs: humano sem atributo na fraqueza', 'apprenticeAttrs', { race: humano, debuff: azarado }, (a) => E.apprenticeAttrs(a.race, a.debuff));
+  caso('apprenticeAttrs: fada desajeitada', 'apprenticeAttrs', { race: fada, debuff: desajeitado }, (a) => E.apprenticeAttrs(a.race, a.debuff));
+  for (const seed of [1, 2, 3]) {
+    const cls = E.classById(CLASSES_IDS[seed] as string)!;
+    caso(`rollAttrs: seed ${seed}, ${cls.id}`, 'rollAttrs', { race: fada, cls, debuff: desajeitado }, (a, { rng }) => E.rollAttrs(a.race, a.cls, a.debuff, rng), { rng: { seed } });
+    caso(`generateCompanion: seed ${seed}`, 'generateCompanion', {}, (_a, { rng }) => E.generateCompanion(rng), { rng: { seed } });
+    caso(`buildApprentice: seed ${seed}`, 'buildApprentice', { creation: { name: 'Novo', race: humano, debuff: azarado, hair: 'curto' } }, (a, { rng }) => E.buildApprentice(a.creation, rng), {
+      rng: { seed },
+    });
+  }
+}
+
+// --- o resto de hero.ts ---
+
+{
+  const bardo = heroi({ classe: 'bardo', extra: { powerIds: ['cancao_debilitante', 'escudo_arcano'], powerNames: ['Canção Debilitante', 'Escudo Arcano'] } });
+  for (const [nome, hero] of [
+    ['pelos ids', heroi({ classe: 'mago', extra: { powerIds: ['bola_de_fogo', 'escudo_arcano'], powerNames: ['Bola de Fogo', 'Escudo Arcano'] } })],
+    ['save antigo: só os nomes, um que não existe mais', { ...heroi({ classe: 'mago' }), powerIds: undefined, powerNames: ['Bola de Fogo', 'Poder Esquecido'] }],
+    ['o bardo ganha a Canção de Batalha da classe', bardo],
+    ['o bardo que já tem a Canção não a recebe duas vezes', { ...bardo, powerIds: ['cancao_debilitante', 'cancao_de_batalha'] }],
+    ['Aprendiz sem poderes', heroi({ classe: null })],
+  ] as const) {
+    caso(`heroPowers: ${nome}`, 'heroPowers', { hero }, (a) => E.heroPowers(a.hero as never));
+  }
+
+  for (const [nome, hero] of [
+    ['classId', { classId: 'mago' }],
+    ['só o nome "Cacador"', { className: 'Cacador' }],
+    ['Aprendiz', { className: 'Aprendiz' }],
+  ] as const) {
+    caso(`hasClass: ${nome}`, 'hasClass', { hero }, (a) => E.hasClass(a.hero));
+  }
+
+  const armado = heroi({ classe: 'guerreiro' });
+  caso('equippedSlot: acha pelo uid', 'equippedSlot', { hero: armado, item: { ...armado.equip.arma!, equipped: false } }, (a) => E.equippedSlot(a.hero, a.item));
+  caso('equippedSlot: item que não está vestido', 'equippedSlot', { hero: armado, item: item('adaga', 'comum', 9) }, (a) => E.equippedSlot(a.hero, a.item));
+
+  // Saves de antes: sem os slots novos, sem ids, só nomes de poder, sem contagem de maestria.
+  const antigo = heroi({ classe: 'clerigo', nomeDaClasse: 'Clerigo', equip: { armadura: item('robe') } }) as Partial<Hero>;
+  delete antigo.raceId;
+  delete antigo.masteryBattles;
+  delete antigo.powerIds;
+  const saveAntigo = {
+    ...antigo,
+    race: 'Elfo',
+    equip: { arma: antigo.equip!.arma, armadura: antigo.equip!.armadura },
+    powerNames: ['Cura Menor', 'Escudo Arcano'],
+    killCount: 17,
+    attrPoints: undefined,
+    buffs: { shield: 0.5, poisonTurns: 2 },
+  };
+  caso('hydrateSavedHero: save de antes dos ids e dos slots novos', 'hydrateSavedHero', { hero: saveAntigo }, (a) => E.hydrateSavedHero(a.hero as never));
+  caso('hydrateSavedHero: arco e escudo de antes da regra das duas mãos', 'hydrateSavedHero', { hero: heroi({ classe: 'arqueiro', equip: { secundaria: item('escudo') } }) }, (a) =>
+    E.hydrateSavedHero(a.hero),
+  );
+  caso('hydrateSavedHero: com classe e sem poder nenhum ganha o da classe', 'hydrateSavedHero', { hero: heroi({ classe: 'monge', extra: { powerIds: [], powerNames: [] } }) }, (a) =>
+    E.hydrateSavedHero(a.hero),
+  );
+  caso('hydrateSavedHero: contagem de maestria fracionária', 'hydrateSavedHero', { hero: heroi({ classe: 'monge', extra: { masteryBattles: 12.7, killCount: 400 } }) }, (a) =>
+    E.hydrateSavedHero(a.hero),
+  );
+  caso('hydrateSavedHero: Aprendiz sem contagem continua em 0', 'hydrateSavedHero', { hero: { ...heroi({ classe: null }), masteryBattles: undefined, killCount: 30 } }, (a) =>
+    E.hydrateSavedHero(a.hero),
+  );
+}
+
+// --- buildHero e trainAtGuild ---
+//
+// Hoje as duas sorteiam o `uid` da arma inicial por dentro, e os casos são
+// pulados. A assinatura chamada aqui é a do patch proposto — um terceiro
+// argumento com `rng` e `now` pra arma —, por isso o cast: quando o patch
+// entrar, os casos passam a ser gravados sem mudar nada neste arquivo.
+
+{
+  const buildHeroComArma = E.buildHero as unknown as (creation: HeroCreation, rng: Rng, armaInicial: { rng: Rng; now: () => number }) => Hero;
+  const trainAtGuildComArma = E.trainAtGuild as unknown as (hero: Hero, cls: ClassDef, armaInicial: { rng: Rng; now: () => number }) => GuildTraining;
+  const humano = E.raceById('humano')!;
+  const orgulhoso = E.debuffById('orgulhoso')!;
+  for (const [seed, classe, escolhidos] of [
+    [1, 'guerreiro', []],
+    [2, 'mago', ['escudo_arcano', 'bola_de_fogo']],
+    [3, 'bardo', ['passo_veloz']],
+  ] as const) {
+    const creation = { name: 'Pronto', race: humano, cls: E.classById(classe)!, debuff: orgulhoso, chosenPowerIds: [...escolhidos] };
+    caso(`buildHero: ${classe}, seed ${seed}`, 'buildHero', { creation, armaInicial: { now: AGORA } }, (a, { rng, now }) => buildHeroComArma(a.creation, rng, { rng, now }), {
+      rng: { seed },
+      now: AGORA,
+      seEscondido: 'pular',
+    });
+  }
+  const aprendiz = E.buildApprentice({ name: 'Novo', race: humano, debuff: orgulhoso }, E.seededRng(1));
+  for (const [nome, hero, classe] of [
+    ['Aprendiz de mão vazia vira mago', aprendiz, 'mago'],
+    ['Aprendiz com espada: o cajado vai pra mochila', { ...aprendiz, equip: { ...aprendiz.equip, arma: item('espada') } }, 'mago'],
+    ['Aprendiz de escudo: o machado de duas mãos vai pra mochila', { ...aprendiz, equip: { ...aprendiz.equip, secundaria: item('escudo') } }, 'barbaro'],
+  ] as const) {
+    caso(`trainAtGuild: ${nome}`, 'trainAtGuild', { hero, cls: E.classById(classe)!, armaInicial: { now: AGORA } }, (a, { rng, now }) => trainAtGuildComArma(a.hero, a.cls, { rng, now }), {
+      rng: { seed: 1 },
+      now: AGORA,
+      seEscondido: 'pular',
+    });
+  }
+  // Quem já tem classe sai como entrou, sem instanciar nada: este grava hoje.
+  caso('trainAtGuild: quem já tem classe sai como entrou', 'trainAtGuild', { hero: heroi({ classe: 'guerreiro' }), cls: E.classById('mago')!, armaInicial: { now: AGORA } }, (a, { rng, now }) =>
+    trainAtGuildComArma(a.hero, a.cls, { rng, now }),
+  { rng: { seed: 1 }, now: AGORA, seEscondido: 'pular' });
+}
+
+// --- teachers ---
+
+constante('CLASS_TEACHER_POWERS', E.CLASS_TEACHER_POWERS);
+constante('TEACHERS', E.TEACHERS);
+
+{
+  const comMaestria = (classe: string | null, powerIds: string[], teachersMet: number, masteryBattles: number, nomeDaClasse?: string): Hero =>
+    heroi({
+      classe,
+      ...(nomeDaClasse ? { nomeDaClasse } : {}),
+      extra: { powerIds, powerNames: powerIds.map((id) => E.powerById(id)?.name ?? id), teachersMet, masteryBattles },
+    });
+  const novo = comMaestria('guerreiro', ['golpe_poderoso'], 0, 100);
+  const depoisDoPrimeiro = comMaestria('guerreiro', ['golpe_poderoso', 'grito_de_guerra'], 1, 360);
+  const veterano = comMaestria('guerreiro', ['golpe_poderoso', 'escudo_arcano', 'bola_de_fogo'], 0, 100);
+  const veteranoComALista = comMaestria('guerreiro', ['golpe_poderoso', 'grito_de_guerra', 'golpe_atordoante', 'passo_veloz'], 0, 100);
+  const pouco = comMaestria('guerreiro', ['golpe_poderoso'], 0, 60);
+  const aprendizComMaestria = comMaestria(null, [], 0, 550);
+  const clerigoAntigo = comMaestria('clerigo', ['cura_menor'], 0, 100, 'Clerigo');
+  const soDaClasse = comMaestria('guerreiro', ['golpe_poderoso', 'golpe_poderoso'], 0, 100);
+  const herois: Array<[string, Hero]> = [
+    ['novo guerreiro, maestria 4', novo],
+    ['depois do primeiro professor, maestria 8', depoisDoPrimeiro],
+    ['veterano com 3 poderes da criação antiga', veterano],
+    ['veterano que já tem a lista toda', veteranoComALista],
+    ['maestria 3', pouco],
+    ['Aprendiz', aprendizComMaestria],
+    ['save antigo "Clerigo"', clerigoAntigo],
+    ['só o poder da classe, repetido', soDaClasse],
+    ['já encontrou os dois', comMaestria('guerreiro', ['golpe_poderoso', 'grito_de_guerra', 'passo_veloz'], 2, 550)],
+  ];
+  for (const [nome, hero] of herois) {
+    caso(`teacherOffer: ${nome}`, 'teacherOffer', { hero }, (a) => E.teacherOffer(a.hero));
+    caso(`teacherMode: ${nome}`, 'teacherMode', { hero }, (a) => E.teacherMode(a.hero));
+    caso(`swappablePowers: ${nome}`, 'swappablePowers', { hero }, (a) => E.swappablePowers(a.hero));
+    for (const floor of [24, 25, 50, 51, 74, 75, 80, 81]) {
+      caso(`teacherFor: ${nome}, andar ${floor}`, 'teacherFor', { hero, floor }, (a) => E.teacherFor(a.hero, a.floor));
+    }
+  }
+  for (const [professor, floor, roll] of [
+    [E.TEACHERS[0]!, 25, 0.05],
+    [E.TEACHERS[0]!, 25, 0.1],
+    [E.TEACHERS[0]!, 49, 0.99],
+    [E.TEACHERS[0]!, 50, 0.99],
+    [E.TEACHERS[1]!, 77, 0.2],
+    [E.TEACHERS[1]!, 77, 0.3],
+    [E.TEACHERS[1]!, 80, 0.99],
+  ] as const) {
+    caso(`teacherAppears: professor ${professor.number}, andar ${floor}, rolo ${roll}`, 'teacherAppears', { professor, floor, roll }, (a) => E.teacherAppears(a.professor, a.floor, a.roll));
+  }
+  for (const [nome, hero, powerId] of [
+    ['novo aprende da lista', novo, 'passo_veloz'],
+    ['poder fora da lista', novo, 'bola_de_fogo'],
+    ['veterano não aprende, troca', veterano, 'grito_de_guerra'],
+    ['segundo professor', depoisDoPrimeiro, 'golpe_atordoante'],
+  ] as const) {
+    caso(`learnFromTeacher: ${nome}`, 'learnFromTeacher', { hero, powerId }, (a) => E.learnFromTeacher(a.hero, a.powerId));
+  }
+  for (const [nome, hero, giveUp, learn] of [
+    ['veterano troca um extra', veterano, 'escudo_arcano', 'grito_de_guerra'],
+    ['não troca o poder da classe', veterano, 'golpe_poderoso', 'grito_de_guerra'],
+    ['não aprende fora da lista', veterano, 'escudo_arcano', 'rajada_glacial'],
+    ['novo não troca, aprende', novo, 'golpe_poderoso', 'passo_veloz'],
+  ] as const) {
+    caso(`swapWithTeacher: ${nome}`, 'swapWithTeacher', { hero, giveUp, learn }, (a) => E.swapWithTeacher(a.hero, a.giveUp, a.learn));
+  }
+}
+
+// =====================================================================
+// items — templates, rarity, item e tiers
+// =====================================================================
+
+modulo('items');
+
+constante('RARITY_IDS', E.RARITY_IDS);
+constante('RARITIES', E.RARITIES);
+constante('ITEM_CATEGORIES', E.ITEM_CATEGORIES);
+constante('EQUIPPABLE_CATEGORIES', E.EQUIPPABLE_CATEGORIES);
+constante('STAT_LABELS', E.STAT_LABELS);
+constante('PROC_EFFECTS', E.PROC_EFFECTS);
+constante('TEMPLATES', E.TEMPLATES);
+constante('TIER_ORDER', E.TIER_ORDER);
+constante('TIER_MIN', E.TIER_MIN);
+
+for (const id of ['comum', 'mitico', 'nada']) caso(`rarityById: ${id}`, 'rarityById', { id }, (a) => E.rarityById(a.id));
+for (const floor of [1, 2, 6, 12, 13, 50, 0, -3, 1.5]) caso(`rarityWeights: andar ${floor}`, 'rarityWeights', { floor }, (a) => E.rarityWeights(a.floor));
+for (const floor of [1, 5, 13, 40]) {
+  for (const seed of [1, 2]) {
+    caso(`pickRarity: andar ${floor}, 30 sorteios, seed ${seed}`, 'pickRarity', { floor, count: 30 }, (a, { rng }) => Array.from({ length: a.count }, () => E.pickRarity(a.floor, rng).id), {
+      rng: { seed },
+    });
+  }
+}
+caso('pickRarity: rng 0 é comum', 'pickRarity', { floor: 1 }, (a, { rng }) => E.pickRarity(a.floor, rng), { rng: { sequence: [0] } });
+caso('pickRarity: rng no fim do intervalo é mítico', 'pickRarity', { floor: 1 }, (a, { rng }) => E.pickRarity(a.floor, rng), { rng: { sequence: [0.9999999999999999] } });
+
+for (const id of ['espada', 'bota_vento', 'nada']) caso(`templateById: ${id}`, 'templateById', { id }, (a) => E.templateById(a.id));
+for (const category of E.ITEM_CATEGORIES) caso(`templatesByCategory: ${category}`, 'templatesByCategory', { category }, (a) => E.templatesByCategory(a.category));
+for (const category of [...E.ITEM_CATEGORIES, 'nada']) caso(`isEquippable: ${category}`, 'isEquippable', { category }, (a) => E.isEquippable(a.category));
+for (const template of E.TEMPLATES.filter((t) => E.isEquippable(t.category))) {
+  caso(`slotForTemplate: ${template.id}`, 'slotForTemplate', { template }, (a) => E.slotForTemplate(a.template));
+}
+
+for (const template of E.TEMPLATES) {
+  caso(
+    `instantiate: ${template.id} em cada raridade`,
+    'instantiate',
+    { template, rarities: E.RARITIES, options: { now: AGORA } },
+    (a, { rng, now }) => a.rarities.map((rarity) => E.instantiate(a.template, rarity, { rng, now })),
+    { rng: { seed: 1 }, now: AGORA },
+  );
+}
+/** Template de mentira com meios exatos: o `Math.round` do JS sobe no .5 (e no −2,5 vai pra −2); o do C# arredonda pro par. */
+const TEMPLATE_DE_ARREDONDAMENTO: ItemTemplate = {
+  id: 'arredondamento',
+  name: 'Arredondamento',
+  genero: 'm',
+  category: 'arma',
+  desc: '',
+  sprite: '',
+  base: { ataque: 2.5, defesa: -2.5, vida: 0.5, mana: 3.5, critico: -3.5, velocidade: 1.5 },
+  value: 4.5,
+  proc: { chance: 0.45, effect: 'queimadura', label: '', icon: '' },
+};
+caso(
+  'instantiate: arredondamento de .5 e −.5, e o teto de 0,5 na chance do proc',
+  'instantiate',
+  { template: TEMPLATE_DE_ARREDONDAMENTO, rarities: [E.RARITIES[0], E.RARITIES[5]], options: { now: AGORA } },
+  (a, { rng, now }) => a.rarities.map((rarity) => E.instantiate(a.template, rarity as never, { rng, now })),
+  { rng: { seed: 1 }, now: AGORA },
+);
+
+for (let seed = 1; seed <= 12; seed++) {
+  caso(`randomItem: qualquer categoria, andar 1, seed ${seed}`, 'randomItem', { options: { now: AGORA } }, (_a, { rng, now }) => E.randomItem({ rng, now }), {
+    rng: { seed },
+    now: AGORA,
+  });
+}
+for (const category of E.ITEM_CATEGORIES.filter((c) => c !== 'missao')) {
+  for (const floor of [1, 10]) {
+    caso(`randomItem: ${category}, andar ${floor}`, 'randomItem', { options: { category, floor, now: AGORA } }, (a, { rng, now }) => E.randomItem({ ...a.options, rng, now }), {
+      rng: { seed: floor * 7 },
+      now: AGORA,
+    });
+  }
+}
+for (const floor of [2, 10, 40, 51, 60, 100, 0, -5]) {
+  caso(`randomItem: arma comum forçada no andar ${floor} (bônus de profundidade, teto +75%)`, 'randomItem', { options: { category: 'arma', rarity: 'comum', floor, now: AGORA } }, (a, { rng, now }) =>
+    E.randomItem({ ...a.options, rng, now } as never),
+  { rng: { seed: 3 }, now: AGORA });
+}
+caso('randomItem: raridade forçada mítica', 'randomItem', { options: { category: 'acessorio', rarity: 'mitico', floor: 5, now: AGORA } }, (a, { rng, now }) =>
+  E.randomItem({ ...a.options, rng, now } as never),
+{ rng: { seed: 4 }, now: AGORA });
+caso('randomItem: raridade desconhecida cai pra comum, sem sortear raridade', 'randomItem', { options: { category: 'arma', rarity: 'xyz', floor: 5, now: AGORA } }, (a, { rng, now }) =>
+  E.randomItem({ ...a.options, rng, now } as never),
+{ rng: { seed: 4 }, now: AGORA });
+caso('randomItem: material fundo não ganha foundFloor', 'randomItem', { options: { category: 'material', floor: 40, now: AGORA } }, (a, { rng, now }) =>
+  E.randomItem({ ...a.options, rng, now } as never),
+{ rng: { seed: 5 }, now: AGORA });
+
+const ITENS_DE_NOME: Array<[string, Item]> = [
+  ['espada comum', item('espada')],
+  ['espada lendária', item('espada', 'lendario')],
+  ['botas raras (feminino plural)', item('botas', 'raro')],
+  ['poção de mana incomum', item('pot_mana', 'incomum')],
+  ['pergaminho épico', item('pergaminho', 'epico')],
+  ['arco mítico', item('arco', 'mitico')],
+];
+for (const [nome, it] of ITENS_DE_NOME) {
+  caso(`displayName: ${nome}`, 'displayName', { item: it }, (a) => E.displayName(a.item));
+  caso(`itemView: ${nome}`, 'itemView', { item: it }, (a) => E.itemView(a.item));
+  caso(`itemCategory: ${nome}`, 'itemCategory', { item: it }, (a) => E.itemCategory(a.item));
+  caso(`concordar: ${nome}`, 'concordar', { item: it, formas: ['escondido', 'escondida', 'escondidos', 'escondidas'] }, (a) => E.concordar(a.item, a.formas as never));
+}
+caso('itemTemplate: template que sumiu lança', 'itemTemplate', { item: { templateId: 'nada' } }, (a) => E.itemTemplate(a.item));
+caso('statTags: sinal, polaridade e stat zerado', 'statTags', { item: { stats: { ataque: 5, defesa: -2, vida: 0, critico: 3, curaMana: 10 } } }, (a) => E.statTags(a.item));
+
+// --- tiers ---
+
+const ITENS_DE_TIER: Array<[string, Item]> = [];
+for (const id of ['espada', 'adaga', 'cajado', 'placas', 'robe', 'botas', 'colar_forca', 'escudo']) {
+  for (const raridade of ['comum', 'raro', 'mitico']) ITENS_DE_TIER.push([`${id} ${raridade}`, item(id, raridade)]);
+}
+ITENS_DE_TIER.push(['espada comum com tierAdjustment +30', { ...item('espada'), tierAdjustment: 30 }]);
+ITENS_DE_TIER.push(['espada comum com tierAdjustment −100', { ...item('espada'), tierAdjustment: -100 }]);
+ITENS_DE_TIER.push(['poção (sem tier)', item('pot_vida', 'mitico')]);
+ITENS_DE_TIER.push(['material (sem tier)', item('minerio')]);
+for (const [nome, it] of ITENS_DE_TIER) {
+  caso(`powerScore: ${nome}`, 'powerScore', { item: it }, (a) => E.powerScore(a.item));
+  caso(`tierFor: ${nome}`, 'tierFor', { item: it }, (a) => E.tierFor(a.item));
+  caso(`tierRank: ${nome}`, 'tierRank', { item: it }, (a) => E.tierRank(a.item));
+  if (E.isEquippable(E.itemCategory(it))) caso(`tierInfo: ${nome}`, 'tierInfo', { item: it }, (a) => E.tierInfo(a.item));
+}
+for (const score of [-5, 0, 24, 25, 39, 40, 59, 60, 84, 85, 114, 115, 144, 145, 174, 175, 209, 210, 249, 250, 300, 1000, Number.NaN]) {
+  caso(`tierFromScore: ${score}`, 'tierFromScore', { score }, (a) => E.tierFromScore(a.score));
+}
+for (const tier of ['E', 'SSS+', 'MAX', 'XYZ']) caso(`tierRank: tier "${tier}"`, 'tierRank', { item: tier }, (a) => E.tierRank(a.item as never));
+for (const tier of ['E', 'SSS+', 'MAX', null]) caso(`tierClass: ${tier}`, 'tierClass', { tier }, (a) => E.tierClass(a.tier as never));
+caso('tierInfo: item no MAX tem progresso 100', 'tierInfo', { item: { ...item('espada', 'mitico'), tierAdjustment: 400 } }, (a) => E.tierInfo(a.item));
+
+for (const [nome, it] of [
+  ['espada comum', item('espada')],
+  ['placas raras', item('placas', 'raro')],
+  ['cajado épico já reforjado', { ...item('cajado', 'epico'), reforgeCount: 2, reforgeFails: 1 }],
+] as const) {
+  for (const delta of [-3, -1, 0, 1, 2, 3]) {
+    caso(`reforge: ${nome}, delta ${delta}`, 'reforge', { item: it, delta }, (a) => E.reforge(a.item, a.delta));
+  }
+}
+caso('reforge: no MAX, +1 não sai do lugar', 'reforge', { item: { ...item('espada', 'mitico'), tierAdjustment: 400 }, delta: 1 }, (a) => E.reforge(a.item, a.delta));
+caso('reforge: no E, −1 não sai do lugar', 'reforge', { item: { ...item('espada'), tierAdjustment: -100 }, delta: -1 }, (a) => E.reforge(a.item, a.delta));
+
+// =====================================================================
+// monsters — species e generate
+// =====================================================================
+
+modulo('monsters');
+
+constante('BEHAVIORS', E.BEHAVIORS);
+constante('AFFINITY_TYPES', E.AFFINITY_TYPES);
+constante('SPECIES', E.SPECIES);
+constante('ENEMY_CLASSES', E.ENEMY_CLASSES);
+constante('TIER_ADJECTIVES', E.TIER_ADJECTIVES);
+constante('BOSS_TITLES', E.BOSS_TITLES);
+
+for (const id of ['zumbi', 'nada']) caso(`speciesById: ${id}`, 'speciesById', { id }, (a) => E.speciesById(a.id));
+for (const id of ['xama', 'nada']) caso(`enemyClassById: ${id}`, 'enemyClassById', { id }, (a) => E.enemyClassById(a.id));
+for (const floor of [-1, 0, 1, 3, 4, 7, 8, 12, 13, 18, 19, 99, 100]) caso(`tierLabelFor: andar ${floor}`, 'tierLabelFor', { floor }, (a) => E.tierLabelFor(a.floor));
+
+for (const floor of [1, 2, 3, 4, 5, 8, 13, 19, 20, 50, 100]) {
+  for (const seed of [1, 2, 3]) {
+    caso(`generate: andar ${floor}, seed ${seed}`, 'generate', { floor }, (a, { rng }) => E.generate(a.floor, { rng }), { rng: { seed } });
+  }
+}
+for (const [nome, species] of [
+  ['só morcego e zumbi', ['morcego', 'zumbi']],
+  ['lista vazia vale todas', []],
+  ['só id desconhecido vale todas', ['dragao_de_papel']],
+  ['a Torre', E.dungeonById('torre')!.species],
+] as const) {
+  for (const seed of [4, 5]) {
+    caso(`generate: ${nome}, seed ${seed}`, 'generate', { floor: 5, options: { species } }, (a, { rng }) => E.generate(a.floor, { ...a.options, rng }), { rng: { seed } });
+  }
+}
+for (const floor of [5, 10, 15, 20, 25, 100]) {
+  for (const seed of [1, 2]) {
+    caso(`generateBoss: andar ${floor}, seed ${seed}`, 'generateBoss', { floor }, (a, { rng }) => E.generateBoss(a.floor, { rng }), { rng: { seed } });
+  }
+}
+caso('generateBoss: quem chama decide o chefe principal (24, main true)', 'generateBoss', { floor: 24, options: { main: true } }, (a, { rng }) =>
+  E.generateBoss(a.floor, { ...a.options, rng }),
+{ rng: { seed: 1 } });
+caso('generateBoss: andar 20 com main false', 'generateBoss', { floor: 20, options: { main: false } }, (a, { rng }) => E.generateBoss(a.floor, { ...a.options, rng }), {
+  rng: { seed: 1 },
+});
+caso('generateBoss: só orc', 'generateBoss', { floor: 5, options: { species: ['orc'] } }, (a, { rng }) => E.generateBoss(a.floor, { ...a.options, rng }), { rng: { seed: 6 } });
+for (const floor of [1, 3, 7, 8, 20]) {
+  caso(`generateMimic: andar ${floor}`, 'generateMimic', { floor }, (a, { rng }) => E.generateMimic(a.floor, { rng }), { rng: { seed: floor + 10 } });
+}
+
+{
+  const comum = E.generate(1, { rng: E.seededRng(1) });
+  const fundo = E.generate(10, { rng: E.seededRng(2) });
+  const lendario = E.generate(40, { rng: E.seededRng(3) });
+  const chefe = E.generateBoss(10, { rng: E.seededRng(5) });
+  const mini = E.generateBoss(5, { rng: E.seededRng(2) });
+  const mimico = E.generateMimic(8, { rng: E.seededRng(1) });
+  for (const [nome, monster] of [
+    ['comum do andar 1', comum],
+    ['andar 10 (Ancestral)', fundo],
+    ['andar 40 (sem adjetivo acima do 99, mas Lendário aqui)', lendario],
+    ['chefe principal', chefe],
+    ['mini-chefe', mini],
+    ['mímico (override)', mimico],
+  ] as const) {
+    caso(`monsterView: ${nome}`, 'monsterView', { monster }, (a) => E.monsterView(a.monster));
+  }
+  caso('monsterView: espécie que sumiu lança', 'monsterView', { monster: { ...comum, speciesId: 'nada' } }, (a) => E.monsterView(a.monster));
+}
+
+// =====================================================================
+// combat
+// =====================================================================
+
+modulo('combat');
+
+constante('LADOS_DO_DANO', E.LADOS_DO_DANO);
+constante('FAIXA_CRITICA', E.FAIXA_CRITICA);
+constante('FORCA_NA_BORDA', E.FORCA_NA_BORDA);
+constante('FORCA_NO_CENTRO', E.FORCA_NO_CENTRO);
+constante('FLEE_TARGET', E.FLEE_TARGET);
+constante('ESQUIVA_TARGET', E.ESQUIVA_TARGET);
+
+// --- monster-state ---
+
+caso('freshCombatMonster', 'freshCombatMonster', { monster: E.generate(3, { rng: E.seededRng(1) }) }, (a) => E.freshCombatMonster(a.monster));
+caso('setStatusField: acrescenta', 'setStatusField', { status: { atordoado: 1 }, key: 'veneno', value: { turns: 3, dmg: 4 } }, (a) =>
+  E.setStatusField(a.status, a.key as 'veneno', a.value),
+);
+caso('setStatusField: troca', 'setStatusField', { status: { veneno: { turns: 1, dmg: 2 } }, key: 'veneno', value: { turns: 3, dmg: 4 } }, (a) =>
+  E.setStatusField(a.status, a.key as 'veneno', a.value),
+);
+caso('setStatusField: value ausente remove a chave', 'setStatusField', { status: { veneno: { turns: 1, dmg: 2 }, atordoado: 1 }, key: 'veneno' }, (a) =>
+  E.setStatusField(a.status, a.key as 'veneno', undefined),
+);
+caso('setStatusField: status ausente', 'setStatusField', { key: 'atordoado', value: 2 }, (a) => E.setStatusField(undefined, a.key as 'atordoado', a.value));
+caso('decrementField: 2 turnos viram 1', 'decrementField', { status: { turns: 2, dmg: 3 } }, (a) => E.decrementField(a.status));
+caso('decrementField: o último turno acaba com o status', 'decrementField', { status: { turns: 1, amount: 0.2 } }, (a) => E.decrementField(a.status));
+caso('decrementField: ausente', 'decrementField', {}, () => E.decrementField(undefined));
+
+// --- damage ---
+
+for (const [nome, destreza, speed, debuff] of [
+  ['velocidade igual', 10, 10, 'orgulhoso'],
+  ['monstro mais rápido', 7, 10, 'orgulhoso'],
+  ['vantagem de 1', 11, 10, 'orgulhoso'],
+  ['vantagem de 4', 14, 10, 'orgulhoso'],
+  ['vantagem de 5', 15, 10, 'orgulhoso'],
+  ['vantagem de 9', 19, 10, 'orgulhoso'],
+  ['Teimoso tira 2', 15, 10, 'teimoso'],
+  ['Teimoso pode deixar negativo', 10, 10, 'teimoso'],
+] as const) {
+  caso(`fleeBonus: ${nome}`, 'fleeBonus', { hero: heroi({ attrs: { destreza }, debuff }), monster: { speed } }, (a) => E.fleeBonus(a.hero, a.monster));
+}
+caso('fleeBonus: save antigo com Teimoso só pelo nome', 'fleeBonus', { hero: heroi({ attrs: { destreza: 15 }, extra: { debuff: { id: '', name: 'Teimoso', icon: '', desc: '', attr: 'sabedoria' } } }), monster: { speed: 10 } }, (a) =>
+  E.fleeBonus(a.hero, a.monster),
+);
+
+for (const affinityPct of [100, 55, 30, 25, 0, 150]) {
+  caso(`weaponAtkContribution: espada a ${affinityPct}%`, 'weaponAtkContribution', { hero: { equip: { arma: item('espada') } }, affinityPct }, (a) =>
+    E.weaponAtkContribution(a.hero, a.affinityPct),
+  );
+}
+for (const ataque of [5, 3, 1, 7]) {
+  caso(`weaponAtkContribution: ataque ${ataque} a 50% — meio exato arredonda pra cima`, 'weaponAtkContribution', { hero: { equip: { arma: { ...item('espada'), stats: { ataque } } } }, affinityPct: 50 }, (a) =>
+    E.weaponAtkContribution(a.hero, a.affinityPct),
+  );
+}
+caso('weaponAtkContribution: sem arma', 'weaponAtkContribution', { hero: { equip: {} }, affinityPct: 100 }, (a) => E.weaponAtkContribution(a.hero, a.affinityPct));
+
+for (const [nome, hero] of [
+  ['guerreiro com adaga na secundária (55%)', heroi({ classe: 'guerreiro', equip: { secundaria: item('adaga', 'raro') } })],
+  ['ladino com adaga na secundária (100%)', heroi({ classe: 'ladino', equip: { secundaria: item('adaga', 'raro') } })],
+  ['armadura e acessório entram cheios', heroi({ classe: 'mago', equip: { armadura: { ...item('placas'), stats: { ataque: 3, defesa: 6 } }, acessorio: item('colar_forca', 'epico') } })],
+  ['Aprendiz com espada na secundária (sem afinidade, 100%)', heroi({ classe: null, equip: { secundaria: item('espada') } })],
+  ['nada que dê ataque', heroi({ classe: 'guerreiro', equip: { secundaria: item('escudo') } })],
+] as const) {
+  caso(`otherEquipAtk: ${nome}`, 'otherEquipAtk', { hero }, (a) => E.otherEquipAtk(a.hero));
+}
+
+{
+  const alvo = E.freshCombatMonster(E.generate(5, { rng: E.seededRng(1) }));
+  const md = (nome: string, monster: CombatMonster, weakness: string, resistance: string, dmg: number, type: string, halfResist: boolean) =>
+    caso(`modifyDamageByAffinity: ${nome}`, 'modifyDamageByAffinity', { monster, weakness, resistance, dmg, type, halfResist }, (a) =>
+      E.modifyDamageByAffinity(a.monster, a.weakness as never, a.resistance as never, a.dmg, a.type as never, a.halfResist),
+    );
+  md('neutro', alvo, 'nenhuma', 'nenhuma', 10, 'fisico', false);
+  md('fraqueza +25%', alvo, 'fisico', 'nenhuma', 10, 'fisico', false);
+  md('fraqueza em 2 dá 2,5 → 3', alvo, 'magico', 'nenhuma', 2, 'magico', false);
+  md('fraqueza em 13', alvo, 'magico', 'nenhuma', 13, 'magico', false);
+  md('resistência −20%', alvo, 'nenhuma', 'fisico', 13, 'fisico', false);
+  md('resistência pela metade (mago) em 5 dá 4,5 → 5', alvo, 'nenhuma', 'magico', 5, 'magico', true);
+  md('fraqueza e resistência ao mesmo tipo', alvo, 'fisico', 'fisico', 10, 'fisico', false);
+  md('tipo diferente não pega', alvo, 'magico', 'fisico', 10, 'nenhuma', false);
+  md('vulnerável soma e gasta um turno', { ...alvo, status: { vulneravel: { turns: 2, amount: 0.2 } } }, 'nenhuma', 'nenhuma', 10, 'fisico', false);
+  md('vulnerável no último turno sai do status', { ...alvo, status: { vulneravel: { turns: 1, amount: 0.15 } } }, 'nenhuma', 'nenhuma', 10, 'fisico', false);
+  md('vulnerável sem amount vale 0,2', { ...alvo, status: { vulneravel: { turns: 2 } as never } }, 'nenhuma', 'nenhuma', 10, 'fisico', false);
+  md('vulnerável com amount 0 vale 0,2 (o `||` do original)', { ...alvo, status: { vulneravel: { turns: 2, amount: 0 } } }, 'nenhuma', 'nenhuma', 10, 'fisico', false);
+  md('Muralha Sombria reduz 35% e gasta um guardHits', { ...alvo, guardHits: 2 }, 'nenhuma', 'nenhuma', 10, 'fisico', false);
+  md('Muralha em dano 1 continua 1', { ...alvo, guardHits: 1 }, 'nenhuma', 'nenhuma', 1, 'fisico', false);
+  md('tudo junto', { ...alvo, guardHits: 1, status: { vulneravel: { turns: 3, amount: 0.2 }, atordoado: 1 } }, 'fisico', 'nenhuma', 17, 'fisico', false);
+  md('dano 0 sai 1', alvo, 'nenhuma', 'nenhuma', 0, 'fisico', false);
+}
+
+// --- status-effects ---
+
+{
+  const base = E.freshCombatMonster(E.generate(5, { rng: E.seededRng(1) }));
+  const tick = (nome: string, monster: CombatMonster) => caso(`tickMonsterDot: ${nome}`, 'tickMonsterDot', { monster }, (a) => E.tickMonsterDot(a.monster));
+  tick('queimadura, sangramento e veneno no mesmo turno', { ...base, status: { queimadura: { turns: 3, dmg: 4 }, sangramento: { turns: 1, dmg: 3 }, veneno: { turns: 2, dmg: 2 } } });
+  tick('sem dano contínuo', { ...base, status: { atordoado: 1, lento: { turns: 2, amount: 0.2 } } });
+  tick('o dano contínuo derruba', { ...base, hp: 5, status: { veneno: { turns: 2, dmg: 5 } } });
+  tick('sem campo status', (({ status: _s, ...resto }) => resto)(base));
+  tick('turns 0 não dispara', { ...base, status: { queimadura: { turns: 0, dmg: 9 } } });
+
+  const monstroComStatus = { ...base, status: { atordoado: 1, veneno: { turns: 1, dmg: 2 } } };
+  for (const derived of [
+    { dmgFisico: 20, dmgMagico: 30 },
+    { dmgFisico: 40, dmgMagico: 9 },
+    { dmgFisico: 2, dmgMagico: 3 },
+  ]) {
+    for (const power of E.POWERS.filter((p) => p.status)) {
+      caso(`applyPowerStatus: ${power.id}, físico ${derived.dmgFisico} / mágico ${derived.dmgMagico}`, 'applyPowerStatus', { power, monster: monstroComStatus, derived }, (a) =>
+        E.applyPowerStatus(a.power, a.monster, a.derived),
+      );
+    }
+  }
+  caso('applyPowerStatus: poder sem status devolve o monstro', 'applyPowerStatus', { power: E.powerById('golpe_poderoso'), monster: monstroComStatus, derived: { dmgFisico: 20, dmgMagico: 30 } }, (a) =>
+    E.applyPowerStatus(a.power!, a.monster, a.derived),
+  );
+  for (const power of [{ status: 'veneno' }, { status: 'lento' }, { status: 'atordoado' }] as const) {
+    caso(`applyPowerStatus: ${power.status} sem turns, dotRatio nem amount usa os padrões`, 'applyPowerStatus', { power, monster: base, derived: { dmgFisico: 20, dmgMagico: 30 } }, (a) =>
+      E.applyPowerStatus(a.power, a.monster, a.derived),
+    );
+  }
+}
+
+// --- weapon-proc ---
+
+for (const armaId of ['espada', 'machado', 'adaga', 'cajado', 'maca', 'marreta', 'violao', 'arco']) {
+  const hero = heroi({ classe: 'guerreiro', arma: armaId, attrs: { forca: 17, sabedoria: 13 }, extra: { hp: 60, mp: 40 } });
+  const monster = E.freshCombatMonster(E.generate(5, { rng: E.seededRng(2) }));
+  caso(`applyWeaponProc: ${armaId}, rolo favorável`, 'applyWeaponProc', { hero, monster }, (a, { rng }) => E.applyWeaponProc(a.hero, a.monster, rng), { rng: { sequence: [0] } });
+  caso(`applyWeaponProc: ${armaId}, rolo contra`, 'applyWeaponProc', { hero, monster }, (a, { rng }) => E.applyWeaponProc(a.hero, a.monster, rng), { rng: { sequence: [0.99] } });
+}
+caso('applyWeaponProc: mana grátis não passa do máximo', 'applyWeaponProc', { hero: heroi({ classe: 'mago' }), monster: monstro() }, (a, { rng }) => E.applyWeaponProc(a.hero, a.monster, rng), {
+  rng: { sequence: [0] },
+});
+caso('applyWeaponProc: cura no acerto não passa do máximo', 'applyWeaponProc', { hero: heroi({ classe: 'clerigo' }), monster: monstro() }, (a, { rng }) => E.applyWeaponProc(a.hero, a.monster, rng), {
+  rng: { sequence: [0] },
+});
+caso('applyWeaponProc: atordoar acumula', 'applyWeaponProc', { hero: heroi({ classe: 'barbaro' }), monster: monstro({ status: { atordoado: 2 } }) }, (a, { rng }) =>
+  E.applyWeaponProc(a.hero, a.monster, rng),
+{ rng: { sequence: [0] } });
+caso('applyWeaponProc: mão vazia, sem sortear', 'applyWeaponProc', { hero: heroi({ arma: null }), monster: monstro() }, (a, { rng }) => E.applyWeaponProc(a.hero, a.monster, rng), {
+  rng: { sequence: [0] },
+});
+
+// --- hero-status ---
+
+for (const [nome, buffs, hp] of [
+  ['sem veneno', {}, 50],
+  ['poisonTurns 0', { poisonTurns: 0, poisonDmg: 5 }, 50],
+  ['veneno de 4 por 3 turnos', { poisonTurns: 3, poisonDmg: 4 }, 50],
+  ['sem poisonDmg vale 2', { poisonTurns: 1 }, 50],
+  ['o veneno derruba', { poisonTurns: 2, poisonDmg: 6 }, 5],
+] as const) {
+  caso(`tickHeroStatus: ${nome}`, 'tickHeroStatus', { hero: heroi({ extra: { buffs, hp } }) }, (a) => E.tickHeroStatus(a.hero));
+}
+
+// --- class-passives ---
+
+{
+  const alvo = monstro({ status: { atordoado: 1 } });
+  for (const cls of E.CLASSES) {
+    for (const dmg of [5, 13]) {
+      for (const [rolo, valor] of [
+        ['favorável', 0],
+        ['contra', 0.99],
+      ] as const) {
+        caso(`applyHeroClassPassive: ${cls.id}, dano ${dmg}, rolo ${rolo}`, 'applyHeroClassPassive', { hero: heroi({ classe: cls.id, extra: { hp: 40 } }), monster: alvo, dmg }, (a, { rng }) =>
+          E.applyHeroClassPassive(a.hero, a.monster, a.dmg, rng),
+        { rng: { sequence: [valor] } });
+      }
+    }
+  }
+  caso('applyHeroClassPassive: Aprendiz nunca sorteia', 'applyHeroClassPassive', { hero: heroi({ classe: null }), monster: alvo, dmg: 10 }, (a, { rng }) =>
+    E.applyHeroClassPassive(a.hero, a.monster, a.dmg, rng),
+  { rng: { sequence: [0] } });
+  caso('applyHeroClassPassive: "Cacador" sem acento ainda dispara', 'applyHeroClassPassive', { hero: heroi({ classe: 'cacador', nomeDaClasse: 'Cacador' }), monster: alvo, dmg: 10 }, (a, { rng }) =>
+    E.applyHeroClassPassive(a.hero, a.monster, a.dmg, rng),
+  { rng: { sequence: [0] } });
+  caso('applyHeroClassPassive: "Clerigo" sem acento NÃO dispara (compara o nome, não o id)', 'applyHeroClassPassive', { hero: heroi({ classe: 'clerigo', nomeDaClasse: 'Clerigo', extra: { hp: 40 } }), monster: alvo, dmg: 10 }, (a, { rng }) =>
+    E.applyHeroClassPassive(a.hero, a.monster, a.dmg, rng),
+  { rng: { sequence: [0] } });
+  caso('applyHeroClassPassive: ladino com dano 1 tira 1', 'applyHeroClassPassive', { hero: heroi({ classe: 'ladino' }), monster: alvo, dmg: 1 }, (a, { rng }) =>
+    E.applyHeroClassPassive(a.hero, a.monster, a.dmg, rng),
+  { rng: { sequence: [0] } });
+}
+
+for (const enemyClassId of CLASSES_DE_INIMIGO) {
+  for (const attackCount of [1, 3, 6]) {
+    caso(`triggerEnemyClassPower: ${enemyClassId}, ataque ${attackCount}`, 'triggerEnemyClassPower', { monster: monstro({ enemyClassId, attackCount, hp: 60 }), hero: heroi({ extra: { mp: 30 } }) }, (a) =>
+      E.triggerEnemyClassPower(a.monster, a.hero),
+    );
+  }
+}
+caso('triggerEnemyClassPower: attackCount 0 não dispara', 'triggerEnemyClassPower', { monster: monstro({ attackCount: 0 }), hero: heroi() }, (a) => E.triggerEnemyClassPower(a.monster, a.hero));
+caso('triggerEnemyClassPower: Xamã não cura além do máximo', 'triggerEnemyClassPower', { monster: monstro({ enemyClassId: 'xama', attackCount: 3, hp: 99 }), hero: heroi() }, (a) =>
+  E.triggerEnemyClassPower(a.monster, a.hero),
+);
+caso('triggerEnemyClassPower: Xamã de vida baixa cura no mínimo 4', 'triggerEnemyClassPower', { monster: monstro({ enemyClassId: 'xama', attackCount: 3, hp: 5, maxHp: 20 }), hero: heroi() }, (a) =>
+  E.triggerEnemyClassPower(a.monster, a.hero),
+);
+caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'triggerEnemyClassPower', { monster: monstro({ enemyClassId: 'feiticeiro', attackCount: 3, dmg: 20 }), hero: heroi({ extra: { mp: 2 } }) }, (a) =>
+  E.triggerEnemyClassPower(a.monster, a.hero),
+);
+
+// --- party ---
+
+{
+  const inspirado = heroi({ classe: 'bardo', extra: { hp: 30, buffs: { inspiracaoTurns: 2, inspiracaoAmount: 0.25 } } });
+  const pt = (nome: string, hero: Hero, party: Companion[], monster: CombatMonster, rng: RngSpec) =>
+    caso(`applyPartyTurn: ${nome}`, 'applyPartyTurn', { hero, party, monster }, (a, ctx) => E.applyPartyTurn(a.hero, a.party, a.monster, ctx.rng), { rng });
+  pt('sem equipe só desconta a canção', inspirado, [], monstro(), { sequence: [] });
+  pt('suporte clérigo cura o herói', heroi({ extra: { hp: 20 } }), [companheiro('clerigo', { stance: 'suporte', attrs: atributos({ sabedoria: 14 }) })], monstro(), { sequence: [0.1] });
+  pt('suporte que não cura ataca (×0,8)', heroi(), [companheiro('druida', { stance: 'suporte' })], monstro(), { sequence: [0.9, 0.1, 0.5, 0.99] });
+  pt('errou', heroi(), [companheiro('guerreiro')], monstro(), { sequence: [0.95] });
+  for (const classe of CLASSES_IDS) {
+    pt(`${classe} acerta, passiva favorável`, heroi(), [companheiro(classe, { hp: 8, attack: 7 })], monstro({ hp: 200, maxHp: 200 }), { sequence: [0.1, 0.5, 0] });
+    pt(`${classe} acerta, passiva contra`, heroi(), [companheiro(classe, { attack: 7 })], monstro({ hp: 200, maxHp: 200 }), { sequence: [0.1, 0.5, 0.99] });
+  }
+  pt('agressiva (×1,3) com a canção (×1,25)', inspirado, [companheiro('guerreiro', { stance: 'agressiva', attack: 9 })], monstro(), { sequence: [0.1, 0.99] });
+  pt('defensiva (×0,8)', heroi(), [companheiro('guerreiro', { stance: 'defensiva', attack: 9 })], monstro(), { sequence: [0.1, 0.99] });
+  pt('o monstro morre no primeiro e o segundo não age', heroi(), [companheiro('guerreiro', { attack: 12 }), companheiro('ladino')], monstro({ hp: 5 }), { sequence: [0.1, 0.99] });
+  pt('companheiro morto não age', heroi(), [companheiro('guerreiro', { hp: 0 }), companheiro('mago')], monstro(), { sequence: [0.1, 0.4] });
+  pt('sem attack vale 5', heroi(), [companheiro('guerreiro', { attack: 0 })], monstro(), { sequence: [0.1, 0] });
+  for (let i = 1; i <= 15; i++) {
+    const hero = heroiDeLote();
+    pt(`lote ${i}`, hero, equipeDeLote(), monstroDeLote(), { seed: 1000 + i });
+  }
+  caso('passarRodadaDaCancao: desconta uma rodada', 'passarRodadaDaCancao', { hero: inspirado }, (a) => E.passarRodadaDaCancao(a.hero));
+  caso('passarRodadaDaCancao: sem canção devolve igual', 'passarRodadaDaCancao', { hero: heroi() }, (a) => E.passarRodadaDaCancao(a.hero));
+}
+
+// --- resolve-attack ---
+
+{
+  const combinacoes: Array<[string, string | null, AttackStyle]> = [];
+  for (const classe of [...CLASSES_IDS, null]) for (const estilo of ['normal', 'magic', 'physical', 'ranged'] as const) combinacoes.push([classe ?? 'aprendiz', classe, estilo]);
+  for (const [nome, classe, estilo] of combinacoes) {
+    caso(`ehAtaqueDaClasse: ${nome}, ${estilo}`, 'ehAtaqueDaClasse', { hero: heroi({ classe }), estilo }, (a) => E.ehAtaqueDaClasse(a.hero, a.estilo));
+  }
+  caso('ehAtaqueDaClasse: arqueiro sem arco não tem tiro', 'ehAtaqueDaClasse', { hero: heroi({ classe: 'arqueiro', arma: 'espada' }), estilo: 'ranged' }, (a) => E.ehAtaqueDaClasse(a.hero, a.estilo as AttackStyle));
+  caso('ehAtaqueDaClasse: "Cacador" sem acento, pelo nome', 'ehAtaqueDaClasse', { hero: heroi({ classe: 'cacador', nomeDaClasse: 'Cacador' }), estilo: 'ranged' }, (a) =>
+    E.ehAtaqueDaClasse(a.hero, a.estilo as AttackStyle),
+  );
+
+  const zona = (nome: string, hero: Hero, estilo: AttackStyle) => caso(`zonaDoAtaque: ${nome}`, 'zonaDoAtaque', { hero, estilo }, (a) => E.zonaDoAtaque(a.hero, a.estilo));
+  zona('comum, metade da barra', heroi(), 'normal');
+  zona('da classe, 2/3', heroi({ classe: 'guerreiro' }), 'normal');
+  zona('Precisão 25 soma 5 fatias', heroi({ extra: { buffs: { precisaoTurns: 2, precisaoAmount: 25 } } }), 'normal');
+  zona('Precisão 7 soma 1 fatia (floor)', heroi({ extra: { buffs: { precisaoTurns: 1, precisaoAmount: 7 } } }), 'normal');
+  zona('Precisão 100 para nos 85%', heroi({ extra: { buffs: { precisaoTurns: 2, precisaoAmount: 100 } } }), 'normal');
+  zona('Precisão com 0 turnos não vale', heroi({ extra: { buffs: { precisaoTurns: 0, precisaoAmount: 25 } } }), 'normal');
+  zona('da classe com Precisão 25 também para nos 85%', heroi({ classe: 'guerreiro', extra: { buffs: { precisaoTurns: 2, precisaoAmount: 25 } } }), 'normal');
+  zona('Visão Fraca com arco tira 10%', heroi({ arma: 'arco', debuff: 'visao_fraca' }), 'normal');
+  zona('Visão Fraca com espada não tira', heroi({ arma: 'espada', debuff: 'visao_fraca' }), 'normal');
+  zona('mago de cajado com Visão Fraca, mágico', heroi({ classe: 'mago', debuff: 'visao_fraca' }), 'magic');
+  zona('arqueiro, tiro, Visão Fraca e Precisão 25', heroi({ classe: 'arqueiro', debuff: 'visao_fraca', extra: { buffs: { precisaoTurns: 1, precisaoAmount: 25 } } }), 'ranged');
+
+  for (const [nome, hero] of [
+    ['mago de cajado', heroi({ classe: 'mago' })],
+    ['arqueiro de arco', heroi({ classe: 'arqueiro' })],
+    ['arqueiro de espada', heroi({ classe: 'arqueiro', arma: 'espada' })],
+    ['caçador de arco', heroi({ classe: 'cacador' })],
+    ['guerreiro', heroi({ classe: 'guerreiro' })],
+    ['ladino', heroi({ classe: 'ladino' })],
+    ['clérigo', heroi({ classe: 'clerigo' })],
+    ['Aprendiz', heroi({ classe: null })],
+    ['guerreiro com Precisão', heroi({ classe: 'guerreiro', extra: { buffs: { precisaoTurns: 2, precisaoAmount: 25 } } })],
+  ] as const) {
+    caso(`ataquesDisponiveis: ${nome}`, 'ataquesDisponiveis', { hero }, (a) => E.ataquesDisponiveis(a.hero));
+  }
+
+  const leituras: Array<[number, number | null]> = [
+    [0.5, 0.5],
+    [0.5, 0.75],
+    [0.5, 0.25],
+    [0.5, 0.625],
+    [0.5, 0.76],
+    [0.5, 0],
+    [0.5, 1],
+    [0.5, null],
+    [0.5, 0.52],
+    [0.5, 0.48],
+    [0.5, 0.525],
+    [0.5, 0.475],
+    [0.5, 0.53],
+    [0.5, 0.47],
+    [2 / 3, 0.55],
+    [2 / 3, 0.5 + 1 / 3],
+    [2 / 3, 0.8],
+    [2 / 3, 0.8334],
+    [0.85, 0.07500000000000001],
+    [0.4, 0.7],
+    [0.1, 0.5],
+    [0.1, 0.55],
+    [0.75, 0.123456789],
+  ];
+  for (const [z, mira] of leituras) caso(`lerMira: zona ${z}, mira ${mira}`, 'lerMira', { zona: z, mira }, (a) => E.lerMira(a.zona, a.mira));
+
+  /** Nem crítico de sorte, nem proc: as duas chamadas de `rng` de um acerto, como o `LISO` dos testes. */
+  const LISO: RngSpec = { sequence: [0.99, 0.99] };
+  const golpeNeutro = (hero: Hero, estilo: AttackStyle = 'normal', dado = 1): JogadaDeAtaque => ({ dado, mira: 0.5 + E.zonaDoAtaque(hero, estilo) / 4 });
+  const NO_VAZIO: JogadaDeAtaque = { dado: 1, mira: null };
+  const ra = (nome: string, hero: Hero, monster: CombatMonsterView, jogada: JogadaDeAtaque, attackStyle: AttackStyle, rng: RngSpec, options: { petCriticoBonus?: number } = {}) =>
+    caso(`resolveAttack: ${nome}`, 'resolveAttack', { hero, monster, jogada, attackStyle, options }, (a, ctx) => E.resolveAttack(a.hero, a.monster, a.jogada, a.attackStyle, { ...a.options, rng: ctx.rng }), { rng });
+
+  const guerreiro = heroi({ classe: 'guerreiro', arma: 'espada' });
+  const barbaroDeEspada = heroi({ arma: 'espada' });
+  const mago = heroi({ classe: 'mago' });
+  const agil = monstro({ speciesId: 'lobo_sombras' });
+
+  ra('guerreiro de espada, d20 em 1, força 1× — 27 calculado à mão', guerreiro, monstro(), golpeNeutro(guerreiro), 'normal', LISO);
+  ra('a face 20 do d20', guerreiro, monstro(), golpeNeutro(guerreiro, 'normal', 20), 'normal', LISO);
+  ra('o 20 não fura a esquiva do monstro ágil', barbaroDeEspada, agil, golpeNeutro(barbaroDeEspada, 'normal', 20), 'normal', { sequence: [0.05] });
+  ra('maestria nível 3 com a arma da classe', heroi({ classe: 'guerreiro', arma: 'espada', extra: { masteryBattles: 60 } }), monstro(), golpeNeutro(guerreiro), 'normal', LISO);
+  ra('maestria não vale com machado', heroi({ classe: 'guerreiro', arma: 'machado', extra: { masteryBattles: 550 } }), monstro(), golpeNeutro(guerreiro), 'normal', LISO);
+  ra('maestria no golpe mágico do mago', heroi({ classe: 'mago', extra: { masteryBattles: 550 } }), monstro(), golpeNeutro(mago, 'magic'), 'magic', LISO);
+  ra('sem mana pro ataque mágico', heroi({ classe: 'mago', extra: { mp: 2 } }), monstro(), golpeNeutro(mago, 'magic'), 'magic', LISO);
+  ra('desconta 5 de mana', heroi({ classe: 'mago', extra: { mp: 20 } }), monstro(), golpeNeutro(mago, 'magic'), 'magic', LISO);
+  ra('critNext acerta com a barra no vazio e crita com força 1×', heroi({ arma: 'espada', extra: { buffs: { critNext: true } } }), monstro(), NO_VAZIO, 'normal', LISO);
+  ra('crítico de sorte multiplica 1,6', barbaroDeEspada, monstro(), golpeNeutro(barbaroDeEspada), 'normal', { sequence: [0, 0.99] });
+  ra('o monstro ágil esquiva fora da faixa do crítico', barbaroDeEspada, agil, golpeNeutro(barbaroDeEspada), 'normal', { sequence: [0.05] });
+  ra('critNext pula a esquiva do ágil', heroi({ arma: 'espada', extra: { buffs: { critNext: true } } }), agil, NO_VAZIO, 'normal', { sequence: [0.05, 0.99, 0.99] });
+  ra('a faixa do crítico pula a esquiva do ágil', barbaroDeEspada, agil, { dado: 1, mira: 0.5 }, 'normal', { sequence: [0.05, 0.99, 0.99] });
+  ra('Precisão faz o mesmo ponto acertar', heroi({ arma: 'espada', extra: { buffs: { precisaoTurns: 2, precisaoAmount: 25 } } }), monstro(), { dado: 1, mira: 0.8 }, 'normal', LISO);
+  ra('sem Precisão o mesmo ponto erra', barbaroDeEspada, monstro(), { dado: 1, mira: 0.8 }, 'normal', LISO);
+  ra('desconta Precisão e Força no acerto', heroi({ arma: 'espada', extra: { buffs: { precisaoTurns: 2, forcaTurns: 3, forcaAmount: 0.3 } } }), monstro(), golpeNeutro(barbaroDeEspada), 'normal', LISO);
+  ra('desconta Precisão e Força no erro', heroi({ arma: 'espada', extra: { buffs: { precisaoTurns: 2, forcaTurns: 3, forcaAmount: 0.3 } } }), monstro(), NO_VAZIO, 'normal', LISO);
+  ra('Visão Fraca com arco: o ponto de 0,72 erra', heroi({ arma: 'arco', debuff: 'visao_fraca' }), monstro(), { dado: 1, mira: 0.72 }, 'normal', LISO);
+  ra('Visão Fraca com espada: o ponto de 0,72 acerta', heroi({ arma: 'espada', debuff: 'visao_fraca' }), monstro(), { dado: 1, mira: 0.72 }, 'normal', LISO);
+  ra('golpe mágico ignora o buff de Força', heroi({ classe: 'mago', extra: { buffs: { forcaTurns: 3, forcaAmount: 1 } } }), monstro(), golpeNeutro(mago, 'magic'), 'magic', LISO);
+  ra('golpe mágico usa dmgMagico e pega a fraqueza do goblin — 45 à mão', mago, monstro(), golpeNeutro(mago, 'magic'), 'magic', LISO);
+  ra('mago no físico usa metade do dano físico — 16 à mão', mago, monstro(), golpeNeutro(mago, 'physical'), 'physical', LISO);
+  ra('não mago no estilo "magic" bate físico', guerreiro, monstro(), golpeNeutro(guerreiro, 'magic'), 'magic', LISO);
+  ra('bárbaro abaixo de 50% de vida, ×1,35', heroi({ arma: 'machado', extra: { hp: 40 } }), monstro(), golpeNeutro(barbaroDeEspada), 'normal', LISO);
+  ra('proc da arma dispara', barbaroDeEspada, monstro(), golpeNeutro(barbaroDeEspada), 'normal', { sequence: [0.99, 0] });
+  ra('passiva do ladino dispara', heroi({ classe: 'ladino' }), monstro(), golpeNeutro(heroi({ classe: 'ladino' })), 'normal', { sequence: [0.99, 0.99, 0] });
+  ra('o golpe derruba o monstro', barbaroDeEspada, monstro({ hp: 5 }), golpeNeutro(barbaroDeEspada), 'normal', LISO);
+  ra('força 1,35 a 0,05 do centro na zona da classe — 36 à mão', guerreiro, monstro(), { dado: 1, mira: 0.55 }, 'normal', LISO);
+  ra('a zona da classe acerta onde a comum erra', guerreiro, monstro(), { dado: 1, mira: 0.8 }, 'normal', LISO);
+  ra('tiro do arqueiro', heroi({ classe: 'arqueiro' }), monstro(), golpeNeutro(heroi({ classe: 'arqueiro' }), 'ranged'), 'ranged', { sequence: [0.99, 0.99, 0.99] });
+  ra('arqueiro soma 8 de crítico', heroi({ classe: 'arqueiro' }), monstro(), golpeNeutro(heroi({ classe: 'arqueiro' }), 'ranged'), 'ranged', { sequence: [0.17, 0.99, 0.99] });
+  ra('pet de crítico', barbaroDeEspada, monstro(), golpeNeutro(barbaroDeEspada), 'normal', { sequence: [0.12, 0.99] }, { petCriticoBonus: 5 });
+  ra('Canção de Batalha no golpe físico', heroi({ classe: 'bardo', arma: 'adaga', extra: { buffs: { inspiracaoTurns: 2, inspiracaoAmount: 0.25 } } }), monstro(), golpeNeutro(barbaroDeEspada), 'normal', { sequence: [0.99, 0.99, 0.99] });
+  ra('Canção de Batalha no golpe mágico', heroi({ classe: 'mago', extra: { buffs: { inspiracaoTurns: 2, inspiracaoAmount: 0.25 } } }), monstro(), golpeNeutro(mago, 'magic'), 'magic', LISO);
+  ra('resistência física do lobo', barbaroDeEspada, monstro({ speciesId: 'lobo_sombras' }), golpeNeutro(barbaroDeEspada), 'normal', { sequence: [0.99, 0.99, 0.99] });
+  ra('mago contra resistência mágica do esqueleto (metade da penalidade)', mago, monstro({ speciesId: 'esqueleto' }), golpeNeutro(mago, 'magic'), 'magic', LISO);
+  ra('vulnerável e Muralha Sombria no mesmo golpe', barbaroDeEspada, monstro({ guardHits: 2, status: { vulneravel: { turns: 1, amount: 0.2 } } }), golpeNeutro(barbaroDeEspada), 'normal', LISO);
+  ra('borda da zona: força 0,5', barbaroDeEspada, monstro(), { dado: 20, mira: 0.25 }, 'normal', LISO);
+  ra('mira 0 erra', barbaroDeEspada, monstro(), { dado: 20, mira: 0 }, 'normal', LISO);
+  ra('nível alto, equipamento épico', heroi({ classe: 'paladino', level: 80, attrs: { forca: 60 }, arma: item('espada', 'mitico'), equip: { secundaria: item('escudo', 'epico'), acessorio: item('colar_forca', 'mitico') } }), monstro({ hp: 2000, maxHp: 2000 }), { dado: 17, mira: 0.51 }, 'normal', { sequence: [0.99, 0.99, 0.99] });
+  for (const dado of [0, 21, 2.5]) ra(`dado ${dado} lança`, barbaroDeEspada, monstro(), { dado, mira: 0.5 }, 'normal', LISO);
+  for (const mira of [-0.1, 1.1, Number.NaN]) ra(`mira ${mira} lança`, barbaroDeEspada, monstro(), { dado: 10, mira }, 'normal', LISO);
+
+  for (let i = 1; i <= 40; i++) {
+    const hero = heroiDeLote();
+    const estilo = chance(0.8) ? umDe(E.ataquesDisponiveis(hero)).estilo : umDe(['normal', 'magic', 'physical', 'ranged'] as const);
+    const mira = chance(0.1) ? null : chance(0.1) ? 0.5 : lote();
+    ra(`lote ${i}`, hero, monstroDeLote(), { dado: entre(1, 20), mira }, estilo, { seed: 2000 + i }, chance(0.2) ? { petCriticoBonus: 5 } : {});
+  }
+}
+
+// --- monster-hit ---
+
+{
+  const mh = (nome: string, hero: Hero, party: Companion[], monster: CombatMonsterView, rng: RngSpec, options: { esquivaCerta?: boolean; petEsquivaBonus?: number } = {}) =>
+    caso(`applyMonsterHit: ${nome}`, 'applyMonsterHit', { hero, party, monster, options }, (a, ctx) => E.applyMonsterHit(a.hero, a.party, a.monster, { ...a.options, rng: ctx.rng }), { rng });
+
+  const ladino = heroi({ classe: 'ladino', arma: null });
+  const esqueleto = monstro({ speciesId: 'esqueleto' });
+  mh('atordoado: pula e gasta um turno, sem sortear', ladino, [], monstro({ status: { atordoado: 2 } }), { sequence: [] });
+  mh('lento: perde o turno', ladino, [], monstro({ status: { lento: { turns: 2, amount: 0.2 } } }), { sequence: [0.1] });
+  mh('lento: não perde o turno', ladino, [], monstro({ status: { lento: { turns: 1, amount: 0.2 } } }), { sequence: [0.5, 0.99, 0.99, 0] });
+  mh('enrage do mini-chefe abaixo de 50%', ladino, [], monstro({ isBoss: true, isMainBoss: false, hp: 40, maxHp: 100 }), { sequence: [0.99, 0.99, 0] });
+  mh('enrage não dispara duas vezes', ladino, [], monstro({ isBoss: true, isMainBoss: false, hp: 40, maxHp: 100, rageTriggered: true, dmg: 8 }), { sequence: [0.99, 0.99, 0] });
+  mh('enfraquecido reduz o golpe', ladino, [], monstro({ status: { enfraquecido: { turns: 2, amount: 0.3 } } }), { sequence: [0.99, 0.99, 0] });
+  mh('enfraquecido sem amount vale 0,25', ladino, [], monstro({ status: { enfraquecido: { turns: 2 } as never } }), { sequence: [0.99, 0.99, 0] });
+  mh('mira o defensor', ladino, [companheiro('guerreiro')], monstro(), { sequence: [0.99, 0.1, 0, 0] });
+  mh('derruba o defensor', ladino, [companheiro('guerreiro', { hp: 3 })], monstro(), { sequence: [0.99, 0.1, 0, 0] });
+  mh('sem defensor nem sorteio, vai no herói', ladino, [companheiro('clerigo', { stance: 'suporte' })], monstro(), { sequence: [0.99, 0.99, 0.99, 0] });
+  mh('mira um companheiro qualquer', ladino, [companheiro('mago'), companheiro('bardo')], monstro(), { sequence: [0.99, 0.1, 0.6, 0.5] });
+  mh('equipe toda morta: vai no herói', ladino, [companheiro('guerreiro', { hp: 0 })], monstro(), { sequence: [0.99, 0.99, 0] });
+  mh('esquiva do Passo Veloz', heroi({ classe: 'ladino', arma: null, extra: { buffs: { esquivaTurns: 3, esquivaAmount: 10 } } }), [], monstro(), { sequence: [0.99, 0.1] });
+  mh('esquiva rolada: erra mesmo com rng que acertaria', ladino, [], monstro(), { sequence: [0.99, 0.99, 0] }, { esquivaCerta: true });
+  mh('esquiva rolada não gasta Passo Veloz nem escudo', heroi({ classe: 'ladino', arma: null, extra: { buffs: { esquivaTurns: 3, esquivaAmount: 20, shield: 0.5 } } }), [], monstro(), { sequence: [0.99] }, { esquivaCerta: true });
+  mh('esquiva rolada não protege o companheiro', ladino, [companheiro('druida', { stance: 'defensiva' })], monstro(), { sequence: [0.99, 0, 0, 0] }, { esquivaCerta: true });
+  mh('dano base ao herói — 4 à mão', ladino, [], monstro(), { sequence: [0.99, 0.99, 0] });
+  mh('dano máximo do d6', ladino, [], monstro(), { sequence: [0.99, 0.99, 0.99] });
+  mh('agressivo: ×1,45', ladino, [], monstro(), { sequence: [0.1, 0.99, 0.5] });
+  mh('defesa e resistência mágica cortam o golpe', heroi({ classe: 'ladino', arma: null, attrs: { sabedoria: 20 }, equip: { armadura: item('placas', 'mitico'), elmo: item('placas_elmo', 'epico') } }), [], esqueleto, { sequence: [0.99, 0.5] });
+  mh('dano nunca abaixo de 1', heroi({ classe: 'ladino', arma: null, attrs: { sabedoria: 60 } }), [], esqueleto, { sequence: [0.99, 0] });
+  mh('Medo do Fogo contra mágico', heroi({ classe: 'ladino', arma: null, debuff: 'medo_do_fogo' }), [], monstro({ speciesId: 'elemental_fogo' }), { sequence: [0.99, 0, 0.99] });
+  mh('Medo do Fogo pelo nome do monstro ("Fogo" no nome)', heroi({ classe: 'ladino', arma: null, debuff: 'medo_do_fogo' }), [], monstro({ speciesId: 'elemental_fogo', overrides: { behavior: 'defensivo' } }), { sequence: [0.99, 0.5] });
+  mh('Corpo Frágil +20%', heroi({ classe: 'ladino', arma: null, debuff: 'corpo_fragil' }), [], esqueleto, { sequence: [0.99, 0] });
+  mh('passiva do guerreiro corta 40%', heroi({ classe: 'guerreiro', arma: null }), [], esqueleto, { sequence: [0.99, 0, 0.1] });
+  mh('escudo absorve e some', heroi({ classe: 'ladino', arma: null, extra: { buffs: { shield: 0.5 } } }), [], esqueleto, { sequence: [0.99, 0] });
+  mh('poisonStrike do Assassino', ladino, [], monstro({ speciesId: 'esqueleto', poisonStrike: true }), { sequence: [0.99, 0] });
+  mh('venenoso envenena', ladino, [], monstro({ speciesId: 'aranha' }), { sequence: [0.99, 0, 0.1] });
+  mh('venenoso com Sangue Tóxico: 3 × 1,5 = 4,5 → 5', heroi({ classe: 'ladino', arma: null, debuff: 'sangue_toxico' }), [], monstro({ speciesId: 'aranha', dmg: 9 }), { sequence: [0.99, 0, 0.1] });
+  mh('mágico drena mana', ladino, [], monstro({ speciesId: 'elemental_fogo' }), { sequence: [0.99, 0, 0.1] });
+  mh('mágico não drena mais que há', heroi({ classe: 'ladino', arma: null, extra: { mp: 1 } }), [], monstro({ speciesId: 'espectro_gelado', dmg: 12 }), { sequence: [0.99, 0, 0.1] });
+  mh('3º ataque do Brutamontes', ladino, [], monstro({ attackCount: 2 }), { sequence: [0.99, 0.99, 0] });
+  mh('3º ataque do Feiticeiro drena', heroi({ classe: 'ladino', arma: null, extra: { mp: 20 } }), [], monstro({ attackCount: 2, enemyClassId: 'feiticeiro' }), { sequence: [0.99, 0.99, 0] });
+  mh('3º ataque do Assassino envenena no mesmo golpe', ladino, [], monstro({ attackCount: 2, enemyClassId: 'assassino', speciesId: 'esqueleto' }), { sequence: [0.99, 0.5] });
+  mh('zumbi lento bate ×1,7 no 3º ataque', ladino, [], monstro({ speciesId: 'zumbi', attackCount: 2, enemyClassId: 'guardiao' }), { sequence: [0.99, 0.5] });
+  mh('chefe principal bate ×1,9 no 3º ataque, por cima do agressivo', ladino, [], monstro({ isBoss: true, isMainBoss: true, attackCount: 5, enemyClassId: 'xama' }), { sequence: [0.1, 0.99, 0.5] });
+  mh('pet de esquiva', ladino, [], monstro(), { sequence: [0.99, 0.12] }, { petEsquivaBonus: 8 });
+  mh('golpe fatal', heroi({ classe: 'ladino', arma: null, extra: { hp: 3 } }), [], monstro(), { sequence: [0.99, 0.99, 0.99] });
+  for (let i = 1; i <= 40; i++) {
+    mh(`lote ${i}`, heroiDeLote(), equipeDeLote(), monstroDeLote(), { seed: 3000 + i }, chance(0.15) ? { esquivaCerta: true } : chance(0.15) ? { petEsquivaBonus: 6 } : {});
+  }
+}
+
+// --- use-power ---
+
+{
+  for (const power of E.POWERS) {
+    caso(`powerManaCost: ${power.id}`, 'powerManaCost', { hero: heroi(), power }, (a) => E.powerManaCost(a.hero, a.power));
+    caso(`powerManaCost: ${power.id} com Mana Instável (ceil de ×1,2)`, 'powerManaCost', { hero: heroi({ debuff: 'mana_instavel' }), power }, (a) => E.powerManaCost(a.hero, a.power));
+  }
+
+  const cp = (nome: string, hero: Hero, party: Companion[], monster: CombatMonsterView, power: Power, rng: RngSpec, options: { petCuraBonus?: number; petManaSaveChance?: number } = {}) =>
+    caso(`castPower: ${nome}`, 'castPower', { hero, party, monster, power, options }, (a, ctx) => E.castPower(a.hero, a.party, a.monster, a.power, { ...a.options, rng: ctx.rng }), { rng });
+
+  const ferido = heroi({ classe: 'clerigo', extra: { hp: 30 } });
+  const equipe = [companheiro('guerreiro', { hp: 5 }), companheiro('mago', { hp: 0 }), companheiro('bardo', { hp: 19 })];
+  for (const power of E.POWERS) {
+    const dono = E.CLASSES.find((c) => c.signatureId === power.id)?.id ?? power.soDaClasse ?? 'mago';
+    cp(`${power.id}, d6 em 0`, heroi({ classe: dono, extra: { hp: 30, buffs: { esquivaTurns: 1, esquivaAmount: 5 } } }), equipe, monstro(), power, { sequence: [0] });
+    cp(`${power.id}, d6 no máximo`, heroi({ classe: dono, attrs: { forca: 18, intelecto: 17, sabedoria: 15 }, extra: { hp: 30 } }), equipe, monstro({ status: { atordoado: 1 } }), power, { sequence: [0.99] });
+  }
+  const golpe = E.powerById('golpe_poderoso')!;
+  const bola = E.powerById('bola_de_fogo')!;
+  const cura = E.powerById('cura_menor')!;
+  const julgamento = E.powerById('julgamento_sagrado')!;
+  cp('sem mana não gasta nada', heroi({ extra: { mp: 3 } }), [], monstro(), bola, { sequence: [0] });
+  cp('Mana Instável cobra o custo maior', heroi({ classe: 'mago', debuff: 'mana_instavel', extra: { mp: 17 } }), [], monstro(), bola, { sequence: [0] });
+  cp('Mana Instável sem mana pro custo maior', heroi({ classe: 'mago', debuff: 'mana_instavel', extra: { mp: 16 } }), [], monstro(), bola, { sequence: [0] });
+  cp('maestria nível 10 no poder', heroi({ classe: 'guerreiro', arma: 'espada', extra: { masteryBattles: 550 } }), [], monstro(), golpe, { sequence: [0] });
+  cp('o poder derruba o monstro', heroi(), [], monstro({ hp: 5 }), golpe, { sequence: [0] });
+  cp('dreno do Julgamento não passa do máximo', heroi({ classe: 'paladino', extra: { hp: 109 } }), [], monstro(), julgamento, { sequence: [0.5] });
+  cp('cura com Cicatrização Lenta', heroi({ classe: 'clerigo', debuff: 'cicatrizacao_lenta', extra: { hp: 30 } }), equipe, monstro(), cura, { sequence: [] });
+  cp('cura com pet de +20%', ferido, equipe, monstro(), cura, { sequence: [] }, { petCuraBonus: 20 });
+  cp('cura não passa do máximo', heroi({ classe: 'clerigo' }), [companheiro('guerreiro')], monstro(), cura, { sequence: [] });
+  cp('pet poupa a mana', ferido, [], monstro(), cura, { sequence: [0.1] }, { petManaSaveChance: 50 });
+  cp('pet não poupa a mana', ferido, [], monstro(), cura, { sequence: [0.9] }, { petManaSaveChance: 50 });
+  cp('buff mantém os buffs que já havia', heroi({ extra: { buffs: { shield: 0.5, poisonTurns: 2, poisonDmg: 3 } } }), [], monstro(), E.powerById('grito_de_guerra')!, { sequence: [] });
+  cp('mágico contra a resistência mágica do esqueleto', heroi({ classe: 'mago' }), [], monstro({ speciesId: 'esqueleto' }), bola, { sequence: [0.5] });
+  cp('físico contra a resistência física do lobo', heroi({ classe: 'guerreiro' }), [], monstro({ speciesId: 'lobo_sombras' }), golpe, { sequence: [0.5] });
+  for (let i = 1; i <= 30; i++) {
+    const options = chance(0.2) ? { petManaSaveChance: 30 } : chance(0.2) ? { petCuraBonus: 15 } : {};
+    cp(`lote ${i}`, heroiDeLote(), equipeDeLote(), monstroDeLote(), umDe(E.POWERS), { seed: 4000 + i }, options);
+  }
+}
+
+// --- flee e dodge ---
+
+{
+  const rapido = heroi({ attrs: { destreza: 15 } });
+  const igual = heroi({ attrs: { destreza: 10 } });
+  const teimoso = heroi({ attrs: { destreza: 10 }, debuff: 'teimoso' });
+  for (const [nome, hero] of [
+    ['vantagem de 5 (+2)', rapido],
+    ['sem vantagem', igual],
+    ['Teimoso (−2)', teimoso],
+  ] as const) {
+    for (const roll of [1, 9, 10, 11, 12, 20]) {
+      caso(`attemptFlee: ${nome}, d20 ${roll}`, 'attemptFlee', { hero, monster: { speed: 10 }, roll }, (a) => E.attemptFlee(a.hero, a.monster, a.roll));
+      caso(`attemptDodge: ${nome}, d20 ${roll}`, 'attemptDodge', { hero, monster: { speed: 10 }, roll }, (a) => E.attemptDodge(a.hero, a.monster, a.roll));
+    }
+  }
+  for (const roll of [0, 25]) caso(`attemptFlee: rolagem ${roll} não é conferida`, 'attemptFlee', { hero: igual, monster: { speed: 10 }, roll }, (a) => E.attemptFlee(a.hero, a.monster, a.roll));
+  for (const roll of [0, 21, 2.5, Number.NaN]) caso(`attemptDodge: rolagem ${roll} lança`, 'attemptDodge', { hero: igual, monster: { speed: 10 }, roll }, (a) => E.attemptDodge(a.hero, a.monster, a.roll));
+}
+
+// =====================================================================
+// dungeon — graph, dungeons e generate
+// =====================================================================
+
+modulo('dungeon');
+
+constante('DIR_VECTORS', E.DIR_VECTORS);
+constante('DIR_LABEL', E.DIR_LABEL);
+constante('DIR_OPP', E.DIR_OPP);
+constante('DIR_ORDER', E.DIR_ORDER);
+constante('DUNGEONS', E.DUNGEONS);
+constante('DIFFICULTIES', E.DIFFICULTIES);
+constante('DUNGEON_FLOORS', E.DUNGEON_FLOORS);
+constante('TOTEM_FLOORS', E.TOTEM_FLOORS);
+constante('DEFAULT_RUN', E.DEFAULT_RUN);
+constante('FLOORS_PER_TIER', E.FLOORS_PER_TIER);
+
+// --- a ordenação que o grafo e o andar usam pra embaralhar ---
+
+for (const [n, seed] of [
+  [2, 1],
+  [3, 1],
+  [4, 1],
+  [4, 2],
+  [4, 3],
+  [5, 7],
+  [8, 1],
+  [9, 4],
+  [13, 1],
+  [13, 2],
+  [13, 99],
+] as const) {
+  caso(`Array.prototype.sort com comparador rng() − 0,5: ${n} itens, seed ${seed} (V8)`, 'Array.prototype.sort', { length: n, comparator: 'rng() - 0.5' }, (a, { rng }) => {
+    const comparisons: Array<[number, number]> = [];
+    const order = Array.from({ length: a.length }, (_, i) => i).sort((x, y) => {
+      comparisons.push([x, y]);
+      return rng() - 0.5;
+    });
+    return { order, comparisons };
+  }, { rng: { seed } });
+}
+for (const seed of [1, 2, 3, 4, 5]) {
+  caso(`Array.prototype.sort: DIR_ORDER embaralhado como no grafo, seed ${seed}`, 'Array.prototype.sort', { list: E.DIR_ORDER, comparator: 'rng() - 0.5' }, (a, { rng }) => a.list.slice().sort(() => rng() - 0.5), {
+    rng: { seed },
+  });
+}
+
+// --- graph ---
+
+for (const [x, y, cols, rows] of [
+  [0, 0, 6, 6],
+  [5, 5, 6, 6],
+  [6, 0, 6, 6],
+  [0, -1, 6, 6],
+  [-1, 3, 6, 6],
+] as const) {
+  caso(`inBounds: (${x}, ${y}) em ${cols}×${rows}`, 'inBounds', { x, y, cols, rows }, (a) => E.inBounds(a.x, a.y, a.cols, a.rows));
+}
+
+function grafoCompacto(g: { grid: RoomCell[][]; rooms: RoomCell[]; start: RoomCell }) {
+  return { grid: g.grid, rooms: g.rooms.map((c) => [c.x, c.y]), start: [g.start.x, g.start.y] };
+}
+
+for (const [rows, cols, roomCount, seed] of [
+  [6, 6, 10, 1],
+  [6, 6, 10, 2],
+  [6, 6, 14, 3],
+  [11, 11, 12, 1],
+  [11, 11, 16, 42],
+  [9, 9, 14, 3],
+  [3, 3, 50, 5],
+  [1, 1, 5, 1],
+  [6, 6, 1, 1],
+] as const) {
+  caso(`generateRoomGraph: ${rows}×${cols}, ${roomCount} salas, seed ${seed}`, 'generateRoomGraph', { rows, cols, roomCount }, (a, { rng }) =>
+    grafoCompacto(E.generateRoomGraph(a.rows, a.cols, a.roomCount, rng)),
+  { rng: { seed } });
+}
+
+{
+  const g = E.generateRoomGraph(6, 6, 12, E.seededRng(8));
+  caso('distancesFrom: do início de um grafo 6×6', 'distancesFrom', { grid: g.grid, start: g.start, cols: 6, rows: 6 }, (a) => E.distancesFrom(a.grid, a.start, a.cols, a.rows));
+  const outra = g.rooms[g.rooms.length - 1]!;
+  caso('distancesFrom: de uma sala da ponta', 'distancesFrom', { grid: g.grid, start: outra, cols: 6, rows: 6 }, (a) => E.distancesFrom(a.grid, a.start, a.cols, a.rows));
+
+  for (const [nome, cell] of [
+    ['null', null],
+    ['void', { type: 'void', x: 0, y: 0, doors: {} }],
+    ['normal', { type: 'normal', x: 0, y: 0, doors: {} }],
+  ] as const) {
+    caso(`isRoom: ${nome}`, 'isRoom', { cell }, (a) => E.isRoom(a.cell));
+  }
+
+  const visitada = (cel: RoomCell) => g.grid.map((linha) => linha.map((c) => (c.x === cel.x && c.y === cel.y ? { ...c, visited: true } : c)));
+  const vizinha = g.rooms[1]!;
+  const longe = g.rooms[g.rooms.length - 1]!;
+  caso('isKnown: sala visitada', 'isKnown', { grid: g.grid, cell: { ...vizinha, visited: true }, cols: 6, rows: 6 }, (a) => E.isKnown(a.grid, a.cell, a.cols, a.rows));
+  caso('isKnown: sala revelada', 'isKnown', { grid: g.grid, cell: { ...longe, revealed: true }, cols: 6, rows: 6 }, (a) => E.isKnown(a.grid, a.cell, a.cols, a.rows));
+  caso('isKnown: vizinha de uma sala visitada', 'isKnown', { grid: visitada(g.start), cell: vizinha, cols: 6, rows: 6 }, (a) => E.isKnown(a.grid, a.cell, a.cols, a.rows));
+  caso('isKnown: longe de tudo que foi visitado', 'isKnown', { grid: visitada(g.start), cell: longe, cols: 6, rows: 6 }, (a) => E.isKnown(a.grid, a.cell, a.cols, a.rows));
+}
+
+// --- dungeons ---
+
+const TODAS_AS_MASMORRAS: DungeonRun[] = E.DUNGEONS.flatMap((d) => E.DIFFICULTIES.map((f) => ({ dungeon: d.id, difficulty: f.id })));
+for (const run of TODAS_AS_MASMORRAS) {
+  caso(`tierOf: ${E.runKey(run)}`, 'tierOf', { run }, (a) => E.tierOf(a.run));
+  caso(`runName: ${E.runKey(run)}`, 'runName', { run }, (a) => E.runName(a.run));
+  caso(`runKey: ${E.runKey(run)}`, 'runKey', { run }, (a) => E.runKey(a.run));
+  for (const floor of [1, 4, 100]) caso(`effectiveFloor: ${E.runKey(run)}, andar ${floor}`, 'effectiveFloor', { run, floor }, (a) => E.effectiveFloor(a.run, a.floor));
+}
+for (const floor of [1, 19, 20, 40, 60, 80, 100]) caso(`isTotemFloor: ${floor}`, 'isTotemFloor', { floor }, (a) => E.isTotemFloor(a.floor));
+for (const [nome, raw] of [
+  ['válido', { dungeon: 'torre', difficulty: 'pesadelo' }],
+  ['masmorra desconhecida', { dungeon: 'pantano', difficulty: 'pesadelo' }],
+  ['dificuldade desconhecida', { dungeon: 'caverna', difficulty: 'insana' }],
+  ['número no lugar de texto', { dungeon: 3, difficulty: null }],
+  ['null', null],
+] as const) {
+  caso(`normalizeRun: ${nome}`, 'normalizeRun', { raw }, (a) => E.normalizeRun(a.raw));
+}
+for (const id of ['caverna', 'nada']) caso(`dungeonById: ${id}`, 'dungeonById', { id }, (a) => E.dungeonById(a.id));
+for (const id of ['dificil', 'nada']) caso(`difficultyById: ${id}`, 'difficultyById', { id }, (a) => E.difficultyById(a.id));
+caso('emptyProgress', 'emptyProgress', {}, () => E.emptyProgress());
+caso(
+  'normalizeProgress: tira chave desconhecida, andar que não é totem e repetição, e ordena',
+  'normalizeProgress',
+  { raw: { cleared: ['floresta:normal', 'floresta:normal', 'pantano:normal', 7], totems: { 'floresta:normal': [60, 20, 20, 33, '40'], 'xyz:normal': [20], 'caverna:dificil': [] } } },
+  (a) => E.normalizeProgress(a.raw),
+);
+caso('normalizeProgress: lixo', 'normalizeProgress', { raw: 'lixo' }, (a) => E.normalizeProgress(a.raw));
+
+const PROGRESSOS: Array<[string, DungeonProgress]> = [
+  ['nada zerado', E.emptyProgress()],
+  ['Floresta Normal zerada', { cleared: ['floresta:normal'], totems: {} }],
+  ['Floresta Normal e Difícil, Caverna Normal', { cleared: ['floresta:normal', 'floresta:dificil', 'caverna:normal'], totems: { 'caverna:normal': [20, 40] } }],
+];
+for (const [nomeP, progress] of PROGRESSOS) {
+  for (const run of TODAS_AS_MASMORRAS) {
+    for (const heroLevel of [1, 30]) {
+      caso(`lockReason: ${nomeP}, nível ${heroLevel}, ${E.runKey(run)}`, 'lockReason', { progress, heroLevel, run }, (a) => E.lockReason(a.progress, a.heroLevel, a.run));
+    }
+    caso(`isCleared: ${nomeP}, ${E.runKey(run)}`, 'isCleared', { progress, run }, (a) => E.isCleared(a.progress, a.run));
+  }
+}
+caso('lockReason: masmorra desconhecida abre', 'lockReason', { progress: E.emptyProgress(), heroLevel: 1, run: { dungeon: 'pantano', difficulty: 'normal' } }, (a) =>
+  E.lockReason(a.progress, a.heroLevel, a.run as never),
+);
+{
+  const p = PROGRESSOS[2]![1];
+  const caverna: DungeonRun = { dungeon: 'caverna', difficulty: 'normal' };
+  caso('entryFloors: andar 1 e os totens tocados', 'entryFloors', { progress: p, run: caverna }, (a) => E.entryFloors(a.progress, a.run));
+  caso('entryFloors: sem totem', 'entryFloors', { progress: p, run: E.DEFAULT_RUN }, (a) => E.entryFloors(a.progress, a.run));
+  for (const floor of [60, 40, 33]) caso(`touchTotem: andar ${floor}`, 'touchTotem', { progress: p, run: caverna, floor }, (a) => E.touchTotem(a.progress, a.run, a.floor));
+  caso('markCleared: zera a Caverna Difícil', 'markCleared', { progress: p, run: { dungeon: 'caverna', difficulty: 'dificil' } }, (a) => E.markCleared(a.progress, a.run as DungeonRun));
+  caso('markCleared: já zerada devolve igual', 'markCleared', { progress: p, run: caverna }, (a) => E.markCleared(a.progress, a.run));
+}
+for (const floor of [1, 19, 20, 37, 85, Number.NaN]) caso(`legacyProgress: andar ${floor}`, 'legacyProgress', { floor }, (a) => E.legacyProgress(a.floor));
+
+// --- generate ---
+
+for (const floor of [0, 1, 4, 5, 10, 15, 99, 100, -5]) caso(`isBossFloor: ${floor}`, 'isBossFloor', { floor }, (a) => E.isBossFloor(a.floor));
+for (const [floor, sequence] of [
+  [10, [0.99, 0.99]],
+  [10, [0.1, 0.99]],
+  [4, [0.1, 0.1]],
+  [3, [0.1, 0.1]],
+  [4, [0.99, 0.1]],
+] as const) {
+  caso(`monsterGroupSize: andar ${floor}, rolos ${sequence.join(' e ')}`, 'monsterGroupSize', { floor }, (a, { rng }) => E.monsterGroupSize(a.floor, rng), { rng: { sequence: [...sequence] } });
+}
+
+function andarCompacto(andar: { grid: DungeonCell[][]; rooms: DungeonCell[]; start: DungeonCell }) {
+  return { grid: andar.grid, rooms: andar.rooms.map((c) => [c.x, c.y]), start: [andar.start.x, andar.start.y] };
+}
+
+const ANDARES: Array<[number, number, number, number, DungeonRun?, { classId: string; number: 1 | 2 }?]> = [
+  [1, 6, 6, 1],
+  [3, 6, 6, 3],
+  [4, 6, 6, 4],
+  [5, 6, 6, 5],
+  [7, 11, 11, 1],
+  [9, 11, 11, 123],
+  [10, 6, 6, 2],
+  [20, 6, 6, 20],
+  [30, 6, 6, 4, undefined, { classId: 'guerreiro', number: 1 }],
+  [60, 6, 6, 9],
+  [77, 6, 6, 77, undefined, { classId: 'mago', number: 2 }],
+  [100, 6, 6, 100],
+  [1, 6, 6, 3, { dungeon: 'caverna', difficulty: 'normal' }],
+  [10, 6, 6, 5, { dungeon: 'caverna', difficulty: 'pesadelo' }],
+  [25, 6, 6, 7, { dungeon: 'torre', difficulty: 'dificil' }],
+  [6, 3, 3, 2],
+  [8, 4, 4, 11],
+];
+for (const [floor, rows, cols, seed, run, teacher] of ANDARES) {
+  const options = { now: AGORA, ...(run ? { run } : {}), ...(teacher ? { teacher } : {}) };
+  const nome = `generateDungeonFloor: andar ${floor}, ${rows}×${cols}, seed ${seed}${run ? `, ${E.runKey(run)}` : ''}${teacher ? `, professor ${teacher.classId} ${teacher.number}` : ''}`;
+  caso(nome, 'generateDungeonFloor', { floor, rows, cols, options }, (a, { rng, now }) => andarCompacto(E.generateDungeonFloor(a.floor, a.rows, a.cols, { ...a.options, rng, now })), {
+    rng: { seed },
+    now: AGORA,
+  });
+}
+
+{
+  // Um andar com chefe, totem e professor, pra ter todo tipo de sala nos textos.
+  const andar = E.generateDungeonFloor(20, 6, 6, { rng: E.seededRng(20), now: relogio, teacher: { classId: 'clerigo', number: 1 } });
+  const celulas: Array<[string, DungeonCell]> = andar.rooms.map((c) => [`${c.type} (${c.x}, ${c.y})`, c]);
+  const primeira = (tipo: string) => andar.rooms.find((c) => c.type === tipo);
+  const variantes: Array<[string, DungeonCell | undefined]> = [
+    ['monstro derrotado', primeira('monster') && { ...primeira('monster')!, beaten: true }],
+    ['monstro sozinho', primeira('monster') && { ...primeira('monster')!, monsters: primeira('monster')!.monsters!.slice(0, 1) }],
+    ['grupo de monstros', primeira('monster') && { ...primeira('monster')!, monsters: [E.generate(5, { rng: E.seededRng(1) }), E.generate(5, { rng: E.seededRng(2) })] }],
+    ['tesouro coletado', primeira('treasure') && { ...primeira('treasure')!, collected: true }],
+    ['evento resolvido', primeira('event') && { ...primeira('event')!, resolved: true }],
+    ['chefe derrotado', primeira('boss') && { ...primeira('boss')!, beaten: true }],
+    ['professor que já ensinou', primeira('teacher') && { ...primeira('teacher')!, teacher: { ...primeira('teacher')!.teacher!, taught: true } }],
+  ];
+  for (const [nome, cell] of [...celulas, ...variantes]) {
+    if (!cell) continue;
+    caso(`iconFor: ${nome}`, 'iconFor', { cell }, (a) => E.iconFor(a.cell));
+    caso(`shortLabel: ${nome}`, 'shortLabel', { cell }, (a) => E.shortLabel(a.cell));
+    caso(`roomDesc: ${nome}`, 'roomDesc', { cell }, (a) => E.roomDesc(a.cell));
+    caso(`entryText: ${nome}`, 'entryText', { cell }, (a) => E.entryText(a.cell));
+  }
+}
+
+// =====================================================================
+// shop
+// =====================================================================
+
+modulo('shop');
+
+constante('FORGE_MATERIALS', E.FORGE_MATERIALS);
+
+for (const kind of ['blacksmith', 'shop'] as const) {
+  for (const floor of [1, 5, 40]) {
+    for (const seed of [1, 2]) {
+      caso(`rollStock: ${kind}, andar ${floor}, seed ${seed}`, 'rollStock', { kind, floor, options: { now: AGORA } }, (a, { rng, now }) => E.rollStock(a.kind, a.floor, { rng, now }), {
+        rng: { seed },
+        now: AGORA,
+      });
+    }
+  }
+}
+
+for (const carisma of [0, 7, 10, 20, 200]) {
+  for (const discount of [0, 0.1, 0.3, 0.6]) {
+    for (const value of [1, 10, 25, 33, 101]) {
+      caso(`buyPrice: carisma ${carisma}, pechincha ${discount}, valor ${value}`, 'buyPrice', { hero: heroi({ attrs: { carisma } }), item: { ...item('espada'), value }, discount }, (a) =>
+        E.buyPrice(a.hero, a.item, a.discount),
+      );
+    }
+  }
+}
+caso('buyPrice: sem pechincha (parâmetro ausente)', 'buyPrice', { hero: heroi({ attrs: { carisma: 9 } }), item: item('placas', 'raro') }, (a) => E.buyPrice(a.hero, a.item));
+for (const value of [0, 1, 2, 3, 25, 101]) caso(`sellPrice: valor ${value}`, 'sellPrice', { item: { ...item('espada'), value } }, (a) => E.sellPrice(a.item));
+for (let roll = 0; roll <= 21; roll++) caso(`discountForRoll: ${roll}`, 'discountForRoll', { roll }, (a) => E.discountForRoll(a.roll));
+
+for (const [materialId, cfg] of Object.entries(E.FORGE_MATERIALS)) {
+  for (const valor of [0, 0.049, 0.05, 0.15, 0.2, 0.3, 0.35, 0.7, 0.75, 0.9, 0.95, 0.99]) {
+    for (const pity of [0, 4]) {
+      caso(`rollForgeOutcome: ${materialId}, rng ${valor}, pity ${pity}`, 'rollForgeOutcome', { cfg, pity }, (a, { rng }) => E.rollForgeOutcome(a.cfg, a.pity, rng), { rng: { sequence: [valor] } });
+    }
+  }
+}
+caso('rollForgeOutcome: pity 3 ainda pode piorar', 'rollForgeOutcome', { cfg: E.FORGE_MATERIALS.minerio, pity: 3 }, (a, { rng }) => E.rollForgeOutcome(a.cfg!, a.pity, rng), {
+  rng: { sequence: [0] },
+});
+
+{
+  const ferreiro = heroi({ extra: { gold: 200 } });
+  const espada = item('espada', 'raro', 3);
+  const minerio = item('minerio', 'comum', 4);
+  const minerio2 = item('minerio', 'comum', 5);
+  const essencia = item('essencia', 'comum', 6);
+  const catalisador = item('catalisador_mitico', 'comum', 7);
+  const pedra = item('pedra_protecao', 'comum', 8);
+  const mochila = [minerio, espada, essencia, minerio2, catalisador, pedra];
+  const rf = (nome: string, hero: Hero, inventory: Item[], it: Item, materialId: string, sequence: number[]) =>
+    caso(`resolveForge: ${nome}`, 'resolveForge', { hero, inventory, item: it, materialId }, (a, ctx) => E.resolveForge(a.hero, a.inventory, a.item, a.materialId, { rng: ctx.rng }), {
+      rng: { sequence },
+    });
+  rf('material desconhecido', ferreiro, mochila, espada, 'pedra', [0.5]);
+  rf('sem o material na mochila', ferreiro, [espada], espada, 'minerio', [0.5]);
+  rf('sem ouro', heroi({ extra: { gold: 10 } }), mochila, espada, 'minerio', [0.5]);
+  rf('minério melhora (+1), gasta só o primeiro minério', ferreiro, mochila, espada, 'minerio', [0.99]);
+  rf('minério mantém o tier', ferreiro, mochila, espada, 'minerio', [0.5]);
+  rf('minério piora (−1)', ferreiro, mochila, espada, 'minerio', [0]);
+  rf('pity 4 força o +1', ferreiro, mochila, { ...espada, reforgeFails: 4 }, 'minerio', [0]);
+  rf('essência +2', ferreiro, mochila, espada, 'essencia', [0.95]);
+  rf('catalisador +3', ferreiro, mochila, espada, 'catalisador_mitico', [0.99]);
+  rf('pedra de proteção não piora', ferreiro, mochila, espada, 'pedra_protecao', [0]);
+  rf('item no MAX não sobe', ferreiro, [minerio, { ...espada, tierAdjustment: 400 }], { ...espada, tierAdjustment: 400 }, 'minerio', [0.99]);
+
+  const loja = [item('pot_vida', 'comum', 9), item('placas', 'raro', 10)];
+  caso('resolveBuy: sem ouro', 'resolveBuy', { hero: heroi({ extra: { gold: 5 } }), inventory: [minerio], forSale: loja, item: loja[1], discount: 0 }, (a) =>
+    E.resolveBuy(a.hero, a.inventory, a.forSale, a.item!, a.discount),
+  );
+  caso('resolveBuy: compra com pechincha', 'resolveBuy', { hero: heroi({ attrs: { carisma: 14 }, extra: { gold: 500 } }), inventory: [minerio], forSale: loja, item: loja[1], discount: 0.15 }, (a) =>
+    E.resolveBuy(a.hero, a.inventory, a.forSale, a.item!, a.discount),
+  );
+  caso('resolveSell: metade do valor', 'resolveSell', { hero: ferreiro, inventory: mochila, item: espada }, (a) => E.resolveSell(a.hero, a.inventory, a.item));
+  caso('resolveRestock: sem ouro', 'resolveRestock', { hero: heroi({ extra: { gold: 20 } }), kind: 'shop', floor: 5, restockCount: 2, options: { now: AGORA } }, (a, { rng, now }) =>
+    E.resolveRestock(a.hero, a.kind as 'shop', a.floor, a.restockCount, { rng, now }),
+  { rng: { seed: 1 }, now: AGORA });
+  caso('resolveRestock: renova o ferreiro', 'resolveRestock', { hero: ferreiro, kind: 'blacksmith', floor: 5, restockCount: 2, options: { now: AGORA } }, (a, { rng, now }) =>
+    E.resolveRestock(a.hero, a.kind as 'blacksmith', a.floor, a.restockCount, { rng, now }),
+  { rng: { seed: 1 }, now: AGORA });
+}
+
+// =====================================================================
+// inventory
+// =====================================================================
+
+modulo('inventory');
+
+{
+  const pocao = item('pot_vida', 'comum', 1);
+  const mana = item('pot_mana', 'incomum', 2);
+  const pergaminho = item('pergaminho', 'comum', 3);
+  const espada = item('espada', 'comum', 4);
+  const minerio = item('minerio', 'comum', 5);
+  const mochila = [espada, pocao, mana, minerio];
+
+  caso('addItem: vai pro fim', 'addItem', { inventory: mochila, item: pergaminho }, (a) => E.addItem(a.inventory, a.item));
+  caso('addItem: mochila vazia', 'addItem', { inventory: [], item: pergaminho }, (a) => E.addItem(a.inventory, a.item));
+  caso('removeByUid: achou', 'removeByUid', { inventory: mochila, uid: pocao.uid }, (a) => E.removeByUid(a.inventory, a.uid));
+  caso('removeByUid: não achou', 'removeByUid', { inventory: mochila, uid: 'nada' }, (a) => E.removeByUid(a.inventory, a.uid));
+  caso('removeByUid: uid repetido tira só o primeiro', 'removeByUid', { inventory: [pocao, espada, pocao], uid: pocao.uid }, (a) => E.removeByUid(a.inventory, a.uid));
+  caso('findByUid: achou', 'findByUid', { inventory: mochila, uid: mana.uid }, (a) => E.findByUid(a.inventory, a.uid));
+  caso('findByUid: não achou', 'findByUid', { inventory: mochila, uid: 'nada' }, (a) => E.findByUid(a.inventory, a.uid));
+
+  const ferido = heroi({ extra: { hp: 50, mp: 20 } });
+  const quaseCheio = heroi({ extra: { hp: 105, mp: 60 } });
+  const ci = (nome: string, hero: Hero, inventory: Item[], it: Item) => caso(`consumeItem: ${nome}`, 'consumeItem', { hero, inventory, item: it }, (a) => E.consumeItem(a.hero, a.inventory, a.item));
+  ci('poção de vida cura e some', ferido, mochila, pocao);
+  ci('poção de vida não passa do máximo', quaseCheio, mochila, pocao);
+  ci('poção de mana', ferido, mochila, mana);
+  ci('pergaminho cura vida e mana', ferido, [...mochila, pergaminho], pergaminho);
+  ci('cheio: usa e não ganha nada', heroi(), mochila, pocao);
+  ci('material não é gasto', ferido, mochila, minerio);
+  ci('espada não é gasta', ferido, mochila, espada);
+  ci('item fora da mochila ainda cura', ferido, [espada], pocao);
+}
+
+// =====================================================================
+// events
+// =====================================================================
+
+modulo('events');
+
+constante('EVENT_TEMPLATES', E.EVENT_TEMPLATES);
+
+for (const id of ['ferido', 'altar', 'porta', 'nada']) caso(`eventTemplateById: ${id}`, 'eventTemplateById', { id }, (a) => E.eventTemplateById(a.id as never));
+for (let seed = 1; seed <= 6; seed++) caso(`randomEventTemplate: seed ${seed}`, 'randomEventTemplate', {}, (_a, { rng }) => E.randomEventTemplate(rng), { rng: { seed } });
+for (const floor of [1, 5, 30, 0, -3, 2.7, Number.NaN]) caso(`eventXp: andar ${floor}`, 'eventXp', { floor }, (a) => E.eventXp(a.floor));
+
+{
+  const evento = (attrs: Partial<Attributes> = {}, extra: Partial<Hero> = {}) => heroi({ classe: 'clerigo', attrs, extra: { hp: 60, mp: 30, gold: 100, ...extra } });
+  const re = (nome: string, hero: Hero, floor: number, choice: string, seed = 1) =>
+    caso(`resolveEvent: ${nome}`, 'resolveEvent', { hero, floor, choice, options: { now: AGORA } }, (a, { rng, now }) => E.resolveEvent(a.hero, a.floor, a.choice as never, { rng, now }), {
+      rng: { seed },
+      now: AGORA,
+    });
+  re('ajudar paga 15 e cura 20', evento(), 1, 'ajudar');
+  re('ajudar sem ouro não resolve', evento({}, { gold: 10 }), 1, 'ajudar');
+  re('ajudar quase cheio não passa do máximo', evento({}, { hp: 120 }), 3, 'ajudar');
+  re('curar com sabedoria 12 dá certo', evento({ sabedoria: 12 }), 1, 'curar');
+  re('curar com sabedoria 11 falha e ainda ganha XP', evento({ sabedoria: 11 }), 1, 'curar');
+  re('estudar com intelecto 13 acha item (andar 1)', evento({ intelecto: 13 }), 1, 'estudar', 1);
+  re('estudar com intelecto 13 acha item (andar 30)', evento({ intelecto: 13 }), 30, 'estudar', 2);
+  re('examinar usa a mesma regra de estudar', evento({ intelecto: 13 }), 5, 'examinar', 3);
+  re('estudar com intelecto 12 falha e perde 8 de mana', evento({ intelecto: 12 }), 1, 'estudar');
+  re('estudar falhando com pouca mana para em 0', evento({ intelecto: 12 }, { mp: 3 }), 1, 'estudar');
+  re('rezar com sabedoria 13 enche vida e mana', evento({ sabedoria: 13 }), 1, 'rezar');
+  re('rezar com sabedoria 12 falha', evento({ sabedoria: 12 }), 1, 'rezar');
+  re('sacrificar tira 20% da vida máxima e dá 1 ponto', evento(), 1, 'sacrificar');
+  re('sacrificar ferido demais não resolve', evento({}, { hp: 25 }), 1, 'sacrificar');
+  re('sacrificar com vida máxima baixa tira no mínimo 10', evento({ constituicao: 1 }, { maxHp: 40, hp: 30 }), 1, 'sacrificar');
+  re('forçar com força 13 abre e dá ouro pelo andar', evento({ forca: 13 }), 7, 'forcar');
+  re('forçar com força 12 falha e perde 10 de vida', evento({ forca: 12 }), 7, 'forcar');
+  re('forçar falhando com pouca vida para em 1', evento({ forca: 12 }, { hp: 5 }), 7, 'forcar');
+  re('ignorar não ganha XP', evento(), 1, 'ignorar');
+  re('desistir não ganha XP', evento(), 1, 'desistir');
+  re('escolha desconhecida', evento(), 1, 'voar');
+  re('o XP do evento sobe de nível', evento({ sabedoria: 12 }, { xp: 35 }), 1, 'curar');
+}
+
+// =====================================================================
+// npc — npc-services
+// =====================================================================
+
+modulo('npc');
+
+constante('NPC_SERVICE_INFO', E.NPC_SERVICE_INFO);
+
+for (const service of [...Object.keys(E.NPC_SERVICE_INFO), 'xyz']) caso(`npcServiceInfo: ${service}`, 'npcServiceInfo', { service }, (a) => E.npcServiceInfo(a.service as never));
+
+{
+  const rh = (nome: string, hero: Hero, floor: number) => caso(`resolveHeal: ${nome}`, 'resolveHeal', { hero, floor }, (a) => E.resolveHeal(a.hero, a.floor));
+  rh('carisma 10, andar 1', heroi({ extra: { hp: 40, mp: 10 } }), 1);
+  rh('carisma 30, andar 10 (15% de desconto)', heroi({ attrs: { carisma: 30 }, extra: { hp: 40, mp: 10 } }), 10);
+  rh('carisma 100: o desconto para em 40%', heroi({ attrs: { carisma: 100 }, extra: { hp: 40, mp: 10 } }), 50);
+  rh('preço mínimo 5', heroi({ attrs: { carisma: 100 }, extra: { hp: 40 } }), -5);
+  rh('sem ouro', heroi({ extra: { hp: 40, gold: 3 } }), 1);
+  rh('cheio não gasta', heroi(), 1);
+  rh('só a mana faltando', heroi({ extra: { mp: 2 } }), 1);
+  rh('quase cheio: o ganho é o que cabe', heroi({ extra: { hp: 120, mp: 60 } }), 1);
+
+  caso('resolveBlessing', 'resolveBlessing', { hero: heroi() }, (a) => E.resolveBlessing(a.hero));
+  for (const [nome, hero] of [
+    ['sem bênção', heroi()],
+    ['três combates viram dois', heroi({ extra: { npcBlessing: { combats: 3, dodge: 12 } } })],
+    ['o último combate acaba com a bênção', heroi({ extra: { npcBlessing: { combats: 1, dodge: 12 }, buffs: { shield: 0.5 } } })],
+    ['bênção zerada não vale', heroi({ extra: { npcBlessing: { combats: 0, dodge: 12 } } })],
+  ] as const) {
+    caso(`applyNpcBlessing: ${nome}`, 'applyNpcBlessing', { hero }, (a) => E.applyNpcBlessing(a.hero));
+  }
+
+  const espada = item('espada', 'comum', 1);
+  const minerio = item('minerio', 'comum', 2);
+  const essencia = item('essencia', 'comum', 3);
+  const rb = (nome: string, inventory: Item[], floor: number, seed: number) =>
+    caso(`resolveBarter: ${nome}`, 'resolveBarter', { inventory, floor, options: { now: AGORA } }, (a, { rng, now }) => E.resolveBarter(a.inventory, a.floor, { rng, now }), {
+      rng: { seed },
+      now: AGORA,
+    });
+  rb('sem material não troca, sem sortear', [espada, item('pot_vida')], 1, 1);
+  rb('troca o primeiro material por uma poção (andar 1)', [espada, minerio, essencia], 1, 1);
+  rb('andar 10', [minerio], 10, 2);
+  rb('material equipado é pulado', [{ ...minerio, equipped: true }, essencia], 1, 3);
+
+  const andar = E.generateDungeonFloor(5, 6, 6, { rng: E.seededRng(5), now: relogio });
+  const revelada = andar.grid.map((linha) => linha.map((c) => (c.x === andar.start.x + 1 && c.type !== 'void' ? { ...c, revealed: true } : c)));
+  caso('resolveReveal: do início', 'resolveReveal', { grid: andar.grid, pos: { x: andar.start.x, y: andar.start.y } }, (a) => E.resolveReveal(a.grid, a.pos));
+  caso('resolveReveal: num canto', 'resolveReveal', { grid: andar.grid, pos: { x: 0, y: 0 } }, (a) => E.resolveReveal(a.grid, a.pos));
+  caso('resolveReveal: o que já estava revelado não conta', 'resolveReveal', { grid: revelada, pos: { x: andar.start.x, y: andar.start.y } }, (a) => E.resolveReveal(a.grid, a.pos));
+
+  for (const [nome, party, seed] of [
+    ['equipe vazia', [], 1],
+    ['equipe vazia, outra seed', [], 2],
+    ['dois na equipe', [companheiro('guerreiro'), companheiro('mago')], 3],
+    ['equipe cheia, sem sortear', [companheiro('guerreiro'), companheiro('mago'), companheiro('bardo')], 1],
+  ] as const) {
+    caso(`resolveRecruit: ${nome}`, 'resolveRecruit', { party }, (a, { rng }) => E.resolveRecruit(a.party, rng), { rng: { seed } });
+  }
+}
+
+// =====================================================================
+// quests
+// =====================================================================
+
+modulo('quests');
+
+for (const floor of [1, 5, 20]) {
+  for (let seed = 1; seed <= 6; seed++) {
+    caso(`generateQuest: andar ${floor}, seed ${seed}`, 'generateQuest', { floor, options: { now: AGORA } }, (a, { rng, now }) => E.generateQuest(a.floor, { rng, now }), {
+      rng: { seed },
+      now: AGORA,
+    });
+  }
+}
+
+{
+  const missao = (id: string, type: Quest['type'], target: number, progress: number, extra: Partial<Quest> = {}): Quest => ({
+    id,
+    type,
+    target,
+    progress,
+    title: '',
+    desc: '',
+    rewardXp: 30,
+    rewardGold: 25,
+    done: progress >= target,
+    claimed: false,
+    ...extra,
+  });
+  const quadro = [missao('q_kill', 'kill', 4, 3), missao('q_floor', 'floor', 6, 3), missao('q_collect', 'collect', 2, 1), missao('q_kill_feita', 'kill', 3, 3)];
+
+  caso('ensureQuestBoard: quadro vazio ganha duas', 'ensureQuestBoard', { quests: [], floor: 3, options: { now: AGORA } }, (a, { rng, now }) => E.ensureQuestBoard(a.quests, a.floor, { rng, now }), {
+    rng: { seed: 1 },
+    now: AGORA,
+  });
+  caso('ensureQuestBoard: quadro com missão fica igual, sem sortear', 'ensureQuestBoard', { quests: quadro, floor: 3, options: { now: AGORA } }, (a, { rng, now }) =>
+    E.ensureQuestBoard(a.quests, a.floor, { rng, now }),
+  { rng: { seed: 1 }, now: AGORA });
+  caso('onMonsterKilled', 'onMonsterKilled', { quests: quadro }, (a) => E.onMonsterKilled(a.quests));
+  for (const floor of [4, 6, 9]) caso(`onFloorReached: andar ${floor}`, 'onFloorReached', { quests: quadro, floor }, (a) => E.onFloorReached(a.quests, a.floor));
+  caso('onItemCollected', 'onItemCollected', { quests: quadro }, (a) => E.onItemCollected(a.quests));
+
+  const cq = (nome: string, hero: Hero, quests: Quest[], targetId: string) =>
+    caso(`claimQuest: ${nome}`, 'claimQuest', { hero, quests, targetId, floor: 4, options: { now: AGORA } }, (a, { rng, now }) =>
+      E.claimQuest(a.hero, a.quests, a.targetId, a.floor, { rng, now }),
+    { rng: { seed: 7 }, now: AGORA });
+  cq('resgata, sobe de nível e sorteia outra no lugar', heroi({ extra: { xp: 30 } }), quadro, 'q_kill_feita');
+  cq('missão que não existe', heroi(), quadro, 'nada');
+  cq('missão ainda não pronta', heroi(), quadro, 'q_kill');
+  cq('missão já resgatada', heroi(), [missao('q_velha', 'kill', 3, 3, { claimed: true })], 'q_velha');
+}
+
+// =====================================================================
+// city
+// =====================================================================
+
+modulo('city');
+
+constante('GUILD_POS', E.GUILD_POS);
+
+function cidadeCompacta(cidade: { grid: CityCell[][]; rooms: CityCell[]; start: CityCell | undefined }) {
+  return { grid: cidade.grid, rooms: cidade.rooms.map((c) => [c.x, c.y]), start: cidade.start ? [cidade.start.x, cidade.start.y] : undefined };
+}
+
+for (const [rows, cols] of [
+  [6, 6],
+  [8, 8],
+  [3, 3],
+  [0, 0],
+] as const) {
+  caso(`generateCityLayout: ${rows}×${cols}`, 'generateCityLayout', { rows, cols }, (a) => cidadeCompacta(E.generateCityLayout(a.rows, a.cols)));
+}
+
+{
+  const cidade = E.generateCityLayout(6, 6);
+  const deAntes = cidade.grid.map((linha) => linha.map((c) => (c.type === 'guild' ? { ...c, type: 'normal' as const } : c)));
+  caso('withGuild: a cidade de antes ganha a Guilda', 'withGuild', { grid: deAntes }, (a) => E.withGuild(a.grid));
+  caso('withGuild: a cidade de hoje fica igual', 'withGuild', { grid: cidade.grid }, (a) => E.withGuild(a.grid));
+  caso('withGuild: grade pequena demais fica igual', 'withGuild', { grid: E.generateCityLayout(2, 2).grid }, (a) => E.withGuild(a.grid));
+  caso('restAtTavern', 'restAtTavern', { hero: heroi({ extra: { hp: 10, mp: 0 } }), party: [companheiro('guerreiro', { hp: 3 }), companheiro('mago', { hp: 0 })] }, (a) =>
+    E.restAtTavern(a.hero, a.party),
+  );
+
+  const celulas: Array<[string, CityCell]> = [
+    ...cidade.rooms.map((c): [string, CityCell] => [`${c.type} (${c.x}, ${c.y})`, c]),
+    ['void', { type: 'void', x: 0, y: 0, doors: {} }],
+    ['tipo desconhecido', { type: 'xyz' as never, x: 0, y: 0, doors: {} }],
+  ];
+  for (const [nome, cell] of celulas) {
+    caso(`cityIconFor: ${nome}`, 'cityIconFor', { cell }, (a) => E.cityIconFor(a.cell));
+    caso(`cityShortLabel: ${nome}`, 'cityShortLabel', { cell }, (a) => E.cityShortLabel(a.cell));
+    caso(`cityRoomDesc: ${nome}`, 'cityRoomDesc', { cell }, (a) => E.cityRoomDesc(a.cell));
+    caso(`cityEntryText: ${nome}`, 'cityEntryText', { cell }, (a) => E.cityEntryText(a.cell));
+  }
+}
+
+// =====================================================================
+// pets
+// =====================================================================
+
+modulo('pets');
+
+constante('PET_ICONS', E.PET_ICONS);
+constante('PET_BONUSES', E.PET_BONUSES);
+
+for (const pet of [...Object.keys(E.PET_ICONS), 'dragao', null]) {
+  caso(`petBonus: ${pet}`, 'petBonus', { pet }, (a) => E.petBonus(a.pet as never));
+  caso(`petIcon: ${pet}`, 'petIcon', { pet }, (a) => E.petIcon(a.pet as never));
+}
+caso('petBonus: ausente', 'petBonus', {}, () => E.petBonus(undefined));
+caso('petIcon: ausente', 'petIcon', {}, () => E.petIcon(undefined));
+
+// =====================================================================
+// tabelas — fixtures/data
+// =====================================================================
+
+class NaoETabela extends Error {}
+
+/**
+ * Lê o valor de uma constante direto do código-fonte, sem rodar nada: só
+ * literal (número, texto, lista, objeto), conta entre números, `as const`,
+ * espalhamento de outra constante do mesmo arquivo e `new Set([...])`.
+ * Qualquer outra coisa — chamada de função, `new Map`, `Math.random` — quer
+ * dizer que aquilo não é tabela.
+ */
+function lerLiteral(no: ts.Expression, locais: ReadonlyMap<string, unknown>): unknown {
+  if (ts.isParenthesizedExpression(no) || ts.isAsExpression(no) || ts.isSatisfiesExpression(no) || ts.isTypeAssertionExpression(no) || ts.isNonNullExpression(no)) {
+    return lerLiteral(no.expression, locais);
+  }
+  if (ts.isNumericLiteral(no)) return Number(no.text.replace(/_/g, ''));
+  if (ts.isStringLiteral(no) || ts.isNoSubstitutionTemplateLiteral(no)) return no.text;
+  if (no.kind === ts.SyntaxKind.TrueKeyword) return true;
+  if (no.kind === ts.SyntaxKind.FalseKeyword) return false;
+  if (no.kind === ts.SyntaxKind.NullKeyword) return null;
+  if (ts.isPrefixUnaryExpression(no) && (no.operator === ts.SyntaxKind.MinusToken || no.operator === ts.SyntaxKind.PlusToken)) {
+    const valor = lerLiteral(no.operand, locais);
+    if (typeof valor !== 'number') throw new NaoETabela('sinal em algo que não é número');
+    return no.operator === ts.SyntaxKind.MinusToken ? -valor : valor;
+  }
+  if (ts.isBinaryExpression(no)) {
+    const esquerda = lerLiteral(no.left, locais);
+    const direita = lerLiteral(no.right, locais);
+    if (typeof esquerda !== 'number' || typeof direita !== 'number') throw new NaoETabela('conta com algo que não é número');
+    switch (no.operatorToken.kind) {
+      case ts.SyntaxKind.PlusToken:
+        return esquerda + direita;
+      case ts.SyntaxKind.MinusToken:
+        return esquerda - direita;
+      case ts.SyntaxKind.AsteriskToken:
+        return esquerda * direita;
+      case ts.SyntaxKind.SlashToken:
+        return esquerda / direita;
+      case ts.SyntaxKind.AsteriskAsteriskToken:
+        return esquerda ** direita;
+      default:
+        throw new NaoETabela(`operador ${ts.SyntaxKind[no.operatorToken.kind]}`);
+    }
+  }
+  if (ts.isArrayLiteralExpression(no)) {
+    const lista: unknown[] = [];
+    for (const elemento of no.elements) {
+      if (ts.isSpreadElement(elemento)) lista.push(...(lerLiteral(elemento.expression, locais) as unknown[]));
+      else lista.push(lerLiteral(elemento, locais));
+    }
+    return lista;
+  }
+  if (ts.isObjectLiteralExpression(no)) {
+    const objeto: Record<string, unknown> = {};
+    for (const propriedade of no.properties) {
+      if (ts.isSpreadAssignment(propriedade)) Object.assign(objeto, lerLiteral(propriedade.expression, locais));
+      else if (ts.isShorthandPropertyAssignment(propriedade)) objeto[propriedade.name.text] = lerLiteral(propriedade.name, locais);
+      else if (ts.isPropertyAssignment(propriedade) && (ts.isIdentifier(propriedade.name) || ts.isStringLiteral(propriedade.name) || ts.isNumericLiteral(propriedade.name))) {
+        objeto[propriedade.name.text] = lerLiteral(propriedade.initializer, locais);
+      } else throw new NaoETabela('propriedade calculada ou método');
+    }
+    return objeto;
+  }
+  if (ts.isIdentifier(no)) {
+    if (locais.has(no.text)) return locais.get(no.text);
+    throw new NaoETabela(`referência a ${no.text}`);
+  }
+  if (ts.isNewExpression(no) && ts.isIdentifier(no.expression) && no.expression.text === 'Set' && no.arguments?.length === 1) {
+    return new Set(lerLiteral(no.arguments[0]!, locais) as unknown[]);
+  }
+  throw new NaoETabela(ts.SyntaxKind[no.kind]);
+}
+
+const comoJson = (valor: unknown, recuo?: number): string => JSON.stringify(valor, (_chave, v: unknown) => (v instanceof Set ? [...v] : v), recuo);
+
+function arquivosDaEngine(pasta: string): string[] {
+  return readdirSync(pasta)
+    .sort()
+    .flatMap((nome) => {
+      const caminho = join(pasta, nome);
+      if (statSync(caminho).isDirectory()) return arquivosDaEngine(caminho);
+      return nome.endsWith('.ts') && !nome.endsWith('.test.ts') && nome !== 'index.ts' ? [caminho] : [];
+    });
+}
+
+const tabelasPorArquivo = new Map<string, Record<string, unknown>>();
+const naoSaoTabela: string[] = [];
+const FONTE = join(PACOTE, 'src');
+
+for (const caminho of arquivosDaEngine(FONTE)) {
+  const fonte = ts.createSourceFile(caminho, readFileSync(caminho, 'utf8'), ts.ScriptTarget.ES2022, true, ts.ScriptKind.TS);
+  const relativo = relative(FONTE, caminho).replace(/\\/g, '/').replace(/\.ts$/, '');
+  const locais = new Map<string, unknown>();
+  const tabelas: Record<string, unknown> = {};
+  const privadas: string[] = [];
+  const conjuntos: string[] = [];
+
+  for (const declaracao of fonte.statements) {
+    if (!ts.isVariableStatement(declaracao) || !(declaracao.declarationList.flags & ts.NodeFlags.Const)) continue;
+    const exportada = declaracao.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword) ?? false;
+    for (const variavel of declaracao.declarationList.declarations) {
+      if (!ts.isIdentifier(variavel.name) || !variavel.initializer) continue;
+      const nome = variavel.name.text;
+      let valor: unknown;
+      try {
+        valor = lerLiteral(variavel.initializer, locais);
+      } catch (erro) {
+        if (!(erro instanceof NaoETabela)) throw erro;
+        naoSaoTabela.push(`${relativo}.${nome} (${erro.message})`);
+        continue;
+      }
+      locais.set(nome, valor);
+      if (exportada) {
+        // A exportada sai do módulo de verdade; a leitura do código-fonte
+        // tem que bater com ela, e é isso que dá confiança nas privadas.
+        const viva = (E as Record<string, unknown>)[nome];
+        if (comoJson(viva) !== comoJson(valor)) throw new Error(`a leitura de ${relativo}.${nome} no código-fonte não bate com o valor exportado`);
+        valor = viva;
+      } else {
+        privadas.push(nome);
+      }
+      if (valor instanceof Set) conjuntos.push(nome);
+      tabelas[nome] = valor;
+    }
+  }
+
+  if (Object.keys(tabelas).length === 0) continue;
+  if (privadas.length) tabelas.$privadas = privadas;
+  if (conjuntos.length) tabelas.$conjuntos = conjuntos;
+  tabelasPorArquivo.set(relativo, tabelas);
+}
+
+// ---------- gravação ----------
+
+mkdirSync(DESTINO, { recursive: true });
+for (const [nome, casos] of arquivos) {
+  const conteudo = `${JSON.stringify(casos, null, 2)}\n`;
+  writeFileSync(join(DESTINO, `${nome}.json`), conteudo);
+  console.log(`${`${nome}.json`.padEnd(22)} ${String(casos.length).padStart(5)} casos   ${(conteudo.length / 1024).toFixed(0).padStart(6)} KB`);
+}
+for (const [relativo, tabelas] of tabelasPorArquivo) {
+  const destino = join(DESTINO, 'data', `${relativo}.json`);
+  mkdirSync(dirname(destino), { recursive: true });
+  const conteudo = `${comoJson(tabelas, 2)}\n`;
+  writeFileSync(destino, conteudo);
+  const quantas = Object.keys(tabelas).filter((k) => !k.startsWith('$')).length;
+  console.log(`${`data/${relativo}.json`.padEnd(22)} ${String(quantas).padStart(5)} tabelas ${(conteudo.length / 1024).toFixed(0).padStart(6)} KB`);
+}
+console.log(`\nNão são tabela (ficaram fora de data/): ${naoSaoTabela.join(', ')}`);
+if (pulados.length) console.log(`\nPulados, porque ainda sorteiam por dentro:\n- ${pulados.join('\n- ')}`);

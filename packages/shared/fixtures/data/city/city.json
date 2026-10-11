@@ -1,0 +1,157 @@
+{
+  "GUILD_POS": {
+    "x": 2,
+    "y": 2
+  },
+  "NPC_TEMPLATES": [
+    {
+      "name": "Velho Ferreiro Bram",
+      "role": "Ferreiro",
+      "service": "barter",
+      "icon": "🔨",
+      "lines": [
+        "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+        "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+        "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+      ]
+    },
+    {
+      "name": "Erma, a Vidente",
+      "role": "Mística",
+      "service": "blessing",
+      "icon": "🔮",
+      "lines": [
+        "As sombras sussurram seu nome, viajante...",
+        "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+        "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+      ]
+    },
+    {
+      "name": "Capitão Doran",
+      "role": "Guarda da Cidade",
+      "service": "recruit",
+      "icon": "🪖",
+      "lines": [
+        "Parado! ...Ah, é apenas um aventureiro. Pode passar.",
+        "A masmorra fica logo adiante. Já perdemos batedores lá esta semana.",
+        "Cada andar que você descer será mais perigoso que o anterior. Vá com cuidado."
+      ]
+    }
+  ],
+  "LAYOUT": [
+    {
+      "x": 3,
+      "y": 3,
+      "type": "start"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "type": "normal"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "type": "gate"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "type": "shop"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "type": "blacksmith"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "type": "tavern"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "type": "questboard"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "type": "npc",
+      "npcIndex": 0
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "type": "npc",
+      "npcIndex": 1
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "type": "guild"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "type": "normal"
+    }
+  ],
+  "LAYOUT_DOORS": [
+    [
+      3,
+      3,
+      "N"
+    ],
+    [
+      3,
+      2,
+      "N"
+    ],
+    [
+      3,
+      3,
+      "W"
+    ],
+    [
+      2,
+      3,
+      "W"
+    ],
+    [
+      3,
+      3,
+      "E"
+    ],
+    [
+      4,
+      3,
+      "E"
+    ],
+    [
+      3,
+      3,
+      "S"
+    ],
+    [
+      3,
+      4,
+      "S"
+    ],
+    [
+      3,
+      2,
+      "W"
+    ],
+    [
+      3,
+      2,
+      "E"
+    ]
+  ],
+  "$privadas": [
+    "NPC_TEMPLATES",
+    "LAYOUT",
+    "LAYOUT_DOORS"
+  ]
+}

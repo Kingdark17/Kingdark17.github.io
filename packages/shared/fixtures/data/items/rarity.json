@@ -1,0 +1,90 @@
+{
+  "RARITY_IDS": [
+    "comum",
+    "incomum",
+    "raro",
+    "epico",
+    "lendario",
+    "mitico"
+  ],
+  "RARITIES": [
+    {
+      "id": "comum",
+      "label": "Comum",
+      "adjetivo": [
+        "Comum",
+        "Comum",
+        "Comuns",
+        "Comuns"
+      ],
+      "colorVar": "--r-comum",
+      "mult": 1,
+      "weight": 45
+    },
+    {
+      "id": "incomum",
+      "label": "Incomum",
+      "adjetivo": [
+        "Incomum",
+        "Incomum",
+        "Incomuns",
+        "Incomuns"
+      ],
+      "colorVar": "--r-incomum",
+      "mult": 1.3,
+      "weight": 28
+    },
+    {
+      "id": "raro",
+      "label": "Raro",
+      "adjetivo": [
+        "Raro",
+        "Rara",
+        "Raros",
+        "Raras"
+      ],
+      "colorVar": "--r-raro",
+      "mult": 1.7,
+      "weight": 16
+    },
+    {
+      "id": "epico",
+      "label": "Épico",
+      "adjetivo": [
+        "Épico",
+        "Épica",
+        "Épicos",
+        "Épicas"
+      ],
+      "colorVar": "--r-epico",
+      "mult": 2.2,
+      "weight": 7
+    },
+    {
+      "id": "lendario",
+      "label": "Lendário",
+      "adjetivo": [
+        "Lendário",
+        "Lendária",
+        "Lendários",
+        "Lendárias"
+      ],
+      "colorVar": "--r-lendario",
+      "mult": 3,
+      "weight": 1.2
+    },
+    {
+      "id": "mitico",
+      "label": "Mítico",
+      "adjetivo": [
+        "Mítico",
+        "Mítica",
+        "Míticos",
+        "Míticas"
+      ],
+      "colorVar": "--r-mitico",
+      "mult": 4,
+      "weight": 0.35
+    }
+  ]
+}

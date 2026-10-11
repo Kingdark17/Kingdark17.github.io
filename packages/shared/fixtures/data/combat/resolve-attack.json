@@ -1,0 +1,24 @@
+{
+  "LADOS_DO_DANO": 20,
+  "ZONA_DA_CLASSE": 0.6666666666666666,
+  "ZONA_COMUM": 0.5,
+  "ZONA_MAXIMA": 0.85,
+  "FATIA_POR_PONTO": 0.05,
+  "FAIXA_CRITICA": 0.05,
+  "FORCA_NA_BORDA": 0.5,
+  "FORCA_NO_CENTRO": 1.5,
+  "ERROU": {
+    "acerto": false,
+    "forca": 0,
+    "critico": false
+  },
+  "MAGIC_ATTACK_COST": 5,
+  "$privadas": [
+    "ZONA_DA_CLASSE",
+    "ZONA_COMUM",
+    "ZONA_MAXIMA",
+    "FATIA_POR_PONTO",
+    "ERROU",
+    "MAGIC_ATTACK_COST"
+  ]
+}

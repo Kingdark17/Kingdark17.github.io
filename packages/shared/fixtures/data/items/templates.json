@@ -1,0 +1,473 @@
+{
+  "ITEM_CATEGORIES": [
+    "arma",
+    "armadura",
+    "acessorio",
+    "consumivel",
+    "material",
+    "missao"
+  ],
+  "CATEGORY_LABELS": {
+    "arma": "Arma",
+    "armadura": "Armadura",
+    "acessorio": "Acessório",
+    "consumivel": "Consumível",
+    "material": "Material",
+    "missao": "Missão"
+  },
+  "EQUIPPABLE_CATEGORIES": [
+    "arma",
+    "armadura",
+    "acessorio"
+  ],
+  "CONSUMABLE_STAT_KEYS": [
+    "cura",
+    "curaMana"
+  ],
+  "STAT_LABELS": {
+    "ataque": "Ataque",
+    "defesa": "Defesa",
+    "vida": "Vida",
+    "mana": "Mana",
+    "critico": "Crítico",
+    "velocidade": "Velocidade",
+    "esquiva": "Esquiva",
+    "cura": "Cura",
+    "curaMana": "Restaura Mana"
+  },
+  "PROC_EFFECTS": [
+    "queimadura",
+    "atordoar",
+    "sangramento",
+    "mana_gratis",
+    "cura_no_acerto"
+  ],
+  "BURN": {
+    "chance": 0.15,
+    "effect": "queimadura",
+    "label": "Queimadura",
+    "icon": "🔥"
+  },
+  "STUN": {
+    "chance": 0.12,
+    "effect": "atordoar",
+    "label": "Atordoar",
+    "icon": "💫"
+  },
+  "TEMPLATES": [
+    {
+      "id": "espada",
+      "name": "Espada",
+      "genero": "f",
+      "category": "arma",
+      "desc": "Uma lâmina equilibrada para combate corpo a corpo.",
+      "sprite": "weapons/espada.png",
+      "base": {
+        "ataque": 4
+      },
+      "value": 22,
+      "proc": {
+        "chance": 0.15,
+        "effect": "queimadura",
+        "label": "Queimadura",
+        "icon": "🔥"
+      }
+    },
+    {
+      "id": "machado",
+      "name": "Machado de Guerra",
+      "genero": "m",
+      "category": "arma",
+      "desc": "Pesado e brutal, favorece a força bruta.",
+      "sprite": "weapons/machado.png",
+      "base": {
+        "ataque": 6,
+        "velocidade": -1
+      },
+      "value": 26,
+      "proc": {
+        "chance": 0.12,
+        "effect": "atordoar",
+        "label": "Atordoar",
+        "icon": "💫"
+      }
+    },
+    {
+      "id": "adaga",
+      "name": "Adaga Sombria",
+      "genero": "f",
+      "category": "arma",
+      "desc": "Rápida e precisa, ideal para golpes furtivos.",
+      "sprite": "weapons/adaga.png",
+      "base": {
+        "ataque": 3,
+        "critico": 8
+      },
+      "value": 20,
+      "proc": {
+        "chance": 0.15,
+        "effect": "sangramento",
+        "label": "Sangramento",
+        "icon": "🩸"
+      }
+    },
+    {
+      "id": "arco",
+      "name": "Arco Longo",
+      "genero": "m",
+      "category": "arma",
+      "desc": "Ataques precisos a distância.",
+      "sprite": "weapons/arco.png",
+      "base": {
+        "ataque": 4,
+        "esquiva": 2,
+        "critico": 6
+      },
+      "value": 24
+    },
+    {
+      "id": "cajado",
+      "name": "Cajado Arcano",
+      "genero": "m",
+      "category": "arma",
+      "desc": "Canaliza energia mágica em combate.",
+      "sprite": "weapons/cajado.png",
+      "base": {
+        "ataque": 3,
+        "mana": 8
+      },
+      "value": 24,
+      "proc": {
+        "chance": 0.1,
+        "effect": "mana_gratis",
+        "label": "Poupança Arcana",
+        "icon": "🔷"
+      }
+    },
+    {
+      "id": "maca",
+      "name": "Maça Sagrada",
+      "genero": "f",
+      "category": "arma",
+      "desc": "Abençoada, favorece curandeiros.",
+      "sprite": "weapons/maca.png",
+      "base": {
+        "ataque": 3,
+        "vida": 6
+      },
+      "value": 22,
+      "proc": {
+        "chance": 0.1,
+        "effect": "cura_no_acerto",
+        "label": "Toque Curativo",
+        "icon": "✨"
+      }
+    },
+    {
+      "id": "marreta",
+      "name": "Marreta de Guerra",
+      "genero": "f",
+      "category": "arma",
+      "desc": "Um golpe pesado o suficiente para rachar armaduras.",
+      "sprite": "weapons/marreta.png",
+      "base": {
+        "ataque": 7,
+        "velocidade": -2
+      },
+      "value": 27,
+      "proc": {
+        "chance": 0.12,
+        "effect": "atordoar",
+        "label": "Atordoar",
+        "icon": "💫"
+      }
+    },
+    {
+      "id": "violao",
+      "name": "Violão Encantado",
+      "genero": "m",
+      "category": "arma",
+      "desc": "Acordes que vibram no ar e atordoam quem ousar se aproximar.",
+      "sprite": "weapons/violao.png",
+      "base": {
+        "ataque": 3,
+        "critico": 6,
+        "esquiva": 2
+      },
+      "value": 23,
+      "proc": {
+        "chance": 0.15,
+        "effect": "atordoar",
+        "label": "Atordoar",
+        "icon": "💫"
+      }
+    },
+    {
+      "id": "escudo",
+      "name": "Escudo de Carvalho",
+      "genero": "m",
+      "category": "armadura",
+      "desc": "Pesado, mas confiável contra golpes diretos.",
+      "sprite": "armor/escudo.png",
+      "slot": "secundaria",
+      "base": {
+        "defesa": 5,
+        "velocidade": -1
+      },
+      "value": 24
+    },
+    {
+      "id": "couro",
+      "name": "Armadura de Couro Batido",
+      "genero": "f",
+      "category": "armadura",
+      "desc": "Leve o suficiente para não atrapalhar reflexos.",
+      "sprite": "armor/couro.png",
+      "base": {
+        "defesa": 3,
+        "velocidade": 1
+      },
+      "value": 22
+    },
+    {
+      "id": "placas",
+      "name": "Peitoral de Placas",
+      "genero": "m",
+      "category": "armadura",
+      "desc": "Proteção pesada, reduz agilidade.",
+      "sprite": "armor/placas.png",
+      "base": {
+        "defesa": 4,
+        "esquiva": -1
+      },
+      "value": 17
+    },
+    {
+      "id": "placas_elmo",
+      "name": "Elmo de Placas",
+      "genero": "m",
+      "category": "armadura",
+      "desc": "Aço fechado, com uma pedra vermelha na testa.",
+      "sprite": "armor/placas_elmo.png",
+      "slot": "elmo",
+      "base": {
+        "defesa": 1
+      },
+      "value": 5
+    },
+    {
+      "id": "placas_calca",
+      "name": "Perneira de Placas",
+      "genero": "f",
+      "category": "armadura",
+      "desc": "Placas sobrepostas que protegem a perna inteira.",
+      "sprite": "armor/placas_calca.png",
+      "slot": "calca",
+      "base": {
+        "defesa": 2,
+        "esquiva": -1
+      },
+      "value": 8
+    },
+    {
+      "id": "robe",
+      "name": "Robe Arcano",
+      "genero": "m",
+      "category": "armadura",
+      "desc": "Tecido enfeitiçado que amplia o poder mágico.",
+      "sprite": "armor/robe.png",
+      "base": {
+        "defesa": 1,
+        "mana": 5
+      },
+      "value": 13
+    },
+    {
+      "id": "robe_calca",
+      "name": "Calça de Mago",
+      "genero": "f",
+      "category": "armadura",
+      "desc": "Saiote pesado de veludo, preso por uma fivela dourada.",
+      "sprite": "armor/robe_calca.png",
+      "slot": "calca",
+      "base": {
+        "defesa": 1,
+        "mana": 3
+      },
+      "value": 8
+    },
+    {
+      "id": "robe_chapeu",
+      "name": "Chapéu de Mago",
+      "genero": "m",
+      "category": "armadura",
+      "desc": "Feltro escuro e aba larga, com uma estrela dourada presa na ponta.",
+      "sprite": "armor/robe_chapeu.png",
+      "slot": "elmo",
+      "base": {
+        "mana": 2
+      },
+      "value": 5
+    },
+    {
+      "id": "botas",
+      "name": "Botas Reforçadas",
+      "genero": "f",
+      "plural": true,
+      "category": "armadura",
+      "desc": "Aço nos dedos e sola macia — protegem sem prender o passo.",
+      "sprite": "armor/botas.png",
+      "slot": "botas",
+      "base": {
+        "defesa": 1,
+        "velocidade": 1
+      },
+      "value": 14
+    },
+    {
+      "id": "anel_som",
+      "name": "Anel das Sombras",
+      "genero": "m",
+      "category": "acessorio",
+      "desc": "Sussurra segredos no escuro.",
+      "sprite": "accessories/anel_som.png",
+      "base": {
+        "critico": 5,
+        "esquiva": 2
+      },
+      "value": 20
+    },
+    {
+      "id": "amuleto_sab",
+      "name": "Amuleto da Sabedoria",
+      "genero": "m",
+      "category": "acessorio",
+      "desc": "Pertenceu a um oráculo esquecido.",
+      "sprite": "accessories/amuleto_sab.png",
+      "base": {
+        "mana": 6,
+        "vida": 4
+      },
+      "value": 20
+    },
+    {
+      "id": "bota_vento",
+      "name": "Botas do Vento",
+      "genero": "f",
+      "plural": true,
+      "category": "acessorio",
+      "desc": "Passos leves como brisa de outono.",
+      "sprite": "accessories/bota_vento.png",
+      "slot": "botas",
+      "base": {
+        "velocidade": 3,
+        "esquiva": 1
+      },
+      "value": 18
+    },
+    {
+      "id": "colar_forca",
+      "name": "Colar da Força Ancestral",
+      "genero": "m",
+      "category": "acessorio",
+      "desc": "Pulsa com poder antigo.",
+      "sprite": "accessories/colar_forca.png",
+      "base": {
+        "ataque": 2,
+        "vida": 8
+      },
+      "value": 22
+    },
+    {
+      "id": "pot_vida",
+      "name": "Poção de Vida",
+      "genero": "f",
+      "category": "consumivel",
+      "desc": "Restaura uma quantidade de vida ao ser bebida.",
+      "sprite": "potions/cura.png",
+      "base": {
+        "cura": 22
+      },
+      "value": 14
+    },
+    {
+      "id": "pot_mana",
+      "name": "Poção de Mana",
+      "genero": "f",
+      "category": "consumivel",
+      "desc": "Restaura uma quantidade de mana.",
+      "sprite": "potions/mana.png",
+      "base": {
+        "curaMana": 16
+      },
+      "value": 14
+    },
+    {
+      "id": "pergaminho",
+      "name": "Pergaminho Selado",
+      "genero": "m",
+      "category": "consumivel",
+      "desc": "Contém um feitiço de propósito desconhecido.",
+      "sprite": "scrolls/pergaminho.png",
+      "base": {
+        "cura": 10,
+        "curaMana": 10
+      },
+      "value": 16
+    },
+    {
+      "id": "minerio",
+      "name": "Minério Bruto",
+      "genero": "m",
+      "category": "material",
+      "desc": "Pode ser vendido a um ferreiro.",
+      "sprite": "materials/minerio.png",
+      "base": {},
+      "value": 10
+    },
+    {
+      "id": "essencia",
+      "name": "Essência Arcana",
+      "genero": "f",
+      "category": "material",
+      "desc": "Resíduo de magia cristalizado.",
+      "sprite": "materials/essencia.png",
+      "base": {},
+      "value": 14
+    },
+    {
+      "id": "catalisador_mitico",
+      "name": "Catalisador Mítico",
+      "genero": "m",
+      "category": "material",
+      "desc": "Catalisador raro que aumenta muito a chance de elevar o tier na reforja.",
+      "sprite": "materials/catalisador_mitico.png",
+      "base": {},
+      "value": 80
+    },
+    {
+      "id": "pedra_protecao",
+      "name": "Pedra de Proteção",
+      "genero": "f",
+      "category": "material",
+      "desc": "Protege o equipamento: uma reforja feita com ela nunca reduz o tier.",
+      "sprite": "materials/pedra_protecao.png",
+      "base": {},
+      "value": 55
+    },
+    {
+      "id": "couro_bruto",
+      "name": "Couro de Fera",
+      "genero": "m",
+      "category": "material",
+      "desc": "Material usado em armaduras leves.",
+      "sprite": "materials/couro_bruto.png",
+      "base": {},
+      "value": 10
+    }
+  ],
+  "$privadas": [
+    "BURN",
+    "STUN"
+  ]
+}

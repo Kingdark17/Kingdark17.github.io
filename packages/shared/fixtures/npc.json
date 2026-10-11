@@ -1,0 +1,5912 @@
+[
+  {
+    "name": "NPC_SERVICE_INFO (constante)",
+    "input": {
+      "const": "NPC_SERVICE_INFO"
+    },
+    "expected": {
+      "value": {
+        "heal": {
+          "icon": "❤️",
+          "label": "Receber Tratamento"
+        },
+        "blessing": {
+          "icon": "✨",
+          "label": "Receber Bênção"
+        },
+        "barter": {
+          "icon": "🧪",
+          "label": "Trocar Material"
+        },
+        "reveal": {
+          "icon": "🗺️",
+          "label": "Pedir Informações"
+        },
+        "recruit": {
+          "icon": "🤝",
+          "label": "Convidar para a Equipe"
+        }
+      }
+    }
+  },
+  {
+    "name": "npcServiceInfo: heal",
+    "input": {
+      "fn": "npcServiceInfo",
+      "args": {
+        "service": "heal"
+      }
+    },
+    "expected": {
+      "result": {
+        "icon": "❤️",
+        "label": "Receber Tratamento"
+      }
+    }
+  },
+  {
+    "name": "npcServiceInfo: blessing",
+    "input": {
+      "fn": "npcServiceInfo",
+      "args": {
+        "service": "blessing"
+      }
+    },
+    "expected": {
+      "result": {
+        "icon": "✨",
+        "label": "Receber Bênção"
+      }
+    }
+  },
+  {
+    "name": "npcServiceInfo: barter",
+    "input": {
+      "fn": "npcServiceInfo",
+      "args": {
+        "service": "barter"
+      }
+    },
+    "expected": {
+      "result": {
+        "icon": "🧪",
+        "label": "Trocar Material"
+      }
+    }
+  },
+  {
+    "name": "npcServiceInfo: reveal",
+    "input": {
+      "fn": "npcServiceInfo",
+      "args": {
+        "service": "reveal"
+      }
+    },
+    "expected": {
+      "result": {
+        "icon": "🗺️",
+        "label": "Pedir Informações"
+      }
+    }
+  },
+  {
+    "name": "npcServiceInfo: recruit",
+    "input": {
+      "fn": "npcServiceInfo",
+      "args": {
+        "service": "recruit"
+      }
+    },
+    "expected": {
+      "result": {
+        "icon": "🤝",
+        "label": "Convidar para a Equipe"
+      }
+    }
+  },
+  {
+    "name": "npcServiceInfo: xyz",
+    "input": {
+      "fn": "npcServiceInfo",
+      "args": {
+        "service": "xyz"
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "resolveHeal: carisma 10, andar 1",
+    "input": {
+      "fn": "resolveHeal",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 40,
+          "maxMp": 62,
+          "mp": 10,
+          "buffs": {}
+        },
+        "floor": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 85,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 96,
+          "maxMp": 62,
+          "mp": 32,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "healed",
+          "goldSpent": 15,
+          "hpGained": 56,
+          "mpGained": 22
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "resolveHeal: carisma 30, andar 10 (15% de desconto)",
+    "input": {
+      "fn": "resolveHeal",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 30
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 15
+          },
+          "maxHp": 125,
+          "hp": 40,
+          "maxMp": 62,
+          "mp": 10,
+          "buffs": {}
+        },
+        "floor": 10
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 30
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 71,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 15
+          },
+          "maxHp": 125,
+          "hp": 96,
+          "maxMp": 62,
+          "mp": 32,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "healed",
+          "goldSpent": 29,
+          "hpGained": 56,
+          "mpGained": 22
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "resolveHeal: carisma 100: o desconto para em 40%",
+    "input": {
+      "fn": "resolveHeal",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 100
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 50
+          },
+          "maxHp": 125,
+          "hp": 40,
+          "maxMp": 62,
+          "mp": 10,
+          "buffs": {}
+        },
+        "floor": 50
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 100
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 32,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 50
+          },
+          "maxHp": 125,
+          "hp": 96,
+          "maxMp": 62,
+          "mp": 32,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "healed",
+          "goldSpent": 68,
+          "hpGained": 56,
+          "mpGained": 22
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "resolveHeal: preço mínimo 5",
+    "input": {
+      "fn": "resolveHeal",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 100
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 50
+          },
+          "maxHp": 125,
+          "hp": 40,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "floor": -5
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 100
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 95,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 50
+          },
+          "maxHp": 125,
+          "hp": 96,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "healed",
+          "goldSpent": 5,
+          "hpGained": 56,
+          "mpGained": 0
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "resolveHeal: sem ouro",
+    "input": {
+      "fn": "resolveHeal",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 3,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 40,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "floor": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 3,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 40,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "insufficient_gold",
+          "required": 15
+        },
+        "used": false
+      }
+    }
+  },
+  {
+    "name": "resolveHeal: cheio não gasta",
+    "input": {
+      "fn": "resolveHeal",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "floor": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "already_full"
+        },
+        "used": false
+      }
+    }
+  },
+  {
+    "name": "resolveHeal: só a mana faltando",
+    "input": {
+      "fn": "resolveHeal",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 2,
+          "buffs": {}
+        },
+        "floor": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 85,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 24,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "healed",
+          "goldSpent": 15,
+          "hpGained": 0,
+          "mpGained": 22
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "resolveHeal: quase cheio: o ganho é o que cabe",
+    "input": {
+      "fn": "resolveHeal",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 120,
+          "maxMp": 62,
+          "mp": 60,
+          "buffs": {}
+        },
+        "floor": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 85,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "healed",
+          "goldSpent": 15,
+          "hpGained": 5,
+          "mpGained": 2
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "resolveBlessing",
+    "input": {
+      "fn": "resolveBlessing",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "npcBlessing": {
+            "combats": 3,
+            "dodge": 12
+          }
+        },
+        "outcome": {
+          "kind": "blessed",
+          "combats": 3,
+          "dodge": 12
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "applyNpcBlessing: sem bênção",
+    "input": {
+      "fn": "applyNpcBlessing",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "applied": false
+      }
+    }
+  },
+  {
+    "name": "applyNpcBlessing: três combates viram dois",
+    "input": {
+      "fn": "applyNpcBlessing",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "npcBlessing": {
+            "combats": 3,
+            "dodge": 12
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {
+            "esquivaTurns": 999,
+            "esquivaAmount": 12
+          },
+          "npcBlessing": {
+            "combats": 2,
+            "dodge": 12
+          }
+        },
+        "applied": true
+      }
+    }
+  },
+  {
+    "name": "applyNpcBlessing: o último combate acaba com a bênção",
+    "input": {
+      "fn": "applyNpcBlessing",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {
+            "shield": 0.5
+          },
+          "npcBlessing": {
+            "combats": 1,
+            "dodge": 12
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {
+            "shield": 0.5,
+            "esquivaTurns": 999,
+            "esquivaAmount": 12
+          }
+        },
+        "applied": true
+      }
+    }
+  },
+  {
+    "name": "applyNpcBlessing: bênção zerada não vale",
+    "input": {
+      "fn": "applyNpcBlessing",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "npcBlessing": {
+            "combats": 0,
+            "dodge": 12
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "npcBlessing": {
+            "combats": 0,
+            "dodge": 12
+          }
+        },
+        "applied": false
+      }
+    }
+  },
+  {
+    "name": "resolveBarter: sem material não troca, sem sortear",
+    "input": {
+      "fn": "resolveBarter",
+      "args": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_62706",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          }
+        ],
+        "floor": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_62706",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "no_material"
+        },
+        "used": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveBarter: troca o primeiro material por uma poção (andar 1)",
+    "input": {
+      "fn": "resolveBarter",
+      "args": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_62706",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "minerio_1700000000000_73424",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          },
+          {
+            "uid": "essencia_1700000000000_72021",
+            "templateId": "essencia",
+            "rarity": "comum",
+            "stats": {},
+            "value": 14,
+            "equipped": false
+          }
+        ],
+        "floor": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_62706",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "essencia_1700000000000_72021",
+            "templateId": "essencia",
+            "rarity": "comum",
+            "stats": {},
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_52744",
+            "templateId": "pot_mana",
+            "rarity": "comum",
+            "stats": {
+              "curaMana": 16
+            },
+            "value": 14,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "bartered",
+          "given": {
+            "uid": "minerio_1700000000000_73424",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          },
+          "received": {
+            "uid": "pot_mana_1700000000000_52744",
+            "templateId": "pot_mana",
+            "rarity": "comum",
+            "stats": {
+              "curaMana": 16
+            },
+            "value": 14,
+            "equipped": false
+          }
+        },
+        "used": true
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "resolveBarter: andar 10",
+    "input": {
+      "fn": "resolveBarter",
+      "args": {
+        "inventory": [
+          {
+            "uid": "minerio_1700000000000_73424",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "floor": 10,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "inventory": [
+          {
+            "uid": "pergaminho_1700000000000_28529",
+            "templateId": "pergaminho",
+            "rarity": "comum",
+            "stats": {
+              "cura": 10,
+              "curaMana": 10
+            },
+            "value": 16,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "bartered",
+          "given": {
+            "uid": "minerio_1700000000000_73424",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          },
+          "received": {
+            "uid": "pergaminho_1700000000000_28529",
+            "templateId": "pergaminho",
+            "rarity": "comum",
+            "stats": {
+              "cura": 10,
+              "curaMana": 10
+            },
+            "value": 16,
+            "equipped": false
+          }
+        },
+        "used": true
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "resolveBarter: material equipado é pulado",
+    "input": {
+      "fn": "resolveBarter",
+      "args": {
+        "inventory": [
+          {
+            "uid": "minerio_1700000000000_73424",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": true
+          },
+          {
+            "uid": "essencia_1700000000000_72021",
+            "templateId": "essencia",
+            "rarity": "comum",
+            "stats": {},
+            "value": 14,
+            "equipped": false
+          }
+        ],
+        "floor": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "inventory": [
+          {
+            "uid": "minerio_1700000000000_73424",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": true
+          },
+          {
+            "uid": "pergaminho_1700000000000_45618",
+            "templateId": "pergaminho",
+            "rarity": "comum",
+            "stats": {
+              "cura": 10,
+              "curaMana": 10
+            },
+            "value": 16,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "bartered",
+          "given": {
+            "uid": "essencia_1700000000000_72021",
+            "templateId": "essencia",
+            "rarity": "comum",
+            "stats": {},
+            "value": 14,
+            "equipped": false
+          },
+          "received": {
+            "uid": "pergaminho_1700000000000_45618",
+            "templateId": "pergaminho",
+            "rarity": "comum",
+            "stats": {
+              "cura": 10,
+              "curaMana": 10
+            },
+            "value": 16,
+            "equipped": false
+          }
+        },
+        "used": true
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "resolveReveal: do início",
+    "input": {
+      "fn": "resolveReveal",
+      "args": {
+        "grid": [
+          [
+            {
+              "type": "stairs",
+              "x": 0,
+              "y": 0,
+              "doors": {
+                "S": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 6
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 0,
+              "doors": {
+                "S": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 28,
+                  "maxHp": 28,
+                  "dmg": 5,
+                  "speed": 7,
+                  "xp": 23,
+                  "gold": 18,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "treasure",
+              "x": 3,
+              "y": 0,
+              "doors": {
+                "W": true
+              },
+              "startBranch": "2,3",
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "exit",
+              "x": 0,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 5
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "boss",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 79,
+                  "maxHp": 79,
+                  "dmg": 8,
+                  "speed": 10,
+                  "xp": 55,
+                  "gold": 70,
+                  "isBoss": true,
+                  "isMainBoss": false,
+                  "bossTitle": "Senhor das Trevas"
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "event",
+              "x": 1,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "W": true
+              },
+              "event": {
+                "templateId": "altar"
+              },
+              "resolved": false
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 23,
+                  "maxHp": 23,
+                  "dmg": 5,
+                  "speed": 11,
+                  "xp": 23,
+                  "gold": 17,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "brutamontes",
+                  "floor": 5,
+                  "hp": 24,
+                  "maxHp": 24,
+                  "dmg": 6,
+                  "speed": 16,
+                  "xp": 24,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 22,
+                  "maxHp": 22,
+                  "dmg": 6,
+                  "speed": 14,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "event",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "event": {
+                "templateId": "porta"
+              },
+              "resolved": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 18,
+                  "maxHp": 18,
+                  "dmg": 6,
+                  "speed": 15,
+                  "xp": 21,
+                  "gold": 16,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 5,
+                  "speed": 9,
+                  "xp": 23,
+                  "gold": 14,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true,
+                "N": true
+              }
+            },
+            {
+              "type": "npc",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
+                "lines": [
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 3,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 4,
+              "y": 4,
+              "doors": {
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 33,
+                  "maxHp": 33,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 22,
+                  "gold": 15,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 17,
+                  "maxHp": 17,
+                  "dmg": 7,
+                  "speed": 16,
+                  "xp": 22,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 19,
+                  "maxHp": 19,
+                  "dmg": 6,
+                  "speed": 19,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "pos": {
+          "x": 3,
+          "y": 3
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "grid": [
+          [
+            {
+              "type": "stairs",
+              "x": 0,
+              "y": 0,
+              "doors": {
+                "S": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 6
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 0,
+              "doors": {
+                "S": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 28,
+                  "maxHp": 28,
+                  "dmg": 5,
+                  "speed": 7,
+                  "xp": 23,
+                  "gold": 18,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "treasure",
+              "x": 3,
+              "y": 0,
+              "doors": {
+                "W": true
+              },
+              "startBranch": "2,3",
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "exit",
+              "x": 0,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 5
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "boss",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 79,
+                  "maxHp": 79,
+                  "dmg": 8,
+                  "speed": 10,
+                  "xp": 55,
+                  "gold": 70,
+                  "isBoss": true,
+                  "isMainBoss": false,
+                  "bossTitle": "Senhor das Trevas"
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "event",
+              "x": 1,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "W": true
+              },
+              "event": {
+                "templateId": "altar"
+              },
+              "resolved": false
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 23,
+                  "maxHp": 23,
+                  "dmg": 5,
+                  "speed": 11,
+                  "xp": 23,
+                  "gold": 17,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "brutamontes",
+                  "floor": 5,
+                  "hp": 24,
+                  "maxHp": 24,
+                  "dmg": 6,
+                  "speed": 16,
+                  "xp": 24,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 22,
+                  "maxHp": 22,
+                  "dmg": 6,
+                  "speed": 14,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "event",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "event": {
+                "templateId": "porta"
+              },
+              "resolved": false,
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 18,
+                  "maxHp": 18,
+                  "dmg": 6,
+                  "speed": 15,
+                  "xp": 21,
+                  "gold": 16,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 5,
+                  "speed": 9,
+                  "xp": 23,
+                  "gold": 14,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true,
+                "N": true
+              },
+              "revealed": true
+            },
+            {
+              "type": "npc",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
+                "lines": [
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
+                ],
+                "serviceUsed": false
+              },
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 3,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 4,
+              "y": 4,
+              "doors": {
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 33,
+                  "maxHp": 33,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 22,
+                  "gold": 15,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 17,
+                  "maxHp": 17,
+                  "dmg": 7,
+                  "speed": 16,
+                  "xp": 22,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 19,
+                  "maxHp": 19,
+                  "dmg": 6,
+                  "speed": 19,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "outcome": {
+          "kind": "revealed",
+          "count": 7
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "resolveReveal: num canto",
+    "input": {
+      "fn": "resolveReveal",
+      "args": {
+        "grid": [
+          [
+            {
+              "type": "stairs",
+              "x": 0,
+              "y": 0,
+              "doors": {
+                "S": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 6
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 0,
+              "doors": {
+                "S": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 28,
+                  "maxHp": 28,
+                  "dmg": 5,
+                  "speed": 7,
+                  "xp": 23,
+                  "gold": 18,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "treasure",
+              "x": 3,
+              "y": 0,
+              "doors": {
+                "W": true
+              },
+              "startBranch": "2,3",
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "exit",
+              "x": 0,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 5
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "boss",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 79,
+                  "maxHp": 79,
+                  "dmg": 8,
+                  "speed": 10,
+                  "xp": 55,
+                  "gold": 70,
+                  "isBoss": true,
+                  "isMainBoss": false,
+                  "bossTitle": "Senhor das Trevas"
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "event",
+              "x": 1,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "W": true
+              },
+              "event": {
+                "templateId": "altar"
+              },
+              "resolved": false
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 23,
+                  "maxHp": 23,
+                  "dmg": 5,
+                  "speed": 11,
+                  "xp": 23,
+                  "gold": 17,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "brutamontes",
+                  "floor": 5,
+                  "hp": 24,
+                  "maxHp": 24,
+                  "dmg": 6,
+                  "speed": 16,
+                  "xp": 24,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 22,
+                  "maxHp": 22,
+                  "dmg": 6,
+                  "speed": 14,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "event",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "event": {
+                "templateId": "porta"
+              },
+              "resolved": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 18,
+                  "maxHp": 18,
+                  "dmg": 6,
+                  "speed": 15,
+                  "xp": 21,
+                  "gold": 16,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 5,
+                  "speed": 9,
+                  "xp": 23,
+                  "gold": 14,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true,
+                "N": true
+              }
+            },
+            {
+              "type": "npc",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
+                "lines": [
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 3,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 4,
+              "y": 4,
+              "doors": {
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 33,
+                  "maxHp": 33,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 22,
+                  "gold": 15,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 17,
+                  "maxHp": 17,
+                  "dmg": 7,
+                  "speed": 16,
+                  "xp": 22,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 19,
+                  "maxHp": 19,
+                  "dmg": 6,
+                  "speed": 19,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "pos": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "grid": [
+          [
+            {
+              "type": "stairs",
+              "x": 0,
+              "y": 0,
+              "doors": {
+                "S": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 6,
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 0,
+              "doors": {
+                "S": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 28,
+                  "maxHp": 28,
+                  "dmg": 5,
+                  "speed": 7,
+                  "xp": 23,
+                  "gold": 18,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "treasure",
+              "x": 3,
+              "y": 0,
+              "doors": {
+                "W": true
+              },
+              "startBranch": "2,3",
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "exit",
+              "x": 0,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 5,
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "boss",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 79,
+                  "maxHp": 79,
+                  "dmg": 8,
+                  "speed": 10,
+                  "xp": 55,
+                  "gold": 70,
+                  "isBoss": true,
+                  "isMainBoss": false,
+                  "bossTitle": "Senhor das Trevas"
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false,
+              "revealed": true
+            },
+            {
+              "type": "event",
+              "x": 1,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "W": true
+              },
+              "event": {
+                "templateId": "altar"
+              },
+              "resolved": false
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 23,
+                  "maxHp": 23,
+                  "dmg": 5,
+                  "speed": 11,
+                  "xp": 23,
+                  "gold": 17,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "brutamontes",
+                  "floor": 5,
+                  "hp": 24,
+                  "maxHp": 24,
+                  "dmg": 6,
+                  "speed": 16,
+                  "xp": 24,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 22,
+                  "maxHp": 22,
+                  "dmg": 6,
+                  "speed": 14,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "event",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "event": {
+                "templateId": "porta"
+              },
+              "resolved": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 18,
+                  "maxHp": 18,
+                  "dmg": 6,
+                  "speed": 15,
+                  "xp": 21,
+                  "gold": 16,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 5,
+                  "speed": 9,
+                  "xp": 23,
+                  "gold": 14,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true,
+                "N": true
+              }
+            },
+            {
+              "type": "npc",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
+                "lines": [
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 3,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 4,
+              "y": 4,
+              "doors": {
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 33,
+                  "maxHp": 33,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 22,
+                  "gold": 15,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 17,
+                  "maxHp": 17,
+                  "dmg": 7,
+                  "speed": 16,
+                  "xp": 22,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 19,
+                  "maxHp": 19,
+                  "dmg": 6,
+                  "speed": 19,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "outcome": {
+          "kind": "revealed",
+          "count": 4
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "resolveReveal: o que já estava revelado não conta",
+    "input": {
+      "fn": "resolveReveal",
+      "args": {
+        "grid": [
+          [
+            {
+              "type": "stairs",
+              "x": 0,
+              "y": 0,
+              "doors": {
+                "S": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 6
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 0,
+              "doors": {
+                "S": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 28,
+                  "maxHp": 28,
+                  "dmg": 5,
+                  "speed": 7,
+                  "xp": 23,
+                  "gold": 18,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "treasure",
+              "x": 3,
+              "y": 0,
+              "doors": {
+                "W": true
+              },
+              "startBranch": "2,3",
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "exit",
+              "x": 0,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 5
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "boss",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 79,
+                  "maxHp": 79,
+                  "dmg": 8,
+                  "speed": 10,
+                  "xp": 55,
+                  "gold": 70,
+                  "isBoss": true,
+                  "isMainBoss": false,
+                  "bossTitle": "Senhor das Trevas"
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "event",
+              "x": 1,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "W": true
+              },
+              "event": {
+                "templateId": "altar"
+              },
+              "resolved": false
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 23,
+                  "maxHp": 23,
+                  "dmg": 5,
+                  "speed": 11,
+                  "xp": 23,
+                  "gold": 17,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "brutamontes",
+                  "floor": 5,
+                  "hp": 24,
+                  "maxHp": 24,
+                  "dmg": 6,
+                  "speed": 16,
+                  "xp": 24,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 22,
+                  "maxHp": 22,
+                  "dmg": 6,
+                  "speed": 14,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "event",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "event": {
+                "templateId": "porta"
+              },
+              "resolved": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 18,
+                  "maxHp": 18,
+                  "dmg": 6,
+                  "speed": 15,
+                  "xp": 21,
+                  "gold": 16,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 5,
+                  "speed": 9,
+                  "xp": 23,
+                  "gold": 14,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true,
+                "N": true
+              }
+            },
+            {
+              "type": "npc",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
+                "lines": [
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
+                ],
+                "serviceUsed": false
+              },
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 3,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 4,
+              "y": 4,
+              "doors": {
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 33,
+                  "maxHp": 33,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 22,
+                  "gold": 15,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 17,
+                  "maxHp": 17,
+                  "dmg": 7,
+                  "speed": 16,
+                  "xp": 22,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 19,
+                  "maxHp": 19,
+                  "dmg": 6,
+                  "speed": 19,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "pos": {
+          "x": 3,
+          "y": 3
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "grid": [
+          [
+            {
+              "type": "stairs",
+              "x": 0,
+              "y": 0,
+              "doors": {
+                "S": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 6
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 0,
+              "doors": {
+                "S": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 28,
+                  "maxHp": 28,
+                  "dmg": 5,
+                  "speed": 7,
+                  "xp": 23,
+                  "gold": 18,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false
+            },
+            {
+              "type": "treasure",
+              "x": 3,
+              "y": 0,
+              "doors": {
+                "W": true
+              },
+              "startBranch": "2,3",
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "exit",
+              "x": 0,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 5
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "boss",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 79,
+                  "maxHp": 79,
+                  "dmg": 8,
+                  "speed": 10,
+                  "xp": 55,
+                  "gold": 70,
+                  "isBoss": true,
+                  "isMainBoss": false,
+                  "bossTitle": "Senhor das Trevas"
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "startBranch": "2,3",
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false
+            },
+            {
+              "type": "event",
+              "x": 1,
+              "y": 2,
+              "doors": {
+                "E": true,
+                "W": true
+              },
+              "event": {
+                "templateId": "altar"
+              },
+              "resolved": false
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 23,
+                  "maxHp": 23,
+                  "dmg": 5,
+                  "speed": 11,
+                  "xp": 23,
+                  "gold": 17,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "brutamontes",
+                  "floor": 5,
+                  "hp": 24,
+                  "maxHp": 24,
+                  "dmg": 6,
+                  "speed": 16,
+                  "xp": 24,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "assassino",
+                  "floor": 5,
+                  "hp": 22,
+                  "maxHp": 22,
+                  "dmg": 6,
+                  "speed": 14,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "event",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "event": {
+                "templateId": "porta"
+              },
+              "resolved": false,
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 18,
+                  "maxHp": 18,
+                  "dmg": 6,
+                  "speed": 15,
+                  "xp": 21,
+                  "gold": 16,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 31,
+                  "maxHp": 31,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 21,
+                  "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 5,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 5,
+                  "speed": 9,
+                  "xp": 23,
+                  "gold": 14,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true,
+                "N": true
+              },
+              "revealed": true
+            },
+            {
+              "type": "npc",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
+                "lines": [
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
+                ],
+                "serviceUsed": false
+              },
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 3,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 4,
+              "y": 4,
+              "doors": {
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 33,
+                  "maxHp": 33,
+                  "dmg": 4,
+                  "speed": 5,
+                  "xp": 22,
+                  "gold": 15,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 17,
+                  "maxHp": 17,
+                  "dmg": 7,
+                  "speed": 16,
+                  "xp": 22,
+                  "gold": 14,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 5,
+                  "hp": 19,
+                  "maxHp": 19,
+                  "dmg": 6,
+                  "speed": 19,
+                  "xp": 24,
+                  "gold": 19,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "revealed": true
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "outcome": {
+          "kind": "revealed",
+          "count": 5
+        },
+        "used": true
+      }
+    }
+  },
+  {
+    "name": "resolveRecruit: equipe vazia",
+    "input": {
+      "fn": "resolveRecruit",
+      "args": {
+        "party": []
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Ivo Marfim",
+            "raceIcon": "👺",
+            "race": "Goblin",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 54,
+            "maxHp": 54,
+            "attack": 12,
+            "attrs": {
+              "forca": 12,
+              "destreza": 13,
+              "constituicao": 12,
+              "intelecto": 8,
+              "sabedoria": 9,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "Proteção",
+            "abilityDesc": "Pode interceptar ataques contra o herói.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        ],
+        "outcome": {
+          "kind": "recruited",
+          "companion": {
+            "name": "Ivo Marfim",
+            "raceIcon": "👺",
+            "race": "Goblin",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 54,
+            "maxHp": 54,
+            "attack": 12,
+            "attrs": {
+              "forca": 12,
+              "destreza": 13,
+              "constituicao": 12,
+              "intelecto": 8,
+              "sabedoria": 9,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "Proteção",
+            "abilityDesc": "Pode interceptar ataques contra o herói.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        },
+        "used": true
+      },
+      "rngCalls": 10
+    }
+  },
+  {
+    "name": "resolveRecruit: equipe vazia, outra seed",
+    "input": {
+      "fn": "resolveRecruit",
+      "args": {
+        "party": []
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Petra Fenris",
+            "raceIcon": "🧚",
+            "race": "Fada",
+            "className": "Clérigo",
+            "classIcon": "✝️",
+            "classId": "clerigo",
+            "hp": 54,
+            "maxHp": 54,
+            "attack": 8,
+            "attrs": {
+              "forca": 5,
+              "destreza": 9,
+              "constituicao": 12,
+              "intelecto": 11,
+              "sabedoria": 11,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "Prece Curativa",
+            "abilityDesc": "Pode recuperar a Vida do herói.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        ],
+        "outcome": {
+          "kind": "recruited",
+          "companion": {
+            "name": "Petra Fenris",
+            "raceIcon": "🧚",
+            "race": "Fada",
+            "className": "Clérigo",
+            "classIcon": "✝️",
+            "classId": "clerigo",
+            "hp": 54,
+            "maxHp": 54,
+            "attack": 8,
+            "attrs": {
+              "forca": 5,
+              "destreza": 9,
+              "constituicao": 12,
+              "intelecto": 11,
+              "sabedoria": 11,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "Prece Curativa",
+            "abilityDesc": "Pode recuperar a Vida do herói.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        },
+        "used": true
+      },
+      "rngCalls": 10
+    }
+  },
+  {
+    "name": "resolveRecruit: dois na equipe",
+    "input": {
+      "fn": "resolveRecruit",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Fiora Lobodourado",
+            "raceIcon": "🧚",
+            "race": "Fada",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 54,
+            "maxHp": 54,
+            "attack": 9,
+            "attrs": {
+              "forca": 9,
+              "destreza": 6,
+              "constituicao": 12,
+              "intelecto": 10,
+              "sabedoria": 8,
+              "carisma": 8
+            },
+            "stance": "equilibrada",
+            "ability": "Proteção",
+            "abilityDesc": "Pode interceptar ataques contra o herói.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        ],
+        "outcome": {
+          "kind": "recruited",
+          "companion": {
+            "name": "Fiora Lobodourado",
+            "raceIcon": "🧚",
+            "race": "Fada",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 54,
+            "maxHp": 54,
+            "attack": 9,
+            "attrs": {
+              "forca": 9,
+              "destreza": 6,
+              "constituicao": 12,
+              "intelecto": 10,
+              "sabedoria": 8,
+              "carisma": 8
+            },
+            "stance": "equilibrada",
+            "ability": "Proteção",
+            "abilityDesc": "Pode interceptar ataques contra o herói.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        },
+        "used": true
+      },
+      "rngCalls": 10
+    }
+  },
+  {
+    "name": "resolveRecruit: equipe cheia, sem sortear",
+    "input": {
+      "fn": "resolveRecruit",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ],
+        "outcome": {
+          "kind": "party_full"
+        },
+        "used": false
+      },
+      "rngCalls": 0
+    }
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "NPC_TEMPLATES": [
+    {
+      "name": "Erma, a Vidente",
+      "role": "Mística Errante",
+      "service": "reveal",
+      "icon": "🔮",
+      "lines": [
+        "Você se aventura fundo demais — ou talvez não o bastante...",
+        "Os corredores mudam quando ninguém observa.",
+        "Cuidado com o que dorme nas profundezas."
+      ]
+    },
+    {
+      "name": "Prisioneiro Esquecido",
+      "role": "Sobrevivente",
+      "service": "heal",
+      "icon": "🧍",
+      "lines": [
+        "Você... você é real? Há quanto tempo estou aqui...",
+        "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
+        "Se encontrar a saída, corra e não olhe para trás."
+      ]
+    }
+  ],
+  "MAX_ROOMS": 14,
+  "MAX_TREASURES": 3,
+  "ICONES_FIXOS": {
+    "npc": "🧙",
+    "stairs": "⬇️",
+    "exit": "🚪",
+    "start": "🚀",
+    "totem": "🗿"
+  },
+  "$privadas": [
+    "NPC_TEMPLATES",
+    "MAX_ROOMS",
+    "MAX_TREASURES",
+    "ICONES_FIXOS"
+  ]
+}

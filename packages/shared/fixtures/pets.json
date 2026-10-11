@@ -1,0 +1,396 @@
+[
+  {
+    "name": "PET_ICONS (constante)",
+    "input": {
+      "const": "PET_ICONS"
+    },
+    "expected": {
+      "value": {
+        "chicken": "🐔",
+        "cat": "🐈",
+        "fox": "🦊",
+        "owl": "🦉",
+        "slime": "🟢",
+        "wolf": "🐺",
+        "fairy": "🧚",
+        "baby_dragon": "🐲",
+        "admin_dragon": "🐉"
+      }
+    }
+  },
+  {
+    "name": "PET_BONUSES (constante)",
+    "input": {
+      "const": "PET_BONUSES"
+    },
+    "expected": {
+      "value": {
+        "chicken": {
+          "esquiva": 3,
+          "label": "+3% de esquiva"
+        },
+        "cat": {
+          "critico": 3,
+          "label": "+3% de crítico"
+        },
+        "fox": {
+          "esquiva": 2,
+          "critico": 2,
+          "label": "+2% de esquiva e crítico"
+        },
+        "owl": {
+          "manaSave": 5,
+          "label": "5% de chance de poupar mana"
+        },
+        "slime": {
+          "healing": 5,
+          "label": "+5% de cura recebida"
+        },
+        "wolf": {
+          "esquiva": 4,
+          "label": "+4% de esquiva"
+        },
+        "fairy": {
+          "healing": 10,
+          "manaSave": 5,
+          "label": "+10% de cura e 5% de economia de mana"
+        },
+        "baby_dragon": {
+          "critico": 6,
+          "esquiva": 3,
+          "label": "+6% de crítico e +3% de esquiva"
+        },
+        "admin_dragon": {
+          "critico": 20,
+          "esquiva": 20,
+          "manaSave": 35,
+          "healing": 35,
+          "label": "+20% crítico e esquiva, +35% cura e economia de mana"
+        }
+      }
+    }
+  },
+  {
+    "name": "petBonus: chicken",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "chicken"
+      }
+    },
+    "expected": {
+      "result": {
+        "esquiva": 3,
+        "label": "+3% de esquiva"
+      }
+    }
+  },
+  {
+    "name": "petIcon: chicken",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "chicken"
+      }
+    },
+    "expected": {
+      "result": "🐔"
+    }
+  },
+  {
+    "name": "petBonus: cat",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "cat"
+      }
+    },
+    "expected": {
+      "result": {
+        "critico": 3,
+        "label": "+3% de crítico"
+      }
+    }
+  },
+  {
+    "name": "petIcon: cat",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "cat"
+      }
+    },
+    "expected": {
+      "result": "🐈"
+    }
+  },
+  {
+    "name": "petBonus: fox",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "fox"
+      }
+    },
+    "expected": {
+      "result": {
+        "esquiva": 2,
+        "critico": 2,
+        "label": "+2% de esquiva e crítico"
+      }
+    }
+  },
+  {
+    "name": "petIcon: fox",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "fox"
+      }
+    },
+    "expected": {
+      "result": "🦊"
+    }
+  },
+  {
+    "name": "petBonus: owl",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "owl"
+      }
+    },
+    "expected": {
+      "result": {
+        "manaSave": 5,
+        "label": "5% de chance de poupar mana"
+      }
+    }
+  },
+  {
+    "name": "petIcon: owl",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "owl"
+      }
+    },
+    "expected": {
+      "result": "🦉"
+    }
+  },
+  {
+    "name": "petBonus: slime",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "slime"
+      }
+    },
+    "expected": {
+      "result": {
+        "healing": 5,
+        "label": "+5% de cura recebida"
+      }
+    }
+  },
+  {
+    "name": "petIcon: slime",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "slime"
+      }
+    },
+    "expected": {
+      "result": "🟢"
+    }
+  },
+  {
+    "name": "petBonus: wolf",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "wolf"
+      }
+    },
+    "expected": {
+      "result": {
+        "esquiva": 4,
+        "label": "+4% de esquiva"
+      }
+    }
+  },
+  {
+    "name": "petIcon: wolf",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "wolf"
+      }
+    },
+    "expected": {
+      "result": "🐺"
+    }
+  },
+  {
+    "name": "petBonus: fairy",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "fairy"
+      }
+    },
+    "expected": {
+      "result": {
+        "healing": 10,
+        "manaSave": 5,
+        "label": "+10% de cura e 5% de economia de mana"
+      }
+    }
+  },
+  {
+    "name": "petIcon: fairy",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "fairy"
+      }
+    },
+    "expected": {
+      "result": "🧚"
+    }
+  },
+  {
+    "name": "petBonus: baby_dragon",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "baby_dragon"
+      }
+    },
+    "expected": {
+      "result": {
+        "critico": 6,
+        "esquiva": 3,
+        "label": "+6% de crítico e +3% de esquiva"
+      }
+    }
+  },
+  {
+    "name": "petIcon: baby_dragon",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "baby_dragon"
+      }
+    },
+    "expected": {
+      "result": "🐲"
+    }
+  },
+  {
+    "name": "petBonus: admin_dragon",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "admin_dragon"
+      }
+    },
+    "expected": {
+      "result": {
+        "critico": 20,
+        "esquiva": 20,
+        "manaSave": 35,
+        "healing": 35,
+        "label": "+20% crítico e esquiva, +35% cura e economia de mana"
+      }
+    }
+  },
+  {
+    "name": "petIcon: admin_dragon",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "admin_dragon"
+      }
+    },
+    "expected": {
+      "result": "🐉"
+    }
+  },
+  {
+    "name": "petBonus: dragao",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": "dragao"
+      }
+    },
+    "expected": {
+      "result": {
+        "label": ""
+      }
+    }
+  },
+  {
+    "name": "petIcon: dragao",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": "dragao"
+      }
+    },
+    "expected": {
+      "result": "🐾"
+    }
+  },
+  {
+    "name": "petBonus: null",
+    "input": {
+      "fn": "petBonus",
+      "args": {
+        "pet": null
+      }
+    },
+    "expected": {
+      "result": {
+        "label": ""
+      }
+    }
+  },
+  {
+    "name": "petIcon: null",
+    "input": {
+      "fn": "petIcon",
+      "args": {
+        "pet": null
+      }
+    },
+    "expected": {
+      "result": "🐾"
+    }
+  },
+  {
+    "name": "petBonus: ausente",
+    "input": {
+      "fn": "petBonus",
+      "args": {}
+    },
+    "expected": {
+      "result": {
+        "label": ""
+      }
+    }
+  },
+  {
+    "name": "petIcon: ausente",
+    "input": {
+      "fn": "petIcon",
+      "args": {}
+    },
+    "expected": {
+      "result": "🐾"
+    }
+  }
+]

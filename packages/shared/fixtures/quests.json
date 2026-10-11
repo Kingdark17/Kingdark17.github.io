@@ -1,0 +1,2266 @@
+[
+  {
+    "name": "generateQuest: andar 1, seed 1",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_5273",
+        "type": "floor",
+        "target": 3,
+        "progress": 1,
+        "title": "Exploradora das Profundezas",
+        "desc": "Alcance o andar 3 da masmorra.",
+        "rewardXp": 42,
+        "rewardGold": 35,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 1, seed 2",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_2852",
+        "type": "collect",
+        "target": 2,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 2 itens de qualquer tipo.",
+        "rewardXp": 25,
+        "rewardGold": 18,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 1, seed 3",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_4561",
+        "type": "collect",
+        "target": 2,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 2 itens de qualquer tipo.",
+        "rewardXp": 25,
+        "rewardGold": 18,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 1, seed 4",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 4
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_2216",
+        "type": "collect",
+        "target": 2,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 2 itens de qualquer tipo.",
+        "rewardXp": 25,
+        "rewardGold": 18,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 1, seed 5",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 5
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_2197",
+        "type": "collect",
+        "target": 4,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 4 itens de qualquer tipo.",
+        "rewardXp": 35,
+        "rewardGold": 26,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 1, seed 6",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 6
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_6631",
+        "type": "floor",
+        "target": 3,
+        "progress": 1,
+        "title": "Exploradora das Profundezas",
+        "desc": "Alcance o andar 3 da masmorra.",
+        "rewardXp": 42,
+        "rewardGold": 35,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 5, seed 1",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_5273",
+        "type": "floor",
+        "target": 7,
+        "progress": 5,
+        "title": "Exploradora das Profundezas",
+        "desc": "Alcance o andar 7 da masmorra.",
+        "rewardXp": 58,
+        "rewardGold": 55,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 5, seed 2",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_2852",
+        "type": "collect",
+        "target": 2,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 2 itens de qualquer tipo.",
+        "rewardXp": 25,
+        "rewardGold": 18,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 5, seed 3",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_4561",
+        "type": "collect",
+        "target": 2,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 2 itens de qualquer tipo.",
+        "rewardXp": 25,
+        "rewardGold": 18,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 5, seed 4",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 4
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_2216",
+        "type": "collect",
+        "target": 2,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 2 itens de qualquer tipo.",
+        "rewardXp": 25,
+        "rewardGold": 18,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 5, seed 5",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 5
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_2197",
+        "type": "collect",
+        "target": 4,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 4 itens de qualquer tipo.",
+        "rewardXp": 35,
+        "rewardGold": 26,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 5, seed 6",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 6
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_6631",
+        "type": "floor",
+        "target": 7,
+        "progress": 5,
+        "title": "Exploradora das Profundezas",
+        "desc": "Alcance o andar 7 da masmorra.",
+        "rewardXp": 58,
+        "rewardGold": 55,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 20, seed 1",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 20,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_5273",
+        "type": "floor",
+        "target": 22,
+        "progress": 20,
+        "title": "Exploradora das Profundezas",
+        "desc": "Alcance o andar 22 da masmorra.",
+        "rewardXp": 118,
+        "rewardGold": 130,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 20, seed 2",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 20,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_2852",
+        "type": "collect",
+        "target": 2,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 2 itens de qualquer tipo.",
+        "rewardXp": 25,
+        "rewardGold": 18,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 20, seed 3",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 20,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_4561",
+        "type": "collect",
+        "target": 2,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 2 itens de qualquer tipo.",
+        "rewardXp": 25,
+        "rewardGold": 18,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 20, seed 4",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 20,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 4
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_2216",
+        "type": "collect",
+        "target": 2,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 2 itens de qualquer tipo.",
+        "rewardXp": 25,
+        "rewardGold": 18,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 20, seed 5",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 20,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 5
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_2197",
+        "type": "collect",
+        "target": 4,
+        "progress": 0,
+        "title": "Coletora de Materiais",
+        "desc": "Colete 4 itens de qualquer tipo.",
+        "rewardXp": 35,
+        "rewardGold": 26,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateQuest: andar 20, seed 6",
+    "input": {
+      "fn": "generateQuest",
+      "args": {
+        "floor": 20,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 6
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "id": "q_1700000000000_6631",
+        "type": "floor",
+        "target": 22,
+        "progress": 20,
+        "title": "Exploradora das Profundezas",
+        "desc": "Alcance o andar 22 da masmorra.",
+        "rewardXp": 118,
+        "rewardGold": 130,
+        "done": false,
+        "claimed": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "ensureQuestBoard: quadro vazio ganha duas",
+    "input": {
+      "fn": "ensureQuestBoard",
+      "args": {
+        "quests": [],
+        "floor": 3,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "q_1700000000000_5273",
+          "type": "floor",
+          "target": 5,
+          "progress": 3,
+          "title": "Exploradora das Profundezas",
+          "desc": "Alcance o andar 5 da masmorra.",
+          "rewardXp": 50,
+          "rewardGold": 45,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_1700000000000_2810",
+          "type": "collect",
+          "target": 4,
+          "progress": 0,
+          "title": "Coletora de Materiais",
+          "desc": "Colete 4 itens de qualquer tipo.",
+          "rewardXp": 35,
+          "rewardGold": 26,
+          "done": false,
+          "claimed": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "ensureQuestBoard: quadro com missão fica igual, sem sortear",
+    "input": {
+      "fn": "ensureQuestBoard",
+      "args": {
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ],
+        "floor": 3,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "q_kill",
+          "type": "kill",
+          "target": 4,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_floor",
+          "type": "floor",
+          "target": 6,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_collect",
+          "type": "collect",
+          "target": 2,
+          "progress": 1,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_kill_feita",
+          "type": "kill",
+          "target": 3,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        }
+      ],
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "onMonsterKilled",
+    "input": {
+      "fn": "onMonsterKilled",
+      "args": {
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "q_kill",
+          "type": "kill",
+          "target": 4,
+          "progress": 4,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        },
+        {
+          "id": "q_floor",
+          "type": "floor",
+          "target": 6,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_collect",
+          "type": "collect",
+          "target": 2,
+          "progress": 1,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_kill_feita",
+          "type": "kill",
+          "target": 3,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        }
+      ]
+    }
+  },
+  {
+    "name": "onFloorReached: andar 4",
+    "input": {
+      "fn": "onFloorReached",
+      "args": {
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ],
+        "floor": 4
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "q_kill",
+          "type": "kill",
+          "target": 4,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_floor",
+          "type": "floor",
+          "target": 6,
+          "progress": 4,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_collect",
+          "type": "collect",
+          "target": 2,
+          "progress": 1,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_kill_feita",
+          "type": "kill",
+          "target": 3,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        }
+      ]
+    }
+  },
+  {
+    "name": "onFloorReached: andar 6",
+    "input": {
+      "fn": "onFloorReached",
+      "args": {
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ],
+        "floor": 6
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "q_kill",
+          "type": "kill",
+          "target": 4,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_floor",
+          "type": "floor",
+          "target": 6,
+          "progress": 6,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        },
+        {
+          "id": "q_collect",
+          "type": "collect",
+          "target": 2,
+          "progress": 1,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_kill_feita",
+          "type": "kill",
+          "target": 3,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        }
+      ]
+    }
+  },
+  {
+    "name": "onFloorReached: andar 9",
+    "input": {
+      "fn": "onFloorReached",
+      "args": {
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ],
+        "floor": 9
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "q_kill",
+          "type": "kill",
+          "target": 4,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_floor",
+          "type": "floor",
+          "target": 6,
+          "progress": 9,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        },
+        {
+          "id": "q_collect",
+          "type": "collect",
+          "target": 2,
+          "progress": 1,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_kill_feita",
+          "type": "kill",
+          "target": 3,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        }
+      ]
+    }
+  },
+  {
+    "name": "onItemCollected",
+    "input": {
+      "fn": "onItemCollected",
+      "args": {
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "q_kill",
+          "type": "kill",
+          "target": 4,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_floor",
+          "type": "floor",
+          "target": 6,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": false,
+          "claimed": false
+        },
+        {
+          "id": "q_collect",
+          "type": "collect",
+          "target": 2,
+          "progress": 2,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        },
+        {
+          "id": "q_kill_feita",
+          "type": "kill",
+          "target": 3,
+          "progress": 3,
+          "title": "",
+          "desc": "",
+          "rewardXp": 30,
+          "rewardGold": 25,
+          "done": true,
+          "claimed": false
+        }
+      ]
+    }
+  },
+  {
+    "name": "claimQuest: resgata, sobe de nível e sorteia outra no lugar",
+    "input": {
+      "fn": "claimQuest",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 30,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ],
+        "targetId": "q_kill_feita",
+        "floor": 4,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 2,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 20,
+          "xpNext": 75,
+          "attrPoints": 2,
+          "gold": 125,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 130,
+            "maxMp": 64,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 130,
+          "hp": 130,
+          "maxMp": 64,
+          "mp": 64,
+          "buffs": {}
+        },
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_1700000000000_9768",
+            "type": "kill",
+            "target": 3,
+            "progress": 0,
+            "title": "Caçador de Monstros",
+            "desc": "Derrote 3 monstros na masmorra.",
+            "rewardXp": 35,
+            "rewardGold": 27,
+            "done": false,
+            "claimed": false
+          }
+        ],
+        "claimed": true,
+        "leveledUp": true,
+        "levels": 1
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "claimQuest: missão que não existe",
+    "input": {
+      "fn": "claimQuest",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ],
+        "targetId": "nada",
+        "floor": 4,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ],
+        "claimed": false,
+        "leveledUp": false,
+        "levels": 0
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "claimQuest: missão ainda não pronta",
+    "input": {
+      "fn": "claimQuest",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ],
+        "targetId": "q_kill",
+        "floor": 4,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "quests": [
+          {
+            "id": "q_kill",
+            "type": "kill",
+            "target": 4,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_floor",
+            "type": "floor",
+            "target": 6,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_collect",
+            "type": "collect",
+            "target": 2,
+            "progress": 1,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": false,
+            "claimed": false
+          },
+          {
+            "id": "q_kill_feita",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": false
+          }
+        ],
+        "claimed": false,
+        "leveledUp": false,
+        "levels": 0
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "claimQuest: missão já resgatada",
+    "input": {
+      "fn": "claimQuest",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "quests": [
+          {
+            "id": "q_velha",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": true
+          }
+        ],
+        "targetId": "q_velha",
+        "floor": 4,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "quests": [
+          {
+            "id": "q_velha",
+            "type": "kill",
+            "target": 3,
+            "progress": 3,
+            "title": "",
+            "desc": "",
+            "rewardXp": 30,
+            "rewardGold": 25,
+            "done": true,
+            "claimed": true
+          }
+        ],
+        "claimed": false,
+        "leveledUp": false,
+        "levels": 0
+      },
+      "rngCalls": 0
+    }
+  }
+]

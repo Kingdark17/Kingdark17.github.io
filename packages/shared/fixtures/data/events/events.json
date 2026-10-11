@@ -1,0 +1,22 @@
+{
+  "EVENT_TEMPLATES": [
+    {
+      "id": "ferido",
+      "icon": "🩹",
+      "title": "Aventureiro Ferido",
+      "text": "Um aventureiro ferido pede ajuda no canto da sala."
+    },
+    {
+      "id": "altar",
+      "icon": "🕯️",
+      "title": "Altar Antigo",
+      "text": "Runas antigas brilham sobre um altar coberto de poeira."
+    },
+    {
+      "id": "porta",
+      "icon": "🚪",
+      "title": "Porta Lacrada",
+      "text": "Uma porta de pedra protege algo valioso. Força ou conhecimento podem abri-la."
+    }
+  ]
+}

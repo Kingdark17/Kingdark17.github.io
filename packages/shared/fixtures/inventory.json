@@ -1,0 +1,2439 @@
+[
+  {
+    "name": "addItem: vai pro fim",
+    "input": {
+      "fn": "addItem",
+      "args": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "item": {
+          "uid": "pergaminho_1700000000000_72021",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "espada_1700000000000_92362",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        {
+          "uid": "pot_vida_1700000000000_62706",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_73424",
+          "templateId": "pot_mana",
+          "rarity": "incomum",
+          "stats": {
+            "curaMana": 21
+          },
+          "value": 18,
+          "equipped": false
+        },
+        {
+          "uid": "minerio_1700000000000_68976",
+          "templateId": "minerio",
+          "rarity": "comum",
+          "stats": {},
+          "value": 10,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_72021",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        }
+      ]
+    }
+  },
+  {
+    "name": "addItem: mochila vazia",
+    "input": {
+      "fn": "addItem",
+      "args": {
+        "inventory": [],
+        "item": {
+          "uid": "pergaminho_1700000000000_72021",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pergaminho_1700000000000_72021",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        }
+      ]
+    }
+  },
+  {
+    "name": "removeByUid: achou",
+    "input": {
+      "fn": "removeByUid",
+      "args": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "uid": "pot_vida_1700000000000_62706"
+      }
+    },
+    "expected": {
+      "result": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "removed": {
+          "uid": "pot_vida_1700000000000_62706",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    }
+  },
+  {
+    "name": "removeByUid: não achou",
+    "input": {
+      "fn": "removeByUid",
+      "args": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "uid": "nada"
+      }
+    },
+    "expected": {
+      "result": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "removed": null
+      }
+    }
+  },
+  {
+    "name": "removeByUid: uid repetido tira só o primeiro",
+    "input": {
+      "fn": "removeByUid",
+      "args": {
+        "inventory": [
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          }
+        ],
+        "uid": "pot_vida_1700000000000_62706"
+      }
+    },
+    "expected": {
+      "result": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          }
+        ],
+        "removed": {
+          "uid": "pot_vida_1700000000000_62706",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    }
+  },
+  {
+    "name": "findByUid: achou",
+    "input": {
+      "fn": "findByUid",
+      "args": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "uid": "pot_mana_1700000000000_73424"
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "pot_mana_1700000000000_73424",
+        "templateId": "pot_mana",
+        "rarity": "incomum",
+        "stats": {
+          "curaMana": 21
+        },
+        "value": 18,
+        "equipped": false
+      }
+    }
+  },
+  {
+    "name": "findByUid: não achou",
+    "input": {
+      "fn": "findByUid",
+      "args": {
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "uid": "nada"
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "consumeItem: poção de vida cura e some",
+    "input": {
+      "fn": "consumeItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "item": {
+          "uid": "pot_vida_1700000000000_62706",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 72,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "used",
+          "hpGained": 22,
+          "mpGained": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "consumeItem: poção de vida não passa do máximo",
+    "input": {
+      "fn": "consumeItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 105,
+          "maxMp": 62,
+          "mp": 60,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "item": {
+          "uid": "pot_vida_1700000000000_62706",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 60,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "used",
+          "hpGained": 20,
+          "mpGained": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "consumeItem: poção de mana",
+    "input": {
+      "fn": "consumeItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "item": {
+          "uid": "pot_mana_1700000000000_73424",
+          "templateId": "pot_mana",
+          "rarity": "incomum",
+          "stats": {
+            "curaMana": 21
+          },
+          "value": 18,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 41,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "used",
+          "hpGained": 0,
+          "mpGained": 21
+        }
+      }
+    }
+  },
+  {
+    "name": "consumeItem: pergaminho cura vida e mana",
+    "input": {
+      "fn": "consumeItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          },
+          {
+            "uid": "pergaminho_1700000000000_72021",
+            "templateId": "pergaminho",
+            "rarity": "comum",
+            "stats": {
+              "cura": 10,
+              "curaMana": 10
+            },
+            "value": 16,
+            "equipped": false
+          }
+        ],
+        "item": {
+          "uid": "pergaminho_1700000000000_72021",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "used",
+          "hpGained": 10,
+          "mpGained": 10
+        }
+      }
+    }
+  },
+  {
+    "name": "consumeItem: cheio: usa e não ganha nada",
+    "input": {
+      "fn": "consumeItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "item": {
+          "uid": "pot_vida_1700000000000_62706",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "used",
+          "hpGained": 0,
+          "mpGained": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "consumeItem: material não é gasto",
+    "input": {
+      "fn": "consumeItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "item": {
+          "uid": "minerio_1700000000000_68976",
+          "templateId": "minerio",
+          "rarity": "comum",
+          "stats": {},
+          "value": 10,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "no_effect"
+        }
+      }
+    }
+  },
+  {
+    "name": "consumeItem: espada não é gasta",
+    "input": {
+      "fn": "consumeItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "item": {
+          "uid": "espada_1700000000000_92362",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ],
+        "outcome": {
+          "kind": "no_effect"
+        }
+      }
+    }
+  },
+  {
+    "name": "consumeItem: item fora da mochila ainda cura",
+    "input": {
+      "fn": "consumeItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          }
+        ],
+        "item": {
+          "uid": "pot_vida_1700000000000_62706",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 72,
+          "maxMp": 62,
+          "mp": 20,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          }
+        ],
+        "outcome": {
+          "kind": "used",
+          "hpGained": 22,
+          "mpGained": 0
+        }
+      }
+    }
+  }
+]

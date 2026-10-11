@@ -1,0 +1,2701 @@
+[
+  {
+    "name": "BEHAVIORS (constante)",
+    "input": {
+      "const": "BEHAVIORS"
+    },
+    "expected": {
+      "value": [
+        "agressivo",
+        "agil",
+        "defensivo",
+        "venenoso",
+        "lento",
+        "magico"
+      ]
+    }
+  },
+  {
+    "name": "AFFINITY_TYPES (constante)",
+    "input": {
+      "const": "AFFINITY_TYPES"
+    },
+    "expected": {
+      "value": [
+        "fisico",
+        "magico",
+        "nenhuma"
+      ]
+    }
+  },
+  {
+    "name": "SPECIES (constante)",
+    "input": {
+      "const": "SPECIES"
+    },
+    "expected": {
+      "value": [
+        {
+          "id": "goblin",
+          "name": "Goblin",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "baseHp": 10,
+          "baseSpeed": 8,
+          "baseDmg": 3,
+          "weakness": "magico",
+          "resistance": "nenhuma",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra."
+        },
+        {
+          "id": "lobo_sombras",
+          "name": "Lobo das Sombras",
+          "icon": "🐺",
+          "behavior": "agil",
+          "baseHp": 9,
+          "baseSpeed": 13,
+          "baseDmg": 3,
+          "weakness": "magico",
+          "resistance": "fisico",
+          "ability": "Reflexos Rápidos",
+          "abilityDesc": "Tem chance de evitar ataques comuns."
+        },
+        {
+          "id": "esqueleto",
+          "name": "Esqueleto Errante",
+          "icon": "💀",
+          "behavior": "defensivo",
+          "baseHp": 13,
+          "baseSpeed": 6,
+          "baseDmg": 2,
+          "weakness": "magico",
+          "resistance": "fisico",
+          "ability": "Ossos Reforçados",
+          "abilityDesc": "Reduz parte do dano físico recebido."
+        },
+        {
+          "id": "aranha",
+          "name": "Aranha Gigante",
+          "icon": "🕷️",
+          "behavior": "venenoso",
+          "baseHp": 8,
+          "baseSpeed": 11,
+          "baseDmg": 4,
+          "weakness": "fisico",
+          "resistance": "nenhuma",
+          "ability": "Picada Venenosa",
+          "abilityDesc": "Pode envenenar o herói por 3 turnos."
+        },
+        {
+          "id": "slime",
+          "name": "Slime Corrosivo",
+          "icon": "🟢",
+          "behavior": "defensivo",
+          "baseHp": 15,
+          "baseSpeed": 4,
+          "baseDmg": 2,
+          "weakness": "magico",
+          "resistance": "fisico",
+          "ability": "Corpo Gelatinoso",
+          "abilityDesc": "Reduz parte do dano físico recebido."
+        },
+        {
+          "id": "orc",
+          "name": "Orc Selvagem",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "baseHp": 14,
+          "baseSpeed": 7,
+          "baseDmg": 4,
+          "weakness": "magico",
+          "resistance": "nenhuma",
+          "ability": "Fúria Selvagem",
+          "abilityDesc": "Pode causar dano extra."
+        },
+        {
+          "id": "morcego",
+          "name": "Morcego Vampírico",
+          "icon": "🦇",
+          "behavior": "agil",
+          "baseHp": 7,
+          "baseSpeed": 14,
+          "baseDmg": 2,
+          "weakness": "fisico",
+          "resistance": "magico",
+          "ability": "Voo Errático",
+          "abilityDesc": "Tem chance de evitar ataques comuns."
+        },
+        {
+          "id": "zumbi",
+          "name": "Zumbi Cambaleante",
+          "icon": "🧟",
+          "behavior": "lento",
+          "baseHp": 16,
+          "baseSpeed": 3,
+          "baseDmg": 3,
+          "weakness": "magico",
+          "resistance": "fisico",
+          "ability": "Golpe Pesado",
+          "abilityDesc": "A cada 3 ataques, causa dano elevado."
+        },
+        {
+          "id": "elemental_fogo",
+          "name": "Elemental de Fogo",
+          "icon": "🔥",
+          "behavior": "magico",
+          "baseHp": 11,
+          "baseSpeed": 9,
+          "baseDmg": 5,
+          "weakness": "fisico",
+          "resistance": "magico",
+          "ability": "Chama Arcana",
+          "abilityDesc": "Pode queimar e drenar mana."
+        },
+        {
+          "id": "espectro_gelado",
+          "name": "Espectro Gelado",
+          "icon": "❄️",
+          "behavior": "magico",
+          "baseHp": 12,
+          "baseSpeed": 10,
+          "baseDmg": 4,
+          "weakness": "fisico",
+          "resistance": "magico",
+          "ability": "Toque Gélido",
+          "abilityDesc": "Pode drenar mana do herói."
+        }
+      ]
+    }
+  },
+  {
+    "name": "ENEMY_CLASSES (constante)",
+    "input": {
+      "const": "ENEMY_CLASSES"
+    },
+    "expected": {
+      "value": [
+        {
+          "id": "brutamontes",
+          "name": "Brutamontes",
+          "icon": "💥",
+          "power": "Impacto Brutal",
+          "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+          "hpMult": 1.15,
+          "dmgMult": 1.2,
+          "speedMult": 0.9
+        },
+        {
+          "id": "assassino",
+          "name": "Assassino",
+          "icon": "🗡️",
+          "power": "Lâmina Tóxica",
+          "powerDesc": "A cada 3 ataques causa dano extra e aplica veneno.",
+          "hpMult": 0.9,
+          "dmgMult": 1.15,
+          "speedMult": 1.25
+        },
+        {
+          "id": "xama",
+          "name": "Xamã",
+          "icon": "🔮",
+          "power": "Regeneração Profana",
+          "powerDesc": "A cada 3 ataques recupera parte da própria Vida.",
+          "hpMult": 1,
+          "dmgMult": 1.05,
+          "speedMult": 1
+        },
+        {
+          "id": "guardiao",
+          "name": "Guardião",
+          "icon": "🛡️",
+          "power": "Muralha Sombria",
+          "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
+          "hpMult": 1.35,
+          "dmgMult": 0.95,
+          "speedMult": 0.8
+        },
+        {
+          "id": "feiticeiro",
+          "name": "Feiticeiro",
+          "icon": "🧙",
+          "power": "Ruptura Arcana",
+          "powerDesc": "A cada 3 ataques drena Mana e aumenta o dano mágico.",
+          "hpMult": 0.95,
+          "dmgMult": 1.18,
+          "speedMult": 1.05
+        }
+      ]
+    }
+  },
+  {
+    "name": "TIER_ADJECTIVES (constante)",
+    "input": {
+      "const": "TIER_ADJECTIVES"
+    },
+    "expected": {
+      "value": [
+        {
+          "min": 1,
+          "max": 3,
+          "label": ""
+        },
+        {
+          "min": 4,
+          "max": 7,
+          "label": "Corrompido"
+        },
+        {
+          "min": 8,
+          "max": 12,
+          "label": "Ancestral"
+        },
+        {
+          "min": 13,
+          "max": 18,
+          "label": "Amaldiçoado"
+        },
+        {
+          "min": 19,
+          "max": 99,
+          "label": "Lendário"
+        }
+      ]
+    }
+  },
+  {
+    "name": "BOSS_TITLES (constante)",
+    "input": {
+      "const": "BOSS_TITLES"
+    },
+    "expected": {
+      "value": [
+        "o Devorador",
+        "o Flagelo",
+        "Senhor das Trevas",
+        "o Ímpio",
+        "o Eterno",
+        "Rei dos Ossos",
+        "a Calamidade"
+      ]
+    }
+  },
+  {
+    "name": "speciesById: zumbi",
+    "input": {
+      "fn": "speciesById",
+      "args": {
+        "id": "zumbi"
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "zumbi",
+        "name": "Zumbi Cambaleante",
+        "icon": "🧟",
+        "behavior": "lento",
+        "baseHp": 16,
+        "baseSpeed": 3,
+        "baseDmg": 3,
+        "weakness": "magico",
+        "resistance": "fisico",
+        "ability": "Golpe Pesado",
+        "abilityDesc": "A cada 3 ataques, causa dano elevado."
+      }
+    }
+  },
+  {
+    "name": "speciesById: nada",
+    "input": {
+      "fn": "speciesById",
+      "args": {
+        "id": "nada"
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "enemyClassById: xama",
+    "input": {
+      "fn": "enemyClassById",
+      "args": {
+        "id": "xama"
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "xama",
+        "name": "Xamã",
+        "icon": "🔮",
+        "power": "Regeneração Profana",
+        "powerDesc": "A cada 3 ataques recupera parte da própria Vida.",
+        "hpMult": 1,
+        "dmgMult": 1.05,
+        "speedMult": 1
+      }
+    }
+  },
+  {
+    "name": "enemyClassById: nada",
+    "input": {
+      "fn": "enemyClassById",
+      "args": {
+        "id": "nada"
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "tierLabelFor: andar -1",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": -1
+      }
+    },
+    "expected": {
+      "result": ""
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 0",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 0
+      }
+    },
+    "expected": {
+      "result": ""
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 1",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 1
+      }
+    },
+    "expected": {
+      "result": ""
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 3",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 3
+      }
+    },
+    "expected": {
+      "result": ""
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 4",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 4
+      }
+    },
+    "expected": {
+      "result": "Corrompido"
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 7",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 7
+      }
+    },
+    "expected": {
+      "result": "Corrompido"
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 8",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 8
+      }
+    },
+    "expected": {
+      "result": "Ancestral"
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 12",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 12
+      }
+    },
+    "expected": {
+      "result": "Ancestral"
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 13",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 13
+      }
+    },
+    "expected": {
+      "result": "Amaldiçoado"
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 18",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 18
+      }
+    },
+    "expected": {
+      "result": "Amaldiçoado"
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 19",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 19
+      }
+    },
+    "expected": {
+      "result": "Lendário"
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 99",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 99
+      }
+    },
+    "expected": {
+      "result": "Lendário"
+    }
+  },
+  {
+    "name": "tierLabelFor: andar 100",
+    "input": {
+      "fn": "tierLabelFor",
+      "args": {
+        "floor": 100
+      }
+    },
+    "expected": {
+      "result": ""
+    }
+  },
+  {
+    "name": "generate: andar 1, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 1
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 1,
+        "hp": 10,
+        "maxHp": 10,
+        "dmg": 2,
+        "speed": 13,
+        "xp": 12,
+        "gold": 11,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 1, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 1
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 1,
+        "hp": 15,
+        "maxHp": 15,
+        "dmg": 3,
+        "speed": 4,
+        "xp": 11,
+        "gold": 11,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 1, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 1
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 1,
+        "hp": 19,
+        "maxHp": 19,
+        "dmg": 4,
+        "speed": 3,
+        "xp": 9,
+        "gold": 10,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 2, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 2
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 2,
+        "hp": 12,
+        "maxHp": 12,
+        "dmg": 2,
+        "speed": 14,
+        "xp": 15,
+        "gold": 13,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 2, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 2
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 2,
+        "hp": 19,
+        "maxHp": 19,
+        "dmg": 3,
+        "speed": 4,
+        "xp": 14,
+        "gold": 13,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 2, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 2
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 2,
+        "hp": 24,
+        "maxHp": 24,
+        "dmg": 4,
+        "speed": 3,
+        "xp": 12,
+        "gold": 12,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 3, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 3
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 3,
+        "hp": 14,
+        "maxHp": 14,
+        "dmg": 4,
+        "speed": 15,
+        "xp": 18,
+        "gold": 15,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 3, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 3
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 3,
+        "hp": 23,
+        "maxHp": 23,
+        "dmg": 5,
+        "speed": 4,
+        "xp": 17,
+        "gold": 15,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 3, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 3
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 3,
+        "hp": 29,
+        "maxHp": 29,
+        "dmg": 5,
+        "speed": 3,
+        "xp": 15,
+        "gold": 14,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 4, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 4
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 4,
+        "hp": 17,
+        "maxHp": 17,
+        "dmg": 4,
+        "speed": 16,
+        "xp": 21,
+        "gold": 17,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 4, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 4
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 4,
+        "hp": 27,
+        "maxHp": 27,
+        "dmg": 5,
+        "speed": 5,
+        "xp": 20,
+        "gold": 17,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 4, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 4
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 4,
+        "hp": 34,
+        "maxHp": 34,
+        "dmg": 5,
+        "speed": 3,
+        "xp": 18,
+        "gold": 16,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 5, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 5,
+        "hp": 19,
+        "maxHp": 19,
+        "dmg": 5,
+        "speed": 17,
+        "xp": 24,
+        "gold": 19,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 5, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 5,
+        "hp": 31,
+        "maxHp": 31,
+        "dmg": 6,
+        "speed": 5,
+        "xp": 23,
+        "gold": 19,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 5, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 5,
+        "hp": 39,
+        "maxHp": 39,
+        "dmg": 6,
+        "speed": 4,
+        "xp": 21,
+        "gold": 18,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 8, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 8
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 8,
+        "hp": 25,
+        "maxHp": 25,
+        "dmg": 7,
+        "speed": 21,
+        "xp": 33,
+        "gold": 25,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 8, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 8
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 8,
+        "hp": 43,
+        "maxHp": 43,
+        "dmg": 8,
+        "speed": 6,
+        "xp": 32,
+        "gold": 25,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 8, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 8
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 8,
+        "hp": 54,
+        "maxHp": 54,
+        "dmg": 8,
+        "speed": 4,
+        "xp": 30,
+        "gold": 24,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 13, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 13
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 13,
+        "hp": 36,
+        "maxHp": 36,
+        "dmg": 11,
+        "speed": 26,
+        "xp": 48,
+        "gold": 35,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 13, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 13
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 13,
+        "hp": 62,
+        "maxHp": 62,
+        "dmg": 12,
+        "speed": 8,
+        "xp": 47,
+        "gold": 35,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 13, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 13
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 13,
+        "hp": 79,
+        "maxHp": 79,
+        "dmg": 12,
+        "speed": 6,
+        "xp": 45,
+        "gold": 34,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 19, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 19
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 19,
+        "hp": 49,
+        "maxHp": 49,
+        "dmg": 14,
+        "speed": 33,
+        "xp": 66,
+        "gold": 47,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 19, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 19
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 19,
+        "hp": 85,
+        "maxHp": 85,
+        "dmg": 15,
+        "speed": 10,
+        "xp": 65,
+        "gold": 47,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 19, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 19
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 19,
+        "hp": 109,
+        "maxHp": 109,
+        "dmg": 16,
+        "speed": 7,
+        "xp": 63,
+        "gold": 46,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 20, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 20
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 20,
+        "hp": 51,
+        "maxHp": 51,
+        "dmg": 16,
+        "speed": 34,
+        "xp": 69,
+        "gold": 49,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 20, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 20
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 20,
+        "hp": 89,
+        "maxHp": 89,
+        "dmg": 16,
+        "speed": 10,
+        "xp": 68,
+        "gold": 49,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 20, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 20
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 20,
+        "hp": 114,
+        "maxHp": 114,
+        "dmg": 17,
+        "speed": 7,
+        "xp": 66,
+        "gold": 48,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 50, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 50
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 50,
+        "hp": 117,
+        "maxHp": 117,
+        "dmg": 37,
+        "speed": 68,
+        "xp": 159,
+        "gold": 109,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 50, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 50
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 50,
+        "hp": 206,
+        "maxHp": 206,
+        "dmg": 37,
+        "speed": 20,
+        "xp": 158,
+        "gold": 109,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 50, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 50
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 50,
+        "hp": 263,
+        "maxHp": 263,
+        "dmg": 38,
+        "speed": 15,
+        "xp": 156,
+        "gold": 108,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 100, seed 1",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 100
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 100,
+        "hp": 225,
+        "maxHp": 225,
+        "dmg": 73,
+        "speed": 125,
+        "xp": 309,
+        "gold": 209,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 100, seed 2",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 100
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 100,
+        "hp": 400,
+        "maxHp": 400,
+        "dmg": 71,
+        "speed": 37,
+        "xp": 308,
+        "gold": 209,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: andar 100, seed 3",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 100
+      },
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 100,
+        "hp": 511,
+        "maxHp": 511,
+        "dmg": 74,
+        "speed": 27,
+        "xp": 306,
+        "gold": 208,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: só morcego e zumbi, seed 4",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5,
+        "options": {
+          "species": [
+            "morcego",
+            "zumbi"
+          ]
+        }
+      },
+      "rng": {
+        "seed": 4
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 5,
+        "hp": 30,
+        "maxHp": 30,
+        "dmg": 6,
+        "speed": 5,
+        "xp": 21,
+        "gold": 15,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: só morcego e zumbi, seed 5",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5,
+        "options": {
+          "species": [
+            "morcego",
+            "zumbi"
+          ]
+        }
+      },
+      "rng": {
+        "seed": 5
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "guardiao",
+        "floor": 5,
+        "hp": 45,
+        "maxHp": 45,
+        "dmg": 5,
+        "speed": 3,
+        "xp": 23,
+        "gold": 14,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: lista vazia vale todas, seed 4",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5,
+        "options": {
+          "species": []
+        }
+      },
+      "rng": {
+        "seed": 4
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "espectro_gelado",
+        "enemyClassId": "assassino",
+        "floor": 5,
+        "hp": 22,
+        "maxHp": 22,
+        "dmg": 7,
+        "speed": 17,
+        "xp": 21,
+        "gold": 15,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: lista vazia vale todas, seed 5",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5,
+        "options": {
+          "species": []
+        }
+      },
+      "rng": {
+        "seed": 5
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "guardiao",
+        "floor": 5,
+        "hp": 20,
+        "maxHp": 20,
+        "dmg": 4,
+        "speed": 15,
+        "xp": 23,
+        "gold": 14,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: só id desconhecido vale todas, seed 4",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5,
+        "options": {
+          "species": [
+            "dragao_de_papel"
+          ]
+        }
+      },
+      "rng": {
+        "seed": 4
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "espectro_gelado",
+        "enemyClassId": "assassino",
+        "floor": 5,
+        "hp": 22,
+        "maxHp": 22,
+        "dmg": 7,
+        "speed": 17,
+        "xp": 21,
+        "gold": 15,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: só id desconhecido vale todas, seed 5",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5,
+        "options": {
+          "species": [
+            "dragao_de_papel"
+          ]
+        }
+      },
+      "rng": {
+        "seed": 5
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "guardiao",
+        "floor": 5,
+        "hp": 20,
+        "maxHp": 20,
+        "dmg": 4,
+        "speed": 15,
+        "xp": 23,
+        "gold": 14,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: a Torre, seed 4",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5,
+        "options": {
+          "species": [
+            "elemental_fogo",
+            "espectro_gelado",
+            "esqueleto",
+            "orc"
+          ]
+        }
+      },
+      "rng": {
+        "seed": 4
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "espectro_gelado",
+        "enemyClassId": "assassino",
+        "floor": 5,
+        "hp": 22,
+        "maxHp": 22,
+        "dmg": 7,
+        "speed": 17,
+        "xp": 21,
+        "gold": 15,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generate: a Torre, seed 5",
+    "input": {
+      "fn": "generate",
+      "args": {
+        "floor": 5,
+        "options": {
+          "species": [
+            "elemental_fogo",
+            "espectro_gelado",
+            "esqueleto",
+            "orc"
+          ]
+        }
+      },
+      "rng": {
+        "seed": 5
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "elemental_fogo",
+        "enemyClassId": "guardiao",
+        "floor": 5,
+        "hp": 31,
+        "maxHp": 31,
+        "dmg": 7,
+        "speed": 10,
+        "xp": 23,
+        "gold": 14,
+        "isBoss": false
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generateBoss: andar 5, seed 1",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 5
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 5,
+        "hp": 55,
+        "maxHp": 55,
+        "dmg": 8,
+        "speed": 17,
+        "xp": 55,
+        "gold": 70,
+        "isBoss": true,
+        "isMainBoss": false,
+        "bossTitle": "o Ímpio"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 5, seed 2",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 5
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 5,
+        "hp": 83,
+        "maxHp": 83,
+        "dmg": 9,
+        "speed": 4,
+        "xp": 55,
+        "gold": 70,
+        "isBoss": true,
+        "isMainBoss": false,
+        "bossTitle": "o Flagelo"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 10, seed 1",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 10
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 10,
+        "hp": 108,
+        "maxHp": 108,
+        "dmg": 14,
+        "speed": 22,
+        "xp": 110,
+        "gold": 140,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Ímpio"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 10, seed 2",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 10
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 10,
+        "hp": 178,
+        "maxHp": 178,
+        "dmg": 15,
+        "speed": 5,
+        "xp": 110,
+        "gold": 140,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Flagelo"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 15, seed 1",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 15
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 15,
+        "hp": 101,
+        "maxHp": 101,
+        "dmg": 17,
+        "speed": 27,
+        "xp": 105,
+        "gold": 130,
+        "isBoss": true,
+        "isMainBoss": false,
+        "bossTitle": "o Ímpio"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 15, seed 2",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 15
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 15,
+        "hp": 165,
+        "maxHp": 165,
+        "dmg": 17,
+        "speed": 6,
+        "xp": 105,
+        "gold": 130,
+        "isBoss": true,
+        "isMainBoss": false,
+        "bossTitle": "o Flagelo"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 20, seed 1",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 20
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 20,
+        "hp": 178,
+        "maxHp": 178,
+        "dmg": 23,
+        "speed": 32,
+        "xp": 160,
+        "gold": 200,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Ímpio"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 20, seed 2",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 20
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 20,
+        "hp": 302,
+        "maxHp": 302,
+        "dmg": 23,
+        "speed": 7,
+        "xp": 160,
+        "gold": 200,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Flagelo"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 25, seed 1",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 25
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 25,
+        "hp": 146,
+        "maxHp": 146,
+        "dmg": 24,
+        "speed": 37,
+        "xp": 155,
+        "gold": 190,
+        "isBoss": true,
+        "isMainBoss": false,
+        "bossTitle": "o Ímpio"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 25, seed 2",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 25
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 25,
+        "hp": 246,
+        "maxHp": 246,
+        "dmg": 24,
+        "speed": 8,
+        "xp": 155,
+        "gold": 190,
+        "isBoss": true,
+        "isMainBoss": false,
+        "bossTitle": "o Flagelo"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 100, seed 1",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 100
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 100,
+        "hp": 734,
+        "maxHp": 734,
+        "dmg": 85,
+        "speed": 112,
+        "xp": 560,
+        "gold": 680,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Ímpio"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 100, seed 2",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 100
+      },
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 100,
+        "hp": 1298,
+        "maxHp": 1298,
+        "dmg": 83,
+        "speed": 24,
+        "xp": 560,
+        "gold": 680,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Flagelo"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: quem chama decide o chefe principal (24, main true)",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 24,
+        "options": {
+          "main": true
+        }
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 24,
+        "hp": 206,
+        "maxHp": 206,
+        "dmg": 25,
+        "speed": 36,
+        "xp": 180,
+        "gold": 224,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Ímpio"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: andar 20 com main false",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 20,
+        "options": {
+          "main": false
+        }
+      },
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 20,
+        "hp": 124,
+        "maxHp": 124,
+        "dmg": 20,
+        "speed": 32,
+        "xp": 130,
+        "gold": 160,
+        "isBoss": true,
+        "isMainBoss": false,
+        "bossTitle": "o Ímpio"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: só orc",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 5,
+        "options": {
+          "species": [
+            "orc"
+          ]
+        }
+      },
+      "rng": {
+        "seed": 6
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "orc",
+        "enemyClassId": "brutamontes",
+        "floor": 5,
+        "hp": 90,
+        "maxHp": 90,
+        "dmg": 11,
+        "speed": 8,
+        "xp": 55,
+        "gold": 70,
+        "isBoss": true,
+        "isMainBoss": false,
+        "bossTitle": "o Eterno"
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateMimic: andar 1",
+    "input": {
+      "fn": "generateMimic",
+      "args": {
+        "floor": 1
+      },
+      "rng": {
+        "seed": 11
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "orc",
+        "enemyClassId": "xama",
+        "floor": 2,
+        "hp": 29,
+        "maxHp": 29,
+        "dmg": 5,
+        "speed": 8,
+        "xp": 24,
+        "gold": 25,
+        "isBoss": false,
+        "overrides": {
+          "name": "Mímico Faminto",
+          "icon": "🧰",
+          "behavior": "agressivo",
+          "ability": "Mordida Surpresa",
+          "abilityDesc": "Ataca com força depois de se revelar como um baú falso."
+        }
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generateMimic: andar 3",
+    "input": {
+      "fn": "generateMimic",
+      "args": {
+        "floor": 3
+      },
+      "rng": {
+        "seed": 13
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "orc",
+        "enemyClassId": "assassino",
+        "floor": 4,
+        "hp": 33,
+        "maxHp": 33,
+        "dmg": 8,
+        "speed": 11,
+        "xp": 32,
+        "gold": 28,
+        "isBoss": false,
+        "overrides": {
+          "name": "Mímico Faminto",
+          "icon": "🧰",
+          "behavior": "agressivo",
+          "ability": "Mordida Surpresa",
+          "abilityDesc": "Ataca com força depois de se revelar como um baú falso."
+        }
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generateMimic: andar 7",
+    "input": {
+      "fn": "generateMimic",
+      "args": {
+        "floor": 7
+      },
+      "rng": {
+        "seed": 17
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 8,
+        "hp": 36,
+        "maxHp": 36,
+        "dmg": 9,
+        "speed": 21,
+        "xp": 52,
+        "gold": 44,
+        "isBoss": false,
+        "overrides": {
+          "name": "Mímico Faminto",
+          "icon": "🧰",
+          "behavior": "agressivo",
+          "ability": "Mordida Surpresa",
+          "abilityDesc": "Ataca com força depois de se revelar como um baú falso."
+        }
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generateMimic: andar 8",
+    "input": {
+      "fn": "generateMimic",
+      "args": {
+        "floor": 8
+      },
+      "rng": {
+        "seed": 18
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "aranha",
+        "enemyClassId": "guardiao",
+        "floor": 9,
+        "hp": 52,
+        "maxHp": 52,
+        "dmg": 10,
+        "speed": 15,
+        "xp": 57,
+        "gold": 52,
+        "isBoss": false,
+        "overrides": {
+          "name": "Mímico Ancestral",
+          "icon": "🧰",
+          "behavior": "agressivo",
+          "ability": "Mordida Surpresa",
+          "abilityDesc": "Ataca com força depois de se revelar como um baú falso."
+        }
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "generateMimic: andar 20",
+    "input": {
+      "fn": "generateMimic",
+      "args": {
+        "floor": 20
+      },
+      "rng": {
+        "seed": 30
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "elemental_fogo",
+        "enemyClassId": "feiticeiro",
+        "floor": 21,
+        "hp": 99,
+        "maxHp": 99,
+        "dmg": 25,
+        "speed": 26,
+        "xp": 117,
+        "gold": 96,
+        "isBoss": false,
+        "overrides": {
+          "name": "Mímico Ancestral",
+          "icon": "🧰",
+          "behavior": "agressivo",
+          "ability": "Mordida Surpresa",
+          "abilityDesc": "Ataca com força depois de se revelar como um baú falso."
+        }
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "monsterView: comum do andar 1",
+    "input": {
+      "fn": "monsterView",
+      "args": {
+        "monster": {
+          "speciesId": "morcego",
+          "enemyClassId": "brutamontes",
+          "floor": 1,
+          "hp": 10,
+          "maxHp": 10,
+          "dmg": 2,
+          "speed": 13,
+          "xp": 12,
+          "gold": 11,
+          "isBoss": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 1,
+        "hp": 10,
+        "maxHp": 10,
+        "dmg": 2,
+        "speed": 13,
+        "xp": 12,
+        "gold": 11,
+        "isBoss": false,
+        "species": {
+          "id": "morcego",
+          "name": "Morcego Vampírico",
+          "icon": "🦇",
+          "behavior": "agil",
+          "baseHp": 7,
+          "baseSpeed": 14,
+          "baseDmg": 2,
+          "weakness": "fisico",
+          "resistance": "magico",
+          "ability": "Voo Errático",
+          "abilityDesc": "Tem chance de evitar ataques comuns."
+        },
+        "enemyClass": {
+          "id": "brutamontes",
+          "name": "Brutamontes",
+          "icon": "💥",
+          "power": "Impacto Brutal",
+          "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+          "hpMult": 1.15,
+          "dmgMult": 1.2,
+          "speedMult": 0.9
+        },
+        "name": "Morcego Vampírico",
+        "icon": "🦇",
+        "behavior": "agil",
+        "ability": "Voo Errático",
+        "abilityDesc": "Tem chance de evitar ataques comuns.",
+        "enemyClassLabel": "Brutamontes"
+      }
+    }
+  },
+  {
+    "name": "monsterView: andar 10 (Ancestral)",
+    "input": {
+      "fn": "monsterView",
+      "args": {
+        "monster": {
+          "speciesId": "zumbi",
+          "enemyClassId": "assassino",
+          "floor": 10,
+          "hp": 50,
+          "maxHp": 50,
+          "dmg": 9,
+          "speed": 7,
+          "xp": 38,
+          "gold": 29,
+          "isBoss": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 10,
+        "hp": 50,
+        "maxHp": 50,
+        "dmg": 9,
+        "speed": 7,
+        "xp": 38,
+        "gold": 29,
+        "isBoss": false,
+        "species": {
+          "id": "zumbi",
+          "name": "Zumbi Cambaleante",
+          "icon": "🧟",
+          "behavior": "lento",
+          "baseHp": 16,
+          "baseSpeed": 3,
+          "baseDmg": 3,
+          "weakness": "magico",
+          "resistance": "fisico",
+          "ability": "Golpe Pesado",
+          "abilityDesc": "A cada 3 ataques, causa dano elevado."
+        },
+        "enemyClass": {
+          "id": "assassino",
+          "name": "Assassino",
+          "icon": "🗡️",
+          "power": "Lâmina Tóxica",
+          "powerDesc": "A cada 3 ataques causa dano extra e aplica veneno.",
+          "hpMult": 0.9,
+          "dmgMult": 1.15,
+          "speedMult": 1.25
+        },
+        "name": "Zumbi Cambaleante Ancestral",
+        "icon": "🧟",
+        "behavior": "lento",
+        "ability": "Golpe Pesado",
+        "abilityDesc": "A cada 3 ataques, causa dano elevado.",
+        "enemyClassLabel": "Assassino"
+      }
+    }
+  },
+  {
+    "name": "monsterView: andar 40 (sem adjetivo acima do 99, mas Lendário aqui)",
+    "input": {
+      "fn": "monsterView",
+      "args": {
+        "monster": {
+          "speciesId": "zumbi",
+          "enemyClassId": "brutamontes",
+          "floor": 40,
+          "hp": 213,
+          "maxHp": 213,
+          "dmg": 31,
+          "speed": 12,
+          "xp": 126,
+          "gold": 88,
+          "isBoss": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "brutamontes",
+        "floor": 40,
+        "hp": 213,
+        "maxHp": 213,
+        "dmg": 31,
+        "speed": 12,
+        "xp": 126,
+        "gold": 88,
+        "isBoss": false,
+        "species": {
+          "id": "zumbi",
+          "name": "Zumbi Cambaleante",
+          "icon": "🧟",
+          "behavior": "lento",
+          "baseHp": 16,
+          "baseSpeed": 3,
+          "baseDmg": 3,
+          "weakness": "magico",
+          "resistance": "fisico",
+          "ability": "Golpe Pesado",
+          "abilityDesc": "A cada 3 ataques, causa dano elevado."
+        },
+        "enemyClass": {
+          "id": "brutamontes",
+          "name": "Brutamontes",
+          "icon": "💥",
+          "power": "Impacto Brutal",
+          "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+          "hpMult": 1.15,
+          "dmgMult": 1.2,
+          "speedMult": 0.9
+        },
+        "name": "Zumbi Cambaleante Lendário",
+        "icon": "🧟",
+        "behavior": "lento",
+        "ability": "Golpe Pesado",
+        "abilityDesc": "A cada 3 ataques, causa dano elevado.",
+        "enemyClassLabel": "Brutamontes"
+      }
+    }
+  },
+  {
+    "name": "monsterView: chefe principal",
+    "input": {
+      "fn": "monsterView",
+      "args": {
+        "monster": {
+          "speciesId": "morcego",
+          "enemyClassId": "guardiao",
+          "floor": 10,
+          "hp": 124,
+          "maxHp": 124,
+          "dmg": 11,
+          "speed": 22,
+          "xp": 110,
+          "gold": 140,
+          "isBoss": true,
+          "isMainBoss": true,
+          "bossTitle": "o Flagelo"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "guardiao",
+        "floor": 10,
+        "hp": 124,
+        "maxHp": 124,
+        "dmg": 11,
+        "speed": 22,
+        "xp": 110,
+        "gold": 140,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Flagelo",
+        "species": {
+          "id": "morcego",
+          "name": "Morcego Vampírico",
+          "icon": "🦇",
+          "behavior": "agil",
+          "baseHp": 7,
+          "baseSpeed": 14,
+          "baseDmg": 2,
+          "weakness": "fisico",
+          "resistance": "magico",
+          "ability": "Voo Errático",
+          "abilityDesc": "Tem chance de evitar ataques comuns."
+        },
+        "enemyClass": {
+          "id": "guardiao",
+          "name": "Guardião",
+          "icon": "🛡️",
+          "power": "Muralha Sombria",
+          "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
+          "hpMult": 1.35,
+          "dmgMult": 0.95,
+          "speedMult": 0.8
+        },
+        "name": "Morcego Vampírico, o Flagelo",
+        "icon": "🦇",
+        "behavior": "agil",
+        "ability": "Voo Errático",
+        "abilityDesc": "Tem chance de evitar ataques comuns.",
+        "enemyClassLabel": "Chefe Guardião"
+      }
+    }
+  },
+  {
+    "name": "monsterView: mini-chefe",
+    "input": {
+      "fn": "monsterView",
+      "args": {
+        "monster": {
+          "speciesId": "zumbi",
+          "enemyClassId": "assassino",
+          "floor": 5,
+          "hp": 83,
+          "maxHp": 83,
+          "dmg": 9,
+          "speed": 4,
+          "xp": 55,
+          "gold": 70,
+          "isBoss": true,
+          "isMainBoss": false,
+          "bossTitle": "o Flagelo"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "zumbi",
+        "enemyClassId": "assassino",
+        "floor": 5,
+        "hp": 83,
+        "maxHp": 83,
+        "dmg": 9,
+        "speed": 4,
+        "xp": 55,
+        "gold": 70,
+        "isBoss": true,
+        "isMainBoss": false,
+        "bossTitle": "o Flagelo",
+        "species": {
+          "id": "zumbi",
+          "name": "Zumbi Cambaleante",
+          "icon": "🧟",
+          "behavior": "lento",
+          "baseHp": 16,
+          "baseSpeed": 3,
+          "baseDmg": 3,
+          "weakness": "magico",
+          "resistance": "fisico",
+          "ability": "Golpe Pesado",
+          "abilityDesc": "A cada 3 ataques, causa dano elevado."
+        },
+        "enemyClass": {
+          "id": "assassino",
+          "name": "Assassino",
+          "icon": "🗡️",
+          "power": "Lâmina Tóxica",
+          "powerDesc": "A cada 3 ataques causa dano extra e aplica veneno.",
+          "hpMult": 0.9,
+          "dmgMult": 1.15,
+          "speedMult": 1.25
+        },
+        "name": "Zumbi Cambaleante, o Flagelo",
+        "icon": "🧟",
+        "behavior": "lento",
+        "ability": "Golpe Pesado",
+        "abilityDesc": "A cada 3 ataques, causa dano elevado.",
+        "enemyClassLabel": "Chefe Assassino"
+      }
+    }
+  },
+  {
+    "name": "monsterView: mímico (override)",
+    "input": {
+      "fn": "monsterView",
+      "args": {
+        "monster": {
+          "speciesId": "morcego",
+          "enemyClassId": "brutamontes",
+          "floor": 9,
+          "hp": 39,
+          "maxHp": 39,
+          "dmg": 9,
+          "speed": 22,
+          "xp": 60,
+          "gold": 53,
+          "isBoss": false,
+          "overrides": {
+            "name": "Mímico Ancestral",
+            "icon": "🧰",
+            "behavior": "agressivo",
+            "ability": "Mordida Surpresa",
+            "abilityDesc": "Ataca com força depois de se revelar como um baú falso."
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "morcego",
+        "enemyClassId": "brutamontes",
+        "floor": 9,
+        "hp": 39,
+        "maxHp": 39,
+        "dmg": 9,
+        "speed": 22,
+        "xp": 60,
+        "gold": 53,
+        "isBoss": false,
+        "overrides": {
+          "name": "Mímico Ancestral",
+          "icon": "🧰",
+          "behavior": "agressivo",
+          "ability": "Mordida Surpresa",
+          "abilityDesc": "Ataca com força depois de se revelar como um baú falso."
+        },
+        "species": {
+          "id": "morcego",
+          "name": "Morcego Vampírico",
+          "icon": "🦇",
+          "behavior": "agil",
+          "baseHp": 7,
+          "baseSpeed": 14,
+          "baseDmg": 2,
+          "weakness": "fisico",
+          "resistance": "magico",
+          "ability": "Voo Errático",
+          "abilityDesc": "Tem chance de evitar ataques comuns."
+        },
+        "enemyClass": {
+          "id": "brutamontes",
+          "name": "Brutamontes",
+          "icon": "💥",
+          "power": "Impacto Brutal",
+          "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+          "hpMult": 1.15,
+          "dmgMult": 1.2,
+          "speedMult": 0.9
+        },
+        "name": "Mímico Ancestral",
+        "icon": "🧰",
+        "behavior": "agressivo",
+        "ability": "Mordida Surpresa",
+        "abilityDesc": "Ataca com força depois de se revelar como um baú falso.",
+        "enemyClassLabel": "Brutamontes"
+      }
+    }
+  },
+  {
+    "name": "monsterView: espécie que sumiu lança",
+    "input": {
+      "fn": "monsterView",
+      "args": {
+        "monster": {
+          "speciesId": "nada",
+          "enemyClassId": "brutamontes",
+          "floor": 1,
+          "hp": 10,
+          "maxHp": 10,
+          "dmg": 2,
+          "speed": 13,
+          "xp": 12,
+          "gold": 11,
+          "isBoss": false
+        }
+      }
+    },
+    "expected": {
+      "throws": {
+        "name": "Error",
+        "message": "Espécie desconhecida: nada"
+      }
+    }
+  }
+]

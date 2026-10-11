@@ -1,0 +1,49 @@
+{
+  "TIER_ORDER": [
+    "E",
+    "D",
+    "C",
+    "B",
+    "A",
+    "S",
+    "SS",
+    "SSS",
+    "SSS+",
+    "MAX"
+  ],
+  "TIER_MIN": [
+    0,
+    25,
+    40,
+    60,
+    85,
+    115,
+    145,
+    175,
+    210,
+    250
+  ],
+  "RARITY_BASE": [
+    10,
+    25,
+    40,
+    58,
+    78,
+    95
+  ],
+  "STAT_WEIGHTS": {
+    "ataque": 4,
+    "defesa": 4,
+    "vida": 0.2,
+    "mana": 0.2,
+    "critico": 1,
+    "velocidade": 3,
+    "esquiva": 2
+  },
+  "DEFAULT_WEIGHT": 0.5,
+  "$privadas": [
+    "RARITY_BASE",
+    "STAT_WEIGHTS",
+    "DEFAULT_WEIGHT"
+  ]
+}

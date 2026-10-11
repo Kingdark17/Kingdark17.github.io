@@ -1,0 +1,80 @@
+{
+  "BASE_ATTR": 8,
+  "APPRENTICE": {
+    "name": "Aprendiz",
+    "icon": "🎒"
+  },
+  "MAX_NIVEIS_POR_GANHO": 500,
+  "OFFHAND_WEAPON_IDS": [
+    "espada",
+    "adaga",
+    "maca"
+  ],
+  "TWO_HANDED_WEAPON_IDS": [
+    "arco",
+    "cajado",
+    "machado",
+    "marreta",
+    "violao"
+  ],
+  "COMPANION_ROLES": {
+    "guerreiro": {
+      "ability": "Proteção",
+      "desc": "Pode interceptar ataques contra o herói."
+    },
+    "mago": {
+      "ability": "Rajada Arcana",
+      "desc": "Seus ataques ignoram parte da resistência."
+    },
+    "ladino": {
+      "ability": "Ataque Furtivo",
+      "desc": "Pode causar um segundo golpe."
+    },
+    "clerigo": {
+      "ability": "Prece Curativa",
+      "desc": "Pode recuperar a Vida do herói."
+    },
+    "barbaro": {
+      "ability": "Fúria",
+      "desc": "Causa mais dano quando está ferido."
+    },
+    "arqueiro": {
+      "ability": "Tiro Crítico",
+      "desc": "Possui chance elevada de dano crítico."
+    },
+    "paladino": {
+      "ability": "Proteção Sagrada",
+      "desc": "Protege a equipe e resiste a golpes."
+    },
+    "necromante": {
+      "ability": "Maldição",
+      "desc": "Enfraquece criaturas durante a batalha."
+    },
+    "druida": {
+      "ability": "Esporos",
+      "desc": "Pode causar dano contínuo e auxiliar aliados."
+    },
+    "monge": {
+      "ability": "Golpe Atordoante",
+      "desc": "Pode impedir a reação do inimigo."
+    },
+    "bardo": {
+      "ability": "Canção de Batalha",
+      "desc": "Inspira os aliados durante o combate."
+    },
+    "cacador": {
+      "ability": "Flecha Serrilhada",
+      "desc": "Possui chance elevada de causar sangramento."
+    }
+  },
+  "$privadas": [
+    "MAX_NIVEIS_POR_GANHO",
+    "OFFHAND_WEAPON_IDS",
+    "TWO_HANDED_WEAPON_IDS",
+    "COMPANION_ROLES"
+  ],
+  "$conjuntos": [
+    "OFFHAND_WEAPON_IDS",
+    "TWO_HANDED_WEAPON_IDS"
+  ]
+}

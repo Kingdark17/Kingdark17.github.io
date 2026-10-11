@@ -1,0 +1,4096 @@
+[
+  {
+    "name": "EVENT_TEMPLATES (constante)",
+    "input": {
+      "const": "EVENT_TEMPLATES"
+    },
+    "expected": {
+      "value": [
+        {
+          "id": "ferido",
+          "icon": "🩹",
+          "title": "Aventureiro Ferido",
+          "text": "Um aventureiro ferido pede ajuda no canto da sala."
+        },
+        {
+          "id": "altar",
+          "icon": "🕯️",
+          "title": "Altar Antigo",
+          "text": "Runas antigas brilham sobre um altar coberto de poeira."
+        },
+        {
+          "id": "porta",
+          "icon": "🚪",
+          "title": "Porta Lacrada",
+          "text": "Uma porta de pedra protege algo valioso. Força ou conhecimento podem abri-la."
+        }
+      ]
+    }
+  },
+  {
+    "name": "eventTemplateById: ferido",
+    "input": {
+      "fn": "eventTemplateById",
+      "args": {
+        "id": "ferido"
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "ferido",
+        "icon": "🩹",
+        "title": "Aventureiro Ferido",
+        "text": "Um aventureiro ferido pede ajuda no canto da sala."
+      }
+    }
+  },
+  {
+    "name": "eventTemplateById: altar",
+    "input": {
+      "fn": "eventTemplateById",
+      "args": {
+        "id": "altar"
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "altar",
+        "icon": "🕯️",
+        "title": "Altar Antigo",
+        "text": "Runas antigas brilham sobre um altar coberto de poeira."
+      }
+    }
+  },
+  {
+    "name": "eventTemplateById: porta",
+    "input": {
+      "fn": "eventTemplateById",
+      "args": {
+        "id": "porta"
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "porta",
+        "icon": "🚪",
+        "title": "Porta Lacrada",
+        "text": "Uma porta de pedra protege algo valioso. Força ou conhecimento podem abri-la."
+      }
+    }
+  },
+  {
+    "name": "eventTemplateById: nada",
+    "input": {
+      "fn": "eventTemplateById",
+      "args": {
+        "id": "nada"
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "randomEventTemplate: seed 1",
+    "input": {
+      "fn": "randomEventTemplate",
+      "args": {},
+      "rng": {
+        "seed": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "altar",
+        "icon": "🕯️",
+        "title": "Altar Antigo",
+        "text": "Runas antigas brilham sobre um altar coberto de poeira."
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "randomEventTemplate: seed 2",
+    "input": {
+      "fn": "randomEventTemplate",
+      "args": {},
+      "rng": {
+        "seed": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "porta",
+        "icon": "🚪",
+        "title": "Porta Lacrada",
+        "text": "Uma porta de pedra protege algo valioso. Força ou conhecimento podem abri-la."
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "randomEventTemplate: seed 3",
+    "input": {
+      "fn": "randomEventTemplate",
+      "args": {},
+      "rng": {
+        "seed": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "porta",
+        "icon": "🚪",
+        "title": "Porta Lacrada",
+        "text": "Uma porta de pedra protege algo valioso. Força ou conhecimento podem abri-la."
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "randomEventTemplate: seed 4",
+    "input": {
+      "fn": "randomEventTemplate",
+      "args": {},
+      "rng": {
+        "seed": 4
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "porta",
+        "icon": "🚪",
+        "title": "Porta Lacrada",
+        "text": "Uma porta de pedra protege algo valioso. Força ou conhecimento podem abri-la."
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "randomEventTemplate: seed 5",
+    "input": {
+      "fn": "randomEventTemplate",
+      "args": {},
+      "rng": {
+        "seed": 5
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "porta",
+        "icon": "🚪",
+        "title": "Porta Lacrada",
+        "text": "Uma porta de pedra protege algo valioso. Força ou conhecimento podem abri-la."
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "randomEventTemplate: seed 6",
+    "input": {
+      "fn": "randomEventTemplate",
+      "args": {},
+      "rng": {
+        "seed": 6
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "altar",
+        "icon": "🕯️",
+        "title": "Altar Antigo",
+        "text": "Runas antigas brilham sobre um altar coberto de poeira."
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "eventXp: andar 1",
+    "input": {
+      "fn": "eventXp",
+      "args": {
+        "floor": 1
+      }
+    },
+    "expected": {
+      "result": 11
+    }
+  },
+  {
+    "name": "eventXp: andar 5",
+    "input": {
+      "fn": "eventXp",
+      "args": {
+        "floor": 5
+      }
+    },
+    "expected": {
+      "result": 23
+    }
+  },
+  {
+    "name": "eventXp: andar 30",
+    "input": {
+      "fn": "eventXp",
+      "args": {
+        "floor": 30
+      }
+    },
+    "expected": {
+      "result": 98
+    }
+  },
+  {
+    "name": "eventXp: andar 0",
+    "input": {
+      "fn": "eventXp",
+      "args": {
+        "floor": 0
+      }
+    },
+    "expected": {
+      "result": 11
+    }
+  },
+  {
+    "name": "eventXp: andar -3",
+    "input": {
+      "fn": "eventXp",
+      "args": {
+        "floor": -3
+      }
+    },
+    "expected": {
+      "result": 11
+    }
+  },
+  {
+    "name": "eventXp: andar 2.7",
+    "input": {
+      "fn": "eventXp",
+      "args": {
+        "floor": 2.7
+      }
+    },
+    "expected": {
+      "result": 14
+    }
+  },
+  {
+    "name": "eventXp: andar NaN",
+    "input": {
+      "fn": "eventXp",
+      "args": {
+        "floor": {
+          "$num": "NaN"
+        }
+      }
+    },
+    "expected": {
+      "result": 11
+    }
+  },
+  {
+    "name": "resolveEvent: ajudar paga 15 e cura 20",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "ajudar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 85,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 80,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "helped_wounded"
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: ajudar sem ouro não resolve",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 10,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "ajudar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 10,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "insufficient_gold",
+          "required": 15
+        },
+        "resolved": false,
+        "xp": null
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: ajudar quase cheio não passa do máximo",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 120,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 3,
+        "choice": "ajudar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 17,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 85,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 131,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "helped_wounded"
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 17,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: curar com sabedoria 12 dá certo",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 12,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 12,
+            "resistMagica": 12,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "curar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 12,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 130,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 12,
+            "resistMagica": 12,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "healed_wounded",
+          "success": true,
+          "goldGained": 30
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: curar com sabedoria 11 falha e ainda ganha XP",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 11,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 11,
+            "resistMagica": 11,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "curar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 11,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 11,
+            "resistMagica": 11,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "healed_wounded",
+          "success": false,
+          "goldGained": 0
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: estudar com intelecto 13 acha item (andar 1)",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 77,
+            "dmgFisico": 20,
+            "dmgMagico": 39,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 77,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "estudar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 77,
+            "dmgFisico": 20,
+            "dmgMagico": 39,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 77,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "studied",
+          "success": true,
+          "item": {
+            "uid": "amuleto_sab_1700000000000_52744",
+            "templateId": "amuleto_sab",
+            "rarity": "comum",
+            "stats": {
+              "mana": 6,
+              "vida": 4
+            },
+            "value": 20,
+            "equipped": false
+          }
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "resolveEvent: estudar com intelecto 13 acha item (andar 30)",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 77,
+            "dmgFisico": 20,
+            "dmgMagico": 39,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 77,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 30,
+        "choice": "estudar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 2,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 58,
+          "xpNext": 75,
+          "attrPoints": 2,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 136,
+            "maxMp": 79,
+            "dmgFisico": 20,
+            "dmgMagico": 39,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 136,
+          "hp": 65,
+          "maxMp": 79,
+          "mp": 32,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "studied",
+          "success": true,
+          "item": {
+            "uid": "pot_vida_1700000000000_28529",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          }
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 98,
+          "leveledUp": true,
+          "levels": 1
+        }
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "resolveEvent: examinar usa a mesma regra de estudar",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 77,
+            "dmgFisico": 20,
+            "dmgMagico": 39,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 77,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 5,
+        "choice": "examinar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 23,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 77,
+            "dmgFisico": 20,
+            "dmgMagico": 39,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 77,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "studied",
+          "success": true,
+          "item": {
+            "uid": "colar_forca_1700000000000_45618",
+            "templateId": "colar_forca",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 2,
+              "vida": 8
+            },
+            "value": 22,
+            "equipped": false,
+            "foundFloor": 5
+          }
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 23,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "resolveEvent: estudar com intelecto 12 falha e perde 8 de mana",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 12,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 72,
+            "dmgFisico": 20,
+            "dmgMagico": 36,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 72,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "estudar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 12,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 72,
+            "dmgFisico": 20,
+            "dmgMagico": 36,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 72,
+          "mp": 22,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "studied",
+          "success": false,
+          "item": null
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: estudar falhando com pouca mana para em 0",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 12,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 72,
+            "dmgFisico": 20,
+            "dmgMagico": 36,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 72,
+          "mp": 3,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "estudar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 12,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 72,
+            "dmgFisico": 20,
+            "dmgMagico": 36,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 72,
+          "mp": 0,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "studied",
+          "success": false,
+          "item": null
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: rezar com sabedoria 13 enche vida e mana",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 13,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 13,
+            "resistMagica": 13,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "rezar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 13,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 13,
+            "resistMagica": 13,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 131,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "prayed",
+          "success": true
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: rezar com sabedoria 12 falha",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 12,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 12,
+            "resistMagica": 12,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "rezar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 12,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 12,
+            "resistMagica": 12,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "prayed",
+          "success": false
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: sacrificar tira 20% da vida máxima e dá 1 ponto",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "sacrificar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 1,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 34,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "sacrificed",
+          "hpLost": 26
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: sacrificar ferido demais não resolve",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 25,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "sacrificar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 25,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "too_wounded",
+          "required": 26
+        },
+        "resolved": false,
+        "xp": null
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: sacrificar com vida máxima baixa tira no mínimo 10",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 1,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 41,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 40,
+          "hp": 30,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "sacrificar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 1,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 11,
+          "xpNext": 40,
+          "attrPoints": 1,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 41,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 40,
+          "hp": 20,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "sacrificed",
+          "hpLost": 10
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: forçar com força 13 abre e dá ouro pelo andar",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 13,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 26,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 7,
+        "choice": "forcar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 13,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 29,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 139,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 26,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "forced_door",
+          "success": true,
+          "goldGained": 39,
+          "hpLost": 0
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 29,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: forçar com força 12 falha e perde 10 de vida",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 12,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 24,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 7,
+        "choice": "forcar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 12,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 29,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 24,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "forced_door",
+          "success": false,
+          "goldGained": 0,
+          "hpLost": 10
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 29,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: forçar falhando com pouca vida para em 1",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 12,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 24,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 5,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 7,
+        "choice": "forcar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 12,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 29,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 24,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 1,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "forced_door",
+          "success": false,
+          "goldGained": 0,
+          "hpLost": 10
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 29,
+          "leveledUp": false,
+          "levels": 0
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: ignorar não ganha XP",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "ignorar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "declined"
+        },
+        "resolved": true,
+        "xp": null
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: desistir não ganha XP",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "desistir",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "declined"
+        },
+        "resolved": true,
+        "xp": null
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: escolha desconhecida",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "voar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "invalid_choice"
+        },
+        "resolved": false,
+        "xp": null
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "resolveEvent: o XP do evento sobe de nível",
+    "input": {
+      "fn": "resolveEvent",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 12,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 35,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 131,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 12,
+            "resistMagica": 12,
+            "descontoLoja": 5
+          },
+          "maxHp": 131,
+          "hp": 60,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "floor": 1,
+        "choice": "curar",
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 2,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 12,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "maca_1700000000000_62706",
+              "templateId": "maca",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "vida": 6
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Clérigo",
+          "classIcon": "✝️",
+          "classId": "clerigo",
+          "raceId": "humano",
+          "xp": 6,
+          "xpNext": 75,
+          "attrPoints": 2,
+          "gold": 130,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 136,
+            "maxMp": 64,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 12,
+            "resistMagica": 12,
+            "descontoLoja": 5
+          },
+          "maxHp": 136,
+          "hp": 65,
+          "maxMp": 64,
+          "mp": 32,
+          "buffs": {}
+        },
+        "outcome": {
+          "kind": "healed_wounded",
+          "success": true,
+          "goldGained": 30
+        },
+        "resolved": true,
+        "xp": {
+          "gained": 11,
+          "leveledUp": true,
+          "levels": 1
+        }
+      },
+      "rngCalls": 0
+    }
+  }
+]

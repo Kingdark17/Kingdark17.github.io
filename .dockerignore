@@ -26,6 +26,11 @@ rpg-legend
 # O cliente Unity também não (e a Library local da Unity tem vários GB).
 apps/unity
 
+# Os casos de referência da engine (o contrato com o port em C# do cliente
+# Unity) e o script que os gera: 6 MB que a API não usa.
+packages/shared/fixtures
+packages/shared/scripts
+
 # O front tem imagem própria (Vercel); só o package.json dele entra, e o
 # Dockerfile copia esse explicitamente.
 apps/web/app
