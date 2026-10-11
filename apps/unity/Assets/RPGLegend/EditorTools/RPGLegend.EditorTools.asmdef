@@ -1,0 +1,14 @@
+{
+  "name": "RPGLegend.EditorTools",
+  "rootNamespace": "RPGLegend.EditorTools",
+  "references": [ "RPGLegend.Engine", "RPGLegend.Engine.Json", "RPGLegend.Game" ],
+  "includePlatforms": [ "Editor" ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

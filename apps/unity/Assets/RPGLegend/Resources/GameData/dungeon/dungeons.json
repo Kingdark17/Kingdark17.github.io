@@ -1,0 +1,70 @@
+{
+  "DUNGEONS": [
+    {
+      "id": "floresta",
+      "name": "Floresta",
+      "icon": "🌲",
+      "minLevel": 1,
+      "requires": null,
+      "species": [
+        "goblin",
+        "lobo_sombras",
+        "aranha",
+        "slime"
+      ]
+    },
+    {
+      "id": "caverna",
+      "name": "Caverna",
+      "icon": "🦇",
+      "minLevel": 15,
+      "requires": "floresta",
+      "species": [
+        "morcego",
+        "esqueleto",
+        "orc",
+        "zumbi",
+        "aranha"
+      ]
+    },
+    {
+      "id": "torre",
+      "name": "Torre",
+      "icon": "🗼",
+      "minLevel": 30,
+      "requires": "caverna",
+      "species": [
+        "elemental_fogo",
+        "espectro_gelado",
+        "esqueleto",
+        "orc"
+      ]
+    }
+  ],
+  "DIFFICULTIES": [
+    {
+      "id": "normal",
+      "name": "Normal"
+    },
+    {
+      "id": "dificil",
+      "name": "Difícil"
+    },
+    {
+      "id": "pesadelo",
+      "name": "Pesadelo"
+    }
+  ],
+  "DUNGEON_FLOORS": 100,
+  "TOTEM_FLOORS": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "DEFAULT_RUN": {
+    "dungeon": "floresta",
+    "difficulty": "normal"
+  },
+  "FLOORS_PER_TIER": 7
+}

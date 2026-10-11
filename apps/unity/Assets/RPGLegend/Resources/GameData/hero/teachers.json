@@ -1,0 +1,84 @@
+{
+  "CLASS_TEACHER_POWERS": {
+    "guerreiro": [
+      "grito_de_guerra",
+      "golpe_atordoante",
+      "passo_veloz"
+    ],
+    "mago": [
+      "rajada_glacial",
+      "escudo_arcano",
+      "maldicao_sombria"
+    ],
+    "ladino": [
+      "passo_veloz",
+      "golpe_poderoso",
+      "esporos_venenosos"
+    ],
+    "clerigo": [
+      "renovacao_natural",
+      "julgamento_sagrado",
+      "escudo_arcano"
+    ],
+    "barbaro": [
+      "golpe_poderoso",
+      "golpe_atordoante",
+      "passo_veloz"
+    ],
+    "arqueiro": [
+      "flecha_serrilhada",
+      "passo_veloz",
+      "furtividade_sombria"
+    ],
+    "paladino": [
+      "cura_menor",
+      "escudo_arcano",
+      "golpe_poderoso"
+    ],
+    "necromante": [
+      "esporos_venenosos",
+      "rajada_glacial",
+      "escudo_arcano"
+    ],
+    "druida": [
+      "renovacao_natural",
+      "cura_menor",
+      "rajada_glacial"
+    ],
+    "monge": [
+      "passo_veloz",
+      "golpe_poderoso",
+      "cura_menor"
+    ],
+    "bardo": [
+      "passo_veloz",
+      "furtividade_sombria",
+      "cura_menor"
+    ],
+    "cacador": [
+      "tiro_certeiro",
+      "esporos_venenosos",
+      "passo_veloz"
+    ]
+  },
+  "TEACHERS": [
+    {
+      "number": 1,
+      "floors": [
+        25,
+        50
+      ],
+      "mastery": 4,
+      "chance": 0.1
+    },
+    {
+      "number": 2,
+      "floors": [
+        75,
+        80
+      ],
+      "mastery": 8,
+      "chance": 0.25
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "DOT_KEYS": [
+    "queimadura",
+    "sangramento",
+    "veneno"
+  ],
+  "$privadas": [
+    "DOT_KEYS"
+  ]
+}

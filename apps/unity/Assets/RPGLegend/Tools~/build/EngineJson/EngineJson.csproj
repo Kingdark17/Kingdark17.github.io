@@ -9,7 +9,7 @@
   <ItemGroup>
     <Compile Include="../../../EngineJson/**/*.cs" />
     <ProjectReference Include="../Engine/Engine.csproj" />
-    <!-- Na Unity: com.unity.nuget.newtonsoft-json (13.0.2). Aqui: a cópia que vem com o SDK do .NET. -->
+    <!-- A mesma DLL do pacote com.unity.nuget.newtonsoft-json (13.0.2) que a Unity usa; ver ../../README.md. -->
     <Reference Include="Newtonsoft.Json"><HintPath>../../lib/Newtonsoft.Json.dll</HintPath></Reference>
   </ItemGroup>
 </Project>

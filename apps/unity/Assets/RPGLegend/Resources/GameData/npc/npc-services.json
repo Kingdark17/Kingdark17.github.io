@@ -1,0 +1,30 @@
+{
+  "NPC_SERVICE_INFO": {
+    "heal": {
+      "icon": "❤️",
+      "label": "Receber Tratamento"
+    },
+    "blessing": {
+      "icon": "✨",
+      "label": "Receber Bênção"
+    },
+    "barter": {
+      "icon": "🧪",
+      "label": "Trocar Material"
+    },
+    "reveal": {
+      "icon": "🗺️",
+      "label": "Pedir Informações"
+    },
+    "recruit": {
+      "icon": "🤝",
+      "label": "Convidar para a Equipe"
+    }
+  },
+  "MAX_PARTY_SIZE": 3,
+  "TEMPORARY_RECRUIT_COMBATS": 3,
+  "$privadas": [
+    "MAX_PARTY_SIZE",
+    "TEMPORARY_RECRUIT_COMBATS"
+  ]
+}

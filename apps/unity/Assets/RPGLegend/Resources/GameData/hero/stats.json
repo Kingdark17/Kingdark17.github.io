@@ -1,0 +1,28 @@
+{
+  "ATTR_KEYS": [
+    "forca",
+    "destreza",
+    "constituicao",
+    "intelecto",
+    "sabedoria",
+    "carisma"
+  ],
+  "EQUIP_SLOTS": [
+    "arma",
+    "secundaria",
+    "elmo",
+    "armadura",
+    "calca",
+    "botas",
+    "acessorio"
+  ],
+  "ITEM_STAT_KEYS": [
+    "ataque",
+    "defesa",
+    "vida",
+    "mana",
+    "critico",
+    "velocidade",
+    "esquiva"
+  ]
+}

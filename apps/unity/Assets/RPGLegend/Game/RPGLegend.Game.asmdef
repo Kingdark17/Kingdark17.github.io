@@ -1,0 +1,14 @@
+{
+  "name": "RPGLegend.Game",
+  "rootNamespace": "RPGLegend.Game",
+  "references": [ "RPGLegend.Engine", "RPGLegend.Engine.Json" ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

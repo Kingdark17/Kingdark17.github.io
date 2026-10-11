@@ -1,0 +1,10 @@
+{
+  "QUEST_TYPES": [
+    "kill",
+    "floor",
+    "collect"
+  ],
+  "$privadas": [
+    "QUEST_TYPES"
+  ]
+}

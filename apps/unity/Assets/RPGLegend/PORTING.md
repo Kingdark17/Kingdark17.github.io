@@ -17,7 +17,8 @@ Quem decide se está certo são os resultados de referência gerados pelo TS:
 
 Na Unity: Window > General > Test Runner > EditMode > Run All.
 
-Fora da Unity (precisa do .NET 8 SDK), a partir desta pasta:
+Fora da Unity (precisa de um .NET 8 SDK; sem um instalado, no Windows os scripts usam o que vem com a
+Unity), a partir desta pasta:
 
 ```
 bash Tools~/run-tests.sh                      # tudo
@@ -34,14 +35,34 @@ Fora da Unity, os testes de `Tests/EditMode` rodam com um substituto mínimo do 
 Os dois jeitos leem os casos de `packages/shared/fixtures`, achado subindo a partir da pasta atual;
 a variável `RPG_FIXTURES_DIR` aponta outra pasta. Quando a engine TS mudar, regenere os casos
 (`cd packages/shared && pnpm dlx tsx scripts/gen-fixtures.ts`) e rode de novo: o que falhar é o que
-falta portar.
+falta portar. Se as tabelas mudaram, rode também **RPG Legend > Atualizar tabelas do jogo** (ver Tabelas).
+
+Build de teste: **RPG Legend > Build de teste (Windows)**. Builda só a cena `Scenes/EngineSmoke.unity`
+(Mono, Windows 64) em `apps/unity/Builds/Smoke/` (fora do git), roda o `.exe` com
+`-batchmode -nographics -logFile` e confere se as linhas `[smoke]` do log são idênticas às do `SmokeRun`
+rodado no Editor. O resultado vai para o Console e para `Builds/Smoke/smoke-report.txt`. O primeiro build
+leva uns 13 minutos (a Unity compila os shaders do zero); os seguintes, bem menos.
 
 ## Estrutura
 
 - `Engine/` — C# puro (.NET Standard 2.1, **C# 9**), sem UnityEngine e sem biblioteca de JSON.
   Um arquivo/pasta por módulo do TS (`Engine/Monsters/…`, `Engine/Combat/…`).
 - `EngineJson/` — a ponte com JSON (Newtonsoft): `JsSerializer`, `JsJson`, `GameDataLoader`.
-- `Tests/EditMode/` — os handlers de fixture (`XxxFixtures.cs`) e o executor `EngineFixtureTests`.
+- `Game/` — o jogo de verdade, com UnityEngine (assembly `RPGLegend.Game`):
+  - `GameBootstrap` carrega as tabelas de `Resources/GameData` antes da primeira cena
+    (`RuntimeInitializeOnLoadMethod`), com erro dizendo qual tabela falta;
+  - `SmokeRun` (sem UnityEngine) é uma partida curta e determinística — herói, andar 1, uma luta —
+    com `Rng.SeededRng(42)` e relógio fixo; o relatório não mostra uid, porque o da arma inicial sai de
+    `Rng.Default`/`Date.now` (paridade com o `buildHero` do TS);
+  - `EngineSmoke` (MonoBehaviour) mostra o `SmokeRun` na tela e no log (`[smoke] `) e, com `-batchmode`,
+    sai com código 0 ou 1.
+- `Scenes/EngineSmoke.unity` — câmera e `EngineSmoke`; é a cena do build de teste.
+- `Resources/GameData/` — a cópia de `packages/shared/fixtures/data`, nas mesmas pastas, que vai no build.
+  Não edite à mão: ela sai do menu de atualizar tabelas (ver Tabelas).
+- `EditorTools/` — só Editor (namespace `RPGLegend.EditorTools`, não `Editor`, que colide com
+  `UnityEditor.Editor`): os menus "Atualizar tabelas do jogo" e "Build de teste (Windows)".
+- `Tests/EditMode/` — os handlers de fixture (`XxxFixtures.cs`), o executor `EngineFixtureTests`, as
+  regressões e o `GameDataCopyTests`. Tudo sem UnityEngine: também compila no executor de fora da Unity.
 - `Tools~/` — o executor fora da Unity (projetos .NET, shim do NUnit, scripts `run-tests`).
   A Unity ignora pastas terminadas em `~`.
 
@@ -100,6 +121,11 @@ falta portar.
   O `GameDataLoader` acha os `ITableSet` sozinho.
 - Constantes simples (um número) podem ser `const` no C# se não estiverem no JSON, mas prefira
   ler do JSON quando estiverem lá.
+- De onde vem o texto das tabelas: nos testes, direto de `packages/shared/fixtures/data`; no jogo, da cópia
+  em `Assets/RPGLegend/Resources/GameData` (o `GameBootstrap` lê com `Resources.Load<TextAsset>`).
+- **Mudaram as tabelas do TS (regenerou os fixtures) → rode RPG Legend > Atualizar tabelas do jogo.** O menu
+  copia só o que mudou (ignorando `\r\n` contra `\n`) e apaga o que sumiu da origem. O teste
+  `GameDataCopyTests` falha enquanto a cópia estiver diferente da origem, e diz qual arquivo.
 
 ### Fixtures (testes)
 - Um `Tests/EditMode/XxxFixtures.cs` por módulo: `internal sealed class XxxFixtures : IFixtureModule`

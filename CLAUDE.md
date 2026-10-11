@@ -123,6 +123,14 @@ Ordem das fases: 0 monorepo → 1 engine shared → 2 Nest (ainda no Neon) →
 Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
 `package.json`, então fica fora do workspace pnpm e do turbo.
 
+- Alvo: **PC e celular**, com a **mesma conta e os mesmos personagens do web**
+  (o mesmo save na nuvem, então o app lê e grava o mesmo JSON que o web).
+- A ideia é o app ter mais coisas que o web. Onde mora o conteúdo exclusivo do
+  app ainda não foi decidido (fica para o futuro): no TS com o web só não
+  mostrando, numa camada C# fora do port, ou em personagens separados.
+  **Perguntar antes de escrever o primeiro.** Até lá, nada só do app entra no
+  save nem na engine.
+
 - `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
   paridade exata: mesma entrada → mesmo resultado e a mesma sequência de
   sorteios do rng. As regras do port estão em `Assets/RPGLegend/PORTING.md`.
@@ -130,7 +138,20 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   (`cd packages/shared && pnpm dlx tsx scripts/gen-fixtures.ts`). **Mudou a
   engine TS → regenerar os casos e rodar os testes da Unity** (Test Runner →
   EditMode, ou `bash apps/unity/Assets/RPGLegend/Tools~/run-tests.sh`, que
-  precisa do .NET 8 SDK). O que falhar é o que falta portar para o C#.
+  usa o .NET 8 SDK e, sem um instalado, o que vem com a Unity). O que falhar é
+  o que falta portar para o C#.
+- O jogo carrega as tabelas de uma cópia de `packages/shared/fixtures/data` em
+  `Assets/RPGLegend/Resources/GameData` (é ela que vai no build). **Mudaram as
+  tabelas do TS → rodar na Unity o menu RPG Legend > Atualizar tabelas do jogo**
+  (copia só o que mudou, apaga o que sumiu). O teste `GameDataCopyTests` falha
+  enquanto a cópia estiver diferente da origem.
+- Build: Mono, Windows 64 (o IL2CPP não está instalado). O menu RPG Legend >
+  Build de teste (Windows) builda a cena `EngineSmoke` em `apps/unity/Builds/Smoke`
+  (fora do git), roda o .exe em batchmode e confere o relatório dele contra o do
+  Editor; o resultado sai no Console e em `Builds/Smoke/smoke-report.txt`.
+  Celular exige IL2CPP (Android 64 bits; iPhone), e os módulos de Android e iOS
+  ainda não estão instalados. A paridade no celular só vale depois de provada
+  rodando no aparelho.
 - Comportamento estranho do TS se corrige primeiro no TS (regenera os casos e
   porta a correção), nunca só de um lado.
 - `Library/`, `Temp/`, `Logs/` e `UserSettings/` são gerados pela Unity e ficam

@@ -1,0 +1,92 @@
+{
+  "BLACKSMITH_CATEGORIES": [
+    "arma",
+    "armadura",
+    "acessorio"
+  ],
+  "FORGE_MATERIALS": {
+    "minerio": {
+      "cost": 20,
+      "outcomes": [
+        [
+          -1,
+          30
+        ],
+        [
+          0,
+          40
+        ],
+        [
+          1,
+          30
+        ]
+      ]
+    },
+    "essencia": {
+      "cost": 50,
+      "outcomes": [
+        [
+          -1,
+          15
+        ],
+        [
+          0,
+          35
+        ],
+        [
+          1,
+          40
+        ],
+        [
+          2,
+          10
+        ]
+      ]
+    },
+    "catalisador_mitico": {
+      "cost": 120,
+      "outcomes": [
+        [
+          -1,
+          5
+        ],
+        [
+          0,
+          20
+        ],
+        [
+          1,
+          45
+        ],
+        [
+          2,
+          25
+        ],
+        [
+          3,
+          5
+        ]
+      ]
+    },
+    "pedra_protecao": {
+      "cost": 80,
+      "outcomes": [
+        [
+          0,
+          45
+        ],
+        [
+          1,
+          45
+        ],
+        [
+          2,
+          10
+        ]
+      ]
+    }
+  },
+  "$privadas": [
+    "BLACKSMITH_CATEGORIES"
+  ]
+}
