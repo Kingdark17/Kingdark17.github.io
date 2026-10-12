@@ -14,7 +14,7 @@
  */
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { ATTR_KEYS, ATTR_LABELS, hasClass, idDaRaca, type AttrKey, type Hero } from '@rpg-legend/shared';
 
@@ -52,6 +52,20 @@ function Medidor({ rotulo, atual, maximo, cor, contagem, nota }: Readonly<PropsD
         <div className={`${cartao.preenchimento} ${cor}`} style={{ width: porcentagem(atual, maximo) }} />
       </div>
       {nota && <p className={cartao.notaDoMedidor}>{nota}</p>}
+    </div>
+  );
+}
+
+/** A barrinha da faixa do celular: rótulo, número e trilho, numa linha só. */
+function BarraCurta({ rotulo, atual, maximo, cor }: Readonly<{ rotulo: string; atual: number; maximo: number; cor: string }>) {
+  return (
+    <div className={styles.barraCurta}>
+      <span className={styles.rotuloCurto}>
+        {rotulo} <span className={styles.numeroCurto}>{`${atual}/${maximo}`}</span>
+      </span>
+      <div className={styles.trilhoCurto}>
+        <div className={`${cartao.preenchimento} ${cor}`} style={{ width: porcentagem(atual, maximo) }} />
+      </div>
     </div>
   );
 }
@@ -107,6 +121,16 @@ export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
   const [atacando, setAtacando] = useState(false);
   const golpesAnteriores = useRef(golpes);
   const relogioDoGolpe = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /**
+   * No celular o cartão inteiro tomava a primeira tela, e a sala ficava
+   * embaixo, cortada (decisão do usuário, 2026-10-11: "sala primeiro"). Lá
+   * ele fica recolhido atrás de uma faixa com Vida e Mana e abre pelo botão.
+   * Com ponto de atributo pra gastar na mochila ele já vem aberto: o "+" mora
+   * nele. No computador nada muda — a faixa nem aparece.
+   */
+  const [fichaAberta, setFichaAberta] = useState(false);
+  const mostraFicha = fichaAberta || comPontos;
+  const idDaFicha = useId();
 
   // O painel percebe o nível novo sozinho, como o `renderHero()` do
   // cliente antigo: subir de nível acontece no combate, na mochila e no
@@ -184,122 +208,142 @@ export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
   );
 
   return (
-    <aside
-      className={cartao.cartao}
-      aria-label={`Cartão de guilda de ${hero.name}`}
-      data-subiu-de-nivel={subiu || undefined}
-      onAnimationEnd={(evento) => {
-        if (evento.currentTarget === evento.target) setSubiu(false);
-      }}
-    >
-      {/* O selo é da Guilda: o Aprendiz ainda não treinou, e o cartão dele
-          é provisório. Primeiro no HTML, posicionado — a última seção é que
-          leva a folga pra não passar por baixo dele. */}
-      {treinado && <Image className={cartao.selo} src="/img/ui/selo-da-guilda.png" alt="Selo da Guilda" width={28} height={28} unoptimized />}
+    <>
+      <div className={styles.resumoDoHeroi}>
+        <span className={styles.nomeNoResumo}>
+          {hero.name} <span className={styles.nivelNoResumo}>nv {hero.level}</span>
+        </span>
+        <BarraCurta rotulo="Vida" atual={hero.hp} maximo={hero.maxHp} cor={cartao.vida} />
+        <BarraCurta rotulo="Mana" atual={hero.mp} maximo={hero.maxMp} cor={cartao.mana} />
+        <button
+          type="button"
+          className={styles.botaoDaFicha}
+          aria-expanded={mostraFicha}
+          aria-controls={idDaFicha}
+          onClick={() => setFichaAberta((aberta) => !aberta)}
+        >
+          {mostraFicha ? 'Fechar' : 'Ficha'}
+          {hero.attrPoints > 0 && <span className={styles.marcaDePontos}>{hero.attrPoints}</span>}
+        </button>
+      </div>
+      <aside
+        id={idDaFicha}
+        className={`${cartao.cartao} ${mostraFicha ? '' : styles.fichaRecolhida}`}
+        aria-label={`Cartão de guilda de ${hero.name}`}
+        data-subiu-de-nivel={subiu || undefined}
+        onAnimationEnd={(evento) => {
+          if (evento.currentTarget === evento.target) setSubiu(false);
+        }}
+      >
+        {/* O selo é da Guilda: o Aprendiz ainda não treinou, e o cartão dele
+            é provisório. Primeiro no HTML, posicionado — a última seção é que
+            leva a folga pra não passar por baixo dele. */}
+        {treinado && <Image className={cartao.selo} src="/img/ui/selo-da-guilda.png" alt="Selo da Guilda" width={28} height={28} unoptimized />}
 
-      {/* O boneco vestido com o que **está equipado agora**, e não com a
-          arma inicial da classe: trocar de espada na mochila muda o que
-          aparece aqui. `idDaRaca` porque o herói grava `race` como nome
-          ("Elfo Negro") e só os saves novos trazem `raceId` — a função
-          resolve os dois.
-          Com a mochila aberta ele sai: o mesmo boneco já está no meio da
-          tela, maior, com os espaços em volta. */}
-      {!naMochila && (
-        <Paperdoll
-          className={cartao.retrato}
-          raca={idDaRaca(hero)}
-          arma={hero.equip.arma?.templateId}
-          armadura={hero.equip.armadura?.templateId}
-          elmo={hero.equip.elmo?.templateId}
-          calca={hero.equip.calca?.templateId}
-          botas={hero.equip.botas?.templateId}
-          secundaria={hero.equip.secundaria?.templateId}
-          acessorio={hero.equip.acessorio?.templateId}
-          cabelo={hero.hair}
-          lado={132}
-          sinais={{ ...sinaisDoHeroi(hero), ferido, atacando }}
-          reserva={
-            <span className={styles.reservaDoRetrato} aria-hidden>
-              {hero.raceIcon}
-            </span>
-          }
-        />
-      )}
-
-      <header className={cartao.topo}>
-        <h2 className={cartao.nome}>{hero.name}</h2>
-        <span className={cartao.nivel}>nível {hero.level}</span>
-      </header>
-      <p className={cartao.linha}>
-        {hero.raceIcon} {hero.race} · {hero.classIcon} {hero.className}
-        {!treinado && (
-          <>
-            {' · '}
-            <span className={cartao.provisorio}>provisório</span>
-          </>
-        )}
-      </p>
-
-      <div className={cartao.medidores}>
-        <Medidor rotulo="Vida" atual={hero.hp} maximo={hero.maxHp} cor={cartao.vida} />
-        <Medidor rotulo="Mana" atual={hero.mp} maximo={hero.maxMp} cor={cartao.mana} />
-        <Medidor rotulo="XP" atual={hero.xp} maximo={hero.xpNext} cor={cartao.xp} />
-        {maestria && (
-          <Medidor
-            rotulo={`Maestria ${maestria.nivel}`}
-            atual={maestria.atual}
-            maximo={maestria.maximo}
-            cor={cartao.maestria}
-            contagem={maestria.contagem}
-            nota={maestria.bonus}
+        {/* O boneco vestido com o que **está equipado agora**, e não com a
+            arma inicial da classe: trocar de espada na mochila muda o que
+            aparece aqui. `idDaRaca` porque o herói grava `race` como nome
+            ("Elfo Negro") e só os saves novos trazem `raceId` — a função
+            resolve os dois.
+            Com a mochila aberta ele sai: o mesmo boneco já está no meio da
+            tela, maior, com os espaços em volta. */}
+        {!naMochila && (
+          <Paperdoll
+            className={cartao.retrato}
+            raca={idDaRaca(hero)}
+            arma={hero.equip.arma?.templateId}
+            armadura={hero.equip.armadura?.templateId}
+            elmo={hero.equip.elmo?.templateId}
+            calca={hero.equip.calca?.templateId}
+            botas={hero.equip.botas?.templateId}
+            secundaria={hero.equip.secundaria?.templateId}
+            acessorio={hero.equip.acessorio?.templateId}
+            cabelo={hero.hair}
+            lado={132}
+            sinais={{ ...sinaisDoHeroi(hero), ferido, atacando }}
+            reserva={
+              <span className={styles.reservaDoRetrato} aria-hidden>
+                {hero.raceIcon}
+              </span>
+            }
           />
         )}
-      </div>
 
-      {comPontos && (
-        <p className={cartao.pontos}>
-          Subiu de nível: {hero.attrPoints} {hero.attrPoints === 1 ? 'ponto' : 'pontos'}
+        <header className={cartao.topo}>
+          <h2 className={cartao.nome}>{hero.name}</h2>
+          <span className={cartao.nivel}>nível {hero.level}</span>
+        </header>
+        <p className={cartao.linha}>
+          {hero.raceIcon} {hero.race} · {hero.classIcon} {hero.className}
+          {!treinado && (
+            <>
+              {' · '}
+              <span className={cartao.provisorio}>provisório</span>
+            </>
+          )}
         </p>
-      )}
 
-      <dl className={cartao.atributos}>
-        {ATTR_KEYS.map((chave) => (
-          <div key={chave} className={cartao.atributo}>
-            <dt>{ATTR_LABELS[chave]}</dt>
-            <dd>{hero.attrs[chave]}</dd>
-            {comPontos && (
-              <button
-                type="button"
-                className={cartao.mais}
-                onClick={() => onPonto(chave)}
-                aria-label={`Mais um ponto em ${ATTR_LABELS[chave]}`}
-              >
-                +
-              </button>
-            )}
-          </div>
-        ))}
-      </dl>
+        <div className={cartao.medidores}>
+          <Medidor rotulo="Vida" atual={hero.hp} maximo={hero.maxHp} cor={cartao.vida} />
+          <Medidor rotulo="Mana" atual={hero.mp} maximo={hero.maxMp} cor={cartao.mana} />
+          <Medidor rotulo="XP" atual={hero.xp} maximo={hero.xpNext} cor={cartao.xp} />
+          {maestria && (
+            <Medidor
+              rotulo={`Maestria ${maestria.nivel}`}
+              atual={maestria.atual}
+              maximo={maestria.maximo}
+              cor={cartao.maestria}
+              contagem={maestria.contagem}
+              nota={maestria.bonus}
+            />
+          )}
+        </div>
 
-      <section className={cartao.secao}>
-        <h3 className={cartao.rotulo}>{poderes.length > 1 ? 'Poderes' : 'Poder'}</h3>
-        {poderes.map((poder) => (
-          <p key={poder.id}>
-            {poder.icone} {poder.nome} <span className={cartao.custo}>· {poder.custo} MP</span>
+        {comPontos && (
+          <p className={cartao.pontos}>
+            Subiu de nível: {hero.attrPoints} {hero.attrPoints === 1 ? 'ponto' : 'pontos'}
           </p>
-        ))}
-        {poderes.length === 0 && <p className={cartao.provisorio}>{treinado ? 'Nenhum.' : 'Nenhum ainda: a Guilda ensina o primeiro.'}</p>}
-      </section>
+        )}
 
-      {fraqueza && (
+        <dl className={cartao.atributos}>
+          {ATTR_KEYS.map((chave) => (
+            <div key={chave} className={cartao.atributo}>
+              <dt>{ATTR_LABELS[chave]}</dt>
+              <dd>{hero.attrs[chave]}</dd>
+              {comPontos && (
+                <button
+                  type="button"
+                  className={cartao.mais}
+                  onClick={() => onPonto(chave)}
+                  aria-label={`Mais um ponto em ${ATTR_LABELS[chave]}`}
+                >
+                  +
+                </button>
+              )}
+            </div>
+          ))}
+        </dl>
+
         <section className={cartao.secao}>
-          <h3 className={cartao.rotulo}>Fraqueza</h3>
-          <p>
-            {fraqueza.icone} {fraqueza.nome}
-          </p>
-          <p className={cartao.efeito}>{fraqueza.efeito}</p>
+          <h3 className={cartao.rotulo}>{poderes.length > 1 ? 'Poderes' : 'Poder'}</h3>
+          {poderes.map((poder) => (
+            <p key={poder.id}>
+              {poder.icone} {poder.nome} <span className={cartao.custo}>· {poder.custo} MP</span>
+            </p>
+          ))}
+          {poderes.length === 0 && <p className={cartao.provisorio}>{treinado ? 'Nenhum.' : 'Nenhum ainda: a Guilda ensina o primeiro.'}</p>}
         </section>
-      )}
-    </aside>
+
+        {fraqueza && (
+          <section className={cartao.secao}>
+            <h3 className={cartao.rotulo}>Fraqueza</h3>
+            <p>
+              {fraqueza.icone} {fraqueza.nome}
+            </p>
+            <p className={cartao.efeito}>{fraqueza.efeito}</p>
+          </section>
+        )}
+      </aside>
+    </>
   );
 }

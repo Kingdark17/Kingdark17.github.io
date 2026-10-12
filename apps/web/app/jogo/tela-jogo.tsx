@@ -861,137 +861,142 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             >
               <Joystick onVetor={moverJoystick} ativo={andando} />
             </CenaDaSala>
-            {narracao && (
-              <div className={styles.descricaoLocal}>
-                <p className={styles.linhaDaCena}>{narracao.ambiente}</p>
-                {narracao.conteudo && (
-                  <p className={styles.linhaDaCena}>
-                    <TextoDoJogo>{narracao.conteudo}</TextoDoJogo>
-                  </p>
-                )}
-                <p className={styles.pistasDasPortas}>{narracao.portas.join(' ')}</p>
-              </div>
-            )}
 
-            {/* A escada e a saída, que não têm volta, perguntam depois do
-                encostão. "Não" só fecha: o herói continua na sala. */}
-            {alvoDaPergunta && (
-              <div className={styles.caixa} role="dialog" aria-label={alvoDaPergunta.type === 'stairs' ? 'Descer as escadas?' : 'Sair da masmorra?'}>
-                <span className={styles.iconeCaixa} aria-hidden>
-                  {visual.icone(alvoDaPergunta) || '🚪'}
-                </span>
-                <div>
-                  <p className={styles.textoCaixa}>
-                    <TextoDoJogo>{visual.textoDeEntrada(alvoDaPergunta)}</TextoDoJogo>
+            {/* Tudo o que vem depois da sala, junto: no celular deitado a
+                sala fica sozinha à esquerda e isto vai pra direita. */}
+            <div className={styles.ladoDaCena}>
+              {narracao && (
+                <div className={styles.descricaoLocal}>
+                  <p className={styles.linhaDaCena}>{narracao.ambiente}</p>
+                  {narracao.conteudo && (
+                    <p className={styles.linhaDaCena}>
+                      <TextoDoJogo>{narracao.conteudo}</TextoDoJogo>
+                    </p>
+                  )}
+                  <p className={styles.pistasDasPortas}>{narracao.portas.join(' ')}</p>
+                </div>
+              )}
+
+              {/* A escada e a saída, que não têm volta, perguntam depois do
+                  encostão. "Não" só fecha: o herói continua na sala. */}
+              {alvoDaPergunta && (
+                <div className={styles.caixa} role="dialog" aria-label={alvoDaPergunta.type === 'stairs' ? 'Descer as escadas?' : 'Sair da masmorra?'}>
+                  <span className={styles.iconeCaixa} aria-hidden>
+                    {visual.icone(alvoDaPergunta) || '🚪'}
+                  </span>
+                  <div>
+                    <p className={styles.textoCaixa}>
+                      <TextoDoJogo>{visual.textoDeEntrada(alvoDaPergunta)}</TextoDoJogo>
+                    </p>
+                    <div className={styles.escolhas}>
+                      <button type="button" className={`${styles.botao} ${styles.botaoPrincipal}`} onClick={() => interagirAqui(estado)}>
+                        Sim
+                      </button>
+                      <button type="button" className={styles.botao} onClick={() => setConfirmando(false)}>
+                        Não
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {aviso && !confirmando && (
+                <div className={styles.caixa} role="status">
+                  <span className={styles.iconeCaixa} aria-hidden>
+                    {aviso.icone}
+                  </span>
+                  <div>
+                    <h2 className={styles.tituloCaixa}>{aviso.titulo}</h2>
+                    <p className={styles.textoCaixa}>
+                      <TextoDoJogo>{aviso.texto}</TextoDoJogo>
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* A mochila não é sala: abre por botão, e continua acessível com a
+                  pergunta da escada na tela — beber uma poção antes de descer
+                  pro andar seguinte é justamente quando ela serve. */}
+              <div className={styles.acoesDaExploracao}>
+                <button
+                  type="button"
+                  className={`${styles.botao} ${estado.hero.attrPoints > 0 ? styles.botaoPrincipal : ''}`}
+                  onClick={() => abrirTelaDaMochila(estado)}
+                >
+                  🎒 Mochila
+                  {estado.hero.attrPoints > 0 && <span className={styles.marcaDePontos}>{estado.hero.attrPoints}</span>}
+                </button>
+
+                <button type="button" className={styles.botao} onClick={() => setDiarioAberto(true)}>
+                  📜 Diário
+                  {diario.length > 0 && <span className={styles.marcaDoDiario}>{diario.length}</span>}
+                </button>
+
+                <button type="button" className={styles.botao} onClick={() => setGuiaAberto(true)}>
+                  <img className={styles.iconeDeBotao} src="/img/ui/guia.png" alt="" aria-hidden />
+                  Guia
+                </button>
+
+                <ControleDeSom />
+
+                {admin && (
+                  <button type="button" className={styles.botao} onClick={() => setTela({ tipo: 'adm', adm: abrirAdm(estado) })}>
+                    🛠️ ADM
+                  </button>
+                )}
+
+                {/* As duas portas empilhadas, e não troca de `src` no hover:
+                    assim as duas carregam junto com a página e a primeira
+                    passada do mouse não espera download nem pisca. */}
+                <button
+                  type="button"
+                  className={`${styles.botao} ${styles.botaoSair}`}
+                  onClick={() => setConfirmandoSaida(true)}
+                  disabled={saindo}
+                >
+                  <span className={styles.porta} aria-hidden>
+                    <img className={styles.portaFechada} src="/img/ui/porta.png" alt="" />
+                    <img className={styles.portaAberta} src="/img/ui/porta-aberta.png" alt="" />
+                  </span>
+                  Sair
+                </button>
+              </div>
+
+              {/* Confirmação na própria tela, e não `window.confirm`: o mesmo
+                  motivo da exclusão de personagem — o `confirm` trava a página
+                  inteira e não dá pra ler direito no celular. E aqui ele
+                  atrapalharia mais, porque a mensagem muda conforme o modo. */}
+              {confirmandoSaida && (
+                <div className={styles.confirmacaoDeSaida} role="dialog" aria-label="Sair da partida?">
+                  <p className={styles.perguntaDeSaida}>Sair da partida?</p>
+                  <p className={styles.detalheDaSaida}>
+                    {emCoop
+                      ? 'A sala se desfaz e seu parceiro volta a jogar sozinho. O progresso desta sessão não é gravado — seu personagem continua como estava antes de você entrar.'
+                      : 'Seu progresso é gravado na nuvem antes de sair.'}
                   </p>
-                  <div className={styles.escolhas}>
-                    <button type="button" className={`${styles.botao} ${styles.botaoPrincipal}`} onClick={() => interagirAqui(estado)}>
-                      Sim
+                  <div className={styles.botoesDaSaida}>
+                    <button type="button" className={styles.botao} onClick={() => void sairDaPartida()} disabled={saindo}>
+                      {saindo ? 'Saindo…' : 'Sim, sair'}
                     </button>
-                    <button type="button" className={styles.botao} onClick={() => setConfirmando(false)}>
-                      Não
+                    <button type="button" className={styles.botao} onClick={() => setConfirmandoSaida(false)} disabled={saindo}>
+                      Continuar jogando
                     </button>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {aviso && !confirmando && (
-              <div className={styles.caixa} role="status">
-                <span className={styles.iconeCaixa} aria-hidden>
-                  {aviso.icone}
-                </span>
-                <div>
-                  <h2 className={styles.tituloCaixa}>{aviso.titulo}</h2>
-                  <p className={styles.textoCaixa}>
-                    <TextoDoJogo>{aviso.texto}</TextoDoJogo>
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* A mochila não é sala: abre por botão, e continua acessível com a
-                pergunta da escada na tela — beber uma poção antes de descer
-                pro andar seguinte é justamente quando ela serve. */}
-            <div className={styles.acoesDaExploracao}>
-              <button
-                type="button"
-                className={`${styles.botao} ${estado.hero.attrPoints > 0 ? styles.botaoPrincipal : ''}`}
-                onClick={() => abrirTelaDaMochila(estado)}
-              >
-                🎒 Mochila
-                {estado.hero.attrPoints > 0 && <span className={styles.marcaDePontos}>{estado.hero.attrPoints}</span>}
-              </button>
-
-              <button type="button" className={styles.botao} onClick={() => setDiarioAberto(true)}>
-                📜 Diário
-                {diario.length > 0 && <span className={styles.marcaDoDiario}>{diario.length}</span>}
-              </button>
-
-              <button type="button" className={styles.botao} onClick={() => setGuiaAberto(true)}>
-                <img className={styles.iconeDeBotao} src="/img/ui/guia.png" alt="" aria-hidden />
-                Guia
-              </button>
-
-              <ControleDeSom />
-
-              {admin && (
-                <button type="button" className={styles.botao} onClick={() => setTela({ tipo: 'adm', adm: abrirAdm(estado) })}>
-                  🛠️ ADM
-                </button>
               )}
 
-              {/* As duas portas empilhadas, e não troca de `src` no hover:
-                  assim as duas carregam junto com a página e a primeira
-                  passada do mouse não espera download nem pisca. */}
-              <button
-                type="button"
-                className={`${styles.botao} ${styles.botaoSair}`}
-                onClick={() => setConfirmandoSaida(true)}
-                disabled={saindo}
-              >
-                <span className={styles.porta} aria-hidden>
-                  <img className={styles.portaFechada} src="/img/ui/porta.png" alt="" />
-                  <img className={styles.portaAberta} src="/img/ui/porta-aberta.png" alt="" />
-                </span>
-                Sair
-              </button>
+              {/* Fica dentro da narração, e não depois da cena: solto lá
+                  embaixo ele caía **abaixo do bloco mais alto** — como a
+                  navegação é mais alta que o texto, sobravam trezentos
+                  pixels de nada entre os botões e esta linha. */}
+              <p className={styles.estadoSalvamento}>
+                {emCoop && `Sala ${sala.codigo} · ${conduzo ? 'você conduz a exploração' : 'o anfitrião conduz'} · o progresso desta sessão não é gravado`}
+                {!emCoop && salvamento === 'salvando' && 'Salvando na nuvem…'}
+                {!emCoop && salvamento === 'salvo' && 'Progresso salvo na nuvem.'}
+              </p>
+
+              {erro && <p className={styles.erro}>{erro}</p>}
             </div>
-
-            {/* Confirmação na própria tela, e não `window.confirm`: o mesmo
-                motivo da exclusão de personagem — o `confirm` trava a página
-                inteira e não dá pra ler direito no celular. E aqui ele
-                atrapalharia mais, porque a mensagem muda conforme o modo. */}
-            {confirmandoSaida && (
-              <div className={styles.confirmacaoDeSaida} role="dialog" aria-label="Sair da partida?">
-                <p className={styles.perguntaDeSaida}>Sair da partida?</p>
-                <p className={styles.detalheDaSaida}>
-                  {emCoop
-                    ? 'A sala se desfaz e seu parceiro volta a jogar sozinho. O progresso desta sessão não é gravado — seu personagem continua como estava antes de você entrar.'
-                    : 'Seu progresso é gravado na nuvem antes de sair.'}
-                </p>
-                <div className={styles.botoesDaSaida}>
-                  <button type="button" className={styles.botao} onClick={() => void sairDaPartida()} disabled={saindo}>
-                    {saindo ? 'Saindo…' : 'Sim, sair'}
-                  </button>
-                  <button type="button" className={styles.botao} onClick={() => setConfirmandoSaida(false)} disabled={saindo}>
-                    Continuar jogando
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Fica dentro da narração, e não depois da cena: solto lá
-                embaixo ele caía **abaixo do bloco mais alto** — como a
-                navegação é mais alta que o texto, sobravam trezentos
-                pixels de nada entre os botões e esta linha. */}
-            <p className={styles.estadoSalvamento}>
-              {emCoop && `Sala ${sala.codigo} · ${conduzo ? 'você conduz a exploração' : 'o anfitrião conduz'} · o progresso desta sessão não é gravado`}
-              {!emCoop && salvamento === 'salvando' && 'Salvando na nuvem…'}
-              {!emCoop && salvamento === 'salvo' && 'Progresso salvo na nuvem.'}
-            </p>
-
-            {erro && <p className={styles.erro}>{erro}</p>}
           </div>
 
           {/* O mapa do andar. A bússola que ficava aqui saiu com o andar

@@ -1050,6 +1050,168 @@
   }
 }
 
+/* ---------- celular: a sala primeiro ----------
+   Decisão do usuário (2026-10-11). Abaixo da largura em que o cartão vira
+   coluna própria, ele tomava a primeira tela inteira e a sala ficava
+   embaixo, cortada. Ali o cartão recolhe atrás de uma faixa com Vida e Mana
+   (`painel-heroi.tsx`), presa no topo enquanto a página rola, e o botão
+   "Ficha" o abre. No computador a faixa nem existe. */
+
+.resumoDoHeroi {
+  display: none;
+}
+
+@media (max-width: 59.99rem) {
+  .tela {
+    padding: 0.75rem 0.5rem 1.5rem;
+  }
+
+  .conteudo {
+    gap: 0.75rem;
+  }
+
+  .resumoDoHeroi {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.45rem 0.6rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Dois níveis de seletor: o `.cartao` do cartão de guilda chega depois
+     deste arquivo e, com a mesma força, o `display` dele vencia. */
+  .conteudo > .fichaRecolhida {
+    display: none;
+  }
+
+  .narracao {
+    padding: 0.75rem;
+  }
+
+  .tituloDaCena {
+    font-size: 1.25rem;
+    margin-bottom: 0.45rem;
+  }
+}
+
+.nomeNoResumo {
+  flex: none;
+  max-width: 7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+}
+
+.nivelNoResumo {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+}
+
+.barraCurta {
+  flex: 1 1 0;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.rotuloCurto {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.3rem;
+  white-space: nowrap;
+  font-size: 0.7rem;
+  color: var(--parchment-dim);
+}
+
+.numeroCurto {
+  font-family: var(--font-mono), monospace;
+  color: var(--parchment);
+}
+
+.trilhoCurto {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.botaoDaFicha {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--parchment);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.botaoDaFicha:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Celular deitado: a sala à esquerda, na altura da tela, e o resto à
+   direita — de pé ela cabia na largura, deitado ela passava da altura e o
+   arraste do joystick não rola a página. A faixa deixa de ser presa: aqui
+   cada linha de altura conta. */
+@media (orientation: landscape) and (max-height: 32rem) {
+  .tela {
+    padding: 0.4rem 0.6rem;
+  }
+
+  .conteudo {
+    gap: 0.4rem;
+  }
+
+  .resumoDoHeroi {
+    position: static;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .narracao {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 1rem;
+    padding: 0.5rem;
+  }
+
+  .narracao > .tituloDaCena {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .narracao > .cenaDaSala {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    height: calc(100dvh - 4.5rem);
+    width: auto;
+    max-width: none;
+    margin: 0;
+  }
+
+  .narracao > .ladoDaCena {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+  }
+}
+
 /* O portão: masmorra, dificuldade e entrada, um grupo embaixo do outro. */
 .grupoDoPortao {
   display: grid;
