@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { direcaoDaTecla, estaDigitando } from './teclado';
+import { direcaoAoSoltar, direcaoDaTecla, estaDigitando } from './teclado';
 
 describe('direcaoDaTecla', () => {
   it('mapeia WASD nas quatro direções', () => {
@@ -43,17 +43,21 @@ describe('direcaoDaTecla', () => {
   });
 
   /**
-   * Tecla segurada repete ~30x por segundo, e cada repetição seria um
-   * passo inteiro. Pior que o gasto: reiniciava o adiamento do
-   * salvamento antes dele vencer, e o progresso nunca ia pra nuvem.
+   * A tecla é estado desde o andar solto: a repetição só confirma que ela
+   * segue segurada, e quem chama precisa reconhecê-la pra seguir barrando a
+   * rolagem da página com as setas.
    */
-  it('ignora a auto-repetição da tecla segurada', () => {
-    expect(direcaoDaTecla({ key: 'w', repeat: true })).toBeNull();
-    expect(direcaoDaTecla({ key: 'ArrowLeft', repeat: true })).toBeNull();
+  it('a auto-repetição da tecla segurada é a mesma direção', () => {
+    expect(direcaoDaTecla({ key: 'w', repeat: true })).toBe('N');
+    expect(direcaoDaTecla({ key: 'ArrowLeft', repeat: true })).toBe('W');
   });
+});
 
-  it('o primeiro toque continua andando — só a repetição dele é que não', () => {
-    expect(direcaoDaTecla({ key: 'w', repeat: false })).toBe('N');
+describe('direcaoAoSoltar', () => {
+  it('solta a direção mesmo com modificador apertado, senão o herói seguiria andando', () => {
+    expect(direcaoAoSoltar({ key: 'w' })).toBe('N');
+    expect(direcaoAoSoltar({ key: 'ArrowRight' })).toBe('E');
+    expect(direcaoAoSoltar({ key: 'q' })).toBeNull();
   });
 });
 

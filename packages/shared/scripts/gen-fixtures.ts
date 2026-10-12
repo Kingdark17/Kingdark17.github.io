@@ -95,6 +95,8 @@ import type {
   Quest,
   Rng,
   RoomCell,
+  Walker,
+  WalkStep,
 } from '../src/index.js';
 
 const PACOTE = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -1903,6 +1905,122 @@ for (const [floor, rows, cols, seed, run, teacher] of ANDARES) {
     caso(`shortLabel: ${nome}`, 'shortLabel', { cell }, (a) => E.shortLabel(a.cell));
     caso(`roomDesc: ${nome}`, 'roomDesc', { cell }, (a) => E.roomDesc(a.cell));
     caso(`entryText: ${nome}`, 'entryText', { cell }, (a) => E.entryText(a.cell));
+  }
+}
+
+// --- room-walk: andar solto dentro da sala ---
+//
+// Sorteio próprio, e não o `lote`: os casos daqui não podem mexer nos
+// sorteados dos módulos seguintes.
+
+for (const nome of ['ROOM_COLS', 'ROOM_ROWS', 'TILE_UNITS', 'WALK_TICKS_PER_SECOND', 'HERO_SPEED', 'HERO_HALF', 'TOUCH_REACH', 'STICK_MAX', 'DOOR_ASSIST', 'CONTENT_TILE'] as const) {
+  constante(nome, E[nome]);
+}
+
+{
+  const DIRS = ['N', 'S', 'E', 'W'] as const;
+  const conteudo = [{ id: 'content', ...E.CONTENT_TILE }];
+  const portasDe = (mascara: number) => Object.fromEntries(DIRS.filter((_, i) => mascara & (1 << i)).map((d) => [d, true]));
+  const rotulo = (portas: Record<string, unknown>) => Object.keys(portas).join('') || 'nenhuma';
+
+  for (let mascara = 0; mascara < 16; mascara++) {
+    const doors = portasDe(mascara);
+    caso(`roomLayout: portas ${rotulo(doors)}, sem objeto`, 'roomLayout', { doors, objects: [] }, (a) => E.roomLayout(a.doors, a.objects));
+    caso(`roomLayout: portas ${rotulo(doors)}, com o conteúdo no centro`, 'roomLayout', { doors, objects: conteudo }, (a) => E.roomLayout(a.doors, a.objects));
+  }
+  caso('roomLayout: dois objetos', 'roomLayout', { doors: { N: true, W: true }, objects: [{ id: 'a', col: 2, row: 2 }, { id: 'b', col: 6, row: 4 }] }, (a) => E.roomLayout(a.doors, a.objects));
+
+  for (const [x, y] of [
+    [0, 0],
+    [1, 1],
+    [-1, -1],
+    [0.5, -0.5],
+    [0.999, 0.001],
+    [-0.3333, 0.7071],
+    [2, -3],
+    [0.0078, -0.0079],
+  ] as const) {
+    caso(`stickInput: (${x}, ${y})`, 'stickInput', { x, y }, (a) => E.stickInput(a.x, a.y));
+  }
+
+  for (const d of [null, ...DIRS]) caso(`roomArrival: ${d ?? 'sem direção'}`, 'roomArrival', { movedTowards: d }, (a) => E.roomArrival(a.movedTowards));
+
+  /** Vários passos seguidos, segmento por segmento; para no vão. O C# repete o mesmo laço (cola de teste, como o sort). */
+  interface Segmento {
+    x: number;
+    y: number;
+    ticks: number;
+  }
+  const andarVarios = (a: { doors: Record<string, unknown>; objects: { id: string; col: number; row: number }[]; walker: Walker; inputs: Segmento[] }) => {
+    const layout = E.roomLayout(a.doors, a.objects);
+    let walker = a.walker;
+    let ticks = 0;
+    const trace: WalkStep[] = [];
+    const touches: { tick: number; id: string | null }[] = [];
+    let tocando: string | null = null;
+    for (const segmento of a.inputs) {
+      let passo: WalkStep | null = null;
+      for (let i = 0; i < segmento.ticks; i++) {
+        passo = E.walkTick(layout, walker, segmento);
+        walker = passo.walker;
+        ticks++;
+        if (passo.touching !== tocando) {
+          tocando = passo.touching;
+          touches.push({ tick: ticks, id: tocando });
+        }
+        if (passo.exit) break;
+      }
+      if (passo) trace.push(passo);
+      if (passo?.exit) break;
+    }
+    return { trace, touches, ticks };
+  };
+
+  const c = (quadrado: number) => quadrado * E.TILE_UNITS + E.TILE_UNITS / 2;
+  const M = E.STICK_MAX;
+  const todas = { N: true, S: true, E: true, W: true };
+  const cenarios: [string, Record<string, unknown>, boolean, Walker, Segmento[]][] = [
+    ['reto pro leste até a parede', { S: true }, false, { x: c(1), y: c(2), facing: 'S' }, [{ x: M, y: 0, ticks: 200 }]],
+    ['diagonal escorregando na parede de baixo', { N: true }, false, { x: c(2), y: c(4), facing: 'S' }, [{ x: M, y: M, ticks: 120 }]],
+    ['joystick pela metade', todas, true, { x: c(2), y: c(2), facing: 'S' }, [{ x: 63, y: -20, ticks: 40 }]],
+    ['contorna o conteúdo e encosta', todas, true, { x: c(1), y: c(3), facing: 'E' }, [{ x: M, y: 0, ticks: 80 }, { x: 0, y: M, ticks: 30 }, { x: M, y: 0, ticks: 60 }]],
+    ['sai pelo norte alinhado', todas, true, { x: c(4), y: c(2), facing: 'N' }, [{ x: 0, y: -M, ticks: 100 }]],
+    ['ajuda na porta do norte, vindo da direita', todas, true, { x: c(4) + 420, y: c(1), facing: 'N' }, [{ x: 0, y: -M, ticks: 100 }]],
+    ['ajuda na porta do sul, vindo da esquerda', todas, true, { x: c(4) - 400, y: c(5), facing: 'S' }, [{ x: 0, y: M, ticks: 100 }]],
+    ['ajuda na porta do oeste, vindo de cima', todas, true, { x: c(1), y: c(3) - 450, facing: 'W' }, [{ x: -M, y: 0, ticks: 100 }]],
+    ['ajuda na porta do leste, vindo de baixo', todas, true, { x: c(7), y: c(3) + 300, facing: 'E' }, [{ x: M, y: 0, ticks: 100 }]],
+    ['longe do vão a ajuda não puxa', todas, true, { x: c(2), y: c(1), facing: 'N' }, [{ x: 0, y: -M, ticks: 60 }]],
+    ['porta fechada segura', { S: true }, true, { x: c(4), y: c(2), facing: 'N' }, [{ x: 0, y: -M, ticks: 60 }]],
+    ['diagonal para dentro do vão do oeste', todas, false, { x: c(1), y: c(1), facing: 'S' }, [{ x: -M, y: M, ticks: 200 }]],
+    ['volta e meia pela sala', todas, true, E.roomArrival('N'), [{ x: M, y: -M, ticks: 50 }, { x: -M, y: -M, ticks: 50 }, { x: -M, y: M, ticks: 50 }, { x: 0, y: -M, ticks: 50 }]],
+  ];
+  for (const [nome, doors, comConteudo, walker, inputs] of cenarios) {
+    caso(`walkTicks: ${nome}`, 'walkTicks', { doors, objects: comConteudo ? conteudo : [], walker, inputs }, andarVarios);
+  }
+
+  const sorteio = E.seededRng(20261011);
+  const de = (min: number, max: number) => min + Math.floor(sorteio() * (max - min + 1));
+  const eixo = () => [0, 0, M, -M, de(-M, M)][de(0, 4)] as number;
+  for (let n = 1; n <= 40; n++) {
+    const doors = portasDe(de(0, 15));
+    const comConteudo = sorteio() < 0.7;
+    const chegou = [null, ...DIRS][de(0, 4)] ?? null;
+    const inputs: Segmento[] = Array.from({ length: de(3, 8) }, () => ({ x: eixo(), y: eixo(), ticks: de(1, 45) }));
+    caso(`walkTicks: sorteado ${n}`, 'walkTicks', { doors, objects: comConteudo ? conteudo : [], walker: E.roomArrival(chegou), inputs }, andarVarios);
+  }
+
+  // walkTick direto, com a planta pronta na entrada (o caminho que o jogo usa).
+  const planta = E.roomLayout(todas, conteudo);
+  for (const [nome, walker, input] of [
+    ['parado', { x: c(2), y: c(2), facing: 'W' }, { x: 0, y: 0 }],
+    ['reto', { x: c(2), y: c(2), facing: 'W' }, { x: M, y: 0 }],
+    ['diagonal no fim', { x: c(2), y: c(2), facing: 'W' }, { x: -M, y: M }],
+    ['entrada fora da faixa', { x: c(2), y: c(2), facing: 'W' }, { x: 900, y: -900 }],
+    ['entrada com fração', { x: c(2), y: c(2), facing: 'W' }, { x: 33.9, y: -12.5 }],
+    ['encostado no conteúdo', { x: E.CONTENT_TILE.col * E.TILE_UNITS - E.HERO_HALF, y: c(3), facing: 'E' }, { x: M, y: 0 }],
+    ['no meio do vão do norte', { x: c(4), y: c(0) + 10, facing: 'N' }, { x: 0, y: -M }],
+  ] as const) {
+    caso(`walkTick: ${nome}`, 'walkTick', { layout: planta, walker, input }, (a) => E.walkTick(a.layout, a.walker, a.input));
   }
 }
 

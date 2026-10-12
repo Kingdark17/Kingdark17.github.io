@@ -980,9 +980,11 @@
   color: var(--parchment);
 }
 
-/* A sala em quadradinhos. A proporção reserva o lugar antes de o PixiJS
-   chegar, pra narração não pular quando o canvas aparece. */
+/* A sala. A proporção reserva o lugar antes de o PixiJS chegar, pra
+   narração não pular quando o canvas aparece. `relative` porque o joystick
+   fica por cima, ocupando a sala inteira. */
 .cenaDaSala {
+  position: relative;
   width: 100%;
   max-width: 432px;
   aspect-ratio: 9 / 7;
@@ -992,8 +994,60 @@
   background: rgba(0, 0, 0, 0.25);
 }
 
-.cenaDaSala canvas {
+.telaDaSala canvas {
   display: block;
+}
+
+/* O joystick: a sala inteira é a área de toque. `touch-action: none` pra o
+   arraste andar o herói, e não rolar a página. */
+.areaDoJoystick {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.baseDoJoystick,
+.alavancaDoJoystick {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.baseDoJoystick {
+  width: 88px;
+  height: 88px;
+  border: 2px solid rgba(236, 223, 192, 0.45);
+  background: rgba(16, 18, 26, 0.35);
+}
+
+.alavancaDoJoystick {
+  width: 40px;
+  height: 40px;
+  background: rgba(232, 198, 90, 0.75);
+  box-shadow: 0 0 0 2px rgba(26, 11, 9, 0.6);
+}
+
+/* Só na tela de toque, no pé da sala, sem cobrir o herói nem a porta de baixo. */
+.dicaDoJoystick {
+  display: none;
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.4rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  background: rgba(16, 18, 26, 0.6);
+  color: var(--parchment-dim);
+  font-size: 0.75rem;
+  pointer-events: none;
+}
+
+@media (pointer: coarse) {
+  .dicaDoJoystick {
+    display: block;
+  }
 }
 
 /* O portão: masmorra, dificuldade e entrada, um grupo embaixo do outro. */
@@ -1184,41 +1238,8 @@
   padding: 0 0.4rem;
 }
 
-/* Centralizada porque agora fica logo abaixo do mapa, e os dois têm que
-   ler como um bloco só — alinhada à esquerda ela parecia solta.
-   `justify-self` porque ela é item de grade dentro de `.navegacao`; sem
-   ele a caixa ocupa a coluna inteira e o "centro" vira o da caixa. */
-.bussola {
-  display: grid;
-  grid-template-columns: repeat(3, 2.9rem);
-  grid-template-rows: repeat(3, 2.9rem);
-  gap: 0.3rem;
-  justify-content: center;
-  justify-self: center;
-}
-
-.norte {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.oeste {
-  grid-column: 1;
-  grid-row: 2;
-}
-
-.leste {
-  grid-column: 3;
-  grid-row: 2;
-}
-
-.sul {
-  grid-column: 2;
-  grid-row: 3;
-}
-
-/* Escondida onde não há teclado. Num celular a dica seria mentira, e
-   ocuparia a linha logo abaixo dos controles que a pessoa está usando. */
+/* Escondida onde não há teclado. Num celular a dica seria mentira; lá a do
+   joystick aparece na própria sala. */
 .dicaDoTeclado {
   display: none;
   font-size: 0.75rem;
@@ -1231,25 +1252,6 @@
   .dicaDoTeclado {
     display: block;
   }
-}
-
-.botaoDirecao {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 0.35rem;
-  color: var(--parchment);
-  font: inherit;
-  font-size: 1.1rem;
-  cursor: pointer;
-}
-
-.botaoDirecao:hover:not(:disabled) {
-  border-color: var(--gold);
-}
-
-.botaoDirecao:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
 }
 
 .estadoSalvamento {

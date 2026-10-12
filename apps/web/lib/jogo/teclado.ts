@@ -1,12 +1,17 @@
 /**
- * WASD e setas andando pelo mapa — o que `bindKeyboard()` fazia em
+ * WASD e setas andando pela sala — o que `bindKeyboard()` fazia em
  * `rpg-legend/js/ui.js`. O cliente antigo tinha teclado desde sempre; o
  * front novo nasceu só com os botões, e o texto do tutorial chegou a ser
  * reescrito pra parar de prometer o que não existia mais.
  *
+ * Desde o andar solto (2026-10-11) a tecla não é mais um passo: é um
+ * estado. Apertar põe a direção no conjunto das seguradas, soltar tira, e
+ * o andar lê o conjunto a cada passo de simulação (`andar-na-sala.ts`) —
+ * duas teclas juntas são diagonal.
+ *
  * Aqui mora só a **leitura** da tecla: que direção ela significa, e se é
- * pra ignorar. Quem decide se o passo pode acontecer é a tela, que sabe
- * de porta, de pergunta na frente e de quem conduz a partida no co-op.
+ * pra ignorar. Quem decide se o herói pode andar é a tela, que sabe de
+ * pergunta na frente e de quem conduz a partida no co-op.
  *
  * Nada de `KeyboardEvent` nem de `HTMLElement` nas assinaturas, de
  * propósito: os testes de `lib/` rodam em ambiente `node`, sem DOM. As
@@ -41,6 +46,8 @@ export interface TeclaPressionada {
 }
 
 /**
+ * Que direção a tecla apertada põe no conjunto das seguradas.
+ *
  * Com modificador a tecla não é jogada: Ctrl+S é salvar a página e Ctrl+A
  * é selecionar tudo. Andar por engano ao tentar um atalho do navegador
  * seria pior que não andar.
@@ -48,19 +55,22 @@ export interface TeclaPressionada {
  * Shift fica de fora da lista porque não muda o sentido de nenhuma dessas
  * teclas, e segurar Shift sem querer enquanto anda é comum.
  *
- * **A repetição também não é jogada.** Tecla segurada repete no ritmo do
- * sistema — perto de 30 vezes por segundo — e cada repetição seria um
- * passo inteiro: clone do estado, mapa reconstruído, sala resolvida, som
- * e um render da tela. O botão da bússola não consegue fazer isso, um
- * clique é um passo, e o teclado tem que valer o mesmo.
- *
- * O efeito pior não era o gasto: o salvamento é adiado 2,5 s **depois da
- * última mudança**, então enquanto a tecla ficava presa o temporizador
- * era reiniciado antes de vencer e o progresso nunca ia pra nuvem.
+ * A auto-repetição da tecla segurada devolve a mesma direção. Antes ela era
+ * ignorada porque cada repetição virava um passo inteiro; agora a tecla é
+ * estado (pôr de novo no conjunto não muda nada), e quem chama precisa
+ * reconhecê-la pra continuar segurando a rolagem da página com as setas.
  */
 export function direcaoDaTecla(tecla: TeclaPressionada): Direction | null {
-  if (tecla.repeat) return null;
   if (tecla.ctrlKey || tecla.metaKey || tecla.altKey) return null;
+  return DIRECAO_POR_TECLA[tecla.key.toLowerCase()] ?? null;
+}
+
+/**
+ * Que direção sai do conjunto quando a tecla é solta. Sem olhar
+ * modificador: soltar o W com o Ctrl apertado também solta o W — senão o
+ * herói seguiria andando sozinho.
+ */
+export function direcaoAoSoltar(tecla: Pick<TeclaPressionada, 'key'>): Direction | null {
   return DIRECAO_POR_TECLA[tecla.key.toLowerCase()] ?? null;
 }
 

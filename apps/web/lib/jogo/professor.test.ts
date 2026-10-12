@@ -5,7 +5,7 @@ import { classById, powerById, seededRng, type DungeonCell, type Hero } from '@r
 import { celulaAtual, retomarSave, type EstadoNaMasmorra } from './estado';
 import { saveSorteado } from './heroi-sorteado';
 import { abrirProfessor, aprender, ofertas, trocar, trocaveis } from './professor';
-import { interagir, precisaConfirmar } from './sala';
+import { confirmaAoTocar, interagir, lutaAoEntrar } from './sala';
 
 /** O herói sorteado, com maestria 4 e os poderes que o teste quiser. */
 function heroi(powerIds: string[] | null, extra: Partial<Hero> = {}): Hero {
@@ -49,10 +49,10 @@ describe('o professor aparece', () => {
     expect(noAndar(heroi([assinaturaDe(hero)], { masteryBattles: 99 })).map.flat().some((c) => c.type === 'teacher')).toBe(false);
   });
 
-  it('a sala pergunta antes de entrar, e depois de ensinar não pergunta mais', () => {
+  it('o mestre fala no encostão, sem pergunta antes nem luta ao entrar', () => {
     const sala = { type: 'teacher', x: 0, y: 0, doors: {}, teacher: { classId: 'mago', number: 1 } } as DungeonCell;
-    expect(precisaConfirmar(sala)).toBe(true);
-    expect(precisaConfirmar({ ...sala, teacher: { classId: 'mago', number: 1, taught: true } })).toBe(false);
+    expect(confirmaAoTocar(sala)).toBe(false);
+    expect(lutaAoEntrar(sala)).toBe(false);
   });
 });
 

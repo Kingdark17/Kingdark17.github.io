@@ -4,6 +4,10 @@
  * 2026-10-09: PixiJS, e arte provisória até o Breno desenhar os tiles e o
  * boneco do mapa).
  *
+ * Desde o andar solto (2026-10-11) o herói não anda mais de quadradinho em
+ * quadradinho: a regra da engine (`room-walk.ts`) diz onde ele está, em
+ * unidades, e este arquivo só converte em pixel a cada quadro.
+ *
  * O PixiJS chega **por parâmetro**, e não por `import`: quem chama
  * (`cena-da-sala.tsx`) o busca sob demanda, então a biblioteca só baixa
  * quando a exploração abre, e não pesa em nenhuma outra tela. Daqui só
@@ -12,22 +16,20 @@
  * A arte de agora é provisória e desenhada aqui mesmo: chão xadrez e
  * parede na cor de cada lugar, o ícone do minimapa no centro e o corpo da
  * raça do paperdoll como boneco. Quando a arte chegar, troca este arquivo;
- * a regra de andar (`sala-em-tiles.ts`) fica.
+ * a regra de andar fica.
  */
 
 import type * as Pixi from 'pixi.js';
 
-import type { Direction } from '@rpg-legend/shared';
-
-import { ALTURA_DA_SALA, LARGURA_DA_SALA, type PassoNaSala, type PlantaDaSala } from './sala-em-tiles';
+import { HERO_HALF, ROOM_COLS, ROOM_ROWS, TILE_UNITS, type RoomLayout, type Walker } from '@rpg-legend/shared';
 
 /** Pixels de tela por quadradinho: 16 de arte × 3, a escala do pixel art do jogo. */
 export const LADO = 48;
-export const LARGURA_DA_CENA = LARGURA_DA_SALA * LADO;
-export const ALTURA_DA_CENA = ALTURA_DA_SALA * LADO;
+export const LARGURA_DA_CENA = ROOM_COLS * LADO;
+export const ALTURA_DA_CENA = ROOM_ROWS * LADO;
 
-/** Quanto dura um passo. É também o ritmo de quem segura a tecla. */
-export const DURACAO_DO_PASSO_MS = 140;
+/** Pixels por unidade da regra. */
+const ESCALA = LADO / TILE_UNITS;
 
 export type LugarDoTema = 'cidade' | 'floresta' | 'caverna' | 'torre';
 
@@ -54,9 +56,11 @@ export interface Figura {
 }
 
 export interface Cena {
-  desenharSala(planta: PlantaDaSala, tema: TemaDaSala, conteudo: Figura | null): Promise<void>;
-  /** `animar: false` põe o herói no lugar na hora — chegada em sala nova, carregar o jogo. */
-  colocarHeroi(passo: PassoNaSala, animar: boolean): void;
+  desenharSala(planta: RoomLayout, tema: TemaDaSala, conteudo: Figura | null): Promise<void>;
+  /** Põe o herói onde a regra diz. `andando` balança o boneco, que ainda não tem quadros de caminhada. */
+  colocarHeroi(walker: Walker, andando: boolean): void;
+  /** Chama `fn` a cada quadro da tela, com os milissegundos desde o anterior. Devolve como parar. */
+  aCadaQuadro(fn: (decorridoMs: number) => void): () => void;
   destruir(): void;
 }
 
@@ -85,8 +89,9 @@ async function figuraEm(pixi: typeof Pixi, figura: Figura, altura: number): Prom
   return texto;
 }
 
-function centroDoPe(x: number, y: number): { x: number; y: number } {
-  return { x: x * LADO + LADO / 2, y: y * LADO + LADO - 4 };
+/** O pé de quem está num quadrado: no meio dele, um pouco acima da borda de baixo. */
+function peNoQuadrado(col: number, row: number): { x: number; y: number } {
+  return { x: col * LADO + LADO / 2, y: row * LADO + LADO - 4 };
 }
 
 export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Figura): Promise<Cena> {
@@ -109,31 +114,19 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
   const conteudo = new pixi.Container();
   const personagem = new pixi.Container();
   app.stage.addChild(chao, conteudo, personagem);
+  // Quem está mais embaixo na tela fica na frente: o herói que passa por
+  // trás do baú some atrás dele, e o que passa pela frente o cobre.
+  app.stage.sortableChildren = true;
+  conteudo.zIndex = 2;
+  /** Onde fica o pé do conteúdo, em pixel (sem conteúdo, o herói sempre na frente). */
+  let peDoConteudo = Number.NEGATIVE_INFINITY;
 
   const boneco = await figuraEm(pixi, heroi, LADO * 1.25);
   personagem.addChild(boneco);
 
   const semMovimento = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-  let destino = centroDoPe(4, 5);
-  let caminhada: { de: { x: number; y: number }; inicio: number } | null = null;
-  boneco.position.set(destino.x, destino.y);
-
-  app.ticker.add(() => {
-    if (!caminhada) return;
-    const fracao = Math.min(1, (performance.now() - caminhada.inicio) / DURACAO_DO_PASSO_MS);
-    boneco.x = caminhada.de.x + (destino.x - caminhada.de.x) * fracao;
-    // Um pulinho no meio do passo: sem frame de caminhada ainda, é o que
-    // diz "andou" em vez de "deslizou".
-    boneco.y = caminhada.de.y + (destino.y - caminhada.de.y) * fracao - Math.sin(fracao * Math.PI) * 4;
-    if (fracao >= 1) caminhada = null;
-  });
-
-  function olharPara(direcao: Direction) {
-    // Provisório: o corpo do paperdoll só tem frente. Espelhar pro lado
-    // que anda já diz pra onde ele vai; as quatro direções vêm do Breno.
-    const lado = direcao === 'W' ? -1 : 1;
-    boneco.scale.x = Math.abs(boneco.scale.x) * lado;
-  }
+  /** Fase do balanço do passo: avança só enquanto o herói anda. */
+  let fase = 0;
 
   /**
    * Qual desenho é o da vez. A arte do conteúdo carrega com `await`, e
@@ -149,43 +142,63 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       conteudo.removeChildren().forEach((filho) => filho.destroy());
 
       const ladrilhos = new pixi.Graphics();
-      planta.ladrilhos.forEach((linha, y) => {
-        linha.forEach((ladrilho, x) => {
-          const px = x * LADO;
-          const py = y * LADO;
-          if (ladrilho === 'parede') {
+      planta.solid.forEach((linha, row) => {
+        linha.forEach((solido, col) => {
+          const px = col * LADO;
+          const py = row * LADO;
+          const borda = col === 0 || row === 0 || col === ROOM_COLS - 1 || row === ROOM_ROWS - 1;
+          if (borda && solido) {
             ladrilhos.rect(px, py, LADO, LADO).fill({ color: tema.parede });
             ladrilhos.rect(px + 2, py + 2, LADO - 4, LADO - 4).stroke({ width: 2, color: tema.bordaDaParede });
           } else {
-            const xadrez = (x + y) % 2 === 0 ? tema.chao : tema.chaoAlternado;
-            ladrilhos.rect(px, py, LADO, LADO).fill({ color: ladrilho === 'porta' ? tema.vao : xadrez });
+            // Vão de porta na borda; dentro, chão xadrez — também debaixo do conteúdo.
+            const xadrez = (col + row) % 2 === 0 ? tema.chao : tema.chaoAlternado;
+            ladrilhos.rect(px, py, LADO, LADO).fill({ color: borda ? tema.vao : xadrez });
           }
         });
       });
       chao.addChild(ladrilhos);
 
-      if (planta.objeto && figura) {
-        const objeto = await figuraEm(pixi, figura, LADO);
+      const objeto = planta.objects[0];
+      peDoConteudo = objeto && figura ? peNoQuadrado(objeto.col, objeto.row).y : Number.NEGATIVE_INFINITY;
+      if (objeto && figura) {
+        const desenho = await figuraEm(pixi, figura, LADO);
         if (esta !== vez) {
-          objeto.destroy();
+          desenho.destroy();
           return;
         }
-        const pe = centroDoPe(planta.objeto.x, planta.objeto.y);
-        objeto.position.set(pe.x, pe.y);
-        conteudo.addChild(objeto);
+        const pe = peNoQuadrado(objeto.col, objeto.row);
+        desenho.position.set(pe.x, pe.y);
+        conteudo.addChild(desenho);
       }
     },
 
-    colocarHeroi(passo, animar) {
-      const novo = centroDoPe(passo.x, passo.y);
-      olharPara(passo.olhando);
-      if (animar && !semMovimento && (novo.x !== destino.x || novo.y !== destino.y)) {
-        caminhada = { de: { x: boneco.x, y: boneco.y }, inicio: performance.now() };
-      } else {
-        caminhada = null;
-        boneco.position.set(novo.x, novo.y);
-      }
-      destino = novo;
+    colocarHeroi(walker, andando) {
+      // O pé do boneco fica na borda de baixo da base que bate nas paredes.
+      const x = walker.x * ESCALA;
+      const y = (walker.y + HERO_HALF) * ESCALA;
+      if (andando && !semMovimento) fase += 1;
+      // Um pulinho a cada passo: sem quadros de caminhada ainda, é o que diz "andou" em vez de "deslizou".
+      const pulo = andando && !semMovimento ? Math.abs(Math.sin(fase * 0.35)) * 3 : 0;
+      boneco.position.set(x, y - pulo);
+      personagem.zIndex = y >= peDoConteudo ? 3 : 1;
+      // Provisório: o corpo do paperdoll só tem frente. Espelhar pro lado
+      // que anda já diz pra onde ele vai; as quatro direções vêm do Breno.
+      if (walker.facing === 'W' || walker.facing === 'E') boneco.scale.x = Math.abs(boneco.scale.x) * (walker.facing === 'W' ? -1 : 1);
+    },
+
+    aCadaQuadro(fn) {
+      const chamar = (ticker: Pixi.Ticker) => fn(ticker.deltaMS);
+      app.ticker.add(chamar);
+      return () => {
+        // A cena pode já ter sido destruída (desmontar derruba as duas
+        // coisas juntas, e a ordem não é garantida): aí não há o que parar.
+        try {
+          app.ticker.remove(chamar);
+        } catch {
+          // ticker já foi embora com a aplicação
+        }
+      };
     },
 
     destruir() {

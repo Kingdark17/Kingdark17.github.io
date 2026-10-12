@@ -1,12 +1,15 @@
 /**
- * O que acontece ao entrar numa sala — o `handleEnter()` de `js/city.js` e
+ * O que acontece numa sala — o `handleEnter()` de `js/city.js` e
  * `js/dungeon.js`, sem DOM.
  *
- * O original pergunta antes de entrar em sala "interessante" (`needsConfirm`
- * em `ui.js`) e, no "não", atravessa a sala mesmo assim quando ela é só de
- * passagem. Sem isso a saída da masmorra sequestra o jogador de volta pra
- * cidade só por ele passar por cima dela — e ela pode estar no caminho da
- * escada. As duas regras estão aqui, iguais.
+ * Desde o andar solto (decisão do usuário, 2026-10-11) entrar numa sala não
+ * aciona mais o que ela tem: o herói anda até o conteúdo e **encosta** nele
+ * (baú, NPC, loja, escada…). A exceção é a sala de monstro, que começa a
+ * luta assim que se entra (`lutaAoEntrar`) — sem a pergunta "deseja
+ * entrar?" que o original fazia na porta, e com ela some a saída grátis de
+ * dizer "não". A escada e a saída ainda perguntam ao encostar
+ * (`confirmaAoTocar`), porque não têm volta: uma troca de andar, a outra
+ * tira da masmorra.
  *
  * Cada função devolve `{ estado, aviso, tela }`: estado novo (imutável), a
  * caixinha de diálogo que a tela mostra e, quando a sala tem conteúdo
@@ -117,47 +120,22 @@ const PASSO_DA_SALA: Record<string, PassoDoTutorial> = {
   boss: 'combat',
 };
 
-/** Salas que abrem a pergunta "deseja entrar?" antes do passo (`needsConfirm`). */
-const PEDEM_CONFIRMACAO = new Set([
-  'npc',
-  'event',
-  'treasure',
-  'monster',
-  'boss',
-  'shop',
-  'blacksmith',
-  'tavern',
-  'questboard',
-  'guild',
-  'gate',
-  'exit',
-  'stairs',
-  'totem',
-  'teacher',
-]);
-
-/** Dizer "não" nestas salas atravessa em vez de recuar — senão a saída da masmorra viraria um muro no caminho da escada. */
-const ATRAVESSAM_SEM_INTERAGIR = new Set(['npc', 'shop', 'blacksmith', 'tavern', 'questboard', 'guild', 'treasure', 'event', 'exit', 'totem', 'teacher']);
-
 /**
- * Sala já resolvida não pergunta nada: não há o que decidir.
- *
- * O evento estava de fora desta lista e era o único — baú coletado e
- * monstro batido já dispensavam a pergunta desde sempre. O preço era
- * cobrado duas vezes no mesmo passo: perguntava "deseja investigar?" e,
- * no sim, abria a tela inteira do altar só pra dizer que já tinha sido
- * resolvido.
+ * Sala de monstro ainda não batida: entrar já é a luta (decisão do usuário,
+ * 2026-10-11). Quem foge continua na sala, com a criatura lá — encostar
+ * nela recomeça a luta.
  */
-export function precisaConfirmar(celula: CelulaDoMapa): boolean {
-  if (celula.type === 'treasure' && celula.collected) return false;
-  if ((celula.type === 'monster' || celula.type === 'boss') && celula.beaten) return false;
-  if (celula.type === 'event' && celula.resolved) return false;
-  if (celula.type === 'teacher' && celula.teacher?.taught) return false;
-  return PEDEM_CONFIRMACAO.has(celula.type);
+export function lutaAoEntrar(celula: CelulaDoMapa | null): boolean {
+  return !!celula && (celula.type === 'monster' || celula.type === 'boss') && !celula.beaten;
 }
 
-export function atravessaSemInteragir(celula: CelulaDoMapa): boolean {
-  return ATRAVESSAM_SEM_INTERAGIR.has(celula.type);
+/**
+ * O que pergunta antes, ao encostar: só o que não tem volta. A escada troca
+ * de andar e a saída tira da masmorra; o resto abre uma tela com o próprio
+ * "voltar" (loja, conversa, portão, totem) ou só dá o que tem (baú).
+ */
+export function confirmaAoTocar(celula: CelulaDoMapa | null): boolean {
+  return !!celula && (celula.type === 'stairs' || celula.type === 'exit');
 }
 
 function aviso(icone: string, titulo: string, texto: string): Aviso {
@@ -165,9 +143,9 @@ function aviso(icone: string, titulo: string, texto: string): Aviso {
 }
 
 /**
- * Resolve a sala em que o jogador acabou de entrar. `pet` é o cosmético da
- * conta, não do save — só a sala de monstro o usa, pra passar os bônus ao
- * combate.
+ * Resolve a sala em que o jogador está: quem chama é o encostão no conteúdo
+ * ou, na sala de monstro, a entrada. `pet` é o cosmético da conta, não do
+ * save — só a sala de monstro o usa, pra passar os bônus ao combate.
  *
  * A etapa do tutorial é marcada **antes** de montar a tela da sala: a
  * recompensa entra no ouro e na mochila que a loja vai mostrar, e a tela

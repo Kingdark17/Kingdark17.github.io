@@ -42,6 +42,7 @@ export * from './events/events.js';
 export * from './dungeon/graph.js';
 export * from './dungeon/dungeons.js';
 export * from './dungeon/generate.js';
+export * from './dungeon/room-walk.js';
 
 export * from './inventory/inventory.js';
 export * from './npc/npc-services.js';

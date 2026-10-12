@@ -22308,5 +22308,9916 @@
     "expected": {
       "result": "Um mestre clérigo espera nesta sala. Deseja falar com ele?"
     }
+  },
+  {
+    "name": "ROOM_COLS (constante)",
+    "input": {
+      "const": "ROOM_COLS"
+    },
+    "expected": {
+      "value": 9
+    }
+  },
+  {
+    "name": "ROOM_ROWS (constante)",
+    "input": {
+      "const": "ROOM_ROWS"
+    },
+    "expected": {
+      "value": 7
+    }
+  },
+  {
+    "name": "TILE_UNITS (constante)",
+    "input": {
+      "const": "TILE_UNITS"
+    },
+    "expected": {
+      "value": 960
+    }
+  },
+  {
+    "name": "WALK_TICKS_PER_SECOND (constante)",
+    "input": {
+      "const": "WALK_TICKS_PER_SECOND"
+    },
+    "expected": {
+      "value": 60
+    }
+  },
+  {
+    "name": "HERO_SPEED (constante)",
+    "input": {
+      "const": "HERO_SPEED"
+    },
+    "expected": {
+      "value": 64
+    }
+  },
+  {
+    "name": "HERO_HALF (constante)",
+    "input": {
+      "const": "HERO_HALF"
+    },
+    "expected": {
+      "value": 288
+    }
+  },
+  {
+    "name": "TOUCH_REACH (constante)",
+    "input": {
+      "const": "TOUCH_REACH"
+    },
+    "expected": {
+      "value": 48
+    }
+  },
+  {
+    "name": "STICK_MAX (constante)",
+    "input": {
+      "const": "STICK_MAX"
+    },
+    "expected": {
+      "value": 127
+    }
+  },
+  {
+    "name": "DOOR_ASSIST (constante)",
+    "input": {
+      "const": "DOOR_ASSIST"
+    },
+    "expected": {
+      "value": 480
+    }
+  },
+  {
+    "name": "CONTENT_TILE (constante)",
+    "input": {
+      "const": "CONTENT_TILE"
+    },
+    "expected": {
+      "value": {
+        "col": 4,
+        "row": 3
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas nenhuma, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {},
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas nenhuma, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {},
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas N, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas N, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas S, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "S": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "S"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas S, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "S": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "S"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NS, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NS, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas E, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "E": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas E, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NE, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "E": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NE, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas SE, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "S": true,
+          "E": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "S",
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas SE, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "S",
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NSE, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S",
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NSE, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S",
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas W, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "W": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas W, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NW, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "W": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NW, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas SW, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "S": true,
+          "W": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "S",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas SW, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "S": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "S",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NSW, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "W": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NSW, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas EW, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "E": true,
+          "W": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas EW, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NEW, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "E": true,
+          "W": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NEW, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas SEW, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "S",
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas SEW, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "S",
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NSEW, sem objeto",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": []
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S",
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": []
+      }
+    }
+  },
+  {
+    "name": "roomLayout: portas NSEW, com o conteúdo no centro",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S",
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "roomLayout: dois objetos",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "a",
+            "col": 2,
+            "row": 2
+          },
+          {
+            "id": "b",
+            "col": 6,
+            "row": 4
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "a",
+            "col": 2,
+            "row": 2
+          },
+          {
+            "id": "b",
+            "col": 6,
+            "row": 4
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "stickInput: (0, 0)",
+    "input": {
+      "fn": "stickInput",
+      "args": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  {
+    "name": "stickInput: (1, 1)",
+    "input": {
+      "fn": "stickInput",
+      "args": {
+        "x": 1,
+        "y": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 127,
+        "y": 127
+      }
+    }
+  },
+  {
+    "name": "stickInput: (-1, -1)",
+    "input": {
+      "fn": "stickInput",
+      "args": {
+        "x": -1,
+        "y": -1
+      }
+    },
+    "expected": {
+      "result": {
+        "x": -127,
+        "y": -127
+      }
+    }
+  },
+  {
+    "name": "stickInput: (0.5, -0.5)",
+    "input": {
+      "fn": "stickInput",
+      "args": {
+        "x": 0.5,
+        "y": -0.5
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 63,
+        "y": -63
+      }
+    }
+  },
+  {
+    "name": "stickInput: (0.999, 0.001)",
+    "input": {
+      "fn": "stickInput",
+      "args": {
+        "x": 0.999,
+        "y": 0.001
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 126,
+        "y": 0
+      }
+    }
+  },
+  {
+    "name": "stickInput: (-0.3333, 0.7071)",
+    "input": {
+      "fn": "stickInput",
+      "args": {
+        "x": -0.3333,
+        "y": 0.7071
+      }
+    },
+    "expected": {
+      "result": {
+        "x": -42,
+        "y": 89
+      }
+    }
+  },
+  {
+    "name": "stickInput: (2, -3)",
+    "input": {
+      "fn": "stickInput",
+      "args": {
+        "x": 2,
+        "y": -3
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 127,
+        "y": -127
+      }
+    }
+  },
+  {
+    "name": "stickInput: (0.0078, -0.0079)",
+    "input": {
+      "fn": "stickInput",
+      "args": {
+        "x": 0.0078,
+        "y": -0.0079
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 0,
+        "y": -1
+      }
+    }
+  },
+  {
+    "name": "roomArrival: sem direção",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": null
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 4320,
+        "y": 5280,
+        "facing": "S"
+      }
+    }
+  },
+  {
+    "name": "roomArrival: N",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": "N"
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 4320,
+        "y": 5280,
+        "facing": "N"
+      }
+    }
+  },
+  {
+    "name": "roomArrival: S",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": "S"
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 4320,
+        "y": 1440,
+        "facing": "S"
+      }
+    }
+  },
+  {
+    "name": "roomArrival: E",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": "E"
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 1440,
+        "y": 3360,
+        "facing": "E"
+      }
+    }
+  },
+  {
+    "name": "roomArrival: W",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": "W"
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 7200,
+        "y": 3360,
+        "facing": "W"
+      }
+    }
+  },
+  {
+    "name": "walkTicks: reto pro leste até a parede",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "S": true
+        },
+        "objects": [],
+        "walker": {
+          "x": 1440,
+          "y": 2400,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 200
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 7392,
+              "y": 2400,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 200
+      }
+    }
+  },
+  {
+    "name": "walkTicks: diagonal escorregando na parede de baixo",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true
+        },
+        "objects": [],
+        "walker": {
+          "x": 2400,
+          "y": 4320,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 127,
+            "ticks": 120
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 120
+      }
+    }
+  },
+  {
+    "name": "walkTicks: joystick pela metade",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 2400,
+          "y": 2400,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 63,
+            "y": -20,
+            "ticks": 40
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 3640,
+              "y": 2000,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 40
+      }
+    }
+  },
+  {
+    "name": "walkTicks: contorna o conteúdo e encosta",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 1440,
+          "y": 3360,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 80
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 30
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 60
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 3552,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": "content"
+          },
+          {
+            "walker": {
+              "x": 3552,
+              "y": 5280,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5280,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [
+          {
+            "tick": 33,
+            "id": "content"
+          },
+          {
+            "tick": 93,
+            "id": null
+          }
+        ],
+        "ticks": 170
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sai pelo norte alinhado",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 2400,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 100
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4320,
+              "y": 416,
+              "facing": "N"
+            },
+            "exit": "N",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 31
+      }
+    }
+  },
+  {
+    "name": "walkTicks: ajuda na porta do norte, vindo da direita",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4740,
+          "y": 1440,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 100
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4484,
+              "y": 416,
+              "facing": "N"
+            },
+            "exit": "N",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 20
+      }
+    }
+  },
+  {
+    "name": "walkTicks: ajuda na porta do sul, vindo da esquerda",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 3920,
+          "y": 5280,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 100
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4176,
+              "y": 6304,
+              "facing": "S"
+            },
+            "exit": "S",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 20
+      }
+    }
+  },
+  {
+    "name": "walkTicks: ajuda na porta do oeste, vindo de cima",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 1440,
+          "y": 2910,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 100
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 416,
+              "y": 3230,
+              "facing": "W"
+            },
+            "exit": "W",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 21
+      }
+    }
+  },
+  {
+    "name": "walkTicks: ajuda na porta do leste, vindo de baixo",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 7200,
+          "y": 3660,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 100
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 8224,
+              "y": 3532,
+              "facing": "E"
+            },
+            "exit": "E",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 18
+      }
+    }
+  },
+  {
+    "name": "walkTicks: longe do vão a ajuda não puxa",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 2400,
+          "y": 1440,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 60
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 2400,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 60
+      }
+    }
+  },
+  {
+    "name": "walkTicks: porta fechada segura",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "S": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 2400,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 60
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4320,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 60
+      }
+    }
+  },
+  {
+    "name": "walkTicks: diagonal para dentro do vão do oeste",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [],
+        "walker": {
+          "x": 1440,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": 127,
+            "ticks": 200
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 456,
+              "y": 3552,
+              "facing": "S"
+            },
+            "exit": "W",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 53
+      }
+    }
+  },
+  {
+    "name": "walkTicks: volta e meia pela sala",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 50
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 50
+          },
+          {
+            "x": -127,
+            "y": 127,
+            "ticks": 50
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 50
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 6520,
+              "y": 3080,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4192,
+              "y": 940,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2236,
+              "y": 3140,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2236,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 200
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 1",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "E": true
+        },
+        "objects": [],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -115,
+            "y": -127,
+            "ticks": 34
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 44
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 22
+          },
+          {
+            "x": -127,
+            "y": 25,
+            "ticks": 38
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4128,
+              "y": 449,
+              "facing": "N"
+            },
+            "exit": "N",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 22
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 2",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 7200,
+          "y": 3360,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 3
+          },
+          {
+            "x": 0,
+            "y": 20,
+            "ticks": 17
+          },
+          {
+            "x": -89,
+            "y": 0,
+            "ticks": 15
+          },
+          {
+            "x": 94,
+            "y": -127,
+            "ticks": 2
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 37
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 27
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 38
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 7200,
+              "y": 3552,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7200,
+              "y": 3722,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6540,
+              "y": 3722,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6614,
+              "y": 3620,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6614,
+              "y": 3620,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6614,
+              "y": 3620,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6614,
+              "y": 3620,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 139
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 3",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 89,
+            "ticks": 19
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 18
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 35
+          },
+          {
+            "x": 127,
+            "y": -126,
+            "ticks": 35
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4320,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5472,
+              "y": 5472,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 3932,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 107
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 4",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -62,
+            "ticks": 40
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 43
+          },
+          {
+            "x": 83,
+            "y": 0,
+            "ticks": 35
+          },
+          {
+            "x": -74,
+            "y": 0,
+            "ticks": 8
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 17
+          },
+          {
+            "x": -127,
+            "y": 127,
+            "ticks": 20
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 16
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 3
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4320,
+              "y": 4128,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": "content"
+          },
+          {
+            "walker": {
+              "x": 7072,
+              "y": 4128,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 4128,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7096,
+              "y": 4128,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 4128,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6512,
+              "y": 5008,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5488,
+              "y": 5008,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5488,
+              "y": 5200,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [
+          {
+            "tick": 36,
+            "id": "content"
+          },
+          {
+            "tick": 53,
+            "id": null
+          }
+        ],
+        "ticks": 182
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 5",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {},
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -45,
+            "y": 0,
+            "ticks": 8
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 5
+          },
+          {
+            "x": -110,
+            "y": -127,
+            "ticks": 12
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 35
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 4
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 37
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4144,
+              "y": 5280,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3924,
+              "y": 5060,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3432,
+              "y": 4496,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 4496,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 4752,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 4752,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 101
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 6",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 1440,
+          "y": 3360,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 5
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 37
+          },
+          {
+            "x": 127,
+            "y": -29,
+            "ticks": 6
+          },
+          {
+            "x": 127,
+            "y": 127,
+            "ticks": 21
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 16
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 4
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 22
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 1440,
+              "y": 3040,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1440,
+              "y": 3040,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1806,
+              "y": 2956,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2730,
+              "y": 3880,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2730,
+              "y": 3880,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2730,
+              "y": 4136,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1322,
+              "y": 4136,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 111
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 7",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 32
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 28
+          },
+          {
+            "x": 12,
+            "y": 0,
+            "ticks": 20
+          },
+          {
+            "x": 0,
+            "y": -8,
+            "ticks": 42
+          },
+          {
+            "x": 125,
+            "y": -127,
+            "ticks": 27
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 2912,
+              "y": 3872,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2912,
+              "y": 2080,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3032,
+              "y": 2080,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3032,
+              "y": 1912,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4220,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 149
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 8",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 35
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 11
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 45
+          },
+          {
+            "x": 6,
+            "y": 8,
+            "ticks": 35
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 6560,
+              "y": 5280,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6560,
+              "y": 5280,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6560,
+              "y": 5280,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6665,
+              "y": 5420,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 126
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 9",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 98,
+            "y": -127,
+            "ticks": 33
+          },
+          {
+            "x": -127,
+            "y": 85,
+            "ticks": 5
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 38
+          },
+          {
+            "x": 127,
+            "y": 127,
+            "ticks": 35
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 2
+          },
+          {
+            "x": -87,
+            "y": 0,
+            "ticks": 11
+          },
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 29
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4512,
+              "y": 440,
+              "facing": "N"
+            },
+            "exit": "N",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 20
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 10",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 127,
+            "ticks": 2
+          },
+          {
+            "x": 0,
+            "y": 41,
+            "ticks": 30
+          },
+          {
+            "x": 127,
+            "y": 15,
+            "ticks": 26
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 11
+          },
+          {
+            "x": -127,
+            "y": 123,
+            "ticks": 28
+          },
+          {
+            "x": 127,
+            "y": 56,
+            "ticks": 41
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4408,
+              "y": 1528,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4408,
+              "y": 2128,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6046,
+              "y": 2310,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5342,
+              "y": 2310,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4082,
+              "y": 2592,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": "content"
+          },
+          {
+            "walker": {
+              "x": 6460,
+              "y": 3192,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [
+          {
+            "tick": 75,
+            "id": "content"
+          },
+          {
+            "tick": 116,
+            "id": null
+          }
+        ],
+        "ticks": 138
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 11",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 7200,
+          "y": 3360,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": 51,
+            "y": 127,
+            "ticks": 36
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 3
+          },
+          {
+            "x": 53,
+            "y": 127,
+            "ticks": 35
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 41
+          },
+          {
+            "x": -49,
+            "y": 0,
+            "ticks": 36
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5448,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5256,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6528,
+              "y": 5472,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 151
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 12",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 32
+          },
+          {
+            "x": -89,
+            "y": 127,
+            "ticks": 6
+          },
+          {
+            "x": 0,
+            "y": 19,
+            "ticks": 21
+          },
+          {
+            "x": -127,
+            "y": 31,
+            "ticks": 32
+          },
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 24
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 2272,
+              "y": 5280,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2056,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2056,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 5472,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2304,
+              "y": 4416,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 115
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 13",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 1440,
+          "y": 3360,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -24,
+            "ticks": 30
+          },
+          {
+            "x": -17,
+            "y": 0,
+            "ticks": 3
+          },
+          {
+            "x": 127,
+            "y": 61,
+            "ticks": 34
+          },
+          {
+            "x": 0,
+            "y": -112,
+            "ticks": 29
+          },
+          {
+            "x": -127,
+            "y": 112,
+            "ticks": 41
+          },
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 13
+          },
+          {
+            "x": 28,
+            "y": 127,
+            "ticks": 35
+          },
+          {
+            "x": -39,
+            "y": -127,
+            "ticks": 32
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 1440,
+              "y": 3000,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1416,
+              "y": 3000,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3354,
+              "y": 3918,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3354,
+              "y": 2294,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1427,
+              "y": 4016,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1999,
+              "y": 3444,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2454,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1878,
+              "y": 3552,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 217
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 14",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {},
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 1440,
+          "y": 3360,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 9
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 9
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 8
+          },
+          {
+            "x": 127,
+            "y": -102,
+            "ticks": 19
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 5
+          },
+          {
+            "x": 74,
+            "y": -127,
+            "ticks": 17
+          },
+          {
+            "x": -127,
+            "y": 127,
+            "ticks": 7
+          },
+          {
+            "x": -127,
+            "y": 30,
+            "ticks": 39
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 1440,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 3360,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1760,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2691,
+              "y": 2619,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2371,
+              "y": 2619,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2898,
+              "y": 1701,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2590,
+              "y": 2009,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 2555,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 113
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 15",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {},
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 20
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 14
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 3
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 18
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 19
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 30
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 21
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 28
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 5600,
+              "y": 1440,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5600,
+              "y": 1440,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5408,
+              "y": 1440,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5408,
+              "y": 2592,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6624,
+              "y": 2592,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6624,
+              "y": 4512,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6624,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6624,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 153
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 16",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "S": true
+        },
+        "objects": [],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 7
+          },
+          {
+            "x": 0,
+            "y": 24,
+            "ticks": 1
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 43
+          },
+          {
+            "x": 127,
+            "y": 127,
+            "ticks": 27
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 38
+          },
+          {
+            "x": 65,
+            "y": 0,
+            "ticks": 40
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 37
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 14
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4012,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4012,
+              "y": 1260,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2120,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3308,
+              "y": 2436,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 2436,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2528,
+              "y": 2436,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2528,
+              "y": 2436,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2528,
+              "y": 2436,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 207
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 17",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 7200,
+          "y": 3360,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 22
+          },
+          {
+            "x": 127,
+            "y": -26,
+            "ticks": 20
+          },
+          {
+            "x": 0,
+            "y": 37,
+            "ticks": 39
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 27
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 1
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 40
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 5792,
+              "y": 3360,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7032,
+              "y": 3120,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7032,
+              "y": 3822,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7032,
+              "y": 2094,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6968,
+              "y": 2094,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 2094,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 149
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 18",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": -68,
+            "ticks": 36
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 5
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 21
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4128,
+              "y": 1016,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4128,
+              "y": 1336,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4128,
+              "y": 1336,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 62
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 19",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "S": true,
+          "E": true
+        },
+        "objects": [],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 32
+          },
+          {
+            "x": 127,
+            "y": 124,
+            "ticks": 22
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 17
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 10
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 36
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 1
+          },
+          {
+            "x": -13,
+            "y": 0,
+            "ticks": 32
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 6368,
+              "y": 1440,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7358,
+              "y": 2408,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 2408,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 2408,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 2408,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7348,
+              "y": 2364,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7156,
+              "y": 2364,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 150
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 20",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {},
+        "objects": [],
+        "walker": {
+          "x": 1440,
+          "y": 3360,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 26
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 42
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 13
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 28
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 11
+          },
+          {
+            "x": -127,
+            "y": 127,
+            "ticks": 4
+          },
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 39
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 4
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 1440,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1440,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2272,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4064,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4064,
+              "y": 4064,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3888,
+              "y": 4240,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5604,
+              "y": 2524,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5604,
+              "y": 2268,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 167
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 21",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": [],
+        "walker": {
+          "x": 7200,
+          "y": 3360,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 19
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 35
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 21
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 1
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 28
+          },
+          {
+            "x": -58,
+            "y": 0,
+            "ticks": 12
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 35
+          },
+          {
+            "x": 0,
+            "y": -122,
+            "ticks": 28
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 8036,
+              "y": 3168,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 8036,
+              "y": 3168,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 8036,
+              "y": 3168,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 8036,
+              "y": 3168,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 8036,
+              "y": 3168,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7688,
+              "y": 3168,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7688,
+              "y": 3552,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7688,
+              "y": 3168,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 179
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 22",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 17
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 41
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 22
+          },
+          {
+            "x": 47,
+            "y": -127,
+            "ticks": 45
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 13
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 3232,
+              "y": 1440,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 1440,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 1440,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2238,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1666,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 138
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 23",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 5
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 29
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 34
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 37
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 26
+          },
+          {
+            "x": 88,
+            "y": 127,
+            "ticks": 5
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 40
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4320,
+              "y": 5600,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4320,
+              "y": 6304,
+              "facing": "S"
+            },
+            "exit": "S",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 16
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 24",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {},
+        "objects": [],
+        "walker": {
+          "x": 7200,
+          "y": 3360,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 43
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 9
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 23
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 19
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 7392,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5920,
+              "y": 3360,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5920,
+              "y": 4576,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 94
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 25",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 25
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 11
+          },
+          {
+            "x": -52,
+            "y": -127,
+            "ticks": 15
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 33
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 2720,
+              "y": 5280,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2236,
+              "y": 4796,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1876,
+              "y": 3926,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 3926,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 84
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 26",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 25
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 5
+          },
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 28
+          },
+          {
+            "x": 127,
+            "y": -96,
+            "ticks": 44
+          },
+          {
+            "x": 127,
+            "y": 91,
+            "ticks": 39
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 45
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 8
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4100,
+              "y": 5060,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5332,
+              "y": 3864,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 2192,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 8208,
+              "y": 3552,
+              "facing": "E"
+            },
+            "exit": "E",
+            "touching": null
+          }
+        ],
+        "touches": [
+          {
+            "tick": 51,
+            "id": "content"
+          },
+          {
+            "tick": 54,
+            "id": null
+          }
+        ],
+        "ticks": 140
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 27",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 25
+          },
+          {
+            "x": 0,
+            "y": -96,
+            "ticks": 39
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 8
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 28
+          },
+          {
+            "x": -127,
+            "y": 37,
+            "ticks": 8
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 28
+          },
+          {
+            "x": 127,
+            "y": -4,
+            "ticks": 37
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 44
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4320,
+              "y": 4128,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": "content"
+          },
+          {
+            "walker": {
+              "x": 4320,
+              "y": 4640,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6112,
+              "y": 4640,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5632,
+              "y": 4776,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5632,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5435,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 2619,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [
+          {
+            "tick": 49,
+            "id": "content"
+          },
+          {
+            "tick": 65,
+            "id": null
+          }
+        ],
+        "ticks": 217
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 28",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 7200,
+          "y": 3360,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 2
+          },
+          {
+            "x": -50,
+            "y": 0,
+            "ticks": 37
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 7
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 17
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 33
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 7200,
+              "y": 3360,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6275,
+              "y": 3360,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6275,
+              "y": 3360,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5187,
+              "y": 3360,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5187,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 96
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 29",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 1440,
+          "y": 3360,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 22
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 7
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 26
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 14
+          },
+          {
+            "x": -53,
+            "y": -127,
+            "ticks": 1
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 1440,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1440,
+              "y": 2912,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1440,
+              "y": 2912,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 2296,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 2238,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 70
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 30",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "S": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 1440,
+          "y": 3360,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": -93,
+            "y": 127,
+            "ticks": 2
+          },
+          {
+            "x": 120,
+            "y": 0,
+            "ticks": 20
+          },
+          {
+            "x": 127,
+            "y": -119,
+            "ticks": 30
+          },
+          {
+            "x": 127,
+            "y": 15,
+            "ticks": 12
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 1366,
+              "y": 3462,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2566,
+              "y": 3462,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3946,
+              "y": 2172,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4702,
+              "y": 2256,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [
+          {
+            "tick": 43,
+            "id": "content"
+          },
+          {
+            "tick": 44,
+            "id": null
+          }
+        ],
+        "ticks": 64
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 31",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": 14,
+            "ticks": 40
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 25
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 17
+          },
+          {
+            "x": 0,
+            "y": 1,
+            "ticks": 16
+          },
+          {
+            "x": -58,
+            "y": 0,
+            "ticks": 16
+          },
+          {
+            "x": -127,
+            "y": 8,
+            "ticks": 27
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 28
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 1800,
+              "y": 1680,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3400,
+              "y": 1680,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3400,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3400,
+              "y": 1248,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2936,
+              "y": 1248,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 1329,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3040,
+              "y": 1329,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 169
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 32",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 11
+          },
+          {
+            "x": 127,
+            "y": -61,
+            "ticks": 1
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 17
+          },
+          {
+            "x": 127,
+            "y": 127,
+            "ticks": 30
+          },
+          {
+            "x": 113,
+            "y": -127,
+            "ticks": 37
+          },
+          {
+            "x": 111,
+            "y": 0,
+            "ticks": 39
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 19
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4320,
+              "y": 1440,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4377,
+              "y": 1413,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4128,
+              "y": 665,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 5216,
+              "y": 1985,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6770,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 1248,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6176,
+              "y": 1248,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 154
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 33",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "E": true,
+          "W": true
+        },
+        "objects": [],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 3
+          },
+          {
+            "x": 0,
+            "y": 24,
+            "ticks": 24
+          },
+          {
+            "x": 127,
+            "y": -7,
+            "ticks": 44
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 7
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4188,
+              "y": 1308,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4188,
+              "y": 1596,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6960,
+              "y": 1464,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6960,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 78
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 34",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 7200,
+          "y": 3360,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 31
+          },
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 18
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 39
+          },
+          {
+            "x": -127,
+            "y": 127,
+            "ticks": 30
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 5836,
+              "y": 1996,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6628,
+              "y": 1248,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 1248,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6072,
+              "y": 2568,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 118
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 35",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 1440,
+          "y": 3360,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 3
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 3
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 13
+          },
+          {
+            "x": -127,
+            "y": 127,
+            "ticks": 27
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 45
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 1440,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1308,
+              "y": 3228,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1308,
+              "y": 4060,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 5248,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4128,
+              "y": 5248,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 91
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 36",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 1440,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 39,
+            "y": 127,
+            "ticks": 37
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 33
+          },
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 14
+          },
+          {
+            "x": -127,
+            "y": -26,
+            "ticks": 45
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4986,
+              "y": 2592,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": "content"
+          },
+          {
+            "walker": {
+              "x": 4986,
+              "y": 2592,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": "content"
+          },
+          {
+            "walker": {
+              "x": 4090,
+              "y": 2592,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": "content"
+          },
+          {
+            "walker": {
+              "x": 1300,
+              "y": 2052,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [
+          {
+            "tick": 19,
+            "id": "content"
+          },
+          {
+            "tick": 88,
+            "id": null
+          }
+        ],
+        "ticks": 129
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 37",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {},
+        "objects": [],
+        "walker": {
+          "x": 7200,
+          "y": 3360,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 127,
+            "ticks": 38
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 12
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 24
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 25
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 43
+          },
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 21
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5032,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5032,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5032,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5032,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 163
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 38",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 7200,
+          "y": 3360,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 34
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 22
+          },
+          {
+            "x": -127,
+            "y": 120,
+            "ticks": 7
+          },
+          {
+            "x": 127,
+            "y": 127,
+            "ticks": 11
+          },
+          {
+            "x": -127,
+            "y": 127,
+            "ticks": 19
+          },
+          {
+            "x": 127,
+            "y": 127,
+            "ticks": 38
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 7200,
+              "y": 3360,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7200,
+              "y": 3360,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6878,
+              "y": 3661,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7362,
+              "y": 4145,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6526,
+              "y": 4981,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 131
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 39",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 1440,
+          "y": 3360,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 0,
+            "ticks": 13
+          },
+          {
+            "x": -125,
+            "y": 127,
+            "ticks": 30
+          },
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 4
+          },
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 29
+          },
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 43
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 7
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 1440,
+              "y": 3360,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 4710,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1248,
+              "y": 4454,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 2524,
+              "y": 3178,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4416,
+              "y": 1286,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4864,
+              "y": 1286,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 126
+      }
+    }
+  },
+  {
+    "name": "walkTicks: sorteado 40",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 3
+          }
+        ],
+        "walker": {
+          "x": 4320,
+          "y": 5280,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 35
+          },
+          {
+            "x": -56,
+            "y": 0,
+            "ticks": 23
+          },
+          {
+            "x": 46,
+            "y": 127,
+            "ticks": 40
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 45
+          },
+          {
+            "x": 21,
+            "y": 127,
+            "ticks": 15
+          },
+          {
+            "x": 0,
+            "y": 14,
+            "ticks": 44
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 4320,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 3676,
+              "y": 5472,
+              "facing": "W"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4516,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 5472,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 202
+      }
+    }
+  },
+  {
+    "name": "walkTick: parado",
+    "input": {
+      "fn": "walkTick",
+      "args": {
+        "layout": {
+          "doors": [
+            "N",
+            "S",
+            "E",
+            "W"
+          ],
+          "solid": [
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              false,
+              false,
+              false,
+              false,
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ]
+          ],
+          "objects": [
+            {
+              "id": "content",
+              "col": 4,
+              "row": 3
+            }
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 2400,
+          "facing": "W"
+        },
+        "input": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "walker": {
+          "x": 2400,
+          "y": 2400,
+          "facing": "W"
+        },
+        "exit": null,
+        "touching": null
+      }
+    }
+  },
+  {
+    "name": "walkTick: reto",
+    "input": {
+      "fn": "walkTick",
+      "args": {
+        "layout": {
+          "doors": [
+            "N",
+            "S",
+            "E",
+            "W"
+          ],
+          "solid": [
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              false,
+              false,
+              false,
+              false,
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ]
+          ],
+          "objects": [
+            {
+              "id": "content",
+              "col": 4,
+              "row": 3
+            }
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 2400,
+          "facing": "W"
+        },
+        "input": {
+          "x": 127,
+          "y": 0
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "walker": {
+          "x": 2464,
+          "y": 2400,
+          "facing": "E"
+        },
+        "exit": null,
+        "touching": null
+      }
+    }
+  },
+  {
+    "name": "walkTick: diagonal no fim",
+    "input": {
+      "fn": "walkTick",
+      "args": {
+        "layout": {
+          "doors": [
+            "N",
+            "S",
+            "E",
+            "W"
+          ],
+          "solid": [
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              false,
+              false,
+              false,
+              false,
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ]
+          ],
+          "objects": [
+            {
+              "id": "content",
+              "col": 4,
+              "row": 3
+            }
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 2400,
+          "facing": "W"
+        },
+        "input": {
+          "x": -127,
+          "y": 127
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "walker": {
+          "x": 2356,
+          "y": 2444,
+          "facing": "S"
+        },
+        "exit": null,
+        "touching": null
+      }
+    }
+  },
+  {
+    "name": "walkTick: entrada fora da faixa",
+    "input": {
+      "fn": "walkTick",
+      "args": {
+        "layout": {
+          "doors": [
+            "N",
+            "S",
+            "E",
+            "W"
+          ],
+          "solid": [
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              false,
+              false,
+              false,
+              false,
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ]
+          ],
+          "objects": [
+            {
+              "id": "content",
+              "col": 4,
+              "row": 3
+            }
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 2400,
+          "facing": "W"
+        },
+        "input": {
+          "x": 900,
+          "y": -900
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "walker": {
+          "x": 2444,
+          "y": 2356,
+          "facing": "N"
+        },
+        "exit": null,
+        "touching": null
+      }
+    }
+  },
+  {
+    "name": "walkTick: entrada com fração",
+    "input": {
+      "fn": "walkTick",
+      "args": {
+        "layout": {
+          "doors": [
+            "N",
+            "S",
+            "E",
+            "W"
+          ],
+          "solid": [
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              false,
+              false,
+              false,
+              false,
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ]
+          ],
+          "objects": [
+            {
+              "id": "content",
+              "col": 4,
+              "row": 3
+            }
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 2400,
+          "facing": "W"
+        },
+        "input": {
+          "x": 33.9,
+          "y": -12.5
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "walker": {
+          "x": 2416,
+          "y": 2394,
+          "facing": "E"
+        },
+        "exit": null,
+        "touching": null
+      }
+    }
+  },
+  {
+    "name": "walkTick: encostado no conteúdo",
+    "input": {
+      "fn": "walkTick",
+      "args": {
+        "layout": {
+          "doors": [
+            "N",
+            "S",
+            "E",
+            "W"
+          ],
+          "solid": [
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              false,
+              false,
+              false,
+              false,
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ]
+          ],
+          "objects": [
+            {
+              "id": "content",
+              "col": 4,
+              "row": 3
+            }
+          ]
+        },
+        "walker": {
+          "x": 3552,
+          "y": 3360,
+          "facing": "E"
+        },
+        "input": {
+          "x": 127,
+          "y": 0
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "walker": {
+          "x": 3552,
+          "y": 3360,
+          "facing": "E"
+        },
+        "exit": null,
+        "touching": "content"
+      }
+    }
+  },
+  {
+    "name": "walkTick: no meio do vão do norte",
+    "input": {
+      "fn": "walkTick",
+      "args": {
+        "layout": {
+          "doors": [
+            "N",
+            "S",
+            "E",
+            "W"
+          ],
+          "solid": [
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              false,
+              false,
+              false,
+              false,
+              true,
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ],
+            [
+              true,
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              true
+            ]
+          ],
+          "objects": [
+            {
+              "id": "content",
+              "col": 4,
+              "row": 3
+            }
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 490,
+          "facing": "N"
+        },
+        "input": {
+          "x": 0,
+          "y": -127
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "walker": {
+          "x": 4320,
+          "y": 426,
+          "facing": "N"
+        },
+        "exit": "N",
+        "touching": null
+      }
+    }
   }
 ]

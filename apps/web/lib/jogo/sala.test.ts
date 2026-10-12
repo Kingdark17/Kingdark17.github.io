@@ -13,7 +13,7 @@ import {
 import { treinar } from './guilda';
 import { saveSorteado } from './heroi-sorteado';
 import { entrar } from './portao';
-import { atravessaSemInteragir, interagir, precisaConfirmar } from './sala';
+import { confirmaAoTocar, interagir, lutaAoEntrar } from './sala';
 import { montarSaveInicial } from './save-inicial';
 
 function saveNovo() {
@@ -49,39 +49,34 @@ function sala(tipo: DungeonRoomType, extra: Partial<DungeonCell> = {}): DungeonC
   return { type: tipo, x: 0, y: 0, doors: {}, ...extra };
 }
 
-describe('precisaConfirmar', () => {
-  it('pergunta antes de entrar no portão, na escada e na saída', () => {
-    expect(precisaConfirmar({ type: 'gate', x: 0, y: 0, doors: {} } as CityCell)).toBe(true);
-    expect(precisaConfirmar(sala('stairs'))).toBe(true);
-    expect(precisaConfirmar(sala('exit'))).toBe(true);
+describe('lutaAoEntrar', () => {
+  it('sala de monstro e de chefe ainda não batida começa a luta ao entrar, sem perguntar', () => {
+    expect(lutaAoEntrar(sala('monster'))).toBe(true);
+    expect(lutaAoEntrar(sala('boss'))).toBe(true);
   });
 
-  it('não pergunta em sala comum nem em sala já resolvida', () => {
-    expect(precisaConfirmar(sala('normal'))).toBe(false);
-    expect(precisaConfirmar(sala('treasure', { collected: true }))).toBe(false);
-    expect(precisaConfirmar(sala('monster', { beaten: true }))).toBe(false);
-    expect(precisaConfirmar(sala('treasure', { collected: false }))).toBe(true);
-  });
-
-  /**
-   * O evento era o único que ficava de fora da regra acima, e o preço era
-   * cobrado duas vezes: perguntava "deseja investigar?" e, no sim, abria a
-   * tela inteira do altar pra dizer que já tinha sido resolvido.
-   */
-  it('evento já resolvido não pergunta; o que ainda não foi, pergunta', () => {
-    expect(precisaConfirmar(sala('event', { resolved: true }))).toBe(false);
-    expect(precisaConfirmar(sala('event', { resolved: false }))).toBe(true);
+  it('a já batida, e qualquer outra sala, não', () => {
+    expect(lutaAoEntrar(sala('monster', { beaten: true }))).toBe(false);
+    expect(lutaAoEntrar(sala('treasure'))).toBe(false);
+    expect(lutaAoEntrar(sala('stairs'))).toBe(false);
+    expect(lutaAoEntrar({ type: 'shop', x: 0, y: 0, doors: {} } as CityCell)).toBe(false);
+    expect(lutaAoEntrar(null)).toBe(false);
   });
 });
 
-describe('atravessaSemInteragir', () => {
-  it('deixa passar pela saída, senão ela viraria um muro no caminho da escada', () => {
-    expect(atravessaSemInteragir(sala('exit'))).toBe(true);
+describe('confirmaAoTocar', () => {
+  it('a escada e a saída perguntam antes, porque não têm volta', () => {
+    expect(confirmaAoTocar(sala('stairs'))).toBe(true);
+    expect(confirmaAoTocar(sala('exit'))).toBe(true);
   });
 
-  it('não deixa passar pela escada nem pelo chefe: ou entra ou recua', () => {
-    expect(atravessaSemInteragir(sala('stairs'))).toBe(false);
-    expect(atravessaSemInteragir(sala('boss'))).toBe(false);
+  it('o resto aciona no encostão: baú, evento, mestre, totem, portão, loja', () => {
+    expect(confirmaAoTocar(sala('treasure'))).toBe(false);
+    expect(confirmaAoTocar(sala('event'))).toBe(false);
+    expect(confirmaAoTocar(sala('teacher'))).toBe(false);
+    expect(confirmaAoTocar(sala('totem'))).toBe(false);
+    expect(confirmaAoTocar({ type: 'gate', x: 0, y: 0, doors: {} } as CityCell)).toBe(false);
+    expect(confirmaAoTocar({ type: 'shop', x: 0, y: 0, doors: {} } as CityCell)).toBe(false);
   });
 });
 

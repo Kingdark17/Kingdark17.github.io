@@ -40,7 +40,7 @@ export interface Passo {
  * `rewarded` continua valendo, e a Guilda só aparece como etapa por fazer.
  */
 export const PASSOS: Passo[] = [
-  { id: 'move', icone: '🧭', nome: 'Dê o primeiro passo', dica: 'Use WASD, as setas do teclado ou os botões de direção para andar.' },
+  { id: 'move', icone: '🧭', nome: 'Dê o primeiro passo', dica: 'Use WASD, as setas do teclado ou arraste o dedo na sala para andar.' },
   {
     id: 'guild',
     icone: '⚜️',
@@ -57,7 +57,7 @@ export const PASSOS: Passo[] = [
 export const GUIAS: { titulo: string; texto: string }[] = [
   {
     titulo: '🧭 Movimentação',
-    texto: 'Use WASD, as setas ou os controles. Ao escolher “Não” em NPCs, lojas e saídas, você pode atravessar sem interagir.',
+    texto: 'Use WASD, as setas ou arraste o dedo na sala. Encoste no que estiver nela para interagir: baús, pessoas, lojas e escadas. Sala com monstro começa a luta assim que você entra.',
   },
   {
     titulo: '⚔️ Combate',

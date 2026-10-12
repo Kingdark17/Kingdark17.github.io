@@ -1,0 +1,36 @@
+{
+  "ROOM_COLS": 9,
+  "ROOM_ROWS": 7,
+  "TILE_UNITS": 960,
+  "WALK_TICKS_PER_SECOND": 60,
+  "HERO_SPEED": 64,
+  "HERO_HALF": 288,
+  "TOUCH_REACH": 48,
+  "STICK_MAX": 127,
+  "DOOR_ASSIST": 480,
+  "CONTENT_TILE": {
+    "col": 4,
+    "row": 3
+  },
+  "DOOR_TILE": {
+    "N": {
+      "col": 4,
+      "row": 0
+    },
+    "S": {
+      "col": 4,
+      "row": 6
+    },
+    "W": {
+      "col": 0,
+      "row": 3
+    },
+    "E": {
+      "col": 8,
+      "row": 3
+    }
+  },
+  "$privadas": [
+    "DOOR_TILE"
+  ]
+}
