@@ -117,6 +117,8 @@ namespace RPGLegend.Engine
             if (IsBossFloor(floor)) PlaceBoss(First(Place(DungeonRoomTypes.Boss, 1)), forca, floor % 10 == 0, species, rng);
 
             PopulateRoomContent(res.Rooms, forca, rng, now);
+            // Por último: o resto do andar sai igual ao de antes pra mesma semente.
+            RoomExtras.PlaceExtras(res.Rooms, forca, rng, now);
 
             return new RoomGraph<DungeonCell> { Grid = res.Grid, Rooms = res.Rooms, Start = res.Start };
         }

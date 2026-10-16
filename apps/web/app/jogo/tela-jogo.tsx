@@ -24,14 +24,26 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { displayName, idDaRaca, roomArrival, type Direction, type Item, type PetId, type Walker } from '@rpg-legend/shared';
+import { DIR_LABEL, DIR_OPP, defaultRng, displayName, idDaRaca, roomArrival, type Direction, type Item, type PetId, type Walker } from '@rpg-legend/shared';
 import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { apresentacaoDe } from '@/lib/jogo/apresentacao';
 import { arteDoTipo } from '@/lib/jogo/icones-do-mapa';
 import { TEMAS, type Figura } from '@/lib/jogo/desenho-da-sala';
-import { PARADO, entradaCombinada, plantaDaSala, type PosicaoNaSala, type Vetor } from '@/lib/jogo/andar-na-sala';
+import { ID_DO_CONTEUDO, PARADO, entradaCombinada, plantaDaSala, type PosicaoNaSala, type Vetor } from '@/lib/jogo/andar-na-sala';
+import {
+  ID_DO_BAU_SECRETO,
+  abrirBauSecreto,
+  descricaoDosExtras,
+  indiceDoExtra,
+  passagemSecreta,
+  plantaDaSalaSecreta,
+  textoDaSecreta,
+  tocarExtra,
+  type ResultadoDoExtra,
+} from '@/lib/jogo/extras';
+import { assinaturaDosExtras, chaveDosObjetos, figurasDaSala, lerObjetos } from '@/lib/jogo/figuras-da-sala';
 import { andar, celulaAtual, retomarSave, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
 import { confirmaAoTocar, interagir, lutaAoEntrar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
 import { abrirAdm } from '@/lib/jogo/adm';
@@ -178,11 +190,31 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const racaAgora = estado ? idDaRaca(estado.hero) : null;
   const emojiDaRaca = estado?.hero.raceIcon || '🙂';
 
-  const planta = useMemo(
-    () => plantaDaSala(Object.fromEntries([...portasAgora].map((d) => [d, true])), iconeAgora !== ''),
-    [portasAgora, iconeAgora],
+  // Os extras da sala (`extras.ts`): baú pequeno, vaso, placa, parede
+  // rachada. Tudo o que sai da célula vira texto aqui, antes das
+  // memorizações: as plantas e as figuras só mudam quando o texto muda.
+  const objetosAgora = chaveDosObjetos(celulaAgora, iconeAgora !== '');
+  const extrasAgora = assinaturaDosExtras(celulaAgora);
+  const ladoDaPassagem = passagemSecreta(celulaAgora)?.lado ?? null;
+
+  /**
+   * A sala secreta atrás da parede rachada, quando o herói está nela. Fica
+   * fora do mapa e do save: é desta sala, e trocar de sala a esquece (quem
+   * recarrega o jogo lá dentro aparece na sala da parede).
+   */
+  const [naSecreta, setNaSecreta] = useState<{ sala: string; lado: Direction; indice: number } | null>(null);
+  const secretaAgora = naSecreta?.sala === salaAgora ? naSecreta : null;
+  const ladoDaSecreta = secretaAgora?.lado ?? null;
+
+  const planta = useMemo(() => {
+    if (ladoDaSecreta) return plantaDaSalaSecreta(ladoDaSecreta);
+    const portas = Object.fromEntries([...portasAgora, ...(ladoDaPassagem ? [ladoDaPassagem] : [])].map((d) => [d, true]));
+    return plantaDaSala(portas, lerObjetos(objetosAgora));
+  }, [ladoDaSecreta, portasAgora, ladoDaPassagem, objetosAgora]);
+  const figuras = useMemo(
+    () => figurasDaSala(iconeAgora ? { arte: arteAgora, emoji: iconeAgora } : null, extrasAgora, secretaAgora?.indice ?? null),
+    [iconeAgora, arteAgora, extrasAgora, secretaAgora?.indice],
   );
-  const conteudoDaSala = useMemo<Figura | null>(() => (iconeAgora ? { arte: arteAgora, emoji: iconeAgora } : null), [iconeAgora, arteAgora]);
   // Provisório: o corpo da raça do paperdoll faz o papel do boneco do mapa
   // até o Breno desenhar o de 4 direções.
   const heroiNaCena = useMemo<Figura>(() => ({ arte: racaAgora ? `/img/paperdoll/corpo/${racaAgora}.png` : null, emoji: emojiDaRaca }), [racaAgora, emojiDaRaca]);
@@ -194,15 +226,21 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
    * porta por onde entrou; quem chegou de outro jeito — portão, escada,
    * totem, derrota — aparece no meio.
    */
-  const [naSala, setNaSala] = useState<{ sala: string; mapa: string; x: number; y: number; chegada: Walker } | null>(null);
+  const [naSala, setNaSala] = useState<{ sala: string; mapa: string; x: number; y: number; chegada: Walker; volta: number } | null>(null);
   if (estado && naSala?.sala !== salaAgora) {
     const dx = estado.pos.x - (naSala?.x ?? 0);
     const dy = estado.pos.y - (naSala?.y ?? 0);
     const vizinha = naSala?.mapa === mapaAgora && Math.abs(dx) + Math.abs(dy) === 1;
     const veioPor: Direction | null = vizinha ? (dx === 1 ? 'E' : dx === -1 ? 'W' : dy === 1 ? 'S' : 'N') : null;
-    setNaSala({ sala: salaAgora, mapa: mapaAgora, x: estado.pos.x, y: estado.pos.y, chegada: roomArrival(veioPor) });
+    setNaSala({ sala: salaAgora, mapa: mapaAgora, x: estado.pos.x, y: estado.pos.y, chegada: roomArrival(veioPor), volta: 0 });
   }
   const chegadaNaSala = naSala?.sala === salaAgora ? naSala.chegada : roomArrival(null);
+  /**
+   * A cena põe o herói na chegada quando esta chave muda. Entrar e sair da
+   * sala secreta também mudam: na volta (`volta`), ele aparece na passagem.
+   */
+  const chaveDaCena = secretaAgora ? `${salaAgora}#secreta` : `${salaAgora}#${naSala?.sala === salaAgora ? naSala.volta : 0}`;
+  const chegadaDaCena = secretaAgora ? roomArrival(secretaAgora.lado) : chegadaNaSala;
 
   /** Onde o herói está agora: a cena escreve aqui a cada passo, e sobrevive a ela desmontar. */
   const posicao = useRef<PosicaoNaSala>({ sala: null, walker: roomArrival(null), tocando: null });
@@ -522,6 +560,35 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   }
 
   /**
+   * O herói encostou em algo da sala: o conteúdo, um extra ou, na sala
+   * secreta, o baú dela.
+   */
+  function aoEncostar(id: string) {
+    if (!estado || !conduzo || tela) return;
+    if (estado.mapMode === 'dungeon' && secretaAgora) {
+      if (id === ID_DO_BAU_SECRETO) aplicarExtra(estado, abrirBauSecreto(estado, secretaAgora.indice));
+      return;
+    }
+    if (id === ID_DO_CONTEUDO) {
+      encostar();
+      return;
+    }
+    const indice = indiceDoExtra(id);
+    if (indice !== null && estado.mapMode === 'dungeon') aplicarExtra(estado, tocarExtra(estado, indice, defaultRng));
+  }
+
+  /** O resultado de um extra: o aviso sempre; o estado novo só quando algo mudou (a placa só se lê). */
+  function aplicarExtra(atual: EstadoDoJogo, resultado: ResultadoDoExtra) {
+    if (resultado.som) tocar(resultado.som);
+    if (resultado.estado === atual) {
+      avisar(resultado.aviso);
+      return;
+    }
+    if (emCoop) travarParceiro();
+    registrarMudanca(resultado.estado, resultado.aviso);
+  }
+
+  /**
    * O herói encostou no conteúdo da sala. A escada e a saída perguntam
    * antes, porque não têm volta; o resto aciona na hora. No co-op, quem
    * conduz avisa o parceiro antes de mexer no mapa, como ao andar.
@@ -578,6 +645,24 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
    */
   function mover(direcao: Direction): boolean {
     if (!estado || !conduzo) return false;
+
+    // A sala secreta tem uma porta só, de volta pra sala da parede: o herói
+    // reaparece na passagem (`volta`), e não por onde entrou da outra vez.
+    if (secretaAgora) {
+      if (direcao !== DIR_OPP[secretaAgora.lado]) return false;
+      setNaSecreta(null);
+      if (naSala) setNaSala({ ...naSala, chegada: roomArrival(direcao), volta: naSala.volta + 1 });
+      tocar('step');
+      return true;
+    }
+    // A parede rachada já aberta é a passagem pra ela. Fica fora do mapa:
+    // o andar não muda, e o save também não.
+    const passagem = passagemSecreta(celulaAtual(estado));
+    if (passagem && direcao === passagem.lado) {
+      setNaSecreta({ sala: salaAgora, lado: passagem.lado, indice: passagem.indice });
+      tocar('door');
+      return true;
+    }
 
     // Quem conduz avisa o parceiro que está andando: enquanto isso ele não
     // age, senão os dois mexem no mesmo mapa ao mesmo tempo.
@@ -829,6 +914,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
 
   const visual = apresentacaoDe(estado);
   const narracao = narrar(estado);
+  const textoDosExtras = descricaoDosExtras(celulaAtual(estado));
   // Calculada aqui, e não `celulaAgora`: passar aquela às funções da
   // apresentação faria o React Compiler supor que ela muda depois do render
   // e desistir das memoizações lá de cima.
@@ -845,19 +931,19 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             tela em vez de ver. */}
         <div className={styles.cena}>
           <div className={styles.narracao}>
-            <h1 className={`${styles.local} ${styles.tituloDaCena}`}>{visual.lugar}</h1>
+            <h1 className={`${styles.local} ${styles.tituloDaCena}`}>{secretaAgora ? 'Sala Secreta' : visual.lugar}</h1>
             <CenaDaSala
-              sala={salaAgora}
+              sala={chaveDaCena}
               planta={planta}
               tema={TEMAS[estado.mapMode === 'dungeon' ? estado.masmorra.dungeon : 'cidade']}
-              conteudo={conteudoDaSala}
+              figuras={figuras}
               heroi={heroiNaCena}
-              chegada={chegadaNaSala}
+              chegada={chegadaDaCena}
               posicao={posicao}
               ativo={andando}
               entrada={entrada}
               onSaida={mover}
-              onEncostar={encostar}
+              onEncostar={aoEncostar}
             >
               <Joystick onVetor={moverJoystick} ativo={andando} />
             </CenaDaSala>
@@ -865,16 +951,26 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             {/* Tudo o que vem depois da sala, junto: no celular deitado a
                 sala fica sozinha à esquerda e isto vai pra direita. */}
             <div className={styles.ladoDaCena}>
-              {narracao && (
+              {secretaAgora ? (
                 <div className={styles.descricaoLocal}>
-                  <p className={styles.linhaDaCena}>{narracao.ambiente}</p>
-                  {narracao.conteudo && (
-                    <p className={styles.linhaDaCena}>
-                      <TextoDoJogo>{narracao.conteudo}</TextoDoJogo>
-                    </p>
-                  )}
-                  <p className={styles.pistasDasPortas}>{narracao.portas.join(' ')}</p>
+                  <p className={styles.linhaDaCena}>
+                    {textoDaSecreta(celulaAtual(estado), secretaAgora.indice)}
+                  </p>
+                  <p className={styles.pistasDasPortas}>{`A passagem de volta fica ao ${DIR_LABEL[DIR_OPP[secretaAgora.lado]].toLowerCase()}.`}</p>
                 </div>
+              ) : (
+                narracao && (
+                  <div className={styles.descricaoLocal}>
+                    <p className={styles.linhaDaCena}>{narracao.ambiente}</p>
+                    {narracao.conteudo && (
+                      <p className={styles.linhaDaCena}>
+                        <TextoDoJogo>{narracao.conteudo}</TextoDoJogo>
+                      </p>
+                    )}
+                    {textoDosExtras && <p className={styles.linhaDaCena}>{textoDosExtras}</p>}
+                    <p className={styles.pistasDasPortas}>{narracao.portas.join(' ')}</p>
+                  </div>
+                )
               )}
 
               {/* A escada e a saída, que não têm volta, perguntam depois do

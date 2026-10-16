@@ -54,8 +54,8 @@ export const DOOR_ASSIST = 480;
 /** O quadrado do conteúdo da sala (baú, monstro, loja…): o centro. */
 export const CONTENT_TILE = { col: 4, row: 3 } as const;
 
-/** O vão de cada porta: no meio de cada parede. */
-const DOOR_TILE: Record<Direction, { col: number; row: number }> = {
+/** O vão de cada porta: no meio de cada parede. A parede rachada dos extras fica no vão de uma porta que não existe. */
+export const DOOR_TILE: Record<Direction, { col: number; row: number }> = {
   N: { col: 4, row: 0 },
   S: { col: 4, row: ROOM_ROWS - 1 },
   W: { col: 0, row: 3 },

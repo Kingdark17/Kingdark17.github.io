@@ -2024,6 +2024,67 @@ for (const nome of ['ROOM_COLS', 'ROOM_ROWS', 'TILE_UNITS', 'WALK_TICKS_PER_SECO
   }
 }
 
+// --- extras: baú pequeno, vaso, placa, parede rachada ---
+//
+// O sorteio dos extras roda dentro de generateDungeonFloor (os casos de
+// andar lá em cima já os trazem). Aqui ficam os prêmios e a placa.
+
+for (const nome of ['EXTRA_TILES', 'CRACK_CHANCE', 'EXTRA_CHEST_CHANCE', 'EXTRA_POT_CHANCE', 'EXTRA_POTIONS', 'DOOR_TILE'] as const) {
+  constante(nome, E[nome]);
+}
+for (const [floor, seed] of [
+  [1, 1],
+  [5, 2],
+  [10, 3],
+  [40, 4],
+  [100, 5],
+] as const) {
+  caso(`extraChestGold: andar ${floor}, seed ${seed}`, 'extraChestGold', { floor }, (a, { rng }) => E.extraChestGold(a.floor, rng), { rng: { seed } });
+}
+for (const seed of [1, 2, 3, 4, 5, 6]) {
+  caso(`potCoins: seed ${seed}`, 'potCoins', {}, (_a, { rng }) => E.potCoins(rng), { rng: { seed } });
+}
+// A dica de cada placa depende do andar inteiro (escada, parede oca, chefe):
+// o caso gera o andar e lê a placa de todas as salas.
+for (const [floor, seed] of [
+  [5, 5],
+  [10, 2],
+  [12, 8],
+  [20, 20],
+  [35, 3],
+] as const) {
+  caso(
+    `signHint: as placas de todas as salas do andar ${floor}, seed ${seed}`,
+    'signHint (andar gerado)',
+    { floor, rows: 6, cols: 6 },
+    (a, { rng, now }) => {
+      const andar = E.generateDungeonFloor(a.floor, a.rows, a.cols, { rng, now });
+      return andar.rooms.map((c) => ({ x: c.x, y: c.y, hint: E.signHint(andar.grid, c) }));
+    },
+    { rng: { seed }, now: AGORA },
+  );
+}
+{
+  const vazia = (x: number, y: number): DungeonCell => ({ type: 'void', x, y, doors: {} });
+  const grade = Array.from({ length: 4 }, (_, y) => Array.from({ length: 4 }, (_, x) => vazia(x, y)));
+  grade[0]![0] = { type: 'normal', x: 0, y: 0, doors: {} };
+  grade[3]![1] = { type: 'stairs', x: 1, y: 3, doors: {} };
+  grade[1]![3] = { type: 'normal', x: 3, y: 1, doors: {}, extras: [{ kind: 'crack', col: 4, row: 0, side: 'N', used: false }] };
+  grade[2]![2] = { type: 'boss', x: 2, y: 2, doors: {}, beaten: false, monsters: [E.generateBoss(5, { rng: E.seededRng(3) })] };
+  for (const [x, y] of [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [0, 1],
+    [3, 1],
+    [0, 2],
+    [1, 3],
+  ] as const) {
+    caso(`signHint: grade feita à mão, placa em (${x}, ${y})`, 'signHint', { grid: grade, cell: { type: 'normal', x, y, doors: {} } }, (a) => E.signHint(a.grid, a.cell));
+  }
+  caso('signHint: sem escada, parede oca nem chefe', 'signHint', { grid: [[grade[0]![0]!]], cell: grade[0]![0]! }, (a) => E.signHint(a.grid, a.cell));
+}
+
 // =====================================================================
 // shop
 // =====================================================================

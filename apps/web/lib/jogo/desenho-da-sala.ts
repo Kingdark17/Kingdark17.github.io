@@ -53,10 +53,17 @@ export const TEMAS: Record<LugarDoTema, TemaDaSala> = {
 export interface Figura {
   arte: string | null;
   emoji: string;
+  /** Altura em quadrados (1 se ausente): os extras são menores que o conteúdo da sala. */
+  escala?: number;
+  /** Já usado (baú aberto): desenhado apagado. */
+  apagada?: boolean;
+  /** `rachadura`: não é figura, é a parede rachada riscada no próprio quadrado da parede. */
+  forma?: 'rachadura';
 }
 
 export interface Cena {
-  desenharSala(planta: RoomLayout, tema: TemaDaSala, conteudo: Figura | null): Promise<void>;
+  /** `figuras`: a figura de cada objeto da planta, pelo id; objeto sem figura não é desenhado. */
+  desenharSala(planta: RoomLayout, tema: TemaDaSala, figuras: Readonly<Record<string, Figura>>): Promise<void>;
   /** Põe o herói onde a regra diz. `andando` balança o boneco, que ainda não tem quadros de caminhada. */
   colocarHeroi(walker: Walker, andando: boolean): void;
   /** Chama `fn` a cada quadro da tela, com os milissegundos desde o anterior. Devolve como parar. */
@@ -111,18 +118,17 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
   alvo.appendChild(app.canvas);
 
   const chao = new pixi.Container();
-  const conteudo = new pixi.Container();
-  const personagem = new pixi.Container();
-  app.stage.addChild(chao, conteudo, personagem);
-  // Quem está mais embaixo na tela fica na frente: o herói que passa por
-  // trás do baú some atrás dele, e o que passa pela frente o cobre.
-  app.stage.sortableChildren = true;
-  conteudo.zIndex = 2;
-  /** Onde fica o pé do conteúdo, em pixel (sem conteúdo, o herói sempre na frente). */
-  let peDoConteudo = Number.NEGATIVE_INFINITY;
+  // Objetos e herói no mesmo palco, ordenados pelo pé: quem está mais
+  // embaixo na tela fica na frente — o herói que passa por trás do baú some
+  // atrás dele, e o que passa pela frente o cobre.
+  const mundo = new pixi.Container();
+  mundo.sortableChildren = true;
+  app.stage.addChild(chao, mundo);
+  /** Os objetos desenhados na sala atual, pra sair quando ela troca. */
+  let objetos: Pixi.Container[] = [];
 
   const boneco = await figuraEm(pixi, heroi, LADO * 1.25);
-  personagem.addChild(boneco);
+  mundo.addChild(boneco);
 
   const semMovimento = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   /** Fase do balanço do passo: avança só enquanto o herói anda. */
@@ -136,10 +142,11 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
   let vez = 0;
 
   return {
-    async desenharSala(planta, tema, figura) {
+    async desenharSala(planta, tema, figuras) {
       const esta = ++vez;
       chao.removeChildren().forEach((filho) => filho.destroy());
-      conteudo.removeChildren().forEach((filho) => filho.destroy());
+      for (const objeto of objetos) objeto.destroy();
+      objetos = [];
 
       const ladrilhos = new pixi.Graphics();
       planta.solid.forEach((linha, row) => {
@@ -159,17 +166,44 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       });
       chao.addChild(ladrilhos);
 
-      const objeto = planta.objects[0];
-      peDoConteudo = objeto && figura ? peNoQuadrado(objeto.col, objeto.row).y : Number.NEGATIVE_INFINITY;
-      if (objeto && figura) {
-        const desenho = await figuraEm(pixi, figura, LADO);
-        if (esta !== vez) {
-          desenho.destroy();
-          return;
-        }
-        const pe = peNoQuadrado(objeto.col, objeto.row);
-        desenho.position.set(pe.x, pe.y);
-        conteudo.addChild(desenho);
+      // A parede rachada é riscada na própria pedra, por cima do ladrilho.
+      const rachaduras = new pixi.Graphics();
+      for (const objeto of planta.objects) {
+        if (figuras[objeto.id]?.forma !== 'rachadura') continue;
+        const px = objeto.col * LADO;
+        const py = objeto.row * LADO;
+        rachaduras
+          .moveTo(px + LADO * 0.5, py + 4)
+          .lineTo(px + LADO * 0.38, py + LADO * 0.32)
+          .lineTo(px + LADO * 0.6, py + LADO * 0.52)
+          .lineTo(px + LADO * 0.42, py + LADO * 0.78)
+          .lineTo(px + LADO * 0.52, py + LADO - 4)
+          .moveTo(px + LADO * 0.6, py + LADO * 0.52)
+          .lineTo(px + LADO * 0.8, py + LADO * 0.6)
+          .stroke({ width: 3, color: 0x1a0b09 });
+      }
+      chao.addChild(rachaduras);
+
+      const desenhos = await Promise.all(
+        planta.objects.map(async (objeto) => {
+          const figura = figuras[objeto.id];
+          if (!figura || figura.forma === 'rachadura') return null;
+          const desenho = await figuraEm(pixi, figura, LADO * (figura.escala ?? 1));
+          const pe = peNoQuadrado(objeto.col, objeto.row);
+          desenho.position.set(pe.x, pe.y);
+          desenho.zIndex = pe.y;
+          if (figura.apagada) desenho.alpha = 0.45;
+          return desenho;
+        }),
+      );
+      if (esta !== vez) {
+        for (const desenho of desenhos) desenho?.destroy();
+        return;
+      }
+      for (const desenho of desenhos) {
+        if (!desenho) continue;
+        mundo.addChild(desenho);
+        objetos.push(desenho);
       }
     },
 
@@ -181,7 +215,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       // Um pulinho a cada passo: sem quadros de caminhada ainda, é o que diz "andou" em vez de "deslizou".
       const pulo = andando && !semMovimento ? Math.abs(Math.sin(fase * 0.35)) * 3 : 0;
       boneco.position.set(x, y - pulo);
-      personagem.zIndex = y >= peDoConteudo ? 3 : 1;
+      boneco.zIndex = y;
       // Provisório: o corpo do paperdoll só tem frente. Espelhar pro lado
       // que anda já diz pra onde ele vai; as quatro direções vêm do Breno.
       if (walker.facing === 'W' || walker.facing === 'E') boneco.scale.x = Math.abs(boneco.scale.x) * (walker.facing === 'W' ? -1 : 1);

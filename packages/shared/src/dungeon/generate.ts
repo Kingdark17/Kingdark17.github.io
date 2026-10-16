@@ -17,6 +17,7 @@ import { randomItem, type Item } from '../items/item.js';
 import type { NpcService } from '../npc/npc-services.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import { DEFAULT_RUN, dungeonById, effectiveFloor, isTotemFloor, type DungeonRun } from './dungeons.js';
+import { placeExtras, type DungeonExtra } from './extras.js';
 import { distancesFrom, generateRoomGraph, DIR_VECTORS, type Direction, type RoomCell, type RoomGraph } from './graph.js';
 
 export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit' | 'totem' | 'teacher';
@@ -95,6 +96,8 @@ export interface DungeonCell extends RoomCell {
   distanceFromStart?: number;
   startBranch?: string;
   teacher?: DungeonTeacher;
+  /** Baú pequeno, vaso, placa, parede rachada (`extras.ts`). Andar gerado antes deles não tem. */
+  extras?: DungeonExtra[];
 }
 
 export interface DungeonFloor {
@@ -336,6 +339,8 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
   if (isBossFloor(floor)) placeBoss(place('boss', 1)[0], forca, floor % 10 === 0, species, rng);
 
   populateRoomContent(res.rooms as DungeonCell[], forca, rng, now);
+  // Por último: o resto do andar sai igual ao de antes pra mesma semente.
+  placeExtras(res.rooms as DungeonCell[], forca, rng, now);
 
   return { grid: res.grid as DungeonCell[][], rooms: res.rooms as DungeonCell[], start: res.start as DungeonCell };
 }

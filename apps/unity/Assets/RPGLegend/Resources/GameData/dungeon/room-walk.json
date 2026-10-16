@@ -29,8 +29,5 @@
       "col": 8,
       "row": 3
     }
-  },
-  "$privadas": [
-    "DOOR_TILE"
-  ]
+  }
 }

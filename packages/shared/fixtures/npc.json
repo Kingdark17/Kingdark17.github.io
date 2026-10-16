@@ -2533,7 +2533,15 @@
                 "S": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 6
+              "distanceFromStart": 6,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -2577,7 +2585,16 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "treasure",
@@ -2590,7 +2607,20 @@
               "isMimic": true,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
             },
             {
               "type": "void",
@@ -2615,7 +2645,25 @@
                 "N": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 5
+              "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_39952",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -2634,7 +2682,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "boss",
@@ -2660,7 +2716,20 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 1
+                }
+              ]
             },
             {
               "type": "void",
@@ -2688,7 +2757,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "event",
@@ -2701,7 +2778,15 @@
               "event": {
                 "templateId": "altar"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "monster",
@@ -2751,7 +2836,16 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "event",
@@ -2764,7 +2858,53 @@
               "event": {
                 "templateId": "porta"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_28959",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "crack",
+                  "col": 0,
+                  "row": 3,
+                  "side": "W",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "cajado_1700000000000_26880",
+                    "templateId": "cajado",
+                    "rarity": "incomum",
+                    "stats": {
+                      "ataque": 4,
+                      "mana": 11
+                    },
+                    "value": 31,
+                    "equipped": false,
+                    "procChance": 0.115,
+                    "foundFloor": 5
+                  },
+                  "secretCollected": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -2839,7 +2979,32 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_19855",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "start",
@@ -2849,7 +3014,22 @@
                 "W": true,
                 "E": true,
                 "N": true
-              }
+              },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "npc",
@@ -2870,7 +3050,14 @@
                   "Cuidado com o que dorme nas profundezas."
                 ],
                 "serviceUsed": false
-              }
+              },
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
             },
             {
               "type": "void",
@@ -2950,7 +3137,25 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_93224",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -3016,7 +3221,15 @@
                 "S": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 6
+              "distanceFromStart": 6,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -3060,7 +3273,16 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "treasure",
@@ -3073,7 +3295,20 @@
               "isMimic": true,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
             },
             {
               "type": "void",
@@ -3098,7 +3333,25 @@
                 "N": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 5
+              "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_39952",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -3117,7 +3370,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "boss",
@@ -3144,6 +3405,19 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 1
+                }
+              ],
               "revealed": true
             },
             {
@@ -3172,7 +3446,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "event",
@@ -3185,7 +3467,15 @@
               "event": {
                 "templateId": "altar"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "monster",
@@ -3236,6 +3526,15 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -3250,6 +3549,52 @@
                 "templateId": "porta"
               },
               "resolved": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_28959",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "crack",
+                  "col": 0,
+                  "row": 3,
+                  "side": "W",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "cajado_1700000000000_26880",
+                    "templateId": "cajado",
+                    "rarity": "incomum",
+                    "stats": {
+                      "ataque": 4,
+                      "mana": 11
+                    },
+                    "value": 31,
+                    "equipped": false,
+                    "procChance": 0.115,
+                    "foundFloor": 5
+                  },
+                  "secretCollected": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -3326,6 +3671,31 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_19855",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -3337,6 +3707,21 @@
                 "E": true,
                 "N": true
               },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -3359,6 +3744,13 @@
                 ],
                 "serviceUsed": false
               },
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ],
               "revealed": true
             },
             {
@@ -3440,6 +3832,24 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_93224",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -3511,7 +3921,15 @@
                 "S": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 6
+              "distanceFromStart": 6,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -3555,7 +3973,16 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "treasure",
@@ -3568,7 +3995,20 @@
               "isMimic": true,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
             },
             {
               "type": "void",
@@ -3593,7 +4033,25 @@
                 "N": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 5
+              "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_39952",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -3612,7 +4070,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "boss",
@@ -3638,7 +4104,20 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 1
+                }
+              ]
             },
             {
               "type": "void",
@@ -3666,7 +4145,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "event",
@@ -3679,7 +4166,15 @@
               "event": {
                 "templateId": "altar"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "monster",
@@ -3729,7 +4224,16 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "event",
@@ -3742,7 +4246,53 @@
               "event": {
                 "templateId": "porta"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_28959",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "crack",
+                  "col": 0,
+                  "row": 3,
+                  "side": "W",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "cajado_1700000000000_26880",
+                    "templateId": "cajado",
+                    "rarity": "incomum",
+                    "stats": {
+                      "ataque": 4,
+                      "mana": 11
+                    },
+                    "value": 31,
+                    "equipped": false,
+                    "procChance": 0.115,
+                    "foundFloor": 5
+                  },
+                  "secretCollected": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -3817,7 +4367,32 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_19855",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "start",
@@ -3827,7 +4402,22 @@
                 "W": true,
                 "E": true,
                 "N": true
-              }
+              },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "npc",
@@ -3848,7 +4438,14 @@
                   "Cuidado com o que dorme nas profundezas."
                 ],
                 "serviceUsed": false
-              }
+              },
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
             },
             {
               "type": "void",
@@ -3928,7 +4525,25 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_93224",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -3995,6 +4610,14 @@
               },
               "startBranch": "2,3",
               "distanceFromStart": 6,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -4040,6 +4663,15 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -4053,7 +4685,20 @@
               "isMimic": true,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
             },
             {
               "type": "void",
@@ -4079,6 +4724,24 @@
               },
               "startBranch": "2,3",
               "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_39952",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -4098,7 +4761,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "boss",
@@ -4124,7 +4795,20 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 1
+                }
+              ]
             },
             {
               "type": "void",
@@ -4153,6 +4837,14 @@
               "giveGold": true,
               "item": null,
               "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 5,
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -4166,7 +4858,15 @@
               "event": {
                 "templateId": "altar"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "monster",
@@ -4216,7 +4916,16 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "event",
@@ -4229,7 +4938,53 @@
               "event": {
                 "templateId": "porta"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_28959",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "crack",
+                  "col": 0,
+                  "row": 3,
+                  "side": "W",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "cajado_1700000000000_26880",
+                    "templateId": "cajado",
+                    "rarity": "incomum",
+                    "stats": {
+                      "ataque": 4,
+                      "mana": 11
+                    },
+                    "value": 31,
+                    "equipped": false,
+                    "procChance": 0.115,
+                    "foundFloor": 5
+                  },
+                  "secretCollected": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -4304,7 +5059,32 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_19855",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "start",
@@ -4314,7 +5094,22 @@
                 "W": true,
                 "E": true,
                 "N": true
-              }
+              },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "npc",
@@ -4335,7 +5130,14 @@
                   "Cuidado com o que dorme nas profundezas."
                 ],
                 "serviceUsed": false
-              }
+              },
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
             },
             {
               "type": "void",
@@ -4415,7 +5217,25 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_93224",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -4486,7 +5306,15 @@
                 "S": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 6
+              "distanceFromStart": 6,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -4530,7 +5358,16 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "treasure",
@@ -4543,7 +5380,20 @@
               "isMimic": true,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
             },
             {
               "type": "void",
@@ -4568,7 +5418,25 @@
                 "N": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 5
+              "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_39952",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -4587,7 +5455,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "boss",
@@ -4613,7 +5489,20 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 1
+                }
+              ]
             },
             {
               "type": "void",
@@ -4641,7 +5530,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "event",
@@ -4654,7 +5551,15 @@
               "event": {
                 "templateId": "altar"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "monster",
@@ -4704,7 +5609,16 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "event",
@@ -4717,7 +5631,53 @@
               "event": {
                 "templateId": "porta"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_28959",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "crack",
+                  "col": 0,
+                  "row": 3,
+                  "side": "W",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "cajado_1700000000000_26880",
+                    "templateId": "cajado",
+                    "rarity": "incomum",
+                    "stats": {
+                      "ataque": 4,
+                      "mana": 11
+                    },
+                    "value": 31,
+                    "equipped": false,
+                    "procChance": 0.115,
+                    "foundFloor": 5
+                  },
+                  "secretCollected": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -4792,7 +5752,32 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_19855",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "start",
@@ -4802,7 +5787,22 @@
                 "W": true,
                 "E": true,
                 "N": true
-              }
+              },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "npc",
@@ -4824,6 +5824,13 @@
                 ],
                 "serviceUsed": false
               },
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ],
               "revealed": true
             },
             {
@@ -4905,6 +5912,24 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_93224",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -4971,7 +5996,15 @@
                 "S": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 6
+              "distanceFromStart": 6,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -5015,7 +6048,16 @@
                 }
               ],
               "monsterIndex": 0,
-              "beaten": false
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "treasure",
@@ -5028,7 +6070,20 @@
               "isMimic": true,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
             },
             {
               "type": "void",
@@ -5053,7 +6108,25 @@
                 "N": true
               },
               "startBranch": "2,3",
-              "distanceFromStart": 5
+              "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_39952",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
             },
             {
               "type": "void",
@@ -5072,7 +6145,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "boss",
@@ -5099,6 +6180,19 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 1
+                }
+              ],
               "revealed": true
             },
             {
@@ -5127,7 +6221,15 @@
               "isMimic": false,
               "giveGold": true,
               "item": null,
-              "collected": false
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "event",
@@ -5140,7 +6242,15 @@
               "event": {
                 "templateId": "altar"
               },
-              "resolved": false
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                }
+              ]
             },
             {
               "type": "monster",
@@ -5191,6 +6301,15 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -5205,6 +6324,52 @@
                 "templateId": "porta"
               },
               "resolved": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_28959",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "crack",
+                  "col": 0,
+                  "row": 3,
+                  "side": "W",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "cajado_1700000000000_26880",
+                    "templateId": "cajado",
+                    "rarity": "incomum",
+                    "stats": {
+                      "ataque": 4,
+                      "mana": 11
+                    },
+                    "value": 31,
+                    "equipped": false,
+                    "procChance": 0.115,
+                    "foundFloor": 5
+                  },
+                  "secretCollected": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -5281,6 +6446,31 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_19855",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -5292,6 +6482,21 @@
                 "E": true,
                 "N": true
               },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {
@@ -5314,6 +6519,13 @@
                 ],
                 "serviceUsed": false
               },
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ],
               "revealed": true
             },
             {
@@ -5395,6 +6607,24 @@
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_93224",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ],
               "revealed": true
             },
             {

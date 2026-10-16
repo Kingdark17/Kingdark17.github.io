@@ -36,7 +36,8 @@ interface Props {
   sala: string;
   planta: RoomLayout;
   tema: TemaDaSala;
-  conteudo: Figura | null;
+  /** A figura de cada objeto da planta (conteúdo e extras), pelo id. */
+  figuras: Readonly<Record<string, Figura>>;
   heroi: Figura;
   /** Onde o herói aparece nesta sala. */
   chegada: Walker;
@@ -54,7 +55,7 @@ interface Props {
   children?: ReactNode;
 }
 
-export function CenaDaSala({ sala, planta, tema, conteudo, heroi, chegada, posicao, ativo, entrada, onSaida, onEncostar, children }: Readonly<Props>) {
+export function CenaDaSala({ sala, planta, tema, figuras, heroi, chegada, posicao, ativo, entrada, onSaida, onEncostar, children }: Readonly<Props>) {
   const alvo = useRef<HTMLDivElement>(null);
   const cena = useRef<Cena | null>(null);
   const [pronta, setPronta] = useState(false);
@@ -92,8 +93,8 @@ export function CenaDaSala({ sala, planta, tema, conteudo, heroi, chegada, posic
   }, [heroi]);
 
   useEffect(() => {
-    if (pronta) void cena.current?.desenharSala(planta, tema, conteudo);
-  }, [pronta, planta, tema, conteudo]);
+    if (pronta) void cena.current?.desenharSala(planta, tema, figuras);
+  }, [pronta, planta, tema, figuras]);
 
   useEffect(() => {
     const desenho = cena.current;

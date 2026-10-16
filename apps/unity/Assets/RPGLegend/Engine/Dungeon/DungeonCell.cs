@@ -138,6 +138,8 @@ namespace RPGLegend.Engine
         /// <summary>Salas distantes: onde a rota até o início se ramifica ("x,y").</summary>
         public string StartBranch;
         public DungeonTeacher Teacher;
+        /// <summary>Baú pequeno, vaso, placa, parede rachada (RoomExtras). Andar gerado antes deles não tem: null.</summary>
+        public List<DungeonExtra> Extras;
 
         /// <summary>O <c>{ ...cell }</c> do TS: cópia rasa (portas, monstros, NPC e item continuam os mesmos objetos).</summary>
         public new DungeonCell Clone() => (DungeonCell)base.Clone();

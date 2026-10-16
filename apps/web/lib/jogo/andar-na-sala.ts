@@ -23,6 +23,7 @@ import {
   walkTick,
   type Direction,
   type RoomLayout,
+  type RoomObject,
   type Walker,
 } from '@rpg-legend/shared';
 
@@ -46,9 +47,14 @@ export interface Vetor {
 
 export const PARADO: Vetor = { x: 0, y: 0 };
 
-/** A planta da sala na regra da engine: portas e, quando há, o conteúdo no centro. */
-export function plantaDaSala(portas: Partial<Record<Direction, unknown>>, temConteudo: boolean): RoomLayout {
-  return roomLayout(portas, temConteudo ? [{ id: ID_DO_CONTEUDO, ...CONTENT_TILE }] : []);
+/**
+ * A planta da sala na regra da engine: portas e objetos. Com `true`, só o
+ * conteúdo no centro; com a lista, o que vier (conteúdo e extras, ver
+ * `objetosDaSala` em `extras.ts`).
+ */
+export function plantaDaSala(portas: Partial<Record<Direction, unknown>>, objetos: boolean | readonly RoomObject[]): RoomLayout {
+  if (typeof objetos !== 'boolean') return roomLayout(portas, objetos);
+  return roomLayout(portas, objetos ? [{ id: ID_DO_CONTEUDO, ...CONTENT_TILE }] : []);
 }
 
 /** Quantos passos cabem no tempo que passou, e o que sobra pro próximo quadro. */
