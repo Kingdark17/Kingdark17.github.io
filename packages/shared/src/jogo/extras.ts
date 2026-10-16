@@ -163,15 +163,42 @@ export function textoDaSecreta(celula: CelulaDoMapa | null, indice: number): str
     : 'Uma câmara escondida atrás da parede, coberta de poeira. Um baú esquecido espera no centro.';
 }
 
-/** Uma linha pra narração: o que de extra há na sala, na ordem em que aparecem. */
-export function descricaoDosExtras(celula: CelulaDoMapa | null): string {
-  const frases: string[] = [];
-  for (const extra of extrasDe(celula)) {
-    if (extra.kind === 'chest') frases.push(extra.used ? 'Num canto, um baú pequeno aberto.' : 'Num canto, um baú pequeno.');
-    if (extra.kind === 'pot' && !extra.used) frases.push('Um vaso de barro encostado na parede.');
-    if (extra.kind === 'pot' && extra.used) frases.push('Cacos de um vaso pelo chão.');
-    if (extra.kind === 'sign') frases.push('Uma placa de madeira presa à parede.');
-    if (extra.kind === 'crack') frases.push(extra.used ? 'Uma passagem estreita se abre numa das paredes.' : 'Uma das paredes tem uma rachadura funda.');
+/** A frase de um extra, sozinho e em par: a sala pode sortear dois iguais. */
+function fraseDoExtra(extra: DungeonExtra): { uma: string; duas: string } | null {
+  switch (extra.kind) {
+    case 'chest':
+      return extra.used
+        ? { uma: 'Num canto, um baú pequeno aberto.', duas: 'Dois baús pequenos abertos, cada um num canto.' }
+        : { uma: 'Num canto, um baú pequeno.', duas: 'Dois baús pequenos, cada um num canto.' };
+    case 'pot':
+      return extra.used
+        ? { uma: 'Cacos de um vaso pelo chão.', duas: 'Cacos de dois vasos pelo chão.' }
+        : { uma: 'Um vaso de barro encostado na parede.', duas: 'Dois vasos de barro encostados na parede.' };
+    case 'sign':
+      return { uma: 'Uma placa de madeira presa à parede.', duas: 'Duas placas de madeira presas à parede.' };
+    case 'crack':
+      return extra.used
+        ? { uma: 'Uma passagem estreita se abre numa das paredes.', duas: 'Duas passagens estreitas se abrem nas paredes.' }
+        : { uma: 'Uma das paredes tem uma rachadura funda.', duas: 'Duas das paredes têm rachaduras fundas.' };
+    default:
+      return null;
   }
-  return frases.join(' ');
+}
+
+/**
+ * Uma linha pra narração: o que de extra há na sala, na ordem em que
+ * aparecem. Dois iguais no mesmo estado viram uma frase só, no plural
+ * (decisão do usuário, 2026-10-16); um vaso inteiro e um quebrado
+ * continuam em frases separadas.
+ */
+export function descricaoDosExtras(celula: CelulaDoMapa | null): string {
+  const frases = new Map<string, { duas: string; vezes: number }>();
+  for (const extra of extrasDe(celula)) {
+    const frase = fraseDoExtra(extra);
+    if (!frase) continue;
+    const ja = frases.get(frase.uma);
+    if (ja) ja.vezes++;
+    else frases.set(frase.uma, { duas: frase.duas, vezes: 1 });
+  }
+  return [...frases].map(([uma, { duas, vezes }]) => (vezes > 1 ? duas : uma)).join(' ');
 }

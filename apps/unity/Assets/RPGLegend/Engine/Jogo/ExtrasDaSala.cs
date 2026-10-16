@@ -231,20 +231,54 @@ namespace RPGLegend.Engine
                 ? "Uma câmara escondida atrás da parede. O baú já está vazio."
                 : "Uma câmara escondida atrás da parede, coberta de poeira. Um baú esquecido espera no centro.";
 
-        /// <summary>TS: descricaoDosExtras — uma linha pra narração, na ordem em que os extras aparecem.</summary>
+        /// <summary>TS: fraseDoExtra — a frase de um extra, sozinho e em par (a sala pode sortear dois iguais).</summary>
+        private static (string Uma, string Duas)? FraseDoExtra(DungeonExtra extra)
+        {
+            bool usado = extra.Used ?? false;
+            switch (extra.Kind)
+            {
+                case "chest":
+                    return usado
+                        ? ("Num canto, um baú pequeno aberto.", "Dois baús pequenos abertos, cada um num canto.")
+                        : ("Num canto, um baú pequeno.", "Dois baús pequenos, cada um num canto.");
+                case "pot":
+                    return usado
+                        ? ("Cacos de um vaso pelo chão.", "Cacos de dois vasos pelo chão.")
+                        : ("Um vaso de barro encostado na parede.", "Dois vasos de barro encostados na parede.");
+                case "sign":
+                    return ("Uma placa de madeira presa à parede.", "Duas placas de madeira presas à parede.");
+                case "crack":
+                    return usado
+                        ? ("Uma passagem estreita se abre numa das paredes.", "Duas passagens estreitas se abrem nas paredes.")
+                        : ("Uma das paredes tem uma rachadura funda.", "Duas das paredes têm rachaduras fundas.");
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// TS: descricaoDosExtras — uma linha pra narração, na ordem em que os extras aparecem. Dois iguais no mesmo
+        /// estado viram uma frase só, no plural; estados diferentes continuam separados.
+        /// </summary>
         public static string DescricaoDosExtras(RoomCell celula)
         {
-            var frases = new List<string>();
+            var ordem = new List<string>();
+            var frases = new Dictionary<string, (string Duas, int Vezes)>();
             foreach (var extra in ExtrasDe(celula))
             {
-                bool usado = extra.Used ?? false;
-                if (extra.Kind == "chest") frases.Add(usado ? "Num canto, um baú pequeno aberto." : "Num canto, um baú pequeno.");
-                if (extra.Kind == "pot" && !usado) frases.Add("Um vaso de barro encostado na parede.");
-                if (extra.Kind == "pot" && usado) frases.Add("Cacos de um vaso pelo chão.");
-                if (extra.Kind == "sign") frases.Add("Uma placa de madeira presa à parede.");
-                if (extra.Kind == "crack") frases.Add(usado ? "Uma passagem estreita se abre numa das paredes." : "Uma das paredes tem uma rachadura funda.");
+                var frase = FraseDoExtra(extra);
+                if (frase == null) continue;
+                var (uma, duas) = frase.Value;
+                if (frases.TryGetValue(uma, out var ja)) frases[uma] = (ja.Duas, ja.Vezes + 1);
+                else
+                {
+                    frases[uma] = (duas, 1);
+                    ordem.Add(uma);
+                }
             }
-            return string.Join(" ", frases);
+            var linha = new List<string>();
+            foreach (var uma in ordem) linha.Add(frases[uma].Vezes > 1 ? frases[uma].Duas : uma);
+            return string.Join(" ", linha);
         }
     }
 }

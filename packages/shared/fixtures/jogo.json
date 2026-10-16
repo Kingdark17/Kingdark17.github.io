@@ -81179,7 +81179,7 @@
       }
     },
     "expected": {
-      "result": "Num canto, um baú pequeno. Num canto, um baú pequeno. Um vaso de barro encostado na parede. Uma placa de madeira presa à parede. Uma das paredes tem uma rachadura funda."
+      "result": "Dois baús pequenos, cada um num canto. Um vaso de barro encostado na parede. Uma placa de madeira presa à parede. Uma das paredes tem uma rachadura funda."
     }
   },
   {
@@ -81507,7 +81507,7 @@
       }
     },
     "expected": {
-      "result": "Num canto, um baú pequeno aberto. Num canto, um baú pequeno aberto. Cacos de um vaso pelo chão. Uma placa de madeira presa à parede. Uma passagem estreita se abre numa das paredes."
+      "result": "Dois baús pequenos abertos, cada um num canto. Cacos de um vaso pelo chão. Uma placa de madeira presa à parede. Uma passagem estreita se abre numa das paredes."
     }
   },
   {
@@ -81662,7 +81662,222 @@
       }
     },
     "expected": {
-      "result": "Num canto, um baú pequeno. Num canto, um baú pequeno. Um vaso de barro encostado na parede. Uma placa de madeira presa à parede. Uma passagem estreita se abre numa das paredes."
+      "result": "Dois baús pequenos, cada um num canto. Um vaso de barro encostado na parede. Uma placa de madeira presa à parede. Uma passagem estreita se abre numa das paredes."
+    }
+  },
+  {
+    "name": "descricaoDosExtras: dois vasos inteiros",
+    "input": {
+      "fn": "descricaoDosExtras",
+      "args": {
+        "celula": {
+          "type": "start",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "pot",
+              "col": 1,
+              "row": 1,
+              "used": false
+            },
+            {
+              "kind": "pot",
+              "col": 7,
+              "row": 5,
+              "used": false
+            }
+          ],
+          "visited": true,
+          "revealed": true
+        }
+      }
+    },
+    "expected": {
+      "result": "Dois vasos de barro encostados na parede."
+    }
+  },
+  {
+    "name": "descricaoDosExtras: dois vasos quebrados",
+    "input": {
+      "fn": "descricaoDosExtras",
+      "args": {
+        "celula": {
+          "type": "start",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "pot",
+              "col": 1,
+              "row": 1,
+              "used": true
+            },
+            {
+              "kind": "pot",
+              "col": 7,
+              "row": 5,
+              "used": true
+            }
+          ],
+          "visited": true,
+          "revealed": true
+        }
+      }
+    },
+    "expected": {
+      "result": "Cacos de dois vasos pelo chão."
+    }
+  },
+  {
+    "name": "descricaoDosExtras: duas placas",
+    "input": {
+      "fn": "descricaoDosExtras",
+      "args": {
+        "celula": {
+          "type": "start",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 7,
+              "row": 5
+            }
+          ],
+          "visited": true,
+          "revealed": true
+        }
+      }
+    },
+    "expected": {
+      "result": "Duas placas de madeira presas à parede."
+    }
+  },
+  {
+    "name": "descricaoDosExtras: vaso inteiro e vaso quebrado",
+    "input": {
+      "fn": "descricaoDosExtras",
+      "args": {
+        "celula": {
+          "type": "start",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "pot",
+              "col": 1,
+              "row": 1,
+              "used": false
+            },
+            {
+              "kind": "pot",
+              "col": 7,
+              "row": 5,
+              "used": true
+            }
+          ],
+          "visited": true,
+          "revealed": true
+        }
+      }
+    },
+    "expected": {
+      "result": "Um vaso de barro encostado na parede. Cacos de um vaso pelo chão."
+    }
+  },
+  {
+    "name": "descricaoDosExtras: baú aberto e baú fechado",
+    "input": {
+      "fn": "descricaoDosExtras",
+      "args": {
+        "celula": {
+          "type": "start",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "chest",
+              "col": 1,
+              "row": 1,
+              "item": null,
+              "used": true
+            },
+            {
+              "kind": "chest",
+              "col": 7,
+              "row": 5,
+              "item": null,
+              "used": false
+            }
+          ],
+          "visited": true,
+          "revealed": true
+        }
+      }
+    },
+    "expected": {
+      "result": "Num canto, um baú pequeno aberto. Num canto, um baú pequeno."
+    }
+  },
+  {
+    "name": "descricaoDosExtras: vaso, placa e outro vaso",
+    "input": {
+      "fn": "descricaoDosExtras",
+      "args": {
+        "celula": {
+          "type": "start",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "pot",
+              "col": 1,
+              "row": 1,
+              "used": false
+            },
+            {
+              "kind": "sign",
+              "col": 2,
+              "row": 1
+            },
+            {
+              "kind": "pot",
+              "col": 7,
+              "row": 5,
+              "used": false
+            }
+          ],
+          "visited": true,
+          "revealed": true
+        }
+      }
+    },
+    "expected": {
+      "result": "Dois vasos de barro encostados na parede. Uma placa de madeira presa à parede."
     }
   },
   {

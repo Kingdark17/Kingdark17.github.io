@@ -145,4 +145,28 @@ describe('descricaoDosExtras', () => {
     } as DungeonCell;
     expect(descricaoDosExtras(celula)).toBe('Num canto, um baú pequeno. Uma das paredes tem uma rachadura funda.');
   });
+
+  const sala = (extras: DungeonCell['extras']) => ({ type: 'normal', x: 0, y: 0, doors: {}, extras }) as DungeonCell;
+
+  it('dois iguais no mesmo estado viram uma frase no plural', () => {
+    const doisVasos = sala([
+      { kind: 'pot', col: 1, row: 1, used: false },
+      { kind: 'pot', col: 7, row: 5, used: false },
+    ]);
+    expect(descricaoDosExtras(doisVasos)).toBe('Dois vasos de barro encostados na parede.');
+    const doisBaus = sala([
+      { kind: 'chest', col: 1, row: 1, item: null, used: true },
+      { kind: 'chest', col: 7, row: 5, item: null, used: true },
+      { kind: 'crack', col: 4, row: 0, side: 'N', used: false },
+    ]);
+    expect(descricaoDosExtras(doisBaus)).toBe('Dois baús pequenos abertos, cada um num canto. Uma das paredes tem uma rachadura funda.');
+  });
+
+  it('estados diferentes continuam em frases separadas', () => {
+    const vasos = sala([
+      { kind: 'pot', col: 1, row: 1, used: false },
+      { kind: 'pot', col: 7, row: 5, used: true },
+    ]);
+    expect(descricaoDosExtras(vasos)).toBe('Um vaso de barro encostado na parede. Cacos de um vaso pelo chão.');
+  });
 });

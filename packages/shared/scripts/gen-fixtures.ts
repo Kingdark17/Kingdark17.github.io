@@ -2910,6 +2910,17 @@ for (const [nome, extras] of [
   caso(`passagemSecreta: ${nome}`, 'passagemSecreta', { celula: salaCom(extras) }, (a) => E.passagemSecreta(a.celula));
   caso(`descricaoDosExtras: ${nome}`, 'descricaoDosExtras', { celula: salaCom(extras) }, (a) => E.descricaoDosExtras(a.celula));
 }
+const doisIguais: [string, DungeonExtra[]][] = [
+  ['dois vasos inteiros', [{ kind: 'pot', col: 1, row: 1, used: false }, { kind: 'pot', col: 7, row: 5, used: false }]],
+  ['dois vasos quebrados', [{ kind: 'pot', col: 1, row: 1, used: true }, { kind: 'pot', col: 7, row: 5, used: true }]],
+  ['duas placas', [{ kind: 'sign', col: 1, row: 1 }, { kind: 'sign', col: 7, row: 5 }]],
+  ['vaso inteiro e vaso quebrado', [{ kind: 'pot', col: 1, row: 1, used: false }, { kind: 'pot', col: 7, row: 5, used: true }]],
+  ['baú aberto e baú fechado', [{ kind: 'chest', col: 1, row: 1, item: null, used: true }, { kind: 'chest', col: 7, row: 5, item: null, used: false }]],
+  ['vaso, placa e outro vaso', [{ kind: 'pot', col: 1, row: 1, used: false }, { kind: 'sign', col: 2, row: 1 }, { kind: 'pot', col: 7, row: 5, used: false }]],
+];
+for (const [nome, extras] of doisIguais) {
+  caso(`descricaoDosExtras: ${nome}`, 'descricaoDosExtras', { celula: salaCom(extras) }, (a) => E.descricaoDosExtras(a.celula));
+}
 for (const [nome, celula, temConteudo] of [
   ['extras novos, com conteúdo', salaCom(extrasNovos), true],
   ['extras usados, sem conteúdo', salaCom(extrasUsados), false],
