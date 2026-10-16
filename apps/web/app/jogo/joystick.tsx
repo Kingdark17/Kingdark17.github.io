@@ -14,7 +14,7 @@
 
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
 
-import { PARADO, type Vetor } from '@/lib/jogo/andar-na-sala';
+import { PARADO, type Vetor } from '@rpg-legend/shared';
 import styles from './jogo.module.css';
 
 /** Quantos pixels de arraste são o joystick no fim. */

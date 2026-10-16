@@ -10,16 +10,14 @@
  * quarta barra, com o bônus escrito embaixo (2026-10-09).
  *
  * O Aprendiz tem o cartão **provisório**: sem selo, até a Guilda selar no
- * treino. O texto do cartão sai de `lib/jogo/cartao.ts`.
+ * treino. O texto do cartão sai de `jogo/cartao.ts` (na engine).
  */
 
 import Image from 'next/image';
 import { useEffect, useId, useRef, useState } from 'react';
 
-import { ATTR_KEYS, ATTR_LABELS, hasClass, idDaRaca, type AttrKey, type Hero } from '@rpg-legend/shared';
+import { ATTR_KEYS, ATTR_LABELS, fraquezaNoCartao, hasClass, idDaRaca, maestriaNoCartao, poderesNoCartao, type AttrKey, type Hero } from '@rpg-legend/shared';
 
-import { fraquezaNoCartao, poderesNoCartao } from '@/lib/jogo/cartao';
-import { maestriaNoCartao } from '@/lib/jogo/maestria';
 import { sinaisDoHeroi } from '@/lib/paperdoll/sinais';
 import { tocar } from '@/lib/som/efeitos';
 import { Paperdoll } from '../componentes/paperdoll';

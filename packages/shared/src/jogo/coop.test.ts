@@ -1,0 +1,223 @@
+import { describe, expect, it } from 'vitest';
+
+import { seededRng } from '../rng.js';
+import { aplicarRemoto, instantaneoDaSala, type PerfilNaSala } from './coop.js';
+import { entrarNaCidade, entrarNaMasmorra, type EstadoDoJogo, type EstadoNaCidade } from './estado.js';
+import { saveSorteado } from './heroi-sorteado.js';
+
+function cidade(nome = 'Aria', semente = 3): EstadoNaCidade {
+  const rng = seededRng(semente);
+  return entrarNaCidade(saveSorteado(nome, rng));
+}
+
+function perfilDe(estado: EstadoDoJogo): PerfilNaSala {
+  return {
+    name: estado.hero.name,
+    hero: estado.hero as unknown as Record<string, unknown>,
+    inventory: estado.inventory,
+    party: estado.party as unknown as Record<string, unknown>[],
+    publicProfile: null,
+  };
+}
+
+const COSMETICOS = { username: 'Aria', avatarUrl: '', frame: 'gold', nameColor: '#6ee7ff', pet: 'owl' };
+
+describe('instantaneoDaSala', () => {
+  it('leva mapa, posição, andar e missões — o que é compartilhado', () => {
+    const estado = cidade();
+    const pacote = instantaneoDaSala(estado, 1, 'Aria', COSMETICOS);
+
+    expect(pacote.map).toBe(estado.map);
+    expect(pacote.pos).toBe(estado.pos);
+    expect(pacote.floor).toBe(estado.floor);
+    expect(pacote.mapMode).toBe('city');
+  });
+
+  it('a masmorra e a dificuldade viajam junto do andar', () => {
+    const naCaverna = entrarNaMasmorra(cidade(), seededRng(3), { dungeon: 'caverna', difficulty: 'dificil' });
+
+    expect(instantaneoDaSala(naCaverna, 1, 'Aria', COSMETICOS).masmorra).toEqual({ dungeon: 'caverna', difficulty: 'dificil' });
+  });
+
+  it('o parceiro adota a masmorra de quem conduz, mas o progresso continua o dele', () => {
+    const doOutro = entrarNaMasmorra(cidade('Bree', 9), seededRng(9), { dungeon: 'torre', difficulty: 'normal' });
+    const meu = entrarNaMasmorra({ ...cidade(), progresso: { cleared: ['floresta:normal'], totems: {} } }, seededRng(3));
+
+    const aplicado = aplicarRemoto(meu, instantaneoDaSala(doOutro, 1, 'Bree', COSMETICOS), undefined);
+
+    expect(aplicado.masmorra).toEqual({ dungeon: 'torre', difficulty: 'normal' });
+    expect(aplicado.progresso).toBe(meu.progresso);
+  });
+
+  it('manda só o próprio papel em profiles', () => {
+    const pacote = instantaneoDaSala(cidade(), 2, 'Aria', COSMETICOS);
+    const perfis = pacote.profiles as Record<string, unknown>;
+
+    expect(Object.keys(perfis)).toEqual(['2']);
+  });
+
+  describe('a mochila só viaja quando muda', () => {
+    function perfilDoPacote(pacote: Record<string, unknown>, papel = 1): Record<string, unknown> {
+      return (pacote.profiles as Record<string, Record<string, unknown>>)[String(papel)];
+    }
+
+    it('vai inteira quando nada foi enviado ainda', () => {
+      const estado = cidade();
+      const perfil = perfilDoPacote(instantaneoDaSala(estado, 1, 'Aria', COSMETICOS, null));
+
+      expect(perfil.inventory).toBe(estado.inventory);
+    });
+
+    // O ganho: andar, lutar ou abrir porta não mexem na mochila, e ela é o
+    // pedaço grande do pacote — 10,5 KB de 14 KB num save com 76 itens.
+    it('sai do pacote quando é a mesma de antes', () => {
+      const estado = cidade();
+      const perfil = perfilDoPacote(instantaneoDaSala(estado, 1, 'Aria', COSMETICOS, estado.inventory));
+
+      expect(perfil).not.toHaveProperty('inventory');
+      // O resto do perfil continua indo: o herói muda a cada golpe.
+      expect(perfil.hero).toBe(estado.hero);
+      expect(perfil.party).toBe(estado.party);
+    });
+
+    it('volta a viajar assim que muda', () => {
+      const estado = cidade();
+      const outra = [...estado.inventory];
+      const perfil = perfilDoPacote(instantaneoDaSala(estado, 1, 'Aria', COSMETICOS, outra));
+
+      // Mesmo conteúdo, referência diferente: a engine troca o array ao
+      // mudar, então referência é o sinal — e errar pro lado de enviar
+      // demais custa banda, enquanto errar pro outro custa a mochila.
+      expect(perfil.inventory).toBe(estado.inventory);
+    });
+
+    // Sem argumento nenhum é o mesmo que "não sei o que o servidor tem", e
+    // aí manda. É o que mantém as chamadas antigas de 4 argumentos corretas.
+    it('manda quando não recebe a referência anterior', () => {
+      const estado = cidade();
+      expect(perfilDoPacote(instantaneoDaSala(estado, 1, 'Aria', COSMETICOS))).toHaveProperty('inventory');
+    });
+  });
+
+  it('o cosmético viaja junto do perfil', () => {
+    const pacote = instantaneoDaSala(cidade(), 1, 'Aria', COSMETICOS);
+    const meu = (pacote.profiles as Record<string, { publicProfile: unknown }>)['1'];
+
+    expect(meu.publicProfile).toEqual(COSMETICOS);
+  });
+});
+
+describe('aplicarRemoto', () => {
+  it('adota o mapa e a posição do parceiro', () => {
+    const meu = cidade('Aria', 3);
+    const doOutro = entrarNaMasmorra(cidade('Bree', 9), seededRng(9));
+
+    const depois = aplicarRemoto(meu, instantaneoDaSala(doOutro, 1, 'Bree', null), perfilDe(meu));
+
+    expect(depois.mapMode).toBe('dungeon');
+    expect(depois.map).toEqual(doOutro.map);
+    expect(depois.pos).toEqual(doOutro.pos);
+    expect(depois.floor).toBe(doOutro.floor);
+  });
+
+  it('o herói continua sendo o meu, não o do parceiro', () => {
+    const meu = cidade('Aria', 3);
+    const doOutro = cidade('Bree', 9);
+
+    const depois = aplicarRemoto(meu, instantaneoDaSala(doOutro, 1, 'Bree', null), perfilDe(meu));
+
+    expect(depois.hero.name).toBe('Aria');
+    expect(depois.hero.name).not.toBe(doOutro.hero.name);
+  });
+
+  it('sem perfil meu no pacote, o herói local fica como está', () => {
+    const meu = cidade();
+    const depois = aplicarRemoto(meu, instantaneoDaSala(cidade('Bree', 9), 1, 'Bree', null), undefined);
+
+    expect(depois.hero).toBe(meu.hero);
+    expect(depois.inventory).toBe(meu.inventory);
+  });
+
+  it('pacote sem posição não apaga a masmorra de ninguém', () => {
+    const meu = entrarNaMasmorra(cidade(), seededRng(3));
+
+    // Sem posição não há o que aplicar, com ou sem mapa no pacote.
+    expect(aplicarRemoto(meu, { floor: 9 }, perfilDe(meu))).toBe(meu);
+    expect(aplicarRemoto(meu, { map: meu.map }, perfilDe(meu))).toBe(meu);
+  });
+
+  /**
+   * O outro lado da omissão do mapa (ver `mapaParaMembro`, na API): o mapa
+   * é 91% do pacote e quase nunca muda, então o servidor para de mandá-lo
+   * quando esta conexão já tem a versão.
+   *
+   * Antes, ausência aqui fazia a função devolver o estado local inteiro — e
+   * a sincronização toda ia junto pro lixo: posição, andar, perfis. Estes
+   * testes prendem a regra nova: **ausente é "não mudou"**, e o que o
+   * pacote de fato traz continua sendo aplicado.
+   */
+  describe('mapa ausente', () => {
+    it('mantém o mapa local e aplica o resto do pacote', () => {
+      const meu = entrarNaMasmorra(cidade(), seededRng(3));
+
+      const depois = aplicarRemoto(meu, { pos: { x: 2, y: 1 }, floor: 9, mapMode: meu.mapMode }, perfilDe(meu));
+
+      expect(depois).not.toBe(meu);
+      expect(depois.map).toBe(meu.map);
+      expect(depois.floor).toBe(9);
+      expect(depois.pos).toEqual({ x: 2, y: 1 });
+    });
+
+    it('mapa vazio conta como ausente — ninguém tem masmorra de zero salas', () => {
+      const meu = entrarNaMasmorra(cidade(), seededRng(3));
+
+      expect(aplicarRemoto(meu, { map: [], pos: { x: 0, y: 0 }, mapMode: meu.mapMode }, perfilDe(meu)).map).toBe(meu.map);
+    });
+
+    /**
+     * Cidade e masmorra têm células de formato diferente. Reaproveitar o
+     * mapa local sob o modo novo faria a tela ler sala de masmorra como
+     * quadra de cidade — pacote ignorado é a resposta certa.
+     */
+    it('trocar de modo sem trazer mapa é pacote ignorado', () => {
+      const meu = entrarNaMasmorra(cidade(), seededRng(3));
+
+      expect(aplicarRemoto(meu, { pos: { x: 1, y: 1 }, mapMode: 'city' }, perfilDe(meu))).toBe(meu);
+    });
+
+    /** Sem `mapMode` no pacote, vale o local — ler o campo direto jogaria todo mundo pra cidade. */
+    it('sem mapMode, o modo local se mantém', () => {
+      const meu = entrarNaMasmorra(cidade(), seededRng(3));
+
+      expect(aplicarRemoto(meu, { pos: { x: 1, y: 1 } }, perfilDe(meu)).mapMode).toBe('dungeon');
+    });
+  });
+
+  it('a mochila que volta é a que o servidor devolveu no meu perfil', () => {
+    const meu = cidade();
+    const comMenos: PerfilNaSala = { ...perfilDe(meu), inventory: [] };
+
+    const depois = aplicarRemoto(meu, instantaneoDaSala(cidade('Bree', 9), 1, 'Bree', null), comMenos);
+
+    expect(depois.inventory).toEqual([]);
+  });
+
+  /**
+   * O par do teste acima, e a diferença que segura a regra inteira:
+   * mochila **vazia** é esvaziar de verdade; mochila **ausente** é "não
+   * mudou". O servidor parou de reenviá-la a cada ação (eram 11,5 KB de um
+   * pacote de 20,3 KB, ecoados sem novidade), e ler ausência como `[]`
+   * apagaria a mochila do jogador a cada passo — e a perda viajaria de
+   * volta na sincronização seguinte, virando definitiva.
+   */
+  it('mochila ausente no perfil mantém a que eu já tinha', () => {
+    const meu = cidade();
+    const semMochila: PerfilNaSala = { ...perfilDe(meu) };
+    delete semMochila.inventory;
+
+    const depois = aplicarRemoto(meu, instantaneoDaSala(cidade('Bree', 9), 1, 'Bree', null), semMochila);
+
+    expect(depois.inventory).toBe(meu.inventory);
+    expect(depois.inventory.length).toBeGreaterThan(0);
+  });
+});

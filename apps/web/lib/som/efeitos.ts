@@ -8,9 +8,12 @@
  * de Configurações valem pra eles.
  */
 
+import type { Efeito } from '@rpg-legend/shared';
+
 import { audio, efeitosMudos, saidaDeEfeitos } from './audio';
 
-export type Efeito = 'hit' | 'crit' | 'miss' | 'gold' | 'buy' | 'sell' | 'door' | 'levelup' | 'victory' | 'defeat' | 'step' | 'heal';
+/** Quais efeitos existem é da engine (`jogo/efeitos.ts`): é o fluxo do jogo que pede cada um. */
+export type { Efeito };
 
 interface Beep {
   hz: number;

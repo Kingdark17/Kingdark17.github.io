@@ -10,12 +10,9 @@
  * a célula muda depois do render.
  */
 
-import type { RoomObject } from '@rpg-legend/shared';
+import { ID_DO_BAU_SECRETO, ID_DO_CONTEUDO, extrasDe, idDoExtra, objetosDaSala, type CelulaDoMapa, type RoomObject } from '@rpg-legend/shared';
 
-import { ID_DO_CONTEUDO } from './andar-na-sala';
 import type { Figura } from './desenho-da-sala';
-import type { CelulaDoMapa } from './estado';
-import { ID_DO_BAU_SECRETO, extrasDe, idDoExtra, objetosDaSala } from './extras';
 import { arteDoTipo } from './icones-do-mapa';
 
 /** Os extras da sala como texto: o tipo de cada um e, colado, `*` se já foi usado e `$` se o baú secreto já foi aberto. */

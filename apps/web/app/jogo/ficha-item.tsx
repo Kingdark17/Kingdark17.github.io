@@ -10,7 +10,7 @@
  * (`{ defesa: 7, esquiva: -2 }`) sobe uma coisa e baixa outra, e a perda só
  * aparecia no combate seguinte, sem ligação visível com a troca.
  *
- * Os números vêm de `lib/jogo/impacto.ts`, que não calcula nada por conta
+ * Os números vêm de `jogo/impacto.ts` (na engine), que não calcula nada por conta
  * própria — ele passa o herói por `equipItem` e mede com as mesmas funções
  * que o combate usa. Ver o cabeçalho de lá.
  */
@@ -18,9 +18,8 @@
 import Image from 'next/image';
 import type { ReactNode } from 'react';
 
-import { CATEGORY_LABELS, itemView, statTags, tierFor, type Hero, type Item } from '@rpg-legend/shared';
+import { CATEGORY_LABELS, impactoDaPeca, itemView, statTags, tierFor, type Hero, type Item, type LinhaDeImpacto } from '@rpg-legend/shared';
 
-import { impactoDaPeca, type LinhaDeImpacto } from '@/lib/jogo/impacto';
 import { spriteDoItem } from './carta-item';
 import styles from './jogo.module.css';
 

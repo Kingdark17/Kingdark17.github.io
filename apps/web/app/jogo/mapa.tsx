@@ -34,9 +34,8 @@
  * ficava idêntica a uma vizinha qualquer de sala visitada.
  */
 
-import type { CelulaDoMapa, Posicao } from '@/lib/jogo/estado';
+import { estadoDaSala, sabeOTipo, type CelulaDoMapa, type EstadoDaSala, type Posicao } from '@rpg-legend/shared';
 import { arteDoTipo, MARCADOR_DO_JOGADOR } from '@/lib/jogo/icones-do-mapa';
-import { estadoDaSala, sabeOTipo, type EstadoDaSala } from '@/lib/jogo/neblina';
 import styles from './jogo.module.css';
 
 /** `Record` completo: estado novo na névoa sem classe aqui vira erro de compilação. */

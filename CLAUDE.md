@@ -108,6 +108,12 @@ O jogo está sendo migrado de JS vanilla para um monorepo. Decisões fechadas:
 **Regras que decorrem disso:**
 - A engine em `packages/shared` não importa React, DOM nem Node — é o que
   permite o Nest validar jogada com o mesmo código do cliente.
+- O fluxo do jogo (o que junta as peças: sala, combate, mochila, loja,
+  missões, extras, co-op, narração) também mora na engine, em
+  `packages/shared/src/jogo`, com os nomes em português de antes. Veio de
+  `apps/web/lib/jogo` em 2026-10-16, para o app ter as mesmas regras. No
+  site, `lib/jogo` guarda só o que é tela: desenho da sala, figuras, arte do
+  minimapa, teclado e o relógio da barra de mira.
 - Não propor Zustand/Redux para lógica de jogo: a engine é fora do React de
   propósito.
 - Não propor Supabase Auth: os hashes são scrypt e não importam pra lá;

@@ -18,40 +18,18 @@
 
 import type { Socket } from 'socket.io-client';
 
+import type { CosmeticosPublicos, PerfilNaSala } from '@rpg-legend/shared';
+
 import { urlDaApi } from '../api/client';
 import { Descompressor, suportaDeflate, type PacoteComprimido } from './descomprimir';
+
+/** O perfil e os cosméticos moram na engine, junto do fluxo do co-op (`jogo/coop.ts`). */
+export type { CosmeticosPublicos, PerfilNaSala };
 
 export type PapelNaSala = 1 | 2;
 
 export const PAPEL_ANFITRIAO: PapelNaSala = 1;
 export const PAPEL_CONVIDADO: PapelNaSala = 2;
-
-/** Cosméticos do parceiro, saneados pelo servidor (`sanitizeCosmetics`). */
-export interface CosmeticosPublicos {
-  username: string;
-  avatarUrl: string;
-  frame: string;
-  nameColor: string;
-  pet: string;
-}
-
-export interface PerfilNaSala {
-  name: string;
-  hero: Record<string, unknown>;
-  /**
-   * **Ausente quer dizer "não mudou"**, nunca "esvaziou" — a mesma regra
-   * que a subida já usa (`instantaneoDaSala`). O servidor só reenvia a
-   * mochila quando ela é outra; eram 11,5 KB de um pacote de 20,3 KB,
-   * ecoados a cada ação de jogo sem novidade nenhuma.
-   *
-   * Quem preserva a anterior é `comMochilaPreservada`, aqui na fronteira,
-   * pra que ninguém mais no front precise saber disso. O perfil do
-   * parceiro nunca tem mochila, por outro motivo (a tela dele não lê).
-   */
-  inventory?: unknown[];
-  party: Record<string, unknown>[];
-  publicProfile: CosmeticosPublicos | null;
-}
 
 export interface Convite {
   de: string;

@@ -5,7 +5,7 @@
  * depende de um atributo do herói e sai de `resolveEvent` na engine.
  */
 
-import { escolher, escolhas, type Evento } from '@/lib/jogo/evento';
+import { escolhas, escolher, type Evento } from '@rpg-legend/shared';
 import styles from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
 

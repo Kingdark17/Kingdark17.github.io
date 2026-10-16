@@ -1,0 +1,8 @@
+{
+  "MAX_PASSOS_POR_QUADRO": 6,
+  "ID_DO_CONTEUDO": "conteudo",
+  "PARADO": {
+    "x": 0,
+    "y": 0
+  }
+}

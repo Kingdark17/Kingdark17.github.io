@@ -2,7 +2,7 @@
 
 /**
  * Loja e ferreiro. Só desenha e rola o dado da pechincha — as regras estão
- * em `lib/jogo/loja.ts` e na engine.
+ * na engine, em `jogo/loja.ts` e `shop/shop.ts`.
  *
  * O original é um modal com três grades (comprar, vender, reforjar) e um
  * painel de detalhe. Aqui as três grades continuam, mas a reforja aparece
@@ -19,21 +19,28 @@
 
 import { useState } from 'react';
 
-import { concordar, FORGE_MATERIALS, itemView, templateById, tierFor, tierRank, TIER_ORDER, type Item } from '@rpg-legend/shared';
-
 import {
+  FORGE_MATERIALS,
+  TIER_ORDER,
   comprar,
+  concordar,
   estoque,
+  itemView,
   pechinchar,
   precoDaRenovacao,
   precoDeCompra,
   precoDeVenda,
   reforjar,
   renovarEstoque,
+  templateById,
+  tierFor,
+  tierRank,
   vendaveis,
   vender,
+  type Item,
   type Loja,
-} from '@/lib/jogo/loja';
+} from '@rpg-legend/shared';
+
 import { CartaItem } from './carta-item';
 import { FichaItem } from './ficha-item';
 import styles from './jogo.module.css';

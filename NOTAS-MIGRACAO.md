@@ -260,6 +260,15 @@ porque o servidor precisa do mesmo tipo de save e da mesma máquina de
 turnos. Não movi agora porque a fase 3 ainda está mexendo neles todo dia —
 é decisão pra fase 6.
 
+**Resolvido em 2026-10-16, por outro motivo:** o app Unity precisa das
+mesmas regras do site, conferidas pelos mesmos casos. O usuário escolheu
+(2026-10-11) levar o fluxo inteiro pra engine antes de traduzir pro C#.
+Tudo o que era regra em `apps/web/lib/jogo` está agora em
+`packages/shared/src/jogo`, com os mesmos nomes e o mesmo conteúdo. No
+site ficaram só o desenho da sala, as figuras, a arte do minimapa, o
+teclado e o relógio da barra de mira. Os caminhos `lib/jogo/...` citados
+acima e abaixo, quando são regra, agora são `jogo/...` na engine.
+
 ### Salas com tela própria
 
 `interagir()` devolve `tela: TelaAberta | null` — união discriminada por

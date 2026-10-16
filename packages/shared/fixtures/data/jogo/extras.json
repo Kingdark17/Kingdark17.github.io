@@ -1,0 +1,7 @@
+{
+  "PREFIXO": "extra-",
+  "ID_DO_BAU_SECRETO": "bau-secreto",
+  "$privadas": [
+    "PREFIXO"
+  ]
+}

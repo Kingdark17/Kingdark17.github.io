@@ -1,0 +1,13 @@
+{
+  "PASSO_DA_SALA": {
+    "npc": "npc",
+    "shop": "shop",
+    "blacksmith": "shop",
+    "guild": "guild",
+    "monster": "combat",
+    "boss": "combat"
+  },
+  "$privadas": [
+    "PASSO_DA_SALA"
+  ]
+}

@@ -9,7 +9,7 @@
  * desviar — foi decidido assim.
  *
  * Só desenha e rola o dado — quem decide o que acontece é
- * `lib/jogo/combate.ts`. Os dados são rolados aqui e passados pra máquina
+ * `jogo/combate.ts` (na engine). Os dados são rolados aqui e passados pra máquina
  * de turnos em vez de sorteados lá dentro: a tela mostra o número que saiu,
  * e é o mesmo número que um dia o servidor vai conferir.
  *
@@ -34,29 +34,27 @@ import * as m from 'motion/react-m';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 
 import {
+  atacar,
   ataquesDisponiveis,
+  consumiveisDoCombate,
   displayName,
+  esquivar,
+  fugir,
   heroPowers,
+  inimigosRestantes,
+  monstroAtual,
   powerManaCost,
+  usarItem,
+  usarPoder,
   type AtaqueDisponivel,
   type CombatMonsterView,
+  type Combate,
+  type Flutuante,
   type Item,
   type JogadaDeAtaque,
   type Power,
 } from '@rpg-legend/shared';
 
-import {
-  atacar,
-  consumiveisDoCombate,
-  esquivar,
-  fugir,
-  inimigosRestantes,
-  monstroAtual,
-  usarItem,
-  usarPoder,
-  type Combate,
-  type Flutuante,
-} from '@/lib/jogo/combate';
 import { TEMAS, type LugarDoTema } from '@/lib/jogo/desenho-da-sala';
 import { tocar } from '@/lib/som/efeitos';
 import { AtaqueComMira } from './ataque-com-mira';

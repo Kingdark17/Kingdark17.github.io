@@ -2,18 +2,10 @@
 
 /**
  * Conversa com NPC: retrato, falas em sequência e o botão do serviço que
- * ele oferece. As regras estão em `lib/jogo/dialogo.ts`.
+ * ele oferece. As regras estão em `jogo/dialogo.ts` (na engine).
  */
 
-import {
-  falaAtual,
-  proximaFala,
-  rotuloDoServico,
-  servicoDisponivel,
-  temMaisFalas,
-  usarServico,
-  type Dialogo,
-} from '@/lib/jogo/dialogo';
+import { falaAtual, proximaFala, rotuloDoServico, servicoDisponivel, temMaisFalas, usarServico, type Dialogo } from '@rpg-legend/shared';
 import styles from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
 

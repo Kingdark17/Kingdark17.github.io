@@ -1,0 +1,82 @@
+{
+  "LEGENDA_DA_CIDADE": [
+    [
+      "start",
+      "Início"
+    ],
+    [
+      "npc",
+      "NPC"
+    ],
+    [
+      "shop",
+      "Vendedor"
+    ],
+    [
+      "blacksmith",
+      "Ferreiro"
+    ],
+    [
+      "tavern",
+      "Taverna"
+    ],
+    [
+      "questboard",
+      "Missões"
+    ],
+    [
+      "guild",
+      "Guilda"
+    ],
+    [
+      "gate",
+      "Portão da Masmorra"
+    ]
+  ],
+  "LEGENDA_DA_MASMORRA": [
+    [
+      "start",
+      "Início"
+    ],
+    [
+      "npc",
+      "NPC"
+    ],
+    [
+      "treasure",
+      "Baú"
+    ],
+    [
+      "monster",
+      "Monstro"
+    ],
+    [
+      "boss",
+      "Chefe"
+    ],
+    [
+      "totem",
+      "Totem"
+    ],
+    [
+      "teacher",
+      "Mestre da classe"
+    ],
+    [
+      "stairs",
+      "Escadas"
+    ],
+    [
+      "exit",
+      "Saída"
+    ],
+    [
+      "event",
+      "Evento"
+    ]
+  ],
+  "$privadas": [
+    "LEGENDA_DA_CIDADE",
+    "LEGENDA_DA_MASMORRA"
+  ]
+}

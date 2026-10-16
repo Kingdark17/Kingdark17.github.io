@@ -8,15 +8,26 @@
  * decisão mais pesada do personagem e não tem volta, então a carta só
  * seleciona: quem treina é o botão da ficha, que diz o nome da classe.
  *
- * Quem já tem classe vê a dele e mais nada. Ver `lib/jogo/guilda.ts`.
+ * Quem já tem classe vê a dele e mais nada. Ver `jogo/guilda.ts` (na engine).
  */
 
 import Image from 'next/image';
 import { useState } from 'react';
 
-import { ATTR_LABELS, CLASSES, hasClass, powerById, POWERS, templateById, type AttrKey, type ClassDef, type Power } from '@rpg-legend/shared';
+import {
+  ATTR_LABELS,
+  CLASSES,
+  POWERS,
+  hasClass,
+  powerById,
+  templateById,
+  treinar,
+  type AttrKey,
+  type ClassDef,
+  type Guilda,
+  type Power,
+} from '@rpg-legend/shared';
 
-import { treinar, type Guilda } from '@/lib/jogo/guilda';
 import styles from './jogo.module.css';
 import { useFichaAVista } from './use-ficha-a-vista';
 

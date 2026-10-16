@@ -6,7 +6,7 @@
  * sorteia outra no lugar (`claimQuest` na engine).
  */
 
-import { missoes, resgatar, type Quadro } from '@/lib/jogo/missoes';
+import { missoes, resgatar, type Quadro } from '@rpg-legend/shared';
 import styles from './jogo.module.css';
 
 interface Props {

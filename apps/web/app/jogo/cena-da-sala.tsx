@@ -4,7 +4,7 @@
  * A sala com o herói andando solto (decisão do usuário, 2026-10-11: andar
  * livre estilo Isaac). O desenho é de `lib/jogo/desenho-da-sala.ts`, com
  * PixiJS; a regra de andar é da engine, com o relógio do site em
- * `lib/jogo/andar-na-sala.ts`. Este componente roda o andar a cada quadro e
+ * `jogo/andar-na-sala.ts` (na engine). Este componente roda o andar a cada quadro e
  * avisa a tela quando algo acontece: o herói atravessou uma porta
  * (`onSaida`) ou encostou no conteúdo da sala (`onEncostar`).
  *
@@ -25,9 +25,8 @@
 
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 
-import type { Direction, RoomLayout, Walker } from '@rpg-legend/shared';
+import { andarNoQuadro, passosDoQuadro, type Direction, type PosicaoNaSala, type RoomLayout, type Vetor, type Walker } from '@rpg-legend/shared';
 
-import { andarNoQuadro, passosDoQuadro, type PosicaoNaSala, type Vetor } from '@/lib/jogo/andar-na-sala';
 import { criarCena, type Cena, type Figura, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
 import styles from './jogo.module.css';
 

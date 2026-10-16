@@ -209,6 +209,12 @@ exceção no log). O primeiro build leva uns 12 minutos; os seguintes, perto de 
   `Tests/EditMode/PortRegressionTests.cs` como `[Test]` comuns (o executor fora da Unity também os
   roda, no módulo "regressao").
 
+### Ainda não portado
+- `jogo/` — o fluxo do jogo (estado, sala, combate, mochila, loja, missões, extras, co-op, narração…).
+  Veio de `apps/web/lib/jogo` para a engine em 2026-10-16, com os mesmos nomes em português, e ainda
+  **não tem casos no gerador nem port**: por enquanto só as tabelas dele (`data/jogo/*.json`) estão na
+  cópia de `Resources/GameData`. É a próxima etapa (o jogo no app).
+
 ### Limitações conhecidas
 - `Attributes` guarda os seis atributos como `double`: atributo ausente vira NaN e `null` vira 0
   (o `Number()` do JS). O que o C# não distingue é o `attrs.x ?? 8` do TS (ausente/null → 8): só

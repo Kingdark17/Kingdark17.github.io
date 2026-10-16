@@ -24,40 +24,70 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { DIR_LABEL, DIR_OPP, defaultRng, displayName, idDaRaca, roomArrival, type Direction, type Item, type PetId, type Walker } from '@rpg-legend/shared';
+import {
+  DIR_LABEL,
+  DIR_OPP,
+  ID_DO_BAU_SECRETO,
+  ID_DO_CONTEUDO,
+  PARADO,
+  abrirAdm,
+  abrirBauSecreto,
+  abrirMochila,
+  andar,
+  anotar,
+  aplicarRemoto,
+  apresentacaoDe,
+  celulaAtual,
+  confirmaAoTocar,
+  curarNaTela,
+  curarPeloParceiro,
+  defaultRng,
+  descricaoDosExtras,
+  displayName,
+  entradaCombinada,
+  gastarPonto,
+  idDaRaca,
+  indiceDoExtra,
+  instantaneoDaSala,
+  interagir,
+  lutaAoEntrar,
+  marcar,
+  monstroAtual,
+  narrar,
+  passagemSecreta,
+  plantaDaSala,
+  plantaDaSalaSecreta,
+  retomarSave,
+  roomArrival,
+  textoDaSecreta,
+  tocarExtra,
+  vizinhaEm,
+  type Anotacao,
+  type Aviso,
+  type Combate,
+  type CosmeticosDoJogador,
+  type Direction,
+  type EstadoDoJogo,
+  type Item,
+  type PetId,
+  type PosicaoNaSala,
+  type Recado,
+  type ResultadoDoExtra,
+  type SaveCarregado,
+  type TelaAberta,
+  type Vetor,
+  type Walker,
+} from '@rpg-legend/shared';
 import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
-import { apresentacaoDe } from '@/lib/jogo/apresentacao';
 import { arteDoTipo } from '@/lib/jogo/icones-do-mapa';
 import { TEMAS, type Figura } from '@/lib/jogo/desenho-da-sala';
-import { ID_DO_CONTEUDO, PARADO, entradaCombinada, plantaDaSala, type PosicaoNaSala, type Vetor } from '@/lib/jogo/andar-na-sala';
-import {
-  ID_DO_BAU_SECRETO,
-  abrirBauSecreto,
-  descricaoDosExtras,
-  indiceDoExtra,
-  passagemSecreta,
-  plantaDaSalaSecreta,
-  textoDaSecreta,
-  tocarExtra,
-  type ResultadoDoExtra,
-} from '@/lib/jogo/extras';
 import { assinaturaDosExtras, chaveDosObjetos, figurasDaSala, lerObjetos } from '@/lib/jogo/figuras-da-sala';
-import { andar, celulaAtual, retomarSave, vizinhaEm, type EstadoDoJogo, type SaveCarregado } from '@/lib/jogo/estado';
-import { confirmaAoTocar, interagir, lutaAoEntrar, type Aviso, type TelaAberta } from '@/lib/jogo/sala';
-import { abrirAdm } from '@/lib/jogo/adm';
-import { aplicarRemoto, instantaneoDaSala, type CosmeticosDoJogador } from '@/lib/jogo/coop';
-import { anotar, type Anotacao } from '@/lib/jogo/diario';
-import { abrirMochila, gastarPonto } from '@/lib/jogo/mochila';
-import { narrar } from '@/lib/jogo/narrador';
 import { direcaoAoSoltar, direcaoDaTecla, estaDigitando } from '@/lib/jogo/teclado';
-import { monstroAtual } from '@/lib/jogo/combate';
 import { tocar } from '@/lib/som/efeitos';
 import { useTrilha } from '@/lib/som/use-trilha';
 import type { Tema } from '@/lib/som/musica';
-import { marcar, type Recado } from '@/lib/jogo/tutorial';
-import { curarNaTela, curarPeloParceiro } from '@/lib/jogo/cura-do-parceiro';
 import {
   abrirAventura,
   assinar,
@@ -70,7 +100,6 @@ import {
   travarParceiro,
 } from '@/lib/rede/sala';
 import { useSala } from '@/lib/rede/use-sala';
-import type { Combate } from '@/lib/jogo/combate';
 import { BichoDeEstimacao } from './bicho-de-estimacao';
 import { CenaDaSala } from './cena-da-sala';
 import { ControleDeSom } from './controle-de-som';

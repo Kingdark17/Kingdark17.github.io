@@ -1,0 +1,24 @@
+{
+  "AMBIENTE_DA_CIDADE": [
+    "As ruas de paralelepípedo ecoam seus passos.",
+    "O cheiro de pão fresco e fumaça de forja se mistura no ar.",
+    "Bandeiras coloridas tremulam entre os telhados inclinados ao redor.",
+    "Vozes distantes de mercadores anunciam ofertas em algum lugar próximo.",
+    "Uma brisa fresca percorre a rua estreita, carregando cheiro de terra molhada.",
+    "Lampiões pendurados nas paredes iluminam fracamente o caminho.",
+    "Passos apressados ecoam em algum beco próximo, fora de vista."
+  ],
+  "AMBIENTE_DA_MASMORRA": [
+    "O ar aqui é frio e cheira a pedra úmida.",
+    "Tochas bruxuleantes lançam sombras longas pelas paredes de pedra.",
+    "Um silêncio pesado paira sobre a sala, quebrado apenas por um pingar distante.",
+    "Musgo cobre as pedras irregulares sob seus pés.",
+    "Algo goteja em algum lugar da escuridão adiante.",
+    "As paredes de pedra parecem se fechar um pouco mais a cada passo.",
+    "Um vento fraco sopra vindo de algum lugar mais fundo na masmorra."
+  ],
+  "$privadas": [
+    "AMBIENTE_DA_CIDADE",
+    "AMBIENTE_DA_MASMORRA"
+  ]
+}

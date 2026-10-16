@@ -6,14 +6,13 @@
  * trocar poder não tem volta.
  *
  * Herói com vaga escolhe o que aprender. Quem já tem os três poderes da
- * criação antiga escolhe também qual esquecer. Ver `lib/jogo/professor.ts`.
+ * criação antiga escolhe também qual esquecer. Ver `jogo/professor.ts` (na engine).
  */
 
 import { useState } from 'react';
 
-import type { Power } from '@rpg-legend/shared';
+import { aprender, ofertas, trocar, trocaveis, type Power, type Professor } from '@rpg-legend/shared';
 
-import { aprender, ofertas, trocar, trocaveis, type Professor } from '@/lib/jogo/professor';
 import styles from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
 

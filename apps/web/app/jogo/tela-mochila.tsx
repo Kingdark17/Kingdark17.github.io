@@ -22,21 +22,26 @@
 
 import { useState } from 'react';
 
-import { CATEGORY_LABELS, displayName, EQUIP_SLOTS, itemCategory, type Item, type ItemCategory } from '@rpg-legend/shared';
-
 import {
+  CATEGORY_LABELS,
+  EQUIP_SLOTS,
   aceitaMaoSecundaria,
   armaQueOcupaAsMaos,
   descartar,
   desequipar,
+  displayName,
   equipar,
   equiparNoLugarDaArma,
+  itemCategory,
   podeEquipar,
   podeUsar,
   slotDoItem,
   usar,
+  type Item,
+  type ItemCategory,
   type Mochila,
-} from '@/lib/jogo/mochila';
+} from '@rpg-legend/shared';
+
 import { CartaItem } from './carta-item';
 import { Equipamento } from './equipamento';
 import { FichaItem } from './ficha-item';

@@ -51,3 +51,38 @@ export * from './quests/quests.js';
 export * from './city/city.js';
 export * from './pets/pets.js';
 export * from './shop/shop.js';
+
+// O fluxo do jogo — o que junta as peças acima: entrar na sala, abrir o
+// baú, vencer a luta, equipar, comprar, missões, co-op. Morava no site
+// (`apps/web/lib/jogo`) e veio pra cá pra o app ter as mesmas regras,
+// conferidas pelos mesmos casos (decisão do usuário, 2026-10-11). Os nomes
+// seguem em português, como eram. `jogo/heroi-sorteado.ts` fica de fora:
+// só os testes usam.
+export * from './jogo/adm.js';
+export * from './jogo/andar-na-sala.js';
+export * from './jogo/apresentacao.js';
+export * from './jogo/cartao.js';
+export * from './jogo/combate.js';
+export * from './jogo/coop.js';
+export * from './jogo/criacao.js';
+export * from './jogo/cura-do-parceiro.js';
+export * from './jogo/dialogo.js';
+export * from './jogo/diario.js';
+export * from './jogo/efeitos.js';
+export * from './jogo/estado.js';
+export * from './jogo/evento.js';
+export * from './jogo/extras.js';
+export * from './jogo/guilda.js';
+export * from './jogo/impacto.js';
+export * from './jogo/loja.js';
+export * from './jogo/maestria.js';
+export * from './jogo/missoes.js';
+export * from './jogo/mochila.js';
+export * from './jogo/narrador.js';
+export * from './jogo/neblina.js';
+export * from './jogo/portao.js';
+export * from './jogo/professor.js';
+export * from './jogo/sala.js';
+export * from './jogo/save-inicial.js';
+export * from './jogo/totem.js';
+export * from './jogo/tutorial.js';

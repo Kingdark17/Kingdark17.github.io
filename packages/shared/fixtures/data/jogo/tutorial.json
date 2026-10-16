@@ -1,0 +1,84 @@
+{
+  "PASSOS": [
+    {
+      "id": "move",
+      "icone": "🧭",
+      "nome": "Dê o primeiro passo",
+      "dica": "Use WASD, as setas do teclado ou arraste o dedo na sala para andar."
+    },
+    {
+      "id": "guild",
+      "icone": "⚜️",
+      "nome": "Treine na Guilda",
+      "dica": "Escolha sua classe na Guilda dos Aventureiros. Sem ela, o portão da masmorra não abre."
+    },
+    {
+      "id": "inventory",
+      "icone": "🎒",
+      "nome": "Abra a mochila",
+      "dica": "Selecione um item para ver atributos, comparar, equipar, usar ou descartar."
+    },
+    {
+      "id": "npc",
+      "icone": "🧙",
+      "nome": "Converse com um NPC",
+      "dica": "NPCs podem curar, negociar, revelar o mapa ou entrar temporariamente na equipe."
+    },
+    {
+      "id": "shop",
+      "icone": "🏵️",
+      "nome": "Visite uma loja",
+      "dica": "Compare o item da loja com o equipado. Carisma melhora seus descontos."
+    },
+    {
+      "id": "dungeon",
+      "icone": "🏰",
+      "nome": "Entre na masmorra",
+      "dica": "Atravesse o portão da cidade e escolha a masmorra. Lá dentro, explore antes de usar a saída ou a escada: o mapa oculta salas ainda desconhecidas."
+    },
+    {
+      "id": "combat",
+      "icone": "⚔️",
+      "nome": "Comece um combate",
+      "dica": "Observe fraquezas e resistências. Poderes gastam Mana e podem aplicar debuffs."
+    }
+  ],
+  "GUIAS": [
+    {
+      "titulo": "🧭 Movimentação",
+      "texto": "Use WASD, as setas ou arraste o dedo na sala. Encoste no que estiver nela para interagir: baús, pessoas, lojas e escadas. Sala com monstro começa a luta assim que você entra."
+    },
+    {
+      "titulo": "⚔️ Combate",
+      "texto": "Ataques usam atributos e afinidade da arma. Poderes gastam Mana. Você também pode fugir com uma rolagem."
+    },
+    {
+      "titulo": "☣️ Efeitos",
+      "texto": "Queimadura, veneno e sangramento causam dano contínuo. Atordoamento impede ataques; lentidão, vulnerabilidade e fraqueza reduzem a defesa do inimigo."
+    },
+    {
+      "titulo": "🎒 Itens e tiers",
+      "texto": "Compare atributos e tiers antes de equipar. A ordem é E, D, C, B, A, S, SS, SSS, SSS+ e MAX."
+    },
+    {
+      "titulo": "⚒️ Reforja",
+      "texto": "No ferreiro, materiais diferentes alteram as chances. A Pedra de Proteção impede queda e quatro falhas ativam garantia."
+    },
+    {
+      "titulo": "🧙 NPCs e aliados",
+      "texto": "Você começa sozinho. Converse e realize serviços para conseguir ajuda e companheiros temporários."
+    },
+    {
+      "titulo": "👥 Multiplayer",
+      "texto": "Cada jogador cria o próprio herói. O mapa é compartilhado e os turnos são usados somente nas batalhas."
+    },
+    {
+      "titulo": "💾 Salvamento",
+      "texto": "O progresso vai pra nuvem sozinho alguns segundos depois de cada passo."
+    }
+  ],
+  "OURO_DA_RECOMPENSA": 40,
+  "$privadas": [
+    "OURO_DA_RECOMPENSA"
+  ]
+}

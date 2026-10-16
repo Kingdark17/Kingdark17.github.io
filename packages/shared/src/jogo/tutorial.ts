@@ -1,0 +1,132 @@
+/**
+ * Primeiros Passos e Guia do Aventureiro — porta de `js/tutorial.js`.
+ *
+ * Duas coisas diferentes com o mesmo nome no original: um **guia** de
+ * texto que fica disponível pra sempre, e uma **missãozinha** de etapas
+ * que dá 40 de ouro e uma poção ao completar — seis no original, sete
+ * desde que a Guilda entrou.
+ *
+ * O progresso vive no save (`state.tutorial` no original), então trocar de
+ * navegador não recomeça o tutorial. `enabled: false` desliga o
+ * acompanhamento sem apagar o que já foi feito — é o que o original faz
+ * pra quem dispensa o tutorial na criação do personagem.
+ */
+
+import { addItem } from '../inventory/inventory.js';
+import { randomItem, type Item } from '../items/item.js';
+import { defaultRng, type Rng } from '../rng.js';
+import type { EstadoDoJogo } from './estado.js';
+
+export type PassoDoTutorial = 'move' | 'guild' | 'inventory' | 'npc' | 'shop' | 'dungeon' | 'combat';
+
+export interface Tutorial {
+  enabled: boolean;
+  completed: Partial<Record<PassoDoTutorial, boolean>>;
+  rewarded: boolean;
+}
+
+export interface Passo {
+  id: PassoDoTutorial;
+  icone: string;
+  nome: string;
+  dica: string;
+}
+
+/**
+ * Textos iguais aos do original, na mesma ordem — mais a Guilda (2026-10),
+ * logo depois do primeiro passo: sem ela o portão não abre, e quem acabou de
+ * nascer Aprendiz precisa saber onde ir antes de tentar a masmorra.
+ *
+ * Quem já tinha fechado as seis etapas e ganhado o prêmio não ganha de novo:
+ * `rewarded` continua valendo, e a Guilda só aparece como etapa por fazer.
+ */
+export const PASSOS: Passo[] = [
+  { id: 'move', icone: '🧭', nome: 'Dê o primeiro passo', dica: 'Use WASD, as setas do teclado ou arraste o dedo na sala para andar.' },
+  {
+    id: 'guild',
+    icone: '⚜️',
+    nome: 'Treine na Guilda',
+    dica: 'Escolha sua classe na Guilda dos Aventureiros. Sem ela, o portão da masmorra não abre.',
+  },
+  { id: 'inventory', icone: '🎒', nome: 'Abra a mochila', dica: 'Selecione um item para ver atributos, comparar, equipar, usar ou descartar.' },
+  { id: 'npc', icone: '🧙', nome: 'Converse com um NPC', dica: 'NPCs podem curar, negociar, revelar o mapa ou entrar temporariamente na equipe.' },
+  { id: 'shop', icone: '🏵️', nome: 'Visite uma loja', dica: 'Compare o item da loja com o equipado. Carisma melhora seus descontos.' },
+  { id: 'dungeon', icone: '🏰', nome: 'Entre na masmorra', dica: 'Atravesse o portão da cidade e escolha a masmorra. Lá dentro, explore antes de usar a saída ou a escada: o mapa oculta salas ainda desconhecidas.' },
+  { id: 'combat', icone: '⚔️', nome: 'Comece um combate', dica: 'Observe fraquezas e resistências. Poderes gastam Mana e podem aplicar debuffs.' },
+];
+
+export const GUIAS: { titulo: string; texto: string }[] = [
+  {
+    titulo: '🧭 Movimentação',
+    texto: 'Use WASD, as setas ou arraste o dedo na sala. Encoste no que estiver nela para interagir: baús, pessoas, lojas e escadas. Sala com monstro começa a luta assim que você entra.',
+  },
+  {
+    titulo: '⚔️ Combate',
+    texto: 'Ataques usam atributos e afinidade da arma. Poderes gastam Mana. Você também pode fugir com uma rolagem.',
+  },
+  {
+    titulo: '☣️ Efeitos',
+    texto:
+      'Queimadura, veneno e sangramento causam dano contínuo. Atordoamento impede ataques; lentidão, vulnerabilidade e fraqueza reduzem a defesa do inimigo.',
+  },
+  { titulo: '🎒 Itens e tiers', texto: 'Compare atributos e tiers antes de equipar. A ordem é E, D, C, B, A, S, SS, SSS, SSS+ e MAX.' },
+  {
+    titulo: '⚒️ Reforja',
+    texto: 'No ferreiro, materiais diferentes alteram as chances. A Pedra de Proteção impede queda e quatro falhas ativam garantia.',
+  },
+  { titulo: '🧙 NPCs e aliados', texto: 'Você começa sozinho. Converse e realize serviços para conseguir ajuda e companheiros temporários.' },
+  { titulo: '👥 Multiplayer', texto: 'Cada jogador cria o próprio herói. O mapa é compartilhado e os turnos são usados somente nas batalhas.' },
+  { titulo: '💾 Salvamento', texto: 'O progresso vai pra nuvem sozinho alguns segundos depois de cada passo.' },
+];
+
+/** A recompensa de fechar as etapas, igual à do original (que tinha seis). */
+const OURO_DA_RECOMPENSA = 40;
+
+export interface Recado {
+  titulo: string;
+  texto: string;
+}
+
+export interface ResultadoDoPasso {
+  estado: EstadoDoJogo;
+  recado: Recado | null;
+}
+
+export function tutorialDe(estado: EstadoDoJogo): Tutorial {
+  return estado.tutorial ?? { enabled: true, completed: {}, rewarded: false };
+}
+
+export function concluidos(tutorial: Tutorial): number {
+  return PASSOS.filter((passo) => tutorial.completed[passo.id]).length;
+}
+
+/**
+ * Marca uma etapa. Devolve o estado intacto (mesma referência) quando não
+ * há nada a fazer — etapa repetida ou tutorial desligado —, pra tela não
+ * agendar uma gravação à toa.
+ */
+export function marcar(estado: EstadoDoJogo, id: PassoDoTutorial, rng: Rng = defaultRng): ResultadoDoPasso {
+  const tutorial = tutorialDe(estado);
+  if (!tutorial.enabled || tutorial.completed[id]) return { estado, recado: null };
+
+  const marcado: Tutorial = { ...tutorial, completed: { ...tutorial.completed, [id]: true } };
+  const passo = PASSOS.find((atual) => atual.id === id);
+  const recado: Recado | null = passo ? { titulo: `${passo.icone} Etapa concluída`, texto: passo.dica } : null;
+
+  const faltando = PASSOS.some((atual) => !marcado.completed[atual.id]);
+  if (faltando || marcado.rewarded) return { estado: { ...estado, tutorial: marcado }, recado };
+
+  const premio: Item = randomItem({ category: 'consumivel', floor: 1, rng });
+  return {
+    estado: {
+      ...estado,
+      tutorial: { ...marcado, rewarded: true },
+      hero: { ...estado.hero, gold: estado.hero.gold + OURO_DA_RECOMPENSA },
+      inventory: addItem(estado.inventory, premio),
+    },
+    recado: {
+      titulo: '🏆 Tutorial concluído',
+      texto: `Você recebeu ${OURO_DA_RECOMPENSA} de ouro e uma poção. O Guia continua disponível.`,
+    },
+  };
+}

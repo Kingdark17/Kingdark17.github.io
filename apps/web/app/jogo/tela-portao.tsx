@@ -6,10 +6,8 @@
  * apagado, com o que falta escrito no próprio botão: esconder a Torre de
  * quem ainda não chegou lá esconderia também pra onde o jogo vai.
  *
- * A regra mora em `lib/jogo/portao.ts` e `dungeon/dungeons.ts`.
+ * A regra mora na engine, em `jogo/portao.ts` e `dungeon/dungeons.ts`.
  */
-
-import { runName } from '@rpg-legend/shared';
 
 import {
   andares,
@@ -19,10 +17,12 @@ import {
   escolherDificuldade,
   escolherMasmorra,
   masmorras,
+  runName,
   type Entrada,
   type OpcaoDoPortao,
   type Portao,
-} from '@/lib/jogo/portao';
+} from '@rpg-legend/shared';
+
 import styles from './jogo.module.css';
 
 interface Props {

@@ -8,8 +8,7 @@
  * (andar, abrir mochila).
  */
 
-import { concluidos, GUIAS, PASSOS, tutorialDe } from '@/lib/jogo/tutorial';
-import type { EstadoDoJogo } from '@/lib/jogo/estado';
+import { GUIAS, PASSOS, concluidos, tutorialDe, type EstadoDoJogo } from '@rpg-legend/shared';
 import styles from './jogo.module.css';
 
 export function TelaGuia({ estado, onFechar }: { estado: EstadoDoJogo; onFechar: () => void }) {

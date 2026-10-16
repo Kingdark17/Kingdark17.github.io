@@ -2,14 +2,12 @@
 
 /**
  * O totem dos andares 20, 40, 60 e 80: o toque já marcou o andar no portão
- * (`lib/jogo/totem.ts`), e a tela oferece a volta pra cidade na hora — é o
+ * (`jogo/totem.ts`, na engine), e a tela oferece a volta pra cidade na hora — é o
  * "totem de tp" do pedido do usuário.
  */
 
-import { runName } from '@rpg-legend/shared';
+import { runName, voltarPeloTotem, type EstadoNaCidade, type EstadoNaMasmorra, type Totem } from '@rpg-legend/shared';
 
-import type { EstadoNaCidade, EstadoNaMasmorra } from '@/lib/jogo/estado';
-import { voltarPeloTotem, type Totem } from '@/lib/jogo/totem';
 import styles from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
 

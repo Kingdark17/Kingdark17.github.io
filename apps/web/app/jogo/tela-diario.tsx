@@ -8,11 +8,11 @@
  * que ser um passo, não uma volta.
  *
  * Só mostra. Quem escreve são `avisar` e `recadar`, na tela de jogo — ver
- * `lib/jogo/diario.ts` pro porquê de a fonte ser essa e não um gerador
+ * `jogo/diario.ts` (na engine) pro porquê de a fonte ser essa e não um gerador
  * próprio.
  */
 
-import type { Anotacao } from '@/lib/jogo/diario';
+import type { Anotacao } from '@rpg-legend/shared';
 import styles from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
 

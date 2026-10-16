@@ -7,7 +7,7 @@
 
 import { useState } from 'react';
 
-import { aplicar, fichaDe, modoInfinito, type Adm, type FichaDoAdm } from '@/lib/jogo/adm';
+import { aplicar, fichaDe, modoInfinito, type Adm, type FichaDoAdm } from '@rpg-legend/shared';
 import styles from './jogo.module.css';
 
 const CAMPOS: { chave: keyof FichaDoAdm; rotulo: string }[] = [

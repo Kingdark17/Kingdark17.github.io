@@ -1,0 +1,46 @@
+{
+  "ESCOLHAS": {
+    "ferido": [
+      {
+        "id": "ajudar",
+        "label": "Dar 15 ouro"
+      },
+      {
+        "id": "curar",
+        "label": "Usar SAB"
+      },
+      {
+        "id": "ignorar",
+        "label": "Seguir caminho"
+      }
+    ],
+    "altar": [
+      {
+        "id": "estudar",
+        "label": "Estudar com INT"
+      },
+      {
+        "id": "rezar",
+        "label": "Rezar com SAB"
+      },
+      {
+        "id": "sacrificar",
+        "label": "Sacrificar Vida"
+      }
+    ],
+    "porta": [
+      {
+        "id": "forcar",
+        "label": "Forçar com FOR"
+      },
+      {
+        "id": "examinar",
+        "label": "Examinar com INT"
+      },
+      {
+        "id": "desistir",
+        "label": "Deixar fechada"
+      }
+    ]
+  }
+}

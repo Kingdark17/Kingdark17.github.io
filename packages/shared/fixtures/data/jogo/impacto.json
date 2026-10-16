@@ -1,0 +1,42 @@
+{
+  "MEDIDAS": [
+    {
+      "chave": "vida",
+      "rotulo": "Vida máxima",
+      "casas": 0
+    },
+    {
+      "chave": "mana",
+      "rotulo": "Mana máxima",
+      "casas": 0
+    },
+    {
+      "chave": "ataque",
+      "rotulo": "Ataque",
+      "casas": 0
+    },
+    {
+      "chave": "defesa",
+      "rotulo": "Defesa",
+      "casas": 0
+    },
+    {
+      "chave": "critico",
+      "rotulo": "Crítico",
+      "casas": 1
+    },
+    {
+      "chave": "esquiva",
+      "rotulo": "Esquiva",
+      "casas": 1
+    },
+    {
+      "chave": "velocidade",
+      "rotulo": "Velocidade",
+      "casas": 0
+    }
+  ],
+  "$privadas": [
+    "MEDIDAS"
+  ]
+}

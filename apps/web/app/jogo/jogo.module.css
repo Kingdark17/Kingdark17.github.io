@@ -874,7 +874,7 @@
 /* ---------- "o que muda em você" ----------
  *
  * O painel que responde a pergunta que o jogador está de fato fazendo. Ver
- * `lib/jogo/impacto.ts` — os números saem das mesmas funções que o combate
+ * `jogo/impacto.ts` (na engine) — os números saem das mesmas funções que o combate
  * usa, não de uma segunda conta. */
 .impacto {
   padding: 0.6rem 0.7rem;

@@ -6,7 +6,7 @@
  * Classe, poderes e a Roleta do Destino saíram daqui (doc do Breno,
  * 2026-10): o herói nasce Aprendiz e escolhe a classe no Treinamento de
  * Guilda, na cidade, antes de poder descer à masmorra. Ver
- * `lib/jogo/criacao.ts`.
+ * `jogo/criacao.ts` (na engine).
  *
  * O herói é montado por `buildApprentice()` da engine compartilhada, dentro
  * de `montarSaveInicial` — aqui só tem tela e estado.
@@ -15,12 +15,10 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { RACES, type Race } from '@rpg-legend/shared';
+import { RACES, criacaoVazia, faltaParaComecar, montarSaveInicial, type Criacao, type Race } from '@rpg-legend/shared';
 import { ErroDaApi } from '@/lib/api/client';
 import { CABELO_PADRAO, CORPOS, PENTEADOS, SEM_CABELO } from '@/lib/paperdoll/camadas';
 import { gravarSave } from '@/lib/api/save';
-import { criacaoVazia, faltaParaComecar, type Criacao } from '@/lib/jogo/criacao';
-import { montarSaveInicial } from '@/lib/jogo/save-inicial';
 import { Paperdoll } from '../../componentes/paperdoll';
 import styles from './criacao.module.css';
 

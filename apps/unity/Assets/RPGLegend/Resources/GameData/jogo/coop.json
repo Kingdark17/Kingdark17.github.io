@@ -1,0 +1,15 @@
+{
+  "CAMPOS_COMPARTILHADOS": [
+    "quests",
+    "floor",
+    "mapMode",
+    "map",
+    "mapRows",
+    "mapCols",
+    "pos",
+    "masmorra"
+  ],
+  "$privadas": [
+    "CAMPOS_COMPARTILHADOS"
+  ]
+}

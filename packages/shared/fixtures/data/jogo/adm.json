@@ -1,0 +1,27 @@
+{
+  "INFINITO": {
+    "atributo": 999,
+    "hp": 999999,
+    "mp": 999999,
+    "ouro": 999999999
+  },
+  "CATEGORIAS_EQUIPAVEIS": [
+    "arma",
+    "armadura",
+    "acessorio"
+  ],
+  "CONSUMIVEIS_POR_TIPO": 20,
+  "ATRIBUTOS_DA_FICHA": [
+    "forca",
+    "destreza",
+    "constituicao",
+    "intelecto",
+    "sabedoria",
+    "carisma"
+  ],
+  "$privadas": [
+    "INFINITO",
+    "CATEGORIAS_EQUIPAVEIS",
+    "CONSUMIVEIS_POR_TIPO"
+  ]
+}

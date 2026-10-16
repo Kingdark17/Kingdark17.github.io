@@ -5,7 +5,7 @@
  * `js/pets.js`. Clicar solta um coração e o pet reage por um instante.
  *
  * O carinho é só enfeite: o bônus de combate do pet vem de `petBonus()`,
- * lá em `lib/jogo/combate.ts`, e não depende de ninguém clicar aqui.
+ * lá em `jogo/combate.ts` (na engine), e não depende de ninguém clicar aqui.
  */
 
 import { useEffect, useState } from 'react';
