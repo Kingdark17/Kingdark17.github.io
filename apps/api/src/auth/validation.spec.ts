@@ -123,15 +123,93 @@ describe('isValidTransition', () => {
     expect(isValidTransition(oldSave, makeSave({ floor: 4 }))).toBe(false);
   });
 
-  it('rejeita o andar caindo sem voltar pra cidade', () => {
-    const oldSave = makeSave({ floor: 2, mapMode: 'dungeon' });
-    expect(isValidTransition(oldSave, makeSave({ floor: 1, mapMode: 'dungeon' }))).toBe(false);
+  it('rejeita o andar caindo pra um andar que o portão não oferece', () => {
+    const oldSave = makeSave({ floor: 5, mapMode: 'dungeon' });
+    expect(isValidTransition(oldSave, makeSave({ floor: 3, mapMode: 'dungeon' }))).toBe(false);
   });
 
   it('aceita o andar caindo pro 1 quando volta pra cidade', () => {
     const oldSave = makeSave({ floor: 5, mapMode: 'dungeon' });
     expect(isValidTransition(oldSave, makeSave({ floor: 1, mapMode: 'city' }))).toBe(true);
     expect(isValidTransition(oldSave, makeSave({ floor: 1, mapMode: 'town' }))).toBe(true);
+  });
+
+  describe('portão', () => {
+    const floresta = { dungeon: 'floresta', difficulty: 'normal' };
+    const totens = (andares: number[]) => ({ cleared: [], totems: { 'floresta:normal': andares } });
+
+    it('aceita entrar pelo andar 1 depois de sair de um andar mais fundo (a saída guarda o andar)', () => {
+      const oldSave = makeSave({ floor: 3, mapMode: 'city', masmorra: floresta });
+      expect(isValidTransition(oldSave, makeSave({ floor: 1, mapMode: 'dungeon', masmorra: floresta }))).toBe(true);
+    });
+
+    it('aceita o andar 1 de outra masmorra', () => {
+      const oldSave = makeSave({ floor: 100, mapMode: 'city', masmorra: floresta });
+      expect(isValidTransition(oldSave, makeSave({ floor: 1, mapMode: 'dungeon', masmorra: { dungeon: 'caverna', difficulty: 'normal' } }))).toBe(
+        true,
+      );
+    });
+
+    it('aceita sair e entrar de novo sem a cidade ter sido gravada no meio', () => {
+      const oldSave = makeSave({ floor: 4, mapMode: 'dungeon', masmorra: floresta });
+      expect(isValidTransition(oldSave, makeSave({ floor: 1, mapMode: 'dungeon', masmorra: floresta }))).toBe(true);
+    });
+
+    it('aceita entrar por um totem que o save anterior já tinha, mais raso ou mais fundo que o andar dele', () => {
+      const progresso = totens([20, 40]);
+      expect(isValidTransition(makeSave({ floor: 47, mapMode: 'city', progresso }), makeSave({ floor: 20, masmorra: floresta, progresso }))).toBe(
+        true,
+      );
+      expect(isValidTransition(makeSave({ floor: 1, mapMode: 'city', progresso }), makeSave({ floor: 40, masmorra: floresta, progresso }))).toBe(
+        true,
+      );
+    });
+
+    it('rejeita um totem que o save anterior não tinha', () => {
+      const oldSave = makeSave({ floor: 1, mapMode: 'city', progresso: totens([]) });
+      expect(isValidTransition(oldSave, makeSave({ floor: 20, masmorra: floresta }))).toBe(false);
+    });
+
+    it('o totem vale só pra masmorra e a dificuldade dele', () => {
+      const oldSave = makeSave({ floor: 30, mapMode: 'city', progresso: totens([20]) });
+      expect(isValidTransition(oldSave, makeSave({ floor: 20, masmorra: { dungeon: 'floresta', difficulty: 'dificil' } }))).toBe(false);
+    });
+
+    it('save de antes das masmorras (sem progresso): os totens já passados contam, como a engine lê', () => {
+      const oldSave = makeSave({ floor: 37, mapMode: 'city' });
+      expect(isValidTransition(oldSave, makeSave({ floor: 20, masmorra: floresta }))).toBe(true);
+      expect(isValidTransition(oldSave, makeSave({ floor: 40, masmorra: floresta }))).toBe(false);
+    });
+
+    it('não vale fora da masmorra: cidade num andar mais raso continua recusada', () => {
+      const oldSave = makeSave({ floor: 5, mapMode: 'dungeon' });
+      expect(isValidTransition(oldSave, makeSave({ floor: 3, mapMode: 'city' }))).toBe(false);
+    });
+  });
+
+  describe('totens novos no save', () => {
+    const totens = (andares: number[]) => ({ cleared: [], totems: { 'floresta:normal': andares } });
+
+    it('aceita o totem do andar onde o herói está', () => {
+      const oldSave = makeSave({ floor: 19, progresso: totens([]) });
+      expect(isValidTransition(oldSave, makeSave({ floor: 20, progresso: totens([20]) }))).toBe(true);
+    });
+
+    it('aceita o totem do andar de onde o herói acabou de descer, ou de onde voltou pra cidade', () => {
+      const oldSave = makeSave({ floor: 20, progresso: totens([]) });
+      expect(isValidTransition(oldSave, makeSave({ floor: 21, progresso: totens([20]) }))).toBe(true);
+      expect(isValidTransition(oldSave, makeSave({ floor: 20, mapMode: 'city', progresso: totens([20]) }))).toBe(true);
+    });
+
+    it('rejeita totem forjado longe do herói (abriria o portão pro andar 80)', () => {
+      const oldSave = makeSave({ floor: 5, progresso: totens([]) });
+      expect(isValidTransition(oldSave, makeSave({ floor: 5, progresso: totens([20, 40, 60, 80]) }))).toBe(false);
+    });
+
+    it('save sem progresso não é conferido (a engine deduz os totens do andar)', () => {
+      const oldSave = makeSave({ floor: 44, progresso: totens([20]) });
+      expect(isValidTransition(oldSave, makeSave({ floor: 45 }))).toBe(true);
+    });
   });
 
   it('aceita o inventário pequeno crescendo até o teto mínimo de 250, mesmo passando de +30', () => {
