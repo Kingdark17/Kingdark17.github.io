@@ -752,9 +752,14 @@
     display: none;
 }
 
-.rolagem-fina .unity-scroller--vertical > .unity-scroller__slider {
-    margin-top: 0;
-    margin-bottom: 0;
+/* O slider padrão tem 24 px e transbordava do scroller de 6 px: na narração caía fora da tela, mas entre
+   as colunas da mochila virava uma faixa dourada. */
+.rolagem-fina .unity-scroller--vertical > .unity-scroller__slider,
+.rolagem-fina .unity-scroller--vertical .unity-base-slider__input,
+.rolagem-fina .unity-scroller--vertical .unity-base-slider__drag-container {
+    margin: 0;
+    width: 6px;
+    min-width: 6px;
 }
 
 .rolagem-fina .unity-scroller--vertical .unity-base-slider__tracker {

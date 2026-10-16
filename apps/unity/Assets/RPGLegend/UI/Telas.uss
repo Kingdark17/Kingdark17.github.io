@@ -1,0 +1,878 @@
+/* As telas de sala do app (etapa 4.2): o molde das do site (apps/web/app/jogo/jogo.module.css e
+   cartao-de-guilda.module.css). Os tokens (--panel, --gold…) e o botão de pedra moram no Tema.uss. */
+
+.escondida {
+    display: none;
+}
+
+/* ---------- a janela: cabeçalho, resposta e as colunas da janela larga ---------- */
+
+.cabecalho-da-janela {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+.cabecalho-da-janela .titulo-da-janela {
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.ouro-da-janela {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 22px;
+    color: var(--gold-bright);
+    margin-left: 16px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+/* A última resposta da tela, como a linha do log do site. */
+.linha-da-janela {
+    flex-shrink: 0;
+    font-size: 16px;
+    color: var(--parchment-dim);
+    white-space: normal;
+    margin-top: -4px;
+    margin-bottom: 8px;
+}
+
+/* Quase a tela toda, com colunas que rolam cada uma por dentro. */
+.janela.janela-larga {
+    width: 96%;
+    height: 94%;
+    max-height: 94%;
+    padding: 16px 18px 12px 18px;
+}
+
+/* Base zero: com a base no conteúdo, a coluna mais comprida empurrava os botões pra fora da janela. */
+.colunas-da-janela {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    min-height: 0;
+    margin-bottom: 10px;
+}
+
+.botoes-da-janela {
+    flex-shrink: 0;
+}
+
+.coluna-da-janela {
+    flex-shrink: 1;
+    min-width: 0;
+    margin-right: 14px;
+}
+
+.coluna-do-cartao {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 300px;
+}
+
+.coluna-larga {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.coluna-da-ficha {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 360px;
+    margin-right: 0;
+}
+
+.titulo-da-secao {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-SemiBold.ttf");
+    -unity-font-definition: initial;
+    font-size: 17px;
+    color: var(--gold-bright);
+    margin-top: 6px;
+    margin-bottom: 8px;
+}
+
+.vazio {
+    font-size: 15px;
+    color: var(--parchment-dim);
+    white-space: normal;
+    margin-bottom: 8px;
+}
+
+.unity-button.botao-principal {
+    color: var(--gold-bright);
+}
+
+.unity-button.botao-discreto {
+    font-size: 15px;
+    margin-right: 10px;
+    margin-bottom: 6px;
+    align-self: center;
+}
+
+/* ---------- cartas (item, classe, poder): a carta só seleciona ---------- */
+
+.grade-de-cartas {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+/* 156 de largura: três por linha na coluna do celular deitado, duas na do PC 16:9. */
+.carta {
+    width: 156px;
+    align-items: center;
+    padding: 10px 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-left-width: 3px;
+    border-color: var(--line);
+    border-left-color: #b7b7b7;
+    border-radius: 4px;
+}
+
+.clicavel:hover {
+    border-top-color: var(--gold);
+    border-right-color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+
+.clicavel.selecionado {
+    border-top-color: var(--gold-bright);
+    border-right-color: var(--gold-bright);
+    border-bottom-color: var(--gold-bright);
+    background-color: #2c3346;
+}
+
+.sprite-de-item {
+    -unity-background-scale-mode: scale-to-fit;
+    flex-shrink: 0;
+}
+
+.nome-da-carta {
+    font-size: 15px;
+    white-space: normal;
+    -unity-text-align: upper-center;
+    margin-top: 4px;
+}
+
+.meta-da-carta {
+    font-size: 13px;
+    color: var(--parchment-dim);
+    white-space: normal;
+    -unity-text-align: upper-center;
+}
+
+.atributos-da-carta {
+    font-size: 13px;
+    white-space: normal;
+    -unity-text-align: upper-center;
+}
+
+.rodape-da-carta {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 17px;
+    color: var(--gold-bright);
+    margin-top: 2px;
+}
+
+.icone-da-carta {
+    font-size: 30px;
+}
+
+/* ---------- a ficha da peça: o que ela é, o que dá e o que muda em você ---------- */
+
+.ficha-da-peca {
+    padding: 12px;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.ficha-vazia {
+    font-size: 15px;
+    color: var(--parchment-dim);
+    white-space: normal;
+}
+
+.cabecalho-da-ficha {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.titulos-da-ficha {
+    flex-shrink: 1;
+    min-width: 0;
+    margin-left: 10px;
+}
+
+.nome-da-ficha {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-SemiBold.ttf");
+    -unity-font-definition: initial;
+    font-size: 19px;
+    white-space: normal;
+}
+
+.meta-da-ficha {
+    font-size: 14px;
+    color: var(--parchment-dim);
+    white-space: normal;
+}
+
+.descricao-da-ficha {
+    font-size: 15px;
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.atributos-da-ficha {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.atributo-bom,
+.atributo-ruim {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 17px;
+    padding: 2px 7px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* A perda tem cor de perda: a engine já marca o sinal (statTags().positive). */
+.atributo-ruim {
+    color: #e28a8a;
+    border-color: rgba(226, 138, 138, 0.35);
+}
+
+.proc-da-ficha {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 17px;
+    color: var(--ember);
+    margin-bottom: 4px;
+}
+
+.impacto {
+    border-top-width: 1px;
+    border-color: var(--line);
+    padding-top: 6px;
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.titulo-do-impacto {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-SemiBold.ttf");
+    -unity-font-definition: initial;
+    font-size: 15px;
+    color: var(--gold-bright);
+    margin-bottom: 4px;
+}
+
+.impacto-nulo {
+    font-size: 14px;
+    color: var(--parchment-dim);
+}
+
+.linha-do-impacto {
+    flex-direction: row;
+    align-items: center;
+}
+
+.rotulo-do-impacto {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 15px;
+}
+
+.numeros-do-impacto {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.melhor,
+.pior {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 18px;
+    min-width: 44px;
+    -unity-text-align: middle-right;
+}
+
+.melhor {
+    color: #7fcdb8;
+}
+
+.pior {
+    color: #e28a8a;
+}
+
+.acoes-da-ficha {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.aviso-da-ficha {
+    width: 100%;
+    font-size: 14px;
+    color: var(--ember);
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+/* ---------- conversa, evento, totem, missões, mestre ---------- */
+
+.retrato-da-tela {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.icone-da-tela {
+    font-size: 52px;
+    margin-right: 14px;
+}
+
+.textos-do-retrato {
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.nome-da-tela {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/Alkhemikal.ttf");
+    -unity-font-definition: initial;
+    font-size: 26px;
+    color: var(--gold-bright);
+    white-space: normal;
+}
+
+.detalhe-da-tela {
+    font-size: 15px;
+    color: var(--parchment-dim);
+}
+
+.fala-da-tela {
+    font-size: 17px;
+    white-space: normal;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+}
+
+.resposta-da-tela {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 19px;
+    color: var(--parchment-dim);
+    white-space: normal;
+    margin-bottom: 8px;
+}
+
+.missao {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+}
+
+.titulo-da-missao {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-SemiBold.ttf");
+    -unity-font-definition: initial;
+    font-size: 17px;
+    color: var(--gold-bright);
+    white-space: normal;
+}
+
+.descricao-da-missao {
+    font-size: 15px;
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.trilho-da-tela {
+    margin-bottom: 4px;
+}
+
+.meta-da-missao {
+    font-size: 14px;
+    color: var(--parchment-dim);
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.missao .unity-button.botao {
+    align-self: flex-start;
+}
+
+/* ---------- guia ---------- */
+
+.passo-do-guia {
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 8px;
+    margin-bottom: 4px;
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+}
+
+.passo-feito {
+    background-color: rgba(127, 205, 184, 0.08);
+}
+
+.icone-do-passo {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.textos-do-passo {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.nome-do-passo {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-SemiBold.ttf");
+    -unity-font-definition: initial;
+    font-size: 16px;
+    white-space: normal;
+}
+
+.dica-do-passo {
+    font-size: 14px;
+    color: var(--parchment-dim);
+    white-space: normal;
+}
+
+.marca-do-passo {
+    font-size: 20px;
+    margin-left: 8px;
+    color: var(--parchment-dim);
+}
+
+.passo-feito .marca-do-passo {
+    color: #7fcdb8;
+}
+
+.carta-do-guia {
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+}
+
+/* ---------- guilda ---------- */
+
+.icone-da-classe {
+    font-size: 44px;
+}
+
+.linha-da-guilda {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 6px;
+}
+
+.rotulo-da-guilda {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 16px;
+    color: var(--parchment-dim);
+    width: 84px;
+    flex-shrink: 0;
+}
+
+.arma-da-guilda {
+    flex-direction: row;
+    align-items: center;
+}
+
+.textos-da-guilda {
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.texto-da-guilda {
+    font-size: 15px;
+    white-space: normal;
+    margin-left: 4px;
+    flex-shrink: 1;
+}
+
+.descricao-do-poder {
+    font-size: 14px;
+    color: var(--parchment-dim);
+    white-space: normal;
+    margin-left: 4px;
+}
+
+/* ---------- mochila: o boneco com os espaços em volta ---------- */
+
+.equipamento {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.espacos-do-equipamento {
+    flex-shrink: 0;
+}
+
+/* 96 + o balão de 200: o bloco cabe na coluna do PC 16:9 (≈430 de largura). */
+.espaco {
+    width: 96px;
+    align-items: center;
+    padding: 4px 4px 5px 4px;
+    margin: 3px;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-left-width: 3px;
+    border-color: var(--line);
+    border-radius: 4px;
+}
+
+.espaco-vazio {
+    opacity: 0.55;
+}
+
+/* Sem a folga padrão do Label: os quatro espaços da esquerda medem a altura do boneco inteiro. */
+.espaco .unity-label,
+.carta .unity-label {
+    margin: 0;
+    padding: 0;
+}
+
+.rotulo-do-espaco {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 15px;
+    color: var(--parchment-dim);
+}
+
+.moldura-do-sprite {
+    width: 36px;
+    height: 36px;
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 3px;
+}
+
+.nome-do-espaco {
+    font-size: 12px;
+    white-space: normal;
+    -unity-text-align: upper-center;
+}
+
+.balao-do-boneco {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    margin: 0 6px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 100px;
+}
+
+.boneco {
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.pilha-do-boneco,
+.camada-do-boneco {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.camada-do-boneco {
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.reserva-do-boneco {
+    font-size: 64px;
+}
+
+.abas-de-texto {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+/* Texto, e não pedra: na coluna estreita os botões de pedra saíam um por linha (tela-mochila.tsx). */
+.unity-button.aba-de-texto {
+    margin: 0 12px 4px 0;
+    padding: 2px 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-radius: 0;
+    border-color: rgba(0, 0, 0, 0);
+    font-size: 16px;
+    color: var(--parchment-dim);
+}
+
+.unity-button.aba-de-texto:hover {
+    color: var(--parchment);
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-button.aba-escolhida {
+    color: var(--gold-bright);
+    border-color: var(--gold-bright);
+}
+
+/* ---------- loja ---------- */
+
+.resultado-da-pechincha {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 20px;
+    color: var(--gold-bright);
+    margin-right: 12px;
+    align-self: center;
+}
+
+.painel-da-forja {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+}
+
+/* ---------- o cartão de guilda: tinta sobre o pergaminho ---------- */
+
+.unity-button.botao-ficha {
+    margin-left: auto;
+    align-self: center;
+    font-size: 15px;
+}
+
+/* O pergaminho é moldura de 9 fatias, como no site: a borda de arte e o miolo repetido, sem esticar
+   pixel. A url aponta a textura (fileID 2800000), e não o sprite que o importador também cria: pelo
+   sprite, a Unity 6.6 fatiou errado (o miolo saiu vermelho e cada canto ocupou um quarto do cartão). */
+.cartao-de-guilda {
+    padding: 12px 14px 14px 14px;
+    background-image: url("project://database/Assets/RPGLegend/UI/Imagens/cartao-de-guilda.png?fileID=2800000&guid=7a3ba492c87dc0344963c2e67f8e70f8&type=3#cartao-de-guilda");
+    -unity-slice-left: 8;
+    -unity-slice-right: 8;
+    -unity-slice-top: 8;
+    -unity-slice-bottom: 8;
+    -unity-slice-scale: 1px;
+    -unity-slice-type: tiled;
+    background-color: #d6c19c;
+    color: #3b2316;
+    margin-bottom: 8px;
+}
+
+.cartao-sozinho {
+    width: 380px;
+    align-self: center;
+}
+
+.retrato-do-cartao {
+    align-self: center;
+    width: 140px;
+    height: 140px;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px;
+    border-color: rgba(110, 81, 55, 0.45);
+    border-radius: 70px;
+    background-color: rgba(110, 81, 55, 0.22);
+    margin-bottom: 6px;
+}
+
+.topo-do-cartao {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.nome-no-cartao {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/Alkhemikal.ttf");
+    -unity-font-definition: initial;
+    font-size: 24px;
+    color: #ad3636;
+    flex-shrink: 1;
+    white-space: normal;
+}
+
+.rotulo-do-cartao {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    color: #6e5137;
+}
+
+.linha-do-cartao {
+    font-size: 15px;
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.medidores-do-cartao {
+    margin-bottom: 6px;
+}
+
+.medidor-do-cartao {
+    margin-bottom: 4px;
+}
+
+.cima-do-medidor {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.numero-do-cartao {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 16px;
+}
+
+.trilho-do-cartao {
+    height: 8px;
+    margin-top: 1px;
+    border-width: 1px;
+    border-color: rgba(59, 35, 22, 0.45);
+    border-radius: 4px;
+    background-color: rgba(59, 35, 22, 0.2);
+    overflow: hidden;
+}
+
+.enchimento-do-cartao {
+    height: 100%;
+}
+
+.vida-no-cartao {
+    background-color: #a8322f;
+}
+
+.mana-no-cartao {
+    background-color: #3f6fc4;
+}
+
+.xp-no-cartao {
+    background-color: #b8891c;
+}
+
+/* O roxo do selo da Guilda: a maestria é da classe, que a Guilda dá. */
+.maestria-no-cartao {
+    background-color: #7a3a9e;
+}
+
+.nota-do-medidor {
+    font-size: 13px;
+    color: #5a3f2a;
+    white-space: normal;
+}
+
+.pontos-do-cartao {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/Alkhemikal.ttf");
+    -unity-font-definition: initial;
+    font-size: 17px;
+    color: #ad3636;
+    margin-bottom: 4px;
+}
+
+/* Três por linha, cada número colado no rótulo dele. */
+.atributos-do-cartao {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px 0;
+    margin-bottom: 6px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-color: rgba(110, 81, 55, 0.35);
+}
+
+.atributo-do-cartao {
+    width: 33%;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.valor-do-cartao {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+/* O "+" do nível no vermelho da moldura: o dourado do jogo some no papel. */
+.unity-button.mais-do-cartao {
+    width: 20px;
+    height: 20px;
+    margin: 0 0 0 4px;
+    padding: 0;
+    border-width: 0;
+    border-radius: 2px;
+    background-color: #ad3636;
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 18px;
+    color: #f6ead0;
+    -unity-text-align: middle-center;
+}
+
+.unity-button.mais-do-cartao:hover {
+    background-color: #c24848;
+}
+
+.secao-do-cartao {
+    margin-bottom: 4px;
+    padding-right: 30px;
+}
+
+.texto-do-cartao {
+    font-size: 15px;
+    white-space: normal;
+}
+
+.efeito-do-cartao {
+    font-size: 14px;
+    color: #5a3f2a;
+    white-space: normal;
+}
+
+.selo-do-cartao {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 28px;
+    height: 28px;
+    background-image: url("project://database/Assets/RPGLegend/UI/Imagens/selo-da-guilda.png");
+}

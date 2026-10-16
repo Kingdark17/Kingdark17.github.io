@@ -187,11 +187,19 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   teclado ou joystick). Grava na nuvem como o site (2,5 s, teto de 10 s,
   `baseSignature`). **Até a luta em tempo real (etapa 5), a porta de sala de
   monstro fica trancada com aviso** (decisão do usuário). As telas de sala
-  ainda são janelas provisórias, menos o portão. O texto da UI usa o emoji do
-  sistema sozinho (Unity 6.6); a cena da sala desenha emoji com
-  `EmojiDoSistema` (fonte do sistema → sprite). Atalho de teste do Editor:
-  RPG Legend > Jogar direto > Slot N pula porta e menu (precisa de sessão
-  salva; combine com o Servidor do jogo local).
+  são as do site, nos mesmos moldes (a carta seleciona, a ficha age):
+  conversa, evento, totem, quadro de missões, mestre e guilda em
+  `TelaDeJogo.Telas.cs`; mochila (cartão de guilda com o "+" dos pontos,
+  boneco com os espaços, ficha com "Se você equipar") e loja/ferreiro em
+  arquivos próprios; e mais o guia e a ficha do herói. A arte de item e a do
+  boneco são **cópia** de `apps/web/public/img` (mesmos nomes, em
+  `Art/Jogo/Resources/Itens` e `Paperdoll`): arte nova vai nos dois lugares.
+  O boneco é port de `lib/paperdoll/camadas.ts` (`Paperdoll.cs`), parado. O
+  texto da UI usa o emoji do sistema sozinho (Unity 6.6); a cena da sala
+  desenha emoji com `EmojiDoSistema` (fonte do sistema → sprite). Atalho de
+  teste do Editor: RPG Legend > Jogar direto > Slot N pula porta e menu
+  (precisa de sessão salva; combine com o Servidor do jogo local). Os testes
+  do app ficam em `Tests/EditMode/App` e só rodam no Test Runner da Unity.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no

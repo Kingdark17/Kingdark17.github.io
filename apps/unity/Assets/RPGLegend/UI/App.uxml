@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
     <Style src="project://database/Assets/RPGLegend/UI/Tema.uss" />
+    <Style src="project://database/Assets/RPGLegend/UI/Telas.uss" />
     <ui:VisualElement name="raiz" class="raiz" picking-mode="Ignore">
 
         <!-- A entrada fica por cima da cena da porta: o cartão à direita e o "toque para entrar" embaixo. -->
@@ -63,6 +64,8 @@
                         <ui:VisualElement class="linha-do-nome">
                             <ui:Label name="nome-do-heroi" class="nome-do-heroi" />
                             <ui:Label name="nivel-do-heroi" class="nivel-do-heroi" />
+                            <!-- O cartão de guilda inteiro, como o botão "Ficha" da faixa do site no celular. -->
+                            <ui:Button name="botao-ficha" text="Ficha" class="link botao-ficha" />
                         </ui:VisualElement>
                         <ui:VisualElement class="barras">
                             <ui:VisualElement class="barra">
@@ -85,7 +88,7 @@
                 </ui:VisualElement>
                 <ui:Label name="lugar" class="lugar" />
                 <!-- O meio rola como um bloco quando não cabe (a tela 16:9 do PC); o lugar e os botões ficam fixos. -->
-                <ui:ScrollView name="meio-do-lado" class="meio-do-lado rolagem-fina">
+                <ui:ScrollView name="meio-do-lado" class="meio-do-lado rolagem-fina" horizontal-scroller-visibility="Hidden">
                     <ui:VisualElement name="narracao" class="narracao" />
                     <ui:VisualElement name="caixa" class="painel caixa escondida">
                         <ui:Label name="icone-da-caixa" class="icone-da-caixa" />
@@ -109,6 +112,7 @@
                 <ui:VisualElement class="acoes-do-jogo">
                     <ui:Button name="botao-mochila" text="MOCHILA" class="botao botao-pequeno" />
                     <ui:Button name="botao-diario" text="DIÁRIO" class="botao botao-pequeno" />
+                    <ui:Button name="botao-guia" text="GUIA" class="botao botao-pequeno" />
                     <ui:Button name="botao-sair-do-jogo" text="SAIR" class="botao botao-pequeno" />
                 </ui:VisualElement>
                 <ui:Label name="estado-do-salvamento" class="estado-do-salvamento" />
@@ -117,8 +121,15 @@
             <ui:VisualElement name="sobre-o-jogo" class="sobre-o-jogo oculto">
                 <ui:VisualElement name="janela" class="painel janela">
                     <ui:VisualElement class="moldura" picking-mode="Ignore" />
-                    <ui:Label name="titulo-da-janela" class="titulo-da-janela" />
-                    <ui:ScrollView name="conteudo-da-janela" class="conteudo-da-janela rolagem-fina" />
+                    <ui:VisualElement class="cabecalho-da-janela">
+                        <ui:Label name="titulo-da-janela" class="titulo-da-janela" />
+                        <ui:Label name="ouro-da-janela" class="ouro-da-janela" />
+                    </ui:VisualElement>
+                    <!-- A última resposta da tela ("Você compra…", "Você equipa…"), como a linha do log do site. -->
+                    <ui:Label name="linha-da-janela" class="linha-da-janela" />
+                    <ui:ScrollView name="conteudo-da-janela" class="conteudo-da-janela rolagem-fina" horizontal-scroller-visibility="Hidden" />
+                    <!-- Mochila, loja e guilda: colunas que rolam cada uma por dentro, como no site. -->
+                    <ui:VisualElement name="colunas-da-janela" class="colunas-da-janela" />
                     <ui:VisualElement name="botoes-da-janela" class="botoes-da-janela" />
                 </ui:VisualElement>
             </ui:VisualElement>

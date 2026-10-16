@@ -14,11 +14,11 @@ namespace RPGLegend.Game.Jogo
     /// telas, como a tela-jogo.tsx do site. Carrega o save do slot, anda pelo teclado (WASD e setas) ou pelo joystick
     /// que aparece onde o dedo encosta na sala, e grava na nuvem 2,5 s depois da última mudança.
     ///
-    /// As telas de sala (loja, conversa, mochila…) chegam na parte seguinte da etapa 4: até lá, abrem uma janela que
-    /// diz isso e fecham devolvendo o estado da sala. O portão já é de verdade, porque é o único caminho até a
-    /// masmorra.
+    /// As telas de sala abrem numa janela por cima da sala: as pequenas (conversa, evento, totem, quadro de
+    /// missões, mestre) aqui e em TelaDeJogo.Telas.cs; a mochila, a loja e a guilda em janela larga, com colunas que
+    /// rolam por dentro (TelaDeJogo.Mochila.cs, TelaDeJogo.Loja.cs).
     /// </summary>
-    public sealed class TelaDeJogo : MonoBehaviour
+    public sealed partial class TelaDeJogo : MonoBehaviour
     {
         private const float RaioDoJoystick = 56f;
         private const float ZonaMorta = 0.15f;
@@ -41,7 +41,9 @@ namespace RPGLegend.Game.Jogo
         public event Action AoSair;
 
         private VisualElement _tela, _palco, _lado, _baseDoJoystick, _alavanca, _minimapa, _caixa, _escolhas, _recado, _sobre, _botoesDaJanela, _vida, _mana;
+        private VisualElement _janelaEl, _colunasDaJanela;
         private Label _dica, _nome, _nivel, _numeroDaVida, _numeroDaMana, _lugar, _iconeDaCaixa, _tituloDaCaixa, _textoDaCaixa, _tituloDoRecado, _textoDoRecado, _salvamento, _tituloDaJanela, _carregando;
+        private Label _ouroDaJanela, _linhaDaJanela;
         private VisualElement _narracao;
         private ScrollView _meio, _conteudoDaJanela;
         /// <summary>O aviso e o recado já mostrados: quando chega um novo, o meio da coluna rola até ele.</summary>
@@ -52,9 +54,12 @@ namespace RPGLegend.Game.Jogo
         private SalaEmCena _sala;
         private string _token;
 
-        /// <summary>O que a janela por cima mostra: "sala" (uma tela de sala), "diario", "saida" ou null.</summary>
+        /// <summary>O que a janela por cima mostra: "sala" (uma tela de sala), "diario", "guia", "ficha", "saida" ou null.</summary>
         private string _janela;
         private bool _saindo;
+
+        /// <summary>O nível que a tela mostrou por último: subir toca o som do site (painel-heroi.tsx).</summary>
+        private double _nivelMostrado = -1;
 
         /// <summary>Onde o herói aparece nesta sala (a chegada pela porta), como o naSala do site.</summary>
         private string _salaDaChegada, _mapaDaChegada;
@@ -77,6 +82,8 @@ namespace RPGLegend.Game.Jogo
             _partida = null;
             _janela = null;
             _saindo = false;
+            _nivelMostrado = -1;
+            EsquecerEscolhas();
             _salaDaChegada = null;
             _mapaDaChegada = null;
             _chegada = null;
@@ -193,8 +200,12 @@ namespace RPGLegend.Game.Jogo
             _sairDoJogo = raiz.Q<Button>("botao-sair-do-jogo");
             _salvamento = raiz.Q<Label>("estado-do-salvamento");
             _sobre = raiz.Q("sobre-o-jogo");
+            _janelaEl = raiz.Q("janela");
             _tituloDaJanela = raiz.Q<Label>("titulo-da-janela");
+            _ouroDaJanela = raiz.Q<Label>("ouro-da-janela");
+            _linhaDaJanela = raiz.Q<Label>("linha-da-janela");
             _conteudoDaJanela = raiz.Q<ScrollView>("conteudo-da-janela");
+            _colunasDaJanela = raiz.Q("colunas-da-janela");
             _botoesDaJanela = raiz.Q("botoes-da-janela");
             _carregando = raiz.Q<Label>("carregando-jogo");
 
@@ -203,6 +214,8 @@ namespace RPGLegend.Game.Jogo
             raiz.Q<Button>("fechar-recado").clicked += () => _partida?.FecharRecado();
             _mochila.clicked += () => _partida?.AbrirMochila();
             _diario.clicked += AbrirDiario;
+            raiz.Q<Button>("botao-guia").clicked += AbrirGuia;
+            raiz.Q<Button>("botao-ficha").clicked += AbrirFicha;
             _sairDoJogo.clicked += PerguntarSaida;
 
             _tela.RegisterCallback<GeometryChangedEvent>(_ => AjustarPalco());
@@ -247,7 +260,8 @@ namespace RPGLegend.Game.Jogo
             var teclado = Keyboard.current;
             if (teclado != null && teclado.escapeKey.wasPressedThisFrame)
             {
-                if (_janela == "diario" || _janela == "saida") FecharJanela();
+                if (JanelaSemTela) FecharJanela();
+                else if (_janela == "sala") _sairDaTela?.Invoke();
                 else if (_janela == null) PerguntarSaida();
             }
 
@@ -333,6 +347,9 @@ namespace RPGLegend.Game.Jogo
 
         private void DesenharHeroi(Hero hero)
         {
+            // Como o painel do site: o nível novo é percebido aqui, venha de onde vier (missão, combate, mochila).
+            if (_nivelMostrado >= 0 && hero.Level > _nivelMostrado) Sons.Tocar("levelup");
+            _nivelMostrado = hero.Level;
             _nome.text = hero.Name ?? "";
             _nivel.text = "nv " + Js.NumberToString(hero.Level);
             Encher(_vida, _numeroDaVida, hero.Hp, hero.MaxHp);
@@ -545,76 +562,49 @@ namespace RPGLegend.Game.Jogo
 
         // ---------- janelas por cima ----------
 
+        /// <summary>O que fecha a tela de sala aberta, como o botão dela (o Esc e o "voltar" do Android).</summary>
+        private Action _sairDaTela;
+
         private void DesenharTela()
         {
             var tela = _partida.Tela;
             if (tela == null)
             {
+                _sairDaTela = null;
                 if (_janela == "sala")
                 {
                     _janela = null;
                     _sobre.AddToClassList("oculto");
+                    EsquecerEscolhas();
                 }
                 return;
             }
+            if (_janela != null && _janela != "sala") FecharJanela();
             _janela = "sala";
-            if (tela.Tipo == "portao") TelaDoPortao(tela.Portao);
-            else TelaEmBreve(tela);
-        }
-
-        /// <summary>As telas que ainda não existem no app: dizem isso e fecham devolvendo o estado da sala.</summary>
-        private void TelaEmBreve(TelaAberta tela)
-        {
-            string nome;
-            EstadoDoJogo estado;
-            Aviso aviso = null;
+            if (tela.Tipo != _tipoDaTela) EsquecerEscolhas();
+            _tipoDaTela = tela.Tipo;
             switch (tela.Tipo)
             {
-                case "loja":
-                    nome = tela.Loja.Kind == ShopKinds.Blacksmith ? "Ferreiro" : "Loja";
-                    estado = tela.Loja.Estado;
-                    break;
-                case "dialogo":
-                    nome = string.IsNullOrEmpty(tela.Dialogo.Npc?.Name) ? "Conversa" : tela.Dialogo.Npc.Name;
-                    estado = tela.Dialogo.Estado;
-                    break;
-                case "missoes":
-                    nome = "Quadro de Missões";
-                    estado = tela.Quadro.Estado;
-                    break;
-                case "evento":
-                    nome = string.IsNullOrEmpty(tela.Evento.Template?.Title) ? "Evento" : tela.Evento.Template.Title;
-                    estado = tela.Evento.Estado;
-                    break;
-                case "mochila":
-                    nome = "Mochila";
-                    estado = tela.Mochila.Estado;
-                    break;
-                case "guilda":
-                    nome = "Guilda dos Aventureiros";
-                    estado = tela.Guilda.Estado;
-                    break;
-                case "professor":
-                    nome = "Mestre de Classe";
-                    estado = tela.Professor.Estado;
-                    break;
-                case "totem":
-                    nome = "Totem Antigo";
-                    estado = tela.Totem.Estado;
-                    aviso = new Aviso("🗿", "Totem Antigo", tela.Totem.Texto);
-                    break;
+                case "portao": TelaDoPortao(tela.Portao); break;
+                case "dialogo": TelaDoDialogo(tela.Dialogo); break;
+                case "evento": TelaDoEvento(tela.Evento); break;
+                case "totem": TelaDoTotem(tela.Totem); break;
+                case "missoes": TelaDasMissoes(tela.Quadro); break;
+                case "professor": TelaDoProfessor(tela.Professor); break;
+                case "guilda": TelaDaGuilda(tela.Guilda); break;
+                case "mochila": TelaDaMochila(tela.Mochila); break;
+                case "loja": TelaDaLoja(tela.Loja); break;
                 default:
-                    nome = tela.Tipo;
-                    estado = _partida.Estado;
+                    // O painel ADM e o combate não abrem no app (a luta é da etapa 5; o ADM fica pra depois).
+                    _partida.TrocarTela(null);
                     break;
             }
-            Janela(nome, conteudo => conteudo.Add(Paragrafo("Esta tela chega na próxima parte da atualização do app.")),
-                ("FECHAR", () => _partida.Fechar(estado, aviso)));
         }
 
         /// <summary>O portão: a masmorra, a dificuldade e o andar de entrada (o 1 ou um totem já tocado), e entrar.</summary>
         private void TelaDoPortao(Portao portao)
         {
+            _sairDaTela = () => _partida.Fechar(portao.Estado);
             Janela("Portão da Masmorra", conteudo =>
             {
                 conteudo.Add(Subtitulo("Masmorra"));
@@ -682,22 +672,124 @@ namespace RPGLegend.Game.Jogo
                 ("SIM, SAIR", Sair), ("CONTINUAR JOGANDO", FecharJanela));
         }
 
+        /// <summary>A janela aberta não é tela de sala: o diário, o guia, a ficha ou a pergunta de saída.</summary>
+        private bool JanelaSemTela => _janela == "diario" || _janela == "guia" || _janela == "ficha" || _janela == "saida";
+
         private void FecharJanela()
         {
-            if (_saindo || (_janela != "diario" && _janela != "saida")) return;
+            if (_saindo || !JanelaSemTela) return;
             _janela = null;
             _sobre.AddToClassList("oculto");
             Redesenhar();
         }
 
-        private void Janela(string titulo, Action<ScrollView> conteudo, params (string texto, Action acao)[] botoes)
+        // ---------- a janela por cima da sala ----------
+
+        /// <summary>A tela desenhada por último: redesenhar a mesma tela devolve a rolagem de cada coluna.</summary>
+        private string _chaveDaJanela;
+        private readonly Dictionary<string, Vector2> _rolagens = new Dictionary<string, Vector2>();
+
+        /// <summary>A janela de sempre: o título, o ouro (quando a tela mostra), a resposta, o conteúdo que rola e os botões.</summary>
+        private void Janela(string titulo, Action<ScrollView> conteudo, params (string texto, Action acao)[] botoes) =>
+            MontarJanela("janela:" + titulo, titulo, null, null, conteudo, botoes);
+
+        private void Janela(string titulo, string ouro, string linha, Action<ScrollView> conteudo, params (string texto, Action acao)[] botoes) =>
+            MontarJanela("janela:" + titulo, titulo, ouro, linha, conteudo, botoes);
+
+        /// <summary>A conversa, o evento e o totem: o retrato já diz quem é, então a janela não repete o nome no título.</summary>
+        private void JanelaDeRetrato(string chave, Action<ScrollView> conteudo, params (string texto, Action acao)[] botoes) =>
+            MontarJanela("retrato:" + chave, null, null, null, conteudo, botoes);
+
+        private void MontarJanela(string chave, string titulo, string ouro, string linha, Action<ScrollView> conteudo, (string texto, Action acao)[] botoes)
         {
-            _sobre.RemoveFromClassList("oculto");
-            _tituloDaJanela.text = titulo;
+            GuardarRolagens(chave);
+            Cabecalho(titulo, ouro, linha, larga: false);
             _conteudoDaJanela.Clear();
             conteudo(_conteudoDaJanela);
+            Botoes(botoes);
+            DevolverRolagens();
+        }
+
+        /// <summary>
+        /// A janela larga da mochila, da loja e da guilda: quase a tela toda, com colunas que rolam cada uma por
+        /// dentro (as rolagens vêm de <see cref="Coluna"/>). O resto é igual à de sempre.
+        /// </summary>
+        private void JanelaLarga(string titulo, string ouro, string linha, Action<VisualElement> colunas, params (string texto, Action acao)[] botoes)
+        {
+            var chave = "larga:" + titulo;
+            GuardarRolagens(chave);
+            Cabecalho(titulo, ouro, linha, larga: true);
+            _colunasDaJanela.Clear();
+            colunas(_colunasDaJanela);
+            Botoes(botoes);
+            DevolverRolagens();
+        }
+
+        /// <summary>Uma coluna da janela larga; o nome guarda a rolagem dela entre um desenho e outro.</summary>
+        private static ScrollView Coluna(string nome, string classe)
+        {
+            // Sem rolagem de lado: o conteúdo que passar da largura quebra linha ou encolhe.
+            var coluna = new ScrollView(ScrollViewMode.Vertical) { name = nome, horizontalScrollerVisibility = ScrollerVisibility.Hidden };
+            coluna.AddToClassList("coluna-da-janela");
+            coluna.AddToClassList("rolagem-fina");
+            if (classe != null) coluna.AddToClassList(classe);
+            return coluna;
+        }
+
+        private void Cabecalho(string titulo, string ouro, string linha, bool larga)
+        {
+            _sobre.RemoveFromClassList("oculto");
+            _janelaEl.EnableInClassList("janela-larga", larga);
+            _conteudoDaJanela.EnableInClassList("escondida", larga);
+            _colunasDaJanela.EnableInClassList("escondida", !larga);
+            if (larga) _conteudoDaJanela.Clear();
+            else _colunasDaJanela.Clear();
+            _tituloDaJanela.text = titulo ?? "";
+            _tituloDaJanela.EnableInClassList("escondida", string.IsNullOrEmpty(titulo));
+            _ouroDaJanela.text = ouro ?? "";
+            _ouroDaJanela.EnableInClassList("escondida", string.IsNullOrEmpty(ouro));
+            _linhaDaJanela.text = TextoDoJogo.ParaTela(linha ?? "");
+            _linhaDaJanela.EnableInClassList("escondida", string.IsNullOrEmpty(linha));
+        }
+
+        private void Botoes((string texto, Action acao)[] botoes)
+        {
             _botoesDaJanela.Clear();
             foreach (var (texto, acao) in botoes) _botoesDaJanela.Add(Botao(texto, acao));
+        }
+
+        private void GuardarRolagens(string chave)
+        {
+            _rolagens.Clear();
+            if (chave == _chaveDaJanela)
+                _janelaEl.Query<ScrollView>().ForEach(rolagem =>
+                {
+                    if (!string.IsNullOrEmpty(rolagem.name)) _rolagens[rolagem.name] = rolagem.scrollOffset;
+                });
+            _chaveDaJanela = chave;
+        }
+
+        /// <summary>
+        /// O que a tela pediu pra mostrar depois de desenhar (a ficha da peça recém-escolhida, como o
+        /// useFichaAVista do site): a coluna dela rola até ele, por cima da rolagem devolvida.
+        /// </summary>
+        private VisualElement _mostrarDepois;
+
+        /// <summary>Depois do layout: antes dele o conteúdo novo ainda não tem altura, e a rolagem voltaria a zero.</summary>
+        private void DevolverRolagens()
+        {
+            var guardadas = new Dictionary<string, Vector2>(_rolagens);
+            var alvo = _mostrarDepois;
+            _mostrarDepois = null;
+            if (guardadas.Count == 0 && alvo == null) return;
+            _janelaEl.schedule.Execute(() =>
+            {
+                _janelaEl.Query<ScrollView>().ForEach(rolagem =>
+                {
+                    if (guardadas.TryGetValue(rolagem.name ?? "", out var onde)) rolagem.scrollOffset = onde;
+                });
+                alvo?.GetFirstAncestorOfType<ScrollView>()?.ScrollTo(alvo);
+            });
         }
 
         private static Button Botao(string texto, Action acao)

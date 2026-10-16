@@ -13,8 +13,8 @@
     <Compile Include="../Shim/*.cs" />
     <Compile Include="../../../Fixtures/**/*.cs" />
     <Compile Include="../../../Tests/EditMode/**/*.cs" />
-    <!-- A partida do app (Game/Jogo) depende da Unity: o teste dela roda só no Test Runner do Editor. -->
-    <Compile Remove="../../../Tests/EditMode/PartidaTests.cs" />
+    <!-- Os testes do app (Game/Jogo) dependem da Unity: rodam só no Test Runner do Editor. -->
+    <Compile Remove="../../../Tests/EditMode/App/**/*.cs" />
     <ProjectReference Include="../Engine/Engine.csproj" />
     <ProjectReference Include="../EngineJson/EngineJson.csproj" />
     <Reference Include="Newtonsoft.Json"><HintPath>../../lib/Newtonsoft.Json.dll</HintPath></Reference>
