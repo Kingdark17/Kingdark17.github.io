@@ -105,7 +105,7 @@ export function concluidos(tutorial: Tutorial): number {
  * há nada a fazer — etapa repetida ou tutorial desligado —, pra tela não
  * agendar uma gravação à toa.
  */
-export function marcar(estado: EstadoDoJogo, id: PassoDoTutorial, rng: Rng = defaultRng): ResultadoDoPasso {
+export function marcar(estado: EstadoDoJogo, id: PassoDoTutorial, rng: Rng = defaultRng, now?: () => number): ResultadoDoPasso {
   const tutorial = tutorialDe(estado);
   if (!tutorial.enabled || tutorial.completed[id]) return { estado, recado: null };
 
@@ -116,7 +116,7 @@ export function marcar(estado: EstadoDoJogo, id: PassoDoTutorial, rng: Rng = def
   const faltando = PASSOS.some((atual) => !marcado.completed[atual.id]);
   if (faltando || marcado.rewarded) return { estado: { ...estado, tutorial: marcado }, recado };
 
-  const premio: Item = randomItem({ category: 'consumivel', floor: 1, rng });
+  const premio: Item = randomItem({ category: 'consumivel', floor: 1, rng, now });
   return {
     estado: {
       ...estado,

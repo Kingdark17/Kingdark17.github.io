@@ -39,6 +39,17 @@ namespace RPGLegend.Engine
         public Item SecretItem;
         /// <summary>Parede rachada: o baú da sala secreta já foi aberto.</summary>
         public bool? SecretCollected;
+
+        /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
+        [JsExtra] public JsExtras Extra;
+
+        /// <summary>O <c>{ ...extra }</c> do TS: cópia rasa (o item continua o mesmo objeto).</summary>
+        public DungeonExtra Clone()
+        {
+            var c = (DungeonExtra)MemberwiseClone();
+            c.Extra = Extra?.Clone();
+            return c;
+        }
     }
 
     /// <summary>As tabelas de dungeon/extras.ts (fixtures/data/dungeon/extras.json).</summary>

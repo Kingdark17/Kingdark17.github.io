@@ -135,7 +135,7 @@ function temCidade(save: SaveCarregado): save is SaveCarregado & { cityMap: City
  * monstros — é o que `applySave()` (`ui.js`) faz quando o save traz `map` e
  * `pos`. Save antigo sem mapa cai no caminho de gerar um andar novo.
  */
-export function retomarSave(entrada: SaveCarregado, rng: Rng = defaultRng): EstadoDoJogo {
+export function retomarSave(entrada: SaveCarregado, rng: Rng = defaultRng, now?: () => number): EstadoDoJogo {
   // Único ponto em que o save vem de fora, e por isso o único lugar que
   // normaliza: `hydrateSavedHero` resolve aqui a identidade que os saves
   // antigos não têm (`classId`, `raceId`, `powerIds`, a partir dos nomes
@@ -156,7 +156,7 @@ export function retomarSave(entrada: SaveCarregado, rng: Rng = defaultRng): Esta
     return { ...comuns(save), mapMode: 'dungeon', map: mapa, pos: save.pos };
   }
 
-  return gerarAndar(comuns(save), save.floor, rng);
+  return gerarAndar(comuns(save), save.floor, rng, now);
 }
 
 /**
@@ -192,8 +192,9 @@ export function entrarNaMasmorra(
   rng: Rng = defaultRng,
   masmorra: DungeonRun = estado.masmorra,
   andar: number = PRIMEIRO_ANDAR,
+  now?: () => number,
 ): EstadoNaMasmorra {
-  return gerarAndar({ ...estado, masmorra }, andar, rng);
+  return gerarAndar({ ...estado, masmorra }, andar, rng, now);
 }
 
 /** A saída da masmorra devolve o jogador à cidade guardada, no ponto de partida dela. O andar atual não é zerado — só o portão faz isso. */
@@ -208,10 +209,10 @@ export type ResultadoDaEscada = { kind: 'selado' } | { kind: 'fundo' } | { kind:
  * selado — sem isso dava pra pular todo chefe do jogo andando em volta. No
  * andar 100 não há mais pra onde descer: a masmorra termina no chefe dele.
  */
-export function descerEscada(estado: EstadoNaMasmorra, rng: Rng = defaultRng): ResultadoDaEscada {
+export function descerEscada(estado: EstadoNaMasmorra, rng: Rng = defaultRng, now?: () => number): ResultadoDaEscada {
   if (isBossFloor(estado.floor) && temChefeVivo(estado)) return { kind: 'selado' };
   if (estado.floor >= DUNGEON_FLOORS) return { kind: 'fundo' };
-  return { kind: 'desceu', estado: avancarAndar(estado, rng) };
+  return { kind: 'desceu', estado: avancarAndar(estado, rng, now) };
 }
 
 /**
@@ -219,8 +220,8 @@ export function descerEscada(estado: EstadoNaMasmorra, rng: Rng = defaultRng): R
  * depois de derrotar um chefe (`advanceAfterBoss`): o caminho se abre e o
  * grupo desce sozinho.
  */
-export function avancarAndar(estado: EstadoNaMasmorra, rng: Rng = defaultRng): EstadoNaMasmorra {
-  return gerarAndar(estado, estado.floor + 1, rng);
+export function avancarAndar(estado: EstadoNaMasmorra, rng: Rng = defaultRng, now?: () => number): EstadoNaMasmorra {
+  return gerarAndar(estado, estado.floor + 1, rng, now);
 }
 
 export function temChefeVivo(estado: EstadoNaMasmorra): boolean {
@@ -239,9 +240,14 @@ function professorDoAndar(hero: Hero, floor: number, rng: Rng): { classId: strin
   return { classId: classe, number: professor.number };
 }
 
-function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng): EstadoNaMasmorra {
+/**
+ * `now` é o relógio do `uid` dos itens que o andar sorteia (baús, extras).
+ * Ausente, `Date.now`, como sempre foi; quem passa são os casos do porte
+ * pro C#, pra o andar sair igual nos dois lados.
+ */
+function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng, now?: () => number): EstadoNaMasmorra {
   const teacher = professorDoAndar(base.hero, floor, rng);
-  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, { rng, run: base.masmorra, teacher });
+  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, { rng, run: base.masmorra, teacher, now });
   const inicio = { x: andar.start.x, y: andar.start.y };
 
   return {

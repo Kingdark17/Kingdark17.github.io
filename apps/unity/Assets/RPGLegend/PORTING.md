@@ -209,11 +209,19 @@ exceção no log). O primeiro build leva uns 12 minutos; os seguintes, perto de 
   `Tests/EditMode/PortRegressionTests.cs` como `[Test]` comuns (o executor fora da Unity também os
   roda, no módulo "regressao").
 
-### Ainda não portado
-- `jogo/` — o fluxo do jogo (estado, sala, combate, mochila, loja, missões, extras, co-op, narração…).
-  Veio de `apps/web/lib/jogo` para a engine em 2026-10-16, com os mesmos nomes em português, e ainda
-  **não tem casos no gerador nem port**: por enquanto só as tabelas dele (`data/jogo/*.json`) estão na
-  cópia de `Resources/GameData`. É a próxima etapa (o jogo no app).
+### O fluxo do jogo (`jogo/`, em andamento)
+- Veio de `apps/web/lib/jogo` para a engine em 2026-10-16, com os mesmos nomes em português, e está sendo
+  portado para `Engine/Jogo/` (casos no módulo `jogo` do gerador). Os nomes C# seguem o TS: `Estados`
+  (estado.ts), `Tutoriais`, `Apresentacoes`, `Narrador`, `Neblina`, `Cartao`, `Maestria`, `Diario`,
+  `AndarNaSala` e `ExtrasDaSala` (extras.ts; o `RoomExtras` é o de dungeon/extras.ts).
+- O estado é a união do TS (`EstadoNaCidade` / `EstadoNaMasmorra`, pelo `mapMode`) e não sai de um
+  `JsSerializer.Read` simples: leia com `JogoJson.LerEstado`, e o save com `JogoJson.LerSave`.
+- As funções do fluxo que criam item (gerar andar, prêmio do tutorial…) recebem `now` opcional no TS também,
+  para os casos gravarem o uid; sem ele, valem `Date.now` e o relógio de verdade.
+- Ainda faltam: mochila, impacto, loja, missões, diálogo, evento, professor, portão, guilda, totem, a sala,
+  a criação e o save inicial. **Ficam fora de propósito** (decisão do usuário, 2026-10-16): a luta por turnos
+  (`combate.ts`, só o começo do encontro vem junto com a sala), porque a luta do app vai ser em tempo real, e
+  o co-op e o painel ADM, que entram no app numa etapa própria.
 
 ### Limitações conhecidas
 - `Attributes` guarda os seis atributos como `double`: atributo ausente vira NaN e `null` vira 0

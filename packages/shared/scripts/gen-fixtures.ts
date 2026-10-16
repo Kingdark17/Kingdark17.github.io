@@ -71,16 +71,22 @@ import ts from 'typescript';
 import type {
   AttackStyle,
   Attributes,
+  CelulaDoMapa,
   CityCell,
   ClassDef,
   CombatMonster,
   CombatMonsterView,
   Companion,
   CompanionStance,
+  Direction,
   DungeonCell,
+  DungeonExtra,
   DungeonProgress,
   DungeonRun,
   EquippableItem,
+  EstadoDoJogo,
+  EstadoNaCidade,
+  EstadoNaMasmorra,
   GuildTraining,
   Hero,
   HeroBuffs,
@@ -91,10 +97,14 @@ import type {
   JogadaDeAtaque,
   MonsterInstance,
   MonsterStatus,
+  PassoDoTutorial,
   Power,
   Quest,
   Rng,
   RoomCell,
+  RoomObject,
+  SaveCarregado,
+  Tutorial,
   Walker,
   WalkStep,
 } from '../src/index.js';
@@ -2418,6 +2428,503 @@ for (const pet of [...Object.keys(E.PET_ICONS), 'dragao', null]) {
 }
 caso('petBonus: ausente', 'petBonus', {}, () => E.petBonus(undefined));
 caso('petIcon: ausente', 'petIcon', {}, () => E.petIcon(undefined));
+
+// =====================================================================
+// jogo — o fluxo do jogo (src/jogo, que morava em apps/web/lib/jogo)
+// =====================================================================
+//
+// Os estados de partida são montados aqui com as próprias funções do
+// fluxo: a cidade de um herói de teste e andares sorteados a partir dela,
+// sempre com semente e relógio fixos. Cada caso grava o estado inteiro na
+// entrada e no resultado: ele é o save, e o app tem que devolvê-lo igual.
+//
+// Onde o resultado seria o próprio estado de entrada (passo que não
+// acontece), o caso de cola devolve só se veio a mesma referência — o
+// estado inteiro de novo só engordaria o arquivo.
+
+modulo('jogo');
+
+/** Um save como sai da Guilda: guerreiro com uma poção, ainda sem mapa. */
+function saveNovo(h: HeroiDeTeste = {}, resto: Partial<SaveCarregado> = {}): SaveCarregado {
+  return { hero: heroi({ classe: 'guerreiro', ...h }), floor: 1, inventory: [item('pot_vida')], quests: [], ...resto };
+}
+
+function naCidade(save: SaveCarregado): EstadoNaCidade {
+  const estado = E.retomarSave(save, E.seededRng(1), relogio);
+  if (estado.mapMode !== 'city') throw new Error('o save de teste não caiu na cidade');
+  return estado;
+}
+
+function naMasmorra(cidade: EstadoNaCidade, semente: number, andar = 1, masmorra: DungeonRun = cidade.masmorra): EstadoNaMasmorra {
+  return E.entrarNaMasmorra(cidade, E.seededRng(semente), masmorra, andar, relogio);
+}
+
+/** A primeira porta aberta da sala atual, na ordem de `DIR_ORDER`. */
+function primeiraPorta(estado: EstadoDoJogo): Direction {
+  const direcao = E.DIR_ORDER.find((d) => E.podeAndar(estado, d));
+  if (!direcao) throw new Error('sala de teste sem porta');
+  return direcao;
+}
+
+/** O estado posto na primeira sala da grade que tem parede, e a direção dela. */
+function diantedaParede<T extends EstadoDoJogo>(estado: T): { estado: T; direcao: Direction } {
+  for (const linha of estado.map) {
+    for (const c of linha) {
+      if (c.type === 'void') continue;
+      const noLugar = { ...estado, pos: { x: c.x, y: c.y } };
+      const direcao = E.DIR_ORDER.find((d) => !E.podeAndar(noLugar, d));
+      if (direcao) return { estado: noLugar, direcao };
+    }
+  }
+  throw new Error('grade de teste sem parede');
+}
+
+function comChefe<T extends EstadoNaMasmorra>(estado: T, beaten: boolean): T {
+  return { ...estado, map: estado.map.map((linha) => linha.map((c) => (c.type === 'boss' ? { ...c, beaten } : c))) };
+}
+
+/** A primeira semente cujo primeiro sorteio cumpre `cond` — o sorteio do professor é o primeiro do andar. */
+function sementeOnde(cond: (primeiro: number) => boolean): number {
+  for (let semente = 1; ; semente++) if (cond(E.seededRng(semente)())) return semente;
+}
+
+const cidade = naCidade(saveNovo());
+const masmorra = naMasmorra(cidade, 7);
+const andarDoChefe = naMasmorra(cidade, 5, 5);
+const fundo = naMasmorra(cidade, 9, E.DUNGEON_FLOORS);
+
+// ---------- estado ----------
+
+constante('LINHAS_DO_MAPA', E.LINHAS_DO_MAPA);
+constante('COLUNAS_DO_MAPA', E.COLUNAS_DO_MAPA);
+constante('PRIMEIRO_ANDAR', E.PRIMEIRO_ANDAR);
+
+for (const [dungeon, difficulty, floor] of [
+  ['floresta', 'normal', 1],
+  ['caverna', 'dificil', 37],
+  ['torre', 'pesadelo', 100],
+] as const) {
+  caso(`andarDeForca: ${dungeon} ${difficulty} ${floor}`, 'andarDeForca', { masmorra: { dungeon, difficulty }, floor }, (a) => E.andarDeForca(a));
+}
+
+function retomar(nome: string, save: SaveCarregado, chamada: Chamada = {}): void {
+  caso(`retomarSave: ${nome}`, 'retomarSave', { save }, (a, ctx) => E.retomarSave(a.save, ctx.rng, ctx.now), chamada);
+}
+
+retomar('save novo cai na cidade', saveNovo());
+retomar('na cidade, noutra sala', E.andar(cidade, primeiraPorta(cidade)));
+retomar('na cidade sem o ponto de partida', { ...E.andar(cidade, primeiraPorta(cidade)), cityStart: null });
+const semGuilda = cidade.map.map((linha) => linha.map((c) => (c.type === 'guild' ? { ...c, type: 'normal' as const } : c)));
+retomar('cidade de antes da Guilda', { ...cidade, map: semGuilda, cityMap: semGuilda });
+retomar('na masmorra', E.andar(masmorra, primeiraPorta(masmorra)));
+retomar('na masmorra sem mapa', saveNovo({}, { mapMode: 'dungeon', floor: 3 }), { rng: { seed: 3 }, now: AGORA });
+retomar('na masmorra com o mapa vazio', { ...masmorra, map: [] }, { rng: { seed: 4 }, now: AGORA });
+retomar('na masmorra sem posição', { ...masmorra, pos: null }, { rng: { seed: 6 }, now: AGORA });
+retomar('save de antes das masmorras e dos ids', {
+  hero: heroi({ classe: 'mago', nomeDaClasse: 'Mago' }),
+  floor: 23,
+  mapMode: 'dungeon',
+  map: masmorra.map,
+  pos: masmorra.pos,
+});
+retomar('com tutorial', saveNovo({}, { tutorial: { enabled: true, completed: { move: true }, rewarded: false } }));
+retomar(
+  'masmorra e progresso estranhos',
+  saveNovo({}, {
+    masmorra: { dungeon: 'xyz', difficulty: 3 } as never,
+    progresso: { cleared: ['floresta:normal', 'nada', 'floresta:normal'], totems: { 'caverna:normal': [40, 20, '60', 20, 7] } } as never,
+  }),
+);
+
+caso('entrarNaCidade: save novo', 'entrarNaCidade', { save: saveNovo() }, (a) => E.entrarNaCidade(a.save));
+caso('entrarNaCidade: vindo da masmorra', 'entrarNaCidade', { save: E.andar(masmorra, primeiraPorta(masmorra)) }, (a) => E.entrarNaCidade(a.save));
+
+function entrar(nome: string, estado: EstadoNaCidade, semente: number, andar?: number, masmorraDaVez?: DungeonRun): void {
+  caso(
+    `entrarNaMasmorra: ${nome}`,
+    'entrarNaMasmorra',
+    { estado, masmorra: masmorraDaVez, andar },
+    (a, ctx) => E.entrarNaMasmorra(a.estado, ctx.rng, a.masmorra, a.andar, ctx.now),
+    { rng: { seed: semente }, now: AGORA },
+  );
+}
+
+entrar('andar 1', cidade, 7);
+entrar('andar 1, outra semente', cidade, 8);
+entrar('caverna difícil pelo totem do 20', cidade, 21, 20, { dungeon: 'caverna', difficulty: 'dificil' });
+
+const mestre = naCidade(saveNovo({ extra: { masteryBattles: E.masteryBattlesFor(4) } }));
+const comProfessor = sementeOnde((r) => r < 0.1);
+if (!naMasmorra(mestre, comProfessor, 30).map.some((l) => l.some((c) => c.type === 'teacher'))) throw new Error('o professor de teste não apareceu');
+entrar('professor aparece', mestre, comProfessor, 30);
+entrar('professor não aparece', mestre, sementeOnde((r) => r >= 0.1), 30);
+entrar('professor garantido no último andar da faixa', mestre, sementeOnde((r) => r >= 0.1), 50);
+const veterano = naCidade(saveNovo({ extra: { masteryBattles: E.masteryBattlesFor(8), teachersMet: 1 } }));
+entrar('segundo professor', veterano, sementeOnde((r) => r < 0.25), 76);
+entrar('aprendiz não encontra professor', naCidade(saveNovo({ classe: null, extra: { masteryBattles: 300 } })), 30, 30);
+
+caso('voltarParaCidade: da masmorra', 'voltarParaCidade', { estado: E.andar(masmorra, primeiraPorta(masmorra)) }, (a) => E.voltarParaCidade(a.estado));
+
+function descer(nome: string, estado: EstadoNaMasmorra, semente: number): void {
+  caso(`descerEscada: ${nome}`, 'descerEscada', { estado }, (a, ctx) => E.descerEscada(a.estado, ctx.rng, ctx.now), { rng: { seed: semente }, now: AGORA });
+}
+
+descer('andar comum', masmorra, 11);
+descer('chefe vivo sela a escada', andarDoChefe, 12);
+descer('chefe vencido', comChefe(andarDoChefe, true), 13);
+descer('fundo da masmorra com o chefe vivo', fundo, 14);
+descer('fundo da masmorra', comChefe(fundo, true), 15);
+
+caso('avancarAndar: depois do chefe', 'avancarAndar', { estado: comChefe(andarDoChefe, true) }, (a, ctx) => E.avancarAndar(a.estado, ctx.rng, ctx.now), {
+  rng: { seed: 16 },
+  now: AGORA,
+});
+
+caso('temChefeVivo: chefe vivo', 'temChefeVivo', { estado: andarDoChefe }, (a) => E.temChefeVivo(a.estado));
+caso('temChefeVivo: chefe vencido', 'temChefeVivo', { estado: comChefe(andarDoChefe, true) }, (a) => E.temChefeVivo(a.estado));
+caso('temChefeVivo: andar sem chefe', 'temChefeVivo', { estado: masmorra }, (a) => E.temChefeVivo(a.estado));
+
+// Leituras da grade, todas num caso só por estado (o estado é o que pesa).
+for (const [nome, estado] of [
+  ['cidade', cidade],
+  ['masmorra', masmorra],
+] as const) {
+  caso(`celulaEm (pontos da grade): ${nome}`, 'celulaEm (pontos da grade)', { estado }, (a) =>
+    [a.estado.pos, { x: 0, y: 0 }, { x: 5, y: 5 }, { x: 6, y: 2 }, { x: -1, y: 0 }, { x: 0, y: 9 }, { x: 2.5, y: 1 }].map((p) => E.celulaEm(a.estado, p)),
+  );
+  caso(`celulaAtual: ${nome}`, 'celulaAtual', { estado }, (a) => E.celulaAtual(a.estado));
+  caso(`vizinhaEm e podeAndar (as quatro direções): ${nome}`, 'vizinhaEm e podeAndar (as quatro direções)', { estado }, (a) =>
+    E.DIR_ORDER.map((d) => ({ direcao: d, vizinha: E.vizinhaEm(a.estado, d), pode: E.podeAndar(a.estado, d) })),
+  );
+  caso(`andar: ${nome}`, 'andar', { estado, direcao: primeiraPorta(estado) }, (a) => E.andar(a.estado, a.direcao));
+  caso(`andar (parede devolve o mesmo estado): ${nome}`, 'andar (parede devolve o mesmo estado)', diantedaParede(estado), (a) =>
+    E.andar(a.estado, a.direcao) === a.estado,
+  );
+  caso(`revelar: ${nome}`, 'revelar', { estado, posicao: { x: 5, y: 0 } }, (a) => E.revelar(a.estado, a.posicao));
+}
+caso('vizinhaEm e podeAndar (as quatro direções): sala sem portas', 'vizinhaEm e podeAndar (as quatro direções)', { estado: { ...masmorra, pos: { x: 9, y: 9 } } }, (a) =>
+  E.DIR_ORDER.map((d) => ({ direcao: d, vizinha: E.vizinhaEm(a.estado, d), pode: E.podeAndar(a.estado, d) })),
+);
+caso('substituirCelulaAtual: baú aberto na masmorra', 'substituirCelulaAtual', { estado: masmorra, celula: { ...E.celulaAtual(masmorra)!, collected: true } }, (a) =>
+  E.substituirCelulaAtual(a.estado as EstadoNaMasmorra, a.celula as DungeonCell),
+);
+caso('substituirCelulaAtual: estoque na cidade', 'substituirCelulaAtual', { estado: cidade, celula: { ...E.celulaAtual(cidade)!, forSale: [item('espada')] } }, (a) =>
+  E.substituirCelulaAtual(a.estado as EstadoNaCidade, a.celula as CityCell),
+);
+
+// ---------- tutorial ----------
+
+constante('PASSOS', E.PASSOS);
+constante('GUIAS', E.GUIAS);
+
+const tutorial = (completed: Record<string, boolean>, o: Partial<Tutorial> = {}): Tutorial => ({ enabled: true, completed, rewarded: false, ...o });
+const todosMenos = (id: string): Record<string, boolean> => Object.fromEntries(E.PASSOS.filter((p) => p.id !== id).map((p) => [p.id, true]));
+const comTutorial = (t: Tutorial): EstadoNaCidade => ({ ...cidade, tutorial: t });
+
+caso('tutorialDe: save sem tutorial', 'tutorialDe', { estado: cidade }, (a) => E.tutorialDe(a.estado));
+caso('tutorialDe: com tutorial', 'tutorialDe', { estado: comTutorial(tutorial({ move: true }, { enabled: false })) }, (a) => E.tutorialDe(a.estado));
+
+for (const [nome, t] of [
+  ['nenhum', tutorial({})],
+  ['três', tutorial({ move: true, shop: true, npc: true })],
+  ['todos', tutorial(todosMenos(''))],
+  ['chave desconhecida e falso', tutorial({ xyz: true, move: false, guild: true })],
+] as const) {
+  caso(`concluidos: ${nome}`, 'concluidos', { tutorial: t }, (a) => E.concluidos(a.tutorial));
+}
+
+function marcarPasso(nome: string, estado: EstadoDoJogo, id: string, chamada: Chamada = {}): void {
+  caso(`marcar: ${nome}`, 'marcar', { estado, id }, (a, ctx) => E.marcar(a.estado, a.id as PassoDoTutorial, ctx.rng, ctx.now), chamada);
+}
+
+marcarPasso('primeiro passo', cidade, 'move');
+marcarPasso('passo repetido', comTutorial(tutorial({ move: true })), 'move');
+marcarPasso('tutorial desligado', comTutorial(tutorial({}, { enabled: false })), 'shop');
+marcarPasso('passo desconhecido', comTutorial(tutorial({ move: true })), 'xyz');
+marcarPasso('último passo dá o prêmio', comTutorial(tutorial(todosMenos('combat'))), 'combat', { rng: { seed: 17 }, now: AGORA });
+marcarPasso('último passo de quem já ganhou o prêmio', comTutorial(tutorial(todosMenos('guild'), { rewarded: true })), 'guild');
+marcarPasso('último passo com chave a mais', comTutorial(tutorial({ ...todosMenos('npc'), xyz: true })), 'npc', { rng: { seed: 18 }, now: AGORA });
+
+// ---------- apresentação, narrador e neblina ----------
+//
+// A apresentação devolve funções; o caso de cola as aplica a todas as salas
+// da grade. O narrador e a neblina também vão sala por sala, num caso só
+// por estado.
+
+const masmorraGasta: EstadoNaMasmorra = {
+  ...masmorra,
+  map: masmorra.map.map((linha) =>
+    linha.map((c) => {
+      if (c.type === 'treasure') return { ...c, collected: true };
+      if (c.type === 'monster') return { ...c, beaten: true };
+      if (c.type === 'event') return { ...c, resolved: true };
+      return c;
+    }),
+  ),
+};
+
+/** Duas salas andadas e uma revelada de longe: visitada, revelada, silhueta e inexplorada na mesma grade. */
+const masmorraAndada: EstadoNaMasmorra = (() => {
+  const um = E.andar(masmorra, primeiraPorta(masmorra));
+  const dois = E.andar(um, primeiraPorta(um));
+  const longe = dois.map.flat().find((c) => c.type !== 'void' && !c.visited && !E.isKnown(dois.map, c, dois.mapCols, dois.mapRows));
+  return longe ? E.revelar(dois, { x: longe.x, y: longe.y }) : dois;
+})();
+
+const salasDe = (estado: EstadoDoJogo): CelulaDoMapa[] => (estado.map as CelulaDoMapa[][]).flat();
+
+for (const [nome, estado] of [
+  ['cidade', cidade],
+  ['masmorra', masmorra],
+  ['masmorra com salas gastas', masmorraGasta],
+  ['andar de chefe', andarDoChefe],
+  ['caverna difícil', naMasmorra(cidade, 22, 12, { dungeon: 'caverna', difficulty: 'dificil' })],
+] as const) {
+  caso(`apresentacaoDe (todas as salas): ${nome}`, 'apresentacaoDe (todas as salas)', { estado }, (a) => {
+    const visual = E.apresentacaoDe(a.estado);
+    return {
+      lugar: visual.lugar,
+      legenda: visual.legenda,
+      salas: salasDe(a.estado).map((c) => ({
+        x: c.x,
+        y: c.y,
+        icone: visual.icone(c),
+        descricao: visual.descricao(c),
+        textoDeEntrada: visual.textoDeEntrada(c),
+        rotulo: visual.rotulo(c),
+        gasta: visual.gasta(c),
+      })),
+    };
+  });
+}
+
+for (const [nome, estado] of [
+  ['cidade', cidade],
+  ['masmorra', masmorra],
+  ['masmorra andada e revelada', masmorraAndada],
+] as const) {
+  caso(`narrar (todas as salas): ${nome}`, 'narrar (todas as salas)', { estado }, (a) =>
+    salasDe(a.estado).map((c) => ({ x: c.x, y: c.y, narracao: E.narrar({ ...a.estado, pos: { x: c.x, y: c.y } } as EstadoDoJogo) })),
+  );
+  caso(`estadoDaSala (toda a grade): ${nome}`, 'estadoDaSala (toda a grade)', { estado }, (a) =>
+    salasDe(a.estado).map((c) => E.estadoDaSala(a.estado.map as CelulaDoMapa[][], c, a.estado.mapCols, a.estado.mapRows)),
+  );
+}
+caso('narrar: fora da grade', 'narrar', { estado: { ...cidade, pos: { x: 9, y: 9 } } }, (a) => E.narrar(a.estado));
+
+for (const estado of ['vazia', 'inexplorada', 'silhueta', 'revelada', 'visitada'] as const) {
+  caso(`sabeOTipo: ${estado}`, 'sabeOTipo', { estado }, (a) => E.sabeOTipo(a.estado));
+}
+
+// ---------- cartão, maestria e diário ----------
+
+const [fraquezaA, fraquezaB] = E.DEBUFFS as [Hero['debuff'], Hero['debuff']];
+for (const [nome, debuff] of [
+  ['pelo id', { ...fraquezaA }],
+  ['só o nome (save antigo)', { name: fraquezaB.name, icon: '?', desc: 'texto antigo' }],
+  ['id desconhecido, nome do catálogo', { id: 'xyz', name: fraquezaA.name, icon: '?', desc: 'texto antigo' }],
+  ['id e nome desconhecidos', { id: 'xyz', name: 'Maldição Velha', icon: '💀', desc: 'algo que mudou' }],
+  ['sem ícone nem texto', { id: 'xyz', name: 'Sem Nada' }],
+  ['vazia', {}],
+] as const) {
+  caso(`fraquezaNoCartao: ${nome}`, 'fraquezaNoCartao', { hero: { debuff } }, (a) => E.fraquezaNoCartao(a.hero as never));
+}
+caso('fraquezaNoCartao: sem fraqueza', 'fraquezaNoCartao', { hero: {} }, (a) => E.fraquezaNoCartao(a.hero as never));
+
+const tresPoderes = E.POWERS.slice(0, 3).map((p) => p.id);
+for (const [nome, hero] of [
+  ['guerreiro com três poderes', heroi({ classe: 'guerreiro', extra: { powerIds: tresPoderes } })],
+  ['mana instável', heroi({ classe: 'mago', debuff: 'mana_instavel', extra: { powerIds: tresPoderes } })],
+  ['aprendiz sem poderes', heroi({ classe: null })],
+  ['save antigo, só os nomes', heroi({ classe: 'clerigo', extra: { powerIds: undefined, powerNames: E.POWERS.slice(3, 5).map((p) => p.name) } })],
+] as const) {
+  caso(`poderesNoCartao: ${nome}`, 'poderesNoCartao', { hero }, (a) => E.poderesNoCartao(a.hero));
+}
+
+for (const classe of [...CLASSES_IDS, null]) {
+  const nomeDaClasse = classe ? E.classById(classe)!.name : E.APPRENTICE.name;
+  caso(`armasDaMaestria: ${classe ?? 'aprendiz'}`, 'armasDaMaestria', { hero: { ...(classe ? { classId: classe } : {}), className: nomeDaClasse } }, (a) =>
+    E.armasDaMaestria(a.hero),
+  );
+}
+caso('armasDaMaestria: save antigo, só o nome', 'armasDaMaestria', { hero: { className: E.classById('arqueiro')!.name } }, (a) => E.armasDaMaestria(a.hero));
+
+const armaDeOutraClasse = E.templatesByCategory('arma').find((t) => !E.masteryWeapons(E.classById('guerreiro')!).includes(t.id))!.id;
+const guerreiroCom = (batalhas: number, o: HeroiDeTeste = {}): Hero => heroi({ classe: 'guerreiro', ...o, extra: { masteryBattles: batalhas } });
+for (const [nome, hero] of [
+  ['aprendiz', heroi({ classe: null })],
+  ['nível 0', guerreiroCom(3)],
+  ['nível 3 com a arma da classe', guerreiroCom(E.masteryBattlesFor(3) + 5)],
+  ['nível 3 com outra arma', guerreiroCom(E.masteryBattlesFor(3) + 5, { arma: armaDeOutraClasse })],
+  ['nível 3 de mãos vazias', guerreiroCom(E.masteryBattlesFor(3) + 5, { arma: null })],
+  ['no teto', guerreiroCom(E.masteryBattlesFor(E.MASTERY_MAX_LEVEL) + 100)],
+  ['bardo', heroi({ classe: 'bardo', extra: { masteryBattles: 40 } })],
+] as const) {
+  caso(`maestriaNoCartao: ${nome}`, 'maestriaNoCartao', { hero }, (a) => E.maestriaNoCartao(a.hero));
+}
+for (const [nome, hero, nivel] of [
+  ['guerreiro no 3', guerreiroCom(E.masteryBattlesFor(3)), 3],
+  ['bardo no 10', heroi({ classe: 'bardo' }), 10],
+  ['save antigo, só o nome', heroi({ classe: 'mago', nomeDaClasse: 'Mago' }), 2],
+] as const) {
+  caso(`maestriaSubiu: ${nome}`, 'maestriaSubiu', { hero, nivel }, (a) => E.maestriaSubiu(a.hero, a.nivel));
+}
+
+constante('LIMITE_DO_DIARIO', E.LIMITE_DO_DIARIO);
+const nota = (n: number) => ({ icone: '📜', titulo: `Nota ${n}`, texto: `Aconteceu a coisa ${n}.` });
+const diarioCom = (n: number) => Array.from({ length: n }, (_, i) => ({ id: n - i, ...nota(n - i) }));
+for (const [nome, diario, entrada] of [
+  ['diário vazio', [], nota(1)],
+  ['com duas anotações', diarioCom(2), nota(3)],
+  ['no limite', diarioCom(E.LIMITE_DO_DIARIO), nota(E.LIMITE_DO_DIARIO + 1)],
+  ['id da primeira fora de ordem', [{ id: 7, ...nota(7) }, { id: 9, ...nota(9) }], nota(10)],
+] as const) {
+  caso(`anotar: ${nome}`, 'anotar', { diario, entrada }, (a) => E.anotar(a.diario as never, a.entrada));
+}
+
+// ---------- andar na sala ----------
+
+constante('MS_POR_PASSO', E.MS_POR_PASSO);
+constante('MAX_PASSOS_POR_QUADRO', E.MAX_PASSOS_POR_QUADRO);
+constante('ID_DO_CONTEUDO', E.ID_DO_CONTEUDO);
+constante('PARADO', E.PARADO);
+
+const conteudoDaSala = { id: E.ID_DO_CONTEUDO, ...E.CONTENT_TILE };
+for (const [nome, portas, objetos] of [
+  ['só o conteúdo', { N: true, S: true }, true],
+  ['sala vazia', { E: true }, false],
+  ['com extras', { N: true, W: true }, [conteudoDaSala, { id: 'extra-0', col: 1, row: 1 }, { id: 'extra-1', col: 7, row: 5 }]],
+  ['lista vazia', { S: true }, []],
+] as const) {
+  caso(`plantaDaSala: ${nome}`, 'plantaDaSala', { portas, objetos }, (a) => E.plantaDaSala(a.portas, a.objetos as boolean | RoomObject[]));
+}
+
+for (const [sobra, decorridoMs] of [
+  [0, 16],
+  [0, 17],
+  [10, 30],
+  [5, 500],
+  [0, -40],
+  [16.5, 0.2],
+  [0, 100],
+]) {
+  caso(`passosDoQuadro: sobra ${sobra}, ${decorridoMs} ms`, 'passosDoQuadro', { sobra, decorridoMs }, (a) => E.passosDoQuadro(a.sobra, a.decorridoMs));
+}
+
+for (const teclas of [[], ['N'], ['N', 'E'], ['N', 'S'], ['W', 'W'], ['S', 'E', 'W']] as Direction[][]) {
+  caso(`vetorDasTeclas: [${teclas.join(', ')}]`, 'vetorDasTeclas', { teclas }, (a) => E.vetorDasTeclas(a.teclas));
+}
+caso('entradaCombinada: o joystick manda', 'entradaCombinada', { teclas: ['N'] as Direction[], joystick: { x: 0.5, y: -0.25 } }, (a) =>
+  E.entradaCombinada(a.teclas, a.joystick),
+);
+caso('entradaCombinada: joystick parado, valem as teclas', 'entradaCombinada', { teclas: ['S', 'W'] as Direction[], joystick: { x: 0, y: 0 } }, (a) =>
+  E.entradaCombinada(a.teclas, a.joystick),
+);
+
+// O extra fica na diagonal que sai do meio da sala, pra o herói encostar nele andando nela.
+const plantaDeTeste = E.plantaDaSala({ N: true, S: true, E: true }, [conteudoDaSala, { id: 'extra-0', col: 2, row: 3 }]);
+const noMeio = E.roomArrival(null);
+const colado = E.andarNoQuadro(plantaDeTeste, noMeio, { x: 0, y: -1 }, 40, null).walker;
+for (const [nome, walker, entrada, passos, tocandoAntes] of [
+  ['parado', noMeio, E.PARADO, 3, null],
+  ['nenhum passo', noMeio, { x: 1, y: 0 }, 0, null],
+  ['sobe e encosta no conteúdo', noMeio, { x: 0, y: -1 }, 40, null],
+  ['já encostado não encosta de novo', colado, { x: 0, y: -1 }, 5, E.ID_DO_CONTEUDO],
+  ['sai de perto e solta o encosto', colado, { x: 0, y: 1 }, 20, E.ID_DO_CONTEUDO],
+  ['atravessa a porta do sul', E.roomArrival('N'), { x: 0, y: 1 }, 60, null],
+  ['diagonal até a parede', noMeio, { x: 1, y: 1 }, 60, null],
+  ['encosta no extra', noMeio, { x: -1, y: -1 }, 80, null],
+  ['meio joystick pra leste, a porta puxa pro vão', { x: 6000, y: 3760, facing: 'E' }, { x: 0.5, y: 0 }, 200, null],
+] as const) {
+  caso(`andarNoQuadro: ${nome}`, 'andarNoQuadro', { planta: plantaDeTeste, walker, entrada, passos, tocandoAntes }, (a) =>
+    E.andarNoQuadro(a.planta, a.walker, a.entrada, a.passos, a.tocandoAntes),
+  );
+}
+
+// ---------- extras da sala (o lado do jogo) ----------
+
+constante('ID_DO_BAU_SECRETO', E.ID_DO_BAU_SECRETO);
+for (const indice of [0, 3, 12]) caso(`idDoExtra: ${indice}`, 'idDoExtra', { indice }, (a) => E.idDoExtra(a.indice));
+for (const id of ['extra-0', 'extra-3', 'extra-12', 'conteudo', 'bau-secreto', 'extra-x', 'extra-1.5', 'extra-', 'extra- 2', 'extra-1e1']) {
+  caso(`indiceDoExtra: ${id}`, 'indiceDoExtra', { id }, (a) => E.indiceDoExtra(a.id));
+}
+
+const extrasNovos: DungeonExtra[] = [
+  { kind: 'chest', col: 1, row: 1, item: item('pot_vida'), used: false },
+  { kind: 'chest', col: 2, row: 1, item: null, used: false },
+  { kind: 'pot', col: 6, row: 1, used: false },
+  { kind: 'sign', col: 7, row: 1 },
+  { kind: 'crack', col: 4, row: 6, side: 'S', used: false, secretItem: item('colar_forca', 'incomum', 3), secretCollected: false },
+];
+const extrasUsados = extrasNovos.map((e) => ({ ...e, used: true, ...(e.kind === 'crack' ? { secretCollected: true } : {}) }));
+const paredeAberta = extrasNovos.map((e) => (e.kind === 'crack' ? { ...e, used: true } : e));
+const salaCom = (extras: DungeonExtra[] | undefined, o: Partial<DungeonCell> = {}): DungeonCell => ({ ...(E.celulaAtual(masmorra) as DungeonCell), extras, ...o });
+const naSala = (celula: DungeonCell): EstadoNaMasmorra => E.substituirCelulaAtual(masmorra, celula);
+
+for (const [nome, celula] of [
+  ['sala com extras', salaCom(extrasNovos)],
+  ['sala sem extras', salaCom(undefined)],
+  ['sala da cidade', E.celulaAtual(cidade)],
+  ['nenhuma sala', null],
+] as const) {
+  caso(`extrasDe: ${nome}`, 'extrasDe', { celula }, (a) => E.extrasDe(a.celula));
+  caso(`passagemSecreta: ${nome}`, 'passagemSecreta', { celula }, (a) => E.passagemSecreta(a.celula));
+  caso(`descricaoDosExtras: ${nome}`, 'descricaoDosExtras', { celula }, (a) => E.descricaoDosExtras(a.celula));
+}
+for (const [nome, extras] of [
+  ['extras usados', extrasUsados],
+  ['parede aberta', paredeAberta],
+] as const) {
+  caso(`passagemSecreta: ${nome}`, 'passagemSecreta', { celula: salaCom(extras) }, (a) => E.passagemSecreta(a.celula));
+  caso(`descricaoDosExtras: ${nome}`, 'descricaoDosExtras', { celula: salaCom(extras) }, (a) => E.descricaoDosExtras(a.celula));
+}
+for (const [nome, celula, temConteudo] of [
+  ['extras novos, com conteúdo', salaCom(extrasNovos), true],
+  ['extras usados, sem conteúdo', salaCom(extrasUsados), false],
+  ['parede aberta', salaCom(paredeAberta), true],
+  ['sala sem extras', salaCom(undefined), true],
+  ['nenhuma sala', null, false],
+] as const) {
+  caso(`objetosDaSala: ${nome}`, 'objetosDaSala', { celula, temConteudo }, (a) => E.objetosDaSala(a.celula, a.temConteudo));
+}
+for (const lado of E.DIR_ORDER) caso(`plantaDaSalaSecreta: parede ${lado}`, 'plantaDaSalaSecreta', { lado }, (a) => E.plantaDaSalaSecreta(a.lado));
+for (const [nome, celula, indice] of [
+  ['baú cheio', salaCom(paredeAberta), 4],
+  ['baú vazio', salaCom(extrasUsados), 4],
+  ['extra que não é parede', salaCom(extrasNovos), 0],
+  ['índice que não existe', salaCom(paredeAberta), 9],
+  ['nenhuma sala', null, 0],
+] as const) {
+  caso(`textoDaSecreta: ${nome}`, 'textoDaSecreta', { celula, indice }, (a) => E.textoDaSecreta(a.celula, a.indice));
+}
+
+function tocar(nome: string, estado: EstadoNaMasmorra, indice: number, semente: number): void {
+  caso(`tocarExtra: ${nome}`, 'tocarExtra', { estado, indice }, (a, ctx) => E.tocarExtra(a.estado, a.indice, ctx.rng), { rng: { seed: semente } });
+}
+
+tocar('baú com poção', naSala(salaCom(extrasNovos)), 0, 31);
+tocar('baú com ouro', naSala(salaCom(extrasNovos)), 1, 32);
+tocar('baú vazio', naSala(salaCom(extrasUsados)), 0, 33);
+tocar('vaso', naSala(salaCom(extrasNovos)), 2, 34);
+tocar('cacos', naSala(salaCom(extrasUsados)), 2, 35);
+tocar('placa', naSala(salaCom(extrasNovos)), 3, 36);
+tocar('parede rachada', naSala(salaCom(extrasNovos)), 4, 37);
+tocar('passagem já aberta', naSala(salaCom(paredeAberta)), 4, 38);
+tocar('índice que não existe', naSala(salaCom(extrasNovos)), 9, 39);
+tocar('sala de monstro: baú antes de vencer', naSala(salaCom(extrasNovos, { type: 'monster', beaten: false })), 0, 40);
+tocar('sala de monstro: placa antes de vencer', naSala(salaCom(extrasNovos, { type: 'monster', beaten: false })), 3, 41);
+tocar('sala de monstro vencida: baú de ouro', naSala(salaCom(extrasNovos, { type: 'monster', beaten: true })), 1, 42);
+tocar('sala de chefe: vaso antes de vencer', naSala(salaCom(extrasNovos, { type: 'boss' })), 2, 43);
+tocar('baú de ouro na caverna difícil', { ...naSala(salaCom(extrasNovos)), masmorra: { dungeon: 'caverna', difficulty: 'dificil' }, floor: 12 }, 1, 44);
+
+for (const [nome, extras, indice] of [
+  ['primeira vez', paredeAberta, 4],
+  ['já vazio', extrasUsados, 4],
+  ['extra que não é parede', extrasNovos, 0],
+  ['parede sem item escondido', extrasNovos.map((e) => (e.kind === 'crack' ? { ...e, used: true, secretItem: undefined } : e)), 4],
+] as const) {
+  caso(`abrirBauSecreto: ${nome}`, 'abrirBauSecreto', { estado: naSala(salaCom(extras as DungeonExtra[])), indice }, (a) => E.abrirBauSecreto(a.estado, a.indice));
+}
 
 // =====================================================================
 // tabelas — fixtures/data

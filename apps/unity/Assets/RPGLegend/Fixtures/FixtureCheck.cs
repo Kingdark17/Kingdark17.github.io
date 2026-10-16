@@ -42,7 +42,7 @@ namespace RPGLegend.Tests
         public static readonly string[] Modules =
         {
             "rng", "hero", "items", "monsters", "combat", "dungeon", "shop",
-            "inventory", "events", "npc", "quests", "city", "pets",
+            "inventory", "events", "npc", "quests", "city", "pets", "jogo",
         };
 
         public static FixtureResult Run(string module, JToken c)
