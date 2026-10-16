@@ -124,10 +124,10 @@ export interface Entrada {
  * É aqui, e não ao pisar no portão, que fecha "Entre na masmorra": abrir a
  * escolha e desistir não é entrar.
  */
-export function entrar(portao: Portao, rng: Rng = defaultRng): Entrada | null {
+export function entrar(portao: Portao, rng: Rng = defaultRng, now?: () => number): Entrada | null {
   if (bloqueio(portao, portao.escolha) || !andares(portao).includes(portao.andar)) return null;
-  const dentro = entrarNaMasmorra(portao.estado, rng, portao.escolha, portao.andar);
-  const etapa = marcar(dentro, 'dungeon', rng);
+  const dentro = entrarNaMasmorra(portao.estado, rng, portao.escolha, portao.andar, now);
+  const etapa = marcar(dentro, 'dungeon', rng, now);
   const comEtapa = etapa.estado as EstadoNaMasmorra;
   const pelo = portao.andar === 1 ? 'Andar 1' : `Andar ${portao.andar}, pelo totem`;
   return { estado: comEtapa, recado: etapa.recado, texto: `Você atravessa o portão: ${runName(portao.escolha)}. ${pelo}.` };

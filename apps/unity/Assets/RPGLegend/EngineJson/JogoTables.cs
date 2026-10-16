@@ -15,6 +15,8 @@ namespace RPGLegend.Engine.Json
             GameData.DiarioTable = JsSerializer.Parse<DiarioData>(readTable("jogo/diario"));
             GameData.AndarNaSalaTable = JsSerializer.Parse<AndarNaSalaData>(readTable("jogo/andar-na-sala"));
             GameData.ExtrasDaSalaTable = JsSerializer.Parse<ExtrasDaSalaData>(readTable("jogo/extras"));
+            GameData.ImpactoTable = JsSerializer.Parse<ImpactoData>(readTable("jogo/impacto"));
+            GameData.EventoTable = JsSerializer.Parse<EventoData>(readTable("jogo/evento"));
         }
     }
 }

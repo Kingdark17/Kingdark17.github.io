@@ -38,11 +38,11 @@ export function abrirGuilda(estado: EstadoDoJogo): Guilda {
  * É aqui, e não na porta, que o Aprendiz fecha a etapa "Treine na Guilda"
  * do tutorial. `rng` só sorteia a poção do prêmio, se esta for a última.
  */
-export function treinar(guilda: Guilda, classe: ClassDef, rng: Rng = defaultRng): Guilda {
+export function treinar(guilda: Guilda, classe: ClassDef, rng: Rng = defaultRng, now?: () => number): Guilda {
   const { hero, inventory } = guilda.estado;
   if (hasClass(hero)) return { ...guilda, log: [`Você já treinou como ${hero.className}.`], recado: null };
 
-  const { hero: treinado, toInventory } = trainAtGuild(hero, classe);
+  const { hero: treinado, toInventory } = trainAtGuild(hero, classe, { rng, now });
   const poder = powerById(classe.signatureId)?.name ?? classe.signatureId;
   const log = [`Você treina como ${classe.name} e aprende ${poder}.`];
   // A arma inicial que não coube na mão vai pra mochila, e a pessoa precisa
@@ -53,6 +53,7 @@ export function treinar(guilda: Guilda, classe: ClassDef, rng: Rng = defaultRng)
     { ...guilda.estado, hero: treinado, inventory: toInventory ? addItem(inventory, toInventory) : inventory },
     'guild',
     rng,
+    now,
   );
   return { estado: etapa.estado, log, recado: etapa.recado };
 }

@@ -22,14 +22,13 @@ namespace RPGLegend.Tests
             Fn(M, "heroPowers", (a, c) => W(Heroes.HeroPowers(R<Hero>(a["hero"]))));
             Fn(M, "rollAttrs", (a, c) =>
                 W(Heroes.RollAttrs(R<RaceDef>(a["race"]), R<ClassDef>(a["cls"]), R<DebuffDef>(a["debuff"]), c.RngFn)));
-            // O gerador chama buildHero com um 3º argumento ({ rng, now } da arma) que o TS de hoje ignora, e
-            // por isso pula os casos (o uid da arma sai do Math.random/Date.now). Aqui vale a assinatura atual.
-            Fn(M, "buildHero", (a, c) => W(Heroes.BuildHero(R<HeroCreation>(a["creation"]), c.RngFn)));
+            // O gerador passa o mesmo rng e o relógio do caso como armaInicial ({ rng, now } da arma).
+            Fn(M, "buildHero", (a, c) => W(Heroes.BuildHero(R<HeroCreation>(a["creation"]), c.RngFn, c.RngFn, c.NowOrFail)));
             Fn(M, "apprenticeAttrs", (a, c) => W(Heroes.ApprenticeAttrs(R<RaceDef>(a["race"]), R<DebuffDef>(a["debuff"]))));
             Fn(M, "buildApprentice", (a, c) => W(Heroes.BuildApprentice(R<ApprenticeCreation>(a["creation"]), c.RngFn)));
             Fn(M, "hasClass", (a, c) => W(Heroes.HasClass(R<Hero>(a["hero"]))));
-            // Idem buildHero: o 3º argumento (armaInicial) não existe na assinatura atual.
-            Fn(M, "trainAtGuild", (a, c) => W(Heroes.TrainAtGuild(R<Hero>(a["hero"]), R<ClassDef>(a["cls"]))));
+            // Idem buildHero: o rng e o relógio do caso são a armaInicial.
+            Fn(M, "trainAtGuild", (a, c) => W(Heroes.TrainAtGuild(R<Hero>(a["hero"]), R<ClassDef>(a["cls"]), c.RngFn, c.NowOrFail)));
             Fn(M, "recomputeDerived", (a, c) =>
                 W(Heroes.RecomputeDerived(R<Hero>(a["hero"]), JsJson.Truthy(JsJson.Prop(a["options"], "critPenalty")))));
             Fn(M, "spendAttrPoint", (a, c) => W(Heroes.SpendAttrPoint(R<Hero>(a["hero"]), Str(a["key"]))));

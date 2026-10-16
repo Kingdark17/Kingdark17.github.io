@@ -213,13 +213,20 @@ exceção no log). O primeiro build leva uns 12 minutos; os seguintes, perto de 
 - Veio de `apps/web/lib/jogo` para a engine em 2026-10-16, com os mesmos nomes em português, e está sendo
   portado para `Engine/Jogo/` (casos no módulo `jogo` do gerador). Os nomes C# seguem o TS: `Estados`
   (estado.ts), `Tutoriais`, `Apresentacoes`, `Narrador`, `Neblina`, `Cartao`, `Maestria`, `Diario`,
-  `AndarNaSala` e `ExtrasDaSala` (extras.ts; o `RoomExtras` é o de dungeon/extras.ts).
-- O estado é a união do TS (`EstadoNaCidade` / `EstadoNaMasmorra`, pelo `mapMode`) e não sai de um
-  `JsSerializer.Read` simples: leia com `JogoJson.LerEstado`, e o save com `JogoJson.LerSave`.
-- As funções do fluxo que criam item (gerar andar, prêmio do tutorial…) recebem `now` opcional no TS também,
-  para os casos gravarem o uid; sem ele, valem `Date.now` e o relógio de verdade.
-- Ainda faltam: mochila, impacto, loja, missões, diálogo, evento, professor, portão, guilda, totem, a sala,
-  a criação e o save inicial. **Ficam fora de propósito** (decisão do usuário, 2026-10-16): a luta por turnos
+  `AndarNaSala`, `ExtrasDaSala` (extras.ts; o `RoomExtras` é o de dungeon/extras.ts), `Mochilas`, `Impactos`,
+  `Lojas`, `QuadroDeMissoes` (missoes.ts: o membro `Missoes` não pode ter o nome da classe), `Dialogos`,
+  `Eventos`, `Professores`, `Portoes`, `Guildas` e `Totens`.
+- O estado é a união do TS (`EstadoNaCidade` / `EstadoNaMasmorra`, pelo `mapMode`). Quem escolhe a classe na
+  leitura é o `EstadoDoJogoConverter`, registrado no `JsSerializer`: um campo `EstadoDoJogo` dentro de outro
+  objeto (a mochila, a conversa) também sai certo. O save carregado se lê com `JogoJson.LerSave`.
+- O NPC da cidade e o da masmorra são duas classes no C# (`CityNpc`, `DungeonNpc`) com os mesmos campos; a
+  conversa usa `Npc`, que converte de e para as duas.
+- As funções do fluxo que criam item (gerar andar, prêmio do tutorial, estoque, troca do NPC, evento, missão,
+  portão, guilda) recebem `now` opcional no TS também, para os casos gravarem o uid; sem ele, valem `Date.now`
+  e o relógio de verdade. `buildHero` e `trainAtGuild` recebem o rng e o relógio da arma inicial
+  (`armaInicial`; no C#, `armaRng` e `armaNow`), e os casos delas, que eram pulados, agora são gravados.
+- Ainda faltam: a sala (com o começo do encontro de `combate.ts`), a criação e o save inicial. **Ficam fora
+  de propósito** (decisão do usuário, 2026-10-16): a luta por turnos
   (`combate.ts`, só o começo do encontro vem junto com a sala), porque a luta do app vai ser em tempo real, e
   o co-op e o painel ADM, que entram no app numa etapa própria.
 

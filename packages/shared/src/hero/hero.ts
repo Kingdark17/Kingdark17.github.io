@@ -1,4 +1,4 @@
-import { instantiate, type Item } from '../items/item.js';
+import { instantiate, type InstantiateOptions, type Item } from '../items/item.js';
 import { RARITIES } from '../items/rarity.js';
 import { isEquippable, slotForTemplate, templateById, type ItemTemplate } from '../items/templates.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
@@ -160,11 +160,15 @@ export interface HeroCreation {
   hair?: string;
 }
 
-export function buildHero(creation: HeroCreation, rng: Rng = defaultRng): Hero {
+/**
+ * `armaInicial` é o rng e o relógio do `uid` da arma inicial; ausente, os de
+ * sempre (`defaultRng` e `Date.now`). Quem passa são os casos do porte pro C#.
+ */
+export function buildHero(creation: HeroCreation, rng: Rng = defaultRng, armaInicial: InstantiateOptions = {}): Hero {
   const attrs = creation.attrs ?? rollAttrs(creation.race, creation.cls, creation.debuff, rng);
   const weaponTemplate = templateById(creation.cls.weaponTemplate);
   if (!weaponTemplate) throw new Error(`Arma inicial desconhecida: ${creation.cls.weaponTemplate}`);
-  const startWeapon: Item = { ...instantiate(weaponTemplate, RARITIES[0] as (typeof RARITIES)[number]), equipped: true };
+  const startWeapon: Item = { ...instantiate(weaponTemplate, RARITIES[0] as (typeof RARITIES)[number], armaInicial), equipped: true };
 
   // poder de assinatura da classe (automático) + os escolhidos na criação, sem duplicar
   const powerIds = [creation.cls.signatureId];
@@ -305,8 +309,10 @@ export interface GuildTraining {
  * de atributos da classe, a arma inicial dela e **só o poder da classe** — os
  * outros virão dos professores, por maestria (decisão do usuário,
  * 2026-10-09). Quem já tem classe sai como entrou.
+ *
+ * `armaInicial` é o rng e o relógio do `uid` da arma, como em `buildHero`.
  */
-export function trainAtGuild(hero: Hero, cls: ClassDef): GuildTraining {
+export function trainAtGuild(hero: Hero, cls: ClassDef, armaInicial: InstantiateOptions = {}): GuildTraining {
   if (hasClass(hero)) return { hero, toInventory: null };
 
   const attrs = { ...hero.attrs };
@@ -314,7 +320,7 @@ export function trainAtGuild(hero: Hero, cls: ClassDef): GuildTraining {
 
   const template = templateById(cls.weaponTemplate);
   if (!template) throw new Error(`Arma inicial desconhecida: ${cls.weaponTemplate}`);
-  const arma: Item = instantiate(template, RARITIES[0] as (typeof RARITIES)[number]);
+  const arma: Item = instantiate(template, RARITIES[0] as (typeof RARITIES)[number], armaInicial);
   // Mão principal livre, e sem escudo no caminho de uma arma de duas mãos.
   const cabe = !hero.equip.arma && !(isTwoHanded(arma) && hero.equip.secundaria);
 

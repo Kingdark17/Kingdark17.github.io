@@ -136,16 +136,16 @@ namespace RPGLegend.Engine
         /// <summary>
         /// TS: buildHero — o herói pronto da criação antiga (classe, arma e poderes de saída).
         /// Sorteios do <paramref name="rng"/>: os seis de rollAttrs (quando creation.Attrs não vem) e o ouro.
-        /// O uid da arma inicial sai, como no TS de hoje, do sorteio e do relógio padrão
-        /// (<c>instantiate</c> sem rng nem now) — não do <paramref name="rng"/> recebido.
+        /// O uid da arma inicial sai de <paramref name="armaRng"/> e <paramref name="armaNow"/> (o
+        /// <c>armaInicial</c> do TS); ausentes, do sorteio e do relógio padrão — não do <paramref name="rng"/>.
         /// </summary>
-        public static Hero BuildHero(HeroCreation creation, RngFn rng = null)
+        public static Hero BuildHero(HeroCreation creation, RngFn rng = null, RngFn armaRng = null, Func<double> armaNow = null)
         {
             rng = rng ?? Rng.Default;
             var attrs = creation.Attrs ?? RollAttrs(creation.Race, creation.Cls, creation.Debuff, rng);
             var weaponTemplate = ItemTemplates.ById(creation.Cls.WeaponTemplate);
             if (weaponTemplate == null) throw new EngineError("Arma inicial desconhecida: " + Js.Str(creation.Cls.WeaponTemplate));
-            var startWeapon = Espalhar(Items.Instantiate(weaponTemplate, Rarities.All[0]));
+            var startWeapon = Espalhar(Items.Instantiate(weaponTemplate, Rarities.All[0], armaRng, armaNow));
             startWeapon.Equipped = true;
 
             // Poder de assinatura da classe (automático) + os escolhidos, sem duplicar a assinatura.
@@ -253,9 +253,10 @@ namespace RPGLegend.Engine
         /// inicial e só o poder da classe. Quem já tem classe sai como entrou (o mesmo objeto).
         /// A arma vai para a mão quando a principal está livre e não há escudo no caminho de uma arma de
         /// duas mãos; senão volta em <see cref="GuildTraining.ToInventory"/>.
-        /// Como no TS de hoje, o uid da arma sai do sorteio e do relógio padrão (sem rng injetável).
+        /// O uid da arma sai de <paramref name="armaRng"/> e <paramref name="armaNow"/> (o <c>armaInicial</c> do
+        /// TS); ausentes, do sorteio e do relógio padrão.
         /// </summary>
-        public static GuildTraining TrainAtGuild(Hero hero, ClassDef cls)
+        public static GuildTraining TrainAtGuild(Hero hero, ClassDef cls, RngFn armaRng = null, Func<double> armaNow = null)
         {
             if (HasClass(hero)) return new GuildTraining { Hero = hero, ToInventory = null };
 
@@ -264,7 +265,7 @@ namespace RPGLegend.Engine
 
             var template = ItemTemplates.ById(cls.WeaponTemplate);
             if (template == null) throw new EngineError("Arma inicial desconhecida: " + Js.Str(cls.WeaponTemplate));
-            var arma = Items.Instantiate(template, Rarities.All[0]);
+            var arma = Items.Instantiate(template, Rarities.All[0], armaRng, armaNow);
             // Mão principal livre, e sem escudo no caminho de uma arma de duas mãos.
             bool cabe = hero.Equip.Get("arma") == null && !(IsTwoHanded(arma) && hero.Equip.Get("secundaria") != null);
 

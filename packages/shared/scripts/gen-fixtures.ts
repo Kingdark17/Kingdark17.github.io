@@ -52,10 +52,9 @@
  * **Só a entrada gravada decide o resultado.** Enquanto um caso roda,
  * `Math.random` e `Date.now` lançam erro: se alguma função sortear ou ler
  * o relógio por fora do que recebeu, o gerador para, em vez de gravar um
- * número que o porte não teria como reproduzir. A exceção são os casos de
- * `buildHero` e `trainAtGuild`, que hoje sorteiam o `uid` da arma inicial
- * por dentro: eles são pulados (com aviso no terminal) até as duas funções
- * aceitarem `rng` e `now` pra arma, e entram sozinhos quando aceitarem.
+ * número que o porte não teria como reproduzir. Por isso as funções que criam
+ * item recebem `now` (e o `rng`) por parâmetro, como `buildHero` e
+ * `trainAtGuild` fazem com a arma inicial (`armaInicial`).
  *
  * Os casos reaproveitam os cenários dos `.test.ts` (o mesmo herói, monstro
  * e sequência de sorteios) e somam bordas — crítico, esquiva, nível alto,
@@ -70,6 +69,7 @@ import ts from 'typescript';
 
 import type {
   AttackStyle,
+  AttrKey,
   Attributes,
   CelulaDoMapa,
   CityCell,
@@ -83,6 +83,7 @@ import type {
   DungeonExtra,
   DungeonProgress,
   DungeonRun,
+  EquipSlot,
   EquippableItem,
   EstadoDoJogo,
   EstadoNaCidade,
@@ -95,6 +96,7 @@ import type {
   Item,
   ItemTemplate,
   JogadaDeAtaque,
+  Mochila,
   MonsterInstance,
   MonsterStatus,
   PassoDoTutorial,
@@ -892,14 +894,12 @@ caso('isTwoHanded: null', 'isTwoHanded', { item: null }, (a) => E.isTwoHanded(a.
 
 // --- buildHero e trainAtGuild ---
 //
-// Hoje as duas sorteiam o `uid` da arma inicial por dentro, e os casos são
-// pulados. A assinatura chamada aqui é a do patch proposto — um terceiro
-// argumento com `rng` e `now` pra arma —, por isso o cast: quando o patch
-// entrar, os casos passam a ser gravados sem mudar nada neste arquivo.
+// O terceiro argumento é o `rng` e o relógio do `uid` da arma inicial. Sem
+// ele, as duas sorteiam o uid por dentro, com `defaultRng` e `Date.now`.
 
 {
-  const buildHeroComArma = E.buildHero as unknown as (creation: HeroCreation, rng: Rng, armaInicial: { rng: Rng; now: () => number }) => Hero;
-  const trainAtGuildComArma = E.trainAtGuild as unknown as (hero: Hero, cls: ClassDef, armaInicial: { rng: Rng; now: () => number }) => GuildTraining;
+  const buildHeroComArma = E.buildHero;
+  const trainAtGuildComArma = E.trainAtGuild;
   const humano = E.raceById('humano')!;
   const orgulhoso = E.debuffById('orgulhoso')!;
   for (const [seed, classe, escolhidos] of [
@@ -2493,6 +2493,36 @@ const masmorra = naMasmorra(cidade, 7);
 const andarDoChefe = naMasmorra(cidade, 5, 5);
 const fundo = naMasmorra(cidade, 9, E.DUNGEON_FLOORS);
 
+/**
+ * Estados enxutos, pra função que só olha a sala atual: a sala vai sozinha na
+ * grade, e a cidade guardada fica de fora. A grade inteira em cada caso só
+ * engordaria o arquivo.
+ */
+const enxuto = (hero: Hero = cidade.hero, inventory: Item[] = cidade.inventory): EstadoNaCidade => ({
+  ...cidade,
+  map: [[E.celulaAtual(cidade) as CityCell]],
+  cityMap: null,
+  cityStart: null,
+  pos: { x: 0, y: 0 },
+  mapRows: 1,
+  mapCols: 1,
+  hero,
+  inventory,
+});
+
+/** A cidade enxuta parada numa sala do tipo pedido. */
+function naSalaDaCidade(tipo: string, hero: Hero = cidade.hero, inventory: Item[] = []): EstadoNaCidade {
+  const sala = cidade.map.flat().find((c) => c.type === tipo);
+  if (!sala) throw new Error(`a cidade de teste não tem ${tipo}`);
+  return { ...enxuto(hero, inventory), map: [[sala]] };
+}
+
+/** A masmorra enxuta numa sala com este conteúdo. */
+function naSalaDaMasmorra(celula: Partial<DungeonCell>, hero: Hero = cidade.hero, inventory: Item[] = [], o: Partial<EstadoNaMasmorra> = {}): EstadoNaMasmorra {
+  const sala: DungeonCell = { ...(E.celulaAtual(masmorra) as DungeonCell), ...celula };
+  return { ...masmorra, map: [[sala]], cityMap: null, cityStart: null, pos: { x: 0, y: 0 }, mapRows: 1, mapCols: 1, hero, inventory, ...o };
+}
+
 // ---------- estado ----------
 
 constante('LINHAS_DO_MAPA', E.LINHAS_DO_MAPA);
@@ -2619,9 +2649,9 @@ constante('GUIAS', E.GUIAS);
 
 const tutorial = (completed: Record<string, boolean>, o: Partial<Tutorial> = {}): Tutorial => ({ enabled: true, completed, rewarded: false, ...o });
 const todosMenos = (id: string): Record<string, boolean> => Object.fromEntries(E.PASSOS.filter((p) => p.id !== id).map((p) => [p.id, true]));
-const comTutorial = (t: Tutorial): EstadoNaCidade => ({ ...cidade, tutorial: t });
+const comTutorial = (t: Tutorial): EstadoNaCidade => ({ ...enxuto(), tutorial: t });
 
-caso('tutorialDe: save sem tutorial', 'tutorialDe', { estado: cidade }, (a) => E.tutorialDe(a.estado));
+caso('tutorialDe: save sem tutorial', 'tutorialDe', { estado: enxuto() }, (a) => E.tutorialDe(a.estado));
 caso('tutorialDe: com tutorial', 'tutorialDe', { estado: comTutorial(tutorial({ move: true }, { enabled: false })) }, (a) => E.tutorialDe(a.estado));
 
 for (const [nome, t] of [
@@ -2637,7 +2667,7 @@ function marcarPasso(nome: string, estado: EstadoDoJogo, id: string, chamada: Ch
   caso(`marcar: ${nome}`, 'marcar', { estado, id }, (a, ctx) => E.marcar(a.estado, a.id as PassoDoTutorial, ctx.rng, ctx.now), chamada);
 }
 
-marcarPasso('primeiro passo', cidade, 'move');
+marcarPasso('primeiro passo', enxuto(), 'move');
 marcarPasso('passo repetido', comTutorial(tutorial({ move: true })), 'move');
 marcarPasso('tutorial desligado', comTutorial(tutorial({}, { enabled: false })), 'shop');
 marcarPasso('passo desconhecido', comTutorial(tutorial({ move: true })), 'xyz');
@@ -2859,7 +2889,9 @@ const extrasNovos: DungeonExtra[] = [
 const extrasUsados = extrasNovos.map((e) => ({ ...e, used: true, ...(e.kind === 'crack' ? { secretCollected: true } : {}) }));
 const paredeAberta = extrasNovos.map((e) => (e.kind === 'crack' ? { ...e, used: true } : e));
 const salaCom = (extras: DungeonExtra[] | undefined, o: Partial<DungeonCell> = {}): DungeonCell => ({ ...(E.celulaAtual(masmorra) as DungeonCell), extras, ...o });
-const naSala = (celula: DungeonCell): EstadoNaMasmorra => E.substituirCelulaAtual(masmorra, celula);
+/** A placa lê o andar inteiro (escada, parede oca, chefe); o resto dos extras só olha a sala. */
+const naSalaInteira = (celula: DungeonCell): EstadoNaMasmorra => E.substituirCelulaAtual(masmorra, celula);
+const naSala = (celula: DungeonCell): EstadoNaMasmorra => naSalaDaMasmorra(celula);
 
 for (const [nome, celula] of [
   ['sala com extras', salaCom(extrasNovos)],
@@ -2907,12 +2939,12 @@ tocar('baú com ouro', naSala(salaCom(extrasNovos)), 1, 32);
 tocar('baú vazio', naSala(salaCom(extrasUsados)), 0, 33);
 tocar('vaso', naSala(salaCom(extrasNovos)), 2, 34);
 tocar('cacos', naSala(salaCom(extrasUsados)), 2, 35);
-tocar('placa', naSala(salaCom(extrasNovos)), 3, 36);
+tocar('placa', naSalaInteira(salaCom(extrasNovos)), 3, 36);
 tocar('parede rachada', naSala(salaCom(extrasNovos)), 4, 37);
 tocar('passagem já aberta', naSala(salaCom(paredeAberta)), 4, 38);
 tocar('índice que não existe', naSala(salaCom(extrasNovos)), 9, 39);
 tocar('sala de monstro: baú antes de vencer', naSala(salaCom(extrasNovos, { type: 'monster', beaten: false })), 0, 40);
-tocar('sala de monstro: placa antes de vencer', naSala(salaCom(extrasNovos, { type: 'monster', beaten: false })), 3, 41);
+tocar('sala de monstro: placa antes de vencer', naSalaInteira(salaCom(extrasNovos, { type: 'monster', beaten: false })), 3, 41);
 tocar('sala de monstro vencida: baú de ouro', naSala(salaCom(extrasNovos, { type: 'monster', beaten: true })), 1, 42);
 tocar('sala de chefe: vaso antes de vencer', naSala(salaCom(extrasNovos, { type: 'boss' })), 2, 43);
 tocar('baú de ouro na caverna difícil', { ...naSala(salaCom(extrasNovos)), masmorra: { dungeon: 'caverna', difficulty: 'dificil' }, floor: 12 }, 1, 44);
@@ -2925,6 +2957,396 @@ for (const [nome, extras, indice] of [
 ] as const) {
   caso(`abrirBauSecreto: ${nome}`, 'abrirBauSecreto', { estado: naSala(salaCom(extras as DungeonExtra[])), indice }, (a) => E.abrirBauSecreto(a.estado, a.indice));
 }
+
+// ---------- mochila e impacto ----------
+
+const espadaNova = item('espada', 'raro', 4);
+const escudo = item('escudo', 'comum', 5);
+const machado = item('machado', 'incomum', 6);
+const adaga = item('adaga', 'comum', 7);
+const elmo = item('placas_elmo', 'comum', 8);
+const anel = item('anel_som', 'raro', 9);
+const pocaoDeVida = item('pot_vida', 'comum', 10);
+const pocaoDeMana = item('pot_mana', 'comum', 11);
+const pergaminho = item('pergaminho', 'comum', 12);
+const minerio = item('minerio', 'comum', 13);
+
+const mochilaCom = (hero: Hero, inventory: Item[]): Mochila => ({ estado: enxuto(hero, inventory), log: [] });
+const guerreiro = heroi({ classe: 'guerreiro' });
+const comMachado = heroi({ classe: 'guerreiro', arma: machado });
+const comEscudo = heroi({ classe: 'guerreiro', equip: { secundaria: escudo } });
+const ferido = heroi({ classe: 'guerreiro', extra: { hp: 20, mp: 3 } });
+const tudoNaMochila = [espadaNova, escudo, machado, adaga, elmo, anel, pocaoDeVida, pocaoDeMana, pergaminho, minerio];
+
+caso(
+  'abrirMochila: marcas de equipado desencontradas',
+  'abrirMochila',
+  { estado: enxuto(guerreiro, [{ ...guerreiro.equip.arma!, equipped: false }, { ...anel, equipped: true }, pocaoDeVida]) },
+  (a) => E.abrirMochila(a.estado),
+);
+caso('abrirMochila: tudo em dia', 'abrirMochila', { estado: enxuto(guerreiro, [pocaoDeVida]) }, (a) => E.abrirMochila(a.estado));
+
+for (const peca of [espadaNova, escudo, anel, elmo, pocaoDeVida, pocaoDeMana, pergaminho, minerio]) {
+  caso(`podeEquipar: ${peca.templateId}`, 'podeEquipar', { item: peca }, (a) => E.podeEquipar(a.item));
+  caso(`podeUsar: ${peca.templateId}`, 'podeUsar', { item: peca }, (a) => E.podeUsar(a.item));
+}
+for (const peca of [escudo, adaga, espadaNova, machado, anel]) {
+  caso(`aceitaMaoSecundaria: ${peca.templateId}`, 'aceitaMaoSecundaria', { item: peca }, (a) => E.aceitaMaoSecundaria(a.item));
+}
+caso('slotDoItem: a arma na mão', 'slotDoItem', { estado: enxuto(guerreiro), item: guerreiro.equip.arma }, (a) => E.slotDoItem(a.estado, a.item!));
+caso('slotDoItem: peça da mochila', 'slotDoItem', { estado: enxuto(guerreiro), item: anel }, (a) => E.slotDoItem(a.estado, a.item));
+
+function naMochila(nome: string, fn: string, mochila: Mochila, extra: Record<string, unknown>, executar: (m: Mochila, a: Record<string, unknown>) => unknown): void {
+  caso(`${fn}: ${nome}`, fn, { mochila, ...extra }, (a) => executar(a.mochila, a));
+}
+
+naMochila('espada nova na mão', 'equipar', mochilaCom(guerreiro, tudoNaMochila), { item: espadaNova }, (m, a) => E.equipar(m, a.item as Item));
+naMochila('escudo na secundária', 'equipar', mochilaCom(guerreiro, tudoNaMochila), { item: escudo }, (m, a) => E.equipar(m, a.item as Item));
+naMochila('adaga pedida na secundária', 'equipar', mochilaCom(guerreiro, tudoNaMochila), { item: adaga, slot: 'secundaria' }, (m, a) =>
+  E.equipar(m, a.item as Item, a.slot as EquipSlot),
+);
+naMochila('machado de duas mãos larga o escudo', 'equipar', mochilaCom(comEscudo, tudoNaMochila), { item: machado }, (m, a) => E.equipar(m, a.item as Item));
+naMochila('escudo com as duas mãos ocupadas', 'equipar', mochilaCom(comMachado, tudoNaMochila), { item: escudo }, (m, a) => E.equipar(m, a.item as Item));
+naMochila('poção não vai', 'equipar', mochilaCom(guerreiro, tudoNaMochila), { item: pocaoDeVida }, (m, a) => E.equipar(m, a.item as Item));
+naMochila('arma inicial fora da mochila volta pra ela', 'equipar', mochilaCom(guerreiro, [machado]), { item: machado }, (m, a) => E.equipar(m, a.item as Item));
+naMochila('elmo e anel', 'equipar', mochilaCom(guerreiro, tudoNaMochila), { item: anel }, (m, a) => E.equipar(m, a.item as Item));
+
+naMochila('a arma', 'desequipar', mochilaCom(guerreiro, [pocaoDeVida]), { slot: 'arma' }, (m, a) => E.desequipar(m, a.slot as EquipSlot));
+naMochila('slot vazio', 'desequipar', mochilaCom(guerreiro, [pocaoDeVida]), { slot: 'elmo' }, (m, a) => E.desequipar(m, a.slot as EquipSlot));
+
+naMochila('poção de vida ferido', 'usar', mochilaCom(ferido, [pocaoDeVida, pocaoDeMana]), { item: pocaoDeVida }, (m, a) => E.usar(m, a.item as Item));
+naMochila('poção de mana', 'usar', mochilaCom(ferido, [pocaoDeVida, pocaoDeMana]), { item: pocaoDeMana }, (m, a) => E.usar(m, a.item as Item));
+naMochila('poção de vida com a vida cheia', 'usar', mochilaCom(guerreiro, [pocaoDeVida]), { item: pocaoDeVida }, (m, a) => E.usar(m, a.item as Item));
+naMochila('pergaminho', 'usar', mochilaCom(ferido, [pergaminho]), { item: pergaminho }, (m, a) => E.usar(m, a.item as Item));
+
+for (const [nome, hero, peca] of [
+  ['escudo com machado na mão', comMachado, escudo],
+  ['adaga com machado na mão', comMachado, adaga],
+  ['anel com machado na mão', comMachado, anel],
+  ['escudo com espada na mão', guerreiro, escudo],
+  ['o próprio machado', comMachado, machado],
+] as const) {
+  caso(`armaQueOcupaAsMaos: ${nome}`, 'armaQueOcupaAsMaos', { estado: enxuto(hero), item: peca }, (a) => E.armaQueOcupaAsMaos(a.estado, a.item));
+}
+naMochila('guarda o machado e põe o escudo', 'equiparNoLugarDaArma', mochilaCom(comMachado, tudoNaMochila), { item: escudo }, (m, a) =>
+  E.equiparNoLugarDaArma(m, a.item as Item),
+);
+naMochila('sem arma de duas mãos, vai pra secundária', 'equiparNoLugarDaArma', mochilaCom(guerreiro, tudoNaMochila), { item: adaga }, (m, a) =>
+  E.equiparNoLugarDaArma(m, a.item as Item),
+);
+naMochila('machado não vai na secundária', 'equiparNoLugarDaArma', mochilaCom(guerreiro, tudoNaMochila), { item: machado }, (m, a) =>
+  E.equiparNoLugarDaArma(m, a.item as Item),
+);
+
+naMochila('peça da mochila', 'descartar', mochilaCom(guerreiro, tudoNaMochila), { item: minerio }, (m, a) => E.descartar(m, a.item as Item));
+naMochila('peça vestida sai do slot', 'descartar', mochilaCom(comEscudo, [escudo, pocaoDeVida]), { item: escudo }, (m, a) => E.descartar(m, a.item as Item));
+naMochila('peça que não está na mochila', 'descartar', mochilaCom(guerreiro, [pocaoDeVida]), { item: anel }, (m, a) => E.descartar(m, a.item as Item));
+
+naMochila('com pontos', 'gastarPonto', mochilaCom(heroi({ classe: 'guerreiro', extra: { attrPoints: 2 } }), []), { chave: 'forca' }, (m, a) =>
+  E.gastarPonto(m, a.chave as AttrKey),
+);
+naMochila('sem pontos', 'gastarPonto', mochilaCom(guerreiro, []), { chave: 'sabedoria' }, (m, a) => E.gastarPonto(m, a.chave as AttrKey));
+
+const mago = heroi({ classe: 'mago' });
+for (const [nome, hero, peca, slot] of [
+  ['guardar a arma', guerreiro, guerreiro.equip.arma!, undefined],
+  ['espada melhor', guerreiro, espadaNova, undefined],
+  ['espada na mão do mago', mago, espadaNova, undefined],
+  ['anel', guerreiro, anel, undefined],
+  ['elmo', guerreiro, elmo, undefined],
+  ['escudo com machado na mão', comMachado, escudo, undefined],
+  ['adaga na secundária', guerreiro, adaga, 'secundaria'],
+  ['poção', guerreiro, pocaoDeVida, undefined],
+  ['minério', guerreiro, minerio, undefined],
+] as const) {
+  caso(`impactoDaPeca: ${nome}`, 'impactoDaPeca', { hero, item: peca, slotDesejado: slot }, (a) => E.impactoDaPeca(a.hero, a.item, a.slotDesejado));
+}
+
+// ---------- loja, quadro de missões, conversa, evento, professor, portão, guilda e totem ----------
+//
+// Os estados são enxutos sempre que a função só olha a sala atual: a sala do
+// tipo pedido vai sozinha na grade.
+
+// --- loja ---
+
+const rico = heroi({ classe: 'guerreiro', extra: { gold: 5000 } });
+const pobre = heroi({ classe: 'guerreiro', extra: { gold: 0 } });
+const lojaDe = (kind: 'shop' | 'blacksmith', hero: Hero, inventory: Item[] = []) =>
+  E.abrirLoja(naSalaDaCidade(kind, hero, inventory), kind, E.seededRng(50), relogio);
+
+for (const [nome, estado, kind, semente] of [
+  ['vendedor sem estoque sorteia', naSalaDaCidade('shop'), 'shop', 51],
+  ['ferreiro sem estoque sorteia', naSalaDaCidade('blacksmith'), 'blacksmith', 52],
+  ['vendedor com estoque guardado', lojaDe('shop', rico).estado, 'shop', 53],
+] as const) {
+  caso(`abrirLoja: ${nome}`, 'abrirLoja', { estado, kind }, (a, ctx) => E.abrirLoja(a.estado, a.kind, ctx.rng, ctx.now), { rng: { seed: semente }, now: AGORA });
+}
+
+const lojaRica = lojaDe('shop', rico, [espadaNova, { ...anel, equipped: true }, minerio]);
+const peca0 = E.estoque(lojaRica)[0]!;
+caso('estoque: vendedor', 'estoque', { loja: lojaRica }, (a) => E.estoque(a.loja));
+caso('vendaveis: o equipado fica', 'vendaveis', { loja: lojaRica }, (a) => E.vendaveis(a.loja));
+caso('precoDeCompra: sem desconto', 'precoDeCompra', { loja: lojaRica, item: peca0 }, (a) => E.precoDeCompra(a.loja, a.item));
+caso('precoDeCompra: com desconto', 'precoDeCompra', { loja: { ...lojaRica, desconto: 0.2 }, item: peca0 }, (a) => E.precoDeCompra(a.loja, a.item));
+caso('precoDeVenda: espada', 'precoDeVenda', { item: espadaNova }, (a) => E.precoDeVenda(a.item));
+caso('precoDaRenovacao: primeira', 'precoDaRenovacao', { loja: lojaRica }, (a) => E.precoDaRenovacao(a.loja));
+caso('precoDaRenovacao: terceira, na caverna difícil', 'precoDaRenovacao', {
+  loja: { ...lojaRica, renovacoes: 2, estado: { ...lojaRica.estado, masmorra: { dungeon: 'caverna', difficulty: 'dificil' }, floor: 9 } },
+}, (a) => E.precoDaRenovacao(a.loja));
+
+for (const roll of [1, 10, 15, 20]) caso(`pechinchar: dado ${roll}`, 'pechinchar', { loja: lojaRica, roll }, (a) => E.pechinchar(a.loja, a.roll));
+caso('pechinchar: só uma vez por visita', 'pechinchar', { loja: E.pechinchar(lojaRica, 20), roll: 1 }, (a) => E.pechinchar(a.loja, a.roll));
+
+caso('comprar: com ouro', 'comprar', { loja: lojaRica, item: peca0 }, (a) => E.comprar(a.loja, a.item));
+caso('comprar: com desconto', 'comprar', { loja: E.pechinchar(lojaRica, 20), item: peca0 }, (a) => E.comprar(a.loja, a.item));
+const lojaPobre = lojaDe('shop', pobre);
+caso('comprar: sem ouro', 'comprar', { loja: lojaPobre, item: E.estoque(lojaPobre)[0]! }, (a) => E.comprar(a.loja, a.item));
+caso('vender: espada', 'vender', { loja: lojaRica, item: espadaNova }, (a) => E.vender(a.loja, a.item));
+
+for (const [nome, loja, semente] of [
+  ['com ouro', lojaRica, 54],
+  ['a segunda, mais cara', { ...lojaRica, renovacoes: 1 }, 55],
+  ['sem ouro', lojaPobre, 56],
+  ['ferreiro', lojaDe('blacksmith', rico), 57],
+] as const) {
+  caso(`renovarEstoque: ${nome}`, 'renovarEstoque', { loja }, (a, ctx) => E.renovarEstoque(a.loja, ctx.rng, ctx.now), { rng: { seed: semente }, now: AGORA });
+}
+
+const ferreiro = lojaDe('blacksmith', rico, [espadaNova, minerio, item('essencia'), item('pedra_protecao')]);
+for (const [nome, loja, materialId, semente] of [
+  ['com minério', ferreiro, 'minerio', 58],
+  ['com essência', ferreiro, 'essencia', 59],
+  ['com outra semente', ferreiro, 'minerio', 60],
+  ['sem o material', ferreiro, 'catalisador_mitico', 61],
+  ['material que não existe', ferreiro, 'xyz', 62],
+  ['sem ouro', lojaDe('blacksmith', pobre, [espadaNova, minerio]), 'minerio', 63],
+] as const) {
+  caso(`reforjar: ${nome}`, 'reforjar', { loja, item: espadaNova, materialId }, (a, ctx) => E.reforjar(a.loja, a.item, a.materialId, ctx.rng), {
+    rng: { seed: semente },
+  });
+}
+
+// --- quadro de missões ---
+
+const quadroVazio = naSalaDaCidade('questboard', guerreiro);
+caso('abrirQuadro: quadro vazio ganha missões', 'abrirQuadro', { estado: quadroVazio }, (a, ctx) => E.abrirQuadro(a.estado, ctx.rng, ctx.now), { rng: { seed: 64 }, now: AGORA });
+const quadro = E.abrirQuadro(quadroVazio, E.seededRng(64), relogio);
+caso('abrirQuadro: com missões, não sorteia', 'abrirQuadro', { estado: quadro.estado }, (a, ctx) => E.abrirQuadro(a.estado, ctx.rng, ctx.now), { rng: { seed: 65 }, now: AGORA });
+caso('missoes: as do quadro', 'missoes', { quadro }, (a) => E.missoes(a.quadro));
+const [missaoA, missaoB] = quadro.estado.quests as [Quest, Quest];
+const concluida = { ...quadro, estado: { ...quadro.estado, quests: [{ ...missaoA, progress: missaoA.target, done: true }, missaoB] } };
+const perto = heroi({ classe: 'guerreiro', extra: { xp: E.xpForLevel(1) - 1 } });
+for (const [nome, q, id, semente] of [
+  ['concluída', concluida, missaoA.id, 66],
+  ['concluída, sobe de nível', { ...concluida, estado: { ...concluida.estado, hero: perto } }, missaoA.id, 67],
+  ['ainda aberta', concluida, missaoB.id, 68],
+  ['que não existe', concluida, 'q_nada', 69],
+] as const) {
+  caso(`resgatar: ${nome}`, 'resgatar', { quadro: q, questId: id }, (a, ctx) => E.resgatar(a.quadro, a.questId, ctx.rng, ctx.now), { rng: { seed: semente }, now: AGORA });
+}
+
+// --- conversa com NPC ---
+
+const npc = (service: string, o: Record<string, unknown> = {}) => ({
+  name: 'Erma',
+  role: 'Vidente',
+  service,
+  icon: '🔮',
+  lines: ['Bem-vindo, viajante.', 'O caminho adiante é escuro.'],
+  serviceUsed: false,
+  ...o,
+});
+const naMasmorraComNpc = (n: unknown, hero: Hero = guerreiro, inventory: Item[] = [], party: Companion[] = []) =>
+  naSalaDaMasmorra({ type: 'npc', npc: n as DungeonCell['npc'] }, hero, inventory, { party });
+
+caso('abrirDialogo: NPC da cidade', 'abrirDialogo', { estado: naSalaDaCidade('npc') }, (a) => E.abrirDialogo(a.estado));
+caso('abrirDialogo: NPC da masmorra', 'abrirDialogo', { estado: naMasmorraComNpc(npc('heal')) }, (a) => E.abrirDialogo(a.estado));
+caso('abrirDialogo: sala sem NPC', 'abrirDialogo', { estado: naSalaDaCidade('shop') }, (a) => E.abrirDialogo(a.estado));
+
+const dialogo = E.abrirDialogo(naMasmorraComNpc(npc('heal')))!;
+const naUltimaFala = { ...dialogo, linha: 1 };
+caso('falaAtual: a primeira', 'falaAtual', { dialogo }, (a) => E.falaAtual(a.dialogo));
+caso('falaAtual: depois da última', 'falaAtual', { dialogo: { ...dialogo, linha: 5 } }, (a) => E.falaAtual(a.dialogo));
+caso('temMaisFalas: na primeira', 'temMaisFalas', { dialogo }, (a) => E.temMaisFalas(a.dialogo));
+caso('temMaisFalas: na última', 'temMaisFalas', { dialogo: naUltimaFala }, (a) => E.temMaisFalas(a.dialogo));
+caso('proximaFala: avança', 'proximaFala', { dialogo }, (a) => E.proximaFala(a.dialogo));
+caso('proximaFala: na última fica', 'proximaFala (na última fica)', { dialogo: naUltimaFala }, (a) => E.proximaFala(a.dialogo) === a.dialogo);
+for (const servico of ['heal', 'blessing', 'barter', 'reveal', 'recruit', 'xyz']) {
+  caso(`rotuloDoServico: ${servico}`, 'rotuloDoServico', { npc: npc(servico) }, (a) => E.rotuloDoServico(a.npc as never));
+  caso(`servicoDisponivel: ${servico}`, 'servicoDisponivel', { npc: npc(servico) }, (a) => E.servicoDisponivel(a.npc as never));
+}
+caso('servicoDisponivel: já usado', 'servicoDisponivel', { npc: npc('heal', { serviceUsed: true }) }, (a) => E.servicoDisponivel(a.npc as never));
+
+const machucado = heroi({ classe: 'guerreiro', extra: { hp: 10, mp: 2, gold: 500 } });
+const comTres = [companheiro('guerreiro'), companheiro('mago'), companheiro('clerigo')];
+const dialogoNa = (estado: EstadoDoJogo) => E.abrirDialogo(estado)!;
+for (const [nome, d, semente] of [
+  ['curar ferido com ouro', dialogoNa(naMasmorraComNpc(npc('heal'), machucado)), 70],
+  ['curar sem ouro', dialogoNa(naMasmorraComNpc(npc('heal'), heroi({ classe: 'guerreiro', extra: { hp: 10, gold: 0 } }))), 71],
+  ['curar quem está inteiro', dialogoNa(naMasmorraComNpc(npc('heal'))), 72],
+  ['bênção', dialogoNa(naMasmorraComNpc(npc('blessing'))), 73],
+  ['troca com material', dialogoNa(naMasmorraComNpc(npc('barter'), guerreiro, [minerio, pocaoDeVida])), 74],
+  ['troca sem material', dialogoNa(naMasmorraComNpc(npc('barter'), guerreiro, [pocaoDeVida])), 75],
+  ['revelar na masmorra', E.abrirDialogo(E.substituirCelulaAtual(masmorra, { ...(E.celulaAtual(masmorra) as DungeonCell), npc: npc('reveal') as never }))!, 76],
+  ['revelar na cidade', { ...dialogoNa(naSalaDaCidade('npc')), npc: npc('reveal') as never }, 77],
+  ['recrutar', dialogoNa(naMasmorraComNpc(npc('recruit'))), 78],
+  ['recrutar com a equipe cheia', dialogoNa(naMasmorraComNpc(npc('recruit'), guerreiro, [], comTres)), 79],
+  ['serviço já usado', dialogoNa(naMasmorraComNpc(npc('heal', { serviceUsed: true }), machucado)), 80],
+  ['serviço que não existe', dialogoNa(naMasmorraComNpc(npc('xyz'))), 81],
+  ['NPC da cidade cura', { ...dialogoNa(naSalaDaCidade('npc', machucado)), npc: npc('heal') as never }, 82],
+] as const) {
+  caso(`usarServico: ${nome}`, 'usarServico', { dialogo: d }, (a, ctx) => E.usarServico(a.dialogo, ctx.rng, ctx.now), { rng: { seed: semente }, now: AGORA });
+}
+
+// --- evento ---
+
+const naSalaDoEvento = (templateId: string, o: Partial<DungeonCell> = {}, hero: Hero = guerreiro) =>
+  naSalaDaMasmorra({ type: 'event', event: { templateId } as DungeonCell['event'], ...o }, hero);
+caso('abrirEvento: aventureiro ferido', 'abrirEvento', { estado: naSalaDoEvento('ferido') }, (a) => E.abrirEvento(a.estado));
+caso('abrirEvento: já resolvido', 'abrirEvento', { estado: naSalaDoEvento('altar', { resolved: true }) }, (a) => E.abrirEvento(a.estado));
+caso('abrirEvento: sala sem evento', 'abrirEvento', { estado: naSalaDaMasmorra({ type: 'normal' }) }, (a) => E.abrirEvento(a.estado));
+caso('abrirEvento: evento desconhecido', 'abrirEvento', { estado: naSalaDoEvento('xyz') }, (a) => E.abrirEvento(a.estado));
+constante('ESCOLHAS', E.ESCOLHAS);
+
+const fraco = heroi({ classe: 'guerreiro', extra: { hp: 3, gold: 5 } });
+for (const [templateId, escolhaId, hero, semente] of [
+  ['ferido', 'ajudar', guerreiro, 83],
+  ['ferido', 'ajudar', fraco, 84],
+  ['ferido', 'curar', guerreiro, 85],
+  ['ferido', 'curar', guerreiro, 86],
+  ['ferido', 'ignorar', guerreiro, 87],
+  ['altar', 'estudar', guerreiro, 88],
+  ['altar', 'estudar', heroi({ classe: 'mago', attrs: { intelecto: 25 } }), 89],
+  ['altar', 'rezar', guerreiro, 90],
+  ['altar', 'sacrificar', guerreiro, 91],
+  ['altar', 'sacrificar', fraco, 92],
+  ['porta', 'forcar', heroi({ classe: 'guerreiro', attrs: { forca: 25 } }), 93],
+  ['porta', 'forcar', guerreiro, 94],
+  ['porta', 'examinar', heroi({ classe: 'mago', attrs: { intelecto: 25 } }), 95],
+  ['porta', 'desistir', guerreiro, 96],
+] as const) {
+  const evento = E.abrirEvento(naSalaDoEvento(templateId, {}, hero))!;
+  caso(`escolher: ${templateId}, ${escolhaId}, semente ${semente}`, 'escolher', { evento, escolha: escolhaId }, (a, ctx) => E.escolher(a.evento, a.escolha as never, ctx.rng, ctx.now), {
+    rng: { seed: semente },
+    now: AGORA,
+  });
+}
+caso('escolher: evento já resolvido', 'escolher', { evento: E.abrirEvento(naSalaDoEvento('porta', { resolved: true }))!, escolha: 'forcar' }, (a, ctx) =>
+  E.escolher(a.evento, a.escolha as never, ctx.rng, ctx.now),
+{ rng: { seed: 97 }, now: AGORA });
+caso('escolhas: altar', 'escolhas', { evento: E.abrirEvento(naSalaDoEvento('altar'))! }, (a) => E.escolhas(a.evento));
+
+// --- professor ---
+
+const aprendizDeMestre = heroi({ classe: 'guerreiro', extra: { masteryBattles: E.masteryBattlesFor(4), powerIds: ['golpe_poderoso'] } });
+const comTresPoderes = heroi({ classe: 'guerreiro', extra: { masteryBattles: E.masteryBattlesFor(4), powerIds: ['golpe_poderoso', ...tresPoderes.slice(0, 2)] } });
+const naSalaDoMestre = (hero: Hero, teacher: Partial<DungeonTeacher> = {}) =>
+  naSalaDaMasmorra({ type: 'teacher', teacher: { classId: 'guerreiro', number: 1, ...teacher } }, hero, [], { floor: 30 });
+for (const [nome, estado] of [
+  ['ensina quem tem vaga', naSalaDoMestre(aprendizDeMestre)],
+  ['troca com quem tem três', naSalaDoMestre(comTresPoderes)],
+  ['mestre de outra classe', naSalaDoMestre(aprendizDeMestre, { classId: 'mago' })],
+  ['mestre que já passou', naSalaDoMestre(heroi({ classe: 'guerreiro', extra: { masteryBattles: E.masteryBattlesFor(4), teachersMet: 1 } }))],
+  ['sala sem mestre', naSalaDaMasmorra({ type: 'normal' })],
+] as const) {
+  caso(`abrirProfessor: ${nome}`, 'abrirProfessor', { estado }, (a) => E.abrirProfessor(a.estado));
+}
+const professor = E.abrirProfessor(naSalaDoMestre(aprendizDeMestre))!;
+const professorDeTroca = E.abrirProfessor(naSalaDoMestre(comTresPoderes))!;
+caso('ofertas: o que ele ensina', 'ofertas', { professor }, (a) => E.ofertas(a.professor));
+caso('trocaveis: o que dá pra esquecer', 'trocaveis', { professor: professorDeTroca }, (a) => E.trocaveis(a.professor));
+const oferta = E.ofertas(professor)[0]!.id;
+caso('aprender: da lista', 'aprender', { professor, powerId: oferta }, (a) => E.aprender(a.professor, a.powerId));
+caso('aprender: fora da lista devolve o mesmo', 'aprender (fora da lista devolve o mesmo)', { professor, powerId: 'xyz' }, (a) => E.aprender(a.professor, a.powerId) === a.professor);
+const esquecer = E.trocaveis(professorDeTroca)[0]!.id;
+const novo = E.ofertas(professorDeTroca)[0]!.id;
+caso('trocar: um por um da lista', 'trocar', { professor: professorDeTroca, esquecer, aprenderId: novo }, (a) => E.trocar(a.professor, a.esquecer, a.aprenderId));
+caso('trocar: inválida devolve o mesmo', 'trocar (inválida devolve o mesmo)', { professor: professorDeTroca, esquecer: 'golpe_poderoso', aprenderId: novo }, (a) =>
+  E.trocar(a.professor, a.esquecer, a.aprenderId) === a.professor,
+);
+
+// --- portão ---
+
+for (const [nome, bloqueio] of [
+  ['nível', { kind: 'level', minLevel: 15 }],
+  ['masmorra anterior', { kind: 'previous_dungeon', dungeon: 'floresta' }],
+  ['masmorra anterior desconhecida', { kind: 'previous_dungeon', dungeon: 'xyz' }],
+  ['dificuldade anterior', { kind: 'previous_difficulty', difficulty: 'normal' }],
+] as const) {
+  caso(`motivo: ${nome}`, 'motivo', { bloqueio }, (a) => E.motivo(a.bloqueio as never));
+}
+
+const veteranoDoPortao = heroi({ classe: 'guerreiro', level: 20 });
+const progressoDeVeterano: DungeonProgress = { cleared: ['floresta:normal'], totems: { 'floresta:normal': [20, 40], 'caverna:normal': [20] } };
+const portaoDe = (hero: Hero, progresso: DungeonProgress, masmorraDaVez: DungeonRun = cidade.masmorra) =>
+  ({ ...naSalaDaCidade('gate', hero), progresso, masmorra: masmorraDaVez }) as EstadoNaCidade;
+const naCidadeDoVeterano = portaoDe(veteranoDoPortao, progressoDeVeterano, { dungeon: 'caverna', difficulty: 'normal' });
+for (const [nome, estado] of [
+  ['herói novo', portaoDe(guerreiro, { cleared: [], totems: {} })],
+  ['veterano volta pra caverna', naCidadeDoVeterano],
+  ['última descida fechada', portaoDe(guerreiro, { cleared: [], totems: {} }, { dungeon: 'torre', difficulty: 'pesadelo' })],
+] as const) {
+  caso(`abrirPortao: ${nome}`, 'abrirPortao', { estado }, (a) => E.abrirPortao(a.estado));
+  const portao = E.abrirPortao(estado);
+  caso(`masmorras: ${nome}`, 'masmorras', { portao }, (a) => E.masmorras(a.portao));
+  caso(`dificuldades: ${nome}`, 'dificuldades', { portao }, (a) => E.dificuldades(a.portao));
+  caso(`andares: ${nome}`, 'andares', { portao }, (a) => E.andares(a.portao));
+}
+const portaoDoVeterano = E.abrirPortao(naCidadeDoVeterano);
+caso('escolherMasmorra: aberta', 'escolherMasmorra', { portao: portaoDoVeterano, dungeon: 'floresta' }, (a) => E.escolherMasmorra(a.portao, a.dungeon as never));
+caso('escolherMasmorra: fechada devolve o mesmo', 'escolherMasmorra (fechada devolve o mesmo)', { portao: portaoDoVeterano, dungeon: 'torre' }, (a) =>
+  E.escolherMasmorra(a.portao, a.dungeon as never) === a.portao,
+);
+caso('escolherDificuldade: aberta', 'escolherDificuldade', { portao: E.escolherMasmorra(portaoDoVeterano, 'floresta'), difficulty: 'dificil' }, (a) =>
+  E.escolherDificuldade(a.portao, a.difficulty as never),
+);
+caso('escolherDificuldade: fechada devolve o mesmo', 'escolherDificuldade (fechada devolve o mesmo)', { portao: portaoDoVeterano, difficulty: 'pesadelo' }, (a) =>
+  E.escolherDificuldade(a.portao, a.difficulty as never) === a.portao,
+);
+caso('escolherAndar: um totem tocado', 'escolherAndar', { portao: E.escolherMasmorra(portaoDoVeterano, 'floresta'), andar: 40 }, (a) =>
+  E.escolherAndar(a.portao, a.andar),
+);
+caso('escolherAndar: andar sem totem devolve o mesmo', 'escolherAndar (andar sem totem devolve o mesmo)', { portao: portaoDoVeterano, andar: 30 }, (a) =>
+  E.escolherAndar(a.portao, a.andar) === a.portao,
+);
+for (const [nome, portao, semente] of [
+  ['pelo andar 1', E.abrirPortao(portaoDe(guerreiro, { cleared: [], totems: {} })), 98],
+  ['pelo totem do 20 da caverna', E.escolherAndar(portaoDoVeterano, 20), 99],
+  ['escolha fechada', { ...portaoDoVeterano, escolha: { dungeon: 'torre', difficulty: 'normal' } }, 100],
+  ['andar que não abre', { ...portaoDoVeterano, andar: 30 }, 101],
+] as const) {
+  caso(`entrar: ${nome}`, 'entrar', { portao }, (a, ctx) => E.entrar(a.portao as never, ctx.rng, ctx.now), { rng: { seed: semente }, now: AGORA });
+}
+
+// --- guilda ---
+
+const aprendizNovo = E.buildApprentice({ name: 'Novo', race: E.raceById('humano')!, debuff: E.debuffById('orgulhoso')! }, E.seededRng(1));
+const naGuilda = (hero: Hero, inventory: Item[] = [], t?: Tutorial) => ({ ...naSalaDaCidade('guild', hero, inventory), ...(t ? { tutorial: t } : {}) });
+caso('abrirGuilda: na guilda', 'abrirGuilda', { estado: naGuilda(aprendizNovo) }, (a) => E.abrirGuilda(a.estado));
+for (const [nome, estado, classe, semente] of [
+  ['aprendiz vira mago', naGuilda(aprendizNovo), 'mago', 102],
+  ['aprendiz de espada na mão: o cajado vai pra mochila', naGuilda({ ...aprendizNovo, equip: { ...aprendizNovo.equip, arma: espadaNova } }, [espadaNova]), 'mago', 103],
+  ['quem já tem classe não troca', naGuilda(guerreiro), 'mago', 104],
+  ['o treino fecha o tutorial', naGuilda(aprendizNovo, [], tutorial(todosMenos('guild'))), 'barbaro', 105],
+] as const) {
+  caso(`treinar: ${nome}`, 'treinar', { guilda: E.abrirGuilda(estado), classe: E.classById(classe)! }, (a, ctx) => E.treinar(a.guilda, a.classe, ctx.rng, ctx.now), {
+    rng: { seed: semente },
+    now: AGORA,
+  });
+}
+
+// --- totem ---
+
+const noTotem = (progresso: DungeonProgress, floor = 20) => naSalaDaMasmorra({ type: 'totem' }, guerreiro, [], { floor, progresso });
+for (const [nome, estado] of [
+  ['primeira vez', noTotem({ cleared: [], totems: {} })],
+  ['já tocado', noTotem({ cleared: [], totems: { 'floresta:normal': [20] } })],
+  ['outra masmorra', { ...noTotem({ cleared: [], totems: { 'floresta:normal': [20] } }), masmorra: { dungeon: 'caverna', difficulty: 'dificil' } }],
+] as const) {
+  caso(`tocarTotem: ${nome}`, 'tocarTotem', { estado }, (a) => E.tocarTotem(a.estado));
+}
+const totem = E.tocarTotem({ ...masmorra, floor: 20, progresso: { cleared: [], totems: {} } });
+caso('voltarPeloTotem: de volta pra cidade', 'voltarPeloTotem', { totem }, (a) => E.voltarPeloTotem(a.totem));
 
 // =====================================================================
 // tabelas — fixtures/data

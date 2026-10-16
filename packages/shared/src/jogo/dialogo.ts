@@ -59,13 +59,13 @@ export function servicoDisponivel(npc: Npc): boolean {
  * ouro e vida, bênção, mochila, mapa, ou a equipe — e o `serviceUsed` só
  * é marcado quando algo realmente aconteceu, igual ao original.
  */
-export function usarServico(dialogo: Dialogo, rng: Rng = defaultRng): Dialogo {
+export function usarServico(dialogo: Dialogo, rng: Rng = defaultRng, now?: () => number): Dialogo {
   if (dialogo.npc.serviceUsed) return { ...dialogo, log: ['Este serviço já foi utilizado durante este encontro.'] };
 
   const acao = ACOES[dialogo.npc.service];
   if (!acao) return { ...dialogo, log: ['Este NPC não possui um serviço disponível.'] };
 
-  const { estado, usado, mensagem } = acao(dialogo.estado, rng);
+  const { estado, usado, mensagem } = acao(dialogo.estado, rng, now);
   const npc: Npc = usado ? { ...dialogo.npc, serviceUsed: true } : dialogo.npc;
 
   return { ...dialogo, estado: usado ? comNpc(estado, npc) : estado, npc, log: [mensagem] };
@@ -77,7 +77,7 @@ interface ResultadoDoServico {
   mensagem: string;
 }
 
-type AcaoDeServico = (estado: EstadoDoJogo, rng: Rng) => ResultadoDoServico;
+type AcaoDeServico = (estado: EstadoDoJogo, rng: Rng, now: (() => number) | undefined) => ResultadoDoServico;
 
 const ACOES: Record<NpcService, AcaoDeServico> = {
   heal: (estado) => {
@@ -104,8 +104,8 @@ const ACOES: Record<NpcService, AcaoDeServico> = {
     };
   },
 
-  barter: (estado, rng) => {
-    const troca = resolveBarter(estado.inventory, andarDeForca(estado), { rng });
+  barter: (estado, rng, now) => {
+    const troca = resolveBarter(estado.inventory, andarDeForca(estado), { rng, now });
     if (troca.outcome.kind === 'no_material') {
       return { estado, usado: false, mensagem: 'Você não tem nenhum material para trocar.' };
     }

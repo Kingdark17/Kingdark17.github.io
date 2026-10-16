@@ -31,11 +31,11 @@ export interface Loja {
   log: string[];
 }
 
-export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = defaultRng): Loja {
+export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = defaultRng, now?: () => number): Loja {
   const sala = celulaAtual(estado) as CityCell;
   const comEstoque = sala.forSale?.length
     ? estado
-    : substituirCelulaAtual(estado, { ...sala, forSale: rollStock(kind, andarDeForca(estado), { rng }) });
+    : substituirCelulaAtual(estado, { ...sala, forSale: rollStock(kind, andarDeForca(estado), { rng, now }) });
 
   return {
     estado: comEstoque,
@@ -114,9 +114,9 @@ export function vender(loja: Loja, item: Item): Loja {
   };
 }
 
-export function renovarEstoque(loja: Loja, rng: Rng = defaultRng): Loja {
+export function renovarEstoque(loja: Loja, rng: Rng = defaultRng, now?: () => number): Loja {
   const sala = celulaAtual(loja.estado) as CityCell;
-  const renovacao = resolveRestock(loja.estado.hero, loja.kind, andarDeForca(loja.estado), loja.renovacoes, { rng });
+  const renovacao = resolveRestock(loja.estado.hero, loja.kind, andarDeForca(loja.estado), loja.renovacoes, { rng, now });
 
   if (renovacao.outcome.kind === 'insufficient_gold') {
     return { ...loja, log: [`Renovar o estoque custa ${renovacao.outcome.required} de ouro.`] };

@@ -34,7 +34,7 @@ namespace RPGLegend.Engine.Json
             MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
             DateParseHandling = DateParseHandling.None,
             FloatParseHandling = FloatParseHandling.Double,
-            Converters = new List<JsonConverter> { new JsNumberConverter(), new OrderedMapConverter(), new AttributesConverter() },
+            Converters = new List<JsonConverter> { new JsNumberConverter(), new OrderedMapConverter(), new AttributesConverter(), new EstadoDoJogoConverter() },
         };
 
         /// <summary>Lê um valor JSON como T. Ausente ou null viram default(T).</summary>

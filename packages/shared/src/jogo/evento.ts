@@ -69,10 +69,10 @@ export function escolhas(evento: Evento): Escolha[] {
   return ESCOLHAS[evento.template.id];
 }
 
-export function escolher(evento: Evento, escolha: EventChoiceId, rng: Rng = defaultRng): Evento {
+export function escolher(evento: Evento, escolha: EventChoiceId, rng: Rng = defaultRng, now?: () => number): Evento {
   if (evento.resolvido) return evento;
 
-  const resultado = resolveEvent(evento.estado.hero, andarDeForca(evento.estado), escolha, { rng });
+  const resultado = resolveEvent(evento.estado.hero, andarDeForca(evento.estado), escolha, { rng, now });
   const mensagem = narrar(resultado.outcome) + narrarXp(resultado.xp);
 
   if (!resultado.resolved) {

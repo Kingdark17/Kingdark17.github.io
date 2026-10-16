@@ -11860,6 +11860,991 @@
     }
   },
   {
+    "name": "buildHero: guerreiro, seed 1",
+    "input": {
+      "fn": "buildHero",
+      "args": {
+        "creation": {
+          "name": "Pronto",
+          "race": {
+            "id": "humano",
+            "name": "Humano",
+            "icon": "🧑",
+            "desc": "Versátil e equilibrado em todos os atributos.",
+            "bonus": {
+              "forca": 1,
+              "destreza": 1,
+              "constituicao": 1,
+              "intelecto": 1,
+              "sabedoria": 1,
+              "carisma": 1
+            }
+          },
+          "cls": {
+            "id": "guerreiro",
+            "name": "Guerreiro",
+            "icon": "⚔️",
+            "weaponTemplate": "espada",
+            "bias": {
+              "forca": 3,
+              "constituicao": 2
+            },
+            "desc": "Combate corpo a corpo, resistente na linha de frente.",
+            "signatureId": "golpe_poderoso",
+            "affinity": {
+              "espada": 100,
+              "machado": 90,
+              "maca": 70,
+              "adaga": 55,
+              "arco": 50,
+              "cajado": 25,
+              "marreta": 90,
+              "violao": 20
+            },
+            "ataquePrincipal": "fisico"
+          },
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "chosenPowerIds": []
+        },
+        "armaInicial": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "level": 1,
+        "attrs": {
+          "forca": 13,
+          "destreza": 7,
+          "constituicao": 12,
+          "intelecto": 12,
+          "sabedoria": 12,
+          "carisma": 7
+        },
+        "equip": {
+          "arma": {
+            "uid": "espada_1700000000000_61283",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": true,
+            "procChance": 0.15
+          },
+          "secundaria": null,
+          "elmo": null,
+          "armadura": null,
+          "calca": null,
+          "botas": null,
+          "acessorio": null
+        },
+        "name": "Pronto",
+        "race": "Humano",
+        "raceIcon": "🧑",
+        "className": "Guerreiro",
+        "classIcon": "⚔️",
+        "classId": "guerreiro",
+        "raceId": "humano",
+        "xp": 0,
+        "xpNext": 40,
+        "attrPoints": 0,
+        "gold": 45,
+        "powerNames": [
+          "Golpe Poderoso"
+        ],
+        "powerIds": [
+          "golpe_poderoso"
+        ],
+        "debuff": {
+          "id": "orgulhoso",
+          "name": "Orgulhoso",
+          "icon": "👑",
+          "desc": "-1 Carisma em negociações com autoridades.",
+          "attr": "carisma"
+        },
+        "killCount": 0,
+        "masteryBattles": 0,
+        "derived": {
+          "maxHp": 145,
+          "maxMp": 72,
+          "dmgFisico": 26,
+          "dmgMagico": 36,
+          "esquiva": 3.5,
+          "critico": 8.5,
+          "velocidade": 7,
+          "curaBonus": 12,
+          "resistMagica": 12,
+          "descontoLoja": 3.5
+        },
+        "maxHp": 145,
+        "hp": 145,
+        "maxMp": 72,
+        "mp": 72
+      },
+      "rngCalls": 8
+    }
+  },
+  {
+    "name": "buildHero: mago, seed 2",
+    "input": {
+      "fn": "buildHero",
+      "args": {
+        "creation": {
+          "name": "Pronto",
+          "race": {
+            "id": "humano",
+            "name": "Humano",
+            "icon": "🧑",
+            "desc": "Versátil e equilibrado em todos os atributos.",
+            "bonus": {
+              "forca": 1,
+              "destreza": 1,
+              "constituicao": 1,
+              "intelecto": 1,
+              "sabedoria": 1,
+              "carisma": 1
+            }
+          },
+          "cls": {
+            "id": "mago",
+            "name": "Mago",
+            "icon": "🧙",
+            "weaponTemplate": "cajado",
+            "bias": {
+              "intelecto": 3,
+              "sabedoria": 1
+            },
+            "desc": "Magias ofensivas e controle de mana.",
+            "signatureId": "bola_de_fogo",
+            "affinity": {
+              "cajado": 100,
+              "maca": 55,
+              "adaga": 45,
+              "arco": 40,
+              "espada": 30,
+              "machado": 20,
+              "marreta": 20,
+              "violao": 30
+            },
+            "ataquePrincipal": "magico"
+          },
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "chosenPowerIds": [
+            "escudo_arcano",
+            "bola_de_fogo"
+          ]
+        },
+        "armaInicial": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "level": 1,
+        "attrs": {
+          "forca": 11,
+          "destreza": 8,
+          "constituicao": 8,
+          "intelecto": 13,
+          "sabedoria": 13,
+          "carisma": 9
+        },
+        "equip": {
+          "arma": {
+            "uid": "cajado_1700000000000_49919",
+            "templateId": "cajado",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 3,
+              "mana": 8
+            },
+            "value": 24,
+            "equipped": true,
+            "procChance": 0.1
+          },
+          "secundaria": null,
+          "elmo": null,
+          "armadura": null,
+          "calca": null,
+          "botas": null,
+          "acessorio": null
+        },
+        "name": "Pronto",
+        "race": "Humano",
+        "raceIcon": "🧑",
+        "className": "Mago",
+        "classIcon": "🧙",
+        "classId": "mago",
+        "raceId": "humano",
+        "xp": 0,
+        "xpNext": 40,
+        "attrPoints": 0,
+        "gold": 37,
+        "powerNames": [
+          "Bola de Fogo",
+          "Escudo Arcano"
+        ],
+        "powerIds": [
+          "bola_de_fogo",
+          "escudo_arcano"
+        ],
+        "debuff": {
+          "id": "orgulhoso",
+          "name": "Orgulhoso",
+          "icon": "👑",
+          "desc": "-1 Carisma em negociações com autoridades.",
+          "attr": "carisma"
+        },
+        "killCount": 0,
+        "masteryBattles": 0,
+        "derived": {
+          "maxHp": 105,
+          "maxMp": 85,
+          "dmgFisico": 22,
+          "dmgMagico": 39,
+          "esquiva": 4,
+          "critico": 9,
+          "velocidade": 8,
+          "curaBonus": 13,
+          "resistMagica": 13,
+          "descontoLoja": 4.5
+        },
+        "maxHp": 105,
+        "hp": 105,
+        "maxMp": 85,
+        "mp": 85
+      },
+      "rngCalls": 8
+    }
+  },
+  {
+    "name": "buildHero: bardo, seed 3",
+    "input": {
+      "fn": "buildHero",
+      "args": {
+        "creation": {
+          "name": "Pronto",
+          "race": {
+            "id": "humano",
+            "name": "Humano",
+            "icon": "🧑",
+            "desc": "Versátil e equilibrado em todos os atributos.",
+            "bonus": {
+              "forca": 1,
+              "destreza": 1,
+              "constituicao": 1,
+              "intelecto": 1,
+              "sabedoria": 1,
+              "carisma": 1
+            }
+          },
+          "cls": {
+            "id": "bardo",
+            "name": "Bardo",
+            "icon": "🎵",
+            "weaponTemplate": "violao",
+            "bias": {
+              "carisma": 3,
+              "destreza": 1
+            },
+            "desc": "Usa música para fortalecer aliados e enfraquecer inimigos.",
+            "signatureId": "cancao_debilitante",
+            "affinity": {
+              "adaga": 100,
+              "arco": 80,
+              "espada": 65,
+              "cajado": 65,
+              "maca": 50,
+              "machado": 30,
+              "marreta": 30,
+              "violao": 100
+            }
+          },
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "chosenPowerIds": [
+            "passo_veloz"
+          ]
+        },
+        "armaInicial": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "level": 1,
+        "attrs": {
+          "forca": 11,
+          "destreza": 8,
+          "constituicao": 9,
+          "intelecto": 7,
+          "sabedoria": 11,
+          "carisma": 11
+        },
+        "equip": {
+          "arma": {
+            "uid": "violao_1700000000000_48672",
+            "templateId": "violao",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 3,
+              "critico": 6,
+              "esquiva": 2
+            },
+            "value": 23,
+            "equipped": true,
+            "procChance": 0.15
+          },
+          "secundaria": null,
+          "elmo": null,
+          "armadura": null,
+          "calca": null,
+          "botas": null,
+          "acessorio": null
+        },
+        "name": "Pronto",
+        "race": "Humano",
+        "raceIcon": "🧑",
+        "className": "Bardo",
+        "classIcon": "🎵",
+        "classId": "bardo",
+        "raceId": "humano",
+        "xp": 0,
+        "xpNext": 40,
+        "attrPoints": 0,
+        "gold": 33,
+        "powerNames": [
+          "Canção Debilitante",
+          "Passo Veloz"
+        ],
+        "powerIds": [
+          "cancao_debilitante",
+          "passo_veloz"
+        ],
+        "debuff": {
+          "id": "orgulhoso",
+          "name": "Orgulhoso",
+          "icon": "👑",
+          "desc": "-1 Carisma em negociações com autoridades.",
+          "attr": "carisma"
+        },
+        "killCount": 0,
+        "masteryBattles": 0,
+        "derived": {
+          "maxHp": 115,
+          "maxMp": 47,
+          "dmgFisico": 22,
+          "dmgMagico": 21,
+          "esquiva": 6,
+          "critico": 9,
+          "velocidade": 8,
+          "curaBonus": 11,
+          "resistMagica": 11,
+          "descontoLoja": 5.5
+        },
+        "maxHp": 115,
+        "hp": 115,
+        "maxMp": 47,
+        "mp": 47
+      },
+      "rngCalls": 8
+    }
+  },
+  {
+    "name": "trainAtGuild: Aprendiz de mão vazia vira mago",
+    "input": {
+      "fn": "trainAtGuild",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 9,
+            "destreza": 9,
+            "constituicao": 9,
+            "intelecto": 9,
+            "sabedoria": 9,
+            "carisma": 8
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Novo",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Aprendiz",
+          "classIcon": "🎒",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 43,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 115,
+            "maxMp": 57,
+            "dmgFisico": 18,
+            "dmgMagico": 27,
+            "esquiva": 4.5,
+            "critico": 9.5,
+            "velocidade": 9,
+            "curaBonus": 9,
+            "resistMagica": 9,
+            "descontoLoja": 4
+          },
+          "maxHp": 115,
+          "hp": 115,
+          "maxMp": 57,
+          "mp": 57
+        },
+        "cls": {
+          "id": "mago",
+          "name": "Mago",
+          "icon": "🧙",
+          "weaponTemplate": "cajado",
+          "bias": {
+            "intelecto": 3,
+            "sabedoria": 1
+          },
+          "desc": "Magias ofensivas e controle de mana.",
+          "signatureId": "bola_de_fogo",
+          "affinity": {
+            "cajado": 100,
+            "maca": 55,
+            "adaga": 45,
+            "arco": 40,
+            "espada": 30,
+            "machado": 20,
+            "marreta": 20,
+            "violao": 30
+          },
+          "ataquePrincipal": "magico"
+        },
+        "armaInicial": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 9,
+            "destreza": 9,
+            "constituicao": 9,
+            "intelecto": 12,
+            "sabedoria": 10,
+            "carisma": 8
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": true,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Novo",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 43,
+          "powerNames": [
+            "Bola de Fogo"
+          ],
+          "powerIds": [
+            "bola_de_fogo"
+          ],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 115,
+            "maxMp": 80,
+            "dmgFisico": 18,
+            "dmgMagico": 36,
+            "esquiva": 4.5,
+            "critico": 9.5,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 4
+          },
+          "maxHp": 115,
+          "hp": 115,
+          "maxMp": 80,
+          "mp": 80,
+          "classId": "mago"
+        },
+        "toInventory": null
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "trainAtGuild: Aprendiz com espada: o cajado vai pra mochila",
+    "input": {
+      "fn": "trainAtGuild",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 9,
+            "destreza": 9,
+            "constituicao": 9,
+            "intelecto": 9,
+            "sabedoria": 9,
+            "carisma": 8
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_62706",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.15
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Novo",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Aprendiz",
+          "classIcon": "🎒",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 43,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 115,
+            "maxMp": 57,
+            "dmgFisico": 18,
+            "dmgMagico": 27,
+            "esquiva": 4.5,
+            "critico": 9.5,
+            "velocidade": 9,
+            "curaBonus": 9,
+            "resistMagica": 9,
+            "descontoLoja": 4
+          },
+          "maxHp": 115,
+          "hp": 115,
+          "maxMp": 57,
+          "mp": 57
+        },
+        "cls": {
+          "id": "mago",
+          "name": "Mago",
+          "icon": "🧙",
+          "weaponTemplate": "cajado",
+          "bias": {
+            "intelecto": 3,
+            "sabedoria": 1
+          },
+          "desc": "Magias ofensivas e controle de mana.",
+          "signatureId": "bola_de_fogo",
+          "affinity": {
+            "cajado": 100,
+            "maca": 55,
+            "adaga": 45,
+            "arco": 40,
+            "espada": 30,
+            "machado": 20,
+            "marreta": 20,
+            "violao": 30
+          },
+          "ataquePrincipal": "magico"
+        },
+        "armaInicial": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 9,
+            "destreza": 9,
+            "constituicao": 9,
+            "intelecto": 12,
+            "sabedoria": 10,
+            "carisma": 8
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_62706",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.15
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Novo",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 43,
+          "powerNames": [
+            "Bola de Fogo"
+          ],
+          "powerIds": [
+            "bola_de_fogo"
+          ],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 115,
+            "maxMp": 72,
+            "dmgFisico": 18,
+            "dmgMagico": 36,
+            "esquiva": 4.5,
+            "critico": 9.5,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 4
+          },
+          "maxHp": 115,
+          "hp": 115,
+          "maxMp": 72,
+          "mp": 72,
+          "classId": "mago"
+        },
+        "toInventory": {
+          "uid": "cajado_1700000000000_62706",
+          "templateId": "cajado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "mana": 8
+          },
+          "value": 24,
+          "equipped": false,
+          "procChance": 0.1
+        }
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "trainAtGuild: Aprendiz de escudo: o machado de duas mãos vai pra mochila",
+    "input": {
+      "fn": "trainAtGuild",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 9,
+            "destreza": 9,
+            "constituicao": 9,
+            "intelecto": 9,
+            "sabedoria": 9,
+            "carisma": 8
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "uid": "escudo_1700000000000_62706",
+              "templateId": "escudo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 5,
+                "velocidade": -1
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Novo",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Aprendiz",
+          "classIcon": "🎒",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 43,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 115,
+            "maxMp": 57,
+            "dmgFisico": 18,
+            "dmgMagico": 27,
+            "esquiva": 4.5,
+            "critico": 9.5,
+            "velocidade": 9,
+            "curaBonus": 9,
+            "resistMagica": 9,
+            "descontoLoja": 4
+          },
+          "maxHp": 115,
+          "hp": 115,
+          "maxMp": 57,
+          "mp": 57
+        },
+        "cls": {
+          "id": "barbaro",
+          "name": "Bárbaro",
+          "icon": "🪓",
+          "weaponTemplate": "machado",
+          "bias": {
+            "forca": 4
+          },
+          "desc": "Fúria bruta, dano massivo corpo a corpo.",
+          "signatureId": "grito_de_guerra",
+          "affinity": {
+            "machado": 100,
+            "espada": 85,
+            "maca": 55,
+            "adaga": 45,
+            "arco": 35,
+            "cajado": 15,
+            "marreta": 100,
+            "violao": 15
+          }
+        },
+        "armaInicial": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 13,
+            "destreza": 9,
+            "constituicao": 9,
+            "intelecto": 9,
+            "sabedoria": 9,
+            "carisma": 8
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "uid": "escudo_1700000000000_62706",
+              "templateId": "escudo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 5,
+                "velocidade": -1
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Novo",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 43,
+          "powerNames": [
+            "Grito de Guerra"
+          ],
+          "powerIds": [
+            "grito_de_guerra"
+          ],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 115,
+            "maxMp": 57,
+            "dmgFisico": 26,
+            "dmgMagico": 27,
+            "esquiva": 4.5,
+            "critico": 9.5,
+            "velocidade": 8,
+            "curaBonus": 9,
+            "resistMagica": 9,
+            "descontoLoja": 4
+          },
+          "maxHp": 115,
+          "hp": 115,
+          "maxMp": 57,
+          "mp": 57,
+          "classId": "barbaro"
+        },
+        "toInventory": {
+          "uid": "machado_1700000000000_62706",
+          "templateId": "machado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "velocidade": -1
+          },
+          "value": 26,
+          "equipped": false,
+          "procChance": 0.12
+        }
+      },
+      "rngCalls": 1
+    }
+  },
+  {
     "name": "trainAtGuild: quem já tem classe sai como entrou",
     "input": {
       "fn": "trainAtGuild",

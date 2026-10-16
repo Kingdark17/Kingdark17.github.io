@@ -17,8 +17,8 @@ export interface Quadro {
   log: string[];
 }
 
-export function abrirQuadro(estado: EstadoNaCidade, rng: Rng = defaultRng): Quadro {
-  const quests = ensureQuestBoard(estado.quests, estado.floor, { rng });
+export function abrirQuadro(estado: EstadoNaCidade, rng: Rng = defaultRng, now?: () => number): Quadro {
+  const quests = ensureQuestBoard(estado.quests, estado.floor, { rng, now });
 
   return {
     estado: quests === estado.quests ? estado : { ...estado, quests },
@@ -30,9 +30,9 @@ export function missoes(quadro: Quadro): Quest[] {
   return quadro.estado.quests;
 }
 
-export function resgatar(quadro: Quadro, questId: string, rng: Rng = defaultRng): Quadro {
+export function resgatar(quadro: Quadro, questId: string, rng: Rng = defaultRng, now?: () => number): Quadro {
   const alvo = quadro.estado.quests.find((q) => q.id === questId);
-  const resgate = claimQuest(quadro.estado.hero, quadro.estado.quests, questId, quadro.estado.floor, { rng });
+  const resgate = claimQuest(quadro.estado.hero, quadro.estado.quests, questId, quadro.estado.floor, { rng, now });
 
   if (!resgate.claimed) return { ...quadro, log: ['Esta missão ainda não pode ser resgatada.'] };
 
