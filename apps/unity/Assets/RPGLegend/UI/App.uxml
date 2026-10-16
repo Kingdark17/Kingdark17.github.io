@@ -48,6 +48,83 @@
             <ui:VisualElement name="grade" class="grade" />
         </ui:VisualElement>
 
+        <!-- O jogo: a sala à esquerda, na altura toda (celular deitado, como o site); o resto à direita. -->
+        <ui:VisualElement name="jogo" class="tela jogo oculto">
+            <ui:VisualElement name="palco" class="palco">
+                <ui:VisualElement name="base-do-joystick" class="base-do-joystick escondido" picking-mode="Ignore">
+                    <ui:VisualElement name="alavanca-do-joystick" class="alavanca-do-joystick" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:Label name="dica-do-joystick" text="Arraste o dedo na sala para andar" class="dica-do-joystick" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="lado" class="lado">
+                <ui:VisualElement class="topo-do-lado">
+                    <!-- O resumo curto do site (painel-heroi.tsx): nome e nível, e as duas barras lado a lado. -->
+                    <ui:VisualElement name="resumo-do-heroi" class="resumo-do-heroi">
+                        <ui:VisualElement class="linha-do-nome">
+                            <ui:Label name="nome-do-heroi" class="nome-do-heroi" />
+                            <ui:Label name="nivel-do-heroi" class="nivel-do-heroi" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="barras">
+                            <ui:VisualElement class="barra">
+                                <ui:VisualElement class="rotulo-da-barra">
+                                    <ui:Label text="Vida" class="nome-da-barra" />
+                                    <ui:Label name="numero-da-vida" class="numero-da-barra" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="trilho"><ui:VisualElement name="vida" class="enchimento vida" /></ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement class="barra ultima-barra">
+                                <ui:VisualElement class="rotulo-da-barra">
+                                    <ui:Label text="Mana" class="nome-da-barra" />
+                                    <ui:Label name="numero-da-mana" class="numero-da-barra" />
+                                </ui:VisualElement>
+                                <ui:VisualElement class="trilho"><ui:VisualElement name="mana" class="enchimento mana" /></ui:VisualElement>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="minimapa" class="minimapa" />
+                </ui:VisualElement>
+                <ui:Label name="lugar" class="lugar" />
+                <!-- O meio rola como um bloco quando não cabe (a tela 16:9 do PC); o lugar e os botões ficam fixos. -->
+                <ui:ScrollView name="meio-do-lado" class="meio-do-lado rolagem-fina">
+                    <ui:VisualElement name="narracao" class="narracao" />
+                    <ui:VisualElement name="caixa" class="painel caixa escondida">
+                        <ui:Label name="icone-da-caixa" class="icone-da-caixa" />
+                        <ui:VisualElement class="corpo-da-caixa">
+                            <ui:Label name="titulo-da-caixa" class="titulo-da-caixa" />
+                            <ui:Label name="texto-da-caixa" class="texto-da-caixa" />
+                            <ui:VisualElement name="escolhas-da-caixa" class="escolhas-da-caixa">
+                                <ui:Button name="botao-sim" text="SIM" class="botao botao-pequeno" />
+                                <ui:Button name="botao-nao" text="NÃO" class="botao botao-pequeno" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="recado" class="painel recado escondida">
+                        <ui:VisualElement class="corpo-do-recado">
+                            <ui:Label name="titulo-do-recado" class="titulo-do-recado" />
+                            <ui:Label name="texto-do-recado" class="texto-do-recado" />
+                        </ui:VisualElement>
+                        <ui:Button name="fechar-recado" text="×" class="link fechar-recado" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+                <ui:VisualElement class="acoes-do-jogo">
+                    <ui:Button name="botao-mochila" text="MOCHILA" class="botao botao-pequeno" />
+                    <ui:Button name="botao-diario" text="DIÁRIO" class="botao botao-pequeno" />
+                    <ui:Button name="botao-sair-do-jogo" text="SAIR" class="botao botao-pequeno" />
+                </ui:VisualElement>
+                <ui:Label name="estado-do-salvamento" class="estado-do-salvamento" />
+            </ui:VisualElement>
+            <!-- Por cima do jogo: as telas de sala (loja, conversa…), o diário e a confirmação de saída. -->
+            <ui:VisualElement name="sobre-o-jogo" class="sobre-o-jogo oculto">
+                <ui:VisualElement name="janela" class="painel janela">
+                    <ui:VisualElement class="moldura" picking-mode="Ignore" />
+                    <ui:Label name="titulo-da-janela" class="titulo-da-janela" />
+                    <ui:ScrollView name="conteudo-da-janela" class="conteudo-da-janela rolagem-fina" />
+                    <ui:VisualElement name="botoes-da-janela" class="botoes-da-janela" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label name="carregando-jogo" text="Carregando progresso…" class="carregando-jogo" picking-mode="Ignore" />
+        </ui:VisualElement>
+
         <ui:Label name="aviso" class="aviso escondido" picking-mode="Ignore" />
         <ui:VisualElement name="veu" class="veu" picking-mode="Ignore" />
     </ui:VisualElement>

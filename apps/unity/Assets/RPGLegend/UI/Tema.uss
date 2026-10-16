@@ -474,3 +474,477 @@
     background-color: rgb(0, 0, 0);
     opacity: 1;
 }
+
+/* ---------- jogo: a sala à esquerda, o resto à direita (o site no celular deitado) ---------- */
+
+.jogo {
+    flex-direction: row;
+    padding: 12px;
+}
+
+/* O tamanho sai do código (TelaDeJogo.AjustarPalco): 9 × 7 quadrados na altura toda, ou menor se a coluna
+   da direita ficasse estreita demais — aí a sala fica no meio da altura. */
+.palco {
+    flex-shrink: 0;
+    align-self: center;
+    height: 100%;
+    background-color: #05060a;
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+    -unity-background-scale-mode: scale-to-fit;
+    overflow: hidden;
+}
+
+.base-do-joystick {
+    position: absolute;
+    width: 112px;
+    height: 112px;
+    margin-left: -56px;
+    margin-top: -56px;
+    border-radius: 56px;
+    border-width: 2px;
+    border-color: rgba(236, 223, 192, 0.45);
+    background-color: rgba(16, 18, 26, 0.35);
+}
+
+.alavanca-do-joystick {
+    position: absolute;
+    left: 31px;
+    top: 31px;
+    width: 46px;
+    height: 46px;
+    border-radius: 23px;
+    background-color: rgba(232, 198, 90, 0.75);
+}
+
+.base-do-joystick.escondido,
+.dica-do-joystick.escondido {
+    display: none;
+}
+
+.dica-do-joystick {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    font-size: 16px;
+    color: rgba(236, 223, 192, 0.7);
+    -unity-text-align: middle-center;
+}
+
+.lado {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    margin-left: 14px;
+    flex-direction: column;
+}
+
+/* Coluna estreita (PC 16:9): o resumo em cima e o minimapa embaixo. Larga (celular deitado, que é mais
+   comprido): os dois lado a lado, pra sobrar altura pra narração. A classe sai do TelaDeJogo. */
+.topo-do-lado {
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+    margin-bottom: 6px;
+}
+
+.lado-largo .topo-do-lado {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.resumo-do-heroi {
+    align-self: stretch;
+    flex-shrink: 1;
+    min-width: 0;
+    margin-bottom: 8px;
+}
+
+.lado-largo .resumo-do-heroi {
+    flex-grow: 1;
+    margin-right: 12px;
+    margin-bottom: 0;
+}
+
+.linha-do-nome {
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 4px;
+}
+
+.nome-do-heroi {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/Alkhemikal.ttf");
+    -unity-font-definition: initial;
+    font-size: 26px;
+    color: var(--gold-bright);
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nivel-do-heroi {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 22px;
+    color: var(--parchment-dim);
+}
+
+.barras {
+    flex-direction: row;
+}
+
+/* A barra curta do site: o rótulo e o número numa linha, a trilha fina embaixo. */
+.barra {
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 0;
+    margin-right: 12px;
+}
+
+.barra.ultima-barra {
+    margin-right: 0;
+}
+
+.rotulo-da-barra {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2px;
+}
+
+.nome-da-barra {
+    font-size: 15px;
+    color: var(--parchment-dim);
+}
+
+.trilho {
+    height: 8px;
+    background-color: rgba(0, 0, 0, 0.45);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.enchimento {
+    height: 100%;
+}
+
+.enchimento.vida {
+    background-color: #b8402f;
+}
+
+.enchimento.mana {
+    background-color: #3f6fb5;
+}
+
+.numero-da-barra {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 19px;
+    -unity-text-align: lower-right;
+}
+
+/* O minimapa: as cores e a neblina do site (jogo.module.css). */
+.minimapa {
+    flex-shrink: 0;
+    flex-direction: column;
+    padding: 5px;
+    background-color: #05060a;
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+}
+
+.fileira-do-minimapa {
+    flex-direction: row;
+}
+
+.celula {
+    width: 22px;
+    height: 22px;
+    margin: 1px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0);
+    border-radius: 2px;
+    align-items: center;
+    justify-content: center;
+}
+
+.celula-vazia {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.celula-desconhecida {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-color: var(--line);
+}
+
+.celula-conhecida {
+    background-color: var(--panel-2);
+    border-color: var(--line);
+    opacity: 0.6;
+}
+
+.celula-visitada {
+    background-color: var(--panel-2);
+    border-color: var(--line);
+}
+
+.celula-aqui {
+    border-width: 2px;
+    border-color: var(--gold-bright);
+    opacity: 1;
+}
+
+.celula-esgotada {
+    opacity: 0.4;
+}
+
+.celula-aqui.celula-esgotada {
+    opacity: 1;
+}
+
+.arte-da-celula {
+    width: 16px;
+    height: 16px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.icone-da-celula {
+    font-size: 13px;
+    -unity-text-align: middle-center;
+    padding: 0;
+    margin: 0;
+}
+
+.lugar {
+    flex-shrink: 0;
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/Alkhemikal.ttf");
+    -unity-font-definition: initial;
+    font-size: 24px;
+    color: var(--gold-bright);
+    white-space: normal;
+    margin-bottom: 4px;
+}
+
+.meio-do-lado {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+    margin-bottom: 6px;
+}
+
+.narracao {
+    margin-bottom: 4px;
+}
+
+/* A barra de rolagem fina, sem as setas da Unity: a narração e as janelas rolam pelo dedo ou pela roda. */
+.rolagem-fina .unity-scroller--vertical {
+    width: 6px;
+    margin-left: 4px;
+}
+
+.rolagem-fina .unity-scroller__low-button,
+.rolagem-fina .unity-scroller__high-button {
+    display: none;
+}
+
+.rolagem-fina .unity-scroller--vertical > .unity-scroller__slider {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.rolagem-fina .unity-scroller--vertical .unity-base-slider__tracker {
+    background-color: rgba(0, 0, 0, 0.35);
+    border-width: 0;
+    border-radius: 3px;
+}
+
+.rolagem-fina .unity-scroller--vertical .unity-base-slider__dragger {
+    background-color: var(--line);
+    border-width: 0;
+    border-radius: 3px;
+}
+
+.rolagem-fina .unity-scroller--horizontal {
+    display: none;
+}
+
+.linha-da-narracao {
+    font-size: 17px;
+    white-space: normal;
+    margin-bottom: 6px;
+}
+
+.pistas-das-portas {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 19px;
+    color: var(--parchment-dim);
+    white-space: normal;
+}
+
+.caixa,
+.recado {
+    flex-direction: row;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+}
+
+.caixa.escondida,
+.recado.escondida {
+    display: none;
+}
+
+.icone-da-caixa {
+    font-size: 30px;
+    margin-right: 10px;
+    -unity-text-align: upper-center;
+}
+
+.corpo-da-caixa,
+.corpo-do-recado {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.titulo-da-caixa,
+.titulo-do-recado {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-SemiBold.ttf");
+    -unity-font-definition: initial;
+    font-size: 18px;
+    color: var(--gold-bright);
+    white-space: normal;
+    margin-bottom: 2px;
+}
+
+.texto-da-caixa,
+.texto-do-recado {
+    font-size: 16px;
+    white-space: normal;
+}
+
+.escolhas-da-caixa {
+    flex-direction: row;
+    margin-top: 8px;
+}
+
+.escolhas-da-caixa.escondida {
+    display: none;
+}
+
+.unity-button.botao-pequeno {
+    padding: 12px 28px 15px 22px;
+    margin-right: 8px;
+    margin-bottom: 6px;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.unity-button.fechar-recado {
+    border-bottom-width: 0;
+    font-size: 24px;
+    padding: 0 4px;
+    align-self: flex-start;
+}
+
+.acoes-do-jogo {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.estado-do-salvamento {
+    font-size: 14px;
+    color: var(--parchment-dim);
+    min-height: 18px;
+    flex-shrink: 0;
+}
+
+.estado-do-salvamento.falha {
+    color: var(--ember);
+}
+
+.sobre-o-jogo {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(5, 6, 10, 0.72);
+    align-items: center;
+    justify-content: center;
+}
+
+.janela {
+    width: 640px;
+    max-height: 92%;
+    padding: 20px 24px 16px 24px;
+}
+
+.titulo-da-janela {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/Alkhemikal.ttf");
+    -unity-font-definition: initial;
+    font-size: 28px;
+    color: var(--gold-bright);
+    margin-bottom: 10px;
+    white-space: normal;
+}
+
+.conteudo-da-janela {
+    flex-shrink: 1;
+    margin-bottom: 12px;
+}
+
+.botoes-da-janela {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.paragrafo-da-janela {
+    font-size: 17px;
+    white-space: normal;
+    margin-bottom: 8px;
+}
+
+.subtitulo-da-janela {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-SemiBold.ttf");
+    -unity-font-definition: initial;
+    font-size: 17px;
+    color: var(--parchment-dim);
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.opcoes-da-janela {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+/* A opção escolhida (masmorra, dificuldade, andar): a borda dourada do botão forte. */
+.unity-button.botao-escolhido {
+    border-color: var(--gold-bright);
+    color: var(--gold-bright);
+}
+
+.carregando-jogo {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: var(--ink);
+    font-size: 22px;
+    -unity-text-align: middle-center;
+}
+
+.carregando-jogo.escondido {
+    display: none;
+}

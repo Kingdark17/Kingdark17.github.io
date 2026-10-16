@@ -18,6 +18,23 @@ namespace RPGLegend.Engine.Json
         public static EstadoDoJogo LerEstado(JToken token) => JsSerializer.Read<EstadoDoJogo>(token);
 
         /// <summary>
+        /// O estado como vai pra nuvem: o JSON do <see cref="JsSerializer"/> com número inválido (NaN, Infinity)
+        /// virando <c>null</c>, que é o que o <c>JSON.stringify</c> do site faz. O <c>{"$num": …}</c> é só dos casos
+        /// de teste e não pode ir pro save.
+        /// </summary>
+        public static JToken ParaSave(EstadoDoJogo estado) => SemNumeroEspecial(JsSerializer.Write(estado));
+
+        private static JToken SemNumeroEspecial(JToken token)
+        {
+            if (JsJson.TryReadSpecialNumber(token, out _)) return JValue.CreateNull();
+            if (token is JObject objeto)
+                foreach (var p in new List<JProperty>(objeto.Properties())) p.Value = SemNumeroEspecial(p.Value);
+            else if (token is JArray lista)
+                for (int i = 0; i < lista.Count; i++) lista[i] = SemNumeroEspecial(lista[i]);
+            return token;
+        }
+
+        /// <summary>
         /// O save como veio da nuvem. A masmorra e o progresso ficam crus (o normalize do TS é que dá a forma);
         /// a grade só é lida quando o save está na masmorra e ela é mesmo uma lista — o único caso em que o
         /// TS a usa.

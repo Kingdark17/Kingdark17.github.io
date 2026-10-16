@@ -49,6 +49,14 @@ namespace RPGLegend.Game.App
         public int MaxSlots = 4;
     }
 
+    /// <summary>O save de um slot na nuvem (GET /api/save). <see cref="Save"/> é null quando o slot está vazio.</summary>
+    public sealed class SaveNaNuvem
+    {
+        public JToken Save;
+        /// <summary>A assinatura oficial: vira a baseSignature da próxima gravação.</summary>
+        public string Signature;
+    }
+
     /// <summary>
     /// As rotas da API que o app usa, as mesmas do site (<c>/api/account/*</c> e <c>/api/characters</c>). O app
     /// não é navegador: em vez do cookie, manda o token no cabeçalho <c>Authorization: Bearer</c>, que a API
@@ -86,6 +94,27 @@ namespace RPGLegend.Game.App
         {
             var json = await Enviar("GET", "/api/characters", null, token);
             return LerPersonagens(json);
+        }
+
+        /// <summary>O save do slot, como o site carrega (GET /api/save?slot=N).</summary>
+        public static async Awaitable<SaveNaNuvem> CarregarSave(string token, int slot)
+        {
+            var json = await Enviar("GET", "/api/save?slot=" + slot, null, token);
+            var save = json["save"];
+            return new SaveNaNuvem { Save = save == null || save.Type == JTokenType.Null ? null : save, Signature = (string)json["signature"] ?? "" };
+        }
+
+        /// <summary>
+        /// Grava o save do slot (PUT /api/save), como o site: <paramref name="baseSignature"/> é a assinatura do save
+        /// carregado por último, e o servidor recusa (409) se ela não for a atual. Devolve a assinatura nova.
+        /// </summary>
+        public static async Awaitable<string> GravarSave(string token, int slot, JToken save, string baseSignature)
+        {
+            var corpo = new JObject { ["slot"] = slot, ["save"] = save, ["source"] = "game", ["baseSignature"] = baseSignature ?? "" };
+            var json = await Enviar("PUT", "/api/save", corpo, token);
+            var assinatura = (string)json["signature"];
+            if (string.IsNullOrEmpty(assinatura)) throw new ApiError(500, "O servidor não devolveu a assinatura do save. Tente de novo.");
+            return assinatura;
         }
 
         // ---------- leitura das respostas (sem Unity: dá para testar com JSON de exemplo) ----------

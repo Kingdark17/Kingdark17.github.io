@@ -34,6 +34,8 @@ namespace RPGLegend.Game.App
         public event Action<string, string, string, bool> AoEnviar;
         public event Action AoEsqueci, AoTocar, AoJogar, AoSair, AoVoltar;
         public event Action<string> AoEmBreve;
+        /// <summary>O JOGAR do cartão de um personagem: o número do slot.</summary>
+        public event Action<int> AoJogarSlot;
 
         public AppScreens(VisualElement raiz)
         {
@@ -239,7 +241,10 @@ namespace RPGLegend.Game.App
             card.Add(numeros);
             var data = DataCurta(p.UpdatedAt);
             if (data.Length > 0) card.Add(Texto("Salvo em " + data, "atualizado"));
-            card.Add(BotaoEmBreve("JOGAR", "Jogar pelo app chega numa próxima versão. Por enquanto, jogue no site."));
+            var jogar = new Button(() => AoJogarSlot?.Invoke(slot)) { text = "JOGAR" };
+            jogar.AddToClassList("botao");
+            jogar.AddToClassList("botao-slot");
+            card.Add(jogar);
             return card;
         }
 

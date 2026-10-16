@@ -1,4 +1,5 @@
 using System;
+using RPGLegend.Game.Jogo;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -11,7 +12,8 @@ namespace RPGLegend.Game.App
     /// 2. quem já tem sessão salva vê "Toque para entrar"; quem não tem vê o cartão de entrada (entrar ou criar
     ///    conta, como no site);
     /// 3. com a sessão, o cadeado cai, a porta abre e a câmera mergulha na luz até o menu;
-    /// 4. o menu leva à lista de personagens (lida da nuvem, só leitura); sair da conta volta à porta trancada.
+    /// 4. o menu leva à lista de personagens (lida da nuvem); sair da conta volta à porta trancada;
+    /// 5. o JOGAR de um personagem abre a partida (<see cref="TelaDeJogo"/>), que ao sair volta à lista.
     /// </summary>
     public sealed class AppFlow : MonoBehaviour
     {
@@ -21,9 +23,13 @@ namespace RPGLegend.Game.App
         private static readonly Color Preto = Color.black;
         private static readonly Color Ouro = new Color(1f, 0.93f, 0.7f);
 
-        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Trocando }
+        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Jogando, Trocando }
+
+        /// <summary>Só no Editor: o slot que o menu "RPG Legend > Jogar direto" abre sem passar pela porta (0 = nenhum).</summary>
+        public const string ChaveJogarDireto = "RPGLegend.JogarDireto";
 
         private AppScreens _telas;
+        private TelaDeJogo _jogo;
         private Estado _estado = Estado.Chegando;
         private bool _tocou;
 
@@ -40,6 +46,19 @@ namespace RPGLegend.Game.App
                 _telas.AoVoltar += Voltar;
                 _telas.AoSair += Sair;
                 _telas.AoEmBreve += _telas.Aviso;
+                _telas.AoJogarSlot += JogarSlot;
+
+                _jogo = gameObject.AddComponent<TelaDeJogo>();
+                _jogo.AoSair += SairDoJogo;
+
+#if UNITY_EDITOR
+                int direto = UnityEditor.EditorPrefs.GetInt(ChaveJogarDireto, 0);
+                if (direto > 0 && Session.Tem)
+                {
+                    await JogarDireto(direto);
+                    return;
+                }
+#endif
 
                 // 1. Do preto para o castelo inteiro, um instante parado, e então a caminhada até a porta.
                 _telas.Veu(Preto, 1f);
@@ -217,6 +236,62 @@ namespace RPGLegend.Game.App
             catch (OperationCanceledException) { }
             catch (Exception e) { Debug.LogException(e); }
         }
+
+        // ---------- a partida ----------
+
+        private async void JogarSlot(int slot)
+        {
+            if (_estado != Estado.Personagens) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _telas.MostrarPersonagens(false);
+                    _jogo.Preparar(documento.rootVisualElement);
+                });
+                _estado = Estado.Jogando;
+                if (!await _jogo.Carregar(slot)) await VoltarDoJogo();
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        private async void SairDoJogo()
+        {
+            try
+            {
+                await VoltarDoJogo();
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        /// <summary>De volta à lista, relida da nuvem (o nível e o andar do cartão mudaram com a partida).</summary>
+        private async Awaitable VoltarDoJogo()
+        {
+            if (_estado != Estado.Jogando) return;
+            await Trocar(() =>
+            {
+                _jogo.Fechar();
+                _telas.MostrarPersonagens(true);
+                _telas.PersonagensCarregando();
+            });
+            _estado = Estado.Personagens;
+            await CarregarPersonagens();
+        }
+
+#if UNITY_EDITOR
+        /// <summary>O atalho de teste do Editor: sem porta nem menu, direto na partida do slot; sair dela cai na lista.</summary>
+        private async Awaitable JogarDireto(int slot)
+        {
+            cena.Mostrar(false);
+            _telas.Veu(Preto, 1f);
+            _jogo.Preparar(documento.rootVisualElement);
+            _estado = Estado.Jogando;
+            await Tween.Durante(0.3f, t => _telas.Veu(Preto, 1f - t), destroyCancellationToken);
+            if (!await _jogo.Carregar(slot)) await VoltarDoJogo();
+        }
+#endif
 
         private async void Sair()
         {

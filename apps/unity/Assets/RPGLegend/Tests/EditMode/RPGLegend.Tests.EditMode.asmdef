@@ -5,6 +5,7 @@
     "RPGLegend.Engine",
     "RPGLegend.Engine.Json",
     "RPGLegend.Fixtures",
+    "RPGLegend.Game",
     "UnityEngine.TestRunner",
     "UnityEditor.TestRunner"
   ],
