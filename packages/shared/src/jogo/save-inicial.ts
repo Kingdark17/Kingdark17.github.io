@@ -32,7 +32,8 @@ export class CriacaoIncompletaError extends Error {
   }
 }
 
-export function montarSaveInicial(criacao: Criacao, rng: Rng = defaultRng): SaveInicial {
+/** `now` é o relógio do `uid` da poção do começo; ausente, `Date.now`. */
+export function montarSaveInicial(criacao: Criacao, rng: Rng = defaultRng, now?: () => number): SaveInicial {
   if (!criacao.raca) throw new CriacaoIncompletaError();
 
   // A fraqueza continua existindo, sorteada — só não aparece mais na
@@ -55,7 +56,7 @@ export function montarSaveInicial(criacao: Criacao, rng: Rng = defaultRng): Save
   );
 
   // Todo herói começa com um consumível, igual ao original.
-  const inventory = addItem([], randomItem({ category: 'consumivel', floor: 1, rng }));
+  const inventory = addItem([], randomItem({ category: 'consumivel', floor: 1, rng, now }));
 
   return { hero, inventory, party: [], floor: 1, quests: [] };
 }

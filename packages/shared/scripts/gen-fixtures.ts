@@ -3348,6 +3348,135 @@ for (const [nome, estado] of [
 const totem = E.tocarTotem({ ...masmorra, floor: 20, progresso: { cleared: [], totems: {} } });
 caso('voltarPeloTotem: de volta pra cidade', 'voltarPeloTotem', { totem }, (a) => E.voltarPeloTotem(a.totem));
 
+// ---------- sala, o começo do encontro, criação e save inicial ----------
+//
+// Do combate por turnos só vem o começo do encontro (decisão do usuário,
+// 2026-10-16: no app a luta é em tempo real); a sala o devolve quando a
+// luta começa.
+
+/** A primeira sala, nos andares 3 de várias sementes, que cumpre o predicado. */
+function salaGerada(predicado: (c: DungeonCell) => boolean): DungeonCell {
+  for (let semente = 1; semente < 200; semente++) {
+    const achada = naMasmorra(cidade, semente, 3).map.flat().find(predicado);
+    if (achada) return achada;
+  }
+  throw new Error('nenhuma sala de teste com isso');
+}
+const umMonstro = salaGerada((c) => c.type === 'monster' && c.monsters?.length === 1);
+const grupo = salaGerada((c) => c.type === 'monster' && (c.monsters?.length ?? 0) > 1);
+const chefe = andarDoChefe.map.flat().find((c) => c.type === 'boss')!;
+const petDeTeste = Object.keys(E.PET_ICONS)[0]!;
+/** Estado enxuto que gera andar ou cidade: a grade de verdade é 6×6, mesmo com uma sala só no mapa. */
+const comGradeInteira = (estado: EstadoNaMasmorra): EstadoNaMasmorra => ({ ...estado, mapRows: 6, mapCols: 6 });
+
+for (const [nome, celula] of [
+  ['monstro', umMonstro],
+  ['monstro vencido', { ...umMonstro, beaten: true }],
+  ['chefe', chefe],
+  ['escada', { ...umMonstro, type: 'stairs' }],
+  ['saída', { ...umMonstro, type: 'exit' }],
+  ['baú', { ...umMonstro, type: 'treasure' }],
+  ['sala da cidade', E.celulaAtual(cidade)],
+  ['nenhuma sala', null],
+] as const) {
+  caso(`lutaAoEntrar: ${nome}`, 'lutaAoEntrar', { celula }, (a) => E.lutaAoEntrar(a.celula as never));
+  caso(`confirmaAoTocar: ${nome}`, 'confirmaAoTocar', { celula }, (a) => E.confirmaAoTocar(a.celula as never));
+}
+
+const comBencao = heroi({ classe: 'guerreiro', extra: { npcBlessing: { dodge: 15, combats: 2 } } });
+for (const [nome, estado] of [
+  ['um monstro', naSalaDaMasmorra(umMonstro)],
+  ['grupo', naSalaDaMasmorra(grupo)],
+  ['grupo, no segundo', naSalaDaMasmorra({ ...grupo, monsterIndex: 1 })],
+  ['sala sem monstro', naSalaDaMasmorra({ type: 'normal' })],
+  ['sala de monstro vazia', naSalaDaMasmorra({ type: 'monster', monsters: [] })],
+  ['cidade', enxuto()],
+] as const) {
+  caso(`salaDeCombate: ${nome}`, 'salaDeCombate', { estado }, (a) => E.salaDeCombate(a.estado));
+  caso(`monstroAtual: ${nome}`, 'monstroAtual', { estado }, (a) => E.monstroAtual(a.estado));
+  caso(`inimigosRestantes: ${nome}`, 'inimigosRestantes', { estado }, (a) => E.inimigosRestantes(a.estado));
+}
+for (const [nome, estado, pet] of [
+  ['um monstro', naSalaDaMasmorra(umMonstro), null],
+  ['grupo', naSalaDaMasmorra(grupo), null],
+  ['com a bênção do NPC', naSalaDaMasmorra(umMonstro, comBencao), null],
+  ['com pet', naSalaDaMasmorra(umMonstro), petDeTeste],
+  ['sala vazia', naSalaDaMasmorra({ type: 'monster', monsters: [] }), null],
+] as const) {
+  caso(`iniciarEncontro: ${nome}`, 'iniciarEncontro', { estado, pet }, (a) => E.iniciarEncontro(a.estado, a.pet as never));
+}
+const combateVazio = { estado: naSalaDaMasmorra({ type: 'monster', monsters: [] }), fase: 'combate', log: [], dado: null, loot: null, pet: null, som: null, flutuantes: [] };
+caso('comecarCombate: sala vazia vira vitória', 'comecarCombate', { combate: combateVazio }, (a) => E.comecarCombate(a.combate as never));
+caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: { ...combateVazio, estado: enxuto() } }, (a) => E.comecarCombate(a.combate as never));
+
+function naSalaInterage(nome: string, estado: EstadoDoJogo, semente: number, pet: string | null = null): void {
+  caso(`interagir: ${nome}`, 'interagir', { estado, pet }, (a, ctx) => E.interagir(a.estado, ctx.rng, a.pet as never, ctx.now), { rng: { seed: semente }, now: AGORA });
+}
+
+naSalaInterage('portão de aprendiz', naSalaDaCidade('gate', aprendizNovo), 110);
+naSalaInterage('portão com classe', naSalaDaCidade('gate', guerreiro), 111);
+naSalaInterage('taverna', { ...naSalaDaCidade('tavern', machucado), party: [companheiro('guerreiro', { hp: 5 })] }, 112);
+naSalaInterage('vendedor', naSalaDaCidade('shop'), 113);
+naSalaInterage('ferreiro', naSalaDaCidade('blacksmith'), 114);
+naSalaInterage('quadro de missões', naSalaDaCidade('questboard'), 115);
+naSalaInterage('guilda de aprendiz', naSalaDaCidade('guild', aprendizNovo), 116);
+naSalaInterage('guilda de quem tem classe', naSalaDaCidade('guild', guerreiro), 117);
+naSalaInterage('NPC da cidade', naSalaDaCidade('npc'), 118);
+naSalaInterage('ponto de partida da cidade', naSalaDaCidade('start'), 119);
+naSalaInterage('a loja fecha o tutorial', { ...naSalaDaCidade('shop'), tutorial: tutorial(todosMenos('shop')) }, 120);
+
+const bau = (o: Partial<DungeonCell>) => naSalaDaMasmorra({ type: 'treasure', isMimic: false, giveGold: false, collected: false, ...o });
+naSalaInterage('baú de ouro', bau({ giveGold: true, item: null }), 121);
+naSalaInterage('baú com item', bau({ item: espadaNova }), 122);
+naSalaInterage('baú vazio', bau({ item: espadaNova, collected: true }), 123);
+naSalaInterage('mímico de ouro', bau({ isMimic: true, giveGold: true, item: null }), 124);
+naSalaInterage('mímico de item', bau({ isMimic: true, item: anel }), 125);
+naSalaInterage('mímico na caverna', { ...bau({ isMimic: true, giveGold: true, item: null }), masmorra: { dungeon: 'caverna', difficulty: 'normal' } }, 126);
+naSalaInterage('monstro', naSalaDaMasmorra(umMonstro), 127);
+naSalaInterage('monstro com pet', naSalaDaMasmorra(umMonstro), 128, petDeTeste);
+naSalaInterage('monstro vencido', naSalaDaMasmorra({ ...umMonstro, beaten: true }), 129);
+naSalaInterage('chefe', naSalaDaMasmorra(chefe), 130);
+naSalaInterage('o primeiro combate fecha a etapa', { ...naSalaDaMasmorra(umMonstro), tutorial: tutorial({ move: true }) }, 131);
+naSalaInterage('escada', comGradeInteira(naSalaDaMasmorra({ type: 'stairs' })), 132);
+naSalaInterage('escada selada pelo chefe', {
+  ...naSalaDaMasmorra({ type: 'stairs' }, guerreiro, [], { floor: 5 }),
+  map: [[{ ...(E.celulaAtual(masmorra) as DungeonCell), type: 'stairs' }, chefe]],
+  mapCols: 2,
+}, 133);
+naSalaInterage('escada no fundo', naSalaDaMasmorra({ type: 'stairs' }, guerreiro, [], { floor: E.DUNGEON_FLOORS }), 134);
+naSalaInterage('saída', comGradeInteira(naSalaDaMasmorra({ type: 'exit' })), 135);
+naSalaInterage('NPC da masmorra', naSalaDaMasmorra({ type: 'npc', npc: npc('heal') as DungeonCell['npc'] }), 136);
+naSalaInterage('totem', naSalaDaMasmorra({ type: 'totem' }, guerreiro, [], { floor: 20 }), 137);
+naSalaInterage('mestre que já ensinou', naSalaDaMasmorra({ type: 'teacher', teacher: { classId: 'guerreiro', number: 1, taught: true } }), 138);
+naSalaInterage('mestre', naSalaDoMestre(aprendizDeMestre), 139);
+naSalaInterage('mestre de outra classe', naSalaDoMestre(aprendizDeMestre, { classId: 'mago' }), 140);
+naSalaInterage('evento', naSalaDoEvento('altar'), 141);
+naSalaInterage('evento resolvido', naSalaDoEvento('altar', { resolved: true }), 142);
+naSalaInterage('evento desconhecido', naSalaDoEvento('xyz'), 143);
+naSalaInterage('ponto de partida da masmorra', naSalaDaMasmorra({ type: 'start' }), 144);
+naSalaInterage('sala vazia', naSalaDaMasmorra({ type: 'normal' }), 145);
+
+const humano = E.raceById('humano')!;
+caso('criacaoVazia: com nome', 'criacaoVazia', { nome: 'Lia' }, (a) => E.criacaoVazia(a.nome));
+for (const [nome, criacao] of [
+  ['sem nome', { nome: '   ', raca: humano, cabelo: null }],
+  ['sem raça', { nome: 'Lia', raca: null, cabelo: null }],
+  ['pronta', { nome: 'Lia', raca: humano, cabelo: 'longo' }],
+] as const) {
+  caso(`faltaParaComecar: ${nome}`, 'faltaParaComecar', { criacao }, (a) => E.faltaParaComecar(a.criacao));
+}
+for (const [nome, criacao, semente] of [
+  ['humano', { nome: ' Lia ', raca: humano, cabelo: null }, 150],
+  ['elfo de cabelo escolhido', { nome: 'Ilen', raca: E.raceById('elfo')!, cabelo: 'curto' }, 151],
+  ['outra semente', { nome: 'Lia', raca: humano, cabelo: null }, 152],
+  ['sem raça', { nome: 'Lia', raca: null, cabelo: null }, 153],
+] as const) {
+  caso(`montarSaveInicial: ${nome}`, 'montarSaveInicial', { criacao }, (a, ctx) => E.montarSaveInicial(a.criacao, ctx.rng, ctx.now), {
+    rng: { seed: semente },
+    now: AGORA,
+  });
+}
+
 // =====================================================================
 // tabelas — fixtures/data
 // =====================================================================

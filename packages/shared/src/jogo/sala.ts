@@ -143,15 +143,18 @@ function aviso(icone: string, titulo: string, texto: string): Aviso {
  * recompensa entra no ouro e na mochila que a loja vai mostrar, e a tela
  * aberta já carrega o estado com a etapa marcada — senão fechá-la
  * desfaria a marca.
+ *
+ * `now` é o relógio do que a sala sorteia com item: o estoque da loja, as
+ * missões do quadro, o andar de baixo e o prêmio do tutorial.
  */
-export function interagir(estado: EstadoDoJogo, rng: Rng = defaultRng, pet: PetId | null = null): ResultadoDaInteracao {
-  const antes = comEtapaDaSala(estado, rng);
+export function interagir(estado: EstadoDoJogo, rng: Rng = defaultRng, pet: PetId | null = null, now?: () => number): ResultadoDaInteracao {
+  const antes = comEtapaDaSala(estado, rng, now);
   const resultado =
-    antes.estado.mapMode === 'city' ? naCidade(antes.estado, rng) : naMasmorra(antes.estado, rng, pet);
+    antes.estado.mapMode === 'city' ? naCidade(antes.estado, rng, now) : naMasmorra(antes.estado, rng, pet, now);
   return { ...resultado, recado: antes.recado };
 }
 
-function comEtapaDaSala(estado: EstadoDoJogo, rng: Rng): ResultadoDoPasso {
+function comEtapaDaSala(estado: EstadoDoJogo, rng: Rng, now: (() => number) | undefined): ResultadoDoPasso {
   const celula = celulaAtual(estado);
   const passo = celula ? PASSO_DA_SALA[celula.type] : undefined;
   if (!passo) return { estado, recado: null };
@@ -162,10 +165,10 @@ function comEtapaDaSala(estado: EstadoDoJogo, rng: Rng): ResultadoDoPasso {
   // no treino, em `treinar`. Quem já tem classe fecha só de entrar — não há
   // o que treinar.
   const aprendiz = passo === 'guild' && !hasClass(estado.hero);
-  return jaBatida || aprendiz ? { estado, recado: null } : marcar(estado, passo, rng);
+  return jaBatida || aprendiz ? { estado, recado: null } : marcar(estado, passo, rng, now);
 }
 
-function naCidade(estado: EstadoNaCidade, rng: Rng): ResolucaoDaSala {
+function naCidade(estado: EstadoNaCidade, rng: Rng, now: (() => number) | undefined): ResolucaoDaSala {
   const celula = celulaAtual(estado);
   if (!celula) return { estado, aviso: null, tela: null };
 
@@ -198,11 +201,11 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResolucaoDaSala {
       };
     }
     case 'shop':
-      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'shop', rng) }, som: 'door' };
+      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'shop', rng, now) }, som: 'door' };
     case 'blacksmith':
-      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'blacksmith', rng) }, som: 'door' };
+      return { estado, aviso: null, tela: { tipo: 'loja', loja: abrirLoja(estado, 'blacksmith', rng, now) }, som: 'door' };
     case 'questboard':
-      return { estado, aviso: null, tela: { tipo: 'missoes', quadro: abrirQuadro(estado, rng) } };
+      return { estado, aviso: null, tela: { tipo: 'missoes', quadro: abrirQuadro(estado, rng, now) } };
     case 'guild':
       return { estado, aviso: null, tela: { tipo: 'guilda', guilda: abrirGuilda(estado) }, som: 'door' };
     case 'npc':
@@ -214,7 +217,7 @@ function naCidade(estado: EstadoNaCidade, rng: Rng): ResolucaoDaSala {
   }
 }
 
-function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): ResolucaoDaSala {
+function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null, now: (() => number) | undefined): ResolucaoDaSala {
   const celula = celulaAtual(estado);
   if (!celula || estado.mapMode !== 'dungeon') return { estado, aviso: null, tela: null };
 
@@ -226,7 +229,7 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): Reso
       if (celula.beaten) return { estado, aviso: aviso('👾', 'Sala Vazia', 'Não há mais nada aqui.'), tela: null };
       return { estado, aviso: null, tela: { tipo: 'combate', combate: iniciarEncontro(estado, pet) } };
     case 'stairs':
-      return descer(estado, rng);
+      return descer(estado, rng, now);
     case 'exit':
       return {
         estado: voltarParaCidade(estado),
@@ -278,8 +281,8 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null): Reso
   }
 }
 
-function descer(estado: EstadoNaMasmorra, rng: Rng): ResolucaoDaSala {
-  const resultado = descerEscada(estado, rng);
+function descer(estado: EstadoNaMasmorra, rng: Rng, now: (() => number) | undefined): ResolucaoDaSala {
+  const resultado = descerEscada(estado, rng, now);
   if (resultado.kind === 'selado') {
     return { estado, aviso: aviso('👑', 'Caminho Selado', 'O poder do chefe bloqueia as escadas. Derrote-o para avançar.'), tela: null };
   }
