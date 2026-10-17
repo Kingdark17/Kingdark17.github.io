@@ -133,11 +133,21 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
 
 - Alvo: **PC e celular**, com a **mesma conta e os mesmos personagens do web**
   (o mesmo save na nuvem, então o app lê e grava o mesmo JSON que o web).
-- A ideia é o app ter mais coisas que o web. Onde mora o conteúdo exclusivo do
-  app ainda não foi decidido (fica para o futuro): no TS com o web só não
-  mostrando, numa camada C# fora do port, ou em personagens separados.
-  **Perguntar antes de escrever o primeiro.** Até lá, nada só do app entra no
-  save nem na engine.
+- A ideia é o app ter mais coisas que o web. **Conteúdo só do app mora na
+  engine TS** (decisão de 2026-10-17): regras e catálogo em `packages/shared`,
+  passados para o C# pelos casos de teste como o resto, e o site só não
+  oferece o caminho para conseguir. O site precisa conhecer tudo o que pode
+  estar no save, porque o mesmo personagem é jogado nos dois: hoje ele quebra
+  com item de modelo desconhecido (`itemTemplate` joga erro) e, ao gravar,
+  some com o campo de save que não conhece. Vale para o que vier depois,
+  salvo decisão contrária. Primeiro conteúdo assim (fila de 2026-10-17, depois
+  da etapa 5): runas (pedras raras de baú e de chefe que dão habilidade à
+  arma, como a runa elétrica que dá choque), encantamentos (fortificação, como
+  resistência a ataque mágico) e materiais por tipo de peça somando com a raridade
+  (metal: ferro → aço → aço mágico; madeira: carvalho → ébano → madeira
+  élfica; couro: couro → couro reforçado → couro de dragão; tecido: linho →
+  seda → seda arcana), com arte nova do Breno por material. O poder do
+  necromante que levanta um esqueleto aliado é **do site e do app**.
 
 - `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
   paridade exata: mesma entrada → mesmo resultado e a mesma sequência de
