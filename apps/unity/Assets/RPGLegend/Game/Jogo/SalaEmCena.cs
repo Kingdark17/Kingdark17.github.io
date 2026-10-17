@@ -14,7 +14,7 @@ namespace RPGLegend.Game.Jogo
     /// o relógio (passos fixos de 1/60 s) e o desenho. A cena desenha numa textura que a tela mostra no palco; as
     /// coordenadas são as do site (48 px por quadrado, y pra baixo), num canto longe da cena da porta.
     /// </summary>
-    public sealed class SalaEmCena : MonoBehaviour
+    public sealed partial class SalaEmCena : MonoBehaviour
     {
         public const float Lado = 48f;
         private const int OrdemDoChao = -20000;
@@ -267,7 +267,8 @@ namespace RPGLegend.Game.Jogo
 
         private void Update()
         {
-            if (_planta == null || _walker == null) return;
+            // Em luta quem põe o herói no lugar é a arena (SalaEmCena.Luta.cs).
+            if (EmLuta || _planta == null || _walker == null) return;
             if (!Ativo || _saiuDe == _salaDaCena)
             {
                 _sobra = 0;

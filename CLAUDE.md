@@ -198,8 +198,10 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   (estado, avisos, diário, sala secreta, quando gravar), `TelaDeJogo` liga
   ela à UI e à `SalaEmCena` (a sala desenhada numa textura, andar solto por
   teclado ou joystick). Grava na nuvem como o site (2,5 s, teto de 10 s,
-  `baseSignature`). **Até a luta em tempo real (etapa 5), a porta de sala de
-  monstro fica trancada com aviso** (decisão do usuário). As telas de sala
+  `baseSignature`). Desde a etapa 5.4, a sala de monstro abre a luta em tempo
+  real (`luta/arena.ts`, no C# `Arenas`): a `Partida` troca o combate por
+  turnos pela arena, e a luta acontece na própria sala, com as portas
+  trancadas até vencer ou cair. As telas de sala
   são as do site, nos mesmos moldes (a carta seleciona, a ficha age):
   conversa, evento, totem, quadro de missões, mestre e guilda em
   `TelaDeJogo.Telas.cs`; mochila (cartão de guilda com o "+" dos pontos,

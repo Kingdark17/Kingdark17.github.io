@@ -5,8 +5,8 @@ using RPGLegend.Game.Jogo;
 namespace RPGLegend.Tests
 {
     /// <summary>
-    /// A partida do app (Game/Jogo/Partida.cs): quando grava, o que fazer quando a gravação falha e a porta da
-    /// sala de monstro trancada até a luta em tempo real. É o que protege o save de verdade de quem joga pelo app,
+    /// A partida do app (Game/Jogo/Partida.cs): quando grava, o que fazer quando a gravação falha e a luta em
+    /// tempo real que a sala de monstro abre. É o que protege o save de verdade de quem joga pelo app,
     /// então vale teste mesmo sem par no TypeScript.
     /// </summary>
     public class PartidaTests
@@ -129,20 +129,55 @@ namespace RPGLegend.Tests
             Assert.IsFalse(partida.TemMudancaPorGravar);
         }
 
-        // ---------- a porta da sala de monstro ----------
+        // ---------- a luta em tempo real ----------
 
         [Test]
-        public void PortaDaSalaDeMonstroFicaTrancadaComUmAvisoSoNoDiario()
+        public void EntrarNaSalaDeMonstroAbreALutaNaPorta()
         {
             var (estado, direcao) = MasmorraComMonstroAoLado();
             var partida = new Partida(1, estado, "a");
 
-            for (int vez = 0; vez < 3; vez++) Assert.IsFalse(partida.Mover(direcao), "a sala não muda");
+            Assert.IsTrue(partida.Mover(direcao), "a sala muda");
+            Assert.IsNotNull(partida.Luta, "e a luta começa ali");
+            Assert.IsNull(partida.Tela, "sem a tela de combate por turnos");
+            var chegada = RoomWalk.Arrival(direcao);
+            Assert.AreEqual(chegada.X, partida.Luta.Arena.Heroi.X);
+            Assert.AreEqual(chegada.Y, partida.Luta.Arena.Heroi.Y);
+            Assert.IsTrue(partida.TemMudancaPorGravar);
+            Assert.IsFalse(partida.Mover(Directions.Opposite.Get(direcao)), "a porta fica trancada durante a luta");
+        }
 
-            Assert.AreSame(estado, partida.Estado, "nem o estado");
-            Assert.AreSame(Partida.LutaEmBreve, partida.Aviso);
-            Assert.AreEqual(1, partida.Diario.Count, "empurrar a porta a cada quadro não enche o diário");
-            Assert.IsFalse(partida.TemMudancaPorGravar, "não há o que gravar");
+        [Test]
+        public void PerderALutaVoltaPraCidadeComOAvisoDoSite()
+        {
+            var (estado, direcao) = MasmorraComMonstroAoLado();
+            var fraco = estado.Hero.Clone();
+            fraco.Hp = 1;
+            fraco.Level = 8;
+            var semDefesa = estado.Clone();
+            semDefesa.Hero = fraco;
+            var partida = new Partida(1, semDefesa, "a");
+            Assert.IsTrue(partida.Mover(direcao));
+
+            var parado = new EntradaDaLuta();
+            for (int passo = 0; passo < 20000 && partida.Luta != null; passo++) partida.PassoDaLuta(parado);
+
+            Assert.IsNull(partida.Luta, "a luta acabou");
+            Assert.AreEqual("city", partida.Estado.MapMode);
+            Assert.AreEqual("Derrota", partida.Aviso.Titulo);
+            StringAssert.Contains("Você foi derrotado!", partida.Aviso.Texto);
+        }
+
+        [Test]
+        public void QuemVoltaParadoNumaSalaDeMonstroVoltaPraLuta()
+        {
+            var (estado, direcao) = MasmorraComMonstroAoLado();
+            var naSala = Estados.Andar(estado, direcao);
+            var partida = new Partida(1, naSala, "a");
+            Assert.IsNull(partida.Luta);
+
+            partida.RetomarLutaSeHouver();
+            Assert.IsNotNull(partida.Luta);
         }
 
         [Test]

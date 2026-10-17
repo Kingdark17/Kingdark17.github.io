@@ -978,3 +978,234 @@
 .carregando-jogo.escondido {
     display: none;
 }
+
+/* ---------- a luta em tempo real (TelaDeJogo.Luta.cs) ---------- */
+/* Por cima da sala: o botão de ataque no canto de baixo à direita (o polegar direito), os poderes e os itens ao lado
+   dele, o evento da arma no alto e os números que sobem. O polegar esquerdo continua no joystick do palco. */
+
+.hud-da-luta {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.hud-da-luta.escondido,
+.menu-de-itens.escondido,
+.dica-do-evento.escondido {
+    display: none;
+}
+
+.numeros-da-luta {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.numero-da-luta {
+    position: absolute;
+    translate: -50% 0;
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 30px;
+    color: var(--parchment);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: var(--contorno);
+    white-space: nowrap;
+}
+
+.numero-critico {
+    font-size: 38px;
+    color: var(--gold-bright);
+}
+
+.numero-cura {
+    color: #7fd17a;
+}
+
+.numero-erro {
+    font-size: 24px;
+    color: var(--parchment-dim);
+}
+
+.avisos-da-luta {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 132px;
+    align-items: center;
+}
+
+.aviso-da-luta,
+.diario-da-luta {
+    margin-top: 4px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background-color: rgba(16, 18, 26, 0.78);
+    font-size: 17px;
+    color: var(--parchment);
+    white-space: normal;
+    max-width: 80%;
+    -unity-text-align: middle-center;
+}
+
+.diario-da-luta {
+    color: var(--gold-bright);
+}
+
+.evento-da-arma {
+    position: absolute;
+}
+
+.dica-do-evento {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 1px;
+    font-size: 16px;
+    color: var(--parchment);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: var(--contorno);
+    -unity-text-align: middle-center;
+}
+
+.botoes-da-luta {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.poderes-da-luta {
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.unity-button.botao-da-luta {
+    width: 62px;
+    height: 62px;
+    margin: 8px 0 0 0;
+    padding: 0;
+    border-radius: 31px;
+    border-width: 2px;
+    border-color: rgba(201, 162, 39, 0.75);
+    background-color: rgba(29, 34, 48, 0.9);
+    font-size: 28px;
+    -unity-text-align: middle-center;
+    overflow: hidden;
+}
+
+.unity-button.botao-da-luta:hover {
+    background-color: rgba(36, 42, 58, 0.95);
+}
+
+.unity-button.botao-da-luta.sem-mana {
+    opacity: 0.45;
+}
+
+.icone-do-poder {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 28px;
+    -unity-text-align: middle-center;
+}
+
+.custo-do-poder {
+    position: absolute;
+    right: 6px;
+    bottom: 2px;
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 17px;
+    color: #9fc2ff;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: var(--contorno);
+}
+
+.espera-do-poder {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.botao-de-ataque {
+    width: 108px;
+    height: 108px;
+    border-radius: 54px;
+    border-width: 3px;
+    border-color: var(--gold);
+    background-color: rgba(29, 34, 48, 0.92);
+    align-items: center;
+    justify-content: center;
+}
+
+.botao-de-ataque.apertado {
+    scale: 0.94 0.94;
+    border-color: var(--gold-bright);
+}
+
+.botao-de-ataque.esperando {
+    opacity: 0.6;
+}
+
+.icone-do-ataque {
+    width: 66px;
+    height: 66px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.emoji-do-ataque {
+    position: absolute;
+    font-size: 46px;
+    -unity-text-align: middle-center;
+}
+
+.menu-de-itens {
+    position: absolute;
+    right: 150px;
+    bottom: 14px;
+    width: 280px;
+    padding: 8px 10px;
+}
+
+.titulo-do-menu-de-itens {
+    font-size: 18px;
+    color: var(--gold-bright);
+    margin-bottom: 4px;
+}
+
+.unity-button.item-do-menu {
+    flex-direction: row;
+    align-items: center;
+    margin: 2px 0;
+    padding: 4px 6px;
+    border-width: 0;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 17px;
+    color: var(--parchment);
+    -unity-text-align: middle-left;
+}
+
+.unity-button.item-do-menu:hover {
+    background-color: rgba(201, 162, 39, 0.15);
+    color: var(--gold-bright);
+}
+
+.icone-do-item-do-menu {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+    -unity-background-scale-mode: scale-to-fit;
+}

@@ -85,6 +85,7 @@ namespace RPGLegend.Game.Jogo
             _saindo = false;
             _nivelMostrado = -1;
             EsquecerEscolhas();
+            EsquecerLuta();
             _bicho.Mostrar(null);
             _salaDaChegada = null;
             _mapaDaChegada = null;
@@ -140,6 +141,9 @@ namespace RPGLegend.Game.Jogo
                 _volta++;
             };
             _partida.Som += Sons.Tocar;
+            _partida.NaLuta += MostrarAcontecimentos;
+            _partida.LutaAcabou += AoAcabarALuta;
+            _partida.PosicaoDoHeroi = () => _sala?.Walker;
 
             if (_sala == null)
             {
@@ -153,6 +157,8 @@ namespace RPGLegend.Game.Jogo
 
             _carregando.AddToClassList("escondido");
             Redesenhar();
+            // Quem fechou o app no meio de uma luta volta pra ela.
+            _partida.RetomarLutaSeHouver();
             CarregarPet();
             return true;
         }
@@ -167,7 +173,12 @@ namespace RPGLegend.Game.Jogo
             try
             {
                 var eu = await RpgApi.Eu(_token);
-                if (partida == _partida) _bicho.Mostrar(eu.Pet);
+                if (partida == _partida)
+                {
+                    _bicho.Mostrar(eu.Pet);
+                    // Os bônus do pet valem na luta, como no site.
+                    _partida.Pet = eu.Pet;
+                }
             }
             catch (Exception) { /* sem pet */ }
         }
@@ -182,7 +193,12 @@ namespace RPGLegend.Game.Jogo
         public void Fechar()
         {
             _partida = null;
-            if (_sala != null) _sala.gameObject.SetActive(false);
+            EsquecerLuta();
+            if (_sala != null)
+            {
+                _sala.SairDaLuta(_sala.Walker);
+                _sala.gameObject.SetActive(false);
+            }
             _tela?.AddToClassList("oculto");
             _sobre?.AddToClassList("oculto");
         }
@@ -243,6 +259,8 @@ namespace RPGLegend.Game.Jogo
             _palco.RegisterCallback<PointerUpEvent>(e => SoltarDedo(e.pointerId));
             _palco.RegisterCallback<PointerCancelEvent>(e => SoltarDedo(e.pointerId));
             _palco.RegisterCallback<PointerCaptureOutEvent>(e => SoltarDedo(e.pointerId));
+
+            CriarHudDaLuta(_palco);
         }
 
         /// <summary>
@@ -272,8 +290,10 @@ namespace RPGLegend.Game.Jogo
         {
             if (_partida == null) return;
             _partida.Agora = AgoraMs;
-            if (_sala != null) _sala.Ativo = Andando;
+            if (_sala != null) _sala.Ativo = Andando && _partida.Luta == null;
             if (!Andando && _dedo.HasValue) SoltarDedo(-1);
+            AtualizarLuta();
+            if (_partida == null) return;
 
             // Esc no PC, e o "voltar" do Android, que chega como Esc.
             var teclado = Keyboard.current;
@@ -559,6 +579,14 @@ namespace RPGLegend.Game.Jogo
                 chave = salaAgora + "#secreta";
                 chegada = RoomWalk.Arrival(secreta.Lado);
             }
+            else if (_partida.Luta != null)
+            {
+                // Em luta a sala fica trancada e sem conteúdo: os monstros são as figuras da arena.
+                planta = RoomWalk.Layout(new DoorMap(), new List<RoomObject>());
+                figuras = new Dictionary<string, Figura>();
+                chave = salaAgora + "#" + _volta;
+                chegada = _chegada;
+            }
             else
             {
                 var icone = celula != null ? visual.Icone(celula) ?? "" : "";
@@ -614,7 +642,8 @@ namespace RPGLegend.Game.Jogo
                 case "mochila": TelaDaMochila(tela.Mochila); break;
                 case "loja": TelaDaLoja(tela.Loja); break;
                 default:
-                    // O painel ADM e o combate não abrem no app (a luta é da etapa 5; o ADM fica pra depois).
+                    // O painel ADM não abre no app (fica pra depois). O combate por turnos nem chega aqui: a
+                    // Partida troca ele pela luta em tempo real.
                     _partida.TrocarTela(null);
                     break;
             }
