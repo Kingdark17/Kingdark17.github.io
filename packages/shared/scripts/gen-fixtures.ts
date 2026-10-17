@@ -110,7 +110,7 @@ import type {
   Walker,
   WalkStep,
 } from '../src/index.js';
-import type { EventoDeArma, JogadaDoEvento, LeituraDaMira, PontoDoTraco } from '../src/index.js';
+import type { EntradaDaLuta, EventoDeArma, JogadaDoEvento, LeituraDaMira, LutaEmTempoReal, MonstroNaArena, PontoDoTraco } from '../src/index.js';
 
 const PACOTE = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DESTINO = join(PACOTE, 'fixtures');
@@ -3527,6 +3527,12 @@ caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: 
     caso(`indicesDePe: ${nome}`, 'indicesDePe', { sala }, (a) => E.indicesDePe(a.sala));
   }
 
+  const vista = E.monsterView(E.freshCombatMonster((grupo.monsters ?? [])[1] as MonsterInstance));
+  caso('gravarMonstro: a visão volta crua pra sala', 'gravarMonstro', { estado: naSalaDaMasmorra(grupo), indice: 1, monstro: { ...vista, hp: 3 } }, (a) =>
+    E.gravarMonstro(a.estado, a.indice, a.monstro));
+  caso('gravarMonstro: monstro já cru', 'gravarMonstro', { estado: naSalaDaMasmorra(grupo), indice: 0, monstro: { ...E.freshCombatMonster((grupo.monsters ?? [])[0] as MonsterInstance), hp: 0 } }, (a) =>
+    E.gravarMonstro(a.estado, a.indice, a.monstro));
+
   for (const [nome, estado] of [
     ['um monstro', naSalaDaMasmorra(umMonstro)],
     ['grupo com um caído', naSalaDaMasmorra(grupoComUmCaido)],
@@ -3832,6 +3838,147 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     const evento = E.eventoDoAtaque(hero, estilo, () => lote());
     const leitura = chance(0.15) ? E.lerMira(evento.zona, null) : E.lerMira(evento.zona, lote());
     rg(`lote ${i}`, hero, monstroDeLote(), entre(1, 20), leitura, estilo, { seed: 3000 + i });
+  }
+}
+
+// ---------- a arena ----------
+
+{
+  const base = (grupo.monsters ?? [])[0] as MonsterInstance;
+  const bicho = (speciesId: string, o: Partial<MonsterInstance> = {}): MonsterInstance => ({ ...base, speciesId, ...o });
+  const forte = (o: HeroiDeTeste = {}) => {
+    const h = heroi({ classe: 'guerreiro', level: 6, ...o });
+    return { ...h, hp: 400, maxHp: 400, ...o.extra };
+  };
+  const salaCom = (monsters: MonsterInstance[], hero: Hero = forte(), o: Partial<EstadoNaMasmorra> = {}): EstadoNaMasmorra =>
+    naSalaDaMasmorra({ ...umMonstro, monsters, monsterIndex: 0, beaten: false, bonusTreasure: undefined }, hero, [], o);
+
+  for (const [nome, estado, chegada, pet] of [
+    ['um monstro, entrando pelo sul', salaCom([bicho('goblin')]), 'N', null],
+    ['grupo de três, entrando pelo norte', salaCom([bicho('goblin'), bicho('aranha'), bicho('slime')]), 'S', null],
+    ['grupo com um caído', salaCom([bicho('goblin', { hp: 0 }), bicho('aranha'), bicho('slime')], forte(), {}), 'W', null],
+    ['com companheiros, um caído', { ...salaCom([bicho('zumbi')]), party: [companheiro('guerreiro'), companheiro('mago', { hp: 0 }), companheiro('clerigo')] }, 'E', null],
+    ['com a bênção do NPC', salaCom([bicho('zumbi')], forte({ extra: { npcBlessing: { dodge: 15, combats: 2 } } })), null, null],
+    ['com pet', salaCom([bicho('zumbi')]), null, petDeTeste],
+  ] as const) {
+    caso(`abrirLuta: ${nome}`, 'abrirLuta', { estado, chegada: E.roomArrival(chegada as Direction | null), pet }, (a) => E.abrirLuta(a.estado, a.chegada, a.pet as never));
+  }
+
+  const simula = (nome: string, luta: LutaEmTempoReal, entradas: EntradaDaLuta[], rng: RngSpec) =>
+    caso(`simularLuta: ${nome}`, 'simularLuta', { luta, entradas }, (a, ctx) => E.simularLuta(a.luta, a.entradas, ctx.rng, ctx.now), { rng, now: AGORA });
+  const parado = (n: number): EntradaDaLuta[] => Array.from({ length: n }, () => ({ x: 0, y: 0 }));
+  const abrir = (estado: EstadoNaMasmorra, chegada: Direction | null = null) => E.abrirLuta(estado, E.roomArrival(chegada)).luta;
+  /** O herói encostado (um quadrado abaixo) no primeiro monstro. */
+  const encostado = (luta: LutaEmTempoReal): LutaEmTempoReal => {
+    const m = luta.arena.monstros[0] as MonstroNaArena;
+    return { ...luta, arena: { ...luta.arena, heroi: { ...luta.arena.heroi, x: m.x, y: m.y + E.TILE_UNITS } } };
+  };
+  /** Aperta o ataque no passo 0 e responde ao evento com `resposta`; o resto, parado. */
+  const golpe = (passos: number, resposta: Record<number, EntradaDaLuta>): EntradaDaLuta[] =>
+    parado(passos).map((e, i) => (i === 0 ? { ...e, atacar: true } : (resposta[i] ?? e)));
+
+  // Cada jeito de lutar, com o herói parado (depois correndo em círculo).
+  for (const [nome, especie] of [
+    ['agressivo investe', 'goblin'],
+    ['ágil', 'lobo_sombras'],
+    ['defensivo', 'esqueleto'],
+    ['venenoso', 'aranha'],
+    ['lento', 'zumbi'],
+    ['mágico atira', 'elemental_fogo'],
+    ['mágico de gelo', 'espectro_gelado'],
+  ] as const) {
+    simula(`${nome}, herói parado`, abrir(salaCom([bicho(especie, { hp: 900, maxHp: 900 })]), 'N'), parado(420), { seed: 500 + nome.length });
+    const circulo = parado(420).map((_, i) => {
+      const fase = Math.floor(i / 35) % 4;
+      return { x: fase === 0 ? 127 : fase === 2 ? -127 : 0, y: fase === 1 ? 127 : fase === 3 ? -127 : 0 };
+    });
+    simula(`${nome}, herói correndo em volta`, abrir(salaCom([bicho(especie, { hp: 900, maxHp: 900 })]), 'S'), circulo, { seed: 600 + nome.length });
+  }
+  simula('grupo de três revezando os golpes', abrir(salaCom([bicho('goblin', { hp: 900 }), bicho('aranha', { hp: 900 }), bicho('lobo_sombras', { hp: 900 })]), 'N'), parado(600), { seed: 700 });
+
+  // O evento de cada arma, com o herói encostado num zumbi forte.
+  const zumbi = () => salaCom([bicho('zumbi', { hp: 600, maxHp: 600 })]);
+  const comArma = (classe: string | null, arma: string | null) => forte({ classe, arma });
+  simula('espada: toque no meio da barra', encostado(abrir({ ...zumbi(), hero: comArma('guerreiro', 'espada') })), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 801 });
+  simula('espada: barra sem toque', encostado(abrir({ ...zumbi(), hero: comArma('guerreiro', 'espada') })), golpe(100, {}), { seed: 802 });
+  simula('arco: toque e o tiro voa', encostado(abrir({ ...zumbi(), hero: comArma('arqueiro', 'arco') })), golpe(90, { 40: { x: 0, y: 0, tocar: true } }), { seed: 803 });
+  simula('machado: solta no meio', encostado(abrir({ ...zumbi(), hero: comArma('barbaro', 'machado') })), golpe(50, { 42: { x: 0, y: 0, soltar: true } }), { seed: 804 });
+  simula('marreta: estoura', encostado(abrir({ ...zumbi(), hero: comArma('barbaro', 'marreta') })), golpe(100, {}), { seed: 805 });
+  simula('violão: três batidas', encostado(abrir({ ...zumbi(), hero: comArma('bardo', 'violao') })), golpe(130, { 30: { x: 0, y: 0, tocar: true }, 61: { x: 0, y: 0, tocar: true }, 89: { x: 0, y: 0, tocar: true } }), { seed: 806 });
+  simula('adaga: dois toques', encostado(abrir({ ...zumbi(), hero: comArma('ladino', 'adaga') })), golpe(70, { 24: { x: 0, y: 0, tocar: true }, 43: { x: 0, y: 0, tocar: true } }), { seed: 807 });
+  simula('mão vazia: a barra', encostado(abrir({ ...zumbi(), hero: comArma(null, null) })), golpe(50, { 40: { x: 0, y: 0, tocar: true } }), { seed: 808 });
+  for (const [semente, classe] of [
+    [809, 'mago'],
+    [810, 'necromante'],
+  ] as const) {
+    // O símbolo sai do primeiro sorteio da luta: o do aperto.
+    const nomes = Object.keys(E.SIMBOLOS);
+    const simbolo = nomes[Math.floor(E.seededRng(semente)() * nomes.length)] as string;
+    const pontos = E.SIMBOLOS[simbolo] as readonly (readonly [number, number])[];
+    const resposta: Record<number, EntradaDaLuta> = {};
+    pontos.forEach(([x, y], i) => (resposta[i + 1] = { x: 0, y: 0, dedo: { x, y } }));
+    simula(`cajado do ${classe}: o símbolo ${simbolo}`, encostado(abrir({ ...zumbi(), hero: comArma(classe, 'cajado') })), golpe(pontos.length + 60, resposta), { seed: semente });
+  }
+  simula('longe demais com arma de perto', abrir({ ...zumbi(), hero: comArma('guerreiro', 'espada') }, 'N'), golpe(5, {}), { seed: 811 });
+  simula('mago sem mana abre o desenho do golpe físico', encostado(abrir({ ...zumbi(), hero: { ...comArma('mago', 'cajado'), mp: 0 } })), golpe(60, { 40: { x: 0, y: 0, tocar: true } }), { seed: 812 });
+
+  // Poderes, itens e a rodada.
+  const pocao = item('pot_vida');
+  const clerigo = { ...forte({ classe: 'clerigo' }), hp: 100, mp: 60, powerIds: ['cura_menor'] };
+  simula('poder de dano e a espera dele', abrir({ ...zumbi(), hero: { ...forte(), mp: 60, powerIds: ['golpe_poderoso'] } }), parado(200).map((e, i) => (i === 0 || i === 5 || i === 190 ? { ...e, poder: 'golpe_poderoso' } : e)), { seed: 820 });
+  simula('poder de cura', abrir({ ...zumbi(), hero: clerigo }), parado(30).map((e, i) => (i === 3 ? { ...e, poder: 'cura_menor' } : e)), { seed: 821 });
+  simula('poder que o herói não tem', abrir({ ...zumbi(), hero: forte() }), parado(10).map((e, i) => (i === 1 ? { ...e, poder: 'bola_de_fogo' } : e)), { seed: 822 });
+  simula('poder sem mana', abrir({ ...zumbi(), hero: { ...forte(), mp: 0, powerIds: ['golpe_poderoso'] } }), parado(10).map((e, i) => (i === 1 ? { ...e, poder: 'golpe_poderoso' } : e)), { seed: 823 });
+  simula('poção, e o menu aberto deixa lento', abrir({ ...zumbi(), hero: { ...forte(), hp: 50 }, inventory: [pocao] }), parado(80).map((e, i) => (i < 40 ? { ...e, menu: true, ...(i === 39 ? { item: pocao.uid } : {}) } : e)), { seed: 824 });
+  simula('item que não está na mochila', abrir({ ...zumbi(), hero: forte() }), parado(5).map((e) => ({ ...e, item: 'nao_existe' })), { seed: 825 });
+  // A grade inteira: morrer leva pra cidade, e a cidade precisa do tamanho do mapa pra se montar.
+  const envenenado = abrir(comGradeInteira({ ...zumbi(), hero: forte() }));
+  const estadoEnvenenado = envenenado.estado as EstadoNaMasmorra;
+  simula(
+    'o veneno da rodada',
+    { ...envenenado, estado: { ...estadoEnvenenado, hero: { ...estadoEnvenenado.hero, hp: 4, buffs: { poisonTurns: 5, poisonDmg: 4 } } } },
+    parado(E.RODADA * 3 + 5).map((_, i) => {
+      const fase = Math.floor(i / 35) % 4;
+      return { x: fase === 0 ? 127 : fase === 2 ? -127 : 0, y: fase === 1 ? 127 : fase === 3 ? -127 : 0 };
+    }),
+    { seed: 826 },
+  );
+
+  // Companheiros, vitória, chefe e derrota.
+  simula('companheiros lutam', abrir({ ...salaCom([bicho('zumbi', { hp: 300, maxHp: 300 }), bicho('slime', { hp: 300, maxHp: 300 })]), party: [companheiro('guerreiro', { stance: 'agressiva' }), companheiro('clerigo', { stance: 'suporte' })] }, 'S'), parado(600), { seed: 830 });
+  simula('vitória com item', encostado(abrir({ ...salaCom([bicho('zumbi', { hp: 1 })]), hero: comArma('guerreiro', 'espada') })), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: sementeOnde((primeiro) => primeiro >= 0.25) });
+  simula('vitória com ouro escondido', encostado(abrir({ ...naSalaDaMasmorra({ ...umMonstro, monsters: [bicho('zumbi', { hp: 1 })], monsterIndex: 0, beaten: false, bonusTreasure: { gold: 25 } }, forte({ arma: 'espada' }), []) })), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 832 });
+  simula('o chefe leva ao andar seguinte', encostado(abrir(comGradeInteira(naSalaDaMasmorra({ ...chefe, monsters: [{ ...(chefe.monsters ?? [])[0]!, hp: 1 }], monsterIndex: 0, beaten: false }, forte({ arma: 'espada' }), [])))), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 833 });
+  simula('derrota', abrir(comGradeInteira(salaCom([bicho('aranha', { dmg: 60 })], { ...forte({ level: 8 }), hp: 5, gold: 300 })), null), parado(400), { seed: 834 });
+
+  // Robôs: andam e apertam tudo ao acaso, com grupos e classes variados.
+  const especies = ['goblin', 'lobo_sombras', 'esqueleto', 'aranha', 'slime', 'orc', 'morcego', 'zumbi', 'elemental_fogo', 'espectro_gelado'];
+  for (let i = 1; i <= 8; i++) {
+    const r = E.seededRng(900 + i);
+    const classe = CLASSES_IDS[Math.floor(r() * CLASSES_IDS.length)] as string;
+    const tamanho = 1 + Math.floor(r() * 3);
+    const monsters = Array.from({ length: tamanho }, () => bicho(especies[Math.floor(r() * especies.length)] as string, { hp: 40 + Math.floor(r() * 80) }));
+    const hero = { ...forte({ classe }), mp: 80, powerIds: [E.classById(classe)!.signatureId] };
+    const party = r() < 0.5 ? [companheiro(CLASSES_IDS[Math.floor(r() * CLASSES_IDS.length)] as string)] : [];
+    const estado = { ...comGradeInteira(salaCom(monsters, hero)), party, inventory: [item('pot_vida')] };
+    let x = 0;
+    let y = 0;
+    const entradas: EntradaDaLuta[] = Array.from({ length: 900 }, (_, k) => {
+      if (k % 30 === 0) {
+        x = Math.floor(r() * 255) - 127;
+        y = Math.floor(r() * 255) - 127;
+      }
+      const e: EntradaDaLuta = { x, y };
+      const sorteio = r();
+      if (sorteio < 0.04) e.atacar = true;
+      else if (sorteio < 0.09) e.tocar = true;
+      else if (sorteio < 0.13) e.soltar = true;
+      else if (sorteio < 0.135) e.poder = hero.powerIds[0];
+      else if (sorteio < 0.137) e.item = estado.inventory[0]!.uid;
+      else if (sorteio < 0.3) e.dedo = { x: Math.floor(r() * 1001), y: Math.floor(r() * 1001) };
+      return e;
+    });
+    simula(`robô ${i}: ${classe} contra ${monsters.map((m) => m.speciesId).join(', ')}`, abrir(estado, E.DIR_ORDER[i % 4] as Direction), entradas, { seed: 950 + i });
   }
 }
 

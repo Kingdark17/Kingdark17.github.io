@@ -1,0 +1,119 @@
+{
+  "LENTIDAO": 4,
+  "RODADA": 90,
+  "RECARGA_DO_ATAQUE": 15,
+  "RECARGA_DO_PODER": 180,
+  "RECARGA_DO_ITEM": 60,
+  "ALCANCE_CORPO_A_CORPO": 1440,
+  "ALCANCE_DO_GOLPE": 1920,
+  "VELOCIDADE_DO_TIRO": 112,
+  "VELOCIDADE_DO_TIRO_DO_MONSTRO": 64,
+  "RAIO_DO_TIRO": 400,
+  "VIDA_DO_TIRO": 120,
+  "CONTATO": 640,
+  "TEMPO_ATORDOADO": 60,
+  "TEMPO_HESITANDO": 40,
+  "ESPERA_INICIAL": 45,
+  "ESPERA_POR_MONSTRO": 20,
+  "ATACANDO_DE_UMA_VEZ": 1,
+  "INTERVALO_ENTRE_GOLPES": 20,
+  "CADENCIA_DO_COMPANHEIRO": 100,
+  "VELOCIDADE_DO_COMPANHEIRO": 48,
+  "JEITOS_DE_LUTAR": {
+    "agressivo": {
+      "velocidade": 40,
+      "distancia": 2400,
+      "aviso": 30,
+      "golpe": "investida",
+      "alcance": 2880,
+      "descanso": 50
+    },
+    "agil": {
+      "velocidade": 56,
+      "distancia": 1200,
+      "aviso": 18,
+      "golpe": "investida",
+      "alcance": 1200,
+      "descanso": 30
+    },
+    "defensivo": {
+      "velocidade": 30,
+      "distancia": 1000,
+      "aviso": 36,
+      "golpe": "perto",
+      "alcance": 1300,
+      "descanso": 70,
+      "guarda": true
+    },
+    "venenoso": {
+      "velocidade": 36,
+      "distancia": 1000,
+      "aviso": 30,
+      "golpe": "perto",
+      "alcance": 1200,
+      "descanso": 45
+    },
+    "lento": {
+      "velocidade": 22,
+      "distancia": 1100,
+      "aviso": 54,
+      "golpe": "perto",
+      "alcance": 1400,
+      "descanso": 60
+    },
+    "magico": {
+      "velocidade": 30,
+      "distancia": 3360,
+      "aviso": 36,
+      "golpe": "tiro",
+      "alcance": 0,
+      "descanso": 75
+    }
+  },
+  "LUGAR_DO_COMPANHEIRO": [
+    [
+      -1,
+      0
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "POSICOES_INICIAIS": [
+    [
+      [
+        4,
+        3
+      ]
+    ],
+    [
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        3
+      ]
+    ],
+    [
+      [
+        4,
+        2
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        4
+      ]
+    ]
+  ]
+}

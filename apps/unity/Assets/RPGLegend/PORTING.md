@@ -240,6 +240,12 @@ exceção no log). O primeiro build leva uns 12 minutos; os seguintes, perto de 
   `Attack.ResolverGolpe`, a parte da `ResolveAttack` depois de ler a barra.
 - Tempo em passos (60 por segundo, como o andar) e desenho em inteiros numa caixa de 0 a 1000. As únicas
   contas que não são de inteiros no desenho são a raiz e a divisão final, que saem iguais nos dois lados.
+- `Arenas` (arena.ts): a luta na sala. `AbrirLuta` põe monstros e companheiros; `PassoDaLuta` anda um passo
+  (o evento em tempo de verdade, o mundo em câmera lenta enquanto ele dura); `SimularLuta` encadeia passos e é
+  o que os casos usam (lutas inteiras, com robôs de 900 passos). Os golpes passam pelas regras de sempre
+  (`ResolverGolpe`, `StartMonsterAttack`/`LandHitOnHero`/`HitPartyMember`, `PartyMemberAct`, `CastPower`) e
+  quem cai, por `FimDaLuta`. `VELOCIDADE_DA_INVESTIDA` é conta com o `HERO_SPEED` e por isso não está na
+  tabela: o C# a calcula.
 
 ### Limitações conhecidas
 - `Attributes` guarda os seis atributos como `double`: atributo ausente vira NaN e `null` vira 0

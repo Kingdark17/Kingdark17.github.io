@@ -46,7 +46,7 @@ import { petBonus, type PetId } from '../pets/pets.js';
 import { defaultRng, type Rng } from '../rng.js';
 import type { Efeito } from './efeitos.js';
 import { celulaAtual, substituirCelulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from './estado.js';
-import { indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta, vivoNaSala } from './fim-da-luta.js';
+import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta, vivoNaSala } from './fim-da-luta.js';
 import { podeUsar, usar } from './mochila.js';
 
 /**
@@ -205,32 +205,6 @@ function maisRapido(estado: EstadoNaMasmorra): CombatMonsterView | null {
   return rapido;
 }
 
-function comMonstro(estado: EstadoNaMasmorra, indice: number, monstro: CombatMonster): EstadoNaMasmorra {
-  const sala = celulaAtual(estado) as DungeonCell;
-  const monsters = (sala.monsters ?? []).map((atual, i) => (i === indice ? despirView(monstro) : atual));
-  return substituirCelulaAtual(estado, { ...sala, monsters });
-}
-
-/**
- * Tira os campos que `monsterView()` acrescenta antes de guardar de volta
- * na sala. Sem isso o nome, o ícone e a espécie inteira iriam parar dentro
- * do save e trafegariam no multiplayer a cada golpe — exatamente o que
- * `MonsterInstance` foi desenhado pra evitar.
- */
-function despirView(monstro: CombatMonster): CombatMonster {
-  const { species, enemyClass, name, icon, behavior, ability, abilityDesc, enemyClassLabel, ...cru } =
-    monstro as CombatMonsterView;
-  void species;
-  void enemyClass;
-  void name;
-  void icon;
-  void behavior;
-  void ability;
-  void abilityDesc;
-  void enemyClassLabel;
-  return cru;
-}
-
 // ---------- entrada e saída ----------
 
 /**
@@ -336,7 +310,7 @@ export function atacar(combate: Combate, jogada: JogadaDeAtaque, estilo: AttackS
 
   const depois: Combate = {
     ...combate,
-    estado: comMonstro({ ...estado, hero: ataque.hero }, alvo, ataque.monster),
+    estado: gravarMonstro({ ...estado, hero: ataque.hero }, alvo, ataque.monster),
     alvo,
     dado,
     log,
@@ -398,7 +372,7 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
 
   const depois: Combate = {
     ...combate,
-    estado: comMonstro({ ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster),
+    estado: gravarMonstro({ ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster),
     alvo,
     log,
     // Poder que cura não é golpe; o original só tinha som de acerto.
@@ -560,7 +534,7 @@ function equipeAge(combate: Combate, alvo: number, rng: Rng): Combate {
     else if (acao.kind === 'hit') log.push(`${acao.member.name} acerta ${monstro.name} causando ${acao.amount}.`);
     else log.push(`${acao.member.name} erra o golpe.`);
   }
-  const depois = { ...combate, estado: comMonstro({ ...estado, hero: equipe.hero }, alvo, equipe.monster), log };
+  const depois = { ...combate, estado: gravarMonstro({ ...estado, hero: equipe.hero }, alvo, equipe.monster), log };
   return equipe.defeated ? abaterNoTurno(depois, alvo, monstro, rng) : depois;
 }
 
@@ -572,7 +546,7 @@ function danoContinuo(combate: Combate, rng: Rng): Combate {
     const monstro = monstroNo(estado, indice);
     const dot = tickMonsterDot(monstro);
     const log = dot.damage > 0 ? [...atual.log, `Os efeitos contínuos causam ${dot.damage} de dano em ${monstro.name}.`] : atual.log;
-    atual = { ...atual, estado: comMonstro(estado, indice, dot.monster), log };
+    atual = { ...atual, estado: gravarMonstro(estado, indice, dot.monster), log };
     if (dot.defeated) atual = abaterNoTurno(atual, indice, monstro, rng);
     if (atual.fase !== 'combate') return atual;
   }
@@ -596,7 +570,7 @@ function golpeDaVez(combate: Combate, rng: Rng, opcoes: OpcoesDaRodada): Combate
     petEsquivaBonus: petBonus(combate.pet).esquiva ?? 0,
     esquivaCerta: opcoes.esquivaCerta,
   });
-  const comGolpe = comMonstro({ ...estado, hero: golpe.hero, party: golpe.party }, vez, golpe.monster);
+  const comGolpe = gravarMonstro({ ...estado, hero: golpe.hero, party: golpe.party }, vez, golpe.monster);
   const sala = celulaAtual(comGolpe) as DungeonCell;
   const log = [...combate.log, textoDoGolpe(golpe, atacante.name)];
 

@@ -14,7 +14,7 @@
  * caiu.
  */
 
-import { freshCombatMonster, type CombatMonsterView } from '../combat/monster-state.js';
+import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from '../combat/monster-state.js';
 import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import { gainXP, type Companion, type Hero } from '../hero/hero.js';
@@ -64,6 +64,27 @@ export function vivoNaSala(sala: DungeonCell, indice: number): boolean {
 /** Os índices de quem está de pé, na ordem da sala. */
 export function indicesDePe(sala: DungeonCell): number[] {
   return (sala.monsters ?? []).map((_, indice) => indice).filter((indice) => vivoNaSala(sala, indice));
+}
+
+/**
+ * Grava o monstro `indice` de volta na sala atual, sem os campos que
+ * `monsterView()` acrescenta: o nome, o ícone e a espécie inteira iriam
+ * parar dentro do save e trafegariam no multiplayer a cada golpe — exatamente
+ * o que `MonsterInstance` foi desenhado pra evitar.
+ */
+export function gravarMonstro(estado: EstadoNaMasmorra, indice: number, monstro: CombatMonster): EstadoNaMasmorra {
+  const sala = celulaAtual(estado) as DungeonCell;
+  const { species, enemyClass, name, icon, behavior, ability, abilityDesc, enemyClassLabel, ...cru } = monstro as CombatMonsterView;
+  void species;
+  void enemyClass;
+  void name;
+  void icon;
+  void behavior;
+  void ability;
+  void abilityDesc;
+  void enemyClassLabel;
+  const monsters = (sala.monsters ?? []).map((atual, i) => (i === indice ? cru : atual));
+  return substituirCelulaAtual(estado, { ...sala, monsters });
 }
 
 /**

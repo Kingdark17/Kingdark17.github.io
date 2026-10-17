@@ -32,6 +32,7 @@ namespace RPGLegend.Tests
 
             Fn(M, "vivoNaSala", (a, c) => W(FimDaLuta.VivoNaSala(R<DungeonCell>(a["sala"]), Num(a["indice"]))));
             Fn(M, "indicesDePe", (a, c) => W(FimDaLuta.IndicesDePe(R<DungeonCell>(a["sala"]))));
+            Fn(M, "gravarMonstro", (a, c) => W(FimDaLuta.GravarMonstro(R<EstadoNaMasmorra>(a["estado"]), Num(a["indice"]), R<CombatMonsterView>(a["monstro"]))));
             Fn(M, "prepararLuta", (a, c) => W(FimDaLuta.PrepararLuta(R<EstadoNaMasmorra>(a["estado"]))));
             Fn(M, "pagarAbate", (a, c) => W(FimDaLuta.PagarAbate(R<EstadoNaMasmorra>(a["estado"]), R<CombatMonsterView>(a["abatido"]))));
             Fn(M, "limparSala", (a, c) => W(FimDaLuta.LimparSala(R<EstadoNaMasmorra>(a["estado"]), R<CombatMonsterView>(a["abatido"]), c.RngFn, c.NowOrFail)));

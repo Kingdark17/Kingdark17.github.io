@@ -71,6 +71,25 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>
+        /// TS: gravarMonstro — grava o monstro <paramref name="indice"/> de volta na sala atual, sem os campos que a
+        /// visão (<see cref="Monsters.View"/>) acrescenta: nome, ícone e espécie iriam parar dentro do save.
+        /// </summary>
+        public static EstadoNaMasmorra GravarMonstro(EstadoNaMasmorra estado, double indice, CombatMonster monstro)
+        {
+            var sala = (DungeonCell)Estados.CelulaAtual(estado);
+            var cru = new CombatMonster();
+            monstro.CopyInstanceFieldsTo(cru);
+            monstro.CopyCombatFieldsTo(cru);
+            foreach (var chave in CombatMonsterView.ViewKeys) cru.ForgetExtras(chave);
+            var origem = sala.Monsters ?? new List<MonsterInstance>();
+            var monsters = new List<MonsterInstance>(origem.Count);
+            for (int i = 0; i < origem.Count; i++) monsters.Add(i == indice ? cru : origem[i]);
+            var nova = sala.Clone();
+            nova.Monsters = monsters;
+            return Estados.SubstituirCelulaAtual(estado, nova);
+        }
+
+        /// <summary>
         /// TS: prepararLuta — zera os buffs da luta anterior, consome uma bênção de NPC se houver e deixa cada
         /// criatura de pé pronta pra receber status.
         /// </summary>

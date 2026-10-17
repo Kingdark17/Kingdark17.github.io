@@ -92,3 +92,4 @@ export * from './jogo/tutorial.js';
 // só o app usa, mas mora aqui pelo mesmo motivo do resto — uma regra só,
 // conferida pelos casos.
 export * from './luta/eventos-de-arma.js';
+export * from './luta/arena.js';
