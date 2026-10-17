@@ -1,119 +1,63 @@
 {
-  "LENTIDAO": 4,
+  "LENTIDAO": 2,
   "RODADA": 90,
   "RECARGA_DO_ATAQUE": 15,
   "RECARGA_DO_PODER": 180,
   "RECARGA_DO_ITEM": 60,
-  "ALCANCE_CORPO_A_CORPO": 1440,
-  "ALCANCE_DO_GOLPE": 1920,
-  "VELOCIDADE_DO_TIRO": 112,
-  "VELOCIDADE_DO_TIRO_DO_MONSTRO": 64,
-  "RAIO_DO_TIRO": 400,
+  "LARGURA_DA_CAIXA": 7680,
+  "ALTURA_DA_CAIXA": 2880,
+  "RAIO_DO_CORACAO": 160,
+  "VELOCIDADE_DO_CORACAO": 80,
   "VIDA_DO_TIRO": 120,
-  "CONTATO": 640,
   "TEMPO_ATORDOADO": 60,
   "TEMPO_HESITANDO": 40,
-  "ESPERA_INICIAL": 45,
-  "ESPERA_POR_MONSTRO": 20,
+  "ESPERA_INICIAL": 60,
   "ATACANDO_DE_UMA_VEZ": 1,
-  "INTERVALO_ENTRE_GOLPES": 20,
+  "INTERVALO_ENTRE_GOLPES": 30,
   "CADENCIA_DO_COMPANHEIRO": 100,
-  "VELOCIDADE_DO_COMPANHEIRO": 48,
   "JEITOS_DE_LUTAR": {
     "agressivo": {
-      "velocidade": 40,
-      "distancia": 2400,
       "aviso": 30,
       "golpe": "investida",
-      "alcance": 2880,
-      "descanso": 50
+      "tamanho": 560,
+      "velocidade": 160,
+      "descanso": 40
     },
     "agil": {
-      "velocidade": 56,
-      "distancia": 1200,
       "aviso": 18,
       "golpe": "investida",
-      "alcance": 1200,
-      "descanso": 30
+      "tamanho": 400,
+      "velocidade": 224,
+      "descanso": 25
     },
     "defensivo": {
-      "velocidade": 30,
-      "distancia": 1000,
       "aviso": 36,
       "golpe": "perto",
-      "alcance": 1300,
-      "descanso": 70,
+      "tamanho": 1100,
+      "velocidade": 0,
+      "descanso": 60,
       "guarda": true
     },
     "venenoso": {
-      "velocidade": 36,
-      "distancia": 1000,
       "aviso": 30,
       "golpe": "perto",
-      "alcance": 1200,
-      "descanso": 45
+      "tamanho": 1000,
+      "velocidade": 0,
+      "descanso": 40
     },
     "lento": {
-      "velocidade": 22,
-      "distancia": 1100,
       "aviso": 54,
       "golpe": "perto",
-      "alcance": 1400,
-      "descanso": 60
+      "tamanho": 1300,
+      "velocidade": 0,
+      "descanso": 50
     },
     "magico": {
-      "velocidade": 30,
-      "distancia": 3360,
       "aviso": 36,
       "golpe": "tiro",
-      "alcance": 0,
-      "descanso": 75
+      "tamanho": 360,
+      "velocidade": 96,
+      "descanso": 50
     }
-  },
-  "LUGAR_DO_COMPANHEIRO": [
-    [
-      -1,
-      0
-    ],
-    [
-      1,
-      0
-    ],
-    [
-      0,
-      1
-    ]
-  ],
-  "POSICOES_INICIAIS": [
-    [
-      [
-        4,
-        3
-      ]
-    ],
-    [
-      [
-        3,
-        3
-      ],
-      [
-        5,
-        3
-      ]
-    ],
-    [
-      [
-        4,
-        2
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        5,
-        4
-      ]
-    ]
-  ]
+  }
 }

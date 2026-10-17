@@ -980,8 +980,9 @@
 }
 
 /* ---------- a luta em tempo real (TelaDeJogo.Luta.cs) ---------- */
-/* Por cima da sala: o botão de ataque no canto de baixo à direita (o polegar direito), os poderes e os itens ao lado
-   dele, o evento da arma no alto e os números que sobem. O polegar esquerdo continua no joystick do palco. */
+/* Por cima da luta em primeira pessoa: o botão de ataque no canto de baixo à direita (o polegar direito), os poderes
+   e a poção em arco em volta dele, o evento da arma no palco dos monstros e os números que sobem. O polegar esquerdo
+   continua no joystick do palco, que move o coração. */
 
 .hud-da-luta {
     position: absolute;
@@ -1062,28 +1063,42 @@
 
 .dica-do-evento {
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 1px;
+    left: 50%;
+    top: 2px;
+    translate: -50% 0;
+    padding: 1px 10px;
+    border-radius: 4px;
+    background-color: rgba(16, 18, 26, 0.88);
     font-size: 16px;
     color: var(--parchment);
-    -unity-text-outline-width: 1px;
-    -unity-text-outline-color: var(--contorno);
     -unity-text-align: middle-center;
+    white-space: nowrap;
 }
 
 .botoes-da-luta {
     position: absolute;
     right: 14px;
     bottom: 14px;
-    flex-direction: row;
-    align-items: flex-end;
+    width: 220px;
+    height: 220px;
 }
 
+/* Os botões em volta do ataque têm a posição calculada no código (o arco). */
 .poderes-da-luta {
-    flex-direction: column;
-    align-items: center;
-    margin-right: 10px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.unity-button.botao-da-luta.botao-em-volta {
+    position: absolute;
+    margin: 0;
+}
+
+.escondido-na-luta {
+    display: none;
 }
 
 .unity-button.botao-da-luta {
@@ -1140,6 +1155,9 @@
 }
 
 .botao-de-ataque {
+    position: absolute;
+    right: 0;
+    bottom: 0;
     width: 108px;
     height: 108px;
     border-radius: 54px;
@@ -1173,7 +1191,7 @@
 
 .menu-de-itens {
     position: absolute;
-    right: 150px;
+    right: 240px;
     bottom: 14px;
     width: 280px;
     padding: 8px 10px;
@@ -1208,4 +1226,260 @@
     height: 30px;
     margin-right: 8px;
     -unity-background-scale-mode: scale-to-fit;
+}
+
+/* ---------- a luta em primeira pessoa (PalcoDaLuta.cs) ---------- */
+/* Teste pedido pelo usuário em 2026-10-17: o palco do combate do site (o cenário do lugar, os monstros de frente com a
+   placa em cima) e embaixo a caixa preta do Undertale, com o coração. As cores do cenário vêm do tema do lugar, no
+   código; a posição e o tamanho da caixa também (a proporção é a da engine). */
+
+.palco-da-luta {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.cenario-da-luta {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.parede-da-luta {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 52%;
+}
+
+.rodape-da-luta {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 52%;
+    height: 1.5%;
+}
+
+.chao-da-luta {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 53.5%;
+    bottom: 0;
+}
+
+.grupo-da-luta {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0 8px;
+}
+
+.lutador {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.placa-da-luta {
+    width: 92%;
+    max-width: 330px;
+    margin-top: 10px;
+    padding: 5px 8px 6px 8px;
+    background-color: rgba(16, 18, 26, 0.78);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+    align-items: center;
+}
+
+.lutador-chefe .placa-da-luta {
+    border-color: var(--gold);
+}
+
+.lutador-alvo .placa-da-luta {
+    border-width: 2px;
+    border-color: var(--gold-bright);
+}
+
+.nome-do-lutador {
+    font-size: 20px;
+    color: var(--gold-bright);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.subtitulo-do-lutador {
+    font-size: 14px;
+    color: var(--parchment-dim);
+}
+
+.trilho-da-luta {
+    width: 100%;
+    height: 8px;
+    margin-top: 3px;
+    background-color: rgba(0, 0, 0, 0.55);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.vida-da-luta {
+    height: 100%;
+    background-color: var(--ember);
+}
+
+.vida-do-lutador {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 18px;
+    color: var(--parchment-dim);
+}
+
+.marcadores-da-luta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.marcador-da-luta {
+    margin: 2px;
+    padding: 0 6px;
+    font-size: 13px;
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 8px;
+    background-color: rgba(16, 18, 26, 0.6);
+}
+
+.vez-do-lutador {
+    font-size: 14px;
+    color: #ff9f6b;
+}
+
+.corpo-do-lutador {
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.mira-do-lutador {
+    height: 26px;
+    font-size: 22px;
+    -unity-text-align: middle-center;
+}
+
+.figura-do-lutador {
+    margin: 0;
+    padding: 0;
+    font-size: 128px;
+    -unity-text-align: middle-center;
+}
+
+.grupo-de-dois .figura-do-lutador {
+    font-size: 108px;
+}
+
+.grupo-de-tres .figura-do-lutador {
+    font-size: 92px;
+}
+
+.lutador-chefe .figura-do-lutador {
+    font-size: 150px;
+}
+
+.lutador-avisando .figura-do-lutador {
+    scale: 1.08 1.08;
+}
+
+.sombra-do-lutador {
+    width: 90px;
+    height: 12px;
+    margin-top: -10px;
+    border-radius: 45px;
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+/* Quem caiu fica no lugar, apagado, até a luta acabar (como no site); o corpo apaga no código, junto com o mergulho. */
+.lutador-caido .placa-da-luta {
+    opacity: 0.38;
+}
+
+.aliados-da-luta {
+    position: absolute;
+    left: 8px;
+    align-items: center;
+}
+
+.aliado-na-luta {
+    width: 54px;
+    margin-bottom: 6px;
+    padding: 3px;
+    align-items: center;
+    background-color: rgba(16, 18, 26, 0.72);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+}
+
+.aliado-na-mira {
+    border-width: 2px;
+    border-color: #e04040;
+}
+
+.aliado-caido {
+    opacity: 0.38;
+}
+
+.icone-do-aliado {
+    font-size: 26px;
+    -unity-text-align: middle-center;
+}
+
+.trilho-do-aliado {
+    width: 100%;
+    height: 5px;
+    background-color: rgba(0, 0, 0, 0.55);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.vida-do-aliado {
+    height: 100%;
+    background-color: #5fa85a;
+}
+
+/* A caixa do Undertale: preta, de borda branca. O que vai dentro é desenhado no código. */
+.caixa-da-luta {
+    position: absolute;
+    background-color: #000000;
+    border-width: 3px;
+    border-color: #ffffff;
+    overflow: hidden;
+}
+
+.tinta-da-caixa {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.mergulho-na-caixa {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    -unity-text-align: middle-center;
 }

@@ -156,6 +156,20 @@ namespace RPGLegend.Engine
             };
         }
 
+        /// <summary>
+        /// TS: pickMonsterTarget — em quem o golpe do monstro cai: um companheiro defensor (55% das vezes, se
+        /// houver), um companheiro qualquer (30%) ou o herói (null). Devolve o índice na equipe. Separado do
+        /// <see cref="ApplyMonsterHit"/> pra luta do app, onde o golpe no herói vai pra caixa (e só pega se
+        /// encostar) e o golpe no companheiro cai como no site.
+        /// </summary>
+        public static double? PickMonsterTarget(IReadOnlyList<Companion> party, RngFn rng = null)
+        {
+            rng = rng ?? Rng.Default;
+            var pool = SelectTargetPool(party, rng);
+            if (pool == null) return null;
+            return IndexOf(party, pool[(int)Rng.RandomInt(pool.Count, rng)]);
+        }
+
         /// <summary>TS: hitPartyMember — o golpe num companheiro: d6 mais o dano do monstro, na força do golpe.</summary>
         public static PartyMemberHit HitPartyMember(Companion member, CombatMonsterView monster, double attackMult, RngFn rng = null)
         {
@@ -225,11 +239,11 @@ namespace RPGLegend.Engine
                 };
             }
 
-            var targetPool = SelectTargetPool(party, rng);
-            if (targetPool != null)
+            var alvo = PickMonsterTarget(party, rng);
+            if (alvo != null)
             {
-                var target = targetPool[(int)Rng.RandomInt(targetPool.Count, rng)];
-                int targetIndex = IndexOf(party, target);
+                int targetIndex = (int)alvo.Value;
+                var target = party[targetIndex];
                 var golpe = HitPartyMember(target, inicio.Monster, inicio.AttackMult, rng);
                 var nextParty = new List<Companion>(party.Count);
                 for (int i = 0; i < party.Count; i++) nextParty.Add(i == targetIndex ? golpe.Member : party[i]);

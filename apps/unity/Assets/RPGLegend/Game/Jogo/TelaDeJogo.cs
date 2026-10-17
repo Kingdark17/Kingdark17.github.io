@@ -548,7 +548,7 @@ namespace RPGLegend.Game.Jogo
         private void DesenharSala(EstadoDoJogo estado, RoomCell celula, NaSecreta secreta, Apresentacao visual)
         {
             if (_sala == null) return;
-            _dica.EnableInClassList("escondido", !Andando || _dedo.HasValue || Touchscreen.current == null);
+            _dica.EnableInClassList("escondido", !Andando || _dedo.HasValue || Touchscreen.current == null || _partida.Luta != null);
 
             // Onde o herói aparece: quem veio da sala ao lado, na porta por onde entrou; quem chegou de outro jeito
             // (portão, escada, totem), no meio.
@@ -578,14 +578,6 @@ namespace RPGLegend.Game.Jogo
                 figuras = FigurasDaSala.Da(celula, null, secreta.Indice);
                 chave = salaAgora + "#secreta";
                 chegada = RoomWalk.Arrival(secreta.Lado);
-            }
-            else if (_partida.Luta != null)
-            {
-                // Em luta a sala fica trancada e sem conteúdo: os monstros são as figuras da arena.
-                planta = RoomWalk.Layout(new DoorMap(), new List<RoomObject>());
-                figuras = new Dictionary<string, Figura>();
-                chave = salaAgora + "#" + _volta;
-                chegada = _chegada;
             }
             else
             {

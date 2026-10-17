@@ -56,6 +56,7 @@ namespace RPGLegend.Tests
             Fn(M, "landHitOnHero", (a, c) => W(MonsterHit.LandHitOnHero(R<Hero>(a["hero"]), Monstro(a["monster"]), Num(a["attackMult"]), c.RngFn,
                 JsJson.ToOptionalNumber(a["petEsquiva"]) ?? 0)));
             Fn(M, "hitPartyMember", (a, c) => W(MonsterHit.HitPartyMember(R<Companion>(a["member"]), Monstro(a["monster"]), Num(a["attackMult"]), c.RngFn)));
+            Fn(M, "pickMonsterTarget", (a, c) => W(MonsterHit.PickMonsterTarget(Equipe(a["party"]), c.RngFn)));
 
             // ---------- flee e dodge ----------
             Const(M, "FLEE_TARGET", () => N(Flee.FleeTarget));

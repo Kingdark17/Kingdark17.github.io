@@ -1676,6 +1676,16 @@ caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'trig
   noCompanheiro('na força 1,45', companheiro('mago'), monstro(), 1.45, { sequence: [0.99] });
   noCompanheiro('derruba', companheiro('bardo', { hp: 3 }), monstro(), 1, { sequence: [0.5] });
   noCompanheiro('no mínimo 1', companheiro('guerreiro'), monstro({ dmg: 0 }), 0.1, { sequence: [0] });
+
+  // Em quem o golpe cai, que a luta do app sorteia no começo do aviso (sem lote, pelo mesmo motivo).
+  const quemLeva = (nome: string, party: Companion[], rng: RngSpec) =>
+    caso(`pickMonsterTarget: ${nome}`, 'pickMonsterTarget', { party }, (a, ctx) => E.pickMonsterTarget(a.party, ctx.rng), { rng });
+  quemLeva('sem equipe: o herói, sem sortear', [], { sequence: [] });
+  quemLeva('o defensor', [companheiro('mago'), companheiro('guerreiro')], { sequence: [0.1, 0] });
+  quemLeva('o defensor escapa, vai num qualquer', [companheiro('mago'), companheiro('guerreiro')], { sequence: [0.9, 0.1, 0.2] });
+  quemLeva('sem defensor e sem sorte: o herói', [companheiro('mago'), companheiro('bardo')], { sequence: [0.5] });
+  quemLeva('quem caiu não conta', [companheiro('guerreiro', { hp: 0 }), companheiro('mago')], { sequence: [0.1, 0.5] });
+  quemLeva('a postura defensiva também defende', [companheiro('mago', { stance: 'defensiva' }), companheiro('bardo')], { sequence: [0.2, 0] });
 }
 
 // --- use-power ---
@@ -3857,6 +3867,7 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     ['um monstro, entrando pelo sul', salaCom([bicho('goblin')]), 'N', null],
     ['grupo de três, entrando pelo norte', salaCom([bicho('goblin'), bicho('aranha'), bicho('slime')]), 'S', null],
     ['grupo com um caído', salaCom([bicho('goblin', { hp: 0 }), bicho('aranha'), bicho('slime')], forte(), {}), 'W', null],
+    ['save da fila: quem ficou antes do monsterIndex já caiu', naSalaDaMasmorra({ ...umMonstro, monsters: [bicho('goblin'), bicho('aranha')], monsterIndex: 1, beaten: false, bonusTreasure: undefined }, forte(), []), 'W', null],
     ['com companheiros, um caído', { ...salaCom([bicho('zumbi')]), party: [companheiro('guerreiro'), companheiro('mago', { hp: 0 }), companheiro('clerigo')] }, 'E', null],
     ['com a bênção do NPC', salaCom([bicho('zumbi')], forte({ extra: { npcBlessing: { dodge: 15, combats: 2 } } })), null, null],
     ['com pet', salaCom([bicho('zumbi')]), null, petDeTeste],
@@ -3867,17 +3878,18 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
   const simula = (nome: string, luta: LutaEmTempoReal, entradas: EntradaDaLuta[], rng: RngSpec) =>
     caso(`simularLuta: ${nome}`, 'simularLuta', { luta, entradas }, (a, ctx) => E.simularLuta(a.luta, a.entradas, ctx.rng, ctx.now), { rng, now: AGORA });
   const parado = (n: number): EntradaDaLuta[] => Array.from({ length: n }, () => ({ x: 0, y: 0 }));
+  /** O coração rodando pela caixa, 35 passos pra cada lado. */
+  const rodando = (n: number): EntradaDaLuta[] =>
+    parado(n).map((_, i) => {
+      const fase = Math.floor(i / 35) % 4;
+      return { x: fase === 0 ? 127 : fase === 2 ? -127 : 0, y: fase === 1 ? 127 : fase === 3 ? -127 : 0 };
+    });
   const abrir = (estado: EstadoNaMasmorra, chegada: Direction | null = null) => E.abrirLuta(estado, E.roomArrival(chegada)).luta;
-  /** O herói encostado (um quadrado abaixo) no primeiro monstro. */
-  const encostado = (luta: LutaEmTempoReal): LutaEmTempoReal => {
-    const m = luta.arena.monstros[0] as MonstroNaArena;
-    return { ...luta, arena: { ...luta.arena, heroi: { ...luta.arena.heroi, x: m.x, y: m.y + E.TILE_UNITS } } };
-  };
   /** Aperta o ataque no passo 0 e responde ao evento com `resposta`; o resto, parado. */
   const golpe = (passos: number, resposta: Record<number, EntradaDaLuta>): EntradaDaLuta[] =>
     parado(passos).map((e, i) => (i === 0 ? { ...e, atacar: true } : (resposta[i] ?? e)));
 
-  // Cada jeito de lutar, com o herói parado (depois correndo em círculo).
+  // Cada jeito de lutar, com o coração parado (depois rodando pela caixa).
   for (const [nome, especie] of [
     ['agressivo investe', 'goblin'],
     ['ágil', 'lobo_sombras'],
@@ -3887,26 +3899,23 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     ['mágico atira', 'elemental_fogo'],
     ['mágico de gelo', 'espectro_gelado'],
   ] as const) {
-    simula(`${nome}, herói parado`, abrir(salaCom([bicho(especie, { hp: 900, maxHp: 900 })]), 'N'), parado(420), { seed: 500 + nome.length });
-    const circulo = parado(420).map((_, i) => {
-      const fase = Math.floor(i / 35) % 4;
-      return { x: fase === 0 ? 127 : fase === 2 ? -127 : 0, y: fase === 1 ? 127 : fase === 3 ? -127 : 0 };
-    });
-    simula(`${nome}, herói correndo em volta`, abrir(salaCom([bicho(especie, { hp: 900, maxHp: 900 })]), 'S'), circulo, { seed: 600 + nome.length });
+    simula(`${nome}, coração parado`, abrir(salaCom([bicho(especie, { hp: 900, maxHp: 900 })]), 'N'), parado(420), { seed: 500 + nome.length });
+    simula(`${nome}, coração rodando`, abrir(salaCom([bicho(especie, { hp: 900, maxHp: 900 })]), 'S'), rodando(420), { seed: 600 + nome.length });
   }
   simula('grupo de três revezando os golpes', abrir(salaCom([bicho('goblin', { hp: 900 }), bicho('aranha', { hp: 900 }), bicho('lobo_sombras', { hp: 900 })]), 'N'), parado(600), { seed: 700 });
+  simula('grupo de três, coração rodando', abrir(salaCom([bicho('elemental_fogo', { hp: 900 }), bicho('zumbi', { hp: 900 }), bicho('goblin', { hp: 900 })]), 'N'), rodando(600), { seed: 701 });
 
-  // O evento de cada arma, com o herói encostado num zumbi forte.
+  // O evento de cada arma, contra um zumbi forte.
   const zumbi = () => salaCom([bicho('zumbi', { hp: 600, maxHp: 600 })]);
   const comArma = (classe: string | null, arma: string | null) => forte({ classe, arma });
-  simula('espada: toque no meio da barra', encostado(abrir({ ...zumbi(), hero: comArma('guerreiro', 'espada') })), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 801 });
-  simula('espada: barra sem toque', encostado(abrir({ ...zumbi(), hero: comArma('guerreiro', 'espada') })), golpe(100, {}), { seed: 802 });
-  simula('arco: toque e o tiro voa', encostado(abrir({ ...zumbi(), hero: comArma('arqueiro', 'arco') })), golpe(90, { 40: { x: 0, y: 0, tocar: true } }), { seed: 803 });
-  simula('machado: solta no meio', encostado(abrir({ ...zumbi(), hero: comArma('barbaro', 'machado') })), golpe(50, { 42: { x: 0, y: 0, soltar: true } }), { seed: 804 });
-  simula('marreta: estoura', encostado(abrir({ ...zumbi(), hero: comArma('barbaro', 'marreta') })), golpe(100, {}), { seed: 805 });
-  simula('violão: três batidas', encostado(abrir({ ...zumbi(), hero: comArma('bardo', 'violao') })), golpe(130, { 30: { x: 0, y: 0, tocar: true }, 61: { x: 0, y: 0, tocar: true }, 89: { x: 0, y: 0, tocar: true } }), { seed: 806 });
-  simula('adaga: dois toques', encostado(abrir({ ...zumbi(), hero: comArma('ladino', 'adaga') })), golpe(70, { 24: { x: 0, y: 0, tocar: true }, 43: { x: 0, y: 0, tocar: true } }), { seed: 807 });
-  simula('mão vazia: a barra', encostado(abrir({ ...zumbi(), hero: comArma(null, null) })), golpe(50, { 40: { x: 0, y: 0, tocar: true } }), { seed: 808 });
+  simula('espada: toque no meio da barra', abrir({ ...zumbi(), hero: comArma('guerreiro', 'espada') }), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 801 });
+  simula('espada: barra sem toque', abrir({ ...zumbi(), hero: comArma('guerreiro', 'espada') }), golpe(100, {}), { seed: 802 });
+  simula('arco: toque na bolinha, e o golpe cai no fim do evento', abrir({ ...zumbi(), hero: comArma('arqueiro', 'arco') }), golpe(90, { 40: { x: 0, y: 0, tocar: true } }), { seed: 803 });
+  simula('machado: solta no meio', abrir({ ...zumbi(), hero: comArma('barbaro', 'machado') }), golpe(50, { 42: { x: 0, y: 0, soltar: true } }), { seed: 804 });
+  simula('marreta: estoura', abrir({ ...zumbi(), hero: comArma('barbaro', 'marreta') }), golpe(100, {}), { seed: 805 });
+  simula('violão: três batidas', abrir({ ...zumbi(), hero: comArma('bardo', 'violao') }), golpe(130, { 30: { x: 0, y: 0, tocar: true }, 61: { x: 0, y: 0, tocar: true }, 89: { x: 0, y: 0, tocar: true } }), { seed: 806 });
+  simula('adaga: dois toques', abrir({ ...zumbi(), hero: comArma('ladino', 'adaga') }), golpe(70, { 24: { x: 0, y: 0, tocar: true }, 43: { x: 0, y: 0, tocar: true } }), { seed: 807 });
+  simula('mão vazia: a barra', abrir({ ...zumbi(), hero: comArma(null, null) }), golpe(50, { 40: { x: 0, y: 0, tocar: true } }), { seed: 808 });
   for (const [semente, classe] of [
     [809, 'mago'],
     [810, 'necromante'],
@@ -3917,10 +3926,15 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     const pontos = E.SIMBOLOS[simbolo] as readonly (readonly [number, number])[];
     const resposta: Record<number, EntradaDaLuta> = {};
     pontos.forEach(([x, y], i) => (resposta[i + 1] = { x: 0, y: 0, dedo: { x, y } }));
-    simula(`cajado do ${classe}: o símbolo ${simbolo}`, encostado(abrir({ ...zumbi(), hero: comArma(classe, 'cajado') })), golpe(pontos.length + 60, resposta), { seed: semente });
+    simula(`cajado do ${classe}: o símbolo ${simbolo}`, abrir({ ...zumbi(), hero: comArma(classe, 'cajado') }), golpe(pontos.length + 60, resposta), { seed: semente });
   }
-  simula('longe demais com arma de perto', abrir({ ...zumbi(), hero: comArma('guerreiro', 'espada') }, 'N'), golpe(5, {}), { seed: 811 });
-  simula('mago sem mana abre o desenho do golpe físico', encostado(abrir({ ...zumbi(), hero: { ...comArma('mago', 'cajado'), mp: 0 } })), golpe(60, { 40: { x: 0, y: 0, tocar: true } }), { seed: 812 });
+  simula('mago sem mana abre o desenho do golpe físico', abrir({ ...zumbi(), hero: { ...comArma('mago', 'cajado'), mp: 0 } }), golpe(60, { 40: { x: 0, y: 0, tocar: true } }), { seed: 812 });
+
+  // O alvo: tocar no monstro, e quem cai passa a vez de alvo.
+  const tres = (hero: Hero) => salaCom([bicho('zumbi', { hp: 600, maxHp: 600 }), bicho('slime', { hp: 600, maxHp: 600 }), bicho('aranha', { hp: 0 })], hero);
+  simula('mirar no segundo, e o golpe cai nele', abrir(tres(comArma('guerreiro', 'espada'))), golpe(50, { 42: { x: 0, y: 0, tocar: true } }).map((e, i) => (i === 0 ? { ...e, mirar: 1 } : e)), { seed: 813 });
+  simula('mirar num caído, ou num que não existe, não muda o alvo', abrir(tres(comArma('guerreiro', 'espada'))), parado(10).map((e, i) => (i === 1 ? { ...e, mirar: 2 } : i === 2 ? { ...e, mirar: 5 } : i === 3 ? { ...e, mirar: -1 } : e)), { seed: 814 });
+  simula('derrubar o alvo passa pro próximo de pé', abrir({ ...salaCom([bicho('zumbi', { hp: 1 }), bicho('slime', { hp: 600, maxHp: 600 })]), hero: comArma('guerreiro', 'espada') }), golpe(80, { 42: { x: 0, y: 0, tocar: true } }), { seed: 815 });
 
   // Poderes, itens e a rodada.
   const pocao = item('pot_vida');
@@ -3934,24 +3948,28 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
   // A grade inteira: morrer leva pra cidade, e a cidade precisa do tamanho do mapa pra se montar.
   const envenenado = abrir(comGradeInteira({ ...zumbi(), hero: forte() }));
   const estadoEnvenenado = envenenado.estado as EstadoNaMasmorra;
-  simula(
-    'o veneno da rodada',
-    { ...envenenado, estado: { ...estadoEnvenenado, hero: { ...estadoEnvenenado.hero, hp: 4, buffs: { poisonTurns: 5, poisonDmg: 4 } } } },
-    parado(E.RODADA * 3 + 5).map((_, i) => {
-      const fase = Math.floor(i / 35) % 4;
-      return { x: fase === 0 ? 127 : fase === 2 ? -127 : 0, y: fase === 1 ? 127 : fase === 3 ? -127 : 0 };
-    }),
-    { seed: 826 },
-  );
+  simula('o veneno da rodada', { ...envenenado, estado: { ...estadoEnvenenado, hero: { ...estadoEnvenenado.hero, hp: 4, buffs: { poisonTurns: 5, poisonDmg: 4 } } } }, rodando(E.RODADA * 3 + 5), { seed: 826 });
 
   // Companheiros, vitória, chefe e derrota.
-  simula('companheiros lutam', abrir({ ...salaCom([bicho('zumbi', { hp: 300, maxHp: 300 }), bicho('slime', { hp: 300, maxHp: 300 })]), party: [companheiro('guerreiro', { stance: 'agressiva' }), companheiro('clerigo', { stance: 'suporte' })] }, 'S'), parado(600), { seed: 830 });
-  simula('vitória com item', encostado(abrir({ ...salaCom([bicho('zumbi', { hp: 1 })]), hero: comArma('guerreiro', 'espada') })), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: sementeOnde((primeiro) => primeiro >= 0.25) });
-  simula('vitória com ouro escondido', encostado(abrir({ ...naSalaDaMasmorra({ ...umMonstro, monsters: [bicho('zumbi', { hp: 1 })], monsterIndex: 0, beaten: false, bonusTreasure: { gold: 25 } }, forte({ arma: 'espada' }), []) })), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 832 });
-  simula('o chefe leva ao andar seguinte', encostado(abrir(comGradeInteira(naSalaDaMasmorra({ ...chefe, monsters: [{ ...(chefe.monsters ?? [])[0]!, hp: 1 }], monsterIndex: 0, beaten: false }, forte({ arma: 'espada' }), [])))), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 833 });
-  simula('derrota', abrir(comGradeInteira(salaCom([bicho('aranha', { dmg: 60 })], { ...forte({ level: 8 }), hp: 5, gold: 300 })), null), parado(400), { seed: 834 });
+  simula(
+    'companheiros batem no alvo',
+    abrir({ ...salaCom([bicho('zumbi', { hp: 300, maxHp: 300 }), bicho('slime', { hp: 300, maxHp: 300 })]), party: [companheiro('guerreiro', { stance: 'agressiva' }), companheiro('clerigo', { stance: 'suporte' })] }, 'S'),
+    parado(600).map((e, i) => (i === 0 ? { ...e, mirar: 1 } : e)),
+    { seed: 830 },
+  );
+  simula('o golpe vai no defensor, fora da caixa', abrir({ ...salaCom([bicho('goblin', { hp: 900 })]), party: [companheiro('guerreiro', { hp: 200, maxHp: 200 }), companheiro('mago', { hp: 200, maxHp: 200 })] }), parado(400), { seed: 831 });
+  simula('o defensor cai, e os golpes voltam pro coração', abrir({ ...salaCom([bicho('aranha', { hp: 900 })]), party: [companheiro('guerreiro', { hp: 1, maxHp: 200, stance: 'defensiva' })] }), parado(500), { seed: 832 });
+  // A primeira semente em que o item cai mesmo (o sorteio do item vem depois dos do golpe).
+  const vitoria = abrir({ ...salaCom([bicho('zumbi', { hp: 1 })]), hero: comArma('guerreiro', 'espada') });
+  const toqueNoMeio = golpe(50, { 42: { x: 0, y: 0, tocar: true } });
+  let comItem = 1;
+  while (E.simularLuta(vitoria, toqueNoMeio, E.seededRng(comItem), () => AGORA).luta.loot === null) comItem++;
+  simula('vitória com item', vitoria, toqueNoMeio, { seed: comItem });
+  simula('vitória com ouro escondido', abrir({ ...naSalaDaMasmorra({ ...umMonstro, monsters: [bicho('zumbi', { hp: 1 })], monsterIndex: 0, beaten: false, bonusTreasure: { gold: 25 } }, forte({ arma: 'espada' }), []) }), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 833 });
+  simula('o chefe leva ao andar seguinte', abrir(comGradeInteira(naSalaDaMasmorra({ ...chefe, monsters: [{ ...(chefe.monsters ?? [])[0]!, hp: 1 }], monsterIndex: 0, beaten: false }, forte({ arma: 'espada' }), []))), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 834 });
+  simula('derrota', abrir(comGradeInteira(salaCom([bicho('aranha', { dmg: 60 })], { ...forte({ level: 8 }), hp: 5, gold: 300 })), null), parado(400), { seed: 835 });
 
-  // Robôs: andam e apertam tudo ao acaso, com grupos e classes variados.
+  // Robôs: mexem o coração, miram e apertam tudo ao acaso, com grupos e classes variados.
   const especies = ['goblin', 'lobo_sombras', 'esqueleto', 'aranha', 'slime', 'orc', 'morcego', 'zumbi', 'elemental_fogo', 'espectro_gelado'];
   for (let i = 1; i <= 8; i++) {
     const r = E.seededRng(900 + i);
@@ -3975,6 +3993,7 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       else if (sorteio < 0.13) e.soltar = true;
       else if (sorteio < 0.135) e.poder = hero.powerIds[0];
       else if (sorteio < 0.137) e.item = estado.inventory[0]!.uid;
+      else if (sorteio < 0.15) e.mirar = Math.floor(r() * 4);
       else if (sorteio < 0.3) e.dedo = { x: Math.floor(r() * 1001), y: Math.floor(r() * 1001) };
       return e;
     });

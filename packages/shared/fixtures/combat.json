@@ -108019,6 +108019,342 @@
     }
   },
   {
+    "name": "pickMonsterTarget: sem equipe: o herói, sem sortear",
+    "input": {
+      "fn": "pickMonsterTarget",
+      "args": {
+        "party": []
+      },
+      "rng": {
+        "sequence": []
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "pickMonsterTarget: o defensor",
+    "input": {
+      "fn": "pickMonsterTarget",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      },
+      "rng": {
+        "sequence": [
+          0.1,
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": 1,
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "pickMonsterTarget: o defensor escapa, vai num qualquer",
+    "input": {
+      "fn": "pickMonsterTarget",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      },
+      "rng": {
+        "sequence": [
+          0.9,
+          0.1,
+          0.2
+        ]
+      }
+    },
+    "expected": {
+      "result": 0,
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "pickMonsterTarget: sem defensor e sem sorte: o herói",
+    "input": {
+      "fn": "pickMonsterTarget",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      },
+      "rng": {
+        "sequence": [
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "pickMonsterTarget: quem caiu não conta",
+    "input": {
+      "fn": "pickMonsterTarget",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 0,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      },
+      "rng": {
+        "sequence": [
+          0.1,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": 1,
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "pickMonsterTarget: a postura defensiva também defende",
+    "input": {
+      "fn": "pickMonsterTarget",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "defensiva",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      },
+      "rng": {
+        "sequence": [
+          0.2,
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": 0,
+      "rngCalls": 2
+    }
+  },
+  {
     "name": "powerManaCost: golpe_poderoso",
     "input": {
       "fn": "powerManaCost",

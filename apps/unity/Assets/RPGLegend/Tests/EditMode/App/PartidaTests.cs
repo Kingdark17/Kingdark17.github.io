@@ -141,8 +141,8 @@ namespace RPGLegend.Tests
             Assert.IsNotNull(partida.Luta, "e a luta começa ali");
             Assert.IsNull(partida.Tela, "sem a tela de combate por turnos");
             var chegada = RoomWalk.Arrival(direcao);
-            Assert.AreEqual(chegada.X, partida.Luta.Arena.Heroi.X);
-            Assert.AreEqual(chegada.Y, partida.Luta.Arena.Heroi.Y);
+            Assert.AreEqual(chegada.X, partida.Luta.Arena.Chegada.X, "a luta guarda a porta por onde o herói entrou");
+            Assert.AreEqual(chegada.Y, partida.Luta.Arena.Chegada.Y);
             Assert.IsTrue(partida.TemMudancaPorGravar);
             Assert.IsFalse(partida.Mover(Directions.Opposite.Get(direcao)), "a porta fica trancada durante a luta");
         }

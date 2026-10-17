@@ -116,6 +116,20 @@ function selectTargetPool(party: readonly Companion[], rng: Rng): Companion[] | 
   return null;
 }
 
+/**
+ * Em quem o golpe do monstro cai: um companheiro defensor (55% das vezes,
+ * se houver), um companheiro qualquer (30%) ou o herói (`null`). Devolve o
+ * índice na equipe.
+ *
+ * Separado de `applyMonsterHit` pra luta do app, onde o golpe no herói vai
+ * pra caixa (e só pega se encostar) e o golpe no companheiro cai como no site.
+ */
+export function pickMonsterTarget(party: readonly Companion[], rng: Rng = defaultRng): number | null {
+  const pool = selectTargetPool(party, rng);
+  if (!pool) return null;
+  return party.indexOf(pool[randomInt(pool.length, rng)] as Companion);
+}
+
 export interface HeroDamageResult {
   hero: Hero;
   dodged: boolean;
@@ -288,10 +302,9 @@ export function applyMonsterHit(
     };
   }
 
-  const targetPool = selectTargetPool(party, rng);
-  if (targetPool) {
-    const target = targetPool[randomInt(targetPool.length, rng)] as Companion;
-    const targetIndex = party.indexOf(target);
+  const targetIndex = pickMonsterTarget(party, rng);
+  if (targetIndex !== null) {
+    const target = party[targetIndex] as Companion;
     const golpe = hitPartyMember(target, inicio.monster, inicio.attackMult, rng);
     const nextParty = party.map((m, i) => (i === targetIndex ? golpe.member : m));
 

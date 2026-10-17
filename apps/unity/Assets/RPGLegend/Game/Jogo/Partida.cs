@@ -20,8 +20,8 @@ namespace RPGLegend.Game.Jogo
     /// Quem desenha e quem chama a API é a <c>TelaDeJogo</c>.
     ///
     /// A diferença do site é a luta: onde o site abre a tela de combate por turnos, aqui começa a luta em tempo real
-    /// (<see cref="Arenas"/>, etapa 5), dentro da própria sala — ao entrar na sala de monstro, ao abrir o baú que era
-    /// mímico e ao voltar pra uma partida fechada no meio de uma luta.
+    /// (<see cref="Arenas"/>, etapa 5) — ao entrar na sala de monstro, ao abrir o baú que era mímico e ao voltar pra
+    /// uma partida fechada no meio de uma luta. Quando ela acaba, o herói fica na porta por onde entrou.
     /// </summary>
     public sealed class Partida
     {
@@ -293,7 +293,7 @@ namespace RPGLegend.Game.Jogo
             {
                 aviso = new Aviso("🏆", "Vitória", "Você venceu a batalha!" + (final.Loot != null ? " Encontrou <b>" + Items.DisplayName(final.Loot) + "</b>." : ""));
             }
-            LutaAcabou?.Invoke(final.Arena.Heroi);
+            LutaAcabou?.Invoke(final.Arena.Chegada);
             RegistrarMudanca(final.Estado, aviso);
         }
 

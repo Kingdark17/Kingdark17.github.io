@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { DungeonCell } from '../dungeon/generate.js';
-import { HERO_HALF, roomArrival, TILE_UNITS } from '../dungeon/room-walk.js';
+import { roomArrival } from '../dungeon/room-walk.js';
 import { generateCompanion, type Hero } from '../hero/hero.js';
 import { instantiate } from '../items/item.js';
 import { RARITIES } from '../items/rarity.js';
@@ -12,11 +12,15 @@ import { celulaAtual, retomarSave, substituirCelulaAtual, type EstadoNaMasmorra 
 import { saveSorteado } from '../jogo/heroi-sorteado.js';
 import {
   abrirLuta,
+  ALTURA_DA_CAIXA,
   JEITOS_DE_LUTAR,
+  LARGURA_DA_CAIXA,
   LENTIDAO,
   passoDaLuta,
+  RAIO_DO_CORACAO,
   RECARGA_DO_PODER,
   RODADA,
+  VELOCIDADE_DO_CORACAO,
   type Acontecimento,
   type EntradaDaLuta,
   type LutaEmTempoReal,
@@ -55,19 +59,42 @@ function rodar(luta: LutaEmTempoReal, passos: number, rng: Rng, entrada: (i: num
   return { luta: atual, acontecimentos: tudo };
 }
 
+/** Anda passo a passo, parado, até o monstro `indice` começar o aviso. */
+function ateOAviso(luta: LutaEmTempoReal, rng: Rng, indice = 0): LutaEmTempoReal {
+  let atual = luta;
+  for (let i = 0; i < 1000 && atual.arena.monstros[indice]!.fase !== 'avisando'; i++) atual = passoDaLuta(atual, PARADO, rng).luta;
+  expect(atual.arena.monstros[indice]!.fase).toBe('avisando');
+  return atual;
+}
+
 function vidaDoMonstro(luta: LutaEmTempoReal, indice = 0): number {
   return ((celulaAtual(luta.estado) as DungeonCell).monsters ?? [])[indice]!.hp;
+}
+
+function vidaDoHeroi(luta: LutaEmTempoReal): number {
+  return (luta.estado as EstadoNaMasmorra).hero.hp;
 }
 
 const NUNCA: Rng = () => 0.99;
 
 describe('abrirLuta', () => {
-  it('põe cada monstro de pé no lugar do grupo e o caído fica caído', () => {
-    const estado = naSala({ monsters: [monstro({ hp: 0 }), monstro(), monstro()], monsterIndex: 1 });
+  it('põe os monstros no palco, o caído fica caído, e o alvo é o primeiro de pé', () => {
+    const estado = naSala({ monsters: [monstro({ hp: 0 }), monstro(), monstro()], monsterIndex: 0 });
     const { luta } = abrirLuta(estado, roomArrival('N'));
-    expect(luta.arena.monstros.map((m) => m.fase)).toEqual(['caido', 'andando', 'andando']);
-    expect(luta.arena.monstros[1]!.x).not.toBe(luta.arena.monstros[2]!.x);
-    expect(luta.arena.monstros[2]!.tempo).toBeGreaterThan(luta.arena.monstros[1]!.tempo);
+    expect(luta.arena.monstros.map((m) => m.fase)).toEqual(['caido', 'esperando', 'esperando']);
+    expect(luta.arena.alvo).toBe(1);
+    expect(luta.arena.coracao).toEqual({ x: LARGURA_DA_CAIXA / 2, y: ALTURA_DA_CAIXA / 2 });
+  });
+
+  it('quem ficou antes do monsterIndex (os saves da fila) já caiu', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [monstro(), monstro()], monsterIndex: 1 }), roomArrival('N'));
+    expect(luta.arena.monstros.map((m) => m.fase)).toEqual(['caido', 'esperando']);
+    expect(luta.arena.alvo).toBe(1);
+  });
+
+  it('guarda por onde o herói entrou', () => {
+    const { luta } = abrirLuta(naSala(), roomArrival('W'));
+    expect(luta.arena.chegada).toEqual(roomArrival('W'));
   });
 
   it('consome a bênção do NPC e conta no diário', () => {
@@ -75,7 +102,7 @@ describe('abrirLuta', () => {
     expect(acontecimentos.some((a) => a.tipo === 'diario' && a.texto?.includes('bênção'))).toBe(true);
   });
 
-  it('os companheiros vivos aparecem em volta do herói', () => {
+  it('os companheiros vivos entram na luta', () => {
     const vivo = generateCompanion(seededRng(3));
     const caido = { ...generateCompanion(seededRng(4)), hp: 0 };
     const { luta } = abrirLuta({ ...naSala(), party: [vivo, caido] }, roomArrival('N'));
@@ -83,16 +110,26 @@ describe('abrirLuta', () => {
   });
 });
 
-describe('a sala trancada', () => {
-  it('andar contra a porta não sai da sala', () => {
+describe('o coração', () => {
+  it('anda com o joystick, e a parede da caixa segura', () => {
     const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi' })] }), roomArrival('S'));
-    const fim = rodar(luta, 120, NUNCA, () => ({ x: 0, y: -127 }));
-    expect(fim.luta.arena.heroi.y).toBeGreaterThanOrEqual(TILE_UNITS + HERO_HALF);
+    const fim = rodar(luta, 200, NUNCA, () => ({ x: 127, y: -127 }));
+    expect(fim.luta.arena.coracao).toEqual({ x: LARGURA_DA_CAIXA - RAIO_DO_CORACAO, y: RAIO_DO_CORACAO });
+  });
+
+  it('na diagonal não anda mais rápido que reto', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi' })] }), roomArrival('S'));
+    const reto = passoDaLuta(luta, { x: 127, y: 0 }, NUNCA).luta.arena.coracao;
+    const diagonal = passoDaLuta(luta, { x: 127, y: 127 }, NUNCA).luta.arena.coracao;
+    expect(reto.x - luta.arena.coracao.x).toBe(VELOCIDADE_DO_CORACAO);
+    const dx = diagonal.x - luta.arena.coracao.x;
+    expect(dx).toBe(diagonal.y - luta.arena.coracao.y);
+    expect(dx * dx * 2).toBeLessThanOrEqual(VELOCIDADE_DO_CORACAO * VELOCIDADE_DO_CORACAO);
   });
 });
 
 describe('o golpe do monstro', () => {
-  it('vem com aviso, e acerta quem fica parado', () => {
+  it('vem com aviso, e acerta o coração parado', () => {
     const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'aranha' })] }), roomArrival(null));
     let avisou = false;
     const fim = rodar(luta, 400, NUNCA, (_i, l) => {
@@ -103,28 +140,64 @@ describe('o golpe do monstro', () => {
     expect(fim.acontecimentos.some((a) => a.tipo === 'numero' && a.onde === 'heroi' && a.texto?.startsWith('-'))).toBe(true);
   });
 
-  it('quem sai do alcance durante o aviso não leva', () => {
+  it('o círculo cai onde o coração estava: quem sai dele durante o aviso não leva', () => {
     const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'aranha' })] }), roomArrival(null));
-    let atual = luta;
-    // Espera o primeiro aviso.
-    while (atual.arena.monstros[0]!.fase !== 'avisando') atual = passoDaLuta(atual, PARADO, NUNCA).luta;
-    const vidaAntes = (atual.estado as EstadoNaMasmorra).hero.hp;
-    const m = atual.arena.monstros[0]!;
-    // De lado, perpendicular a quem vem: de costas, a parede de baixo seguraria o herói.
-    const fuga = { x: -Math.sign(atual.arena.heroi.y - m.y) * 127 || 127, y: Math.sign(atual.arena.heroi.x - m.x) * 127 };
-    const fim = rodar(atual, JEITOS_DE_LUTAR.venenoso.aviso + 2, NUNCA, () => fuga);
-    expect((fim.luta.estado as EstadoNaMasmorra).hero.hp).toBe(vidaAntes);
+    const avisando = ateOAviso(luta, NUNCA);
+    expect(avisando.arena.monstros[0]).toMatchObject({ x: avisando.arena.coracao.x, y: avisando.arena.coracao.y, alvo: -1 });
+    const fim = rodar(avisando, JEITOS_DE_LUTAR.venenoso.aviso + 2, NUNCA, () => ({ x: 127, y: 0 }));
+    expect(vidaDoHeroi(fim.luta)).toBe(vidaDoHeroi(avisando));
     expect(fim.acontecimentos.some((a) => a.tipo === 'numero' && a.texto === 'Errou')).toBe(true);
   });
 
-  it('o mágico atira de longe', () => {
+  it('a investida mergulha de cima mirando o coração: parado leva, de lado escapa', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'goblin' })] }), roomArrival(null));
+    const avisando = ateOAviso(luta, NUNCA);
+    const m = avisando.arena.monstros[0]!;
+    expect(m.y).toBeLessThan(0);
+    expect(m.rumoY).toBeGreaterThan(0);
+
+    const parado = rodar(avisando, 120, NUNCA);
+    expect(vidaDoHeroi(parado.luta)).toBeLessThan(vidaDoHeroi(avisando));
+
+    const deLado = rodar(avisando, 120, NUNCA, () => ({ x: 127, y: 0 }));
+    expect(vidaDoHeroi(deLado.luta)).toBe(vidaDoHeroi(avisando));
+    expect(deLado.acontecimentos.some((a) => a.tipo === 'numero' && a.texto === 'Errou')).toBe(true);
+  });
+
+  it('o mágico atira uma bola de cima, na direção do coração', () => {
     const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'elemental_fogo' })] }), roomArrival('N'));
-    let atirou = false;
+    let tiro = null as LutaEmTempoReal['arena']['tiros'][number] | null;
     rodar(luta, 300, NUNCA, (_i, l) => {
-      if (l.arena.tiros.some((t) => t.de === 'monstro')) atirou = true;
+      tiro ??= l.arena.tiros[0] ?? null;
       return PARADO;
     });
-    expect(atirou).toBe(true);
+    expect(tiro).not.toBeNull();
+    expect(tiro!.y).toBeLessThan(ALTURA_DA_CAIXA / 2);
+    expect(tiro!.vy).toBeGreaterThan(0);
+  });
+
+  it('o golpe pode ir no companheiro, como no site, e aí não passa pela caixa', () => {
+    const defensor = { ...generateCompanion(seededRng(3)), stance: 'defensiva' as const, hp: 999, maxHp: 999 };
+    const { luta } = abrirLuta({ ...naSala({ monsters: [monstro({ speciesId: 'aranha' })] }), party: [defensor] }, roomArrival(null));
+    const sempre: Rng = () => 0;
+    const avisando = ateOAviso(luta, sempre);
+    expect(avisando.arena.monstros[0]!.alvo).toBe(0);
+    const fim = rodar(avisando, 60, sempre);
+    expect(fim.acontecimentos.some((a) => a.tipo === 'numero' && a.onde === 'companheiro' && a.texto?.startsWith('-'))).toBe(true);
+    expect(vidaDoHeroi(fim.luta)).toBe(vidaDoHeroi(avisando));
+  });
+
+  it('um golpe por vez, revezando entre os de pé', () => {
+    const grupo = [monstro({ speciesId: 'goblin', hp: 900 }), monstro({ speciesId: 'aranha', hp: 900 }), monstro({ speciesId: 'zumbi', hp: 900 })];
+    const { luta } = abrirLuta(naSala({ monsters: grupo }), roomArrival(null));
+    const ordem: number[] = [];
+    rodar(luta, 900, NUNCA, (_i, l) => {
+      const golpeando = l.arena.monstros.filter((m) => m.fase === 'avisando' || m.fase === 'investindo');
+      expect(golpeando.length).toBeLessThanOrEqual(1);
+      if (golpeando[0] && ordem[ordem.length - 1] !== golpeando[0].indice) ordem.push(golpeando[0].indice);
+      return { x: 0, y: 127 };
+    });
+    expect(ordem.slice(0, 4)).toEqual([0, 1, 2, 0]);
   });
 
   it('o herói que cai perde a luta e volta pra cidade', () => {
@@ -136,22 +209,10 @@ describe('o golpe do monstro', () => {
 });
 
 describe('o ataque do herói', () => {
-  /** Encosta o herói no monstro antes de atacar. */
-  function encostado(hero: Partial<Hero>, sala: Partial<DungeonCell> = {}) {
-    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 200, maxHp: 200 })], ...sala }, hero), roomArrival(null));
-    const m = luta.arena.monstros[0]!;
-    return { ...luta, arena: { ...luta.arena, heroi: { ...luta.arena.heroi, x: m.x, y: m.y + TILE_UNITS } } };
-  }
+  const comArma = (id: string, hero: Partial<Hero> = {}) => ({ equip: { ...naSala().hero.equip, arma: arma(id) }, ...hero });
 
-  it('longe demais com arma de perto: avisa e não abre o evento', () => {
-    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi' })] }, { equip: { ...naSala().hero.equip, arma: arma('espada') } }), roomArrival('S'));
-    const quadro = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA);
-    expect(quadro.luta.arena.evento).toBeNull();
-    expect(quadro.acontecimentos).toContainEqual({ tipo: 'aviso', texto: 'Longe demais' });
-  });
-
-  it('a espada abre a barra, o mundo fica lento, e o toque no meio crita', () => {
-    const luta = encostado({ equip: { ...naSala().hero.equip, arma: arma('espada') } });
+  it('a espada abre a barra no alvo, o mundo fica lento, e o toque no meio crita', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 200, maxHp: 200 })] }, comArma('espada')), roomArrival('S'));
     const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta;
     expect(aberto.arena.evento?.evento.tipo).toBe('barra');
     // Câmera lenta: em LENTIDAO passos de verdade, o mundo anda um.
@@ -165,19 +226,46 @@ describe('o ataque do herói', () => {
     expect(fim.acontecimentos.some((a) => a.tipo === 'numero' && a.tom === 'critico')).toBe(true);
   });
 
-  it('o arco atira, e o tiro acerta', () => {
-    const luta = encostado({ className: 'Arqueiro', classId: 'arqueiro', equip: { ...naSala().hero.equip, arma: arma('arco') } });
+  it('tocar num monstro de pé muda o alvo; num caído, ou num que não existe, não', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [monstro({ hp: 0 }), monstro({ speciesId: 'zumbi' }), monstro({ speciesId: 'zumbi' })], monsterIndex: 1 }), roomArrival('S'));
+    const mirado = passoDaLuta(luta, { ...PARADO, mirar: 2 }, NUNCA).luta;
+    expect(mirado.arena.alvo).toBe(2);
+    expect(passoDaLuta(mirado, { ...PARADO, mirar: 0 }, NUNCA).luta.arena.alvo).toBe(2);
+    expect(passoDaLuta(mirado, { ...PARADO, mirar: 7 }, NUNCA).luta.arena.alvo).toBe(2);
+  });
+
+  it('o golpe cai no alvo escolhido', () => {
+    const dois = [monstro({ speciesId: 'zumbi', hp: 200, maxHp: 200 }), monstro({ speciesId: 'zumbi', hp: 200, maxHp: 200 })];
+    const { luta } = abrirLuta(naSala({ monsters: dois }, comArma('espada')), roomArrival('S'));
+    const aberto = passoDaLuta(luta, { ...PARADO, mirar: 1, atacar: true }, NUNCA).luta;
+    expect(aberto.arena.evento?.alvo).toBe(1);
+    const meio = DURACAO_DA_BARRA / 2;
+    const fim = rodar(aberto, meio, NUNCA, (i) => (i === meio - 1 ? { ...PARADO, tocar: true } : PARADO));
+    expect(vidaDoMonstro(fim.luta, 1)).toBeLessThan(200);
+    expect(vidaDoMonstro(fim.luta, 0)).toBe(200);
+  });
+
+  it('o arco acerta no fim do evento, sem bola voando', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 200, maxHp: 200 })] }, comArma('arco', { className: 'Arqueiro', classId: 'arqueiro' })), roomArrival('S'));
     const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta;
-    expect(aberto.arena.evento?.tiro).toBe(true);
-    const antes = vidaDoMonstro(aberto);
-    const solto = rodar(aberto, 42, NUNCA, (i) => (i === 41 ? { ...PARADO, tocar: true } : PARADO));
-    expect(solto.luta.arena.tiros.length + (vidaDoMonstro(solto.luta) < antes ? 1 : 0)).toBeGreaterThan(0);
-    const fim = rodar(solto.luta, 30, NUNCA);
-    expect(vidaDoMonstro(fim.luta)).toBeLessThan(antes);
+    expect(aberto.arena.evento?.evento.tipo).toBe('circulo');
+    const fim = rodar(aberto, 42, NUNCA, (i) => (i === 41 ? { ...PARADO, tocar: true } : PARADO));
+    expect(vidaDoMonstro(fim.luta)).toBeLessThan(200);
+    expect(fim.luta.arena.tiros).toHaveLength(0);
+  });
+
+  it('derrubar o alvo passa o alvo pro próximo de pé', () => {
+    const dois = [monstro({ speciesId: 'zumbi', hp: 1 }), monstro({ speciesId: 'zumbi', hp: 200, maxHp: 200 })];
+    const { luta } = abrirLuta(naSala({ monsters: dois }, comArma('espada')), roomArrival('S'));
+    const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta;
+    const fim = rodar(aberto, 42, NUNCA, (i) => (i === 41 ? { ...PARADO, tocar: true } : PARADO));
+    expect(fim.luta.arena.monstros[0]!.fase).toBe('caido');
+    expect(fim.luta.arena.alvo).toBe(1);
+    expect(fim.luta.fim).toBeNull();
   });
 
   it('derrubar o último vence a luta e marca a sala', () => {
-    const luta = encostado({ equip: { ...naSala().hero.equip, arma: arma('espada') } }, { monsters: [monstro({ speciesId: 'zumbi', hp: 1 })] });
+    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 1 })] }, comArma('espada')), roomArrival('S'));
     const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta;
     const fim = rodar(aberto, 42, NUNCA, (i) => (i === 41 ? { ...PARADO, tocar: true } : PARADO));
     expect(fim.luta.fim).toBe('vitoria');
@@ -187,14 +275,12 @@ describe('o ataque do herói', () => {
 });
 
 describe('os outros eventos dentro da arena', () => {
-  function pertoDoZumbi(hero: Partial<Hero>) {
-    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 300, maxHp: 300 })] }, hero), roomArrival(null));
-    const m = luta.arena.monstros[0]!;
-    return { ...luta, arena: { ...luta.arena, heroi: { ...luta.arena.heroi, x: m.x, y: m.y + TILE_UNITS } } };
+  function contraOZumbi(hero: Partial<Hero>) {
+    return abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 300, maxHp: 300 })] }, hero), roomArrival(null)).luta;
   }
 
   it('o machado: o aperto já começa a encher, e soltar no meio acerta', () => {
-    const luta = pertoDoZumbi({ equip: { ...naSala().hero.equip, arma: arma('machado') } });
+    const luta = contraOZumbi({ equip: { ...naSala().hero.equip, arma: arma('machado') } });
     const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta;
     expect(aberto.arena.evento?.evento.tipo).toBe('carga');
     const fim = rodar(aberto, 42, NUNCA, (i) => (i === 41 ? { ...PARADO, soltar: true } : PARADO));
@@ -202,7 +288,7 @@ describe('os outros eventos dentro da arena', () => {
   });
 
   it('o cajado: o traço em cima do símbolo, levantando o dedo, acerta', () => {
-    const luta = pertoDoZumbi({ equip: { ...naSala().hero.equip, arma: arma('cajado') } });
+    const luta = contraOZumbi({ equip: { ...naSala().hero.equip, arma: arma('cajado') } });
     const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta;
     const evento = aberto.arena.evento!.evento;
     expect(evento.tipo).toBe('desenho');
@@ -214,8 +300,7 @@ describe('os outros eventos dentro da arena', () => {
 
   it('o defensivo descansando se protege: o golpe chega com metade da força', () => {
     const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'esqueleto', hp: 300, maxHp: 300 })] }, { equip: { ...naSala().hero.equip, arma: arma('espada') } }), roomArrival(null));
-    const m = luta.arena.monstros[0]!;
-    const guardando = { ...luta, arena: { ...luta.arena, heroi: { ...luta.arena.heroi, x: m.x, y: m.y + TILE_UNITS }, monstros: [{ ...m, fase: 'descansando' as const, tempo: 500 }] } };
+    const guardando = { ...luta, arena: { ...luta.arena, monstros: [{ ...luta.arena.monstros[0]!, fase: 'descansando' as const, tempo: 500 }] } };
     const aberto = passoDaLuta(guardando, { ...PARADO, atacar: true }, NUNCA).luta;
     const fim = rodar(aberto, 42, NUNCA, (i) => (i === 41 ? { ...PARADO, tocar: true } : PARADO));
     expect(fim.acontecimentos.some((a) => a.tipo === 'aviso' && a.texto?.includes('se protege'))).toBe(true);
@@ -224,16 +309,18 @@ describe('os outros eventos dentro da arena', () => {
 });
 
 describe('os companheiros', () => {
-  it('vão até o monstro e batem nele', () => {
+  it('batem no alvo do jogador', () => {
     const companheiro = { ...generateCompanion(seededRng(3)), stance: 'agressiva' as const };
-    const { luta } = abrirLuta({ ...naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 500, maxHp: 500 })] }), party: [companheiro] }, roomArrival('S'));
-    const fim = rodar(luta, 400, seededRng(9), () => ({ x: 0, y: 127 }));
-    expect(vidaDoMonstro(fim.luta)).toBeLessThan(500);
+    const dois = [monstro({ speciesId: 'zumbi', hp: 500, maxHp: 500 }), monstro({ speciesId: 'zumbi', hp: 500, maxHp: 500 })];
+    const { luta } = abrirLuta({ ...naSala({ monsters: dois }), party: [companheiro] }, roomArrival('S'));
+    const fim = rodar(luta, 400, seededRng(9), (i) => (i === 0 ? { ...PARADO, mirar: 1 } : { x: 0, y: 127 }));
+    expect(vidaDoMonstro(fim.luta, 1)).toBeLessThan(500);
+    expect(vidaDoMonstro(fim.luta, 0)).toBe(500);
   });
 });
 
 describe('poderes, itens e a rodada', () => {
-  it('o poder de dano acerta o mais perto e espera pra voltar', () => {
+  it('o poder de dano acerta o alvo e espera pra voltar', () => {
     const estado = naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 300, maxHp: 300 })] }, { className: 'Guerreiro', classId: 'guerreiro', powerIds: ['golpe_poderoso'], mp: 50 });
     const { luta } = abrirLuta(estado, roomArrival(null));
     const usado = passoDaLuta(luta, { ...PARADO, poder: 'golpe_poderoso' }, NUNCA).luta;
@@ -257,15 +344,15 @@ describe('poderes, itens e a rodada', () => {
     const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi' })] }, { hp: 500 }), roomArrival('S'));
     const estado = luta.estado as EstadoNaMasmorra;
     const envenenado = { ...luta, estado: { ...estado, hero: { ...estado.hero, buffs: { poisonTurns: 3, poisonDmg: 4 } } } };
-    const fim = rodar(envenenado, RODADA, NUNCA, () => ({ x: 0, y: 127 }));
-    expect((fim.luta.estado as EstadoNaMasmorra).hero.hp).toBe(496);
+    const fim = rodar(envenenado, RODADA, NUNCA, () => ({ x: 127, y: 0 }));
+    expect(vidaDoHeroi(fim.luta)).toBe(496);
   });
 });
 
 describe('a mesma entrada dá a mesma luta', () => {
   it('passo a passo, com a mesma semente', () => {
     const estado = naSala({ monsters: [monstro(), monstro({ speciesId: 'elemental_fogo' }), monstro({ speciesId: 'aranha' })] }, { equip: { ...naSala().hero.equip, arma: arma('machado') } });
-    const entrada = (i: number): EntradaDaLuta => ({ x: (i % 50) - 25, y: 30 - (i % 40), atacar: i % 70 === 0, soltar: i % 70 === 40 });
+    const entrada = (i: number): EntradaDaLuta => ({ x: (i % 50) - 25, y: 30 - (i % 40), atacar: i % 70 === 0, soltar: i % 70 === 40, ...(i % 200 === 100 ? { mirar: (i / 100) % 3 } : {}) });
     const a = rodar(abrirLuta(estado, roomArrival('W')).luta, 900, seededRng(5), entrada);
     const b = rodar(abrirLuta(estado, roomArrival('W')).luta, 900, seededRng(5), entrada);
     expect(b).toEqual(a);

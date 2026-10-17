@@ -8,28 +8,37 @@ using UnityEngine.UIElements;
 namespace RPGLegend.Game.Jogo
 {
     /// <summary>
-    /// A luta em tempo real na tela (etapa 5): o botão de ataque (com a arte da arma), os botões dos poderes e o de
-    /// itens por cima da sala, o desenho do evento da arma e os números que sobem. A cada quadro a luta anda em passos
+    /// A luta em tempo real na tela (etapa 5), em primeira pessoa como no site (<see cref="PalcoDaLuta"/>): os monstros
+    /// de frente, a caixa com o coração que o joystick move, o botão de ataque (com a arte da arma) com os poderes e a
+    /// poção em volta dele, o desenho do evento da arma e os números que sobem. A cada quadro a luta anda em passos
     /// fixos de 1/60 s (<see cref="Partida.PassoDaLuta"/>), com o joystick, o teclado e os toques do quadro.
     ///
-    /// No PC: espaço (ou J) é o botão de ataque — apertar abre o evento, apertar de novo toca, soltar solta a carga —,
-    /// 1, 2 e 3 são os poderes, Q abre os itens, e o desenho é com o mouse.
+    /// No PC: as setas (ou WASD) movem o coração; espaço (ou J) é o botão de ataque — apertar abre o evento, apertar de
+    /// novo toca, soltar solta a carga —, 1, 2 e 3 são os poderes, Q abre os itens, Tab troca o alvo, e o desenho e a
+    /// escolha do alvo também vão com o mouse.
     /// </summary>
     public sealed partial class TelaDeJogo
     {
         private const float VidaDoNumero = 0.9f;
         private const float VidaDoAviso = 2.2f;
 
+        /// <summary>Os poderes e a poção em arco em volta do botão de ataque: o raio, e o ângulo de cada um (0° é a direita).</summary>
+        private const float RaioDosBotoes = 124f;
+        private static readonly float[] AngulosDosBotoes = { 180f, 148f, 116f, 84f };
+
         private VisualElement _hud, _botaoAtaque, _iconeDoAtaque, _poderes, _menuDeItens, _numeros, _avisosDaLuta;
         private Label _emojiDoAtaque, _dicaDoEvento;
         private Button _botaoItem;
         private EventoNaTela _eventoNaTela;
+        private PalcoDaLuta _palcoDaLuta;
+        private Button _botaoDoBicho;
         private readonly List<BotaoDePoder> _botoesDePoder = new List<BotaoDePoder>();
         private string _poderesMostrados, _armaMostrada;
 
         // O que a pessoa fez desde o último passo: entra no primeiro passo do quadro.
         private bool _apertou, _soltou, _tocou;
         private string _poderApertado, _itemUsado;
+        private int? _mirar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
         private double _sobraDaLuta;
@@ -55,6 +64,14 @@ namespace RPGLegend.Game.Jogo
 
         private void CriarHudDaLuta(VisualElement palco)
         {
+            // A luta em primeira pessoa cobre a sala, por baixo do joystick, do pet e dos botões.
+            _palcoDaLuta = new PalcoDaLuta();
+            _palcoDaLuta.AoMirar += indice => _mirar = indice;
+            _palcoDaLuta.Esconder();
+            palco.Insert(0, _palcoDaLuta);
+            // O pet fica de fora da luta: o bônus dele vale, mas o canto da sala é o palco dos monstros.
+            _botaoDoBicho = palco.Q<Button>("bichinho");
+
             _hud = new VisualElement { name = "hud-da-luta", pickingMode = PickingMode.Ignore };
             _hud.AddToClassList("hud-da-luta");
             _hud.AddToClassList("escondido");
@@ -88,6 +105,7 @@ namespace RPGLegend.Game.Jogo
 
             _botaoItem = new Button { text = "🧪" };
             _botaoItem.AddToClassList("botao-da-luta");
+            _botaoItem.AddToClassList("botao-em-volta");
             _botaoItem.AddToClassList("botao-de-item");
             ParaNaoAndar(_botaoItem);
             _botaoItem.clicked += AlternarMenuDeItens;
@@ -135,10 +153,16 @@ namespace RPGLegend.Game.Jogo
         {
             var luta = _partida?.Luta;
             _hud.EnableInClassList("escondido", luta == null);
+            _botaoDoBicho?.EnableInClassList("escondido-na-luta", luta != null);
             AnimarFlutuantes();
-            if (luta == null) return;
+            if (luta == null)
+            {
+                _palcoDaLuta.Esconder();
+                return;
+            }
+            _sala?.EntrarNaLuta();
 
-            LerTecladoDaLuta();
+            LerTecladoDaLuta(luta);
             bool pausada = _janela != null || _saindo;
             if (!pausada)
             {
@@ -146,8 +170,14 @@ namespace RPGLegend.Game.Jogo
                 _sobraDaLuta = passos.Sobra;
                 for (int i = 0; i < passos.Passos && _partida?.Luta != null; i++) _partida.PassoDaLuta(EntradaDaLuta());
             }
-            if (_partida?.Luta == null) return;
-            _sala.MostrarLuta(_partida.Luta);
+            if (_partida?.Luta == null)
+            {
+                _palcoDaLuta.Esconder();
+                return;
+            }
+            var estado = _partida.Luta.Estado;
+            string lugar = estado.MapMode == "dungeon" ? estado.Masmorra?.Dungeon ?? "floresta" : "cidade";
+            _palcoDaLuta.Mostrar(_partida.Luta, TemaDaSala.Do(estado), lugar);
             DesenharHud(_partida.Luta);
         }
 
@@ -167,20 +197,23 @@ namespace RPGLegend.Game.Jogo
                 Item = _itemUsado,
                 Menu = _menuDeItens.ClassListContains("escondido") ? (bool?)null : true,
                 Dedo = _dedoNoDesenho,
+                Mirar = _mirar,
             };
             _apertou = _soltou = _tocou = false;
             _poderApertado = null;
             _itemUsado = null;
+            _mirar = null;
             return entrada;
         }
 
-        private void LerTecladoDaLuta()
+        private void LerTecladoDaLuta(LutaEmTempoReal luta)
         {
             var teclado = Keyboard.current;
             if (teclado == null || _janela != null) return;
             if (teclado.spaceKey.wasPressedThisFrame || teclado.jKey.wasPressedThisFrame) _apertou = true;
             if (teclado.spaceKey.wasReleasedThisFrame || teclado.jKey.wasReleasedThisFrame) _soltou = true;
             if (teclado.qKey.wasPressedThisFrame) AlternarMenuDeItens();
+            if (teclado.tabKey.wasPressedThisFrame) _mirar = ProximoAlvo(luta.Arena);
             var digitos = new[] { teclado.digit1Key, teclado.digit2Key, teclado.digit3Key };
             for (int i = 0; i < digitos.Length && i < _botoesDePoder.Count; i++)
                 if (digitos[i].wasPressedThisFrame) _poderApertado = _botoesDePoder[i].Id;
@@ -218,6 +251,7 @@ namespace RPGLegend.Game.Jogo
                     var poder = poderes[i];
                     var botao = new Button { text = "" };
                     botao.AddToClassList("botao-da-luta");
+                    botao.AddToClassList("botao-em-volta");
                     botao.AddToClassList("botao-de-poder");
                     var icone = new Label(poder.Icon) { pickingMode = PickingMode.Ignore };
                     icone.AddToClassList("icone-do-poder");
@@ -234,6 +268,7 @@ namespace RPGLegend.Game.Jogo
                     _poderes.Insert(_poderes.IndexOf(_botaoItem), botao);
                     _botoesDePoder.Add(new BotaoDePoder { Id = id, Botao = botao, Espera = espera, Custo = custo });
                 }
+                PosicionarEmVolta();
             }
             double recargaTotal = GameData.ArenaTable.RecargaDoPoder;
             foreach (var b in _botoesDePoder)
@@ -254,9 +289,11 @@ namespace RPGLegend.Game.Jogo
             _botaoItem.EnableInClassList("sem-mana", consumiveis == 0 || arena.RecargaDoItem > 0);
             if (!_menuDeItens.ClassListContains("escondido") && consumiveis == 0) _menuDeItens.AddToClassList("escondido");
 
-            // O evento da arma, se houver um aberto.
+            // O evento da arma, se houver um aberto, no palco dos monstros (a caixa do coração fica livre).
             var aberto = arena.Evento;
-            _eventoNaTela.Mostrar(aberto, _palco.contentRect);
+            _eventoNaTela.Mostrar(aberto, _palcoDaLuta.AreaDoPalco);
+            float topoDaCaixa = _palcoDaLuta.TopoDaCaixa;
+            if (topoDaCaixa > 0) _avisosDaLuta.style.bottom = Mathf.Max(0f, _palco.contentRect.height - topoDaCaixa + 6f);
             _dicaDoEvento.text = aberto != null ? DicaDoEvento(aberto.Evento.Tipo) : "";
             _dicaDoEvento.EnableInClassList("escondido", aberto == null);
             if (aberto == null || aberto.Evento.Tipo != TiposDeEvento.Desenho) _dedoNoDesenho = null;
@@ -273,6 +310,33 @@ namespace RPGLegend.Game.Jogo
                 case TiposDeEvento.ToqueDuplo: return "Dois toques ligeiros";
                 default: return "Toque no meio da barra";
             }
+        }
+
+        /// <summary>Os poderes (na ordem do herói) e, depois deles, a poção, em arco em volta do botão de ataque.</summary>
+        private void PosicionarEmVolta()
+        {
+            var botoes = new List<VisualElement>();
+            foreach (var b in _botoesDePoder) botoes.Add(b.Botao);
+            botoes.Add(_botaoItem);
+            // O centro do botão de ataque fica a 54 px do canto de baixo à direita; cada botão em volta tem 62 px.
+            for (int i = 0; i < botoes.Count && i < AngulosDosBotoes.Length; i++)
+            {
+                float angulo = AngulosDosBotoes[i] * Mathf.Deg2Rad;
+                botoes[i].style.right = 54f - Mathf.Cos(angulo) * RaioDosBotoes - 31f;
+                botoes[i].style.bottom = 54f + Mathf.Sin(angulo) * RaioDosBotoes - 31f;
+            }
+        }
+
+        /// <summary>O próximo monstro de pé depois do alvo de agora, dando a volta (o Tab do PC).</summary>
+        private static int? ProximoAlvo(Arena arena)
+        {
+            int total = arena.Monstros.Count;
+            for (int k = 1; k <= total; k++)
+            {
+                var m = arena.Monstros[(int)((arena.Alvo + k) % total)];
+                if (m.Fase != "caido") return (int)m.Indice;
+            }
+            return null;
         }
 
         // ---------- o desenho, com o dedo ou o mouse ----------
@@ -384,37 +448,27 @@ namespace RPGLegend.Game.Jogo
             }
         }
 
-        /// <summary>O número que sobe em cima de quem levou (ou desviou, ou se curou).</summary>
+        /// <summary>
+        /// O número que sobe em cima de quem levou (ou desviou, ou se curou): o monstro no palco, o coração na caixa ou o
+        /// companheiro do lado dela. Quem apanhou treme (o monstro) ou pisca (o coração).
+        /// </summary>
         private void Numero(Arena arena, Acontecimento a)
         {
-            double x, y;
             int indice = (int)(a.Indice ?? 0);
-            if (a.Onde == "monstro" && indice < arena.Monstros.Count)
-            {
-                x = arena.Monstros[indice].X;
-                y = arena.Monstros[indice].Y;
-            }
-            else if (a.Onde == "companheiro")
-            {
-                var c = arena.Companheiros.Find(k => k.Indice == indice);
-                if (c == null) return;
-                x = c.X;
-                y = c.Y;
-            }
-            else
-            {
-                x = arena.Heroi.X;
-                y = arena.Heroi.Y;
-            }
-            double largura = RoomWalk.RoomCols * RoomWalk.TileUnits;
-            double altura = RoomWalk.RoomRows * RoomWalk.TileUnits;
+            Vector2 onde = a.Onde == "monstro" ? _palcoDaLuta.PosicaoDoMonstro(indice)
+                : a.Onde == "companheiro" ? _palcoDaLuta.PosicaoDoAliado(arena, indice)
+                : _palcoDaLuta.PosicaoDoCoracao(arena);
             var rotulo = new Label(a.Texto) { pickingMode = PickingMode.Ignore };
             rotulo.AddToClassList("numero-da-luta");
             rotulo.AddToClassList("numero-" + (a.Tom ?? "dano"));
-            rotulo.style.left = Length.Percent((float)(x / largura * 100.0));
-            rotulo.style.top = Length.Percent((float)((y - RoomWalk.TileUnits * 1.1) / altura * 100.0));
+            rotulo.style.left = onde.x;
+            rotulo.style.top = onde.y - 24f;
             _numeros.Add(rotulo);
             _flutuando.Add(new Flutuando { Rotulo = rotulo, Desde = Time.unscaledTime, Vida = VidaDoNumero });
+
+            bool doeu = a.Tom == "dano" || a.Tom == "critico";
+            if (a.Onde == "monstro" && doeu) _palcoDaLuta.Apanhou(indice);
+            if (a.Onde == "heroi" && doeu) _palcoDaLuta.CoracaoApanhou();
         }
 
         private void AvisoDaLuta(string texto, string classe)
@@ -445,10 +499,12 @@ namespace RPGLegend.Game.Jogo
             }
         }
 
-        /// <summary>A luta acabou: a cena volta a andar dali, e o que era da luta sai da tela.</summary>
+        /// <summary>A luta acabou: a sala volta, com o herói na porta por onde entrou, e o que era da luta sai da tela.</summary>
         private void AoAcabarALuta(Walker heroi)
         {
             _sala?.SairDaLuta(heroi);
+            _palcoDaLuta.Esconder();
+            _mirar = null;
             _menuDeItens.AddToClassList("escondido");
             _eventoNaTela.Mostrar(null, _palco.contentRect);
             _dicaDoEvento.AddToClassList("escondido");
@@ -462,6 +518,8 @@ namespace RPGLegend.Game.Jogo
         {
             if (_hud == null) return;
             _hud.AddToClassList("escondido");
+            _palcoDaLuta.Esconder();
+            _mirar = null;
             _menuDeItens.AddToClassList("escondido");
             _numeros.Clear();
             _avisosDaLuta.Clear();
@@ -475,8 +533,8 @@ namespace RPGLegend.Game.Jogo
     }
 
     /// <summary>
-    /// O evento da arma desenhado por cima da sala (o Painter2D da UI): a barra, a bolinha encolhendo até o aro, a
-    /// carga subindo, as notas do ritmo chegando na linha e o símbolo a traçar. Os números vêm da engine
+    /// O evento da arma desenhado por cima do palco dos monstros (o Painter2D da UI): a barra, a bolinha encolhendo até
+    /// o aro, a carga subindo, as notas do ritmo chegando na linha e o símbolo a traçar. Os números vêm da engine
     /// (<see cref="EventosDeArma"/>): a zona, a faixa do crítico e os tempos são os mesmos que a leitura usa.
     /// </summary>
     internal sealed class EventoNaTela : VisualElement
@@ -498,8 +556,11 @@ namespace RPGLegend.Game.Jogo
             generateVisualContent += Desenhar;
         }
 
-        /// <summary>Mostra o evento (ou some, sem evento), no tamanho que o tipo pede dentro do palco.</summary>
-        public void Mostrar(EventoAberto aberto, Rect palco)
+        /// <summary>
+        /// Mostra o evento (ou some, sem evento), no tamanho que o tipo pede dentro de <paramref name="area"/>: o palco dos
+        /// monstros, em cima da caixa, que fica livre pro coração continuar desviando.
+        /// </summary>
+        public void Mostrar(EventoAberto aberto, Rect area)
         {
             _aberto = aberto;
             style.display = aberto == null ? DisplayStyle.None : DisplayStyle.Flex;
@@ -507,12 +568,12 @@ namespace RPGLegend.Game.Jogo
             bool desenho = aberto.Evento.Tipo == TiposDeEvento.Desenho;
             bool circulo = aberto.Evento.Tipo == TiposDeEvento.Circulo;
             bool carga = aberto.Evento.Tipo == TiposDeEvento.Carga;
-            float alto = desenho ? palco.height * 0.62f : circulo ? palco.height * 0.36f : carga ? palco.height * 0.44f : palco.height * 0.16f;
-            float largo = desenho || circulo ? alto : carga ? palco.height * 0.12f : palco.width * 0.6f;
+            float alto = desenho ? area.height * 0.86f : circulo ? area.height * 0.52f : carga ? area.height * 0.64f : area.height * 0.22f;
+            float largo = desenho || circulo ? alto : carga ? area.height * 0.17f : area.width * 0.6f;
             style.width = largo;
             style.height = alto;
-            style.left = (palco.width - largo) / 2f;
-            style.top = palco.height * 0.06f;
+            style.left = area.x + (area.width - largo) / 2f;
+            style.top = area.y + area.height * 0.06f;
             // Só o desenho e as notas recebem o dedo aqui; o resto é no botão de ataque (ou aqui, se preferir).
             pickingMode = PickingMode.Position;
             MarkDirtyRepaint();

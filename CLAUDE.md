@@ -200,8 +200,10 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   teclado ou joystick). Grava na nuvem como o site (2,5 s, teto de 10 s,
   `baseSignature`). Desde a etapa 5.4, a sala de monstro abre a luta em tempo
   real (`luta/arena.ts`, no C# `Arenas`): a `Partida` troca o combate por
-  turnos pela arena, e a luta acontece na própria sala, com as portas
-  trancadas até vencer ou cair. As telas de sala
+  turnos pela arena, e só se sai vencendo ou caindo. A luta é em primeira
+  pessoa, como a do site, com o coração do Undertale numa caixa
+  (`PalcoDaLuta`): **teste pedido pelo usuário em 2026-10-17, sem decisão**;
+  a versão com a luta dentro da sala é o commit 82b03da. As telas de sala
   são as do site, nos mesmos moldes (a carta seleciona, a ficha age):
   conversa, evento, totem, quadro de missões, mestre e guilda em
   `TelaDeJogo.Telas.cs`; mochila (cartão de guilda com o "+" dos pontos,
