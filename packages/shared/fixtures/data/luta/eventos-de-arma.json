@@ -10,6 +10,9 @@
     "adaga": "toque_duplo"
   },
   "EVENTO_SEM_ARMA": "barra",
+  "EVENTO_NO_TECLADO": {
+    "desenho": "letras"
+  },
   "DURACAO_DA_BARRA": 84,
   "DURACAO_DO_CIRCULO": 84,
   "DURACAO_DA_CARGA": 84,
@@ -31,6 +34,18 @@
   "ERRO_NA_PONTA": 240,
   "PASSO_DO_TRACO": 25,
   "PONTOS_MAXIMOS_DO_TRACO": 600,
+  "LETRAS_DO_TECLADO": [
+    "U",
+    "I",
+    "O",
+    "P"
+  ],
+  "NOTAS_DAS_LETRAS": [
+    36,
+    108,
+    180
+  ],
+  "JANELA_DAS_LETRAS": 36,
   "SIMBOLOS": {
     "circulo": [
       [

@@ -240,6 +240,8 @@ export interface LutaEmTempoReal {
   estado: EstadoDoJogo;
   arena: Arena;
   pet: PetId | null;
+  /** Jogada no teclado (o PC): o cajado pede letras em vez do desenho (`EVENTO_NO_TECLADO`). */
+  teclado: boolean;
   fim: FimDaLuta | null;
   /** O item achado ao vencer. */
   loot: Item | null;
@@ -260,6 +262,8 @@ export interface EntradaDaLuta {
   tocar?: boolean;
   /** Desenho: onde o dedo está, na caixa do desenho. Ausente, o dedo está fora da tela. */
   dedo?: { x: number; y: number };
+  /** Letras: a tecla de letra apertada neste passo. */
+  tecla?: string;
   /** O poder apertado neste passo. */
   poder?: string;
   /** O item usado neste passo (uid). */
@@ -293,9 +297,10 @@ export interface QuadroDaLuta {
  * põe os monstros no palco (os caídos ficam no lugar, apagados), o coração
  * no meio da caixa e os companheiros vivos ao lado. O alvo começa no
  * primeiro de pé, como no site. `chegada` é por onde o herói entrou: a luta
- * guarda pra ele voltar ali quando acabar.
+ * guarda pra ele voltar ali quando acabar. `teclado`: jogada no PC, onde o
+ * cajado pede letras em vez do desenho.
  */
-export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId | null = null): QuadroDaLuta {
+export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId | null = null, teclado = false): QuadroDaLuta {
   const preparada = prepararLuta(estado);
   const sala = celulaAtual(preparada.estado) as DungeonCell;
   const dePe = indicesDePe(sala);
@@ -335,7 +340,7 @@ export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId 
     vez: -1,
   };
   const acontecimentos: Acontecimento[] = preparada.log.map((texto) => ({ tipo: 'diario', texto }));
-  return { luta: { estado: preparada.estado, arena, pet, fim: null, loot: null }, acontecimentos };
+  return { luta: { estado: preparada.estado, arena, pet, teclado, fim: null, loot: null }, acontecimentos };
 }
 
 // ---------- o passo ----------
@@ -364,7 +369,7 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
     if (!lento || l.arena.lento % LENTIDAO === 0) passoDoMundo(l, entrada);
   }
 
-  return { luta: { estado: l.estado, arena: l.arena, pet: l.pet, fim: l.fim, loot: l.loot }, acontecimentos: l.acontecimentos };
+  return { luta: { estado: l.estado, arena: l.arena, pet: l.pet, teclado: l.teclado, fim: l.fim, loot: l.loot }, acontecimentos: l.acontecimentos };
 }
 
 /**
@@ -407,6 +412,7 @@ function copiarArena(arena: Arena): Arena {
             ...arena.evento.jogada,
             ...(arena.evento.jogada.toques ? { toques: [...arena.evento.jogada.toques] } : {}),
             ...(arena.evento.jogada.traco ? { traco: [...arena.evento.jogada.traco] } : {}),
+            ...(arena.evento.jogada.teclas ? { teclas: [...arena.evento.jogada.teclas] } : {}),
           },
         }
       : null,
@@ -492,7 +498,7 @@ function abrirEvento(l: Luta): void {
   if (alvo === null) return;
   const hero = masmorra(l).hero;
   const estilo = estiloDoBotao(hero);
-  const evento = eventoDoAtaque(hero, estilo, l.rng);
+  const evento = eventoDoAtaque(hero, estilo, l.rng, l.teclado);
   l.arena.evento = { evento, passo: 0, jogada: {}, alvo, estilo };
 }
 
@@ -535,6 +541,14 @@ function seguirEvento(l: Luta, entrada: EntradaDaLuta): void {
       }
       break;
     }
+    case 'letras':
+      if (entrada.tecla && passo <= evento.duracao) {
+        jogada.teclas = [...(jogada.teclas ?? []), { letra: entrada.tecla, t: passo }];
+        // Uma tecla na janela da última letra decide ela: não sobra nada pra apertar.
+        const batidas = evento.notas ?? [];
+        if (passo >= (batidas[batidas.length - 1] ?? 0) - (evento.janela ?? 0)) pronto = true;
+      }
+      break;
   }
 
   if (pronto) golpear(l);
@@ -973,6 +987,6 @@ function perder(l: Luta): void {
 // ---------- pra tela ----------
 
 /** O evento que o botão de ataque abriria agora (pro app desenhar o ícone do botão), sem sortear nada. */
-export function eventoDoBotao(hero: Hero): TipoDeEvento {
-  return eventoDaArma(hero.equip.arma?.templateId);
+export function eventoDoBotao(hero: Hero, teclado = false): TipoDeEvento {
+  return eventoDaArma(hero.equip.arma?.templateId, teclado);
 }

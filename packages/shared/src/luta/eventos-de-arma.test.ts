@@ -16,7 +16,9 @@ import {
   DURACAO_DO_DESENHO,
   ERRO_NA_PONTA,
   ERRO_POR_PASSO,
+  JANELA_DAS_LETRAS,
   JANELA_DO_RITMO,
+  NOTAS_DAS_LETRAS,
   NOTAS_DO_RITMO,
   NOTAS_DO_TOQUE_DUPLO,
   SIMBOLOS,
@@ -73,6 +75,13 @@ describe('eventoDaArma', () => {
     expect(eventoDaArma(undefined)).toBe('barra');
     expect(eventoDaArma('constructor')).toBe('barra');
   });
+
+  it('no teclado, o cajado pede letras e as outras armas ficam iguais', () => {
+    expect(eventoDaArma('cajado', true)).toBe('letras');
+    for (const arma of ['espada', 'maca', 'arco', 'machado', 'marreta', 'violao', 'adaga', null, 'constructor']) {
+      expect(eventoDaArma(arma, true)).toBe(eventoDaArma(arma));
+    }
+  });
 });
 
 describe('eventoDoAtaque', () => {
@@ -91,6 +100,23 @@ describe('eventoDoAtaque', () => {
     const nomes = Object.keys(SIMBOLOS);
     expect(eventoDoAtaque(heroi('cajado'), 'normal', sequencia([0])).simbolo).toBe(nomes[0]);
     expect(eventoDoAtaque(heroi('cajado'), 'normal', sequencia([0.99])).simbolo).toBe(nomes[nomes.length - 1]);
+  });
+
+  it('as letras: uma por nota, das quatro do teclado, sem repetir a de antes', () => {
+    const hero = heroi('cajado');
+    expect(eventoDoAtaque(hero, 'normal', sequencia([0, 0, 0]), true)).toEqual({
+      tipo: 'letras',
+      zona: zonaDoAtaque(hero, 'normal'),
+      duracao: NOTAS_DAS_LETRAS[NOTAS_DAS_LETRAS.length - 1]! + JANELA_DAS_LETRAS,
+      notas: [...NOTAS_DAS_LETRAS],
+      janela: JANELA_DAS_LETRAS,
+      letras: ['U', 'I', 'U'],
+    });
+    expect(eventoDoAtaque(hero, 'normal', sequencia([0.99, 0.99, 0.99]), true).letras).toEqual(['P', 'O', 'P']);
+  });
+
+  it('fora do teclado, o cajado continua no desenho', () => {
+    expect(eventoDoAtaque(heroi('cajado'), 'normal', sequencia([0]), false).tipo).toBe('desenho');
   });
 });
 
@@ -153,6 +179,40 @@ describe('lerEvento — ritmo e toque duplo', () => {
   it('a adaga usa as duas notas dela', () => {
     const adaga = eventoDoAtaque(heroi('adaga'), 'normal', nuncaSorteia);
     expect(lerEvento(adaga, { toques: [...NOTAS_DO_TOQUE_DUPLO] })).toEqual({ acerto: true, forca: 1.5, critico: true });
+  });
+});
+
+describe('lerEvento — letras', () => {
+  const letras: EventoDeArma = { tipo: 'letras', zona: 0.5, duracao: 144, notas: [24, 72, 120], janela: 24, letras: ['U', 'O', 'I'] };
+  const apertou = (...teclas: Array<[string, number]>) => ({ teclas: teclas.map(([letra, t]) => ({ letra, t })) });
+
+  it('as três letras certas quando o aro encosta: 1,5× e crítico', () => {
+    expect(lerEvento(letras, apertou(['U', 24], ['O', 72], ['I', 120]))).toEqual({ acerto: true, forca: 1.5, critico: true });
+  });
+
+  it('cada letra é uma régua pequena, como as notas do ritmo', () => {
+    const ritmo: EventoDeArma = { tipo: 'ritmo', zona: 0.5, duracao: 144, notas: [24, 72, 120], janela: 24 };
+    expect(lerEvento(letras, apertou(['U', 30], ['O', 66], ['I', 120]))).toEqual(lerEvento(ritmo, { toques: [30, 66, 120] }));
+  });
+
+  it('a letra errada perde a nota, mesmo com a certa logo depois', () => {
+    expect(lerEvento(letras, apertou(['U', 24], ['P', 70], ['O', 72], ['I', 120]))).toEqual({ acerto: true, forca: 1, critico: false });
+  });
+
+  it('o passo em que a letra some já é da próxima', () => {
+    // O O no 48 é a primeira tecla da janela da segunda letra (48 a 95): cedo demais, e o do 72 não conta mais.
+    expect(lerEvento(letras, apertou(['U', 24], ['O', 48], ['O', 72], ['I', 120]))).toEqual({ acerto: true, forca: 1, critico: false });
+  });
+
+  it('apertar todas sem parar não compensa', () => {
+    const todas = Array.from({ length: 144 }, (_, t) => ({ letra: ['U', 'I', 'O', 'P'][t % 4]!, t }));
+    expect(lerEvento(letras, { teclas: todas }).acerto).toBe(false);
+  });
+
+  it('nenhuma tecla erra; tecla fora do tempo, ou voltando, lança', () => {
+    expect(lerEvento(letras, {}).acerto).toBe(false);
+    expect(() => lerEvento(letras, apertou(['U', 145]))).toThrow(RangeError);
+    expect(() => lerEvento(letras, apertou(['U', 30], ['O', 20]))).toThrow(RangeError);
   });
 });
 

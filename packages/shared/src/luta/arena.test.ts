@@ -298,6 +298,20 @@ describe('os outros eventos dentro da arena', () => {
     expect(vidaDoMonstro(fim.luta)).toBeLessThan(300);
   });
 
+  it('o cajado no PC: uma letra por vez, a tecla quando o aro encosta; a da última fecha o evento', () => {
+    const estado = naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 300, maxHp: 300 })] }, { equip: { ...naSala().hero.equip, arma: arma('cajado') } });
+    const luta = abrirLuta(estado, roomArrival(null), null, true).luta;
+    expect(luta.teclado).toBe(true);
+    const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta;
+    const evento = aberto.arena.evento!.evento;
+    expect(evento.tipo).toBe('letras');
+    const naBatida = new Map(evento.notas!.map((batida, k) => [batida, evento.letras![k]!]));
+    // O passo i de `rodar` é o passo i + 1 do evento. O ataque no meio não conta como letra.
+    const fim = rodar(aberto, evento.notas![2]!, NUNCA, (i) => (i === 5 ? { ...PARADO, atacar: true } : { ...PARADO, tecla: naBatida.get(i + 1) }));
+    expect(fim.luta.arena.evento).toBeNull();
+    expect(fim.acontecimentos.some((a) => a.tipo === 'numero' && a.tom === 'critico')).toBe(true);
+  });
+
   it('o defensivo descansando se protege: o golpe chega com metade da força', () => {
     const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'esqueleto', hp: 300, maxHp: 300 })] }, { equip: { ...naSala().hero.equip, arma: arma('espada') } }), roomArrival(null));
     const guardando = { ...luta, arena: { ...luta.arena, monstros: [{ ...luta.arena.monstros[0]!, fase: 'descansando' as const, tempo: 500 }] } };

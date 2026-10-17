@@ -1061,6 +1061,21 @@
     position: absolute;
 }
 
+/* A letra do cajado no PC, no meio do aro (o tamanho e a cor vêm do código). */
+.letra-do-evento {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    -unity-text-align: middle-center;
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/PixelifySans-SemiBold.ttf");
+    -unity-font-definition: initial;
+    color: rgb(236, 223, 192);
+}
+
 .dica-do-evento {
     position: absolute;
     left: 50%;

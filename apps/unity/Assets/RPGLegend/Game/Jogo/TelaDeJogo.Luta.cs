@@ -14,8 +14,8 @@ namespace RPGLegend.Game.Jogo
     /// fixos de 1/60 s (<see cref="Partida.PassoDaLuta"/>), com o joystick, o teclado e os toques do quadro.
     ///
     /// No PC: as setas (ou WASD) movem o coração; espaço (ou J) é o botão de ataque — apertar abre o evento, apertar de
-    /// novo toca, soltar solta a carga —, 1, 2 e 3 são os poderes, Q abre os itens, Tab troca o alvo, e o desenho e a
-    /// escolha do alvo também vão com o mouse.
+    /// novo toca, soltar solta a carga —, 1, 2 e 3 são os poderes, Q abre os itens, Tab troca o alvo, e a escolha do
+    /// alvo também vai com o mouse. O cajado, no PC, pede letras em vez do desenho: U, I, O e P.
     /// </summary>
     public sealed partial class TelaDeJogo
     {
@@ -37,7 +37,7 @@ namespace RPGLegend.Game.Jogo
 
         // O que a pessoa fez desde o último passo: entra no primeiro passo do quadro.
         private bool _apertou, _soltou, _tocou;
-        private string _poderApertado, _itemUsado;
+        private string _poderApertado, _itemUsado, _tecla;
         private int? _mirar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
@@ -197,11 +197,13 @@ namespace RPGLegend.Game.Jogo
                 Item = _itemUsado,
                 Menu = _menuDeItens.ClassListContains("escondido") ? (bool?)null : true,
                 Dedo = _dedoNoDesenho,
+                Tecla = _tecla,
                 Mirar = _mirar,
             };
             _apertou = _soltou = _tocou = false;
             _poderApertado = null;
             _itemUsado = null;
+            _tecla = null;
             _mirar = null;
             return entrada;
         }
@@ -217,6 +219,9 @@ namespace RPGLegend.Game.Jogo
             var digitos = new[] { teclado.digit1Key, teclado.digit2Key, teclado.digit3Key };
             for (int i = 0; i < digitos.Length && i < _botoesDePoder.Count; i++)
                 if (digitos[i].wasPressedThisFrame) _poderApertado = _botoesDePoder[i].Id;
+            // As letras do cajado no PC (a engine só olha pra elas no evento das letras).
+            foreach (var letra in GameData.EventosDeArmaTable.LetrasDoTeclado)
+                if (Enum.TryParse<Key>(letra, out var tecla) && teclado[tecla].wasPressedThisFrame) _tecla = letra;
         }
 
         // ---------- o painel ----------
@@ -306,6 +311,7 @@ namespace RPGLegend.Game.Jogo
                 case TiposDeEvento.Circulo: return "Toque quando a bolinha bater no aro";
                 case TiposDeEvento.Carga: return "Segure e solte na faixa";
                 case TiposDeEvento.Desenho: return "Passe o dedo pelo símbolo";
+                case TiposDeEvento.Letras: return "Aperte a letra quando o aro encostar";
                 case TiposDeEvento.Ritmo: return "Toque no ritmo";
                 case TiposDeEvento.ToqueDuplo: return "Dois toques ligeiros";
                 default: return "Toque no meio da barra";
@@ -534,8 +540,9 @@ namespace RPGLegend.Game.Jogo
 
     /// <summary>
     /// O evento da arma desenhado por cima do palco dos monstros (o Painter2D da UI): a barra, a bolinha encolhendo até
-    /// o aro, a carga subindo, as notas do ritmo chegando na linha e o símbolo a traçar. Os números vêm da engine
-    /// (<see cref="EventosDeArma"/>): a zona, a faixa do crítico e os tempos são os mesmos que a leitura usa.
+    /// o aro, a carga subindo, as notas do ritmo chegando na linha, o símbolo a traçar e, no PC, a letra com o aro
+    /// fechando. Os números vêm da engine (<see cref="EventosDeArma"/>): a zona, a faixa do crítico e os tempos são os
+    /// mesmos que a leitura usa.
     /// </summary>
     internal sealed class EventoNaTela : VisualElement
     {
@@ -546,14 +553,23 @@ namespace RPGLegend.Game.Jogo
         private static readonly Color Cursor = new Color32(0xec, 0xdf, 0xc0, 255);
         private static readonly Color Traco = new Color32(0xe8, 0xc6, 0x5a, 255);
         private static readonly Color Simbolo = new Color(0.93f, 0.87f, 0.75f, 0.28f);
+        private static readonly Color Acertou = new Color32(0x9f, 0xd3, 0x6b, 255);
+        private static readonly Color Errou = new Color32(0xe0, 0x5a, 0x4f, 255);
+        private static readonly Color Apagada = new Color(0.93f, 0.87f, 0.75f, 0.25f);
+        private static readonly Color FundoDaLetra = new Color(0.06f, 0.07f, 0.1f, 0.96f);
 
         private EventoAberto _aberto;
+        /// <summary>A letra da vez, no meio do aro (o Painter2D não escreve texto).</summary>
+        private readonly Label _letra;
 
         public EventoNaTela()
         {
             AddToClassList("evento-da-arma");
             style.display = DisplayStyle.None;
             generateVisualContent += Desenhar;
+            _letra = new Label { pickingMode = PickingMode.Ignore };
+            _letra.AddToClassList("letra-do-evento");
+            Add(_letra);
         }
 
         /// <summary>
@@ -566,18 +582,61 @@ namespace RPGLegend.Game.Jogo
             style.display = aberto == null ? DisplayStyle.None : DisplayStyle.Flex;
             if (aberto == null) return;
             bool desenho = aberto.Evento.Tipo == TiposDeEvento.Desenho;
-            bool circulo = aberto.Evento.Tipo == TiposDeEvento.Circulo;
+            bool redondo = aberto.Evento.Tipo == TiposDeEvento.Circulo || aberto.Evento.Tipo == TiposDeEvento.Letras;
             bool carga = aberto.Evento.Tipo == TiposDeEvento.Carga;
-            float alto = desenho ? area.height * 0.86f : circulo ? area.height * 0.52f : carga ? area.height * 0.64f : area.height * 0.22f;
-            float largo = desenho || circulo ? alto : carga ? area.height * 0.17f : area.width * 0.6f;
+            float alto = desenho ? area.height * 0.86f : redondo ? area.height * 0.52f : carga ? area.height * 0.64f : area.height * 0.22f;
+            float largo = desenho || redondo ? alto : carga ? area.height * 0.17f : area.width * 0.6f;
             style.width = largo;
             style.height = alto;
             style.left = area.x + (area.width - largo) / 2f;
             style.top = area.y + area.height * 0.06f;
             // Só o desenho e as notas recebem o dedo aqui; o resto é no botão de ataque (ou aqui, se preferir).
             pickingMode = PickingMode.Position;
+            MostrarLetra(aberto.Evento, alto);
             MarkDirtyRepaint();
         }
+
+        /// <summary>A letra da vez no meio do aro, na cor de como foi: ainda sem tecla, crítica, acertada ou perdida.</summary>
+        private void MostrarLetra(EventoDeArma evento, float alto)
+        {
+            int k = evento.Tipo == TiposDeEvento.Letras ? LetraDaVez(evento, _aberto.Passo) : -1;
+            _letra.style.display = k >= 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            if (k < 0) return;
+            _letra.text = evento.Letras[k];
+            _letra.style.fontSize = alto * 0.3f;
+            _letra.style.color = CorDaLetra(LeituraDaLetra(evento, k), Cursor);
+        }
+
+        /// <summary>A letra cuja janela tem o passo (a da vez), ou -1 fora de todas.</summary>
+        private static int LetraDaVez(EventoDeArma evento, double passo)
+        {
+            if (evento.Notas == null || evento.Letras == null) return -1;
+            double janela = evento.Janela ?? 0;
+            for (int k = 0; k < evento.Notas.Count && k < evento.Letras.Count; k++)
+                if (passo >= evento.Notas[k] - janela && passo < evento.Notas[k] + janela) return k;
+            return -1;
+        }
+
+        /// <summary>
+        /// Como foi a letra <paramref name="k"/>: null se nenhuma tecla caiu na janela dela; senão a leitura da primeira
+        /// (a letra errada é erro), pela mesma régua da engine.
+        /// </summary>
+        private LeituraDaMira LeituraDaLetra(EventoDeArma evento, int k)
+        {
+            var teclas = _aberto?.Jogada?.Teclas;
+            if (teclas == null) return null;
+            double batida = evento.Notas[k], janela = evento.Janela ?? 1;
+            foreach (var tecla in teclas)
+            {
+                if (tecla.T < batida - janela || tecla.T >= batida + janela) continue;
+                if (tecla.Letra != evento.Letras[k]) return Attack.LerMira(evento.Zona, null);
+                return Attack.LerMira(evento.Zona, 0.5 + (tecla.T - batida) / (2 * janela));
+            }
+            return null;
+        }
+
+        private static Color CorDaLetra(LeituraDaMira leitura, Color semTecla) =>
+            leitura == null ? semTecla : leitura.Critico ? Critico : leitura.Acerto ? Acertou : Errou;
 
         /// <summary>Do ponto na caixa do desenho pra caixa da engine (0 a TAMANHO_DO_DESENHO, y pra baixo).</summary>
         public DedoNoDesenho NoDesenho(Vector2 local)
@@ -629,6 +688,9 @@ namespace RPGLegend.Game.Jogo
                 case TiposDeEvento.Desenho:
                     Desenho(p, r, evento, progresso);
                     break;
+                case TiposDeEvento.Letras:
+                    Letras(p, r, evento, zona, faixa);
+                    break;
                 default:
                 {
                     Retangulo(p, r, Fundo);
@@ -672,6 +734,40 @@ namespace RPGLegend.Game.Jogo
                 }
             }
             Contorno(p, r);
+        }
+
+        /// <summary>
+        /// As letras: o aro da letra da vez fechando até o círculo dela, com a faixa da zona e a do crítico em volta,
+        /// como no arco (some quando a tecla cai). A letra fica num disco escuro, com a borda na cor de como foi, pra
+        /// ler bem em cima da faixa. Embaixo, uma bolinha por letra, na cor de como cada uma foi.
+        /// </summary>
+        private void Letras(Painter2D p, Rect r, EventoDeArma evento, float zona, float faixa)
+        {
+            var centro = r.center;
+            float raio = Mathf.Min(r.width, r.height) * 0.47f;
+            Circulo(p, centro, raio, Fundo, true, 0);
+            int k = LetraDaVez(evento, _aberto.Passo);
+            if (k >= 0)
+            {
+                Circulo(p, centro, raio * 0.5f, Zona, false, raio * zona);
+                Circulo(p, centro, raio * 0.5f, Critico, false, Mathf.Max(2f, raio * faixa));
+                var leitura = LeituraDaLetra(evento, k);
+                Circulo(p, centro, raio * 0.28f, FundoDaLetra, true, 0);
+                Circulo(p, centro, raio * 0.28f, CorDaLetra(leitura, Cursor), false, 2f);
+                if (leitura == null)
+                {
+                    double janela = evento.Janela ?? 1;
+                    float progresso = Mathf.Clamp01((float)((_aberto.Passo - (evento.Notas[k] - janela)) / (2 * janela)));
+                    Circulo(p, centro, Mathf.Max(1f, raio * (1f - progresso)), Cursor, false, 3f);
+                }
+            }
+            int total = evento.Letras?.Count ?? 0;
+            for (int i = 0; i < total; i++)
+            {
+                var ponto = new Vector2(centro.x + (i - (total - 1) / 2f) * raio * 0.22f, centro.y + raio * 0.78f);
+                var cor = k >= 0 && i > k ? Apagada : CorDaLetra(LeituraDaLetra(evento, i), i == k ? Cursor : Errou);
+                Circulo(p, ponto, raio * 0.05f, cor, true, 0);
+            }
         }
 
         /// <summary>O símbolo fraco, o traço do dedo por cima e o tempo que resta embaixo.</summary>

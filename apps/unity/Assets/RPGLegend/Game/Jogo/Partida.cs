@@ -43,6 +43,8 @@ namespace RPGLegend.Game.Jogo
         public LutaEmTempoReal Luta { get; private set; }
         /// <summary>O pet da conta (os bônus de combate dele); quem abre a partida diz qual é, quando souber.</summary>
         public string Pet;
+        /// <summary>Jogando no teclado (o PC): na luta, o cajado pede letras em vez do desenho.</summary>
+        public bool Teclado;
         /// <summary>Onde o herói está na sala agora: é onde a luta começa quando a sala vira de monstro (o mímico).</summary>
         public Func<Walker> PosicaoDoHeroi;
 
@@ -248,7 +250,7 @@ namespace RPGLegend.Game.Jogo
         private void AbrirLuta(Walker chegada)
         {
             if (!(Estado is EstadoNaMasmorra masmorra)) return;
-            var quadro = Arenas.AbrirLuta(masmorra, chegada, Pet);
+            var quadro = Arenas.AbrirLuta(masmorra, chegada, Pet, Teclado);
             Luta = quadro.Luta;
             Estado = Luta.Estado;
             MarcarParaSalvar();

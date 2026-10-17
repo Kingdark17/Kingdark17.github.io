@@ -132,7 +132,8 @@ namespace RPGLegend.Game.Jogo
                 return false;
             }
 
-            _partida = new Partida(slot, estado, assinatura) { Agora = AgoraMs };
+            // No PC o cajado pede letras (desenhar com o mouse é mais difícil que com o dedo); no celular, o desenho.
+            _partida = new Partida(slot, estado, assinatura) { Agora = AgoraMs, Teclado = !Application.isMobilePlatform };
             _partida.Mudou += Redesenhar;
             _partida.SaiuDaSecreta += direcao =>
             {

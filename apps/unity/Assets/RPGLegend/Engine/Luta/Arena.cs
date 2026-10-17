@@ -106,6 +106,8 @@ namespace RPGLegend.Engine
         public EstadoDoJogo Estado;
         public Arena Arena;
         [KeepNull] public string Pet;
+        /// <summary>Jogada no teclado (o PC): o cajado pede letras em vez do desenho (EVENTO_NO_TECLADO).</summary>
+        public bool Teclado;
         [KeepNull] public string Fim;
         [KeepNull] public Item Loot;
     }
@@ -127,6 +129,8 @@ namespace RPGLegend.Engine
         public bool? Soltar;
         public bool? Tocar;
         public DedoNoDesenho Dedo;
+        /// <summary>Letras: a tecla de letra apertada neste passo.</summary>
+        public string Tecla;
         public string Poder;
         public string Item;
         public bool? Menu;
@@ -216,6 +220,7 @@ namespace RPGLegend.Engine
             public EstadoDoJogo Estado;
             public Arena Arena;
             public string Pet;
+            public bool Teclado;
             public string Fim;
             public Item Loot;
             public RngFn Rng;
@@ -229,9 +234,10 @@ namespace RPGLegend.Engine
         /// TS: abrirLuta — prepara os monstros e o herói (<see cref="FimDaLuta.PrepararLuta"/>), põe os monstros no
         /// palco (os caídos ficam no lugar, apagados), o coração no meio da caixa e os companheiros vivos ao lado.
         /// O alvo começa no primeiro de pé. <paramref name="chegada"/> é por onde o herói entrou: a luta guarda
-        /// pra ele voltar ali quando acabar.
+        /// pra ele voltar ali quando acabar. <paramref name="teclado"/>: jogada no PC, onde o cajado pede letras em
+        /// vez do desenho.
         /// </summary>
-        public static QuadroDaLuta AbrirLuta(EstadoNaMasmorra estado, Walker chegada, string pet = null)
+        public static QuadroDaLuta AbrirLuta(EstadoNaMasmorra estado, Walker chegada, string pet = null, bool teclado = false)
         {
             var preparada = FimDaLuta.PrepararLuta(estado);
             var sala = (DungeonCell)Estados.CelulaAtual(preparada.Estado);
@@ -284,7 +290,7 @@ namespace RPGLegend.Engine
             foreach (var texto in preparada.Log) acontecimentos.Add(new Acontecimento { Tipo = "diario", Texto = texto });
             return new QuadroDaLuta
             {
-                Luta = new LutaEmTempoReal { Estado = preparada.Estado, Arena = arena, Pet = pet, Fim = null, Loot = null },
+                Luta = new LutaEmTempoReal { Estado = preparada.Estado, Arena = arena, Pet = pet, Teclado = teclado, Fim = null, Loot = null },
                 Acontecimentos = acontecimentos,
             };
         }
@@ -299,7 +305,7 @@ namespace RPGLegend.Engine
         public static QuadroDaLuta PassoDaLuta(LutaEmTempoReal luta, EntradaDaLuta entrada, RngFn rng, Func<double> now = null)
         {
             if (luta.Fim != null) return new QuadroDaLuta { Luta = luta, Acontecimentos = new List<Acontecimento>() };
-            var l = new Luta { Estado = luta.Estado, Arena = CopiarArena(luta.Arena), Pet = luta.Pet, Fim = luta.Fim, Loot = luta.Loot, Rng = rng, Now = now };
+            var l = new Luta { Estado = luta.Estado, Arena = CopiarArena(luta.Arena), Pet = luta.Pet, Teclado = luta.Teclado, Fim = luta.Fim, Loot = luta.Loot, Rng = rng, Now = now };
 
             if (entrada.Mirar != null) Mirar(l, entrada.Mirar.Value);
             if (l.Arena.Evento != null) SeguirEvento(l, entrada);
@@ -316,7 +322,7 @@ namespace RPGLegend.Engine
 
             return new QuadroDaLuta
             {
-                Luta = new LutaEmTempoReal { Estado = l.Estado, Arena = l.Arena, Pet = l.Pet, Fim = l.Fim, Loot = l.Loot },
+                Luta = new LutaEmTempoReal { Estado = l.Estado, Arena = l.Arena, Pet = l.Pet, Teclado = l.Teclado, Fim = l.Fim, Loot = l.Loot },
                 Acontecimentos = l.Acontecimentos,
             };
         }
@@ -373,6 +379,7 @@ namespace RPGLegend.Engine
                         Soltou = j.Soltou,
                         Toques = j.Toques != null ? new List<double>(j.Toques) : null,
                         Traco = j.Traco != null ? new List<PontoDoTraco>(j.Traco) : null,
+                        Teclas = j.Teclas != null ? new List<TeclaDoEvento>(j.Teclas) : null,
                     },
                     Alvo = arena.Evento.Alvo,
                     Estilo = arena.Evento.Estilo,
@@ -476,7 +483,7 @@ namespace RPGLegend.Engine
             if (alvo == null) return;
             var hero = Masmorra(l).Hero;
             string estilo = EstiloDoBotao(hero);
-            var evento = EventosDeArma.EventoDoAtaque(hero, estilo, l.Rng);
+            var evento = EventosDeArma.EventoDoAtaque(hero, estilo, l.Rng, l.Teclado);
             l.Arena.Evento = new EventoAberto { Evento = evento, Passo = 0, Jogada = new JogadaDoEvento(), Alvo = alvo.Value, Estilo = estilo };
         }
 
@@ -539,6 +546,18 @@ namespace RPGLegend.Engine
                     }
                     break;
                 }
+                case TiposDeEvento.Letras:
+                    if (Js.Truthy(entrada.Tecla) && passo <= evento.Duracao)
+                    {
+                        var teclas = jogada.Teclas != null ? new List<TeclaDoEvento>(jogada.Teclas) : new List<TeclaDoEvento>();
+                        teclas.Add(new TeclaDoEvento { Letra = entrada.Tecla, T = passo });
+                        jogada.Teclas = teclas;
+                        // Uma tecla na janela da última letra decide ela: não sobra nada pra apertar.
+                        var batidas = evento.Notas ?? new List<double>();
+                        double ultima = batidas.Count > 0 ? batidas[batidas.Count - 1] : 0;
+                        if (passo >= ultima - (evento.Janela ?? 0)) pronto = true;
+                    }
+                    break;
             }
 
             if (pronto) Golpear(l);
@@ -1080,6 +1099,6 @@ namespace RPGLegend.Engine
         // ---------- pra tela ----------
 
         /// <summary>TS: eventoDoBotao — o evento que o botão de ataque abriria agora, sem sortear nada.</summary>
-        public static string EventoDoBotao(Hero hero) => EventosDeArma.EventoDaArma(hero.Equip.Get("arma")?.TemplateId);
+        public static string EventoDoBotao(Hero hero, bool teclado = false) => EventosDeArma.EventoDaArma(hero.Equip.Get("arma")?.TemplateId, teclado);
     }
 }

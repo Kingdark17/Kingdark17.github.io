@@ -10,6 +10,7 @@ namespace RPGLegend.Engine
         public const string Circulo = "circulo";
         public const string Carga = "carga";
         public const string Desenho = "desenho";
+        public const string Letras = "letras";
         public const string Ritmo = "ritmo";
         public const string ToqueDuplo = "toque_duplo";
     }
@@ -23,12 +24,21 @@ namespace RPGLegend.Engine
         public double Zona;
         /// <summary>O máximo que o evento dura, em passos: a câmera lenta dura isso.</summary>
         public double Duracao;
-        /// <summary>Ritmo e toque duplo: em que passo cada nota bate.</summary>
+        /// <summary>Ritmo, toque duplo e letras: em que passo cada nota bate.</summary>
         public List<double> Notas;
-        /// <summary>Ritmo e toque duplo: a meia janela de cada nota, em passos.</summary>
+        /// <summary>Ritmo, toque duplo e letras: a meia janela de cada nota, em passos.</summary>
         public double? Janela;
         /// <summary>Desenho: o símbolo sorteado, uma chave de SIMBOLOS.</summary>
         public string Simbolo;
+        /// <summary>Letras: a letra de cada nota, em ordem.</summary>
+        public List<string> Letras;
+    }
+
+    /// <summary>TS: TeclaDoEvento — uma tecla de letra apertada no evento: qual, e em que passo.</summary>
+    public sealed class TeclaDoEvento
+    {
+        public string Letra;
+        public double T;
     }
 
     /// <summary>TS: PontoDoTraco — um ponto do traço do dedo: onde, na caixa do desenho, e em que passo.</summary>
@@ -53,6 +63,8 @@ namespace RPGLegend.Engine
         public List<double> Toques;
         /// <summary>Desenho: os pontos do traço, em ordem.</summary>
         public List<PontoDoTraco> Traco;
+        /// <summary>Letras: as teclas apertadas, em ordem.</summary>
+        public List<TeclaDoEvento> Teclas;
     }
 
     /// <summary>As tabelas de luta/eventos-de-arma.ts (fixtures/data/luta/eventos-de-arma.json).</summary>
@@ -60,6 +72,8 @@ namespace RPGLegend.Engine
     {
         [JsName("EVENTO_POR_ARMA")] public OrderedMap<string> EventoPorArma = new OrderedMap<string>();
         [JsName("EVENTO_SEM_ARMA")] public string EventoSemArma;
+        /// <summary>No teclado (o PC), o evento que troca: o desenho do cajado vira as letras.</summary>
+        [JsName("EVENTO_NO_TECLADO")] public OrderedMap<string> EventoNoTeclado = new OrderedMap<string>();
         [JsName("DURACAO_DA_BARRA")] public double DuracaoDaBarra;
         [JsName("DURACAO_DO_CIRCULO")] public double DuracaoDoCirculo;
         [JsName("DURACAO_DA_CARGA")] public double DuracaoDaCarga;
@@ -74,6 +88,10 @@ namespace RPGLegend.Engine
         [JsName("ERRO_NA_PONTA")] public double ErroNaPonta;
         [JsName("PASSO_DO_TRACO")] public double PassoDoTraco;
         [JsName("PONTOS_MAXIMOS_DO_TRACO")] public double PontosMaximosDoTraco;
+        /// <summary>As letras do cajado no teclado: quatro da mão direita que nenhum controle da luta usa.</summary>
+        [JsName("LETRAS_DO_TECLADO")] public List<string> LetrasDoTeclado;
+        [JsName("NOTAS_DAS_LETRAS")] public List<double> NotasDasLetras;
+        [JsName("JANELA_DAS_LETRAS")] public double JanelaDasLetras;
         /// <summary>Os símbolos do cajado: cada um, os pontos [x, y] do traço, na caixa de 0 a 1000.</summary>
         [JsName("SIMBOLOS")] public OrderedMap<List<List<double>>> Simbolos = new OrderedMap<List<List<double>>>();
     }
@@ -93,7 +111,7 @@ namespace RPGLegend.Engine
     /// <summary>
     /// Port de shared/src/luta/eventos-de-arma.ts: o evento de mira de cada arma na luta em tempo real do app
     /// (espada e maça: a barra; arco: a bolinha que encolhe; machado e marreta: segurar e soltar na faixa;
-    /// cajado: passar o dedo pelo símbolo; violão: o ritmo; adaga: dois toques). Todo evento termina numa
+    /// cajado: passar o dedo pelo símbolo, e no PC as letras com o aro; violão: o ritmo; adaga: dois toques). Todo evento termina numa
     /// <see cref="LeituraDaMira"/> pela mesma <see cref="Attack.LerMira"/>, e o golpe segue em
     /// <see cref="Attack.ResolverGolpe"/>. Tempo em passos (60 por segundo) e desenho em inteiros.
     /// </summary>
@@ -101,21 +119,25 @@ namespace RPGLegend.Engine
     {
         private static EventosDeArmaData D => GameData.EventosDeArmaTable;
 
-        /// <summary>TS: eventoDaArma — o evento da arma pelo id do modelo; sem arma, ou arma sem evento, a barra.</summary>
-        public static string EventoDaArma(string templateId)
+        /// <summary>
+        /// TS: eventoDaArma — o evento da arma pelo id do modelo; sem arma, ou arma sem evento, a barra. No teclado,
+        /// o que troca troca (EVENTO_NO_TECLADO).
+        /// </summary>
+        public static string EventoDaArma(string templateId, bool teclado = false)
         {
-            if (Js.Truthy(templateId) && D.EventoPorArma.TryGet(templateId, out var tipo)) return tipo;
-            return D.EventoSemArma;
+            string tipo = Js.Truthy(templateId) && D.EventoPorArma.TryGet(templateId, out var daArma) ? daArma : D.EventoSemArma;
+            if (teclado && D.EventoNoTeclado.TryGet(tipo, out var noTeclado)) return noTeclado;
+            return tipo;
         }
 
         /// <summary>
         /// TS: eventoDoAtaque — o evento que abre quando o herói aperta o ataque: o da arma na mão, com a zona
-        /// deste estilo de ataque. Só o desenho sorteia (o símbolo, um número).
+        /// deste estilo de ataque. Só o desenho e as letras sorteiam (o símbolo, um número; uma letra por nota).
         /// </summary>
-        public static EventoDeArma EventoDoAtaque(Hero hero, string estilo, RngFn rng = null)
+        public static EventoDeArma EventoDoAtaque(Hero hero, string estilo, RngFn rng = null, bool teclado = false)
         {
             rng = rng ?? Rng.Default;
-            string tipo = EventoDaArma(hero.Equip.Get("arma")?.TemplateId);
+            string tipo = EventoDaArma(hero.Equip.Get("arma")?.TemplateId, teclado);
             double zona = Attack.ZonaDoAtaque(hero, estilo);
             switch (tipo)
             {
@@ -132,6 +154,12 @@ namespace RPGLegend.Engine
                     var nomes = D.Simbolos.Keys;
                     return new EventoDeArma { Tipo = tipo, Zona = zona, Duracao = D.DuracaoDoDesenho, Simbolo = nomes[(int)Rng.RandomInt(nomes.Count, rng)] };
                 }
+                case TiposDeEvento.Letras:
+                {
+                    var evento = Notas(tipo, zona, D.NotasDasLetras, D.JanelaDasLetras);
+                    evento.Letras = SortearLetras(D.NotasDasLetras.Count, rng);
+                    return evento;
+                }
                 default:
                     return new EventoDeArma { Tipo = tipo, Zona = zona, Duracao = D.DuracaoDaBarra };
             }
@@ -139,6 +167,20 @@ namespace RPGLegend.Engine
 
         private static EventoDeArma Notas(string tipo, double zona, List<double> batidas, double janela) =>
             new EventoDeArma { Tipo = tipo, Zona = zona, Duracao = batidas[batidas.Count - 1] + janela, Notas = new List<double>(batidas), Janela = janela };
+
+        /// <summary>Uma letra por nota, sem repetir a de antes: cada uma é uma tecla nova pra achar.</summary>
+        private static List<string> SortearLetras(int quantas, RngFn rng)
+        {
+            var letras = new List<string>(quantas);
+            for (int i = 0; i < quantas; i++)
+            {
+                var podem = new List<string>();
+                foreach (var letra in D.LetrasDoTeclado)
+                    if (i == 0 || letra != letras[i - 1]) podem.Add(letra);
+                letras.Add(podem[(int)Rng.RandomInt(podem.Count, rng)]);
+            }
+            return letras;
+        }
 
         /// <summary>
         /// TS: lerEvento — lê o que a pessoa fez no evento. Número fora do evento (passo negativo, quebrado, depois
@@ -158,6 +200,8 @@ namespace RPGLegend.Engine
                     return LerNotas(evento, jogada.Toques ?? new List<double>());
                 case TiposDeEvento.Desenho:
                     return LerDesenho(evento, jogada.Traco ?? new List<PontoDoTraco>());
+                case TiposDeEvento.Letras:
+                    return LerLetras(evento, jogada.Teclas ?? new List<TeclaDoEvento>());
                 default:
                     throw new EngineError("evento desconhecido: " + Js.Str(evento.Tipo), "RangeError");
             }
@@ -225,7 +269,59 @@ namespace RPGLegend.Engine
                 usados[achou] = true;
                 leituras.Add(Attack.LerMira(zona, 0.5 + (toques[achou] - batida) / (2 * janela)));
             }
+            return JuntarNotas(zona, leituras);
+        }
 
+        /// <summary>
+        /// Letras: uma por vez. A janela de cada uma vai da batida menos a janela até a batida mais a janela, sem o
+        /// último passo (que já é da próxima), e a letra fica com a primeira tecla apertada ali; se for outra letra,
+        /// perdeu. Cada letra é uma régua pequena, como as notas do ritmo, e elas se juntam do mesmo jeito.
+        /// </summary>
+        private static LeituraDaMira LerLetras(EventoDeArma evento, List<TeclaDoEvento> teclas)
+        {
+            string tipo = evento.Tipo;
+            double zona = evento.Zona;
+            var batidas = evento.Notas ?? new List<double>();
+            double janela = evento.Janela ?? 0;
+            var letras = evento.Letras ?? new List<string>();
+            double anterior = 0;
+            foreach (var tecla in teclas)
+            {
+                ConferirPasso(tecla.T, evento.Duracao, "tecla no passo", tipo);
+                if (tecla.T < anterior) throw new EngineError("tecla no passo " + Js.NumberToString(tecla.T) + " antes da anterior (" + tipo + ")", "RangeError");
+                anterior = tecla.T;
+            }
+
+            var leituras = new List<LeituraDaMira>(batidas.Count);
+            for (int i = 0; i < batidas.Count; i++)
+            {
+                double batida = batidas[i];
+                TeclaDoEvento achou = null;
+                foreach (var tecla in teclas)
+                {
+                    if (tecla.T >= batida - janela && tecla.T < batida + janela)
+                    {
+                        achou = tecla;
+                        break;
+                    }
+                }
+                string esperada = i < letras.Count ? letras[i] : null;
+                if (achou == null || achou.Letra != esperada)
+                {
+                    leituras.Add(Attack.LerMira(zona, null));
+                    continue;
+                }
+                leituras.Add(Attack.LerMira(zona, 0.5 + (achou.T - batida) / (2 * janela)));
+            }
+            return JuntarNotas(zona, leituras);
+        }
+
+        /// <summary>
+        /// As notas juntas: a força é a média delas (nota perdida vale zero), nunca abaixo da borda se alguma
+        /// acertou; crita quem crita todas.
+        /// </summary>
+        private static LeituraDaMira JuntarNotas(double zona, List<LeituraDaMira> leituras)
+        {
             bool algum = false, todosCriticos = true;
             double soma = 0;
             foreach (var l in leituras)
@@ -238,7 +334,7 @@ namespace RPGLegend.Engine
             return new LeituraDaMira
             {
                 Acerto = true,
-                Forca = Js.Max(Attack.ForcaNaBorda, Js.Round(soma / batidas.Count * 100) / 100),
+                Forca = Js.Max(Attack.ForcaNaBorda, Js.Round(soma / leituras.Count * 100) / 100),
                 Critico = todosCriticos,
             };
         }

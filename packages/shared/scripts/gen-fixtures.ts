@@ -3681,6 +3681,7 @@ modulo('luta');
 
 for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'constructor', 'escudo']) {
   caso(`eventoDaArma: ${arma}`, 'eventoDaArma', { templateId: arma }, (a) => E.eventoDaArma(a.templateId));
+  caso(`eventoDaArma: ${arma} no teclado`, 'eventoDaArma', { templateId: arma, teclado: true }, (a) => E.eventoDaArma(a.templateId, a.teclado));
 }
 
 {
@@ -3708,6 +3709,17 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
   }
   caso('eventoDoAtaque: necromante de cajado, golpe físico', 'eventoDoAtaque', { hero: heroi({ classe: 'necromante' }), estilo: 'normal' }, (a, ctx) =>
     E.eventoDoAtaque(a.hero, a.estilo as AttackStyle, ctx.rng), { rng: { seed: 77 } });
+
+  // No teclado: o cajado sorteia uma letra por nota, sem repetir a de antes; as outras armas não mudam.
+  const noTeclado = (nome: string, hero: Hero, estilo: AttackStyle, rng: RngSpec) =>
+    caso(`eventoDoAtaque: ${nome} no teclado`, 'eventoDoAtaque', { hero, estilo, teclado: true }, (a, ctx) => E.eventoDoAtaque(a.hero, a.estilo, ctx.rng, a.teclado), { rng });
+  for (const sorteios of [[0, 0, 0], [0.99, 0.99, 0.99], [0.3, 0.5, 0.8], [0.6, 0.1, 0.9], [0.25, 0.34, 0.67]]) {
+    noTeclado(`mago de cajado, sorteios ${sorteios.join(' ')}`, mago, 'magic', { sequence: sorteios });
+  }
+  noTeclado('necromante de cajado, golpe físico', heroi({ classe: 'necromante' }), 'normal', { seed: 78 });
+  noTeclado('bárbaro de espada', heroi({ arma: 'espada' }), 'normal', SEM_SORTEIO);
+  noTeclado('bardo de violão', heroi({ classe: 'bardo', arma: 'violao' }), 'normal', SEM_SORTEIO);
+  noTeclado('mão vazia', heroi({ arma: null }), 'normal', SEM_SORTEIO);
 }
 
 // ---------- a leitura ----------
@@ -3814,6 +3826,41 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     le(`desenho, lote ${i}`, desenho(alvo, umDe([0.5, 2 / 3, 0.4, 0.85])), { traco });
   }
 
+  // A leitura com uma régua de números fixos: os da tabela podem mudar sem mexer nestes casos.
+  const letras = (zona: number, quais = ['U', 'O', 'I']): EventoDeArma => ({
+    tipo: 'letras',
+    zona,
+    duracao: 144,
+    notas: [24, 72, 120],
+    janela: 24,
+    letras: quais,
+  });
+  const teclas = (...lista: Array<[string, number]>) => lista.map(([letra, t]) => ({ letra, t }));
+  for (const [nome, lista] of [
+    ['as três em cima', teclas(['U', 24], ['O', 72], ['I', 120])],
+    ['um passo fora em cada', teclas(['U', 25], ['O', 71], ['I', 121])],
+    ['a primeira atrasada 6', teclas(['U', 30], ['O', 72], ['I', 120])],
+    ['a segunda errada', teclas(['U', 24], ['P', 72], ['I', 120])],
+    ['a errada antes da certa na mesma janela', teclas(['U', 24], ['P', 70], ['O', 72], ['I', 120])],
+    ['o passo em que a letra some já é da próxima', teclas(['U', 24], ['O', 48], ['O', 72], ['I', 120])],
+    ['a última no último passo da janela', teclas(['U', 24], ['O', 72], ['I', 143])],
+    ['tecla no fim do evento não conta', teclas(['U', 24], ['O', 72], ['I', 144])],
+    ['só a do meio', teclas(['O', 72])],
+    ['duas no mesmo passo', teclas(['U', 24], ['O', 72], ['P', 72], ['I', 120])],
+    ['letra minúscula não é a mesma', teclas(['u', 24], ['o', 72], ['i', 120])],
+    ['aperta todas sem parar', Array.from({ length: 145 }, (_, t) => ({ letra: ['U', 'I', 'O', 'P'][t % 4] as string, t }))],
+    ['nenhuma tecla', []],
+  ] as const) {
+    le(`letras, ${nome}`, letras(0.5), { teclas: [...lista] });
+  }
+  le('letras da classe, um pouco fora', letras(2 / 3, ['P', 'U', 'O']), { teclas: teclas(['P', 28], ['U', 66], ['O', 126]) });
+  le('letras com zona apertada', letras(0.4, ['I', 'P', 'U']), { teclas: teclas(['I', 26], ['P', 72], ['U', 117]) });
+  le('letras, sem o campo das teclas', letras(0.5), {});
+  le('letras, sem as letras no evento', { tipo: 'letras', zona: 0.5, duracao: 144, notas: [24, 72, 120], janela: 24 }, { teclas: teclas(['U', 24]) });
+  le('letras, tecla voltando lança', letras(0.5), { teclas: teclas(['O', 72], ['U', 24]) });
+  le('letras, tecla depois do fim lança', letras(0.5), { teclas: teclas(['U', 24], ['O', 145]) });
+  le('letras, passo quebrado lança', letras(0.5), { teclas: teclas(['U', 24.5]) });
+
   le('evento desconhecido lança', { tipo: 'flauta' as never, zona: 0.5, duracao: 10 }, {});
 }
 
@@ -3874,6 +3921,8 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
   ] as const) {
     caso(`abrirLuta: ${nome}`, 'abrirLuta', { estado, chegada: E.roomArrival(chegada as Direction | null), pet }, (a) => E.abrirLuta(a.estado, a.chegada, a.pet as never));
   }
+  caso('abrirLuta: no PC (teclado)', 'abrirLuta', { estado: salaCom([bicho('zumbi')]), chegada: E.roomArrival(null), pet: null, teclado: true }, (a) =>
+    E.abrirLuta(a.estado, a.chegada, a.pet, a.teclado));
 
   const simula = (nome: string, luta: LutaEmTempoReal, entradas: EntradaDaLuta[], rng: RngSpec) =>
     caso(`simularLuta: ${nome}`, 'simularLuta', { luta, entradas }, (a, ctx) => E.simularLuta(a.luta, a.entradas, ctx.rng, ctx.now), { rng, now: AGORA });
@@ -3930,6 +3979,27 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
   }
   simula('mago sem mana abre o desenho do golpe físico', abrir({ ...zumbi(), hero: { ...comArma('mago', 'cajado'), mp: 0 } }), golpe(60, { 40: { x: 0, y: 0, tocar: true } }), { seed: 812 });
 
+  // O cajado no PC: as letras saem dos primeiros sorteios da luta, os do aperto; a tecla da última fecha o evento.
+  {
+    const noPc = (classe: string) => E.abrirLuta({ ...zumbi(), hero: comArma(classe, 'cajado') }, E.roomArrival(null), null, true).luta;
+    const letrasDe = (luta: LutaEmTempoReal, semente: number) => E.passoDaLuta(luta, { x: 0, y: 0, atacar: true }, E.seededRng(semente)).luta.arena.evento?.evento.letras ?? [];
+    const nasTeclas = (lista: Array<[number, string | undefined]>): Record<number, EntradaDaLuta> => Object.fromEntries(lista.map(([passo, tecla]) => [passo, { x: 0, y: 0, tecla }]));
+    const outra = (letra: string | undefined) => E.LETRAS_DO_TECLADO.find((l) => l !== letra);
+    const [b0, b1, b2] = E.NOTAS_DAS_LETRAS as [number, number, number];
+    const ateOFim = b2 + E.JANELA_DAS_LETRAS + 40;
+    const mago = noPc('mago');
+    const naHora = letrasDe(mago, 840);
+    simula('cajado no PC: as três letras na hora', mago, golpe(ateOFim, nasTeclas([[b0, naHora[0]], [b1, naHora[1]], [b2, naHora[2]]])), { seed: 840 });
+    const comErro = letrasDe(mago, 841);
+    simula('cajado no PC: a segunda errada, a terceira atrasada', mago, golpe(ateOFim, nasTeclas([[b0, comErro[0]], [b1 - 2, outra(comErro[1])], [b1, comErro[1]], [b2 + 8, comErro[2]]])), { seed: 841 });
+    simula('cajado no PC: sem apertar, o evento vai até o fim e erra', mago, golpe(ateOFim, {}), { seed: 842 });
+    simula('cajado no PC: o ataque e o toque não são letra', mago, golpe(ateOFim, { 10: { x: 0, y: 0, atacar: true }, [b0]: { x: 0, y: 0, tocar: true } }), { seed: 843 });
+    const necromante = noPc('necromante');
+    const doNecromante = letrasDe(necromante, 844);
+    simula('cajado do necromante no PC', necromante, golpe(ateOFim, nasTeclas([[b0 + 6, doNecromante[0]], [b1 - 6, doNecromante[1]], [b2, doNecromante[2]]])), { seed: 844 });
+    simula('espada no PC: a barra de sempre', E.abrirLuta({ ...zumbi(), hero: comArma('guerreiro', 'espada') }, E.roomArrival(null), null, true).luta, golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 845 });
+  }
+
   // O alvo: tocar no monstro, e quem cai passa a vez de alvo.
   const tres = (hero: Hero) => salaCom([bicho('zumbi', { hp: 600, maxHp: 600 }), bicho('slime', { hp: 600, maxHp: 600 }), bicho('aranha', { hp: 0 })], hero);
   simula('mirar no segundo, e o golpe cai nele', abrir(tres(comArma('guerreiro', 'espada'))), golpe(50, { 42: { x: 0, y: 0, tocar: true } }).map((e, i) => (i === 0 ? { ...e, mirar: 1 } : e)), { seed: 813 });
@@ -3969,14 +4039,16 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
   simula('o chefe leva ao andar seguinte', abrir(comGradeInteira(naSalaDaMasmorra({ ...chefe, monsters: [{ ...(chefe.monsters ?? [])[0]!, hp: 1 }], monsterIndex: 0, beaten: false }, forte({ arma: 'espada' }), []))), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 834 });
   simula('derrota', abrir(comGradeInteira(salaCom([bicho('aranha', { dmg: 60 })], { ...forte({ level: 8 }), hp: 5, gold: 300 })), null), parado(400), { seed: 835 });
 
-  // Robôs: mexem o coração, miram e apertam tudo ao acaso, com grupos e classes variados.
+  // Robôs: mexem o coração, miram e apertam tudo ao acaso, com grupos e classes variados. Os dois
+  // últimos jogam no PC, de cajado, apertando letras também.
   const especies = ['goblin', 'lobo_sombras', 'esqueleto', 'aranha', 'slime', 'orc', 'morcego', 'zumbi', 'elemental_fogo', 'espectro_gelado'];
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 10; i++) {
+    const noPc = i > 8;
     const r = E.seededRng(900 + i);
     const classe = CLASSES_IDS[Math.floor(r() * CLASSES_IDS.length)] as string;
     const tamanho = 1 + Math.floor(r() * 3);
     const monsters = Array.from({ length: tamanho }, () => bicho(especies[Math.floor(r() * especies.length)] as string, { hp: 40 + Math.floor(r() * 80) }));
-    const hero = { ...forte({ classe }), mp: 80, powerIds: [E.classById(classe)!.signatureId] };
+    const hero = { ...forte(noPc ? { classe, arma: 'cajado' } : { classe }), mp: 80, powerIds: [E.classById(classe)!.signatureId] };
     const party = r() < 0.5 ? [companheiro(CLASSES_IDS[Math.floor(r() * CLASSES_IDS.length)] as string)] : [];
     const estado = { ...comGradeInteira(salaCom(monsters, hero)), party, inventory: [item('pot_vida')] };
     let x = 0;
@@ -3995,9 +4067,11 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       else if (sorteio < 0.137) e.item = estado.inventory[0]!.uid;
       else if (sorteio < 0.15) e.mirar = Math.floor(r() * 4);
       else if (sorteio < 0.3) e.dedo = { x: Math.floor(r() * 1001), y: Math.floor(r() * 1001) };
+      else if (noPc && sorteio < 0.38) e.tecla = E.LETRAS_DO_TECLADO[Math.floor(r() * E.LETRAS_DO_TECLADO.length)];
       return e;
     });
-    simula(`robô ${i}: ${classe} contra ${monsters.map((m) => m.speciesId).join(', ')}`, abrir(estado, E.DIR_ORDER[i % 4] as Direction), entradas, { seed: 950 + i });
+    const luta = noPc ? E.abrirLuta(estado, E.roomArrival(E.DIR_ORDER[i % 4] as Direction), null, true).luta : abrir(estado, E.DIR_ORDER[i % 4] as Direction);
+    simula(`robô ${i}${noPc ? ' no PC' : ''}: ${classe} contra ${monsters.map((m) => m.speciesId).join(', ')}`, luta, entradas, { seed: 950 + i });
   }
 }
 

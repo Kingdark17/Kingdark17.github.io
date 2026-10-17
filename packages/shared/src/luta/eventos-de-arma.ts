@@ -8,7 +8,10 @@
  * - **arco:** uma bolinha que encolhe, e o toque quando ela bate no aro;
  * - **machado e marreta:** segurar pra encher e soltar na faixa — nem baixa,
  *   nem alta demais (passou do topo, estourou);
- * - **cajado:** passar o dedo por cima de um símbolo, como um feitiço;
+ * - **cajado:** passar o dedo por cima de um símbolo, como um feitiço. No
+ *   PC, onde desenhar com o mouse é mais difícil que com o dedo, são
+ *   letras: uma por vez (U, I, O ou P), com um aro fechando em volta, e a
+ *   tecla quando o aro encosta (ideia do usuário, 2026-10-17);
  * - **violão:** tocar no ritmo de três batidas;
  * - **adaga:** dois toques ligeiros em duas janelas curtas.
  *
@@ -37,7 +40,7 @@ import type { Hero } from '../hero/hero.js';
 import { FORCA_NA_BORDA, lerMira, zonaDoAtaque, type AttackStyle, type LeituraDaMira } from '../combat/resolve-attack.js';
 import { defaultRng, randomInt, type Rng } from '../rng.js';
 
-export type TipoDeEvento = 'barra' | 'circulo' | 'carga' | 'desenho' | 'ritmo' | 'toque_duplo';
+export type TipoDeEvento = 'barra' | 'circulo' | 'carga' | 'desenho' | 'letras' | 'ritmo' | 'toque_duplo';
 
 /** O evento de cada arma, pelo id do modelo. */
 export const EVENTO_POR_ARMA: Readonly<Record<string, TipoDeEvento>> = {
@@ -53,6 +56,14 @@ export const EVENTO_POR_ARMA: Readonly<Record<string, TipoDeEvento>> = {
 
 /** De mão vazia (ou com uma arma que ainda não tem evento), a barra. */
 export const EVENTO_SEM_ARMA: TipoDeEvento = 'barra';
+
+/**
+ * Jogando no teclado (o PC), o evento que troca: o desenho do cajado vira
+ * as letras. Os outros ficam como estão — o toque é apertar o ataque de novo.
+ */
+export const EVENTO_NO_TECLADO: Readonly<Record<string, TipoDeEvento>> = {
+  desenho: 'letras',
+};
 
 /** Quanto o cursor leva pra cruzar a barra: 1,4 s, a mesma do site. */
 export const DURACAO_DA_BARRA = 84;
@@ -108,6 +119,26 @@ export const PASSO_DO_TRACO = 25;
 export const PONTOS_MAXIMOS_DO_TRACO = 600;
 
 /**
+ * As letras do cajado no teclado: quatro da mão direita que nenhum controle
+ * da luta usa. A esquerda fica no WASD, desviando o coração.
+ */
+export const LETRAS_DO_TECLADO: readonly string[] = ['U', 'I', 'O', 'P'];
+
+/**
+ * Quando o aro de cada letra encosta nela, em passos desde o aperto. Uma
+ * letra por vez: cada uma fica na tela da batida menos a janela até a
+ * batida mais a janela, e a próxima aparece quando ela some.
+ */
+export const NOTAS_DAS_LETRAS: readonly number[] = [36, 108, 180];
+
+/**
+ * A meia janela de cada letra: o aro leva isto pra fechar até ela (0,6 s,
+ * perto dos 0,7 s do arco) e isto pra sumir depois. Começou em 24 (0,4 s),
+ * e o usuário achou rápido (2026-10-17).
+ */
+export const JANELA_DAS_LETRAS = 36;
+
+/**
  * Os símbolos do cajado, de um traço só, na caixa de 0 a 1000, com os
  * pontos igualmente espaçados ao longo do traço (nenhum trecho pesa mais).
  * Gerados uma vez a partir das formas — círculo, triângulo, raio, espiral e
@@ -159,18 +190,26 @@ export interface EventoDeArma {
   zona: number;
   /** O máximo que o evento dura, em passos: a câmera lenta dura isso. */
   duracao: number;
-  /** Ritmo e toque duplo: em que passo cada nota bate. */
+  /** Ritmo, toque duplo e letras: em que passo cada nota bate. */
   notas?: number[];
-  /** Ritmo e toque duplo: a meia janela de cada nota, em passos. */
+  /** Ritmo, toque duplo e letras: a meia janela de cada nota, em passos. */
   janela?: number;
   /** Desenho: o símbolo sorteado, uma chave de `SIMBOLOS`. */
   simbolo?: string;
+  /** Letras: a letra de cada nota, em ordem. */
+  letras?: string[];
 }
 
 /** Um ponto do traço do dedo: onde, na caixa do desenho, e em que passo. */
 export interface PontoDoTraco {
   x: number;
   y: number;
+  t: number;
+}
+
+/** Uma tecla de letra apertada no evento: qual, e em que passo. */
+export interface TeclaDoEvento {
+  letra: string;
   t: number;
 }
 
@@ -187,24 +226,30 @@ export interface JogadaDoEvento {
   toques?: number[];
   /** Desenho: os pontos do traço, em ordem. */
   traco?: PontoDoTraco[];
+  /** Letras: as teclas apertadas, em ordem. */
+  teclas?: TeclaDoEvento[];
 }
 
 function proprio<T>(tabela: Readonly<Record<string, T>>, chave: string): T | undefined {
   return Object.prototype.hasOwnProperty.call(tabela, chave) ? tabela[chave] : undefined;
 }
 
-/** O evento da arma pelo id do modelo; sem arma, ou arma sem evento, a barra. */
-export function eventoDaArma(templateId: string | null | undefined): TipoDeEvento {
-  return (templateId ? proprio(EVENTO_POR_ARMA, templateId) : undefined) ?? EVENTO_SEM_ARMA;
+/**
+ * O evento da arma pelo id do modelo; sem arma, ou arma sem evento, a barra.
+ * No teclado, o que troca troca (`EVENTO_NO_TECLADO`).
+ */
+export function eventoDaArma(templateId: string | null | undefined, teclado = false): TipoDeEvento {
+  const tipo = (templateId ? proprio(EVENTO_POR_ARMA, templateId) : undefined) ?? EVENTO_SEM_ARMA;
+  return (teclado ? proprio(EVENTO_NO_TECLADO, tipo) : undefined) ?? tipo;
 }
 
 /**
  * O evento que abre quando o herói aperta o ataque: o da arma na mão, com a
- * zona deste estilo de ataque. Só o desenho sorteia (o símbolo); os outros
- * não tiram nada do `rng`.
+ * zona deste estilo de ataque. Só o desenho e as letras sorteiam (o símbolo;
+ * uma letra por nota); os outros não tiram nada do `rng`.
  */
-export function eventoDoAtaque(hero: Hero, estilo: AttackStyle, rng: Rng = defaultRng): EventoDeArma {
-  const tipo = eventoDaArma(hero.equip.arma?.templateId);
+export function eventoDoAtaque(hero: Hero, estilo: AttackStyle, rng: Rng = defaultRng, teclado = false): EventoDeArma {
+  const tipo = eventoDaArma(hero.equip.arma?.templateId, teclado);
   const zona = zonaDoAtaque(hero, estilo);
   switch (tipo) {
     case 'barra':
@@ -221,11 +266,23 @@ export function eventoDoAtaque(hero: Hero, estilo: AttackStyle, rng: Rng = defau
       const nomes = Object.keys(SIMBOLOS);
       return { tipo, zona, duracao: DURACAO_DO_DESENHO, simbolo: nomes[randomInt(nomes.length, rng)] as string };
     }
+    case 'letras':
+      return { ...notas(tipo, zona, NOTAS_DAS_LETRAS, JANELA_DAS_LETRAS), letras: sortearLetras(NOTAS_DAS_LETRAS.length, rng) };
   }
 }
 
 function notas(tipo: TipoDeEvento, zona: number, batidas: readonly number[], janela: number): EventoDeArma {
   return { tipo, zona, duracao: (batidas[batidas.length - 1] as number) + janela, notas: [...batidas], janela };
+}
+
+/** Uma letra por nota, sem repetir a de antes: cada uma é uma tecla nova pra achar. */
+function sortearLetras(quantas: number, rng: Rng): string[] {
+  const letras: string[] = [];
+  for (let i = 0; i < quantas; i++) {
+    const podem = LETRAS_DO_TECLADO.filter((letra) => i === 0 || letra !== letras[i - 1]);
+    letras.push(podem[randomInt(podem.length, rng)] as string);
+  }
+  return letras;
 }
 
 /**
@@ -248,6 +305,8 @@ export function lerEvento(evento: EventoDeArma, jogada: JogadaDoEvento): Leitura
       return lerNotas(evento, jogada.toques ?? []);
     case 'desenho':
       return lerDesenho(evento, jogada.traco ?? []);
+    case 'letras':
+      return lerLetras(evento, jogada.teclas ?? []);
     default:
       throw new RangeError(`evento desconhecido: ${String(tipo)}`);
   }
@@ -298,12 +357,46 @@ function lerNotas(evento: EventoDeArma, toques: readonly number[]): LeituraDaMir
     usados[i] = true;
     return lerMira(zona, 0.5 + ((toques[i] as number) - batida) / (2 * janela));
   });
+  return juntarNotas(zona, leituras);
+}
 
+/**
+ * Letras. Uma por vez: a janela de cada uma vai da batida menos a janela até
+ * a batida mais a janela, sem o último passo (que já é da próxima), e a
+ * letra fica com a **primeira** tecla apertada ali. Se for outra letra,
+ * perdeu: apertar todas não adianta. Cada letra é uma régua pequena, como as
+ * notas do ritmo, e elas se juntam do mesmo jeito.
+ */
+function lerLetras(evento: EventoDeArma, teclas: readonly TeclaDoEvento[]): LeituraDaMira {
+  const { tipo, zona, duracao } = evento;
+  const batidas = evento.notas ?? [];
+  const janela = evento.janela ?? 0;
+  const letras = evento.letras ?? [];
+  let anterior = 0;
+  for (const tecla of teclas) {
+    conferirPasso(tecla.t, duracao, 'tecla no passo', tipo);
+    if (tecla.t < anterior) throw new RangeError(`tecla no passo ${tecla.t} antes da anterior (${tipo})`);
+    anterior = tecla.t;
+  }
+
+  const leituras = batidas.map((batida, i) => {
+    const tecla = teclas.find((k) => k.t >= batida - janela && k.t < batida + janela);
+    if (!tecla || tecla.letra !== letras[i]) return lerMira(zona, null);
+    return lerMira(zona, 0.5 + (tecla.t - batida) / (2 * janela));
+  });
+  return juntarNotas(zona, leituras);
+}
+
+/**
+ * As notas juntas: a força é a média delas (nota perdida vale zero), nunca
+ * abaixo da borda se alguma acertou; crita quem crita todas.
+ */
+function juntarNotas(zona: number, leituras: readonly LeituraDaMira[]): LeituraDaMira {
   if (!leituras.some((l) => l.acerto)) return lerMira(zona, null);
   const soma = leituras.reduce((total, l) => total + l.forca, 0);
   return {
     acerto: true,
-    forca: Math.max(FORCA_NA_BORDA, Math.round((soma / batidas.length) * 100) / 100),
+    forca: Math.max(FORCA_NA_BORDA, Math.round((soma / leituras.length) * 100) / 100),
     critico: leituras.every((l) => l.critico),
   };
 }
