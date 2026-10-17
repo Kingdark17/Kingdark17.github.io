@@ -155,7 +155,11 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   um número a mais do rng. Os materiais (`items/materiais.ts`, desde
   2026-10-17) são os primeiros: o item guarda só o `degrau` (2 ou 3; ausente
   é o primeiro), +25% na base antes da raridade, chance crescendo com o andar
-  (o chefe dobra), e a loja do app vende até o degrau 2.
+  (o chefe dobra), e a loja do app vende até o degrau 2. As runas
+  (`items/runas.ts`, desde 2026-10-17) vieram depois: o item da runa guarda o
+  `tierDaRuna`, a arma guarda `runas` (`{runa, tier}`), e só a arena do app as
+  aplica — no site a arma vale só pelos atributos, e a runa só aparece na
+  mochila para descartar.
 
 - `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
   paridade exata: mesma entrada → mesmo resultado e a mesma sequência de
