@@ -21,7 +21,8 @@ namespace RPGLegend.Game.Jogo
     ///
     /// A diferença do site é a luta: onde o site abre a tela de combate por turnos, aqui começa a luta em tempo real
     /// (<see cref="Arenas"/>, etapa 5) — ao entrar na sala de monstro, ao abrir o baú que era mímico e ao voltar pra
-    /// uma partida fechada no meio de uma luta. Quando ela acaba, o herói fica na porta por onde entrou.
+    /// uma partida fechada no meio de uma luta. Quando ela acaba, o herói fica na porta por onde entrou. E o que a
+    /// sala faz nascer aqui é do app (<c>app: true</c>): as armas e armaduras podem vir com material (aço, ébano…).
     /// </summary>
     public sealed class Partida
     {
@@ -140,7 +141,7 @@ namespace RPGLegend.Game.Jogo
                 return true;
             }
 
-            var resultado = Salas.Interagir(passo.Estado, Rng.Default, Pet);
+            var resultado = Salas.Interagir(passo.Estado, Rng.Default, Pet, null, app: true);
             TocarSom(resultado.Som ?? "step");
             RegistrarMudanca(resultado.Estado, resultado.Aviso);
             Recadar(resultado.Recado ?? passo.Recado);
@@ -215,7 +216,7 @@ namespace RPGLegend.Game.Jogo
         /// <summary>TS: interagirAqui — o que a sala tem, acionado agora.</summary>
         private void InteragirAqui(Walker chegada = null)
         {
-            var resultado = Salas.Interagir(Estado, Rng.Default, Pet);
+            var resultado = Salas.Interagir(Estado, Rng.Default, Pet, null, app: true);
             if (resultado.Som != null) TocarSom(resultado.Som);
             RegistrarMudanca(resultado.Estado, resultado.Aviso);
             Recadar(resultado.Recado);

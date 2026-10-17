@@ -1094,6 +1094,72 @@ caso('randomItem: material fundo não ganha foundFloor', 'randomItem', { options
   E.randomItem({ ...a.options, rng, now } as never),
 { rng: { seed: 5 }, now: AGORA });
 
+// ---------- os materiais das peças (só do app) ----------
+
+constante('MATERIAIS', E.MATERIAIS);
+for (const degrau of [1, 2, 3]) caso(`multiplicadorDoDegrau: ${degrau}`, 'multiplicadorDoDegrau', { degrau }, (a) => E.multiplicadorDoDegrau(a.degrau));
+for (const andar of [1, 5, 6, 20, 25, 26, 37, 49, 50, 51, 74, 75, 76, 100, 300, 0, -4]) {
+  for (const chefe of [false, true]) {
+    caso(`chancesDoDegrau: andar ${andar}${chefe ? ', chefe' : ''}`, 'chancesDoDegrau', { andar, chefe }, (a) => E.chancesDoDegrau(a.andar, a.chefe));
+  }
+}
+for (const [andar, chefe, sorteio, teto] of [
+  [75, false, 0.1, 3],
+  [75, false, 0.2, 3],
+  [75, false, 0.55, 3],
+  [75, false, 0.6, 3],
+  [75, false, 0.1, 2],
+  [30, true, 0.05, 3],
+  [40, false, 0.3, 3],
+  [1, false, 0, 3],
+  [100, true, 0.999, 3],
+  [100, true, 0.29, 1],
+] as const) {
+  caso(`sortearDegrau: andar ${andar}${chefe ? ', chefe' : ''}, sorteio ${sorteio}, teto ${teto}`, 'sortearDegrau', { andar, chefe, teto }, (a, { rng }) => E.sortearDegrau(a.andar, a.chefe, rng, a.teto), {
+    rng: { sequence: [sorteio] },
+  });
+}
+for (const template of E.TEMPLATES) {
+  caso(`nomeComMaterial: ${template.id}`, 'nomeComMaterial', { template, degraus: [1, 2, 3, 4, 0, 2.5] }, (a) => a.degraus.map((d) => E.nomeComMaterial(a.template, d)));
+}
+for (const template of E.TEMPLATES.filter((t) => E.isEquippable(t.category))) {
+  for (const degrau of [2, 3]) {
+    caso(
+      `instantiate: ${template.id} no degrau ${degrau}`,
+      'instantiate',
+      { template, rarities: [E.RARITIES[0], E.RARITIES[2], E.RARITIES[5]], options: { now: AGORA, degrau } },
+      (a, { rng, now }) => a.rarities.map((rarity) => E.instantiate(a.template, rarity as never, { rng, now, degrau: a.options.degrau })),
+      { rng: { seed: 1 }, now: AGORA },
+    );
+  }
+}
+for (const degrau of [0, 9, 2.7, -1]) {
+  caso(`instantiate: espada no degrau ${degrau} (fica entre 1 e 3, inteiro)`, 'instantiate', { template: E.templateById('espada'), rarities: [E.RARITIES[2]], options: { now: AGORA, degrau } }, (a, { rng, now }) =>
+    a.rarities.map((rarity) => E.instantiate(a.template as never, rarity as never, { rng, now, degrau: a.options.degrau })),
+  { rng: { seed: 1 }, now: AGORA });
+}
+caso('instantiate: o arredondamento com o degrau', 'instantiate', { template: { ...TEMPLATE_DE_ARREDONDAMENTO, escada: 'metal' as const }, rarities: [E.RARITIES[0], E.RARITIES[3]], options: { now: AGORA, degrau: 2 } }, (a, { rng, now }) =>
+  a.rarities.map((rarity) => E.instantiate(a.template, rarity as never, { rng, now, degrau: a.options.degrau })),
+{ rng: { seed: 1 }, now: AGORA });
+{
+  const noApp = (nome: string, options: Record<string, unknown>, rng: RngSpec) =>
+    caso(`randomItem: app, ${nome}`, 'randomItem', { options: { ...options, now: AGORA, app: true } }, (a, { rng: r, now }) => E.randomItem({ ...a.options, rng: r, now } as never), { rng, now: AGORA });
+  for (const floor of [1, 30, 60, 100]) {
+    for (const seed of [1, 2, 3, 4, 5, 6]) noApp(`arma, andar ${floor}, seed ${seed}`, { category: 'arma', floor }, { seed });
+  }
+  for (const seed of [7, 8, 9, 10]) noApp(`armadura do chefe, andar 80, seed ${seed}`, { category: 'armadura', floor: 80, chefe: true }, { seed });
+  for (const seed of [11, 12, 13]) noApp(`qualquer categoria, andar 90, seed ${seed}`, { floor: 90 }, { seed });
+  noApp('espada no degrau 3, sorteio na mão', { category: 'arma', floor: 100 }, { sequence: [0, 0, 0.01, 0] });
+  noApp('espada no degrau 2, sorteio na mão', { category: 'arma', floor: 100 }, { sequence: [0, 0, 0.2, 0] });
+  noApp('teto 2 vira o 3 em 2', { category: 'arma', floor: 100, tetoDoDegrau: 2 }, { sequence: [0, 0, 0.01, 0] });
+  noApp('acessório não sorteia degrau', { category: 'acessorio', floor: 100 }, { sequence: [0, 0, 0.01, 0] });
+  noApp('consumível não sorteia degrau', { category: 'consumivel', floor: 100 }, { sequence: [0, 0, 0.01, 0] });
+  noApp('raridade forçada também sorteia o degrau', { category: 'armadura', rarity: 'epico', floor: 70 }, { sequence: [0.5, 0.05, 0] });
+  caso('randomItem: app false é o site', 'randomItem', { options: { category: 'arma', floor: 100, now: AGORA, app: false } }, (a, { rng, now }) =>
+    E.randomItem({ ...a.options, rng, now } as never),
+  { rng: { sequence: [0, 0, 0.01, 0] }, now: AGORA });
+}
+
 const ITENS_DE_NOME: Array<[string, Item]> = [
   ['espada comum', item('espada')],
   ['espada lendária', item('espada', 'lendario')],
@@ -1101,6 +1167,11 @@ const ITENS_DE_NOME: Array<[string, Item]> = [
   ['poção de mana incomum', item('pot_mana', 'incomum')],
   ['pergaminho épico', item('pergaminho', 'epico')],
   ['arco mítico', item('arco', 'mitico')],
+  ['espada de aço rara', { ...item('espada', 'raro'), degrau: 2 }],
+  ['botas de couro de dragão raras', { ...item('botas', 'raro'), degrau: 3 }],
+  ['escudo de ébano', { ...item('escudo'), degrau: 2 }],
+  ['robe de seda arcana mítico', { ...item('robe', 'mitico'), degrau: 3 }],
+  ['anel com degrau (acessório não tem material)', { ...item('anel_som', 'epico'), degrau: 3 }],
 ];
 for (const [nome, it] of ITENS_DE_NOME) {
   caso(`displayName: ${nome}`, 'displayName', { item: it }, (a) => E.displayName(a.item));
@@ -1953,6 +2024,19 @@ for (const [floor, rows, cols, seed, run, teacher] of ANDARES) {
     now: AGORA,
   });
 }
+// O andar gerado no app: os itens dos baús, das salas e da sala secreta podem vir com material.
+for (const [floor, seed, run] of [
+  [30, 4, undefined],
+  [60, 9, undefined],
+  [100, 100, undefined],
+  [25, 7, { dungeon: 'torre', difficulty: 'dificil' }],
+  [3, 3, undefined],
+] as Array<[number, number, DungeonRun | undefined]>) {
+  const options = { now: AGORA, app: true, ...(run ? { run } : {}) };
+  caso(`generateDungeonFloor: no app, andar ${floor}, seed ${seed}${run ? `, ${E.runKey(run)}` : ''}`, 'generateDungeonFloor', { floor, rows: 6, cols: 6, options }, (a, { rng, now }) =>
+    andarCompacto(E.generateDungeonFloor(a.floor, a.rows, a.cols, { ...a.options, rng, now })),
+  { rng: { seed }, now: AGORA });
+}
 
 {
   // Um andar com chefe, totem e professor, pra ter todo tipo de sala nos textos.
@@ -2236,6 +2320,20 @@ caso('rollForgeOutcome: pity 3 ainda pode piorar', 'rollForgeOutcome', { cfg: E.
   caso('resolveRestock: renova o ferreiro', 'resolveRestock', { hero: ferreiro, kind: 'blacksmith', floor: 5, restockCount: 2, options: { now: AGORA } }, (a, { rng, now }) =>
     E.resolveRestock(a.hero, a.kind as 'blacksmith', a.floor, a.restockCount, { rng, now }),
   { rng: { seed: 1 }, now: AGORA });
+  caso('resolveRestock: o ferreiro do app, no fundo', 'resolveRestock', { hero: ferreiro, kind: 'blacksmith', floor: 90, restockCount: 0, options: { now: AGORA, app: true } }, (a, { rng, now }) =>
+    E.resolveRestock(a.hero, a.kind as 'blacksmith', a.floor, a.restockCount, { rng, now, app: a.options.app }),
+  { rng: { seed: 2 }, now: AGORA });
+}
+
+// A loja do app: o ferreiro vende peça no degrau 2, nunca no 3; o vendedor itinerante não muda.
+for (const kind of ['blacksmith', 'shop'] as const) {
+  for (const floor of [3, 40, 90]) {
+    for (const seed of [1, 2, 3]) {
+      caso(`rollStock: ${kind} do app, andar ${floor}, seed ${seed}`, 'rollStock', { kind, floor, options: { now: AGORA, app: true } }, (a, { rng, now }) =>
+        E.rollStock(a.kind, a.floor, { rng, now, app: a.options.app }),
+      { rng: { seed }, now: AGORA });
+    }
+  }
 }
 
 // =====================================================================
@@ -2300,6 +2398,11 @@ for (const floor of [1, 5, 30, 0, -3, 2.7, Number.NaN]) caso(`eventXp: andar ${f
   re('estudar com intelecto 13 acha item (andar 1)', evento({ intelecto: 13 }), 1, 'estudar', 1);
   re('estudar com intelecto 13 acha item (andar 30)', evento({ intelecto: 13 }), 30, 'estudar', 2);
   re('examinar usa a mesma regra de estudar', evento({ intelecto: 13 }), 5, 'examinar', 3);
+  for (const [floor, seed] of [[60, 4], [90, 5], [90, 6], [1, 7]] as const) {
+    caso(`resolveEvent: estudar no app, andar ${floor}, seed ${seed}`, 'resolveEvent', { hero: evento({ intelecto: 13 }), floor, choice: 'estudar', options: { now: AGORA, app: true } }, (a, { rng, now }) =>
+      E.resolveEvent(a.hero, a.floor, a.choice as never, { rng, now, app: a.options.app }),
+    { rng: { seed }, now: AGORA });
+  }
   re('estudar com intelecto 12 falha e perde 8 de mana', evento({ intelecto: 12 }), 1, 'estudar');
   re('estudar falhando com pouca mana para em 0', evento({ intelecto: 12 }, { mp: 3 }), 1, 'estudar');
   re('rezar com sabedoria 13 enche vida e mana', evento({ sabedoria: 13 }), 1, 'rezar');
@@ -2652,6 +2755,11 @@ const veterano = naCidade(saveNovo({ extra: { masteryBattles: E.masteryBattlesFo
 entrar('segundo professor', veterano, sementeOnde((r) => r < 0.25), 76);
 entrar('aprendiz não encontra professor', naCidade(saveNovo({ classe: null, extra: { masteryBattles: 300 } })), 30, 30);
 
+// No app, o andar de entrada pode ter item com material (pelo totem do 60, que o portão já conferiu).
+caso('entrarNaMasmorra: no app, pelo andar 60', 'entrarNaMasmorra', { estado: cidade, andar: 60, app: true }, (a, ctx) =>
+  E.entrarNaMasmorra(a.estado, ctx.rng, undefined, a.andar, ctx.now, a.app),
+{ rng: { seed: 61 }, now: AGORA });
+
 caso('voltarParaCidade: da masmorra', 'voltarParaCidade', { estado: E.andar(masmorra, primeiraPorta(masmorra)) }, (a) => E.voltarParaCidade(a.estado));
 
 function descer(nome: string, estado: EstadoNaMasmorra, semente: number): void {
@@ -2665,6 +2773,19 @@ descer('fundo da masmorra com o chefe vivo', fundo, 14);
 descer('fundo da masmorra', comChefe(fundo, true), 15);
 
 caso('avancarAndar: depois do chefe', 'avancarAndar', { estado: comChefe(andarDoChefe, true) }, (a, ctx) => E.avancarAndar(a.estado, ctx.rng, ctx.now), {
+  rng: { seed: 16 },
+  now: AGORA,
+});
+
+// No app, o andar de baixo pode ter item com material.
+const andar71 = E.entrarNaMasmorra(cidade, E.seededRng(71), undefined, 71, relogio);
+for (const semente of [72, 73]) {
+  caso(`descerEscada: no app, do andar 71, semente ${semente}`, 'descerEscada', { estado: andar71, app: true }, (a, ctx) => E.descerEscada(a.estado, ctx.rng, ctx.now, a.app), {
+    rng: { seed: semente },
+    now: AGORA,
+  });
+}
+caso('avancarAndar: no app, depois do chefe', 'avancarAndar', { estado: comChefe(andarDoChefe, true), app: true }, (a, ctx) => E.avancarAndar(a.estado, ctx.rng, ctx.now, a.app), {
   rng: { seed: 16 },
   now: AGORA,
 });
@@ -3182,6 +3303,20 @@ for (const [nome, loja, semente] of [
   caso(`renovarEstoque: ${nome}`, 'renovarEstoque', { loja }, (a, ctx) => E.renovarEstoque(a.loja, ctx.rng, ctx.now), { rng: { seed: semente }, now: AGORA });
 }
 
+// A loja do app: o ferreiro, no fundo, vende peça no degrau 2 do material (e a renovação também).
+for (const [nome, kind, semente] of [
+  ['ferreiro do app no andar 80', 'blacksmith', 59],
+  ['ferreiro do app no andar 80, outra semente', 'blacksmith', 60],
+  ['vendedor do app', 'shop', 61],
+] as const) {
+  caso(`abrirLoja: ${nome}`, 'abrirLoja', { estado: { ...naSalaDaCidade(kind), floor: 80 }, kind, app: true }, (a, ctx) => E.abrirLoja(a.estado, a.kind, ctx.rng, ctx.now, a.app), {
+    rng: { seed: semente },
+    now: AGORA,
+  });
+}
+const ferreiroDoApp = E.abrirLoja({ ...naSalaDaCidade('blacksmith', rico), floor: 80 }, 'blacksmith', E.seededRng(62), relogio, true);
+caso('renovarEstoque: ferreiro do app', 'renovarEstoque', { loja: ferreiroDoApp }, (a, ctx) => E.renovarEstoque(a.loja, ctx.rng, ctx.now), { rng: { seed: 63 }, now: AGORA });
+
 const ferreiro = lojaDe('blacksmith', rico, [espadaNova, minerio, item('essencia'), item('pedra_protecao')]);
 for (const [nome, loja, materialId, semente] of [
   ['com minério', ferreiro, 'minerio', 58],
@@ -3276,6 +3411,7 @@ caso('abrirEvento: aventureiro ferido', 'abrirEvento', { estado: naSalaDoEvento(
 caso('abrirEvento: já resolvido', 'abrirEvento', { estado: naSalaDoEvento('altar', { resolved: true }) }, (a) => E.abrirEvento(a.estado));
 caso('abrirEvento: sala sem evento', 'abrirEvento', { estado: naSalaDaMasmorra({ type: 'normal' }) }, (a) => E.abrirEvento(a.estado));
 caso('abrirEvento: evento desconhecido', 'abrirEvento', { estado: naSalaDoEvento('xyz') }, (a) => E.abrirEvento(a.estado));
+caso('abrirEvento: no app', 'abrirEvento', { estado: naSalaDoEvento('altar'), app: true }, (a) => E.abrirEvento(a.estado, a.app));
 constante('ESCOLHAS', E.ESCOLHAS);
 
 const fraco = heroi({ classe: 'guerreiro', extra: { hp: 3, gold: 5 } });
@@ -3305,6 +3441,17 @@ caso('escolher: evento já resolvido', 'escolher', { evento: E.abrirEvento(naSal
   E.escolher(a.evento, a.escolha as never, ctx.rng, ctx.now),
 { rng: { seed: 97 }, now: AGORA });
 caso('escolhas: altar', 'escolhas', { evento: E.abrirEvento(naSalaDoEvento('altar'))! }, (a) => E.escolhas(a.evento));
+{
+  // No app, o item de estudar pode vir com material.
+  const sabio = heroi({ classe: 'mago', attrs: { intelecto: 25 } });
+  for (const semente of [98, 99, 100]) {
+    const evento = E.abrirEvento({ ...naSalaDoEvento('altar', {}, sabio), floor: 90 }, true)!;
+    caso(`escolher: altar, estudar no app no andar 90, semente ${semente}`, 'escolher', { evento, escolha: 'estudar' }, (a, ctx) => E.escolher(a.evento, a.escolha as never, ctx.rng, ctx.now), {
+      rng: { seed: semente },
+      now: AGORA,
+    });
+  }
+}
 
 // --- professor ---
 
@@ -3387,6 +3534,10 @@ for (const [nome, portao, semente] of [
 ] as const) {
   caso(`entrar: ${nome}`, 'entrar', { portao }, (a, ctx) => E.entrar(a.portao as never, ctx.rng, ctx.now), { rng: { seed: semente }, now: AGORA });
 }
+caso('abrirPortao: no app', 'abrirPortao', { estado: naCidadeDoVeterano, app: true }, (a) => E.abrirPortao(a.estado, a.app));
+caso('entrar: no app, pelo totem do 40 da floresta', 'entrar', { portao: E.escolherAndar(E.escolherMasmorra(E.abrirPortao(naCidadeDoVeterano, true), 'floresta'), 40) }, (a, ctx) =>
+  E.entrar(a.portao as never, ctx.rng, ctx.now),
+{ rng: { seed: 102 }, now: AGORA });
 
 // --- guilda ---
 
@@ -3594,6 +3745,29 @@ caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: 
   limpa('o chefe do último andar zera a masmorra', comGradeInteira(noFundo.estado), noFundo.abatido, { seed: 43 });
   limpa('zera no Difícil da Caverna', comGradeInteira({ ...noFundo.estado, masmorra: { dungeon: 'caverna', difficulty: 'dificil' } }), noFundo.abatido, { seed: 44 });
 
+  // A luta do app: o item achado pode vir com material, o do chefe com mais chance, e o andar de depois do chefe também.
+  const limpaNoApp = (nome: string, estado: EstadoNaMasmorra, abatido: CombatMonsterView, rng: RngSpec) =>
+    caso(`limparSala: no app, ${nome}`, 'limparSala', { estado, abatido, app: true }, (a, ctx) => E.limparSala(a.estado, a.abatido, ctx.rng, ctx.now, a.app), { rng, now: AGORA });
+  const fundoComum = caiu(umMonstro, 0, cidade.hero, { floor: 90 });
+  // As três primeiras sementes em que o item cai (o primeiro sorteio abaixo da chance de loot).
+  const comItem = Array.from({ length: 200 }, (_, i) => i + 1).filter((semente) => E.seededRng(semente)() < 0.25).slice(0, 3);
+  for (const semente of comItem) {
+    limpaNoApp(`no andar 90, com item, semente ${semente}`, fundoComum.estado, fundoComum.abatido, { seed: semente });
+  }
+  limpaNoApp('sem item', fundoComum.estado, fundoComum.abatido, { sequence: [0.99] });
+  limpaNoApp('o chefe leva ao andar seguinte', comGradeInteira(noChefe.estado), noChefe.abatido, { seed: 42 });
+  const chefeFundo = caiu(chefe, 0, cidade.hero, { floor: 85 });
+  for (const semente of [45, 46]) limpaNoApp(`o chefe do andar 85, semente ${semente}`, comGradeInteira(chefeFundo.estado), chefeFundo.abatido, { seed: semente });
+  // A primeira semente em que o item achado vem com material: no chefe (com a chance dobrada) e num monstro comum.
+  const sementeComMaterial = (estado: EstadoNaMasmorra, abatido: CombatMonsterView): number => {
+    for (let semente = 1; semente < 2000; semente++) {
+      if ((E.limparSala(estado, abatido, E.seededRng(semente), relogio, true).loot?.degrau ?? 1) > 1) return semente;
+    }
+    throw new Error('nenhuma semente deu item com material');
+  };
+  limpaNoApp('o item do chefe vem com material', comGradeInteira(chefeFundo.estado), chefeFundo.abatido, { seed: sementeComMaterial(comGradeInteira(chefeFundo.estado), chefeFundo.abatido) });
+  limpaNoApp('o item do monstro vem com material', fundoComum.estado, fundoComum.abatido, { seed: sementeComMaterial(fundoComum.estado, fundoComum.abatido) });
+
   const perde = (nome: string, estado: EstadoNaMasmorra, rng: RngSpec) => caso(`perderLuta: ${nome}`, 'perderLuta', { estado }, (a, ctx) => E.perderLuta(a.estado, ctx.rng), { rng });
   const nivel = (level: number, gold: number) => heroi({ classe: 'guerreiro', level, extra: { gold, hp: 0 } });
   const mochila = [item('pot_vida'), item('espada', 'raro'), item('couro', 'incomum'), { ...item('adaga'), equipped: true }];
@@ -3649,6 +3823,20 @@ naSalaInterage('evento resolvido', naSalaDoEvento('altar', { resolved: true }), 
 naSalaInterage('evento desconhecido', naSalaDoEvento('xyz'), 143);
 naSalaInterage('ponto de partida da masmorra', naSalaDaMasmorra({ type: 'start' }), 144);
 naSalaInterage('sala vazia', naSalaDaMasmorra({ type: 'normal' }), 145);
+
+// No app: o ferreiro vende peça com material, a escada e o portão geram andar com material, e o evento guarda que é do app.
+function naSalaInterageNoApp(nome: string, estado: EstadoDoJogo, semente: number): void {
+  caso(`interagir: no app, ${nome}`, 'interagir', { estado, pet: null, app: true }, (a, ctx) => E.interagir(a.estado, ctx.rng, a.pet as never, ctx.now, a.app), {
+    rng: { seed: semente },
+    now: AGORA,
+  });
+}
+naSalaInterageNoApp('ferreiro no andar 80', { ...naSalaDaCidade('blacksmith'), floor: 80 }, 146);
+naSalaInterageNoApp('vendedor', naSalaDaCidade('shop'), 147);
+naSalaInterageNoApp('portão com classe', naSalaDaCidade('gate', guerreiro), 148);
+naSalaInterageNoApp('escada no andar 71', comGradeInteira(naSalaDaMasmorra({ type: 'stairs' }, guerreiro, [], { floor: 71 })), 149);
+naSalaInterageNoApp('evento', naSalaDoEvento('altar'), 150);
+naSalaInterageNoApp('baú com item', bau({ item: espadaNova }), 151);
 
 const humano = E.raceById('humano')!;
 caso('criacaoVazia: com nome', 'criacaoVazia', { nome: 'Lia' }, (a) => E.criacaoVazia(a.nome));
@@ -4035,6 +4223,13 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
   let comItem = 1;
   while (E.simularLuta(vitoria, toqueNoMeio, E.seededRng(comItem), () => AGORA).luta.loot === null) comItem++;
   simula('vitória com item', vitoria, toqueNoMeio, { seed: comItem });
+  // A arena é do app: no fundo da masmorra, o item da vitória pode vir com material.
+  const vitoriaFunda = abrir({ ...salaCom([bicho('zumbi', { hp: 1 })]), hero: comArma('guerreiro', 'espada'), floor: 90 });
+  let comMaterial = 1;
+  while ((E.simularLuta(vitoriaFunda, toqueNoMeio, E.seededRng(comMaterial), () => AGORA).luta.loot?.degrau ?? 1) < 2) {
+    if (++comMaterial > 3000) throw new Error('nenhuma semente deu item com material na arena');
+  }
+  simula('vitória no andar 90, com item de material', vitoriaFunda, toqueNoMeio, { seed: comMaterial });
   simula('vitória com ouro escondido', abrir({ ...naSalaDaMasmorra({ ...umMonstro, monsters: [bicho('zumbi', { hp: 1 })], monsterIndex: 0, beaten: false, bonusTreasure: { gold: 25 } }, forte({ arma: 'espada' }), []) }), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 833 });
   simula('o chefe leva ao andar seguinte', abrir(comGradeInteira(naSalaDaMasmorra({ ...chefe, monsters: [{ ...(chefe.monsters ?? [])[0]!, hp: 1 }], monsterIndex: 0, beaten: false }, forte({ arma: 'espada' }), []))), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 834 });
   simula('derrota', abrir(comGradeInteira(salaCom([bicho('aranha', { dmg: 60 })], { ...forte({ level: 8 }), hp: 5, gold: 300 })), null), parado(400), { seed: 835 });

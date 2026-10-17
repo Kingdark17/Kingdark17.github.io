@@ -69,6 +69,12 @@ export interface ProcTemplate {
 export type Genero = 'm' | 'f';
 
 /**
+ * A escada de material de uma arma ou armadura: três degraus, e o primeiro
+ * é a peça de hoje (ver `items/materiais.ts`).
+ */
+export type EscadaId = 'metal' | 'madeira' | 'couro' | 'tecido';
+
+/**
  * As quatro formas de uma palavra que concorda com o nome de um item:
  * masculino, feminino e os dois plurais. Ver `concordar` em `item.ts`.
  */
@@ -117,6 +123,14 @@ export interface ItemTemplate {
   base: StatBlock;
   value: number;
   proc?: ProcTemplate;
+  /** A escada de material. Só armas e armaduras têm; acessório, consumível e material, não. */
+  escada?: EscadaId;
+  /**
+   * O nome sem o material de hoje, quando ele está no nome: de ébano, o
+   * "Escudo de Carvalho" é o "Escudo de Ébano". Sem isto, o material entra
+   * depois do nome inteiro ("Espada de Aço").
+   */
+  nomeSemMaterial?: string;
 }
 
 /**
@@ -150,6 +164,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     base: { ataque: 4 },
     value: 22,
     proc: BURN,
+    escada: 'metal',
   },
   {
     id: 'machado',
@@ -161,6 +176,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     base: { ataque: 6, velocidade: -1 },
     value: 26,
     proc: STUN,
+    escada: 'metal',
   },
   {
     id: 'adaga',
@@ -172,6 +188,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     base: { ataque: 3, critico: 8 },
     value: 20,
     proc: { chance: 0.15, effect: 'sangramento', label: 'Sangramento', icon: '🩸' },
+    escada: 'metal',
   },
   {
     id: 'arco',
@@ -182,6 +199,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     sprite: 'weapons/arco.png',
     base: { ataque: 4, esquiva: 2, critico: 6 },
     value: 24,
+    escada: 'madeira',
   },
   {
     id: 'cajado',
@@ -193,6 +211,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     base: { ataque: 3, mana: 8 },
     value: 24,
     proc: { chance: 0.1, effect: 'mana_gratis', label: 'Poupança Arcana', icon: '🔷' },
+    escada: 'madeira',
   },
   {
     id: 'maca',
@@ -204,6 +223,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     base: { ataque: 3, vida: 6 },
     value: 22,
     proc: { chance: 0.1, effect: 'cura_no_acerto', label: 'Toque Curativo', icon: '✨' },
+    escada: 'metal',
   },
   {
     id: 'marreta',
@@ -215,6 +235,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     base: { ataque: 7, velocidade: -2 },
     value: 27,
     proc: STUN,
+    escada: 'metal',
   },
   {
     id: 'violao',
@@ -226,6 +247,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     base: { ataque: 3, critico: 6, esquiva: 2 },
     value: 23,
     proc: { ...STUN, chance: 0.15 },
+    escada: 'madeira',
   },
 
   // ---------- armaduras ----------
@@ -241,6 +263,8 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     slot: 'secundaria',
     base: { defesa: 5, velocidade: -1 },
     value: 24,
+    escada: 'madeira',
+    nomeSemMaterial: 'Escudo',
   },
   {
     id: 'couro',
@@ -251,6 +275,8 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     sprite: 'armor/couro.png',
     base: { defesa: 3, velocidade: 1 },
     value: 22,
+    escada: 'couro',
+    nomeSemMaterial: 'Armadura',
   },
   {
     id: 'placas',
@@ -261,6 +287,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     sprite: 'armor/placas.png',
     base: { defesa: 4, esquiva: -1 },
     value: 17,
+    escada: 'metal',
   },
   {
     id: 'placas_elmo',
@@ -272,6 +299,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     slot: 'elmo',
     base: { defesa: 1 },
     value: 5,
+    escada: 'metal',
   },
   {
     id: 'placas_calca',
@@ -283,6 +311,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     slot: 'calca',
     base: { defesa: 2, esquiva: -1 },
     value: 8,
+    escada: 'metal',
   },
   {
     id: 'robe',
@@ -303,6 +332,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     // 5. O commit que trouxe o chapéu diz o contrário — está errado.
     base: { defesa: 1, mana: 5 },
     value: 13,
+    escada: 'tecido',
   },
   {
     id: 'robe_calca',
@@ -314,6 +344,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     slot: 'calca',
     base: { defesa: 1, mana: 3 },
     value: 8,
+    escada: 'tecido',
   },
   {
     id: 'robe_chapeu',
@@ -325,6 +356,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     slot: 'elmo',
     base: { mana: 2 },
     value: 5,
+    escada: 'tecido',
   },
   {
     id: 'botas',
@@ -337,6 +369,8 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     slot: 'botas',
     base: { defesa: 1, velocidade: 1 },
     value: 14,
+    escada: 'couro',
+    nomeSemMaterial: 'Botas',
   },
 
   // ---------- acessórios ----------

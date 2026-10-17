@@ -21,7 +21,7 @@ namespace RPGLegend.Tests
             // O gerador chama resolveEvent(hero, floor, choice, { rng, now }): o now de args.options é só registro.
             Fn(M, "resolveEvent", (a, c) =>
                 W(DungeonEvents.Resolve(R<Hero>(a["hero"]), Num(a["floor"]), Str(a["choice"]),
-                    new EventResolveOptions { Rng = c.RngFn, Now = c.NowOrFail })));
+                    new EventResolveOptions { Rng = c.RngFn, Now = c.NowOrFail, App = RPGLegend.Engine.Json.JsJson.Truthy(RPGLegend.Engine.Json.JsJson.Prop(a["options"], "app")) })));
         }
     }
 }

@@ -113,13 +113,17 @@ namespace RPGLegend.Engine
             return plural ? At(formas, 2) : At(formas, 0);
         }
 
-        /// <summary>TS: displayName — "Espada Lendária", "Botas Reforçadas Raras"; comum não ganha nada.</summary>
+        /// <summary>
+        /// TS: displayName — o nome com o material e a raridade depois: "Espada Lendária", "Espada de Aço Rara",
+        /// "Botas Reforçadas Raras"; comum não ganha nada.
+        /// </summary>
         public static string DisplayName(Item item)
         {
             var template = TemplateOf(item);
+            string nome = Materiais.NomeComMaterial(template, item.Degrau);
             var rarity = Rarities.ById(item.Rarity);
-            if (rarity == null || rarity.Id == "comum") return template.Name;
-            return template.Name + " " + Concordar(item, rarity.Adjetivo);
+            if (rarity == null || rarity.Id == "comum") return nome;
+            return nome + " " + Concordar(item, rarity.Adjetivo);
         }
 
         /// <summary>TS: itemView.</summary>
@@ -152,16 +156,23 @@ namespace RPGLegend.Engine
         public static string CategoryOf(Item item) => TemplateOf(item).Category;
 
         /// <summary>
-        /// TS: instantiate. O uid é "templateId_agora_sorteio" e tira um número do rng.
+        /// TS: instantiate. O uid é "templateId_agora_sorteio" e tira um número do rng. <paramref name="degrau"/> é o do
+        /// material (1 a 3, só em peça com escada): multiplica o que a peça dá, antes da raridade, e deixa a
+        /// penalidade (a velocidade do machado) como está.
         /// </summary>
-        public static Item Instantiate(ItemTemplate template, RarityDef rarity, RngFn rng = null, Func<double> now = null)
+        public static Item Instantiate(ItemTemplate template, RarityDef rarity, RngFn rng = null, Func<double> now = null, double? degrau = null)
         {
             rng = rng ?? Rng.Default;
             now = now ?? Js.DateNow;
+            double naEscada = Js.Truthy(template.Escada) ? Js.Max(1, Js.Min(Materiais.UltimoDegrau, Math.Truncate(degrau ?? 1))) : 1;
+            double material = Materiais.MultiplicadorDoDegrau(naEscada);
 
             var stats = new ItemStats();
             foreach (var key in template.Base.Keys)
-                stats.Set(key, Js.Round(template.Base.OrZero(key) * rarity.Mult));
+            {
+                double baseDaPeca = template.Base.OrZero(key);
+                stats.Set(key, Js.Round((baseDaPeca > 0 ? baseDaPeca * material : baseDaPeca) * rarity.Mult));
+            }
 
             var item = new Item
             {
@@ -169,12 +180,13 @@ namespace RPGLegend.Engine
                 TemplateId = template.Id,
                 Rarity = rarity.Id,
                 Stats = stats,
-                Value = Js.Round(template.Value * rarity.Mult),
+                Value = Js.Round(template.Value * material * rarity.Mult),
                 Equipped = false,
             };
 
             if (template.Proc != null)
                 item.ProcChance = Js.Min(0.5, template.Proc.Chance + (rarity.Mult - 1) * 0.05);
+            if (naEscada > 1) item.Degrau = naEscada;
 
             return item;
         }
@@ -187,6 +199,12 @@ namespace RPGLegend.Engine
             public double? Floor;
             public RngFn Rng;
             public Func<double> Now;
+            /// <summary>Quem pede é o app: arma e armadura sorteiam o degrau do material, com um número a mais do rng.</summary>
+            public bool App;
+            /// <summary>O item é do chefe: a chance dos degraus 2 e 3 dobra.</summary>
+            public bool Chefe;
+            /// <summary>O degrau mais alto que pode sair (a loja do app vende até o 2).</summary>
+            public double? TetoDoDegrau;
         }
 
         /// <summary>
@@ -203,8 +221,9 @@ namespace RPGLegend.Engine
             var template = Rng.Pick(pool, rng);
             // Uma raridade forçada e desconhecida cai para comum, igual ao original.
             var rarity = (Js.Truthy(o.Rarity) ? Rarities.ById(o.Rarity) : Rarities.Pick(floor, rng)) ?? Rarities.All[0];
+            double degrau = o.App && Js.Truthy(template.Escada) ? Materiais.SortearDegrau(floor, o.Chefe, rng, o.TetoDoDegrau) : 1;
 
-            var item = Instantiate(template, rarity, rng, o.Now);
+            var item = Instantiate(template, rarity, rng, o.Now, degrau);
 
             double depth = Js.Max(1, floor);
             if (ItemTemplates.IsEquippable(template.Category) && depth > 1)

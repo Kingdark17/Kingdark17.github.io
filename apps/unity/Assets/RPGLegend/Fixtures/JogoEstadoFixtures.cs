@@ -27,10 +27,10 @@ namespace RPGLegend.Tests
             Fn(M, "retomarSave", (a, c) => W(Estados.RetomarSave(JogoJson.LerSave(a["save"]), c.RngFn, c.NowOrFail)));
             Fn(M, "entrarNaCidade", (a, c) => W(Estados.EntrarNaCidade(JogoJson.LerSave(a["save"]))));
             Fn(M, "entrarNaMasmorra", (a, c) => W(Estados.EntrarNaMasmorra((EstadoNaCidade)Estado(a["estado"]), c.RngFn, R<DungeonRun>(a["masmorra"]),
-                Opcional(a["andar"]), c.NowOrFail)));
+                Opcional(a["andar"]), c.NowOrFail, JsJson.Truthy(a["app"]))));
             Fn(M, "voltarParaCidade", (a, c) => W(Estados.VoltarParaCidade((EstadoNaMasmorra)Estado(a["estado"]))));
-            Fn(M, "descerEscada", (a, c) => W(Estados.DescerEscada((EstadoNaMasmorra)Estado(a["estado"]), c.RngFn, c.NowOrFail)));
-            Fn(M, "avancarAndar", (a, c) => W(Estados.AvancarAndar((EstadoNaMasmorra)Estado(a["estado"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "descerEscada", (a, c) => W(Estados.DescerEscada((EstadoNaMasmorra)Estado(a["estado"]), c.RngFn, c.NowOrFail, JsJson.Truthy(a["app"]))));
+            Fn(M, "avancarAndar", (a, c) => W(Estados.AvancarAndar((EstadoNaMasmorra)Estado(a["estado"]), c.RngFn, c.NowOrFail, JsJson.Truthy(a["app"]))));
             Fn(M, "temChefeVivo", (a, c) => W(Estados.TemChefeVivo((EstadoNaMasmorra)Estado(a["estado"]))));
 
             // Cola de teste: os mesmos pontos do gerador, um caso por estado.

@@ -19,6 +19,11 @@ namespace RPGLegend.Engine
         public double? ReforgeCount;
         /// <summary>Tentativas seguidas de reforja sem melhorar o tier (o "pity" da forja).</summary>
         public double? ReforgeFails;
+        /// <summary>
+        /// O degrau do material (<see cref="Materiais"/>): 2 ou 3. Ausente é o primeiro, a peça de hoje; só o app faz
+        /// nascer peça acima dele.
+        /// </summary>
+        public double? Degrau;
 
         /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
         [JsExtra] public JsExtras Extra;
@@ -46,6 +51,7 @@ namespace RPGLegend.Engine
             target.TierAdjustment = TierAdjustment;
             target.ReforgeCount = ReforgeCount;
             target.ReforgeFails = ReforgeFails;
+            target.Degrau = Degrau;
             target.Extra = Extra;
         }
     }

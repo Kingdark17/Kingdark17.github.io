@@ -30,6 +30,10 @@ namespace RPGLegend.Engine
         public ItemStats Base;
         public double Value;
         public ProcTemplate Proc;
+        /// <summary>A escada de material ("metal", "madeira", "couro", "tecido"); só armas e armaduras têm.</summary>
+        public string Escada;
+        /// <summary>O nome sem o material de hoje, quando ele está no nome ("Escudo" do "Escudo de Carvalho").</summary>
+        public string NomeSemMaterial;
     }
 
     /// <summary>As tabelas de items/templates.ts (fixtures/data/items/templates.json).</summary>

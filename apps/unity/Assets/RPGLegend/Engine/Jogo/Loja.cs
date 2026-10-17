@@ -19,6 +19,8 @@ namespace RPGLegend.Engine
         public double Renovacoes;
         [KeepNull] public double? Dado;
         public List<string> Log;
+        /// <summary>A loja é a do app: o estoque novo pode ter peça no degrau 2 do material. Só aparece quando é true.</summary>
+        public bool? App;
 
         /// <summary>O <c>{ ...loja }</c> do TS.</summary>
         public Loja Clone() => (Loja)MemberwiseClone();
@@ -41,14 +43,17 @@ namespace RPGLegend.Engine
             return nova;
         }
 
-        /// <summary>TS: abrirLoja — sorteia o estoque só quando a sala ainda não tem um guardado.</summary>
-        public static Loja AbrirLoja(EstadoNaCidade estado, string kind, RngFn rng = null, Func<double> now = null)
+        /// <summary>
+        /// TS: abrirLoja — sorteia o estoque só quando a sala ainda não tem um guardado. <paramref name="app"/>: a loja é a
+        /// do app (o estoque dela, e o da renovação, pode ter peça com material).
+        /// </summary>
+        public static Loja AbrirLoja(EstadoNaCidade estado, string kind, RngFn rng = null, Func<double> now = null, bool app = false)
         {
             rng = rng ?? Rng.Default;
             var sala = (CityCell)Estados.CelulaAtual(estado);
             var comEstoque = sala.ForSale != null && sala.ForSale.Count > 0
                 ? estado
-                : Estados.SubstituirCelulaAtual(estado, ComEstoque(sala, Shop.RollStock(kind, Estados.AndarDeForca(estado), rng, now)));
+                : Estados.SubstituirCelulaAtual(estado, ComEstoque(sala, Shop.RollStock(kind, Estados.AndarDeForca(estado), rng, now, app)));
 
             return new Loja
             {
@@ -59,6 +64,7 @@ namespace RPGLegend.Engine
                 Renovacoes = 0,
                 Dado = null,
                 Log = new List<string> { kind == ShopKinds.Blacksmith ? "A forja do ferreiro está acesa." : "O vendedor itinerante abre a sacola." },
+                App = app ? true : (bool?)null,
             };
         }
 
@@ -128,7 +134,7 @@ namespace RPGLegend.Engine
         {
             rng = rng ?? Rng.Default;
             var sala = (CityCell)Estados.CelulaAtual(loja.Estado);
-            var renovacao = Shop.ResolveRestock(loja.Estado.Hero, loja.Kind, Estados.AndarDeForca(loja.Estado), loja.Renovacoes, rng, now);
+            var renovacao = Shop.ResolveRestock(loja.Estado.Hero, loja.Kind, Estados.AndarDeForca(loja.Estado), loja.Renovacoes, rng, now, loja.App == true);
 
             if (renovacao.Outcome.Kind == RestockOutcome.KindInsufficientGold)
                 return loja.ComLog("Renovar o estoque custa " + Js.NumberToString(renovacao.Outcome.Required ?? double.NaN) + " de ouro.");

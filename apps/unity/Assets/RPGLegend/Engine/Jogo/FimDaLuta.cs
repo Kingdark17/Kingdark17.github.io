@@ -150,7 +150,7 @@ namespace RPGLegend.Engine
         /// último andar zera a masmorra e devolve o grupo à cidade. Ordem dos sorteios: a chance de item, o item (se
         /// caiu) e o andar novo (se foi chefe de andar). <paramref name="now"/> é o relógio do uid do item e do andar.
         /// </summary>
-        public static SalaLimpa LimparSala(EstadoNaMasmorra estado, CombatMonsterView abatido, RngFn rng = null, Func<double> now = null)
+        public static SalaLimpa LimparSala(EstadoNaMasmorra estado, CombatMonsterView abatido, RngFn rng = null, Func<double> now = null, bool app = false)
         {
             rng = rng ?? Rng.Default;
             var sala = (DungeonCell)Estados.CelulaAtual(estado);
@@ -178,7 +178,14 @@ namespace RPGLegend.Engine
 
             if (rng() < (sala.Type == DungeonRoomTypes.Boss ? D.ChanceDeLootChefe : D.ChanceDeLootNormal))
             {
-                loot = Items.RandomItem(new Items.RandomItemOptions { Floor = Estados.AndarDeForca(estado), Rng = rng, Now = now });
+                loot = Items.RandomItem(new Items.RandomItemOptions
+                {
+                    Floor = Estados.AndarDeForca(estado),
+                    Rng = rng,
+                    Now = now,
+                    App = app,
+                    Chefe = app && sala.Type == DungeonRoomTypes.Boss,
+                });
                 inventory = Inventory.AddItem(inventory, loot);
                 quests = Quests.OnItemCollected(quests);
                 log.Add("Encontrou " + Items.DisplayName(loot) + " após a batalha.");
@@ -230,7 +237,7 @@ namespace RPGLegend.Engine
 
             if (sala.Type == DungeonRoomTypes.Boss)
             {
-                var proximo = Estados.AvancarAndar(limpo, rng, now);
+                var proximo = Estados.AvancarAndar(limpo, rng, now, app);
                 log.Add("Após vencer " + Js.Str(abatido.Name) + ", o grupo avança automaticamente para o Andar " + Js.NumberToString(proximo.Floor) + ".");
                 return new SalaLimpa { Estado = proximo, Log = log, Loot = loot };
             }

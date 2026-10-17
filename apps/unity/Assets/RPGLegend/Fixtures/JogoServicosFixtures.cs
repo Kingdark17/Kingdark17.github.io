@@ -16,7 +16,7 @@ namespace RPGLegend.Tests
         {
             // ---------- loja ----------
 
-            Fn(M, "abrirLoja", (a, c) => W(Lojas.AbrirLoja(R<EstadoNaCidade>(a["estado"]), Str(a["kind"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "abrirLoja", (a, c) => W(Lojas.AbrirLoja(R<EstadoNaCidade>(a["estado"]), Str(a["kind"]), c.RngFn, c.NowOrFail, JsJson.Truthy(a["app"]))));
             Fn(M, "estoque", (a, c) => W(Lojas.Estoque(R<Loja>(a["loja"]))));
             Fn(M, "vendaveis", (a, c) => W(Lojas.Vendaveis(R<Loja>(a["loja"]))));
             Fn(M, "precoDeCompra", (a, c) => N(Lojas.PrecoDeCompra(R<Loja>(a["loja"]), R<Item>(a["item"]))));
@@ -52,7 +52,7 @@ namespace RPGLegend.Tests
             // ---------- evento ----------
 
             Const(M, "ESCOLHAS", () => W(Eventos.TodasAsEscolhas));
-            Fn(M, "abrirEvento", (a, c) => W(Eventos.AbrirEvento(R<EstadoNaMasmorra>(a["estado"]))));
+            Fn(M, "abrirEvento", (a, c) => W(Eventos.AbrirEvento(R<EstadoNaMasmorra>(a["estado"]), JsJson.Truthy(a["app"]))));
             Fn(M, "escolhas", (a, c) => W(Eventos.Escolhas(R<Evento>(a["evento"]))));
             Fn(M, "escolher", (a, c) => W(Eventos.Escolher(R<Evento>(a["evento"]), Str(a["escolha"]), c.RngFn, c.NowOrFail)));
 
@@ -77,7 +77,7 @@ namespace RPGLegend.Tests
             // ---------- portão ----------
 
             Fn(M, "motivo", (a, c) => W(Portoes.Motivo(R<LockReason>(a["bloqueio"]))));
-            Fn(M, "abrirPortao", (a, c) => W(Portoes.AbrirPortao(R<EstadoNaCidade>(a["estado"]))));
+            Fn(M, "abrirPortao", (a, c) => W(Portoes.AbrirPortao(R<EstadoNaCidade>(a["estado"]), JsJson.Truthy(a["app"]))));
             Fn(M, "masmorras", (a, c) => W(Portoes.Masmorras(R<Portao>(a["portao"]))));
             Fn(M, "dificuldades", (a, c) => W(Portoes.Dificuldades(R<Portao>(a["portao"]))));
             Fn(M, "andares", (a, c) => W(Portoes.Andares(R<Portao>(a["portao"]))));

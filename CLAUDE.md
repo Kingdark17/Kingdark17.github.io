@@ -148,6 +148,14 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   élfica; couro: couro → couro reforçado → couro de dragão; tecido: linho →
   seda → seda arcana), com arte nova do Breno por material. O poder do
   necromante que levanta um esqueleto aliado é **do site e do app**.
+  O caminho para "só o app consegue" é o parâmetro `app` de quem cria coisa
+  (`randomItem`, `generateDungeonFloor`, `rollStock`, `limparSala`,
+  `interagir`, `entrarNaMasmorra`…): a `Partida` do app passa `app: true`, a
+  arena sempre passa, e o site não passa nada — o sorteio dele fica igual, sem
+  um número a mais do rng. Os materiais (`items/materiais.ts`, desde
+  2026-10-17) são os primeiros: o item guarda só o `degrau` (2 ou 3; ausente
+  é o primeiro), +25% na base antes da raridade, chance crescendo com o andar
+  (o chefe dobra), e a loja do app vende até o degrau 2.
 
 - `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
   paridade exata: mesma entrada → mesmo resultado e a mesma sequência de

@@ -89,7 +89,7 @@ namespace RPGLegend.Engine
         public static List<string> ExtraPotions => D.ExtraPotions;
 
         /// <summary>TS: placeExtras — roda por último na geração do andar; <paramref name="floor"/> é o andar de força.</summary>
-        public static void PlaceExtras(List<DungeonCell> rooms, double floor, RngFn rng, Func<double> now)
+        public static void PlaceExtras(List<DungeonCell> rooms, double floor, RngFn rng, Func<double> now, bool app = false)
         {
             foreach (var cell in rooms)
             {
@@ -138,7 +138,7 @@ namespace RPGLegend.Engine
                 Row = vao.Row,
                 Side = side,
                 Used = false,
-                SecretItem = SecretItem(floor, rng, now),
+                SecretItem = SecretItem(floor, rng, now, app),
                 SecretCollected = false,
             });
         }
@@ -160,7 +160,7 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>O item da sala secreta: um equipamento um degrau acima da raridade que o andar sortearia.</summary>
-        private static Item SecretItem(double floor, RngFn rng, Func<double> now)
+        private static Item SecretItem(double floor, RngFn rng, Func<double> now, bool app)
         {
             var normal = Rarities.Pick(floor, rng);
             var todas = Rarities.All;
@@ -172,6 +172,7 @@ namespace RPGLegend.Engine
                 Floor = floor,
                 Rng = rng,
                 Now = now,
+                App = app,
             });
         }
 

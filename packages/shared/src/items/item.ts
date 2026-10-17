@@ -1,4 +1,5 @@
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
+import { multiplicadorDoDegrau, nomeComMaterial, sortearDegrau, ULTIMO_DEGRAU } from './materiais.js';
 import { pickRarity, RARITIES, rarityById, type Rarity, type RarityId } from './rarity.js';
 import {
   isEquippable,
@@ -41,6 +42,12 @@ export interface Item {
   reforgeCount?: number;
   /** Contador de "pity" da reforja na forja (`shop.js`): tentativas seguidas sem melhora de tier. Zera ao melhorar; a partir de 4, o próximo resultado é forçado a não piorar. */
   reforgeFails?: number;
+  /**
+   * O degrau do material (`items/materiais.ts`): 2 ou 3. Ausente é o
+   * primeiro, a peça de hoje — todo item de antes é do primeiro degrau. Só
+   * o app faz nascer peça acima dele.
+   */
+  degrau?: number;
 }
 
 /** Visão "gorda" do item, montada na hora de renderizar. */
@@ -76,18 +83,19 @@ export function concordar(item: Pick<Item, 'templateId'>, [m, f, mp, fp]: Formas
 }
 
 /**
- * Nome exibido: o do template, e a raridade depois, concordando com ele —
- * "Poção de Mana Incomum", "Espada Lendária", "Botas Reforçadas Raras".
- * Comum não ganha nada.
+ * Nome exibido: o do template com o material, e a raridade depois,
+ * concordando com ele — "Poção de Mana Incomum", "Espada Lendária", "Espada
+ * de Aço Rara", "Botas Reforçadas Raras". Comum não ganha nada.
  *
  * Até 2026-10 a raridade vinha antes e sempre no masculino ("Lendário
  * Espada"), herança do `items.js` do jogo antigo.
  */
-export function displayName(item: Pick<Item, 'templateId' | 'rarity'>): string {
+export function displayName(item: Pick<Item, 'templateId' | 'rarity' | 'degrau'>): string {
   const template = itemTemplate(item);
+  const nome = nomeComMaterial(template, item.degrau);
   const rarity = rarityById(item.rarity);
-  if (!rarity || rarity.id === 'comum') return template.name;
-  return `${template.name} ${concordar(item, rarity.adjetivo)}`;
+  if (!rarity || rarity.id === 'comum') return nome;
+  return `${nome} ${concordar(item, rarity.adjetivo)}`;
 }
 
 export function itemView(item: Item): ItemView {
@@ -118,16 +126,23 @@ export interface InstantiateOptions {
   rng?: Rng;
   /** Injetável para o uid ser reproduzível em teste. */
   now?: () => number;
+  /** O degrau do material (1 a 3); só vale pra peça com escada. Ausente, o primeiro. */
+  degrau?: number;
 }
 
 export function instantiate(
   template: ItemTemplate,
   rarity: Rarity,
-  { rng = defaultRng, now = Date.now }: InstantiateOptions = {},
+  { rng = defaultRng, now = Date.now, degrau = 1 }: InstantiateOptions = {},
 ): Item {
+  // O material só melhora: multiplica o que a peça dá e deixa a penalidade
+  // (a velocidade do machado) como está.
+  const naEscada = template.escada ? Math.max(1, Math.min(ULTIMO_DEGRAU, Math.trunc(degrau))) : 1;
+  const material = multiplicadorDoDegrau(naEscada);
   const stats: StatBlock = {};
   for (const key of Object.keys(template.base) as AnyStatKey[]) {
-    stats[key] = Math.round((template.base[key] ?? 0) * rarity.mult);
+    const base = template.base[key] ?? 0;
+    stats[key] = Math.round((base > 0 ? base * material : base) * rarity.mult);
   }
 
   const item: Item = {
@@ -135,13 +150,14 @@ export function instantiate(
     templateId: template.id,
     rarity: rarity.id,
     stats,
-    value: Math.round(template.value * rarity.mult),
+    value: Math.round(template.value * material * rarity.mult),
     equipped: false,
   };
 
   if (template.proc) {
     item.procChance = Math.min(0.5, template.proc.chance + (rarity.mult - 1) * 0.05);
   }
+  if (naEscada > 1) item.degrau = naEscada;
 
   return item;
 }
@@ -150,6 +166,16 @@ export interface RandomItemOptions extends InstantiateOptions {
   category?: ItemCategory;
   rarity?: RarityId;
   floor?: number;
+  /**
+   * Quem pede é o app: arma e armadura sorteiam o degrau do material
+   * (`sortearDegrau`), com um número a mais do `rng`. O site nunca passa,
+   * e o sorteio dele fica como sempre foi.
+   */
+  app?: boolean;
+  /** O item é do chefe: a chance dos degraus 2 e 3 dobra. */
+  chefe?: boolean;
+  /** O degrau mais alto que pode sair (a loja do app vende até o 2). */
+  tetoDoDegrau?: number;
 }
 
 export function randomItem(options: RandomItemOptions = {}): Item {
@@ -160,8 +186,9 @@ export function randomItem(options: RandomItemOptions = {}): Item {
   // Uma raridade forçada e desconhecida cai para comum, igual ao original.
   const rarity =
     (forcedRarity ? rarityById(forcedRarity) : pickRarity(floor, rng)) ?? (RARITIES[0] as Rarity);
+  const degrau = options.app && template.escada ? sortearDegrau(floor, !!options.chefe, rng, options.tetoDoDegrau) : 1;
 
-  const item = instantiate(template, rarity, now ? { rng, now } : { rng });
+  const item = instantiate(template, rarity, now ? { rng, now, degrau } : { rng, degrau });
 
   // Bônus de profundidade: itens equipáveis achados fundo na masmorra vêm um
   // pouco mais fortes, teto de +75%.

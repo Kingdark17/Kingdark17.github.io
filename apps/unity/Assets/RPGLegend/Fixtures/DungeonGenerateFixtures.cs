@@ -31,6 +31,7 @@ namespace RPGLegend.Tests
                     Now = c.NowOrFail,
                     Run = R<DungeonRun>(JsJson.Prop(o, "run")),
                     Teacher = R<DungeonTeacher>(JsJson.Prop(o, "teacher")),
+                    App = JsJson.Truthy(JsJson.Prop(o, "app")),
                 });
                 return Compact(andar);
             });

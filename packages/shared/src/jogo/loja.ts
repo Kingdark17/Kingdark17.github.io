@@ -29,13 +29,15 @@ export interface Loja {
   renovacoes: number;
   dado: number | null;
   log: string[];
+  /** A loja é a do app: o estoque novo (o de abrir e o de renovar) pode ter peça no degrau 2 do material. */
+  app?: true;
 }
 
-export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = defaultRng, now?: () => number): Loja {
+export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = defaultRng, now?: () => number, app = false): Loja {
   const sala = celulaAtual(estado) as CityCell;
   const comEstoque = sala.forSale?.length
     ? estado
-    : substituirCelulaAtual(estado, { ...sala, forSale: rollStock(kind, andarDeForca(estado), { rng, now }) });
+    : substituirCelulaAtual(estado, { ...sala, forSale: rollStock(kind, andarDeForca(estado), { rng, now, ...(app ? { app } : {}) }) });
 
   return {
     estado: comEstoque,
@@ -45,6 +47,7 @@ export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = def
     renovacoes: 0,
     dado: null,
     log: [kind === 'blacksmith' ? 'A forja do ferreiro está acesa.' : 'O vendedor itinerante abre a sacola.'],
+    ...(app ? { app: true as const } : {}),
   };
 }
 
@@ -116,7 +119,7 @@ export function vender(loja: Loja, item: Item): Loja {
 
 export function renovarEstoque(loja: Loja, rng: Rng = defaultRng, now?: () => number): Loja {
   const sala = celulaAtual(loja.estado) as CityCell;
-  const renovacao = resolveRestock(loja.estado.hero, loja.kind, andarDeForca(loja.estado), loja.renovacoes, { rng, now });
+  const renovacao = resolveRestock(loja.estado.hero, loja.kind, andarDeForca(loja.estado), loja.renovacoes, { rng, now, ...(loja.app ? { app: true } : {}) });
 
   if (renovacao.outcome.kind === 'insufficient_gold') {
     return { ...loja, log: [`Renovar o estoque custa ${renovacao.outcome.required} de ouro.`] };

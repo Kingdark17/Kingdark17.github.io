@@ -1,0 +1,37 @@
+{
+  "MATERIAIS": {
+    "metal": [
+      "Ferro",
+      "Aço",
+      "Aço Mágico"
+    ],
+    "madeira": [
+      "Carvalho",
+      "Ébano",
+      "Madeira Élfica"
+    ],
+    "couro": [
+      "Couro",
+      "Couro Reforçado",
+      "Couro de Dragão"
+    ],
+    "tecido": [
+      "Linho",
+      "Seda",
+      "Seda Arcana"
+    ]
+  },
+  "ULTIMO_DEGRAU": 3,
+  "BONUS_POR_DEGRAU": 0.25,
+  "CHANCE_DO_DEGRAU_2": {
+    "desde": 5,
+    "cheio": 50,
+    "chance": 0.4
+  },
+  "CHANCE_DO_DEGRAU_3": {
+    "desde": 25,
+    "cheio": 75,
+    "chance": 0.15
+  },
+  "CHANCE_DO_CHEFE": 2
+}

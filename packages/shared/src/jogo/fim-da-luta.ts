@@ -136,8 +136,10 @@ export function pagarAbate(estado: EstadoNaMasmorra, abatido: CombatMonsterView)
  *
  * `abatido` é o último que caiu: o diário do chefe diz o nome dele. `now`
  * é o relógio do `uid` do item achado e do andar novo; sem ele, `Date.now`.
+ * `app`: a luta é a do app, e o item achado (e o do andar novo, depois do
+ * chefe) pode vir com material — o do chefe com mais chance.
  */
-export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView, rng: Rng = defaultRng, now?: () => number): SalaLimpa {
+export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView, rng: Rng = defaultRng, now?: () => number, app = false): SalaLimpa {
   const sala = celulaAtual(estado) as DungeonCell;
   const log: string[] = [];
 
@@ -150,7 +152,7 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
   let loot: Item | null = null;
 
   if (rng() < (sala.type === 'boss' ? CHANCE_DE_LOOT_CHEFE : CHANCE_DE_LOOT_NORMAL)) {
-    loot = randomItem({ floor: andarDeForca(estado), rng, ...(now ? { now } : {}) });
+    loot = randomItem({ floor: andarDeForca(estado), rng, ...(now ? { now } : {}), ...(app ? { app, chefe: sala.type === 'boss' } : {}) });
     inventory = addItem(inventory, loot);
     quests = onItemCollected(quests);
     log.push(`Encontrou ${displayName(loot)} após a batalha.`);
@@ -188,7 +190,7 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
   }
 
   if (sala.type === 'boss') {
-    const proximo = avancarAndar(limpo, rng, now);
+    const proximo = avancarAndar(limpo, rng, now, app);
     log.push(`Após vencer ${abatido.name}, o grupo avança automaticamente para o Andar ${proximo.floor}.`);
     return { estado: proximo, log, loot };
   }

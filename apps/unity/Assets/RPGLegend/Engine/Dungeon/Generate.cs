@@ -16,6 +16,8 @@ namespace RPGLegend.Engine
         /// Number são lidos). Quem chama decide, porque depende do herói.
         /// </summary>
         public DungeonTeacher Teacher;
+        /// <summary>Quem gera o andar é o app: os itens dos baús e das salas podem vir com material.</summary>
+        public bool App;
     }
 
     /// <summary>
@@ -112,13 +114,13 @@ namespace RPGLegend.Engine
             // Escada e saída já estão reservadas; em andar de chefe, uma sala fica para ele.
             double reservedRooms = IsBossFloor(floor) ? 1 : 0;
             double monsterRoomCount = Js.Min(pool.Count - reservedRooms, 3 + Math.Floor((floor - 1) * 1.3));
-            PopulateMonsterRooms(Place(DungeonRoomTypes.Monster, Js.Max(2, monsterRoomCount)), forca, species, rng, now);
+            PopulateMonsterRooms(Place(DungeonRoomTypes.Monster, Js.Max(2, monsterRoomCount)), forca, species, rng, now, o.App);
 
             if (IsBossFloor(floor)) PlaceBoss(First(Place(DungeonRoomTypes.Boss, 1)), forca, floor % 10 == 0, species, rng);
 
-            PopulateRoomContent(res.Rooms, forca, rng, now);
+            PopulateRoomContent(res.Rooms, forca, rng, now, o.App);
             // Por último: o resto do andar sai igual ao de antes pra mesma semente.
-            RoomExtras.PlaceExtras(res.Rooms, forca, rng, now);
+            RoomExtras.PlaceExtras(res.Rooms, forca, rng, now, o.App);
 
             return new RoomGraph<DungeonCell> { Grid = res.Grid, Rooms = res.Rooms, Start = res.Start };
         }
@@ -352,7 +354,7 @@ namespace RPGLegend.Engine
         /// chance de recompensa extra (35%) nas salas com mais de um: ouro (70%) ou um item. floor é o andar de
         /// força, e species, as da masmorra.
         /// </summary>
-        private static void PopulateMonsterRooms(List<DungeonCell> rooms, double floor, IReadOnlyList<string> species, RngFn rng, Func<double> now)
+        private static void PopulateMonsterRooms(List<DungeonCell> rooms, double floor, IReadOnlyList<string> species, RngFn rng, Func<double> now, bool app)
         {
             foreach (var cell in rooms)
             {
@@ -366,7 +368,7 @@ namespace RPGLegend.Engine
                 {
                     cell.BonusTreasure = rng() < 0.7
                         ? new DungeonTreasureBonus { Gold = 10 + floor * 3 + Rng.RandomInt(15, rng) }
-                        : new DungeonTreasureBonus { Item = Items.RandomItem(new Items.RandomItemOptions { Floor = floor, Rng = rng, Now = now }) };
+                        : new DungeonTreasureBonus { Item = Items.RandomItem(new Items.RandomItemOptions { Floor = floor, Rng = rng, Now = now, App = app }) };
                 }
             }
         }
@@ -387,7 +389,7 @@ namespace RPGLegend.Engine
         /// TS: populateRoomContent — NPC, evento e baú das salas já tipadas, na ordem das salas (monstro e chefe já
         /// saíram prontos). O baú: Mímico (10% + 0,8% por andar, até 25%), ouro (70%) ou um item do andar.
         /// </summary>
-        private static void PopulateRoomContent(List<DungeonCell> rooms, double floor, RngFn rng, Func<double> now)
+        private static void PopulateRoomContent(List<DungeonCell> rooms, double floor, RngFn rng, Func<double> now, bool app)
         {
             foreach (var cell in rooms)
             {
@@ -413,7 +415,7 @@ namespace RPGLegend.Engine
                 {
                     cell.IsMimic = rng() < Js.Min(0.25, 0.1 + floor * 0.008);
                     cell.GiveGold = rng() < 0.7;
-                    cell.Item = cell.GiveGold == true ? null : Items.RandomItem(new Items.RandomItemOptions { Floor = floor, Rng = rng, Now = now });
+                    cell.Item = cell.GiveGold == true ? null : Items.RandomItem(new Items.RandomItemOptions { Floor = floor, Rng = rng, Now = now, App = app });
                     cell.Collected = false;
                 }
             }

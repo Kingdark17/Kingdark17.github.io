@@ -71,7 +71,8 @@
         "effect": "queimadura",
         "label": "Queimadura",
         "icon": "🔥"
-      }
+      },
+      "escada": "metal"
     },
     {
       "id": "machado",
@@ -90,7 +91,8 @@
         "effect": "atordoar",
         "label": "Atordoar",
         "icon": "💫"
-      }
+      },
+      "escada": "metal"
     },
     {
       "id": "adaga",
@@ -109,7 +111,8 @@
         "effect": "sangramento",
         "label": "Sangramento",
         "icon": "🩸"
-      }
+      },
+      "escada": "metal"
     },
     {
       "id": "arco",
@@ -123,7 +126,8 @@
         "esquiva": 2,
         "critico": 6
       },
-      "value": 24
+      "value": 24,
+      "escada": "madeira"
     },
     {
       "id": "cajado",
@@ -142,7 +146,8 @@
         "effect": "mana_gratis",
         "label": "Poupança Arcana",
         "icon": "🔷"
-      }
+      },
+      "escada": "madeira"
     },
     {
       "id": "maca",
@@ -161,7 +166,8 @@
         "effect": "cura_no_acerto",
         "label": "Toque Curativo",
         "icon": "✨"
-      }
+      },
+      "escada": "metal"
     },
     {
       "id": "marreta",
@@ -180,7 +186,8 @@
         "effect": "atordoar",
         "label": "Atordoar",
         "icon": "💫"
-      }
+      },
+      "escada": "metal"
     },
     {
       "id": "violao",
@@ -200,7 +207,8 @@
         "effect": "atordoar",
         "label": "Atordoar",
         "icon": "💫"
-      }
+      },
+      "escada": "madeira"
     },
     {
       "id": "escudo",
@@ -214,7 +222,9 @@
         "defesa": 5,
         "velocidade": -1
       },
-      "value": 24
+      "value": 24,
+      "escada": "madeira",
+      "nomeSemMaterial": "Escudo"
     },
     {
       "id": "couro",
@@ -227,7 +237,9 @@
         "defesa": 3,
         "velocidade": 1
       },
-      "value": 22
+      "value": 22,
+      "escada": "couro",
+      "nomeSemMaterial": "Armadura"
     },
     {
       "id": "placas",
@@ -240,7 +252,8 @@
         "defesa": 4,
         "esquiva": -1
       },
-      "value": 17
+      "value": 17,
+      "escada": "metal"
     },
     {
       "id": "placas_elmo",
@@ -253,7 +266,8 @@
       "base": {
         "defesa": 1
       },
-      "value": 5
+      "value": 5,
+      "escada": "metal"
     },
     {
       "id": "placas_calca",
@@ -267,7 +281,8 @@
         "defesa": 2,
         "esquiva": -1
       },
-      "value": 8
+      "value": 8,
+      "escada": "metal"
     },
     {
       "id": "robe",
@@ -280,7 +295,8 @@
         "defesa": 1,
         "mana": 5
       },
-      "value": 13
+      "value": 13,
+      "escada": "tecido"
     },
     {
       "id": "robe_calca",
@@ -294,7 +310,8 @@
         "defesa": 1,
         "mana": 3
       },
-      "value": 8
+      "value": 8,
+      "escada": "tecido"
     },
     {
       "id": "robe_chapeu",
@@ -307,7 +324,8 @@
       "base": {
         "mana": 2
       },
-      "value": 5
+      "value": 5,
+      "escada": "tecido"
     },
     {
       "id": "botas",
@@ -322,7 +340,9 @@
         "defesa": 1,
         "velocidade": 1
       },
-      "value": 14
+      "value": 14,
+      "escada": "couro",
+      "nomeSemMaterial": "Botas"
     },
     {
       "id": "anel_som",

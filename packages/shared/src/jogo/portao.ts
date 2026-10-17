@@ -28,6 +28,8 @@ export interface Portao {
   estado: EstadoNaCidade;
   escolha: DungeonRun;
   andar: number;
+  /** O portão é o do app: o andar de entrada pode ter item com material. */
+  app?: true;
 }
 
 export interface OpcaoDoPortao<Id extends string> {
@@ -69,10 +71,10 @@ function dificuldadeAberta(estado: EstadoNaCidade, dungeon: DungeonId): Difficul
  * Abre na última masmorra e dificuldade em que o jogador desceu, se ainda
  * estiverem abertas; senão, na Floresta Normal.
  */
-export function abrirPortao(estado: EstadoNaCidade): Portao {
+export function abrirPortao(estado: EstadoNaCidade, app = false): Portao {
   const ultima = bloqueio({ estado }, estado.masmorra) ? null : estado.masmorra;
   const escolha: DungeonRun = ultima ?? { dungeon: 'floresta', difficulty: 'normal' };
-  return { estado, escolha, andar: andarMaisFundo(estado, escolha) };
+  return { estado, escolha, andar: andarMaisFundo(estado, escolha), ...(app ? { app: true as const } : {}) };
 }
 
 export function masmorras(portao: Portao): OpcaoDoPortao<DungeonId>[] {
@@ -126,7 +128,7 @@ export interface Entrada {
  */
 export function entrar(portao: Portao, rng: Rng = defaultRng, now?: () => number): Entrada | null {
   if (bloqueio(portao, portao.escolha) || !andares(portao).includes(portao.andar)) return null;
-  const dentro = entrarNaMasmorra(portao.estado, rng, portao.escolha, portao.andar, now);
+  const dentro = entrarNaMasmorra(portao.estado, rng, portao.escolha, portao.andar, now, !!portao.app);
   const etapa = marcar(dentro, 'dungeon', rng, now);
   const comEtapa = etapa.estado as EstadoNaMasmorra;
   const pelo = portao.andar === 1 ? 'Andar 1' : `Andar ${portao.andar}, pelo totem`;

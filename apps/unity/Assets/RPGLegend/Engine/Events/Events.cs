@@ -120,6 +120,8 @@ namespace RPGLegend.Engine
         public RngFn Rng;
         /// <summary>O relógio do uid do item de estudar/examinar (o InstantiateOptions.now). Ausente, Date.now.</summary>
         public Func<double> Now;
+        /// <summary>Quem joga é o app: o item de estudar/examinar pode vir com material.</summary>
+        public bool App;
     }
 
     /// <summary>
@@ -177,7 +179,7 @@ namespace RPGLegend.Engine
             if (choice == EventChoices.Ignorar || choice == EventChoices.Desistir) return Choice(hero, EventOutcome.Declined(), true);
             if (choice == EventChoices.Ajudar) return ResolveAjudar(hero);
             if (choice == EventChoices.Curar) return ResolveCurar(hero);
-            if (choice == EventChoices.Estudar || choice == EventChoices.Examinar) return ResolveEstudarOuExaminar(hero, floor, rng, options.Now);
+            if (choice == EventChoices.Estudar || choice == EventChoices.Examinar) return ResolveEstudarOuExaminar(hero, floor, rng, options.Now, options.App);
             if (choice == EventChoices.Rezar) return ResolveRezar(hero);
             if (choice == EventChoices.Sacrificar) return ResolveSacrificar(hero);
             if (choice == EventChoices.Forcar) return ResolveForcar(hero, floor);
@@ -212,12 +214,12 @@ namespace RPGLegend.Engine
         /// TS: resolveEstudarOuExaminar — intelecto 13 ou mais acha um item do andar (o herói fica o mesmo);
         /// senão perde 8 de mana (até 0).
         /// </summary>
-        private static EventResolveResult ResolveEstudarOuExaminar(Hero hero, double floor, RngFn rng, Func<double> now)
+        private static EventResolveResult ResolveEstudarOuExaminar(Hero hero, double floor, RngFn rng, Func<double> now, bool app)
         {
             bool success = hero.Attrs.Intelecto >= 13;
             if (success)
             {
-                var item = Items.RandomItem(new Items.RandomItemOptions { Floor = floor, Rng = rng, Now = now });
+                var item = Items.RandomItem(new Items.RandomItemOptions { Floor = floor, Rng = rng, Now = now, App = app });
                 return Choice(hero, EventOutcome.Studied(true, item), true);
             }
             var nextHero = hero.Clone();

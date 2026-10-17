@@ -76,7 +76,7 @@ export const EXTRA_POTIONS = ['pot_vida', 'pot_mana'] as const;
  * geração: o resto do andar sai igual ao de antes pra mesma semente.
  * `floor` é o andar **de força** (o que decide ouro e item).
  */
-export function placeExtras(rooms: DungeonCell[], floor: number, rng: Rng, now?: () => number): void {
+export function placeExtras(rooms: DungeonCell[], floor: number, rng: Rng, now?: () => number, app = false): void {
   for (const cell of rooms) {
     const livres: { col: number; row: number }[] = EXTRA_TILES.map((t) => ({ col: t.col, row: t.row }));
     const quantos = rng() < 0.5 ? 1 : 2;
@@ -104,7 +104,7 @@ export function placeExtras(rooms: DungeonCell[], floor: number, rng: Rng, now?:
     rng,
   );
   const vao = DOOR_TILE[side];
-  (cell.extras ??= []).push({ kind: 'crack', col: vao.col, row: vao.row, side, used: false, secretItem: secretItem(floor, rng, now), secretCollected: false });
+  (cell.extras ??= []).push({ kind: 'crack', col: vao.col, row: vao.row, side, used: false, secretItem: secretItem(floor, rng, now, app), secretCollected: false });
 }
 
 /** A poção do baú pequeno: vida ou mana, comum. */
@@ -115,10 +115,10 @@ function smallPotion(rng: Rng, now?: () => number): Item {
 }
 
 /** O item da sala secreta: um equipamento um degrau acima da raridade que o andar sortearia. */
-function secretItem(floor: number, rng: Rng, now?: () => number): Item {
+function secretItem(floor: number, rng: Rng, now?: () => number, app = false): Item {
   const normal = pickRarity(floor, rng);
   const acima = RARITIES[Math.min(RARITIES.indexOf(normal) + 1, RARITIES.length - 1)] as Rarity;
-  return randomItem({ category: pick(EQUIPPABLE_CATEGORIES, rng), rarity: acima.id, floor, rng, now });
+  return randomItem({ category: pick(EQUIPPABLE_CATEGORIES, rng), rarity: acima.id, floor, rng, now, app });
 }
 
 /** O ouro do baú pequeno, sorteado ao abrir: menos que o baú da sala de tesouro (8 a 25, mais 2 por andar). */

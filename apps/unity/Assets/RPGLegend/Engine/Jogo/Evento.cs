@@ -18,6 +18,8 @@ namespace RPGLegend.Engine
         public EventTemplate Template;
         public bool Resolvido;
         public List<string> Log;
+        /// <summary>O evento é o do app: o item que ele dá pode vir com material. Só aparece quando é true.</summary>
+        public bool? App;
 
         public Evento Clone() => (Evento)MemberwiseClone();
     }
@@ -50,8 +52,8 @@ namespace RPGLegend.Engine
         /// <summary>TS: ESCOLHAS.</summary>
         public static OrderedMap<List<Escolha>> TodasAsEscolhas => GameData.EventoTable.Escolhas;
 
-        /// <summary>TS: abrirEvento — null quando a sala não tem evento conhecido.</summary>
-        public static Evento AbrirEvento(EstadoNaMasmorra estado)
+        /// <summary>TS: abrirEvento — null quando a sala não tem evento conhecido. <paramref name="app"/>: o evento é o do app.</summary>
+        public static Evento AbrirEvento(EstadoNaMasmorra estado, bool app = false)
         {
             var sala = Estados.CelulaAtual(estado) as DungeonCell;
             var template = sala?.Event != null ? DungeonEvents.TemplateById(sala.Event.TemplateId) : null;
@@ -64,6 +66,7 @@ namespace RPGLegend.Engine
                 Template = template,
                 Resolvido = resolvido,
                 Log = new List<string> { resolvido ? "Este evento já foi resolvido." : template.Text },
+                App = app ? true : (bool?)null,
             };
         }
 
@@ -76,7 +79,7 @@ namespace RPGLegend.Engine
             if (evento.Resolvido) return evento;
 
             var resultado = DungeonEvents.Resolve(evento.Estado.Hero, Estados.AndarDeForca(evento.Estado), escolha,
-                new EventResolveOptions { Rng = rng ?? Rng.Default, Now = now });
+                new EventResolveOptions { Rng = rng ?? Rng.Default, Now = now, App = evento.App == true });
             var mensagem = Narrar(resultado.Outcome) + NarrarXp(resultado.Xp);
 
             var comHeroi = evento.Estado.Clone();

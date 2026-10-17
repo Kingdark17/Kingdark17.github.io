@@ -25,7 +25,12 @@ const BLACKSMITH_CATEGORIES: ItemCategory[] = ['arma', 'armadura', 'acessorio'];
 export interface RollStockOptions {
   rng?: Rng;
   now?: () => number;
+  /** A loja é a do app: o ferreiro vende peça no degrau 2 do material, mas nunca no 3 (decisão do usuário, 2026-10-17). */
+  app?: boolean;
 }
+
+/** O degrau mais alto que a loja do app vende. */
+export const DEGRAU_DA_LOJA = 2;
 
 /** Sorteia 5 itens à venda: equipamento pro ferreiro, consumível pro vendedor itinerante. */
 export function rollStock(kind: ShopKind, floor: number, options: RollStockOptions = {}): Item[] {
@@ -33,7 +38,7 @@ export function rollStock(kind: ShopKind, floor: number, options: RollStockOptio
   const stock: Item[] = [];
   for (let i = 0; i < 5; i++) {
     const category: ItemCategory = kind === 'blacksmith' ? pick(BLACKSMITH_CATEGORIES, rng) : 'consumivel';
-    stock.push(randomItem({ category, floor, rng, now: options.now }));
+    stock.push(randomItem({ category, floor, rng, now: options.now, ...(options.app ? { app: true, tetoDoDegrau: DEGRAU_DA_LOJA } : {}) }));
   }
   return stock;
 }

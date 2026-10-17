@@ -9,6 +9,8 @@ namespace RPGLegend.Engine
         public EstadoNaCidade Estado;
         public DungeonRun Escolha;
         public double Andar;
+        /// <summary>O portão é o do app: o andar de entrada pode ter item com material. Só aparece quando é true.</summary>
+        public bool? App;
 
         public Portao Clone() => (Portao)MemberwiseClone();
     }
@@ -76,11 +78,11 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: abrirPortao — abre na última descida, se ainda estiver aberta; senão, na Floresta Normal.</summary>
-        public static Portao AbrirPortao(EstadoNaCidade estado)
+        public static Portao AbrirPortao(EstadoNaCidade estado, bool app = false)
         {
             var ultima = Bloqueio(estado, estado.Masmorra) != null ? null : estado.Masmorra;
             var escolha = ultima ?? Run("floresta", "normal");
-            return new Portao { Estado = estado, Escolha = escolha, Andar = AndarMaisFundo(estado, escolha) };
+            return new Portao { Estado = estado, Escolha = escolha, Andar = AndarMaisFundo(estado, escolha), App = app ? true : (bool?)null };
         }
 
         /// <summary>TS: masmorras.</summary>
@@ -149,7 +151,7 @@ namespace RPGLegend.Engine
             rng = rng ?? Rng.Default;
             if (Bloqueio(portao.Estado, portao.Escolha) != null || !Andares(portao).Contains(portao.Andar)) return null;
 
-            var dentro = Estados.EntrarNaMasmorra(portao.Estado, rng, portao.Escolha, portao.Andar, now);
+            var dentro = Estados.EntrarNaMasmorra(portao.Estado, rng, portao.Escolha, portao.Andar, now, portao.App == true);
             var etapa = Tutoriais.Marcar(dentro, "dungeon", rng, now);
             var pelo = portao.Andar == 1 ? "Andar 1" : "Andar " + Js.NumberToString(portao.Andar) + ", pelo totem";
             return new Entrada

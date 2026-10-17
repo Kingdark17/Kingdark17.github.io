@@ -18668,5 +18668,1613 @@
       },
       "rngCalls": 20
     }
+  },
+  {
+    "name": "resolveRestock: o ferreiro do app, no fundo",
+    "input": {
+      "fn": "resolveRestock",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 200,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "kind": "blacksmith",
+        "floor": 90,
+        "restockCount": 0,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 200,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "forSale": null,
+        "restockCount": 0,
+        "outcome": {
+          "kind": "insufficient_gold",
+          "required": 280
+        }
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "rollStock: blacksmith do app, andar 3, seed 1",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "blacksmith",
+        "floor": 3,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "escudo_1700000000000_96836",
+          "templateId": "escudo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 5,
+            "velocidade": -1
+          },
+          "value": 24,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "cajado_1700000000000_99481",
+          "templateId": "cajado",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 4,
+            "mana": 10
+          },
+          "value": 31,
+          "equipped": false,
+          "procChance": 0.115,
+          "foundFloor": 3
+        },
+        {
+          "uid": "placas_calca_1700000000000_24752",
+          "templateId": "placas_calca",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 2,
+            "esquiva": -1
+          },
+          "value": 8,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "arco_1700000000000_76710",
+          "templateId": "arco",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4,
+            "esquiva": 2,
+            "critico": 6
+          },
+          "value": 24,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "machado_1700000000000_59037",
+          "templateId": "machado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "velocidade": -1
+          },
+          "value": 26,
+          "equipped": false,
+          "procChance": 0.12,
+          "foundFloor": 3
+        }
+      ],
+      "rngCalls": 25
+    }
+  },
+  {
+    "name": "rollStock: blacksmith do app, andar 3, seed 2",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "blacksmith",
+        "floor": 3,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "amuleto_sab_1700000000000_53794",
+          "templateId": "amuleto_sab",
+          "rarity": "comum",
+          "stats": {
+            "mana": 6,
+            "vida": 4
+          },
+          "value": 20,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "bota_vento_1700000000000_35724",
+          "templateId": "bota_vento",
+          "rarity": "comum",
+          "stats": {
+            "velocidade": 3,
+            "esquiva": 1
+          },
+          "value": 18,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "anel_som_1700000000000_20154",
+          "templateId": "anel_som",
+          "rarity": "incomum",
+          "stats": {
+            "critico": 7,
+            "esquiva": 3
+          },
+          "value": 26,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "robe_chapeu_1700000000000_67222",
+          "templateId": "robe_chapeu",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 3
+          },
+          "value": 7,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "botas_1700000000000_6218",
+          "templateId": "botas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 1,
+            "velocidade": 1
+          },
+          "value": 14,
+          "equipped": false,
+          "foundFloor": 3
+        }
+      ],
+      "rngCalls": 22
+    }
+  },
+  {
+    "name": "rollStock: blacksmith do app, andar 3, seed 3",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "blacksmith",
+        "floor": 3,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "anel_som_1700000000000_7492",
+          "templateId": "anel_som",
+          "rarity": "comum",
+          "stats": {
+            "critico": 5,
+            "esquiva": 2
+          },
+          "value": 20,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "amuleto_sab_1700000000000_16179",
+          "templateId": "amuleto_sab",
+          "rarity": "comum",
+          "stats": {
+            "mana": 6,
+            "vida": 4
+          },
+          "value": 20,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "cajado_1700000000000_71378",
+          "templateId": "cajado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "mana": 8
+          },
+          "value": 24,
+          "equipped": false,
+          "procChance": 0.1,
+          "foundFloor": 3
+        },
+        {
+          "uid": "robe_chapeu_1700000000000_69057",
+          "templateId": "robe_chapeu",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 3
+          },
+          "value": 7,
+          "equipped": false,
+          "foundFloor": 3
+        },
+        {
+          "uid": "maca_1700000000000_53994",
+          "templateId": "maca",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "vida": 6
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.1,
+          "foundFloor": 3
+        }
+      ],
+      "rngCalls": 23
+    }
+  },
+  {
+    "name": "rollStock: blacksmith do app, andar 40, seed 1",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "blacksmith",
+        "floor": 40,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "escudo_1700000000000_96836",
+          "templateId": "escudo",
+          "rarity": "incomum",
+          "stats": {
+            "defesa": 11,
+            "velocidade": -1
+          },
+          "value": 31,
+          "equipped": false,
+          "foundFloor": 40
+        },
+        {
+          "uid": "cajado_1700000000000_99481",
+          "templateId": "cajado",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 8,
+            "mana": 22
+          },
+          "value": 41,
+          "equipped": false,
+          "procChance": 0.135,
+          "foundFloor": 40
+        },
+        {
+          "uid": "placas_calca_1700000000000_24752",
+          "templateId": "placas_calca",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 3,
+            "esquiva": -1
+          },
+          "value": 8,
+          "equipped": false,
+          "foundFloor": 40
+        },
+        {
+          "uid": "arco_1700000000000_76710",
+          "templateId": "arco",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "esquiva": 3,
+            "critico": 10
+          },
+          "value": 24,
+          "equipped": false,
+          "foundFloor": 40
+        },
+        {
+          "uid": "machado_1700000000000_59037",
+          "templateId": "machado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 10,
+            "velocidade": -1
+          },
+          "value": 26,
+          "equipped": false,
+          "procChance": 0.12,
+          "foundFloor": 40
+        }
+      ],
+      "rngCalls": 25
+    }
+  },
+  {
+    "name": "rollStock: blacksmith do app, andar 40, seed 2",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "blacksmith",
+        "floor": 40,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "amuleto_sab_1700000000000_53794",
+          "templateId": "amuleto_sab",
+          "rarity": "comum",
+          "stats": {
+            "mana": 10,
+            "vida": 6
+          },
+          "value": 20,
+          "equipped": false,
+          "foundFloor": 40
+        },
+        {
+          "uid": "bota_vento_1700000000000_35724",
+          "templateId": "bota_vento",
+          "rarity": "incomum",
+          "stats": {
+            "velocidade": 6,
+            "esquiva": 2
+          },
+          "value": 23,
+          "equipped": false,
+          "foundFloor": 40
+        },
+        {
+          "uid": "anel_som_1700000000000_20154",
+          "templateId": "anel_som",
+          "rarity": "raro",
+          "stats": {
+            "critico": 14,
+            "esquiva": 5
+          },
+          "value": 34,
+          "equipped": false,
+          "foundFloor": 40
+        },
+        {
+          "uid": "robe_chapeu_1700000000000_67222",
+          "templateId": "robe_chapeu",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 5
+          },
+          "value": 8,
+          "equipped": false,
+          "degrau": 2,
+          "foundFloor": 40
+        },
+        {
+          "uid": "botas_1700000000000_6218",
+          "templateId": "botas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 2,
+            "velocidade": 2
+          },
+          "value": 14,
+          "equipped": false,
+          "foundFloor": 40
+        }
+      ],
+      "rngCalls": 22
+    }
+  },
+  {
+    "name": "rollStock: blacksmith do app, andar 40, seed 3",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "blacksmith",
+        "floor": 40,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "anel_som_1700000000000_7492",
+          "templateId": "anel_som",
+          "rarity": "incomum",
+          "stats": {
+            "critico": 11,
+            "esquiva": 5
+          },
+          "value": 26,
+          "equipped": false,
+          "foundFloor": 40
+        },
+        {
+          "uid": "amuleto_sab_1700000000000_16179",
+          "templateId": "amuleto_sab",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 13,
+            "vida": 8
+          },
+          "value": 26,
+          "equipped": false,
+          "foundFloor": 40
+        },
+        {
+          "uid": "cajado_1700000000000_71378",
+          "templateId": "cajado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "mana": 16
+          },
+          "value": 30,
+          "equipped": false,
+          "procChance": 0.1,
+          "degrau": 2,
+          "foundFloor": 40
+        },
+        {
+          "uid": "robe_chapeu_1700000000000_69057",
+          "templateId": "robe_chapeu",
+          "rarity": "raro",
+          "stats": {
+            "mana": 6
+          },
+          "value": 11,
+          "equipped": false,
+          "degrau": 2,
+          "foundFloor": 40
+        },
+        {
+          "uid": "maca_1700000000000_53994",
+          "templateId": "maca",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 6,
+            "vida": 13
+          },
+          "value": 29,
+          "equipped": false,
+          "procChance": 0.115,
+          "foundFloor": 40
+        }
+      ],
+      "rngCalls": 23
+    }
+  },
+  {
+    "name": "rollStock: blacksmith do app, andar 90, seed 1",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "blacksmith",
+        "floor": 90,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "escudo_1700000000000_96836",
+          "templateId": "escudo",
+          "rarity": "incomum",
+          "stats": {
+            "defesa": 12,
+            "velocidade": -1
+          },
+          "value": 31,
+          "equipped": false,
+          "foundFloor": 90
+        },
+        {
+          "uid": "cajado_1700000000000_99481",
+          "templateId": "cajado",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 11,
+            "mana": 30
+          },
+          "value": 51,
+          "equipped": false,
+          "procChance": 0.135,
+          "degrau": 2,
+          "foundFloor": 90
+        },
+        {
+          "uid": "placas_calca_1700000000000_24752",
+          "templateId": "placas_calca",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 5,
+            "esquiva": -1
+          },
+          "value": 10,
+          "equipped": false,
+          "degrau": 2,
+          "foundFloor": 90
+        },
+        {
+          "uid": "arco_1700000000000_76710",
+          "templateId": "arco",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 9,
+            "esquiva": 5,
+            "critico": 14
+          },
+          "value": 30,
+          "equipped": false,
+          "degrau": 2,
+          "foundFloor": 90
+        },
+        {
+          "uid": "machado_1700000000000_59037",
+          "templateId": "machado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 14,
+            "velocidade": -1
+          },
+          "value": 33,
+          "equipped": false,
+          "procChance": 0.12,
+          "degrau": 2,
+          "foundFloor": 90
+        }
+      ],
+      "rngCalls": 25
+    }
+  },
+  {
+    "name": "rollStock: blacksmith do app, andar 90, seed 2",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "blacksmith",
+        "floor": 90,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "amuleto_sab_1700000000000_53794",
+          "templateId": "amuleto_sab",
+          "rarity": "comum",
+          "stats": {
+            "mana": 11,
+            "vida": 7
+          },
+          "value": 20,
+          "equipped": false,
+          "foundFloor": 90
+        },
+        {
+          "uid": "bota_vento_1700000000000_35724",
+          "templateId": "bota_vento",
+          "rarity": "incomum",
+          "stats": {
+            "velocidade": 7,
+            "esquiva": 2
+          },
+          "value": 23,
+          "equipped": false,
+          "foundFloor": 90
+        },
+        {
+          "uid": "anel_som_1700000000000_20154",
+          "templateId": "anel_som",
+          "rarity": "raro",
+          "stats": {
+            "critico": 16,
+            "esquiva": 5
+          },
+          "value": 34,
+          "equipped": false,
+          "foundFloor": 90
+        },
+        {
+          "uid": "robe_chapeu_1700000000000_67222",
+          "templateId": "robe_chapeu",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 5
+          },
+          "value": 8,
+          "equipped": false,
+          "degrau": 2,
+          "foundFloor": 90
+        },
+        {
+          "uid": "botas_1700000000000_6218",
+          "templateId": "botas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 2,
+            "velocidade": 2
+          },
+          "value": 14,
+          "equipped": false,
+          "foundFloor": 90
+        }
+      ],
+      "rngCalls": 22
+    }
+  },
+  {
+    "name": "rollStock: blacksmith do app, andar 90, seed 3",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "blacksmith",
+        "floor": 90,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "anel_som_1700000000000_7492",
+          "templateId": "anel_som",
+          "rarity": "incomum",
+          "stats": {
+            "critico": 12,
+            "esquiva": 5
+          },
+          "value": 26,
+          "equipped": false,
+          "foundFloor": 90
+        },
+        {
+          "uid": "amuleto_sab_1700000000000_16179",
+          "templateId": "amuleto_sab",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 14,
+            "vida": 9
+          },
+          "value": 26,
+          "equipped": false,
+          "foundFloor": 90
+        },
+        {
+          "uid": "cajado_1700000000000_71378",
+          "templateId": "cajado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 7,
+            "mana": 18
+          },
+          "value": 30,
+          "equipped": false,
+          "procChance": 0.1,
+          "degrau": 2,
+          "foundFloor": 90
+        },
+        {
+          "uid": "robe_chapeu_1700000000000_69057",
+          "templateId": "robe_chapeu",
+          "rarity": "raro",
+          "stats": {
+            "mana": 7
+          },
+          "value": 11,
+          "equipped": false,
+          "degrau": 2,
+          "foundFloor": 90
+        },
+        {
+          "uid": "maca_1700000000000_53994",
+          "templateId": "maca",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 7,
+            "vida": 14
+          },
+          "value": 29,
+          "equipped": false,
+          "procChance": 0.115,
+          "foundFloor": 90
+        }
+      ],
+      "rngCalls": 23
+    }
+  },
+  {
+    "name": "rollStock: shop do app, andar 3, seed 1",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "shop",
+        "floor": 3,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pot_mana_1700000000000_52744",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_28110",
+          "templateId": "pergaminho",
+          "rarity": "epico",
+          "stats": {
+            "cura": 22,
+            "curaMana": 22
+          },
+          "value": 35,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_42579",
+          "templateId": "pot_mana",
+          "rarity": "incomum",
+          "stats": {
+            "curaMana": 21
+          },
+          "value": 18,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_48878",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        },
+        {
+          "uid": "pot_vida_1700000000000_24752",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 15
+    }
+  },
+  {
+    "name": "rollStock: shop do app, andar 3, seed 2",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "shop",
+        "floor": 3,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pergaminho_1700000000000_28529",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_63082",
+          "templateId": "pot_mana",
+          "rarity": "incomum",
+          "stats": {
+            "curaMana": 21
+          },
+          "value": 18,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_78158",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pot_vida_1700000000000_20154",
+          "templateId": "pot_vida",
+          "rarity": "incomum",
+          "stats": {
+            "cura": 29
+          },
+          "value": 18,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_58131",
+          "templateId": "pot_mana",
+          "rarity": "incomum",
+          "stats": {
+            "curaMana": 21
+          },
+          "value": 18,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 15
+    }
+  },
+  {
+    "name": "rollStock: shop do app, andar 3, seed 3",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "shop",
+        "floor": 3,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pergaminho_1700000000000_45618",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        },
+        {
+          "uid": "pot_vida_1700000000000_48117",
+          "templateId": "pot_vida",
+          "rarity": "incomum",
+          "stats": {
+            "cura": 29
+          },
+          "value": 18,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_26325",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_8359",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_79372",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 15
+    }
+  },
+  {
+    "name": "rollStock: shop do app, andar 40, seed 1",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "shop",
+        "floor": 40,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pot_mana_1700000000000_52744",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_28110",
+          "templateId": "pergaminho",
+          "rarity": "epico",
+          "stats": {
+            "cura": 22,
+            "curaMana": 22
+          },
+          "value": 35,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_42579",
+          "templateId": "pot_mana",
+          "rarity": "raro",
+          "stats": {
+            "curaMana": 27
+          },
+          "value": 24,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_48878",
+          "templateId": "pergaminho",
+          "rarity": "incomum",
+          "stats": {
+            "cura": 13,
+            "curaMana": 13
+          },
+          "value": 21,
+          "equipped": false
+        },
+        {
+          "uid": "pot_vida_1700000000000_24752",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 15
+    }
+  },
+  {
+    "name": "rollStock: shop do app, andar 40, seed 2",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "shop",
+        "floor": 40,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pergaminho_1700000000000_28529",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_63082",
+          "templateId": "pot_mana",
+          "rarity": "raro",
+          "stats": {
+            "curaMana": 27
+          },
+          "value": 24,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_78158",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pot_vida_1700000000000_20154",
+          "templateId": "pot_vida",
+          "rarity": "raro",
+          "stats": {
+            "cura": 37
+          },
+          "value": 24,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_58131",
+          "templateId": "pot_mana",
+          "rarity": "raro",
+          "stats": {
+            "curaMana": 27
+          },
+          "value": 24,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 15
+    }
+  },
+  {
+    "name": "rollStock: shop do app, andar 40, seed 3",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "shop",
+        "floor": 40,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pergaminho_1700000000000_45618",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        },
+        {
+          "uid": "pot_vida_1700000000000_48117",
+          "templateId": "pot_vida",
+          "rarity": "raro",
+          "stats": {
+            "cura": 37
+          },
+          "value": 24,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_26325",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_8359",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_79372",
+          "templateId": "pergaminho",
+          "rarity": "incomum",
+          "stats": {
+            "cura": 13,
+            "curaMana": 13
+          },
+          "value": 21,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 15
+    }
+  },
+  {
+    "name": "rollStock: shop do app, andar 90, seed 1",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "shop",
+        "floor": 90,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pot_mana_1700000000000_52744",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_28110",
+          "templateId": "pergaminho",
+          "rarity": "epico",
+          "stats": {
+            "cura": 22,
+            "curaMana": 22
+          },
+          "value": 35,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_42579",
+          "templateId": "pot_mana",
+          "rarity": "raro",
+          "stats": {
+            "curaMana": 27
+          },
+          "value": 24,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_48878",
+          "templateId": "pergaminho",
+          "rarity": "incomum",
+          "stats": {
+            "cura": 13,
+            "curaMana": 13
+          },
+          "value": 21,
+          "equipped": false
+        },
+        {
+          "uid": "pot_vida_1700000000000_24752",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 15
+    }
+  },
+  {
+    "name": "rollStock: shop do app, andar 90, seed 2",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "shop",
+        "floor": 90,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pergaminho_1700000000000_28529",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_63082",
+          "templateId": "pot_mana",
+          "rarity": "raro",
+          "stats": {
+            "curaMana": 27
+          },
+          "value": 24,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_78158",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pot_vida_1700000000000_20154",
+          "templateId": "pot_vida",
+          "rarity": "raro",
+          "stats": {
+            "cura": 37
+          },
+          "value": 24,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_58131",
+          "templateId": "pot_mana",
+          "rarity": "raro",
+          "stats": {
+            "curaMana": 27
+          },
+          "value": 24,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 15
+    }
+  },
+  {
+    "name": "rollStock: shop do app, andar 90, seed 3",
+    "input": {
+      "fn": "rollStock",
+      "args": {
+        "kind": "shop",
+        "floor": 90,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pergaminho_1700000000000_45618",
+          "templateId": "pergaminho",
+          "rarity": "comum",
+          "stats": {
+            "cura": 10,
+            "curaMana": 10
+          },
+          "value": 16,
+          "equipped": false
+        },
+        {
+          "uid": "pot_vida_1700000000000_48117",
+          "templateId": "pot_vida",
+          "rarity": "raro",
+          "stats": {
+            "cura": 37
+          },
+          "value": 24,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_26325",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pot_mana_1700000000000_8359",
+          "templateId": "pot_mana",
+          "rarity": "comum",
+          "stats": {
+            "curaMana": 16
+          },
+          "value": 14,
+          "equipped": false
+        },
+        {
+          "uid": "pergaminho_1700000000000_79372",
+          "templateId": "pergaminho",
+          "rarity": "incomum",
+          "stats": {
+            "cura": 13,
+            "curaMana": 13
+          },
+          "value": 21,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 15
+    }
   }
 ]

@@ -193,8 +193,9 @@ export function entrarNaMasmorra(
   masmorra: DungeonRun = estado.masmorra,
   andar: number = PRIMEIRO_ANDAR,
   now?: () => number,
+  app = false,
 ): EstadoNaMasmorra {
-  return gerarAndar({ ...estado, masmorra }, andar, rng, now);
+  return gerarAndar({ ...estado, masmorra }, andar, rng, now, app);
 }
 
 /** A saída da masmorra devolve o jogador à cidade guardada, no ponto de partida dela. O andar atual não é zerado — só o portão faz isso. */
@@ -209,10 +210,10 @@ export type ResultadoDaEscada = { kind: 'selado' } | { kind: 'fundo' } | { kind:
  * selado — sem isso dava pra pular todo chefe do jogo andando em volta. No
  * andar 100 não há mais pra onde descer: a masmorra termina no chefe dele.
  */
-export function descerEscada(estado: EstadoNaMasmorra, rng: Rng = defaultRng, now?: () => number): ResultadoDaEscada {
+export function descerEscada(estado: EstadoNaMasmorra, rng: Rng = defaultRng, now?: () => number, app = false): ResultadoDaEscada {
   if (isBossFloor(estado.floor) && temChefeVivo(estado)) return { kind: 'selado' };
   if (estado.floor >= DUNGEON_FLOORS) return { kind: 'fundo' };
-  return { kind: 'desceu', estado: avancarAndar(estado, rng, now) };
+  return { kind: 'desceu', estado: avancarAndar(estado, rng, now, app) };
 }
 
 /**
@@ -220,8 +221,8 @@ export function descerEscada(estado: EstadoNaMasmorra, rng: Rng = defaultRng, no
  * depois de derrotar um chefe (`advanceAfterBoss`): o caminho se abre e o
  * grupo desce sozinho.
  */
-export function avancarAndar(estado: EstadoNaMasmorra, rng: Rng = defaultRng, now?: () => number): EstadoNaMasmorra {
-  return gerarAndar(estado, estado.floor + 1, rng, now);
+export function avancarAndar(estado: EstadoNaMasmorra, rng: Rng = defaultRng, now?: () => number, app = false): EstadoNaMasmorra {
+  return gerarAndar(estado, estado.floor + 1, rng, now, app);
 }
 
 export function temChefeVivo(estado: EstadoNaMasmorra): boolean {
@@ -243,11 +244,12 @@ function professorDoAndar(hero: Hero, floor: number, rng: Rng): { classId: strin
 /**
  * `now` é o relógio do `uid` dos itens que o andar sorteia (baús, extras).
  * Ausente, `Date.now`, como sempre foi; quem passa são os casos do porte
- * pro C#, pra o andar sair igual nos dois lados.
+ * pro C#, pra o andar sair igual nos dois lados. `app`: quem desce é o app,
+ * e os itens do andar podem vir com material.
  */
-function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng, now?: () => number): EstadoNaMasmorra {
+function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng, now?: () => number, app = false): EstadoNaMasmorra {
   const teacher = professorDoAndar(base.hero, floor, rng);
-  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, { rng, run: base.masmorra, teacher, now });
+  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, { rng, run: base.masmorra, teacher, now, ...(app ? { app } : {}) });
   const inicio = { x: andar.start.x, y: andar.start.y };
 
   return {

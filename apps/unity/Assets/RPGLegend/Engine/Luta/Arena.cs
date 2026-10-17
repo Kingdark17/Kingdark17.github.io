@@ -1075,7 +1075,8 @@ namespace RPGLegend.Engine
                 return;
             }
 
-            var limpa = FimDaLuta.LimparSala(Masmorra(l), abatido, l.Rng, l.Now);
+            // A arena só existe no app: o item achado pode vir com material.
+            var limpa = FimDaLuta.LimparSala(Masmorra(l), abatido, l.Rng, l.Now, true);
             l.Estado = limpa.Estado;
             l.Loot = limpa.Loot;
             l.Fim = "vitoria";

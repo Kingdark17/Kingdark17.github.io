@@ -20,7 +20,7 @@ namespace RPGLegend.Tests
 
             Const(M, "FORGE_MATERIALS", () => W(Shop.ForgeMaterials));
 
-            Fn(M, "rollStock", (a, c) => W(Shop.RollStock(Str(a["kind"]), Num(a["floor"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "rollStock", (a, c) => W(Shop.RollStock(Str(a["kind"]), Num(a["floor"]), c.RngFn, c.NowOrFail, JsJson.Truthy(JsJson.Prop(a["options"], "app")))));
             Fn(M, "buyPrice", (a, c) => N(Shop.BuyPrice(R<Hero>(a["hero"]), R<Item>(a["item"]), Discount(a["discount"]))));
             Fn(M, "sellPrice", (a, c) => N(Shop.SellPrice(R<Item>(a["item"]))));
             Fn(M, "discountForRoll", (a, c) => N(Shop.DiscountForRoll(Num(a["roll"]))));
@@ -32,7 +32,8 @@ namespace RPGLegend.Tests
                     Discount(a["discount"]))));
             Fn(M, "resolveSell", (a, c) => W(Shop.ResolveSell(R<Hero>(a["hero"]), R<List<Item>>(a["inventory"]), R<Item>(a["item"]))));
             Fn(M, "resolveRestock", (a, c) =>
-                W(Shop.ResolveRestock(R<Hero>(a["hero"]), Str(a["kind"]), Num(a["floor"]), Num(a["restockCount"]), c.RngFn, c.NowOrFail)));
+                W(Shop.ResolveRestock(R<Hero>(a["hero"]), Str(a["kind"]), Num(a["floor"]), Num(a["restockCount"]), c.RngFn, c.NowOrFail,
+                    JsJson.Truthy(JsJson.Prop(a["options"], "app")))));
         }
 
         /// <summary>O <c>discount = 0</c> do TS: o padrão só vale para o argumento ausente (null conta como 0 na soma).</summary>

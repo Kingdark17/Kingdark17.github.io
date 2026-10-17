@@ -50,9 +50,11 @@ export interface Evento {
   template: EventTemplate;
   resolvido: boolean;
   log: string[];
+  /** O evento é o do app: o item que ele dá pode vir com material. */
+  app?: true;
 }
 
-export function abrirEvento(estado: EstadoNaMasmorra): Evento | null {
+export function abrirEvento(estado: EstadoNaMasmorra, app = false): Evento | null {
   const sala = celulaAtual(estado) as DungeonCell | null;
   const template = sala?.event ? eventTemplateById(sala.event.templateId) : null;
   if (!sala || !template) return null;
@@ -62,6 +64,7 @@ export function abrirEvento(estado: EstadoNaMasmorra): Evento | null {
     template,
     resolvido: !!sala.resolved,
     log: [sala.resolved ? 'Este evento já foi resolvido.' : template.text],
+    ...(app ? { app: true as const } : {}),
   };
 }
 
@@ -72,7 +75,7 @@ export function escolhas(evento: Evento): Escolha[] {
 export function escolher(evento: Evento, escolha: EventChoiceId, rng: Rng = defaultRng, now?: () => number): Evento {
   if (evento.resolvido) return evento;
 
-  const resultado = resolveEvent(evento.estado.hero, andarDeForca(evento.estado), escolha, { rng, now });
+  const resultado = resolveEvent(evento.estado.hero, andarDeForca(evento.estado), escolha, { rng, now, ...(evento.app ? { app: true } : {}) });
   const mensagem = narrar(resultado.outcome) + narrarXp(resultado.xp);
 
   if (!resultado.resolved) {

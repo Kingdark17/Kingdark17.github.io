@@ -158,6 +158,8 @@ export interface DungeonGenerateOptions {
    * depende do herói (maestria, quem já encontrou) e o andar não sabe dele.
    */
   teacher?: Omit<DungeonTeacher, 'taught'>;
+  /** Quem gera o andar é o app: os itens dos baús e das salas podem vir com material (`items/materiais.ts`). */
+  app?: boolean;
 }
 
 interface DistantRoomsResult {
@@ -238,7 +240,7 @@ function reserveDistant(
  * recompensa extra em salas com mais de um inimigo. `floor` aqui é o andar
  * **de força** (`effectiveFloor`), e `species`, as da masmorra.
  */
-function populateMonsterRooms(rooms: DungeonCell[], floor: number, species: readonly string[], rng: Rng, now?: () => number): void {
+function populateMonsterRooms(rooms: DungeonCell[], floor: number, species: readonly string[], rng: Rng, now?: () => number, app = false): void {
   for (const cell of rooms) {
     const groupSize = monsterGroupSize(floor, rng);
     cell.monsters = [];
@@ -246,7 +248,7 @@ function populateMonsterRooms(rooms: DungeonCell[], floor: number, species: read
     cell.monsterIndex = 0;
     cell.beaten = false;
     if (groupSize > 1 && rng() < 0.35) {
-      cell.bonusTreasure = rng() < 0.7 ? { gold: 10 + floor * 3 + randomInt(15, rng) } : { item: randomItem({ floor, rng, now }) };
+      cell.bonusTreasure = rng() < 0.7 ? { gold: 10 + floor * 3 + randomInt(15, rng) } : { item: randomItem({ floor, rng, now, app }) };
     }
   }
 }
@@ -259,7 +261,7 @@ function placeBoss(bossRoom: DungeonCell | undefined, floor: number, main: boole
 }
 
 /** Preenche NPC/evento/tesouro nas salas já tipadas por `place()` — monstro e chefe já saem prontos de `populateMonsterRooms`/`placeBoss`. */
-function populateRoomContent(rooms: DungeonCell[], floor: number, rng: Rng, now?: () => number): void {
+function populateRoomContent(rooms: DungeonCell[], floor: number, rng: Rng, now?: () => number, app = false): void {
   for (const cell of rooms) {
     if (cell.type === 'npc') {
       const template = pick(NPC_TEMPLATES, rng);
@@ -272,7 +274,7 @@ function populateRoomContent(rooms: DungeonCell[], floor: number, rng: Rng, now?
     if (cell.type === 'treasure') {
       cell.isMimic = rng() < Math.min(0.25, 0.1 + floor * 0.008);
       cell.giveGold = rng() < 0.7;
-      cell.item = cell.giveGold ? null : randomItem({ floor, rng, now });
+      cell.item = cell.giveGold ? null : randomItem({ floor, rng, now, app });
       cell.collected = false;
     }
   }
@@ -302,6 +304,7 @@ const MAX_TREASURES = 3;
 export function generateDungeonFloor(floor: number, rows: number, cols: number, options: DungeonGenerateOptions = {}): DungeonFloor {
   const rng = options.rng ?? defaultRng;
   const { now } = options;
+  const app = !!options.app;
   const run = options.run ?? DEFAULT_RUN;
   const forca = effectiveFloor(run, floor);
   const species = dungeonById(run.dungeon)?.species ?? [];
@@ -337,13 +340,13 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
   // uma terceira sala para o chefe.
   const reservedRooms = isBossFloor(floor) ? 1 : 0;
   const monsterRoomCount = Math.min(pool.length - reservedRooms, 3 + Math.floor((floor - 1) * 1.3));
-  populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), forca, species, rng, now);
+  populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), forca, species, rng, now, app);
 
   if (isBossFloor(floor)) placeBoss(place('boss', 1)[0], forca, floor % 10 === 0, species, rng);
 
-  populateRoomContent(res.rooms as DungeonCell[], forca, rng, now);
+  populateRoomContent(res.rooms as DungeonCell[], forca, rng, now, app);
   // Por último: o resto do andar sai igual ao de antes pra mesma semente.
-  placeExtras(res.rooms as DungeonCell[], forca, rng, now);
+  placeExtras(res.rooms as DungeonCell[], forca, rng, now, app);
 
   return { grid: res.grid as DungeonCell[][], rooms: res.rooms as DungeonCell[], start: res.start as DungeonCell };
 }

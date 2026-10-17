@@ -965,7 +965,8 @@ function abater(l: Luta, indice: number, abatido: CombatMonsterView): void {
     return;
   }
 
-  const limpa = limparSala(masmorra(l), abatido, l.rng, l.now);
+  // A arena só existe no app: o item achado pode vir com material.
+  const limpa = limparSala(masmorra(l), abatido, l.rng, l.now, true);
   l.estado = limpa.estado;
   l.loot = limpa.loot;
   l.fim = 'vitoria';

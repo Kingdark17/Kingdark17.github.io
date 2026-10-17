@@ -100,13 +100,15 @@ namespace RPGLegend.Engine
         /// <summary>
         /// TS: interagir — resolve a sala em que o jogador está. A etapa do tutorial é marcada antes de montar a
         /// tela da sala. <paramref name="pet"/> é o cosmético da conta (só a luta usa); <paramref name="now"/> é o
-        /// relógio do estoque, das missões, do andar de baixo e do prêmio do tutorial.
+        /// relógio do estoque, das missões, do andar de baixo e do prêmio do tutorial. <paramref name="app"/>: quem
+        /// joga é o app, e o que a sala faz nascer (o estoque do ferreiro, o andar de baixo, o item do evento, o andar
+        /// do portão) pode vir com material.
         /// </summary>
-        public static ResultadoDaInteracao Interagir(EstadoDoJogo estado, RngFn rng = null, string pet = null, Func<double> now = null)
+        public static ResultadoDaInteracao Interagir(EstadoDoJogo estado, RngFn rng = null, string pet = null, Func<double> now = null, bool app = false)
         {
             rng = rng ?? Rng.Default;
             var antes = ComEtapaDaSala(estado, rng, now);
-            var resultado = antes.Estado.MapMode == "city" ? NaCidade((EstadoNaCidade)antes.Estado, rng, now) : NaMasmorra(antes.Estado, rng, pet, now);
+            var resultado = antes.Estado.MapMode == "city" ? NaCidade((EstadoNaCidade)antes.Estado, rng, now, app) : NaMasmorra(antes.Estado, rng, pet, now, app);
             resultado.Recado = antes.Recado;
             return resultado;
         }
@@ -123,7 +125,7 @@ namespace RPGLegend.Engine
             return jaBatida || aprendiz ? new ResultadoDoPasso { Estado = estado, Recado = null } : Tutoriais.Marcar(estado, passo, rng, now);
         }
 
-        private static ResultadoDaInteracao NaCidade(EstadoNaCidade estado, RngFn rng, Func<double> now)
+        private static ResultadoDaInteracao NaCidade(EstadoNaCidade estado, RngFn rng, Func<double> now, bool app)
         {
             var celula = Estados.CelulaAtual(estado);
             if (celula == null) return Nada(estado);
@@ -135,7 +137,7 @@ namespace RPGLegend.Engine
                     if (!Heroes.HasClass(estado.Hero))
                         return ComAviso(estado, "🌟", "Portão da Masmorra",
                             "O guarda barra a passagem: a masmorra é só para quem já treinou na Guilda dos Aventureiros, ao lado do caminho até aqui.");
-                    return ComTela(estado, new TelaAberta { Tipo = "portao", Portao = Portoes.AbrirPortao(estado) });
+                    return ComTela(estado, new TelaAberta { Tipo = "portao", Portao = Portoes.AbrirPortao(estado, app) });
                 case "tavern":
                 {
                     var descanso = City.RestAtTavern(estado.Hero, estado.Party);
@@ -145,9 +147,9 @@ namespace RPGLegend.Engine
                     return ComAviso(descansado, "🍺", "Taverna", "Você descansa por uma noite. Vida e mana totalmente restauradas.", "door");
                 }
                 case "shop":
-                    return ComTela(estado, new TelaAberta { Tipo = "loja", Loja = Lojas.AbrirLoja(estado, ShopKinds.Shop, rng, now) }, "door");
+                    return ComTela(estado, new TelaAberta { Tipo = "loja", Loja = Lojas.AbrirLoja(estado, ShopKinds.Shop, rng, now, app) }, "door");
                 case "blacksmith":
-                    return ComTela(estado, new TelaAberta { Tipo = "loja", Loja = Lojas.AbrirLoja(estado, ShopKinds.Blacksmith, rng, now) }, "door");
+                    return ComTela(estado, new TelaAberta { Tipo = "loja", Loja = Lojas.AbrirLoja(estado, ShopKinds.Blacksmith, rng, now, app) }, "door");
                 case "questboard":
                     return ComTela(estado, new TelaAberta { Tipo = "missoes", Quadro = QuadroDeMissoes.AbrirQuadro(estado, rng, now) });
                 case "guild":
@@ -161,7 +163,7 @@ namespace RPGLegend.Engine
             }
         }
 
-        private static ResultadoDaInteracao NaMasmorra(EstadoDoJogo qualquer, RngFn rng, string pet, Func<double> now)
+        private static ResultadoDaInteracao NaMasmorra(EstadoDoJogo qualquer, RngFn rng, string pet, Func<double> now, bool app)
         {
             var celula = Estados.CelulaAtual(qualquer) as DungeonCell;
             if (celula == null || qualquer.MapMode != "dungeon" || !(qualquer is EstadoNaMasmorra estado)) return Nada(qualquer);
@@ -175,7 +177,7 @@ namespace RPGLegend.Engine
                     if (celula.Beaten ?? false) return ComAviso(estado, "👾", "Sala Vazia", "Não há mais nada aqui.");
                     return ComTela(estado, new TelaAberta { Tipo = "combate", Combate = Combates.IniciarEncontro(estado, pet) });
                 case DungeonRoomTypes.Stairs:
-                    return Descer(estado, rng, now);
+                    return Descer(estado, rng, now, app);
                 case DungeonRoomTypes.Exit:
                     return ComAviso(Estados.VoltarParaCidade(estado), "🚪", "De Volta à Cidade", "Você sobe o caminho iluminado e retorna à cidade.", "door");
                 case DungeonRoomTypes.Npc:
@@ -195,7 +197,7 @@ namespace RPGLegend.Engine
                 }
                 case DungeonRoomTypes.Event:
                 {
-                    var evento = Eventos.AbrirEvento(estado);
+                    var evento = Eventos.AbrirEvento(estado, app);
                     if (evento == null) return Nada(estado);
                     // Já resolvido vira aviso, com o ícone e o título do próprio evento.
                     if (evento.Resolvido) return ComAviso(estado, evento.Template.Icon, evento.Template.Title, "Você já resolveu o que havia aqui.");
@@ -208,9 +210,9 @@ namespace RPGLegend.Engine
             }
         }
 
-        private static ResultadoDaInteracao Descer(EstadoNaMasmorra estado, RngFn rng, Func<double> now)
+        private static ResultadoDaInteracao Descer(EstadoNaMasmorra estado, RngFn rng, Func<double> now, bool app)
         {
-            var resultado = Estados.DescerEscada(estado, rng, now);
+            var resultado = Estados.DescerEscada(estado, rng, now, app);
             if (resultado.Kind == "selado")
                 return ComAviso(estado, "👑", "Caminho Selado", "O poder do chefe bloqueia as escadas. Derrote-o para avançar.");
             if (resultado.Kind == "fundo")

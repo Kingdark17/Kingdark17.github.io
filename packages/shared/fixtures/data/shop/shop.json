@@ -4,6 +4,7 @@
     "armadura",
     "acessorio"
   ],
+  "DEGRAU_DA_LOJA": 2,
   "FORGE_MATERIALS": {
     "minerio": {
       "cost": 20,

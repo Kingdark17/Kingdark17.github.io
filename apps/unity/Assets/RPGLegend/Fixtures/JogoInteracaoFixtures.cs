@@ -16,7 +16,7 @@ namespace RPGLegend.Tests
         {
             Fn(M, "lutaAoEntrar", (a, c) => W(Salas.LutaAoEntrar(R<DungeonCell>(a["celula"]))));
             Fn(M, "confirmaAoTocar", (a, c) => W(Salas.ConfirmaAoTocar(R<DungeonCell>(a["celula"]))));
-            Fn(M, "interagir", (a, c) => W(Salas.Interagir(JogoJson.LerEstado(a["estado"]), c.RngFn, Str(a["pet"]), c.NowOrFail)));
+            Fn(M, "interagir", (a, c) => W(Salas.Interagir(JogoJson.LerEstado(a["estado"]), c.RngFn, Str(a["pet"]), c.NowOrFail, JsJson.Truthy(a["app"]))));
 
             Fn(M, "salaDeCombate", (a, c) => W(Combates.SalaDeCombate(JogoJson.LerEstado(a["estado"]))));
             Fn(M, "monstroAtual", (a, c) => W(Combates.MonstroAtual(JogoJson.LerEstado(a["estado"]))));
@@ -35,7 +35,8 @@ namespace RPGLegend.Tests
             Fn(M, "gravarMonstro", (a, c) => W(FimDaLuta.GravarMonstro(R<EstadoNaMasmorra>(a["estado"]), Num(a["indice"]), R<CombatMonsterView>(a["monstro"]))));
             Fn(M, "prepararLuta", (a, c) => W(FimDaLuta.PrepararLuta(R<EstadoNaMasmorra>(a["estado"]))));
             Fn(M, "pagarAbate", (a, c) => W(FimDaLuta.PagarAbate(R<EstadoNaMasmorra>(a["estado"]), R<CombatMonsterView>(a["abatido"]))));
-            Fn(M, "limparSala", (a, c) => W(FimDaLuta.LimparSala(R<EstadoNaMasmorra>(a["estado"]), R<CombatMonsterView>(a["abatido"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "limparSala", (a, c) => W(FimDaLuta.LimparSala(R<EstadoNaMasmorra>(a["estado"]), R<CombatMonsterView>(a["abatido"]), c.RngFn, c.NowOrFail,
+                JsJson.Truthy(a["app"]))));
             Fn(M, "perderLuta", (a, c) => W(FimDaLuta.PerderLuta(R<EstadoNaMasmorra>(a["estado"]), c.RngFn)));
 
             Fn(M, "criacaoVazia", (a, c) => W(Criacoes.CriacaoVazia(Str(a["nome"]))));

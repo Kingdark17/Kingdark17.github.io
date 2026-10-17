@@ -94,6 +94,8 @@ export interface EventResolveOptions {
   rng?: Rng;
   /** Injetável para o `uid` do item de `estudar`/`examinar` ficar reproduzível em teste — mesmo padrão de `InstantiateOptions.now`. */
   now?: () => number;
+  /** Quem joga é o app: o item de `estudar`/`examinar` pode vir com material. */
+  app?: boolean;
 }
 
 function resolveAjudar(hero: Hero): ChoiceResult {
@@ -111,10 +113,10 @@ function resolveCurar(hero: Hero): ChoiceResult {
 }
 
 /** Compartilhada por `estudar` (altar) e `examinar` (porta) — mesma fórmula no original, ver nota de `EventChoiceId`. */
-function resolveEstudarOuExaminar(hero: Hero, floor: number, rng: Rng, now: (() => number) | undefined): ChoiceResult {
+function resolveEstudarOuExaminar(hero: Hero, floor: number, rng: Rng, now: (() => number) | undefined, app = false): ChoiceResult {
   const success = hero.attrs.intelecto >= 13;
   if (success) {
-    const item = randomItem({ floor, rng, now });
+    const item = randomItem({ floor, rng, now, app });
     return { hero, outcome: { kind: 'studied', success: true, item }, resolved: true };
   }
   return { hero: { ...hero, mp: Math.max(0, hero.mp - 8) }, outcome: { kind: 'studied', success: false, item: null }, resolved: true };
@@ -166,7 +168,7 @@ function resolveChoice(hero: Hero, floor: number, choice: EventChoiceId, options
   if (choice === 'ignorar' || choice === 'desistir') return { hero, outcome: { kind: 'declined' }, resolved: true };
   if (choice === 'ajudar') return resolveAjudar(hero);
   if (choice === 'curar') return resolveCurar(hero);
-  if (choice === 'estudar' || choice === 'examinar') return resolveEstudarOuExaminar(hero, floor, rng, options.now);
+  if (choice === 'estudar' || choice === 'examinar') return resolveEstudarOuExaminar(hero, floor, rng, options.now, !!options.app);
   if (choice === 'rezar') return resolveRezar(hero);
   if (choice === 'sacrificar') return resolveSacrificar(hero);
   if (choice === 'forcar') return resolveForcar(hero, floor);

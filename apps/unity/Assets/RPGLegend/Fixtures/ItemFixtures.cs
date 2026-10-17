@@ -21,6 +21,7 @@ namespace RPGLegend.Tests
             Const(M, "STAT_LABELS", () => W(GameData.ItemTable.StatLabels));
             Const(M, "PROC_EFFECTS", () => W(GameData.ItemTable.ProcEffects));
             Const(M, "TEMPLATES", () => W(ItemTemplates.All));
+            Const(M, "MATERIAIS", () => W(GameData.MateriaisTable.Materiais));
             Const(M, "TIER_ORDER", () => W(Tiers.Order));
             Const(M, "TIER_MIN", () => W(Tiers.Min));
 
@@ -44,13 +45,14 @@ namespace RPGLegend.Tests
             Fn(M, "slotForTemplate", (a, c) => W(ItemTemplates.SlotFor(R<ItemTemplate>(a["template"]))));
 
             // ---------- item ----------
-            // O gerador instancia o template em cada raridade da lista, com o mesmo rng.
+            // O gerador instancia o template em cada raridade da lista, com o mesmo rng (e o degrau de options.degrau).
             Fn(M, "instantiate", (a, c) =>
             {
                 var template = R<ItemTemplate>(a["template"]);
+                double? degrau = JsJson.ToOptionalNumber(JsJson.Prop(a["options"], "degrau"));
                 var list = new JArray();
                 foreach (var rarity in R<List<RarityDef>>(a["rarities"]))
-                    list.Add(W(Items.Instantiate(template, rarity, c.RngFn, c.NowOrFail)));
+                    list.Add(W(Items.Instantiate(template, rarity, c.RngFn, c.NowOrFail, degrau)));
                 return list;
             });
             Fn(M, "randomItem", (a, c) =>
@@ -63,7 +65,22 @@ namespace RPGLegend.Tests
                     Floor = JsJson.ToOptionalNumber(JsJson.Prop(o, "floor")),
                     Rng = c.RngFn,
                     Now = c.NowOrFail,
+                    App = JsJson.Truthy(JsJson.Prop(o, "app")),
+                    Chefe = JsJson.Truthy(JsJson.Prop(o, "chefe")),
+                    TetoDoDegrau = JsJson.ToOptionalNumber(JsJson.Prop(o, "tetoDoDegrau")),
                 }));
+            });
+
+            // ---------- os materiais das peças ----------
+            Fn(M, "multiplicadorDoDegrau", (a, c) => N(Materiais.MultiplicadorDoDegrau(Num(a["degrau"]))));
+            Fn(M, "chancesDoDegrau", (a, c) => W(Materiais.ChancesDoDegrau(Num(a["andar"]), JsJson.Truthy(a["chefe"]))));
+            Fn(M, "sortearDegrau", (a, c) => N(Materiais.SortearDegrau(Num(a["andar"]), JsJson.Truthy(a["chefe"]), c.RngFn, JsJson.ToOptionalNumber(a["teto"]))));
+            Fn(M, "nomeComMaterial", (a, c) =>
+            {
+                var template = R<ItemTemplate>(a["template"]);
+                var list = new JArray();
+                foreach (var degrau in (JArray)a["degraus"]) list.Add(W(Materiais.NomeComMaterial(template, JsJson.ToOptionalNumber(degrau))));
+                return list;
             });
             Fn(M, "displayName", (a, c) => W(Items.DisplayName(R<Item>(a["item"]))));
             Fn(M, "itemView", (a, c) => W(Items.View(R<Item>(a["item"]))));

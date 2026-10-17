@@ -44,6 +44,7 @@ namespace RPGLegend.Engine.Json
             GameData.HeroCatalog = JsSerializer.Parse<HeroCatalogData>(readTable("hero/catalog"));
             GameData.RarityTable = JsSerializer.Parse<RarityData>(readTable("items/rarity"));
             GameData.ItemTable = JsSerializer.Parse<ItemTemplatesData>(readTable("items/templates"));
+            GameData.MateriaisTable = JsSerializer.Parse<MateriaisData>(readTable("items/materiais"));
             GameData.TierTable = JsSerializer.Parse<TierData>(readTable("items/tiers"));
         }
     }

@@ -20,6 +20,8 @@ namespace RPGLegend.Engine
         [JsName("BLACKSMITH_CATEGORIES")] public List<string> BlacksmithCategories = new List<string>();
         /// <summary>Chaveado pelo templateId do material (minerio, essencia, catalisador_mitico, pedra_protecao).</summary>
         [JsName("FORGE_MATERIALS")] public OrderedMap<ForgeMaterialConfig> ForgeMaterials = new OrderedMap<ForgeMaterialConfig>();
+        /// <summary>O degrau de material mais alto que a loja do app vende.</summary>
+        [JsName("DEGRAU_DA_LOJA")] public double DegrauDaLoja;
     }
 
     public static partial class GameData
