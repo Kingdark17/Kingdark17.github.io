@@ -69,9 +69,11 @@ não é sinal de regressão.
 
 ## Mapa (resumo)
 Grafo de salas conectadas por portas (N/S/L/O), neblina revela só a silhueta
-das salas vizinhas, múltiplos monstros em fila por sala (combate encadeado
-automático), tesouro bônus ao limpar a sala, movimento em direção absoluta
-fixa.
+das salas vizinhas, até 3 monstros por sala lutando juntos (luta em grupo,
+2026-10-17: o jogador escolhe o alvo, um monstro ataca por rodada revezando
+entre os de pé, derrubar um não encerra a rodada, fuga e esquiva contra o
+mais rápido de pé, o da vez atordoado perde o ataque), tesouro bônus ao
+limpar a sala, movimento em direção absoluta fixa.
 
 ---
 

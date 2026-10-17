@@ -11,6 +11,12 @@
  * como no original: assim o save no meio da luta guarda a vida e os status
  * da criatura, e recarregar a página não cura o chefe.
  *
+ * **A sala luta em grupo** (pedido do usuário, 2026-10-16): os monstros não
+ * vêm mais em fila. Todos ficam na luta, o jogador escolhe o alvo
+ * (`Combate.alvo`) e **um monstro ataca por rodada**, revezando entre os de
+ * pé (`cell.monsterTurn`). `cell.monsterIndex` continua apontando o
+ * primeiro de pé, que é o que ele sempre quis dizer pra quem lê a sala.
+ *
  * A rolagem do d20 entra por parâmetro em vez de ser sorteada aqui — a tela
  * mostra o dado girando antes de saber o resultado, e um dia o servidor vai
  * querer conferir a jogada com o mesmo número. No ataque entra também onde
@@ -96,6 +102,13 @@ export interface Combate {
    * `log`.
    */
   flutuantes: Flutuante[];
+  /**
+   * O monstro que o jogador escolheu atacar: o índice dele em
+   * `cell.monsters`. Golpe, poder e equipe vão nele. Caiu, o alvo passa pro
+   * primeiro de pé — `alvoDaLuta` confere sempre, então um índice velho
+   * nunca acerta defunto.
+   */
+  alvo: number;
 }
 
 export interface Rolagem {
@@ -108,6 +121,8 @@ export interface Flutuante {
   tom: 'dano' | 'critico';
   /** Sobre quem o número aparece. */
   alvo: 'inimigo' | 'heroi';
+  /** No inimigo: em qual monstro do grupo (o índice em `cell.monsters`). */
+  indice?: number;
 }
 
 const CHANCE_DE_LOOT_NORMAL = 0.25;
@@ -125,6 +140,7 @@ export function salaDeCombate(estado: EstadoDoJogo): DungeonCell | null {
   return celula.monsters?.length ? celula : null;
 }
 
+/** O primeiro monstro de pé — o que `monsterIndex` aponta. */
 export function monstroAtual(estado: EstadoDoJogo): CombatMonsterView | null {
   const sala = salaDeCombate(estado);
   if (!sala) return null;
@@ -132,16 +148,88 @@ export function monstroAtual(estado: EstadoDoJogo): CombatMonsterView | null {
   return bruto ? monsterView(bruto as CombatMonster) : null;
 }
 
-/** Quantos inimigos ainda faltam nesta sala, contando o que está na frente. */
-export function inimigosRestantes(estado: EstadoDoJogo): number {
-  const sala = salaDeCombate(estado);
-  if (!sala?.monsters) return 0;
-  return sala.monsters.length - (sala.monsterIndex ?? 0);
+/**
+ * De pé: com vida, e não atrás do `monsterIndex` — nos saves da fila, quem
+ * ficou pra trás já caiu.
+ */
+function vivoNaSala(sala: DungeonCell, indice: number): boolean {
+  const bruto = sala.monsters?.[indice];
+  return !!bruto && indice >= (sala.monsterIndex ?? 0) && bruto.hp > 0;
 }
 
-function comMonstro(estado: EstadoNaMasmorra, monstro: CombatMonster): EstadoNaMasmorra {
+function indicesDePe(sala: DungeonCell): number[] {
+  return (sala.monsters ?? []).map((_, indice) => indice).filter((indice) => vivoNaSala(sala, indice));
+}
+
+/** Quantos inimigos ainda estão de pé nesta sala. */
+export function inimigosRestantes(estado: EstadoDoJogo): number {
+  const sala = salaDeCombate(estado);
+  return sala ? indicesDePe(sala).length : 0;
+}
+
+export interface InimigoNaLuta {
+  /** O índice em `cell.monsters` — é o que `escolherAlvo` recebe. */
+  indice: number;
+  monstro: CombatMonsterView;
+  vivo: boolean;
+}
+
+/** O grupo inteiro, na ordem da sala, com quem ainda está de pé: a tela da luta mostra todos. */
+export function inimigosDaLuta(estado: EstadoDoJogo): InimigoNaLuta[] {
+  const sala = salaDeCombate(estado);
+  if (!sala?.monsters) return [];
+  return sala.monsters.map((bruto, indice) => ({ indice, monstro: monsterView(bruto as CombatMonster), vivo: vivoNaSala(sala, indice) }));
+}
+
+/**
+ * De quem é a vez de atacar: o primeiro de pé a partir de
+ * `cell.monsterTurn`, dando a volta no grupo. Sem `monsterTurn` (luta que
+ * acabou de começar, save de antes do grupo), começa pelo primeiro.
+ */
+export function vezDoMonstro(estado: EstadoDoJogo): number | null {
+  const sala = salaDeCombate(estado);
+  if (!sala) return null;
+  const dePe = indicesDePe(sala);
+  const desde = sala.monsterTurn ?? 0;
+  return dePe.find((indice) => indice >= desde) ?? dePe[0] ?? null;
+}
+
+/** O alvo do jogador, se ainda está de pé; senão o primeiro de pé. */
+export function alvoDaLuta(combate: Combate): number | null {
+  const sala = salaDeCombate(combate.estado);
+  if (!sala) return null;
+  return vivoNaSala(sala, combate.alvo) ? combate.alvo : (indicesDePe(sala)[0] ?? null);
+}
+
+/** Trocar o alvo não gasta o turno. Monstro caído (ou índice que não existe) não vira alvo. */
+export function escolherAlvo(combate: Combate, indice: number): Combate {
+  const sala = salaDeCombate(combate.estado);
+  if (!sala || !vivoNaSala(sala, indice)) return combate;
+  return { ...combate, alvo: indice };
+}
+
+function monstroNo(estado: EstadoNaMasmorra, indice: number): CombatMonsterView {
   const sala = celulaAtual(estado) as DungeonCell;
-  const indice = sala.monsterIndex ?? 0;
+  return monsterView((sala.monsters ?? [])[indice] as CombatMonster);
+}
+
+/**
+ * O mais rápido de pé: é contra ele que fugir e esquivar medem a velocidade
+ * (decisão do usuário, 2026-10-17 — de um grupo, quem barra a saída é o mais
+ * rápido). Empate fica com o primeiro.
+ */
+function maisRapido(estado: EstadoNaMasmorra): CombatMonsterView | null {
+  const sala = celulaAtual(estado) as DungeonCell;
+  let rapido: CombatMonsterView | null = null;
+  for (const indice of indicesDePe(sala)) {
+    const monstro = monstroNo(estado, indice);
+    if (!rapido || monstro.speed > rapido.speed) rapido = monstro;
+  }
+  return rapido;
+}
+
+function comMonstro(estado: EstadoNaMasmorra, indice: number, monstro: CombatMonster): EstadoNaMasmorra {
+  const sala = celulaAtual(estado) as DungeonCell;
   const monsters = (sala.monsters ?? []).map((atual, i) => (i === indice ? despirView(monstro) : atual));
   return substituirCelulaAtual(estado, { ...sala, monsters });
 }
@@ -185,7 +273,17 @@ export function iniciarEncontro(estado: EstadoNaMasmorra, pet: PetId | null = nu
       ? `Um grupo de ${restantes} criaturas aparece!`
       : `${monstro.name} aparece!`;
 
-  const aberto: Combate = { estado, fase: 'combate', log: [abertura], dado: null, loot: null, pet, som: null, flutuantes: [] };
+  const aberto: Combate = {
+    estado,
+    fase: 'combate',
+    log: [abertura],
+    dado: null,
+    loot: null,
+    pet,
+    som: null,
+    flutuantes: [],
+    alvo: salaDeCombate(estado)?.monsterIndex ?? 0,
+  };
 
   // Sala sem criatura não vira vitória: `comecarCombate` a declararia
   // ganha, e a tela mostraria "Continuar" no lugar de "A sala está vazia".
@@ -198,12 +296,13 @@ export function iniciarEncontro(estado: EstadoNaMasmorra, pet: PetId | null = nu
 
 /**
  * Começa a luta de verdade: zera os buffs do combate anterior, consome uma
- * bênção de NPC se houver e prepara a criatura pra receber status.
+ * bênção de NPC se houver e prepara cada criatura de pé pra receber status
+ * (o grupo inteiro está na luta, não só a primeira).
  */
 export function comecarCombate(combate: Combate): Combate {
   const estado = exigirMasmorra(combate);
-  const monstro = monstroAtual(estado);
-  if (!monstro) return { ...combate, fase: 'vitoria' };
+  const sala = salaDeCombate(estado);
+  if (!sala || !monstroAtual(estado)) return { ...combate, fase: 'vitoria' };
 
   const log: string[] = [];
 
@@ -216,9 +315,11 @@ export function comecarCombate(combate: Combate): Combate {
   if (bencao.applied) log.push(`A bênção recebida concede +${dodge}% de Esquiva neste combate.`);
   log.push('O combate começa! Ataque, use um poder ou tente fugir.');
 
+  const monsters = (sala.monsters ?? []).map((bruto, indice) => (vivoNaSala(sala, indice) ? freshCombatMonster(bruto) : bruto));
+
   return {
     ...combate,
-    estado: comMonstro({ ...estado, hero }, freshCombatMonster(monstro)),
+    estado: substituirCelulaAtual({ ...estado, hero }, { ...sala, monsters }),
     fase: 'combate',
     log,
     som: null,
@@ -240,8 +341,9 @@ function somDoGolpe(acertou: boolean, critico: boolean | undefined): Efeito {
  */
 export function atacar(combate: Combate, jogada: JogadaDeAtaque, estilo: AttackStyle, rng: Rng = defaultRng): Combate {
   const estado = exigirMasmorra(combate);
-  const monstro = monstroAtual(estado);
-  if (!monstro) return combate;
+  const alvo = alvoDaLuta(combate);
+  if (alvo === null) return combate;
+  const monstro = monstroNo(estado, alvo);
 
   const veneno = tickHeroStatus(estado.hero);
   const log: string[] = [];
@@ -269,17 +371,18 @@ export function atacar(combate: Combate, jogada: JogadaDeAtaque, estilo: AttackS
 
   const depois: Combate = {
     ...combate,
-    estado: comMonstro({ ...estado, hero: ataque.hero }, ataque.monster),
+    estado: comMonstro({ ...estado, hero: ataque.hero }, alvo, ataque.monster),
+    alvo,
     dado,
     log,
     som: somDoGolpe(ataque.outcome === 'hit', ataque.isCrit),
     flutuantes:
       ataque.outcome === 'hit'
-        ? [{ texto: `${ataque.isCrit ? 'CRÍTICO! ' : ''}-${ataque.damage}`, tom: ataque.isCrit ? 'critico' : 'dano', alvo: 'inimigo' }]
+        ? [{ texto: `${ataque.isCrit ? 'CRÍTICO! ' : ''}-${ataque.damage}`, tom: ataque.isCrit ? 'critico' : 'dano', alvo: 'inimigo', indice: alvo }]
         : [],
   };
 
-  if (ataque.monsterDefeated) return heroiMatou(depois, monstro, rng);
+  if (ataque.monsterDefeated) return heroiMatou(depois, alvo, monstro, rng);
   return turnoDosOutros(depois, rng);
 }
 
@@ -303,8 +406,9 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
   const semCura = (fim: Combate): ResultadoDoPoder => ({ combate: fim, curaDoParceiro: 0 });
 
   const estado = exigirMasmorra(combate);
-  const monstro = monstroAtual(estado);
-  if (!monstro) return semCura(combate);
+  const alvo = alvoDaLuta(combate);
+  if (alvo === null) return semCura(combate);
+  const monstro = monstroNo(estado, alvo);
 
   const veneno = tickHeroStatus(estado.hero);
   const log: string[] = [];
@@ -329,15 +433,16 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
 
   const depois: Combate = {
     ...combate,
-    estado: comMonstro({ ...estado, hero: uso.hero, party: uso.party }, uso.monster),
+    estado: comMonstro({ ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster),
+    alvo,
     log,
     // Poder que cura não é golpe; o original só tinha som de acerto.
     som: uso.outcome === 'damage' ? 'crit' : null,
-    flutuantes: uso.outcome === 'damage' ? [{ texto: `${poder.icon} -${uso.damage}`, tom: 'critico', alvo: 'inimigo' }] : [],
+    flutuantes: uso.outcome === 'damage' ? [{ texto: `${poder.icon} -${uso.damage}`, tom: 'critico', alvo: 'inimigo', indice: alvo }] : [],
   };
 
   const curaDoParceiro = uso.outcome === 'heal' ? (uso.allyHealed ?? 0) : 0;
-  const fim = uso.monsterDefeated ? heroiMatou(depois, monstro, rng) : turnoDosOutros(depois, rng);
+  const fim = uso.monsterDefeated ? heroiMatou(depois, alvo, monstro, rng) : turnoDosOutros(depois, rng);
   return { combate: fim, curaDoParceiro };
 }
 
@@ -351,10 +456,10 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
  */
 export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Combate {
   const estado = exigirMasmorra(combate);
-  const monstro = monstroAtual(estado);
-  if (!monstro) return combate;
+  const rapido = maisRapido(estado);
+  if (!rapido) return combate;
 
-  const tentativa = attemptFlee(estado.hero, monstro, roll);
+  const tentativa = attemptFlee(estado.hero, rapido, roll);
   const comBonus = tentativa.bonus ? ` (+${tentativa.bonus} por velocidade)` : '';
   const dado: Rolagem = { valor: roll, lados: 20 };
 
@@ -388,15 +493,15 @@ export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Co
  */
 export function esquivar(combate: Combate, roll: number, rng: Rng = defaultRng): Combate {
   const estado = exigirMasmorra(combate);
-  const monstro = monstroAtual(estado);
-  if (!monstro) return combate;
+  const rapido = maisRapido(estado);
+  if (!rapido) return combate;
 
   const veneno = tickHeroStatus(estado.hero);
   const log: string[] = [];
   if (veneno.damage > 0) log.push(`O veneno corrói você em ${veneno.damage} de vida.`);
   if (veneno.defeated) return morteNoVeneno(combate, veneno.hero, log, rng);
 
-  const tentativa = attemptDodge(veneno.hero, monstro, roll);
+  const tentativa = attemptDodge(veneno.hero, rapido, roll);
   const comBonus = tentativa.bonus ? ` (+${tentativa.bonus} por velocidade)` : '';
   log.push(
     tentativa.success
@@ -455,39 +560,84 @@ interface OpcoesDaRodada {
   esquivaCerta?: boolean;
 }
 
-/** Equipe → dano contínuo no monstro → golpe do monstro. É a ordem exata do original. */
+/**
+ * Equipe → dano contínuo → o golpe do monstro da vez. A ordem é a do
+ * original; o que o grupo mudou é **em quem** cada passo cai:
+ *
+ * - a equipe bate no alvo do jogador;
+ * - o dano contínuo corre em todo monstro de pé que tiver queimadura ou
+ *   sangramento — estão todos na luta;
+ * - **um só monstro ataca**, o da vez, e a vez passa pro seguinte. Atordoado
+ *   ou lento demais, ele perde o ataque e ninguém bate nesta rodada; a vez
+ *   passa do mesmo jeito (decisão do usuário, 2026-10-17).
+ *
+ * Quem cai no meio é pago na hora (`pagarAbate`); a luta só acaba quando não
+ * sobra ninguém de pé.
+ */
 function turnoDosOutros(combate: Combate, rng: Rng, opcoes: OpcoesDaRodada = {}): Combate {
+  const alvo = alvoDaLuta(combate);
+  if (alvo === null) return combate;
+  const comEquipe = equipeAge(combate, alvo, rng);
+  if (comEquipe.fase !== 'combate') return comEquipe;
+  const comDano = danoContinuo(comEquipe, rng);
+  if (comDano.fase !== 'combate') return comDano;
+  return golpeDaVez(comDano, rng, opcoes);
+}
+
+/** A equipe bate no alvo do jogador (ou o curandeiro cura o herói). */
+function equipeAge(combate: Combate, alvo: number, rng: Rng): Combate {
   const estado = exigirMasmorra(combate);
-  const monstro = monstroAtual(estado);
-  if (!monstro) return combate;
-
-  const log = [...combate.log];
-
+  const monstro = monstroNo(estado, alvo);
   const equipe = applyPartyTurn(estado.hero, estado.party, monstro, rng);
+  const log = [...combate.log];
   for (const acao of equipe.outcomes) {
     if (acao.kind === 'healed_hero') log.push(`${acao.member.name} cura você em ${acao.amount}.`);
-    else if (acao.kind === 'hit') log.push(`${acao.member.name} acerta a criatura causando ${acao.amount}.`);
+    else if (acao.kind === 'hit') log.push(`${acao.member.name} acerta ${monstro.name} causando ${acao.amount}.`);
     else log.push(`${acao.member.name} erra o golpe.`);
   }
+  const depois = { ...combate, estado: comMonstro({ ...estado, hero: equipe.hero }, alvo, equipe.monster), log };
+  return equipe.defeated ? abaterNoTurno(depois, alvo, monstro, rng) : depois;
+}
 
-  let comEquipe = comMonstro({ ...estado, hero: equipe.hero }, equipe.monster);
-  if (equipe.defeated) return derrotarMonstro({ ...combate, estado: comEquipe, log }, monstro, rng);
+/** A queimadura e o sangramento correm em cada monstro de pé que os tiver: estão todos na luta. */
+function danoContinuo(combate: Combate, rng: Rng): Combate {
+  let atual = combate;
+  for (const indice of indicesDePe(celulaAtual(exigirMasmorra(combate)) as DungeonCell)) {
+    const estado = exigirMasmorra(atual);
+    const monstro = monstroNo(estado, indice);
+    const dot = tickMonsterDot(monstro);
+    const log = dot.damage > 0 ? [...atual.log, `Os efeitos contínuos causam ${dot.damage} de dano em ${monstro.name}.`] : atual.log;
+    atual = { ...atual, estado: comMonstro(estado, indice, dot.monster), log };
+    if (dot.defeated) atual = abaterNoTurno(atual, indice, monstro, rng);
+    if (atual.fase !== 'combate') return atual;
+  }
+  return atual;
+}
 
-  const dot = tickMonsterDot(equipe.monster);
-  if (dot.damage > 0) log.push(`Os efeitos contínuos causam ${dot.damage} de dano em ${monstro.name}.`);
-  comEquipe = comMonstro(comEquipe, dot.monster);
-  if (dot.defeated) return derrotarMonstro({ ...combate, estado: comEquipe, log }, monstro, rng);
+/** Quem caiu na vez dos outros é pago na hora; foi o último, a sala está limpa. */
+function abaterNoTurno(combate: Combate, indice: number, abatido: CombatMonsterView, rng: Rng): Combate {
+  const pago = pagarAbate(combate, indice, abatido);
+  return inimigosRestantes(pago.estado) > 0 ? pago : limparSala(pago, abatido, rng);
+}
 
-  const golpe = applyMonsterHit(comEquipe.hero, comEquipe.party, monsterView(dot.monster), {
+/** O monstro da vez ataca — atordoado ou lento, perde o ataque — e a vez passa pro seguinte. */
+function golpeDaVez(combate: Combate, rng: Rng, opcoes: OpcoesDaRodada): Combate {
+  const estado = exigirMasmorra(combate);
+  const vez = vezDoMonstro(estado);
+  if (vez === null) return combate;
+  const atacante = monstroNo(estado, vez);
+  const golpe = applyMonsterHit(estado.hero, estado.party, atacante, {
     rng,
     petEsquivaBonus: petBonus(combate.pet).esquiva ?? 0,
     esquivaCerta: opcoes.esquivaCerta,
   });
-  log.push(textoDoGolpe(golpe, monstro.name));
+  const comGolpe = comMonstro({ ...estado, hero: golpe.hero, party: golpe.party }, vez, golpe.monster);
+  const sala = celulaAtual(comGolpe) as DungeonCell;
+  const log = [...combate.log, textoDoGolpe(golpe, atacante.name)];
 
   const depois: Combate = {
     ...combate,
-    estado: comMonstro({ ...comEquipe, hero: golpe.hero, party: golpe.party }, golpe.monster),
+    estado: substituirCelulaAtual(comGolpe, { ...sala, monsterTurn: vez + 1 }),
     log,
     // Soma ao que o golpe do jogador já pôs na tela — os dois números
     // aparecem no mesmo turno, como no original.
@@ -515,13 +665,20 @@ function textoDoGolpe(golpe: ReturnType<typeof applyMonsterHit>, nome: string): 
 // ---------- fim de combate ----------
 
 /**
- * O golpe (ou poder) do herói matou: a rodada acaba aqui, sem turno da
- * equipe — e é nele que a Canção de Batalha desconta. Sem esta volta, cada
- * morte numa sala de vários monstros dava uma rodada de canção de graça.
+ * O golpe (ou poder) do herói derrubou o monstro `indice`.
+ *
+ * Com mais gente de pé, **a rodada segue**: a equipe age e o monstro da vez
+ * ainda ataca (decisão do usuário, 2026-10-17 — derrubar um do grupo não dá
+ * rodada sem troco).
+ *
+ * Foi o último: a luta acaba aqui, sem turno da equipe — e é nele que a
+ * Canção de Batalha desconta, então a rodada é descontada à mão.
  */
-function heroiMatou(combate: Combate, abatido: CombatMonsterView, rng: Rng): Combate {
-  const estado = exigirMasmorra(combate);
-  return derrotarMonstro({ ...combate, estado: { ...estado, hero: passarRodadaDaCancao(estado.hero) } }, abatido, rng);
+function heroiMatou(combate: Combate, indice: number, abatido: CombatMonsterView, rng: Rng): Combate {
+  const pago = pagarAbate(combate, indice, abatido);
+  if (inimigosRestantes(pago.estado) > 0) return turnoDosOutros(pago, rng);
+  const estado = exigirMasmorra(pago);
+  return limparSala({ ...pago, estado: { ...estado, hero: passarRodadaDaCancao(estado.hero) } }, abatido, rng);
 }
 
 /**
@@ -535,9 +692,14 @@ function morteNoVeneno(combate: Combate, hero: Hero, log: string[], rng: Rng): C
   return derrota({ ...combate, estado: { ...estado, hero }, dado: null, som: null, flutuantes: [] }, log, rng);
 }
 
-function derrotarMonstro(combate: Combate, abatido: CombatMonsterView, rng: Rng): Combate {
+/**
+ * Paga o monstro que caiu (a vida dele já foi gravada zerada na sala): XP,
+ * ouro, a conta de abates e a missão. `monsterIndex` volta a apontar o
+ * primeiro de pé, e o alvo que caiu passa pro primeiro de pé. A luta não
+ * acaba aqui — quem chama confere se sobrou alguém.
+ */
+function pagarAbate(combate: Combate, indice: number, abatido: CombatMonsterView): Combate {
   const estado = exigirMasmorra(combate);
-  const sala = celulaAtual(estado) as DungeonCell;
   const log = [...combate.log];
 
   const xp = gainXP({ ...estado.hero, killCount: estado.hero.killCount + 1, gold: estado.hero.gold + abatido.gold }, abatido.xp);
@@ -545,21 +707,18 @@ function derrotarMonstro(combate: Combate, abatido: CombatMonsterView, rng: Rng)
   if (xp.leveledUp) log.push(`Você subiu ${xp.levels} nível(is)!`);
 
   const comRecompensa: EstadoNaMasmorra = { ...estado, hero: xp.hero, quests: onMonsterKilled(estado.quests) };
+  const sala = celulaAtual(comRecompensa) as DungeonCell;
+  const primeiroDePe = indicesDePe(sala)[0];
+  // Ninguém de pé: o índice fica onde estava, como na fila — quem lê a sala vencida olha `beaten`.
+  const comIndice = primeiroDePe === undefined ? comRecompensa : substituirCelulaAtual(comRecompensa, { ...sala, monsterIndex: primeiroDePe });
 
-  const indice = sala.monsterIndex ?? 0;
-  const fila = sala.monsters ?? [];
-  if (indice + 1 < fila.length) {
-    const proximo = monsterView(fila[indice + 1] as CombatMonster);
-    log.push(`${proximo.name} aparece para continuar a briga.`);
-    return {
-      ...combate,
-      estado: substituirCelulaAtual(comRecompensa, { ...sala, monsterIndex: indice + 1 }),
-      fase: 'combate',
-      log,
-    };
-  }
-
-  return limparSala({ ...combate, estado: comRecompensa, log }, abatido, rng);
+  return {
+    ...combate,
+    estado: comIndice,
+    alvo: combate.alvo === indice && primeiroDePe !== undefined ? primeiroDePe : combate.alvo,
+    fase: 'combate',
+    log,
+  };
 }
 
 /** Último inimigo caiu: a sala fica marcada, os temporários se despedem e vem a recompensa. */

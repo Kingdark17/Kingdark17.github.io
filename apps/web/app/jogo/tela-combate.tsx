@@ -31,25 +31,28 @@
 
 import { AnimatePresence, LazyMotion, MotionConfig } from 'motion/react';
 import * as m from 'motion/react-m';
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 import {
+  alvoDaLuta,
   atacar,
   ataquesDisponiveis,
   consumiveisDoCombate,
   displayName,
+  escolherAlvo,
   esquivar,
   fugir,
   heroPowers,
-  inimigosRestantes,
-  monstroAtual,
+  inimigosDaLuta,
   powerManaCost,
   usarItem,
   usarPoder,
+  vezDoMonstro,
   type AtaqueDisponivel,
   type CombatMonsterView,
   type Combate,
   type Flutuante,
+  type InimigoNaLuta,
   type Item,
   type JogadaDeAtaque,
   type Power,
@@ -164,7 +167,8 @@ export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoPar
   const [historico, setHistorico] = useState<LinhaDoLog[]>(() => combate.log.map((texto, indice) => ({ id: indice, texto })));
   const [naTela, setNaTela] = useState<NumeroNaTela[]>([]);
   const [tremida, setTremida] = useState(false);
-  const [golpeado, setGolpeado] = useState(false);
+  /** Os monstros do grupo que acabaram de apanhar (pelo índice na sala), pro clarão de cada um. */
+  const [golpeados, setGolpeados] = useState<number[]>([]);
   const [caixa, setCaixa] = useState<Caixa>(REGISTRO);
   // O cenário é o de onde a luta começou. Perder (ou zerar a masmorra) leva
   // o estado pra cidade antes da tela de "Continuar", e o fundo não deve
@@ -172,9 +176,13 @@ export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoPar
   const [cenario] = useState(lugar);
   const proximoId = useRef(combate.log.length);
 
-  const monstro = monstroAtual(combate.estado);
+  // O grupo inteiro fica no palco (pedido do usuário, 2026-10-16): o jogador
+  // toca no monstro que quer atacar, e a placa marca quem bate nesta rodada.
+  const grupo = inimigosDaLuta(combate.estado);
+  const alvo = alvoDaLuta(combate);
+  const vez = vezDoMonstro(combate.estado);
+  const emGrupo = grupo.length > 1;
   const hero = combate.estado.hero;
-  const restantes = inimigosRestantes(combate.estado);
   const acabou = combate.fase === 'vitoria' || combate.fase === 'fuga' || combate.fase === 'derrota';
   const atacando = caixa.tipo === 'ataque';
 
@@ -201,7 +209,8 @@ export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoPar
     // `onAnimationEnd`), o equivalente React do `classList.remove` + reflow
     // que o cliente antigo fazia à mão.
     if (numeros.some((numero) => numero.alvo === 'heroi')) setTremida(true);
-    if (numeros.some((numero) => numero.alvo === 'inimigo')) setGolpeado(true);
+    const apanharam = numeros.filter((numero) => numero.alvo === 'inimigo').map((numero) => numero.indice ?? alvo ?? 0);
+    if (apanharam.length > 0) setGolpeados(apanharam);
 
     // Aqui e não num efeito: dois acertos seguidos têm o mesmo `som`, e
     // um efeito que observa o valor não tocaria o segundo.
@@ -231,7 +240,36 @@ export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoPar
     setCaixa((atual) => (atual.tipo === tipo ? REGISTRO : { tipo }));
   }
 
-  if (!monstro && !acabou) return <p className={jogo.erro}>A sala está vazia.</p>;
+  /**
+   * Trocar o alvo não é ação: não gasta o turno, não toca som e não deixa
+   * número — sem zerar os `flutuantes`, a tela de jogo contaria de novo o
+   * golpe anterior e giraria a arma do boneco à toa.
+   */
+  function mirar(indice: number) {
+    const proximo = escolherAlvo(combate, indice);
+    if (proximo !== combate) onCombate({ ...proximo, som: null, flutuantes: [] });
+  }
+
+  if (grupo.length === 0 && !acabou) return <p className={jogo.erro}>A sala está vazia.</p>;
+
+  function tirarNumero(id: number) {
+    setNaTela((atual) => atual.filter((outro) => outro.id !== id));
+  }
+
+  /** Os números do golpe que caem neste monstro; o do herói fica no palco, embaixo. */
+  function numerosNoMonstro(indice: number) {
+    return naTela
+      .filter((numero) => numero.alvo === 'inimigo' && (numero.indice ?? alvo) === indice)
+      .map((numero) => (
+        <span
+          key={numero.id}
+          className={`${styles.numero} ${numero.tom === 'critico' ? styles.numeroCritico : ''}`}
+          onAnimationEnd={() => tirarNumero(numero.id)}
+        >
+          {numero.texto}
+        </span>
+      ));
+  }
 
   return (
     <section
@@ -242,61 +280,40 @@ export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoPar
       }}
     >
       <div className={styles.palco} style={corDoCenario(cenario)}>
-        {/* Os números do golpe ficam sobre o palco inteiro, e cada um se
-            remove quando a própria animação termina. */}
-        <div className={styles.numeros} aria-hidden>
-          {naTela.map((numero) => (
-            <span
-              key={numero.id}
-              className={`${styles.numero} ${numero.tom === 'critico' ? styles.numeroCritico : ''} ${numero.alvo === 'heroi' ? styles.numeroNoHeroi : ''}`}
-              onAnimationEnd={() => setNaTela((atual) => atual.filter((outro) => outro.id !== numero.id))}
-            >
-              {numero.texto}
-            </span>
-          ))}
+        {/* O golpe que o herói toma fica sobre o palco inteiro, embaixo; o que
+            cai num monstro sobe de cima dele. Cada número se remove quando a
+            própria animação termina. */}
+        <div className={styles.numeros} data-tamanho={grupo.length} aria-hidden>
+          {naTela
+            .filter((numero) => numero.alvo === 'heroi')
+            .map((numero) => (
+              <span
+                key={numero.id}
+                className={`${styles.numero} ${styles.numeroNoHeroi}`}
+                onAnimationEnd={() => tirarNumero(numero.id)}
+              >
+                {numero.texto}
+              </span>
+            ))}
         </div>
 
-        {monstro && !acabou && (
-          <>
-            <div className={`${styles.placa} ${monstro.isBoss ? styles.placaChefe : ''}`}>
-              <h2 className={styles.nome}>
-                {monstro.name}
-                {monstro.isBoss ? ' 👑' : ''}
-              </h2>
-              <p className={styles.subtitulo}>
-                {monstro.enemyClassLabel}
-                {restantes > 1 ? ` · ainda restam ${restantes} nesta sala` : ''}
-              </p>
-              <div className={jogo.trilho}>
-                <div
-                  className={`${jogo.preenchimento} ${jogo.vida}`}
-                  style={{ width: `${Math.max(0, Math.min(100, (monstro.hp / monstro.maxHp) * 100))}%` }}
-                />
-              </div>
-              <p className={styles.vida}>
-                {Math.max(0, monstro.hp)} / {monstro.maxHp}
-              </p>
-              {statusAtivos(monstro).length > 0 && (
-                <ul className={styles.marcadores}>
-                  {statusAtivos(monstro).map((rotulo) => (
-                    <li key={rotulo} className={styles.marcador}>
-                      {rotulo}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            <div
-              className={`${styles.monstro} ${monstro.isBoss ? styles.monstroChefe : ''}`}
-              data-golpeado={golpeado || undefined}
-              onAnimationEnd={() => setGolpeado(false)}
-              aria-hidden
-            >
-              <span className={styles.figura}>{monstro.icon}</span>
-              <span className={styles.sombra} />
-            </div>
-          </>
+        {!acabou && (
+          <div className={styles.grupo} data-tamanho={grupo.length}>
+            {grupo.map((inimigo) => (
+              <Lutador
+                key={inimigo.indice}
+                inimigo={inimigo}
+                emGrupo={emGrupo}
+                escolhido={emGrupo && inimigo.vivo && inimigo.indice === alvo}
+                daVez={emGrupo && inimigo.vivo && inimigo.indice === vez}
+                golpeado={golpeados.includes(inimigo.indice)}
+                travado={atacando}
+                numeros={numerosNoMonstro(inimigo.indice)}
+                onEscolher={() => mirar(inimigo.indice)}
+                onFimDoGolpe={() => setGolpeados((atual) => atual.filter((outro) => outro !== inimigo.indice))}
+              />
+            ))}
+          </div>
         )}
       </div>
 
@@ -455,5 +472,96 @@ export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoPar
         </nav>
       )}
     </section>
+  );
+}
+
+interface PropsDoLutador {
+  inimigo: InimigoNaLuta;
+  emGrupo: boolean;
+  /** O alvo do jogador: leva a mira e a moldura dourada. */
+  escolhido: boolean;
+  /** É quem ataca nesta rodada. */
+  daVez: boolean;
+  golpeado: boolean;
+  /** Com o ataque em andamento (dado girado, barra correndo), o alvo não muda mais. */
+  travado: boolean;
+  numeros: ReactNode;
+  onEscolher: () => void;
+  onFimDoGolpe: () => void;
+}
+
+/**
+ * Um monstro no palco: a placa em cima (nome, vida, o que pesa sobre ele e
+ * se é a vez dele) e a figura no chão. Sozinho na sala, é só o desenho, como
+ * sempre foi; em grupo, é o botão que escolhe o alvo. O que caiu fica no
+ * lugar, apagado, até a luta acabar — sumir no meio empurraria os outros e
+ * o número do golpe que o derrubou ficaria sem onde aparecer.
+ */
+function Lutador({ inimigo, emGrupo, escolhido, daVez, golpeado, travado, numeros, onEscolher, onFimDoGolpe }: Readonly<PropsDoLutador>) {
+  const { monstro, vivo } = inimigo;
+  const status = vivo ? statusAtivos(monstro) : [];
+  // O atordoado só baixa quando chega a vez dele: o da vez atordoado perde o
+  // ataque com certeza, e a placa não pode prometer um golpe que não vem.
+  const perdeAVez = (monstro.status?.atordoado ?? 0) > 0;
+
+  const conteudo = (
+    <>
+      <div className={`${styles.placa} ${monstro.isBoss ? styles.placaChefe : ''}`}>
+        <h2 className={styles.nome}>
+          {monstro.name}
+          {monstro.isBoss ? ' 👑' : ''}
+        </h2>
+        <p className={styles.subtitulo}>{vivo ? monstro.enemyClassLabel : 'Caiu'}</p>
+        <div className={jogo.trilho}>
+          <div
+            className={`${jogo.preenchimento} ${jogo.vida}`}
+            style={{ width: `${Math.max(0, Math.min(100, (monstro.hp / monstro.maxHp) * 100))}%` }}
+          />
+        </div>
+        <p className={styles.vida}>
+          {Math.max(0, monstro.hp)} / {monstro.maxHp}
+        </p>
+        {status.length > 0 && (
+          <ul className={styles.marcadores}>
+            {status.map((rotulo) => (
+              <li key={rotulo} className={styles.marcador}>
+                {rotulo}
+              </li>
+            ))}
+          </ul>
+        )}
+        {daVez && <p className={styles.daVez}>{perdeAVez ? '💫 perde a vez' : '⚔️ ataca nesta rodada'}</p>}
+      </div>
+
+      <div
+        className={`${styles.monstro} ${monstro.isBoss ? styles.monstroChefe : ''}`}
+        data-golpeado={golpeado || undefined}
+        onAnimationEnd={onFimDoGolpe}
+        aria-hidden
+      >
+        {escolhido && <span className={styles.marcaDeAlvo}>🎯</span>}
+        <span className={styles.figura}>{monstro.icon}</span>
+        <span className={styles.sombra} />
+      </div>
+      <div className={styles.numerosDoMonstro} aria-hidden>
+        {numeros}
+      </div>
+    </>
+  );
+
+  if (!emGrupo) return <div className={styles.lutador}>{conteudo}</div>;
+
+  return (
+    <button
+      type="button"
+      className={`${styles.lutador} ${styles.lutadorClicavel} ${escolhido ? styles.lutadorAlvo : ''}`}
+      data-caido={!vivo || undefined}
+      disabled={!vivo || travado}
+      aria-pressed={escolhido}
+      aria-label={vivo ? `Atacar ${monstro.name}` : `${monstro.name} caiu`}
+      onClick={onEscolher}
+    >
+      {conteudo}
+    </button>
   );
 }

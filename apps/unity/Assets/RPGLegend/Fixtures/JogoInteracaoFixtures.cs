@@ -23,10 +23,18 @@ namespace RPGLegend.Tests
             Fn(M, "inimigosRestantes", (a, c) => N(Combates.InimigosRestantes(JogoJson.LerEstado(a["estado"]))));
             Fn(M, "iniciarEncontro", (a, c) => W(Combates.IniciarEncontro(R<EstadoNaMasmorra>(a["estado"]), Str(a["pet"]))));
             Fn(M, "comecarCombate", (a, c) => W(Combates.ComecarCombate(R<Combate>(a["combate"]))));
+            Fn(M, "inimigosDaLuta", (a, c) => W(Combates.InimigosDaLuta(JogoJson.LerEstado(a["estado"]))));
+            Fn(M, "vezDoMonstro", (a, c) => NumOuNull(Combates.VezDoMonstro(JogoJson.LerEstado(a["estado"]))));
+            Fn(M, "alvoDaLuta", (a, c) => NumOuNull(Combates.AlvoDaLuta(R<Combate>(a["combate"]))));
+            Fn(M, "escolherAlvo", (a, c) => W(Combates.EscolherAlvo(R<Combate>(a["combate"]), Num(a["indice"]))));
 
             Fn(M, "criacaoVazia", (a, c) => W(Criacoes.CriacaoVazia(Str(a["nome"]))));
             Fn(M, "faltaParaComecar", (a, c) => W(Criacoes.FaltaParaComecar(R<Criacao>(a["criacao"]))));
             Fn(M, "montarSaveInicial", (a, c) => W(Criacoes.MontarSaveInicial(R<Criacao>(a["criacao"]), c.RngFn, c.NowOrFail)));
         }
+
+        /// <summary>O <c>number | null</c> do TS.</summary>
+        private static Newtonsoft.Json.Linq.JToken NumOuNull(double? valor) =>
+            valor.HasValue ? N(valor.Value) : Newtonsoft.Json.Linq.JValue.CreateNull();
     }
 }

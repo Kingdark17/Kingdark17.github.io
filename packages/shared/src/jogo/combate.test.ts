@@ -14,13 +14,17 @@ import {
   atacar,
   comecarCombate,
   consumiveisDoCombate,
+  escolherAlvo,
   esquivar,
   fugir,
+  inimigosDaLuta,
+  inimigosRestantes,
   iniciarEncontro,
   monstroAtual,
   salaDeCombate,
   usarItem,
   usarPoder,
+  vezDoMonstro,
   type Combate,
 } from './combate.js';
 import { celulaAtual, retomarSave, substituirCelulaAtual, type EstadoNaMasmorra } from './estado.js';
@@ -194,7 +198,7 @@ describe('atacar', () => {
     expect(combate.log.some((linha) => linha.includes('Você derrotou'))).toBe(true);
   });
 
-  it('chama o próximo da fila em vez de encerrar quando ainda há inimigo', () => {
+  it('com mais gente de pé, derrubar um não encerra a luta', () => {
     const inicio = comSalaDeMonstro({ monsters: [monstro({ hp: 1 }), monstro()] });
 
     const combate = atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA);
@@ -658,5 +662,131 @@ describe('cura que vai pro parceiro', () => {
     const combate = iniciarEncontro(comMonstroDuro({ mp: 50, maxMp: 50 }));
     const { combate: depois } = usarPoder(combate, powerById('cura_menor')!, NUNCA);
     expect('curaDoParceiro' in depois).toBe(false);
+  });
+});
+
+describe('luta em grupo', () => {
+  /** Três de espécies diferentes, pra saber pelo log quem fez o quê. */
+  function trio(sobre: Partial<MonsterInstance>[] = []): Combate {
+    const especies = ['goblin', 'aranha', 'slime'];
+    const monsters = especies.map((speciesId, i) => monstro({ speciesId, ...sobre[i] }));
+    return iniciarEncontro(comSalaDeMonstro({ monsters }));
+  }
+
+  /** Quem atacou o herói nesta rodada, pelo nome no log. */
+  function quemAtacou(combate: Combate): string | undefined {
+    const nomes = inimigosDaLuta(combate.estado).map((inimigo) => inimigo.monstro.name);
+    return nomes.find((nome) => combate.log.some((linha) => linha.startsWith(nome) && linha.includes('acerta você')));
+  }
+
+  it('o grupo inteiro está na luta, na ordem da sala', () => {
+    const combate = trio();
+    const grupo = inimigosDaLuta(combate.estado);
+
+    expect(grupo.map((inimigo) => inimigo.indice)).toEqual([0, 1, 2]);
+    expect(grupo.every((inimigo) => inimigo.vivo)).toBe(true);
+    expect(inimigosRestantes(combate.estado)).toBe(3);
+    expect(combate.alvo).toBe(0);
+  });
+
+  it('o golpe vai no alvo escolhido', () => {
+    const combate = atacar(escolherAlvo(trio(), 2), EM_CHEIO, 'normal', NUNCA);
+    const [primeiro, , terceiro] = inimigosDaLuta(combate.estado);
+
+    expect(terceiro?.monstro.hp).toBeLessThan(40);
+    expect(primeiro?.monstro.hp).toBe(40);
+    expect(combate.flutuantes.find((numero) => numero.alvo === 'inimigo')?.indice).toBe(2);
+  });
+
+  it('monstro caído ou que não existe não vira alvo', () => {
+    const combate = trio([{ hp: 0 }]);
+
+    expect(escolherAlvo(combate, 0)).toBe(combate);
+    expect(escolherAlvo(combate, 7)).toBe(combate);
+  });
+
+  it('um monstro ataca por rodada, revezando entre os de pé', () => {
+    let combate = trio();
+    const atacantes: (string | undefined)[] = [];
+    for (let rodada = 0; rodada < 4; rodada++) {
+      combate = atacar(combate, NO_VAZIO, 'normal', NUNCA);
+      atacantes.push(quemAtacou(combate));
+    }
+    const [goblin, aranha, slime] = inimigosDaLuta(combate.estado).map((inimigo) => inimigo.monstro.name);
+
+    expect(atacantes).toEqual([goblin, aranha, slime, goblin]);
+  });
+
+  it('derrubar um do grupo não dá rodada sem troco: o da vez ataca', () => {
+    const vidaAntes = trio().estado.hero.hp;
+    const combate = atacar(trio([{ hp: 1 }]), EM_CHEIO, 'normal', NUNCA);
+
+    expect(combate.log.some((linha) => linha.includes('Você derrotou'))).toBe(true);
+    expect(combate.fase).toBe('combate');
+    expect(quemAtacou(combate)).toBeDefined();
+    expect(combate.estado.hero.hp).toBeLessThan(vidaAntes);
+  });
+
+  it('o alvo que cai passa pro primeiro de pé, e a vez pula quem caiu', () => {
+    const combate = atacar(trio([{ hp: 1 }]), EM_CHEIO, 'normal', NUNCA);
+
+    expect(combate.alvo).toBe(1);
+    expect(vezDoMonstro(combate.estado)).toBe(2);
+    expect(inimigosDaLuta(combate.estado)[0]?.vivo).toBe(false);
+  });
+
+  it('atordoado na vez dele perde o ataque: ninguém bate na rodada, e a vez passa', () => {
+    const inicio = trio();
+    const sala = salaDepois(inicio);
+    const tonto = substituirCelulaAtual(inicio.estado as EstadoNaMasmorra, {
+      ...sala,
+      monsters: (sala.monsters ?? []).map((m, i) => (i === 0 ? { ...m, status: { atordoado: 1 } } : m)),
+    });
+    const vidaAntes = tonto.hero.hp;
+
+    const combate = atacar({ ...inicio, estado: tonto }, NO_VAZIO, 'normal', NUNCA);
+
+    expect(combate.log.some((linha) => linha.includes('atordoado e perde o turno'))).toBe(true);
+    expect(combate.estado.hero.hp).toBe(vidaAntes);
+    expect(vezDoMonstro(combate.estado)).toBe(1);
+  });
+
+  it('fugir mede a velocidade contra o mais rápido de pé', () => {
+    // 11 no dado: contra quem é bem mais lento que o herói, o bônus de +2 basta pra escapar.
+    expect(fugir(iniciarEncontro(comSalaDeMonstro({ monsters: [monstro({ speed: 0 }), monstro({ speed: 0 })] })), 11, NUNCA).fase).toBe('fuga');
+    expect(fugir(iniciarEncontro(comSalaDeMonstro({ monsters: [monstro({ speed: 0 }), monstro({ speed: 99 })] })), 11, NUNCA).fase).toBe('combate');
+  });
+
+  it('o dano contínuo corre em todos de pé que o tiverem', () => {
+    const inicio = trio();
+    const sala = salaDepois(inicio);
+    const queimando = { queimadura: { turns: 2, dmg: 5 } };
+    const estado = substituirCelulaAtual(inicio.estado as EstadoNaMasmorra, {
+      ...sala,
+      monsters: (sala.monsters ?? []).map((m, i) => (i === 2 ? m : { ...m, status: queimando })),
+    });
+
+    const combate = esquivar({ ...inicio, estado }, 1, NUNCA);
+    const vidas = inimigosDaLuta(combate.estado).map((inimigo) => inimigo.monstro.hp);
+
+    expect(vidas).toEqual([35, 35, 40]);
+  });
+
+  it('cair o último limpa a sala, e a vitória conta uma vez só', () => {
+    const inicio = trio([{ hp: 1 }, { hp: 0 }, { hp: 0 }]);
+    const combate = atacar(inicio, EM_CHEIO, 'normal', NUNCA);
+
+    expect(combate.fase).toBe('vitoria');
+    expect(salaDepois(combate).beaten).toBe(true);
+    expect(combate.estado.hero.masteryBattles).toBe((inicio.estado.hero.masteryBattles ?? 0) + 1);
+  });
+
+  it('save do tempo da fila segue de onde parou: quem já caiu não volta', () => {
+    const estado = comSalaDeMonstro({ monsters: [monstro({ hp: 0 }), monstro()], monsterIndex: 1 });
+    const combate = iniciarEncontro(estado);
+
+    expect(combate.alvo).toBe(1);
+    expect(inimigosRestantes(combate.estado)).toBe(1);
+    expect(inimigosDaLuta(combate.estado).map((inimigo) => inimigo.vivo)).toEqual([false, true]);
   });
 });

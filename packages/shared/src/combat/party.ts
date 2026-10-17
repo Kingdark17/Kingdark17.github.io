@@ -139,10 +139,10 @@ export function applyPartyTurn(
  * que continua passa por ele — com ou sem equipe, tenha o herói atacado,
  * curado ou fugido.
  *
- * **A rodada em que o herói mata não passa por ele**: a equipe não age
- * contra um monstro morto. Quem orquestra chama isto nesse caso. Sem essa
- * chamada, cada morte numa sala de vários monstros dava uma rodada de
- * canção de graça.
+ * **A rodada em que o herói derruba o último monstro não passa por ele**: a
+ * luta acaba ali e a equipe não age. Quem orquestra chama isto nesse caso.
+ * (Derrubar um de um grupo não encerra a rodada — a equipe age e desconta
+ * normalmente.)
  */
 export function passarRodadaDaCancao(hero: Hero): Hero {
   const buffs = hero.buffs;

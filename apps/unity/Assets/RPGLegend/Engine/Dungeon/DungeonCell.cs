@@ -99,8 +99,10 @@ namespace RPGLegend.Engine
         /// <summary>Sala de evento: o evento já chegou ao fim.</summary>
         public bool? Resolved;
         public List<MonsterInstance> Monsters;
-        /// <summary>O monstro da vez na sala (o índice em <see cref="Monsters"/>).</summary>
+        /// <summary>O primeiro monstro de pé (o índice em <see cref="Monsters"/>); quem ficou atrás dele já caiu.</summary>
         public double? MonsterIndex;
+        /// <summary>Na luta em grupo, de quem é a vez de atacar (shared/src/jogo/combate.ts). Ausente: o primeiro de pé.</summary>
+        public double? MonsterTurn;
         public bool? Beaten;
         public DungeonTreasureBonus BonusTreasure;
         /// <summary>Baú que é um Mímico.</summary>

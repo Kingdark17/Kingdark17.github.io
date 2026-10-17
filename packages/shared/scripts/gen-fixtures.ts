@@ -3406,6 +3406,48 @@ for (const [nome, estado] of [
   caso(`salaDeCombate: ${nome}`, 'salaDeCombate', { estado }, (a) => E.salaDeCombate(a.estado));
   caso(`monstroAtual: ${nome}`, 'monstroAtual', { estado }, (a) => E.monstroAtual(a.estado));
   caso(`inimigosRestantes: ${nome}`, 'inimigosRestantes', { estado }, (a) => E.inimigosRestantes(a.estado));
+  caso(`inimigosDaLuta: ${nome}`, 'inimigosDaLuta', { estado }, (a) => E.inimigosDaLuta(a.estado));
+  caso(`vezDoMonstro: ${nome}`, 'vezDoMonstro', { estado }, (a) => E.vezDoMonstro(a.estado));
+}
+
+// A luta em grupo: quem caiu fica de fora, a vez dá a volta, o alvo caído passa pro primeiro de pé.
+const grupoComUmCaido = { ...grupo, monsters: (grupo.monsters ?? []).map((m, i) => (i === 0 ? { ...m, hp: 0 } : m)) };
+for (const [nome, sala] of [
+  ['vez no segundo', { ...grupo, monsterTurn: 1 }],
+  ['vez depois do último dá a volta', { ...grupo, monsterTurn: 9 }],
+  ['vez num caído passa pro seguinte', { ...grupoComUmCaido, monsterTurn: 0 }],
+  ['um caído fora da ordem', grupoComUmCaido],
+] as const) {
+  const estado = naSalaDaMasmorra(sala);
+  caso(`inimigosDaLuta: ${nome}`, 'inimigosDaLuta', { estado }, (a) => E.inimigosDaLuta(a.estado));
+  caso(`vezDoMonstro: ${nome}`, 'vezDoMonstro', { estado }, (a) => E.vezDoMonstro(a.estado));
+  caso(`inimigosRestantes: ${nome}`, 'inimigosRestantes', { estado }, (a) => E.inimigosRestantes(a.estado));
+}
+const combateDoGrupo = (sala: DungeonCell, alvo: number) => ({
+  estado: naSalaDaMasmorra(sala),
+  fase: 'combate',
+  log: [],
+  dado: null,
+  loot: null,
+  pet: null,
+  som: null,
+  flutuantes: [],
+  alvo,
+});
+for (const [nome, combate] of [
+  ['alvo de pé', combateDoGrupo(grupo, 1)],
+  ['alvo caído', combateDoGrupo(grupoComUmCaido, 0)],
+  ['alvo que não existe', combateDoGrupo(grupo, 9)],
+  ['na cidade', { ...combateDoGrupo(grupo, 0), estado: enxuto() }],
+] as const) {
+  caso(`alvoDaLuta: ${nome}`, 'alvoDaLuta', { combate }, (a) => E.alvoDaLuta(a.combate as never));
+}
+for (const [nome, combate, indice] of [
+  ['de pé', combateDoGrupo(grupo, 0), 1],
+  ['caído', combateDoGrupo(grupoComUmCaido, 1), 0],
+  ['que não existe', combateDoGrupo(grupo, 0), 9],
+] as const) {
+  caso(`escolherAlvo: ${nome}`, 'escolherAlvo', { combate, indice }, (a) => E.escolherAlvo(a.combate as never, a.indice));
 }
 for (const [nome, estado, pet] of [
   ['um monstro', naSalaDaMasmorra(umMonstro), null],
@@ -3416,7 +3458,8 @@ for (const [nome, estado, pet] of [
 ] as const) {
   caso(`iniciarEncontro: ${nome}`, 'iniciarEncontro', { estado, pet }, (a) => E.iniciarEncontro(a.estado, a.pet as never));
 }
-const combateVazio = { estado: naSalaDaMasmorra({ type: 'monster', monsters: [] }), fase: 'combate', log: [], dado: null, loot: null, pet: null, som: null, flutuantes: [] };
+const combateVazio = { estado: naSalaDaMasmorra({ type: 'monster', monsters: [] }), fase: 'combate', log: [], dado: null, loot: null, pet: null, som: null, flutuantes: [], alvo: 0 };
+caso('comecarCombate: o grupo inteiro se prepara', 'comecarCombate', { combate: { ...combateDoGrupo(grupoComUmCaido, 1) } }, (a) => E.comecarCombate(a.combate as never));
 caso('comecarCombate: sala vazia vira vitória', 'comecarCombate', { combate: combateVazio }, (a) => E.comecarCombate(a.combate as never));
 caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: { ...combateVazio, estado: enxuto() } }, (a) => E.comecarCombate(a.combate as never));
 

@@ -143193,6 +143193,376 @@
     }
   },
   {
+    "name": "inimigosDaLuta: um monstro",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 1,
+                "y": 2,
+                "doors": {
+                  "E": true
+                },
+                "extras": [
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_78034",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 2,
+                    "row": 1,
+                    "item": null,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "brutamontes",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 8,
+                    "xp": 17,
+                    "gold": 10,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "indice": 0,
+          "monstro": {
+            "speciesId": "goblin",
+            "enemyClassId": "brutamontes",
+            "floor": 3,
+            "hp": 20,
+            "maxHp": 20,
+            "dmg": 5,
+            "speed": 8,
+            "xp": 17,
+            "gold": 10,
+            "isBoss": false,
+            "species": {
+              "id": "goblin",
+              "name": "Goblin",
+              "icon": "👹",
+              "behavior": "agressivo",
+              "baseHp": 10,
+              "baseSpeed": 8,
+              "baseDmg": 3,
+              "weakness": "magico",
+              "resistance": "nenhuma",
+              "ability": "Ataque Impulsivo",
+              "abilityDesc": "Pode causar dano extra."
+            },
+            "enemyClass": {
+              "id": "brutamontes",
+              "name": "Brutamontes",
+              "icon": "💥",
+              "power": "Impacto Brutal",
+              "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+              "hpMult": 1.15,
+              "dmgMult": 1.2,
+              "speedMult": 0.9
+            },
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra.",
+            "enemyClassLabel": "Brutamontes"
+          },
+          "vivo": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "vezDoMonstro: um monstro",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 1,
+                "y": 2,
+                "doors": {
+                  "E": true
+                },
+                "extras": [
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_78034",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 2,
+                    "row": 1,
+                    "item": null,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "brutamontes",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 8,
+                    "xp": 17,
+                    "gold": 10,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
     "name": "salaDeCombate: grupo",
     "input": {
       "fn": "salaDeCombate",
@@ -143810,6 +144180,443 @@
     },
     "expected": {
       "result": 2
+    }
+  },
+  {
+    "name": "inimigosDaLuta: grupo",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "indice": 0,
+          "monstro": {
+            "speciesId": "goblin",
+            "enemyClassId": "xama",
+            "floor": 3,
+            "hp": 17,
+            "maxHp": 17,
+            "dmg": 4,
+            "speed": 9,
+            "xp": 17,
+            "gold": 14,
+            "isBoss": false,
+            "species": {
+              "id": "goblin",
+              "name": "Goblin",
+              "icon": "👹",
+              "behavior": "agressivo",
+              "baseHp": 10,
+              "baseSpeed": 8,
+              "baseDmg": 3,
+              "weakness": "magico",
+              "resistance": "nenhuma",
+              "ability": "Ataque Impulsivo",
+              "abilityDesc": "Pode causar dano extra."
+            },
+            "enemyClass": {
+              "id": "xama",
+              "name": "Xamã",
+              "icon": "🔮",
+              "power": "Regeneração Profana",
+              "powerDesc": "A cada 3 ataques recupera parte da própria Vida.",
+              "hpMult": 1,
+              "dmgMult": 1.05,
+              "speedMult": 1
+            },
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra.",
+            "enemyClassLabel": "Xamã"
+          },
+          "vivo": true
+        },
+        {
+          "indice": 1,
+          "monstro": {
+            "speciesId": "aranha",
+            "enemyClassId": "guardiao",
+            "floor": 3,
+            "hp": 20,
+            "maxHp": 20,
+            "dmg": 5,
+            "speed": 10,
+            "xp": 15,
+            "gold": 15,
+            "isBoss": false,
+            "species": {
+              "id": "aranha",
+              "name": "Aranha Gigante",
+              "icon": "🕷️",
+              "behavior": "venenoso",
+              "baseHp": 8,
+              "baseSpeed": 11,
+              "baseDmg": 4,
+              "weakness": "fisico",
+              "resistance": "nenhuma",
+              "ability": "Picada Venenosa",
+              "abilityDesc": "Pode envenenar o herói por 3 turnos."
+            },
+            "enemyClass": {
+              "id": "guardiao",
+              "name": "Guardião",
+              "icon": "🛡️",
+              "power": "Muralha Sombria",
+              "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
+              "hpMult": 1.35,
+              "dmgMult": 0.95,
+              "speedMult": 0.8
+            },
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+            "enemyClassLabel": "Guardião"
+          },
+          "vivo": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "vezDoMonstro: grupo",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
     }
   },
   {
@@ -144433,6 +145240,443 @@
     }
   },
   {
+    "name": "inimigosDaLuta: grupo, no segundo",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 1,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "indice": 0,
+          "monstro": {
+            "speciesId": "goblin",
+            "enemyClassId": "xama",
+            "floor": 3,
+            "hp": 17,
+            "maxHp": 17,
+            "dmg": 4,
+            "speed": 9,
+            "xp": 17,
+            "gold": 14,
+            "isBoss": false,
+            "species": {
+              "id": "goblin",
+              "name": "Goblin",
+              "icon": "👹",
+              "behavior": "agressivo",
+              "baseHp": 10,
+              "baseSpeed": 8,
+              "baseDmg": 3,
+              "weakness": "magico",
+              "resistance": "nenhuma",
+              "ability": "Ataque Impulsivo",
+              "abilityDesc": "Pode causar dano extra."
+            },
+            "enemyClass": {
+              "id": "xama",
+              "name": "Xamã",
+              "icon": "🔮",
+              "power": "Regeneração Profana",
+              "powerDesc": "A cada 3 ataques recupera parte da própria Vida.",
+              "hpMult": 1,
+              "dmgMult": 1.05,
+              "speedMult": 1
+            },
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra.",
+            "enemyClassLabel": "Xamã"
+          },
+          "vivo": false
+        },
+        {
+          "indice": 1,
+          "monstro": {
+            "speciesId": "aranha",
+            "enemyClassId": "guardiao",
+            "floor": 3,
+            "hp": 20,
+            "maxHp": 20,
+            "dmg": 5,
+            "speed": 10,
+            "xp": 15,
+            "gold": 15,
+            "isBoss": false,
+            "species": {
+              "id": "aranha",
+              "name": "Aranha Gigante",
+              "icon": "🕷️",
+              "behavior": "venenoso",
+              "baseHp": 8,
+              "baseSpeed": 11,
+              "baseDmg": 4,
+              "weakness": "fisico",
+              "resistance": "nenhuma",
+              "ability": "Picada Venenosa",
+              "abilityDesc": "Pode envenenar o herói por 3 turnos."
+            },
+            "enemyClass": {
+              "id": "guardiao",
+              "name": "Guardião",
+              "icon": "🛡️",
+              "power": "Muralha Sombria",
+              "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
+              "hpMult": 1.35,
+              "dmgMult": 0.95,
+              "speedMult": 0.8
+            },
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+            "enemyClassLabel": "Guardião"
+          },
+          "vivo": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "vezDoMonstro: grupo, no segundo",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 1,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
     "name": "salaDeCombate: sala sem monstro",
     "input": {
       "fn": "salaDeCombate",
@@ -144835,6 +146079,276 @@
     },
     "expected": {
       "result": 0
+    }
+  },
+  {
+    "name": "inimigosDaLuta: sala sem monstro",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 6,
+                    "row": 1,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "vezDoMonstro: sala sem monstro",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 6,
+                    "row": 1,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": null
     }
   },
   {
@@ -145246,6 +146760,278 @@
     }
   },
   {
+    "name": "inimigosDaLuta: sala de monstro vazia",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 6,
+                    "row": 1,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": []
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "vezDoMonstro: sala de monstro vazia",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 6,
+                    "row": 1,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": []
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
     "name": "salaDeCombate: cidade",
     "input": {
       "fn": "salaDeCombate",
@@ -145651,6 +147437,4484 @@
     }
   },
   {
+    "name": "inimigosDaLuta: cidade",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "pot_vida_1700000000000_62706",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "vezDoMonstro: cidade",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "pot_vida_1700000000000_62706",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "inimigosDaLuta: vez no segundo",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false,
+                "monsterTurn": 1
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "indice": 0,
+          "monstro": {
+            "speciesId": "goblin",
+            "enemyClassId": "xama",
+            "floor": 3,
+            "hp": 17,
+            "maxHp": 17,
+            "dmg": 4,
+            "speed": 9,
+            "xp": 17,
+            "gold": 14,
+            "isBoss": false,
+            "species": {
+              "id": "goblin",
+              "name": "Goblin",
+              "icon": "👹",
+              "behavior": "agressivo",
+              "baseHp": 10,
+              "baseSpeed": 8,
+              "baseDmg": 3,
+              "weakness": "magico",
+              "resistance": "nenhuma",
+              "ability": "Ataque Impulsivo",
+              "abilityDesc": "Pode causar dano extra."
+            },
+            "enemyClass": {
+              "id": "xama",
+              "name": "Xamã",
+              "icon": "🔮",
+              "power": "Regeneração Profana",
+              "powerDesc": "A cada 3 ataques recupera parte da própria Vida.",
+              "hpMult": 1,
+              "dmgMult": 1.05,
+              "speedMult": 1
+            },
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra.",
+            "enemyClassLabel": "Xamã"
+          },
+          "vivo": true
+        },
+        {
+          "indice": 1,
+          "monstro": {
+            "speciesId": "aranha",
+            "enemyClassId": "guardiao",
+            "floor": 3,
+            "hp": 20,
+            "maxHp": 20,
+            "dmg": 5,
+            "speed": 10,
+            "xp": 15,
+            "gold": 15,
+            "isBoss": false,
+            "species": {
+              "id": "aranha",
+              "name": "Aranha Gigante",
+              "icon": "🕷️",
+              "behavior": "venenoso",
+              "baseHp": 8,
+              "baseSpeed": 11,
+              "baseDmg": 4,
+              "weakness": "fisico",
+              "resistance": "nenhuma",
+              "ability": "Picada Venenosa",
+              "abilityDesc": "Pode envenenar o herói por 3 turnos."
+            },
+            "enemyClass": {
+              "id": "guardiao",
+              "name": "Guardião",
+              "icon": "🛡️",
+              "power": "Muralha Sombria",
+              "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
+              "hpMult": 1.35,
+              "dmgMult": 0.95,
+              "speedMult": 0.8
+            },
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+            "enemyClassLabel": "Guardião"
+          },
+          "vivo": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "vezDoMonstro: vez no segundo",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false,
+                "monsterTurn": 1
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "inimigosRestantes: vez no segundo",
+    "input": {
+      "fn": "inimigosRestantes",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false,
+                "monsterTurn": 1
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "inimigosDaLuta: vez depois do último dá a volta",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false,
+                "monsterTurn": 9
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "indice": 0,
+          "monstro": {
+            "speciesId": "goblin",
+            "enemyClassId": "xama",
+            "floor": 3,
+            "hp": 17,
+            "maxHp": 17,
+            "dmg": 4,
+            "speed": 9,
+            "xp": 17,
+            "gold": 14,
+            "isBoss": false,
+            "species": {
+              "id": "goblin",
+              "name": "Goblin",
+              "icon": "👹",
+              "behavior": "agressivo",
+              "baseHp": 10,
+              "baseSpeed": 8,
+              "baseDmg": 3,
+              "weakness": "magico",
+              "resistance": "nenhuma",
+              "ability": "Ataque Impulsivo",
+              "abilityDesc": "Pode causar dano extra."
+            },
+            "enemyClass": {
+              "id": "xama",
+              "name": "Xamã",
+              "icon": "🔮",
+              "power": "Regeneração Profana",
+              "powerDesc": "A cada 3 ataques recupera parte da própria Vida.",
+              "hpMult": 1,
+              "dmgMult": 1.05,
+              "speedMult": 1
+            },
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra.",
+            "enemyClassLabel": "Xamã"
+          },
+          "vivo": true
+        },
+        {
+          "indice": 1,
+          "monstro": {
+            "speciesId": "aranha",
+            "enemyClassId": "guardiao",
+            "floor": 3,
+            "hp": 20,
+            "maxHp": 20,
+            "dmg": 5,
+            "speed": 10,
+            "xp": 15,
+            "gold": 15,
+            "isBoss": false,
+            "species": {
+              "id": "aranha",
+              "name": "Aranha Gigante",
+              "icon": "🕷️",
+              "behavior": "venenoso",
+              "baseHp": 8,
+              "baseSpeed": 11,
+              "baseDmg": 4,
+              "weakness": "fisico",
+              "resistance": "nenhuma",
+              "ability": "Picada Venenosa",
+              "abilityDesc": "Pode envenenar o herói por 3 turnos."
+            },
+            "enemyClass": {
+              "id": "guardiao",
+              "name": "Guardião",
+              "icon": "🛡️",
+              "power": "Muralha Sombria",
+              "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
+              "hpMult": 1.35,
+              "dmgMult": 0.95,
+              "speedMult": 0.8
+            },
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+            "enemyClassLabel": "Guardião"
+          },
+          "vivo": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "vezDoMonstro: vez depois do último dá a volta",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false,
+                "monsterTurn": 9
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "inimigosRestantes: vez depois do último dá a volta",
+    "input": {
+      "fn": "inimigosRestantes",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false,
+                "monsterTurn": 9
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "inimigosDaLuta: vez num caído passa pro seguinte",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false,
+                "monsterTurn": 0
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "indice": 0,
+          "monstro": {
+            "speciesId": "goblin",
+            "enemyClassId": "xama",
+            "floor": 3,
+            "hp": 0,
+            "maxHp": 17,
+            "dmg": 4,
+            "speed": 9,
+            "xp": 17,
+            "gold": 14,
+            "isBoss": false,
+            "species": {
+              "id": "goblin",
+              "name": "Goblin",
+              "icon": "👹",
+              "behavior": "agressivo",
+              "baseHp": 10,
+              "baseSpeed": 8,
+              "baseDmg": 3,
+              "weakness": "magico",
+              "resistance": "nenhuma",
+              "ability": "Ataque Impulsivo",
+              "abilityDesc": "Pode causar dano extra."
+            },
+            "enemyClass": {
+              "id": "xama",
+              "name": "Xamã",
+              "icon": "🔮",
+              "power": "Regeneração Profana",
+              "powerDesc": "A cada 3 ataques recupera parte da própria Vida.",
+              "hpMult": 1,
+              "dmgMult": 1.05,
+              "speedMult": 1
+            },
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra.",
+            "enemyClassLabel": "Xamã"
+          },
+          "vivo": false
+        },
+        {
+          "indice": 1,
+          "monstro": {
+            "speciesId": "aranha",
+            "enemyClassId": "guardiao",
+            "floor": 3,
+            "hp": 20,
+            "maxHp": 20,
+            "dmg": 5,
+            "speed": 10,
+            "xp": 15,
+            "gold": 15,
+            "isBoss": false,
+            "species": {
+              "id": "aranha",
+              "name": "Aranha Gigante",
+              "icon": "🕷️",
+              "behavior": "venenoso",
+              "baseHp": 8,
+              "baseSpeed": 11,
+              "baseDmg": 4,
+              "weakness": "fisico",
+              "resistance": "nenhuma",
+              "ability": "Picada Venenosa",
+              "abilityDesc": "Pode envenenar o herói por 3 turnos."
+            },
+            "enemyClass": {
+              "id": "guardiao",
+              "name": "Guardião",
+              "icon": "🛡️",
+              "power": "Muralha Sombria",
+              "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
+              "hpMult": 1.35,
+              "dmgMult": 0.95,
+              "speedMult": 0.8
+            },
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+            "enemyClassLabel": "Guardião"
+          },
+          "vivo": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "vezDoMonstro: vez num caído passa pro seguinte",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false,
+                "monsterTurn": 0
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "inimigosRestantes: vez num caído passa pro seguinte",
+    "input": {
+      "fn": "inimigosRestantes",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false,
+                "monsterTurn": 0
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "inimigosDaLuta: um caído fora da ordem",
+    "input": {
+      "fn": "inimigosDaLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "indice": 0,
+          "monstro": {
+            "speciesId": "goblin",
+            "enemyClassId": "xama",
+            "floor": 3,
+            "hp": 0,
+            "maxHp": 17,
+            "dmg": 4,
+            "speed": 9,
+            "xp": 17,
+            "gold": 14,
+            "isBoss": false,
+            "species": {
+              "id": "goblin",
+              "name": "Goblin",
+              "icon": "👹",
+              "behavior": "agressivo",
+              "baseHp": 10,
+              "baseSpeed": 8,
+              "baseDmg": 3,
+              "weakness": "magico",
+              "resistance": "nenhuma",
+              "ability": "Ataque Impulsivo",
+              "abilityDesc": "Pode causar dano extra."
+            },
+            "enemyClass": {
+              "id": "xama",
+              "name": "Xamã",
+              "icon": "🔮",
+              "power": "Regeneração Profana",
+              "powerDesc": "A cada 3 ataques recupera parte da própria Vida.",
+              "hpMult": 1,
+              "dmgMult": 1.05,
+              "speedMult": 1
+            },
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra.",
+            "enemyClassLabel": "Xamã"
+          },
+          "vivo": false
+        },
+        {
+          "indice": 1,
+          "monstro": {
+            "speciesId": "aranha",
+            "enemyClassId": "guardiao",
+            "floor": 3,
+            "hp": 20,
+            "maxHp": 20,
+            "dmg": 5,
+            "speed": 10,
+            "xp": 15,
+            "gold": 15,
+            "isBoss": false,
+            "species": {
+              "id": "aranha",
+              "name": "Aranha Gigante",
+              "icon": "🕷️",
+              "behavior": "venenoso",
+              "baseHp": 8,
+              "baseSpeed": 11,
+              "baseDmg": 4,
+              "weakness": "fisico",
+              "resistance": "nenhuma",
+              "ability": "Picada Venenosa",
+              "abilityDesc": "Pode envenenar o herói por 3 turnos."
+            },
+            "enemyClass": {
+              "id": "guardiao",
+              "name": "Guardião",
+              "icon": "🛡️",
+              "power": "Muralha Sombria",
+              "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
+              "hpMult": 1.35,
+              "dmgMult": 0.95,
+              "speedMult": 0.8
+            },
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+            "enemyClassLabel": "Guardião"
+          },
+          "vivo": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "vezDoMonstro: um caído fora da ordem",
+    "input": {
+      "fn": "vezDoMonstro",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "inimigosRestantes: um caído fora da ordem",
+    "input": {
+      "fn": "inimigosRestantes",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alvoDaLuta: alvo de pé",
+    "input": {
+      "fn": "alvoDaLuta",
+      "args": {
+        "combate": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [
+                "Golpe Poderoso"
+              ],
+              "powerIds": [
+                "golpe_poderoso"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 3,
+                  "y": 2,
+                  "doors": {
+                    "S": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 7,
+                      "row": 1,
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_38471",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "goblin",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 17,
+                      "maxHp": 17,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false
+                    },
+                    {
+                      "speciesId": "aranha",
+                      "enemyClassId": "guardiao",
+                      "floor": 3,
+                      "hp": 20,
+                      "maxHp": 20,
+                      "dmg": 5,
+                      "speed": 10,
+                      "xp": 15,
+                      "gold": 15,
+                      "isBoss": false
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "fase": "combate",
+          "log": [],
+          "dado": null,
+          "loot": null,
+          "pet": null,
+          "som": null,
+          "flutuantes": [],
+          "alvo": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alvoDaLuta: alvo caído",
+    "input": {
+      "fn": "alvoDaLuta",
+      "args": {
+        "combate": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [
+                "Golpe Poderoso"
+              ],
+              "powerIds": [
+                "golpe_poderoso"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 3,
+                  "y": 2,
+                  "doors": {
+                    "S": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 7,
+                      "row": 1,
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_38471",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "goblin",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 0,
+                      "maxHp": 17,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false
+                    },
+                    {
+                      "speciesId": "aranha",
+                      "enemyClassId": "guardiao",
+                      "floor": 3,
+                      "hp": 20,
+                      "maxHp": 20,
+                      "dmg": 5,
+                      "speed": 10,
+                      "xp": 15,
+                      "gold": 15,
+                      "isBoss": false
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "fase": "combate",
+          "log": [],
+          "dado": null,
+          "loot": null,
+          "pet": null,
+          "som": null,
+          "flutuantes": [],
+          "alvo": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alvoDaLuta: alvo que não existe",
+    "input": {
+      "fn": "alvoDaLuta",
+      "args": {
+        "combate": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [
+                "Golpe Poderoso"
+              ],
+              "powerIds": [
+                "golpe_poderoso"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 3,
+                  "y": 2,
+                  "doors": {
+                    "S": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 7,
+                      "row": 1,
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_38471",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "goblin",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 17,
+                      "maxHp": 17,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false
+                    },
+                    {
+                      "speciesId": "aranha",
+                      "enemyClassId": "guardiao",
+                      "floor": 3,
+                      "hp": 20,
+                      "maxHp": 20,
+                      "dmg": 5,
+                      "speed": 10,
+                      "xp": 15,
+                      "gold": 15,
+                      "isBoss": false
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "fase": "combate",
+          "log": [],
+          "dado": null,
+          "loot": null,
+          "pet": null,
+          "som": null,
+          "flutuantes": [],
+          "alvo": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "alvoDaLuta: na cidade",
+    "input": {
+      "fn": "alvoDaLuta",
+      "args": {
+        "combate": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [
+                "Golpe Poderoso"
+              ],
+              "powerIds": [
+                "golpe_poderoso"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "pot_vida_1700000000000_62706",
+                "templateId": "pot_vida",
+                "rarity": "comum",
+                "stats": {
+                  "cura": 22
+                },
+                "value": 14,
+                "equipped": false
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "start",
+                  "x": 3,
+                  "y": 3,
+                  "doors": {
+                    "N": true,
+                    "W": true,
+                    "E": true,
+                    "S": true
+                  },
+                  "visited": true,
+                  "revealed": true
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "fase": "combate",
+          "log": [],
+          "dado": null,
+          "loot": null,
+          "pet": null,
+          "som": null,
+          "flutuantes": [],
+          "alvo": 0
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "escolherAlvo: de pé",
+    "input": {
+      "fn": "escolherAlvo",
+      "args": {
+        "combate": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [
+                "Golpe Poderoso"
+              ],
+              "powerIds": [
+                "golpe_poderoso"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 3,
+                  "y": 2,
+                  "doors": {
+                    "S": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 7,
+                      "row": 1,
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_38471",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "goblin",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 17,
+                      "maxHp": 17,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false
+                    },
+                    {
+                      "speciesId": "aranha",
+                      "enemyClassId": "guardiao",
+                      "floor": 3,
+                      "hp": 20,
+                      "maxHp": 20,
+                      "dmg": 5,
+                      "speed": 10,
+                      "xp": 15,
+                      "gold": 15,
+                      "isBoss": false
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "fase": "combate",
+          "log": [],
+          "dado": null,
+          "loot": null,
+          "pet": null,
+          "som": null,
+          "flutuantes": [],
+          "alvo": 0
+        },
+        "indice": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "fase": "combate",
+        "log": [],
+        "dado": null,
+        "loot": null,
+        "pet": null,
+        "som": null,
+        "flutuantes": [],
+        "alvo": 1
+      }
+    }
+  },
+  {
+    "name": "escolherAlvo: caído",
+    "input": {
+      "fn": "escolherAlvo",
+      "args": {
+        "combate": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [
+                "Golpe Poderoso"
+              ],
+              "powerIds": [
+                "golpe_poderoso"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 3,
+                  "y": 2,
+                  "doors": {
+                    "S": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 7,
+                      "row": 1,
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_38471",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "goblin",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 0,
+                      "maxHp": 17,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false
+                    },
+                    {
+                      "speciesId": "aranha",
+                      "enemyClassId": "guardiao",
+                      "floor": 3,
+                      "hp": 20,
+                      "maxHp": 20,
+                      "dmg": 5,
+                      "speed": 10,
+                      "xp": 15,
+                      "gold": 15,
+                      "isBoss": false
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "fase": "combate",
+          "log": [],
+          "dado": null,
+          "loot": null,
+          "pet": null,
+          "som": null,
+          "flutuantes": [],
+          "alvo": 1
+        },
+        "indice": 0
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "fase": "combate",
+        "log": [],
+        "dado": null,
+        "loot": null,
+        "pet": null,
+        "som": null,
+        "flutuantes": [],
+        "alvo": 1
+      }
+    }
+  },
+  {
+    "name": "escolherAlvo: que não existe",
+    "input": {
+      "fn": "escolherAlvo",
+      "args": {
+        "combate": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [
+                "Golpe Poderoso"
+              ],
+              "powerIds": [
+                "golpe_poderoso"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 3,
+                  "y": 2,
+                  "doors": {
+                    "S": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 7,
+                      "row": 1,
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_38471",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "goblin",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 17,
+                      "maxHp": 17,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false
+                    },
+                    {
+                      "speciesId": "aranha",
+                      "enemyClassId": "guardiao",
+                      "floor": 3,
+                      "hp": 20,
+                      "maxHp": 20,
+                      "dmg": 5,
+                      "speed": 10,
+                      "xp": 15,
+                      "gold": 15,
+                      "isBoss": false
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "fase": "combate",
+          "log": [],
+          "dado": null,
+          "loot": null,
+          "pet": null,
+          "som": null,
+          "flutuantes": [],
+          "alvo": 0
+        },
+        "indice": 9
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 17,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "fase": "combate",
+        "log": [],
+        "dado": null,
+        "loot": null,
+        "pet": null,
+        "som": null,
+        "flutuantes": [],
+        "alvo": 0
+      }
+    }
+  },
+  {
     "name": "iniciarEncontro: um monstro",
     "input": {
       "fn": "iniciarEncontro",
@@ -145973,7 +152237,8 @@
         "loot": null,
         "pet": null,
         "som": null,
-        "flutuantes": []
+        "flutuantes": [],
+        "alvo": 0
       }
     }
   },
@@ -146300,7 +152565,9 @@
                     "speed": 10,
                     "xp": 15,
                     "gold": 15,
-                    "isBoss": false
+                    "isBoss": false,
+                    "status": {},
+                    "attackCount": 0
                   }
                 ],
                 "monsterIndex": 0,
@@ -146322,7 +152589,8 @@
         "loot": null,
         "pet": null,
         "som": null,
-        "flutuantes": []
+        "flutuantes": [],
+        "alvo": 0
       }
     }
   },
@@ -146653,7 +152921,8 @@
         "loot": null,
         "pet": null,
         "som": null,
-        "flutuantes": []
+        "flutuantes": [],
+        "alvo": 0
       }
     }
   },
@@ -146980,7 +153249,8 @@
         "loot": null,
         "pet": "chicken",
         "som": null,
-        "flutuantes": []
+        "flutuantes": [],
+        "alvo": 0
       }
     }
   },
@@ -147252,7 +153522,366 @@
         "loot": null,
         "pet": null,
         "som": null,
-        "flutuantes": []
+        "flutuantes": [],
+        "alvo": 0
+      }
+    }
+  },
+  {
+    "name": "comecarCombate: o grupo inteiro se prepara",
+    "input": {
+      "fn": "comecarCombate",
+      "args": {
+        "combate": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [
+                "Golpe Poderoso"
+              ],
+              "powerIds": [
+                "golpe_poderoso"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 3,
+                  "y": 2,
+                  "doors": {
+                    "S": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 7,
+                      "row": 1,
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_38471",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "goblin",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 0,
+                      "maxHp": 17,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false
+                    },
+                    {
+                      "speciesId": "aranha",
+                      "enemyClassId": "guardiao",
+                      "floor": 3,
+                      "hp": 20,
+                      "maxHp": 20,
+                      "dmg": 5,
+                      "speed": 10,
+                      "xp": 15,
+                      "gold": 15,
+                      "isBoss": false
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "fase": "combate",
+          "log": [],
+          "dado": null,
+          "loot": null,
+          "pet": null,
+          "som": null,
+          "flutuantes": [],
+          "alvo": 1
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "chest",
+                    "col": 6,
+                    "row": 5,
+                    "item": {
+                      "uid": "pot_mana_1700000000000_38471",
+                      "templateId": "pot_mana",
+                      "rarity": "comum",
+                      "stats": {
+                        "curaMana": 16
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "xama",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 17,
+                    "dmg": 4,
+                    "speed": 9,
+                    "xp": 17,
+                    "gold": 14,
+                    "isBoss": false
+                  },
+                  {
+                    "speciesId": "aranha",
+                    "enemyClassId": "guardiao",
+                    "floor": 3,
+                    "hp": 20,
+                    "maxHp": 20,
+                    "dmg": 5,
+                    "speed": 10,
+                    "xp": 15,
+                    "gold": 15,
+                    "isBoss": false,
+                    "status": {},
+                    "attackCount": 0
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "fase": "combate",
+        "log": [
+          "O combate começa! Ataque, use um poder ou tente fugir."
+        ],
+        "dado": null,
+        "loot": null,
+        "pet": null,
+        "som": null,
+        "flutuantes": [],
+        "alvo": 1
       }
     }
   },
@@ -147393,7 +154022,8 @@
           "loot": null,
           "pet": null,
           "som": null,
-          "flutuantes": []
+          "flutuantes": [],
+          "alvo": 0
         }
       }
     },
@@ -147530,7 +154160,8 @@
         "loot": null,
         "pet": null,
         "som": null,
-        "flutuantes": []
+        "flutuantes": [],
+        "alvo": 0
       }
     }
   },
@@ -147670,7 +154301,8 @@
           "loot": null,
           "pet": null,
           "som": null,
-          "flutuantes": []
+          "flutuantes": [],
+          "alvo": 0
         }
       }
     },
@@ -153132,7 +159764,8 @@
             "loot": null,
             "pet": null,
             "som": null,
-            "flutuantes": []
+            "flutuantes": [],
+            "alvo": 0
           }
         },
         "recado": null
@@ -153659,7 +160292,8 @@
             "loot": null,
             "pet": null,
             "som": null,
-            "flutuantes": []
+            "flutuantes": [],
+            "alvo": 0
           }
         },
         "recado": null
@@ -154136,7 +160770,8 @@
             "loot": null,
             "pet": null,
             "som": null,
-            "flutuantes": []
+            "flutuantes": [],
+            "alvo": 0
           }
         },
         "recado": null
@@ -154640,7 +161275,8 @@
             "loot": null,
             "pet": null,
             "som": null,
-            "flutuantes": []
+            "flutuantes": [],
+            "alvo": 0
           }
         },
         "recado": {
@@ -155147,7 +161783,8 @@
             "loot": null,
             "pet": "chicken",
             "som": null,
-            "flutuantes": []
+            "flutuantes": [],
+            "alvo": 0
           }
         },
         "recado": {
@@ -155951,7 +162588,8 @@
             "loot": null,
             "pet": null,
             "som": null,
-            "flutuantes": []
+            "flutuantes": [],
+            "alvo": 0
           }
         },
         "recado": {
@@ -156467,7 +163105,8 @@
             "loot": null,
             "pet": null,
             "som": null,
-            "flutuantes": []
+            "flutuantes": [],
+            "alvo": 0
           }
         },
         "recado": {

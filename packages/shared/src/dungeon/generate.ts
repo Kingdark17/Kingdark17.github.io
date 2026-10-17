@@ -86,7 +86,10 @@ export interface DungeonCell extends RoomCell {
   event?: DungeonEventStub;
   resolved?: boolean;
   monsters?: MonsterInstance[];
+  /** O primeiro monstro de pé. No tempo da fila era "o da frente"; quem ficou atrás dele já caiu. */
   monsterIndex?: number;
+  /** Na luta em grupo, de quem é a vez de atacar (`jogo/combate.ts`). Ausente: o primeiro de pé. */
+  monsterTurn?: number;
   beaten?: boolean;
   bonusTreasure?: DungeonTreasureBonus;
   isMimic?: boolean;
