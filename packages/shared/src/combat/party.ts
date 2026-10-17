@@ -26,12 +26,96 @@ const HIT_CHANCE: Record<Companion['stance'], number> = {
   equilibrada: 0.82,
 };
 
+/** O que um companheiro fez na vez dele: o herói (que pode ter sido curado), o monstro e o resultado. */
+export interface PartyMemberAction {
+  hero: Hero;
+  monster: CombatMonster;
+  outcome: PartyMemberOutcome;
+}
+
+/**
+ * A vez de um companheiro. Em postura "suporte" ele tenta curar antes de
+ * atacar (Clérigo com chance maior); senão ataca com bônus por postura e uma
+ * chance de passiva de classe — mesma lista que `applyHeroClassPassive`,
+ * mas rolada para o companheiro em vez do herói. A Canção de Batalha do
+ * herói bardo chega aqui: é o único buff de herói que a equipe sente.
+ *
+ * Separada do turno da equipe pra luta em tempo real do app, onde cada
+ * companheiro age no seu tempo, no monstro mais perto dele. Quem chama
+ * confere antes se ele e o monstro estão de pé.
+ */
+export function partyMemberAct(hero: Hero, member: Companion, monster: CombatMonster, rng: Rng = defaultRng): PartyMemberAction {
+  let nextHero = hero;
+  const buffs = hero.buffs ?? {};
+  const inspiracao = buffs.inspiracaoTurns && buffs.inspiracaoTurns > 0 ? 1 + (buffs.inspiracaoAmount ?? 0) : 1;
+
+  const stance = member.stance || 'equilibrada';
+  const classe = idDaClasse(member);
+  const isCleric = classe === 'clerigo';
+
+  if (stance === 'suporte' && rng() < (isCleric ? 0.65 : 0.4)) {
+    const heal = Math.max(4, Math.round((member.attrs?.sabedoria ?? 8) * 0.7));
+    nextHero = { ...nextHero, hp: Math.min(nextHero.maxHp, nextHero.hp + heal) };
+    return { hero: nextHero, monster, outcome: { member, kind: 'healed_hero', amount: heal } };
+  }
+
+  if (rng() >= HIT_CHANCE[stance]) {
+    return { hero: nextHero, monster, outcome: { member, kind: 'miss' } };
+  }
+
+  let dmg = Math.max(2, (member.attack || 5) + randomInt(5, rng));
+  if (stance === 'agressiva') dmg = Math.round(dmg * 1.3);
+  if (stance === 'defensiva' || stance === 'suporte') dmg = Math.round(dmg * 0.8);
+  if (classe === 'mago') dmg = Math.round(dmg * 1.2);
+  if (inspiracao > 1) dmg = Math.round(dmg * inspiracao);
+
+  let passive: PartyPassiveKind | undefined;
+  if (classe === 'ladino' && rng() < 0.25) {
+    dmg = Math.round(dmg * 1.65);
+    passive = 'ladino';
+  }
+  if (classe === 'barbaro' && member.hp < member.maxHp / 2) {
+    dmg = Math.round(dmg * 1.35);
+    passive = 'barbaro';
+  }
+  if (classe === 'arqueiro' && rng() < 0.25) {
+    dmg = Math.round(dmg * 1.5);
+    passive = 'arqueiro';
+  }
+
+  let status = monster.status;
+  if (classe === 'necromante' && rng() < 0.3) {
+    status = setStatusField(status, 'enfraquecido', { turns: 2, amount: 0.2 });
+    passive = 'necromante';
+  }
+  if (classe === 'druida' && rng() < 0.3) {
+    status = setStatusField(status, 'veneno', { turns: 3, dmg: Math.max(2, Math.round(dmg * 0.2)) });
+    passive = 'druida';
+  }
+  if (classe === 'monge' && rng() < 0.22) {
+    status = setStatusField(status, 'atordoado', (status?.atordoado ?? 0) + 1);
+    passive = 'monge';
+  }
+  if (classe === 'bardo' && rng() < 0.3) {
+    status = setStatusField(status, 'vulneravel', { turns: 2, amount: 0.15 });
+    passive = 'bardo';
+  }
+  if (classe === 'cacador' && rng() < 0.3) {
+    status = setStatusField(status, 'sangramento', { turns: 3, dmg: Math.max(2, Math.round(dmg * 0.2)) });
+    passive = 'cacador';
+  }
+  if (classe === 'paladino' && rng() < 0.25) {
+    const paladinHeal = Math.max(3, Math.round(dmg * 0.2));
+    nextHero = { ...nextHero, hp: Math.min(nextHero.maxHp, nextHero.hp + paladinHeal) };
+    passive = 'paladino';
+  }
+
+  return { hero: nextHero, monster: { ...monster, status, hp: monster.hp - dmg }, outcome: { member, kind: 'hit', amount: dmg, passive } };
+}
+
 /**
  * Turno automático dos companheiros, agindo em sequência logo depois do
- * herói. Cada membro em postura "suporte" tenta curar antes de atacar
- * (Clérigo com chance maior); os demais atacam com bônus por postura e uma
- * chance de passiva de classe — mesma lista que `applyHeroClassPassive`,
- * mas rolada para o companheiro em vez do herói.
+ * herói, cada um na sua vez (`partyMemberAct`).
  *
  * Para no primeiro membro que derrota o monstro: membros seguintes na fila
  * são pulados, igual ao original (`monster.hp <= 0` interrompia o `forEach`
@@ -49,80 +133,13 @@ export function applyPartyTurn(
   const outcomes: PartyMemberOutcome[] = [];
   let totalDamage = 0;
 
-  // A Canção de Batalha do herói bardo chega aqui: é o único buff de herói
-  // que a equipe sente.
-  const buffs = hero.buffs ?? {};
-  const inspiracao = buffs.inspiracaoTurns && buffs.inspiracaoTurns > 0 ? 1 + (buffs.inspiracaoAmount ?? 0) : 1;
-
   for (const member of party) {
     if (member.hp <= 0 || nextMonster.hp <= 0) continue;
-
-    const stance = member.stance || 'equilibrada';
-    const classe = idDaClasse(member);
-    const isCleric = classe === 'clerigo';
-
-    if (stance === 'suporte' && rng() < (isCleric ? 0.65 : 0.4)) {
-      const heal = Math.max(4, Math.round((member.attrs?.sabedoria ?? 8) * 0.7));
-      nextHero = { ...nextHero, hp: Math.min(nextHero.maxHp, nextHero.hp + heal) };
-      outcomes.push({ member, kind: 'healed_hero', amount: heal });
-      continue;
-    }
-
-    if (rng() >= HIT_CHANCE[stance]) {
-      outcomes.push({ member, kind: 'miss' });
-      continue;
-    }
-
-    let dmg = Math.max(2, (member.attack || 5) + randomInt(5, rng));
-    if (stance === 'agressiva') dmg = Math.round(dmg * 1.3);
-    if (stance === 'defensiva' || stance === 'suporte') dmg = Math.round(dmg * 0.8);
-    if (classe === 'mago') dmg = Math.round(dmg * 1.2);
-    if (inspiracao > 1) dmg = Math.round(dmg * inspiracao);
-
-    let passive: PartyPassiveKind | undefined;
-    if (classe === 'ladino' && rng() < 0.25) {
-      dmg = Math.round(dmg * 1.65);
-      passive = 'ladino';
-    }
-    if (classe === 'barbaro' && member.hp < member.maxHp / 2) {
-      dmg = Math.round(dmg * 1.35);
-      passive = 'barbaro';
-    }
-    if (classe === 'arqueiro' && rng() < 0.25) {
-      dmg = Math.round(dmg * 1.5);
-      passive = 'arqueiro';
-    }
-
-    let status = nextMonster.status;
-    if (classe === 'necromante' && rng() < 0.3) {
-      status = setStatusField(status, 'enfraquecido', { turns: 2, amount: 0.2 });
-      passive = 'necromante';
-    }
-    if (classe === 'druida' && rng() < 0.3) {
-      status = setStatusField(status, 'veneno', { turns: 3, dmg: Math.max(2, Math.round(dmg * 0.2)) });
-      passive = 'druida';
-    }
-    if (classe === 'monge' && rng() < 0.22) {
-      status = setStatusField(status, 'atordoado', (status?.atordoado ?? 0) + 1);
-      passive = 'monge';
-    }
-    if (classe === 'bardo' && rng() < 0.3) {
-      status = setStatusField(status, 'vulneravel', { turns: 2, amount: 0.15 });
-      passive = 'bardo';
-    }
-    if (classe === 'cacador' && rng() < 0.3) {
-      status = setStatusField(status, 'sangramento', { turns: 3, dmg: Math.max(2, Math.round(dmg * 0.2)) });
-      passive = 'cacador';
-    }
-    if (classe === 'paladino' && rng() < 0.25) {
-      const paladinHeal = Math.max(3, Math.round(dmg * 0.2));
-      nextHero = { ...nextHero, hp: Math.min(nextHero.maxHp, nextHero.hp + paladinHeal) };
-      passive = 'paladino';
-    }
-
-    nextMonster = { ...nextMonster, status, hp: nextMonster.hp - dmg };
-    totalDamage += dmg;
-    outcomes.push({ member, kind: 'hit', amount: dmg, passive });
+    const acao = partyMemberAct(nextHero, member, nextMonster, rng);
+    nextHero = acao.hero;
+    nextMonster = acao.monster;
+    outcomes.push(acao.outcome);
+    if (acao.outcome.kind === 'hit') totalDamage += acao.outcome.amount;
   }
 
   nextHero = passarRodadaDaCancao(nextHero);

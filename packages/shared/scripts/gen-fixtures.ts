@@ -1445,6 +1445,21 @@ caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'trig
     const hero = heroiDeLote();
     pt(`lote ${i}`, hero, equipeDeLote(), monstroDeLote(), { seed: 1000 + i });
   }
+  // A vez de um só companheiro, que a luta em tempo real chama. Sem lote aqui: o lote do gerador é uma
+  // sequência só, e sortear a mais no meio mudaria todos os casos de lote que vêm depois.
+  const pm = (nome: string, hero: Hero, member: Companion, monster: CombatMonster, rng: RngSpec) =>
+    caso(`partyMemberAct: ${nome}`, 'partyMemberAct', { hero, member, monster }, (a, ctx) => E.partyMemberAct(a.hero, a.member, a.monster, ctx.rng), { rng });
+  pm('suporte clérigo cura o herói', heroi({ extra: { hp: 20 } }), companheiro('clerigo', { stance: 'suporte', attrs: atributos({ sabedoria: 14 }) }), monstro(), { sequence: [0.1] });
+  pm('suporte que não cura ataca', heroi(), companheiro('druida', { stance: 'suporte' }), monstro(), { sequence: [0.9, 0.1, 0.5, 0.99] });
+  pm('errou', heroi(), companheiro('guerreiro'), monstro(), { sequence: [0.95] });
+  for (const classe of CLASSES_IDS) {
+    pm(`${classe}, passiva favorável`, heroi(), companheiro(classe, { hp: 8, attack: 7 }), monstro({ hp: 200, maxHp: 200 }), { sequence: [0.1, 0.5, 0] });
+  }
+  pm('com a canção do herói', inspirado, companheiro('guerreiro', { stance: 'agressiva', attack: 9 }), monstro(), { sequence: [0.1, 0.99] });
+  pm('derruba o monstro', heroi(), companheiro('guerreiro', { attack: 12 }), monstro({ hp: 5 }), { sequence: [0.1, 0.99] });
+  pm('paladino cura acima do máximo não passa', heroi(), companheiro('paladino', { attack: 30 }), monstro({ hp: 200, maxHp: 200 }), { sequence: [0.1, 0.5, 0] });
+  for (const semente of [11, 12, 13, 14, 15]) pm(`semente ${semente}`, heroi({ classe: 'bardo' }), companheiro(CLASSES_IDS[semente % CLASSES_IDS.length]!), monstro(), { seed: semente });
+
   caso('passarRodadaDaCancao: desconta uma rodada', 'passarRodadaDaCancao', { hero: inspirado }, (a) => E.passarRodadaDaCancao(a.hero));
   caso('passarRodadaDaCancao: sem canção devolve igual', 'passarRodadaDaCancao', { hero: heroi() }, (a) => E.passarRodadaDaCancao(a.hero));
 }
@@ -1628,6 +1643,39 @@ caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'trig
   for (let i = 1; i <= 40; i++) {
     mh(`lote ${i}`, heroiDeLote(), equipeDeLote(), monstroDeLote(), { seed: 3000 + i }, chance(0.15) ? { esquivaCerta: true } : chance(0.15) ? { petEsquivaBonus: 6 } : {});
   }
+
+  // As três partes do golpe, que a luta em tempo real chama em momentos diferentes (sem lote: ver partyMemberAct).
+  const inicio = (nome: string, monster: CombatMonsterView, hero: Hero, rng: RngSpec) =>
+    caso(`startMonsterAttack: ${nome}`, 'startMonsterAttack', { monster, hero }, (a, ctx) => E.startMonsterAttack(a.monster, a.hero, ctx.rng), { rng });
+  inicio('atordoado perde a vez sem sortear', monstro({ status: { atordoado: 2 } }), ladino, { sequence: [] });
+  inicio('lento perde a vez', monstro({ status: { lento: { turns: 2, amount: 0.2 } } }), ladino, { sequence: [0.1] });
+  inicio('lento não perde', monstro({ status: { lento: { turns: 1, amount: 0.2 } } }), ladino, { sequence: [0.5, 0.99] });
+  inicio('enrage do mini-chefe', monstro({ isBoss: true, isMainBoss: false, hp: 40, maxHp: 100 }), ladino, { sequence: [0.99] });
+  inicio('enfraquecido', monstro({ status: { enfraquecido: { turns: 2, amount: 0.3 } } }), ladino, { sequence: [0.99] });
+  inicio('agressivo bate ×1,45', monstro(), ladino, { sequence: [0.1] });
+  inicio('3º ataque do Feiticeiro', monstro({ attackCount: 2, enemyClassId: 'feiticeiro' }), heroi({ classe: 'ladino', arma: null, extra: { mp: 20 } }), { sequence: [0.99] });
+  inicio('chefe principal no 3º', monstro({ isBoss: true, isMainBoss: true, attackCount: 5 }), ladino, { sequence: [0.99] });
+
+  const noHeroi = (nome: string, hero: Hero, monster: CombatMonsterView, attackMult: number, rng: RngSpec, petEsquiva?: number) =>
+    caso(`landHitOnHero: ${nome}`, 'landHitOnHero', { hero, monster, attackMult, petEsquiva }, (a, ctx) => E.landHitOnHero(a.hero, a.monster, a.attackMult, ctx.rng, a.petEsquiva), { rng });
+  noHeroi('acerta', ladino, monstro(), 1, { sequence: [0.99, 0.5] });
+  noHeroi('na força 1,7', ladino, monstro(), 1.7, { sequence: [0.99, 0.5] });
+  noHeroi('esquiva', heroi({ classe: 'ladino', arma: null, extra: { buffs: { esquivaTurns: 2, esquivaAmount: 40 } } }), monstro(), 1, { sequence: [0.1] });
+  noHeroi('pet de esquiva', ladino, monstro(), 1, { sequence: [0.12] }, 8);
+  noHeroi('golpe envenenado se gasta', ladino, monstro({ poisonStrike: true }), 1, { sequence: [0.99, 0.5] });
+  noHeroi('golpe envenenado fica na esquiva', heroi({ classe: 'ladino', arma: null, extra: { buffs: { esquivaTurns: 1, esquivaAmount: 100 } } }), monstro({ poisonStrike: true }), 1, { sequence: [0.1] });
+  noHeroi('guerreiro apara', heroi({ classe: 'guerreiro' }), monstro(), 1, { sequence: [0.99, 0.5, 0.1] });
+  noHeroi('escudo arcano', heroi({ classe: 'ladino', arma: null, extra: { buffs: { shield: 0.5 } } }), monstro(), 1, { sequence: [0.99, 0.5] });
+  noHeroi('venenoso envenena', ladino, monstro({ speciesId: 'aranha' }), 1, { sequence: [0.99, 0.5, 0.1] });
+  noHeroi('mágico drena', heroi({ classe: 'ladino', arma: null, extra: { mp: 20 } }), monstro({ speciesId: 'espectro_gelado' }), 1, { sequence: [0.99, 0.5, 0.1] });
+  noHeroi('golpe fatal', heroi({ classe: 'ladino', arma: null, extra: { hp: 2 } }), monstro(), 1, { sequence: [0.99, 0.99] });
+
+  const noCompanheiro = (nome: string, member: Companion, monster: CombatMonsterView, attackMult: number, rng: RngSpec) =>
+    caso(`hitPartyMember: ${nome}`, 'hitPartyMember', { member, monster, attackMult }, (a, ctx) => E.hitPartyMember(a.member, a.monster, a.attackMult, ctx.rng), { rng });
+  noCompanheiro('acerta', companheiro('guerreiro'), monstro(), 1, { sequence: [0.5] });
+  noCompanheiro('na força 1,45', companheiro('mago'), monstro(), 1.45, { sequence: [0.99] });
+  noCompanheiro('derruba', companheiro('bardo', { hp: 3 }), monstro(), 1, { sequence: [0.5] });
+  noCompanheiro('no mínimo 1', companheiro('guerreiro'), monstro({ dmg: 0 }), 0.1, { sequence: [0] });
 }
 
 // --- use-power ---

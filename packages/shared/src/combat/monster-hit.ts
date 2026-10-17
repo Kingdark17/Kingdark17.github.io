@@ -116,7 +116,7 @@ function selectTargetPool(party: readonly Companion[], rng: Rng): Companion[] | 
   return null;
 }
 
-interface HeroDamageResult {
+export interface HeroDamageResult {
   hero: Hero;
   dodged: boolean;
   damage: number;
@@ -189,6 +189,73 @@ function resolveHeroDamage(hero: Hero, monster: CombatMonsterView, attackMult: n
   return { hero: nextHero, dodged: false, damage: dmg, poisonApplied, manaDrained, defensivePassiveTriggered, shieldConsumed };
 }
 
+/** O começo do golpe do monstro: se ele perde a vez e, se não, com que força vem. */
+export interface MonsterAttackStart {
+  monster: CombatMonsterView;
+  hero: Hero;
+  /** `ready`: o golpe vem, com `attackMult`. Atordoado ou lento demais, não vem. */
+  outcome: 'stunned' | 'lento_skip' | 'ready';
+  attackMult: number;
+  rageTriggered: boolean;
+  enemyClassPowerTriggered: string | null;
+}
+
+/**
+ * O começo do golpe do monstro, antes de saber em quem ele cai: atordoado
+ * perde a vez (e gasta um turno do atordoamento, sem sortear); senão vêm o
+ * enrage de mini-chefe, o enfraquecido, o lento (que pode fazer perder a
+ * vez), o comportamento e o poder de classe de inimigo.
+ *
+ * Separado de `applyMonsterHit` pra luta em tempo real do app: lá o golpe
+ * começa quando o aviso aparece e só cai em alguém se ele ainda estiver no
+ * alcance quando o aviso acaba. A luta por turnos chama os dois de uma vez.
+ */
+export function startMonsterAttack(monster: CombatMonsterView, hero: Hero, rng: Rng = defaultRng): MonsterAttackStart {
+  if (monster.status?.atordoado && monster.status.atordoado > 0) {
+    const status = setStatusField(monster.status, 'atordoado', monster.status.atordoado - 1);
+    return { monster: { ...monster, status }, hero, outcome: 'stunned', attackMult: 1, rageTriggered: false, enemyClassPowerTriggered: null };
+  }
+  const mult = resolveAttackMultiplier(monster, hero, rng);
+  return {
+    monster: mult.monster,
+    hero: mult.hero,
+    outcome: mult.skip ? 'lento_skip' : 'ready',
+    attackMult: mult.attackMult,
+    rageTriggered: mult.rageTriggered,
+    enemyClassPowerTriggered: mult.enemyClassPowerTriggered,
+  };
+}
+
+/** O golpe que caiu num companheiro: a vida dele depois e o dano. */
+export interface PartyMemberHit {
+  member: Companion;
+  damage: number;
+  defeated: boolean;
+}
+
+/** O golpe do monstro num companheiro: d6 mais o dano do monstro, na força do golpe. Sem esquiva nem defesa. */
+export function hitPartyMember(member: Companion, monster: CombatMonsterView, attackMult: number, rng: Rng = defaultRng): PartyMemberHit {
+  const damage = Math.max(1, Math.round((1 + randomInt(6, rng) + monster.dmg - 1) * attackMult));
+  const atingido: Companion = { ...member, hp: Math.max(0, member.hp - damage) };
+  return { member: atingido, damage, defeated: atingido.hp <= 0 };
+}
+
+/** O golpe que foi no herói, com o monstro depois dele (o veneno de golpe se gasta ao acertar). */
+export interface HeroHit extends HeroDamageResult {
+  monster: CombatMonsterView;
+}
+
+/**
+ * O golpe do monstro no próprio herói: esquiva, defesa, vulnerabilidades,
+ * escudo e o que o golpe deixa de volta (veneno, dreno de mana). Acertou, o
+ * golpe envenenado do poder de classe se gasta.
+ */
+export function landHitOnHero(hero: Hero, monster: CombatMonsterView, attackMult: number, rng: Rng = defaultRng, petEsquiva = 0): HeroHit {
+  const heroHit = resolveHeroDamage(hero, monster, attackMult, rng, petEsquiva);
+  if (heroHit.dodged) return { ...heroHit, monster };
+  return { ...heroHit, monster: monster.poisonStrike ? { ...monster, poisonStrike: false } : monster };
+}
+
 /**
  * Resolve o turno de ataque do monstro: atordoamento, enrage de mini-chefe,
  * multiplicadores de comportamento e de classe de inimigo, escolha de alvo
@@ -206,20 +273,18 @@ export function applyMonsterHit(
   const rng = options.rng ?? defaultRng;
   const petEsquiva = options.petEsquivaBonus ?? 0;
 
-  if (monster.status?.atordoado && monster.status.atordoado > 0) {
-    const status = setStatusField(monster.status, 'atordoado', monster.status.atordoado - 1);
-    return { monster: { ...monster, status }, hero, party: [...party], outcome: 'stunned', heroDefeated: false };
+  const inicio = startMonsterAttack(monster, hero, rng);
+  if (inicio.outcome === 'stunned') {
+    return { monster: inicio.monster, hero, party: [...party], outcome: 'stunned', heroDefeated: false };
   }
-
-  const mult = resolveAttackMultiplier(monster, hero, rng);
-  if (mult.skip) {
+  if (inicio.outcome === 'lento_skip') {
     return {
-      monster: mult.monster,
-      hero: mult.hero,
+      monster: inicio.monster,
+      hero: inicio.hero,
       party: [...party],
       outcome: 'lento_skip',
       heroDefeated: false,
-      rageTriggered: mult.rageTriggered,
+      rageTriggered: inicio.rageTriggered,
     };
   }
 
@@ -227,21 +292,20 @@ export function applyMonsterHit(
   if (targetPool) {
     const target = targetPool[randomInt(targetPool.length, rng)] as Companion;
     const targetIndex = party.indexOf(target);
-    const partyDmg = Math.max(1, Math.round((1 + randomInt(6, rng) + mult.monster.dmg - 1) * mult.attackMult));
-    const updatedTarget: Companion = { ...target, hp: Math.max(0, target.hp - partyDmg) };
-    const nextParty = party.map((m, i) => (i === targetIndex ? updatedTarget : m));
+    const golpe = hitPartyMember(target, inicio.monster, inicio.attackMult, rng);
+    const nextParty = party.map((m, i) => (i === targetIndex ? golpe.member : m));
 
     return {
-      monster: mult.monster,
-      hero: mult.hero,
+      monster: inicio.monster,
+      hero: inicio.hero,
       party: nextParty,
       outcome: 'hit_party',
-      damage: partyDmg,
+      damage: golpe.damage,
       targetIndex,
       heroDefeated: false,
-      partyMemberDefeated: updatedTarget.hp <= 0,
-      enemyClassPowerTriggered: mult.enemyClassPowerTriggered,
-      rageTriggered: mult.rageTriggered,
+      partyMemberDefeated: golpe.defeated,
+      enemyClassPowerTriggered: inicio.enemyClassPowerTriggered,
+      rageTriggered: inicio.rageTriggered,
     };
   }
 
@@ -250,40 +314,38 @@ export function applyMonsterHit(
   // salvaram o herói.
   if (options.esquivaCerta) {
     return {
-      monster: mult.monster,
-      hero: mult.hero,
+      monster: inicio.monster,
+      hero: inicio.hero,
       party: [...party],
       outcome: 'dodged',
       heroDefeated: false,
-      enemyClassPowerTriggered: mult.enemyClassPowerTriggered,
-      rageTriggered: mult.rageTriggered,
+      enemyClassPowerTriggered: inicio.enemyClassPowerTriggered,
+      rageTriggered: inicio.rageTriggered,
     };
   }
 
-  const heroHit = resolveHeroDamage(mult.hero, mult.monster, mult.attackMult, rng, petEsquiva);
+  const heroHit = landHitOnHero(inicio.hero, inicio.monster, inicio.attackMult, rng, petEsquiva);
   if (heroHit.dodged) {
     return {
-      monster: mult.monster,
+      monster: heroHit.monster,
       hero: heroHit.hero,
       party: [...party],
       outcome: 'dodged',
       heroDefeated: false,
-      enemyClassPowerTriggered: mult.enemyClassPowerTriggered,
-      rageTriggered: mult.rageTriggered,
+      enemyClassPowerTriggered: inicio.enemyClassPowerTriggered,
+      rageTriggered: inicio.rageTriggered,
     };
   }
 
-  const finalMonster: CombatMonsterView = mult.monster.poisonStrike ? { ...mult.monster, poisonStrike: false } : mult.monster;
-
   return {
-    monster: finalMonster,
+    monster: heroHit.monster,
     hero: heroHit.hero,
     party: [...party],
     outcome: 'hit_hero',
     damage: heroHit.damage,
     heroDefeated: heroHit.hero.hp <= 0,
-    enemyClassPowerTriggered: mult.enemyClassPowerTriggered,
-    rageTriggered: mult.rageTriggered,
+    enemyClassPowerTriggered: inicio.enemyClassPowerTriggered,
+    rageTriggered: inicio.rageTriggered,
     poisonApplied: heroHit.poisonApplied,
     manaDrained: heroHit.manaDrained,
     defensivePassiveTriggered: heroHit.defensivePassiveTriggered,

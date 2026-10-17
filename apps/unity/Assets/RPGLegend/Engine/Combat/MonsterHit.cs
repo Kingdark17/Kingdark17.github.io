@@ -70,6 +70,43 @@ namespace RPGLegend.Engine
         public bool? ShieldConsumed;
     }
 
+    /// <summary>TS: MonsterAttackStart — o começo do golpe do monstro: se ele perde a vez e, se não, com que força vem.</summary>
+    public sealed class MonsterAttackStart
+    {
+        public const string Stunned = "stunned";
+        public const string LentoSkip = "lento_skip";
+        public const string Ready = "ready";
+
+        public CombatMonsterView Monster;
+        public Hero Hero;
+        /// <summary>"ready": o golpe vem, com <see cref="AttackMult"/>. Atordoado ou lento demais, não vem.</summary>
+        public string Outcome;
+        public double AttackMult;
+        public bool RageTriggered;
+        [KeepNull] public string EnemyClassPowerTriggered;
+    }
+
+    /// <summary>TS: PartyMemberHit — o golpe que caiu num companheiro.</summary>
+    public sealed class PartyMemberHit
+    {
+        public Companion Member;
+        public double Damage;
+        public bool Defeated;
+    }
+
+    /// <summary>TS: HeroHit (o HeroDamageResult com o monstro depois do golpe).</summary>
+    public sealed class HeroHit
+    {
+        public Hero Hero;
+        public bool Dodged;
+        public double Damage;
+        public bool PoisonApplied;
+        public double ManaDrained;
+        public bool DefensivePassiveTriggered;
+        public bool ShieldConsumed;
+        public CombatMonsterView Monster;
+    }
+
     /// <summary>Port de shared/src/combat/monster-hit.ts: o turno de ataque do monstro.</summary>
     public static class MonsterHit
     {
@@ -85,24 +122,73 @@ namespace RPGLegend.Engine
             public string EnemyClassPowerTriggered;
         }
 
-        /// <summary>TS: HeroDamageResult (privado).</summary>
-        private sealed class HeroDamageResult
+        /// <summary>
+        /// TS: startMonsterAttack — o começo do golpe, antes de saber em quem ele cai: atordoado perde a vez (e
+        /// gasta um turno do atordoamento, sem sortear); senão o enrage, o enfraquecido, o lento (que pode fazer
+        /// perder a vez), o comportamento e o poder de classe de inimigo. A luta em tempo real chama isto quando o
+        /// aviso aparece; a luta por turnos, junto com o resto.
+        /// </summary>
+        public static MonsterAttackStart StartMonsterAttack(CombatMonsterView monster, Hero hero, RngFn rng = null)
         {
-            public Hero Hero;
-            public bool Dodged;
-            public double Damage;
-            public bool PoisonApplied;
-            public double ManaDrained;
-            public bool DefensivePassiveTriggered;
-            public bool ShieldConsumed;
+            rng = rng ?? Rng.Default;
+            if (Js.Truthy(monster.Status?.Atordoado) && monster.Status.Atordoado.Value > 0)
+            {
+                var status = MonsterState.SetStatusField(monster.Status, "atordoado", monster.Status.Atordoado.Value - 1);
+                return new MonsterAttackStart
+                {
+                    Monster = ComStatus(monster, status),
+                    Hero = hero,
+                    Outcome = MonsterAttackStart.Stunned,
+                    AttackMult = 1,
+                    RageTriggered = false,
+                    EnemyClassPowerTriggered = null,
+                };
+            }
+            var mult = ResolveAttackMultiplier(monster, hero, rng);
+            return new MonsterAttackStart
+            {
+                Monster = mult.Monster,
+                Hero = mult.Hero,
+                Outcome = mult.Skip ? MonsterAttackStart.LentoSkip : MonsterAttackStart.Ready,
+                AttackMult = mult.AttackMult,
+                RageTriggered = mult.RageTriggered,
+                EnemyClassPowerTriggered = mult.EnemyClassPowerTriggered,
+            };
+        }
+
+        /// <summary>TS: hitPartyMember — o golpe num companheiro: d6 mais o dano do monstro, na força do golpe.</summary>
+        public static PartyMemberHit HitPartyMember(Companion member, CombatMonsterView monster, double attackMult, RngFn rng = null)
+        {
+            rng = rng ?? Rng.Default;
+            double damage = Js.Max(1, Js.Round((1 + Rng.RandomInt(6, rng) + monster.Dmg - 1) * attackMult));
+            var atingido = member.Clone();
+            atingido.Hp = Js.Max(0, member.Hp - damage);
+            return new PartyMemberHit { Member = atingido, Damage = damage, Defeated = atingido.Hp <= 0 };
         }
 
         /// <summary>
-        /// TS: applyMonsterHit — o turno de ataque do monstro: atordoamento (pula e gasta um turno, sem
-        /// sortear), enrage de mini-chefe, multiplicadores de comportamento e de classe de inimigo, escolha de
-        /// alvo (companheiro defensor, companheiro qualquer ou o próprio herói), esquiva, dano final e os
-        /// efeitos que o golpe aplica de volta (veneno, dreno de mana). Não decide o que vem depois (derrota,
-        /// próximo turno). Não muta nada.
+        /// TS: landHitOnHero — o golpe no próprio herói (esquiva, defesa, vulnerabilidades, escudo, veneno e dreno
+        /// de mana), com o monstro depois dele: acertou, o golpe envenenado do poder de classe se gasta.
+        /// </summary>
+        public static HeroHit LandHitOnHero(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng = null, double petEsquiva = 0)
+        {
+            rng = rng ?? Rng.Default;
+            var heroHit = ResolveHeroDamage(hero, monster, attackMult, rng, petEsquiva);
+            heroHit.Monster = monster;
+            if (!heroHit.Dodged && monster.PoisonStrike == true)
+            {
+                var gasto = monster.Clone();
+                gasto.PoisonStrike = false;
+                gasto.ForgetExtras("poisonStrike");
+                heroHit.Monster = gasto;
+            }
+            return heroHit;
+        }
+
+        /// <summary>
+        /// TS: applyMonsterHit — o turno de ataque do monstro: o começo do golpe (<see cref="StartMonsterAttack"/>),
+        /// a escolha de alvo (companheiro defensor, companheiro qualquer ou o próprio herói) e o golpe
+        /// (<see cref="HitPartyMember"/> ou <see cref="LandHitOnHero"/>). Não decide o que vem depois. Não muta nada.
         ///
         /// Ordem dos sorteios: lento (se ativo), agressivo (se for), defensor (se houver), companheiro
         /// qualquer (se houver vivo), e então ou o alvo e o d6 do companheiro, ou — no herói — a esquiva, o
@@ -114,30 +200,28 @@ namespace RPGLegend.Engine
             var rng = options.Rng ?? Rng.Default;
             double petEsquiva = options.PetEsquivaBonus ?? 0;
 
-            if (Js.Truthy(monster.Status?.Atordoado) && monster.Status.Atordoado.Value > 0)
+            var inicio = StartMonsterAttack(monster, hero, rng);
+            if (inicio.Outcome == MonsterAttackStart.Stunned)
             {
-                var status = MonsterState.SetStatusField(monster.Status, "atordoado", monster.Status.Atordoado.Value - 1);
                 return new MonsterHitResult
                 {
-                    Monster = ComStatus(monster, status),
+                    Monster = inicio.Monster,
                     Hero = hero,
                     Party = new List<Companion>(party),
                     Outcome = MonsterHitOutcomes.Stunned,
                     HeroDefeated = false,
                 };
             }
-
-            var mult = ResolveAttackMultiplier(monster, hero, rng);
-            if (mult.Skip)
+            if (inicio.Outcome == MonsterAttackStart.LentoSkip)
             {
                 return new MonsterHitResult
                 {
-                    Monster = mult.Monster,
-                    Hero = mult.Hero,
+                    Monster = inicio.Monster,
+                    Hero = inicio.Hero,
                     Party = new List<Companion>(party),
                     Outcome = MonsterHitOutcomes.LentoSkip,
                     HeroDefeated = false,
-                    RageTriggered = mult.RageTriggered,
+                    RageTriggered = inicio.RageTriggered,
                 };
             }
 
@@ -146,25 +230,23 @@ namespace RPGLegend.Engine
             {
                 var target = targetPool[(int)Rng.RandomInt(targetPool.Count, rng)];
                 int targetIndex = IndexOf(party, target);
-                double partyDmg = Js.Max(1, Js.Round((1 + Rng.RandomInt(6, rng) + mult.Monster.Dmg - 1) * mult.AttackMult));
-                var updatedTarget = target.Clone();
-                updatedTarget.Hp = Js.Max(0, target.Hp - partyDmg);
+                var golpe = HitPartyMember(target, inicio.Monster, inicio.AttackMult, rng);
                 var nextParty = new List<Companion>(party.Count);
-                for (int i = 0; i < party.Count; i++) nextParty.Add(i == targetIndex ? updatedTarget : party[i]);
+                for (int i = 0; i < party.Count; i++) nextParty.Add(i == targetIndex ? golpe.Member : party[i]);
 
                 return new MonsterHitResult
                 {
-                    Monster = mult.Monster,
-                    Hero = mult.Hero,
+                    Monster = inicio.Monster,
+                    Hero = inicio.Hero,
                     Party = nextParty,
                     Outcome = MonsterHitOutcomes.HitParty,
-                    Damage = partyDmg,
+                    Damage = golpe.Damage,
                     TargetIndex = targetIndex,
                     HeroDefeated = false,
-                    PartyMemberDefeated = updatedTarget.Hp <= 0,
-                    EnemyClassPowerTriggered = mult.EnemyClassPowerTriggered,
+                    PartyMemberDefeated = golpe.Defeated,
+                    EnemyClassPowerTriggered = inicio.EnemyClassPowerTriggered,
                     EnemyClassPowerTriggeredSpecified = true,
-                    RageTriggered = mult.RageTriggered,
+                    RageTriggered = inicio.RageTriggered,
                 };
             }
 
@@ -174,52 +256,44 @@ namespace RPGLegend.Engine
             {
                 return new MonsterHitResult
                 {
-                    Monster = mult.Monster,
-                    Hero = mult.Hero,
+                    Monster = inicio.Monster,
+                    Hero = inicio.Hero,
                     Party = new List<Companion>(party),
                     Outcome = MonsterHitOutcomes.Dodged,
                     HeroDefeated = false,
-                    EnemyClassPowerTriggered = mult.EnemyClassPowerTriggered,
+                    EnemyClassPowerTriggered = inicio.EnemyClassPowerTriggered,
                     EnemyClassPowerTriggeredSpecified = true,
-                    RageTriggered = mult.RageTriggered,
+                    RageTriggered = inicio.RageTriggered,
                 };
             }
 
-            var heroHit = ResolveHeroDamage(mult.Hero, mult.Monster, mult.AttackMult, rng, petEsquiva);
+            var heroHit = LandHitOnHero(inicio.Hero, inicio.Monster, inicio.AttackMult, rng, petEsquiva);
             if (heroHit.Dodged)
             {
                 return new MonsterHitResult
                 {
-                    Monster = mult.Monster,
+                    Monster = heroHit.Monster,
                     Hero = heroHit.Hero,
                     Party = new List<Companion>(party),
                     Outcome = MonsterHitOutcomes.Dodged,
                     HeroDefeated = false,
-                    EnemyClassPowerTriggered = mult.EnemyClassPowerTriggered,
+                    EnemyClassPowerTriggered = inicio.EnemyClassPowerTriggered,
                     EnemyClassPowerTriggeredSpecified = true,
-                    RageTriggered = mult.RageTriggered,
+                    RageTriggered = inicio.RageTriggered,
                 };
-            }
-
-            var finalMonster = mult.Monster;
-            if (mult.Monster.PoisonStrike == true)
-            {
-                finalMonster = mult.Monster.Clone();
-                finalMonster.PoisonStrike = false;
-                finalMonster.ForgetExtras("poisonStrike");
             }
 
             return new MonsterHitResult
             {
-                Monster = finalMonster,
+                Monster = heroHit.Monster,
                 Hero = heroHit.Hero,
                 Party = new List<Companion>(party),
                 Outcome = MonsterHitOutcomes.HitHero,
                 Damage = heroHit.Damage,
                 HeroDefeated = heroHit.Hero.Hp <= 0,
-                EnemyClassPowerTriggered = mult.EnemyClassPowerTriggered,
+                EnemyClassPowerTriggered = inicio.EnemyClassPowerTriggered,
                 EnemyClassPowerTriggeredSpecified = true,
-                RageTriggered = mult.RageTriggered,
+                RageTriggered = inicio.RageTriggered,
                 PoisonApplied = heroHit.PoisonApplied,
                 ManaDrained = heroHit.ManaDrained,
                 DefensivePassiveTriggered = heroHit.DefensivePassiveTriggered,
@@ -336,7 +410,7 @@ namespace RPGLegend.Engine
         ///
         /// O buffs do herói sai sempre como objeto novo (<c>{}</c> se ele não tinha), como no TS.
         /// </summary>
-        private static HeroDamageResult ResolveHeroDamage(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng, double petEsquiva)
+        private static HeroHit ResolveHeroDamage(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng, double petEsquiva)
         {
             var d = hero.Derived;
             var buffs = hero.Buffs ?? new HeroBuffs();
@@ -351,7 +425,7 @@ namespace RPGLegend.Engine
 
             if (rng() * 100 < dodge)
             {
-                return new HeroDamageResult { Hero = nextHero, Dodged = true, Damage = 0, PoisonApplied = false, ManaDrained = 0, DefensivePassiveTriggered = false, ShieldConsumed = false };
+                return new HeroHit { Hero = nextHero, Dodged = true, Damage = 0, PoisonApplied = false, ManaDrained = 0, DefensivePassiveTriggered = false, ShieldConsumed = false };
             }
 
             var bonus = Derived.EquipmentBonus(nextHero.Equip);
@@ -415,7 +489,7 @@ namespace RPGLegend.Engine
                 nextHero = drenado;
             }
 
-            return new HeroDamageResult
+            return new HeroHit
             {
                 Hero = nextHero,
                 Dodged = false,

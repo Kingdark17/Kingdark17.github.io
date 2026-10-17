@@ -49,6 +49,13 @@ namespace RPGLegend.Tests
             Fn(M, "applyPartyTurn", (a, c) =>
                 W(Party.ApplyPartyTurn(R<Hero>(a["hero"]), Equipe(a["party"]), Monstro(a["monster"]), c.RngFn)));
             Fn(M, "passarRodadaDaCancao", (a, c) => W(Party.PassarRodadaDaCancao(R<Hero>(a["hero"]))));
+            Fn(M, "partyMemberAct", (a, c) => W(Party.PartyMemberAct(R<Hero>(a["hero"]), R<Companion>(a["member"]), Monstro(a["monster"]), c.RngFn)));
+
+            // As três partes do golpe do monstro, que a luta em tempo real chama em momentos diferentes.
+            Fn(M, "startMonsterAttack", (a, c) => W(MonsterHit.StartMonsterAttack(Monstro(a["monster"]), R<Hero>(a["hero"]), c.RngFn)));
+            Fn(M, "landHitOnHero", (a, c) => W(MonsterHit.LandHitOnHero(R<Hero>(a["hero"]), Monstro(a["monster"]), Num(a["attackMult"]), c.RngFn,
+                JsJson.ToOptionalNumber(a["petEsquiva"]) ?? 0)));
+            Fn(M, "hitPartyMember", (a, c) => W(MonsterHit.HitPartyMember(R<Companion>(a["member"]), Monstro(a["monster"]), Num(a["attackMult"]), c.RngFn)));
 
             // ---------- flee e dodge ----------
             Const(M, "FLEE_TARGET", () => N(Flee.FleeTarget));
