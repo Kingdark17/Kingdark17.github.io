@@ -191,6 +191,14 @@ namespace RPGLegend.Engine
                 log.Add("Encontrou " + Items.DisplayName(loot) + " após a batalha.");
             }
 
+            // No app, o chefe pode deixar uma runa, um tier acima do andar.
+            if (app && sala.Type == DungeonRoomTypes.Boss && rng() < GameData.RunasTable.ChanceDaRunaNoChefe)
+            {
+                var runa = Runas.SortearRuna(Estados.AndarDeForca(estado), true, rng, now);
+                inventory = Inventory.AddItem(inventory, runa);
+                log.Add("O chefe deixa cair " + Items.DisplayName(runa) + ".");
+            }
+
             var bonus = sala.BonusTreasure;
             if (bonus != null && bonus.Gold != null)
             {

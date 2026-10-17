@@ -23,6 +23,10 @@ namespace RPGLegend.Tests
             Fn(M, "usar", (a, c) => W(Mochilas.Usar(R<Mochila>(a["mochila"]), R<Item>(a["item"]))));
             Fn(M, "equiparNoLugarDaArma", (a, c) => W(Mochilas.EquiparNoLugarDaArma(R<Mochila>(a["mochila"]), R<Item>(a["item"]))));
             Fn(M, "descartar", (a, c) => W(Mochilas.Descartar(R<Mochila>(a["mochila"]), R<Item>(a["item"]))));
+            Fn(M, "engastarRuna", (a, c) =>
+                W(Mochilas.EngastarRuna(R<Mochila>(a["mochila"]), R<Item>(a["arma"]), R<Item>(a["runa"]), JsJson.ToOptionalNumber(a["indice"]))));
+            Fn(M, "tirarRuna", (a, c) => W(Mochilas.TirarRuna(R<Mochila>(a["mochila"]), R<Item>(a["arma"]), Num(a["indice"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "chanceDeQuebrar", (a, c) => N(Mochilas.ChanceDeQuebrar(R<Item>(a["arma"]), Num(a["indice"]))));
             Fn(M, "gastarPonto", (a, c) => W(Mochilas.GastarPonto(R<Mochila>(a["mochila"]), Str(a["chave"]))));
 
             Fn(M, "impactoDaPeca", (a, c) => W(Impactos.ImpactoDaPeca(R<Hero>(a["hero"]), R<Item>(a["item"]), Str(a["slotDesejado"]))));

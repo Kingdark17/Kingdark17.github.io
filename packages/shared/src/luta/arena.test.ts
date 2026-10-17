@@ -312,6 +312,17 @@ describe('os outros eventos dentro da arena', () => {
     expect(fim.acontecimentos.some((a) => a.tipo === 'numero' && a.tom === 'critico')).toBe(true);
   });
 
+  it('a runa da arma dispara no acerto: o choque tira mais e aparece no número', () => {
+    const espada = { ...arma('espada'), runas: [{ runa: 'eletrica' as const, tier: 3 }] };
+    const luta = contraOZumbi({ equip: { ...naSala().hero.equip, arma: espada } });
+    const sempreDispara: Rng = () => 0;
+    const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, sempreDispara).luta;
+    const fim = rodar(aberto, 42, sempreDispara, (i) => (i === 41 ? { ...PARADO, tocar: true } : PARADO));
+    expect(fim.acontecimentos.some((a) => a.tipo === 'numero' && a.texto?.startsWith('⚡-'))).toBe(true);
+    const zumbi = ((celulaAtual(fim.luta.estado) as DungeonCell).monsters ?? [])[0] as { status?: { atordoado?: number } };
+    expect(zumbi.status?.atordoado).toBe(1);
+  });
+
   it('o defensivo descansando se protege: o golpe chega com metade da força', () => {
     const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'esqueleto', hp: 300, maxHp: 300 })] }, { equip: { ...naSala().hero.equip, arma: arma('espada') } }), roomArrival(null));
     const guardando = { ...luta, arena: { ...luta.arena, monstros: [{ ...luta.arena.monstros[0]!, fase: 'descansando' as const, tempo: 500 }] } };

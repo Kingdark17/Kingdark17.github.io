@@ -162,6 +162,8 @@ namespace RPGLegend.Engine
         /// <summary>O item da sala secreta: um equipamento um degrau acima da raridade que o andar sortearia.</summary>
         private static Item SecretItem(double floor, RngFn rng, Func<double> now, bool app)
         {
+            // No app, a sala secreta pode guardar uma runa.
+            if (app && rng() < GameData.RunasTable.ChanceDaRunaNoBau) return Runas.SortearRuna(floor, false, rng, now);
             var normal = Rarities.Pick(floor, rng);
             var todas = Rarities.All;
             var acima = todas[Math.Min(todas.IndexOf(normal) + 1, todas.Count - 1)];

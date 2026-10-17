@@ -23406,23 +23406,29 @@
                 "S": true
               },
               "npc": {
-                "name": "Prisioneiro Esquecido",
-                "role": "Sobrevivente",
-                "service": "heal",
-                "icon": "🧍",
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
                 "lines": [
-                  "Você... você é real? Há quanto tempo estou aqui...",
-                  "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
-                  "Se encontrar a saída, corra e não olhe para trás."
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
                 ],
                 "serviceUsed": false
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 7,
+                  "kind": "chest",
+                  "col": 2,
                   "row": 5,
+                  "item": null,
                   "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 1
                 }
               ]
             },
@@ -23484,10 +23490,25 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "chest",
+                  "kind": "pot",
                   "col": 7,
                   "row": 5,
-                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_26201",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 }
               ]
@@ -23532,19 +23553,15 @@
               "collected": false,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 6,
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 7,
                   "row": 1,
-                  "item": {
-                    "uid": "pot_mana_1700000000000_84982",
-                    "templateId": "pot_mana",
-                    "rarity": "comum",
-                    "stats": {
-                      "curaMana": 16
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
                   "used": false
                 }
               ]
@@ -23560,15 +23577,35 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 1,
+                  "kind": "chest",
+                  "col": 6,
                   "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_70864",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 },
                 {
-                  "kind": "pot",
+                  "kind": "chest",
                   "col": 6,
-                  "row": 1,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_95230",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 }
               ]
@@ -23587,8 +23624,8 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 1,
-                  "row": 1,
+                  "col": 7,
+                  "row": 5,
                   "used": false
                 }
               ]
@@ -23635,8 +23672,14 @@
               "extras": [
                 {
                   "kind": "sign",
-                  "col": 1,
+                  "col": 6,
                   "row": 1
+                },
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
+                  "used": false
                 }
               ]
             },
@@ -23666,14 +23709,10 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 2,
-                  "row": 5
-                },
-                {
-                  "kind": "pot",
-                  "col": 1,
+                  "kind": "chest",
+                  "col": 7,
                   "row": 5,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -23706,8 +23745,14 @@
               "extras": [
                 {
                   "kind": "sign",
-                  "col": 7,
-                  "row": 1
+                  "col": 2,
+                  "row": 5
+                },
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 5,
+                  "used": false
                 }
               ]
             },
@@ -23749,10 +23794,16 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 1,
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 5,
+                  "item": null,
                   "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 7,
+                  "row": 1
                 }
               ]
             },
@@ -23781,21 +23832,15 @@
               "distanceFromStart": 4,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 7,
-                  "row": 5,
-                  "used": false
-                },
-                {
                   "kind": "chest",
-                  "col": 7,
+                  "col": 2,
                   "row": 1,
                   "item": {
-                    "uid": "pot_mana_1700000000000_26201",
-                    "templateId": "pot_mana",
+                    "uid": "pot_vida_1700000000000_38962",
+                    "templateId": "pot_vida",
                     "rarity": "comum",
                     "stats": {
-                      "curaMana": 16
+                      "cura": 22
                     },
                     "value": 14,
                     "equipped": false
@@ -23827,7 +23872,7 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 6,
+                  "col": 1,
                   "row": 5,
                   "used": false
                 }
@@ -23845,26 +23890,55 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pedra_protecao_1700000000000_72337",
-                "templateId": "pedra_protecao",
-                "rarity": "comum",
-                "stats": {},
-                "value": 55,
-                "equipped": false
+                "uid": "violao_1700000000000_98406",
+                "templateId": "violao",
+                "rarity": "raro",
+                "stats": {
+                  "ataque": 7,
+                  "critico": 14,
+                  "esquiva": 4
+                },
+                "value": 39,
+                "equipped": false,
+                "procChance": 0.185,
+                "foundFloor": 30
               },
               "collected": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 7,
-                  "row": 5,
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_5241",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 },
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 5,
-                  "used": false
+                  "kind": "crack",
+                  "col": 4,
+                  "row": 6,
+                  "side": "S",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "robe_chapeu_1700000000000_83017",
+                    "templateId": "robe_chapeu",
+                    "rarity": "incomum",
+                    "stats": {
+                      "mana": 4
+                    },
+                    "value": 7,
+                    "equipped": false,
+                    "foundFloor": 30
+                  },
+                  "secretCollected": false
                 }
               ]
             },
@@ -23876,15 +23950,22 @@
                 "W": true,
                 "E": true
               },
-              "isMimic": true,
+              "isMimic": false,
               "giveGold": true,
               "item": null,
               "collected": false,
               "extras": [
                 {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
                   "kind": "pot",
                   "col": 1,
-                  "row": 5,
+                  "row": 1,
                   "used": false
                 }
               ]
@@ -23901,15 +23982,25 @@
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 2,
+                  "col": 7,
                   "row": 5,
-                  "item": null,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_85060",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 },
                 {
-                  "kind": "sign",
-                  "col": 7,
-                  "row": 1
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 1,
+                  "used": false
                 }
               ]
             }
@@ -23978,7 +24069,7 @@
           3
         ]
       },
-      "rngCalls": 315
+      "rngCalls": 349
     }
   },
   {
@@ -24184,7 +24275,7 @@
                 "S": true
               },
               "event": {
-                "templateId": "altar"
+                "templateId": "porta"
               },
               "resolved": false,
               "extras": [
@@ -24272,15 +24363,8 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 6,
-                  "row": 5,
-                  "used": false
-                },
-                {
-                  "kind": "chest",
-                  "col": 6,
+                  "col": 2,
                   "row": 1,
-                  "item": null,
                   "used": false
                 }
               ]
@@ -24336,9 +24420,16 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
                   "col": 2,
-                  "row": 5
+                  "row": 5,
+                  "used": false
                 }
               ]
             },
@@ -24460,9 +24551,24 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
+                  "kind": "sign",
+                  "col": 6,
+                  "row": 1
+                },
+                {
+                  "kind": "chest",
                   "col": 1,
-                  "row": 1,
+                  "row": 5,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_26891",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 }
               ]
@@ -24498,15 +24604,8 @@
                 "N": true
               },
               "isMimic": false,
-              "giveGold": false,
-              "item": {
-                "uid": "catalisador_mitico_1700000000000_80052",
-                "templateId": "catalisador_mitico",
-                "rarity": "comum",
-                "stats": {},
-                "value": 80,
-                "equipped": false
-              },
+              "giveGold": true,
+              "item": null,
               "collected": false,
               "extras": [
                 {
@@ -24568,20 +24667,8 @@
                 "N": true
               },
               "isMimic": false,
-              "giveGold": false,
-              "item": {
-                "uid": "espada_1700000000000_60652",
-                "templateId": "espada",
-                "rarity": "raro",
-                "stats": {
-                  "ataque": 16
-                },
-                "value": 47,
-                "equipped": false,
-                "procChance": 0.185,
-                "degrau": 2,
-                "foundFloor": 60
-              },
+              "giveGold": true,
+              "item": null,
               "collected": false,
               "extras": [
                 {
@@ -24601,14 +24688,16 @@
                   "side": "W",
                   "used": false,
                   "secretItem": {
-                    "uid": "placas_elmo_1700000000000_32131",
-                    "templateId": "placas_elmo",
-                    "rarity": "raro",
+                    "uid": "botas_1700000000000_71678",
+                    "templateId": "botas",
+                    "rarity": "incomum",
                     "stats": {
-                      "defesa": 4
+                      "defesa": 4,
+                      "velocidade": 4
                     },
-                    "value": 9,
+                    "value": 23,
                     "equipped": false,
+                    "degrau": 2,
                     "foundFloor": 60
                   },
                   "secretCollected": false
@@ -24724,7 +24813,7 @@
           3
         ]
       },
-      "rngCalls": 341
+      "rngCalls": 342
     }
   },
   {
@@ -24842,33 +24931,6 @@
               "distanceFromStart": 5,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 6,
-                  "row": 5,
-                  "item": null,
-                  "used": false
-                },
-                {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 5
-                }
-              ]
-            },
-            {
-              "type": "treasure",
-              "x": 2,
-              "y": 2,
-              "doors": {
-                "S": true,
-                "E": true
-              },
-              "isMimic": false,
-              "giveGold": true,
-              "item": null,
-              "collected": false,
-              "extras": [
-                {
                   "kind": "pot",
                   "col": 6,
                   "row": 5,
@@ -24888,6 +24950,41 @@
                     "value": 14,
                     "equipped": false
                   },
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "E": true
+              },
+              "isMimic": true,
+              "giveGold": false,
+              "item": {
+                "uid": "violao_1700000000000_88753",
+                "templateId": "violao",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 9,
+                  "critico": 16,
+                  "esquiva": 5
+                },
+                "value": 35,
+                "equipped": false,
+                "procChance": 0.15,
+                "degrau": 3,
+                "foundFloor": 100
+              },
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
                   "used": false
                 }
               ]
@@ -24922,6 +25019,13 @@
                   "kind": "pot",
                   "col": 7,
                   "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 5,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -24972,9 +25076,15 @@
               "beaten": false,
               "extras": [
                 {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                },
+                {
                   "kind": "chest",
                   "col": 1,
-                  "row": 1,
+                  "row": 5,
                   "item": null,
                   "used": false
                 }
@@ -25032,20 +25142,20 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 2,
+                  "col": 7,
                   "row": 5,
                   "used": false
                 },
                 {
                   "kind": "chest",
                   "col": 7,
-                  "row": 5,
+                  "row": 1,
                   "item": {
-                    "uid": "pot_vida_1700000000000_59418",
-                    "templateId": "pot_vida",
+                    "uid": "pot_mana_1700000000000_3191",
+                    "templateId": "pot_mana",
                     "rarity": "comum",
                     "stats": {
-                      "cura": 22
+                      "curaMana": 16
                     },
                     "value": 14,
                     "equipped": false
@@ -25064,8 +25174,8 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 5,
+                  "col": 2,
+                  "row": 1,
                   "used": false
                 }
               ]
@@ -25110,17 +25220,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 2,
-                  "row": 5,
-                  "used": false
-                },
-                {
-                  "kind": "chest",
-                  "col": 1,
-                  "row": 5,
-                  "item": null,
-                  "used": false
+                  "kind": "sign",
+                  "col": 7,
+                  "row": 5
                 }
               ]
             },
@@ -25135,31 +25237,30 @@
                 "W": true
               },
               "event": {
-                "templateId": "ferido"
+                "templateId": "porta"
               },
               "resolved": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 1,
-                  "row": 1,
-                  "used": false
-                },
-                {
                   "kind": "chest",
-                  "col": 2,
+                  "col": 6,
                   "row": 1,
                   "item": {
-                    "uid": "pot_vida_1700000000000_89229",
-                    "templateId": "pot_vida",
+                    "uid": "pot_mana_1700000000000_53523",
+                    "templateId": "pot_mana",
                     "rarity": "comum",
                     "stats": {
-                      "cura": 22
+                      "curaMana": 16
                     },
                     "value": 14,
                     "equipped": false
                   },
                   "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 6,
+                  "row": 5
                 }
               ]
             },
@@ -25178,15 +25279,26 @@
               "collected": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 5,
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_89229",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 },
                 {
-                  "kind": "pot",
-                  "col": 2,
+                  "kind": "chest",
+                  "col": 6,
                   "row": 1,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -25218,9 +25330,14 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 1,
+                  "col": 7,
                   "row": 1,
                   "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 2,
+                  "row": 1
                 }
               ]
             },
@@ -25232,17 +25349,109 @@
                 "W": true
               },
               "npc": {
-                "name": "Erma, a Vidente",
-                "role": "Mística Errante",
-                "service": "reveal",
-                "icon": "🔮",
+                "name": "Prisioneiro Esquecido",
+                "role": "Sobrevivente",
+                "service": "heal",
+                "icon": "🧍",
                 "lines": [
-                  "Você se aventura fundo demais — ou talvez não o bastante...",
-                  "Os corredores mudam quando ninguém observa.",
-                  "Cuidado com o que dorme nas profundezas."
+                  "Você... você é real? Há quanto tempo estou aqui...",
+                  "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
+                  "Se encontrar a saída, corra e não olhe para trás."
                 ],
                 "serviceUsed": false
               },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "stairs",
+              "x": 0,
+              "y": 5,
+              "doors": {
+                "E": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 5
+                }
+              ]
+            },
+            {
+              "type": "npc",
+              "x": 1,
+              "y": 5,
+              "doors": {
+                "N": true,
+                "W": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "npc": {
+                "name": "Prisioneiro Esquecido",
+                "role": "Sobrevivente",
+                "service": "heal",
+                "icon": "🧍",
+                "lines": [
+                  "Você... você é real? Há quanto tempo estou aqui...",
+                  "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
+                  "Se encontrar a saída, corra e não olhe para trás."
+                ],
+                "serviceUsed": false
+              },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 5,
+              "doors": {
+                "W": true
+              },
+              "startBranch": "2,3",
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false,
               "extras": [
                 {
                   "kind": "chest",
@@ -25275,103 +25484,6 @@
                     "equipped": false
                   },
                   "used": false
-                }
-              ]
-            },
-            {
-              "type": "void",
-              "x": 5,
-              "y": 4,
-              "doors": {}
-            }
-          ],
-          [
-            {
-              "type": "stairs",
-              "x": 0,
-              "y": 5,
-              "doors": {
-                "E": true
-              },
-              "startBranch": "2,3",
-              "distanceFromStart": 5,
-              "extras": [
-                {
-                  "kind": "pot",
-                  "col": 7,
-                  "row": 1,
-                  "used": false
-                },
-                {
-                  "kind": "sign",
-                  "col": 2,
-                  "row": 1
-                }
-              ]
-            },
-            {
-              "type": "npc",
-              "x": 1,
-              "y": 5,
-              "doors": {
-                "N": true,
-                "W": true,
-                "E": true
-              },
-              "startBranch": "2,3",
-              "npc": {
-                "name": "Prisioneiro Esquecido",
-                "role": "Sobrevivente",
-                "service": "heal",
-                "icon": "🧍",
-                "lines": [
-                  "Você... você é real? Há quanto tempo estou aqui...",
-                  "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
-                  "Se encontrar a saída, corra e não olhe para trás."
-                ],
-                "serviceUsed": false
-              },
-              "extras": [
-                {
-                  "kind": "chest",
-                  "col": 6,
-                  "row": 1,
-                  "item": {
-                    "uid": "pot_mana_1700000000000_53523",
-                    "templateId": "pot_mana",
-                    "rarity": "comum",
-                    "stats": {
-                      "curaMana": 16
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
-                  "used": false
-                },
-                {
-                  "kind": "sign",
-                  "col": 6,
-                  "row": 5
-                }
-              ]
-            },
-            {
-              "type": "treasure",
-              "x": 2,
-              "y": 5,
-              "doors": {
-                "W": true
-              },
-              "startBranch": "2,3",
-              "isMimic": false,
-              "giveGold": true,
-              "item": null,
-              "collected": false,
-              "extras": [
-                {
-                  "kind": "sign",
-                  "col": 7,
-                  "row": 5
                 }
               ]
             },
@@ -25458,7 +25570,7 @@
           3
         ]
       },
-      "rngCalls": 343
+      "rngCalls": 355
     }
   },
   {
@@ -25511,15 +25623,10 @@
               "distanceFromStart": 4,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 1,
-                  "used": false
-                },
-                {
-                  "kind": "pot",
+                  "kind": "chest",
                   "col": 1,
-                  "row": 1,
+                  "row": 5,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -25540,6 +25647,13 @@
                   "row": 5,
                   "item": null,
                   "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -25552,14 +25666,34 @@
               },
               "startBranch": "3,2",
               "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "giveGold": false,
+              "item": {
+                "uid": "adaga_1700000000000_78921",
+                "templateId": "adaga",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 7,
+                  "critico": 18
+                },
+                "value": 25,
+                "equipped": false,
+                "procChance": 0.15,
+                "degrau": 2,
+                "foundFloor": 60
+              },
               "collected": false,
               "extras": [
                 {
                   "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
                   "col": 1,
                   "row": 5,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -25604,9 +25738,16 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 1
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 5,
+                  "used": false
                 }
               ]
             },
@@ -25620,14 +25761,45 @@
                 "W": true
               },
               "isMimic": true,
-              "giveGold": true,
-              "item": null,
+              "giveGold": false,
+              "item": {
+                "uid": "violao_1700000000000_79390",
+                "templateId": "violao",
+                "rarity": "incomum",
+                "stats": {
+                  "ataque": 9,
+                  "critico": 18,
+                  "esquiva": 5
+                },
+                "value": 37,
+                "equipped": false,
+                "procChance": 0.165,
+                "degrau": 2,
+                "foundFloor": 60
+              },
               "collected": false,
               "extras": [
                 {
-                  "kind": "sign",
+                  "kind": "pot",
                   "col": 2,
-                  "row": 5
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_3080",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
                 }
               ]
             },
@@ -25655,6 +25827,13 @@
                   "kind": "chest",
                   "col": 1,
                   "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 5,
                   "item": null,
                   "used": false
                 }
@@ -25689,7 +25868,16 @@
                   "kind": "chest",
                   "col": 2,
                   "row": 1,
-                  "item": null,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_82360",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 }
               ]
@@ -25716,37 +25904,22 @@
                 "E": true
               },
               "npc": {
-                "name": "Prisioneiro Esquecido",
-                "role": "Sobrevivente",
-                "service": "heal",
-                "icon": "🧍",
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
                 "lines": [
-                  "Você... você é real? Há quanto tempo estou aqui...",
-                  "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
-                  "Se encontrar a saída, corra e não olhe para trás."
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
                 ],
                 "serviceUsed": false
               },
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 6,
-                  "row": 1
-                },
-                {
-                  "kind": "chest",
-                  "col": 2,
+                  "kind": "pot",
+                  "col": 1,
                   "row": 5,
-                  "item": {
-                    "uid": "pot_vida_1700000000000_98839",
-                    "templateId": "pot_vida",
-                    "rarity": "comum",
-                    "stats": {
-                      "cura": 22
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
                   "used": false
                 }
               ]
@@ -25794,10 +25967,9 @@
               },
               "extras": [
                 {
-                  "kind": "chest",
+                  "kind": "pot",
                   "col": 1,
                   "row": 5,
-                  "item": null,
                   "used": false
                 }
               ]
@@ -25832,9 +26004,11 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 7,
-                  "row": 1
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 5,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -25847,19 +26021,29 @@
                 "E": true
               },
               "event": {
-                "templateId": "porta"
+                "templateId": "ferido"
               },
               "resolved": false,
               "extras": [
                 {
-                  "kind": "pot",
+                  "kind": "chest",
                   "col": 6,
                   "row": 1,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_69342",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 },
                 {
                   "kind": "pot",
-                  "col": 1,
+                  "col": 2,
                   "row": 1,
                   "used": false
                 }
@@ -25914,16 +26098,25 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 7,
-                  "row": 1,
-                  "used": false
-                },
-                {
                   "kind": "chest",
                   "col": 2,
                   "row": 5,
-                  "item": null,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_32738",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
                   "used": false
                 }
               ]
@@ -25967,10 +26160,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 2,
-                  "row": 1,
-                  "used": false
+                  "kind": "sign",
+                  "col": 7,
+                  "row": 5
                 }
               ]
             },
@@ -25983,9 +26175,19 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 5,
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_54426",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
                   "used": false
                 }
               ]
@@ -26143,7 +26345,7 @@
           3
         ]
       },
-      "rngCalls": 314
+      "rngCalls": 345
     }
   },
   {
@@ -26308,15 +26510,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 2,
-                  "row": 1
-                },
-                {
-                  "kind": "chest",
-                  "col": 7,
+                  "kind": "pot",
+                  "col": 6,
                   "row": 1,
-                  "item": null,
                   "used": false
                 }
               ]
@@ -26335,9 +26531,15 @@
               "collected": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 5,
+                  "kind": "sign",
+                  "col": 2,
+                  "row": 5
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -26398,21 +26600,14 @@
                 "E": true,
                 "N": true
               },
-              "isMimic": true,
+              "isMimic": false,
               "giveGold": true,
               "item": null,
               "collected": false,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 1,
-                  "row": 5,
-                  "item": null,
-                  "used": false
-                },
-                {
                   "kind": "pot",
-                  "col": 2,
+                  "col": 7,
                   "row": 1,
                   "used": false
                 }
@@ -26445,19 +26640,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 1,
-                  "row": 5,
-                  "item": {
-                    "uid": "pot_vida_1700000000000_26592",
-                    "templateId": "pot_vida",
-                    "rarity": "comum",
-                    "stats": {
-                      "cura": 22
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
                   "used": false
                 }
               ]
@@ -26480,6 +26665,11 @@
                   "col": 1,
                   "row": 5,
                   "used": false
+                },
+                {
+                  "kind": "sign",
+                  "col": 2,
+                  "row": 1
                 }
               ]
             },
@@ -26493,16 +26683,12 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "robe_1700000000000_65055",
-                "templateId": "robe",
-                "rarity": "lendario",
-                "stats": {
-                  "defesa": 3,
-                  "mana": 15
-                },
-                "value": 39,
-                "equipped": false,
-                "foundFloor": 3
+                "uid": "pedra_protecao_1700000000000_80597",
+                "templateId": "pedra_protecao",
+                "rarity": "incomum",
+                "stats": {},
+                "value": 72,
+                "equipped": false
               },
               "collected": false,
               "extras": [
@@ -26561,19 +26747,15 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "chest",
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
                   "col": 6,
                   "row": 1,
-                  "item": {
-                    "uid": "pot_mana_1700000000000_79483",
-                    "templateId": "pot_mana",
-                    "rarity": "comum",
-                    "stats": {
-                      "curaMana": 16
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
                   "used": false
                 }
               ]
@@ -26588,15 +26770,25 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 5,
-                  "used": false
-                },
-                {
                   "kind": "sign",
                   "col": 7,
                   "row": 1
+                },
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_76680",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
                 }
               ]
             },
@@ -26746,6 +26938,694 @@
         ]
       },
       "rngCalls": 363
+    }
+  },
+  {
+    "name": "generateDungeonFloor: no app, andar 70, uma runa no baú, seed 8",
+    "input": {
+      "fn": "generateDungeonFloor",
+      "args": {
+        "floor": 70,
+        "rows": 6,
+        "cols": 6,
+        "options": {
+          "now": 1700000000000,
+          "app": true
+        }
+      },
+      "rng": {
+        "seed": 8
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "grid": [
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "stairs",
+              "x": 5,
+              "y": 0,
+              "doors": {
+                "S": true
+              },
+              "startBranch": "4,3",
+              "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 1
+                },
+                {
+                  "kind": "sign",
+                  "col": 7,
+                  "row": 5
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
+                "lines": [
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
+                ],
+                "serviceUsed": false
+              },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_5912",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "exit",
+              "x": 5,
+              "y": 1,
+              "doors": {
+                "S": true,
+                "N": true
+              },
+              "startBranch": "4,3",
+              "distanceFromStart": 4,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "E": true
+              },
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "treasure",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "W": true,
+                "N": true
+              },
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 4,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "E": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "brutamontes",
+                  "floor": 70,
+                  "hp": 229,
+                  "maxHp": 229,
+                  "dmg": 53,
+                  "speed": 52,
+                  "xp": 219,
+                  "gold": 144,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_43357",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 5,
+              "y": 2,
+              "doors": {
+                "W": true,
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "brutamontes",
+                  "floor": 70,
+                  "hp": 183,
+                  "maxHp": 183,
+                  "dmg": 54,
+                  "speed": 71,
+                  "xp": 218,
+                  "gold": 146,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "event",
+              "x": 1,
+              "y": 3,
+              "doors": {
+                "E": true
+              },
+              "event": {
+                "templateId": "altar"
+              },
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 1,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "xama",
+                  "floor": 70,
+                  "hp": 180,
+                  "maxHp": 180,
+                  "dmg": 46,
+                  "speed": 94,
+                  "xp": 216,
+                  "gold": 145,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 1
+                }
+              ]
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "N": true,
+                "E": true,
+                "S": true,
+                "W": true
+              },
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "treasure",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "N": true,
+                "E": true
+              },
+              "isMimic": false,
+              "giveGold": false,
+              "item": {
+                "uid": "runa_vampirica_1700000000000_26259",
+                "templateId": "runa_vampirica",
+                "rarity": "comum",
+                "stats": {},
+                "value": 80,
+                "equipped": false,
+                "tierDaRuna": 2
+              },
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 5,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 1,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 5,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "S": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "brutamontes",
+                  "floor": 70,
+                  "hp": 340,
+                  "maxHp": 340,
+                  "dmg": 52,
+                  "speed": 26,
+                  "xp": 219,
+                  "gold": 148,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 1,
+                  "used": false
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "monster",
+              "x": 3,
+              "y": 4,
+              "doors": {
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 70,
+                  "hp": 297,
+                  "maxHp": 297,
+                  "dmg": 45,
+                  "speed": 29,
+                  "xp": 218,
+                  "gold": 146,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "guardiao",
+                  "floor": 70,
+                  "hp": 239,
+                  "maxHp": 239,
+                  "dmg": 42,
+                  "speed": 75,
+                  "xp": 219,
+                  "gold": 148,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 5,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "boss",
+              "x": 5,
+              "y": 4,
+              "doors": {
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "assassino",
+                  "floor": 70,
+                  "hp": 585,
+                  "maxHp": 585,
+                  "dmg": 60,
+                  "speed": 47,
+                  "xp": 410,
+                  "gold": 500,
+                  "isBoss": true,
+                  "isMainBoss": true,
+                  "bossTitle": "o Flagelo"
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 5,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "rooms": [
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            4
+          ]
+        ],
+        "start": [
+          3,
+          3
+        ]
+      },
+      "rngCalls": 318
     }
   },
   {

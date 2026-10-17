@@ -131,6 +131,105 @@ namespace RPGLegend.Engine
             return ComLog(estado, "Você descarta " + Items.DisplayName(item) + ".");
         }
 
+        /// <summary>
+        /// TS: engastarRuna — de graça, na arma guardada ou vestida: no primeiro espaço livre, ou, com a arma cheia,
+        /// no espaço <paramref name="indice"/> (a runa que estava lá se desfaz). A runa sai da mochila. Só o app oferece.
+        /// </summary>
+        public static Mochila EngastarRuna(Mochila mochila, Item arma, Item runa, double? indice = null)
+        {
+            // A arma e a runa têm de estar com o herói: senão a runa se duplicaria (ou sumiria).
+            if (!TemPeca(mochila.Estado, arma) || !mochila.Estado.Inventory.Exists(item => item.Uid == runa.Uid)) return mochila;
+            var resultado = Runas.Engastar(arma, runa, indice);
+            switch (resultado.Kind)
+            {
+                case "nao_e_arma":
+                    return ComLog(mochila.Estado, Items.DisplayName(arma) + " não tem espaço de runa.");
+                case "nao_e_runa":
+                    return ComLog(mochila.Estado, Items.DisplayName(runa) + " não é uma runa.");
+                case "cheia":
+                    return ComLog(mochila.Estado, "Os espaços de " + Items.DisplayName(arma) + " estão cheios: escolha qual runa trocar.");
+            }
+            var semARuna = mochila.Estado.Clone();
+            semARuna.Inventory = Inventory.RemoveByUid(mochila.Estado.Inventory, runa.Uid).Inventory;
+            var log = new List<string> { "Você engasta " + Items.DisplayName(runa) + " em " + Items.DisplayName(arma) + "." };
+            if (resultado.Kind == "substituiu") log.Add("A " + Runas.NomeDaRuna(resultado.Destruida) + " que estava ali se desfaz.");
+            return new Mochila { Estado = ComPecaTrocada(semARuna, resultado.Arma), Log = log };
+        }
+
+        /// <summary>
+        /// TS: tirarRuna — a runa do espaço <paramref name="indice"/> volta pra mochila ou quebra, pelo tier. Só o app
+        /// oferece.
+        /// </summary>
+        public static Mochila TirarRuna(Mochila mochila, Item arma, double indice, RngFn rng = null, System.Func<double> now = null)
+        {
+            if (!TemPeca(mochila.Estado, arma)) return mochila;
+            var resultado = Runas.Tirar(arma, indice, rng, now);
+            if (resultado.Kind == "sem_runa") return mochila;
+            if (resultado.Kind == "quebrou")
+                return ComLog(ComPecaTrocada(mochila.Estado, resultado.Arma), "A " + Runas.NomeDaRuna(resultado.Quebrada) + " quebra ao sair de " + Items.DisplayName(arma) + ".");
+            var comARuna = mochila.Estado.Clone();
+            comARuna.Inventory = Inventory.AddItem(mochila.Estado.Inventory, resultado.Runa);
+            return ComLog(ComPecaTrocada(comARuna, resultado.Arma), "Você tira " + Items.DisplayName(resultado.Runa) + " de " + Items.DisplayName(arma) + ", inteira.");
+        }
+
+        /// <summary>TS: chanceDeQuebrar — a chance de a runa do espaço <paramref name="indice"/> quebrar ao sair, pra tela avisar antes.</summary>
+        public static double ChanceDeQuebrar(Item arma, double indice)
+        {
+            var runas = arma.Runas;
+            if (runas == null || indice != System.Math.Floor(indice) || indice < 0 || indice >= runas.Count) return 0;
+            var quebra = GameData.RunasTable.QuebraAoTirar;
+            double tier = Js.Min(quebra.Count, Js.Max(1, System.Math.Truncate(runas[(int)indice].Tier)));
+            return quebra[(int)tier - 1];
+        }
+
+        /// <summary>TS: temPeca — a peça está com o herói: na mochila ou vestida.</summary>
+        private static bool TemPeca(EstadoDoJogo estado, Item peca)
+        {
+            if (estado.Inventory.Exists(item => item.Uid == peca.Uid)) return true;
+            foreach (var slot in StatKeys.EquipSlots)
+                if (estado.Hero.Equip.Get(slot)?.Uid == peca.Uid) return true;
+            return false;
+        }
+
+        /// <summary>
+        /// TS: comPecaTrocada — a peça mudada (as runas) no lugar dela: na mochila e, se estiver vestida, no slot. Os
+        /// atributos não mudam.
+        /// </summary>
+        private static EstadoDoJogo ComPecaTrocada(EstadoDoJogo estado, Item peca)
+        {
+            var inventory = new List<Item>(estado.Inventory.Count);
+            foreach (var item in estado.Inventory)
+            {
+                if (item.Uid != peca.Uid)
+                {
+                    inventory.Add(item);
+                    continue;
+                }
+                var trocada = peca.Clone();
+                trocada.Equipped = item.Equipped;
+                inventory.Add(trocada);
+            }
+            var equip = estado.Hero.Equip;
+            foreach (var slot in StatKeys.EquipSlots)
+            {
+                var vestida = equip.Get(slot);
+                if (vestida == null || vestida.Uid != peca.Uid) continue;
+                if (ReferenceEquals(equip, estado.Hero.Equip)) equip = equip.Clone();
+                var naMao = peca.Clone();
+                naMao.Equipped = true;
+                equip.Set(slot, naMao);
+            }
+            var novo = estado.Clone();
+            novo.Inventory = inventory;
+            if (!ReferenceEquals(equip, estado.Hero.Equip))
+            {
+                var hero = estado.Hero.Clone();
+                hero.Equip = equip;
+                novo.Hero = hero;
+            }
+            return novo;
+        }
+
         /// <summary>TS: gastarPonto — level up é manual, um ponto por vez.</summary>
         public static Mochila GastarPonto(Mochila mochila, string chave)
         {

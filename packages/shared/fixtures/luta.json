@@ -103809,6 +103809,5320 @@
     }
   },
   {
+    "name": "simularLuta: runas: uma de cada, em seis golpes",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15,
+                  "runas": [
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "fogo",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "gelo",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "vampirica",
+                      "tier": 3
+                    }
+                  ]
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 1,
+                  "y": 2,
+                  "doors": {
+                    "E": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_78034",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 2,
+                      "row": 1,
+                      "item": null,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "S"
+            },
+            "coracao": {
+              "x": 3840,
+              "y": 1440
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      "rng": {
+        "seed": 860
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15,
+                  "runas": [
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "fogo",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "gelo",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "vampirica",
+                      "tier": 3
+                    }
+                  ]
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {
+                "critNext": false
+              }
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 1,
+                  "y": 2,
+                  "doors": {
+                    "E": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_78034",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 2,
+                      "row": 1,
+                      "item": null,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 51,
+                      "maxHp": 600,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {
+                        "lento": {
+                          "turns": 3,
+                          "amount": 0.5
+                        },
+                        "queimadura": {
+                          "turns": 1,
+                          "dmg": 29
+                        },
+                        "atordoado": 1
+                      },
+                      "attackCount": 1,
+                      "guardHits": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 240,
+            "lento": 252,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "S"
+            },
+            "coracao": {
+              "x": 3840,
+              "y": 1440
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "atordoado",
+                "tempo": 44,
+                "forca": 1,
+                "alvo": -1,
+                "x": 3840,
+                "y": 1440,
+                "rumoX": 0,
+                "rumoY": 0
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 30,
+            "intervalo": 14,
+            "vez": 0
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "acontecimentos": [
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-54",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "❄️",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-72",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "🔥",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "❄️",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-29",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-56",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "⚡-28",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-3",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-66",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "⚡-33",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "❄️",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "🩸+3",
+            "tom": "cura"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "💫",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-29",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-53",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-86",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "⚡-43",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "💫",
+            "tom": "erro"
+          }
+        ]
+      },
+      "rngCalls": 46
+    }
+  },
+  {
+    "name": "simularLuta: runas: quatro elétricas, o choque derruba",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15,
+                  "runas": [
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    }
+                  ]
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 1,
+                  "y": 2,
+                  "doors": {
+                    "E": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_78034",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 2,
+                      "row": 1,
+                      "item": null,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 100,
+                      "maxHp": 100,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "S"
+            },
+            "coracao": {
+              "x": 3840,
+              "y": 1440
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      "rng": {
+        "seed": 861
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15,
+                  "runas": [
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "eletrica",
+                      "tier": 3
+                    }
+                  ]
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 17,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 114,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 1,
+              "masteryBattles": 1,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 1,
+                  "y": 2,
+                  "doors": {
+                    "E": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_78034",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 2,
+                      "row": 1,
+                      "item": null,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 0,
+                      "maxHp": 100,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {
+                        "queimadura": {
+                          "turns": 3,
+                          "dmg": 6
+                        },
+                        "atordoado": 1
+                      },
+                      "attackCount": 0,
+                      "guardHits": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": true
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 21,
+            "lento": 42,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "S"
+            },
+            "coracao": {
+              "x": 3840,
+              "y": 1440
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "caido",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 15,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 69,
+            "intervalo": 39,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": "vitoria",
+          "loot": null
+        },
+        "acontecimentos": [
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-69",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "⚡-138",
+            "tom": "dano"
+          },
+          {
+            "tipo": "diario",
+            "texto": "Você derrotou Zumbi Cambaleante! +17 XP e +14 ouro."
+          },
+          {
+            "tipo": "som",
+            "som": "victory"
+          }
+        ]
+      },
+      "rngCalls": 5
+    }
+  },
+  {
+    "name": "simularLuta: runas: a vampírica cura o herói ferido",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15,
+                  "runas": [
+                    {
+                      "runa": "vampirica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "vampirica",
+                      "tier": 3
+                    }
+                  ]
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 100,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 1,
+                  "y": 2,
+                  "doors": {
+                    "E": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_78034",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 2,
+                      "row": 1,
+                      "item": null,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "S"
+            },
+            "coracao": {
+              "x": 3840,
+              "y": 1440
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tocar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      "rng": {
+        "seed": 862
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15,
+                  "runas": [
+                    {
+                      "runa": "vampirica",
+                      "tier": 3
+                    },
+                    {
+                      "runa": "vampirica",
+                      "tier": 3
+                    }
+                  ]
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 398,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {
+                "critNext": false
+              }
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 1,
+                  "y": 2,
+                  "doors": {
+                    "E": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "chest",
+                      "col": 6,
+                      "row": 5,
+                      "item": {
+                        "uid": "pot_mana_1700000000000_78034",
+                        "templateId": "pot_mana",
+                        "rarity": "comum",
+                        "stats": {
+                          "curaMana": 16
+                        },
+                        "value": 14,
+                        "equipped": false
+                      },
+                      "used": false
+                    },
+                    {
+                      "kind": "chest",
+                      "col": 2,
+                      "row": 1,
+                      "item": null,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 208,
+                      "maxHp": 600,
+                      "dmg": 4,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {
+                        "queimadura": {
+                          "turns": 1,
+                          "dmg": 6
+                        }
+                      },
+                      "attackCount": 2,
+                      "guardHits": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 200,
+            "lento": 210,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "S"
+            },
+            "coracao": {
+              "x": 3840,
+              "y": 1440
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "avisando",
+                "tempo": 18,
+                "forca": 1,
+                "alvo": -1,
+                "x": 3840,
+                "y": 1440,
+                "rumoX": 0,
+                "rumoY": 0
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 70,
+            "intervalo": 0,
+            "vez": 0
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "acontecimentos": [
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-58",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "🩸+58",
+            "tom": "cura"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-85",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "🩸+85",
+            "tom": "cura"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-6",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-85",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "🩸+85",
+            "tom": "cura"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-5",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-75",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "🩸+75",
+            "tom": "cura"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-6",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-77",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          }
+        ]
+      },
+      "rngCalls": 23
+    }
+  },
+  {
     "name": "simularLuta: vitória com ouro escondido",
     "input": {
       "fn": "simularLuta",
@@ -104941,67 +110255,75 @@
             "map": [
               [
                 {
-                  "type": "void",
+                  "type": "stairs",
                   "x": 0,
                   "y": 0,
-                  "doors": {}
+                  "doors": {
+                    "E": true
+                  },
+                  "startBranch": "3,2",
+                  "distanceFromStart": 6,
+                  "extras": [
+                    {
+                      "kind": "sign",
+                      "col": 2,
+                      "row": 1
+                    }
+                  ]
                 },
                 {
-                  "type": "void",
+                  "type": "exit",
                   "x": 1,
                   "y": 0,
-                  "doors": {}
+                  "doors": {
+                    "E": true,
+                    "W": true
+                  },
+                  "startBranch": "3,2",
+                  "distanceFromStart": 5,
+                  "extras": [
+                    {
+                      "kind": "sign",
+                      "col": 2,
+                      "row": 5
+                    },
+                    {
+                      "kind": "sign",
+                      "col": 1,
+                      "row": 5
+                    }
+                  ]
                 },
                 {
-                  "type": "void",
+                  "type": "treasure",
                   "x": 2,
                   "y": 0,
-                  "doors": {}
-                },
-                {
-                  "type": "void",
-                  "x": 3,
-                  "y": 0,
-                  "doors": {}
-                },
-                {
-                  "type": "void",
-                  "x": 4,
-                  "y": 0,
-                  "doors": {}
-                },
-                {
-                  "type": "void",
-                  "x": 5,
-                  "y": 0,
-                  "doors": {}
-                }
-              ],
-              [
-                {
-                  "type": "void",
-                  "x": 0,
-                  "y": 1,
-                  "doors": {}
-                },
-                {
-                  "type": "void",
-                  "x": 1,
-                  "y": 1,
-                  "doors": {}
-                },
-                {
-                  "type": "void",
-                  "x": 2,
-                  "y": 1,
-                  "doors": {}
+                  "doors": {
+                    "E": true,
+                    "W": true
+                  },
+                  "startBranch": "3,2",
+                  "isMimic": false,
+                  "giveGold": true,
+                  "item": null,
+                  "collected": false,
+                  "extras": [
+                    {
+                      "kind": "chest",
+                      "col": 1,
+                      "row": 5,
+                      "item": null,
+                      "used": false
+                    }
+                  ]
                 },
                 {
                   "type": "npc",
                   "x": 3,
-                  "y": 1,
+                  "y": 0,
                   "doors": {
-                    "S": true
+                    "S": true,
+                    "W": true
                   },
                   "npc": {
                     "name": "Erma, a Vidente",
@@ -105017,61 +110339,133 @@
                   },
                   "extras": [
                     {
-                      "kind": "chest",
-                      "col": 6,
-                      "row": 5,
-                      "item": null,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
-                      "col": 1,
-                      "row": 1
-                    }
-                  ]
-                },
-                {
-                  "type": "stairs",
-                  "x": 4,
-                  "y": 1,
-                  "doors": {
-                    "E": true
-                  },
-                  "startBranch": "4,3",
-                  "distanceFromStart": 5,
-                  "extras": [
-                    {
-                      "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    }
-                  ]
-                },
-                {
-                  "type": "exit",
-                  "x": 5,
-                  "y": 1,
-                  "doors": {
-                    "S": true,
-                    "W": true
-                  },
-                  "startBranch": "4,3",
-                  "distanceFromStart": 4,
-                  "extras": [
-                    {
-                      "kind": "pot",
-                      "col": 1,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
                       "kind": "pot",
                       "col": 2,
                       "row": 5,
                       "used": false
                     }
                   ]
+                },
+                {
+                  "type": "void",
+                  "x": 4,
+                  "y": 0,
+                  "doors": {}
+                },
+                {
+                  "type": "void",
+                  "x": 5,
+                  "y": 0,
+                  "doors": {}
+                }
+              ],
+              [
+                {
+                  "type": "void",
+                  "x": 0,
+                  "y": 1,
+                  "doors": {}
+                },
+                {
+                  "type": "void",
+                  "x": 1,
+                  "y": 1,
+                  "doors": {}
+                },
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 1,
+                  "doors": {
+                    "E": true,
+                    "S": true
+                  },
+                  "monsters": [
+                    {
+                      "speciesId": "lobo_sombras",
+                      "enemyClassId": "brutamontes",
+                      "floor": 2,
+                      "hp": 16,
+                      "maxHp": 16,
+                      "dmg": 4,
+                      "speed": 13,
+                      "xp": 14,
+                      "gold": 10,
+                      "isBoss": false
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false,
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 1,
+                      "used": false
+                    }
+                  ]
+                },
+                {
+                  "type": "event",
+                  "x": 3,
+                  "y": 1,
+                  "doors": {
+                    "S": true,
+                    "N": true,
+                    "W": true,
+                    "E": true
+                  },
+                  "event": {
+                    "templateId": "altar"
+                  },
+                  "resolved": false,
+                  "extras": [
+                    {
+                      "kind": "chest",
+                      "col": 7,
+                      "row": 1,
+                      "item": null,
+                      "used": false
+                    }
+                  ]
+                },
+                {
+                  "type": "monster",
+                  "x": 4,
+                  "y": 1,
+                  "doors": {
+                    "W": true
+                  },
+                  "monsters": [
+                    {
+                      "speciesId": "lobo_sombras",
+                      "enemyClassId": "brutamontes",
+                      "floor": 2,
+                      "hp": 15,
+                      "maxHp": 15,
+                      "dmg": 4,
+                      "speed": 13,
+                      "xp": 15,
+                      "gold": 11,
+                      "isBoss": false
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false,
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 1,
+                      "used": false
+                    }
+                  ]
+                },
+                {
+                  "type": "void",
+                  "x": 5,
+                  "y": 1,
+                  "doors": {}
                 }
               ],
               [
@@ -105088,39 +110482,22 @@
                   "doors": {}
                 },
                 {
-                  "type": "monster",
+                  "type": "treasure",
                   "x": 2,
                   "y": 2,
                   "doors": {
-                    "E": true
+                    "N": true
                   },
-                  "monsters": [
-                    {
-                      "speciesId": "slime",
-                      "enemyClassId": "feiticeiro",
-                      "floor": 2,
-                      "hp": 20,
-                      "maxHp": 20,
-                      "dmg": 2,
-                      "speed": 5,
-                      "xp": 14,
-                      "gold": 9,
-                      "isBoss": false
-                    }
-                  ],
-                  "monsterIndex": 0,
-                  "beaten": false,
+                  "isMimic": true,
+                  "giveGold": true,
+                  "item": null,
+                  "collected": false,
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 6,
+                      "col": 1,
                       "row": 1,
                       "used": false
-                    },
-                    {
-                      "kind": "sign",
-                      "col": 6,
-                      "row": 5
                     }
                   ]
                 },
@@ -105129,77 +110506,20 @@
                   "x": 3,
                   "y": 2,
                   "doors": {
-                    "E": true,
-                    "N": true,
-                    "W": true
+                    "S": true,
+                    "N": true
                   },
                   "monsters": [
                     {
                       "speciesId": "lobo_sombras",
-                      "enemyClassId": "feiticeiro",
-                      "floor": 2,
-                      "hp": 14,
-                      "maxHp": 14,
-                      "dmg": 4,
-                      "speed": 15,
-                      "xp": 14,
-                      "gold": 12,
-                      "isBoss": false
-                    }
-                  ],
-                  "monsterIndex": 0,
-                  "beaten": false,
-                  "extras": [
-                    {
-                      "kind": "chest",
-                      "col": 7,
-                      "row": 1,
-                      "item": {
-                        "uid": "pot_vida_1700000000000_99808",
-                        "templateId": "pot_vida",
-                        "rarity": "comum",
-                        "stats": {
-                          "cura": 22
-                        },
-                        "value": 14,
-                        "equipped": false
-                      },
-                      "used": false
-                    }
-                  ]
-                },
-                {
-                  "type": "monster",
-                  "x": 4,
-                  "y": 2,
-                  "doors": {
-                    "S": true,
-                    "E": true,
-                    "W": true
-                  },
-                  "monsters": [
-                    {
-                      "speciesId": "aranha",
-                      "enemyClassId": "xama",
+                      "enemyClassId": "assassino",
                       "floor": 2,
                       "hp": 11,
                       "maxHp": 11,
-                      "dmg": 4,
-                      "speed": 12,
-                      "xp": 13,
+                      "dmg": 3,
+                      "speed": 18,
+                      "xp": 14,
                       "gold": 11,
-                      "isBoss": false
-                    },
-                    {
-                      "speciesId": "slime",
-                      "enemyClassId": "assassino",
-                      "floor": 2,
-                      "hp": 19,
-                      "maxHp": 19,
-                      "dmg": 2,
-                      "speed": 5,
-                      "xp": 15,
-                      "gold": 12,
                       "isBoss": false
                     }
                   ],
@@ -105207,66 +110527,30 @@
                   "beaten": false,
                   "extras": [
                     {
-                      "kind": "chest",
-                      "col": 6,
-                      "row": 5,
-                      "item": {
-                        "uid": "pot_mana_1700000000000_56637",
-                        "templateId": "pot_mana",
-                        "rarity": "comum",
-                        "stats": {
-                          "curaMana": 16
-                        },
-                        "value": 14,
-                        "equipped": false
-                      },
+                      "kind": "pot",
+                      "col": 7,
+                      "row": 1,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 1,
                       "used": false
                     }
                   ]
                 },
                 {
-                  "type": "treasure",
+                  "type": "void",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {}
+                },
+                {
+                  "type": "void",
                   "x": 5,
                   "y": 2,
-                  "doors": {
-                    "W": true,
-                    "N": true
-                  },
-                  "isMimic": false,
-                  "giveGold": false,
-                  "item": {
-                    "uid": "violao_1700000000000_44218",
-                    "templateId": "violao",
-                    "rarity": "comum",
-                    "stats": {
-                      "ataque": 3,
-                      "critico": 6,
-                      "esquiva": 2
-                    },
-                    "value": 23,
-                    "equipped": false,
-                    "procChance": 0.15,
-                    "foundFloor": 2
-                  },
-                  "collected": false,
-                  "extras": [
-                    {
-                      "kind": "chest",
-                      "col": 6,
-                      "row": 5,
-                      "item": {
-                        "uid": "pot_vida_1700000000000_62429",
-                        "templateId": "pot_vida",
-                        "rarity": "comum",
-                        "stats": {
-                          "cura": 22
-                        },
-                        "value": 14,
-                        "equipped": false
-                      },
-                      "used": false
-                    }
-                  ]
+                  "doors": {}
                 }
               ],
               [
@@ -105283,130 +110567,45 @@
                   "doors": {}
                 },
                 {
-                  "type": "monster",
+                  "type": "void",
                   "x": 2,
                   "y": 3,
-                  "doors": {
-                    "E": true
-                  },
-                  "monsters": [
-                    {
-                      "speciesId": "goblin",
-                      "enemyClassId": "xama",
-                      "floor": 2,
-                      "hp": 16,
-                      "maxHp": 16,
-                      "dmg": 3,
-                      "speed": 9,
-                      "xp": 15,
-                      "gold": 11,
-                      "isBoss": false
-                    }
-                  ],
-                  "monsterIndex": 0,
-                  "beaten": false,
-                  "extras": [
-                    {
-                      "kind": "pot",
-                      "col": 2,
-                      "row": 1,
-                      "used": false
-                    }
-                  ]
+                  "doors": {}
                 },
                 {
                   "type": "start",
                   "x": 3,
                   "y": 3,
                   "doors": {
-                    "E": true,
-                    "W": true
+                    "N": true,
+                    "S": true
                   },
                   "extras": [
                     {
                       "kind": "sign",
-                      "col": 7,
-                      "row": 5
+                      "col": 6,
+                      "row": 1
                     },
                     {
-                      "kind": "chest",
-                      "col": 6,
-                      "row": 1,
-                      "item": {
-                        "uid": "pot_mana_1700000000000_86318",
-                        "templateId": "pot_mana",
-                        "rarity": "comum",
-                        "stats": {
-                          "curaMana": 16
-                        },
-                        "value": 14,
-                        "equipped": false
-                      },
-                      "used": false
+                      "kind": "sign",
+                      "col": 2,
+                      "row": 5
                     }
                   ],
                   "visited": true,
                   "revealed": true
                 },
                 {
-                  "type": "event",
+                  "type": "void",
                   "x": 4,
                   "y": 3,
-                  "doors": {
-                    "W": true,
-                    "N": true,
-                    "E": true
-                  },
-                  "event": {
-                    "templateId": "porta"
-                  },
-                  "resolved": false,
-                  "extras": [
-                    {
-                      "kind": "chest",
-                      "col": 1,
-                      "row": 5,
-                      "item": null,
-                      "used": false
-                    }
-                  ]
+                  "doors": {}
                 },
                 {
-                  "type": "treasure",
+                  "type": "void",
                   "x": 5,
                   "y": 3,
-                  "doors": {
-                    "W": true
-                  },
-                  "isMimic": false,
-                  "giveGold": false,
-                  "item": {
-                    "uid": "escudo_1700000000000_36915",
-                    "templateId": "escudo",
-                    "rarity": "incomum",
-                    "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
-                    },
-                    "value": 31,
-                    "equipped": false,
-                    "foundFloor": 2
-                  },
-                  "collected": false,
-                  "extras": [
-                    {
-                      "kind": "chest",
-                      "col": 7,
-                      "row": 1,
-                      "item": null,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
-                      "col": 1,
-                      "row": 1
-                    }
-                  ]
+                  "doors": {}
                 }
               ],
               [
@@ -105429,10 +110628,38 @@
                   "doors": {}
                 },
                 {
-                  "type": "void",
+                  "type": "npc",
                   "x": 3,
                   "y": 4,
-                  "doors": {}
+                  "doors": {
+                    "N": true
+                  },
+                  "npc": {
+                    "name": "Prisioneiro Esquecido",
+                    "role": "Sobrevivente",
+                    "service": "heal",
+                    "icon": "🧍",
+                    "lines": [
+                      "Você... você é real? Há quanto tempo estou aqui...",
+                      "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
+                      "Se encontrar a saída, corra e não olhe para trás."
+                    ],
+                    "serviceUsed": false
+                  },
+                  "extras": [
+                    {
+                      "kind": "chest",
+                      "col": 1,
+                      "row": 1,
+                      "item": null,
+                      "used": false
+                    },
+                    {
+                      "kind": "sign",
+                      "col": 6,
+                      "row": 1
+                    }
+                  ]
                 },
                 {
                   "type": "void",
@@ -105572,7 +110799,7 @@
           }
         ]
       },
-      "rngCalls": 242
+      "rngCalls": 646
     }
   },
   {

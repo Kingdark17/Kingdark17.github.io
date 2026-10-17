@@ -17,6 +17,8 @@ import { equipItem, equippedSlot, isOffhandEligible, isTwoHanded, spendAttrPoint
 import { EQUIP_SLOTS, type AttrKey, type EquipSlot } from '../hero/stats.js';
 import { addItem, consumeItem, removeByUid } from '../inventory/inventory.js';
 import { concordar, displayName, itemCategory, type Item } from '../items/item.js';
+import { engastar, nomeDaRuna, QUEBRA_AO_TIRAR, tirar } from '../items/runas.js';
+import { defaultRng, type Rng } from '../rng.js';
 import type { EstadoDoJogo } from './estado.js';
 
 export interface Mochila {
@@ -150,6 +152,65 @@ export function descartar(mochila: Mochila, item: Item): Mochila {
     estado: { ...mochila.estado, hero, inventory: resultado.inventory },
     log: [`Você descarta ${displayName(item)}.`],
   };
+}
+
+/**
+ * Engasta a runa na arma, guardada ou equipada, de graça (`items/runas.ts`):
+ * no primeiro espaço livre, ou — com a arma cheia — no espaço `indice`,
+ * e a runa que estava lá se desfaz. A runa sai da mochila. Só o app oferece.
+ */
+export function engastarRuna(mochila: Mochila, arma: Item, runa: Item, indice?: number): Mochila {
+  // A arma e a runa têm de estar com o herói: senão a runa se duplicaria (ou sumiria).
+  if (!temPeca(mochila.estado, arma) || !mochila.estado.inventory.some((item) => item.uid === runa.uid)) return mochila;
+  const resultado = engastar(arma, runa, indice);
+  switch (resultado.kind) {
+    case 'nao_e_arma':
+      return { ...mochila, log: [`${displayName(arma)} não tem espaço de runa.`] };
+    case 'nao_e_runa':
+      return { ...mochila, log: [`${displayName(runa)} não é uma runa.`] };
+    case 'cheia':
+      return { ...mochila, log: [`Os espaços de ${displayName(arma)} estão cheios: escolha qual runa trocar.`] };
+  }
+  const semARuna = { ...mochila.estado, inventory: removeByUid(mochila.estado.inventory, runa.uid).inventory };
+  const log = [`Você engasta ${displayName(runa)} em ${displayName(arma)}.`];
+  if (resultado.kind === 'substituiu') log.push(`A ${nomeDaRuna(resultado.destruida)} que estava ali se desfaz.`);
+  return { estado: comPecaTrocada(semARuna, resultado.arma), log };
+}
+
+/**
+ * Tira a runa do espaço `indice` da arma: ela volta pra mochila ou quebra,
+ * pelo tier (`QUEBRA_AO_TIRAR`). Só o app oferece.
+ */
+export function tirarRuna(mochila: Mochila, arma: Item, indice: number, rng: Rng = defaultRng, now?: () => number): Mochila {
+  if (!temPeca(mochila.estado, arma)) return mochila;
+  const resultado = tirar(arma, indice, rng, now);
+  if (resultado.kind === 'sem_runa') return mochila;
+  if (resultado.kind === 'quebrou') {
+    return { estado: comPecaTrocada(mochila.estado, resultado.arma), log: [`A ${nomeDaRuna(resultado.quebrada)} quebra ao sair de ${displayName(arma)}.`] };
+  }
+  const estado = comPecaTrocada({ ...mochila.estado, inventory: addItem(mochila.estado.inventory, resultado.runa) }, resultado.arma);
+  return { estado, log: [`Você tira ${displayName(resultado.runa)} de ${displayName(arma)}, inteira.`] };
+}
+
+/** A chance de a runa do espaço `indice` quebrar ao ser tirada, pra tela avisar antes. */
+export function chanceDeQuebrar(arma: Item, indice: number): number {
+  const runa = arma.runas?.[indice];
+  return runa ? (QUEBRA_AO_TIRAR[Math.min(QUEBRA_AO_TIRAR.length, Math.max(1, Math.trunc(runa.tier))) - 1] as number) : 0;
+}
+
+/** A peça está com o herói: na mochila ou vestida. */
+function temPeca(estado: EstadoDoJogo, peca: Item): boolean {
+  return estado.inventory.some((item) => item.uid === peca.uid) || EQUIP_SLOTS.some((slot) => estado.hero.equip[slot]?.uid === peca.uid);
+}
+
+/** A peça mudada (as runas) no lugar dela: na mochila e, se estiver vestida, no slot. Os atributos não mudam. */
+function comPecaTrocada(estado: EstadoDoJogo, peca: Item): EstadoDoJogo {
+  const inventory = estado.inventory.map((item) => (item.uid === peca.uid ? { ...peca, equipped: item.equipped } : item));
+  let equip = estado.hero.equip;
+  for (const slot of EQUIP_SLOTS) {
+    if (equip[slot]?.uid === peca.uid) equip = { ...equip, [slot]: { ...peca, equipped: true } };
+  }
+  return { ...estado, inventory, hero: equip === estado.hero.equip ? estado.hero : { ...estado.hero, equip } };
 }
 
 /** Level up é manual: 2 pontos por nível, gastos um a um pelo jogador. */

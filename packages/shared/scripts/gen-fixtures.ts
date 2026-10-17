@@ -110,7 +110,7 @@ import type {
   Walker,
   WalkStep,
 } from '../src/index.js';
-import type { EntradaDaLuta, EventoDeArma, JogadaDoEvento, LeituraDaMira, LutaEmTempoReal, MonstroNaArena, PontoDoTraco } from '../src/index.js';
+import type { EntradaDaLuta, EventoDeArma, JogadaDoEvento, LeituraDaMira, LutaEmTempoReal, MonstroNaArena, PontoDoTraco, RunaId, RunaNaArma } from '../src/index.js';
 
 const PACOTE = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DESTINO = join(PACOTE, 'fixtures');
@@ -1160,6 +1160,132 @@ caso('instantiate: o arredondamento com o degrau', 'instantiate', { template: { 
   { rng: { sequence: [0, 0, 0.01, 0] }, now: AGORA });
 }
 
+// ---------- as runas (só do app) ----------
+
+constante('RUNAS', E.RUNAS);
+{
+  const runa = (tipo: RunaId, tier: number): Item => E.criarRuna(tipo, tier, { rng: E.seededRng(1), now: relogio });
+  const armaDe = (id: string, raridade = 'comum', degrau = 1): Item => E.instantiate(E.templateById(id)!, E.rarityById(raridade)!, { rng: E.seededRng(2), now: relogio, degrau });
+  const com = (peca: Item, runas: RunaNaArma[]): Item => ({ ...peca, runas });
+  const r = (tipo: RunaId, tier: number): RunaNaArma => ({ runa: tipo, tier });
+
+  for (const tipo of E.TIPOS_DE_RUNA) {
+    for (const tier of [1, 2, 3, 0, 5, 2.5]) {
+      caso(`criarRuna: ${tipo}, tier ${tier}`, 'criarRuna', { runa: tipo, tier, options: { now: AGORA } }, (a, { rng, now }) => E.criarRuna(a.runa as RunaId, a.tier, { rng, now }), {
+        rng: { seed: 3 },
+        now: AGORA,
+      });
+    }
+  }
+  for (const andar of [1, 29, 30, 59, 60, 100, 0]) caso(`tierMaximoNoAndar: ${andar}`, 'tierMaximoNoAndar', { andar }, (a) => E.tierMaximoNoAndar(a.andar));
+  for (const [andar, chefe, sorteios] of [
+    [10, false, [0, 0.99, 0]],
+    [10, true, [0.3, 0, 0]],
+    [45, false, [0.6, 0.6, 0]],
+    [90, false, [0.99, 0.99, 0]],
+    [90, true, [0.5, 0.99, 0]],
+    [70, true, [0.26, 0.1, 0.5]],
+  ] as const) {
+    caso(`sortearRuna: andar ${andar}${chefe ? ', chefe' : ''}, sorteios ${sorteios.join(' ')}`, 'sortearRuna', { andar, chefe, options: { now: AGORA } }, (a, { rng, now }) =>
+      E.sortearRuna(a.andar, a.chefe, rng, now),
+    { rng: { sequence: [...sorteios] }, now: AGORA });
+  }
+  for (const [nome, peca] of [
+    ['runa de fogo II', runa('fogo', 2)],
+    ['runa elétrica III', runa('eletrica', 3)],
+    ['runa de gelo I', runa('gelo', 1)],
+    ['runa vampírica sem tier', { ...runa('vampirica', 3), tierDaRuna: undefined }],
+    ['runa com tier fora (7)', { ...runa('gelo', 1), tierDaRuna: 7 }],
+  ] as const) {
+    caso(`displayName: ${nome}`, 'displayName', { item: peca }, (a) => E.displayName(a.item));
+    caso(`itemView: ${nome}`, 'itemView', { item: peca }, (a) => E.itemView(a.item));
+  }
+  for (const [nome, peca] of [
+    ['espada comum', armaDe('espada')],
+    ['espada mítica', armaDe('espada', 'mitico')],
+    ['espada lendária', armaDe('espada', 'lendario')],
+    ['arco de madeira élfica', armaDe('arco', 'comum', 3)],
+    ['marreta mítica de aço mágico', armaDe('marreta', 'mitico', 3)],
+    ['espada reforjada até o tier A', { ...armaDe('espada', 'raro'), tierAdjustment: 20 }],
+    ['peitoral mítico de aço mágico', armaDe('placas', 'mitico', 3)],
+    ['runa', runa('fogo', 1)],
+  ] as const) {
+    caso(`espacosDeRuna: ${nome}`, 'espacosDeRuna', { item: peca }, (a) => E.espacosDeRuna(a.item));
+  }
+  const espada = armaDe('espada');
+  const quatro = armaDe('marreta', 'mitico', 3);
+  for (const [nome, arma, pedra, indice] of [
+    ['espaço livre', espada, runa('fogo', 2), undefined],
+    ['cheia, sem dizer qual', com(espada, [r('gelo', 1)]), runa('fogo', 2), undefined],
+    ['cheia, troca a do espaço 0', com(espada, [r('gelo', 1)]), runa('fogo', 2), 0],
+    ['cheia, espaço que não existe', com(espada, [r('gelo', 1)]), runa('fogo', 2), 3],
+    ['cheia, espaço quebrado', com(espada, [r('gelo', 1)]), runa('fogo', 2), 0.5],
+    ['a mesma runa de novo, na arma de quatro espaços', com(quatro, [r('fogo', 3)]), runa('fogo', 3), undefined],
+    ['não é arma', armaDe('placas'), runa('fogo', 1), undefined],
+    ['não é runa', espada, armaDe('adaga'), undefined],
+    ['arma com mais runas que espaços', com(espada, [r('gelo', 1), r('fogo', 1)]), runa('eletrica', 1), 1],
+  ] as const) {
+    caso(`engastar: ${nome}`, 'engastar', { arma, runa: pedra, indice }, (a) => E.engastar(a.arma, a.runa, a.indice));
+  }
+  for (const [nome, arma, indice, sorteio] of [
+    ['tier I quebra com 0,39', com(espada, [r('fogo', 1)]), 0, 0.39],
+    ['tier I volta com 0,4', com(espada, [r('fogo', 1)]), 0, 0.4],
+    ['tier II quebra com 0,24', com(espada, [r('gelo', 2)]), 0, 0.24],
+    ['tier II volta com 0,25', com(espada, [r('gelo', 2)]), 0, 0.25],
+    ['tier III quebra com 0,09', com(espada, [r('eletrica', 3)]), 0, 0.09],
+    ['tier III volta com 0,1', com(espada, [r('eletrica', 3)]), 0, 0.1],
+    ['tira a do meio', com(quatro, [r('fogo', 1), r('gelo', 2), r('eletrica', 3)]), 1, 0.9],
+    ['espaço vazio', espada, 0, 0.5],
+    ['índice quebrado', com(espada, [r('fogo', 1)]), 0.5, 0.5],
+  ] as const) {
+    caso(`tirar: ${nome}`, 'tirar', { arma, indice, options: { now: AGORA } }, (a, { rng, now }) => E.tirar(a.arma, a.indice, rng, now), {
+      rng: { sequence: [sorteio, 0.3] },
+      now: AGORA,
+    });
+  }
+  for (const [nome, arma] of [
+    ['cabe tudo', com(quatro, [r('fogo', 1)])],
+    ['sobram duas', com(espada, [r('fogo', 1), r('gelo', 2), r('eletrica', 3)])],
+    ['sem runas', espada],
+    ['quem não é arma devolve tudo', com(armaDe('placas'), [r('fogo', 1)])],
+  ] as const) {
+    caso(`aposMudarDeTier: ${nome}`, 'aposMudarDeTier', { arma, options: { now: AGORA } }, (a, { rng, now }) => E.aposMudarDeTier(a.arma, rng, now), {
+      rng: { seed: 4 },
+      now: AGORA,
+    });
+  }
+  for (const [nome, runas] of [
+    ['uma de cada', [r('eletrica', 1), r('fogo', 2), r('gelo', 3), r('vampirica', 1)]],
+    ['duas de fogo somam', [r('fogo', 1), r('fogo', 3)]],
+    ['quatro elétricas no teto', [r('eletrica', 3), r('eletrica', 3), r('eletrica', 3), r('eletrica', 3)]],
+    ['tier fora da régua', [r('gelo', 9), r('gelo', 0)]],
+    ['sem runas', []],
+  ] as const) {
+    caso(`efeitosDaArma: ${nome}`, 'efeitosDaArma', { arma: com(espada, [...runas]) }, (a) => E.efeitosDaArma(a.arma));
+  }
+  caso('efeitosDaArma: sem arma', 'efeitosDaArma', { arma: null }, (a) => E.efeitosDaArma(a.arma));
+  const heroiCom = (runas: RunaNaArma[]): Hero => {
+    const h = heroi({ classe: 'guerreiro', extra: { hp: 50 } });
+    return { ...h, equip: { ...h.equip, arma: { ...com(espada, runas), equipped: true } } };
+  };
+  const quaseCheio = heroiCom([r('vampirica', 3)]);
+  for (const [nome, hero, dano, alvo, sorteios] of [
+    ['todas disparam', heroiCom([r('eletrica', 2), r('fogo', 2), r('gelo', 2), r('vampirica', 2)]), 20, monstro(), [0, 0, 0, 0]],
+    ['nenhuma dispara', heroiCom([r('eletrica', 1), r('fogo', 1), r('gelo', 1), r('vampirica', 1)]), 20, monstro(), [0.99, 0.99, 0.99, 0.99]],
+    ['o choque derruba', heroiCom([r('eletrica', 3), r('eletrica', 3)]), 200, monstro({ hp: 30 }), [0]],
+    ['o choque soma ao atordoado que já havia', heroiCom([r('eletrica', 1)]), 10, monstro({ status: { atordoado: 2 } }), [0]],
+    ['a cura para na vida cheia', { ...quaseCheio, hp: quaseCheio.maxHp - 2 }, 40, monstro(), [0]],
+    ['a cura com a vida cheia', { ...quaseCheio, hp: quaseCheio.maxHp }, 40, monstro(), [0]],
+    ['queima mínima', heroiCom([r('fogo', 1)]), 3, monstro(), [0]],
+    ['dano zero', heroiCom([r('eletrica', 1), r('vampirica', 1)]), 0, monstro(), [0, 0]],
+    ['só a segunda dispara', heroiCom([r('fogo', 3), r('gelo', 3)]), 30, monstro(), [0.5, 0.1]],
+  ] as const) {
+    caso(`aplicarRunas: ${nome}`, 'aplicarRunas', { hero, monster: alvo, dano }, (a, { rng }) => E.aplicarRunas(a.hero, a.monster, a.dano, rng), {
+      rng: { sequence: [...sorteios] },
+    });
+  }
+}
+
 const ITENS_DE_NOME: Array<[string, Item]> = [
   ['espada comum', item('espada')],
   ['espada lendária', item('espada', 'lendario')],
@@ -2037,6 +2163,19 @@ for (const [floor, seed, run] of [
     andarCompacto(E.generateDungeonFloor(a.floor, a.rows, a.cols, { ...a.options, rng, now })),
   { rng: { seed }, now: AGORA });
 }
+{
+  // A primeira semente em que um baú do andar 70 gerado no app guarda uma runa (na sala de tesouro ou na secreta).
+  const ehRuna = (peca: Item | null | undefined) => !!peca && peca.templateId.startsWith('runa_');
+  const temRuna = (grade: DungeonCell[][]) =>
+    grade.flat().some((celula) => ehRuna(celula.item) || (celula.extras ?? []).some((extra) => extra.kind === 'crack' && ehRuna(extra.secretItem)));
+  let semente = 1;
+  while (!temRuna(E.generateDungeonFloor(70, 6, 6, { rng: E.seededRng(semente), now: relogio, app: true }).grid)) {
+    if (++semente > 3000) throw new Error('nenhum andar de teste com runa no baú');
+  }
+  caso(`generateDungeonFloor: no app, andar 70, uma runa no baú, seed ${semente}`, 'generateDungeonFloor', { floor: 70, rows: 6, cols: 6, options: { now: AGORA, app: true } }, (a, { rng, now }) =>
+    andarCompacto(E.generateDungeonFloor(a.floor, a.rows, a.cols, { ...a.options, rng, now })),
+  { rng: { seed: semente }, now: AGORA });
+}
 
 {
   // Um andar com chefe, totem e professor, pra ter todo tipo de sala nos textos.
@@ -2305,6 +2444,22 @@ caso('rollForgeOutcome: pity 3 ainda pode piorar', 'rollForgeOutcome', { cfg: E.
   rf('catalisador +3', ferreiro, mochila, espada, 'catalisador_mitico', [0.99]);
   rf('pedra de proteção não piora', ferreiro, mochila, espada, 'pedra_protecao', [0]);
   rf('item no MAX não sobe', ferreiro, [minerio, { ...espada, tierAdjustment: 400 }], { ...espada, tierAdjustment: 400 }, 'minerio', [0.99]);
+  {
+    // Tier A (o ajuste põe a espada no A), duas runas: o minério que piora derruba pro B, e a segunda runa volta.
+    const ajusteProTierA = (peca: Item): number => {
+      for (let ajuste = 0; ajuste < 300; ajuste++) if (E.tierFor({ ...peca, tierAdjustment: ajuste }) === 'A') return ajuste + 5;
+      throw new Error('nenhum ajuste põe a peça no tier A');
+    };
+    const noA: Item = { ...espada, tierAdjustment: ajusteProTierA(espada), runas: [{ runa: 'fogo', tier: 1 }, { runa: 'gelo', tier: 2 }] };
+    if (E.espacosDeRuna(noA) !== 2) throw new Error('a espada de teste não ficou com dois espaços: ' + E.espacosDeRuna(noA));
+    caso('resolveForge: o tier cai e a runa que sobrou volta pra mochila', 'resolveForge', { hero: ferreiro, inventory: [minerio, noA], item: noA, materialId: 'minerio' }, (a, ctx) =>
+      E.resolveForge(a.hero, a.inventory, a.item, a.materialId, { rng: ctx.rng, now: ctx.now }),
+    { rng: { sequence: [0, 0.3, 0.3] }, now: AGORA });
+    const sorteios = [0, 0.3, 0.3];
+    let i = 0;
+    const resultado = E.resolveForge(ferreiro, [minerio, noA], noA, 'minerio', { rng: () => sorteios[i++] ?? 0, now: relogio });
+    if (resultado.outcome.kind !== 'forged' || !resultado.outcome.runasDevolvidas?.length) throw new Error('a reforja de teste não devolveu runa');
+  }
 
   const loja = [item('pot_vida', 'comum', 9), item('placas', 'raro', 10)];
   caso('resolveBuy: sem ouro', 'resolveBuy', { hero: heroi({ extra: { gold: 5 } }), inventory: [minerio], forSale: loja, item: loja[1], discount: 0 }, (a) =>
@@ -3233,6 +3388,42 @@ naMochila('peça da mochila', 'descartar', mochilaCom(guerreiro, tudoNaMochila),
 naMochila('peça vestida sai do slot', 'descartar', mochilaCom(comEscudo, [escudo, pocaoDeVida]), { item: escudo }, (m, a) => E.descartar(m, a.item as Item));
 naMochila('peça que não está na mochila', 'descartar', mochilaCom(guerreiro, [pocaoDeVida]), { item: anel }, (m, a) => E.descartar(m, a.item as Item));
 
+{
+  // As runas na mochila: engastar (de graça) e tirar (com chance de quebrar), na arma guardada ou vestida.
+  const fogo = E.criarRuna('fogo', 2, { rng: E.seededRng(5), now: relogio });
+  const gelo = E.criarRuna('gelo', 3, { rng: E.seededRng(6), now: relogio });
+  const comFogo: Item = { ...espadaNova, runas: [{ runa: 'fogo', tier: 1 }] };
+  const vestindo = (arma: Item) => heroi({ classe: 'guerreiro', arma: { ...arma, equipped: true } });
+  const engasta = (m: Mochila, a: Record<string, unknown>) => E.engastarRuna(m, a.arma as Item, a.runa as Item, a.indice as number | undefined);
+  naMochila('na arma guardada', 'engastarRuna', mochilaCom(guerreiro, [espadaNova, fogo, gelo]), { arma: espadaNova, runa: fogo }, engasta);
+  naMochila('na arma vestida', 'engastarRuna', mochilaCom(vestindo(espadaNova), [espadaNova, fogo]), { arma: espadaNova, runa: fogo }, engasta);
+  naMochila('arma cheia, troca a do espaço 0', 'engastarRuna', mochilaCom(guerreiro, [comFogo, gelo]), { arma: comFogo, runa: gelo, indice: 0 }, engasta);
+  naMochila('arma cheia, sem dizer qual', 'engastarRuna', mochilaCom(guerreiro, [comFogo, gelo]), { arma: comFogo, runa: gelo }, engasta);
+  naMochila('a runa fora da mochila', 'engastarRuna', mochilaCom(guerreiro, [espadaNova]), { arma: espadaNova, runa: fogo }, engasta);
+  naMochila('a arma que não está com o herói', 'engastarRuna', mochilaCom(guerreiro, [fogo]), { arma: espadaNova, runa: fogo }, engasta);
+  naMochila('num escudo', 'engastarRuna', mochilaCom(guerreiro, [escudo, fogo]), { arma: escudo, runa: fogo }, engasta);
+  naMochila('uma poção no lugar da runa', 'engastarRuna', mochilaCom(guerreiro, [espadaNova, pocaoDeVida]), { arma: espadaNova, runa: pocaoDeVida }, engasta);
+  for (const [nome, mochila, arma, indice, sorteios] of [
+    ['volta inteira', mochilaCom(guerreiro, [comFogo]), comFogo, 0, [0.9, 0.3]],
+    ['quebra', mochilaCom(guerreiro, [comFogo]), comFogo, 0, [0.1]],
+    ['da arma vestida', mochilaCom(vestindo(comFogo), [comFogo]), comFogo, 0, [0.9, 0.3]],
+    ['espaço vazio', mochilaCom(guerreiro, [espadaNova]), espadaNova, 0, []],
+    ['a arma que não está com o herói', mochilaCom(guerreiro, [pocaoDeVida]), comFogo, 0, []],
+  ] as const) {
+    caso(`tirarRuna: ${nome}`, 'tirarRuna', { mochila, arma, indice }, (a, ctx) => E.tirarRuna(a.mochila, a.arma, a.indice, ctx.rng, ctx.now), {
+      rng: { sequence: [...sorteios] },
+      now: AGORA,
+    });
+  }
+  for (const [nome, arma, indice] of [
+    ['tier I', comFogo, 0],
+    ['tier III', { ...espadaNova, runas: [{ runa: 'gelo' as const, tier: 3 }] }, 0],
+    ['espaço vazio', espadaNova, 0],
+  ] as const) {
+    caso(`chanceDeQuebrar: ${nome}`, 'chanceDeQuebrar', { arma, indice }, (a) => E.chanceDeQuebrar(a.arma as Item, a.indice));
+  }
+}
+
 naMochila('com pontos', 'gastarPonto', mochilaCom(heroi({ classe: 'guerreiro', extra: { attrPoints: 2 } }), []), { chave: 'forca' }, (m, a) =>
   E.gastarPonto(m, a.chave as AttrKey),
 );
@@ -3767,6 +3958,15 @@ caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: 
   };
   limpaNoApp('o item do chefe vem com material', comGradeInteira(chefeFundo.estado), chefeFundo.abatido, { seed: sementeComMaterial(comGradeInteira(chefeFundo.estado), chefeFundo.abatido) });
   limpaNoApp('o item do monstro vem com material', fundoComum.estado, fundoComum.abatido, { seed: sementeComMaterial(fundoComum.estado, fundoComum.abatido) });
+  // A primeira semente em que o chefe do app deixa uma runa.
+  const sementeComRuna = (): number => {
+    for (let semente = 1; semente < 3000; semente++) {
+      const limpa = E.limparSala(comGradeInteira(chefeFundo.estado), chefeFundo.abatido, E.seededRng(semente), relogio, true);
+      if (limpa.log.some((linha) => linha.startsWith('O chefe deixa cair'))) return semente;
+    }
+    throw new Error('o chefe de teste nunca deixou runa');
+  };
+  limpaNoApp('o chefe deixa uma runa', comGradeInteira(chefeFundo.estado), chefeFundo.abatido, { seed: sementeComRuna() });
 
   const perde = (nome: string, estado: EstadoNaMasmorra, rng: RngSpec) => caso(`perderLuta: ${nome}`, 'perderLuta', { estado }, (a, ctx) => E.perderLuta(a.estado, ctx.rng), { rng });
   const nivel = (level: number, gold: number) => heroi({ classe: 'guerreiro', level, extra: { gold, hp: 0 } });
@@ -4230,6 +4430,26 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     if (++comMaterial > 3000) throw new Error('nenhuma semente deu item com material na arena');
   }
   simula('vitória no andar 90, com item de material', vitoriaFunda, toqueNoMeio, { seed: comMaterial });
+
+  // As runas na arena (só o app as aplica): golpes seguidos no meio da barra, com a espada carregada de runas.
+  {
+    const golpesSeguidos = (vezes: number): EntradaDaLuta[] => {
+      const entradas: EntradaDaLuta[] = [];
+      for (let i = 0; i < vezes; i++) {
+        entradas.push({ x: 0, y: 0, atacar: true });
+        for (let k = 1; k <= 60; k++) entradas.push(k === 42 ? { x: 0, y: 0, tocar: true } : { x: 0, y: 0 });
+      }
+      return entradas;
+    };
+    const comRunas = (runas: RunaNaArma[], o: Partial<Hero> = {}): Hero => {
+      const h = comArma('guerreiro', 'espada');
+      return { ...h, ...o, equip: { ...h.equip, arma: { ...(h.equip.arma as Item), runas } } };
+    };
+    const tres = (runa: RunaId): RunaNaArma => ({ runa, tier: 3 });
+    simula('runas: uma de cada, em seis golpes', abrir({ ...zumbi(), hero: comRunas([tres('eletrica'), tres('fogo'), tres('gelo'), tres('vampirica')]) }), golpesSeguidos(6), { seed: 860 });
+    simula('runas: quatro elétricas, o choque derruba', abrir({ ...salaCom([bicho('zumbi', { hp: 100, maxHp: 100 })]), hero: comRunas([tres('eletrica'), tres('eletrica'), tres('eletrica'), tres('eletrica')]) }), golpesSeguidos(4), { seed: 861 });
+    simula('runas: a vampírica cura o herói ferido', abrir({ ...zumbi(), hero: comRunas([tres('vampirica'), tres('vampirica')], { hp: 100 }) }), golpesSeguidos(5), { seed: 862 });
+  }
   simula('vitória com ouro escondido', abrir({ ...naSalaDaMasmorra({ ...umMonstro, monsters: [bicho('zumbi', { hp: 1 })], monsterIndex: 0, beaten: false, bonusTreasure: { gold: 25 } }, forte({ arma: 'espada' }), []) }), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 833 });
   simula('o chefe leva ao andar seguinte', abrir(comGradeInteira(naSalaDaMasmorra({ ...chefe, monsters: [{ ...(chefe.monsters ?? [])[0]!, hp: 1 }], monsterIndex: 0, beaten: false }, forte({ arma: 'espada' }), []))), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 834 });
   simula('derrota', abrir(comGradeInteira(salaCom([bicho('aranha', { dmg: 60 })], { ...forte({ level: 8 }), hp: 5, gold: 300 })), null), parado(400), { seed: 835 });

@@ -416,6 +416,12 @@ namespace RPGLegend.Engine
                     cell.IsMimic = rng() < Js.Min(0.25, 0.1 + floor * 0.008);
                     cell.GiveGold = rng() < 0.7;
                     cell.Item = cell.GiveGold == true ? null : Items.RandomItem(new Items.RandomItemOptions { Floor = floor, Rng = rng, Now = now, App = app });
+                    // No app, o baú pode guardar uma runa no lugar do tesouro.
+                    if (app && rng() < GameData.RunasTable.ChanceDaRunaNoBau)
+                    {
+                        cell.GiveGold = false;
+                        cell.Item = Runas.SortearRuna(floor, false, rng, now);
+                    }
                     cell.Collected = false;
                 }
             }

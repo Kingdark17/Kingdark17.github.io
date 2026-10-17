@@ -21,6 +21,7 @@ import { gainXP, type Companion, type Hero } from '../hero/hero.js';
 import { winBattle } from '../hero/mastery.js';
 import { addItem } from '../inventory/inventory.js';
 import { concordar, displayName, randomItem, type Item } from '../items/item.js';
+import { CHANCE_DA_RUNA_NO_CHEFE, sortearRuna } from '../items/runas.js';
 import { applyNpcBlessing } from '../npc/npc-services.js';
 import { onItemCollected, onMonsterKilled } from '../quests/quests.js';
 import { defaultRng, type Rng } from '../rng.js';
@@ -156,6 +157,13 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
     inventory = addItem(inventory, loot);
     quests = onItemCollected(quests);
     log.push(`Encontrou ${displayName(loot)} após a batalha.`);
+  }
+
+  // No app, o chefe pode deixar uma runa (`items/runas.ts`), um tier acima do andar.
+  if (app && sala.type === 'boss' && rng() < CHANCE_DA_RUNA_NO_CHEFE) {
+    const runa = sortearRuna(andarDeForca(estado), true, rng, now);
+    inventory = addItem(inventory, runa);
+    log.push(`O chefe deixa cair ${displayName(runa)}.`);
   }
 
   const bonus = sala.bonusTreasure;

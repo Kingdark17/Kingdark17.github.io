@@ -33,6 +33,8 @@ namespace RPGLegend.Engine
         public bool? Improved;
         /// <summary>kind "forged": o "pity" do item depois da tentativa.</summary>
         public double? ReforgeFails;
+        /// <summary>kind "forged": as runas que a arma devolveu ao perder espaço (só quando houve).</summary>
+        public List<Item> RunasDevolvidas;
 
         public static ForgeOutcome Unavailable() => new ForgeOutcome { Kind = KindUnavailable };
 
@@ -240,7 +242,7 @@ namespace RPGLegend.Engine
         /// "Subiu" compara o rank novo com o <c>tierRank</c> do item, que é -1 para o que não é equipamento:
         /// reforjar um consumível sempre conta como melhora, mesmo com delta 0 (igual ao TS).
         /// </summary>
-        public static ForgeResult ResolveForge(Hero hero, IReadOnlyList<Item> inventory, Item item, string materialId, RngFn rng = null)
+        public static ForgeResult ResolveForge(Hero hero, IReadOnlyList<Item> inventory, Item item, string materialId, RngFn rng = null, Func<double> now = null)
         {
             rng = rng ?? Rng.Default;
             // FORGE_MATERIALS[materialId]: aqui só as chaves da tabela contam. No JS, um materialId com nome de
@@ -260,12 +262,18 @@ namespace RPGLegend.Engine
             var result = reforged.Result;
             bool improved = result.NewRank > oldRank;
             // { ...reforgedBase, reforgeFails }: cópia rasa, os stats continuam os do item reforjado.
-            var reforgedItem = Espalhar(reforged.Item);
-            reforgedItem.ReforgeFails = improved ? 0 : (item.ReforgeFails ?? 0) + 1;
+            var reforjada = Espalhar(reforged.Item);
+            reforjada.ReforgeFails = improved ? 0 : (item.ReforgeFails ?? 0) + 1;
+            // A arma que caiu de tier pode perder espaço de runa: a que sobrou volta inteira pra mochila.
+            var ajuste = Runas.AposMudarDeTier(reforjada, rng, now);
+            var reforgedItem = ajuste.Arma;
 
             var afterRemoval = Inventory.RemoveByUid(inventory, material.Uid).Inventory;
-            var nextInventory = new List<Item>(afterRemoval.Count);
+            var nextInventory = new List<Item>(afterRemoval.Count + ajuste.Devolvidas.Count);
             foreach (var i in afterRemoval) nextInventory.Add(Inventory.UidOf(i) == item.Uid ? reforgedItem : i);
+            nextInventory.AddRange(ajuste.Devolvidas);
+            var outcome = ForgeOutcome.Forged(result.OldTier, result.NewTier, improved, reforgedItem.ReforgeFails ?? 0);
+            if (ajuste.Devolvidas.Count > 0) outcome.RunasDevolvidas = ajuste.Devolvidas;
 
             var next = hero.Clone();
             next.Gold = hero.Gold - cfg.Cost;
@@ -274,7 +282,7 @@ namespace RPGLegend.Engine
                 Hero = next,
                 Inventory = nextInventory,
                 Item = reforgedItem,
-                Outcome = ForgeOutcome.Forged(result.OldTier, result.NewTier, improved, reforgedItem.ReforgeFails ?? 0),
+                Outcome = outcome,
             };
         }
 

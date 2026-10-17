@@ -26,7 +26,7 @@ namespace RPGLegend.Tests
             Fn(M, "discountForRoll", (a, c) => N(Shop.DiscountForRoll(Num(a["roll"]))));
             Fn(M, "rollForgeOutcome", (a, c) => N(Shop.RollForgeOutcome(R<ForgeMaterialConfig>(a["cfg"]), Num(a["pity"]), c.RngFn)));
             Fn(M, "resolveForge", (a, c) =>
-                W(Shop.ResolveForge(R<Hero>(a["hero"]), R<List<Item>>(a["inventory"]), R<Item>(a["item"]), Str(a["materialId"]), c.RngFn)));
+                W(Shop.ResolveForge(R<Hero>(a["hero"]), R<List<Item>>(a["inventory"]), R<Item>(a["item"]), Str(a["materialId"]), c.RngFn, c.NowOrFail)));
             Fn(M, "resolveBuy", (a, c) =>
                 W(Shop.ResolveBuy(R<Hero>(a["hero"]), R<List<Item>>(a["inventory"]), R<List<Item>>(a["forSale"]), R<Item>(a["item"]),
                     Discount(a["discount"]))));

@@ -1,0 +1,84 @@
+{
+  "RUNAS": {
+    "eletrica": {
+      "icone": "⚡",
+      "chance": [
+        0.1,
+        0.15,
+        0.2
+      ],
+      "forca": [
+        0.2,
+        0.35,
+        0.5
+      ]
+    },
+    "fogo": {
+      "icone": "🔥",
+      "chance": [
+        0.1,
+        0.15,
+        0.2
+      ],
+      "forca": [
+        0.2,
+        0.3,
+        0.4
+      ]
+    },
+    "gelo": {
+      "icone": "❄️",
+      "chance": [
+        0.1,
+        0.15,
+        0.2
+      ],
+      "forca": [
+        0.25,
+        0.35,
+        0.5
+      ]
+    },
+    "vampirica": {
+      "icone": "🩸",
+      "chance": [
+        0.1,
+        0.15,
+        0.2
+      ],
+      "forca": [
+        0.2,
+        0.35,
+        0.5
+      ]
+    }
+  },
+  "TIPOS_DE_RUNA": [
+    "eletrica",
+    "fogo",
+    "gelo",
+    "vampirica"
+  ],
+  "ANDAR_DO_TIER": [
+    1,
+    30,
+    60
+  ],
+  "CHANCE_DA_RUNA_NO_CHEFE": 0.25,
+  "CHANCE_DA_RUNA_NO_BAU": 0.05,
+  "QUEBRA_AO_TIRAR": [
+    0.4,
+    0.25,
+    0.1
+  ],
+  "VALOR_DO_TIER": [
+    1,
+    2,
+    4
+  ],
+  "ESPACOS_MAXIMOS": 4,
+  "RARIDADE_COM_ESPACO": "mitico",
+  "TIER_COM_ESPACO": "A",
+  "CHANCE_MAXIMA_DA_RUNA": 0.9,
+  "TURNOS_DA_RUNA": 3
+}

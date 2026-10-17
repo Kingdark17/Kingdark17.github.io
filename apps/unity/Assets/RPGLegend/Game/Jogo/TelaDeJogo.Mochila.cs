@@ -23,7 +23,7 @@ namespace RPGLegend.Game.Jogo
         private static readonly string[] SlotsDaEsquerda = { "elmo", "armadura", "calca", "botas" };
         private static readonly string[] SlotsDaDireita = { "arma", "secundaria", "acessorio" };
 
-        private static readonly string[] Abas = { "todos", "arma", "armadura", "acessorio", "consumivel", "material" };
+        private static readonly string[] Abas = { "todos", "arma", "armadura", "acessorio", "consumivel", "material", "runa" };
 
         private void TelaDaMochila(Mochila mochila)
         {
@@ -176,11 +176,85 @@ namespace RPGLegend.Game.Jogo
 
             if (Mochilas.PodeUsar(item)) botoes.Add(PecasDaTela.Botao("USAR", () => SeguirMochila(Mochilas.Usar(mochila, item))));
 
+            AcoesDeRuna(mochila, item, botoes);
+
             botoes.Add(PecasDaTela.Discreto("Descartar", () =>
             {
                 _selecionado = null;
                 SeguirMochila(Mochilas.Descartar(mochila, item));
             }));
         }
+
+        /// <summary>
+        /// As runas na ficha (só o app): numa arma, os espaços e as runas engastadas, cada uma com o "Tirar" e a chance
+        /// de quebrar; numa runa, o que ela faz e o engaste na arma que está na mão — cheia, a escolha de qual se desfaz.
+        /// </summary>
+        private void AcoesDeRuna(Mochila mochila, Item item, VisualElement botoes)
+        {
+            double espacos = Runas.EspacosDeRuna(item);
+            if (espacos > 0)
+            {
+                var runas = Runas.RunasDaArma(item);
+                botoes.Add(PecasDaTela.Texto("Runas: " + runas.Count + " de " + Js.NumberToString(espacos) + (espacos > 1 ? " espaços" : " espaço"), "titulo-das-runas"));
+                for (int i = 0; i < runas.Count; i++)
+                {
+                    int indice = i;
+                    var runa = runas[i];
+                    botoes.Add(PecasDaTela.Texto(Runas.IconeDe(runa.Runa) + " " + Runas.NomeDaRuna(runa) + ": " + EfeitoDaRuna(runa.Runa, runa.Tier), "runa-da-ficha"));
+                    string quebra = Pct(Mochilas.ChanceDeQuebrar(item, indice));
+                    botoes.Add(PecasDaTela.Discreto("Tirar " + Runas.NomeDaRuna(runa) + " (" + quebra + " de quebrar)", () =>
+                        SeguirMochila(Mochilas.TirarRuna(mochila, item, indice, Rng.Default))));
+                }
+                return;
+            }
+
+            string tipo = Runas.RunaDoItem(item);
+            if (tipo == null) return;
+            botoes.Add(PecasDaTela.Texto(Maiuscula(EfeitoDaRuna(tipo, Runas.TierDaRuna(item))), "runa-da-ficha"));
+            var arma = mochila.Estado.Hero.Equip?.Get("arma");
+            if (arma == null)
+            {
+                botoes.Add(PecasDaTela.Texto("Equipe uma arma para engastar a runa nela.", "aviso-da-ficha"));
+                return;
+            }
+            var naArma = Runas.RunasDaArma(arma);
+            if (naArma.Count < Runas.EspacosDeRuna(arma))
+            {
+                botoes.Add(PecasDaTela.Botao("ENGASTAR EM " + Items.DisplayName(arma).ToUpperInvariant(), () =>
+                    SeguirMochila(Mochilas.EngastarRuna(mochila, arma, item)), principal: true));
+                return;
+            }
+            botoes.Add(PecasDaTela.Texto(Items.DisplayName(arma) + " está com os espaços cheios: a runa nova toma o lugar de uma, e a antiga se desfaz.",
+                "aviso-da-ficha"));
+            for (int i = 0; i < naArma.Count; i++)
+            {
+                int indice = i;
+                botoes.Add(PecasDaTela.Botao("NO LUGAR DA " + Runas.NomeDaRuna(naArma[i]).ToUpperInvariant(), () =>
+                    SeguirMochila(Mochilas.EngastarRuna(mochila, arma, item, indice))));
+            }
+        }
+
+        /// <summary>O que a runa faz, com os números do tier dela (a régua é a de items/runas.ts).</summary>
+        private static string EfeitoDaRuna(string tipo, double tier)
+        {
+            var tabela = GameData.RunasTable;
+            if (!tabela.Runas.TryGet(tipo, out var def) || def == null) return "";
+            int t = (int)System.Math.Max(1, System.Math.Min(def.Chance.Count, System.Math.Truncate(tier))) - 1;
+            string chance = Pct(def.Chance[t]);
+            string forca = Pct(def.Forca[t]);
+            string turnos = Js.NumberToString(tabela.TurnosDaRuna);
+            switch (tipo)
+            {
+                case "eletrica": return "no acerto, " + chance + " de chance de um choque de " + forca + " do dano do golpe, e o monstro fica atordoado.";
+                case "fogo": return "no acerto, " + chance + " de chance de queimar o monstro: " + forca + " do dano do golpe por turno, por " + turnos + " turnos.";
+                case "gelo": return "no acerto, " + chance + " de chance de deixar o monstro lento por " + turnos + " turnos (" + forca + " de chance de ele hesitar).";
+                case "vampirica": return "no acerto, " + chance + " de chance de curar " + forca + " do dano do golpe.";
+                default: return "";
+            }
+        }
+
+        private static string Pct(double fracao) => Js.NumberToString(System.Math.Round(fracao * 100)) + "%";
+
+        private static string Maiuscula(string texto) => string.IsNullOrEmpty(texto) ? texto : char.ToUpperInvariant(texto[0]) + texto.Substring(1);
     }
 }

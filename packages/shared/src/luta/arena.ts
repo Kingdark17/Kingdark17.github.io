@@ -57,6 +57,7 @@ import type { Efeito } from '../jogo/efeitos.js';
 import { celulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from '../jogo/estado.js';
 import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta } from '../jogo/fim-da-luta.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
+import { aplicarRunas, RUNAS } from '../items/runas.js';
 import { eventoDaArma, eventoDoAtaque, lerEvento, TAMANHO_DO_DESENHO, type EventoDeArma, type JogadaDoEvento, type TipoDeEvento } from './eventos-de-arma.js';
 
 // ---------- números ----------
@@ -594,7 +595,34 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
   }
   contar(l, { tipo: 'numero', onde: 'monstro', indice: alvo.indice, texto: `-${golpe.damage}`, tom: golpe.isCrit ? 'critico' : 'dano' });
   contar(l, { tipo: 'som', som: golpe.isCrit ? 'crit' : 'hit' });
-  if (golpe.monsterDefeated) abater(l, alvo.indice, golpe.monster);
+  if (golpe.monsterDefeated) {
+    abater(l, alvo.indice, golpe.monster);
+    return;
+  }
+  aplicarRunasDoGolpe(l, alvo.indice, golpe.monster, golpe.damage ?? 0);
+}
+
+/**
+ * As runas da arma no golpe que acertou (`items/runas.ts`). Só a arena as
+ * aplica: no site a arma vale só pelos atributos. O choque pode derrubar.
+ */
+function aplicarRunasDoGolpe(l: Luta, indice: number, monstro: CombatMonsterView, dano: number): void {
+  const estado = masmorra(l);
+  const runas = aplicarRunas(estado.hero, monstro, dano, l.rng);
+  if (runas.disparos.length === 0) return;
+  l.estado = gravarMonstro({ ...estado, hero: runas.hero }, indice, runas.monster);
+  for (const disparo of runas.disparos) {
+    const icone = RUNAS[disparo.runa].icone;
+    if (disparo.runa === 'vampirica') {
+      if (disparo.valor > 0) contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `${icone}+${disparo.valor}`, tom: 'cura' });
+    } else if (disparo.runa === 'eletrica') {
+      contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: `${icone}-${disparo.valor}`, tom: 'dano' });
+    } else {
+      // Queimar e gelar só marcam o monstro, como o 💫 e o 🐌: sem dano agora, ele não treme.
+      contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: icone, tom: 'erro' });
+    }
+  }
+  if (runas.monster.hp <= 0) abater(l, indice, runas.monster);
 }
 
 // ---------- poderes e itens ----------

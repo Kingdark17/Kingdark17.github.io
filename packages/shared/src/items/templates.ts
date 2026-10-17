@@ -7,6 +7,7 @@ export const ITEM_CATEGORIES = [
   'consumivel',
   'material',
   'missao',
+  'runa',
 ] as const;
 
 export type ItemCategory = (typeof ITEM_CATEGORIES)[number];
@@ -18,6 +19,7 @@ export const CATEGORY_LABELS: Record<ItemCategory, string> = {
   consumivel: 'Consumível',
   material: 'Material',
   missao: 'Missão',
+  runa: 'Runa',
 };
 
 /** Categorias que ocupam slot e entram no cálculo de atributos derivados. */
@@ -73,6 +75,12 @@ export type Genero = 'm' | 'f';
  * é a peça de hoje (ver `items/materiais.ts`).
  */
 export type EscadaId = 'metal' | 'madeira' | 'couro' | 'tecido';
+
+/** O tipo de uma runa (ver `items/runas.ts`). */
+export type RunaId = 'eletrica' | 'fogo' | 'gelo' | 'vampirica';
+
+/** O tier de uma runa no nome dela: "Runa de Fogo II". */
+export const ROMANOS: readonly string[] = ['I', 'II', 'III'];
 
 /**
  * As quatro formas de uma palavra que concorda com o nome de um item:
@@ -131,6 +139,8 @@ export interface ItemTemplate {
    * depois do nome inteiro ("Espada de Aço").
    */
   nomeSemMaterial?: string;
+  /** Numa runa, o tipo dela. */
+  runa?: RunaId;
 }
 
 /**
@@ -503,6 +513,53 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     sprite: 'materials/couro_bruto.png',
     base: {},
     value: 10,
+  },
+
+  // ---------- runas (só do app; ver items/runas.ts) ----------
+  // A arte é provisória (a pedra de proteção): o Breno desenha as runas.
+  {
+    id: 'runa_eletrica',
+    name: 'Runa Elétrica',
+    genero: 'f',
+    category: 'runa',
+    desc: 'Pedra rara que eletrifica a arma: o golpe pode dar um choque e atordoar.',
+    sprite: 'materials/pedra_protecao.png',
+    base: {},
+    value: 40,
+    runa: 'eletrica',
+  },
+  {
+    id: 'runa_fogo',
+    name: 'Runa de Fogo',
+    genero: 'f',
+    category: 'runa',
+    desc: 'Pedra rara que incendeia a arma: o golpe pode queimar o monstro.',
+    sprite: 'materials/pedra_protecao.png',
+    base: {},
+    value: 40,
+    runa: 'fogo',
+  },
+  {
+    id: 'runa_gelo',
+    name: 'Runa de Gelo',
+    genero: 'f',
+    category: 'runa',
+    desc: 'Pedra rara que gela a arma: o golpe pode deixar o monstro lento.',
+    sprite: 'materials/pedra_protecao.png',
+    base: {},
+    value: 40,
+    runa: 'gelo',
+  },
+  {
+    id: 'runa_vampirica',
+    name: 'Runa Vampírica',
+    genero: 'f',
+    category: 'runa',
+    desc: 'Pedra rara que dá sede à arma: o golpe pode curar quem bate.',
+    sprite: 'materials/pedra_protecao.png',
+    base: {},
+    value: 40,
+    runa: 'vampirica',
   },
 ];
 

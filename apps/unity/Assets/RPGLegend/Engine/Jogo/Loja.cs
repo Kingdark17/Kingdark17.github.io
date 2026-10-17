@@ -149,9 +149,9 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: reforjar.</summary>
-        public static Loja Reforjar(Loja loja, Item item, string materialId, RngFn rng = null)
+        public static Loja Reforjar(Loja loja, Item item, string materialId, RngFn rng = null, Func<double> now = null)
         {
-            var forja = Shop.ResolveForge(loja.Estado.Hero, loja.Estado.Inventory, item, materialId, rng ?? Rng.Default);
+            var forja = Shop.ResolveForge(loja.Estado.Hero, loja.Estado.Inventory, item, materialId, rng ?? Rng.Default, now);
 
             if (forja.Outcome.Kind == ForgeOutcome.KindInsufficientGold)
                 return loja.ComLog("A reforja custa " + Js.NumberToString(forja.Outcome.Required ?? double.NaN) + " de ouro.");
@@ -168,6 +168,8 @@ namespace RPGLegend.Engine
             comForja.Hero = forja.Hero;
             comForja.Inventory = forja.Inventory;
             var nova = loja.ComLog("Reforja de " + Items.DisplayName(item) + ": Tier " + Js.Str(antes) + " → Tier " + Js.Str(depois) + ". " + veredito);
+            foreach (var runa in forja.Outcome.RunasDevolvidas ?? new List<Item>())
+                nova.Log.Add("A arma perdeu um espaço de runa: " + Items.DisplayName(runa) + " volta pra mochila.");
             nova.Estado = comForja;
             return nova;
         }

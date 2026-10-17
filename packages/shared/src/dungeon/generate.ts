@@ -14,6 +14,7 @@ import { randomEventTemplate, type EventTemplateId } from '../events/events.js';
 import { classById } from '../hero/catalog.js';
 import { generate as generateMonster, generateBoss, monsterView, type MonsterInstance } from '../monsters/generate.js';
 import { randomItem, type Item } from '../items/item.js';
+import { CHANCE_DA_RUNA_NO_BAU, sortearRuna } from '../items/runas.js';
 import type { NpcService } from '../npc/npc-services.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import { DEFAULT_RUN, dungeonById, effectiveFloor, isTotemFloor, type DungeonRun } from './dungeons.js';
@@ -275,6 +276,11 @@ function populateRoomContent(rooms: DungeonCell[], floor: number, rng: Rng, now?
       cell.isMimic = rng() < Math.min(0.25, 0.1 + floor * 0.008);
       cell.giveGold = rng() < 0.7;
       cell.item = cell.giveGold ? null : randomItem({ floor, rng, now, app });
+      // No app, o baú pode guardar uma runa no lugar do tesouro (`items/runas.ts`).
+      if (app && rng() < CHANCE_DA_RUNA_NO_BAU) {
+        cell.giveGold = false;
+        cell.item = sortearRuna(floor, false, rng, now);
+      }
       cell.collected = false;
     }
   }

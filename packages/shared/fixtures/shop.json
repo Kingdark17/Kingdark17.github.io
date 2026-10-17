@@ -17540,6 +17540,291 @@
     }
   },
   {
+    "name": "resolveForge: o tier cai e a runa que sobrou volta pra mochila",
+    "input": {
+      "fn": "resolveForge",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 200,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "minerio_1700000000000_92362",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          },
+          {
+            "uid": "espada_1700000000000_72021",
+            "templateId": "espada",
+            "rarity": "raro",
+            "stats": {
+              "ataque": 7
+            },
+            "value": 37,
+            "equipped": false,
+            "procChance": 0.185,
+            "tierAdjustment": 16,
+            "runas": [
+              {
+                "runa": "fogo",
+                "tier": 1
+              },
+              {
+                "runa": "gelo",
+                "tier": 2
+              }
+            ]
+          }
+        ],
+        "item": {
+          "uid": "espada_1700000000000_72021",
+          "templateId": "espada",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 7
+          },
+          "value": 37,
+          "equipped": false,
+          "procChance": 0.185,
+          "tierAdjustment": 16,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            },
+            {
+              "runa": "gelo",
+              "tier": 2
+            }
+          ]
+        },
+        "materialId": "minerio"
+      },
+      "rng": {
+        "sequence": [
+          0,
+          0.3,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 180,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "inventory": [
+          {
+            "uid": "espada_1700000000000_72021",
+            "templateId": "espada",
+            "rarity": "raro",
+            "stats": {
+              "ataque": 6
+            },
+            "value": 31,
+            "equipped": false,
+            "procChance": 0.16999999999999998,
+            "tierAdjustment": 3,
+            "runas": [
+              {
+                "runa": "fogo",
+                "tier": 1
+              }
+            ],
+            "reforgeCount": 1,
+            "reforgeFails": 1
+          },
+          {
+            "uid": "runa_gelo_1700000000000_29999",
+            "templateId": "runa_gelo",
+            "rarity": "comum",
+            "stats": {},
+            "value": 80,
+            "equipped": false,
+            "tierDaRuna": 2
+          }
+        ],
+        "item": {
+          "uid": "espada_1700000000000_72021",
+          "templateId": "espada",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 6
+          },
+          "value": 31,
+          "equipped": false,
+          "procChance": 0.16999999999999998,
+          "tierAdjustment": 3,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            }
+          ],
+          "reforgeCount": 1,
+          "reforgeFails": 1
+        },
+        "outcome": {
+          "kind": "forged",
+          "oldTier": "A",
+          "newTier": "B",
+          "improved": false,
+          "reforgeFails": 1,
+          "runasDevolvidas": [
+            {
+              "uid": "runa_gelo_1700000000000_29999",
+              "templateId": "runa_gelo",
+              "rarity": "comum",
+              "stats": {},
+              "value": 80,
+              "equipped": false,
+              "tierDaRuna": 2
+            }
+          ]
+        }
+      },
+      "rngCalls": 2
+    }
+  },
+  {
     "name": "resolveBuy: sem ouro",
     "input": {
       "fn": "resolveBuy",

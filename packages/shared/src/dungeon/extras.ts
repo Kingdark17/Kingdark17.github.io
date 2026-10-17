@@ -17,6 +17,7 @@
  */
 
 import { randomItem, instantiate, type Item } from '../items/item.js';
+import { CHANCE_DA_RUNA_NO_BAU, sortearRuna } from '../items/runas.js';
 import { RARITIES, pickRarity, type Rarity } from '../items/rarity.js';
 import { EQUIPPABLE_CATEGORIES, templateById } from '../items/templates.js';
 import { speciesById } from '../monsters/species.js';
@@ -116,6 +117,8 @@ function smallPotion(rng: Rng, now?: () => number): Item {
 
 /** O item da sala secreta: um equipamento um degrau acima da raridade que o andar sortearia. */
 function secretItem(floor: number, rng: Rng, now?: () => number, app = false): Item {
+  // No app, a sala secreta pode guardar uma runa (`items/runas.ts`).
+  if (app && rng() < CHANCE_DA_RUNA_NO_BAU) return sortearRuna(floor, false, rng, now);
   const normal = pickRarity(floor, rng);
   const acima = RARITIES[Math.min(RARITIES.indexOf(normal) + 1, RARITIES.length - 1)] as Rarity;
   return randomItem({ category: pick(EQUIPPABLE_CATEGORIES, rng), rarity: acima.id, floor, rng, now, app });

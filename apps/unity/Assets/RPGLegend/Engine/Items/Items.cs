@@ -120,6 +120,13 @@ namespace RPGLegend.Engine
         public static string DisplayName(Item item)
         {
             var template = TemplateOf(item);
+            // A runa leva o tier no nome: "Runa de Fogo II".
+            if (Js.Truthy(template.Runa))
+            {
+                var romanos = GameData.ItemTable.Romanos;
+                double tier = Js.Min(romanos.Count, Js.Max(1, Math.Truncate(item.TierDaRuna ?? 1)));
+                return template.Name + " " + romanos[(int)tier - 1];
+            }
             string nome = Materiais.NomeComMaterial(template, item.Degrau);
             var rarity = Rarities.ById(item.Rarity);
             if (rarity == null || rarity.Id == "comum") return nome;
@@ -191,6 +198,9 @@ namespace RPGLegend.Engine
             return item;
         }
 
+        /// <summary>TS: SORTEAVEIS — o que o sorteio sem categoria escolhe: o catálogo sem as runas.</summary>
+        private static List<ItemTemplate> Sorteaveis => ItemTemplates.All.FindAll(t => t.Category != "runa");
+
         /// <summary>TS: RandomItemOptions.</summary>
         public sealed class RandomItemOptions
         {
@@ -217,7 +227,8 @@ namespace RPGLegend.Engine
             double floor = o.Floor ?? 1;
             var rng = o.Rng ?? Rng.Default;
 
-            var pool = Js.Truthy(o.Category) ? ItemTemplates.ByCategory(o.Category) : ItemTemplates.All;
+            // Sem categoria, tudo menos as runas: elas só caem de baú e de chefe no app.
+            var pool = Js.Truthy(o.Category) ? ItemTemplates.ByCategory(o.Category) : Sorteaveis;
             var template = Rng.Pick(pool, rng);
             // Uma raridade forçada e desconhecida cai para comum, igual ao original.
             var rarity = (Js.Truthy(o.Rarity) ? Rarities.ById(o.Rarity) : Rarities.Pick(floor, rng)) ?? Rarities.All[0];

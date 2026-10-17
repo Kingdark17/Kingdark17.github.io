@@ -53,6 +53,9 @@ namespace RPGLegend.Game.Jogo
             public Label Custo;
         }
 
+        /// <summary>A distância entre dois números que sobem juntos no mesmo alvo (a fonte deles tem 30 px).</summary>
+        private const float AlturaDoNumero = 28f;
+
         private sealed class Flutuando
         {
             public Label Rotulo;
@@ -434,6 +437,8 @@ namespace RPGLegend.Game.Jogo
         private void MostrarAcontecimentos(List<Acontecimento> acontecimentos)
         {
             var luta = _partida?.Luta;
+            // Mais de um número no mesmo alvo de uma vez (o golpe e o choque da runa): cada um uma linha abaixo do outro.
+            var linhasPorAlvo = new Dictionary<string, int>();
             foreach (var a in acontecimentos)
             {
                 switch (a.Tipo)
@@ -442,7 +447,11 @@ namespace RPGLegend.Game.Jogo
                         Sons.Tocar(a.Som);
                         break;
                     case "numero":
-                        if (luta != null) Numero(luta.Arena, a);
+                        if (luta == null) break;
+                        string alvo = a.Onde + ":" + Js.NumberToString(a.Indice ?? 0);
+                        linhasPorAlvo.TryGetValue(alvo, out int linha);
+                        linhasPorAlvo[alvo] = linha + 1;
+                        Numero(luta.Arena, a, linha);
                         break;
                     case "aviso":
                         AvisoDaLuta(a.Texto, "aviso-da-luta");
@@ -458,7 +467,7 @@ namespace RPGLegend.Game.Jogo
         /// O número que sobe em cima de quem levou (ou desviou, ou se curou): o monstro no palco, o coração na caixa ou o
         /// companheiro do lado dela. Quem apanhou treme (o monstro) ou pisca (o coração).
         /// </summary>
-        private void Numero(Arena arena, Acontecimento a)
+        private void Numero(Arena arena, Acontecimento a, int linha)
         {
             int indice = (int)(a.Indice ?? 0);
             Vector2 onde = a.Onde == "monstro" ? _palcoDaLuta.PosicaoDoMonstro(indice)
@@ -468,7 +477,7 @@ namespace RPGLegend.Game.Jogo
             rotulo.AddToClassList("numero-da-luta");
             rotulo.AddToClassList("numero-" + (a.Tom ?? "dano"));
             rotulo.style.left = onde.x;
-            rotulo.style.top = onde.y - 24f;
+            rotulo.style.top = onde.y - 24f + linha * AlturaDoNumero;
             _numeros.Add(rotulo);
             _flutuando.Add(new Flutuando { Rotulo = rotulo, Desde = Time.unscaledTime, Vida = VidaDoNumero });
 

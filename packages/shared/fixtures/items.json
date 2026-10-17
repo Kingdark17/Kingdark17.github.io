@@ -115,7 +115,8 @@
         "acessorio",
         "consumivel",
         "material",
-        "missao"
+        "missao",
+        "runa"
       ]
     }
   },
@@ -602,6 +603,50 @@
           "sprite": "materials/couro_bruto.png",
           "base": {},
           "value": 10
+        },
+        {
+          "id": "runa_eletrica",
+          "name": "Runa Elétrica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que eletrifica a arma: o golpe pode dar um choque e atordoar.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "eletrica"
+        },
+        {
+          "id": "runa_fogo",
+          "name": "Runa de Fogo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que incendeia a arma: o golpe pode queimar o monstro.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "fogo"
+        },
+        {
+          "id": "runa_gelo",
+          "name": "Runa de Gelo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "gelo"
+        },
+        {
+          "id": "runa_vampirica",
+          "name": "Runa Vampírica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que dá sede à arma: o golpe pode curar quem bate.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "vampirica"
         }
       ]
     }
@@ -1897,6 +1942,63 @@
     }
   },
   {
+    "name": "templatesByCategory: runa",
+    "input": {
+      "fn": "templatesByCategory",
+      "args": {
+        "category": "runa"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "runa_eletrica",
+          "name": "Runa Elétrica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que eletrifica a arma: o golpe pode dar um choque e atordoar.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "eletrica"
+        },
+        {
+          "id": "runa_fogo",
+          "name": "Runa de Fogo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que incendeia a arma: o golpe pode queimar o monstro.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "fogo"
+        },
+        {
+          "id": "runa_gelo",
+          "name": "Runa de Gelo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "gelo"
+        },
+        {
+          "id": "runa_vampirica",
+          "name": "Runa Vampírica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que dá sede à arma: o golpe pode curar quem bate.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "vampirica"
+        }
+      ]
+    }
+  },
+  {
     "name": "isEquippable: arma",
     "input": {
       "fn": "isEquippable",
@@ -1962,6 +2064,18 @@
       "fn": "isEquippable",
       "args": {
         "category": "missao"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "isEquippable: runa",
+    "input": {
+      "fn": "isEquippable",
+      "args": {
+        "category": "runa"
       }
     },
     "expected": {
@@ -7733,6 +7847,642 @@
     }
   },
   {
+    "name": "instantiate: runa_eletrica em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "runa_eletrica",
+          "name": "Runa Elétrica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que eletrifica a arma: o golpe pode dar um choque e atordoar.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "eletrica"
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "runa_eletrica_1700000000000_62706",
+          "templateId": "runa_eletrica",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false
+        },
+        {
+          "uid": "runa_eletrica_1700000000000_273",
+          "templateId": "runa_eletrica",
+          "rarity": "incomum",
+          "stats": {},
+          "value": 52,
+          "equipped": false
+        },
+        {
+          "uid": "runa_eletrica_1700000000000_52744",
+          "templateId": "runa_eletrica",
+          "rarity": "raro",
+          "stats": {},
+          "value": 68,
+          "equipped": false
+        },
+        {
+          "uid": "runa_eletrica_1700000000000_98104",
+          "templateId": "runa_eletrica",
+          "rarity": "epico",
+          "stats": {},
+          "value": 88,
+          "equipped": false
+        },
+        {
+          "uid": "runa_eletrica_1700000000000_96836",
+          "templateId": "runa_eletrica",
+          "rarity": "lendario",
+          "stats": {},
+          "value": 120,
+          "equipped": false
+        },
+        {
+          "uid": "runa_eletrica_1700000000000_28110",
+          "templateId": "runa_eletrica",
+          "rarity": "mitico",
+          "stats": {},
+          "value": 160,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: runa_fogo em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "runa_fogo",
+          "name": "Runa de Fogo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que incendeia a arma: o golpe pode queimar o monstro.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "fogo"
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false
+        },
+        {
+          "uid": "runa_fogo_1700000000000_273",
+          "templateId": "runa_fogo",
+          "rarity": "incomum",
+          "stats": {},
+          "value": 52,
+          "equipped": false
+        },
+        {
+          "uid": "runa_fogo_1700000000000_52744",
+          "templateId": "runa_fogo",
+          "rarity": "raro",
+          "stats": {},
+          "value": 68,
+          "equipped": false
+        },
+        {
+          "uid": "runa_fogo_1700000000000_98104",
+          "templateId": "runa_fogo",
+          "rarity": "epico",
+          "stats": {},
+          "value": 88,
+          "equipped": false
+        },
+        {
+          "uid": "runa_fogo_1700000000000_96836",
+          "templateId": "runa_fogo",
+          "rarity": "lendario",
+          "stats": {},
+          "value": 120,
+          "equipped": false
+        },
+        {
+          "uid": "runa_fogo_1700000000000_28110",
+          "templateId": "runa_fogo",
+          "rarity": "mitico",
+          "stats": {},
+          "value": 160,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: runa_gelo em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "runa_gelo",
+          "name": "Runa de Gelo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "gelo"
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "runa_gelo_1700000000000_62706",
+          "templateId": "runa_gelo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false
+        },
+        {
+          "uid": "runa_gelo_1700000000000_273",
+          "templateId": "runa_gelo",
+          "rarity": "incomum",
+          "stats": {},
+          "value": 52,
+          "equipped": false
+        },
+        {
+          "uid": "runa_gelo_1700000000000_52744",
+          "templateId": "runa_gelo",
+          "rarity": "raro",
+          "stats": {},
+          "value": 68,
+          "equipped": false
+        },
+        {
+          "uid": "runa_gelo_1700000000000_98104",
+          "templateId": "runa_gelo",
+          "rarity": "epico",
+          "stats": {},
+          "value": 88,
+          "equipped": false
+        },
+        {
+          "uid": "runa_gelo_1700000000000_96836",
+          "templateId": "runa_gelo",
+          "rarity": "lendario",
+          "stats": {},
+          "value": 120,
+          "equipped": false
+        },
+        {
+          "uid": "runa_gelo_1700000000000_28110",
+          "templateId": "runa_gelo",
+          "rarity": "mitico",
+          "stats": {},
+          "value": 160,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: runa_vampirica em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "runa_vampirica",
+          "name": "Runa Vampírica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que dá sede à arma: o golpe pode curar quem bate.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "vampirica"
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "runa_vampirica_1700000000000_62706",
+          "templateId": "runa_vampirica",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false
+        },
+        {
+          "uid": "runa_vampirica_1700000000000_273",
+          "templateId": "runa_vampirica",
+          "rarity": "incomum",
+          "stats": {},
+          "value": 52,
+          "equipped": false
+        },
+        {
+          "uid": "runa_vampirica_1700000000000_52744",
+          "templateId": "runa_vampirica",
+          "rarity": "raro",
+          "stats": {},
+          "value": 68,
+          "equipped": false
+        },
+        {
+          "uid": "runa_vampirica_1700000000000_98104",
+          "templateId": "runa_vampirica",
+          "rarity": "epico",
+          "stats": {},
+          "value": 88,
+          "equipped": false
+        },
+        {
+          "uid": "runa_vampirica_1700000000000_96836",
+          "templateId": "runa_vampirica",
+          "rarity": "lendario",
+          "stats": {},
+          "value": 120,
+          "equipped": false
+        },
+        {
+          "uid": "runa_vampirica_1700000000000_28110",
+          "templateId": "runa_vampirica",
+          "rarity": "mitico",
+          "stats": {},
+          "value": 160,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
     "name": "instantiate: arredondamento de .5 e −.5, e o teto de 0,5 na chance do proc",
     "input": {
       "fn": "instantiate",
@@ -8482,6 +9232,62 @@
         "rarity": "comum",
         "stats": {},
         "value": 55,
+        "equipped": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "randomItem: runa, andar 1",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "runa",
+          "floor": 1,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_eletrica_1700000000000_97689",
+        "templateId": "runa_eletrica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "randomItem: runa, andar 10",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "runa",
+          "floor": 10,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 70
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_vampirica_1700000000000_31872",
+        "templateId": "runa_vampirica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
         "equipped": false
       },
       "rngCalls": 3
@@ -10844,6 +11650,154 @@
         "Couro de Fera",
         "Couro de Fera",
         "Couro de Fera"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: runa_eletrica",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "runa_eletrica",
+          "name": "Runa Elétrica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que eletrifica a arma: o golpe pode dar um choque e atordoar.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "eletrica"
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Runa Elétrica",
+        "Runa Elétrica",
+        "Runa Elétrica",
+        "Runa Elétrica",
+        "Runa Elétrica",
+        "Runa Elétrica"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: runa_fogo",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "runa_fogo",
+          "name": "Runa de Fogo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que incendeia a arma: o golpe pode queimar o monstro.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "fogo"
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Runa de Fogo",
+        "Runa de Fogo",
+        "Runa de Fogo",
+        "Runa de Fogo",
+        "Runa de Fogo",
+        "Runa de Fogo"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: runa_gelo",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "runa_gelo",
+          "name": "Runa de Gelo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "gelo"
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Runa de Gelo",
+        "Runa de Gelo",
+        "Runa de Gelo",
+        "Runa de Gelo",
+        "Runa de Gelo",
+        "Runa de Gelo"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: runa_vampirica",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "runa_vampirica",
+          "name": "Runa Vampírica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que dá sede à arma: o golpe pode curar quem bate.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "vampirica"
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Runa Vampírica",
+        "Runa Vampírica",
+        "Runa Vampírica",
+        "Runa Vampírica",
+        "Runa Vampírica",
+        "Runa Vampírica"
       ]
     }
   },
@@ -17363,6 +18317,5433 @@
         "foundFloor": 100
       },
       "rngCalls": 3
+    }
+  },
+  {
+    "name": "RUNAS (constante)",
+    "input": {
+      "const": "RUNAS"
+    },
+    "expected": {
+      "value": {
+        "eletrica": {
+          "icone": "⚡",
+          "chance": [
+            0.1,
+            0.15,
+            0.2
+          ],
+          "forca": [
+            0.2,
+            0.35,
+            0.5
+          ]
+        },
+        "fogo": {
+          "icone": "🔥",
+          "chance": [
+            0.1,
+            0.15,
+            0.2
+          ],
+          "forca": [
+            0.2,
+            0.3,
+            0.4
+          ]
+        },
+        "gelo": {
+          "icone": "❄️",
+          "chance": [
+            0.1,
+            0.15,
+            0.2
+          ],
+          "forca": [
+            0.25,
+            0.35,
+            0.5
+          ]
+        },
+        "vampirica": {
+          "icone": "🩸",
+          "chance": [
+            0.1,
+            0.15,
+            0.2
+          ],
+          "forca": [
+            0.2,
+            0.35,
+            0.5
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "criarRuna: eletrica, tier 1",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "eletrica",
+        "tier": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_eletrica_1700000000000_72021",
+        "templateId": "runa_eletrica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: eletrica, tier 2",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "eletrica",
+        "tier": 2,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_eletrica_1700000000000_72021",
+        "templateId": "runa_eletrica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: eletrica, tier 3",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "eletrica",
+        "tier": 3,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_eletrica_1700000000000_72021",
+        "templateId": "runa_eletrica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: eletrica, tier 0",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "eletrica",
+        "tier": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_eletrica_1700000000000_72021",
+        "templateId": "runa_eletrica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: eletrica, tier 5",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "eletrica",
+        "tier": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_eletrica_1700000000000_72021",
+        "templateId": "runa_eletrica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: eletrica, tier 2.5",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "eletrica",
+        "tier": 2.5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_eletrica_1700000000000_72021",
+        "templateId": "runa_eletrica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: fogo, tier 1",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "fogo",
+        "tier": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_fogo_1700000000000_72021",
+        "templateId": "runa_fogo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: fogo, tier 2",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "fogo",
+        "tier": 2,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_fogo_1700000000000_72021",
+        "templateId": "runa_fogo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: fogo, tier 3",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "fogo",
+        "tier": 3,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_fogo_1700000000000_72021",
+        "templateId": "runa_fogo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: fogo, tier 0",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "fogo",
+        "tier": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_fogo_1700000000000_72021",
+        "templateId": "runa_fogo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: fogo, tier 5",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "fogo",
+        "tier": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_fogo_1700000000000_72021",
+        "templateId": "runa_fogo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: fogo, tier 2.5",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "fogo",
+        "tier": 2.5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_fogo_1700000000000_72021",
+        "templateId": "runa_fogo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: gelo, tier 1",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "gelo",
+        "tier": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_72021",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: gelo, tier 2",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "gelo",
+        "tier": 2,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_72021",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: gelo, tier 3",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "gelo",
+        "tier": 3,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_72021",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: gelo, tier 0",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "gelo",
+        "tier": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_72021",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: gelo, tier 5",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "gelo",
+        "tier": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_72021",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: gelo, tier 2.5",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "gelo",
+        "tier": 2.5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_72021",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: vampirica, tier 1",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "vampirica",
+        "tier": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_vampirica_1700000000000_72021",
+        "templateId": "runa_vampirica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: vampirica, tier 2",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "vampirica",
+        "tier": 2,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_vampirica_1700000000000_72021",
+        "templateId": "runa_vampirica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: vampirica, tier 3",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "vampirica",
+        "tier": 3,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_vampirica_1700000000000_72021",
+        "templateId": "runa_vampirica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: vampirica, tier 0",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "vampirica",
+        "tier": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_vampirica_1700000000000_72021",
+        "templateId": "runa_vampirica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: vampirica, tier 5",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "vampirica",
+        "tier": 5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_vampirica_1700000000000_72021",
+        "templateId": "runa_vampirica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "criarRuna: vampirica, tier 2.5",
+    "input": {
+      "fn": "criarRuna",
+      "args": {
+        "runa": "vampirica",
+        "tier": 2.5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_vampirica_1700000000000_72021",
+        "templateId": "runa_vampirica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "tierMaximoNoAndar: 1",
+    "input": {
+      "fn": "tierMaximoNoAndar",
+      "args": {
+        "andar": 1
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "tierMaximoNoAndar: 29",
+    "input": {
+      "fn": "tierMaximoNoAndar",
+      "args": {
+        "andar": 29
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "tierMaximoNoAndar: 30",
+    "input": {
+      "fn": "tierMaximoNoAndar",
+      "args": {
+        "andar": 30
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "tierMaximoNoAndar: 59",
+    "input": {
+      "fn": "tierMaximoNoAndar",
+      "args": {
+        "andar": 59
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "tierMaximoNoAndar: 60",
+    "input": {
+      "fn": "tierMaximoNoAndar",
+      "args": {
+        "andar": 60
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "tierMaximoNoAndar: 100",
+    "input": {
+      "fn": "tierMaximoNoAndar",
+      "args": {
+        "andar": 100
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "tierMaximoNoAndar: 0",
+    "input": {
+      "fn": "tierMaximoNoAndar",
+      "args": {
+        "andar": 0
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "sortearRuna: andar 10, sorteios 0 0.99 0",
+    "input": {
+      "fn": "sortearRuna",
+      "args": {
+        "andar": 10,
+        "chefe": false,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0,
+          0.99,
+          0
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_eletrica_1700000000000_0",
+        "templateId": "runa_eletrica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "sortearRuna: andar 10, chefe, sorteios 0.3 0 0",
+    "input": {
+      "fn": "sortearRuna",
+      "args": {
+        "andar": 10,
+        "chefe": true,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.3,
+          0,
+          0
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_fogo_1700000000000_0",
+        "templateId": "runa_fogo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "sortearRuna: andar 45, sorteios 0.6 0.6 0",
+    "input": {
+      "fn": "sortearRuna",
+      "args": {
+        "andar": 45,
+        "chefe": false,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.6,
+          0.6,
+          0
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_0",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "sortearRuna: andar 90, sorteios 0.99 0.99 0",
+    "input": {
+      "fn": "sortearRuna",
+      "args": {
+        "andar": 90,
+        "chefe": false,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.99,
+          0
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_vampirica_1700000000000_0",
+        "templateId": "runa_vampirica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "sortearRuna: andar 90, chefe, sorteios 0.5 0.99 0",
+    "input": {
+      "fn": "sortearRuna",
+      "args": {
+        "andar": 90,
+        "chefe": true,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.99,
+          0
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_0",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "sortearRuna: andar 70, chefe, sorteios 0.26 0.1 0.5",
+    "input": {
+      "fn": "sortearRuna",
+      "args": {
+        "andar": 70,
+        "chefe": true,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.26,
+          0.1,
+          0.5
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_fogo_1700000000000_49999",
+        "templateId": "runa_fogo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "displayName: runa de fogo II",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 80,
+          "equipped": false,
+          "tierDaRuna": 2
+        }
+      }
+    },
+    "expected": {
+      "result": "Runa de Fogo II"
+    }
+  },
+  {
+    "name": "itemView: runa de fogo II",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 80,
+          "equipped": false,
+          "tierDaRuna": 2
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_fogo_1700000000000_62706",
+        "templateId": "runa_fogo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 80,
+        "equipped": false,
+        "tierDaRuna": 2,
+        "template": {
+          "id": "runa_fogo",
+          "name": "Runa de Fogo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que incendeia a arma: o golpe pode queimar o monstro.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "fogo"
+        },
+        "name": "Runa de Fogo II",
+        "desc": "Pedra rara que incendeia a arma: o golpe pode queimar o monstro.",
+        "sprite": "materials/pedra_protecao.png",
+        "category": "runa",
+        "rarityLabel": "Comum",
+        "rarityColorVar": "--r-comum",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "displayName: runa elétrica III",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "runa_eletrica_1700000000000_62706",
+          "templateId": "runa_eletrica",
+          "rarity": "comum",
+          "stats": {},
+          "value": 160,
+          "equipped": false,
+          "tierDaRuna": 3
+        }
+      }
+    },
+    "expected": {
+      "result": "Runa Elétrica III"
+    }
+  },
+  {
+    "name": "itemView: runa elétrica III",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "runa_eletrica_1700000000000_62706",
+          "templateId": "runa_eletrica",
+          "rarity": "comum",
+          "stats": {},
+          "value": 160,
+          "equipped": false,
+          "tierDaRuna": 3
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_eletrica_1700000000000_62706",
+        "templateId": "runa_eletrica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "tierDaRuna": 3,
+        "template": {
+          "id": "runa_eletrica",
+          "name": "Runa Elétrica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que eletrifica a arma: o golpe pode dar um choque e atordoar.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "eletrica"
+        },
+        "name": "Runa Elétrica III",
+        "desc": "Pedra rara que eletrifica a arma: o golpe pode dar um choque e atordoar.",
+        "sprite": "materials/pedra_protecao.png",
+        "category": "runa",
+        "rarityLabel": "Comum",
+        "rarityColorVar": "--r-comum",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "displayName: runa de gelo I",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "runa_gelo_1700000000000_62706",
+          "templateId": "runa_gelo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false,
+          "tierDaRuna": 1
+        }
+      }
+    },
+    "expected": {
+      "result": "Runa de Gelo I"
+    }
+  },
+  {
+    "name": "itemView: runa de gelo I",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "runa_gelo_1700000000000_62706",
+          "templateId": "runa_gelo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false,
+          "tierDaRuna": 1
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_62706",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 1,
+        "template": {
+          "id": "runa_gelo",
+          "name": "Runa de Gelo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "gelo"
+        },
+        "name": "Runa de Gelo I",
+        "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
+        "sprite": "materials/pedra_protecao.png",
+        "category": "runa",
+        "rarityLabel": "Comum",
+        "rarityColorVar": "--r-comum",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "displayName: runa vampírica sem tier",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "runa_vampirica_1700000000000_62706",
+          "templateId": "runa_vampirica",
+          "rarity": "comum",
+          "stats": {},
+          "value": 160,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": "Runa Vampírica I"
+    }
+  },
+  {
+    "name": "itemView: runa vampírica sem tier",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "runa_vampirica_1700000000000_62706",
+          "templateId": "runa_vampirica",
+          "rarity": "comum",
+          "stats": {},
+          "value": 160,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_vampirica_1700000000000_62706",
+        "templateId": "runa_vampirica",
+        "rarity": "comum",
+        "stats": {},
+        "value": 160,
+        "equipped": false,
+        "template": {
+          "id": "runa_vampirica",
+          "name": "Runa Vampírica",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que dá sede à arma: o golpe pode curar quem bate.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "vampirica"
+        },
+        "name": "Runa Vampírica I",
+        "desc": "Pedra rara que dá sede à arma: o golpe pode curar quem bate.",
+        "sprite": "materials/pedra_protecao.png",
+        "category": "runa",
+        "rarityLabel": "Comum",
+        "rarityColorVar": "--r-comum",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "displayName: runa com tier fora (7)",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "runa_gelo_1700000000000_62706",
+          "templateId": "runa_gelo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false,
+          "tierDaRuna": 7
+        }
+      }
+    },
+    "expected": {
+      "result": "Runa de Gelo III"
+    }
+  },
+  {
+    "name": "itemView: runa com tier fora (7)",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "runa_gelo_1700000000000_62706",
+          "templateId": "runa_gelo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false,
+          "tierDaRuna": 7
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "runa_gelo_1700000000000_62706",
+        "templateId": "runa_gelo",
+        "rarity": "comum",
+        "stats": {},
+        "value": 40,
+        "equipped": false,
+        "tierDaRuna": 7,
+        "template": {
+          "id": "runa_gelo",
+          "name": "Runa de Gelo",
+          "genero": "f",
+          "category": "runa",
+          "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
+          "sprite": "materials/pedra_protecao.png",
+          "base": {},
+          "value": 40,
+          "runa": "gelo"
+        },
+        "name": "Runa de Gelo III",
+        "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
+        "sprite": "materials/pedra_protecao.png",
+        "category": "runa",
+        "rarityLabel": "Comum",
+        "rarityColorVar": "--r-comum",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "espacosDeRuna: espada comum",
+    "input": {
+      "fn": "espacosDeRuna",
+      "args": {
+        "item": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "espacosDeRuna: espada mítica",
+    "input": {
+      "fn": "espacosDeRuna",
+      "args": {
+        "item": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 16
+          },
+          "value": 88,
+          "equipped": false,
+          "procChance": 0.30000000000000004
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "espacosDeRuna: espada lendária",
+    "input": {
+      "fn": "espacosDeRuna",
+      "args": {
+        "item": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 12
+          },
+          "value": 66,
+          "equipped": false,
+          "procChance": 0.25
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "espacosDeRuna: arco de madeira élfica",
+    "input": {
+      "fn": "espacosDeRuna",
+      "args": {
+        "item": {
+          "uid": "arco_1700000000000_73424",
+          "templateId": "arco",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "esquiva": 3,
+            "critico": 9
+          },
+          "value": 36,
+          "equipped": false,
+          "degrau": 3
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "espacosDeRuna: marreta mítica de aço mágico",
+    "input": {
+      "fn": "espacosDeRuna",
+      "args": {
+        "item": {
+          "uid": "marreta_1700000000000_73424",
+          "templateId": "marreta",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 42,
+            "velocidade": -8
+          },
+          "value": 162,
+          "equipped": false,
+          "procChance": 0.27,
+          "degrau": 3
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "espacosDeRuna: espada reforjada até o tier A",
+    "input": {
+      "fn": "espacosDeRuna",
+      "args": {
+        "item": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 7
+          },
+          "value": 37,
+          "equipped": false,
+          "procChance": 0.185,
+          "tierAdjustment": 20
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "espacosDeRuna: peitoral mítico de aço mágico",
+    "input": {
+      "fn": "espacosDeRuna",
+      "args": {
+        "item": {
+          "uid": "placas_1700000000000_73424",
+          "templateId": "placas",
+          "rarity": "mitico",
+          "stats": {
+            "defesa": 24,
+            "esquiva": -4
+          },
+          "value": 102,
+          "equipped": false,
+          "degrau": 3
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "espacosDeRuna: runa",
+    "input": {
+      "fn": "espacosDeRuna",
+      "args": {
+        "item": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false,
+          "tierDaRuna": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "engastar: espaço livre",
+    "input": {
+      "fn": "engastar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "runa": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 80,
+          "equipped": false,
+          "tierDaRuna": 2
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "kind": "engastou",
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "engastar: cheia, sem dizer qual",
+    "input": {
+      "fn": "engastar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "gelo",
+              "tier": 1
+            }
+          ]
+        },
+        "runa": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 80,
+          "equipped": false,
+          "tierDaRuna": 2
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "kind": "cheia"
+      }
+    }
+  },
+  {
+    "name": "engastar: cheia, troca a do espaço 0",
+    "input": {
+      "fn": "engastar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "gelo",
+              "tier": 1
+            }
+          ]
+        },
+        "runa": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 80,
+          "equipped": false,
+          "tierDaRuna": 2
+        },
+        "indice": 0
+      }
+    },
+    "expected": {
+      "result": {
+        "kind": "substituiu",
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 2
+            }
+          ]
+        },
+        "destruida": {
+          "runa": "gelo",
+          "tier": 1
+        }
+      }
+    }
+  },
+  {
+    "name": "engastar: cheia, espaço que não existe",
+    "input": {
+      "fn": "engastar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "gelo",
+              "tier": 1
+            }
+          ]
+        },
+        "runa": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 80,
+          "equipped": false,
+          "tierDaRuna": 2
+        },
+        "indice": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "kind": "cheia"
+      }
+    }
+  },
+  {
+    "name": "engastar: cheia, espaço quebrado",
+    "input": {
+      "fn": "engastar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "gelo",
+              "tier": 1
+            }
+          ]
+        },
+        "runa": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 80,
+          "equipped": false,
+          "tierDaRuna": 2
+        },
+        "indice": 0.5
+      }
+    },
+    "expected": {
+      "result": {
+        "kind": "cheia"
+      }
+    }
+  },
+  {
+    "name": "engastar: a mesma runa de novo, na arma de quatro espaços",
+    "input": {
+      "fn": "engastar",
+      "args": {
+        "arma": {
+          "uid": "marreta_1700000000000_73424",
+          "templateId": "marreta",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 42,
+            "velocidade": -8
+          },
+          "value": 162,
+          "equipped": false,
+          "procChance": 0.27,
+          "degrau": 3,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 3
+            }
+          ]
+        },
+        "runa": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 160,
+          "equipped": false,
+          "tierDaRuna": 3
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "kind": "engastou",
+        "arma": {
+          "uid": "marreta_1700000000000_73424",
+          "templateId": "marreta",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 42,
+            "velocidade": -8
+          },
+          "value": 162,
+          "equipped": false,
+          "procChance": 0.27,
+          "degrau": 3,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 3
+            },
+            {
+              "runa": "fogo",
+              "tier": 3
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "engastar: não é arma",
+    "input": {
+      "fn": "engastar",
+      "args": {
+        "arma": {
+          "uid": "placas_1700000000000_73424",
+          "templateId": "placas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 4,
+            "esquiva": -1
+          },
+          "value": 17,
+          "equipped": false
+        },
+        "runa": {
+          "uid": "runa_fogo_1700000000000_62706",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false,
+          "tierDaRuna": 1
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "kind": "nao_e_arma"
+      }
+    }
+  },
+  {
+    "name": "engastar: não é runa",
+    "input": {
+      "fn": "engastar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "runa": {
+          "uid": "adaga_1700000000000_73424",
+          "templateId": "adaga",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "critico": 8
+          },
+          "value": 20,
+          "equipped": false,
+          "procChance": 0.15
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "kind": "nao_e_runa"
+      }
+    }
+  },
+  {
+    "name": "engastar: arma com mais runas que espaços",
+    "input": {
+      "fn": "engastar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "gelo",
+              "tier": 1
+            },
+            {
+              "runa": "fogo",
+              "tier": 1
+            }
+          ]
+        },
+        "runa": {
+          "uid": "runa_eletrica_1700000000000_62706",
+          "templateId": "runa_eletrica",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false,
+          "tierDaRuna": 1
+        },
+        "indice": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "kind": "substituiu",
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "gelo",
+              "tier": 1
+            },
+            {
+              "runa": "eletrica",
+              "tier": 1
+            }
+          ]
+        },
+        "destruida": {
+          "runa": "fogo",
+          "tier": 1
+        }
+      }
+    }
+  },
+  {
+    "name": "tirar: tier I quebra com 0,39",
+    "input": {
+      "fn": "tirar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            }
+          ]
+        },
+        "indice": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.39,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "kind": "quebrou",
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "quebrada": {
+          "runa": "fogo",
+          "tier": 1
+        }
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "tirar: tier I volta com 0,4",
+    "input": {
+      "fn": "tirar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            }
+          ]
+        },
+        "indice": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.4,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "kind": "voltou",
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "runa": {
+          "uid": "runa_fogo_1700000000000_29999",
+          "templateId": "runa_fogo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 40,
+          "equipped": false,
+          "tierDaRuna": 1
+        }
+      },
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "tirar: tier II quebra com 0,24",
+    "input": {
+      "fn": "tirar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "gelo",
+              "tier": 2
+            }
+          ]
+        },
+        "indice": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.24,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "kind": "quebrou",
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "quebrada": {
+          "runa": "gelo",
+          "tier": 2
+        }
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "tirar: tier II volta com 0,25",
+    "input": {
+      "fn": "tirar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "gelo",
+              "tier": 2
+            }
+          ]
+        },
+        "indice": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.25,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "kind": "voltou",
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "runa": {
+          "uid": "runa_gelo_1700000000000_29999",
+          "templateId": "runa_gelo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 80,
+          "equipped": false,
+          "tierDaRuna": 2
+        }
+      },
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "tirar: tier III quebra com 0,09",
+    "input": {
+      "fn": "tirar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "eletrica",
+              "tier": 3
+            }
+          ]
+        },
+        "indice": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.09,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "kind": "quebrou",
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "quebrada": {
+          "runa": "eletrica",
+          "tier": 3
+        }
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "tirar: tier III volta com 0,1",
+    "input": {
+      "fn": "tirar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "eletrica",
+              "tier": 3
+            }
+          ]
+        },
+        "indice": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.1,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "kind": "voltou",
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "runa": {
+          "uid": "runa_eletrica_1700000000000_29999",
+          "templateId": "runa_eletrica",
+          "rarity": "comum",
+          "stats": {},
+          "value": 160,
+          "equipped": false,
+          "tierDaRuna": 3
+        }
+      },
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "tirar: tira a do meio",
+    "input": {
+      "fn": "tirar",
+      "args": {
+        "arma": {
+          "uid": "marreta_1700000000000_73424",
+          "templateId": "marreta",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 42,
+            "velocidade": -8
+          },
+          "value": 162,
+          "equipped": false,
+          "procChance": 0.27,
+          "degrau": 3,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            },
+            {
+              "runa": "gelo",
+              "tier": 2
+            },
+            {
+              "runa": "eletrica",
+              "tier": 3
+            }
+          ]
+        },
+        "indice": 1,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.9,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "kind": "voltou",
+        "arma": {
+          "uid": "marreta_1700000000000_73424",
+          "templateId": "marreta",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 42,
+            "velocidade": -8
+          },
+          "value": 162,
+          "equipped": false,
+          "procChance": 0.27,
+          "degrau": 3,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            },
+            {
+              "runa": "eletrica",
+              "tier": 3
+            }
+          ]
+        },
+        "runa": {
+          "uid": "runa_gelo_1700000000000_29999",
+          "templateId": "runa_gelo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 80,
+          "equipped": false,
+          "tierDaRuna": 2
+        }
+      },
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "tirar: espaço vazio",
+    "input": {
+      "fn": "tirar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "indice": 0,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "kind": "sem_runa"
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "tirar: índice quebrado",
+    "input": {
+      "fn": "tirar",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            }
+          ]
+        },
+        "indice": 0.5,
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.3
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "kind": "sem_runa"
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "aposMudarDeTier: cabe tudo",
+    "input": {
+      "fn": "aposMudarDeTier",
+      "args": {
+        "arma": {
+          "uid": "marreta_1700000000000_73424",
+          "templateId": "marreta",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 42,
+            "velocidade": -8
+          },
+          "value": 162,
+          "equipped": false,
+          "procChance": 0.27,
+          "degrau": 3,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            }
+          ]
+        },
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 4
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "arma": {
+          "uid": "marreta_1700000000000_73424",
+          "templateId": "marreta",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 42,
+            "velocidade": -8
+          },
+          "value": 162,
+          "equipped": false,
+          "procChance": 0.27,
+          "degrau": 3,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            }
+          ]
+        },
+        "devolvidas": []
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "aposMudarDeTier: sobram duas",
+    "input": {
+      "fn": "aposMudarDeTier",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            },
+            {
+              "runa": "gelo",
+              "tier": 2
+            },
+            {
+              "runa": "eletrica",
+              "tier": 3
+            }
+          ]
+        },
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 4
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            }
+          ]
+        },
+        "devolvidas": [
+          {
+            "uid": "runa_gelo_1700000000000_92362",
+            "templateId": "runa_gelo",
+            "rarity": "comum",
+            "stats": {},
+            "value": 80,
+            "equipped": false,
+            "tierDaRuna": 2
+          },
+          {
+            "uid": "runa_eletrica_1700000000000_33304",
+            "templateId": "runa_eletrica",
+            "rarity": "comum",
+            "stats": {},
+            "value": 160,
+            "equipped": false,
+            "tierDaRuna": 3
+          }
+        ]
+      },
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "aposMudarDeTier: sem runas",
+    "input": {
+      "fn": "aposMudarDeTier",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 4
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "devolvidas": []
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "aposMudarDeTier: quem não é arma devolve tudo",
+    "input": {
+      "fn": "aposMudarDeTier",
+      "args": {
+        "arma": {
+          "uid": "placas_1700000000000_73424",
+          "templateId": "placas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 4,
+            "esquiva": -1
+          },
+          "value": 17,
+          "equipped": false,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            }
+          ]
+        },
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 4
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "arma": {
+          "uid": "placas_1700000000000_73424",
+          "templateId": "placas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 4,
+            "esquiva": -1
+          },
+          "value": 17,
+          "equipped": false
+        },
+        "devolvidas": [
+          {
+            "uid": "runa_fogo_1700000000000_92362",
+            "templateId": "runa_fogo",
+            "rarity": "comum",
+            "stats": {},
+            "value": 40,
+            "equipped": false,
+            "tierDaRuna": 1
+          }
+        ]
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "efeitosDaArma: uma de cada",
+    "input": {
+      "fn": "efeitosDaArma",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "eletrica",
+              "tier": 1
+            },
+            {
+              "runa": "fogo",
+              "tier": 2
+            },
+            {
+              "runa": "gelo",
+              "tier": 3
+            },
+            {
+              "runa": "vampirica",
+              "tier": 1
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "runa": "eletrica",
+          "chance": 0.1,
+          "forca": 0.2
+        },
+        {
+          "runa": "fogo",
+          "chance": 0.15,
+          "forca": 0.3
+        },
+        {
+          "runa": "gelo",
+          "chance": 0.2,
+          "forca": 0.5
+        },
+        {
+          "runa": "vampirica",
+          "chance": 0.1,
+          "forca": 0.2
+        }
+      ]
+    }
+  },
+  {
+    "name": "efeitosDaArma: duas de fogo somam",
+    "input": {
+      "fn": "efeitosDaArma",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "fogo",
+              "tier": 1
+            },
+            {
+              "runa": "fogo",
+              "tier": 3
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "runa": "fogo",
+          "chance": 0.30000000000000004,
+          "forca": 0.6000000000000001
+        }
+      ]
+    }
+  },
+  {
+    "name": "efeitosDaArma: quatro elétricas no teto",
+    "input": {
+      "fn": "efeitosDaArma",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "eletrica",
+              "tier": 3
+            },
+            {
+              "runa": "eletrica",
+              "tier": 3
+            },
+            {
+              "runa": "eletrica",
+              "tier": 3
+            },
+            {
+              "runa": "eletrica",
+              "tier": 3
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "runa": "eletrica",
+          "chance": 0.8,
+          "forca": 2
+        }
+      ]
+    }
+  },
+  {
+    "name": "efeitosDaArma: tier fora da régua",
+    "input": {
+      "fn": "efeitosDaArma",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": [
+            {
+              "runa": "gelo",
+              "tier": 9
+            },
+            {
+              "runa": "gelo",
+              "tier": 0
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "runa": "gelo",
+          "chance": 0.30000000000000004,
+          "forca": 0.75
+        }
+      ]
+    }
+  },
+  {
+    "name": "efeitosDaArma: sem runas",
+    "input": {
+      "fn": "efeitosDaArma",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "runas": []
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "efeitosDaArma: sem arma",
+    "input": {
+      "fn": "efeitosDaArma",
+      "args": {
+        "arma": null
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "aplicarRunas: todas disparam",
+    "input": {
+      "fn": "aplicarRunas",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 2
+                },
+                {
+                  "runa": "fogo",
+                  "tier": 2
+                },
+                {
+                  "runa": "gelo",
+                  "tier": 2
+                },
+                {
+                  "runa": "vampirica",
+                  "tier": 2
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "dano": 20
+      },
+      "rng": {
+        "sequence": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 2
+                },
+                {
+                  "runa": "fogo",
+                  "tier": 2
+                },
+                {
+                  "runa": "gelo",
+                  "tier": 2
+                },
+                {
+                  "runa": "vampirica",
+                  "tier": 2
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 57,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 93,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {
+            "atordoado": 1,
+            "queimadura": {
+              "turns": 3,
+              "dmg": 6
+            },
+            "lento": {
+              "turns": 3,
+              "amount": 0.35
+            }
+          },
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "disparos": [
+          {
+            "runa": "eletrica",
+            "valor": 7
+          },
+          {
+            "runa": "fogo",
+            "valor": 6
+          },
+          {
+            "runa": "gelo",
+            "valor": 0.35
+          },
+          {
+            "runa": "vampirica",
+            "valor": 7
+          }
+        ]
+      },
+      "rngCalls": 4
+    }
+  },
+  {
+    "name": "aplicarRunas: nenhuma dispara",
+    "input": {
+      "fn": "aplicarRunas",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 1
+                },
+                {
+                  "runa": "fogo",
+                  "tier": 1
+                },
+                {
+                  "runa": "gelo",
+                  "tier": 1
+                },
+                {
+                  "runa": "vampirica",
+                  "tier": 1
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "dano": 20
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.99,
+          0.99,
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 1
+                },
+                {
+                  "runa": "fogo",
+                  "tier": 1
+                },
+                {
+                  "runa": "gelo",
+                  "tier": 1
+                },
+                {
+                  "runa": "vampirica",
+                  "tier": 1
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "disparos": []
+      },
+      "rngCalls": 4
+    }
+  },
+  {
+    "name": "aplicarRunas: o choque derruba",
+    "input": {
+      "fn": "aplicarRunas",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 3
+                },
+                {
+                  "runa": "eletrica",
+                  "tier": 3
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 30,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "dano": 200
+      },
+      "rng": {
+        "sequence": [
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 3
+                },
+                {
+                  "runa": "eletrica",
+                  "tier": 3
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 0,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {
+            "atordoado": 1
+          },
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "disparos": [
+          {
+            "runa": "eletrica",
+            "valor": 200
+          }
+        ]
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aplicarRunas: o choque soma ao atordoado que já havia",
+    "input": {
+      "fn": "aplicarRunas",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 1
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {
+            "atordoado": 2
+          },
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "dano": 10
+      },
+      "rng": {
+        "sequence": [
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 1
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 98,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {
+            "atordoado": 3
+          },
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "disparos": [
+          {
+            "runa": "eletrica",
+            "valor": 2
+          }
+        ]
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aplicarRunas: a cura para na vida cheia",
+    "input": {
+      "fn": "aplicarRunas",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "vampirica",
+                  "tier": 3
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 123,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "dano": 40
+      },
+      "rng": {
+        "sequence": [
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "vampirica",
+                  "tier": 3
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "disparos": [
+          {
+            "runa": "vampirica",
+            "valor": 2
+          }
+        ]
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aplicarRunas: a cura com a vida cheia",
+    "input": {
+      "fn": "aplicarRunas",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "vampirica",
+                  "tier": 3
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "dano": 40
+      },
+      "rng": {
+        "sequence": [
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "vampirica",
+                  "tier": 3
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "disparos": [
+          {
+            "runa": "vampirica",
+            "valor": 0
+          }
+        ]
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aplicarRunas: queima mínima",
+    "input": {
+      "fn": "aplicarRunas",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "fogo",
+                  "tier": 1
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "dano": 3
+      },
+      "rng": {
+        "sequence": [
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "fogo",
+                  "tier": 1
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {
+            "queimadura": {
+              "turns": 3,
+              "dmg": 2
+            }
+          },
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "disparos": [
+          {
+            "runa": "fogo",
+            "valor": 2
+          }
+        ]
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aplicarRunas: dano zero",
+    "input": {
+      "fn": "aplicarRunas",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 1
+                },
+                {
+                  "runa": "vampirica",
+                  "tier": 1
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "dano": 0
+      },
+      "rng": {
+        "sequence": [
+          0,
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "eletrica",
+                  "tier": 1
+                },
+                {
+                  "runa": "vampirica",
+                  "tier": 1
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 51,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 99,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {
+            "atordoado": 1
+          },
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "disparos": [
+          {
+            "runa": "eletrica",
+            "valor": 1
+          },
+          {
+            "runa": "vampirica",
+            "valor": 1
+          }
+        ]
+      },
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "aplicarRunas: só a segunda dispara",
+    "input": {
+      "fn": "aplicarRunas",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "fogo",
+                  "tier": 3
+                },
+                {
+                  "runa": "gelo",
+                  "tier": 3
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "dano": 30
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "runas": [
+                {
+                  "runa": "fogo",
+                  "tier": 3
+                },
+                {
+                  "runa": "gelo",
+                  "tier": 3
+                }
+              ]
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 50,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {
+            "lento": {
+              "turns": 3,
+              "amount": 0.5
+            }
+          },
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "disparos": [
+          {
+            "runa": "gelo",
+            "valor": 0.5
+          }
+        ]
+      },
+      "rngCalls": 2
     }
   },
   {

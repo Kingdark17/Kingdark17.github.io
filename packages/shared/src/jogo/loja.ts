@@ -134,8 +134,8 @@ export function renovarEstoque(loja: Loja, rng: Rng = defaultRng, now?: () => nu
   };
 }
 
-export function reforjar(loja: Loja, item: Item, materialId: string, rng: Rng = defaultRng): Loja {
-  const forja = resolveForge(loja.estado.hero, loja.estado.inventory, item, materialId, { rng });
+export function reforjar(loja: Loja, item: Item, materialId: string, rng: Rng = defaultRng, now?: () => number): Loja {
+  const forja = resolveForge(loja.estado.hero, loja.estado.inventory, item, materialId, now ? { rng, now } : { rng });
 
   if (forja.outcome.kind === 'insufficient_gold') return { ...loja, log: [`A reforja custa ${forja.outcome.required} de ouro.`] };
   if (forja.outcome.kind === 'no_material') return { ...loja, log: ['Você não tem esse material na mochila.'] };
@@ -146,9 +146,11 @@ export function reforjar(loja: Loja, item: Item, materialId: string, rng: Rng = 
   if (improved) veredito = 'Melhorou!';
   else if (oldTier === newTier) veredito = 'Manteve o tier.';
 
+  const log = [`Reforja de ${displayName(item)}: Tier ${oldTier} → Tier ${newTier}. ${veredito}`];
+  for (const runa of forja.outcome.runasDevolvidas ?? []) log.push(`A arma perdeu um espaço de runa: ${displayName(runa)} volta pra mochila.`);
   return {
     ...loja,
     estado: { ...loja.estado, hero: forja.hero, inventory: forja.inventory },
-    log: [`Reforja de ${displayName(item)}: Tier ${oldTier} → Tier ${newTier}. ${veredito}`],
+    log,
   };
 }

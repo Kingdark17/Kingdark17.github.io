@@ -15,6 +15,7 @@ import type { Hero } from '../hero/hero.js';
 import { addItem, removeByUid } from '../inventory/inventory.js';
 import { randomItem, type Item } from '../items/item.js';
 import type { ItemCategory } from '../items/templates.js';
+import { aposMudarDeTier } from '../items/runas.js';
 import { reforge, tierRank, type Tier } from '../items/tiers.js';
 import { defaultRng, pick, type Rng } from '../rng.js';
 
@@ -96,7 +97,7 @@ export type ForgeOutcome =
   | { kind: 'unavailable' }
   | { kind: 'no_material' }
   | { kind: 'insufficient_gold'; required: number }
-  | { kind: 'forged'; oldTier: Tier; newTier: Tier; improved: boolean; reforgeFails: number };
+  | { kind: 'forged'; oldTier: Tier; newTier: Tier; improved: boolean; reforgeFails: number; runasDevolvidas?: Item[] };
 
 export interface ForgeResult {
   hero: Hero;
@@ -107,6 +108,8 @@ export interface ForgeResult {
 
 export interface ForgeOptions {
   rng?: Rng;
+  /** O relógio do uid das runas que a arma devolve quando perde espaço. */
+  now?: () => number;
 }
 
 /**
@@ -130,16 +133,25 @@ export function resolveForge(hero: Hero, inventory: readonly Item[], item: Item,
   const delta = rollForgeOutcome(cfg, item.reforgeFails ?? 0, rng);
   const { item: reforgedBase, result } = reforge(item, delta);
   const improved = result.newRank > oldRank;
-  const reforgedItem: Item = { ...reforgedBase, reforgeFails: improved ? 0 : (item.reforgeFails ?? 0) + 1 };
+  // A arma que caiu de tier pode perder espaço de runa: a que sobrou volta inteira pra mochila.
+  const ajuste = aposMudarDeTier({ ...reforgedBase, reforgeFails: improved ? 0 : (item.reforgeFails ?? 0) + 1 }, rng, options.now);
+  const reforgedItem: Item = ajuste.arma;
 
   const afterRemoval = removeByUid(inventory, material.uid).inventory;
-  const nextInventory = afterRemoval.map((i) => (i.uid === item.uid ? reforgedItem : i));
+  const nextInventory = [...afterRemoval.map((i) => (i.uid === item.uid ? reforgedItem : i)), ...ajuste.devolvidas];
 
   return {
     hero: { ...hero, gold: hero.gold - cfg.cost },
     inventory: nextInventory,
     item: reforgedItem,
-    outcome: { kind: 'forged', oldTier: result.oldTier, newTier: result.newTier, improved, reforgeFails: reforgedItem.reforgeFails ?? 0 },
+    outcome: {
+      kind: 'forged',
+      oldTier: result.oldTier,
+      newTier: result.newTier,
+      improved,
+      reforgeFails: reforgedItem.reforgeFails ?? 0,
+      ...(ajuste.devolvidas.length > 0 ? { runasDevolvidas: ajuste.devolvidas } : {}),
+    },
   };
 }
 

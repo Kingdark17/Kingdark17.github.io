@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace RPGLegend.Engine
 {
     /// <summary>
@@ -24,6 +26,10 @@ namespace RPGLegend.Engine
         /// nascer peça acima dele.
         /// </summary>
         public double? Degrau;
+        /// <summary>Numa runa (<see cref="Runas"/>), o tier dela: 1 a 3. Ausente, 1.</summary>
+        public double? TierDaRuna;
+        /// <summary>Numa arma, as runas engastadas, em ordem (só o app engasta).</summary>
+        public List<RunaNaArma> Runas;
 
         /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
         [JsExtra] public JsExtras Extra;
@@ -33,6 +39,7 @@ namespace RPGLegend.Engine
         {
             var c = (Item)MemberwiseClone();
             c.Stats = Stats?.Clone();
+            c.Runas = Runas != null ? new List<RunaNaArma>(Runas) : null;
             c.Extra = Extra?.Clone();
             return c;
         }
@@ -52,8 +59,17 @@ namespace RPGLegend.Engine
             target.ReforgeCount = ReforgeCount;
             target.ReforgeFails = ReforgeFails;
             target.Degrau = Degrau;
+            target.TierDaRuna = TierDaRuna;
+            target.Runas = Runas;
             target.Extra = Extra;
         }
+    }
+
+    /// <summary>TS: RunaNaArma — uma runa engastada numa arma: o tipo e o tier. Tirada da arma, ela volta a ser item.</summary>
+    public sealed class RunaNaArma
+    {
+        public string Runa;
+        public double Tier;
     }
 
     /// <summary>TS: ItemView — o item com o que se deriva do template, montado na hora de desenhar.</summary>

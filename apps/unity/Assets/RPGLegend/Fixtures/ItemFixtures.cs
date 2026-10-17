@@ -22,6 +22,7 @@ namespace RPGLegend.Tests
             Const(M, "PROC_EFFECTS", () => W(GameData.ItemTable.ProcEffects));
             Const(M, "TEMPLATES", () => W(ItemTemplates.All));
             Const(M, "MATERIAIS", () => W(GameData.MateriaisTable.Materiais));
+            Const(M, "RUNAS", () => W(GameData.RunasTable.Runas));
             Const(M, "TIER_ORDER", () => W(Tiers.Order));
             Const(M, "TIER_MIN", () => W(Tiers.Min));
 
@@ -70,6 +71,17 @@ namespace RPGLegend.Tests
                     TetoDoDegrau = JsJson.ToOptionalNumber(JsJson.Prop(o, "tetoDoDegrau")),
                 }));
             });
+
+            // ---------- as runas ----------
+            Fn(M, "criarRuna", (a, c) => W(Runas.CriarRuna(Str(a["runa"]), Num(a["tier"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "tierMaximoNoAndar", (a, c) => N(Runas.TierMaximoNoAndar(Num(a["andar"]))));
+            Fn(M, "sortearRuna", (a, c) => W(Runas.SortearRuna(Num(a["andar"]), JsJson.Truthy(a["chefe"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "espacosDeRuna", (a, c) => N(Runas.EspacosDeRuna(R<Item>(a["item"]))));
+            Fn(M, "engastar", (a, c) => W(Runas.Engastar(R<Item>(a["arma"]), R<Item>(a["runa"]), JsJson.ToOptionalNumber(a["indice"]))));
+            Fn(M, "tirar", (a, c) => W(Runas.Tirar(R<Item>(a["arma"]), Num(a["indice"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "aposMudarDeTier", (a, c) => W(Runas.AposMudarDeTier(R<Item>(a["arma"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "efeitosDaArma", (a, c) => W(Runas.EfeitosDaArma(R<Item>(a["arma"]))));
+            Fn(M, "aplicarRunas", (a, c) => W(Runas.AplicarRunas(R<Hero>(a["hero"]), R<CombatMonsterView>(a["monster"]), Num(a["dano"]), c.RngFn)));
 
             // ---------- os materiais das peças ----------
             Fn(M, "multiplicadorDoDegrau", (a, c) => N(Materiais.MultiplicadorDoDegrau(Num(a["degrau"]))));

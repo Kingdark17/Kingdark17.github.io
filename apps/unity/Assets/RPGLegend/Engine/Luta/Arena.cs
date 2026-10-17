@@ -610,7 +610,44 @@ namespace RPGLegend.Engine
             }
             Contar(l, Numero("monstro", alvo.Indice, "-" + Js.NumberToString(golpe.Damage ?? 0), golpe.IsCrit == true ? "critico" : "dano"));
             Contar(l, Som(golpe.IsCrit == true ? "crit" : "hit"));
-            if (golpe.MonsterDefeated) Abater(l, alvo.Indice, golpe.Monster);
+            if (golpe.MonsterDefeated)
+            {
+                Abater(l, alvo.Indice, golpe.Monster);
+                return;
+            }
+            AplicarRunasDoGolpe(l, alvo.Indice, golpe.Monster, golpe.Damage ?? 0);
+        }
+
+        /// <summary>
+        /// TS: aplicarRunasDoGolpe — as runas da arma no golpe que acertou. Só a arena as aplica: no site a arma vale só
+        /// pelos atributos. O choque pode derrubar.
+        /// </summary>
+        private static void AplicarRunasDoGolpe(Luta l, double indice, CombatMonsterView monstro, double dano)
+        {
+            var estado = Masmorra(l);
+            var runas = Runas.AplicarRunas(estado.Hero, monstro, dano, l.Rng);
+            if (runas.Disparos.Count == 0) return;
+            var comHeroi = (EstadoNaMasmorra)estado.Clone();
+            comHeroi.Hero = runas.Hero;
+            l.Estado = FimDaLuta.GravarMonstro(comHeroi, indice, runas.Monster);
+            foreach (var disparo in runas.Disparos)
+            {
+                string icone = Runas.IconeDe(disparo.Runa);
+                if (disparo.Runa == "vampirica")
+                {
+                    if (disparo.Valor > 0) Contar(l, Numero("heroi", 0, icone + "+" + Js.NumberToString(disparo.Valor), "cura"));
+                }
+                else if (disparo.Runa == "eletrica")
+                {
+                    Contar(l, Numero("monstro", indice, icone + "-" + Js.NumberToString(disparo.Valor), "dano"));
+                }
+                else
+                {
+                    // Queimar e gelar só marcam o monstro, como o 💫 e o 🐌: sem dano agora, ele não treme.
+                    Contar(l, Numero("monstro", indice, icone, "erro"));
+                }
+            }
+            if (runas.Monster.Hp <= 0) Abater(l, indice, runas.Monster);
         }
 
         // ---------- poderes e itens ----------

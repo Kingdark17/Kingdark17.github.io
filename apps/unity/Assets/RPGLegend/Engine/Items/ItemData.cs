@@ -34,6 +34,8 @@ namespace RPGLegend.Engine
         public string Escada;
         /// <summary>O nome sem o material de hoje, quando ele está no nome ("Escudo" do "Escudo de Carvalho").</summary>
         public string NomeSemMaterial;
+        /// <summary>Numa runa, o tipo dela ("eletrica", "fogo", "gelo", "vampirica").</summary>
+        public string Runa;
     }
 
     /// <summary>As tabelas de items/templates.ts (fixtures/data/items/templates.json).</summary>
@@ -48,6 +50,8 @@ namespace RPGLegend.Engine
         [JsName("BURN")] public ProcTemplate Burn;
         [JsName("STUN")] public ProcTemplate Stun;
         [JsName("TEMPLATES")] public List<ItemTemplate> Templates = new List<ItemTemplate>();
+        /// <summary>O tier de uma runa no nome dela: I, II, III.</summary>
+        [JsName("ROMANOS")] public List<string> Romanos = new List<string>();
     }
 
     /// <summary>TS: Rarity.</summary>

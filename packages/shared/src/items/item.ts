@@ -12,7 +12,9 @@ import {
   type ItemCategory,
   type ItemTemplate,
   type ProcTemplate,
+  type RunaId,
   type StatBlock,
+  ROMANOS,
 } from './templates.js';
 
 /**
@@ -48,6 +50,16 @@ export interface Item {
    * o app faz nascer peça acima dele.
    */
   degrau?: number;
+  /** Numa runa (`items/runas.ts`), o tier dela: 1 a 3. Ausente, 1. */
+  tierDaRuna?: number;
+  /** Numa arma, as runas engastadas, em ordem (só o app engasta). */
+  runas?: RunaNaArma[];
+}
+
+/** Uma runa engastada numa arma: o tipo e o tier. Tirada da arma, ela volta a ser item. */
+export interface RunaNaArma {
+  runa: RunaId;
+  tier: number;
 }
 
 /** Visão "gorda" do item, montada na hora de renderizar. */
@@ -90,8 +102,10 @@ export function concordar(item: Pick<Item, 'templateId'>, [m, f, mp, fp]: Formas
  * Até 2026-10 a raridade vinha antes e sempre no masculino ("Lendário
  * Espada"), herança do `items.js` do jogo antigo.
  */
-export function displayName(item: Pick<Item, 'templateId' | 'rarity' | 'degrau'>): string {
+export function displayName(item: Pick<Item, 'templateId' | 'rarity' | 'degrau' | 'tierDaRuna'>): string {
   const template = itemTemplate(item);
+  // A runa leva o tier no nome: "Runa de Fogo II".
+  if (template.runa) return `${template.name} ${ROMANOS[Math.min(ROMANOS.length, Math.max(1, Math.trunc(item.tierDaRuna ?? 1))) - 1]}`;
   const nome = nomeComMaterial(template, item.degrau);
   const rarity = rarityById(item.rarity);
   if (!rarity || rarity.id === 'comum') return nome;
@@ -178,10 +192,13 @@ export interface RandomItemOptions extends InstantiateOptions {
   tetoDoDegrau?: number;
 }
 
+/** O que o sorteio de item sem categoria escolhe: tudo menos as runas, que só caem de baú e de chefe no app. */
+const SORTEAVEIS = TEMPLATES.filter((t) => t.category !== 'runa');
+
 export function randomItem(options: RandomItemOptions = {}): Item {
   const { category, rarity: forcedRarity, floor = 1, rng = defaultRng, now } = options;
 
-  const pool = category ? templatesByCategory(category) : TEMPLATES;
+  const pool = category ? templatesByCategory(category) : SORTEAVEIS;
   const template = pick(pool, rng);
   // Uma raridade forçada e desconhecida cai para comum, igual ao original.
   const rarity =
