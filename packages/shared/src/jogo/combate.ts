@@ -32,26 +32,21 @@ import { attemptDodge } from '../combat/dodge.js';
 import { attemptFlee } from '../combat/flee.js';
 import { tickHeroStatus } from '../combat/hero-status.js';
 import { applyMonsterHit } from '../combat/monster-hit.js';
-import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from '../combat/monster-state.js';
+import type { CombatMonster, CombatMonsterView } from '../combat/monster-state.js';
 import { applyPartyTurn, passarRodadaDaCancao } from '../combat/party.js';
 import { LADOS_DO_DANO, resolveAttack, type AttackStyle, type JogadaDeAtaque } from '../combat/resolve-attack.js';
 import { tickMonsterDot } from '../combat/status-effects.js';
 import { castPower } from '../combat/use-power.js';
-import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import type { Power } from '../hero/catalog.js';
-import { gainXP, type Companion, type Hero } from '../hero/hero.js';
-import { winBattle } from '../hero/mastery.js';
-import { addItem } from '../inventory/inventory.js';
-import { concordar, displayName, randomItem, type Item } from '../items/item.js';
+import type { Hero } from '../hero/hero.js';
+import { displayName, type Item } from '../items/item.js';
 import { monsterView } from '../monsters/generate.js';
-import { applyNpcBlessing } from '../npc/npc-services.js';
 import { petBonus, type PetId } from '../pets/pets.js';
-import { onItemCollected, onMonsterKilled } from '../quests/quests.js';
 import { defaultRng, type Rng } from '../rng.js';
 import type { Efeito } from './efeitos.js';
-import { andarDeForca, avancarAndar, celulaAtual, substituirCelulaAtual, voltarParaCidade, type EstadoDoJogo, type EstadoNaMasmorra } from './estado.js';
-import { maestriaSubiu } from './maestria.js';
+import { celulaAtual, substituirCelulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from './estado.js';
+import { indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta, vivoNaSala } from './fim-da-luta.js';
 import { podeUsar, usar } from './mochila.js';
 
 /**
@@ -125,11 +120,6 @@ export interface Flutuante {
   indice?: number;
 }
 
-const CHANCE_DE_LOOT_NORMAL = 0.25;
-const CHANCE_DE_LOOT_CHEFE = 0.8;
-/** Abaixo deste nível a derrota não cobra nada — é a proteção de iniciante do original. */
-const NIVEL_SEM_PENALIDADE = 5;
-
 // ---------- leitura da sala ----------
 
 /** A sala onde o jogador está, se ela for de monstro ou chefe. */
@@ -146,19 +136,6 @@ export function monstroAtual(estado: EstadoDoJogo): CombatMonsterView | null {
   if (!sala) return null;
   const bruto = sala.monsters?.[sala.monsterIndex ?? 0];
   return bruto ? monsterView(bruto as CombatMonster) : null;
-}
-
-/**
- * De pé: com vida, e não atrás do `monsterIndex` — nos saves da fila, quem
- * ficou pra trás já caiu.
- */
-function vivoNaSala(sala: DungeonCell, indice: number): boolean {
-  const bruto = sala.monsters?.[indice];
-  return !!bruto && indice >= (sala.monsterIndex ?? 0) && bruto.hp > 0;
-}
-
-function indicesDePe(sala: DungeonCell): number[] {
-  return (sala.monsters ?? []).map((_, indice) => indice).filter((indice) => vivoNaSala(sala, indice));
 }
 
 /** Quantos inimigos ainda estão de pé nesta sala. */
@@ -304,24 +281,12 @@ export function comecarCombate(combate: Combate): Combate {
   const sala = salaDeCombate(estado);
   if (!sala || !monstroAtual(estado)) return { ...combate, fase: 'vitoria' };
 
-  const log: string[] = [];
-
-  // `applyNpcBlessing` assume que os buffs do combate anterior já foram
-  // zerados — o original faz `hero.buffs={}` incondicionalmente antes.
-  const dodge = estado.hero.npcBlessing?.dodge ?? 0;
-  const bencao = applyNpcBlessing({ ...estado.hero, buffs: {} });
-  const hero: Hero = bencao.hero;
-
-  if (bencao.applied) log.push(`A bênção recebida concede +${dodge}% de Esquiva neste combate.`);
-  log.push('O combate começa! Ataque, use um poder ou tente fugir.');
-
-  const monsters = (sala.monsters ?? []).map((bruto, indice) => (vivoNaSala(sala, indice) ? freshCombatMonster(bruto) : bruto));
-
+  const preparada = prepararLuta(estado);
   return {
     ...combate,
-    estado: substituirCelulaAtual({ ...estado, hero }, { ...sala, monsters }),
+    estado: preparada.estado,
     fase: 'combate',
-    log,
+    log: [...preparada.log, 'O combate começa! Ataque, use um poder ou tente fugir.'],
     som: null,
     flutuantes: [],
   };
@@ -616,8 +581,8 @@ function danoContinuo(combate: Combate, rng: Rng): Combate {
 
 /** Quem caiu na vez dos outros é pago na hora; foi o último, a sala está limpa. */
 function abaterNoTurno(combate: Combate, indice: number, abatido: CombatMonsterView, rng: Rng): Combate {
-  const pago = pagarAbate(combate, indice, abatido);
-  return inimigosRestantes(pago.estado) > 0 ? pago : limparSala(pago, abatido, rng);
+  const pago = pagarNaLuta(combate, indice, abatido);
+  return inimigosRestantes(pago.estado) > 0 ? pago : vencer(pago, abatido, rng);
 }
 
 /** O monstro da vez ataca — atordoado ou lento, perde o ataque — e a vez passa pro seguinte. */
@@ -675,10 +640,10 @@ function textoDoGolpe(golpe: ReturnType<typeof applyMonsterHit>, nome: string): 
  * Canção de Batalha desconta, então a rodada é descontada à mão.
  */
 function heroiMatou(combate: Combate, indice: number, abatido: CombatMonsterView, rng: Rng): Combate {
-  const pago = pagarAbate(combate, indice, abatido);
+  const pago = pagarNaLuta(combate, indice, abatido);
   if (inimigosRestantes(pago.estado) > 0) return turnoDosOutros(pago, rng);
   const estado = exigirMasmorra(pago);
-  return limparSala({ ...pago, estado: { ...estado, hero: passarRodadaDaCancao(estado.hero) } }, abatido, rng);
+  return vencer({ ...pago, estado: { ...estado, hero: passarRodadaDaCancao(estado.hero) } }, abatido, rng);
 }
 
 /**
@@ -693,159 +658,32 @@ function morteNoVeneno(combate: Combate, hero: Hero, log: string[], rng: Rng): C
 }
 
 /**
- * Paga o monstro que caiu (a vida dele já foi gravada zerada na sala): XP,
- * ouro, a conta de abates e a missão. `monsterIndex` volta a apontar o
- * primeiro de pé, e o alvo que caiu passa pro primeiro de pé. A luta não
- * acaba aqui — quem chama confere se sobrou alguém.
+ * Paga o monstro que caiu (`pagarAbate`, a vida dele já gravada zerada na
+ * sala). O alvo que caiu passa pro primeiro de pé. A luta não acaba aqui —
+ * quem chama confere se sobrou alguém.
  */
-function pagarAbate(combate: Combate, indice: number, abatido: CombatMonsterView): Combate {
-  const estado = exigirMasmorra(combate);
-  const log = [...combate.log];
-
-  const xp = gainXP({ ...estado.hero, killCount: estado.hero.killCount + 1, gold: estado.hero.gold + abatido.gold }, abatido.xp);
-  log.push(`Você derrotou ${abatido.name}! +${abatido.xp} XP e +${abatido.gold} ouro.`);
-  if (xp.leveledUp) log.push(`Você subiu ${xp.levels} nível(is)!`);
-
-  const comRecompensa: EstadoNaMasmorra = { ...estado, hero: xp.hero, quests: onMonsterKilled(estado.quests) };
-  const sala = celulaAtual(comRecompensa) as DungeonCell;
-  const primeiroDePe = indicesDePe(sala)[0];
-  // Ninguém de pé: o índice fica onde estava, como na fila — quem lê a sala vencida olha `beaten`.
-  const comIndice = primeiroDePe === undefined ? comRecompensa : substituirCelulaAtual(comRecompensa, { ...sala, monsterIndex: primeiroDePe });
-
+function pagarNaLuta(combate: Combate, indice: number, abatido: CombatMonsterView): Combate {
+  const pago = pagarAbate(exigirMasmorra(combate), abatido);
+  const primeiroDePe = indicesDePe(celulaAtual(pago.estado) as DungeonCell)[0];
   return {
     ...combate,
-    estado: comIndice,
+    estado: pago.estado,
     alvo: combate.alvo === indice && primeiroDePe !== undefined ? primeiroDePe : combate.alvo,
     fase: 'combate',
-    log,
+    log: [...combate.log, ...pago.log],
   };
 }
 
-/** Último inimigo caiu: a sala fica marcada, os temporários se despedem e vem a recompensa. */
-function limparSala(combate: Combate, abatido: CombatMonsterView, rng: Rng): Combate {
-  const estado = exigirMasmorra(combate);
-  const sala = celulaAtual(estado) as DungeonCell;
-  const log = [...combate.log];
-
-  const { party, saindo } = despedirTemporarios(estado.party);
-  for (const membro of saindo) log.push(`${membro.name} se despede da equipe após cumprir sua promessa.`);
-
-  let hero = estado.hero;
-  let inventory = estado.inventory;
-  let quests = estado.quests;
-  let loot: Item | null = null;
-
-  if (rng() < (sala.type === 'boss' ? CHANCE_DE_LOOT_CHEFE : CHANCE_DE_LOOT_NORMAL)) {
-    loot = randomItem({ floor: andarDeForca(estado), rng });
-    inventory = addItem(inventory, loot);
-    quests = onItemCollected(quests);
-    log.push(`Encontrou ${displayName(loot)} após a batalha.`);
-  }
-
-  const bonus = sala.bonusTreasure;
-  if (bonus && 'gold' in bonus) {
-    hero = { ...hero, gold: hero.gold + bonus.gold };
-    log.push(`Com a sala livre de perigo, você encontra mais ${bonus.gold} de ouro escondido.`);
-  } else if (bonus && 'item' in bonus) {
-    inventory = addItem(inventory, bonus.item);
-    const escondido = concordar(bonus.item, ['escondido', 'escondida', 'escondidos', 'escondidas']);
-    log.push(`Com a sala livre de perigo, você encontra ${displayName(bonus.item)} ${escondido}.`);
-  }
-
-  // Maestria: a sala inteira é uma batalha e conta aqui, quando o último
-  // inimigo cai. Fugir e perder não passam por este caminho.
-  const vitoria = winBattle(hero);
-  hero = vitoria.hero;
-  if (vitoria.leveledUp) log.push(maestriaSubiu(hero, vitoria.level));
-
-  const limpo = substituirCelulaAtual(
-    { ...estado, hero: { ...hero, buffs: {} }, party, inventory, quests },
-    { ...sala, beaten: true, bonusTreasure: undefined },
-  );
-
-  if (sala.type === 'boss' && estado.floor >= DUNGEON_FLOORS) return zerar(combate, limpo, abatido, log, loot);
-
-  if (sala.type === 'boss') {
-    const proximo = avancarAndar(limpo, rng);
-    log.push(`Após vencer ${abatido.name}, o grupo avança automaticamente para o Andar ${proximo.floor}.`);
-    return { ...combate, estado: proximo, fase: 'vitoria', log, loot, som: 'victory' };
-  }
-
-  return { ...combate, estado: limpo, fase: 'vitoria', log, loot, som: 'victory' };
+/** Último inimigo caiu: a vitória, com o que `limparSala` decidiu. */
+function vencer(combate: Combate, abatido: CombatMonsterView, rng: Rng): Combate {
+  const limpa = limparSala(exigirMasmorra(combate), abatido, rng);
+  return { ...combate, estado: limpa.estado, fase: 'vitoria', log: [...combate.log, ...limpa.log], loot: limpa.loot, som: 'victory' };
 }
 
-/**
- * O chefe do andar 100 caiu: a masmorra está zerada nesta dificuldade. O
- * grupo volta pra cidade, e o diário diz o que abriu no portão — a
- * dificuldade seguinte e, no Normal, a próxima masmorra.
- */
-function zerar(combate: Combate, limpo: EstadoNaMasmorra, abatido: CombatMonsterView, log: string[], loot: Item | null): Combate {
-  const progresso = markCleared(limpo.progresso, limpo.masmorra);
-  log.push(`Você venceu ${abatido.name} e zerou ${runName(limpo.masmorra)}!`);
-  for (const aberto of abertosAoZerar(limpo, progresso)) log.push(aberto);
-  log.push('O caminho de volta se abre, e o grupo retorna à cidade.');
-  return { ...combate, estado: voltarParaCidade({ ...limpo, progresso }), fase: 'vitoria', log, loot, som: 'victory' };
-}
-
-function abertosAoZerar(estado: EstadoNaMasmorra, progresso: DungeonProgress): string[] {
-  const linhas: string[] = [];
-  const indice = DIFFICULTIES.findIndex((d) => d.id === estado.masmorra.difficulty);
-  const seguinte = DIFFICULTIES[indice + 1];
-  const masmorra = dungeonById(estado.masmorra.dungeon);
-  if (seguinte && masmorra) linhas.push(`${masmorra.name} no ${seguinte.name} está aberta no portão.`);
-
-  const proxima = DUNGEONS.find((d) => d.requires === estado.masmorra.dungeon);
-  if (proxima && estado.masmorra.difficulty === 'normal') {
-    const falta = lockReason(progresso, estado.hero.level, { dungeon: proxima.id, difficulty: 'normal' });
-    linhas.push(falta?.kind === 'level' ? `A ${proxima.name} abre a partir do nível ${falta.minLevel}.` : `A ${proxima.name} está aberta no portão.`);
-  }
-  return linhas;
-}
-
-function despedirTemporarios(party: readonly Companion[]): { party: Companion[]; saindo: Companion[] } {
-  const depois = party.map((membro) => (membro.temporary ? { ...membro, combatsLeft: (membro.combatsLeft ?? 0) - 1 } : membro));
-  return {
-    party: depois.filter((membro) => !membro.temporary || (membro.combatsLeft ?? 0) > 0),
-    saindo: depois.filter((membro) => membro.temporary && (membro.combatsLeft ?? 0) <= 0),
-  };
-}
-
-/**
- * Derrota. Até o nível 5 não custa nada (proteção de iniciante); depois
- * disso leva 10% do ouro (no máximo 500) e um item comum ou incomum que não
- * esteja equipado. O grupo volta pra cidade com 30% da vida.
- */
+/** A derrota (`perderLuta`): o grupo volta pra cidade. */
 function derrota(combate: Combate, log: string[], rng: Rng): Combate {
-  const estado = exigirMasmorra(combate);
-  const linhas = [...log];
-
-  let hero = estado.hero;
-  let inventory = estado.inventory;
-
-  if (hero.level > NIVEL_SEM_PENALIDADE) {
-    const perdido = Math.min(500, Math.floor(hero.gold * 0.1));
-    hero = { ...hero, gold: Math.max(0, hero.gold - perdido) };
-
-    const descartavel = inventory.filter((item) => !item.equipped && (item.rarity === 'comum' || item.rarity === 'incomum'));
-    const item = descartavel[Math.floor(rng() * descartavel.length)];
-    if (item) inventory = inventory.filter((atual) => atual.uid !== item.uid);
-
-    linhas.push(`Você perdeu ${perdido} de ouro${item ? ` e o item ${displayName(item)}.` : '.'}`);
-  } else {
-    linhas.push('A proteção de iniciante preservou seus itens e seu ouro.');
-  }
-
-  const revivido: Hero = { ...hero, hp: Math.max(1, Math.floor(hero.maxHp * 0.3)), buffs: {} };
-  const equipe = estado.party.map((membro) => ({ ...membro, hp: Math.max(1, Math.floor(membro.maxHp * 0.3)) }));
-  linhas.push('Você foi derrotado! O grupo retorna à cidade inicial.');
-
-  return {
-    ...combate,
-    estado: voltarParaCidade({ ...estado, hero: revivido, party: equipe, inventory }),
-    fase: 'derrota',
-    som: 'defeat',
-    log: linhas,
-  };
+  const perdida = perderLuta(exigirMasmorra(combate), rng);
+  return { ...combate, estado: perdida.estado, fase: 'derrota', som: 'defeat', log: [...log, ...perdida.log] };
 }
 
 function exigirMasmorra(combate: Combate): EstadoNaMasmorra {

@@ -215,8 +215,9 @@ exceção no log). O primeiro build leva uns 12 minutos; os seguintes, perto de 
   `Tutoriais`, `Apresentacoes`, `Narrador`, `Neblina`, `Cartao`, `Maestria`, `Diario`, `AndarNaSala`,
   `ExtrasDaSala` (extras.ts; o `RoomExtras` é o de dungeon/extras.ts), `Mochilas`, `Impactos`, `Lojas`,
   `QuadroDeMissoes` (missoes.ts: o membro `Missoes` não pode ter o nome da classe), `Dialogos`, `Eventos`,
-  `Professores`, `Portoes`, `Guildas`, `Totens`, `Salas` (sala.ts), `Combates` (só o começo do encontro de
-  combate.ts) e `Criacoes` (criacao.ts e save-inicial.ts).
+  `Professores`, `Portoes`, `Guildas`, `Totens`, `Salas` (sala.ts), `Combates` (só o começo do encontro e as
+  leituras da luta em grupo de combate.ts), `FimDaLuta` (fim-da-luta.ts: a sala preparada, o abate, a sala
+  limpa e a derrota, que as duas lutas pagam igual) e `Criacoes` (criacao.ts e save-inicial.ts).
 - A `TelaAberta` (a união do TS por `tipo`) é uma classe com o `Tipo` e o campo daquele tipo preenchido.
 - O estado é a união do TS (`EstadoNaCidade` / `EstadoNaMasmorra`, pelo `mapMode`). Quem escolhe a classe na
   leitura é o `EstadoDoJogoConverter`, registrado no `JsSerializer`: um campo `EstadoDoJogo` dentro de outro

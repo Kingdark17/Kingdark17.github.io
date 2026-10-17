@@ -54,7 +54,7 @@ namespace RPGLegend.Engine
     /// O começo do encontro de shared/src/jogo/combate.ts: ler a sala de monstro e abrir a luta (a bênção do
     /// NPC e o grupo pronto pra receber status), e as leituras da luta em grupo (quem está de pé, de quem é a vez,
     /// o alvo). A luta por turnos em si fica só no site: no app ela é em tempo real (decisão do usuário,
-    /// 2026-10-16), e o que a vitória dá entra com ela.
+    /// 2026-10-16). O que a vitória e a derrota fazem está em <see cref="FimDaLuta"/>, que as duas lutas chamam.
     /// </summary>
     public static class Combates
     {
@@ -83,20 +83,9 @@ namespace RPGLegend.Engine
             return bruto != null ? Monsters.View(bruto) : null;
         }
 
-        /// <summary>TS: vivoNaSala — com vida e não atrás do monsterIndex (nos saves da fila, quem ficou pra trás caiu).</summary>
-        private static bool VivoNaSala(DungeonCell sala, double indice)
-        {
-            var bruto = MonstroEm(sala.Monsters, indice);
-            return bruto != null && indice >= (sala.MonsterIndex ?? 0) && bruto.Hp > 0;
-        }
+        private static bool VivoNaSala(DungeonCell sala, double indice) => FimDaLuta.VivoNaSala(sala, indice);
 
-        private static List<double> IndicesDePe(DungeonCell sala)
-        {
-            var dePe = new List<double>();
-            for (int i = 0; i < (sala.Monsters?.Count ?? 0); i++)
-                if (VivoNaSala(sala, i)) dePe.Add(i);
-            return dePe;
-        }
+        private static List<double> IndicesDePe(DungeonCell sala) => FimDaLuta.IndicesDePe(sala);
 
         /// <summary>TS: inimigosRestantes — quantos ainda estão de pé.</summary>
         public static double InimigosRestantes(EstadoDoJogo estado)
@@ -183,8 +172,8 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>
-        /// TS: comecarCombate — zera os buffs do combate anterior, consome uma bênção de NPC, se houver, e prepara
-        /// cada criatura de pé pra receber status (o grupo inteiro está na luta).
+        /// TS: comecarCombate — a sala preparada pela <see cref="FimDaLuta.PrepararLuta"/> (buffs zerados, bênção
+        /// do NPC, o grupo pronto pra receber status) e a linha que abre a luta por turnos.
         /// </summary>
         public static Combate ComecarCombate(Combate combate)
         {
@@ -197,23 +186,10 @@ namespace RPGLegend.Engine
                 return vitoria;
             }
 
-            var log = new List<string>();
-            double dodge = estado.Hero.NpcBlessing?.Dodge ?? 0;
-            var semBuffs = estado.Hero.Clone();
-            semBuffs.Buffs = new HeroBuffs();
-            var bencao = NpcServices.ApplyNpcBlessing(semBuffs);
-            if (bencao.Applied) log.Add("A bênção recebida concede +" + Js.NumberToString(dodge) + "% de Esquiva neste combate.");
-            log.Add("O combate começa! Ataque, use um poder ou tente fugir.");
-
-            var comHeroi = estado.Clone();
-            comHeroi.Hero = bencao.Hero;
-            var monsters = new List<MonsterInstance>(sala.Monsters.Count);
-            for (int i = 0; i < sala.Monsters.Count; i++)
-                monsters.Add(VivoNaSala(sala, i) ? MonsterState.FreshCombatMonster(sala.Monsters[i]) : sala.Monsters[i]);
-            var preparada = sala.Clone();
-            preparada.Monsters = monsters;
+            var preparada = FimDaLuta.PrepararLuta(estado);
+            var log = new List<string>(preparada.Log) { "O combate começa! Ataque, use um poder ou tente fugir." };
             var c = combate.Clone();
-            c.Estado = Estados.SubstituirCelulaAtual(comHeroi, preparada);
+            c.Estado = preparada.Estado;
             c.Fase = "combate";
             c.Log = log;
             c.Som = null;

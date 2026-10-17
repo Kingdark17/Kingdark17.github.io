@@ -72,6 +72,7 @@ export * from './jogo/efeitos.js';
 export * from './jogo/estado.js';
 export * from './jogo/evento.js';
 export * from './jogo/extras.js';
+export * from './jogo/fim-da-luta.js';
 export * from './jogo/guilda.js';
 export * from './jogo/impacto.js';
 export * from './jogo/loja.js';

@@ -3464,6 +3464,81 @@ caso('comecarCombate: o grupo inteiro se prepara', 'comecarCombate', { combate: 
 caso('comecarCombate: sala vazia vira vitória', 'comecarCombate', { combate: combateVazio }, (a) => E.comecarCombate(a.combate as never));
 caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: { ...combateVazio, estado: enxuto() } }, (a) => E.comecarCombate(a.combate as never));
 
+// ---------- o começo e o fim da luta (fim-da-luta.ts), que as duas lutas chamam ----------
+
+{
+  const salas: Array<[string, DungeonCell]> = [
+    ['um monstro', umMonstro],
+    ['grupo', grupo],
+    ['grupo com um caído', grupoComUmCaido],
+    ['fila que já andou', { ...grupo, monsterIndex: 1 }],
+    ['sem monstros', { ...umMonstro, monsters: [] }],
+  ];
+  for (const [nome, sala] of salas) {
+    for (const indice of [0, 1, 2, 5]) caso(`vivoNaSala: ${nome}, ${indice}`, 'vivoNaSala', { sala, indice }, (a) => E.vivoNaSala(a.sala, a.indice));
+    caso(`indicesDePe: ${nome}`, 'indicesDePe', { sala }, (a) => E.indicesDePe(a.sala));
+  }
+
+  for (const [nome, estado] of [
+    ['um monstro', naSalaDaMasmorra(umMonstro)],
+    ['grupo com um caído', naSalaDaMasmorra(grupoComUmCaido)],
+    ['com a bênção do NPC', naSalaDaMasmorra(umMonstro, comBencao)],
+    ['com buffs da luta anterior', naSalaDaMasmorra(umMonstro, heroi({ classe: 'guerreiro', extra: { buffs: { forcaTurns: 2, forcaAmount: 0.3, critNext: true } } }))],
+  ] as const) {
+    caso(`prepararLuta: ${nome}`, 'prepararLuta', { estado }, (a) => E.prepararLuta(a.estado));
+  }
+
+  /** A sala com o monstro `indice` já caído (a vida zerada gravada), e a visão dele, como quem chama entrega. */
+  const caiu = (sala: DungeonCell, indice: number, hero: Hero = cidade.hero, o: Partial<EstadoNaMasmorra> = {}) => {
+    const monsters = (sala.monsters ?? []).map((m, i) => (i === indice ? { ...E.freshCombatMonster(m), hp: 0 } : m));
+    const abatido = E.monsterView((monsters[indice] as CombatMonster));
+    return { estado: naSalaDaMasmorra({ ...sala, monsters }, hero, [], o), abatido };
+  };
+
+  const quaseSobe = heroi({ classe: 'guerreiro', extra: { xp: 39 } });
+  const missao = (type: Quest['type']): Quest => ({ id: `q_${type}`, type, target: 3, progress: 1, title: type, desc: type, rewardXp: 10, rewardGold: 10, done: false, claimed: false });
+  for (const [nome, { estado, abatido }] of [
+    ['o primeiro de um grupo', caiu(grupo, 0)],
+    ['o do meio de um grupo', caiu(grupo, 1)],
+    ['o único', caiu(umMonstro, 0)],
+    ['sobe de nível', caiu(umMonstro, 0, quaseSobe)],
+    ['com missão de caça e de coleta', caiu(grupo, 0, cidade.hero, { quests: [missao('kill'), missao('collect')] })],
+  ] as const) {
+    caso(`pagarAbate: ${nome}`, 'pagarAbate', { estado, abatido }, (a) => E.pagarAbate(a.estado, a.abatido));
+  }
+
+  const temporario = companheiro('guerreiro', { temporary: true, combatsLeft: 1 });
+  const fiel = companheiro('mago');
+  const veterano = heroi({ classe: 'guerreiro', arma: 'espada', extra: { masteryBattles: 9 } });
+  const limpa = (nome: string, estado: EstadoNaMasmorra, abatido: CombatMonsterView, rng: RngSpec) =>
+    caso(`limparSala: ${nome}`, 'limparSala', { estado, abatido }, (a, ctx) => E.limparSala(a.estado, a.abatido, ctx.rng, ctx.now), { rng, now: AGORA });
+  const ultimo = caiu(umMonstro, 0);
+  limpa('sem item', ultimo.estado, ultimo.abatido, { sequence: [0.99] });
+  limpa('com item', ultimo.estado, ultimo.abatido, { seed: sementeOnde((primeiro) => primeiro < 0.25) });
+  limpa('com ouro escondido', { ...ultimo.estado, map: [[{ ...(E.celulaAtual(ultimo.estado) as DungeonCell), bonusTreasure: { gold: 35 } }]] }, ultimo.abatido, { sequence: [0.99] });
+  limpa(
+    'com item escondido',
+    { ...ultimo.estado, map: [[{ ...(E.celulaAtual(ultimo.estado) as DungeonCell), bonusTreasure: { item: item('botas', 'raro') } }]] },
+    ultimo.abatido,
+    { sequence: [0.99] },
+  );
+  limpa('o temporário se despede, o fiel fica', { ...ultimo.estado, party: [temporario, fiel] }, ultimo.abatido, { sequence: [0.99] });
+  limpa('a maestria sobe', caiu(umMonstro, 0, veterano).estado, ultimo.abatido, { sequence: [0.99] });
+  const noChefe = caiu(chefe, 0);
+  limpa('o chefe leva ao andar seguinte', comGradeInteira(noChefe.estado), noChefe.abatido, { seed: 42 });
+  const noFundo = caiu(chefe, 0, cidade.hero, { floor: E.DUNGEON_FLOORS });
+  limpa('o chefe do último andar zera a masmorra', comGradeInteira(noFundo.estado), noFundo.abatido, { seed: 43 });
+  limpa('zera no Difícil da Caverna', comGradeInteira({ ...noFundo.estado, masmorra: { dungeon: 'caverna', difficulty: 'dificil' } }), noFundo.abatido, { seed: 44 });
+
+  const perde = (nome: string, estado: EstadoNaMasmorra, rng: RngSpec) => caso(`perderLuta: ${nome}`, 'perderLuta', { estado }, (a, ctx) => E.perderLuta(a.estado, ctx.rng), { rng });
+  const nivel = (level: number, gold: number) => heroi({ classe: 'guerreiro', level, extra: { gold, hp: 0 } });
+  const mochila = [item('pot_vida'), item('espada', 'raro'), item('couro', 'incomum'), { ...item('adaga'), equipped: true }];
+  perde('iniciante não perde nada', comGradeInteira(naSalaDaMasmorra(umMonstro, nivel(5, 300), mochila)), { sequence: [] });
+  perde('perde 10% do ouro e um item comum ou incomum', comGradeInteira(naSalaDaMasmorra(umMonstro, nivel(6, 300), mochila)), { sequence: [0.6] });
+  perde('o ouro perdido para em 500', comGradeInteira(naSalaDaMasmorra(umMonstro, nivel(20, 9000), [])), { sequence: [0] });
+  perde('a equipe volta com 30%', comGradeInteira({ ...naSalaDaMasmorra(umMonstro, nivel(2, 0)), party: [companheiro('guerreiro', { hp: 0 }), fiel] }), { sequence: [] });
+}
+
 function naSalaInterage(nome: string, estado: EstadoDoJogo, semente: number, pet: string | null = null): void {
   caso(`interagir: ${nome}`, 'interagir', { estado, pet }, (a, ctx) => E.interagir(a.estado, ctx.rng, a.pet as never, ctx.now), { rng: { seed: semente }, now: AGORA });
 }

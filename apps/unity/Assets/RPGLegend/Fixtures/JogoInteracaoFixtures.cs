@@ -5,8 +5,8 @@ using static RPGLegend.Tests.FixtureRegistry;
 namespace RPGLegend.Tests
 {
     /// <summary>
-    /// Casos de fixtures/jogo.json de jogo/sala.ts, do começo do encontro de jogo/combate.ts e de criacao.ts e
-    /// save-inicial.ts.
+    /// Casos de fixtures/jogo.json de jogo/sala.ts, do começo do encontro de jogo/combate.ts, de fim-da-luta.ts e
+    /// de criacao.ts e save-inicial.ts.
     /// </summary>
     internal sealed class JogoInteracaoFixtures : IFixtureModule
     {
@@ -27,6 +27,15 @@ namespace RPGLegend.Tests
             Fn(M, "vezDoMonstro", (a, c) => NumOuNull(Combates.VezDoMonstro(JogoJson.LerEstado(a["estado"]))));
             Fn(M, "alvoDaLuta", (a, c) => NumOuNull(Combates.AlvoDaLuta(R<Combate>(a["combate"]))));
             Fn(M, "escolherAlvo", (a, c) => W(Combates.EscolherAlvo(R<Combate>(a["combate"]), Num(a["indice"]))));
+
+            // ---------- o começo e o fim da luta (fim-da-luta.ts) ----------
+
+            Fn(M, "vivoNaSala", (a, c) => W(FimDaLuta.VivoNaSala(R<DungeonCell>(a["sala"]), Num(a["indice"]))));
+            Fn(M, "indicesDePe", (a, c) => W(FimDaLuta.IndicesDePe(R<DungeonCell>(a["sala"]))));
+            Fn(M, "prepararLuta", (a, c) => W(FimDaLuta.PrepararLuta(R<EstadoNaMasmorra>(a["estado"]))));
+            Fn(M, "pagarAbate", (a, c) => W(FimDaLuta.PagarAbate(R<EstadoNaMasmorra>(a["estado"]), R<CombatMonsterView>(a["abatido"]))));
+            Fn(M, "limparSala", (a, c) => W(FimDaLuta.LimparSala(R<EstadoNaMasmorra>(a["estado"]), R<CombatMonsterView>(a["abatido"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "perderLuta", (a, c) => W(FimDaLuta.PerderLuta(R<EstadoNaMasmorra>(a["estado"]), c.RngFn)));
 
             Fn(M, "criacaoVazia", (a, c) => W(Criacoes.CriacaoVazia(Str(a["nome"]))));
             Fn(M, "faltaParaComecar", (a, c) => W(Criacoes.FaltaParaComecar(R<Criacao>(a["criacao"]))));
