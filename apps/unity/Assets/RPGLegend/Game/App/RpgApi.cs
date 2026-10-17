@@ -23,6 +23,8 @@ namespace RPGLegend.Game.App
     {
         public string Username;
         public bool EmailVerified;
+        /// <summary>O pet da conta (id da loja de cosméticos), ou "none".</summary>
+        public string Pet;
     }
 
     public sealed class ApiSession
@@ -38,9 +40,16 @@ namespace RPGLegend.Game.App
         public string UpdatedAt;
         public string Name;
         public string Race;
+        /// <summary>Só os saves novos têm; os antigos gravaram a raça pelo nome (<see cref="Race"/>).</summary>
+        public string RaceId;
+        public string RaceIcon;
         public string ClassName;
+        public string ClassIcon;
+        public string Hair;
         public int Level;
         public int Floor;
+        /// <summary>O templateId do que está em cada slot (arma, armadura…), pro boneco do retrato.</summary>
+        public Dictionary<string, string> Equip = new Dictionary<string, string>();
     }
 
     public sealed class CharacterList
@@ -117,6 +126,12 @@ namespace RPGLegend.Game.App
             return assinatura;
         }
 
+        /// <summary>Apaga o personagem do slot (POST /api/save/reset), como o "Sim, apagar" do site.</summary>
+        public static async Awaitable ApagarPersonagem(string token, int slot)
+        {
+            await Enviar("POST", "/api/save/reset", new JObject { ["slot"] = slot }, token);
+        }
+
         // ---------- leitura das respostas (sem Unity: dá para testar com JSON de exemplo) ----------
 
         public static ApiSession LerSessao(JObject json)
@@ -130,6 +145,7 @@ namespace RPGLegend.Game.App
         {
             Username = (string)user?["username"] ?? "",
             EmailVerified = user?["emailVerified"]?.Type == JTokenType.Boolean && (bool)user["emailVerified"],
+            Pet = Texto(user?["pet"]),
         };
 
         public static CharacterList LerPersonagens(JObject json)
@@ -138,18 +154,31 @@ namespace RPGLegend.Game.App
             if (json["maxSlots"]?.Type == JTokenType.Integer) lista.MaxSlots = (int)json["maxSlots"];
             if (json["characters"] is JArray personagens)
                 foreach (var p in personagens)
-                    lista.Characters.Add(new CharacterSummary
+                {
+                    var resumo = new CharacterSummary
                     {
                         Slot = Inteiro(p["slot"], 0),
+                        // O JObject.Parse já transforma a data ISO em data: o cast devolve o texto.
                         UpdatedAt = (string)p["updatedAt"] ?? "",
-                        Name = (string)p["name"] ?? "",
-                        Race = (string)p["race"] ?? "",
-                        ClassName = (string)p["className"] ?? "",
+                        Name = Texto(p["name"]),
+                        Race = Texto(p["race"]),
+                        RaceId = Texto(p["raceId"]),
+                        RaceIcon = Texto(p["raceIcon"]),
+                        ClassName = Texto(p["className"]),
+                        ClassIcon = Texto(p["classIcon"]),
+                        Hair = Texto(p["hair"]),
                         Level = Inteiro(p["level"], 1),
                         Floor = Inteiro(p["floor"], 1),
-                    });
+                    };
+                    if (p["equip"] is JObject equip)
+                        foreach (var slot in equip.Properties())
+                            if (slot.Value.Type == JTokenType.String) resumo.Equip[slot.Name] = (string)slot.Value;
+                    lista.Characters.Add(resumo);
+                }
             return lista;
         }
+
+        private static string Texto(JToken t) => t != null && t.Type == JTokenType.String ? (string)t : "";
 
         private static int Inteiro(JToken t, int padrao) =>
             t != null && (t.Type == JTokenType.Integer || t.Type == JTokenType.Float) ? (int)(double)t : padrao;

@@ -52,6 +52,7 @@ namespace RPGLegend.Game.Jogo
 
         private Partida _partida;
         private SalaEmCena _sala;
+        private BichoDeEstimacao _bicho;
         private string _token;
 
         /// <summary>O que a janela por cima mostra: "sala" (uma tela de sala), "diario", "guia", "ficha", "saida" ou null.</summary>
@@ -84,6 +85,7 @@ namespace RPGLegend.Game.Jogo
             _saindo = false;
             _nivelMostrado = -1;
             EsquecerEscolhas();
+            _bicho.Mostrar(null);
             _salaDaChegada = null;
             _mapaDaChegada = null;
             _chegada = null;
@@ -151,7 +153,23 @@ namespace RPGLegend.Game.Jogo
 
             _carregando.AddToClassList("escondido");
             Redesenhar();
+            CarregarPet();
             return true;
+        }
+
+        /// <summary>
+        /// O pet vem da conta, não do save (o site pergunta o mesmo ao abrir a partida). Falhar aqui não é erro de
+        /// jogo: sem pet, a partida segue igual.
+        /// </summary>
+        private async void CarregarPet()
+        {
+            var partida = _partida;
+            try
+            {
+                var eu = await RpgApi.Eu(_token);
+                if (partida == _partida) _bicho.Mostrar(eu.Pet);
+            }
+            catch (Exception) { /* sem pet */ }
         }
 
         private async Awaitable Mensagem(string texto)
@@ -215,6 +233,7 @@ namespace RPGLegend.Game.Jogo
             _mochila.clicked += () => _partida?.AbrirMochila();
             _diario.clicked += AbrirDiario;
             raiz.Q<Button>("botao-guia").clicked += AbrirGuia;
+            _bicho = new BichoDeEstimacao(raiz.Q<Button>("bichinho"));
             raiz.Q<Button>("botao-ficha").clicked += AbrirFicha;
             _sairDoJogo.clicked += PerguntarSaida;
 

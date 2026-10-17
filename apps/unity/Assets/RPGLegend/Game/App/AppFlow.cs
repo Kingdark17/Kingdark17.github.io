@@ -13,7 +13,8 @@ namespace RPGLegend.Game.App
     ///    conta, como no site);
     /// 3. com a sessão, o cadeado cai, a porta abre e a câmera mergulha na luz até o menu;
     /// 4. o menu leva à lista de personagens (lida da nuvem); sair da conta volta à porta trancada;
-    /// 5. o JOGAR de um personagem abre a partida (<see cref="TelaDeJogo"/>), que ao sair volta à lista.
+    /// 5. o JOGAR de um personagem abre a partida (<see cref="TelaDeJogo"/>), que ao sair volta à lista;
+    /// 6. o slot vazio cria personagem (<see cref="TelaDeCriacao"/>), e o ocupado pode ser apagado, como no site.
     /// </summary>
     public sealed class AppFlow : MonoBehaviour
     {
@@ -23,12 +24,13 @@ namespace RPGLegend.Game.App
         private static readonly Color Preto = Color.black;
         private static readonly Color Ouro = new Color(1f, 0.93f, 0.7f);
 
-        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Jogando, Trocando }
+        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Jogando, Criando, Trocando }
 
         /// <summary>Só no Editor: o slot que o menu "RPG Legend > Jogar direto" abre sem passar pela porta (0 = nenhum).</summary>
         public const string ChaveJogarDireto = "RPGLegend.JogarDireto";
 
         private AppScreens _telas;
+        private TelaDeCriacao _criacao;
         private TelaDeJogo _jogo;
         private Estado _estado = Estado.Chegando;
         private bool _tocou;
@@ -47,6 +49,12 @@ namespace RPGLegend.Game.App
                 _telas.AoSair += Sair;
                 _telas.AoEmBreve += _telas.Aviso;
                 _telas.AoJogarSlot += JogarSlot;
+                _telas.AoCriarSlot += CriarSlot;
+                _telas.AoApagarSlot += ApagarSlot;
+
+                _criacao = new TelaDeCriacao(documento.rootVisualElement);
+                _criacao.AoVoltar += VoltarDaCriacao;
+                _criacao.AoCriado += CriouPersonagem;
 
                 _jogo = gameObject.AddComponent<TelaDeJogo>();
                 _jogo.AoSair += SairDoJogo;
@@ -78,7 +86,9 @@ namespace RPGLegend.Game.App
         private void Update()
         {
             // Botão "voltar" do Android (no Input System ele chega como Esc).
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && _estado == Estado.Personagens) Voltar();
+            if (Keyboard.current == null || !Keyboard.current.escapeKey.wasPressedThisFrame) return;
+            if (_estado == Estado.Personagens) Voltar();
+            else if (_estado == Estado.Criando) VoltarDaCriacao();
         }
 
         // ---------- porta ----------
@@ -235,6 +245,85 @@ namespace RPGLegend.Game.App
             }
             catch (OperationCanceledException) { }
             catch (Exception e) { Debug.LogException(e); }
+        }
+
+        // ---------- criar e apagar personagem ----------
+
+        private async void CriarSlot(int slot)
+        {
+            if (_estado != Estado.Personagens) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _telas.MostrarPersonagens(false);
+                    _criacao.Abrir(slot);
+                });
+                _estado = Estado.Criando;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        private async void VoltarDaCriacao()
+        {
+            if (_estado != Estado.Criando) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _criacao.Fechar();
+                    _telas.MostrarPersonagens(true);
+                });
+                _estado = Estado.Personagens;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        /// <summary>O personagem novo já está na nuvem: de volta à lista, relida (como o router.push do site).</summary>
+        private async void CriouPersonagem()
+        {
+            if (_estado != Estado.Criando) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _criacao.Fechar();
+                    _telas.MostrarPersonagens(true);
+                    _telas.PersonagensCarregando();
+                });
+                _estado = Estado.Personagens;
+                await CarregarPersonagens();
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        private async void ApagarSlot(int slot)
+        {
+            if (_estado != Estado.Personagens) return;
+            try
+            {
+                await RpgApi.ApagarPersonagem(Session.Token, slot);
+                _telas.PersonagensCarregando();
+                await CarregarPersonagens();
+            }
+            catch (ApiError e) when (e.SessaoInvalida)
+            {
+                Session.Limpar();
+                await VoltarParaAPorta("Sua sessão expirou. Entre de novo.");
+            }
+            catch (ApiError e)
+            {
+                _telas.ApagarFalhou(e.Message);
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                _telas.ApagarFalhou("Erro inesperado ao apagar o personagem.");
+            }
         }
 
         // ---------- a partida ----------

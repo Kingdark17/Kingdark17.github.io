@@ -43,6 +43,51 @@ namespace RPGLegend.Game.Jogo
 
         private static bool Existe(string camada) => Arte(camada) != null;
 
+        /// <summary>
+        /// TS: PENTEADOS — os que a criação oferece, do mais curto pro mais longo (a ordem em que a pessoa compara), só
+        /// os que têm arte.
+        /// </summary>
+        public static List<(string Id, string Nome)> Penteados()
+        {
+            var penteados = new List<(string Id, string Nome)>();
+            foreach (var (id, nome) in new[] { ("curto", "Curto"), ("medio", "Médio"), ("longo", "Longo") })
+                if (Existe("cabelo/" + id)) penteados.Add((id, nome));
+            return penteados;
+        }
+
+        /// <summary>A raça tem corpo desenhado (TS: CORPOS.has).</summary>
+        public static bool TemCorpo(string raca) => !string.IsNullOrEmpty(raca) && Existe("corpo/" + raca);
+
+        /// <summary>A raça leva cabelo desenhado: felino e morto-vivo têm a cabeça resolvida na própria arte.</summary>
+        public static bool LevaCabelo(string raca) => !string.IsNullOrEmpty(raca) && !SemCabelo.Contains(raca);
+
+        /// <summary>
+        /// A amostra do penteado na carta de cabelo (.amostraDeCabelo do site): a cabeça do corpo com o cabelo por
+        /// cima, a 2×, recortada em 80 × 68.
+        /// </summary>
+        public static VisualElement AmostraDeCabelo(string raca, string penteado)
+        {
+            var janela = new VisualElement { pickingMode = PickingMode.Ignore };
+            janela.style.width = 80;
+            janela.style.height = 68;
+            janela.style.overflow = Overflow.Hidden;
+            janela.style.flexShrink = 0;
+            foreach (var camada in new[] { "corpo/" + raca, "cabelo/" + penteado })
+            {
+                var arte = Arte(camada);
+                if (arte == null) continue;
+                var imagem = new VisualElement { pickingMode = PickingMode.Ignore };
+                imagem.style.position = Position.Absolute;
+                imagem.style.left = -24;
+                imagem.style.top = 0;
+                imagem.style.width = 128;
+                imagem.style.height = 128;
+                imagem.style.backgroundImage = new StyleBackground(arte);
+                janela.Add(imagem);
+            }
+            return janela;
+        }
+
         /// <summary>TS: ehPequeno — anão, fada e goblin desenham a imagem final inteira a 3/4.</summary>
         public static bool EhPequeno(string raca) => !string.IsNullOrEmpty(raca) && Catalog.RaceById(raca)?.Porte == "pequeno";
 

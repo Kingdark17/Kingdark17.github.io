@@ -24,6 +24,9 @@ namespace RPGLegend.Engine.Json
         /// </summary>
         public static JToken ParaSave(EstadoDoJogo estado) => SemNumeroEspecial(JsSerializer.Write(estado));
 
+        /// <summary>O save do personagem recém-criado, como o site manda o <c>montarSaveInicial</c> pra nuvem.</summary>
+        public static JToken ParaSaveInicial(SaveInicial save) => SemNumeroEspecial(JsSerializer.Write(save));
+
         private static JToken SemNumeroEspecial(JToken token)
         {
             if (JsJson.TryReadSpecialNumber(token, out _)) return JValue.CreateNull();

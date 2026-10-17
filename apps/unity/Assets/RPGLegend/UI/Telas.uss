@@ -568,6 +568,11 @@
     padding: 0;
 }
 
+/* Mais específico que a regra de cima, que zerava também o respiro entre a figura e o nome. */
+.carta .unity-label.nome-da-carta {
+    margin-top: 4px;
+}
+
 .rotulo-do-espaco {
     -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
     -unity-font-definition: initial;
@@ -668,6 +673,142 @@
 .painel-da-forja {
     padding: 10px 12px;
     margin-bottom: 8px;
+}
+
+/* ---------- o bichinho no canto da sala (jogo.module.css, .bichinho) ---------- */
+
+.unity-button.bichinho {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    width: 68px;
+    height: 68px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px;
+    border-color: var(--gold);
+    border-radius: 34px;
+    background-color: var(--panel);
+}
+
+.unity-button.bichinho:hover {
+    background-color: var(--panel);
+}
+
+.unity-button.bichinho.feliz {
+    border-color: var(--gold-bright);
+}
+
+.unity-button.bichinho.escondido,
+.bichinho .escondido {
+    display: none;
+}
+
+.rosto-do-bicho {
+    width: 56px;
+    height: 56px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.emoji-do-bicho {
+    font-size: 32px;
+    margin: 0;
+    padding: 0;
+    -unity-text-align: middle-center;
+}
+
+.coracao-do-bicho {
+    position: absolute;
+    left: 25px;
+    top: 6px;
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    color: #ff6b8a;
+    opacity: 0;
+}
+
+/* ---------- novo personagem (criacao.module.css): a prévia ao lado das escolhas ---------- */
+
+.criacao {
+    padding: 28px 52px 24px 52px;
+}
+
+.corpo-da-criacao {
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    min-height: 0;
+}
+
+.previa-da-criacao {
+    width: 240px;
+    flex-shrink: 0;
+    align-items: center;
+    margin-right: 24px;
+}
+
+.balao-da-criacao {
+    width: 220px;
+    height: 220px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--panel-2);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 110px;
+    margin-bottom: 10px;
+}
+
+.balao-da-criacao .reserva-do-boneco {
+    opacity: 0.5;
+}
+
+.legenda-da-criacao {
+    font-size: 15px;
+    color: var(--parchment-dim);
+    white-space: normal;
+    -unity-text-align: upper-center;
+}
+
+.formulario-da-criacao {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.campo.campo-da-criacao {
+    max-width: 420px;
+}
+
+.carta.carta-de-raca {
+    width: 168px;
+}
+
+.carta-de-raca .reserva-do-boneco {
+    font-size: 44px;
+    opacity: 0.5;
+}
+
+.carta.carta-de-cabelo {
+    width: 104px;
+}
+
+.unity-button.botao-comecar {
+    align-self: flex-start;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.dica-da-criacao {
+    font-size: 15px;
+    color: var(--parchment-dim);
+    white-space: normal;
+    margin-bottom: 8px;
+    max-width: 640px;
 }
 
 /* ---------- o cartão de guilda: tinta sobre o pergaminho ---------- */

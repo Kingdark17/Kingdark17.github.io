@@ -31,8 +31,7 @@
 .titulo,
 .titulo-tela,
 .nome,
-.toque,
-.retrato-letra {
+.toque {
     -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/Alkhemikal.ttf");
     -unity-font-definition: initial;
     -unity-font-style: normal;
@@ -378,21 +377,17 @@
     color: var(--parchment-dim);
 }
 
+/* O balão do boneco (lista-personagens.tsx): o mesmo da criação e da ficha, menor. */
 .retrato {
-    width: 92px;
-    height: 92px;
+    width: 108px;
+    height: 108px;
     margin: 8px 0 6px 0;
     align-items: center;
     justify-content: center;
     background-color: var(--panel-2);
     border-width: 1px;
     border-color: var(--line);
-    border-radius: 46px;
-}
-
-.retrato-letra {
-    font-size: 48px;
-    color: var(--gold);
+    border-radius: 54px;
 }
 
 .nome {
@@ -441,6 +436,36 @@
 .unity-button.botao-slot {
     margin-top: auto;
     font-size: 17px;
+}
+
+/* JOGAR e "Apagar" no pé do cartão; a pergunta de apagar fica no mesmo lugar, sem janela por cima. */
+.rodape-do-slot {
+    margin-top: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.rodape-do-slot .unity-button.botao-slot {
+    margin-top: 0;
+}
+
+.rodape-do-slot .unity-button.link {
+    margin-left: 12px;
+}
+
+.pergunta-do-slot {
+    margin-top: auto;
+    margin-bottom: 6px;
+    font-size: 16px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.unity-button.link-perigo {
+    margin-left: 0;
+    color: var(--ember);
+    border-color: rgba(192, 83, 47, 0.6);
 }
 
 /* ---------- aviso rápido e véu das transições ---------- */

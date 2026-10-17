@@ -36,6 +36,15 @@ namespace RPGLegend.Game.App
         public event Action<string> AoEmBreve;
         /// <summary>O JOGAR do cartão de um personagem: o número do slot.</summary>
         public event Action<int> AoJogarSlot;
+        /// <summary>O CRIAR PERSONAGEM de um slot vazio.</summary>
+        public event Action<int> AoCriarSlot;
+        /// <summary>O "Sim, apagar" da confirmação de um slot.</summary>
+        public event Action<int> AoApagarSlot;
+
+        /// <summary>O slot com a pergunta "Apagar este personagem para sempre?" aberta (0 = nenhum), e a lista desenhada.</summary>
+        private int _confirmandoSlot;
+        private CharacterList _lista;
+        private bool _apagando;
 
         public AppScreens(VisualElement raiz)
         {
@@ -203,13 +212,37 @@ namespace RPGLegend.Game.App
 
         public void PersonagensLista(CharacterList lista)
         {
+            _lista = lista;
+            _confirmandoSlot = 0;
+            _apagando = false;
             Estado(null, false);
+            DesenharLista();
+        }
+
+        private void DesenharLista()
+        {
             _grade.Clear();
-            for (int slot = 1; slot <= Math.Max(1, lista.MaxSlots); slot++)
+            for (int slot = 1; slot <= Math.Max(1, _lista.MaxSlots); slot++)
             {
-                var personagem = lista.Characters.Find(c => c.Slot == slot);
+                var personagem = _lista.Characters.Find(c => c.Slot == slot);
                 _grade.Add(personagem == null ? SlotVazio(slot) : SlotOcupado(slot, personagem));
             }
+        }
+
+        /// <summary>A pergunta de apagar fica no próprio cartão, como no site (nada de janela que trava a tela).</summary>
+        private void Confirmar(int slot)
+        {
+            if (_apagando) return;
+            _confirmandoSlot = slot;
+            DesenharLista();
+        }
+
+        /// <summary>Apagar falhou: a pergunta continua, com o erro em cima da lista.</summary>
+        public void ApagarFalhou(string mensagem)
+        {
+            _apagando = false;
+            Estado(mensagem, true);
+            DesenharLista();
         }
 
         private void Estado(string texto, bool falha)
@@ -222,17 +255,22 @@ namespace RPGLegend.Game.App
         private VisualElement SlotVazio(int slot)
         {
             var card = Card(slot, "slot-vazio");
-            card.Add(BotaoEmBreve("CRIAR PERSONAGEM", "Criar personagem pelo app chega numa próxima versão. Por enquanto, crie no site."));
+            var criar = new Button(() => AoCriarSlot?.Invoke(slot)) { text = "CRIAR PERSONAGEM" };
+            criar.AddToClassList("botao");
+            criar.AddToClassList("botao-slot");
+            card.Add(criar);
             return card;
         }
 
         private VisualElement SlotOcupado(int slot, CharacterSummary p)
         {
             var card = Card(slot, null);
+            // O mesmo boneco da criação e da partida: reconhecer o personagem de relance é metade do motivo de haver
+            // um seletor (lista-personagens.tsx). Raça sem corpo desenhado mostra o emoji dela.
             var retrato = Novo<VisualElement>("retrato");
-            var nome = string.IsNullOrEmpty(p.Name) ? "Sem nome" : p.Name;
-            retrato.Add(Texto(nome.Substring(0, 1).ToUpperInvariant(), "retrato-letra"));
+            retrato.Add(Jogo.Paperdoll.Criar(HeroiDoResumo(p), 96));
             card.Add(retrato);
+            var nome = string.IsNullOrEmpty(p.Name) ? "Sem nome" : p.Name;
             card.Add(Texto(nome, "nome"));
             card.Add(Texto(string.IsNullOrEmpty(p.ClassName) ? "Classe desconhecida" : (string.IsNullOrEmpty(p.Race) ? p.ClassName : p.Race + " " + p.ClassName), "classe"));
             var numeros = Novo<VisualElement>("numeros");
@@ -241,11 +279,49 @@ namespace RPGLegend.Game.App
             card.Add(numeros);
             var data = DataCurta(p.UpdatedAt);
             if (data.Length > 0) card.Add(Texto("Salvo em " + data, "atualizado"));
+
+            if (_confirmandoSlot == slot)
+            {
+                card.Add(Texto("Apagar este personagem para sempre?", "pergunta-do-slot"));
+                var rodape = Novo<VisualElement>("rodape-do-slot");
+                var sim = new Button(() =>
+                {
+                    if (_apagando) return;
+                    _apagando = true;
+                    Estado(null, false);
+                    DesenharLista();
+                    AoApagarSlot?.Invoke(slot);
+                }) { text = _apagando ? "Apagando…" : "Sim, apagar" };
+                sim.AddToClassList("link");
+                sim.AddToClassList("link-perigo");
+                sim.SetEnabled(!_apagando);
+                rodape.Add(sim);
+                var cancelar = new Button(() => Confirmar(0)) { text = "Cancelar" };
+                cancelar.AddToClassList("link");
+                cancelar.SetEnabled(!_apagando);
+                rodape.Add(cancelar);
+                card.Add(rodape);
+                return card;
+            }
+
+            var acoes = Novo<VisualElement>("rodape-do-slot");
             var jogar = new Button(() => AoJogarSlot?.Invoke(slot)) { text = "JOGAR" };
             jogar.AddToClassList("botao");
             jogar.AddToClassList("botao-slot");
-            card.Add(jogar);
+            acoes.Add(jogar);
+            var apagar = new Button(() => Confirmar(slot)) { text = "Apagar" };
+            apagar.AddToClassList("link");
+            acoes.Add(apagar);
+            card.Add(acoes);
             return card;
+        }
+
+        /// <summary>O herói que o boneco do retrato precisa: a raça (id ou nome, nos saves antigos), o cabelo e as peças.</summary>
+        private static Engine.Hero HeroiDoResumo(CharacterSummary p)
+        {
+            var equip = new Engine.Equipment();
+            foreach (var par in p.Equip) equip.Set(par.Key, new Engine.Item { TemplateId = par.Value });
+            return new Engine.Hero { RaceId = p.RaceId, Race = p.Race, RaceIcon = string.IsNullOrEmpty(p.RaceIcon) ? "❔" : p.RaceIcon, Hair = p.Hair, Equip = equip };
         }
 
         private static VisualElement Card(int slot, string classeExtra)
@@ -255,14 +331,6 @@ namespace RPGLegend.Game.App
             if (classeExtra != null) card.AddToClassList(classeExtra);
             card.Add(Texto("SLOT " + slot, "numero-slot"));
             return card;
-        }
-
-        private Button BotaoEmBreve(string texto, string aviso)
-        {
-            var botao = new Button(() => AoEmBreve?.Invoke(aviso)) { text = texto };
-            botao.AddToClassList("botao");
-            botao.AddToClassList("botao-slot");
-            return botao;
         }
 
         private static VisualElement Numero(int valor, string chave)

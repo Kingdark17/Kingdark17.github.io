@@ -169,11 +169,12 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   `br.com.rpglegend.smoke` só durante o build.
 - Telas do app (2026-10-11): cena `Scenes/App.unity` (a do build). Entrada
   animada estilo Genshin: a câmera se aproxima da porta trancada, o cadeado cai
-  e a porta abre quando a pessoa entra; depois menu e lista de personagens (só
-  leitura). UI Toolkit para as telas + cena 2D para a porta; visual igual ao
-  site; **celular deitado** (só paisagem). A arte da porta é **provisória**
-  (o Breno substitui com os mesmos nomes em `Art/Entrada`). Criar personagem
-  pelo app ainda diz "em breve". **Login com Google fica para uma
+  e a porta abre quando a pessoa entra; depois menu e lista de personagens
+  (com o boneco de cada um; criar e apagar como no site, em
+  `TelaDeCriacao`/`AppScreens`). UI Toolkit para as telas + cena 2D para a
+  porta; visual igual ao site; **celular deitado** (só paisagem). A arte da
+  porta é **provisória** (o Breno substitui com os mesmos nomes em
+  `Art/Entrada`). **Login com Google fica para uma
   rodada própria** (Google Cloud, rota na API, mudança no banco de produção e
   regra para e-mail que já tem conta — planejar com o usuário).
   O menu RPG Legend > Build do app (Android) instala o app de verdade no
@@ -191,9 +192,11 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   conversa, evento, totem, quadro de missões, mestre e guilda em
   `TelaDeJogo.Telas.cs`; mochila (cartão de guilda com o "+" dos pontos,
   boneco com os espaços, ficha com "Se você equipar") e loja/ferreiro em
-  arquivos próprios; e mais o guia e a ficha do herói. A arte de item e a do
-  boneco são **cópia** de `apps/web/public/img` (mesmos nomes, em
-  `Art/Jogo/Resources/Itens` e `Paperdoll`): arte nova vai nos dois lugares.
+  arquivos próprios; e mais o guia e a ficha do herói. O pet da conta fica no
+  canto da sala, enfeite como no site (`BichoDeEstimacao`). A arte de item, a
+  do boneco e a do pet são **cópia** de `apps/web/public/img` (mesmos nomes,
+  em `Art/Jogo/Resources/Itens`, `Paperdoll` e `Pets`): arte nova vai nos dois
+  lugares.
   O boneco é port de `lib/paperdoll/camadas.ts` (`Paperdoll.cs`), parado. O
   texto da UI usa o emoji do sistema sozinho (Unity 6.6); a cena da sala
   desenha emoji com `EmojiDoSistema` (fonte do sistema → sprite). Atalho de

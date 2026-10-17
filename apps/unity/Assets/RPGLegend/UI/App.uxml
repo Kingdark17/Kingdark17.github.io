@@ -49,6 +49,35 @@
             <ui:VisualElement name="grade" class="grade" />
         </ui:VisualElement>
 
+        <!-- Novo personagem (formulario-criacao.tsx): a prévia ao lado das escolhas, nome, raça e cabelo. -->
+        <ui:VisualElement name="criacao" class="tela criacao oculto">
+            <ui:VisualElement class="cabecalho">
+                <ui:VisualElement class="cabecalho-textos">
+                    <ui:Label text="Novo personagem" class="titulo-tela" />
+                    <ui:Label name="slot-da-criacao" class="subtitulo" />
+                </ui:VisualElement>
+                <ui:Button name="botao-voltar-criacao" text="VOLTAR" class="botao" />
+            </ui:VisualElement>
+            <ui:VisualElement class="corpo-da-criacao">
+                <ui:VisualElement class="previa-da-criacao">
+                    <ui:VisualElement name="balao-da-criacao" class="balao-da-criacao" />
+                    <ui:Label name="legenda-da-criacao" class="legenda-da-criacao" />
+                </ui:VisualElement>
+                <ui:ScrollView name="formulario-da-criacao" class="formulario-da-criacao rolagem-fina" horizontal-scroller-visibility="Hidden">
+                    <ui:TextField name="nome-da-criacao" label="Nome do herói" max-length="20" class="campo campo-da-criacao" />
+                    <ui:Label text="Raça" class="titulo-da-secao" />
+                    <ui:VisualElement name="racas-da-criacao" class="grade-de-cartas" />
+                    <ui:VisualElement name="secao-do-cabelo">
+                        <ui:Label text="Cabelo" class="titulo-da-secao" />
+                        <ui:VisualElement name="cabelos-da-criacao" class="grade-de-cartas" />
+                    </ui:VisualElement>
+                    <ui:Button name="botao-comecar" text="COMEÇAR AVENTURA" class="botao botao-forte botao-comecar" />
+                    <ui:Label text="Você começa como Aprendiz. A classe e o primeiro poder vêm do Treinamento de Guilda, na cidade — sem ele, o portão da masmorra não abre." class="dica-da-criacao" />
+                    <ui:Label name="erro-da-criacao" class="erro" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
         <!-- O jogo: a sala à esquerda, na altura toda (celular deitado, como o site); o resto à direita. -->
         <ui:VisualElement name="jogo" class="tela jogo oculto">
             <ui:VisualElement name="palco" class="palco">
@@ -56,6 +85,8 @@
                     <ui:VisualElement name="alavanca-do-joystick" class="alavanca-do-joystick" picking-mode="Ignore" />
                 </ui:VisualElement>
                 <ui:Label name="dica-do-joystick" text="Arraste o dedo na sala para andar" class="dica-do-joystick" picking-mode="Ignore" />
+                <!-- O pet da conta no canto da sala, em cima da parede (bicho-de-estimacao.tsx); tocar faz carinho. -->
+                <ui:Button name="bichinho" />
             </ui:VisualElement>
             <ui:VisualElement name="lado" class="lado">
                 <ui:VisualElement class="topo-do-lado">
