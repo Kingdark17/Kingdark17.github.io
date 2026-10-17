@@ -193,7 +193,7 @@ namespace RPGLegend.Engine
 
     /// <summary>
     /// Port de shared/src/luta/arena.ts: a luta em tempo real do app, em primeira pessoa como a do site, com o
-    /// coração na caixa como no Undertale (teste pedido pelo usuário em 2026-10-17, ainda sem decisão). Os
+    /// coração na caixa como no Undertale (pedida pelo usuário como teste em 2026-10-17 e mantida por ele). Os
     /// monstros ficam no palco; o joystick move o coração dentro da caixa; todo golpe de monstro no herói é um
     /// desenho na caixa com aviso antes, e só pega se encostar no coração. O botão de ataque abre o evento da
     /// arma no alvo, em câmera lenta. Um monstro golpeia por vez, revezando; o golpe pode ir num companheiro

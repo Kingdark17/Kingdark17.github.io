@@ -1,7 +1,8 @@
 /**
  * A luta em tempo real do app, em primeira pessoa como a do site, com o
- * coração na caixa como no Undertale (teste pedido pelo usuário em
- * 2026-10-17, ainda sem decisão; a luta dentro da sala ficou no histórico).
+ * coração na caixa como no Undertale (pedida pelo usuário como teste em
+ * 2026-10-17, e mantida por ele no mesmo dia; a luta dentro da sala ficou
+ * no histórico, no commit 82b03da).
  *
  * - Os monstros ficam no palco, de frente, como no site: não andam. O
  *   jogador toca no monstro que quer atacar (`mirar`), e o alvo cai pro

@@ -11,7 +11,7 @@ namespace RPGLegend.Game.Jogo
     /// monstros de frente no palco, cada um com a placa (nome, vida e o que pesa sobre ele) — tocar num deles muda o
     /// alvo —, e embaixo a caixa preta do Undertale, onde o coração desvia dos golpes: o círculo do golpe de perto,
     /// a faixa da investida (com o monstro mergulhando por ela), a bola do mágico. Os companheiros ficam ao lado da
-    /// caixa. Teste pedido pelo usuário em 2026-10-17, ainda sem decisão.
+    /// caixa. Pedida pelo usuário como teste em 2026-10-17 e mantida por ele.
     ///
     /// Só desenha, a cada quadro: onde está cada coisa é a arena que diz (<see cref="Arenas"/>).
     /// </summary>

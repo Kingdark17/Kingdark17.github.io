@@ -202,8 +202,10 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   real (`luta/arena.ts`, no C# `Arenas`): a `Partida` troca o combate por
   turnos pela arena, e só se sai vencendo ou caindo. A luta é em primeira
   pessoa, como a do site, com o coração do Undertale numa caixa
-  (`PalcoDaLuta`): **teste pedido pelo usuário em 2026-10-17, sem decisão**;
-  a versão com a luta dentro da sala é o commit 82b03da. As telas de sala
+  (`PalcoDaLuta`): **decisão do usuário em 2026-10-17**, depois de pedir
+  como teste; a versão com a luta dentro da sala ficou no commit 82b03da.
+  No PC, o cajado pede letras (U, I, O e P, uma por vez, com um aro
+  fechando) em vez do desenho, que fica no celular. As telas de sala
   são as do site, nos mesmos moldes (a carta seleciona, a ficha age):
   conversa, evento, totem, quadro de missões, mestre e guilda em
   `TelaDeJogo.Telas.cs`; mochila (cartão de guilda com o "+" dos pontos,
