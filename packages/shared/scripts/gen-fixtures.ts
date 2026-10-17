@@ -110,6 +110,7 @@ import type {
   Walker,
   WalkStep,
 } from '../src/index.js';
+import type { EventoDeArma, JogadaDoEvento, LeituraDaMira, PontoDoTraco } from '../src/index.js';
 
 const PACOTE = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DESTINO = join(PACOTE, 'fixtures');
@@ -3529,6 +3530,186 @@ for (const [nome, criacao, semente] of [
     rng: { seed: semente },
     now: AGORA,
   });
+}
+
+// =====================================================================
+// luta — a luta em tempo real do app (etapa 5)
+// =====================================================================
+
+modulo('luta');
+
+// ---------- o evento de cada arma ----------
+
+for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'constructor', 'escudo']) {
+  caso(`eventoDaArma: ${arma}`, 'eventoDaArma', { templateId: arma }, (a) => E.eventoDaArma(a.templateId));
+}
+
+{
+  const SEM_SORTEIO: RngSpec = { sequence: [] };
+  for (const [nome, hero, estilo] of [
+    ['bárbaro de espada', heroi({ arma: 'espada' }), 'normal'],
+    ['guerreiro de espada, zona da classe', heroi({ classe: 'guerreiro', arma: 'espada' }), 'normal'],
+    ['clérigo de maça', heroi({ classe: 'clerigo' }), 'normal'],
+    ['maça com Precisão 25', heroi({ arma: 'maca', extra: { buffs: { precisaoTurns: 2, precisaoAmount: 25 } } }), 'normal'],
+    ['arqueiro de arco, tiro', heroi({ classe: 'arqueiro' }), 'ranged'],
+    ['arco com Visão Fraca', heroi({ arma: 'arco', debuff: 'visao_fraca' }), 'normal'],
+    ['bárbaro de machado', heroi({ arma: 'machado' }), 'normal'],
+    ['marreta', heroi({ arma: 'marreta' }), 'normal'],
+    ['bardo de violão', heroi({ classe: 'bardo', arma: 'violao' }), 'normal'],
+    ['ladino de adaga', heroi({ classe: 'ladino' }), 'normal'],
+    ['mão vazia', heroi({ arma: null }), 'normal'],
+  ] as const) {
+    caso(`eventoDoAtaque: ${nome}`, 'eventoDoAtaque', { hero, estilo }, (a, ctx) => E.eventoDoAtaque(a.hero, a.estilo, ctx.rng), { rng: SEM_SORTEIO });
+  }
+  const mago = heroi({ classe: 'mago' });
+  for (const sorteio of [0, 0.2, 0.4, 0.6, 0.99]) {
+    caso(`eventoDoAtaque: mago de cajado, sorteio ${sorteio}`, 'eventoDoAtaque', { hero: mago, estilo: 'magic' }, (a, ctx) => E.eventoDoAtaque(a.hero, a.estilo as AttackStyle, ctx.rng), {
+      rng: { sequence: [sorteio] },
+    });
+  }
+  caso('eventoDoAtaque: necromante de cajado, golpe físico', 'eventoDoAtaque', { hero: heroi({ classe: 'necromante' }), estilo: 'normal' }, (a, ctx) =>
+    E.eventoDoAtaque(a.hero, a.estilo as AttackStyle, ctx.rng), { rng: { seed: 77 } });
+}
+
+// ---------- a leitura ----------
+
+{
+  const le = (nome: string, evento: EventoDeArma, jogada: JogadaDoEvento) => caso(`lerEvento: ${nome}`, 'lerEvento', { evento, jogada }, (a) => E.lerEvento(a.evento, a.jogada));
+
+  const barra = (zona: number): EventoDeArma => ({ tipo: 'barra', zona, duracao: E.DURACAO_DA_BARRA });
+  for (const zona of [0.5, 2 / 3, 0.85, 0.1]) {
+    for (const toque of [0, 10, 21, 30, 41, 42, 43, 55, 63, 70, 83, 84]) le(`barra, zona ${zona}, toque ${toque}`, barra(zona), { toque });
+    le(`barra, zona ${zona}, sem toque`, barra(zona), {});
+  }
+  for (const toque of [85, -1, 1.5, Number.NaN]) le(`barra, toque ${toque} lança`, barra(0.5), { toque });
+
+  const circulo: EventoDeArma = { tipo: 'circulo', zona: 0.5, duracao: E.DURACAO_DO_CIRCULO };
+  for (const toque of [0, 30, 42, 50, 84]) le(`bolinha, toque ${toque}`, circulo, { toque });
+  le('bolinha, sem toque', circulo, {});
+  le('bolinha com o campo da carga não conta', circulo, { soltou: 42 });
+
+  const carga = (zona: number): EventoDeArma => ({ tipo: 'carga', zona, duracao: E.DURACAO_DA_CARGA });
+  for (const soltou of [0, 20, 33, 42, 51, 60, 83, 84]) le(`carga, soltou ${soltou}`, carga(0.5), { soltou });
+  le('carga da classe, soltou 64', carga(2 / 3), { soltou: 64 });
+  le('carga, não soltou', carga(0.5), {});
+  le('carga, soltou 90 lança', carga(0.5), { soltou: 90 });
+
+  const ritmo = (zona: number): EventoDeArma => ({ tipo: 'ritmo', zona, duracao: 114, notas: [...E.NOTAS_DO_RITMO], janela: E.JANELA_DO_RITMO });
+  for (const [nome, toques] of [
+    ['em cima das três', [30, 60, 90]],
+    ['um passo fora em cada', [31, 59, 91]],
+    ['dois passos fora', [32, 62, 88]],
+    ['a primeira atrasada 6', [36, 60, 90]],
+    ['só a do meio', [60]],
+    ['nenhuma na janela', [0, 1, 2, 113]],
+    ['cedo demais em todas', [6, 36, 66]],
+    ['bate sem parar', Array.from({ length: 115 }, (_, i) => i)],
+    ['dois toques na mesma janela', [29, 31, 60, 90]],
+    ['toques repetidos no mesmo passo', [30, 30, 60, 90]],
+    ['nenhum toque', []],
+  ] as const) {
+    le(`ritmo, ${nome}`, ritmo(0.5), { toques: [...toques] });
+  }
+  le('ritmo da classe, um pouco fora', ritmo(2 / 3), { toques: [34, 55, 95] });
+  le('ritmo, sem o campo dos toques', ritmo(0.5), {});
+  le('ritmo, toque voltando lança', ritmo(0.5), { toques: [60, 30] });
+  le('ritmo, toque depois do fim lança', ritmo(0.5), { toques: [30, 115] });
+
+  const duplo: EventoDeArma = { tipo: 'toque_duplo', zona: 0.5, duracao: 58, notas: [...E.NOTAS_DO_TOQUE_DUPLO], janela: E.JANELA_DO_TOQUE_DUPLO };
+  for (const [nome, toques] of [
+    ['em cima', [24, 42]],
+    ['um fora em cada', [25, 41]],
+    ['o segundo atrasado', [24, 50]],
+    ['só o primeiro', [24]],
+    ['os dois cedo demais', [8, 26]],
+    ['bate sem parar', Array.from({ length: 59 }, (_, i) => i)],
+  ] as const) {
+    le(`toque duplo, ${nome}`, duplo, { toques: [...toques] });
+  }
+
+  const desenho = (simbolo: string, zona = 0.5): EventoDeArma => ({ tipo: 'desenho', zona, duracao: E.DURACAO_DO_DESENHO, simbolo });
+  const tracar = (simbolo: string, passos: number, desloca = 0): PontoDoTraco[] => {
+    const pontos = E.SIMBOLOS[simbolo] as readonly (readonly [number, number])[];
+    return pontos.map(([x, y], i) => ({ x: Math.min(1000, x + desloca), y, t: Math.floor((passos * i) / (pontos.length - 1)) }));
+  };
+  for (const simbolo of Object.keys(E.SIMBOLOS)) {
+    le(`desenho, ${simbolo} em cima, rápido`, desenho(simbolo), { traco: tracar(simbolo, 30) });
+    le(`desenho, ${simbolo} deslocado 40`, desenho(simbolo), { traco: tracar(simbolo, 30, 40) });
+    le(`desenho, ${simbolo} devagar`, desenho(simbolo), { traco: tracar(simbolo, 100) });
+    le(`desenho, ${simbolo} pela metade`, desenho(simbolo), { traco: tracar(simbolo, 20).slice(0, Math.ceil((E.SIMBOLOS[simbolo] as unknown[]).length / 2)) });
+  }
+  const raio = tracar('raio', 30);
+  le('desenho, raio ao contrário', desenho('raio'), { traco: raio.map((p, i) => ({ ...(raio[raio.length - 1 - i] as PontoDoTraco), t: p.t })) });
+  le('desenho, raio no círculo', desenho('circulo'), { traco: tracar('raio', 30) });
+  le('desenho, onda no triângulo, zona da classe', desenho('triangulo', 2 / 3), { traco: tracar('onda', 30) });
+  le('desenho, quatro cantos do círculo', desenho('circulo'), { traco: [{ x: 500, y: 160, t: 0 }, { x: 840, y: 500, t: 8 }, { x: 500, y: 840, t: 16 }, { x: 160, y: 500, t: 24 }, { x: 500, y: 160, t: 32 }] });
+  le('desenho, um ponto só', desenho('circulo'), { traco: [{ x: 500, y: 500, t: 0 }] });
+  le('desenho, pontos repetidos', desenho('raio'), { traco: [{ x: 620, y: 120, t: 0 }, { x: 620, y: 120, t: 5 }, { x: 380, y: 880, t: 10 }] });
+  le('desenho, sem traço', desenho('espiral'), {});
+  le('desenho, ponto fora da caixa lança', desenho('circulo'), { traco: [{ x: 1001, y: 0, t: 0 }, { x: 0, y: 0, t: 1 }] });
+  le('desenho, coordenada quebrada lança', desenho('circulo'), { traco: [{ x: 10.5, y: 0, t: 0 }, { x: 0, y: 0, t: 1 }] });
+  le('desenho, passo depois do fim lança', desenho('circulo'), { traco: [{ x: 0, y: 0, t: 0 }, { x: 0, y: 0, t: 121 }] });
+  le('desenho, passo voltando lança', desenho('circulo'), { traco: [{ x: 0, y: 0, t: 5 }, { x: 0, y: 0, t: 4 }] });
+  le('desenho, símbolo herdado do objeto lança', desenho('constructor'), { traco: [] });
+  le('desenho, traço comprido demais lança', desenho('circulo'), {
+    traco: Array.from({ length: E.PONTOS_MAXIMOS_DO_TRACO + 1 }, (_, i) => ({ x: i % 1000, y: 500, t: Math.floor(i / 6) })),
+  });
+
+  // Traços de dedo: o símbolo com tremida, pontos pulados e tempo de sobra ou de falta.
+  for (let i = 1; i <= 24; i++) {
+    const simbolo = umDe(Object.keys(E.SIMBOLOS));
+    const alvo = chance(0.8) ? simbolo : umDe(Object.keys(E.SIMBOLOS));
+    const passos = entre(10, E.DURACAO_DO_DESENHO);
+    const tremida = entre(0, 90);
+    const base = E.SIMBOLOS[simbolo] as readonly (readonly [number, number])[];
+    const traco: PontoDoTraco[] = [];
+    for (let k = 0; k < base.length; k++) {
+      if (k > 0 && k < base.length - 1 && chance(0.3)) continue;
+      const [x, y] = base[k] as readonly [number, number];
+      traco.push({
+        x: Math.max(0, Math.min(1000, x + entre(-tremida, tremida))),
+        y: Math.max(0, Math.min(1000, y + entre(-tremida, tremida))),
+        t: Math.floor((passos * k) / (base.length - 1)),
+      });
+    }
+    le(`desenho, lote ${i}`, desenho(alvo, umDe([0.5, 2 / 3, 0.4, 0.85])), { traco });
+  }
+
+  le('evento desconhecido lança', { tipo: 'flauta' as never, zona: 0.5, duracao: 10 }, {});
+}
+
+// ---------- o golpe com a leitura feita ----------
+
+{
+  const LISO: RngSpec = { sequence: [0.99, 0.99] };
+  const rg = (nome: string, hero: Hero, monster: CombatMonsterView, dado: number, leitura: LeituraDaMira, attackStyle: AttackStyle, rng: RngSpec) =>
+    caso(`resolverGolpe: ${nome}`, 'resolverGolpe', { hero, monster, dado, leitura, attackStyle, options: {} }, (a, ctx) =>
+      E.resolverGolpe(a.hero, a.monster, a.dado, a.leitura, a.attackStyle, { ...a.options, rng: ctx.rng }), { rng });
+
+  const guerreiro = heroi({ classe: 'guerreiro', arma: 'espada' });
+  const mago = heroi({ classe: 'mago' });
+  rg('força 1×', guerreiro, monstro(), 1, { acerto: true, forca: 1, critico: false }, 'normal', LISO);
+  rg('centro do evento: 1,5× e crítico', guerreiro, monstro(), 12, { acerto: true, forca: 1.5, critico: true }, 'normal', LISO);
+  rg('a média do ritmo, 0,83×', heroi({ classe: 'bardo', arma: 'violao' }), monstro(), 9, { acerto: true, forca: 0.83, critico: false }, 'normal', LISO);
+  rg('erro do evento', guerreiro, monstro(), 20, { acerto: false, forca: 0, critico: false }, 'normal', LISO);
+  rg('desenho do mago, golpe mágico', mago, monstro(), 7, { acerto: true, forca: 1.2, critico: false }, 'magic', LISO);
+  rg('mago sem mana', heroi({ classe: 'mago', extra: { mp: 1 } }), monstro(), 7, { acerto: true, forca: 1.2, critico: false }, 'magic', LISO);
+  rg('o ágil esquiva fora do crítico', heroi({ arma: 'machado' }), monstro({ speciesId: 'lobo_sombras' }), 5, { acerto: true, forca: 1.1, critico: false }, 'normal', { sequence: [0.05] });
+  rg('o crítico do evento fura a esquiva do ágil', heroi({ arma: 'machado' }), monstro({ speciesId: 'lobo_sombras' }), 5, { acerto: true, forca: 1.5, critico: true }, 'normal', { sequence: [0.05, 0.99, 0.99] });
+  rg('critNext com o evento errado', heroi({ arma: 'adaga', extra: { buffs: { critNext: true } } }), monstro(), 3, { acerto: false, forca: 0, critico: false }, 'normal', LISO);
+  rg('derruba o monstro', guerreiro, monstro({ hp: 4 }), 20, { acerto: true, forca: 1.5, critico: true }, 'normal', LISO);
+  rg('força 1,6 lança', guerreiro, monstro(), 10, { acerto: true, forca: 1.6, critico: false }, 'normal', LISO);
+  rg('força negativa lança', guerreiro, monstro(), 10, { acerto: true, forca: -0.1, critico: false }, 'normal', LISO);
+  rg('força NaN lança', guerreiro, monstro(), 10, { acerto: true, forca: Number.NaN, critico: false }, 'normal', LISO);
+  rg('dado 0 lança antes da força', guerreiro, monstro(), 0, { acerto: true, forca: 9, critico: false }, 'normal', LISO);
+
+  for (let i = 1; i <= 30; i++) {
+    const hero = heroiDeLote();
+    const estilo = umDe(E.ataquesDisponiveis(hero)).estilo;
+    const evento = E.eventoDoAtaque(hero, estilo, () => lote());
+    const leitura = chance(0.15) ? E.lerMira(evento.zona, null) : E.lerMira(evento.zona, lote());
+    rg(`lote ${i}`, hero, monstroDeLote(), entre(1, 20), leitura, estilo, { seed: 3000 + i });
+  }
 }
 
 // =====================================================================

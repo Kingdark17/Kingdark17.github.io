@@ -205,9 +205,6 @@ export function resolveAttack(
   attackStyle: AttackStyle,
   options: ResolveAttackOptions = {},
 ): ResolveAttackResult {
-  const rng = options.rng ?? defaultRng;
-  const petCritico = options.petCriticoBonus ?? 0;
-
   // Número fora do dado ou mira fora da barra é defeito de quem chamou.
   // Corrigir em silêncio esconderia o defeito, e um servidor que confira a
   // jogada vai querer exatamente esta recusa. Vem antes da mana: a jogada é
@@ -220,7 +217,36 @@ export function resolveAttack(
     throw new RangeError(`mira ${mira} fora da barra (ataque ${attackStyle})`);
   }
 
-  const leitura = lerMira(zonaDoAtaque(hero, attackStyle), mira);
+  return resolverGolpe(hero, monster, dado, lerMira(zonaDoAtaque(hero, attackStyle), mira), attackStyle, options);
+}
+
+/**
+ * O golpe com a mira já lida: tudo o que a `resolveAttack` faz depois de
+ * ler a barra. Existe à parte pra luta em tempo real do app, onde a leitura
+ * vem do evento da arma (`lerEvento`, em `luta/eventos-de-arma.ts`) e não
+ * da barra — o resto do golpe é o mesmo, sorteio por sorteio.
+ *
+ * Dado fora do d20 e força fora de 0 a `FORCA_NO_CENTRO` lançam, pelo mesmo
+ * motivo da `resolveAttack`.
+ */
+export function resolverGolpe(
+  hero: Hero,
+  monster: CombatMonsterView,
+  dado: number,
+  leitura: LeituraDaMira,
+  attackStyle: AttackStyle,
+  options: ResolveAttackOptions = {},
+): ResolveAttackResult {
+  const rng = options.rng ?? defaultRng;
+  const petCritico = options.petCriticoBonus ?? 0;
+
+  if (!Number.isInteger(dado) || dado < 1 || dado > LADOS_DO_DANO) {
+    throw new RangeError(`rolagem ${dado} não existe num d${LADOS_DO_DANO} (ataque ${attackStyle})`);
+  }
+  if (!Number.isFinite(leitura.forca) || leitura.forca < 0 || leitura.forca > FORCA_NO_CENTRO) {
+    throw new RangeError(`força ${leitura.forca} fora da régua (ataque ${attackStyle})`);
+  }
+
   const isMage = idDaClasse(hero) === 'mago';
   const magicalAttack = isMage && attackStyle === 'magic';
 

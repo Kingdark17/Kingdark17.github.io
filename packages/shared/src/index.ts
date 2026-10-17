@@ -86,3 +86,8 @@ export * from './jogo/sala.js';
 export * from './jogo/save-inicial.js';
 export * from './jogo/totem.js';
 export * from './jogo/tutorial.js';
+
+// A luta em tempo real do app (etapa 5, decisões do usuário de 2026-10-17):
+// só o app usa, mas mora aqui pelo mesmo motivo do resto — uma regra só,
+// conferida pelos casos.
+export * from './luta/eventos-de-arma.js';

@@ -219,26 +219,37 @@ namespace RPGLegend.Engine
         /// </summary>
         public static ResolveAttackResult ResolveAttack(Hero hero, CombatMonsterView monster, JogadaDeAtaque jogada, string attackStyle, ResolveAttackOptions options = null)
         {
-            options = options ?? new ResolveAttackOptions();
-            var rng = options.Rng ?? Rng.Default;
-            double petCritico = options.PetCriticoBonus ?? 0;
-
             // Número fora do dado ou mira fora da barra é defeito de quem chamou: o servidor que conferir a
             // jogada quer exatamente esta recusa. Vem antes da mana: a jogada é inválida com ou sem ela.
             double dado = jogada.Dado;
             double? mira = jogada.Mira;
-            if (!Dodge.EhInteiro(dado) || dado < 1 || dado > D.LadosDoDano)
-            {
-                throw new EngineError(
-                    "rolagem " + Js.NumberToString(dado) + " não existe num d" + Js.NumberToString(D.LadosDoDano) + " (ataque " + Js.Str(attackStyle) + ")",
-                    "RangeError");
-            }
+            ConferirDado(dado, attackStyle);
             if (mira != null && (!Js.IsFinite(mira.Value) || mira.Value < 0 || mira.Value > 1))
             {
                 throw new EngineError("mira " + Js.NumberToString(mira.Value) + " fora da barra (ataque " + Js.Str(attackStyle) + ")", "RangeError");
             }
 
-            var leitura = LerMira(ZonaDoAtaque(hero, attackStyle), mira);
+            return ResolverGolpe(hero, monster, dado, LerMira(ZonaDoAtaque(hero, attackStyle), mira), attackStyle, options);
+        }
+
+        /// <summary>
+        /// TS: resolverGolpe — o golpe com a mira já lida: tudo o que a <see cref="ResolveAttack"/> faz depois de
+        /// ler a barra. Existe à parte para a luta em tempo real do app, onde a leitura vem do evento da arma
+        /// (<see cref="EventosDeArma.LerEvento"/>) e não da barra; o resto do golpe é o mesmo, sorteio por sorteio.
+        /// Dado fora do d20 e força fora de 0 a FORCA_NO_CENTRO (ou não finita) lançam RangeError, o dado primeiro.
+        /// </summary>
+        public static ResolveAttackResult ResolverGolpe(Hero hero, CombatMonsterView monster, double dado, LeituraDaMira leitura, string attackStyle, ResolveAttackOptions options = null)
+        {
+            options = options ?? new ResolveAttackOptions();
+            var rng = options.Rng ?? Rng.Default;
+            double petCritico = options.PetCriticoBonus ?? 0;
+
+            ConferirDado(dado, attackStyle);
+            if (!Js.IsFinite(leitura.Forca) || leitura.Forca < 0 || leitura.Forca > D.ForcaNoCentro)
+            {
+                throw new EngineError("força " + Js.NumberToString(leitura.Forca) + " fora da régua (ataque " + Js.Str(attackStyle) + ")", "RangeError");
+            }
+
             bool isMage = IdDaClasse(hero) == "mago";
             bool magicalAttack = isMage && attackStyle == AttackStyles.Magic;
 
@@ -390,6 +401,17 @@ namespace RPGLegend.Engine
             var next = hero.Clone();
             next.Buffs = nextBuffs;
             return next;
+        }
+
+        /// <summary>O dado fora de 1..LADOS_DO_DANO (ou não inteiro) é defeito de quem chamou.</summary>
+        private static void ConferirDado(double dado, string attackStyle)
+        {
+            if (!Dodge.EhInteiro(dado) || dado < 1 || dado > D.LadosDoDano)
+            {
+                throw new EngineError(
+                    "rolagem " + Js.NumberToString(dado) + " não existe num d" + Js.NumberToString(D.LadosDoDano) + " (ataque " + Js.Str(attackStyle) + ")",
+                    "RangeError");
+            }
         }
 
         private static string IdDaClasse(Hero hero) => Catalog.IdDaClasse(hero.ClassId, hero.ClassName);

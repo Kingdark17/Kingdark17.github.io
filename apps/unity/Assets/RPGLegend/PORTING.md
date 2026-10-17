@@ -231,6 +231,15 @@ exceção no log). O primeiro build leva uns 12 minutos; os seguintes, perto de 
   (`combate.ts`, só o começo do encontro vem junto com a sala), porque a luta do app vai ser em tempo real, e
   o co-op e o painel ADM, que entram no app numa etapa própria.
 
+### A luta em tempo real (`luta/`)
+- Só o app usa, mas mora na engine (decisão do usuário, 2026-10-17: conteúdo só do app fica no TS, e o site
+  só não oferece). Casos no módulo `luta` do gerador; o C# fica em `Engine/Luta/`.
+- `EventosDeArma` (eventos-de-arma.ts): o evento de mira de cada arma (barra, bolinha, carga, desenho,
+  ritmo, toque duplo) e a leitura dele, que termina na mesma `Attack.LerMira`. O golpe segue em
+  `Attack.ResolverGolpe`, a parte da `ResolveAttack` depois de ler a barra.
+- Tempo em passos (60 por segundo, como o andar) e desenho em inteiros numa caixa de 0 a 1000. As únicas
+  contas que não são de inteiros no desenho são a raiz e a divisão final, que saem iguais nos dois lados.
+
 ### Limitações conhecidas
 - `Attributes` guarda os seis atributos como `double`: atributo ausente vira NaN e `null` vira 0
   (o `Number()` do JS). O que o C# não distingue é o `attrs.x ?? 8` do TS (ausente/null → 8): só
