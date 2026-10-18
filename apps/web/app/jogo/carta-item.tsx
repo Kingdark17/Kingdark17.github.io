@@ -38,6 +38,7 @@ interface Props {
 export function CartaItem({ item, rodape, selecionado, onClick }: Readonly<Props>) {
   const visao = itemView(item);
   const tier = tierFor(item);
+  const meta = [visao.rarityLabel, tier ? `Tier ${tier}` : ''].filter(Boolean).join(' · ');
   const tags = statTags(item);
 
   const conteudo = (
@@ -53,10 +54,8 @@ export function CartaItem({ item, rodape, selecionado, onClick }: Readonly<Props
       <span className={styles.nomeItem} style={{ color: `var(${visao.rarityColorVar})` }}>
         {visao.name}
       </span>
-      <span className={styles.metaItem}>
-        {visao.rarityLabel}
-        {tier ? ` · Tier ${tier}` : ''}
-      </span>
+      {/* A runa não tem raridade, e muita peça não tem tier: sem nenhum dos dois, a linha some. */}
+      {meta && <span className={styles.metaItem}>{meta}</span>}
       {tags.length > 0 && <span className={styles.statsItem}>{tags.map((tag) => tag.text).join(' · ')}</span>}
       {rodape && <span className={styles.rodapeItem}>{rodape}</span>}
     </>

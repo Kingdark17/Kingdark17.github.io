@@ -44,6 +44,9 @@ namespace RPGLegend.Game.Jogo
         /// <summary>O número como o JS o escreve (o ouro, o preço): sem separador de milhar.</summary>
         public static string Inteiro(double valor) => Js.NumberToString(valor);
 
+        /// <summary>Os pedaços não vazios, separados por " · " (a runa não tem raridade, e muita peça não tem tier).</summary>
+        public static string Pedacos(params string[] pedacos) => string.Join(" · ", Array.FindAll(pedacos, p => !string.IsNullOrEmpty(p)));
+
         /// <summary>A arte do item ("weapons/espada.png" no template), copiada do site em Art/Jogo/Resources/Itens.</summary>
         public static Sprite SpriteDoArquivo(string arquivo)
         {
@@ -137,7 +140,9 @@ namespace RPGLegend.Game.Jogo
             nome.style.color = cor;
             carta.Add(nome);
             var tier = Tiers.TierFor(item);
-            carta.Add(Texto(visao.RarityLabel + (string.IsNullOrEmpty(tier) ? "" : " · Tier " + tier), "meta-da-carta"));
+            // A runa não tem raridade, e muita peça não tem tier: sem nenhum dos dois, a linha some.
+            string meta = Pedacos(visao.RarityLabel, string.IsNullOrEmpty(tier) ? "" : "Tier " + tier);
+            if (meta.Length > 0) carta.Add(Texto(meta, "meta-da-carta"));
             var tags = Items.StatTags(item);
             if (tags.Count > 0)
             {
@@ -184,7 +189,7 @@ namespace RPGLegend.Game.Jogo
             titulos.Add(nome);
             var categoria = GameData.ItemTable.CategoryLabels.Get(visao.Category) ?? visao.Category;
             var tier = Tiers.TierFor(item);
-            titulos.Add(Texto(categoria + " · " + visao.RarityLabel + (string.IsNullOrEmpty(tier) ? "" : " · Tier " + tier) + " · " + Inteiro(visao.Value) + " ouro", "meta-da-ficha"));
+            titulos.Add(Texto(Pedacos(categoria, visao.RarityLabel, string.IsNullOrEmpty(tier) ? "" : "Tier " + tier, Inteiro(visao.Value) + " ouro"), "meta-da-ficha"));
             cabecalho.Add(titulos);
             ficha.Add(cabecalho);
 

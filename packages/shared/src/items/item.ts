@@ -123,7 +123,8 @@ export function itemView(item: Item): ItemView {
     desc: template.desc,
     sprite: template.sprite,
     category: template.category,
-    rarityLabel: concordar(item, rarity.adjetivo),
+    // A runa não mostra raridade: o que conta nela é o tier, que já vai no nome ("Runa de Fogo II").
+    rarityLabel: template.runa ? '' : concordar(item, rarity.adjetivo),
     rarityColorVar: rarity.colorVar,
     proc:
       template.proc && item.procChance !== undefined

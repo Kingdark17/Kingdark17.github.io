@@ -19419,7 +19419,7 @@
         "desc": "Pedra rara que incendeia a arma: o golpe pode queimar o monstro.",
         "sprite": "materials/pedra_protecao.png",
         "category": "runa",
-        "rarityLabel": "Comum",
+        "rarityLabel": "",
         "rarityColorVar": "--r-comum",
         "proc": null
       }
@@ -19485,7 +19485,7 @@
         "desc": "Pedra rara que eletrifica a arma: o golpe pode dar um choque e atordoar.",
         "sprite": "materials/pedra_protecao.png",
         "category": "runa",
-        "rarityLabel": "Comum",
+        "rarityLabel": "",
         "rarityColorVar": "--r-comum",
         "proc": null
       }
@@ -19551,7 +19551,7 @@
         "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
         "sprite": "materials/pedra_protecao.png",
         "category": "runa",
-        "rarityLabel": "Comum",
+        "rarityLabel": "",
         "rarityColorVar": "--r-comum",
         "proc": null
       }
@@ -19614,7 +19614,7 @@
         "desc": "Pedra rara que dá sede à arma: o golpe pode curar quem bate.",
         "sprite": "materials/pedra_protecao.png",
         "category": "runa",
-        "rarityLabel": "Comum",
+        "rarityLabel": "",
         "rarityColorVar": "--r-comum",
         "proc": null
       }
@@ -19680,7 +19680,7 @@
         "desc": "Pedra rara que gela a arma: o golpe pode deixar o monstro lento.",
         "sprite": "materials/pedra_protecao.png",
         "category": "runa",
-        "rarityLabel": "Comum",
+        "rarityLabel": "",
         "rarityColorVar": "--r-comum",
         "proc": null
       }

@@ -7,7 +7,7 @@ import { saveSorteado } from '../jogo/heroi-sorteado.js';
 import { monsterView } from '../monsters/generate.js';
 import { seededRng, type Rng } from '../rng.js';
 import { resolveForge } from '../shop/shop.js';
-import { displayName, instantiate, randomItem, type Item } from './item.js';
+import { displayName, instantiate, itemView, randomItem, type Item } from './item.js';
 import {
   aplicarRunas,
   aposMudarDeTier,
@@ -37,6 +37,11 @@ describe('a runa como item', () => {
     expect(displayName(runa('fogo', 2))).toBe('Runa de Fogo II');
     expect(displayName(runa('eletrica', 3))).toBe('Runa Elétrica III');
     expect([1, 2, 3].map((t) => runa('gelo', t).value)).toEqual([40, 80, 160]);
+  });
+
+  it('não mostra raridade: o que conta nela é o tier, que já vai no nome', () => {
+    expect(itemView(runa('fogo', 2)).rarityLabel).toBe('');
+    expect(itemView(arma('espada')).rarityLabel).toBe('Comum');
   });
 
   it('o sorteio comum de item nunca dá runa', () => {

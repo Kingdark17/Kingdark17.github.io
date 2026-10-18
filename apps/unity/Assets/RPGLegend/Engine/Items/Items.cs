@@ -144,7 +144,8 @@ namespace RPGLegend.Engine
             view.Desc = template.Desc;
             view.Sprite = template.Sprite;
             view.Category = template.Category;
-            view.RarityLabel = Concordar(item, rarity.Adjetivo);
+            // A runa não mostra raridade: o que conta nela é o tier, que já vai no nome ("Runa de Fogo II").
+            view.RarityLabel = template.Runa != null ? "" : Concordar(item, rarity.Adjetivo);
             view.RarityColorVar = rarity.ColorVar;
             if (template.Proc != null && item.ProcChance != null)
             {
