@@ -82,6 +82,7 @@ namespace RPGLegend.Tests
             // A cidade desenhada.
             Fn(M, "plantaDaCidade", (a, c) => W(MapaDaCidade.PlantaDaCidade(JsJson.Truthy(a["troncosNoCaminho"]))));
             Fn(M, "chegadaNoPonto", (a, c) => W(MapaDaCidade.ChegadaNoPonto(Str(a["ponto"]))));
+            Fn(M, "cobreOHeroi", (a, c) => W(MapaDaCidade.CobreOHeroi(R<CamadaDaCidade>(a["camada"]), R<Walker>(a["walker"]))));
             Fn(M, "pontoDaSala", (a, c) => W(MapaDaCidade.PontoDaSala(R<CityCell>(a["celula"]))));
             Fn(M, "pistasDaCidade", (a, c) => W(Cidades.PistasDaCidade(R<EstadoNaCidade>(a["estado"]))));
             Const(M, "TEXTO_DA_CIDADE", () => W(Cidades.TextoDaCidade));

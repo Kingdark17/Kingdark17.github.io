@@ -176,47 +176,101 @@
       "arquivo": "bloqueio_masmorra",
       "plano": "meio",
       "base": 7,
-      "soComTroncos": true
+      "soComTroncos": true,
+      "caixa": [
+        344,
+        147,
+        458,
+        200
+      ]
     },
     {
       "arquivo": "taverna",
       "plano": "meio",
-      "base": 12
+      "base": 12,
+      "caixa": [
+        41,
+        228,
+        150,
+        383
+      ]
     },
     {
       "arquivo": "loja_pocao",
       "plano": "meio",
-      "base": 12
+      "base": 12,
+      "caixa": [
+        195,
+        224,
+        316,
+        383
+      ]
     },
     {
       "arquivo": "ferreiro",
       "plano": "meio",
-      "base": 12
+      "base": 12,
+      "caixa": [
+        498,
+        251,
+        607,
+        383
+      ]
     },
     {
       "arquivo": "3_arvore_central",
       "plano": "meio",
-      "base": 13
+      "base": 13,
+      "caixa": [
+        325,
+        256,
+        472,
+        392
+      ]
     },
     {
       "arquivo": "avisos_guilda",
       "plano": "meio",
-      "base": 15
+      "base": 15,
+      "caixa": [
+        608,
+        417,
+        703,
+        543
+      ]
     },
     {
       "arquivo": "igreja",
       "plano": "meio",
-      "base": 17
+      "base": 17,
+      "caixa": [
+        225,
+        373,
+        378,
+        553
+      ]
     },
     {
       "arquivo": "guilda",
       "plano": "meio",
-      "base": 17
+      "base": 17,
+      "caixa": [
+        468,
+        388,
+        586,
+        546
+      ]
     },
     {
       "arquivo": "cabana_vidente",
       "plano": "meio",
-      "base": 22
+      "base": 22,
+      "caixa": [
+        256,
+        622,
+        374,
+        722
+      ]
     },
     {
       "arquivo": "2_arvores_masmorra",
@@ -229,6 +283,11 @@
       "base": 0
     }
   ],
+  "CORPO_DO_HEROI": {
+    "meiaLargura": 13,
+    "de": 2,
+    "ate": 54
+  },
   "LADOS_DA_CHEGADA": [
     "S",
     "W",
@@ -236,6 +295,7 @@
     "N"
   ],
   "$privadas": [
+    "CORPO_DO_HEROI",
     "LADOS_DA_CHEGADA"
   ]
 }

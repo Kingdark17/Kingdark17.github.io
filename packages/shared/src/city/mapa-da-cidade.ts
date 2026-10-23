@@ -23,7 +23,7 @@
  */
 
 import { DIR_VECTORS, type Direction } from '../dungeon/graph.js';
-import { TILE_UNITS, type RoomLayout, type RoomObject, type Walker } from '../dungeon/room-walk.js';
+import { HERO_HALF, TILE_UNITS, type RoomLayout, type RoomObject, type Walker } from '../dungeon/room-walk.js';
 import type { CityCell } from './city.js';
 
 export const CIDADE_COLS = 30;
@@ -133,23 +133,59 @@ export interface CamadaDaCidade {
   base: number;
   /** Só aparece enquanto os troncos fecham o caminho da caverna. */
   soComTroncos?: boolean;
+  /**
+   * Só nas do `meio`: o retângulo onde a arte tem desenho, em pixel do mapa
+   * (esquerda, topo, direita, baixo, inclusive), medido pelo
+   * `scripts/planta-da-cidade.mjs`. É o que diz se a camada está cobrindo o
+   * herói (`cobreOHeroi`).
+   */
+  caixa?: readonly [number, number, number, number];
 }
 
 /** As camadas, na ordem em que se desenham dentro de cada plano. */
 export const CAMADAS_DA_CIDADE: readonly CamadaDaCidade[] = [
   { arquivo: '1_chao', plano: 'chao', base: 0 },
-  { arquivo: 'bloqueio_masmorra', plano: 'meio', base: 7, soComTroncos: true },
-  { arquivo: 'taverna', plano: 'meio', base: 12 },
-  { arquivo: 'loja_pocao', plano: 'meio', base: 12 },
-  { arquivo: 'ferreiro', plano: 'meio', base: 12 },
-  { arquivo: '3_arvore_central', plano: 'meio', base: 13 },
-  { arquivo: 'avisos_guilda', plano: 'meio', base: 15 },
-  { arquivo: 'igreja', plano: 'meio', base: 17 },
-  { arquivo: 'guilda', plano: 'meio', base: 17 },
-  { arquivo: 'cabana_vidente', plano: 'meio', base: 22 },
+  { arquivo: 'bloqueio_masmorra', plano: 'meio', base: 7, soComTroncos: true, caixa: [344, 147, 458, 200] },
+  { arquivo: 'taverna', plano: 'meio', base: 12, caixa: [41, 228, 150, 383] },
+  { arquivo: 'loja_pocao', plano: 'meio', base: 12, caixa: [195, 224, 316, 383] },
+  { arquivo: 'ferreiro', plano: 'meio', base: 12, caixa: [498, 251, 607, 383] },
+  { arquivo: '3_arvore_central', plano: 'meio', base: 13, caixa: [325, 256, 472, 392] },
+  { arquivo: 'avisos_guilda', plano: 'meio', base: 15, caixa: [608, 417, 703, 543] },
+  { arquivo: 'igreja', plano: 'meio', base: 17, caixa: [225, 373, 378, 553] },
+  { arquivo: 'guilda', plano: 'meio', base: 17, caixa: [468, 388, 586, 546] },
+  { arquivo: 'cabana_vidente', plano: 'meio', base: 22, caixa: [256, 622, 374, 722] },
   { arquivo: '2_arvores_masmorra', plano: 'cima', base: 0 },
   { arquivo: '4_ponte_lateral', plano: 'cima', base: 0 },
 ];
+
+/**
+ * O corpo do herói desenhado na cidade, em pixel do mapa, a partir do pé: o
+ * boneco tem 60 px de altura no site e no app (`LADO * 1.25`), e o corpo de
+ * todas as raças vai de 2 a 54 px acima do pé, com 13 px pra cada lado (as
+ * orelhas do elfo e as asas da fada passam disso, e não contam).
+ */
+const CORPO_DO_HEROI = { meiaLargura: 13, de: 2, ate: 54 };
+
+/**
+ * Se a camada está na frente do herói e por cima do desenho dele: aí ela
+ * fica meio transparente (decisão do usuário, 2026-10-23), pra ele não
+ * sumir atrás da árvore da praça, da loja ou da guilda. Na frente é o mesmo
+ * que ordena o desenho: o pé dele acima do topo da linha `base`. As do
+ * `chao` e as de `cima` nunca contam.
+ */
+export function cobreOHeroi(camada: CamadaDaCidade, walker: Pick<Walker, 'x' | 'y'>): boolean {
+  if (camada.plano !== 'meio' || !camada.caixa) return false;
+  const peX = (walker.x * PIXELS_POR_CASA) / TILE_UNITS;
+  const peY = ((walker.y + HERO_HALF) * PIXELS_POR_CASA) / TILE_UNITS;
+  if (peY >= camada.base * PIXELS_POR_CASA) return false;
+  const [esquerda, topo, direita, baixo] = camada.caixa;
+  return (
+    peX + CORPO_DO_HEROI.meiaLargura > esquerda &&
+    peX - CORPO_DO_HEROI.meiaLargura <= direita &&
+    peY - CORPO_DO_HEROI.de > topo &&
+    peY - CORPO_DO_HEROI.ate <= baixo
+  );
+}
 
 /** De que lado da porta o herói aparece, na ordem em que se procura: na frente (sul) primeiro. */
 const LADOS_DA_CHEGADA: readonly Direction[] = ['S', 'W', 'E', 'N'];

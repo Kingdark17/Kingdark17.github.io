@@ -18,6 +18,16 @@ namespace RPGLegend.Engine
         [JsName("CAMADAS_DA_CIDADE")] public List<CamadaDaCidade> CamadasDaCidade = new List<CamadaDaCidade>();
         /// <summary>Privada no TS: de que lado da porta o herói aparece, na ordem em que se procura.</summary>
         [JsName("LADOS_DA_CHEGADA")] public List<string> LadosDaChegada = new List<string>();
+        /// <summary>Privada no TS: o corpo do herói desenhado na cidade, em pixel do mapa, a partir do pé.</summary>
+        [JsName("CORPO_DO_HEROI")] public CorpoDoHeroi CorpoDoHeroi = new CorpoDoHeroi();
+    }
+
+    /// <summary>TS: CORPO_DO_HEROI — 13 px pra cada lado do pé, de 2 a 54 px acima dele (o boneco tem 60 px).</summary>
+    public sealed class CorpoDoHeroi
+    {
+        public double MeiaLargura;
+        public double De;
+        public double Ate;
     }
 
     /// <summary>
@@ -31,6 +41,11 @@ namespace RPGLegend.Engine
         public double Base;
         /// <summary>Só aparece enquanto os troncos fecham o caminho da caverna.</summary>
         public bool? SoComTroncos;
+        /// <summary>
+        /// Só nas do "meio": o retângulo onde a arte tem desenho, em pixel do mapa (esquerda, topo, direita, baixo,
+        /// inclusive). É o que diz se a camada está cobrindo o herói (<see cref="MapaDaCidade.CobreOHeroi"/>).
+        /// </summary>
+        public List<double> Caixa;
     }
 
     public static partial class GameData
@@ -59,6 +74,24 @@ namespace RPGLegend.Engine
         public static IReadOnlyList<RoomObject> Pontos => D.PontosDaCidade;
         public static double PixelsPorCasa => D.PixelsPorCasa;
         public static IReadOnlyList<CamadaDaCidade> Camadas => D.CamadasDaCidade;
+
+        /// <summary>
+        /// TS: cobreOHeroi — se a camada está na frente do herói (o pé dele acima do topo da linha Base, o mesmo que
+        /// ordena o desenho) e por cima do desenho dele: aí ela fica meio transparente. As do chão e as de cima nunca
+        /// contam.
+        /// </summary>
+        public static bool CobreOHeroi(CamadaDaCidade camada, Walker walker)
+        {
+            if (camada.Plano != "meio" || camada.Caixa == null) return false;
+            var corpo = D.CorpoDoHeroi;
+            double peX = (walker.X * D.PixelsPorCasa) / RoomWalk.TileUnits;
+            double peY = ((walker.Y + RoomWalk.HeroHalf) * D.PixelsPorCasa) / RoomWalk.TileUnits;
+            if (peY >= camada.Base * D.PixelsPorCasa) return false;
+            return peX + corpo.MeiaLargura > camada.Caixa[0]
+                && peX - corpo.MeiaLargura <= camada.Caixa[2]
+                && peY - corpo.De > camada.Caixa[1]
+                && peY - corpo.Ate <= camada.Caixa[3];
+        }
 
         /// <summary>TS: plantaDaCidade — a planta na regra do andar; com os troncos, eles fecham o caminho da caverna.</summary>
         public static RoomLayout PlantaDaCidade(bool troncosNoCaminho)

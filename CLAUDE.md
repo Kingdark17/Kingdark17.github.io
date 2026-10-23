@@ -250,7 +250,9 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   jogador pra sala dela e a aciona (`jogo/cidade.ts`, `entrarNoPonto`), e a
   cena da cidade é uma só (a chave da sala não tem a posição). A planta sai da
   colisão dele (`hitbox.png`) com `packages/shared/scripts/planta-da-cidade.mjs`:
-  colisão nova → rodar o script e colar a planta. A Encantadora atende na
+  colisão nova → rodar o script e colar a planta; ele também mede a `caixa`
+  de cada camada (arte nova → conferir), que faz a camada do meio ficar
+  meio transparente quando cobre o herói (`cobreOHeroi`). A Encantadora atende na
   igreja, o Bram dentro do ferreiro, e cada masmorra tem a entrada dela
   (Floresta ao sul, Caverna ao norte, atrás dos troncos que saem quando a
   Floresta é zerada, e Torre a leste), que abre o portão com ela fixa.

@@ -3914,6 +3914,25 @@ for (const ponto of [...new Set(E.PONTOS_DA_CIDADE.map((p) => p.id)), 'castelo']
   caso(`chegadaNoPonto: ${ponto}`, 'chegadaNoPonto', { ponto }, (a) => E.chegadaNoPonto(a.ponto as never));
 }
 {
+  // Quem cobre o herói: cada camada contra lugares atrás, na frente, ao lado e na beirada exata.
+  const naCasa = (col: number, row: number) => ({ x: col * E.TILE_UNITS + E.TILE_UNITS / 2, y: row * E.TILE_UNITS + E.TILE_UNITS / 2 });
+  for (const [nome, walker] of [
+    ['atrás da árvore', naCasa(12, 10)],
+    ['na praça', E.chegadaNoPonto('arvore')],
+    ['atrás da loja', naCasa(8, 9)],
+    ['atrás da guilda', naCasa(16, 13)],
+    ['diante dos troncos', naCasa(12, 7)],
+    ['com o pé na linha da árvore', { x: 12 * E.TILE_UNITS + E.TILE_UNITS / 2, y: 13 * E.TILE_UNITS - E.HERO_HALF }],
+    ['um pouco acima da linha da árvore', { x: 12 * E.TILE_UNITS + E.TILE_UNITS / 2, y: 13 * E.TILE_UNITS - E.HERO_HALF - 1 }],
+    ['na beirada esquerda da árvore', { x: ((325 - 13) * E.TILE_UNITS) / E.PIXELS_POR_CASA, y: 10 * E.TILE_UNITS }],
+    ['um pixel pra dentro da beirada', { x: ((326 - 13) * E.TILE_UNITS) / E.PIXELS_POR_CASA, y: 10 * E.TILE_UNITS }],
+  ] as const) {
+    for (const camada of E.CAMADAS_DA_CIDADE) {
+      caso(`cobreOHeroi: ${camada.arquivo}, ${nome}`, 'cobreOHeroi', { camada, walker }, (a) => E.cobreOHeroi(a.camada, a.walker));
+    }
+  }
+}
+{
   const salas = E.generateCityLayout(6, 6).rooms;
   const recrutador = { ...salas.find((s) => s.type === 'npc')!, npc: { ...salas.find((s) => s.type === 'npc')!.npc!, service: 'recruit' as const } };
   for (const celula of [...salas, recrutador, { type: 'void', x: 0, y: 0, doors: {} }]) {

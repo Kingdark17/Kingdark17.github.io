@@ -9,6 +9,10 @@
  * Sem caminho, lê a cópia ao lado (`hitbox-da-cidade.png`, a de 2026-10-23).
  * A colisão não vai pro jogo: só a planta que sai daqui.
  *
+ * Depois imprime a `caixa` de cada camada da arte (`apps/web/public/img/cidade`):
+ * o retângulo onde ela tem desenho, que vai em `CAMADAS_DA_CIDADE` e decide
+ * quando a camada cobre o herói. Arte nova → conferir as caixas também.
+ *
  * O desenho dele marca em vermelho a **borda** do que se pisa, e não o
  * cheio: dentro das casas e no meio das árvores fica sem cor, mas ninguém
  * chega lá. Por isso o chão é o que se alcança a partir da praça, andando
@@ -23,7 +27,7 @@
  * um evento que ainda não existe.
  */
 
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
 
@@ -129,4 +133,24 @@ for (const cor of ['verde', 'roxo']) {
   const casas = [];
   cores.forEach((linha, row) => linha.forEach((c, col) => c === cor && casas.push(`(${col},${row})`)));
   console.log(`${cor}: ${casas.join(' ')}`);
+}
+
+console.log('\ncaixas das camadas (esquerda, topo, direita, baixo):');
+const pastaDaArte = fileURLToPath(new URL('../../../apps/web/public/img/cidade/', import.meta.url));
+for (const arquivo of readdirSync(pastaDaArte).filter((nome) => nome.endsWith('.png')).sort()) {
+  const camada = lerPng(pastaDaArte + arquivo);
+  let esquerda = Infinity;
+  let topo = Infinity;
+  let direita = -1;
+  let baixo = -1;
+  for (let y = 0; y < camada.altura; y++) {
+    for (let x = 0; x < camada.largura; x++) {
+      if (camada.canais === 4 && camada.px[(y * camada.largura + x) * 4 + 3] === 0) continue;
+      esquerda = Math.min(esquerda, x);
+      topo = Math.min(topo, y);
+      direita = Math.max(direita, x);
+      baixo = Math.max(baixo, y);
+    }
+  }
+  console.log(`  ${arquivo.replace('.png', '').padEnd(20)} [${esquerda}, ${topo}, ${direita}, ${baixo}]`);
 }

@@ -158896,6 +158896,2673 @@
     }
   },
   {
+    "name": "cobreOHeroi: 1_chao, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "1_chao",
+          "plano": "chao",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: bloqueio_masmorra, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "bloqueio_masmorra",
+          "plano": "meio",
+          "base": 7,
+          "soComTroncos": true,
+          "caixa": [
+            344,
+            147,
+            458,
+            200
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: taverna, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "taverna",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            41,
+            228,
+            150,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: loja_pocao, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "loja_pocao",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            195,
+            224,
+            316,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: ferreiro, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "ferreiro",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            498,
+            251,
+            607,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 3_arvore_central, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "3_arvore_central",
+          "plano": "meio",
+          "base": 13,
+          "caixa": [
+            325,
+            256,
+            472,
+            392
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroi: avisos_guilda, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "avisos_guilda",
+          "plano": "meio",
+          "base": 15,
+          "caixa": [
+            608,
+            417,
+            703,
+            543
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: igreja, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "igreja",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            225,
+            373,
+            378,
+            553
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: guilda, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "guilda",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            468,
+            388,
+            586,
+            546
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: cabana_vidente, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "cabana_vidente",
+          "plano": "meio",
+          "base": 22,
+          "caixa": [
+            256,
+            622,
+            374,
+            722
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 2_arvores_masmorra, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "2_arvores_masmorra",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 4_ponte_lateral, atrás da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "4_ponte_lateral",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 10080
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 1_chao, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "1_chao",
+          "plano": "chao",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: bloqueio_masmorra, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "bloqueio_masmorra",
+          "plano": "meio",
+          "base": 7,
+          "soComTroncos": true,
+          "caixa": [
+            344,
+            147,
+            458,
+            200
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: taverna, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "taverna",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            41,
+            228,
+            150,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: loja_pocao, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "loja_pocao",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            195,
+            224,
+            316,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: ferreiro, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "ferreiro",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            498,
+            251,
+            607,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 3_arvore_central, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "3_arvore_central",
+          "plano": "meio",
+          "base": 13,
+          "caixa": [
+            325,
+            256,
+            472,
+            392
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: avisos_guilda, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "avisos_guilda",
+          "plano": "meio",
+          "base": 15,
+          "caixa": [
+            608,
+            417,
+            703,
+            543
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: igreja, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "igreja",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            225,
+            373,
+            378,
+            553
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: guilda, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "guilda",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            468,
+            388,
+            586,
+            546
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: cabana_vidente, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "cabana_vidente",
+          "plano": "meio",
+          "base": 22,
+          "caixa": [
+            256,
+            622,
+            374,
+            722
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 2_arvores_masmorra, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "2_arvores_masmorra",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 4_ponte_lateral, na praça",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "4_ponte_lateral",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12960,
+          "facing": "S"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 1_chao, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "1_chao",
+          "plano": "chao",
+          "base": 0
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: bloqueio_masmorra, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "bloqueio_masmorra",
+          "plano": "meio",
+          "base": 7,
+          "soComTroncos": true,
+          "caixa": [
+            344,
+            147,
+            458,
+            200
+          ]
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: taverna, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "taverna",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            41,
+            228,
+            150,
+            383
+          ]
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: loja_pocao, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "loja_pocao",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            195,
+            224,
+            316,
+            383
+          ]
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroi: ferreiro, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "ferreiro",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            498,
+            251,
+            607,
+            383
+          ]
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 3_arvore_central, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "3_arvore_central",
+          "plano": "meio",
+          "base": 13,
+          "caixa": [
+            325,
+            256,
+            472,
+            392
+          ]
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: avisos_guilda, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "avisos_guilda",
+          "plano": "meio",
+          "base": 15,
+          "caixa": [
+            608,
+            417,
+            703,
+            543
+          ]
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: igreja, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "igreja",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            225,
+            373,
+            378,
+            553
+          ]
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: guilda, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "guilda",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            468,
+            388,
+            586,
+            546
+          ]
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: cabana_vidente, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "cabana_vidente",
+          "plano": "meio",
+          "base": 22,
+          "caixa": [
+            256,
+            622,
+            374,
+            722
+          ]
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 2_arvores_masmorra, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "2_arvores_masmorra",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 4_ponte_lateral, atrás da loja",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "4_ponte_lateral",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 8160,
+          "y": 9120
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 1_chao, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "1_chao",
+          "plano": "chao",
+          "base": 0
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: bloqueio_masmorra, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "bloqueio_masmorra",
+          "plano": "meio",
+          "base": 7,
+          "soComTroncos": true,
+          "caixa": [
+            344,
+            147,
+            458,
+            200
+          ]
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: taverna, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "taverna",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            41,
+            228,
+            150,
+            383
+          ]
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: loja_pocao, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "loja_pocao",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            195,
+            224,
+            316,
+            383
+          ]
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: ferreiro, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "ferreiro",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            498,
+            251,
+            607,
+            383
+          ]
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 3_arvore_central, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "3_arvore_central",
+          "plano": "meio",
+          "base": 13,
+          "caixa": [
+            325,
+            256,
+            472,
+            392
+          ]
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: avisos_guilda, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "avisos_guilda",
+          "plano": "meio",
+          "base": 15,
+          "caixa": [
+            608,
+            417,
+            703,
+            543
+          ]
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: igreja, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "igreja",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            225,
+            373,
+            378,
+            553
+          ]
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: guilda, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "guilda",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            468,
+            388,
+            586,
+            546
+          ]
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroi: cabana_vidente, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "cabana_vidente",
+          "plano": "meio",
+          "base": 22,
+          "caixa": [
+            256,
+            622,
+            374,
+            722
+          ]
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 2_arvores_masmorra, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "2_arvores_masmorra",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 4_ponte_lateral, atrás da guilda",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "4_ponte_lateral",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 15840,
+          "y": 12960
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 1_chao, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "1_chao",
+          "plano": "chao",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: bloqueio_masmorra, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "bloqueio_masmorra",
+          "plano": "meio",
+          "base": 7,
+          "soComTroncos": true,
+          "caixa": [
+            344,
+            147,
+            458,
+            200
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: taverna, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "taverna",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            41,
+            228,
+            150,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: loja_pocao, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "loja_pocao",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            195,
+            224,
+            316,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: ferreiro, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "ferreiro",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            498,
+            251,
+            607,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 3_arvore_central, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "3_arvore_central",
+          "plano": "meio",
+          "base": 13,
+          "caixa": [
+            325,
+            256,
+            472,
+            392
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: avisos_guilda, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "avisos_guilda",
+          "plano": "meio",
+          "base": 15,
+          "caixa": [
+            608,
+            417,
+            703,
+            543
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: igreja, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "igreja",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            225,
+            373,
+            378,
+            553
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: guilda, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "guilda",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            468,
+            388,
+            586,
+            546
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: cabana_vidente, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "cabana_vidente",
+          "plano": "meio",
+          "base": 22,
+          "caixa": [
+            256,
+            622,
+            374,
+            722
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 2_arvores_masmorra, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "2_arvores_masmorra",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 4_ponte_lateral, diante dos troncos",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "4_ponte_lateral",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 1_chao, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "1_chao",
+          "plano": "chao",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: bloqueio_masmorra, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "bloqueio_masmorra",
+          "plano": "meio",
+          "base": 7,
+          "soComTroncos": true,
+          "caixa": [
+            344,
+            147,
+            458,
+            200
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: taverna, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "taverna",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            41,
+            228,
+            150,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: loja_pocao, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "loja_pocao",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            195,
+            224,
+            316,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: ferreiro, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "ferreiro",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            498,
+            251,
+            607,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 3_arvore_central, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "3_arvore_central",
+          "plano": "meio",
+          "base": 13,
+          "caixa": [
+            325,
+            256,
+            472,
+            392
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: avisos_guilda, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "avisos_guilda",
+          "plano": "meio",
+          "base": 15,
+          "caixa": [
+            608,
+            417,
+            703,
+            543
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: igreja, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "igreja",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            225,
+            373,
+            378,
+            553
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: guilda, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "guilda",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            468,
+            388,
+            586,
+            546
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: cabana_vidente, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "cabana_vidente",
+          "plano": "meio",
+          "base": 22,
+          "caixa": [
+            256,
+            622,
+            374,
+            722
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 2_arvores_masmorra, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "2_arvores_masmorra",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 4_ponte_lateral, com o pé na linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "4_ponte_lateral",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12192
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 1_chao, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "1_chao",
+          "plano": "chao",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: bloqueio_masmorra, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "bloqueio_masmorra",
+          "plano": "meio",
+          "base": 7,
+          "soComTroncos": true,
+          "caixa": [
+            344,
+            147,
+            458,
+            200
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: taverna, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "taverna",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            41,
+            228,
+            150,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: loja_pocao, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "loja_pocao",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            195,
+            224,
+            316,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: ferreiro, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "ferreiro",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            498,
+            251,
+            607,
+            383
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 3_arvore_central, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "3_arvore_central",
+          "plano": "meio",
+          "base": 13,
+          "caixa": [
+            325,
+            256,
+            472,
+            392
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroi: avisos_guilda, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "avisos_guilda",
+          "plano": "meio",
+          "base": 15,
+          "caixa": [
+            608,
+            417,
+            703,
+            543
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: igreja, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "igreja",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            225,
+            373,
+            378,
+            553
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: guilda, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "guilda",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            468,
+            388,
+            586,
+            546
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: cabana_vidente, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "cabana_vidente",
+          "plano": "meio",
+          "base": 22,
+          "caixa": [
+            256,
+            622,
+            374,
+            722
+          ]
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 2_arvores_masmorra, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "2_arvores_masmorra",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 4_ponte_lateral, um pouco acima da linha da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "4_ponte_lateral",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 12000,
+          "y": 12191
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 1_chao, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "1_chao",
+          "plano": "chao",
+          "base": 0
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: bloqueio_masmorra, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "bloqueio_masmorra",
+          "plano": "meio",
+          "base": 7,
+          "soComTroncos": true,
+          "caixa": [
+            344,
+            147,
+            458,
+            200
+          ]
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: taverna, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "taverna",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            41,
+            228,
+            150,
+            383
+          ]
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: loja_pocao, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "loja_pocao",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            195,
+            224,
+            316,
+            383
+          ]
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroi: ferreiro, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "ferreiro",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            498,
+            251,
+            607,
+            383
+          ]
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 3_arvore_central, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "3_arvore_central",
+          "plano": "meio",
+          "base": 13,
+          "caixa": [
+            325,
+            256,
+            472,
+            392
+          ]
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: avisos_guilda, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "avisos_guilda",
+          "plano": "meio",
+          "base": 15,
+          "caixa": [
+            608,
+            417,
+            703,
+            543
+          ]
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: igreja, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "igreja",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            225,
+            373,
+            378,
+            553
+          ]
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: guilda, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "guilda",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            468,
+            388,
+            586,
+            546
+          ]
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: cabana_vidente, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "cabana_vidente",
+          "plano": "meio",
+          "base": 22,
+          "caixa": [
+            256,
+            622,
+            374,
+            722
+          ]
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 2_arvores_masmorra, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "2_arvores_masmorra",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 4_ponte_lateral, na beirada esquerda da árvore",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "4_ponte_lateral",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 9360,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 1_chao, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "1_chao",
+          "plano": "chao",
+          "base": 0
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: bloqueio_masmorra, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "bloqueio_masmorra",
+          "plano": "meio",
+          "base": 7,
+          "soComTroncos": true,
+          "caixa": [
+            344,
+            147,
+            458,
+            200
+          ]
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: taverna, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "taverna",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            41,
+            228,
+            150,
+            383
+          ]
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: loja_pocao, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "loja_pocao",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            195,
+            224,
+            316,
+            383
+          ]
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroi: ferreiro, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "ferreiro",
+          "plano": "meio",
+          "base": 12,
+          "caixa": [
+            498,
+            251,
+            607,
+            383
+          ]
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 3_arvore_central, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "3_arvore_central",
+          "plano": "meio",
+          "base": 13,
+          "caixa": [
+            325,
+            256,
+            472,
+            392
+          ]
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroi: avisos_guilda, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "avisos_guilda",
+          "plano": "meio",
+          "base": 15,
+          "caixa": [
+            608,
+            417,
+            703,
+            543
+          ]
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: igreja, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "igreja",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            225,
+            373,
+            378,
+            553
+          ]
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: guilda, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "guilda",
+          "plano": "meio",
+          "base": 17,
+          "caixa": [
+            468,
+            388,
+            586,
+            546
+          ]
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: cabana_vidente, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "cabana_vidente",
+          "plano": "meio",
+          "base": 22,
+          "caixa": [
+            256,
+            622,
+            374,
+            722
+          ]
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 2_arvores_masmorra, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "2_arvores_masmorra",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroi: 4_ponte_lateral, um pixel pra dentro da beirada",
+    "input": {
+      "fn": "cobreOHeroi",
+      "args": {
+        "camada": {
+          "arquivo": "4_ponte_lateral",
+          "plano": "cima",
+          "base": 0
+        },
+        "walker": {
+          "x": 9390,
+          "y": 9600
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
     "name": "pontoDaSala: start",
     "input": {
       "fn": "pontoDaSala",

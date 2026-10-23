@@ -27,6 +27,11 @@ namespace RPGLegend.Game.Jogo
         /// <summary>A cena mostra a cidade desenhada do Breno (camadas e câmera seguindo o herói), e não uma sala.</summary>
         private bool _naCidade;
         private const int OrdemDeCima = 30000;
+        /// <summary>Na cidade, as camadas do meio, que ficam meio transparentes quando cobrem o herói.</summary>
+        private readonly List<(CamadaDaCidade Camada, SpriteRenderer Desenho)> _doMeio = new List<(CamadaDaCidade, SpriteRenderer)>();
+        /// <summary>Quanto se vê da camada que cobre o herói (meio transparente), e em quantos segundos chega lá.</summary>
+        private const float AlfaDeQuemCobre = 0.5f;
+        private const float SegundosDoEsmaecer = 0.15f;
         private Camera _camera;
         private Sprite _branco;
         private Transform _desenho;
@@ -197,6 +202,7 @@ namespace RPGLegend.Game.Jogo
         private void DesenharCidade(bool troncos)
         {
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
+            _doMeio.Clear();
             _naCidade = true;
             _escala = (float)(MapaDaCidade.PixelsPorCasa / GameData.RoomWalkTable.TileUnits);
             foreach (var camada in MapaDaCidade.Camadas)
@@ -212,12 +218,14 @@ namespace RPGLegend.Game.Jogo
                 renderizador.sprite = sprite;
                 // Ordenada com o herói pela linha onde a camada encosta no chão (o herói vai pelo pé, em pixel).
                 renderizador.sortingOrder = camada.Plano == "chao" ? OrdemDoChao : camada.Plano == "cima" ? OrdemDeCima : (int)(camada.Base * MapaDaCidade.PixelsPorCasa);
+                if (camada.Plano == "meio") _doMeio.Add((camada, renderizador));
             }
         }
 
         private void Desenhar(RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras)
         {
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
+            _doMeio.Clear();
             if (_naCidade)
             {
                 _naCidade = false;
@@ -370,6 +378,16 @@ namespace RPGLegend.Game.Jogo
                 float cx = Mathf.Round(Mathf.Clamp(x, _largura / 2f, larguraDoMapa - _largura / 2f) * 2f) / 2f;
                 float cy = Mathf.Round(Mathf.Clamp(y - Lado / 2f, _altura / 2f, alturaDoMapa - _altura / 2f) * 2f) / 2f;
                 _camera.transform.position = Mundo(cx, cy) + new Vector3(0f, 0f, -10f);
+
+                // Quem cobre o herói (a árvore da praça, a loja...) fica meio transparente, pra ele não sumir atrás.
+                float passo = Mathf.Min(1f, Time.deltaTime / SegundosDoEsmaecer) * (1f - AlfaDeQuemCobre);
+                foreach (var (camada, desenho) in _doMeio)
+                {
+                    float alvo = MapaDaCidade.CobreOHeroi(camada, _walker) ? AlfaDeQuemCobre : 1f;
+                    var cor = desenho.color;
+                    cor.a = Mathf.MoveTowards(cor.a, alvo, passo);
+                    desenho.color = cor;
+                }
             }
             // Provisório: o corpo só tem frente. Espelhar pro lado que anda já diz pra onde ele vai.
             if (_walker.Facing == "W") _corpo.flipX = true;

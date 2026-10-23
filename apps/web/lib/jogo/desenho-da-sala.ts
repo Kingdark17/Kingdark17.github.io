@@ -30,6 +30,8 @@ import {
   ROOM_COLS,
   ROOM_ROWS,
   TILE_UNITS,
+  cobreOHeroi,
+  type CamadaDaCidade,
   type RoomLayout,
   type Walker,
 } from '@rpg-legend/shared';
@@ -50,6 +52,10 @@ const ESCALA = LADO / TILE_UNITS;
 const ESCALA_DA_CIDADE = PIXELS_POR_CASA / TILE_UNITS;
 const LARGURA_DA_CIDADE = CIDADE_COLS * PIXELS_POR_CASA;
 const ALTURA_DA_CIDADE = CIDADE_ROWS * PIXELS_POR_CASA;
+
+/** Quanto se vê da camada que cobre o herói (meio transparente), e quanto leva pra chegar lá. */
+const ALFA_DE_QUEM_COBRE = 0.5;
+const MS_DO_ESMAECER = 150;
 
 export type LugarDoTema = 'cidade' | 'floresta' | 'caverna' | 'torre';
 
@@ -157,6 +163,8 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
   app.stage.addChild(palco);
   /** Os objetos desenhados na sala atual, pra sair quando ela troca. */
   let objetos: Pixi.Container[] = [];
+  /** Na cidade, as camadas do meio, que ficam meio transparentes quando cobrem o herói. */
+  let doMeio: Array<{ camada: CamadaDaCidade; sprite: Pixi.Sprite }> = [];
   let naCidade = false;
   let escala = ESCALA;
 
@@ -165,6 +173,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
     acima.removeChildren().forEach((filho) => filho.destroy());
     for (const objeto of objetos) objeto.destroy();
     objetos = [];
+    doMeio = [];
   }
 
   const boneco = await figuraEm(pixi, heroi, LADO * 1.25);
@@ -267,6 +276,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
           sprite.zIndex = camada.base * PIXELS_POR_CASA;
           mundo.addChild(sprite);
           objetos.push(sprite);
+          doMeio.push({ camada, sprite });
         }
       });
     },
@@ -280,6 +290,12 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
         const meioX = Math.min(0, Math.max(LARGURA_DA_CENA - LARGURA_DA_CIDADE, LARGURA_DA_CENA / 2 - x));
         const meioY = Math.min(0, Math.max(ALTURA_DA_CENA - ALTURA_DA_CIDADE, ALTURA_DA_CENA / 2 - (y - LADO / 2)));
         palco.position.set(Math.round(meioX), Math.round(meioY));
+        // Quem cobre o herói (a árvore da praça, a loja...) fica meio transparente, pra ele não sumir atrás.
+        const passo = semMovimento ? 1 : Math.min(1, app.ticker.deltaMS / MS_DO_ESMAECER) * (1 - ALFA_DE_QUEM_COBRE);
+        for (const { camada, sprite } of doMeio) {
+          const alvo = cobreOHeroi(camada, walker) ? ALFA_DE_QUEM_COBRE : 1;
+          sprite.alpha = alvo < sprite.alpha ? Math.max(alvo, sprite.alpha - passo) : Math.min(alvo, sprite.alpha + passo);
+        }
       }
       if (andando && !semMovimento) fase += 1;
       // Um pulinho a cada passo: sem quadros de caminhada ainda, é o que diz "andou" em vez de "deslizou".

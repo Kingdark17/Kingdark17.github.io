@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { CIDADE_COLS, CIDADE_ROWS, PONTOS_DA_CIDADE, chegadaNoPonto, plantaDaCidade, type PontoDaCidade } from '../city/mapa-da-cidade.js';
+import { CAMADAS_DA_CIDADE, CIDADE_COLS, CIDADE_ROWS, PONTOS_DA_CIDADE, chegadaNoPonto, cobreOHeroi, plantaDaCidade, type PontoDaCidade } from '../city/mapa-da-cidade.js';
 import { markCleared, type DungeonProgress } from '../dungeon/dungeons.js';
 import { TILE_UNITS, walkTick, type RoomLayout, type Walker } from '../dungeon/room-walk.js';
 import { seededRng } from '../rng.js';
@@ -84,6 +84,33 @@ describe('a planta da cidade', () => {
     const aberto = andarAteParar(plantaDaCidade(false), aoLado, 0, -127);
     expect(aberto.tocando).toBeNull();
     expect(casa(aberto.walker).row).toBeLessThan(5);
+  });
+});
+
+describe('a camada que cobre o herói', () => {
+  const camada = (arquivo: string) => CAMADAS_DA_CIDADE.find((c) => c.arquivo === arquivo)!;
+  const naCasa = (col: number, row: number) => ({ x: col * TILE_UNITS + TILE_UNITS / 2, y: row * TILE_UNITS + TILE_UNITS / 2 });
+
+  it('toda camada do meio tem a caixa da arte', () => {
+    for (const c of CAMADAS_DA_CIDADE) expect(c.caixa !== undefined, c.arquivo).toBe(c.plano === 'meio');
+  });
+
+  it('a árvore da praça cobre quem passa por trás dela, e não quem passa na frente', () => {
+    const arvore = camada('3_arvore_central');
+    expect(cobreOHeroi(arvore, naCasa(12, 10))).toBe(true);
+    expect(cobreOHeroi(arvore, chegadaNoPonto('arvore'))).toBe(false);
+    expect(cobreOHeroi(arvore, naCasa(12, 14))).toBe(false);
+  });
+
+  it('atrás da camada, mas longe do desenho, não cobre', () => {
+    expect(cobreOHeroi(camada('guilda'), naCasa(12, 10))).toBe(false);
+    expect(cobreOHeroi(camada('3_arvore_central'), naCasa(20, 10))).toBe(false);
+  });
+
+  it('a loja cobre quem passa atrás dela, e as do chão e de cima nunca contam', () => {
+    expect(cobreOHeroi(camada('loja_pocao'), naCasa(8, 9))).toBe(true);
+    expect(cobreOHeroi(camada('1_chao'), naCasa(8, 9))).toBe(false);
+    expect(cobreOHeroi(camada('2_arvores_masmorra'), naCasa(19, 8))).toBe(false);
   });
 });
 
