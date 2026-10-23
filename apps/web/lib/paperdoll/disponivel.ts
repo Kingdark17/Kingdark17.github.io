@@ -49,8 +49,8 @@ export const ACESSORIOS: ReadonlySet<string> = new Set(['amuleto_sab', 'colar_fo
 /** Arquivos de traço de raça, pelo nome — ver `TRACOS_DE_RACA`. (3 em `public/img/paperdoll/traco/`) */
 export const ARQUIVOS_DE_TRACO: ReadonlySet<string> = new Set(['aureola', 'chifres-de-dragao', 'orelhas-de-gato']);
 
-/** Armas com camada — o nome do arquivo é o `templateId`. (4 em `public/img/paperdoll/arma/`) */
-export const ARMAS: ReadonlySet<string> = new Set(['adaga', 'arco', 'cajado', 'espada']);
+/** Armas com camada — o nome do arquivo é o `templateId`. (5 em `public/img/paperdoll/arma/`) */
+export const ARMAS: ReadonlySet<string> = new Set(['adaga', 'arco', 'cajado', 'espada', 'machado']);
 
 /** O que a mão secundária pode segurar. (2 em `public/img/paperdoll/secundaria/`) */
 export const SECUNDARIAS: ReadonlySet<string> = new Set(['adaga', 'escudo']);
