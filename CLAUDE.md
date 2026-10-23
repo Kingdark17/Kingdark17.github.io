@@ -159,7 +159,13 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   (`items/runas.ts`, desde 2026-10-17) vieram depois: o item da runa guarda o
   `tierDaRuna`, a arma guarda `runas` (`{runa, tier}`), e só a arena do app as
   aplica — no site a arma vale só pelos atributos, e a runa só aparece na
-  mochila para descartar.
+  mochila para descartar. Os encantamentos (`items/encantamentos.ts` e a
+  tela `jogo/encantadora.ts`, desde 2026-10-18) vêm da Encantadora, uma sala
+  da cidade na pracinha a leste do caminho do portão (`withEncantadora`
+  acerta as cidades gravadas antes dela; no site a porta fica fechada): a
+  armadura guarda `encantamento` (`{tipo, nivel}`), e só a arena passa as
+  defesas ao golpe no herói (`landHitOnHero(..., defesas)`) e ergue o escudo
+  do vigor.
 
 - `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
   paridade exata: mesma entrada → mesmo resultado e a mesma sequência de
