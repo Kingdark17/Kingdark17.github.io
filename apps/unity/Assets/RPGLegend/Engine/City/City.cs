@@ -16,6 +16,7 @@ namespace RPGLegend.Engine
         public const string Questboard = "questboard";
         public const string Npc = "npc";
         public const string Guild = "guild";
+        public const string Encantadora = "encantadora";
     }
 
     /// <summary>TS: CityNpc — um morador da cidade, com o serviço ainda por usar.</summary>
@@ -79,6 +80,12 @@ namespace RPGLegend.Engine
         public static GridPosition GuildPos => D.GuildPos;
 
         /// <summary>
+        /// TS: ENCANTADORA_POS — onde fica a Encantadora (2026-10), na pracinha do outro lado do caminho do portão. Ela
+        /// só atende no app; no site a sala existe, com a porta fechada. O mesmo objeto sempre: não altere.
+        /// </summary>
+        public static GridPosition EncantadoraPos => D.EncantadoraPos;
+
+        /// <summary>
         /// TS: generateCityLayout — a grade rows × cols, as salas do desenho que cabem nela (na ordem do desenho),
         /// as portas entre salas que existem e o início em (3, 3). Grade pequena demais fica sem início (null).
         /// Determinístico: o mesmo mapa sempre.
@@ -126,15 +133,21 @@ namespace RPGLegend.Engine
         /// GUILD_POS vira Guilda (uma cópia da sala, numa linha nova; o resto da grade continua o mesmo). Sem
         /// pracinha "normal" ali, devolve a mesma grade.
         /// </summary>
-        public static List<List<CityCell>> WithGuild(List<List<CityCell>> grid)
+        public static List<List<CityCell>> WithGuild(List<List<CityCell>> grid) => ComSalaNoLugarDaPracinha(grid, GuildPos, CityRoomTypes.Guild);
+
+        /// <summary>TS: withEncantadora — a cidade gravada antes de a Encantadora existir, com ela no lugar. A mesma troca do <see cref="WithGuild"/>.</summary>
+        public static List<List<CityCell>> WithEncantadora(List<List<CityCell>> grid) => ComSalaNoLugarDaPracinha(grid, EncantadoraPos, CityRoomTypes.Encantadora);
+
+        /// <summary>A pracinha vazia em <paramref name="pos"/> vira a sala do <paramref name="tipo"/> (uma cópia, numa linha nova); sem pracinha ali, a mesma grade.</summary>
+        private static List<List<CityCell>> ComSalaNoLugarDaPracinha(List<List<CityCell>> grid, GridPosition pos, string tipo)
         {
-            if (DungeonGraph.CellAt(grid, GuildPos.X, GuildPos.Y)?.Type != CityRoomTypes.Normal) return grid;
+            if (DungeonGraph.CellAt(grid, pos.X, pos.Y)?.Type != CityRoomTypes.Normal) return grid;
 
             var next = new List<List<CityCell>>(grid.Count);
             for (int y = 0; y < grid.Count; y++)
             {
                 var linha = grid[y];
-                if (y != GuildPos.Y)
+                if (y != pos.Y)
                 {
                     next.Add(linha);
                     continue;
@@ -143,11 +156,11 @@ namespace RPGLegend.Engine
                 for (int x = 0; x < linha.Count; x++)
                 {
                     var cell = linha[x];
-                    if (x == GuildPos.X)
+                    if (x == pos.X)
                     {
-                        var guilda = cell.Clone();
-                        guilda.Type = CityRoomTypes.Guild;
-                        nova.Add(guilda);
+                        var sala = cell.Clone();
+                        sala.Type = tipo;
+                        nova.Add(sala);
                     }
                     else
                     {
@@ -190,6 +203,7 @@ namespace RPGLegend.Engine
                 case CityRoomTypes.Gate: return "🌟";
                 case CityRoomTypes.Start: return "🚀";
                 case CityRoomTypes.Guild: return "⚜️";
+                case CityRoomTypes.Encantadora: return "✨";
                 default: return "";
             }
         }
@@ -208,6 +222,7 @@ namespace RPGLegend.Engine
                 case CityRoomTypes.Start: return "o ponto de partida";
                 case CityRoomTypes.Normal: return "uma sala vazia";
                 case CityRoomTypes.Guild: return "a Guilda dos Aventureiros";
+                case CityRoomTypes.Encantadora: return "a sala da Encantadora";
                 default: return "uma sala";
             }
         }
@@ -226,6 +241,7 @@ namespace RPGLegend.Engine
                 case CityRoomTypes.Start: return "Este foi o ponto onde você chegou à cidade.";
                 case CityRoomTypes.Normal: return "Uma pracinha tranquila, sem nada de especial.";
                 case CityRoomTypes.Guild: return "Estandartes de todas as classes pendem do salão da Guilda dos Aventureiros.";
+                case CityRoomTypes.Encantadora: return "Pedras e frascos brilham na mesa da Encantadora.";
                 default: return "";
             }
         }
@@ -242,6 +258,7 @@ namespace RPGLegend.Engine
                 case CityRoomTypes.Questboard: return "Um quadro de missões está afixado na parede. Deseja ver os anúncios?";
                 case CityRoomTypes.Gate: return "Um portão misterioso leva à masmorra. Deseja atravessar?";
                 case CityRoomTypes.Guild: return "A Guilda dos Aventureiros treina quem vai descer à masmorra. Deseja entrar?";
+                case CityRoomTypes.Encantadora: return "A Encantadora fortifica armaduras em troca de ouro. Deseja entrar?";
                 default: return "Deseja entrar?";
             }
         }

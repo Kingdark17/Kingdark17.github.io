@@ -199,12 +199,12 @@ export function chanceDeQuebrar(arma: Item, indice: number): number {
 }
 
 /** A peça está com o herói: na mochila ou vestida. */
-function temPeca(estado: EstadoDoJogo, peca: Item): boolean {
+export function temPeca(estado: EstadoDoJogo, peca: Item): boolean {
   return estado.inventory.some((item) => item.uid === peca.uid) || EQUIP_SLOTS.some((slot) => estado.hero.equip[slot]?.uid === peca.uid);
 }
 
-/** A peça mudada (as runas) no lugar dela: na mochila e, se estiver vestida, no slot. Os atributos não mudam. */
-function comPecaTrocada(estado: EstadoDoJogo, peca: Item): EstadoDoJogo {
+/** A peça mudada (as runas, o encantamento) no lugar dela: na mochila e, se estiver vestida, no slot. Os atributos não mudam. */
+export function comPecaTrocada(estado: EstadoDoJogo, peca: Item): EstadoDoJogo {
   const inventory = estado.inventory.map((item) => (item.uid === peca.uid ? { ...peca, equipped: item.equipped } : item));
   let equip = estado.hero.equip;
   for (const slot of EQUIP_SLOTS) {

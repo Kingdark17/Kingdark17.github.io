@@ -105705,6 +105705,2665 @@
     }
   },
   {
+    "name": "landHitOnHero: robustez III desconta de quem bate de perto",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0.15,
+          "resistenciaMagica": 0,
+          "evitaDreno": 0,
+          "resistenciaVeneno": 0,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 107,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "dodged": false,
+        "damage": 18,
+        "poisonApplied": false,
+        "manaDrained": 0,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "landHitOnHero: a robustez não vale contra o mágico",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "elemental_fogo",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "elemental_fogo",
+            "name": "Elemental de Fogo",
+            "icon": "🔥",
+            "behavior": "magico",
+            "baseHp": 11,
+            "baseSpeed": 9,
+            "baseDmg": 5,
+            "weakness": "fisico",
+            "resistance": "magico",
+            "ability": "Chama Arcana",
+            "abilityDesc": "Pode queimar e drenar mana."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Elemental de Fogo Corrompido",
+          "icon": "🔥",
+          "behavior": "magico",
+          "ability": "Chama Arcana",
+          "abilityDesc": "Pode queimar e drenar mana.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0.15,
+          "resistenciaMagica": 0,
+          "evitaDreno": 0,
+          "resistenciaVeneno": 0,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.5,
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 104,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "dodged": false,
+        "damage": 21,
+        "poisonApplied": false,
+        "manaDrained": 0,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "monster": {
+          "speciesId": "elemental_fogo",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "elemental_fogo",
+            "name": "Elemental de Fogo",
+            "icon": "🔥",
+            "behavior": "magico",
+            "baseHp": 11,
+            "baseSpeed": 9,
+            "baseDmg": 5,
+            "weakness": "fisico",
+            "resistance": "magico",
+            "ability": "Chama Arcana",
+            "abilityDesc": "Pode queimar e drenar mana."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Elemental de Fogo Corrompido",
+          "icon": "🔥",
+          "behavior": "magico",
+          "ability": "Chama Arcana",
+          "abilityDesc": "Pode queimar e drenar mana.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "landHitOnHero: resistência mágica III desconta do mágico e segura o dreno",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "elemental_fogo",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "elemental_fogo",
+            "name": "Elemental de Fogo",
+            "icon": "🔥",
+            "behavior": "magico",
+            "baseHp": 11,
+            "baseSpeed": 9,
+            "baseDmg": 5,
+            "weakness": "fisico",
+            "resistance": "magico",
+            "ability": "Chama Arcana",
+            "abilityDesc": "Pode queimar e drenar mana."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Elemental de Fogo Corrompido",
+          "icon": "🔥",
+          "behavior": "magico",
+          "ability": "Chama Arcana",
+          "abilityDesc": "Pode queimar e drenar mana.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0,
+          "resistenciaMagica": 0.35,
+          "evitaDreno": 0.75,
+          "resistenciaVeneno": 0,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.5,
+          0.1,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 111,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "dodged": false,
+        "damage": 14,
+        "poisonApplied": false,
+        "manaDrained": 0,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "drainResisted": true,
+        "monster": {
+          "speciesId": "elemental_fogo",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "elemental_fogo",
+            "name": "Elemental de Fogo",
+            "icon": "🔥",
+            "behavior": "magico",
+            "baseHp": 11,
+            "baseSpeed": 9,
+            "baseDmg": 5,
+            "weakness": "fisico",
+            "resistance": "magico",
+            "ability": "Chama Arcana",
+            "abilityDesc": "Pode queimar e drenar mana."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Elemental de Fogo Corrompido",
+          "icon": "🔥",
+          "behavior": "magico",
+          "ability": "Chama Arcana",
+          "abilityDesc": "Pode queimar e drenar mana.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 4
+    }
+  },
+  {
+    "name": "landHitOnHero: resistência mágica I não segura o dreno",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 1
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 30,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "espectro_gelado",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "espectro_gelado",
+            "name": "Espectro Gelado",
+            "icon": "❄️",
+            "behavior": "magico",
+            "baseHp": 12,
+            "baseSpeed": 10,
+            "baseDmg": 4,
+            "weakness": "fisico",
+            "resistance": "magico",
+            "ability": "Toque Gélido",
+            "abilityDesc": "Pode drenar mana do herói."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Espectro Gelado Corrompido",
+          "icon": "❄️",
+          "behavior": "magico",
+          "ability": "Toque Gélido",
+          "abilityDesc": "Pode drenar mana do herói.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0,
+          "resistenciaMagica": 0.15,
+          "evitaDreno": 0.25,
+          "resistenciaVeneno": 0,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.5,
+          0.1,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 1
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 107,
+          "maxMp": 62,
+          "mp": 21,
+          "buffs": {}
+        },
+        "dodged": false,
+        "damage": 18,
+        "poisonApplied": false,
+        "manaDrained": 9,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "monster": {
+          "speciesId": "espectro_gelado",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "espectro_gelado",
+            "name": "Espectro Gelado",
+            "icon": "❄️",
+            "behavior": "magico",
+            "baseHp": 12,
+            "baseSpeed": 10,
+            "baseDmg": 4,
+            "weakness": "fisico",
+            "resistance": "magico",
+            "ability": "Toque Gélido",
+            "abilityDesc": "Pode drenar mana do herói."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Espectro Gelado Corrompido",
+          "icon": "❄️",
+          "behavior": "magico",
+          "ability": "Toque Gélido",
+          "abilityDesc": "Pode drenar mana do herói.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 4
+    }
+  },
+  {
+    "name": "landHitOnHero: resistência a veneno III segura a aranha",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "aranha",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "aranha",
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "baseHp": 8,
+            "baseSpeed": 11,
+            "baseDmg": 4,
+            "weakness": "fisico",
+            "resistance": "nenhuma",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Aranha Gigante Corrompido",
+          "icon": "🕷️",
+          "behavior": "venenoso",
+          "ability": "Picada Venenosa",
+          "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0,
+          "resistenciaMagica": 0,
+          "evitaDreno": 0,
+          "resistenciaVeneno": 0.75,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.5,
+          0.1,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 104,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "dodged": false,
+        "damage": 21,
+        "poisonApplied": false,
+        "manaDrained": 0,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "poisonResisted": true,
+        "monster": {
+          "speciesId": "aranha",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "aranha",
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "baseHp": 8,
+            "baseSpeed": 11,
+            "baseDmg": 4,
+            "weakness": "fisico",
+            "resistance": "nenhuma",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Aranha Gigante Corrompido",
+          "icon": "🕷️",
+          "behavior": "venenoso",
+          "ability": "Picada Venenosa",
+          "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 4
+    }
+  },
+  {
+    "name": "landHitOnHero: resistência a veneno I não segura",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 1
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "aranha",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "aranha",
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "baseHp": 8,
+            "baseSpeed": 11,
+            "baseDmg": 4,
+            "weakness": "fisico",
+            "resistance": "nenhuma",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Aranha Gigante Corrompido",
+          "icon": "🕷️",
+          "behavior": "venenoso",
+          "ability": "Picada Venenosa",
+          "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0,
+          "resistenciaMagica": 0,
+          "evitaDreno": 0,
+          "resistenciaVeneno": 0.3,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.5,
+          0.1,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 1
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 104,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {
+            "poisonTurns": 3,
+            "poisonDmg": 6
+          }
+        },
+        "dodged": false,
+        "damage": 21,
+        "poisonApplied": true,
+        "manaDrained": 0,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "monster": {
+          "speciesId": "aranha",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 20,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "aranha",
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "baseHp": 8,
+            "baseSpeed": 11,
+            "baseDmg": 4,
+            "weakness": "fisico",
+            "resistance": "nenhuma",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Aranha Gigante Corrompido",
+          "icon": "🕷️",
+          "behavior": "venenoso",
+          "ability": "Picada Venenosa",
+          "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 4
+    }
+  },
+  {
+    "name": "landHitOnHero: o golpe envenenado do poder de classe também é segurado",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "poisonStrike": true,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0,
+          "resistenciaMagica": 0,
+          "evitaDreno": 0,
+          "resistenciaVeneno": 0.75,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.5,
+          0.2
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 119,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "dodged": false,
+        "damage": 6,
+        "poisonApplied": false,
+        "manaDrained": 0,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "poisonResisted": true,
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "poisonStrike": false,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "landHitOnHero: sem encantamento é o golpe de sempre",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "aranha",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "aranha",
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "baseHp": 8,
+            "baseSpeed": 11,
+            "baseDmg": 4,
+            "weakness": "fisico",
+            "resistance": "nenhuma",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Aranha Gigante Corrompido",
+          "icon": "🕷️",
+          "behavior": "venenoso",
+          "ability": "Picada Venenosa",
+          "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0,
+          "resistenciaMagica": 0,
+          "evitaDreno": 0,
+          "resistenciaVeneno": 0,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 118,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {
+            "poisonTurns": 3,
+            "poisonDmg": 2
+          }
+        },
+        "dodged": false,
+        "damage": 7,
+        "poisonApplied": true,
+        "manaDrained": 0,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "monster": {
+          "speciesId": "aranha",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "aranha",
+            "name": "Aranha Gigante",
+            "icon": "🕷️",
+            "behavior": "venenoso",
+            "baseHp": 8,
+            "baseSpeed": 11,
+            "baseDmg": 4,
+            "weakness": "fisico",
+            "resistance": "nenhuma",
+            "ability": "Picada Venenosa",
+            "abilityDesc": "Pode envenenar o herói por 3 turnos."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Aranha Gigante Corrompido",
+          "icon": "🕷️",
+          "behavior": "venenoso",
+          "ability": "Picada Venenosa",
+          "abilityDesc": "Pode envenenar o herói por 3 turnos.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "landHitOnHero: esquiva com a armadura encantada",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 2
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {
+            "esquivaTurns": 2,
+            "esquivaAmount": 40
+          }
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0.1,
+          "resistenciaMagica": 0,
+          "evitaDreno": 0,
+          "resistenciaVeneno": 0,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 2
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {
+            "esquivaTurns": 1,
+            "esquivaAmount": 40
+          }
+        },
+        "dodged": true,
+        "damage": 0,
+        "poisonApplied": false,
+        "manaDrained": 0,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "landHitOnHero: o desconto não passa de 1 de dano",
+    "input": {
+      "fn": "landHitOnHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 0,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "attackMult": 1,
+        "petEsquiva": 0,
+        "defesas": {
+          "robustez": 0.15,
+          "resistenciaMagica": 0,
+          "evitaDreno": 0,
+          "resistenciaVeneno": 0,
+          "vigor": 0
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_62706",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Ladino",
+          "classIcon": "🗡",
+          "classId": "ladino",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 124,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "dodged": false,
+        "damage": 1,
+        "poisonApplied": false,
+        "manaDrained": 0,
+        "defensivePassiveTriggered": false,
+        "shieldConsumed": false,
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 0,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rngCalls": 2
+    }
+  },
+  {
     "name": "landHitOnHero: pet de esquiva",
     "input": {
       "fn": "landHitOnHero",

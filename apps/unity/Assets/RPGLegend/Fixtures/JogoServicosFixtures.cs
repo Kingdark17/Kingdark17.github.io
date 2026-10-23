@@ -105,6 +105,12 @@ namespace RPGLegend.Tests
 
             Fn(M, "abrirGuilda", (a, c) => W(Guildas.AbrirGuilda(JogoJson.LerEstado(a["estado"]))));
             Fn(M, "treinar", (a, c) => W(Guildas.Treinar(R<Guilda>(a["guilda"]), R<ClassDef>(a["classe"]), c.RngFn, c.NowOrFail)));
+
+            // ---------- a Encantadora ----------
+
+            Fn(M, "abrirEncantadora", (a, c) => W(Encantadoras.AbrirEncantadora(JogoJson.LerEstado(a["estado"]))));
+            Fn(M, "pecasParaEncantar", (a, c) => W(Encantadoras.PecasParaEncantar(JogoJson.LerEstado(a["estado"]))));
+            Fn(M, "encantar", (a, c) => W(Encantadoras.Encantar(R<Encantadora>(a["encantadora"]), R<Item>(a["peca"]), Str(a["tipo"]), Num(a["nivel"]))));
             Fn(M, "tocarTotem", (a, c) => W(Totens.TocarTotem(R<EstadoNaMasmorra>(a["estado"]))));
             Fn(M, "voltarPeloTotem", (a, c) => W(Totens.VoltarPeloTotem(R<Totem>(a["totem"]))));
         }

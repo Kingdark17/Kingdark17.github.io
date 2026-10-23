@@ -31,6 +31,7 @@ import type { Adm } from './adm.js';
 import { iniciarEncontro, type Combate } from './combate.js';
 import { abrirDialogo, type Dialogo } from './dialogo.js';
 import type { Efeito } from './efeitos.js';
+import { abrirEncantadora, type Encantadora } from './encantadora.js';
 import {
   andarDeForca,
   celulaAtual,
@@ -76,6 +77,7 @@ export type TelaAberta =
   | { tipo: 'mochila'; mochila: Mochila }
   | { tipo: 'adm'; adm: Adm }
   | { tipo: 'guilda'; guilda: Guilda }
+  | { tipo: 'encantadora'; encantadora: Encantadora }
   | { tipo: 'portao'; portao: Portao }
   | { tipo: 'totem'; totem: Totem }
   | { tipo: 'professor'; professor: Professor };
@@ -210,6 +212,10 @@ function naCidade(estado: EstadoNaCidade, rng: Rng, now: (() => number) | undefi
       return { estado, aviso: null, tela: { tipo: 'missoes', quadro: abrirQuadro(estado, rng, now) } };
     case 'guild':
       return { estado, aviso: null, tela: { tipo: 'guilda', guilda: abrirGuilda(estado) }, som: 'door' };
+    case 'encantadora':
+      // Só o app tem a Encantadora (decisão do usuário, 2026-10-17): no site a porta fica fechada.
+      if (!app) return { estado, aviso: aviso('✨', 'Encantadora', 'A porta da Encantadora está fechada.'), tela: null };
+      return { estado, aviso: null, tela: { tipo: 'encantadora', encantadora: abrirEncantadora(estado) }, som: 'door' };
     case 'npc':
       return abrirConversa(estado);
     case 'start':

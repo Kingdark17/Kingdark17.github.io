@@ -16,7 +16,7 @@ import type { Item } from '../items/item.js';
 import type { NpcService } from '../npc/npc-services.js';
 import { DIR_OPP, DIR_VECTORS, type Direction, type RoomCell } from '../dungeon/graph.js';
 
-export type CityRoomType = 'void' | 'start' | 'normal' | 'gate' | 'shop' | 'blacksmith' | 'tavern' | 'questboard' | 'npc' | 'guild';
+export type CityRoomType = 'void' | 'start' | 'normal' | 'gate' | 'shop' | 'blacksmith' | 'tavern' | 'questboard' | 'npc' | 'guild' | 'encantadora';
 
 /**
  * Onde fica a Guilda: na pracinha a oeste do caminho do portão, que até
@@ -25,6 +25,14 @@ export type CityRoomType = 'void' | 'start' | 'normal' | 'gate' | 'shop' | 'blac
  * uma cidade de antes precisa saber onde abrir a porta (`withGuild`).
  */
 export const GUILD_POS = { x: 2, y: 2 } as const;
+
+/**
+ * Onde fica a Encantadora (2026-10): na pracinha a leste do caminho do
+ * portão, o espelho da Guilda. Ela fortifica armaduras, e só atende no app
+ * (`items/encantamentos.ts`); no site a sala existe, com a porta fechada.
+ * Exportado pelo mesmo motivo da Guilda (`withEncantadora`).
+ */
+export const ENCANTADORA_POS = { x: 4, y: 2 } as const;
 
 export interface CityNpc {
   name: string;
@@ -122,7 +130,7 @@ const LAYOUT: LayoutSpec[] = [
   { x: 3, y: 4, type: 'npc', npcIndex: 0 },
   { x: 3, y: 5, type: 'npc', npcIndex: 1 },
   { ...GUILD_POS, type: 'guild' },
-  { x: 4, y: 2, type: 'normal' },
+  { ...ENCANTADORA_POS, type: 'encantadora' },
 ];
 
 const LAYOUT_DOORS: Array<[number, number, Direction]> = [
@@ -182,6 +190,14 @@ export function withGuild(grid: CityCell[][]): CityCell[][] {
   return grid.map((linha, y) => (y === GUILD_POS.y ? linha.map((cell, x) => (x === GUILD_POS.x ? { ...cell, type: 'guild' } : cell)) : linha));
 }
 
+/** A cidade gravada antes de a Encantadora existir, com ela no lugar. A mesma troca de tipo do `withGuild`. */
+export function withEncantadora(grid: CityCell[][]): CityCell[][] {
+  if (grid[ENCANTADORA_POS.y]?.[ENCANTADORA_POS.x]?.type !== 'normal') return grid;
+  return grid.map((linha, y) =>
+    y === ENCANTADORA_POS.y ? linha.map((cell, x) => (x === ENCANTADORA_POS.x ? { ...cell, type: 'encantadora' } : cell)) : linha,
+  );
+}
+
 /** Restaura Vida e Mana do herói e Vida da equipe inteira — a única regra por trás da taverna. */
 export function restAtTavern(hero: Hero, party: readonly Companion[]): { hero: Hero; party: Companion[] } {
   const nextHero: Hero = { ...hero, hp: hero.maxHp, mp: hero.maxMp };
@@ -201,6 +217,7 @@ export function cityIconFor(cell: CityCell): string {
   if (cell.type === 'gate') return '🌟';
   if (cell.type === 'start') return '🚀';
   if (cell.type === 'guild') return '⚜️';
+  if (cell.type === 'encantadora') return '✨';
   return '';
 }
 
@@ -215,6 +232,7 @@ export function cityShortLabel(cell: CityCell): string {
     start: 'o ponto de partida',
     normal: 'uma sala vazia',
     guild: 'a Guilda dos Aventureiros',
+    encantadora: 'a sala da Encantadora',
   };
   return labels[cell.type] ?? 'uma sala';
 }
@@ -230,6 +248,7 @@ export function cityRoomDesc(cell: CityCell): string {
     start: 'Este foi o ponto onde você chegou à cidade.',
     normal: 'Uma pracinha tranquila, sem nada de especial.',
     guild: 'Estandartes de todas as classes pendem do salão da Guilda dos Aventureiros.',
+    encantadora: 'Pedras e frascos brilham na mesa da Encantadora.',
   };
   return descs[cell.type] ?? '';
 }
@@ -242,5 +261,6 @@ export function cityEntryText(cell: CityCell): string {
   if (cell.type === 'questboard') return 'Um quadro de missões está afixado na parede. Deseja ver os anúncios?';
   if (cell.type === 'gate') return 'Um portão misterioso leva à masmorra. Deseja atravessar?';
   if (cell.type === 'guild') return 'A Guilda dos Aventureiros treina quem vai descer à masmorra. Deseja entrar?';
+  if (cell.type === 'encantadora') return 'A Encantadora fortifica armaduras em troca de ouro. Deseja entrar?';
   return 'Deseja entrar?';
 }

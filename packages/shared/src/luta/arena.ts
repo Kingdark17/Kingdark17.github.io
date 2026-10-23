@@ -58,6 +58,7 @@ import { celulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from '../jogo/e
 import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta } from '../jogo/fim-da-luta.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
+import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
 import { eventoDaArma, eventoDoAtaque, lerEvento, TAMANHO_DO_DESENHO, type EventoDeArma, type JogadaDoEvento, type TipoDeEvento } from './eventos-de-arma.js';
 
 // ---------- números ----------
@@ -233,6 +234,11 @@ export interface Arena {
   intervalo: number;
   /** Quem golpeou por último (índice na sala; -1 ninguém): a vez passa pro próximo de pé. */
   vez: number;
+  /**
+   * O que sobra do escudo do vigor (a Encantadora, `items/encantamentos.ts`): apanha antes da vida e some com a
+   * luta. Ausente quando o herói não tem vigor.
+   */
+  escudo?: number;
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -283,7 +289,7 @@ export interface Acontecimento {
   onde?: 'monstro' | 'heroi' | 'companheiro';
   /** Número sobre monstro ou companheiro: qual (índice na sala, ou na equipe). */
   indice?: number;
-  tom?: 'dano' | 'critico' | 'cura' | 'erro';
+  tom?: 'dano' | 'critico' | 'cura' | 'erro' | 'escudo';
   som?: Efeito;
 }
 
@@ -342,6 +348,12 @@ export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId 
     vez: -1,
   };
   const acontecimentos: Acontecimento[] = preparada.log.map((texto) => ({ tipo: 'diario', texto }));
+  // O vigor da armadura encantada ergue o escudo na entrada da luta (só o app tem a arena).
+  const escudo = escudoDoVigor(preparada.estado.hero);
+  if (escudo > 0) {
+    arena.escudo = escudo;
+    acontecimentos.push({ tipo: 'aviso', texto: `💪 Vigor: escudo de ${escudo}` });
+  }
   return { luta: { estado: preparada.estado, arena, pet, teclado, fim: null, loot: null }, acontecimentos };
 }
 
@@ -874,22 +886,46 @@ function investir(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   }
 }
 
-/** O golpe do monstro `indice` pegou no coração: a regra do site, com a esquiva de sempre. */
+/**
+ * O golpe do monstro `indice` pegou no coração: a regra do site, com a esquiva de sempre, mais a armadura
+ * encantada (que só a arena aplica) e o escudo do vigor, que apanha antes da vida.
+ */
 function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   const estado = masmorra(l);
   const monstro = monstroNo(l, indice);
-  const golpe = landHitOnHero(estado.hero, monstro, forca, l.rng, petBonus(l.pet).esquiva ?? 0);
-  l.estado = gravarMonstro({ ...estado, hero: golpe.hero }, indice, golpe.monster);
+  const golpe = landHitOnHero(estado.hero, monstro, forca, l.rng, petBonus(l.pet).esquiva ?? 0, defesasDoHeroi(estado.hero));
   if (golpe.dodged) {
+    l.estado = gravarMonstro({ ...estado, hero: golpe.hero }, indice, golpe.monster);
     contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: 'Desviou', tom: 'erro' });
     contar(l, { tipo: 'som', som: 'miss' });
     return;
   }
-  contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `-${golpe.damage}`, tom: 'dano' });
+  const hero = noEscudo(l, estado.hero.hp, golpe.hero, golpe.damage);
+  l.estado = gravarMonstro({ ...estado, hero }, indice, golpe.monster);
   contar(l, { tipo: 'som', som: 'hit' });
   if (golpe.manaDrained > 0) contar(l, { tipo: 'aviso', texto: `${monstro.name} drena ${golpe.manaDrained} de mana` });
+  if (golpe.drainResisted) contar(l, { tipo: 'aviso', texto: 'Sua armadura segura o dreno de mana' });
   if (golpe.poisonApplied) contar(l, { tipo: 'aviso', texto: 'Você foi envenenado' });
-  if (golpe.hero.hp <= 0) perder(l);
+  if (golpe.poisonResisted) contar(l, { tipo: 'aviso', texto: 'Sua armadura segura o veneno' });
+  if (hero.hp <= 0) perder(l);
+}
+
+/**
+ * O dano no herói passa primeiro pelo escudo do vigor: ele aguenta o que tiver, e a vida perde só o resto. Conta
+ * os números (o do escudo no tom dele) e devolve o herói com a vida certa. Sem escudo, é o dano de sempre.
+ */
+function noEscudo(l: Luta, vidaAntes: number, hero: Hero, dano: number): Hero {
+  const escudo = l.arena.escudo ?? 0;
+  const absorvido = Math.min(escudo, dano);
+  if (absorvido <= 0) {
+    contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `-${dano}`, tom: 'dano' });
+    return hero;
+  }
+  l.arena.escudo = escudo - absorvido;
+  contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `💪-${absorvido}`, tom: 'escudo' });
+  const resto = dano - absorvido;
+  if (resto > 0) contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `-${resto}`, tom: 'dano' });
+  return { ...hero, hp: Math.max(0, vidaAntes - resto) };
 }
 
 /** O golpe do monstro `m` cai no companheiro `alvo`, como no site. Se ele já caiu, o golpe vai no vazio. */
@@ -954,10 +990,12 @@ function moverTiros(l: Luta): void {
 
 /** A rodada: o veneno do herói, o dano contínuo de cada monstro de pé e a Canção de Batalha. */
 function rodada(l: Luta): void {
-  const veneno = tickHeroStatus(masmorra(l).hero);
-  l.estado = { ...masmorra(l), hero: veneno.hero };
-  if (veneno.damage > 0) contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `-${veneno.damage}`, tom: 'dano' });
-  if (veneno.defeated) {
+  const antes = masmorra(l).hero;
+  const veneno = tickHeroStatus(antes);
+  // O veneno também passa primeiro pelo escudo do vigor.
+  const hero = veneno.damage > 0 ? noEscudo(l, antes.hp, veneno.hero, veneno.damage) : veneno.hero;
+  l.estado = { ...masmorra(l), hero };
+  if (hero.hp <= 0) {
     diario(l, ['O veneno foi mais forte.']);
     perder(l);
     return;

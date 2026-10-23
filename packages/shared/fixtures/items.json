@@ -23747,6 +23747,3296 @@
     }
   },
   {
+    "name": "ENCANTAMENTOS (constante)",
+    "input": {
+      "const": "ENCANTAMENTOS"
+    },
+    "expected": {
+      "value": {
+        "robustez": {
+          "nome": "Robustez",
+          "icone": "🛡️",
+          "forca": [
+            0.05,
+            0.1,
+            0.15
+          ],
+          "teto": 0.3
+        },
+        "resistencia_magica": {
+          "nome": "Resistência Mágica",
+          "icone": "🔮",
+          "forca": [
+            0.15,
+            0.25,
+            0.35
+          ],
+          "teto": 0.6
+        },
+        "resistencia_veneno": {
+          "nome": "Resistência a Veneno",
+          "icone": "🧪",
+          "forca": [
+            0.3,
+            0.5,
+            0.75
+          ],
+          "teto": 0.9
+        },
+        "vigor": {
+          "nome": "Vigor",
+          "icone": "💪",
+          "forca": [
+            0.1,
+            0.15,
+            0.2
+          ],
+          "teto": 0.4
+        }
+      }
+    }
+  },
+  {
+    "name": "podeEncantar: placas",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "placas_1700000000000_73424",
+          "templateId": "placas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 4,
+            "esquiva": -1
+          },
+          "value": 17,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "podeEncantar: escudo",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "escudo_1700000000000_73424",
+          "templateId": "escudo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 5,
+            "velocidade": -1
+          },
+          "value": 24,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "podeEncantar: placas_elmo",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "placas_elmo_1700000000000_73424",
+          "templateId": "placas_elmo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 1
+          },
+          "value": 5,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "podeEncantar: robe_calca",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "robe_calca_1700000000000_73424",
+          "templateId": "robe_calca",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 1,
+            "mana": 3
+          },
+          "value": 8,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "podeEncantar: botas",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "botas_1700000000000_73424",
+          "templateId": "botas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 1,
+            "velocidade": 1
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "podeEncantar: espada",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "podeEncantar: bota_vento",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "bota_vento_1700000000000_73424",
+          "templateId": "bota_vento",
+          "rarity": "comum",
+          "stats": {
+            "velocidade": 3,
+            "esquiva": 1
+          },
+          "value": 18,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "podeEncantar: anel_som",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "anel_som_1700000000000_73424",
+          "templateId": "anel_som",
+          "rarity": "comum",
+          "stats": {
+            "critico": 5,
+            "esquiva": 2
+          },
+          "value": 20,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "podeEncantar: pot_vida",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "pot_vida_1700000000000_73424",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "podeEncantar: minerio",
+    "input": {
+      "fn": "podeEncantar",
+      "args": {
+        "item": {
+          "uid": "minerio_1700000000000_73424",
+          "templateId": "minerio",
+          "rarity": "comum",
+          "stats": {},
+          "value": 10,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: robustez, nível 1",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "robustez",
+          "nivel": 1
+        }
+      }
+    },
+    "expected": {
+      "result": "Robustez I"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: robustez, nível 1",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "robustez",
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": "-5% de dano dos monstros que batem de perto ou investem."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: robustez, nível 2",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "robustez",
+          "nivel": 2
+        }
+      }
+    },
+    "expected": {
+      "result": "Robustez II"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: robustez, nível 2",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "robustez",
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": "-10% de dano dos monstros que batem de perto ou investem."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: robustez, nível 3",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "robustez",
+          "nivel": 3
+        }
+      }
+    },
+    "expected": {
+      "result": "Robustez III"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: robustez, nível 3",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "robustez",
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": "-15% de dano dos monstros que batem de perto ou investem."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: robustez, nível 0",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "robustez",
+          "nivel": 0
+        }
+      }
+    },
+    "expected": {
+      "result": "Robustez I"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: robustez, nível 0",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "robustez",
+        "nivel": 0
+      }
+    },
+    "expected": {
+      "result": "-5% de dano dos monstros que batem de perto ou investem."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: robustez, nível 7",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "robustez",
+          "nivel": 7
+        }
+      }
+    },
+    "expected": {
+      "result": "Robustez III"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: robustez, nível 7",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "robustez",
+        "nivel": 7
+      }
+    },
+    "expected": {
+      "result": "-15% de dano dos monstros que batem de perto ou investem."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: robustez, nível 2.5",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "robustez",
+          "nivel": 2.5
+        }
+      }
+    },
+    "expected": {
+      "result": "Robustez II"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: robustez, nível 2.5",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "robustez",
+        "nivel": 2.5
+      }
+    },
+    "expected": {
+      "result": "-10% de dano dos monstros que batem de perto ou investem."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_magica, nível 1",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_magica",
+          "nivel": 1
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência Mágica I"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_magica, nível 1",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_magica",
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": "-15% de dano dos monstros mágicos, e 25% de chance de evitar o dreno de mana."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_magica, nível 2",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_magica",
+          "nivel": 2
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência Mágica II"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_magica, nível 2",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_magica",
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": "-25% de dano dos monstros mágicos, e 50% de chance de evitar o dreno de mana."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_magica, nível 3",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_magica",
+          "nivel": 3
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência Mágica III"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_magica, nível 3",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_magica",
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": "-35% de dano dos monstros mágicos, e 75% de chance de evitar o dreno de mana."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_magica, nível 0",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_magica",
+          "nivel": 0
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência Mágica I"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_magica, nível 0",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_magica",
+        "nivel": 0
+      }
+    },
+    "expected": {
+      "result": "-15% de dano dos monstros mágicos, e 25% de chance de evitar o dreno de mana."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_magica, nível 7",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_magica",
+          "nivel": 7
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência Mágica III"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_magica, nível 7",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_magica",
+        "nivel": 7
+      }
+    },
+    "expected": {
+      "result": "-35% de dano dos monstros mágicos, e 75% de chance de evitar o dreno de mana."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_magica, nível 2.5",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_magica",
+          "nivel": 2.5
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência Mágica II"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_magica, nível 2.5",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_magica",
+        "nivel": 2.5
+      }
+    },
+    "expected": {
+      "result": "-25% de dano dos monstros mágicos, e 50% de chance de evitar o dreno de mana."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_veneno, nível 1",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_veneno",
+          "nivel": 1
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência a Veneno I"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_veneno, nível 1",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_veneno",
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": "30% de chance de não ser envenenado."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_veneno, nível 2",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_veneno",
+          "nivel": 2
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência a Veneno II"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_veneno, nível 2",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_veneno",
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": "50% de chance de não ser envenenado."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_veneno, nível 3",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_veneno",
+          "nivel": 3
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência a Veneno III"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_veneno, nível 3",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_veneno",
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": "75% de chance de não ser envenenado."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_veneno, nível 0",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_veneno",
+          "nivel": 0
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência a Veneno I"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_veneno, nível 0",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_veneno",
+        "nivel": 0
+      }
+    },
+    "expected": {
+      "result": "30% de chance de não ser envenenado."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_veneno, nível 7",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_veneno",
+          "nivel": 7
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência a Veneno III"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_veneno, nível 7",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_veneno",
+        "nivel": 7
+      }
+    },
+    "expected": {
+      "result": "75% de chance de não ser envenenado."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: resistencia_veneno, nível 2.5",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "resistencia_veneno",
+          "nivel": 2.5
+        }
+      }
+    },
+    "expected": {
+      "result": "Resistência a Veneno II"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: resistencia_veneno, nível 2.5",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "resistencia_veneno",
+        "nivel": 2.5
+      }
+    },
+    "expected": {
+      "result": "50% de chance de não ser envenenado."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: vigor, nível 1",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "vigor",
+          "nivel": 1
+        }
+      }
+    },
+    "expected": {
+      "result": "Vigor I"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: vigor, nível 1",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "vigor",
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": "No começo de cada luta, um escudo de 10% da vida máxima, que apanha primeiro."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: vigor, nível 2",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "vigor",
+          "nivel": 2
+        }
+      }
+    },
+    "expected": {
+      "result": "Vigor II"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: vigor, nível 2",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "vigor",
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": "No começo de cada luta, um escudo de 15% da vida máxima, que apanha primeiro."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: vigor, nível 3",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "vigor",
+          "nivel": 3
+        }
+      }
+    },
+    "expected": {
+      "result": "Vigor III"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: vigor, nível 3",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "vigor",
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": "No começo de cada luta, um escudo de 20% da vida máxima, que apanha primeiro."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: vigor, nível 0",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "vigor",
+          "nivel": 0
+        }
+      }
+    },
+    "expected": {
+      "result": "Vigor I"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: vigor, nível 0",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "vigor",
+        "nivel": 0
+      }
+    },
+    "expected": {
+      "result": "No começo de cada luta, um escudo de 10% da vida máxima, que apanha primeiro."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: vigor, nível 7",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "vigor",
+          "nivel": 7
+        }
+      }
+    },
+    "expected": {
+      "result": "Vigor III"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: vigor, nível 7",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "vigor",
+        "nivel": 7
+      }
+    },
+    "expected": {
+      "result": "No começo de cada luta, um escudo de 20% da vida máxima, que apanha primeiro."
+    }
+  },
+  {
+    "name": "nomeDoEncantamento: vigor, nível 2.5",
+    "input": {
+      "fn": "nomeDoEncantamento",
+      "args": {
+        "encantamento": {
+          "tipo": "vigor",
+          "nivel": 2.5
+        }
+      }
+    },
+    "expected": {
+      "result": "Vigor II"
+    }
+  },
+  {
+    "name": "efeitoDoEncantamento: vigor, nível 2.5",
+    "input": {
+      "fn": "efeitoDoEncantamento",
+      "args": {
+        "tipo": "vigor",
+        "nivel": 2.5
+      }
+    },
+    "expected": {
+      "result": "No começo de cada luta, um escudo de 15% da vida máxima, que apanha primeiro."
+    }
+  },
+  {
+    "name": "custoDoEncantamento: 1",
+    "input": {
+      "fn": "custoDoEncantamento",
+      "args": {
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "custoDoEncantamento: 2",
+    "input": {
+      "fn": "custoDoEncantamento",
+      "args": {
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": 300
+    }
+  },
+  {
+    "name": "custoDoEncantamento: 3",
+    "input": {
+      "fn": "custoDoEncantamento",
+      "args": {
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": 800
+    }
+  },
+  {
+    "name": "custoDoEncantamento: 0",
+    "input": {
+      "fn": "custoDoEncantamento",
+      "args": {
+        "nivel": 0
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "custoDoEncantamento: 4",
+    "input": {
+      "fn": "custoDoEncantamento",
+      "args": {
+        "nivel": 4
+      }
+    },
+    "expected": {
+      "result": 800
+    }
+  },
+  {
+    "name": "custoDoEncantamento: 1.9",
+    "input": {
+      "fn": "custoDoEncantamento",
+      "args": {
+        "nivel": 1.9
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "encantarPeca: peitoral novo",
+    "input": {
+      "fn": "encantarPeca",
+      "args": {
+        "peca": {
+          "uid": "placas_1700000000000_73424",
+          "templateId": "placas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 4,
+            "esquiva": -1
+          },
+          "value": 17,
+          "equipped": false
+        },
+        "tipo": "robustez",
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "placas_1700000000000_73424",
+        "templateId": "placas",
+        "rarity": "comum",
+        "stats": {
+          "defesa": 4,
+          "esquiva": -1
+        },
+        "value": 17,
+        "equipped": false,
+        "encantamento": {
+          "tipo": "robustez",
+          "nivel": 2
+        }
+      }
+    }
+  },
+  {
+    "name": "encantarPeca: troca a que havia",
+    "input": {
+      "fn": "encantarPeca",
+      "args": {
+        "peca": {
+          "uid": "placas_1700000000000_73424",
+          "templateId": "placas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 4,
+            "esquiva": -1
+          },
+          "value": 17,
+          "equipped": true,
+          "encantamento": {
+            "tipo": "vigor",
+            "nivel": 1
+          }
+        },
+        "tipo": "resistencia_magica",
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "placas_1700000000000_73424",
+        "templateId": "placas",
+        "rarity": "comum",
+        "stats": {
+          "defesa": 4,
+          "esquiva": -1
+        },
+        "value": 17,
+        "equipped": true,
+        "encantamento": {
+          "tipo": "resistencia_magica",
+          "nivel": 3
+        }
+      }
+    }
+  },
+  {
+    "name": "encantarPeca: nível fora da régua",
+    "input": {
+      "fn": "encantarPeca",
+      "args": {
+        "peca": {
+          "uid": "escudo_1700000000000_73424",
+          "templateId": "escudo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 5,
+            "velocidade": -1
+          },
+          "value": 24,
+          "equipped": false
+        },
+        "tipo": "vigor",
+        "nivel": 9
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "escudo_1700000000000_73424",
+        "templateId": "escudo",
+        "rarity": "comum",
+        "stats": {
+          "defesa": 5,
+          "velocidade": -1
+        },
+        "value": 24,
+        "equipped": false,
+        "encantamento": {
+          "tipo": "vigor",
+          "nivel": 3
+        }
+      }
+    }
+  },
+  {
+    "name": "encantarPeca: arma não recebe",
+    "input": {
+      "fn": "encantarPeca",
+      "args": {
+        "peca": {
+          "uid": "espada_1700000000000_73424",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "tipo": "robustez",
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "encantamentoDaPeca: com",
+    "input": {
+      "fn": "encantamentoDaPeca",
+      "args": {
+        "item": {
+          "uid": "placas_1700000000000_73424",
+          "templateId": "placas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 4,
+            "esquiva": -1
+          },
+          "value": 17,
+          "equipped": true,
+          "encantamento": {
+            "tipo": "robustez",
+            "nivel": 1
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "tipo": "robustez",
+        "nivel": 1
+      }
+    }
+  },
+  {
+    "name": "encantamentoDaPeca: sem",
+    "input": {
+      "fn": "encantamentoDaPeca",
+      "args": {
+        "item": {
+          "uid": "placas_1700000000000_73424",
+          "templateId": "placas",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 4,
+            "esquiva": -1
+          },
+          "value": 17,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "defesasDoHeroi: nada encantado",
+    "input": {
+      "fn": "defesasDoHeroi",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": false
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "robustez": 0,
+        "resistenciaMagica": 0,
+        "evitaDreno": 0,
+        "resistenciaVeneno": 0,
+        "vigor": 0
+      }
+    }
+  },
+  {
+    "name": "escudoDoVigor: nada encantado",
+    "input": {
+      "fn": "escudoDoVigor",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": false
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "defesasDoHeroi: uma de cada",
+    "input": {
+      "fn": "defesasDoHeroi",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 2
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 1
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "botas": {
+              "uid": "botas_1700000000000_73424",
+              "templateId": "botas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1,
+                "velocidade": 1
+              },
+              "value": 14,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 2
+              }
+            },
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "robustez": 0.05,
+        "resistenciaMagica": 0.25,
+        "evitaDreno": 0.5,
+        "resistenciaVeneno": 0.75,
+        "vigor": 0.15
+      }
+    }
+  },
+  {
+    "name": "escudoDoVigor: uma de cada",
+    "input": {
+      "fn": "escudoDoVigor",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 2
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 1
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "botas": {
+              "uid": "botas_1700000000000_73424",
+              "templateId": "botas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1,
+                "velocidade": 1
+              },
+              "value": 14,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 2
+              }
+            },
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 24
+    }
+  },
+  {
+    "name": "defesasDoHeroi: robustez no teto",
+    "input": {
+      "fn": "defesasDoHeroi",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "robustez": 0.3,
+        "resistenciaMagica": 0,
+        "evitaDreno": 0,
+        "resistenciaVeneno": 0,
+        "vigor": 0
+      }
+    }
+  },
+  {
+    "name": "escudoDoVigor: robustez no teto",
+    "input": {
+      "fn": "escudoDoVigor",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "defesasDoHeroi: resistência mágica e o dreno no teto",
+    "input": {
+      "fn": "defesasDoHeroi",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": {
+              "uid": "escudo_1700000000000_73424",
+              "templateId": "escudo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 5,
+                "velocidade": -1
+              },
+              "value": 24,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 2
+              }
+            },
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 3
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 3
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 3
+              }
+            },
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 8,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "robustez": 0,
+        "resistenciaMagica": 0.6,
+        "evitaDreno": 0.9,
+        "resistenciaVeneno": 0,
+        "vigor": 0
+      }
+    }
+  },
+  {
+    "name": "escudoDoVigor: resistência mágica e o dreno no teto",
+    "input": {
+      "fn": "escudoDoVigor",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": {
+              "uid": "escudo_1700000000000_73424",
+              "templateId": "escudo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 5,
+                "velocidade": -1
+              },
+              "value": 24,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 2
+              }
+            },
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 3
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 3
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 3
+              }
+            },
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 8,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "defesasDoHeroi: veneno no teto",
+    "input": {
+      "fn": "defesasDoHeroi",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "robustez": 0,
+        "resistenciaMagica": 0,
+        "evitaDreno": 0,
+        "resistenciaVeneno": 0.9,
+        "vigor": 0
+      }
+    }
+  },
+  {
+    "name": "escudoDoVigor: veneno no teto",
+    "input": {
+      "fn": "escudoDoVigor",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            },
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "defesasDoHeroi: vigor no teto",
+    "input": {
+      "fn": "defesasDoHeroi",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 3
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 3
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 3
+              }
+            },
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "robustez": 0,
+        "resistenciaMagica": 0,
+        "evitaDreno": 0,
+        "resistenciaVeneno": 0,
+        "vigor": 0.4
+      }
+    }
+  },
+  {
+    "name": "escudoDoVigor: vigor no teto",
+    "input": {
+      "fn": "escudoDoVigor",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": {
+              "uid": "placas_elmo_1700000000000_73424",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 3
+              }
+            },
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 3
+              }
+            },
+            "calca": {
+              "uid": "placas_calca_1700000000000_73424",
+              "templateId": "placas_calca",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 2,
+                "esquiva": -1
+              },
+              "value": 8,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 3
+              }
+            },
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 3,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 63
+    }
+  },
+  {
+    "name": "defesasDoHeroi: vigor somado",
+    "input": {
+      "fn": "defesasDoHeroi",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 1
+              }
+            },
+            "calca": null,
+            "botas": {
+              "uid": "botas_1700000000000_73424",
+              "templateId": "botas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1,
+                "velocidade": 1
+              },
+              "value": 14,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 2
+              }
+            },
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "robustez": 0,
+        "resistenciaMagica": 0,
+        "evitaDreno": 0,
+        "resistenciaVeneno": 0,
+        "vigor": 0.25
+      }
+    }
+  },
+  {
+    "name": "escudoDoVigor: vigor somado",
+    "input": {
+      "fn": "escudoDoVigor",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 1
+              }
+            },
+            "calca": null,
+            "botas": {
+              "uid": "botas_1700000000000_73424",
+              "templateId": "botas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1,
+                "velocidade": 1
+              },
+              "value": 14,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 2
+              }
+            },
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 39
+    }
+  },
+  {
+    "name": "defesasDoHeroi: encantamento numa arma não conta",
+    "input": {
+      "fn": "defesasDoHeroi",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "robustez": 0,
+        "resistenciaMagica": 0,
+        "evitaDreno": 0,
+        "resistenciaVeneno": 0,
+        "vigor": 0
+      }
+    }
+  },
+  {
+    "name": "escudoDoVigor: encantamento numa arma não conta",
+    "input": {
+      "fn": "escudoDoVigor",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_73424",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": true,
+              "procChance": 0.15,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "defesasDoHeroi: nível fora da régua",
+    "input": {
+      "fn": "defesasDoHeroi",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 9
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "robustez": 0,
+        "resistenciaMagica": 0,
+        "evitaDreno": 0,
+        "resistenciaVeneno": 0,
+        "vigor": 0.2
+      }
+    }
+  },
+  {
+    "name": "escudoDoVigor: nível fora da régua",
+    "input": {
+      "fn": "escudoDoVigor",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": {
+              "uid": "placas_1700000000000_73424",
+              "templateId": "placas",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 4,
+                "esquiva": -1
+              },
+              "value": 17,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 9
+              }
+            },
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 4,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 157,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 31
+    }
+  },
+  {
     "name": "displayName: espada comum",
     "input": {
       "fn": "displayName",

@@ -1032,6 +1032,11 @@
     color: var(--parchment-dim);
 }
 
+/* o escudo do vigor (a Encantadora) apanhando no lugar da vida */
+.numero-escudo {
+    color: #8fc8ff;
+}
+
 .avisos-da-luta {
     position: absolute;
     left: 0;

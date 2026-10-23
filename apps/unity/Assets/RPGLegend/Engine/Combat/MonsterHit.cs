@@ -104,6 +104,10 @@ namespace RPGLegend.Engine
         public double ManaDrained;
         public bool DefensivePassiveTriggered;
         public bool ShieldConsumed;
+        /// <summary>A resistência a veneno da Encantadora segurou o veneno (só com as defesas; ausente, null).</summary>
+        public bool? PoisonResisted;
+        /// <summary>A resistência mágica da Encantadora segurou o dreno de mana (só com as defesas; ausente, null).</summary>
+        public bool? DrainResisted;
         public CombatMonsterView Monster;
     }
 
@@ -184,10 +188,10 @@ namespace RPGLegend.Engine
         /// TS: landHitOnHero — o golpe no próprio herói (esquiva, defesa, vulnerabilidades, escudo, veneno e dreno
         /// de mana), com o monstro depois dele: acertou, o golpe envenenado do poder de classe se gasta.
         /// </summary>
-        public static HeroHit LandHitOnHero(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng = null, double petEsquiva = 0)
+        public static HeroHit LandHitOnHero(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng = null, double petEsquiva = 0, DefesasDoHeroi defesas = null)
         {
             rng = rng ?? Rng.Default;
-            var heroHit = ResolveHeroDamage(hero, monster, attackMult, rng, petEsquiva);
+            var heroHit = ResolveHeroDamage(hero, monster, attackMult, rng, petEsquiva, defesas);
             heroHit.Monster = monster;
             if (!heroHit.Dodged && monster.PoisonStrike == true)
             {
@@ -423,8 +427,11 @@ namespace RPGLegend.Engine
         /// do Assassino, veneno do venenoso (com Sangue Tóxico ×1,5) e dreno de mana do mágico.
         ///
         /// O buffs do herói sai sempre como objeto novo (<c>{}</c> se ele não tinha), como no TS.
+        ///
+        /// <paramref name="defesas"/> são as fortificações da Encantadora, que só a arena do app passa. Sem elas o golpe é
+        /// o de sempre, sem um número a mais do rng: os sorteios de resistir só acontecem quando há a resistência.
         /// </summary>
-        private static HeroHit ResolveHeroDamage(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng, double petEsquiva)
+        private static HeroHit ResolveHeroDamage(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng, double petEsquiva, DefesasDoHeroi defesas)
         {
             var d = hero.Derived;
             var buffs = hero.Buffs ?? new HeroBuffs();
@@ -453,6 +460,10 @@ namespace RPGLegend.Engine
                 dmg = Js.Max(1, Js.Round(dmg * 1.25));
             if (Heroes.HasDebuffEffect(nextHero, "physicalVulnerability")) dmg = Js.Max(1, Js.Round(dmg * 1.2));
 
+            // A armadura encantada: resistência mágica contra os monstros mágicos, robustez contra os outros.
+            double reducao = defesas == null ? 0 : monster.Behavior == "magico" ? defesas.ResistenciaMagica : defesas.Robustez;
+            if (reducao > 0) dmg = Js.Max(1, Js.Round(dmg * (1 - reducao)));
+
             bool defensivePassiveTriggered = false;
             if (Catalog.IdDaClasse(nextHero.ClassId, nextHero.ClassName) == "guerreiro" && rng() < 0.2)
             {
@@ -475,8 +486,14 @@ namespace RPGLegend.Engine
             ferido.Hp = Js.Max(0, nextHero.Hp - dmg);
             nextHero = ferido;
 
+            Func<bool> resisteAoVeneno = () => defesas != null && defesas.ResistenciaVeneno > 0 && rng() < defesas.ResistenciaVeneno;
             bool poisonApplied = false;
-            if (monster.PoisonStrike == true)
+            bool poisonResisted = false;
+            if (monster.PoisonStrike == true && resisteAoVeneno())
+            {
+                poisonResisted = true;
+            }
+            else if (monster.PoisonStrike == true)
             {
                 var buffsNow = (nextHero.Buffs ?? new HeroBuffs()).Clone();
                 buffsNow.PoisonTurns = 3;
@@ -486,23 +503,39 @@ namespace RPGLegend.Engine
             }
             if (monster.Behavior == "venenoso" && rng() < 0.35)
             {
-                var buffsNow = (nextHero.Buffs ?? new HeroBuffs()).Clone();
-                double poisonDmg = Js.Max(2, Js.Round(Math.Floor(monster.Dmg / 3) * (Heroes.HasDebuffEffect(nextHero, "poisonVulnerability") ? 1.5 : 1)));
-                buffsNow.PoisonTurns = 3;
-                buffsNow.PoisonDmg = poisonDmg;
-                nextHero = ComBuffs(nextHero, buffsNow);
-                poisonApplied = true;
+                if (resisteAoVeneno())
+                {
+                    poisonResisted = true;
+                }
+                else
+                {
+                    var buffsNow = (nextHero.Buffs ?? new HeroBuffs()).Clone();
+                    double poisonDmg = Js.Max(2, Js.Round(Math.Floor(monster.Dmg / 3) * (Heroes.HasDebuffEffect(nextHero, "poisonVulnerability") ? 1.5 : 1)));
+                    buffsNow.PoisonTurns = 3;
+                    buffsNow.PoisonDmg = poisonDmg;
+                    nextHero = ComBuffs(nextHero, buffsNow);
+                    poisonApplied = true;
+                }
             }
 
             double manaDrained = 0;
+            bool drainResisted = false;
             if (monster.Behavior == "magico" && rng() < 0.35)
             {
-                manaDrained = Js.Min(nextHero.Mp, 3 + Math.Floor(monster.Dmg / 3));
-                var drenado = nextHero.Clone();
-                drenado.Mp = nextHero.Mp - manaDrained;
-                nextHero = drenado;
+                if (defesas != null && defesas.EvitaDreno > 0 && rng() < defesas.EvitaDreno)
+                {
+                    drainResisted = true;
+                }
+                else
+                {
+                    manaDrained = Js.Min(nextHero.Mp, 3 + Math.Floor(monster.Dmg / 3));
+                    var drenado = nextHero.Clone();
+                    drenado.Mp = nextHero.Mp - manaDrained;
+                    nextHero = drenado;
+                }
             }
 
+            // Os dois campos da Encantadora só aparecem quando valem: o golpe do site fica com a mesma cara.
             return new HeroHit
             {
                 Hero = nextHero,
@@ -512,6 +545,8 @@ namespace RPGLegend.Engine
                 ManaDrained = manaDrained,
                 DefensivePassiveTriggered = defensivePassiveTriggered,
                 ShieldConsumed = shieldConsumed,
+                PoisonResisted = poisonResisted ? true : (bool?)null,
+                DrainResisted = drainResisted ? true : (bool?)null,
             };
         }
 

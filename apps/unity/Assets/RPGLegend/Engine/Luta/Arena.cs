@@ -98,6 +98,11 @@ namespace RPGLegend.Engine
         public double Rodada;
         public double Intervalo;
         public double Vez;
+        /// <summary>
+        /// O que sobra do escudo do vigor (a Encantadora, <see cref="Encantamentos"/>): apanha antes da vida e some com a
+        /// luta. Ausente (null) quando o herói não tem vigor.
+        /// </summary>
+        public double? Escudo;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -288,6 +293,13 @@ namespace RPGLegend.Engine
             };
             var acontecimentos = new List<Acontecimento>();
             foreach (var texto in preparada.Log) acontecimentos.Add(new Acontecimento { Tipo = "diario", Texto = texto });
+            // O vigor da armadura encantada ergue o escudo na entrada da luta (só o app tem a arena).
+            double escudo = Encantamentos.EscudoDoVigor(preparada.Estado.Hero);
+            if (escudo > 0)
+            {
+                arena.Escudo = escudo;
+                acontecimentos.Add(Aviso("💪 Vigor: escudo de " + Js.NumberToString(escudo)));
+            }
             return new QuadroDaLuta
             {
                 Luta = new LutaEmTempoReal { Estado = preparada.Estado, Arena = arena, Pet = pet, Teclado = teclado, Fim = null, Loot = null },
@@ -361,6 +373,7 @@ namespace RPGLegend.Engine
                 Rodada = arena.Rodada,
                 Intervalo = arena.Intervalo,
                 Vez = arena.Vez,
+                Escudo = arena.Escudo,
             };
             foreach (var m in arena.Monstros) copia.Monstros.Add(m.Clone());
             foreach (var c in arena.Companheiros) copia.Companheiros.Add(c.Clone());
@@ -958,26 +971,56 @@ namespace RPGLegend.Engine
             }
         }
 
-        /// <summary>O golpe do monstro pegou no coração: a regra do site, com a esquiva de sempre.</summary>
+        /// <summary>
+        /// O golpe do monstro pegou no coração: a regra do site, com a esquiva de sempre, mais a armadura encantada (que só
+        /// a arena aplica) e o escudo do vigor, que apanha antes da vida.
+        /// </summary>
         private static void GolpeNoHeroi(Luta l, double indice, double forca)
         {
             var estado = Masmorra(l);
             var monstro = MonstroNo(l, indice);
-            var golpe = MonsterHit.LandHitOnHero(estado.Hero, monstro, forca, l.Rng, Pets.Bonus(l.Pet).Esquiva ?? 0);
-            var comHeroi = estado.Clone();
-            comHeroi.Hero = golpe.Hero;
-            l.Estado = FimDaLuta.GravarMonstro(comHeroi, indice, golpe.Monster);
+            var golpe = MonsterHit.LandHitOnHero(estado.Hero, monstro, forca, l.Rng, Pets.Bonus(l.Pet).Esquiva ?? 0, Encantamentos.DefesasDoHeroi(estado.Hero));
             if (golpe.Dodged)
             {
+                var desviou = estado.Clone();
+                desviou.Hero = golpe.Hero;
+                l.Estado = FimDaLuta.GravarMonstro(desviou, indice, golpe.Monster);
                 Contar(l, Numero("heroi", 0, "Desviou", "erro"));
                 Contar(l, Som("miss"));
                 return;
             }
-            Contar(l, Numero("heroi", 0, "-" + Js.NumberToString(golpe.Damage), "dano"));
+            var hero = NoEscudo(l, estado.Hero.Hp, golpe.Hero, golpe.Damage);
+            var comHeroi = estado.Clone();
+            comHeroi.Hero = hero;
+            l.Estado = FimDaLuta.GravarMonstro(comHeroi, indice, golpe.Monster);
             Contar(l, Som("hit"));
             if (golpe.ManaDrained > 0) Contar(l, Aviso(Js.Str(monstro.Name) + " drena " + Js.NumberToString(golpe.ManaDrained) + " de mana"));
+            if (golpe.DrainResisted == true) Contar(l, Aviso("Sua armadura segura o dreno de mana"));
             if (golpe.PoisonApplied) Contar(l, Aviso("Você foi envenenado"));
-            if (golpe.Hero.Hp <= 0) Perder(l);
+            if (golpe.PoisonResisted == true) Contar(l, Aviso("Sua armadura segura o veneno"));
+            if (hero.Hp <= 0) Perder(l);
+        }
+
+        /// <summary>
+        /// O dano no herói passa primeiro pelo escudo do vigor: ele aguenta o que tiver, e a vida perde só o resto. Conta
+        /// os números (o do escudo no tom dele) e devolve o herói com a vida certa. Sem escudo, é o dano de sempre.
+        /// </summary>
+        private static Hero NoEscudo(Luta l, double vidaAntes, Hero hero, double dano)
+        {
+            double escudo = l.Arena.Escudo ?? 0;
+            double absorvido = Js.Min(escudo, dano);
+            if (absorvido <= 0)
+            {
+                Contar(l, Numero("heroi", 0, "-" + Js.NumberToString(dano), "dano"));
+                return hero;
+            }
+            l.Arena.Escudo = escudo - absorvido;
+            Contar(l, Numero("heroi", 0, "💪-" + Js.NumberToString(absorvido), "escudo"));
+            double resto = dano - absorvido;
+            if (resto > 0) Contar(l, Numero("heroi", 0, "-" + Js.NumberToString(resto), "dano"));
+            var comVida = hero.Clone();
+            comVida.Hp = Js.Max(0, vidaAntes - resto);
+            return comVida;
         }
 
         /// <summary>O golpe do monstro cai no companheiro <paramref name="alvo"/>, como no site. Se ele já caiu, o golpe vai no vazio.</summary>
@@ -1065,12 +1108,14 @@ namespace RPGLegend.Engine
         /// <summary>A rodada: o veneno do herói, o dano contínuo de cada monstro de pé e a Canção de Batalha.</summary>
         private static void RodadaDaLuta(Luta l)
         {
-            var veneno = HeroStatus.TickHeroStatus(Masmorra(l).Hero);
+            var antes = Masmorra(l).Hero;
+            var veneno = HeroStatus.TickHeroStatus(antes);
+            // O veneno também passa primeiro pelo escudo do vigor.
+            var heroi = veneno.Damage > 0 ? NoEscudo(l, antes.Hp, veneno.Hero, veneno.Damage) : veneno.Hero;
             var comVeneno = Masmorra(l).Clone();
-            comVeneno.Hero = veneno.Hero;
+            comVeneno.Hero = heroi;
             l.Estado = comVeneno;
-            if (veneno.Damage > 0) Contar(l, Numero("heroi", 0, "-" + Js.NumberToString(veneno.Damage), "dano"));
-            if (veneno.Defeated)
+            if (heroi.Hp <= 0)
             {
                 Diario(l, new[] { "O veneno foi mais forte." });
                 Perder(l);

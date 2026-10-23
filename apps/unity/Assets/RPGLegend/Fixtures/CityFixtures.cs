@@ -16,9 +16,11 @@ namespace RPGLegend.Tests
             const string M = "city";
 
             Const(M, "GUILD_POS", () => W(City.GuildPos));
+            Const(M, "ENCANTADORA_POS", () => W(City.EncantadoraPos));
 
             Fn(M, "generateCityLayout", (a, c) => Compact(City.GenerateLayout(Num(a["rows"]), Num(a["cols"]))));
             Fn(M, "withGuild", (a, c) => W(City.WithGuild(R<List<List<CityCell>>>(a["grid"]))));
+            Fn(M, "withEncantadora", (a, c) => W(City.WithEncantadora(R<List<List<CityCell>>>(a["grid"]))));
             Fn(M, "restAtTavern", (a, c) => W(City.RestAtTavern(R<Hero>(a["hero"]), R<List<Companion>>(a["party"]))));
 
             Fn(M, "cityIconFor", (a, c) => W(City.IconFor(R<CityCell>(a["cell"]))));

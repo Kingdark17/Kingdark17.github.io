@@ -1,0 +1,61 @@
+{
+  "ENCANTAMENTOS": {
+    "robustez": {
+      "nome": "Robustez",
+      "icone": "🛡️",
+      "forca": [
+        0.05,
+        0.1,
+        0.15
+      ],
+      "teto": 0.3
+    },
+    "resistencia_magica": {
+      "nome": "Resistência Mágica",
+      "icone": "🔮",
+      "forca": [
+        0.15,
+        0.25,
+        0.35
+      ],
+      "teto": 0.6
+    },
+    "resistencia_veneno": {
+      "nome": "Resistência a Veneno",
+      "icone": "🧪",
+      "forca": [
+        0.3,
+        0.5,
+        0.75
+      ],
+      "teto": 0.9
+    },
+    "vigor": {
+      "nome": "Vigor",
+      "icone": "💪",
+      "forca": [
+        0.1,
+        0.15,
+        0.2
+      ],
+      "teto": 0.4
+    }
+  },
+  "TIPOS_DE_ENCANTAMENTO": [
+    "robustez",
+    "resistencia_magica",
+    "resistencia_veneno",
+    "vigor"
+  ],
+  "EVITA_DRENO": [
+    0.25,
+    0.5,
+    0.75
+  ],
+  "TETO_DO_DRENO": 0.9,
+  "CUSTO_DO_ENCANTAMENTO": [
+    100,
+    300,
+    800
+  ]
+}

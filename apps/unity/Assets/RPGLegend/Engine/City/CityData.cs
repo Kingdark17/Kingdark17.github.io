@@ -38,6 +38,8 @@ namespace RPGLegend.Engine
     {
         /// <summary>Onde fica a Guilda (a pracinha a oeste do caminho do portão).</summary>
         [JsName("GUILD_POS")] public GridPosition GuildPos;
+        /// <summary>Onde fica a Encantadora (a pracinha a leste do caminho do portão).</summary>
+        [JsName("ENCANTADORA_POS")] public GridPosition EncantadoraPos;
         [JsName("NPC_TEMPLATES")] public List<CityNpcTemplate> NpcTemplates = new List<CityNpcTemplate>();
         /// <summary>O desenho fixo: coordenadas numa grade 6×6, com o início em (3, 3).</summary>
         [JsName("LAYOUT")] public List<CityLayoutSpec> Layout = new List<CityLayoutSpec>();

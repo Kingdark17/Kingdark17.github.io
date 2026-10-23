@@ -30,6 +30,8 @@ namespace RPGLegend.Game.Jogo
             _aprender = null;
             _esquecer = null;
             _classe = null;
+            _fortificacao = "robustez";
+            _nivelDoEncanto = 1;
             _chaveDaJanela = null;
         }
 

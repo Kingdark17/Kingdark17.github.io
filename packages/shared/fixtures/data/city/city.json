@@ -3,6 +3,10 @@
     "x": 2,
     "y": 2
   },
+  "ENCANTADORA_POS": {
+    "x": 4,
+    "y": 2
+  },
   "NPC_TEMPLATES": [
     {
       "name": "Velho Ferreiro Bram",
@@ -94,7 +98,7 @@
     {
       "x": 4,
       "y": 2,
-      "type": "normal"
+      "type": "encantadora"
     }
   ],
   "LAYOUT_DOORS": [

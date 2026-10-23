@@ -177,6 +177,7 @@ namespace RPGLegend.Game.Jogo
             if (Mochilas.PodeUsar(item)) botoes.Add(PecasDaTela.Botao("USAR", () => SeguirMochila(Mochilas.Usar(mochila, item))));
 
             AcoesDeRuna(mochila, item, botoes);
+            EncantamentoNaFicha(item, botoes);
 
             botoes.Add(PecasDaTela.Discreto("Descartar", () =>
             {

@@ -16,7 +16,7 @@
  * descida inteiros sem montar tela.
  */
 
-import { generateCityLayout, withGuild, type CityCell } from '../city/city.js';
+import { generateCityLayout, withEncantadora, withGuild, type CityCell } from '../city/city.js';
 import { DUNGEON_FLOORS, effectiveFloor, legacyProgress, normalizeProgress, normalizeRun, type DungeonProgress, type DungeonRun } from '../dungeon/dungeons.js';
 import { generateDungeonFloor, isBossFloor, type DungeonCell } from '../dungeon/generate.js';
 import { DIR_VECTORS, inBounds, type Direction, type RoomCell } from '../dungeon/graph.js';
@@ -168,9 +168,10 @@ export function entrarNaCidade(save: SaveCarregado): EstadoNaCidade {
   const base = comuns(save);
 
   // `withGuild`: a cidade de quem já jogava foi gravada antes da Guilda
-  // existir, com uma pracinha vazia no lugar dela.
+  // existir, com uma pracinha vazia no lugar dela. `withEncantadora`: o
+  // mesmo com a Encantadora, na pracinha do outro lado.
   const { grid, inicio } = temCidade(save)
-    ? { grid: withGuild(save.cityMap), inicio: save.cityStart }
+    ? { grid: withEncantadora(withGuild(save.cityMap)), inicio: save.cityStart }
     : (() => {
         const layout = generateCityLayout(base.mapRows, base.mapCols);
         return { grid: layout.grid, inicio: { x: layout.start.x, y: layout.start.y } };

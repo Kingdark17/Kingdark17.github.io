@@ -54,7 +54,7 @@ namespace RPGLegend.Tests
             // As três partes do golpe do monstro, que a luta em tempo real chama em momentos diferentes.
             Fn(M, "startMonsterAttack", (a, c) => W(MonsterHit.StartMonsterAttack(Monstro(a["monster"]), R<Hero>(a["hero"]), c.RngFn)));
             Fn(M, "landHitOnHero", (a, c) => W(MonsterHit.LandHitOnHero(R<Hero>(a["hero"]), Monstro(a["monster"]), Num(a["attackMult"]), c.RngFn,
-                JsJson.ToOptionalNumber(a["petEsquiva"]) ?? 0)));
+                JsJson.ToOptionalNumber(a["petEsquiva"]) ?? 0, R<DefesasDoHeroi>(a["defesas"]))));
             Fn(M, "hitPartyMember", (a, c) => W(MonsterHit.HitPartyMember(R<Companion>(a["member"]), Monstro(a["monster"]), Num(a["attackMult"]), c.RngFn)));
             Fn(M, "pickMonsterTarget", (a, c) => W(MonsterHit.PickMonsterTarget(Equipe(a["party"]), c.RngFn)));
 

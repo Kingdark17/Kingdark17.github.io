@@ -26,7 +26,7 @@ namespace RPGLegend.Engine
     /// </summary>
     public sealed class TelaAberta
     {
-        /// <summary>"combate", "loja", "dialogo", "missoes", "evento", "mochila", "guilda", "portao", "totem" ou "professor".</summary>
+        /// <summary>"combate", "loja", "dialogo", "missoes", "evento", "mochila", "guilda", "encantadora", "portao", "totem" ou "professor".</summary>
         public string Tipo;
         public Combate Combate;
         public Loja Loja;
@@ -35,6 +35,7 @@ namespace RPGLegend.Engine
         public Evento Evento;
         public Mochila Mochila;
         public Guilda Guilda;
+        public Encantadora Encantadora;
         public Portao Portao;
         public Totem Totem;
         public Professor Professor;
@@ -154,6 +155,10 @@ namespace RPGLegend.Engine
                     return ComTela(estado, new TelaAberta { Tipo = "missoes", Quadro = QuadroDeMissoes.AbrirQuadro(estado, rng, now) });
                 case "guild":
                     return ComTela(estado, new TelaAberta { Tipo = "guilda", Guilda = Guildas.AbrirGuilda(estado) }, "door");
+                case "encantadora":
+                    // Só o app tem a Encantadora (decisão do usuário, 2026-10-17): no site a porta fica fechada.
+                    if (!app) return ComAviso(estado, "✨", "Encantadora", "A porta da Encantadora está fechada.");
+                    return ComTela(estado, new TelaAberta { Tipo = "encantadora", Encantadora = Encantadoras.AbrirEncantadora(estado) }, "door");
                 case "npc":
                     return AbrirConversa(estado);
                 case "start":

@@ -54,12 +54,23 @@ export interface Item {
   tierDaRuna?: number;
   /** Numa arma, as runas engastadas, em ordem (só o app engasta). */
   runas?: RunaNaArma[];
+  /** Numa armadura, a fortificação da Encantadora (`items/encantamentos.ts`; só o app encanta). */
+  encantamento?: EncantamentoNaPeca;
 }
 
 /** Uma runa engastada numa arma: o tipo e o tier. Tirada da arma, ela volta a ser item. */
 export interface RunaNaArma {
   runa: RunaId;
   tier: number;
+}
+
+/** As fortificações da Encantadora (`items/encantamentos.ts`). */
+export type EncantamentoId = 'robustez' | 'resistencia_magica' | 'resistencia_veneno' | 'vigor';
+
+/** O encantamento de uma armadura: a fortificação e o nível (1 a 3). */
+export interface EncantamentoNaPeca {
+  tipo: EncantamentoId;
+  nivel: number;
 }
 
 /** Visão "gorda" do item, montada na hora de renderizar. */

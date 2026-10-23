@@ -23,6 +23,7 @@ namespace RPGLegend.Tests
             Const(M, "TEMPLATES", () => W(ItemTemplates.All));
             Const(M, "MATERIAIS", () => W(GameData.MateriaisTable.Materiais));
             Const(M, "RUNAS", () => W(GameData.RunasTable.Runas));
+            Const(M, "ENCANTAMENTOS", () => W(GameData.EncantamentosTable.Encantamentos));
             Const(M, "TIER_ORDER", () => W(Tiers.Order));
             Const(M, "TIER_MIN", () => W(Tiers.Min));
 
@@ -82,6 +83,16 @@ namespace RPGLegend.Tests
             Fn(M, "aposMudarDeTier", (a, c) => W(Runas.AposMudarDeTier(R<Item>(a["arma"]), c.RngFn, c.NowOrFail)));
             Fn(M, "efeitosDaArma", (a, c) => W(Runas.EfeitosDaArma(R<Item>(a["arma"]))));
             Fn(M, "aplicarRunas", (a, c) => W(Runas.AplicarRunas(R<Hero>(a["hero"]), R<CombatMonsterView>(a["monster"]), Num(a["dano"]), c.RngFn)));
+
+            // ---------- os encantamentos ----------
+            Fn(M, "podeEncantar", (a, c) => W(Encantamentos.PodeEncantar(R<Item>(a["item"]))));
+            Fn(M, "nomeDoEncantamento", (a, c) => W(Encantamentos.NomeDoEncantamento(R<EncantamentoNaPeca>(a["encantamento"]))));
+            Fn(M, "efeitoDoEncantamento", (a, c) => W(Encantamentos.EfeitoDoEncantamento(Str(a["tipo"]), Num(a["nivel"]))));
+            Fn(M, "custoDoEncantamento", (a, c) => N(Encantamentos.CustoDoEncantamento(Num(a["nivel"]))));
+            Fn(M, "encantarPeca", (a, c) => W(Encantamentos.EncantarPeca(R<Item>(a["peca"]), Str(a["tipo"]), Num(a["nivel"]))));
+            Fn(M, "encantamentoDaPeca", (a, c) => W(Encantamentos.EncantamentoDaPeca(R<Item>(a["item"]))));
+            Fn(M, "defesasDoHeroi", (a, c) => W(Encantamentos.DefesasDoHeroi(R<Hero>(a["hero"]))));
+            Fn(M, "escudoDoVigor", (a, c) => N(Encantamentos.EscudoDoVigor(R<Hero>(a["hero"]))));
 
             // ---------- os materiais das peças ----------
             Fn(M, "multiplicadorDoDegrau", (a, c) => N(Materiais.MultiplicadorDoDegrau(Num(a["degrau"]))));

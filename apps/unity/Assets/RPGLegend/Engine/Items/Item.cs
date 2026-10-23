@@ -30,6 +30,8 @@ namespace RPGLegend.Engine
         public double? TierDaRuna;
         /// <summary>Numa arma, as runas engastadas, em ordem (só o app engasta).</summary>
         public List<RunaNaArma> Runas;
+        /// <summary>Numa armadura, a fortificação da Encantadora (<see cref="Encantamentos"/>; só o app encanta).</summary>
+        public EncantamentoNaPeca Encantamento;
 
         /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
         [JsExtra] public JsExtras Extra;
@@ -61,6 +63,7 @@ namespace RPGLegend.Engine
             target.Degrau = Degrau;
             target.TierDaRuna = TierDaRuna;
             target.Runas = Runas;
+            target.Encantamento = Encantamento;
             target.Extra = Extra;
         }
     }
@@ -70,6 +73,14 @@ namespace RPGLegend.Engine
     {
         public string Runa;
         public double Tier;
+    }
+
+    /// <summary>TS: EncantamentoNaPeca — o encantamento de uma armadura: a fortificação e o nível (1 a 3).</summary>
+    public sealed class EncantamentoNaPeca
+    {
+        /// <summary>TS: EncantamentoId — "robustez", "resistencia_magica", "resistencia_veneno" ou "vigor".</summary>
+        public string Tipo;
+        public double Nivel;
     }
 
     /// <summary>TS: ItemView — o item com o que se deriva do template, montado na hora de desenhar.</summary>

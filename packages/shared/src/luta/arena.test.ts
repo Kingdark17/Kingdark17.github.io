@@ -383,3 +383,40 @@ describe('a mesma entrada dá a mesma luta', () => {
     expect(b).toEqual(a);
   });
 });
+
+describe('o vigor da armadura encantada', () => {
+  function comVigor(nivel: number): Partial<Hero> {
+    const placas = { ...instantiate(templateById('placas')!, RARITIES[0]!), equipped: true, encantamento: { tipo: 'vigor' as const, nivel } };
+    return { equip: { ...naSala().hero.equip, armadura: placas } };
+  }
+
+  it('ergue o escudo na entrada, e o golpe bate nele antes da vida', () => {
+    const estado = naSala({ monsters: [monstro({ speciesId: 'aranha' })] }, comVigor(3));
+    const { luta, acontecimentos } = abrirLuta(estado, roomArrival(null));
+    const escudo = Math.round(estado.hero.maxHp * 0.2);
+    expect(luta.arena.escudo).toBe(escudo);
+    expect(acontecimentos).toContainEqual({ tipo: 'aviso', texto: `💪 Vigor: escudo de ${escudo}` });
+
+    const fim = rodar(luta, 400, NUNCA);
+    const noEscudo = fim.acontecimentos.filter((a) => a.tipo === 'numero' && a.tom === 'escudo').map((a) => Number(a.texto!.slice('💪-'.length)));
+    expect(noEscudo.length).toBeGreaterThan(0);
+    expect(vidaDoHeroi(fim.luta)).toBe(estado.hero.hp);
+    expect(fim.luta.arena.escudo).toBe(escudo - noEscudo.reduce((a, b) => a + b, 0));
+  });
+
+  it('o veneno também passa primeiro pelo escudo', () => {
+    // A preparação da luta limpa os buffs: o veneno entra depois de abrir, como no teste do veneno de cima.
+    const { luta } = abrirLuta(naSala({}, comVigor(1)), roomArrival(null));
+    const estado = luta.estado as EstadoNaMasmorra;
+    const envenenado = { ...luta, estado: { ...estado, hero: { ...estado.hero, buffs: { poisonTurns: 3, poisonDmg: 5 } } } };
+    const fim = rodar(envenenado, RODADA, NUNCA, () => ({ x: 127, y: 0 }));
+    expect(fim.acontecimentos).toContainEqual({ tipo: 'numero', onde: 'heroi', indice: 0, texto: '💪-5', tom: 'escudo' });
+    expect(vidaDoHeroi(fim.luta)).toBe(estado.hero.hp);
+  });
+
+  it('sem vigor, a luta não tem escudo', () => {
+    const { luta, acontecimentos } = abrirLuta(naSala(), roomArrival(null));
+    expect(luta.arena.escudo).toBeUndefined();
+    expect(acontecimentos.some((a) => a.tipo === 'aviso')).toBe(false);
+  });
+});

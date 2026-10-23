@@ -183,7 +183,7 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: temPeca — a peça está com o herói: na mochila ou vestida.</summary>
-        private static bool TemPeca(EstadoDoJogo estado, Item peca)
+        internal static bool TemPeca(EstadoDoJogo estado, Item peca)
         {
             if (estado.Inventory.Exists(item => item.Uid == peca.Uid)) return true;
             foreach (var slot in StatKeys.EquipSlots)
@@ -192,10 +192,10 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>
-        /// TS: comPecaTrocada — a peça mudada (as runas) no lugar dela: na mochila e, se estiver vestida, no slot. Os
-        /// atributos não mudam.
+        /// TS: comPecaTrocada — a peça mudada (as runas, o encantamento) no lugar dela: na mochila e, se estiver
+        /// vestida, no slot. Os atributos não mudam.
         /// </summary>
-        private static EstadoDoJogo ComPecaTrocada(EstadoDoJogo estado, Item peca)
+        internal static EstadoDoJogo ComPecaTrocada(EstadoDoJogo estado, Item peca)
         {
             var inventory = new List<Item>(estado.Inventory.Count);
             foreach (var item in estado.Inventory)

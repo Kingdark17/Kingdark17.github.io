@@ -355,6 +355,12 @@
     margin-bottom: 4px;
 }
 
+/* as abas da Encantadora dentro da ficha: cada grupo numa linha inteira */
+.abas-da-ficha {
+    width: 100%;
+    margin-bottom: 4px;
+}
+
 /* ---------- conversa, evento, totem, missões, mestre ---------- */
 
 .retrato-da-tela {

@@ -287,8 +287,9 @@ namespace RPGLegend.Engine
             Posicao inicio;
             if (TemCidade(save))
             {
-                // withGuild: a cidade de quem já jogava foi gravada antes da Guilda existir.
-                grade = City.WithGuild(save.CityMap);
+                // withGuild: a cidade de quem já jogava foi gravada antes da Guilda existir. withEncantadora: o mesmo
+                // com a Encantadora, na pracinha do outro lado.
+                grade = City.WithEncantadora(City.WithGuild(save.CityMap));
                 inicio = save.CityStart;
             }
             else

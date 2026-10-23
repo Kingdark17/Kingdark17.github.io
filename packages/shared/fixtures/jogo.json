@@ -370,7 +370,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -670,7 +670,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -1062,7 +1062,7 @@
                 "revealed": true
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -1364,7 +1364,7 @@
                 "revealed": true
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -1752,7 +1752,7 @@
               "revealed": true
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -2054,7 +2054,7 @@
               "revealed": true
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -2446,7 +2446,7 @@
                 "revealed": true
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -2745,7 +2745,7 @@
                 "revealed": true
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -3133,7 +3133,7 @@
               "revealed": true
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -3433,7 +3433,7 @@
               "revealed": true
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -3615,6 +3615,1382 @@
   },
   {
     "name": "retomarSave: cidade de antes da Guilda",
+    "input": {
+      "fn": "retomarSave",
+      "args": {
+        "save": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "pot_vida_1700000000000_62706",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 6,
+          "mapCols": 6,
+          "cityMap": [
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 3,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 0,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "gate",
+                "x": 3,
+                "y": 1,
+                "doors": {
+                  "S": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 1,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "normal",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "N": true,
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 2,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 3,
+                "doors": {}
+              },
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              },
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              },
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "questboard",
+                "x": 5,
+                "y": 3,
+                "doors": {
+                  "W": true
+                }
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 4,
+                "doors": {
+                  "N": true,
+                  "S": true
+                },
+                "npc": {
+                  "name": "Velho Ferreiro Bram",
+                  "role": "Ferreiro",
+                  "service": "barter",
+                  "icon": "🔨",
+                  "lines": [
+                    "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                    "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                    "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 4,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 5,
+                "doors": {
+                  "N": true
+                },
+                "npc": {
+                  "name": "Erma, a Vidente",
+                  "role": "Mística",
+                  "service": "blessing",
+                  "icon": "🔮",
+                  "lines": [
+                    "As sombras sussurram seu nome, viajante...",
+                    "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                    "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 5,
+                "doors": {}
+              }
+            ]
+          ],
+          "cityStart": {
+            "x": 3,
+            "y": 3
+          },
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 3,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 0,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "gate",
+                "x": 3,
+                "y": 1,
+                "doors": {
+                  "S": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 1,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "normal",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "N": true,
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 2,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 3,
+                "doors": {}
+              },
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              },
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              },
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "questboard",
+                "x": 5,
+                "y": 3,
+                "doors": {
+                  "W": true
+                }
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 4,
+                "doors": {
+                  "N": true,
+                  "S": true
+                },
+                "npc": {
+                  "name": "Velho Ferreiro Bram",
+                  "role": "Ferreiro",
+                  "service": "barter",
+                  "icon": "🔨",
+                  "lines": [
+                    "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                    "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                    "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 4,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 5,
+                "doors": {
+                  "N": true
+                },
+                "npc": {
+                  "name": "Erma, a Vidente",
+                  "role": "Mística",
+                  "service": "blessing",
+                  "icon": "🔮",
+                  "lines": [
+                    "As sombras sussurram seu nome, viajante...",
+                    "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                    "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 5,
+                "doors": {}
+              }
+            ]
+          ],
+          "pos": {
+            "x": 3,
+            "y": 3
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_62706",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.15
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [
+            "Golpe Poderoso"
+          ],
+          "powerIds": [
+            "golpe_poderoso"
+          ],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "party": [],
+        "inventory": [
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          }
+        ],
+        "quests": [],
+        "floor": 1,
+        "mapRows": 6,
+        "mapCols": 6,
+        "cityMap": [
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "gate",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "guild",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "normal",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "encantadora",
+              "x": 4,
+              "y": 2,
+              "doors": {
+                "W": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "blacksmith",
+              "x": 1,
+              "y": 3,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "shop",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "W": true
+              }
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "N": true,
+                "W": true,
+                "E": true,
+                "S": true
+              },
+              "visited": true,
+              "revealed": true
+            },
+            {
+              "type": "tavern",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "questboard",
+              "x": 5,
+              "y": 3,
+              "doors": {
+                "W": true
+              }
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 4,
+              "doors": {
+                "N": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Velho Ferreiro Bram",
+                "role": "Ferreiro",
+                "service": "barter",
+                "icon": "🔨",
+                "lines": [
+                  "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                  "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                  "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 5,
+              "doors": {
+                "N": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística",
+                "service": "blessing",
+                "icon": "🔮",
+                "lines": [
+                  "As sombras sussurram seu nome, viajante...",
+                  "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                  "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "cityStart": {
+          "x": 3,
+          "y": 3
+        },
+        "masmorra": {
+          "dungeon": "floresta",
+          "difficulty": "normal"
+        },
+        "progresso": {
+          "cleared": [],
+          "totems": {}
+        },
+        "mapMode": "city",
+        "map": [
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "gate",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "guild",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "normal",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "encantadora",
+              "x": 4,
+              "y": 2,
+              "doors": {
+                "W": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "blacksmith",
+              "x": 1,
+              "y": 3,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "shop",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "W": true
+              }
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "N": true,
+                "W": true,
+                "E": true,
+                "S": true
+              },
+              "visited": true,
+              "revealed": true
+            },
+            {
+              "type": "tavern",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "questboard",
+              "x": 5,
+              "y": 3,
+              "doors": {
+                "W": true
+              }
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 4,
+              "doors": {
+                "N": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Velho Ferreiro Bram",
+                "role": "Ferreiro",
+                "service": "barter",
+                "icon": "🔨",
+                "lines": [
+                  "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                  "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                  "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 5,
+              "doors": {
+                "N": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística",
+                "service": "blessing",
+                "icon": "🔮",
+                "lines": [
+                  "As sombras sussurram seu nome, viajante...",
+                  "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                  "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "pos": {
+          "x": 3,
+          "y": 3
+        }
+      }
+    }
+  },
+  {
+    "name": "retomarSave: cidade de antes da Guilda e da Encantadora",
     "input": {
       "fn": "retomarSave",
       "args": {
@@ -4507,7 +5883,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -4807,7 +6183,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -5197,7 +6573,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -6081,7 +7457,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -7751,7 +9127,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -8155,7 +9531,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -9010,7 +10386,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -9893,7 +11269,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -12087,7 +13463,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -12394,7 +13770,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -12892,7 +14268,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -13199,7 +14575,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -13673,7 +15049,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -13973,7 +15349,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -14363,7 +15739,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -15247,7 +16623,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -15547,7 +16923,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -15937,7 +17313,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -16237,7 +17613,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -16627,7 +18003,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -17514,7 +18890,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -17814,7 +19190,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -18204,7 +19580,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -19100,7 +20476,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -19400,7 +20776,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -19795,7 +21171,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -20789,7 +22165,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -21089,7 +22465,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -21480,7 +22856,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -22455,7 +23831,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -22755,7 +24131,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -23146,7 +24522,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -24265,7 +25641,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -24565,7 +25941,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -24956,7 +26332,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -26025,7 +27401,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -26325,7 +27701,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -26717,7 +28093,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -27691,7 +29067,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -27991,7 +29367,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -28367,7 +29743,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -29402,7 +30778,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -29702,7 +31078,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -30094,7 +31470,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -31152,7 +32528,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -32036,7 +33412,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -32336,7 +33712,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -32726,7 +34102,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -33614,7 +34990,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -34564,7 +35940,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -35660,7 +37036,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -36747,7 +38123,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -37863,7 +39239,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -38923,7 +40299,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -39983,7 +41359,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -41068,7 +42444,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -42110,7 +43486,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -43192,7 +44568,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -44261,7 +45637,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -45343,7 +46719,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -46455,7 +47831,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -47541,7 +48917,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -48597,7 +49973,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -49686,7 +51062,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -50775,7 +52151,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -51665,7 +53041,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -51965,7 +53341,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -52389,7 +53765,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -52689,7 +54065,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -53095,7 +54471,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -53395,7 +54771,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -53822,7 +55198,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -54122,7 +55498,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -54511,7 +55887,7 @@
               "revealed": true
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -54813,7 +56189,7 @@
               "revealed": true
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -55203,7 +56579,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -55503,7 +56879,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -55898,7 +57274,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -56198,7 +57574,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -56589,7 +57965,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -56890,7 +58266,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -57280,7 +58656,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -58211,7 +59587,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -59124,7 +60500,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -60038,7 +61414,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -60921,7 +62297,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -61809,7 +63185,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -62700,7 +64076,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -63586,7 +64962,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -64473,7 +65849,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -65384,7 +66760,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -66291,7 +67667,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -67178,7 +68554,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -67478,7 +68854,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -67890,7 +69266,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -68203,7 +69579,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -71067,7 +72443,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -71367,7 +72743,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -71582,6 +72958,10 @@
             "Guilda"
           ],
           [
+            "encantadora",
+            "Encantadora"
+          ],
+          [
             "gate",
             "Portão da Masmorra"
           ]
@@ -71734,10 +73114,10 @@
           {
             "x": 4,
             "y": 2,
-            "icone": "",
-            "descricao": "Uma pracinha tranquila, sem nada de especial.",
-            "textoDeEntrada": "Deseja entrar?",
-            "rotulo": "uma sala vazia",
+            "icone": "✨",
+            "descricao": "Pedras e frascos brilham na mesa da Encantadora.",
+            "textoDeEntrada": "A Encantadora fortifica armaduras em troca de ouro. Deseja entrar?",
+            "rotulo": "a sala da Encantadora",
             "gasta": false
           },
           {
@@ -72123,7 +73503,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -73383,7 +74763,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -74643,7 +76023,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -76102,7 +77482,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -77525,7 +78905,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -77825,7 +79205,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -78238,7 +79618,7 @@
           "y": 2,
           "narracao": {
             "ambiente": "Passos apressados ecoam em algum beco próximo, fora de vista.",
-            "conteudo": "Uma pracinha tranquila, sem nada de especial.",
+            "conteudo": "Pedras e frascos brilham na mesa da Encantadora.",
             "portas": [
               "Norte: parede.",
               "Sul: parede.",
@@ -78724,7 +80104,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -79024,7 +80404,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -79455,7 +80835,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -80850,7 +82230,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -81777,7 +83157,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -83175,7 +84555,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -84105,7 +85485,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -84405,7 +85785,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -93179,7 +94559,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -94107,7 +95487,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -96452,7 +97832,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -97381,7 +98761,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -136395,7 +137775,7 @@
                   }
                 },
                 {
-                  "type": "normal",
+                  "type": "encantadora",
                   "x": 4,
                   "y": 2,
                   "doors": {
@@ -137307,7 +138687,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -154999,6 +156379,3583 @@
     }
   },
   {
+    "name": "abrirEncantadora",
+    "input": {
+      "fn": "abrirEncantadora",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 1000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true
+            },
+            {
+              "uid": "placas_elmo_1700000000000_43228",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 1000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true
+            },
+            {
+              "uid": "placas_elmo_1700000000000_43228",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": []
+      }
+    }
+  },
+  {
+    "name": "pecasParaEncantar: as vestidas, depois as guardadas",
+    "input": {
+      "fn": "pecasParaEncantar",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 1000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true
+            },
+            {
+              "uid": "placas_elmo_1700000000000_43228",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": false
+            },
+            {
+              "uid": "espada_1700000000000_92362",
+              "templateId": "espada",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 7
+              },
+              "value": 37,
+              "equipped": false,
+              "procChance": 0.185
+            },
+            {
+              "uid": "anel_som_1700000000000_19872",
+              "templateId": "anel_som",
+              "rarity": "raro",
+              "stats": {
+                "critico": 9,
+                "esquiva": 3
+              },
+              "value": 34,
+              "equipped": false
+            },
+            {
+              "uid": "pot_vida_1700000000000_50198",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "placas_1700000000000_75260",
+          "templateId": "placas",
+          "rarity": "raro",
+          "stats": {
+            "defesa": 7,
+            "esquiva": -2
+          },
+          "value": 29,
+          "equipped": true
+        },
+        {
+          "uid": "placas_elmo_1700000000000_43228",
+          "templateId": "placas_elmo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 1
+          },
+          "value": 5,
+          "equipped": false
+        }
+      ]
+    }
+  },
+  {
+    "name": "pecasParaEncantar: nenhuma",
+    "input": {
+      "fn": "pecasParaEncantar",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "espada_1700000000000_92362",
+              "templateId": "espada",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 7
+              },
+              "value": 37,
+              "equipped": false,
+              "procChance": 0.185
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "encantar: o peitoral vestido",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 1000,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              },
+              {
+                "uid": "placas_elmo_1700000000000_43228",
+                "templateId": "placas_elmo",
+                "rarity": "comum",
+                "stats": {
+                  "defesa": 1
+                },
+                "value": 5,
+                "equipped": false
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "placas_1700000000000_75260",
+          "templateId": "placas",
+          "rarity": "raro",
+          "stats": {
+            "defesa": 7,
+            "esquiva": -2
+          },
+          "value": 29,
+          "equipped": true
+        },
+        "tipo": "robustez",
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true,
+                "encantamento": {
+                  "tipo": "robustez",
+                  "nivel": 2
+                }
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 700,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 2
+              }
+            },
+            {
+              "uid": "placas_elmo_1700000000000_43228",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "A Encantadora fortifica Peitoral de Placas Raro com Robustez II."
+        ]
+      }
+    }
+  },
+  {
+    "name": "encantar: o elmo guardado",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 1000,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              },
+              {
+                "uid": "placas_elmo_1700000000000_43228",
+                "templateId": "placas_elmo",
+                "rarity": "comum",
+                "stats": {
+                  "defesa": 1
+                },
+                "value": 5,
+                "equipped": false
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "placas_elmo_1700000000000_43228",
+          "templateId": "placas_elmo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 1
+          },
+          "value": 5,
+          "equipped": false
+        },
+        "tipo": "vigor",
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 200,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true
+            },
+            {
+              "uid": "placas_elmo_1700000000000_43228",
+              "templateId": "placas_elmo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 1
+              },
+              "value": 5,
+              "equipped": false,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 3
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "A Encantadora fortifica Elmo de Placas com Vigor III."
+        ]
+      }
+    }
+  },
+  {
+    "name": "encantar: troca a fortificação",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true,
+                  "encantamento": {
+                    "tipo": "robustez",
+                    "nivel": 2
+                  }
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 1000,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true,
+                "encantamento": {
+                  "tipo": "robustez",
+                  "nivel": 2
+                }
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "placas_1700000000000_75260",
+          "templateId": "placas",
+          "rarity": "raro",
+          "stats": {
+            "defesa": 7,
+            "esquiva": -2
+          },
+          "value": 29,
+          "equipped": true,
+          "encantamento": {
+            "tipo": "robustez",
+            "nivel": 2
+          }
+        },
+        "tipo": "vigor",
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true,
+                "encantamento": {
+                  "tipo": "vigor",
+                  "nivel": 1
+                }
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 900,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "vigor",
+                "nivel": 1
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "A Encantadora fortifica Peitoral de Placas Raro com Vigor I (Robustez II se desfaz)."
+        ]
+      }
+    }
+  },
+  {
+    "name": "encantar: a mesma que já tem",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true,
+                  "encantamento": {
+                    "tipo": "robustez",
+                    "nivel": 2
+                  }
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 1000,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true,
+                "encantamento": {
+                  "tipo": "robustez",
+                  "nivel": 2
+                }
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "placas_1700000000000_75260",
+          "templateId": "placas",
+          "rarity": "raro",
+          "stats": {
+            "defesa": 7,
+            "esquiva": -2
+          },
+          "value": 29,
+          "equipped": true,
+          "encantamento": {
+            "tipo": "robustez",
+            "nivel": 2
+          }
+        },
+        "tipo": "robustez",
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true,
+                "encantamento": {
+                  "tipo": "robustez",
+                  "nivel": 2
+                }
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 1000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 2
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "Peitoral de Placas Raro já tem Robustez II."
+        ]
+      }
+    }
+  },
+  {
+    "name": "encantar: o mesmo tipo noutro nível",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true,
+                  "encantamento": {
+                    "tipo": "robustez",
+                    "nivel": 2
+                  }
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 1000,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true,
+                "encantamento": {
+                  "tipo": "robustez",
+                  "nivel": 2
+                }
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "placas_1700000000000_75260",
+          "templateId": "placas",
+          "rarity": "raro",
+          "stats": {
+            "defesa": 7,
+            "esquiva": -2
+          },
+          "value": 29,
+          "equipped": true,
+          "encantamento": {
+            "tipo": "robustez",
+            "nivel": 2
+          }
+        },
+        "tipo": "robustez",
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true,
+                "encantamento": {
+                  "tipo": "robustez",
+                  "nivel": 3
+                }
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 200,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "robustez",
+                "nivel": 3
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "A Encantadora fortifica Peitoral de Placas Raro com Robustez III (Robustez II se desfaz)."
+        ]
+      }
+    }
+  },
+  {
+    "name": "encantar: sem ouro",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 50,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "placas_1700000000000_75260",
+          "templateId": "placas",
+          "rarity": "raro",
+          "stats": {
+            "defesa": 7,
+            "esquiva": -2
+          },
+          "value": 29,
+          "equipped": true
+        },
+        "tipo": "robustez",
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 50,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "Faltam 50 de ouro."
+        ]
+      }
+    }
+  },
+  {
+    "name": "encantar: o ouro na conta",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 800,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "placas_1700000000000_75260",
+          "templateId": "placas",
+          "rarity": "raro",
+          "stats": {
+            "defesa": 7,
+            "esquiva": -2
+          },
+          "value": 29,
+          "equipped": true
+        },
+        "tipo": "resistencia_magica",
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true,
+                "encantamento": {
+                  "tipo": "resistencia_magica",
+                  "nivel": 3
+                }
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 0,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_magica",
+                "nivel": 3
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "A Encantadora fortifica Peitoral de Placas Raro com Resistência Mágica III."
+        ]
+      }
+    }
+  },
+  {
+    "name": "encantar: a arma não",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 1000,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "espada_1700000000000_62706",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "tipo": "robustez",
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 1000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "A Encantadora só fortifica armaduras."
+        ]
+      }
+    }
+  },
+  {
+    "name": "encantar: peça que não está com o herói",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 1000,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "placas_elmo_1700000000000_43228",
+          "templateId": "placas_elmo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 1
+          },
+          "value": 5,
+          "equipped": false
+        },
+        "tipo": "robustez",
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 1000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": []
+      }
+    }
+  },
+  {
+    "name": "encantar: nível fora da régua",
+    "input": {
+      "fn": "encantar",
+      "args": {
+        "encantadora": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": {
+                  "uid": "placas_1700000000000_75260",
+                  "templateId": "placas",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 7,
+                    "esquiva": -2
+                  },
+                  "value": 29,
+                  "equipped": true
+                },
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 5000,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 3,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "encantadora",
+                  "x": 4,
+                  "y": 2,
+                  "doors": {
+                    "W": true
+                  }
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "peca": {
+          "uid": "placas_1700000000000_75260",
+          "templateId": "placas",
+          "rarity": "raro",
+          "stats": {
+            "defesa": 7,
+            "esquiva": -2
+          },
+          "value": 29,
+          "equipped": true
+        },
+        "tipo": "resistencia_veneno",
+        "nivel": 9
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": {
+                "uid": "placas_1700000000000_75260",
+                "templateId": "placas",
+                "rarity": "raro",
+                "stats": {
+                  "defesa": 7,
+                  "esquiva": -2
+                },
+                "value": 29,
+                "equipped": true,
+                "encantamento": {
+                  "tipo": "resistencia_veneno",
+                  "nivel": 3
+                }
+              },
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 4200,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 3,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "placas_1700000000000_75260",
+              "templateId": "placas",
+              "rarity": "raro",
+              "stats": {
+                "defesa": 7,
+                "esquiva": -2
+              },
+              "value": 29,
+              "equipped": true,
+              "encantamento": {
+                "tipo": "resistencia_veneno",
+                "nivel": 3
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "A Encantadora fortifica Peitoral de Placas Raro com Resistência a Veneno III."
+        ]
+      }
+    }
+  },
+  {
     "name": "tocarTotem: primeira vez",
     "input": {
       "fn": "tocarTotem",
@@ -155989,7 +160946,7 @@
                   }
                 },
                 {
-                  "type": "normal",
+                  "type": "encantadora",
                   "x": 4,
                   "y": 2,
                   "doors": {
@@ -156877,7 +161834,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -157181,7 +162138,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -179014,7 +183971,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -179316,7 +184273,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -179900,7 +184857,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -180202,7 +185159,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -187550,7 +192507,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -187850,7 +192807,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -188466,7 +193423,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -188766,7 +193723,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -189303,7 +194260,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -189603,7 +194560,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -190228,7 +195185,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -190528,7 +195485,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -194799,6 +199756,247 @@
         }
       },
       "rngCalls": 18
+    }
+  },
+  {
+    "name": "interagir: encantadora (no site, a porta fechada)",
+    "input": {
+      "fn": "interagir",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "pet": null
+      },
+      "rng": {
+        "seed": 152
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "aviso": {
+          "icone": "✨",
+          "titulo": "Encantadora",
+          "texto": "A porta da Encantadora está fechada."
+        },
+        "tela": null,
+        "recado": null
+      },
+      "rngCalls": 0
     }
   },
   {
@@ -201250,7 +206448,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -201550,7 +206748,7 @@
                 }
               },
               {
-                "type": "normal",
+                "type": "encantadora",
                 "x": 4,
                 "y": 2,
                 "doors": {
@@ -208198,6 +213396,358 @@
         },
         "tela": null,
         "som": "buy",
+        "recado": null
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "interagir: no app, encantadora",
+    "input": {
+      "fn": "interagir",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "pet": null,
+        "app": true
+      },
+      "rng": {
+        "seed": 153
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "aviso": null,
+        "tela": {
+          "tipo": "encantadora",
+          "encantadora": {
+            "estado": {
+              "hero": {
+                "level": 1,
+                "attrs": {
+                  "forca": 10,
+                  "destreza": 10,
+                  "constituicao": 10,
+                  "intelecto": 10,
+                  "sabedoria": 10,
+                  "carisma": 10
+                },
+                "equip": {
+                  "arma": {
+                    "uid": "espada_1700000000000_62706",
+                    "templateId": "espada",
+                    "rarity": "comum",
+                    "stats": {
+                      "ataque": 4
+                    },
+                    "value": 22,
+                    "equipped": false,
+                    "procChance": 0.15
+                  },
+                  "secundaria": null,
+                  "elmo": null,
+                  "armadura": null,
+                  "calca": null,
+                  "botas": null,
+                  "acessorio": null
+                },
+                "name": "Teste",
+                "race": "Humano",
+                "raceIcon": "🧑",
+                "className": "Guerreiro",
+                "classIcon": "⚔️",
+                "classId": "guerreiro",
+                "raceId": "humano",
+                "xp": 0,
+                "xpNext": 40,
+                "attrPoints": 0,
+                "gold": 100,
+                "powerNames": [
+                  "Golpe Poderoso"
+                ],
+                "powerIds": [
+                  "golpe_poderoso"
+                ],
+                "debuff": {
+                  "id": "orgulhoso",
+                  "name": "Orgulhoso",
+                  "icon": "👑",
+                  "desc": "-1 Carisma em negociações com autoridades.",
+                  "attr": "carisma"
+                },
+                "killCount": 0,
+                "masteryBattles": 0,
+                "derived": {
+                  "maxHp": 125,
+                  "maxMp": 62,
+                  "dmgFisico": 20,
+                  "dmgMagico": 30,
+                  "esquiva": 5,
+                  "critico": 10,
+                  "velocidade": 10,
+                  "curaBonus": 10,
+                  "resistMagica": 10,
+                  "descontoLoja": 5
+                },
+                "maxHp": 125,
+                "hp": 125,
+                "maxMp": 62,
+                "mp": 62,
+                "buffs": {}
+              },
+              "party": [],
+              "inventory": [],
+              "quests": [],
+              "floor": 1,
+              "mapRows": 1,
+              "mapCols": 1,
+              "cityMap": null,
+              "cityStart": null,
+              "masmorra": {
+                "dungeon": "floresta",
+                "difficulty": "normal"
+              },
+              "progresso": {
+                "cleared": [],
+                "totems": {}
+              },
+              "mapMode": "city",
+              "map": [
+                [
+                  {
+                    "type": "encantadora",
+                    "x": 4,
+                    "y": 2,
+                    "doors": {
+                      "W": true
+                    }
+                  }
+                ]
+              ],
+              "pos": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            "log": []
+          }
+        },
+        "som": "door",
         "recado": null
       },
       "rngCalls": 0

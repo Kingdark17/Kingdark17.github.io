@@ -1,6 +1,7 @@
 import { idDaClasse } from '../hero/catalog.js';
 import { equipmentBonus } from '../hero/derived.js';
 import { hasDebuffEffect, type Companion, type Hero } from '../hero/hero.js';
+import type { DefesasDoHeroi } from '../items/encantamentos.js';
 import { defaultRng, randomInt, type Rng } from '../rng.js';
 import { triggerEnemyClassPower } from './class-passives.js';
 import { decrementField, setStatusField, type CombatMonsterView } from './monster-state.js';
@@ -138,10 +139,19 @@ export interface HeroDamageResult {
   manaDrained: number;
   defensivePassiveTriggered: boolean;
   shieldConsumed: boolean;
+  /** A resistência a veneno da Encantadora segurou o veneno (só com `defesas`). */
+  poisonResisted?: boolean;
+  /** A resistência mágica da Encantadora segurou o dreno de mana (só com `defesas`). */
+  drainResisted?: boolean;
 }
 
-/** Ataque do monstro contra o próprio herói: esquiva, defesa, vulnerabilidades e os efeitos que o golpe aplica de volta. */
-function resolveHeroDamage(hero: Hero, monster: CombatMonsterView, attackMult: number, rng: Rng, petEsquiva: number): HeroDamageResult {
+/**
+ * Ataque do monstro contra o próprio herói: esquiva, defesa, vulnerabilidades e os efeitos que o golpe aplica de volta.
+ *
+ * `defesas` são as fortificações da Encantadora (`items/encantamentos.ts`), que só a arena do app passa. Sem elas o
+ * golpe é o de sempre, sem um número a mais do `rng`: os sorteios de resistir só acontecem quando há a resistência.
+ */
+function resolveHeroDamage(hero: Hero, monster: CombatMonsterView, attackMult: number, rng: Rng, petEsquiva: number, defesas?: DefesasDoHeroi): HeroDamageResult {
   const d = hero.derived;
   const buffs = hero.buffs ?? {};
   const dodge = d.esquiva + petEsquiva + (buffs.esquivaTurns && buffs.esquivaTurns > 0 ? buffs.esquivaAmount || 0 : 0);
@@ -165,6 +175,10 @@ function resolveHeroDamage(hero: Hero, monster: CombatMonsterView, attackMult: n
   }
   if (hasDebuffEffect(nextHero, 'physicalVulnerability')) dmg = Math.max(1, Math.round(dmg * 1.2));
 
+  // A armadura encantada: resistência mágica contra os monstros mágicos, robustez contra os outros.
+  const reducao = defesas ? (monster.behavior === 'magico' ? defesas.resistenciaMagica : defesas.robustez) : 0;
+  if (reducao > 0) dmg = Math.max(1, Math.round(dmg * (1 - reducao)));
+
   let defensivePassiveTriggered = false;
   if (idDaClasse(nextHero) === 'guerreiro' && rng() < 0.2) {
     dmg = Math.max(1, Math.round(dmg * 0.6));
@@ -181,26 +195,50 @@ function resolveHeroDamage(hero: Hero, monster: CombatMonsterView, attackMult: n
 
   nextHero = { ...nextHero, hp: Math.max(0, nextHero.hp - dmg) };
 
+  const resisteAoVeneno = (): boolean => !!defesas && defesas.resistenciaVeneno > 0 && rng() < defesas.resistenciaVeneno;
   let poisonApplied = false;
-  if (monster.poisonStrike) {
+  let poisonResisted = false;
+  if (monster.poisonStrike && resisteAoVeneno()) {
+    poisonResisted = true;
+  } else if (monster.poisonStrike) {
     const buffsNow = nextHero.buffs ?? {};
     nextHero = { ...nextHero, buffs: { ...buffsNow, poisonTurns: 3, poisonDmg: Math.max(2, Math.round(monster.dmg * 0.35)) } };
     poisonApplied = true;
   }
   if (monster.behavior === 'venenoso' && rng() < 0.35) {
-    const buffsNow = nextHero.buffs ?? {};
-    const poisonDmg = Math.max(2, Math.round(Math.floor(monster.dmg / 3) * (hasDebuffEffect(nextHero, 'poisonVulnerability') ? 1.5 : 1)));
-    nextHero = { ...nextHero, buffs: { ...buffsNow, poisonTurns: 3, poisonDmg } };
-    poisonApplied = true;
+    if (resisteAoVeneno()) {
+      poisonResisted = true;
+    } else {
+      const buffsNow = nextHero.buffs ?? {};
+      const poisonDmg = Math.max(2, Math.round(Math.floor(monster.dmg / 3) * (hasDebuffEffect(nextHero, 'poisonVulnerability') ? 1.5 : 1)));
+      nextHero = { ...nextHero, buffs: { ...buffsNow, poisonTurns: 3, poisonDmg } };
+      poisonApplied = true;
+    }
   }
 
   let manaDrained = 0;
+  let drainResisted = false;
   if (monster.behavior === 'magico' && rng() < 0.35) {
-    manaDrained = Math.min(nextHero.mp, 3 + Math.floor(monster.dmg / 3));
-    nextHero = { ...nextHero, mp: nextHero.mp - manaDrained };
+    if (defesas && defesas.evitaDreno > 0 && rng() < defesas.evitaDreno) {
+      drainResisted = true;
+    } else {
+      manaDrained = Math.min(nextHero.mp, 3 + Math.floor(monster.dmg / 3));
+      nextHero = { ...nextHero, mp: nextHero.mp - manaDrained };
+    }
   }
 
-  return { hero: nextHero, dodged: false, damage: dmg, poisonApplied, manaDrained, defensivePassiveTriggered, shieldConsumed };
+  // Os dois campos da Encantadora só aparecem quando valem: o golpe do site fica com a mesma cara.
+  return {
+    hero: nextHero,
+    dodged: false,
+    damage: dmg,
+    poisonApplied,
+    manaDrained,
+    defensivePassiveTriggered,
+    shieldConsumed,
+    ...(poisonResisted ? { poisonResisted } : {}),
+    ...(drainResisted ? { drainResisted } : {}),
+  };
 }
 
 /** O começo do golpe do monstro: se ele perde a vez e, se não, com que força vem. */
@@ -264,8 +302,15 @@ export interface HeroHit extends HeroDamageResult {
  * escudo e o que o golpe deixa de volta (veneno, dreno de mana). Acertou, o
  * golpe envenenado do poder de classe se gasta.
  */
-export function landHitOnHero(hero: Hero, monster: CombatMonsterView, attackMult: number, rng: Rng = defaultRng, petEsquiva = 0): HeroHit {
-  const heroHit = resolveHeroDamage(hero, monster, attackMult, rng, petEsquiva);
+export function landHitOnHero(
+  hero: Hero,
+  monster: CombatMonsterView,
+  attackMult: number,
+  rng: Rng = defaultRng,
+  petEsquiva = 0,
+  defesas?: DefesasDoHeroi,
+): HeroHit {
+  const heroHit = resolveHeroDamage(hero, monster, attackMult, rng, petEsquiva, defesas);
   if (heroHit.dodged) return { ...heroHit, monster };
   return { ...heroHit, monster: monster.poisonStrike ? { ...monster, poisonStrike: false } : monster };
 }

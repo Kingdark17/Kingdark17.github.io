@@ -12,6 +12,18 @@
     }
   },
   {
+    "name": "ENCANTADORA_POS (constante)",
+    "input": {
+      "const": "ENCANTADORA_POS"
+    },
+    "expected": {
+      "value": {
+        "x": 4,
+        "y": 2
+      }
+    }
+  },
+  {
     "name": "generateCityLayout: 6×6",
     "input": {
       "fn": "generateCityLayout",
@@ -134,7 +146,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -507,7 +519,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -1096,7 +1108,7 @@
               }
             },
             {
-              "type": "normal",
+              "type": "encantadora",
               "x": 4,
               "y": 2,
               "doors": {
@@ -1384,7 +1396,7 @@
             }
           },
           {
-            "type": "normal",
+            "type": "encantadora",
             "x": 4,
             "y": 2,
             "doors": {
@@ -1563,6 +1575,656 @@
     "name": "withGuild: a cidade de hoje fica igual",
     "input": {
       "fn": "withGuild",
+      "args": {
+        "grid": [
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "gate",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "guild",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "normal",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "encantadora",
+              "x": 4,
+              "y": 2,
+              "doors": {
+                "W": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "blacksmith",
+              "x": 1,
+              "y": 3,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "shop",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "W": true
+              }
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "N": true,
+                "W": true,
+                "E": true,
+                "S": true
+              }
+            },
+            {
+              "type": "tavern",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "questboard",
+              "x": 5,
+              "y": 3,
+              "doors": {
+                "W": true
+              }
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 4,
+              "doors": {
+                "N": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Velho Ferreiro Bram",
+                "role": "Ferreiro",
+                "service": "barter",
+                "icon": "🔨",
+                "lines": [
+                  "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                  "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                  "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 5,
+              "doors": {
+                "N": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística",
+                "service": "blessing",
+                "icon": "🔮",
+                "lines": [
+                  "As sombras sussurram seu nome, viajante...",
+                  "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                  "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 3,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 0,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "gate",
+            "x": 3,
+            "y": 1,
+            "doors": {
+              "S": true
+            }
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 1,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 2,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 2,
+            "doors": {}
+          },
+          {
+            "type": "guild",
+            "x": 2,
+            "y": 2,
+            "doors": {
+              "E": true
+            }
+          },
+          {
+            "type": "normal",
+            "x": 3,
+            "y": 2,
+            "doors": {
+              "S": true,
+              "N": true,
+              "W": true,
+              "E": true
+            }
+          },
+          {
+            "type": "encantadora",
+            "x": 4,
+            "y": 2,
+            "doors": {
+              "W": true
+            }
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 2,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 3,
+            "doors": {}
+          },
+          {
+            "type": "blacksmith",
+            "x": 1,
+            "y": 3,
+            "doors": {
+              "E": true
+            }
+          },
+          {
+            "type": "shop",
+            "x": 2,
+            "y": 3,
+            "doors": {
+              "E": true,
+              "W": true
+            }
+          },
+          {
+            "type": "start",
+            "x": 3,
+            "y": 3,
+            "doors": {
+              "N": true,
+              "W": true,
+              "E": true,
+              "S": true
+            }
+          },
+          {
+            "type": "tavern",
+            "x": 4,
+            "y": 3,
+            "doors": {
+              "W": true,
+              "E": true
+            }
+          },
+          {
+            "type": "questboard",
+            "x": 5,
+            "y": 3,
+            "doors": {
+              "W": true
+            }
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "npc",
+            "x": 3,
+            "y": 4,
+            "doors": {
+              "N": true,
+              "S": true
+            },
+            "npc": {
+              "name": "Velho Ferreiro Bram",
+              "role": "Ferreiro",
+              "service": "barter",
+              "icon": "🔨",
+              "lines": [
+                "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+              ],
+              "serviceUsed": false
+            }
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 4,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "npc",
+            "x": 3,
+            "y": 5,
+            "doors": {
+              "N": true
+            },
+            "npc": {
+              "name": "Erma, a Vidente",
+              "role": "Mística",
+              "service": "blessing",
+              "icon": "🔮",
+              "lines": [
+                "As sombras sussurram seu nome, viajante...",
+                "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+              ],
+              "serviceUsed": false
+            }
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 5,
+            "doors": {}
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "name": "withGuild: grade pequena demais fica igual",
+    "input": {
+      "fn": "withGuild",
+      "args": {
+        "grid": [
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            }
+          ]
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 0,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 1,
+            "doors": {}
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "name": "withEncantadora: a cidade de antes ganha a Encantadora",
+    "input": {
+      "fn": "withEncantadora",
       "args": {
         "grid": [
           [
@@ -1964,7 +2626,7 @@
             }
           },
           {
-            "type": "normal",
+            "type": "encantadora",
             "x": 4,
             "y": 2,
             "doors": {
@@ -2140,9 +2802,589 @@
     }
   },
   {
-    "name": "withGuild: grade pequena demais fica igual",
+    "name": "withEncantadora: a cidade de hoje fica igual",
     "input": {
-      "fn": "withGuild",
+      "fn": "withEncantadora",
+      "args": {
+        "grid": [
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "gate",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "guild",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "normal",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "encantadora",
+              "x": 4,
+              "y": 2,
+              "doors": {
+                "W": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "blacksmith",
+              "x": 1,
+              "y": 3,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "shop",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "W": true
+              }
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "N": true,
+                "W": true,
+                "E": true,
+                "S": true
+              }
+            },
+            {
+              "type": "tavern",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "questboard",
+              "x": 5,
+              "y": 3,
+              "doors": {
+                "W": true
+              }
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 4,
+              "doors": {
+                "N": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Velho Ferreiro Bram",
+                "role": "Ferreiro",
+                "service": "barter",
+                "icon": "🔨",
+                "lines": [
+                  "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                  "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                  "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 5,
+              "doors": {
+                "N": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística",
+                "service": "blessing",
+                "icon": "🔮",
+                "lines": [
+                  "As sombras sussurram seu nome, viajante...",
+                  "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                  "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 3,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 0,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "gate",
+            "x": 3,
+            "y": 1,
+            "doors": {
+              "S": true
+            }
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 1,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 2,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 2,
+            "doors": {}
+          },
+          {
+            "type": "guild",
+            "x": 2,
+            "y": 2,
+            "doors": {
+              "E": true
+            }
+          },
+          {
+            "type": "normal",
+            "x": 3,
+            "y": 2,
+            "doors": {
+              "S": true,
+              "N": true,
+              "W": true,
+              "E": true
+            }
+          },
+          {
+            "type": "encantadora",
+            "x": 4,
+            "y": 2,
+            "doors": {
+              "W": true
+            }
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 2,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 3,
+            "doors": {}
+          },
+          {
+            "type": "blacksmith",
+            "x": 1,
+            "y": 3,
+            "doors": {
+              "E": true
+            }
+          },
+          {
+            "type": "shop",
+            "x": 2,
+            "y": 3,
+            "doors": {
+              "E": true,
+              "W": true
+            }
+          },
+          {
+            "type": "start",
+            "x": 3,
+            "y": 3,
+            "doors": {
+              "N": true,
+              "W": true,
+              "E": true,
+              "S": true
+            }
+          },
+          {
+            "type": "tavern",
+            "x": 4,
+            "y": 3,
+            "doors": {
+              "W": true,
+              "E": true
+            }
+          },
+          {
+            "type": "questboard",
+            "x": 5,
+            "y": 3,
+            "doors": {
+              "W": true
+            }
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "npc",
+            "x": 3,
+            "y": 4,
+            "doors": {
+              "N": true,
+              "S": true
+            },
+            "npc": {
+              "name": "Velho Ferreiro Bram",
+              "role": "Ferreiro",
+              "service": "barter",
+              "icon": "🔨",
+              "lines": [
+                "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+              ],
+              "serviceUsed": false
+            }
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 4,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "npc",
+            "x": 3,
+            "y": 5,
+            "doors": {
+              "N": true
+            },
+            "npc": {
+              "name": "Erma, a Vidente",
+              "role": "Mística",
+              "service": "blessing",
+              "icon": "🔮",
+              "lines": [
+                "As sombras sussurram seu nome, viajante...",
+                "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+              ],
+              "serviceUsed": false
+            }
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 5,
+            "doors": {}
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "name": "withEncantadora: grade pequena demais fica igual",
+    "input": {
+      "fn": "withEncantadora",
       "args": {
         "grid": [
           [
@@ -2203,6 +3445,586 @@
             "type": "void",
             "x": 1,
             "y": 1,
+            "doors": {}
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "name": "withEncantadora: lugar ocupado por outra sala fica igual",
+    "input": {
+      "fn": "withEncantadora",
+      "args": {
+        "grid": [
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "gate",
+              "x": 3,
+              "y": 1,
+              "doors": {
+                "S": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "guild",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "normal",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true,
+                "N": true,
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "shop",
+              "x": 4,
+              "y": 2,
+              "doors": {
+                "W": true
+              }
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "blacksmith",
+              "x": 1,
+              "y": 3,
+              "doors": {
+                "E": true
+              }
+            },
+            {
+              "type": "shop",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "W": true
+              }
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "N": true,
+                "W": true,
+                "E": true,
+                "S": true
+              }
+            },
+            {
+              "type": "tavern",
+              "x": 4,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "E": true
+              }
+            },
+            {
+              "type": "questboard",
+              "x": 5,
+              "y": 3,
+              "doors": {
+                "W": true
+              }
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 4,
+              "doors": {
+                "N": true,
+                "S": true
+              },
+              "npc": {
+                "name": "Velho Ferreiro Bram",
+                "role": "Ferreiro",
+                "service": "barter",
+                "icon": "🔨",
+                "lines": [
+                  "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                  "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                  "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 5,
+              "doors": {
+                "N": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística",
+                "service": "blessing",
+                "icon": "🔮",
+                "lines": [
+                  "As sombras sussurram seu nome, viajante...",
+                  "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                  "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                ],
+                "serviceUsed": false
+              }
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 3,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 0,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 0,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "gate",
+            "x": 3,
+            "y": 1,
+            "doors": {
+              "S": true
+            }
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 1,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 1,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 2,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 2,
+            "doors": {}
+          },
+          {
+            "type": "guild",
+            "x": 2,
+            "y": 2,
+            "doors": {
+              "E": true
+            }
+          },
+          {
+            "type": "normal",
+            "x": 3,
+            "y": 2,
+            "doors": {
+              "S": true,
+              "N": true,
+              "W": true,
+              "E": true
+            }
+          },
+          {
+            "type": "shop",
+            "x": 4,
+            "y": 2,
+            "doors": {
+              "W": true
+            }
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 2,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 3,
+            "doors": {}
+          },
+          {
+            "type": "blacksmith",
+            "x": 1,
+            "y": 3,
+            "doors": {
+              "E": true
+            }
+          },
+          {
+            "type": "shop",
+            "x": 2,
+            "y": 3,
+            "doors": {
+              "E": true,
+              "W": true
+            }
+          },
+          {
+            "type": "start",
+            "x": 3,
+            "y": 3,
+            "doors": {
+              "N": true,
+              "W": true,
+              "E": true,
+              "S": true
+            }
+          },
+          {
+            "type": "tavern",
+            "x": 4,
+            "y": 3,
+            "doors": {
+              "W": true,
+              "E": true
+            }
+          },
+          {
+            "type": "questboard",
+            "x": 5,
+            "y": 3,
+            "doors": {
+              "W": true
+            }
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "npc",
+            "x": 3,
+            "y": 4,
+            "doors": {
+              "N": true,
+              "S": true
+            },
+            "npc": {
+              "name": "Velho Ferreiro Bram",
+              "role": "Ferreiro",
+              "service": "barter",
+              "icon": "🔨",
+              "lines": [
+                "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+              ],
+              "serviceUsed": false
+            }
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 4,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 4,
+            "doors": {}
+          }
+        ],
+        [
+          {
+            "type": "void",
+            "x": 0,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 1,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 2,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "npc",
+            "x": 3,
+            "y": 5,
+            "doors": {
+              "N": true
+            },
+            "npc": {
+              "name": "Erma, a Vidente",
+              "role": "Mística",
+              "service": "blessing",
+              "icon": "🔮",
+              "lines": [
+                "As sombras sussurram seu nome, viajante...",
+                "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+              ],
+              "serviceUsed": false
+            }
+          },
+          {
+            "type": "void",
+            "x": 4,
+            "y": 5,
+            "doors": {}
+          },
+          {
+            "type": "void",
+            "x": 5,
+            "y": 5,
             "doors": {}
           }
         ]
@@ -3346,12 +5168,12 @@
     }
   },
   {
-    "name": "cityIconFor: normal (4, 2)",
+    "name": "cityIconFor: encantadora (4, 2)",
     "input": {
       "fn": "cityIconFor",
       "args": {
         "cell": {
-          "type": "normal",
+          "type": "encantadora",
           "x": 4,
           "y": 2,
           "doors": {
@@ -3361,16 +5183,16 @@
       }
     },
     "expected": {
-      "result": ""
+      "result": "✨"
     }
   },
   {
-    "name": "cityShortLabel: normal (4, 2)",
+    "name": "cityShortLabel: encantadora (4, 2)",
     "input": {
       "fn": "cityShortLabel",
       "args": {
         "cell": {
-          "type": "normal",
+          "type": "encantadora",
           "x": 4,
           "y": 2,
           "doors": {
@@ -3380,16 +5202,16 @@
       }
     },
     "expected": {
-      "result": "uma sala vazia"
+      "result": "a sala da Encantadora"
     }
   },
   {
-    "name": "cityRoomDesc: normal (4, 2)",
+    "name": "cityRoomDesc: encantadora (4, 2)",
     "input": {
       "fn": "cityRoomDesc",
       "args": {
         "cell": {
-          "type": "normal",
+          "type": "encantadora",
           "x": 4,
           "y": 2,
           "doors": {
@@ -3399,16 +5221,16 @@
       }
     },
     "expected": {
-      "result": "Uma pracinha tranquila, sem nada de especial."
+      "result": "Pedras e frascos brilham na mesa da Encantadora."
     }
   },
   {
-    "name": "cityEntryText: normal (4, 2)",
+    "name": "cityEntryText: encantadora (4, 2)",
     "input": {
       "fn": "cityEntryText",
       "args": {
         "cell": {
-          "type": "normal",
+          "type": "encantadora",
           "x": 4,
           "y": 2,
           "doors": {
@@ -3418,7 +5240,7 @@
       }
     },
     "expected": {
-      "result": "Deseja entrar?"
+      "result": "A Encantadora fortifica armaduras em troca de ouro. Deseja entrar?"
     }
   },
   {

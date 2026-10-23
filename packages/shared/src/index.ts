@@ -21,6 +21,7 @@ export * from './items/templates.js';
 export * from './items/item.js';
 export * from './items/materiais.js';
 export * from './items/runas.js';
+export * from './items/encantamentos.js';
 export * from './items/tiers.js';
 
 export * from './monsters/species.js';
@@ -71,6 +72,7 @@ export * from './jogo/cura-do-parceiro.js';
 export * from './jogo/dialogo.js';
 export * from './jogo/diario.js';
 export * from './jogo/efeitos.js';
+export * from './jogo/encantadora.js';
 export * from './jogo/estado.js';
 export * from './jogo/evento.js';
 export * from './jogo/extras.js';

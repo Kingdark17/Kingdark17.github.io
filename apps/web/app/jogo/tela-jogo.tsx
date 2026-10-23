@@ -861,6 +861,9 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             onFechar={(final) => fechar(final.estado)}
           />
         );
+      case 'encantadora':
+        // Só o app abre a Encantadora: aqui a porta dela fica fechada (`interagir` sem `app`).
+        return null;
       case 'totem':
         return (
           <TelaTotem

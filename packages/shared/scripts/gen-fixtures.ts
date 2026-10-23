@@ -110,7 +110,20 @@ import type {
   Walker,
   WalkStep,
 } from '../src/index.js';
-import type { EntradaDaLuta, EventoDeArma, JogadaDoEvento, LeituraDaMira, LutaEmTempoReal, MonstroNaArena, PontoDoTraco, RunaId, RunaNaArma } from '../src/index.js';
+import type {
+  Encantadora,
+  EncantamentoId,
+  EncantamentoNaPeca,
+  EntradaDaLuta,
+  EventoDeArma,
+  JogadaDoEvento,
+  LeituraDaMira,
+  LutaEmTempoReal,
+  MonstroNaArena,
+  PontoDoTraco,
+  RunaId,
+  RunaNaArma,
+} from '../src/index.js';
 
 const PACOTE = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DESTINO = join(PACOTE, 'fixtures');
@@ -1286,6 +1299,65 @@ constante('RUNAS', E.RUNAS);
   }
 }
 
+// ---------- os encantamentos (só do app) ----------
+
+constante('ENCANTAMENTOS', E.ENCANTAMENTOS);
+{
+  const peca = (id: string, raridade = 'comum'): Item => E.instantiate(E.templateById(id)!, E.rarityById(raridade)!, { rng: E.seededRng(2), now: relogio });
+  const enc = (tipo: EncantamentoId, nivel: number): EncantamentoNaPeca => ({ tipo, nivel });
+  const com = (p: Item, e: EncantamentoNaPeca): Item => ({ ...p, encantamento: e, equipped: true });
+
+  for (const id of ['placas', 'escudo', 'placas_elmo', 'robe_calca', 'botas', 'espada', 'bota_vento', 'anel_som', 'pot_vida', 'minerio']) {
+    caso(`podeEncantar: ${id}`, 'podeEncantar', { item: peca(id) }, (a) => E.podeEncantar(a.item));
+  }
+  for (const tipo of E.TIPOS_DE_ENCANTAMENTO) {
+    for (const nivel of [1, 2, 3, 0, 7, 2.5]) {
+      caso(`nomeDoEncantamento: ${tipo}, nível ${nivel}`, 'nomeDoEncantamento', { encantamento: enc(tipo, nivel) }, (a) => E.nomeDoEncantamento(a.encantamento));
+      caso(`efeitoDoEncantamento: ${tipo}, nível ${nivel}`, 'efeitoDoEncantamento', { tipo, nivel }, (a) => E.efeitoDoEncantamento(a.tipo as EncantamentoId, a.nivel));
+    }
+  }
+  for (const nivel of [1, 2, 3, 0, 4, 1.9]) caso(`custoDoEncantamento: ${nivel}`, 'custoDoEncantamento', { nivel }, (a) => E.custoDoEncantamento(a.nivel));
+  for (const [nome, p, tipo, nivel] of [
+    ['peitoral novo', peca('placas'), 'robustez', 2],
+    ['troca a que havia', com(peca('placas'), enc('vigor', 1)), 'resistencia_magica', 3],
+    ['nível fora da régua', peca('escudo'), 'vigor', 9],
+    ['arma não recebe', peca('espada'), 'robustez', 1],
+  ] as const) {
+    caso(`encantarPeca: ${nome}`, 'encantarPeca', { peca: p, tipo, nivel }, (a) => E.encantarPeca(a.peca, a.tipo as EncantamentoId, a.nivel));
+  }
+  caso('encantamentoDaPeca: com', 'encantamentoDaPeca', { item: com(peca('placas'), enc('robustez', 1)) }, (a) => E.encantamentoDaPeca(a.item));
+  caso('encantamentoDaPeca: sem', 'encantamentoDaPeca', { item: peca('placas') }, (a) => E.encantamentoDaPeca(a.item));
+
+  const tres = (tipo: EncantamentoId): Partial<HeroEquipment> => ({
+    armadura: com(peca('placas'), enc(tipo, 3)),
+    elmo: com(peca('placas_elmo'), enc(tipo, 3)),
+    calca: com(peca('placas_calca'), enc(tipo, 3)),
+  });
+  for (const [nome, equip] of [
+    ['nada encantado', { armadura: peca('placas') }],
+    [
+      'uma de cada',
+      {
+        armadura: com(peca('placas'), enc('robustez', 1)),
+        elmo: com(peca('placas_elmo'), enc('resistencia_magica', 2)),
+        calca: com(peca('placas_calca'), enc('resistencia_veneno', 3)),
+        botas: com(peca('botas'), enc('vigor', 2)),
+      },
+    ],
+    ['robustez no teto', tres('robustez')],
+    ['resistência mágica e o dreno no teto', { ...tres('resistencia_magica'), secundaria: com(peca('escudo'), enc('resistencia_magica', 2)) }],
+    ['veneno no teto', tres('resistencia_veneno')],
+    ['vigor no teto', tres('vigor')],
+    ['vigor somado', { armadura: com(peca('placas'), enc('vigor', 1)), botas: com(peca('botas'), enc('vigor', 2)) }],
+    ['encantamento numa arma não conta', { arma: com(peca('espada'), enc('robustez', 3)) }],
+    ['nível fora da régua', { armadura: com(peca('placas'), enc('vigor', 9)) }],
+  ] as const) {
+    const hero = heroi({ equip: equip as Partial<HeroEquipment>, extra: { maxHp: 157 } });
+    caso(`defesasDoHeroi: ${nome}`, 'defesasDoHeroi', { hero }, (a) => E.defesasDoHeroi(a.hero));
+    caso(`escudoDoVigor: ${nome}`, 'escudoDoVigor', { hero }, (a) => E.escudoDoVigor(a.hero));
+  }
+}
+
 const ITENS_DE_NOME: Array<[string, Item]> = [
   ['espada comum', item('espada')],
   ['espada lendária', item('espada', 'lendario')],
@@ -1858,6 +1930,24 @@ caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'trig
   noHeroi('acerta', ladino, monstro(), 1, { sequence: [0.99, 0.5] });
   noHeroi('na força 1,7', ladino, monstro(), 1.7, { sequence: [0.99, 0.5] });
   noHeroi('esquiva', heroi({ classe: 'ladino', arma: null, extra: { buffs: { esquivaTurns: 2, esquivaAmount: 40 } } }), monstro(), 1, { sequence: [0.1] });
+
+  // A armadura encantada da Encantadora: só a arena do app passa as defesas (items/encantamentos.ts).
+  const encantado = (tipo: EncantamentoId, nivel: number, extra: Partial<Hero> = {}): Hero =>
+    heroi({ classe: 'ladino', arma: null, equip: { armadura: { ...item('placas'), equipped: true, encantamento: { tipo, nivel } } }, extra });
+  const comDefesas = (nome: string, hero: Hero, monster: CombatMonsterView, rng: RngSpec) =>
+    caso(`landHitOnHero: ${nome}`, 'landHitOnHero', { hero, monster, attackMult: 1, petEsquiva: 0, defesas: E.defesasDoHeroi(hero) }, (a, ctx) =>
+      E.landHitOnHero(a.hero, a.monster, a.attackMult, ctx.rng, a.petEsquiva, a.defesas),
+    { rng });
+  comDefesas('robustez III desconta de quem bate de perto', encantado('robustez', 3), monstro({ dmg: 20 }), { sequence: [0.99, 0.5] });
+  comDefesas('a robustez não vale contra o mágico', encantado('robustez', 3), monstro({ speciesId: 'elemental_fogo', dmg: 20 }), { sequence: [0.99, 0.5, 0.99] });
+  comDefesas('resistência mágica III desconta do mágico e segura o dreno', encantado('resistencia_magica', 3, { mp: 30 }), monstro({ speciesId: 'elemental_fogo', dmg: 20 }), { sequence: [0.99, 0.5, 0.1, 0.5] });
+  comDefesas('resistência mágica I não segura o dreno', encantado('resistencia_magica', 1, { mp: 30 }), monstro({ speciesId: 'espectro_gelado', dmg: 20 }), { sequence: [0.99, 0.5, 0.1, 0.5] });
+  comDefesas('resistência a veneno III segura a aranha', encantado('resistencia_veneno', 3), monstro({ speciesId: 'aranha', dmg: 20 }), { sequence: [0.99, 0.5, 0.1, 0.5] });
+  comDefesas('resistência a veneno I não segura', encantado('resistencia_veneno', 1), monstro({ speciesId: 'aranha', dmg: 20 }), { sequence: [0.99, 0.5, 0.1, 0.5] });
+  comDefesas('o golpe envenenado do poder de classe também é segurado', encantado('resistencia_veneno', 3), monstro({ poisonStrike: true }), { sequence: [0.99, 0.5, 0.2] });
+  comDefesas('sem encantamento é o golpe de sempre', heroi({ classe: 'ladino', arma: null }), monstro({ speciesId: 'aranha' }), { sequence: [0.99, 0.5, 0.1] });
+  comDefesas('esquiva com a armadura encantada', encantado('robustez', 2, { buffs: { esquivaTurns: 2, esquivaAmount: 40 } }), monstro(), { sequence: [0.1] });
+  comDefesas('o desconto não passa de 1 de dano', encantado('robustez', 3), monstro({ dmg: 0 }), { sequence: [0.99, 0] });
   noHeroi('pet de esquiva', ladino, monstro(), 1, { sequence: [0.12] }, 8);
   noHeroi('golpe envenenado se gasta', ladino, monstro({ poisonStrike: true }), 1, { sequence: [0.99, 0.5] });
   noHeroi('golpe envenenado fica na esquiva', heroi({ classe: 'ladino', arma: null, extra: { buffs: { esquivaTurns: 1, esquivaAmount: 100 } } }), monstro({ poisonStrike: true }), 1, { sequence: [0.1] });
@@ -2693,6 +2783,7 @@ for (const floor of [1, 5, 20]) {
 modulo('city');
 
 constante('GUILD_POS', E.GUILD_POS);
+constante('ENCANTADORA_POS', E.ENCANTADORA_POS);
 
 function cidadeCompacta(cidade: { grid: CityCell[][]; rooms: CityCell[]; start: CityCell | undefined }) {
   return { grid: cidade.grid, rooms: cidade.rooms.map((c) => [c.x, c.y]), start: cidade.start ? [cidade.start.x, cidade.start.y] : undefined };
@@ -2713,6 +2804,12 @@ for (const [rows, cols] of [
   caso('withGuild: a cidade de antes ganha a Guilda', 'withGuild', { grid: deAntes }, (a) => E.withGuild(a.grid));
   caso('withGuild: a cidade de hoje fica igual', 'withGuild', { grid: cidade.grid }, (a) => E.withGuild(a.grid));
   caso('withGuild: grade pequena demais fica igual', 'withGuild', { grid: E.generateCityLayout(2, 2).grid }, (a) => E.withGuild(a.grid));
+  const semEncantadora = cidade.grid.map((linha) => linha.map((c) => (c.type === 'encantadora' ? { ...c, type: 'normal' as const } : c)));
+  caso('withEncantadora: a cidade de antes ganha a Encantadora', 'withEncantadora', { grid: semEncantadora }, (a) => E.withEncantadora(a.grid));
+  caso('withEncantadora: a cidade de hoje fica igual', 'withEncantadora', { grid: cidade.grid }, (a) => E.withEncantadora(a.grid));
+  caso('withEncantadora: grade pequena demais fica igual', 'withEncantadora', { grid: E.generateCityLayout(2, 2).grid }, (a) => E.withEncantadora(a.grid));
+  const ocupada = cidade.grid.map((linha) => linha.map((c) => (c.type === 'encantadora' ? { ...c, type: 'shop' as const } : c)));
+  caso('withEncantadora: lugar ocupado por outra sala fica igual', 'withEncantadora', { grid: ocupada }, (a) => E.withEncantadora(a.grid));
   caso('restAtTavern', 'restAtTavern', { hero: heroi({ extra: { hp: 10, mp: 0 } }), party: [companheiro('guerreiro', { hp: 3 }), companheiro('mago', { hp: 0 })] }, (a) =>
     E.restAtTavern(a.hero, a.party),
   );
@@ -2863,6 +2960,8 @@ retomar('na cidade, noutra sala', E.andar(cidade, primeiraPorta(cidade)));
 retomar('na cidade sem o ponto de partida', { ...E.andar(cidade, primeiraPorta(cidade)), cityStart: null });
 const semGuilda = cidade.map.map((linha) => linha.map((c) => (c.type === 'guild' ? { ...c, type: 'normal' as const } : c)));
 retomar('cidade de antes da Guilda', { ...cidade, map: semGuilda, cityMap: semGuilda });
+const semAsDuas = semGuilda.map((linha) => linha.map((c) => (c.type === 'encantadora' ? { ...c, type: 'normal' as const } : c)));
+retomar('cidade de antes da Guilda e da Encantadora', { ...cidade, map: semAsDuas, cityMap: semAsDuas });
 retomar('na masmorra', E.andar(masmorra, primeiraPorta(masmorra)));
 retomar('na masmorra sem mapa', saveNovo({}, { mapMode: 'dungeon', floor: 3 }), { rng: { seed: 3 }, now: AGORA });
 retomar('na masmorra com o mapa vazio', { ...masmorra, map: [] }, { rng: { seed: 4 }, now: AGORA });
@@ -3747,6 +3846,36 @@ for (const [nome, estado, classe, semente] of [
   });
 }
 
+// --- a Encantadora (só do app) ---
+
+{
+  const placas = { ...item('placas', 'raro', 20), equipped: true };
+  const elmoGuardado = item('placas_elmo', 'comum', 21);
+  const vestido = (gold: number, armadura: Item = placas) => heroi({ classe: 'guerreiro', equip: { armadura }, extra: { gold } });
+  const naEncantadora = (hero: Hero, inventory: Item[]): Encantadora => E.abrirEncantadora(naSalaDaCidade('encantadora', hero, inventory));
+  caso('abrirEncantadora', 'abrirEncantadora', { estado: naSalaDaCidade('encantadora', vestido(1000), [placas, elmoGuardado]) }, (a) => E.abrirEncantadora(a.estado));
+  caso('pecasParaEncantar: as vestidas, depois as guardadas', 'pecasParaEncantar', { estado: enxuto(vestido(1000), [placas, elmoGuardado, espadaNova, anel, pocaoDeVida]) }, (a) =>
+    E.pecasParaEncantar(a.estado),
+  );
+  caso('pecasParaEncantar: nenhuma', 'pecasParaEncantar', { estado: enxuto(guerreiro, [espadaNova]) }, (a) => E.pecasParaEncantar(a.estado));
+
+  const jaTem = { ...placas, encantamento: { tipo: 'robustez' as const, nivel: 2 } };
+  for (const [nome, encantadora, peca, tipo, nivel] of [
+    ['o peitoral vestido', naEncantadora(vestido(1000), [placas, elmoGuardado]), placas, 'robustez', 2],
+    ['o elmo guardado', naEncantadora(vestido(1000), [placas, elmoGuardado]), elmoGuardado, 'vigor', 3],
+    ['troca a fortificação', naEncantadora(vestido(1000, jaTem), [jaTem]), jaTem, 'vigor', 1],
+    ['a mesma que já tem', naEncantadora(vestido(1000, jaTem), [jaTem]), jaTem, 'robustez', 2],
+    ['o mesmo tipo noutro nível', naEncantadora(vestido(1000, jaTem), [jaTem]), jaTem, 'robustez', 3],
+    ['sem ouro', naEncantadora(vestido(50), [placas]), placas, 'robustez', 1],
+    ['o ouro na conta', naEncantadora(vestido(800), [placas]), placas, 'resistencia_magica', 3],
+    ['a arma não', naEncantadora(vestido(1000), [placas]), vestido(1000).equip.arma!, 'robustez', 1],
+    ['peça que não está com o herói', naEncantadora(vestido(1000), [placas]), elmoGuardado, 'robustez', 1],
+    ['nível fora da régua', naEncantadora(vestido(5000), [placas]), placas, 'resistencia_veneno', 9],
+  ] as const) {
+    caso(`encantar: ${nome}`, 'encantar', { encantadora, peca, tipo, nivel }, (a) => E.encantar(a.encantadora, a.peca, a.tipo as EncantamentoId, a.nivel));
+  }
+}
+
 // --- totem ---
 
 const noTotem = (progresso: DungeonProgress, floor = 20) => naSalaDaMasmorra({ type: 'totem' }, guerreiro, [], { floor, progresso });
@@ -3992,6 +4121,7 @@ naSalaInterage('guilda de quem tem classe', naSalaDaCidade('guild', guerreiro), 
 naSalaInterage('NPC da cidade', naSalaDaCidade('npc'), 118);
 naSalaInterage('ponto de partida da cidade', naSalaDaCidade('start'), 119);
 naSalaInterage('a loja fecha o tutorial', { ...naSalaDaCidade('shop'), tutorial: tutorial(todosMenos('shop')) }, 120);
+naSalaInterage('encantadora (no site, a porta fechada)', naSalaDaCidade('encantadora'), 152);
 
 const bau = (o: Partial<DungeonCell>) => naSalaDaMasmorra({ type: 'treasure', isMimic: false, giveGold: false, collected: false, ...o });
 naSalaInterage('baú de ouro', bau({ giveGold: true, item: null }), 121);
@@ -4037,6 +4167,7 @@ naSalaInterageNoApp('portão com classe', naSalaDaCidade('gate', guerreiro), 148
 naSalaInterageNoApp('escada no andar 71', comGradeInteira(naSalaDaMasmorra({ type: 'stairs' }, guerreiro, [], { floor: 71 })), 149);
 naSalaInterageNoApp('evento', naSalaDoEvento('altar'), 150);
 naSalaInterageNoApp('baú com item', bau({ item: espadaNova }), 151);
+naSalaInterageNoApp('encantadora', naSalaDaCidade('encantadora'), 153);
 
 const humano = E.raceById('humano')!;
 caso('criacaoVazia: com nome', 'criacaoVazia', { nome: 'Lia' }, (a) => E.criacaoVazia(a.nome));
@@ -4449,6 +4580,36 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     simula('runas: uma de cada, em seis golpes', abrir({ ...zumbi(), hero: comRunas([tres('eletrica'), tres('fogo'), tres('gelo'), tres('vampirica')]) }), golpesSeguidos(6), { seed: 860 });
     simula('runas: quatro elétricas, o choque derruba', abrir({ ...salaCom([bicho('zumbi', { hp: 100, maxHp: 100 })]), hero: comRunas([tres('eletrica'), tres('eletrica'), tres('eletrica'), tres('eletrica')]) }), golpesSeguidos(4), { seed: 861 });
     simula('runas: a vampírica cura o herói ferido', abrir({ ...zumbi(), hero: comRunas([tres('vampirica'), tres('vampirica')], { hp: 100 }) }), golpesSeguidos(5), { seed: 862 });
+  }
+
+  // A armadura encantada (a Encantadora, só do app): o escudo do vigor, a robustez e as resistências.
+  {
+    const vestindo = (tipo: EncantamentoId, nivel: number, o: Partial<Hero> = {}): Hero => {
+      const h = forte();
+      return { ...h, ...o, equip: { ...h.equip, armadura: { ...item('placas'), equipped: true, encantamento: { tipo, nivel } } } };
+    };
+    /** A primeira semente, de `desde` em diante, em que a luta mostra o aviso. */
+    const sementeCom = (luta: LutaEmTempoReal, entradas: EntradaDaLuta[], aviso: string, desde: number): number => {
+      for (let semente = desde; semente < desde + 500; semente++) {
+        if (E.simularLuta(luta, entradas, E.seededRng(semente), () => AGORA).acontecimentos.some((a) => a.tipo === 'aviso' && a.texto === aviso)) return semente;
+      }
+      throw new Error(`nenhuma semente mostrou "${aviso}"`);
+    };
+    caso('abrirLuta: com o escudo do vigor', 'abrirLuta', { estado: salaCom([bicho('zumbi')], vestindo('vigor', 3)), chegada: E.roomArrival(null), pet: null }, (a) =>
+      E.abrirLuta(a.estado, a.chegada, a.pet as never));
+    simula('vigor: o escudo aguenta a aranha antes da vida', abrir(salaCom([bicho('aranha', { hp: 900, maxHp: 900 })], vestindo('vigor', 3)), 'N'), parado(420), { seed: 870 });
+    simula('vigor I: o escudo acaba e a vida volta a apanhar', abrir(salaCom([bicho('orc', { hp: 900, maxHp: 900, dmg: 30 })], vestindo('vigor', 1)), 'N'), parado(700), { seed: 871 });
+    const comVigor = abrir(salaCom([bicho('zumbi', { hp: 900, maxHp: 900 })], vestindo('vigor', 1)), 'N');
+    const estadoComVigor = comVigor.estado as EstadoNaMasmorra;
+    const envenenada = { ...comVigor, estado: { ...estadoComVigor, hero: { ...estadoComVigor.hero, buffs: { poisonTurns: 3, poisonDmg: 6 } } } };
+    simula('vigor: o veneno também passa pelo escudo', envenenada, parado(E.RODADA + 5), { seed: 872 });
+    simula('robustez III: o goblin bate menos', abrir(salaCom([bicho('goblin', { hp: 900, maxHp: 900 })], vestindo('robustez', 3)), 'N'), parado(420), { seed: 873 });
+    const magica = abrir(salaCom([bicho('elemental_fogo', { hp: 900, maxHp: 900 })], vestindo('resistencia_magica', 3, { mp: 60 })), 'N');
+    simula('resistência mágica III: o elemental atira e a armadura segura o dreno', magica, parado(700), {
+      seed: sementeCom(magica, parado(700), 'Sua armadura segura o dreno de mana', 874),
+    });
+    const veneno = abrir(salaCom([bicho('aranha', { hp: 900, maxHp: 900 })], vestindo('resistencia_veneno', 3)), 'N');
+    simula('resistência a veneno III: a armadura segura a aranha', veneno, parado(700), { seed: sementeCom(veneno, parado(700), 'Sua armadura segura o veneno', 875) });
   }
   simula('vitória com ouro escondido', abrir({ ...naSalaDaMasmorra({ ...umMonstro, monsters: [bicho('zumbi', { hp: 1 })], monsterIndex: 0, beaten: false, bonusTreasure: { gold: 25 } }, forte({ arma: 'espada' }), []) }), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 833 });
   simula('o chefe leva ao andar seguinte', abrir(comGradeInteira(naSalaDaMasmorra({ ...chefe, monsters: [{ ...(chefe.monsters ?? [])[0]!, hp: 1 }], monsterIndex: 0, beaten: false }, forte({ arma: 'espada' }), []))), golpe(50, { 42: { x: 0, y: 0, tocar: true } }), { seed: 834 });
