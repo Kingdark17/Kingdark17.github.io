@@ -165,7 +165,11 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   acerta as cidades gravadas antes dela; no site a porta fica fechada): a
   armadura guarda `encantamento` (`{tipo, nivel}`), e só a arena passa as
   defesas ao golpe no herói (`landHitOnHero(..., defesas)`) e ergue o escudo
-  do vigor.
+  do vigor. O esqueleto do necromante (`combat/invocacao.ts`, desde
+  2026-10-23) é do site e do app: o poder `levantar_esqueleto` (tipo
+  `invocar`) põe na equipe um companheiro marcado `invocado`, até 3 de pé e
+  fora da vaga dos recrutas; ele some no fim da luta (vitória, derrota ou
+  fuga), e o site mostra a equipe num cartão na tela da luta.
 
 - `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
   paridade exata: mesma entrada → mesmo resultado e a mesma sequência de
