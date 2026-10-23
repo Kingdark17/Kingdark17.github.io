@@ -19169,14 +19169,13 @@
           "foundFloor": 3
         },
         {
-          "uid": "placas_calca_1700000000000_24752",
-          "templateId": "placas_calca",
+          "uid": "placas_elmo_1700000000000_24752",
+          "templateId": "placas_elmo",
           "rarity": "comum",
           "stats": {
-            "defesa": 2,
-            "esquiva": -1
+            "defesa": 1
           },
-          "value": 8,
+          "value": 5,
           "equipped": false,
           "foundFloor": 3
         },
@@ -19349,13 +19348,14 @@
           "foundFloor": 3
         },
         {
-          "uid": "robe_chapeu_1700000000000_69057",
-          "templateId": "robe_chapeu",
+          "uid": "robe_calca_1700000000000_69057",
+          "templateId": "robe_calca",
           "rarity": "incomum",
           "stats": {
-            "mana": 3
+            "defesa": 1,
+            "mana": 4
           },
-          "value": 7,
+          "value": 10,
           "equipped": false,
           "foundFloor": 3
         },
@@ -19421,14 +19421,13 @@
           "foundFloor": 40
         },
         {
-          "uid": "placas_calca_1700000000000_24752",
-          "templateId": "placas_calca",
+          "uid": "placas_elmo_1700000000000_24752",
+          "templateId": "placas_elmo",
           "rarity": "comum",
           "stats": {
-            "defesa": 3,
-            "esquiva": -1
+            "defesa": 2
           },
-          "value": 8,
+          "value": 5,
           "equipped": false,
           "foundFloor": 40
         },
@@ -19603,13 +19602,14 @@
           "foundFloor": 40
         },
         {
-          "uid": "robe_chapeu_1700000000000_69057",
-          "templateId": "robe_chapeu",
+          "uid": "robe_calca_1700000000000_69057",
+          "templateId": "robe_calca",
           "rarity": "raro",
           "stats": {
-            "mana": 6
+            "defesa": 3,
+            "mana": 10
           },
-          "value": 11,
+          "value": 17,
           "equipped": false,
           "degrau": 2,
           "foundFloor": 40
@@ -19677,14 +19677,13 @@
           "foundFloor": 90
         },
         {
-          "uid": "placas_calca_1700000000000_24752",
-          "templateId": "placas_calca",
+          "uid": "placas_elmo_1700000000000_24752",
+          "templateId": "placas_elmo",
           "rarity": "comum",
           "stats": {
-            "defesa": 5,
-            "esquiva": -1
+            "defesa": 2
           },
-          "value": 10,
+          "value": 6,
           "equipped": false,
           "degrau": 2,
           "foundFloor": 90
@@ -19862,13 +19861,14 @@
           "foundFloor": 90
         },
         {
-          "uid": "robe_chapeu_1700000000000_69057",
-          "templateId": "robe_chapeu",
+          "uid": "robe_calca_1700000000000_69057",
+          "templateId": "robe_calca",
           "rarity": "raro",
           "stats": {
-            "mana": 7
+            "defesa": 4,
+            "mana": 11
           },
-          "value": 11,
+          "value": 17,
           "equipped": false,
           "degrau": 2,
           "foundFloor": 90

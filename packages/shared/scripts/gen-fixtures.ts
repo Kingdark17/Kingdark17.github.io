@@ -788,11 +788,28 @@ for (const [nome, hero] of [
   caso(`weaponAffinityPct: ${nome}`, 'weaponAffinityPct', { hero }, (a) => E.weaponAffinityPct(a.hero));
 }
 
-for (const id of [...ARMAS_IDS, 'escudo', 'couro']) {
+for (const id of [...ARMAS_IDS, 'escudo', 'grimorio', 'couro']) {
   caso(`isTwoHanded: ${id}`, 'isTwoHanded', { item: item(id) }, (a) => E.isTwoHanded(a.item));
   caso(`isOffhandEligible: ${id}`, 'isOffhandEligible', { item: item(id) }, (a) => E.isOffhandEligible(a.item));
 }
 caso('isTwoHanded: null', 'isTwoHanded', { item: null }, (a) => E.isTwoHanded(a.item));
+
+// O grimório cabe ao lado do cajado, e de nenhuma outra arma de duas mãos (AO_LADO_DO_CAJADO).
+for (const [arma, peca] of [
+  ['cajado', 'grimorio'],
+  ['cajado', 'escudo'],
+  ['cajado', 'adaga'],
+  ['arco', 'grimorio'],
+  ['machado', 'grimorio'],
+  ['espada', 'escudo'],
+  ['espada', 'grimorio'],
+  [null, 'grimorio'],
+  ['cajado', null],
+] as const) {
+  caso(`cabeNaMaoLivre: ${arma ?? 'mão vazia'} e ${peca ?? 'nada'}`, 'cabeNaMaoLivre', { arma: arma ? item(arma) : null, peca: peca ? item(peca) : null }, (a) =>
+    E.cabeNaMaoLivre(a.arma, a.peca),
+  );
+}
 
 {
   const guerreiro = heroi({ classe: 'guerreiro', arma: 'espada', attrs: { constituicao: 12 } });
@@ -825,6 +842,12 @@ caso('isTwoHanded: null', 'isTwoHanded', { item: null }, (a) => E.isTwoHanded(a.
   const comEscudo = { ...guerreiro, equip: { ...guerreiro.equip, secundaria: item('escudo') } };
   caso('equipItem: arma de duas mãos esvazia a secundária', 'equipItem', { hero: comEscudo, item: item('machado') }, (a) => E.equipItem(a.hero, a.item));
   caso('equipItem: secundária recusada com arma de duas mãos', 'equipItem', { hero: heroi({ classe: 'arqueiro' }), item: item('escudo') }, (a) => E.equipItem(a.hero, a.item));
+  const grimorio = item('grimorio', 'raro', 3);
+  const deEspadaEGrimorio = heroi({ classe: 'mago', arma: 'espada', equip: { secundaria: grimorio } });
+  caso('equipItem: o grimório ao lado do cajado', 'equipItem', { hero: heroi({ classe: 'mago' }), item: grimorio }, (a) => E.equipItem(a.hero, a.item));
+  caso('equipItem: o grimório não cabe com o arco', 'equipItem', { hero: heroi({ classe: 'arqueiro' }), item: grimorio }, (a) => E.equipItem(a.hero, a.item));
+  caso('equipItem: o cajado deixa o grimório na mão', 'equipItem', { hero: deEspadaEGrimorio, item: item('cajado') }, (a) => E.equipItem(a.hero, a.item));
+  caso('equipItem: o machado larga o grimório', 'equipItem', { hero: deEspadaEGrimorio, item: item('machado') }, (a) => E.equipItem(a.hero, a.item));
   caso('equipItem: adaga na secundária', 'equipItem', { hero: guerreiro, item: item('adaga'), requestedSlot: 'secundaria' }, (a) =>
     E.equipItem(a.hero, a.item, a.requestedSlot as 'secundaria'),
   );
@@ -896,6 +919,12 @@ caso('isTwoHanded: null', 'isTwoHanded', { item: null }, (a) => E.isTwoHanded(a.
   caso('hydrateSavedHero: arco e escudo de antes da regra das duas mãos', 'hydrateSavedHero', { hero: heroi({ classe: 'arqueiro', equip: { secundaria: item('escudo') } }) }, (a) =>
     E.hydrateSavedHero(a.hero),
   );
+  caso('hydrateSavedHero: o cajado e o grimório ficam juntos', 'hydrateSavedHero', { hero: heroi({ classe: 'necromante', equip: { secundaria: item('grimorio') } }) }, (a) =>
+    E.hydrateSavedHero(a.hero),
+  );
+  caso('hydrateSavedHero: o arco não guarda o grimório', 'hydrateSavedHero', { hero: heroi({ classe: 'arqueiro', equip: { secundaria: item('grimorio') } }) }, (a) =>
+    E.hydrateSavedHero(a.hero),
+  );
   caso('hydrateSavedHero: com classe e sem poder nenhum ganha o da classe', 'hydrateSavedHero', { hero: heroi({ classe: 'monge', extra: { powerIds: [], powerNames: [] } }) }, (a) =>
     E.hydrateSavedHero(a.hero),
   );
@@ -934,6 +963,7 @@ caso('isTwoHanded: null', 'isTwoHanded', { item: null }, (a) => E.isTwoHanded(a.
     ['Aprendiz de mão vazia vira mago', aprendiz, 'mago'],
     ['Aprendiz com espada: o cajado vai pra mochila', { ...aprendiz, equip: { ...aprendiz.equip, arma: item('espada') } }, 'mago'],
     ['Aprendiz de escudo: o machado de duas mãos vai pra mochila', { ...aprendiz, equip: { ...aprendiz.equip, secundaria: item('escudo') } }, 'barbaro'],
+    ['Aprendiz de grimório: o cajado entra na mão', { ...aprendiz, equip: { ...aprendiz.equip, secundaria: item('grimorio') } }, 'mago'],
   ] as const) {
     caso(`trainAtGuild: ${nome}`, 'trainAtGuild', { hero, cls: E.classById(classe)!, armaInicial: { now: AGORA } }, (a, { rng, now }) => trainAtGuildComArma(a.hero, a.cls, { rng, now }), {
       rng: { seed: 1 },
@@ -3464,7 +3494,9 @@ for (const peca of [espadaNova, escudo, anel, elmo, pocaoDeVida, pocaoDeMana, pe
   caso(`podeEquipar: ${peca.templateId}`, 'podeEquipar', { item: peca }, (a) => E.podeEquipar(a.item));
   caso(`podeUsar: ${peca.templateId}`, 'podeUsar', { item: peca }, (a) => E.podeUsar(a.item));
 }
-for (const peca of [escudo, adaga, espadaNova, machado, anel]) {
+const grimorioNaMochila = item('grimorio', 'incomum', 14);
+const deCajado = heroi({ classe: 'mago' });
+for (const peca of [escudo, adaga, espadaNova, machado, anel, grimorioNaMochila]) {
   caso(`aceitaMaoSecundaria: ${peca.templateId}`, 'aceitaMaoSecundaria', { item: peca }, (a) => E.aceitaMaoSecundaria(a.item));
 }
 caso('slotDoItem: a arma na mão', 'slotDoItem', { estado: enxuto(guerreiro), item: guerreiro.equip.arma }, (a) => E.slotDoItem(a.estado, a.item!));
@@ -3481,6 +3513,8 @@ naMochila('adaga pedida na secundária', 'equipar', mochilaCom(guerreiro, tudoNa
 );
 naMochila('machado de duas mãos larga o escudo', 'equipar', mochilaCom(comEscudo, tudoNaMochila), { item: machado }, (m, a) => E.equipar(m, a.item as Item));
 naMochila('escudo com as duas mãos ocupadas', 'equipar', mochilaCom(comMachado, tudoNaMochila), { item: escudo }, (m, a) => E.equipar(m, a.item as Item));
+naMochila('grimório ao lado do cajado', 'equipar', mochilaCom(deCajado, [grimorioNaMochila, escudo]), { item: grimorioNaMochila }, (m, a) => E.equipar(m, a.item as Item));
+naMochila('escudo com o cajado nas duas mãos', 'equipar', mochilaCom(deCajado, [grimorioNaMochila, escudo]), { item: escudo }, (m, a) => E.equipar(m, a.item as Item));
 naMochila('poção não vai', 'equipar', mochilaCom(guerreiro, tudoNaMochila), { item: pocaoDeVida }, (m, a) => E.equipar(m, a.item as Item));
 naMochila('arma inicial fora da mochila volta pra ela', 'equipar', mochilaCom(guerreiro, [machado]), { item: machado }, (m, a) => E.equipar(m, a.item as Item));
 naMochila('elmo e anel', 'equipar', mochilaCom(guerreiro, tudoNaMochila), { item: anel }, (m, a) => E.equipar(m, a.item as Item));
@@ -3499,6 +3533,8 @@ for (const [nome, hero, peca] of [
   ['anel com machado na mão', comMachado, anel],
   ['escudo com espada na mão', guerreiro, escudo],
   ['o próprio machado', comMachado, machado],
+  ['grimório com o cajado na mão', deCajado, grimorioNaMochila],
+  ['grimório com machado na mão', comMachado, grimorioNaMochila],
 ] as const) {
   caso(`armaQueOcupaAsMaos: ${nome}`, 'armaQueOcupaAsMaos', { estado: enxuto(hero), item: peca }, (a) => E.armaQueOcupaAsMaos(a.estado, a.item));
 }

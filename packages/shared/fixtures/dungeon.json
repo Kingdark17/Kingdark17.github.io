@@ -10821,12 +10821,12 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "amuleto_sab_1700000000000_12378",
-                "templateId": "amuleto_sab",
+                "uid": "anel_som_1700000000000_12378",
+                "templateId": "anel_som",
                 "rarity": "incomum",
                 "stats": {
-                  "mana": 8,
-                  "vida": 5
+                  "critico": 7,
+                  "esquiva": 3
                 },
                 "value": 26,
                 "equipped": false
@@ -11611,14 +11611,14 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "robe_1700000000000_94881",
-                "templateId": "robe",
+                "uid": "placas_calca_1700000000000_94881",
+                "templateId": "placas_calca",
                 "rarity": "lendario",
                 "stats": {
-                  "defesa": 3,
-                  "mana": 15
+                  "defesa": 6,
+                  "esquiva": -3
                 },
-                "value": 39,
+                "value": 24,
                 "equipped": false,
                 "foundFloor": 3
               },
@@ -12025,14 +12025,14 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "placas_1700000000000_9311",
-                "templateId": "placas",
+                "uid": "couro_1700000000000_9311",
+                "templateId": "couro",
                 "rarity": "incomum",
                 "stats": {
-                  "defesa": 5,
-                  "esquiva": -1
+                  "defesa": 4,
+                  "velocidade": 1
                 },
-                "value": 22,
+                "value": 29,
                 "equipped": false,
                 "foundFloor": 4
               },
@@ -13692,14 +13692,14 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "colar_forca_1700000000000_7299",
-                "templateId": "colar_forca",
+                "uid": "bota_vento_1700000000000_7299",
+                "templateId": "bota_vento",
                 "rarity": "epico",
                 "stats": {
-                  "ataque": 4,
-                  "vida": 20
+                  "velocidade": 8,
+                  "esquiva": 2
                 },
-                "value": 48,
+                "value": 40,
                 "equipped": false,
                 "foundFloor": 7
               },
@@ -18700,13 +18700,14 @@
                   "side": "W",
                   "used": false,
                   "secretItem": {
-                    "uid": "placas_elmo_1700000000000_97928",
-                    "templateId": "placas_elmo",
+                    "uid": "placas_1700000000000_97928",
+                    "templateId": "placas",
                     "rarity": "raro",
                     "stats": {
-                      "defesa": 4
+                      "defesa": 12,
+                      "esquiva": -2
                     },
-                    "value": 9,
+                    "value": 29,
                     "equipped": false,
                     "foundFloor": 60
                   },
@@ -23138,14 +23139,13 @@
                   "side": "N",
                   "used": false,
                   "secretItem": {
-                    "uid": "placas_calca_1700000000000_14736",
-                    "templateId": "placas_calca",
+                    "uid": "placas_elmo_1700000000000_14736",
+                    "templateId": "placas_elmo",
                     "rarity": "lendario",
                     "stats": {
-                      "defesa": 7,
-                      "esquiva": -3
+                      "defesa": 3
                     },
-                    "value": 24,
+                    "value": 15,
                     "equipped": false,
                     "foundFloor": 8
                   },
@@ -25763,17 +25763,15 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "violao_1700000000000_79390",
-                "templateId": "violao",
+                "uid": "escudo_1700000000000_79390",
+                "templateId": "escudo",
                 "rarity": "incomum",
                 "stats": {
-                  "ataque": 9,
-                  "critico": 18,
-                  "esquiva": 5
+                  "defesa": 14,
+                  "velocidade": -1
                 },
-                "value": 37,
+                "value": 39,
                 "equipped": false,
-                "procChance": 0.165,
                 "degrau": 2,
                 "foundFloor": 60
               },

@@ -6074,6 +6074,48 @@
     }
   },
   {
+    "name": "isTwoHanded: grimorio",
+    "input": {
+      "fn": "isTwoHanded",
+      "args": {
+        "item": {
+          "uid": "grimorio_1700000000000_62706",
+          "templateId": "grimorio",
+          "rarity": "comum",
+          "stats": {
+            "mana": 8
+          },
+          "value": 22,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "isOffhandEligible: grimorio",
+    "input": {
+      "fn": "isOffhandEligible",
+      "args": {
+        "item": {
+          "uid": "grimorio_1700000000000_62706",
+          "templateId": "grimorio",
+          "rarity": "comum",
+          "stats": {
+            "mana": 8
+          },
+          "value": 22,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
     "name": "isTwoHanded: couro",
     "input": {
       "fn": "isTwoHanded",
@@ -6127,6 +6169,285 @@
     },
     "expected": {
       "result": false
+    }
+  },
+  {
+    "name": "cabeNaMaoLivre: cajado e grimorio",
+    "input": {
+      "fn": "cabeNaMaoLivre",
+      "args": {
+        "arma": {
+          "uid": "cajado_1700000000000_62706",
+          "templateId": "cajado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "mana": 8
+          },
+          "value": 24,
+          "equipped": false,
+          "procChance": 0.1
+        },
+        "peca": {
+          "uid": "grimorio_1700000000000_62706",
+          "templateId": "grimorio",
+          "rarity": "comum",
+          "stats": {
+            "mana": 8
+          },
+          "value": 22,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cabeNaMaoLivre: cajado e escudo",
+    "input": {
+      "fn": "cabeNaMaoLivre",
+      "args": {
+        "arma": {
+          "uid": "cajado_1700000000000_62706",
+          "templateId": "cajado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "mana": 8
+          },
+          "value": 24,
+          "equipped": false,
+          "procChance": 0.1
+        },
+        "peca": {
+          "uid": "escudo_1700000000000_62706",
+          "templateId": "escudo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 5,
+            "velocidade": -1
+          },
+          "value": 24,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cabeNaMaoLivre: cajado e adaga",
+    "input": {
+      "fn": "cabeNaMaoLivre",
+      "args": {
+        "arma": {
+          "uid": "cajado_1700000000000_62706",
+          "templateId": "cajado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "mana": 8
+          },
+          "value": 24,
+          "equipped": false,
+          "procChance": 0.1
+        },
+        "peca": {
+          "uid": "adaga_1700000000000_62706",
+          "templateId": "adaga",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "critico": 8
+          },
+          "value": 20,
+          "equipped": false,
+          "procChance": 0.15
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cabeNaMaoLivre: arco e grimorio",
+    "input": {
+      "fn": "cabeNaMaoLivre",
+      "args": {
+        "arma": {
+          "uid": "arco_1700000000000_62706",
+          "templateId": "arco",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4,
+            "esquiva": 2,
+            "critico": 6
+          },
+          "value": 24,
+          "equipped": false
+        },
+        "peca": {
+          "uid": "grimorio_1700000000000_62706",
+          "templateId": "grimorio",
+          "rarity": "comum",
+          "stats": {
+            "mana": 8
+          },
+          "value": 22,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cabeNaMaoLivre: machado e grimorio",
+    "input": {
+      "fn": "cabeNaMaoLivre",
+      "args": {
+        "arma": {
+          "uid": "machado_1700000000000_62706",
+          "templateId": "machado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "velocidade": -1
+          },
+          "value": 26,
+          "equipped": false,
+          "procChance": 0.12
+        },
+        "peca": {
+          "uid": "grimorio_1700000000000_62706",
+          "templateId": "grimorio",
+          "rarity": "comum",
+          "stats": {
+            "mana": 8
+          },
+          "value": 22,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cabeNaMaoLivre: espada e escudo",
+    "input": {
+      "fn": "cabeNaMaoLivre",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_62706",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "peca": {
+          "uid": "escudo_1700000000000_62706",
+          "templateId": "escudo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 5,
+            "velocidade": -1
+          },
+          "value": 24,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cabeNaMaoLivre: espada e grimorio",
+    "input": {
+      "fn": "cabeNaMaoLivre",
+      "args": {
+        "arma": {
+          "uid": "espada_1700000000000_62706",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "peca": {
+          "uid": "grimorio_1700000000000_62706",
+          "templateId": "grimorio",
+          "rarity": "comum",
+          "stats": {
+            "mana": 8
+          },
+          "value": 22,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cabeNaMaoLivre: mão vazia e grimorio",
+    "input": {
+      "fn": "cabeNaMaoLivre",
+      "args": {
+        "arma": null,
+        "peca": {
+          "uid": "grimorio_1700000000000_62706",
+          "templateId": "grimorio",
+          "rarity": "comum",
+          "stats": {
+            "mana": 8
+          },
+          "value": 22,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cabeNaMaoLivre: cajado e nada",
+    "input": {
+      "fn": "cabeNaMaoLivre",
+      "args": {
+        "arma": {
+          "uid": "cajado_1700000000000_62706",
+          "templateId": "cajado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "mana": 8
+          },
+          "value": 24,
+          "equipped": false,
+          "procChance": 0.1
+        },
+        "peca": null
+      }
+    },
+    "expected": {
+      "result": true
     }
   },
   {
@@ -8890,6 +9211,697 @@
     }
   },
   {
+    "name": "equipItem: o grimório ao lado do cajado",
+    "input": {
+      "fn": "equipItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "classId": "mago",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 70,
+          "mp": 70,
+          "buffs": {}
+        },
+        "item": {
+          "uid": "grimorio_1700000000000_72021",
+          "templateId": "grimorio",
+          "rarity": "raro",
+          "stats": {
+            "mana": 14
+          },
+          "value": 37,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": {
+              "uid": "grimorio_1700000000000_72021",
+              "templateId": "grimorio",
+              "rarity": "raro",
+              "stats": {
+                "mana": 14
+              },
+              "value": 37,
+              "equipped": true
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "classId": "mago",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 84,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 84,
+          "mp": 84,
+          "buffs": {}
+        },
+        "equipped": true
+      }
+    }
+  },
+  {
+    "name": "equipItem: o grimório não cabe com o arco",
+    "input": {
+      "fn": "equipItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Arqueiro",
+          "classIcon": "🏹",
+          "classId": "arqueiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "item": {
+          "uid": "grimorio_1700000000000_72021",
+          "templateId": "grimorio",
+          "rarity": "raro",
+          "stats": {
+            "mana": 14
+          },
+          "value": 37,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Arqueiro",
+          "classIcon": "🏹",
+          "classId": "arqueiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "equipped": false,
+        "reason": "two_handed_weapon"
+      }
+    }
+  },
+  {
+    "name": "equipItem: o cajado deixa o grimório na mão",
+    "input": {
+      "fn": "equipItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_62706",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.15
+            },
+            "secundaria": {
+              "uid": "grimorio_1700000000000_72021",
+              "templateId": "grimorio",
+              "rarity": "raro",
+              "stats": {
+                "mana": 14
+              },
+              "value": 37,
+              "equipped": false
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "classId": "mago",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 76,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 76,
+          "mp": 76,
+          "buffs": {}
+        },
+        "item": {
+          "uid": "cajado_1700000000000_62706",
+          "templateId": "cajado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "mana": 8
+          },
+          "value": 24,
+          "equipped": false,
+          "procChance": 0.1
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": true,
+              "procChance": 0.1
+            },
+            "secundaria": {
+              "uid": "grimorio_1700000000000_72021",
+              "templateId": "grimorio",
+              "rarity": "raro",
+              "stats": {
+                "mana": 14
+              },
+              "value": 37,
+              "equipped": false
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "classId": "mago",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 84,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 84,
+          "mp": 84,
+          "buffs": {}
+        },
+        "equipped": true
+      }
+    }
+  },
+  {
+    "name": "equipItem: o machado larga o grimório",
+    "input": {
+      "fn": "equipItem",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "espada_1700000000000_62706",
+              "templateId": "espada",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4
+              },
+              "value": 22,
+              "equipped": false,
+              "procChance": 0.15
+            },
+            "secundaria": {
+              "uid": "grimorio_1700000000000_72021",
+              "templateId": "grimorio",
+              "rarity": "raro",
+              "stats": {
+                "mana": 14
+              },
+              "value": 37,
+              "equipped": false
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "classId": "mago",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 76,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 76,
+          "mp": 76,
+          "buffs": {}
+        },
+        "item": {
+          "uid": "machado_1700000000000_62706",
+          "templateId": "machado",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "velocidade": -1
+          },
+          "value": 26,
+          "equipped": false,
+          "procChance": 0.12
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": true,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "classId": "mago",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "equipped": true
+      }
+    }
+  },
+  {
     "name": "equipItem: adaga na secundária",
     "input": {
       "fn": "equipItem",
@@ -11543,6 +12555,341 @@
     }
   },
   {
+    "name": "hydrateSavedHero: o cajado e o grimório ficam juntos",
+    "input": {
+      "fn": "hydrateSavedHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": {
+              "uid": "grimorio_1700000000000_62706",
+              "templateId": "grimorio",
+              "rarity": "comum",
+              "stats": {
+                "mana": 8
+              },
+              "value": 22,
+              "equipped": false
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 78,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 78,
+          "mp": 78,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "level": 1,
+        "attrs": {
+          "forca": 10,
+          "destreza": 10,
+          "constituicao": 10,
+          "intelecto": 10,
+          "sabedoria": 10,
+          "carisma": 10
+        },
+        "equip": {
+          "arma": {
+            "uid": "cajado_1700000000000_62706",
+            "templateId": "cajado",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 3,
+              "mana": 8
+            },
+            "value": 24,
+            "equipped": false,
+            "procChance": 0.1
+          },
+          "secundaria": {
+            "uid": "grimorio_1700000000000_62706",
+            "templateId": "grimorio",
+            "rarity": "comum",
+            "stats": {
+              "mana": 8
+            },
+            "value": 22,
+            "equipped": false
+          },
+          "elmo": null,
+          "armadura": null,
+          "calca": null,
+          "botas": null,
+          "acessorio": null
+        },
+        "name": "Teste",
+        "race": "Humano",
+        "raceIcon": "🧑",
+        "className": "Necromante",
+        "classIcon": "☠️",
+        "classId": "necromante",
+        "raceId": "humano",
+        "xp": 0,
+        "xpNext": 40,
+        "attrPoints": 0,
+        "gold": 100,
+        "powerNames": [
+          "Maldição Sombria"
+        ],
+        "powerIds": [
+          "maldicao_sombria"
+        ],
+        "debuff": {
+          "id": "orgulhoso",
+          "name": "Orgulhoso",
+          "icon": "👑",
+          "desc": "-1 Carisma em negociações com autoridades.",
+          "attr": "carisma"
+        },
+        "killCount": 0,
+        "masteryBattles": 0,
+        "derived": {
+          "maxHp": 125,
+          "maxMp": 78,
+          "dmgFisico": 20,
+          "dmgMagico": 30,
+          "esquiva": 5,
+          "critico": 10,
+          "velocidade": 10,
+          "curaBonus": 10,
+          "resistMagica": 10,
+          "descontoLoja": 5
+        },
+        "maxHp": 125,
+        "hp": 125,
+        "maxMp": 78,
+        "mp": 78,
+        "buffs": {}
+      }
+    }
+  },
+  {
+    "name": "hydrateSavedHero: o arco não guarda o grimório",
+    "input": {
+      "fn": "hydrateSavedHero",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": {
+              "uid": "grimorio_1700000000000_62706",
+              "templateId": "grimorio",
+              "rarity": "comum",
+              "stats": {
+                "mana": 8
+              },
+              "value": 22,
+              "equipped": false
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Arqueiro",
+          "classIcon": "🏹",
+          "classId": "arqueiro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 70,
+          "mp": 70,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "level": 1,
+        "attrs": {
+          "forca": 10,
+          "destreza": 10,
+          "constituicao": 10,
+          "intelecto": 10,
+          "sabedoria": 10,
+          "carisma": 10
+        },
+        "equip": {
+          "arma": {
+            "uid": "arco_1700000000000_62706",
+            "templateId": "arco",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4,
+              "esquiva": 2,
+              "critico": 6
+            },
+            "value": 24,
+            "equipped": false
+          },
+          "secundaria": null,
+          "elmo": null,
+          "armadura": null,
+          "calca": null,
+          "botas": null,
+          "acessorio": null
+        },
+        "name": "Teste",
+        "race": "Humano",
+        "raceIcon": "🧑",
+        "className": "Arqueiro",
+        "classIcon": "🏹",
+        "classId": "arqueiro",
+        "raceId": "humano",
+        "xp": 0,
+        "xpNext": 40,
+        "attrPoints": 0,
+        "gold": 100,
+        "powerNames": [
+          "Tiro Certeiro"
+        ],
+        "powerIds": [
+          "tiro_certeiro"
+        ],
+        "debuff": {
+          "id": "orgulhoso",
+          "name": "Orgulhoso",
+          "icon": "👑",
+          "desc": "-1 Carisma em negociações com autoridades.",
+          "attr": "carisma"
+        },
+        "killCount": 0,
+        "masteryBattles": 0,
+        "derived": {
+          "maxHp": 125,
+          "maxMp": 62,
+          "dmgFisico": 20,
+          "dmgMagico": 30,
+          "esquiva": 7,
+          "critico": 10,
+          "velocidade": 10,
+          "curaBonus": 10,
+          "resistMagica": 10,
+          "descontoLoja": 5
+        },
+        "maxHp": 125,
+        "hp": 125,
+        "maxMp": 62,
+        "mp": 62,
+        "buffs": {}
+      }
+    }
+  },
+  {
     "name": "hydrateSavedHero: com classe e sem poder nenhum ganha o da classe",
     "input": {
       "fn": "hydrateSavedHero",
@@ -12956,6 +14303,198 @@
           "equipped": false,
           "procChance": 0.12
         }
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "trainAtGuild: Aprendiz de grimório: o cajado entra na mão",
+    "input": {
+      "fn": "trainAtGuild",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 9,
+            "destreza": 9,
+            "constituicao": 9,
+            "intelecto": 9,
+            "sabedoria": 9,
+            "carisma": 8
+          },
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "uid": "grimorio_1700000000000_62706",
+              "templateId": "grimorio",
+              "rarity": "comum",
+              "stats": {
+                "mana": 8
+              },
+              "value": 22,
+              "equipped": false
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Novo",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Aprendiz",
+          "classIcon": "🎒",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 43,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 115,
+            "maxMp": 57,
+            "dmgFisico": 18,
+            "dmgMagico": 27,
+            "esquiva": 4.5,
+            "critico": 9.5,
+            "velocidade": 9,
+            "curaBonus": 9,
+            "resistMagica": 9,
+            "descontoLoja": 4
+          },
+          "maxHp": 115,
+          "hp": 115,
+          "maxMp": 57,
+          "mp": 57
+        },
+        "cls": {
+          "id": "mago",
+          "name": "Mago",
+          "icon": "🧙",
+          "weaponTemplate": "cajado",
+          "bias": {
+            "intelecto": 3,
+            "sabedoria": 1
+          },
+          "desc": "Magias ofensivas e controle de mana.",
+          "signatureId": "bola_de_fogo",
+          "affinity": {
+            "cajado": 100,
+            "maca": 55,
+            "adaga": 45,
+            "arco": 40,
+            "espada": 30,
+            "machado": 20,
+            "marreta": 20,
+            "violao": 30
+          },
+          "ataquePrincipal": "magico"
+        },
+        "armaInicial": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 9,
+            "destreza": 9,
+            "constituicao": 9,
+            "intelecto": 12,
+            "sabedoria": 10,
+            "carisma": 8
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": true,
+              "procChance": 0.1
+            },
+            "secundaria": {
+              "uid": "grimorio_1700000000000_62706",
+              "templateId": "grimorio",
+              "rarity": "comum",
+              "stats": {
+                "mana": 8
+              },
+              "value": 22,
+              "equipped": false
+            },
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Novo",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 43,
+          "powerNames": [
+            "Bola de Fogo"
+          ],
+          "powerIds": [
+            "bola_de_fogo"
+          ],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 115,
+            "maxMp": 88,
+            "dmgFisico": 18,
+            "dmgMagico": 36,
+            "esquiva": 4.5,
+            "critico": 9.5,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 4
+          },
+          "maxHp": 115,
+          "hp": 115,
+          "maxMp": 88,
+          "mp": 88,
+          "classId": "mago"
+        },
+        "toInventory": null
       },
       "rngCalls": 1
     }

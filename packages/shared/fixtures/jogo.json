@@ -8678,14 +8678,14 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "robe_1700000000000_94881",
-                "templateId": "robe",
+                "uid": "placas_calca_1700000000000_94881",
+                "templateId": "placas_calca",
                 "rarity": "lendario",
                 "stats": {
-                  "defesa": 3,
-                  "mana": 15
+                  "defesa": 6,
+                  "esquiva": -3
                 },
-                "value": 39,
+                "value": 24,
                 "equipped": false,
                 "foundFloor": 3
               },
@@ -9888,14 +9888,14 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "placas_1700000000000_54768",
-                "templateId": "placas",
+                "uid": "couro_1700000000000_54768",
+                "templateId": "couro",
                 "rarity": "comum",
                 "stats": {
-                  "defesa": 4,
-                  "esquiva": -1
+                  "defesa": 3,
+                  "velocidade": 1
                 },
-                "value": 17,
+                "value": 22,
                 "equipped": false
               },
               "collected": false,
@@ -11753,13 +11753,14 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "placas_elmo_1700000000000_19012",
-                "templateId": "placas_elmo",
+                "uid": "placas_1700000000000_19012",
+                "templateId": "placas",
                 "rarity": "comum",
                 "stats": {
-                  "defesa": 1
+                  "defesa": 4,
+                  "esquiva": -1
                 },
-                "value": 5,
+                "value": 17,
                 "equipped": false
               },
               "collected": false,
@@ -19951,13 +19952,14 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pot_vida_1700000000000_68359",
-                "templateId": "pot_vida",
+                "uid": "colar_forca_1700000000000_68359",
+                "templateId": "colar_forca",
                 "rarity": "comum",
                 "stats": {
-                  "cura": 22
+                  "ataque": 2,
+                  "vida": 8
                 },
-                "value": 14,
+                "value": 22,
                 "equipped": false
               },
               "collected": false,
@@ -30062,14 +30064,13 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "escudo_1700000000000_34609",
-                "templateId": "escudo",
+                "uid": "grimorio_1700000000000_34609",
+                "templateId": "grimorio",
                 "rarity": "comum",
                 "stats": {
-                  "defesa": 7,
-                  "velocidade": -1
+                  "mana": 11
                 },
-                "value": 24,
+                "value": 22,
                 "equipped": false,
                 "foundFloor": 30
               },
@@ -35272,13 +35273,14 @@
                 "isMimic": false,
                 "giveGold": false,
                 "item": {
-                  "uid": "placas_elmo_1700000000000_57033",
-                  "templateId": "placas_elmo",
+                  "uid": "placas_1700000000000_57033",
+                  "templateId": "placas",
                   "rarity": "incomum",
                   "stats": {
-                    "defesa": 1
+                    "defesa": 5,
+                    "esquiva": -1
                   },
-                  "value": 7,
+                  "value": 22,
                   "equipped": false,
                   "foundFloor": 2
                 },
@@ -38739,14 +38741,14 @@
                 "isMimic": false,
                 "giveGold": false,
                 "item": {
-                  "uid": "placas_1700000000000_83176",
-                  "templateId": "placas",
+                  "uid": "couro_1700000000000_83176",
+                  "templateId": "couro",
                   "rarity": "comum",
                   "stats": {
-                    "defesa": 4,
-                    "esquiva": -1
+                    "defesa": 3,
+                    "velocidade": 1
                   },
-                  "value": 17,
+                  "value": 22,
                   "equipped": false,
                   "foundFloor": 6
                 },
@@ -77931,14 +77933,14 @@
                 "isMimic": false,
                 "giveGold": false,
                 "item": {
-                  "uid": "placas_1700000000000_85466",
-                  "templateId": "placas",
+                  "uid": "couro_1700000000000_85466",
+                  "templateId": "couro",
                   "rarity": "comum",
                   "stats": {
-                    "defesa": 6,
-                    "esquiva": -1
+                    "defesa": 4,
+                    "velocidade": 1
                   },
-                  "value": 17,
+                  "value": 22,
                   "equipped": false,
                   "foundFloor": 33
                 },
@@ -102936,6 +102938,27 @@
     }
   },
   {
+    "name": "aceitaMaoSecundaria: grimorio",
+    "input": {
+      "fn": "aceitaMaoSecundaria",
+      "args": {
+        "item": {
+          "uid": "grimorio_1700000000000_44795",
+          "templateId": "grimorio",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 10
+          },
+          "value": 29,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
     "name": "slotDoItem: a arma na mão",
     "input": {
       "fn": "slotDoItem",
@@ -105580,6 +105603,600 @@
         },
         "log": [
           "Suas duas mãos estão ocupadas com Machado de Guerra Incomum."
+        ]
+      }
+    }
+  },
+  {
+    "name": "equipar: grimório ao lado do cajado",
+    "input": {
+      "fn": "equipar",
+      "args": {
+        "mochila": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 70,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 70,
+              "mp": 70,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "grimorio_1700000000000_44795",
+                "templateId": "grimorio",
+                "rarity": "incomum",
+                "stats": {
+                  "mana": 10
+                },
+                "value": 29,
+                "equipped": false
+              },
+              {
+                "uid": "escudo_1700000000000_68976",
+                "templateId": "escudo",
+                "rarity": "comum",
+                "stats": {
+                  "defesa": 5,
+                  "velocidade": -1
+                },
+                "value": 24,
+                "equipped": false
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "start",
+                  "x": 3,
+                  "y": 3,
+                  "doors": {
+                    "N": true,
+                    "W": true,
+                    "E": true,
+                    "S": true
+                  },
+                  "visited": true,
+                  "revealed": true
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "item": {
+          "uid": "grimorio_1700000000000_44795",
+          "templateId": "grimorio",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 10
+          },
+          "value": 29,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "cajado_1700000000000_62706",
+                "templateId": "cajado",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 3,
+                  "mana": 8
+                },
+                "value": 24,
+                "equipped": false,
+                "procChance": 0.1
+              },
+              "secundaria": {
+                "uid": "grimorio_1700000000000_44795",
+                "templateId": "grimorio",
+                "rarity": "incomum",
+                "stats": {
+                  "mana": 10
+                },
+                "value": 29,
+                "equipped": true
+              },
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 80,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 80,
+            "mp": 80,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "grimorio_1700000000000_44795",
+              "templateId": "grimorio",
+              "rarity": "incomum",
+              "stats": {
+                "mana": 10
+              },
+              "value": 29,
+              "equipped": true
+            },
+            {
+              "uid": "escudo_1700000000000_68976",
+              "templateId": "escudo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 5,
+                "velocidade": -1
+              },
+              "value": 24,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "Você equipa Grimório Incomum na mão secundária."
+        ]
+      }
+    }
+  },
+  {
+    "name": "equipar: escudo com o cajado nas duas mãos",
+    "input": {
+      "fn": "equipar",
+      "args": {
+        "mochila": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 70,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 70,
+              "mp": 70,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "grimorio_1700000000000_44795",
+                "templateId": "grimorio",
+                "rarity": "incomum",
+                "stats": {
+                  "mana": 10
+                },
+                "value": 29,
+                "equipped": false
+              },
+              {
+                "uid": "escudo_1700000000000_68976",
+                "templateId": "escudo",
+                "rarity": "comum",
+                "stats": {
+                  "defesa": 5,
+                  "velocidade": -1
+                },
+                "value": 24,
+                "equipped": false
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "start",
+                  "x": 3,
+                  "y": 3,
+                  "doors": {
+                    "N": true,
+                    "W": true,
+                    "E": true,
+                    "S": true
+                  },
+                  "visited": true,
+                  "revealed": true
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "item": {
+          "uid": "escudo_1700000000000_68976",
+          "templateId": "escudo",
+          "rarity": "comum",
+          "stats": {
+            "defesa": 5,
+            "velocidade": -1
+          },
+          "value": 24,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "cajado_1700000000000_62706",
+                "templateId": "cajado",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 3,
+                  "mana": 8
+                },
+                "value": 24,
+                "equipped": false,
+                "procChance": 0.1
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 70,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 70,
+            "mp": 70,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "grimorio_1700000000000_44795",
+              "templateId": "grimorio",
+              "rarity": "incomum",
+              "stats": {
+                "mana": 10
+              },
+              "value": 29,
+              "equipped": false
+            },
+            {
+              "uid": "escudo_1700000000000_68976",
+              "templateId": "escudo",
+              "rarity": "comum",
+              "stats": {
+                "defesa": 5,
+                "velocidade": -1
+              },
+              "value": 24,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "Suas duas mãos estão ocupadas com Cajado Arcano."
         ]
       }
     }
@@ -109126,6 +109743,301 @@
     },
     "expected": {
       "result": null
+    }
+  },
+  {
+    "name": "armaQueOcupaAsMaos: grimório com o cajado na mão",
+    "input": {
+      "fn": "armaQueOcupaAsMaos",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "cajado_1700000000000_62706",
+                "templateId": "cajado",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 3,
+                  "mana": 8
+                },
+                "value": 24,
+                "equipped": false,
+                "procChance": 0.1
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 70,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 70,
+            "mp": 70,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "pot_vida_1700000000000_62706",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "item": {
+          "uid": "grimorio_1700000000000_44795",
+          "templateId": "grimorio",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 10
+          },
+          "value": 29,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "armaQueOcupaAsMaos: grimório com machado na mão",
+    "input": {
+      "fn": "armaQueOcupaAsMaos",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "machado_1700000000000_52574",
+                "templateId": "machado",
+                "rarity": "incomum",
+                "stats": {
+                  "ataque": 8,
+                  "velocidade": -1
+                },
+                "value": 34,
+                "equipped": false,
+                "procChance": 0.135
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 9,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "pot_vida_1700000000000_62706",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "item": {
+          "uid": "grimorio_1700000000000_44795",
+          "templateId": "grimorio",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 10
+          },
+          "value": 29,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "machado_1700000000000_52574",
+        "templateId": "machado",
+        "rarity": "incomum",
+        "stats": {
+          "ataque": 8,
+          "velocidade": -1
+        },
+        "value": 34,
+        "equipped": false,
+        "procChance": 0.135
+      }
     }
   },
   {
@@ -126188,14 +127100,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -126236,14 +127147,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -126271,14 +127181,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -126319,14 +127228,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -126464,34 +127372,31 @@
                     "equipped": false
                   },
                   {
-                    "uid": "placas_calca_1700000000000_63301",
-                    "templateId": "placas_calca",
+                    "uid": "placas_elmo_1700000000000_63301",
+                    "templateId": "placas_elmo",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 2,
-                      "esquiva": -1
+                      "defesa": 1
                     },
-                    "value": 8,
+                    "value": 5,
                     "equipped": false
                   },
                   {
-                    "uid": "couro_1700000000000_75992",
-                    "templateId": "couro",
+                    "uid": "grimorio_1700000000000_75992",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 4,
-                      "velocidade": 1
+                      "mana": 10
                     },
                     "value": 29,
                     "equipped": false
                   },
                   {
-                    "uid": "couro_1700000000000_88258",
-                    "templateId": "couro",
+                    "uid": "grimorio_1700000000000_88258",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 4,
-                      "velocidade": 1
+                      "mana": 10
                     },
                     "value": 29,
                     "equipped": false
@@ -126543,34 +127448,31 @@
                     "equipped": false
                   },
                   {
-                    "uid": "placas_calca_1700000000000_63301",
-                    "templateId": "placas_calca",
+                    "uid": "placas_elmo_1700000000000_63301",
+                    "templateId": "placas_elmo",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 2,
-                      "esquiva": -1
+                      "defesa": 1
                     },
-                    "value": 8,
+                    "value": 5,
                     "equipped": false
                   },
                   {
-                    "uid": "couro_1700000000000_75992",
-                    "templateId": "couro",
+                    "uid": "grimorio_1700000000000_75992",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 4,
-                      "velocidade": 1
+                      "mana": 10
                     },
                     "value": 29,
                     "equipped": false
                   },
                   {
-                    "uid": "couro_1700000000000_88258",
-                    "templateId": "couro",
+                    "uid": "grimorio_1700000000000_88258",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 4,
-                      "velocidade": 1
+                      "mana": 10
                     },
                     "value": 29,
                     "equipped": false
@@ -126823,14 +127725,14 @@
                     "foundFloor": 80
                   },
                   {
-                    "uid": "placas_1700000000000_2518",
-                    "templateId": "placas",
+                    "uid": "couro_1700000000000_2518",
+                    "templateId": "couro",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 7,
-                      "esquiva": -1
+                      "defesa": 5,
+                      "velocidade": 2
                     },
-                    "value": 17,
+                    "value": 22,
                     "equipped": false,
                     "foundFloor": 80
                   },
@@ -126911,14 +127813,14 @@
                     "foundFloor": 80
                   },
                   {
-                    "uid": "placas_1700000000000_2518",
-                    "templateId": "placas",
+                    "uid": "couro_1700000000000_2518",
+                    "templateId": "couro",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 7,
-                      "esquiva": -1
+                      "defesa": 5,
+                      "velocidade": 2
                     },
-                    "value": 17,
+                    "value": 22,
                     "equipped": false,
                     "foundFloor": 80
                   },
@@ -128126,13 +129028,14 @@
                     "foundFloor": 80
                   },
                   {
-                    "uid": "placas_elmo_1700000000000_12927",
-                    "templateId": "placas_elmo",
+                    "uid": "placas_1700000000000_12927",
+                    "templateId": "placas",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 2
+                      "defesa": 9,
+                      "esquiva": -1
                     },
-                    "value": 7,
+                    "value": 22,
                     "equipped": false,
                     "foundFloor": 80
                   },
@@ -128214,13 +129117,14 @@
                     "foundFloor": 80
                   },
                   {
-                    "uid": "placas_elmo_1700000000000_12927",
-                    "templateId": "placas_elmo",
+                    "uid": "placas_1700000000000_12927",
+                    "templateId": "placas",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 2
+                      "defesa": 9,
+                      "esquiva": -1
                     },
-                    "value": 7,
+                    "value": 22,
                     "equipped": false,
                     "foundFloor": 80
                   },
@@ -128390,14 +129294,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -128438,14 +129341,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -128473,14 +129375,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -128521,14 +129422,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -128684,14 +129584,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -128732,14 +129631,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -128767,14 +129665,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -128815,14 +129712,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -128975,14 +129871,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -129023,14 +129918,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -129058,14 +129952,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -129106,14 +129999,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -129269,14 +130161,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -129317,14 +130208,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -129352,14 +130242,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -129400,14 +130289,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -129560,14 +130448,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -129608,14 +130495,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -129643,14 +130529,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -129691,14 +130576,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -129854,14 +130738,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -129902,14 +130785,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -129937,14 +130819,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -129985,14 +130866,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -130145,14 +131025,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -130193,14 +131072,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -130228,14 +131106,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -130276,14 +131153,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -130446,14 +131322,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -130494,14 +131369,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -130529,14 +131403,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -130577,14 +131450,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -130737,14 +131609,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -130785,14 +131656,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -130820,14 +131690,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -130868,14 +131737,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -131038,14 +131906,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -131086,14 +131953,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -131121,14 +131987,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -131169,14 +132034,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -131313,14 +132177,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -131361,14 +132224,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -131396,14 +132258,13 @@
                   },
                   "forSale": [
                     {
-                      "uid": "escudo_1700000000000_7386",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_7386",
+                      "templateId": "grimorio",
                       "rarity": "comum",
                       "stats": {
-                        "defesa": 5,
-                        "velocidade": -1
+                        "mana": 8
                       },
-                      "value": 24,
+                      "value": 22,
                       "equipped": false
                     },
                     {
@@ -131444,14 +132305,13 @@
                       "procChance": 0.15
                     },
                     {
-                      "uid": "escudo_1700000000000_32068",
-                      "templateId": "escudo",
+                      "uid": "grimorio_1700000000000_32068",
+                      "templateId": "grimorio",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 7,
-                        "velocidade": -1
+                        "mana": 10
                       },
-                      "value": 31,
+                      "value": 29,
                       "equipped": false
                     }
                   ]
@@ -131598,14 +132458,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -131646,14 +132505,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -131681,14 +132539,13 @@
                 },
                 "forSale": [
                   {
-                    "uid": "escudo_1700000000000_7386",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_7386",
+                    "templateId": "grimorio",
                     "rarity": "comum",
                     "stats": {
-                      "defesa": 5,
-                      "velocidade": -1
+                      "mana": 8
                     },
-                    "value": 24,
+                    "value": 22,
                     "equipped": false
                   },
                   {
@@ -131729,14 +132586,13 @@
                     "procChance": 0.15
                   },
                   {
-                    "uid": "escudo_1700000000000_32068",
-                    "templateId": "escudo",
+                    "uid": "grimorio_1700000000000_32068",
+                    "templateId": "grimorio",
                     "rarity": "incomum",
                     "stats": {
-                      "defesa": 7,
-                      "velocidade": -1
+                      "mana": 10
                     },
-                    "value": 31,
+                    "value": 29,
                     "equipped": false
                   }
                 ]
@@ -147845,7 +148701,7 @@
         },
         "resolvido": true,
         "log": [
-          "Você decifra as runas e encontra Maça Sagrada de Aço. +278 XP. Subiu 3 nível(is)!"
+          "Você decifra as runas e encontra Marreta de Guerra de Aço. +278 XP. Subiu 3 nível(is)!"
         ],
         "app": true
       },
@@ -182989,14 +183845,14 @@
           "party": [],
           "inventory": [
             {
-              "uid": "robe_1700000000000_66972",
-              "templateId": "robe",
+              "uid": "placas_calca_1700000000000_66972",
+              "templateId": "placas_calca",
               "rarity": "incomum",
               "stats": {
-                "defesa": 1,
-                "mana": 7
+                "defesa": 3,
+                "esquiva": -1
               },
-              "value": 17,
+              "value": 10,
               "equipped": false
             }
           ],
@@ -183560,18 +184416,18 @@
           }
         },
         "log": [
-          "Encontrou Robe Arcano Incomum após a batalha.",
+          "Encontrou Perneira de Placas Incomum após a batalha.",
           "Após vencer Goblin, Senhor das Trevas, o grupo avança automaticamente para o Andar 2."
         ],
         "loot": {
-          "uid": "robe_1700000000000_66972",
-          "templateId": "robe",
+          "uid": "placas_calca_1700000000000_66972",
+          "templateId": "placas_calca",
           "rarity": "incomum",
           "stats": {
-            "defesa": 1,
-            "mana": 7
+            "defesa": 3,
+            "esquiva": -1
           },
-          "value": 17,
+          "value": 10,
           "equipped": false
         }
       },
@@ -186033,12 +186889,12 @@
           "party": [],
           "inventory": [
             {
-              "uid": "amuleto_sab_1700000000000_69594",
-              "templateId": "amuleto_sab",
+              "uid": "anel_som_1700000000000_69594",
+              "templateId": "anel_som",
               "rarity": "comum",
               "stats": {
-                "mana": 11,
-                "vida": 7
+                "critico": 9,
+                "esquiva": 4
               },
               "value": 20,
               "equipped": false,
@@ -186123,15 +186979,15 @@
           }
         },
         "log": [
-          "Encontrou Amuleto da Sabedoria após a batalha."
+          "Encontrou Anel das Sombras após a batalha."
         ],
         "loot": {
-          "uid": "amuleto_sab_1700000000000_69594",
-          "templateId": "amuleto_sab",
+          "uid": "anel_som_1700000000000_69594",
+          "templateId": "anel_som",
           "rarity": "comum",
           "stats": {
-            "mana": 11,
-            "vida": 7
+            "critico": 9,
+            "esquiva": 4
           },
           "value": 20,
           "equipped": false,
@@ -187178,14 +188034,14 @@
           "party": [],
           "inventory": [
             {
-              "uid": "robe_1700000000000_17481",
-              "templateId": "robe",
+              "uid": "placas_calca_1700000000000_17481",
+              "templateId": "placas_calca",
               "rarity": "incomum",
               "stats": {
-                "defesa": 1,
-                "mana": 7
+                "defesa": 3,
+                "esquiva": -1
               },
-              "value": 17,
+              "value": 10,
               "equipped": false
             }
           ],
@@ -187737,18 +188593,18 @@
           }
         },
         "log": [
-          "Encontrou Robe Arcano Incomum após a batalha.",
+          "Encontrou Perneira de Placas Incomum após a batalha.",
           "Após vencer Goblin, Senhor das Trevas, o grupo avança automaticamente para o Andar 2."
         ],
         "loot": {
-          "uid": "robe_1700000000000_17481",
-          "templateId": "robe",
+          "uid": "placas_calca_1700000000000_17481",
+          "templateId": "placas_calca",
           "rarity": "incomum",
           "stats": {
-            "defesa": 1,
-            "mana": 7
+            "defesa": 3,
+            "esquiva": -1
           },
-          "value": 17,
+          "value": 10,
           "equipped": false
         }
       },
@@ -188131,14 +188987,14 @@
                 "isMimic": true,
                 "giveGold": false,
                 "item": {
-                  "uid": "anel_som_1700000000000_88622",
-                  "templateId": "anel_som",
+                  "uid": "botas_1700000000000_29771",
+                  "templateId": "botas",
                   "rarity": "comum",
                   "stats": {
-                    "critico": 9,
-                    "esquiva": 4
+                    "defesa": 2,
+                    "velocidade": 2
                   },
-                  "value": 20,
+                  "value": 14,
                   "equipped": false,
                   "foundFloor": 86
                 },
@@ -188384,7 +189240,7 @@
                   {
                     "kind": "pot",
                     "col": 2,
-                    "row": 1,
+                    "row": 5,
                     "used": false
                   }
                 ],
@@ -188408,15 +189264,14 @@
                 "extras": [
                   {
                     "kind": "pot",
-                    "col": 6,
+                    "col": 2,
                     "row": 5,
                     "used": false
                   },
                   {
-                    "kind": "chest",
-                    "col": 7,
+                    "kind": "pot",
+                    "col": 6,
                     "row": 1,
-                    "item": null,
                     "used": false
                   }
                 ]
@@ -188474,14 +189329,14 @@
                   "N": true
                 },
                 "npc": {
-                  "name": "Prisioneiro Esquecido",
-                  "role": "Sobrevivente",
-                  "service": "heal",
-                  "icon": "🧍",
+                  "name": "Erma, a Vidente",
+                  "role": "Mística Errante",
+                  "service": "reveal",
+                  "icon": "🔮",
                   "lines": [
-                    "Você... você é real? Há quanto tempo estou aqui...",
-                    "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
-                    "Se encontrar a saída, corra e não olhe para trás."
+                    "Você se aventura fundo demais — ou talvez não o bastante...",
+                    "Os corredores mudam quando ninguém observa.",
+                    "Cuidado com o que dorme nas profundezas."
                   ],
                   "serviceUsed": false
                 },
@@ -188621,7 +189476,7 @@
                   "W": true
                 },
                 "event": {
-                  "templateId": "altar"
+                  "templateId": "porta"
                 },
                 "resolved": false,
                 "extras": [
@@ -190384,14 +191239,14 @@
                 "isMimic": false,
                 "giveGold": false,
                 "item": {
-                  "uid": "robe_calca_1700000000000_1978",
-                  "templateId": "robe_calca",
+                  "uid": "robe_1700000000000_1978",
+                  "templateId": "robe",
                   "rarity": "raro",
                   "stats": {
                     "defesa": 4,
-                    "mana": 11
+                    "mana": 19
                   },
-                  "value": 17,
+                  "value": 28,
                   "equipped": false,
                   "degrau": 2,
                   "foundFloor": 86
@@ -191660,14 +192515,14 @@
                     "side": "E",
                     "used": false,
                     "secretItem": {
-                      "uid": "placas_1700000000000_35741",
-                      "templateId": "placas",
+                      "uid": "couro_1700000000000_35741",
+                      "templateId": "couro",
                       "rarity": "incomum",
                       "stats": {
-                        "defesa": 9,
-                        "esquiva": -1
+                        "defesa": 7,
+                        "velocidade": 2
                       },
-                      "value": 22,
+                      "value": 29,
                       "equipped": false,
                       "foundFloor": 86
                     },
@@ -191967,14 +192822,14 @@
                 "isMimic": false,
                 "giveGold": false,
                 "item": {
-                  "uid": "colar_forca_1700000000000_59067",
-                  "templateId": "colar_forca",
+                  "uid": "bota_vento_1700000000000_59067",
+                  "templateId": "bota_vento",
                   "rarity": "comum",
                   "stats": {
-                    "ataque": 4,
-                    "vida": 14
+                    "velocidade": 5,
+                    "esquiva": 2
                   },
-                  "value": 22,
+                  "value": 18,
                   "equipped": false,
                   "foundFloor": 86
                 },
@@ -198708,14 +199563,13 @@
                     },
                     "forSale": [
                       {
-                        "uid": "placas_calca_1700000000000_82296",
-                        "templateId": "placas_calca",
+                        "uid": "placas_elmo_1700000000000_82296",
+                        "templateId": "placas_elmo",
                         "rarity": "incomum",
                         "stats": {
-                          "defesa": 3,
-                          "esquiva": -1
+                          "defesa": 1
                         },
-                        "value": 10,
+                        "value": 7,
                         "equipped": false
                       },
                       {
@@ -198730,25 +199584,24 @@
                         "equipped": false
                       },
                       {
-                        "uid": "couro_1700000000000_96354",
-                        "templateId": "couro",
+                        "uid": "grimorio_1700000000000_96354",
+                        "templateId": "grimorio",
                         "rarity": "comum",
                         "stats": {
-                          "defesa": 3,
-                          "velocidade": 1
+                          "mana": 8
                         },
                         "value": 22,
                         "equipped": false
                       },
                       {
-                        "uid": "robe_1700000000000_52632",
-                        "templateId": "robe",
+                        "uid": "placas_calca_1700000000000_52632",
+                        "templateId": "placas_calca",
                         "rarity": "comum",
                         "stats": {
-                          "defesa": 1,
-                          "mana": 5
+                          "defesa": 2,
+                          "esquiva": -1
                         },
-                        "value": 13,
+                        "value": 8,
                         "equipped": false
                       },
                       {
@@ -198786,14 +199639,13 @@
                     },
                     "forSale": [
                       {
-                        "uid": "placas_calca_1700000000000_82296",
-                        "templateId": "placas_calca",
+                        "uid": "placas_elmo_1700000000000_82296",
+                        "templateId": "placas_elmo",
                         "rarity": "incomum",
                         "stats": {
-                          "defesa": 3,
-                          "esquiva": -1
+                          "defesa": 1
                         },
-                        "value": 10,
+                        "value": 7,
                         "equipped": false
                       },
                       {
@@ -198808,25 +199660,24 @@
                         "equipped": false
                       },
                       {
-                        "uid": "couro_1700000000000_96354",
-                        "templateId": "couro",
+                        "uid": "grimorio_1700000000000_96354",
+                        "templateId": "grimorio",
                         "rarity": "comum",
                         "stats": {
-                          "defesa": 3,
-                          "velocidade": 1
+                          "mana": 8
                         },
                         "value": 22,
                         "equipped": false
                       },
                       {
-                        "uid": "robe_1700000000000_52632",
-                        "templateId": "robe",
+                        "uid": "placas_calca_1700000000000_52632",
+                        "templateId": "placas_calca",
                         "rarity": "comum",
                         "stats": {
-                          "defesa": 1,
-                          "mana": 5
+                          "defesa": 2,
+                          "esquiva": -1
                         },
-                        "value": 13,
+                        "value": 8,
                         "equipped": false
                       },
                       {
@@ -206551,14 +207402,13 @@
                 "isMimic": false,
                 "giveGold": false,
                 "item": {
-                  "uid": "placas_calca_1700000000000_95252",
-                  "templateId": "placas_calca",
+                  "uid": "placas_elmo_1700000000000_95252",
+                  "templateId": "placas_elmo",
                   "rarity": "comum",
                   "stats": {
-                    "defesa": 2,
-                    "esquiva": -1
+                    "defesa": 1
                   },
-                  "value": 8,
+                  "value": 5,
                   "equipped": false,
                   "foundFloor": 2
                 },
@@ -212140,25 +212990,26 @@
                         "foundFloor": 80
                       },
                       {
-                        "uid": "placas_1700000000000_92976",
-                        "templateId": "placas",
+                        "uid": "couro_1700000000000_92976",
+                        "templateId": "couro",
                         "rarity": "comum",
                         "stats": {
-                          "defesa": 7,
-                          "esquiva": -1
+                          "defesa": 5,
+                          "velocidade": 2
                         },
-                        "value": 17,
+                        "value": 22,
                         "equipped": false,
                         "foundFloor": 80
                       },
                       {
-                        "uid": "placas_elmo_1700000000000_70794",
-                        "templateId": "placas_elmo",
+                        "uid": "placas_1700000000000_70794",
+                        "templateId": "placas",
                         "rarity": "incomum",
                         "stats": {
-                          "defesa": 2
+                          "defesa": 9,
+                          "esquiva": -1
                         },
-                        "value": 7,
+                        "value": 22,
                         "equipped": false,
                         "foundFloor": 80
                       },
@@ -212225,25 +213076,26 @@
                         "foundFloor": 80
                       },
                       {
-                        "uid": "placas_1700000000000_92976",
-                        "templateId": "placas",
+                        "uid": "couro_1700000000000_92976",
+                        "templateId": "couro",
                         "rarity": "comum",
                         "stats": {
-                          "defesa": 7,
-                          "esquiva": -1
+                          "defesa": 5,
+                          "velocidade": 2
                         },
-                        "value": 17,
+                        "value": 22,
                         "equipped": false,
                         "foundFloor": 80
                       },
                       {
-                        "uid": "placas_elmo_1700000000000_70794",
-                        "templateId": "placas_elmo",
+                        "uid": "placas_1700000000000_70794",
+                        "templateId": "placas",
                         "rarity": "incomum",
                         "stats": {
-                          "defesa": 2
+                          "defesa": 9,
+                          "esquiva": -1
                         },
-                        "value": 7,
+                        "value": 22,
                         "equipped": false,
                         "foundFloor": 80
                       },

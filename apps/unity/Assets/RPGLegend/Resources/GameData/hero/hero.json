@@ -17,6 +17,9 @@
     "marreta",
     "violao"
   ],
+  "AO_LADO_DO_CAJADO": [
+    "grimorio"
+  ],
   "COMPANION_ROLES": {
     "guerreiro": {
       "ability": "Proteção",
@@ -71,10 +74,12 @@
     "MAX_NIVEIS_POR_GANHO",
     "OFFHAND_WEAPON_IDS",
     "TWO_HANDED_WEAPON_IDS",
+    "AO_LADO_DO_CAJADO",
     "COMPANION_ROLES"
   ],
   "$conjuntos": [
     "OFFHAND_WEAPON_IDS",
-    "TWO_HANDED_WEAPON_IDS"
+    "TWO_HANDED_WEAPON_IDS",
+    "AO_LADO_DO_CAJADO"
   ]
 }

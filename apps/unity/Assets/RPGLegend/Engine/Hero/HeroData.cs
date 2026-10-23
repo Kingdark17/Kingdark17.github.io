@@ -18,7 +18,7 @@ namespace RPGLegend.Engine
 
     /// <summary>
     /// As tabelas de hero/hero.ts (fixtures/data/hero/hero.json), inclusive as privadas.
-    /// OFFHAND_WEAPON_IDS e TWO_HANDED_WEAPON_IDS são Set no TS e chegam como lista.
+    /// OFFHAND_WEAPON_IDS, TWO_HANDED_WEAPON_IDS e AO_LADO_DO_CAJADO são Set no TS e chegam como lista.
     /// </summary>
     public sealed class HeroData
     {
@@ -27,6 +27,7 @@ namespace RPGLegend.Engine
         [JsName("MAX_NIVEIS_POR_GANHO")] public double MaxNiveisPorGanho;
         [JsName("OFFHAND_WEAPON_IDS")] public List<string> OffhandWeaponIds = new List<string>();
         [JsName("TWO_HANDED_WEAPON_IDS")] public List<string> TwoHandedWeaponIds = new List<string>();
+        [JsName("AO_LADO_DO_CAJADO")] public List<string> AoLadoDoCajado = new List<string>();
         [JsName("COMPANION_ROLES")] public OrderedMap<CompanionRoleDef> CompanionRoles = new OrderedMap<CompanionRoleDef>();
     }
 

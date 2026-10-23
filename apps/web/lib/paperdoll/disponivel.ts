@@ -52,5 +52,5 @@ export const ARQUIVOS_DE_TRACO: ReadonlySet<string> = new Set(['aureola', 'chifr
 /** Armas com camada — o nome do arquivo é o `templateId`. (5 em `public/img/paperdoll/arma/`) */
 export const ARMAS: ReadonlySet<string> = new Set(['adaga', 'arco', 'cajado', 'espada', 'machado']);
 
-/** O que a mão secundária pode segurar. (2 em `public/img/paperdoll/secundaria/`) */
-export const SECUNDARIAS: ReadonlySet<string> = new Set(['adaga', 'escudo']);
+/** O que a mão secundária pode segurar. (3 em `public/img/paperdoll/secundaria/`) */
+export const SECUNDARIAS: ReadonlySet<string> = new Set(['adaga', 'escudo', 'grimorio']);

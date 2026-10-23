@@ -234,6 +234,20 @@
       "nomeSemMaterial": "Escudo"
     },
     {
+      "id": "grimorio",
+      "name": "Grimório",
+      "genero": "m",
+      "category": "armadura",
+      "desc": "Um livro de feitiços para a mão livre: mais Mana para quem conjura. Cabe ao lado do cajado.",
+      "sprite": "armor/grimorio.png",
+      "slot": "secundaria",
+      "base": {
+        "mana": 8
+      },
+      "value": 22,
+      "escada": "couro"
+    },
+    {
       "id": "couro",
       "name": "Armadura de Couro Batido",
       "genero": "f",

@@ -6,6 +6,7 @@ import {
   BASE_ATTR,
   buildApprentice,
   buildHero,
+  cabeNaMaoLivre,
   equipItem,
   equippedSlot,
   gainXP,
@@ -315,6 +316,26 @@ describe('equipamento', () => {
       expect(equipped).toBe(false);
       expect(reason).toBe('two_handed_weapon');
       expect(depois).toBe(comMachado); // recusa não mexe no herói
+    });
+
+    it('o grimório cabe ao lado do cajado, e só dele', () => {
+      const peca = (id: string) => instantiate(templateById(id)!, RARITIES[0]!, { rng: seededRng(1) });
+      const deCajado = equipItem(novoHeroi(), peca('cajado')).hero;
+
+      const comLivro = equipItem(deCajado, peca('grimorio'));
+      expect(comLivro.equipped).toBe(true);
+      expect(comLivro.hero.equip.secundaria?.templateId).toBe('grimorio');
+      // O escudo continua sem lugar ao lado do cajado.
+      expect(equipItem(deCajado, escudo()).reason).toBe('two_handed_weapon');
+      // E o grimório não cabe com as outras de duas mãos.
+      const deArco = equipItem(novoHeroi(), peca('arco')).hero;
+      expect(equipItem(deArco, peca('grimorio')).reason).toBe('two_handed_weapon');
+
+      // Trocar a arma pelo cajado mantém o livro; pelo machado, larga.
+      expect(equipItem(comLivro.hero, peca('cajado')).hero.equip.secundaria?.templateId).toBe('grimorio');
+      expect(equipItem(comLivro.hero, machado()).hero.equip.secundaria).toBeNull();
+      expect(cabeNaMaoLivre(peca('cajado'), peca('grimorio'))).toBe(true);
+      expect(cabeNaMaoLivre(peca('arco'), peca('grimorio'))).toBe(false);
     });
 
     it('a recusa é da arma, não da classe: com arma de uma mão o escudo entra', () => {

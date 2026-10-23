@@ -35,6 +35,7 @@ namespace RPGLegend.Tests
             Fn(M, "gainXP", (a, c) => W(Heroes.GainXP(R<Hero>(a["hero"]), Num(a["amount"]))));
             Fn(M, "isOffhandEligible", (a, c) => W(Heroes.IsOffhandEligible(R<Item>(a["item"]))));
             Fn(M, "isTwoHanded", (a, c) => W(Heroes.IsTwoHanded(R<Item>(a["item"]))));
+            Fn(M, "cabeNaMaoLivre", (a, c) => W(Heroes.CabeNaMaoLivre(R<Item>(a["arma"]), R<Item>(a["peca"]))));
             Fn(M, "equippedSlot", (a, c) => W(Heroes.EquippedSlot(R<Hero>(a["hero"]), R<Item>(a["item"]))));
             Fn(M, "equipItem", (a, c) => W(Heroes.EquipItem(R<Hero>(a["hero"]), R<Item>(a["item"]), Str(a["requestedSlot"]))));
             Fn(M, "unequipItem", (a, c) => W(Heroes.UnequipItem(R<Hero>(a["hero"]), Str(a["slot"]))));

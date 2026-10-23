@@ -1308,12 +1308,12 @@
           "kind": "studied",
           "success": true,
           "item": {
-            "uid": "amuleto_sab_1700000000000_52744",
-            "templateId": "amuleto_sab",
+            "uid": "anel_som_1700000000000_52744",
+            "templateId": "anel_som",
             "rarity": "comum",
             "stats": {
-              "mana": 6,
-              "vida": 4
+              "critico": 5,
+              "esquiva": 2
             },
             "value": 20,
             "equipped": false
@@ -2039,14 +2039,14 @@
           "kind": "studied",
           "success": true,
           "item": {
-            "uid": "colar_forca_1700000000000_21976",
-            "templateId": "colar_forca",
+            "uid": "bota_vento_1700000000000_21976",
+            "templateId": "bota_vento",
             "rarity": "raro",
             "stats": {
-              "ataque": 5,
-              "vida": 25
+              "velocidade": 9,
+              "esquiva": 4
             },
-            "value": 37,
+            "value": 31,
             "equipped": false,
             "foundFloor": 90
           }
@@ -2224,13 +2224,14 @@
           "kind": "studied",
           "success": true,
           "item": {
-            "uid": "robe_chapeu_1700000000000_20216",
-            "templateId": "robe_chapeu",
+            "uid": "robe_calca_1700000000000_20216",
+            "templateId": "robe_calca",
             "rarity": "comum",
             "stats": {
-              "mana": 4
+              "defesa": 2,
+              "mana": 5
             },
-            "value": 5,
+            "value": 8,
             "equipped": false,
             "foundFloor": 90
           }

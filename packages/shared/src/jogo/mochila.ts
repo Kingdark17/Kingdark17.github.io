@@ -13,7 +13,7 @@
  * continua marcada como equipada na mochila (ou o contrário).
  */
 
-import { equipItem, equippedSlot, isOffhandEligible, isTwoHanded, spendAttrPoint, unequipItem, type Hero } from '../hero/hero.js';
+import { cabeNaMaoLivre, equipItem, equippedSlot, isOffhandEligible, spendAttrPoint, unequipItem, type Hero } from '../hero/hero.js';
 import { EQUIP_SLOTS, type AttrKey, type EquipSlot } from '../hero/stats.js';
 import { addItem, consumeItem, removeByUid } from '../inventory/inventory.js';
 import { concordar, displayName, itemCategory, type Item } from '../items/item.js';
@@ -98,9 +98,9 @@ export function usar(mochila: Mochila, item: Item): Mochila {
   };
 }
 
-/** Item na mão secundária: só escudo e arma leve (`isOffhandEligible`). */
+/** Item na mão secundária: escudo, grimório e arma leve (`isOffhandEligible`). */
 export function aceitaMaoSecundaria(item: Item): boolean {
-  return item.templateId === 'escudo' || (itemCategory(item) === 'arma' && isOffhandEligible(item));
+  return isOffhandEligible(item);
 }
 
 /**
@@ -116,7 +116,7 @@ export function armaQueOcupaAsMaos(estado: EstadoDoJogo, item: Item): Item | nul
   if (!aceitaMaoSecundaria(item)) return null;
 
   const arma = estado.hero.equip.arma as Item | null;
-  return isTwoHanded(arma) ? arma : null;
+  return cabeNaMaoLivre(arma, item) ? null : arma;
 }
 
 /**

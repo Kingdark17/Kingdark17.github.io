@@ -277,6 +277,24 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     nomeSemMaterial: 'Escudo',
   },
   {
+    id: 'grimorio',
+    name: 'Grimório',
+    genero: 'm',
+    category: 'armadura',
+    desc: 'Um livro de feitiços para a mão livre: mais Mana para quem conjura. Cabe ao lado do cajado.',
+    // O ícone é provisório: o livro recortado do desenho do boneco, até o
+    // Breno mandar o grimorio_icon.
+    sprite: 'armor/grimorio.png',
+    // Como o escudo, armadura pela categoria e vestido na mão secundária. É
+    // a única peça que cabe ao lado do cajado (`AO_LADO_DO_CAJADO`, em
+    // hero.ts): decisão do usuário de 2026-10-23, com a arte do Breno, que
+    // desenha o livro na outra mão de quem conjura.
+    slot: 'secundaria',
+    base: { mana: 8 },
+    value: 22,
+    escada: 'couro',
+  },
+  {
     id: 'couro',
     name: 'Armadura de Couro Batido',
     genero: 'f',

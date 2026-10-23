@@ -266,8 +266,8 @@ namespace RPGLegend.Engine
             var template = ItemTemplates.ById(cls.WeaponTemplate);
             if (template == null) throw new EngineError("Arma inicial desconhecida: " + Js.Str(cls.WeaponTemplate));
             var arma = Items.Instantiate(template, Rarities.All[0], armaRng, armaNow);
-            // Mão principal livre, e sem escudo no caminho de uma arma de duas mãos.
-            bool cabe = hero.Equip.Get("arma") == null && !(IsTwoHanded(arma) && hero.Equip.Get("secundaria") != null);
+            // Mão principal livre, e sem escudo no caminho de uma arma de duas mãos (o grimório deixa o cajado entrar).
+            bool cabe = hero.Equip.Get("arma") == null && CabeNaMaoLivre(arma, hero.Equip.Get("secundaria"));
 
             var treinado = hero.Clone();
             treinado.Attrs = attrs;
@@ -364,13 +364,23 @@ namespace RPGLegend.Engine
 
         // ---------- equipamento ----------
 
-        /// <summary>TS: isOffhandEligible — escudo, ou arma leve (OFFHAND_WEAPON_IDS).</summary>
+        /// <summary>TS: isOffhandEligible — a peça que veste na secundária (o escudo e o grimório), ou arma leve (OFFHAND_WEAPON_IDS).</summary>
         public static bool IsOffhandEligible(Item item)
         {
             if (item == null) return false;
-            if (item.TemplateId == "escudo") return true;
             var template = ItemTemplates.ById(item.TemplateId);
+            if (template?.Slot == "secundaria") return true;
             return template?.Category == "arma" && D.OffhandWeaponIds.Contains(item.TemplateId);
+        }
+
+        /// <summary>
+        /// TS: cabeNaMaoLivre — a peça da secundária convive com esta arma? Sempre, com a mão vazia ou arma de uma mão;
+        /// com uma de duas mãos, só o que cabe ao lado do cajado (AO_LADO_DO_CAJADO: o grimório).
+        /// </summary>
+        public static bool CabeNaMaoLivre(Item arma, Item peca)
+        {
+            if (peca == null || arma == null || !IsTwoHanded(arma)) return true;
+            return arma.TemplateId == "cajado" && D.AoLadoDoCajado.Contains(peca.TemplateId);
         }
 
         /// <summary>TS: isTwoHanded — arma que ocupa as duas mãos (TWO_HANDED_WEAPON_IDS).</summary>
@@ -399,7 +409,8 @@ namespace RPGLegend.Engine
         /// <summary>
         /// TS: equipItem — veste a peça no slot pedido (ou no do template). Recusa sem mudar o herói
         /// quando a peça não veste ou não vai naquele slot, e com reason <c>two_handed_weapon</c> quando a
-        /// secundária esbarra numa arma de duas mãos. Arma de duas mãos na principal esvazia a secundária.
+        /// secundária esbarra numa arma de duas mãos. Arma de duas mãos na principal esvazia a secundária — fora o
+        /// grimório ao lado do cajado (CabeNaMaoLivre).
         /// Não muta o item nem o herói.
         /// </summary>
         public static EquipResult EquipItem(Hero hero, Item item, string requestedSlot = null)
@@ -409,7 +420,7 @@ namespace RPGLegend.Engine
 
             string slot = requestedSlot ?? ItemTemplates.SlotFor(template);
             if (!SlotAccepts(slot, item, template)) return new EquipResult { Hero = hero, Equipped = false };
-            if (slot == "secundaria" && IsTwoHanded(hero.Equip.Get("arma")))
+            if (slot == "secundaria" && !CabeNaMaoLivre(hero.Equip.Get("arma"), item))
                 return new EquipResult { Hero = hero, Equipped = false, Reason = EquipFailReasons.TwoHandedWeapon };
 
             var equip = hero.Equip.Clone();
@@ -423,7 +434,7 @@ namespace RPGLegend.Engine
             vestido.Equipped = true;
             equip.Set(slot, vestido);
             // Quem recolhe a peça expulsa é a camada de mochila.
-            if (slot == "arma" && IsTwoHanded(item)) equip.Set("secundaria", null);
+            if (slot == "arma" && !CabeNaMaoLivre(item, equip.Get("secundaria"))) equip.Set("secundaria", null);
 
             var next = hero.Clone();
             next.Equip = equip;
@@ -522,7 +533,7 @@ namespace RPGLegend.Engine
             foreach (var slot in StatKeys.EquipSlots) equip.Set(slot, hero.Equip?.Get(slot));
 
             // Save de antes da regra das duas mãos: a secundária sai (a peça continua na lista do save).
-            if (IsTwoHanded(equip.Get("arma"))) equip.Set("secundaria", null);
+            if (!CabeNaMaoLivre(equip.Get("arma"), equip.Get("secundaria"))) equip.Set("secundaria", null);
 
             string classId = Catalog.IdDaClasse(hero.ClassId, hero.ClassName);
             string raceId = Catalog.IdDaRaca(hero.RaceId, hero.Race);

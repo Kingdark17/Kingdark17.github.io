@@ -102984,11 +102984,11 @@
             "party": [],
             "inventory": [
               {
-                "uid": "pot_mana_1700000000000_48672",
-                "templateId": "pot_mana",
+                "uid": "pot_vida_1700000000000_48672",
+                "templateId": "pot_vida",
                 "rarity": "comum",
                 "stats": {
-                  "curaMana": 16
+                  "cura": 22
                 },
                 "value": 14,
                 "equipped": false
@@ -103112,11 +103112,11 @@
           "teclado": false,
           "fim": "vitoria",
           "loot": {
-            "uid": "pot_mana_1700000000000_48672",
-            "templateId": "pot_mana",
+            "uid": "pot_vida_1700000000000_48672",
+            "templateId": "pot_vida",
             "rarity": "comum",
             "stats": {
-              "curaMana": 16
+              "cura": 22
             },
             "value": 14,
             "equipped": false
@@ -103140,7 +103140,7 @@
           },
           {
             "tipo": "diario",
-            "texto": "Encontrou Poção de Mana após a batalha."
+            "texto": "Encontrou Poção de Vida após a batalha."
           },
           {
             "tipo": "som",
@@ -103633,16 +103633,17 @@
             "party": [],
             "inventory": [
               {
-                "uid": "marreta_1700000000000_97385",
-                "templateId": "marreta",
+                "uid": "violao_1700000000000_97385",
+                "templateId": "violao",
                 "rarity": "incomum",
                 "stats": {
-                  "ataque": 25,
-                  "velocidade": -3
+                  "ataque": 11,
+                  "critico": 21,
+                  "esquiva": 7
                 },
-                "value": 53,
+                "value": 45,
                 "equipped": false,
-                "procChance": 0.135,
+                "procChance": 0.165,
                 "degrau": 3,
                 "foundFloor": 90
               }
@@ -103765,16 +103766,17 @@
           "teclado": false,
           "fim": "vitoria",
           "loot": {
-            "uid": "marreta_1700000000000_97385",
-            "templateId": "marreta",
+            "uid": "violao_1700000000000_97385",
+            "templateId": "violao",
             "rarity": "incomum",
             "stats": {
-              "ataque": 25,
-              "velocidade": -3
+              "ataque": 11,
+              "critico": 21,
+              "esquiva": 7
             },
-            "value": 53,
+            "value": 45,
             "equipped": false,
-            "procChance": 0.135,
+            "procChance": 0.165,
             "degrau": 3,
             "foundFloor": 90
           }
@@ -103797,7 +103799,7 @@
           },
           {
             "tipo": "diario",
-            "texto": "Encontrou Marreta de Guerra de Aço Mágico Incomum após a batalha."
+            "texto": "Encontrou Violão Encantado de Madeira Élfica Incomum após a batalha."
           },
           {
             "tipo": "som",
@@ -177620,13 +177622,14 @@
                 "equipped": false
               },
               {
-                "uid": "robe_chapeu_1700000000000_14985",
-                "templateId": "robe_chapeu",
+                "uid": "robe_calca_1700000000000_14985",
+                "templateId": "robe_calca",
                 "rarity": "incomum",
                 "stats": {
-                  "mana": 3
+                  "defesa": 1,
+                  "mana": 4
                 },
-                "value": 7,
+                "value": 10,
                 "equipped": false
               }
             ],
@@ -177785,13 +177788,14 @@
           "teclado": false,
           "fim": "vitoria",
           "loot": {
-            "uid": "robe_chapeu_1700000000000_14985",
-            "templateId": "robe_chapeu",
+            "uid": "robe_calca_1700000000000_14985",
+            "templateId": "robe_calca",
             "rarity": "incomum",
             "stats": {
-              "mana": 3
+              "defesa": 1,
+              "mana": 4
             },
-            "value": 7,
+            "value": 10,
             "equipped": false
           }
         },
@@ -178057,7 +178061,7 @@
           },
           {
             "tipo": "diario",
-            "texto": "Encontrou Chapéu de Mago Incomum após a batalha."
+            "texto": "Encontrou Calça de Mago Incomum após a batalha."
           },
           {
             "tipo": "som",

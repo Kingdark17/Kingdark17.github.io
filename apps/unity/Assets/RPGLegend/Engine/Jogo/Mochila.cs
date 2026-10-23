@@ -89,9 +89,8 @@ namespace RPGLegend.Engine
                 : "Você usa " + Items.DisplayName(item) + ".");
         }
 
-        /// <summary>TS: aceitaMaoSecundaria — só escudo e arma leve.</summary>
-        public static bool AceitaMaoSecundaria(Item item) =>
-            item.TemplateId == "escudo" || (Items.CategoryOf(item) == "arma" && Heroes.IsOffhandEligible(item));
+        /// <summary>TS: aceitaMaoSecundaria — escudo, grimório e arma leve (IsOffhandEligible).</summary>
+        public static bool AceitaMaoSecundaria(Item item) => Heroes.IsOffhandEligible(item);
 
         /// <summary>
         /// TS: armaQueOcupaAsMaos — a arma de duas mãos que impede esta peça de ir pra mão secundária, ou null
@@ -102,7 +101,7 @@ namespace RPGLegend.Engine
             if (Heroes.EquippedSlot(estado.Hero, item) != null) return null;
             if (!AceitaMaoSecundaria(item)) return null;
             var arma = estado.Hero.Equip.Get("arma");
-            return Heroes.IsTwoHanded(arma) ? arma : null;
+            return Heroes.CabeNaMaoLivre(arma, item) ? null : arma;
         }
 
         /// <summary>TS: equiparNoLugarDaArma — guarda a arma de duas mãos e põe a peça na secundária.</summary>

@@ -321,8 +321,9 @@ export function trainAtGuild(hero: Hero, cls: ClassDef, armaInicial: Instantiate
   const template = templateById(cls.weaponTemplate);
   if (!template) throw new Error(`Arma inicial desconhecida: ${cls.weaponTemplate}`);
   const arma: Item = instantiate(template, RARITIES[0] as (typeof RARITIES)[number], armaInicial);
-  // Mão principal livre, e sem escudo no caminho de uma arma de duas mãos.
-  const cabe = !hero.equip.arma && !(isTwoHanded(arma) && hero.equip.secundaria);
+  // Mão principal livre, e sem escudo no caminho de uma arma de duas mãos
+  // (o grimório deixa o cajado entrar: `cabeNaMaoLivre`).
+  const cabe = !hero.equip.arma && cabeNaMaoLivre(arma, hero.equip.secundaria);
 
   const treinado: Hero = {
     ...hero,
@@ -437,7 +438,7 @@ const OFFHAND_WEAPON_IDS = new Set(['espada', 'adaga', 'maca']);
 
 /**
  * Armas que ocupam as duas mãos, e por isso não convivem com nada na
- * secundária.
+ * secundária — fora o grimório ao lado do cajado (`AO_LADO_DO_CAJADO`).
  *
  * `violao` entra aqui a pedido do Breno: o bardo toca com as duas mãos e não
  * deveria aparecer de escudo. É regra de arma, não de classe — qualquer um
@@ -451,11 +452,30 @@ const OFFHAND_WEAPON_IDS = new Set(['espada', 'adaga', 'maca']);
  */
 const TWO_HANDED_WEAPON_IDS = new Set(['arco', 'cajado', 'machado', 'marreta', 'violao']);
 
+/**
+ * O que cabe na mão livre do cajado, que para o resto ocupa as duas mãos: o
+ * grimório (decisão do usuário, 2026-10-23). O Breno desenhou o livro na
+ * outra mão de quem conjura, e o cajado é a arma de quem conjura. Escudo e
+ * arma leve continuam sem lugar ao lado dele.
+ */
+const AO_LADO_DO_CAJADO = new Set(['grimorio']);
+
+/** Vai na mão secundária: a peça que veste lá (o escudo e o grimório), ou uma arma leve (`OFFHAND_WEAPON_IDS`). */
 export function isOffhandEligible(item: Item | null | undefined): boolean {
   if (!item) return false;
-  if (item.templateId === 'escudo') return true;
   const template = templateById(item.templateId);
+  if (template?.slot === 'secundaria') return true;
   return template?.category === 'arma' && OFFHAND_WEAPON_IDS.has(item.templateId);
+}
+
+/**
+ * A peça da mão secundária convive com esta arma na principal? Sempre, com a
+ * mão vazia ou uma arma de uma mão; com uma de duas mãos, só o que cabe ao
+ * lado do cajado (`AO_LADO_DO_CAJADO`).
+ */
+export function cabeNaMaoLivre(arma: Item | null | undefined, peca: Item | null | undefined): boolean {
+  if (!peca || !arma || !isTwoHanded(arma)) return true;
+  return arma.templateId === 'cajado' && AO_LADO_DO_CAJADO.has(peca.templateId);
 }
 
 /**
@@ -516,6 +536,7 @@ function slotAccepts(slot: EquipSlot, item: Item, template: ItemTemplate): boole
  * secundária com uma arma de duas mãos na principal é recusado. O outro
  * arranjo (o escudo expulsar a arma) seria pior: tirar a arma de alguém pra
  * caber um escudo é surpresa, e a arma é a peça que a pessoa escolheu.
+ * A exceção é o grimório, que cabe ao lado do cajado (`cabeNaMaoLivre`).
  */
 export function equipItem(hero: Hero, item: Item, requestedSlot?: EquipSlot): EquipResult {
   const template = templateById(item.templateId);
@@ -523,7 +544,7 @@ export function equipItem(hero: Hero, item: Item, requestedSlot?: EquipSlot): Eq
 
   const slot: EquipSlot = requestedSlot ?? slotForTemplate(template);
   if (!slotAccepts(slot, item, template)) return { hero, equipped: false };
-  if (slot === 'secundaria' && isTwoHanded(hero.equip.arma)) return { hero, equipped: false, reason: 'two_handed_weapon' };
+  if (slot === 'secundaria' && !cabeNaMaoLivre(hero.equip.arma, item)) return { hero, equipped: false, reason: 'two_handed_weapon' };
 
   const equip: HeroEquipment = { ...hero.equip };
   for (const otherSlot of EQUIP_SLOTS) {
@@ -534,7 +555,7 @@ export function equipItem(hero: Hero, item: Item, requestedSlot?: EquipSlot): Eq
   equip[slot] = { ...item, equipped: true };
   // Quem recolhe a peça expulsa é a camada de mochila, que já devolve pro
   // inventário tudo que saiu de um slot (`trocaDeEquipamento`).
-  if (slot === 'arma' && isTwoHanded(item)) equip.secundaria = null;
+  if (slot === 'arma' && !cabeNaMaoLivre(item, equip.secundaria)) equip.secundaria = null;
 
   return { hero: recomputeDerived({ ...hero, equip }), equipped: true };
 }
@@ -670,7 +691,7 @@ export function hydrateSavedHero(hero: Hero): Hero {
   // arco **e** escudo, e esse par continuaria valendo pra sempre em quem já
   // estava assim. A peça não some — ela segue na lista de itens do save, e a
   // mochila remarca o `equipped` de todo mundo a partir dos slots.
-  if (isTwoHanded(equip.arma)) equip.secundaria = null;
+  if (!cabeNaMaoLivre(equip.arma, equip.secundaria)) equip.secundaria = null;
 
   // Identidade resolvida uma vez, na entrada: o save que veio de antes só
   // tem nome, e a partir daqui o resto do jogo só precisa olhar o id.
