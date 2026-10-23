@@ -989,6 +989,17 @@
     margin-bottom: 2px;
 }
 
+/* Com pontos pra gastar, o "+" grande não cabe em três por linha no cartão estreito da mochila. */
+.com-pontos .atributo-do-cartao {
+    width: 50%;
+    margin-bottom: 4px;
+}
+
+/* O número com dois dígitos não empurra o "+" pra fora da coluna dos outros. */
+.com-pontos .valor-do-cartao {
+    min-width: 20px;
+}
+
 .valor-do-cartao {
     -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
     -unity-font-definition: initial;
@@ -996,18 +1007,19 @@
     margin-left: 5px;
 }
 
-/* O "+" do nível no vermelho da moldura: o dourado do jogo some no papel. */
+/* O "+" do nível no vermelho da moldura: o dourado do jogo some no papel. Do tamanho dos outros botões do jogo
+   (com 20 px ele dava uns 2 mm no celular e o dedo errava; pedido do usuário em 2026-10-23). */
 .unity-button.mais-do-cartao {
-    width: 20px;
-    height: 20px;
-    margin: 0 0 0 4px;
+    width: 40px;
+    height: 40px;
+    margin: 0 0 0 6px;
     padding: 0;
     border-width: 0;
-    border-radius: 2px;
+    border-radius: 4px;
     background-color: #ad3636;
     -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
     -unity-font-definition: initial;
-    font-size: 18px;
+    font-size: 34px;
     color: #f6ead0;
     -unity-text-align: middle-center;
 }

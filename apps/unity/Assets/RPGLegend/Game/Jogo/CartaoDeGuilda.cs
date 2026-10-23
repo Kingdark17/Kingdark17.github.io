@@ -46,8 +46,9 @@ namespace RPGLegend.Game.Jogo
             if (comPontos)
                 cartao.Add(PecasDaTela.Texto("Subiu de nível: " + PecasDaTela.Inteiro(pontos) + (pontos == 1 ? " ponto" : " pontos"), "pontos-do-cartao"));
 
-            // Três por linha, cada número colado no rótulo dele.
+            // Três por linha, cada número colado no rótulo dele; com o "+" (do tamanho de um botão, pro dedo), dois.
             var atributos = PecasDaTela.Bloco("atributos-do-cartao");
+            if (comPontos) atributos.AddToClassList("com-pontos");
             foreach (var chave in StatKeys.Attrs)
             {
                 var atributo = PecasDaTela.Bloco("atributo-do-cartao");
