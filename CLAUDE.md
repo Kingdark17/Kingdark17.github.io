@@ -243,6 +243,17 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   teste do Editor: RPG Legend > Jogar direto > Slot N pula porta e menu
   (precisa de sessão salva; combine com o Servidor do jogo local). Os testes
   do app ficam em `Tests/EditMode/App` e só rodam no Test Runner da Unity.
+- Cidade desenhada (2026-10-23, **site e app**): a cidade não é mais de salas,
+  é o mapa do Breno, um só de 30 × 25 casas (`city/mapa-da-cidade.ts`; arte em
+  `img/cidade/` e `Art/Jogo/Resources/Cidade`, uma camada por arquivo). A grade
+  de salas da cidade continua no save, intacta: encostar numa porta leva o
+  jogador pra sala dela e a aciona (`jogo/cidade.ts`, `entrarNoPonto`), e a
+  cena da cidade é uma só (a chave da sala não tem a posição). A planta sai da
+  colisão dele (`hitbox.png`) com `packages/shared/scripts/planta-da-cidade.mjs`:
+  colisão nova → rodar o script e colar a planta. A Encantadora atende na
+  igreja, o Bram dentro do ferreiro, e cada masmorra tem a entrada dela
+  (Floresta ao sul, Caverna ao norte, atrás dos troncos que saem quando a
+  Floresta é zerada, e Torre a leste), que abre o portão com ela fixa.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no
