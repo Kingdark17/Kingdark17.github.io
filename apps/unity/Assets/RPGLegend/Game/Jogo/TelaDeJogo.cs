@@ -407,6 +407,13 @@ namespace RPGLegend.Game.Jogo
         private void DesenharMinimapa(EstadoDoJogo estado, Apresentacao visual)
         {
             _minimapa.Clear();
+            // Na cidade o mapa é a própria cena: a grade de salas sai, com a moldura.
+            if (estado.MapMode == "city")
+            {
+                _minimapa.style.display = DisplayStyle.None;
+                return;
+            }
+            _minimapa.style.display = StyleKeyword.Null;
             int colunas = (int)estado.MapCols;
             int linhas = (int)estado.MapRows;
             var grade = estado.Grade;
@@ -478,6 +485,13 @@ namespace RPGLegend.Game.Jogo
                 Linha(ExtrasDaSala.TextoDaSecreta(celula, secreta.Indice), "linha-da-narracao");
                 var volta = Directions.Labels.Get(Directions.Opposite.Get(secreta.Lado)) ?? "";
                 Linha("A passagem de volta fica ao " + volta.ToLowerInvariant() + ".", "pistas-das-portas");
+                return;
+            }
+            if (estado.MapMode == "city")
+            {
+                // A cidade desenhada não tem sala pra narrar: diz o que há em volta e como entrar.
+                Linha(Cidades.TextoDaCidade, "linha-da-narracao");
+                Linha(Cidades.PistasDaCidade(estado), "pistas-das-portas");
                 return;
             }
             var narracao = Narrador.Narrar(estado);
@@ -555,6 +569,27 @@ namespace RPGLegend.Game.Jogo
             // (portão, escada, totem), no meio.
             var salaAgora = _partida.ChaveDaSala;
             var mapaAgora = _partida.ChaveDoMapa;
+
+            // A cidade desenhada do Breno: um mapa só, no lugar das salas. Quem volta da masmorra aparece na entrada
+            // dela; quem carrega o jogo, na porta da sala do save.
+            if (estado is EstadoNaCidade cidade)
+            {
+                if (salaAgora != _salaDaChegada)
+                {
+                    bool daMasmorra = _mapaDaChegada != null && _mapaDaChegada.StartsWith("dungeon", StringComparison.Ordinal);
+                    _salaDaChegada = salaAgora;
+                    _mapaDaChegada = mapaAgora;
+                    _xDaChegada = estado.Pos.X;
+                    _yDaChegada = estado.Pos.Y;
+                    _chegada = Cidades.ChegadaNaCidade(cidade, daMasmorra);
+                    _volta = 0;
+                }
+                var quem = estado.Hero;
+                _sala.DefinirHeroi(Catalog.IdDaRaca(quem.RaceId, quem.Race), string.IsNullOrEmpty(quem.RaceIcon) ? "🙂" : quem.RaceIcon);
+                _sala.MostrarCidade(salaAgora, Cidades.PlantaDaCidadeAgora(cidade), Cidades.TroncosNoCaminho(cidade), _chegada);
+                return;
+            }
+
             if (salaAgora != _salaDaChegada)
             {
                 double dx = estado.Pos.X - _xDaChegada;
@@ -649,8 +684,17 @@ namespace RPGLegend.Game.Jogo
             _sairDaTela = () => _partida.Fechar(portao.Estado);
             Janela("Portão da Masmorra", conteudo =>
             {
-                conteudo.Add(Subtitulo("Masmorra"));
-                conteudo.Add(Opcoes(Portoes.Masmorras(portao), portao.Escolha?.Dungeon, id => Portao(Portoes.EscolherMasmorra(portao, id))));
+                if (portao.Fixa == true)
+                {
+                    // Pela entrada da cidade desenhada a masmorra já está escolhida: é a do caminho.
+                    var nome = Dungeons.ById(portao.Escolha?.Dungeon)?.Name ?? portao.Escolha?.Dungeon;
+                    conteudo.Add(PecasDaTela.Texto("O caminho leva à " + nome + ". Escolha a dificuldade e por onde entrar.", "fala-da-tela"));
+                }
+                else
+                {
+                    conteudo.Add(Subtitulo("Masmorra"));
+                    conteudo.Add(Opcoes(Portoes.Masmorras(portao), portao.Escolha?.Dungeon, id => Portao(Portoes.EscolherMasmorra(portao, id))));
+                }
                 conteudo.Add(Subtitulo("Dificuldade"));
                 conteudo.Add(Opcoes(Portoes.Dificuldades(portao), portao.Escolha?.Difficulty, id => Portao(Portoes.EscolherDificuldade(portao, id))));
                 conteudo.Add(Subtitulo("Andar de entrada"));

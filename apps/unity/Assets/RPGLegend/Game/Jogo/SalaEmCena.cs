@@ -23,7 +23,10 @@ namespace RPGLegend.Game.Jogo
         private static readonly Color Fundo = new Color32(5, 6, 10, 255);
         private static readonly Color CorDaRachadura = new Color32(0x1a, 0x0b, 0x09, 255);
 
-        private float _largura, _altura, _escala;
+        private float _largura, _altura, _escala, _escalaDaSala;
+        /// <summary>A cena mostra a cidade desenhada do Breno (camadas e câmera seguindo o herói), e não uma sala.</summary>
+        private bool _naCidade;
+        private const int OrdemDeCima = 30000;
         private Camera _camera;
         private Sprite _branco;
         private Transform _desenho;
@@ -69,6 +72,7 @@ namespace RPGLegend.Game.Jogo
             _largura = (float)regra.RoomCols * Lado;
             _altura = (float)regra.RoomRows * Lado;
             _escala = Lado / (float)regra.TileUnits;
+            _escalaDaSala = _escala;
 
             // 2× o tamanho do site, pra o emoji e o boneco não serrilharem quando a tela amplia. O URP (render graph)
             // exige depth na textura de saída da câmera: sem ele, reclama a cada quadro.
@@ -166,9 +170,60 @@ namespace RPGLegend.Game.Jogo
             return string.Join("|", partes);
         }
 
+        /// <summary>
+        /// Mostra a cidade desenhada do Breno no lugar da sala (city/mapa-da-cidade.ts): as camadas dele no tamanho da
+        /// arte (32 px por casa), e a câmera seguindo o herói. <paramref name="troncos"/>: os troncos ainda fecham o
+        /// caminho da caverna. A chave funciona como a da sala.
+        /// </summary>
+        public void MostrarCidade(string chave, RoomLayout planta, bool troncos, Walker chegada)
+        {
+            _planta = planta;
+            if (chave != _salaDaCena)
+            {
+                _salaDaCena = chave;
+                _walker = chegada;
+                _tocando = null;
+                _sobra = 0;
+            }
+            var assinatura = "cidade#" + troncos;
+            if (assinatura != _assinaturaDoDesenho)
+            {
+                _assinaturaDoDesenho = assinatura;
+                DesenharCidade(troncos);
+            }
+            ColocarHeroi(false);
+        }
+
+        private void DesenharCidade(bool troncos)
+        {
+            for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
+            _naCidade = true;
+            _escala = (float)(MapaDaCidade.PixelsPorCasa / GameData.RoomWalkTable.TileUnits);
+            foreach (var camada in MapaDaCidade.Camadas)
+            {
+                if (camada.SoComTroncos == true && !troncos) continue;
+                var sprite = Resources.Load<Sprite>("Cidade/" + camada.Arquivo);
+                if (sprite == null) continue;
+                var objeto = new GameObject(camada.Arquivo);
+                objeto.transform.SetParent(_desenho, false);
+                // O canto de cima à esquerda da arte no (0, 0) do mapa.
+                objeto.transform.position = Mundo(0f, 0f) + new Vector3(-sprite.bounds.min.x, -sprite.bounds.max.y, 0f);
+                var renderizador = objeto.AddComponent<SpriteRenderer>();
+                renderizador.sprite = sprite;
+                // Ordenada com o herói pela linha onde a camada encosta no chão (o herói vai pelo pé, em pixel).
+                renderizador.sortingOrder = camada.Plano == "chao" ? OrdemDoChao : camada.Plano == "cima" ? OrdemDeCima : (int)(camada.Base * MapaDaCidade.PixelsPorCasa);
+            }
+        }
+
         private void Desenhar(RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras)
         {
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
+            if (_naCidade)
+            {
+                _naCidade = false;
+                _escala = _escalaDaSala;
+                _camera.transform.position = Origem + new Vector3(_largura / 2f, _altura / 2f, -10f);
+            }
 
             int linhas = planta.Solid.Count;
             for (int row = 0; row < linhas; row++)
@@ -307,6 +362,15 @@ namespace RPGLegend.Game.Jogo
             float pulo = andando ? Mathf.Abs(Mathf.Sin(_fase * 0.35f)) * 3f : 0f;
             _boneco.position = Mundo(x, y - pulo);
             _corpo.sortingOrder = (int)y;
+            if (_naCidade)
+            {
+                // A janela segue o herói, sem passar da borda do mapa, em meio pixel (a textura é 2×): fração faz a arte tremer.
+                float larguraDoMapa = (float)(MapaDaCidade.Cols * MapaDaCidade.PixelsPorCasa);
+                float alturaDoMapa = (float)(MapaDaCidade.Rows * MapaDaCidade.PixelsPorCasa);
+                float cx = Mathf.Round(Mathf.Clamp(x, _largura / 2f, larguraDoMapa - _largura / 2f) * 2f) / 2f;
+                float cy = Mathf.Round(Mathf.Clamp(y - Lado / 2f, _altura / 2f, alturaDoMapa - _altura / 2f) * 2f) / 2f;
+                _camera.transform.position = Mundo(cx, cy) + new Vector3(0f, 0f, -10f);
+            }
             // Provisório: o corpo só tem frente. Espelhar pro lado que anda já diz pra onde ele vai.
             if (_walker.Facing == "W") _corpo.flipX = true;
             else if (_walker.Facing == "E") _corpo.flipX = false;

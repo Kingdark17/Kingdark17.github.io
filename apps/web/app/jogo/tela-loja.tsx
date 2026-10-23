@@ -65,9 +65,11 @@ interface Props {
   loja: Loja;
   onLoja: (proxima: Loja) => void;
   onFechar: (final: Loja) => void;
+  /** Na forja da cidade: conversar com o Bram, que atende ali dentro (decisão do usuário, 2026-10-23). */
+  onBram?: (final: Loja) => void;
 }
 
-export function TelaLoja({ loja, onLoja, onFechar }: Props) {
+export function TelaLoja({ loja, onLoja, onFechar, onBram }: Props) {
   const [paraReforjar, setParaReforjar] = useState<string | null>(null);
   /**
    * A peça aberta na ficha, pelo `uid` — igual à mochila. O preço e o ouro
@@ -106,6 +108,11 @@ export function TelaLoja({ loja, onLoja, onFechar }: Props) {
         <h1 className={styles.local}>{ehFerreiro ? '🔨 Ferreiro' : '🏵 Vendedor Itinerante'}</h1>
         <div className={styles.ladoDoCabecalho}>
           <p className={styles.ouro}>💰 {loja.estado.hero.gold} ouro</p>
+          {onBram && (
+            <button type="button" className={styles.botao} onClick={() => onBram(loja)}>
+              🧔 Falar com o Bram
+            </button>
+          )}
           <button type="button" className={styles.botao} onClick={() => onFechar(loja)}>
             Sair
           </button>

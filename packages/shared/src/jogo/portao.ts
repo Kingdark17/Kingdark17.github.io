@@ -30,6 +30,11 @@ export interface Portao {
   andar: number;
   /** O portão é o do app: o andar de entrada pode ter item com material. */
   app?: true;
+  /**
+   * Aberto por uma das entradas da cidade desenhada (`jogo/cidade.ts`): a
+   * masmorra é a dela, e a tela não oferece as outras.
+   */
+  fixa?: true;
 }
 
 export interface OpcaoDoPortao<Id extends string> {
@@ -70,11 +75,20 @@ function dificuldadeAberta(estado: EstadoNaCidade, dungeon: DungeonId): Difficul
 /**
  * Abre na última masmorra e dificuldade em que o jogador desceu, se ainda
  * estiverem abertas; senão, na Floresta Normal.
+ *
+ * `masmorra`: a entrada da cidade desenhada por onde ele chegou. A masmorra
+ * fica fixa (`fixa`), na última dificuldade em que ele desceu nela ou, sem
+ * essa, na mais difícil aberta. Quem chama já conferiu que ela abre.
  */
-export function abrirPortao(estado: EstadoNaCidade, app = false): Portao {
+export function abrirPortao(estado: EstadoNaCidade, app = false, masmorra?: DungeonId): Portao {
   const ultima = bloqueio({ estado }, estado.masmorra) ? null : estado.masmorra;
+  const comApp = app ? { app: true as const } : {};
+  if (masmorra) {
+    const escolha: DungeonRun = ultima?.dungeon === masmorra ? ultima : { dungeon: masmorra, difficulty: dificuldadeAberta(estado, masmorra) };
+    return { estado, escolha, andar: andarMaisFundo(estado, escolha), ...comApp, fixa: true };
+  }
   const escolha: DungeonRun = ultima ?? { dungeon: 'floresta', difficulty: 'normal' };
-  return { estado, escolha, andar: andarMaisFundo(estado, escolha), ...(app ? { app: true as const } : {}) };
+  return { estado, escolha, andar: andarMaisFundo(estado, escolha), ...comApp };
 }
 
 export function masmorras(portao: Portao): OpcaoDoPortao<DungeonId>[] {
@@ -97,7 +111,7 @@ export function andares(portao: Portao): number[] {
 
 /** Trocar de masmorra leva junto a dificuldade mais alta aberta nela e o totem mais fundo. */
 export function escolherMasmorra(portao: Portao, dungeon: DungeonId): Portao {
-  if (bloqueio(portao, { dungeon, difficulty: 'normal' })) return portao;
+  if (portao.fixa || bloqueio(portao, { dungeon, difficulty: 'normal' })) return portao;
   const escolha: DungeonRun = { dungeon, difficulty: dificuldadeAberta(portao.estado, dungeon) };
   return { ...portao, escolha, andar: andarMaisFundo(portao.estado, escolha) };
 }

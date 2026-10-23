@@ -72,6 +72,13 @@ export interface RoomObject {
 export interface RoomLayout {
   /** As portas da sala, na ordem de `DIR_ORDER`. */
   doors: Direction[];
+  /**
+   * O tamanho, quando não é o da sala (`ROOM_COLS × ROOM_ROWS`): a cidade
+   * desenhada é uma planta grande só (`city/mapa-da-cidade.ts`). Ausente nas
+   * salas, que continuam como sempre foram.
+   */
+  cols?: number;
+  rows?: number;
   /** `[row][col]`: parede, ou quadrado ocupado por um objeto. */
   solid: boolean[][];
   objects: RoomObject[];
@@ -179,8 +186,16 @@ function quadradoDe(unidades: number): number {
   return Math.floor(unidades / TILE_UNITS);
 }
 
+function colunas(layout: RoomLayout): number {
+  return layout.cols ?? ROOM_COLS;
+}
+
+function linhas(layout: RoomLayout): number {
+  return layout.rows ?? ROOM_ROWS;
+}
+
 function solido(layout: RoomLayout, col: number, row: number): boolean {
-  if (row < 0 || row >= ROOM_ROWS || col < 0 || col >= ROOM_COLS) return true;
+  if (row < 0 || row >= linhas(layout) || col < 0 || col >= colunas(layout)) return true;
   return (layout.solid[row] as boolean[])[col] as boolean;
 }
 
@@ -235,9 +250,9 @@ function ajudaNaPorta(layout: RoomLayout, x: number, y: number, lado: Direction,
   // Colado na parede: a base encosta no primeiro quadrado depois do chão.
   const colado =
     lado === 'N' ? y - HERO_HALF === TILE_UNITS
-    : lado === 'S' ? y + HERO_HALF === (ROOM_ROWS - 1) * TILE_UNITS
+    : lado === 'S' ? y + HERO_HALF === (linhas(layout) - 1) * TILE_UNITS
     : lado === 'W' ? x - HERO_HALF === TILE_UNITS
-    : x + HERO_HALF === (ROOM_COLS - 1) * TILE_UNITS;
+    : x + HERO_HALF === (colunas(layout) - 1) * TILE_UNITS;
   if (!colado) return atual;
   const meio = centro(eixo === 'x' ? vao.col : vao.row);
   const falta = meio - atual;
@@ -251,9 +266,9 @@ function saida(layout: RoomLayout, x: number, y: number): Direction | null {
   const meio = TILE_UNITS / 2;
   for (const direcao of layout.doors) {
     if (direcao === 'N' && y < meio) return 'N';
-    if (direcao === 'S' && y > ROOM_ROWS * TILE_UNITS - meio) return 'S';
+    if (direcao === 'S' && y > linhas(layout) * TILE_UNITS - meio) return 'S';
     if (direcao === 'W' && x < meio) return 'W';
-    if (direcao === 'E' && x > ROOM_COLS * TILE_UNITS - meio) return 'E';
+    if (direcao === 'E' && x > colunas(layout) * TILE_UNITS - meio) return 'E';
   }
   return null;
 }

@@ -3893,6 +3893,104 @@ caso('abrirPortao: no app', 'abrirPortao', { estado: naCidadeDoVeterano, app: tr
 caso('entrar: no app, pelo totem do 40 da floresta', 'entrar', { portao: E.escolherAndar(E.escolherMasmorra(E.abrirPortao(naCidadeDoVeterano, true), 'floresta'), 40) }, (a, ctx) =>
   E.entrar(a.portao as never, ctx.rng, ctx.now),
 { rng: { seed: 102 }, now: AGORA });
+// Pelas entradas da cidade desenhada: a masmorra fica fixa.
+for (const [nome, estado, app, dungeon] of [
+  ['pela entrada da caverna, onde desceu por último', naCidadeDoVeterano, false, 'caverna'],
+  ['pela entrada da floresta, depois de descer na caverna', naCidadeDoVeterano, false, 'floresta'],
+  ['pela entrada da floresta, no app', portaoDe(guerreiro, { cleared: [], totems: {} }), true, 'floresta'],
+] as const) {
+  caso(`abrirPortao: ${nome}`, 'abrirPortao', { estado, app, masmorra: dungeon }, (a) => E.abrirPortao(a.estado, a.app, a.masmorra as never));
+}
+caso('escolherMasmorra: com a masmorra fixa devolve o mesmo', 'escolherMasmorra (fechada devolve o mesmo)', { portao: E.abrirPortao(naCidadeDoVeterano, false, 'caverna'), dungeon: 'floresta' }, (a) =>
+  E.escolherMasmorra(a.portao, a.dungeon as never) === a.portao,
+);
+
+// --- a cidade desenhada (city/mapa-da-cidade.ts e jogo/cidade.ts) ---
+
+for (const troncos of [true, false]) {
+  caso(`plantaDaCidade: ${troncos ? 'com' : 'sem'} os troncos`, 'plantaDaCidade', { troncosNoCaminho: troncos }, (a) => E.plantaDaCidade(a.troncosNoCaminho));
+}
+for (const ponto of [...new Set(E.PONTOS_DA_CIDADE.map((p) => p.id)), 'castelo']) {
+  caso(`chegadaNoPonto: ${ponto}`, 'chegadaNoPonto', { ponto }, (a) => E.chegadaNoPonto(a.ponto as never));
+}
+{
+  const salas = E.generateCityLayout(6, 6).rooms;
+  const recrutador = { ...salas.find((s) => s.type === 'npc')!, npc: { ...salas.find((s) => s.type === 'npc')!.npc!, service: 'recruit' as const } };
+  for (const celula of [...salas, recrutador, { type: 'void', x: 0, y: 0, doors: {} }]) {
+    const nome = celula.type === 'npc' ? `npc ${celula.npc?.service}` : celula.type;
+    caso(`pontoDaSala: ${nome}`, 'pontoDaSala', { celula }, (a) => E.pontoDaSala(a.celula as never));
+  }
+}
+{
+  // Sem a cópia da cidade (`cityMap`): a porta só olha a grade do mapa, e a cópia dobraria cada caso.
+  const naPraca: EstadoNaCidade = { ...cidade, cityMap: null, hero: heroi({ classe: 'guerreiro', level: 5 }) };
+  const florestaZerada: DungeonProgress = { cleared: ['floresta:normal'], totems: {} };
+  const veteranoNaPraca: EstadoNaCidade = { ...naPraca, hero: heroi({ classe: 'guerreiro', level: 20 }), progresso: florestaZerada };
+  const naSala = (tipo: string, base: EstadoNaCidade = naPraca): EstadoNaCidade => {
+    const sala = base.map.flat().find((c) => c.type === tipo && (tipo !== 'npc' || c.npc?.service === 'barter'))!;
+    return { ...base, pos: { x: sala.x, y: sala.y } };
+  };
+  for (const [nome, estado] of [
+    ['herói novo', naPraca],
+    ['floresta zerada', veteranoNaPraca],
+  ] as const) {
+    caso(`troncosNoCaminho: ${nome}`, 'troncosNoCaminho', { estado }, (a) => E.troncosNoCaminho(a.estado));
+    caso(`pistasDaCidade: ${nome}`, 'pistasDaCidade', { estado }, (a) => E.pistasDaCidade(a.estado));
+  }
+  constante('TEXTO_DA_CIDADE', E.TEXTO_DA_CIDADE);
+  caso('plantaDaCidadeAgora: floresta zerada', 'plantaDaCidadeAgora', { estado: veteranoNaPraca }, (a) => E.plantaDaCidadeAgora(a.estado));
+  for (const [nome, estado, daMasmorra] of [
+    ['na praça', naPraca, false],
+    ['na loja', naSala('shop'), false],
+    ['com o Bram', naSala('npc'), false],
+    ['no portão, depois da caverna', { ...naSala('gate'), masmorra: { dungeon: 'caverna', difficulty: 'normal' } }, false],
+    ['de volta da torre', { ...naPraca, masmorra: { dungeon: 'torre', difficulty: 'dificil' } }, true],
+  ] as const) {
+    caso(`chegadaNaCidade: ${nome}`, 'chegadaNaCidade', { estado, daMasmorra }, (a) => E.chegadaNaCidade(a.estado as EstadoNaCidade, a.daMasmorra));
+  }
+  const pontos = [...new Set(E.PONTOS_DA_CIDADE.map((p) => p.id))];
+  const semTutorial: EstadoNaCidade = { ...naPraca, tutorial: { enabled: false, completed: {}, rewarded: false } };
+  const aprendizNaPraca: EstadoNaCidade = { ...naPraca, hero: heroi({ classe: null }) };
+  const feridoNaPraca: EstadoNaCidade = { ...semTutorial, hero: heroi({ classe: 'guerreiro', extra: { hp: 5, mp: 1 } }) };
+  const casos: Array<[string, EstadoNaCidade, string, boolean]> = [
+    ...pontos.map((ponto): [string, EstadoNaCidade, string, boolean] => [ponto, semTutorial, ponto, false]),
+    ['loja, fechando "Dê o primeiro passo"', naPraca, 'loja', false],
+    ['taverna, ferido', feridoNaPraca, 'taverna', false],
+    ['igreja no app', semTutorial, 'igreja', true],
+    ['ferreiro no app', semTutorial, 'ferreiro', true],
+    ['floresta, Aprendiz', aprendizNaPraca, 'floresta', false],
+    ['caverna, veterano', veteranoNaPraca, 'caverna', false],
+    ['caverna sem o nível', { ...naPraca, progresso: florestaZerada }, 'caverna', false],
+    ['torre sem a caverna', { ...veteranoNaPraca, hero: heroi({ classe: 'guerreiro', level: 40 }) }, 'torre', false],
+  ];
+  for (const [nome, estado, ponto, app] of casos) {
+    caso(`entrarNoPonto: ${nome}`, 'entrarNoPonto', { estado, ponto, pet: null, app }, (a, ctx) => E.entrarNoPonto(a.estado, a.ponto as never, ctx.rng, a.pet, ctx.now, a.app), {
+      rng: { seed: 7 },
+      now: AGORA,
+    });
+  }
+  caso('falarComOBram: na forja', 'falarComOBram', { estado: naSala('blacksmith', semTutorial), app: false }, (a, ctx) => E.falarComOBram(a.estado, ctx.rng, ctx.now, a.app), {
+    rng: { seed: 8 },
+    now: AGORA,
+  });
+
+  // O andar na planta grande: a regra das salas, com o tamanho do mapa.
+  const plantaComTroncos = E.plantaDaCidade(true);
+  const plantaAberta = E.plantaDaCidade(false);
+  const daArvore = E.chegadaNoPonto('arvore');
+  const aoLadoDaArvore = { x: 11 * E.TILE_UNITS + E.TILE_UNITS / 2, y: 10 * E.TILE_UNITS + E.TILE_UNITS / 2, facing: 'N' as const };
+  for (const [nome, planta, walker, entrada, passos] of [
+    ['da praça pro oeste, pela estrada', plantaComTroncos, daArvore, { x: -1, y: 0 }, 400],
+    ['sobe até os troncos e encosta', plantaComTroncos, aoLadoDaArvore, { x: 0, y: -1 }, 400],
+    ['sem os troncos, sobe até a caverna', plantaAberta, aoLadoDaArvore, { x: 0, y: -1 }, 600],
+    ['diagonal até a borda', plantaAberta, daArvore, { x: 1, y: 1 }, 900],
+    ['até a estrada da torre', plantaAberta, { x: 25 * E.TILE_UNITS, y: 14 * E.TILE_UNITS + E.TILE_UNITS / 2, facing: 'E' as const }, { x: 1, y: 0 }, 400],
+  ] as const) {
+    caso(`andarNoQuadro: cidade, ${nome}`, 'andarNoQuadro', { planta, walker, entrada, passos, tocandoAntes: null }, (a) =>
+      E.andarNoQuadro(a.planta, a.walker, a.entrada, a.passos, a.tocandoAntes),
+    );
+  }
+}
 
 // --- guilda ---
 

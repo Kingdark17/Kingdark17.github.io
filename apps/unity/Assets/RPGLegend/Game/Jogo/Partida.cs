@@ -77,7 +77,11 @@ namespace RPGLegend.Game.Jogo
         public string ChaveDoMapa => Estado.MapMode + ":" + Estado.Masmorra?.Dungeon + ":" + Estado.Masmorra?.Difficulty + ":" + Js.NumberToString(Estado.Floor);
 
         /// <summary>A chave da sala atual (sem a secreta).</summary>
-        public string ChaveDaSala => ChaveDoMapa + ":" + Js.NumberToString(Estado.Pos.X) + "," + Js.NumberToString(Estado.Pos.Y);
+        /// <remarks>
+        /// Na cidade desenhada (desde 2026-10-23) não há salas pra andar: entrar por uma porta muda a sala do save, mas o
+        /// herói continua onde está, e a chave é uma só pra cidade inteira (como no site).
+        /// </remarks>
+        public string ChaveDaSala => Estado.MapMode == "city" ? ChaveDoMapa + ":cidade" : ChaveDoMapa + ":" + Js.NumberToString(Estado.Pos.X) + "," + Js.NumberToString(Estado.Pos.Y);
 
         /// <summary>A sala secreta, se o herói está nela agora.</summary>
         public NaSecreta Secreta => _naSecreta != null && _naSecreta.Sala == ChaveDaSala ? _naSecreta : null;
@@ -155,6 +159,11 @@ namespace RPGLegend.Game.Jogo
         public void AoEncostar(string id)
         {
             if (Tela != null || Luta != null) return;
+            if (Estado is EstadoNaCidade cidade)
+            {
+                EntrarPelaPorta(cidade, id);
+                return;
+            }
             var secreta = Secreta;
             if (secreta != null)
             {
@@ -168,6 +177,26 @@ namespace RPGLegend.Game.Jogo
             }
             var indice = ExtrasDaSala.IndiceDoExtra(id);
             if (indice.HasValue && Estado is EstadoNaMasmorra masmorra) AplicarExtra(ExtrasDaSala.TocarExtra(masmorra, indice.Value, Rng.Default));
+        }
+
+        /// <summary>TS: entrarPelaPorta (tela-jogo.tsx) — a porta da cidade desenhada: a sala dela no save, e o que ela faz.</summary>
+        private void EntrarPelaPorta(EstadoNaCidade cidade, string ponto)
+        {
+            var resultado = Cidades.EntrarNoPonto(cidade, ponto, Rng.Default, Pet, null, app: true);
+            if (resultado.Som != null) TocarSom(resultado.Som);
+            RegistrarMudanca(resultado.Estado, resultado.Aviso);
+            Recadar(resultado.Recado);
+            AbrirTela(resultado.Tela);
+        }
+
+        /// <summary>TS: conversarComBram — o Bram atende dentro do ferreiro: a forja oferece a conversa com ele.</summary>
+        public void FalarComOBram(EstadoDoJogo estadoDaForja)
+        {
+            if (!(estadoDaForja is EstadoNaCidade cidade)) return;
+            var resultado = Cidades.FalarComOBram(cidade, Rng.Default, null, app: true);
+            RegistrarMudanca(resultado.Estado, resultado.Aviso);
+            Recadar(resultado.Recado);
+            AbrirTela(resultado.Tela);
         }
 
         /// <summary>O resultado de um extra: o aviso sempre; o estado novo só quando algo mudou (a placa só se lê).</summary>

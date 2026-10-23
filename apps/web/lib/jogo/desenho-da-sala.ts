@@ -21,7 +21,18 @@
 
 import type * as Pixi from 'pixi.js';
 
-import { HERO_HALF, ROOM_COLS, ROOM_ROWS, TILE_UNITS, type RoomLayout, type Walker } from '@rpg-legend/shared';
+import {
+  CAMADAS_DA_CIDADE,
+  CIDADE_COLS,
+  CIDADE_ROWS,
+  HERO_HALF,
+  PIXELS_POR_CASA,
+  ROOM_COLS,
+  ROOM_ROWS,
+  TILE_UNITS,
+  type RoomLayout,
+  type Walker,
+} from '@rpg-legend/shared';
 
 /** Pixels de tela por quadradinho: 16 de arte × 3, a escala do pixel art do jogo. */
 export const LADO = 48;
@@ -30,6 +41,15 @@ export const ALTURA_DA_CENA = ROOM_ROWS * LADO;
 
 /** Pixels por unidade da regra. */
 const ESCALA = LADO / TILE_UNITS;
+
+/**
+ * Na cidade desenhada do Breno, a arte vai no tamanho dela (32 pixels por
+ * casa, sem esticar, que pixel art esticada por fração borra), e a sala vira
+ * uma janela de 13,5 × 10,5 casas que segue o herói.
+ */
+const ESCALA_DA_CIDADE = PIXELS_POR_CASA / TILE_UNITS;
+const LARGURA_DA_CIDADE = CIDADE_COLS * PIXELS_POR_CASA;
+const ALTURA_DA_CIDADE = CIDADE_ROWS * PIXELS_POR_CASA;
 
 export type LugarDoTema = 'cidade' | 'floresta' | 'caverna' | 'torre';
 
@@ -64,6 +84,12 @@ export interface Figura {
 export interface Cena {
   /** `figuras`: a figura de cada objeto da planta, pelo id; objeto sem figura não é desenhado. */
   desenharSala(planta: RoomLayout, tema: TemaDaSala, figuras: Readonly<Record<string, Figura>>): Promise<void>;
+  /**
+   * A cidade desenhada do Breno no lugar da sala (`city/mapa-da-cidade.ts`):
+   * as camadas dele, e a janela seguindo o herói. `troncos`: os troncos
+   * ainda fecham o caminho da caverna.
+   */
+  desenharCidade(troncos: boolean): Promise<void>;
   /** Põe o herói onde a regra diz. `andando` balança o boneco, que ainda não tem quadros de caminhada. */
   colocarHeroi(walker: Walker, andando: boolean): void;
   /** Chama `fn` a cada quadro da tela, com os milissegundos desde o anterior. Devolve como parar. */
@@ -123,9 +149,23 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
   // atrás dele, e o que passa pela frente o cobre.
   const mundo = new pixi.Container();
   mundo.sortableChildren = true;
-  app.stage.addChild(chao, mundo);
+  /** O que vai por cima de tudo: na cidade, as árvores da borda e a grade das pontes. */
+  const acima = new pixi.Container();
+  /** O que a câmera move. Na sala fica parado; na cidade, segue o herói. */
+  const palco = new pixi.Container();
+  palco.addChild(chao, mundo, acima);
+  app.stage.addChild(palco);
   /** Os objetos desenhados na sala atual, pra sair quando ela troca. */
   let objetos: Pixi.Container[] = [];
+  let naCidade = false;
+  let escala = ESCALA;
+
+  function limpar() {
+    chao.removeChildren().forEach((filho) => filho.destroy());
+    acima.removeChildren().forEach((filho) => filho.destroy());
+    for (const objeto of objetos) objeto.destroy();
+    objetos = [];
+  }
 
   const boneco = await figuraEm(pixi, heroi, LADO * 1.25);
   mundo.addChild(boneco);
@@ -144,9 +184,10 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
   return {
     async desenharSala(planta, tema, figuras) {
       const esta = ++vez;
-      chao.removeChildren().forEach((filho) => filho.destroy());
-      for (const objeto of objetos) objeto.destroy();
-      objetos = [];
+      limpar();
+      naCidade = false;
+      escala = ESCALA;
+      palco.position.set(0, 0);
 
       const ladrilhos = new pixi.Graphics();
       planta.solid.forEach((linha, row) => {
@@ -207,10 +248,39 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       }
     },
 
+    async desenharCidade(troncos) {
+      const esta = ++vez;
+      const camadas = CAMADAS_DA_CIDADE.filter((camada) => troncos || !camada.soComTroncos);
+      const texturas = await Promise.all(camadas.map((camada) => textura(pixi, `/img/cidade/${camada.arquivo}.png`)));
+      if (esta !== vez) return;
+      limpar();
+      naCidade = true;
+      escala = ESCALA_DA_CIDADE;
+      camadas.forEach((camada, i) => {
+        const tex = texturas[i];
+        if (!tex) return;
+        const sprite = new pixi.Sprite(tex);
+        if (camada.plano === 'chao') chao.addChild(sprite);
+        else if (camada.plano === 'cima') acima.addChild(sprite);
+        else {
+          // Ordenada com o herói pela linha onde a camada encosta no chão.
+          sprite.zIndex = camada.base * PIXELS_POR_CASA;
+          mundo.addChild(sprite);
+          objetos.push(sprite);
+        }
+      });
+    },
+
     colocarHeroi(walker, andando) {
       // O pé do boneco fica na borda de baixo da base que bate nas paredes.
-      const x = walker.x * ESCALA;
-      const y = (walker.y + HERO_HALF) * ESCALA;
+      const x = walker.x * escala;
+      const y = (walker.y + HERO_HALF) * escala;
+      if (naCidade) {
+        // A janela segue o herói, sem passar da borda do mapa, em pixel inteiro (fração faz a arte tremer).
+        const meioX = Math.min(0, Math.max(LARGURA_DA_CENA - LARGURA_DA_CIDADE, LARGURA_DA_CENA / 2 - x));
+        const meioY = Math.min(0, Math.max(ALTURA_DA_CENA - ALTURA_DA_CIDADE, ALTURA_DA_CENA / 2 - (y - LADO / 2)));
+        palco.position.set(Math.round(meioX), Math.round(meioY));
+      }
       if (andando && !semMovimento) fase += 1;
       // Um pulinho a cada passo: sem quadros de caminhada ainda, é o que diz "andou" em vez de "deslizou".
       const pulo = andando && !semMovimento ? Math.abs(Math.sin(fase * 0.35)) * 3 : 0;

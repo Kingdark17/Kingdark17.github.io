@@ -53,6 +53,7 @@ export * from './inventory/inventory.js';
 export * from './npc/npc-services.js';
 export * from './quests/quests.js';
 export * from './city/city.js';
+export * from './city/mapa-da-cidade.js';
 export * from './pets/pets.js';
 export * from './shop/shop.js';
 
@@ -66,6 +67,7 @@ export * from './jogo/adm.js';
 export * from './jogo/andar-na-sala.js';
 export * from './jogo/apresentacao.js';
 export * from './jogo/cartao.js';
+export * from './jogo/cidade.js';
 export * from './jogo/combate.js';
 export * from './jogo/coop.js';
 export * from './jogo/criacao.js';

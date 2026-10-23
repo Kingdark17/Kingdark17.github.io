@@ -91,7 +91,14 @@ namespace RPGLegend.Game.Jogo
                         botoes.Add(PecasDaTela.Botao("VENDER POR " + PecasDaTela.Inteiro(Lojas.PrecoDeVenda(aVender)) + " OURO", () => Agir(Lojas.Vender(loja, aVender))));
                 }, "Escolha uma peça à venda ou da sua mochila para ver o preço e o que ela muda em você."));
                 colunas.Add(ficha);
-            }, ("SAIR", _sairDaTela));
+            }, BotoesDaLoja(loja, ferreiro));
+        }
+
+        /// <summary>O SAIR, e na forja da cidade o Bram, que atende ali dentro (decisão do usuário, 2026-10-23).</summary>
+        private (string texto, Action acao)[] BotoesDaLoja(Loja loja, bool ferreiro)
+        {
+            if (!ferreiro || !(loja.Estado is EstadoNaCidade)) return new[] { ("SAIR", _sairDaTela) };
+            return new[] { ("FALAR COM O BRAM", (Action)(() => _partida.FalarComOBram(loja.Estado))), ("SAIR", _sairDaTela) };
         }
 
         private void SeguirLoja(Loja proxima) => _partida.Seguir(new TelaAberta { Tipo = "loja", Loja = proxima }, proxima.Estado);

@@ -1,0 +1,22 @@
+{
+  "SALA_DO_PONTO": {
+    "taverna": "tavern",
+    "loja": "shop",
+    "ferreiro": "blacksmith",
+    "arvore": "start",
+    "igreja": "encantadora",
+    "guilda": "guild",
+    "quadro": "questboard",
+    "vidente": "npc"
+  },
+  "ENTRADAS": {
+    "floresta": "floresta",
+    "caverna": "caverna",
+    "torre": "torre"
+  },
+  "TEXTO_DA_CIDADE": "A cidade se espalha em volta da árvore da praça: a taverna, a loja de poções e a igreja a oeste; o ferreiro, a guilda e o quadro de avisos a leste; a cabana da vidente ao sul.",
+  "$privadas": [
+    "SALA_DO_PONTO",
+    "ENTRADAS"
+  ]
+}

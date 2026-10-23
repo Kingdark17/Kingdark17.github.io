@@ -1,0 +1,241 @@
+{
+  "CIDADE_COLS": 30,
+  "CIDADE_ROWS": 25,
+  "PLANTA_DA_CIDADE": [
+    "##############################",
+    "#########.####################",
+    "########.....#..########.#####",
+    "#########....#..########.#####",
+    "##########.....########..#####",
+    "###########...#########..#####",
+    "##########.....########..#####",
+    "#########...........####.#####",
+    "#######..............##..#####",
+    "######............##......####",
+    "######.##.................####",
+    "######.##...#...###.......####",
+    "##..........#..............###",
+    "##...##......................#",
+    "###..##............###.......#",
+    "##....#####....###...........#",
+    "###...#####.....##...........#",
+    "##........................####",
+    "##....#..................#####",
+    "##...##.................######",
+    "######..####...........#######",
+    "###.....###...........########",
+    "#######.####.......###########",
+    "###########...################",
+    "##############################"
+  ],
+  "PONTOS_DA_CIDADE": [
+    {
+      "id": "taverna",
+      "col": 2,
+      "row": 11
+    },
+    {
+      "id": "taverna",
+      "col": 3,
+      "row": 11
+    },
+    {
+      "id": "loja",
+      "col": 7,
+      "row": 11
+    },
+    {
+      "id": "loja",
+      "col": 8,
+      "row": 11
+    },
+    {
+      "id": "arvore",
+      "col": 12,
+      "row": 11
+    },
+    {
+      "id": "arvore",
+      "col": 12,
+      "row": 12
+    },
+    {
+      "id": "ferreiro",
+      "col": 16,
+      "row": 11
+    },
+    {
+      "id": "quadro",
+      "col": 19,
+      "row": 14
+    },
+    {
+      "id": "quadro",
+      "col": 20,
+      "row": 14
+    },
+    {
+      "id": "quadro",
+      "col": 21,
+      "row": 14
+    },
+    {
+      "id": "guilda",
+      "col": 15,
+      "row": 15
+    },
+    {
+      "id": "poco",
+      "col": 16,
+      "row": 16
+    },
+    {
+      "id": "poco",
+      "col": 17,
+      "row": 16
+    },
+    {
+      "id": "igreja",
+      "col": 8,
+      "row": 16
+    },
+    {
+      "id": "igreja",
+      "col": 9,
+      "row": 16
+    },
+    {
+      "id": "vidente",
+      "col": 10,
+      "row": 21
+    },
+    {
+      "id": "floresta",
+      "col": 12,
+      "row": 24
+    },
+    {
+      "id": "caverna",
+      "col": 12,
+      "row": 1
+    },
+    {
+      "id": "torre",
+      "col": 29,
+      "row": 13
+    },
+    {
+      "id": "torre",
+      "col": 29,
+      "row": 14
+    },
+    {
+      "id": "torre",
+      "col": 29,
+      "row": 15
+    },
+    {
+      "id": "troncos",
+      "col": 11,
+      "row": 5
+    },
+    {
+      "id": "troncos",
+      "col": 12,
+      "row": 5
+    },
+    {
+      "id": "troncos",
+      "col": 13,
+      "row": 5
+    },
+    {
+      "id": "troncos",
+      "col": 11,
+      "row": 6
+    },
+    {
+      "id": "troncos",
+      "col": 12,
+      "row": 6
+    },
+    {
+      "id": "troncos",
+      "col": 13,
+      "row": 6
+    }
+  ],
+  "PIXELS_POR_CASA": 32,
+  "CAMADAS_DA_CIDADE": [
+    {
+      "arquivo": "1_chao",
+      "plano": "chao",
+      "base": 0
+    },
+    {
+      "arquivo": "bloqueio_masmorra",
+      "plano": "meio",
+      "base": 7,
+      "soComTroncos": true
+    },
+    {
+      "arquivo": "taverna",
+      "plano": "meio",
+      "base": 12
+    },
+    {
+      "arquivo": "loja_pocao",
+      "plano": "meio",
+      "base": 12
+    },
+    {
+      "arquivo": "ferreiro",
+      "plano": "meio",
+      "base": 12
+    },
+    {
+      "arquivo": "3_arvore_central",
+      "plano": "meio",
+      "base": 13
+    },
+    {
+      "arquivo": "avisos_guilda",
+      "plano": "meio",
+      "base": 15
+    },
+    {
+      "arquivo": "igreja",
+      "plano": "meio",
+      "base": 17
+    },
+    {
+      "arquivo": "guilda",
+      "plano": "meio",
+      "base": 17
+    },
+    {
+      "arquivo": "cabana_vidente",
+      "plano": "meio",
+      "base": 22
+    },
+    {
+      "arquivo": "2_arvores_masmorra",
+      "plano": "cima",
+      "base": 0
+    },
+    {
+      "arquivo": "4_ponte_lateral",
+      "plano": "cima",
+      "base": 0
+    }
+  ],
+  "LADOS_DA_CHEGADA": [
+    "S",
+    "W",
+    "E",
+    "N"
+  ],
+  "$privadas": [
+    "LADOS_DA_CHEGADA"
+  ]
+}

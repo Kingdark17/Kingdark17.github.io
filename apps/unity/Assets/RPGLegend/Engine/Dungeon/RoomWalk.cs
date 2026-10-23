@@ -16,6 +16,12 @@ namespace RPGLegend.Engine
     {
         /// <summary>As portas da sala, na ordem de DIR_ORDER.</summary>
         public List<string> Doors;
+        /// <summary>
+        /// O tamanho, quando não é o da sala (ROOM_COLS × ROOM_ROWS): a cidade desenhada é uma planta grande só
+        /// (<see cref="MapaDaCidade"/>). null nas salas, que continuam como sempre foram.
+        /// </summary>
+        public double? Cols;
+        public double? Rows;
         /// <summary>[row][col]: parede, ou quadrado ocupado por um objeto.</summary>
         public List<List<bool>> Solid;
         public List<RoomObject> Objects;
@@ -149,9 +155,13 @@ namespace RPGLegend.Engine
 
         private static double QuadradoDe(double unidades) => Math.Floor(unidades / TileUnits);
 
+        private static double Colunas(RoomLayout layout) => layout.Cols ?? RoomCols;
+
+        private static double Linhas(RoomLayout layout) => layout.Rows ?? RoomRows;
+
         private static bool Solido(RoomLayout layout, double col, double row)
         {
-            if (row < 0 || row >= RoomRows || col < 0 || col >= RoomCols) return true;
+            if (row < 0 || row >= Linhas(layout) || col < 0 || col >= Colunas(layout)) return true;
             return layout.Solid[(int)row][(int)col];
         }
 
@@ -203,9 +213,9 @@ namespace RPGLegend.Engine
             var vao = D.DoorTile[lado];
             bool colado =
                 lado == "N" ? y - HeroHalf == TileUnits
-                : lado == "S" ? y + HeroHalf == (RoomRows - 1) * TileUnits
+                : lado == "S" ? y + HeroHalf == (Linhas(layout) - 1) * TileUnits
                 : lado == "W" ? x - HeroHalf == TileUnits
-                : x + HeroHalf == (RoomCols - 1) * TileUnits;
+                : x + HeroHalf == (Colunas(layout) - 1) * TileUnits;
             if (!colado) return atual;
             double meio = Centro(eixoX ? vao.Col : vao.Row);
             double falta = meio - atual;
@@ -220,9 +230,9 @@ namespace RPGLegend.Engine
             foreach (var direcao in layout.Doors)
             {
                 if (direcao == "N" && y < meio) return "N";
-                if (direcao == "S" && y > RoomRows * TileUnits - meio) return "S";
+                if (direcao == "S" && y > Linhas(layout) * TileUnits - meio) return "S";
                 if (direcao == "W" && x < meio) return "W";
-                if (direcao == "E" && x > RoomCols * TileUnits - meio) return "E";
+                if (direcao == "E" && x > Colunas(layout) * TileUnits - meio) return "E";
             }
             return null;
         }

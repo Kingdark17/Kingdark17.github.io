@@ -34,6 +34,11 @@ interface Props {
   /** Muda quando o jogador troca de sala: aí o herói aparece em `chegada`. */
   sala: string;
   planta: RoomLayout;
+  /**
+   * Na cidade: a cidade desenhada do Breno no lugar da sala, e se os troncos
+   * ainda estão no caminho da caverna. `null` na masmorra.
+   */
+  cidade: { troncos: boolean } | null;
   tema: TemaDaSala;
   /** A figura de cada objeto da planta (conteúdo e extras), pelo id. */
   figuras: Readonly<Record<string, Figura>>;
@@ -54,7 +59,7 @@ interface Props {
   children?: ReactNode;
 }
 
-export function CenaDaSala({ sala, planta, tema, figuras, heroi, chegada, posicao, ativo, entrada, onSaida, onEncostar, children }: Readonly<Props>) {
+export function CenaDaSala({ sala, planta, cidade, tema, figuras, heroi, chegada, posicao, ativo, entrada, onSaida, onEncostar, children }: Readonly<Props>) {
   const alvo = useRef<HTMLDivElement>(null);
   const cena = useRef<Cena | null>(null);
   const [pronta, setPronta] = useState(false);
@@ -91,9 +96,12 @@ export function CenaDaSala({ sala, planta, tema, figuras, heroi, chegada, posica
     };
   }, [heroi]);
 
+  const troncos = cidade ? cidade.troncos : null;
   useEffect(() => {
-    if (pronta) void cena.current?.desenharSala(planta, tema, figuras);
-  }, [pronta, planta, tema, figuras]);
+    if (!pronta) return;
+    if (troncos === null) void cena.current?.desenharSala(planta, tema, figuras);
+    else void cena.current?.desenharCidade(troncos);
+  }, [pronta, planta, tema, figuras, troncos]);
 
   useEffect(() => {
     const desenho = cena.current;

@@ -77,7 +77,19 @@ namespace RPGLegend.Tests
             // ---------- portão ----------
 
             Fn(M, "motivo", (a, c) => W(Portoes.Motivo(R<LockReason>(a["bloqueio"]))));
-            Fn(M, "abrirPortao", (a, c) => W(Portoes.AbrirPortao(R<EstadoNaCidade>(a["estado"]), JsJson.Truthy(a["app"]))));
+            Fn(M, "abrirPortao", (a, c) => W(Portoes.AbrirPortao(R<EstadoNaCidade>(a["estado"]), JsJson.Truthy(a["app"]), Str(a["masmorra"]))));
+
+            // A cidade desenhada.
+            Fn(M, "plantaDaCidade", (a, c) => W(MapaDaCidade.PlantaDaCidade(JsJson.Truthy(a["troncosNoCaminho"]))));
+            Fn(M, "chegadaNoPonto", (a, c) => W(MapaDaCidade.ChegadaNoPonto(Str(a["ponto"]))));
+            Fn(M, "pontoDaSala", (a, c) => W(MapaDaCidade.PontoDaSala(R<CityCell>(a["celula"]))));
+            Fn(M, "pistasDaCidade", (a, c) => W(Cidades.PistasDaCidade(R<EstadoNaCidade>(a["estado"]))));
+            Const(M, "TEXTO_DA_CIDADE", () => W(Cidades.TextoDaCidade));
+            Fn(M, "troncosNoCaminho", (a, c) => W(Cidades.TroncosNoCaminho(R<EstadoNaCidade>(a["estado"]))));
+            Fn(M, "plantaDaCidadeAgora", (a, c) => W(Cidades.PlantaDaCidadeAgora(R<EstadoNaCidade>(a["estado"]))));
+            Fn(M, "chegadaNaCidade", (a, c) => W(Cidades.ChegadaNaCidade(R<EstadoNaCidade>(a["estado"]), JsJson.Truthy(a["daMasmorra"]))));
+            Fn(M, "entrarNoPonto", (a, c) => W(Cidades.EntrarNoPonto(R<EstadoNaCidade>(a["estado"]), Str(a["ponto"]), c.RngFn, Str(a["pet"]), c.NowOrFail, JsJson.Truthy(a["app"]))));
+            Fn(M, "falarComOBram", (a, c) => W(Cidades.FalarComOBram(R<EstadoNaCidade>(a["estado"]), c.RngFn, c.NowOrFail, JsJson.Truthy(a["app"]))));
             Fn(M, "masmorras", (a, c) => W(Portoes.Masmorras(R<Portao>(a["portao"]))));
             Fn(M, "dificuldades", (a, c) => W(Portoes.Dificuldades(R<Portao>(a["portao"]))));
             Fn(M, "andares", (a, c) => W(Portoes.Andares(R<Portao>(a["portao"]))));

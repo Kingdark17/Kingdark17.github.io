@@ -11,6 +11,8 @@ namespace RPGLegend.Engine
         public double Andar;
         /// <summary>O portão é o do app: o andar de entrada pode ter item com material. Só aparece quando é true.</summary>
         public bool? App;
+        /// <summary>Aberto por uma entrada da cidade desenhada (<see cref="Cidades"/>): a masmorra é a dela. Só aparece quando é true.</summary>
+        public bool? Fixa;
 
         public Portao Clone() => (Portao)MemberwiseClone();
     }
@@ -77,10 +79,19 @@ namespace RPGLegend.Engine
             return aberta ?? "normal";
         }
 
-        /// <summary>TS: abrirPortao — abre na última descida, se ainda estiver aberta; senão, na Floresta Normal.</summary>
-        public static Portao AbrirPortao(EstadoNaCidade estado, bool app = false)
+        /// <summary>
+        /// TS: abrirPortao — abre na última descida, se ainda estiver aberta; senão, na Floresta Normal. Com
+        /// <paramref name="masmorra"/> (a entrada da cidade desenhada), ela fica fixa: na última dificuldade em que se
+        /// desceu nela ou, sem essa, na mais difícil aberta.
+        /// </summary>
+        public static Portao AbrirPortao(EstadoNaCidade estado, bool app = false, string masmorra = null)
         {
             var ultima = Bloqueio(estado, estado.Masmorra) != null ? null : estado.Masmorra;
+            if (masmorra != null)
+            {
+                var fixa = ultima != null && ultima.Dungeon == masmorra ? ultima : Run(masmorra, DificuldadeAberta(estado, masmorra));
+                return new Portao { Estado = estado, Escolha = fixa, Andar = AndarMaisFundo(estado, fixa), App = app ? true : (bool?)null, Fixa = true };
+            }
             var escolha = ultima ?? Run("floresta", "normal");
             return new Portao { Estado = estado, Escolha = escolha, Andar = AndarMaisFundo(estado, escolha), App = app ? true : (bool?)null };
         }
@@ -115,7 +126,7 @@ namespace RPGLegend.Engine
         /// <summary>TS: escolherMasmorra — leva junto a dificuldade mais alta aberta nela e o totem mais fundo. Fechada: a mesma.</summary>
         public static Portao EscolherMasmorra(Portao portao, string dungeon)
         {
-            if (Bloqueio(portao.Estado, Run(dungeon, "normal")) != null) return portao;
+            if (portao.Fixa == true || Bloqueio(portao.Estado, Run(dungeon, "normal")) != null) return portao;
             var c = portao.Clone();
             c.Escolha = Run(dungeon, DificuldadeAberta(portao.Estado, dungeon));
             c.Andar = AndarMaisFundo(portao.Estado, c.Escolha);

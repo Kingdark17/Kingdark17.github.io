@@ -38,6 +38,7 @@ import {
   aplicarRemoto,
   apresentacaoDe,
   celulaAtual,
+  chegadaNaCidade,
   confirmaAoTocar,
   curarNaTela,
   curarPeloParceiro,
@@ -45,6 +46,8 @@ import {
   descricaoDosExtras,
   displayName,
   entradaCombinada,
+  entrarNoPonto,
+  falarComOBram,
   gastarPonto,
   idDaRaca,
   indiceDoExtra,
@@ -55,12 +58,16 @@ import {
   monstroAtual,
   narrar,
   passagemSecreta,
+  pistasDaCidade,
+  plantaDaCidade,
   plantaDaSala,
   plantaDaSalaSecreta,
   retomarSave,
   roomArrival,
+  TEXTO_DA_CIDADE,
   textoDaSecreta,
   tocarExtra,
+  troncosNoCaminho,
   vizinhaEm,
   type Anotacao,
   type Aviso,
@@ -68,8 +75,10 @@ import {
   type CosmeticosDoJogador,
   type Direction,
   type EstadoDoJogo,
+  type EstadoNaCidade,
   type Item,
   type PetId,
+  type PontoDaCidade,
   type PosicaoNaSala,
   type Recado,
   type ResultadoDoExtra,
@@ -210,9 +219,15 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   //
   // Onde ele está dentro da sala não vai pro save: é caminho até a porta.
 
+  // Na cidade, desde 2026-10-23, não há salas pra andar: é o mapa desenhado
+  // do Breno (`city/mapa-da-cidade.ts`), uma planta só. Entrar por uma porta
+  // muda a sala do save (`entrarNoPonto`), mas o herói continua onde está,
+  // então a sala da cena é uma só pra cidade inteira.
   const celulaAgora = estado ? celulaAtual(estado) : null;
   const mapaAgora = estado ? `${estado.mapMode}:${estado.masmorra.dungeon}:${estado.masmorra.difficulty}:${estado.floor}` : '';
-  const salaAgora = estado ? `${mapaAgora}:${estado.pos.x},${estado.pos.y}` : '';
+  const salaAgora = estado ? (estado.mapMode === 'city' ? `${mapaAgora}:cidade` : `${mapaAgora}:${estado.pos.x},${estado.pos.y}`) : '';
+  /** Os troncos no caminho da caverna, na cidade; `null` na masmorra. */
+  const troncosAgora = estado?.mapMode === 'city' ? troncosNoCaminho(estado) : null;
   const portasAgora = (['N', 'S', 'E', 'W'] as const).filter((d) => celulaAgora?.doors?.[d]).join('');
   const iconeAgora = estado && celulaAgora ? apresentacaoDe(estado).icone(celulaAgora) : '';
   const arteAgora = iconeAgora ? arteDoTipo(celulaAgora?.type) : null;
@@ -236,10 +251,11 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const ladoDaSecreta = secretaAgora?.lado ?? null;
 
   const planta = useMemo(() => {
+    if (troncosAgora !== null) return plantaDaCidade(troncosAgora);
     if (ladoDaSecreta) return plantaDaSalaSecreta(ladoDaSecreta);
     const portas = Object.fromEntries([...portasAgora, ...(ladoDaPassagem ? [ladoDaPassagem] : [])].map((d) => [d, true]));
     return plantaDaSala(portas, lerObjetos(objetosAgora));
-  }, [ladoDaSecreta, portasAgora, ladoDaPassagem, objetosAgora]);
+  }, [troncosAgora, ladoDaSecreta, portasAgora, ladoDaPassagem, objetosAgora]);
   const figuras = useMemo(
     () => figurasDaSala(iconeAgora ? { arte: arteAgora, emoji: iconeAgora } : null, extrasAgora, secretaAgora?.indice ?? null),
     [iconeAgora, arteAgora, extrasAgora, secretaAgora?.indice],
@@ -261,9 +277,11 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     const dy = estado.pos.y - (naSala?.y ?? 0);
     const vizinha = naSala?.mapa === mapaAgora && Math.abs(dx) + Math.abs(dy) === 1;
     const veioPor: Direction | null = vizinha ? (dx === 1 ? 'E' : dx === -1 ? 'W' : dy === 1 ? 'S' : 'N') : null;
-    setNaSala({ sala: salaAgora, mapa: mapaAgora, x: estado.pos.x, y: estado.pos.y, chegada: roomArrival(veioPor), volta: 0 });
+    // Na cidade: quem volta da masmorra aparece na entrada dela; quem carrega o jogo, na porta da sala do save.
+    const chegada = estado.mapMode === 'city' ? chegadaNaCidade(estado, naSala?.mapa.startsWith('dungeon') ?? false) : roomArrival(veioPor);
+    setNaSala({ sala: salaAgora, mapa: mapaAgora, x: estado.pos.x, y: estado.pos.y, chegada, volta: 0 });
   }
-  const chegadaNaSala = naSala?.sala === salaAgora ? naSala.chegada : roomArrival(null);
+  const chegadaNaSala = naSala?.sala === salaAgora ? naSala.chegada : estado?.mapMode === 'city' ? chegadaNaCidade(estado) : roomArrival(null);
   /**
    * A cena põe o herói na chegada quando esta chave muda. Entrar e sair da
    * sala secreta também mudam: na volta (`volta`), ele aparece na passagem.
@@ -594,6 +612,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
    */
   function aoEncostar(id: string) {
     if (!estado || !conduzo || tela) return;
+    if (estado.mapMode === 'city') {
+      entrarPelaPorta(estado, id as PontoDaCidade);
+      return;
+    }
     if (estado.mapMode === 'dungeon' && secretaAgora) {
       if (id === ID_DO_BAU_SECRETO) aplicarExtra(estado, abrirBauSecreto(estado, secretaAgora.indice));
       return;
@@ -604,6 +626,29 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     }
     const indice = indiceDoExtra(id);
     if (indice !== null && estado.mapMode === 'dungeon') aplicarExtra(estado, tocarExtra(estado, indice, defaultRng));
+  }
+
+  /**
+   * O herói encostou numa porta da cidade desenhada: a sala dela no save, e
+   * o que ela faz (`entrarNoPonto`). No co-op, quem conduz avisa o parceiro
+   * antes, como ao encostar no conteúdo de uma sala.
+   */
+  function entrarPelaPorta(atual: EstadoNaCidade, ponto: PontoDaCidade) {
+    if (emCoop) travarParceiro();
+    const resultado = entrarNoPonto(atual, ponto, defaultRng, pet);
+    if (resultado.som) tocar(resultado.som);
+    registrarMudanca(resultado.estado, resultado.aviso);
+    recadar(resultado.recado);
+    setTela(resultado.tela);
+  }
+
+  /** O Bram atende dentro do ferreiro: a forja oferece a conversa com ele (decisão do usuário, 2026-10-23). */
+  function conversarComBram(atual: EstadoDoJogo) {
+    if (atual.mapMode !== 'city') return;
+    const resultado = falarComOBram(atual, defaultRng);
+    registrarMudanca(resultado.estado, resultado.aviso);
+    recadar(resultado.recado);
+    setTela(resultado.tela);
   }
 
   /** O resultado de um extra: o aviso sempre; o estado novo só quando algo mudou (a placa só se lê). */
@@ -786,6 +831,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             loja={aberta.loja}
             onLoja={(proxima) => seguir({ tipo: 'loja', loja: proxima }, proxima.estado)}
             onFechar={(final) => fechar(final.estado)}
+            onBram={aberta.loja.kind === 'blacksmith' && aberta.loja.estado.mapMode === 'city' ? (final) => conversarComBram(final.estado) : undefined}
           />
         );
       case 'dialogo':
@@ -967,6 +1013,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             <CenaDaSala
               sala={chaveDaCena}
               planta={planta}
+              cidade={troncosAgora === null ? null : { troncos: troncosAgora }}
               tema={TEMAS[estado.mapMode === 'dungeon' ? estado.masmorra.dungeon : 'cidade']}
               figuras={figuras}
               heroi={heroiNaCena}
@@ -983,7 +1030,13 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             {/* Tudo o que vem depois da sala, junto: no celular deitado a
                 sala fica sozinha à esquerda e isto vai pra direita. */}
             <div className={styles.ladoDaCena}>
-              {secretaAgora ? (
+              {estado.mapMode === 'city' ? (
+                // A cidade desenhada não tem sala pra narrar: diz o que há em volta e como entrar.
+                <div className={styles.descricaoLocal}>
+                  <p className={styles.linhaDaCena}>{TEXTO_DA_CIDADE}</p>
+                  <p className={styles.pistasDasPortas}>{pistasDaCidade(estado)}</p>
+                </div>
+              ) : secretaAgora ? (
                 <div className={styles.descricaoLocal}>
                   <p className={styles.linhaDaCena}>
                     {textoDaSecreta(celulaAtual(estado), secretaAgora.indice)}
@@ -1131,16 +1184,19 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               solto (2026-10-11): anda-se pelo teclado ou pelo joystick, que
               aparece onde o dedo encosta na sala. */}
           <aside className={styles.navegacao} aria-label="Mapa">
-            <Mapa
-              grade={estado.map}
-              posicao={estado.pos}
-              linhas={estado.mapRows}
-              colunas={estado.mapCols}
-              icone={visual.icone}
-              rotulo={visual.rotulo}
-              gasta={visual.gasta}
-              descricao={`Mapa: ${visual.lugar}`}
-            />
+            {/* Na cidade o mapa é a própria cena: a grade de salas sai, junto com a legenda dela. */}
+            {estado.mapMode === 'dungeon' && (
+              <Mapa
+                grade={estado.map}
+                posicao={estado.pos}
+                linhas={estado.mapRows}
+                colunas={estado.mapCols}
+                icone={visual.icone}
+                rotulo={visual.rotulo}
+                gasta={visual.gasta}
+                descricao={`Mapa: ${visual.lugar}`}
+              />
+            )}
 
             {/* Só aparece onde há teclado: no celular ela seria mentira, e
                 lá a dica do joystick aparece na própria sala. */}
@@ -1148,19 +1204,21 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
 
             {/* Botão, e não `title` no ícone: a legenda tem que abrir no
                 toque também, e um alvo de 15px não é alvo de dedo. */}
-            <button
-              type="button"
-              className={styles.chaveDaLegenda}
-              aria-expanded={legendaAberta}
-              onClick={() => setLegendaAberta((aberta) => !aberta)}
-            >
-              {legendaAberta ? '▾ Legenda' : '▸ Legenda'}
-            </button>
+            {estado.mapMode === 'dungeon' && (
+              <button
+                type="button"
+                className={styles.chaveDaLegenda}
+                aria-expanded={legendaAberta}
+                onClick={() => setLegendaAberta((aberta) => !aberta)}
+              >
+                {legendaAberta ? '▾ Legenda' : '▸ Legenda'}
+              </button>
+            )}
 
             {/* A legenda desenha a mesma arte da grade, resolvida pelo mesmo
                 `arteDoTipo` — antes era uma segunda lista de emoji escrita à
                 mão. O nome fica de pé mesmo se um tipo novo chegar sem arte. */}
-            {legendaAberta && (
+            {legendaAberta && estado.mapMode === 'dungeon' && (
               <ul className={styles.legenda}>
                 {visual.legenda.map(([tipo, nome]) => {
                   const arte = arteDoTipo(tipo);

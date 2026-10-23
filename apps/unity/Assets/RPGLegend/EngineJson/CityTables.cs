@@ -33,6 +33,7 @@ namespace RPGLegend.Engine.Json
             data.LayoutDoors = doors;
 
             GameData.CityTable = data;
+            GameData.MapaDaCidadeTable = JsSerializer.Parse<MapaDaCidadeData>(readTable("city/mapa-da-cidade"));
         }
     }
 }

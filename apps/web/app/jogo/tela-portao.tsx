@@ -12,6 +12,7 @@
 import {
   andares,
   dificuldades,
+  dungeonById,
   entrar,
   escolherAndar,
   escolherDificuldade,
@@ -60,16 +61,23 @@ export function TelaPortao({ portao, onPortao, onEntrar, onFechar }: Readonly<Pr
         </button>
       </header>
 
-      <p className={styles.textoDaGuilda}>O guarda abre o portão. Para onde você vai?</p>
+      {/* Pela entrada da cidade desenhada a masmorra já está escolhida: é a do caminho. */}
+      {portao.fixa ? (
+        <p className={styles.textoDaGuilda}>{`O caminho leva à ${dungeonById(portao.escolha.dungeon)?.name ?? portao.escolha.dungeon}. Escolha a dificuldade e por onde entrar.`}</p>
+      ) : (
+        <>
+          <p className={styles.textoDaGuilda}>O guarda abre o portão. Para onde você vai?</p>
 
-      <div className={styles.grupoDoPortao}>
-        <h2 className={styles.tituloDaSecao}>Masmorra</h2>
-        <div className={styles.escolhasDoPortao}>
-          {masmorras(portao).map((opcao) => (
-            <Opcao key={opcao.id} opcao={opcao} escolhida={portao.escolha.dungeon === opcao.id} onEscolher={(id) => onPortao(escolherMasmorra(portao, id))} />
-          ))}
-        </div>
-      </div>
+          <div className={styles.grupoDoPortao}>
+            <h2 className={styles.tituloDaSecao}>Masmorra</h2>
+            <div className={styles.escolhasDoPortao}>
+              {masmorras(portao).map((opcao) => (
+                <Opcao key={opcao.id} opcao={opcao} escolhida={portao.escolha.dungeon === opcao.id} onEscolher={(id) => onPortao(escolherMasmorra(portao, id))} />
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       <div className={styles.grupoDoPortao}>
         <h2 className={styles.tituloDaSecao}>Dificuldade</h2>
