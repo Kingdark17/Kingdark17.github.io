@@ -318,7 +318,8 @@ namespace RPGLegend.Engine
         public static RecruitResult ResolveRecruit(IReadOnlyList<Companion> party, RngFn rng = null)
         {
             rng = rng ?? Rng.Default;
-            if (party.Count >= MaxPartySize)
+            // Os esqueletos do necromante não ocupam vaga: são da luta, não da equipe.
+            if (Invocacao.SemInvocados(party).Count >= MaxPartySize)
                 return new RecruitResult { Party = new List<Companion>(party), Outcome = RecruitOutcome.PartyFull(), Used = false };
 
             // { ...generateCompanion(rng), temporary: true, combatsLeft: TEMPORARY_RECRUIT_COMBATS }

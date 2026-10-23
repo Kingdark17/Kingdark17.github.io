@@ -31,6 +31,7 @@
 import { attemptDodge } from '../combat/dodge.js';
 import { attemptFlee } from '../combat/flee.js';
 import { tickHeroStatus } from '../combat/hero-status.js';
+import { FIM_DOS_ESQUELETOS, MAX_ESQUELETOS, semInvocados } from '../combat/invocacao.js';
 import { applyMonsterHit } from '../combat/monster-hit.js';
 import type { CombatMonster, CombatMonsterView } from '../combat/monster-state.js';
 import { applyPartyTurn, passarRodadaDaCancao } from '../combat/party.js';
@@ -364,9 +365,13 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
   if (uso.outcome === 'no_mana') {
     return semCura({ ...combate, estado: { ...estado, hero: veneno.hero }, log: [`Mana insuficiente para usar ${poder.name}.`], som: null, flutuantes: [] });
   }
+  if (uso.outcome === 'summon_full') {
+    return semCura({ ...combate, estado: { ...estado, hero: veneno.hero }, log: [`Seus ${MAX_ESQUELETOS} esqueletos já estão de pé.`], som: null, flutuantes: [] });
+  }
 
   if (uso.outcome === 'damage') log.push(`Você usa ${poder.name} e causa ${uso.damage} de dano!`);
   else if (uso.outcome === 'heal') log.push(`Você usa ${poder.name} e recupera ${uso.healed} de Vida. A equipe recupera ${uso.allyHealed}.`);
+  else if (uso.outcome === 'summon') log.push(`Você usa ${poder.name}: ${uso.summoned?.name ?? 'um esqueleto'} se ergue para lutar ao seu lado!`);
   else log.push(`Você usa ${poder.name}.`);
   if (uso.healed && uso.outcome === 'damage') log.push(`O golpe devolve ${uso.healed} de vida a você.`);
 
@@ -403,11 +408,14 @@ export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Co
   const dado: Rolagem = { valor: roll, lados: 20 };
 
   if (tentativa.success) {
+    // Os esqueletos do necromante são da luta: ficam pra trás.
+    const comEsqueletos = estado.party.some((membro) => membro.invocado);
     return {
       ...combate,
+      estado: comEsqueletos ? { ...estado, party: semInvocados(estado.party) } : estado,
       fase: 'fuga',
       dado,
-      log: [`Você rolou ${roll}${comBonus} e fugiu com sucesso.`, 'Você escapa da batalha, ofegante.'],
+      log: [`Você rolou ${roll}${comBonus} e fugiu com sucesso.`, 'Você escapa da batalha, ofegante.', ...(comEsqueletos ? [FIM_DOS_ESQUELETOS] : [])],
       som: 'door',
       flutuantes: [],
     };

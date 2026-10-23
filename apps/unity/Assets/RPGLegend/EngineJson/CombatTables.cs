@@ -17,6 +17,7 @@ namespace RPGLegend.Engine.Json
             GameData.UsePowerTable = JsSerializer.Parse<UsePowerData>(readTable("combat/use-power"));
             GameData.FleeTable = JsSerializer.Parse<FleeData>(readTable("combat/flee"));
             GameData.DodgeTable = JsSerializer.Parse<DodgeData>(readTable("combat/dodge"));
+            GameData.InvocacaoTable = JsSerializer.Parse<InvocacaoData>(readTable("combat/invocacao"));
         }
     }
 }

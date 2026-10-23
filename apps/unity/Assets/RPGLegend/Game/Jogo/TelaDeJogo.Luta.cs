@@ -26,6 +26,16 @@ namespace RPGLegend.Game.Jogo
         private const float RaioDosBotoes = 124f;
         private static readonly float[] AngulosDosBotoes = { 180f, 148f, 116f, 84f };
 
+        /// <summary>
+        /// Com quatro poderes (o necromante com o Levantar Esqueleto, o bardo com a Canção), o arco abre: raio maior e cinco
+        /// lugares, pra os botões de 62 px não se encostarem. Até três, fica o arco de sempre.
+        /// </summary>
+        private const float RaioDosBotoesLargo = 150f;
+        private static readonly float[] AngulosDosBotoesLargo = { 180f, 156f, 132f, 108f, 84f };
+
+        /// <summary>Quantos botões de poder cabem em volta do ataque.</summary>
+        private const int PoderesNoArco = 4;
+
         private VisualElement _hud, _botaoAtaque, _iconeDoAtaque, _poderes, _menuDeItens, _numeros, _avisosDaLuta;
         private Label _emojiDoAtaque, _dicaDoEvento;
         private Button _botaoItem;
@@ -254,7 +264,7 @@ namespace RPGLegend.Game.Jogo
                 _poderesMostrados = chave;
                 foreach (var antigo in _botoesDePoder) antigo.Botao.RemoveFromHierarchy();
                 _botoesDePoder.Clear();
-                for (int i = 0; i < poderes.Count && i < 3; i++)
+                for (int i = 0; i < poderes.Count && i < PoderesNoArco; i++)
                 {
                     var poder = poderes[i];
                     var botao = new Button { text = "" };
@@ -333,11 +343,14 @@ namespace RPGLegend.Game.Jogo
             foreach (var b in _botoesDePoder) botoes.Add(b.Botao);
             botoes.Add(_botaoItem);
             // O centro do botão de ataque fica a 54 px do canto de baixo à direita; cada botão em volta tem 62 px.
-            for (int i = 0; i < botoes.Count && i < AngulosDosBotoes.Length; i++)
+            bool largo = botoes.Count > AngulosDosBotoes.Length;
+            var angulos = largo ? AngulosDosBotoesLargo : AngulosDosBotoes;
+            float raio = largo ? RaioDosBotoesLargo : RaioDosBotoes;
+            for (int i = 0; i < botoes.Count && i < angulos.Length; i++)
             {
-                float angulo = AngulosDosBotoes[i] * Mathf.Deg2Rad;
-                botoes[i].style.right = 54f - Mathf.Cos(angulo) * RaioDosBotoes - 31f;
-                botoes[i].style.bottom = 54f + Mathf.Sin(angulo) * RaioDosBotoes - 31f;
+                float angulo = angulos[i] * Mathf.Deg2Rad;
+                botoes[i].style.right = 54f - Mathf.Cos(angulo) * raio - 31f;
+                botoes[i].style.bottom = 54f + Mathf.Sin(angulo) * raio - 31f;
             }
         }
 

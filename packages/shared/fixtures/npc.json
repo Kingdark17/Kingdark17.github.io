@@ -7138,5 +7138,257 @@
       },
       "rngCalls": 0
     }
+  },
+  {
+    "name": "resolveRecruit: dois recrutas e dois esqueletos: os esqueletos não ocupam vaga",
+    "input": {
+      "fn": "resolveRecruit",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": "",
+            "invocado": true
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": "",
+            "invocado": true
+          }
+        ]
+      },
+      "rng": {
+        "seed": 4
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": "",
+            "invocado": true
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": "",
+            "invocado": true
+          },
+          {
+            "name": "Maren Ventoforte",
+            "raceIcon": "😇",
+            "race": "Celestial",
+            "className": "Clérigo",
+            "classIcon": "✝️",
+            "classId": "clerigo",
+            "hp": 42,
+            "maxHp": 42,
+            "attack": 8,
+            "attrs": {
+              "forca": 6,
+              "destreza": 6,
+              "constituicao": 8,
+              "intelecto": 9,
+              "sabedoria": 11,
+              "carisma": 13
+            },
+            "stance": "equilibrada",
+            "ability": "Prece Curativa",
+            "abilityDesc": "Pode recuperar a Vida do herói.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        ],
+        "outcome": {
+          "kind": "recruited",
+          "companion": {
+            "name": "Maren Ventoforte",
+            "raceIcon": "😇",
+            "race": "Celestial",
+            "className": "Clérigo",
+            "classIcon": "✝️",
+            "classId": "clerigo",
+            "hp": 42,
+            "maxHp": 42,
+            "attack": 8,
+            "attrs": {
+              "forca": 6,
+              "destreza": 6,
+              "constituicao": 8,
+              "intelecto": 9,
+              "sabedoria": 11,
+              "carisma": 13
+            },
+            "stance": "equilibrada",
+            "ability": "Prece Curativa",
+            "abilityDesc": "Pode recuperar a Vida do herói.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        },
+        "used": true
+      },
+      "rngCalls": 10
+    }
   }
 ]

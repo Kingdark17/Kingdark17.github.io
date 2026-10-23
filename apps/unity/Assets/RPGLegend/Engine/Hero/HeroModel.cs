@@ -168,6 +168,8 @@ namespace RPGLegend.Engine
         /// <summary>Recrutado por tempo limitado (serviço de NPC). Opcional.</summary>
         public bool? Temporary;
         public double? CombatsLeft;
+        /// <summary>O esqueleto do necromante (<see cref="Invocacao"/>): é da luta, não ocupa vaga e some no fim dela.</summary>
+        public bool? Invocado;
 
         [JsExtra] public JsExtras Extra;
 

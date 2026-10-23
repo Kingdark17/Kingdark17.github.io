@@ -51,6 +51,7 @@ import {
   type AtaqueDisponivel,
   type CombatMonsterView,
   type Combate,
+  type Companion,
   type Flutuante,
   type InimigoNaLuta,
   type Item,
@@ -317,6 +318,8 @@ export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoPar
         )}
       </div>
 
+      {combate.estado.party.length > 0 && <Equipe membros={combate.estado.party} />}
+
       <div className={styles.caixa}>
         {caixa.tipo === 'registro' && (
           <>
@@ -563,5 +566,32 @@ function Lutador({ inimigo, emGrupo, escolhido, daVez, golpeado, travado, numero
     >
       {conteudo}
     </button>
+  );
+}
+
+/**
+ * A equipe na luta: os recrutas e os esqueletos do necromante, cada um com a
+ * vida (pedido do usuário, 2026-10-23). O caído fica apagado até a luta
+ * acabar — os esqueletos somem com ela, e os recrutas voltam como estavam.
+ */
+function Equipe({ membros }: Readonly<{ membros: readonly Companion[] }>) {
+  return (
+    <ul className={styles.equipe} aria-label="Sua equipe">
+      {membros.map((membro, indice) => (
+        <li key={`${indice}-${membro.name}`} className={styles.membro} data-caido={membro.hp <= 0 || undefined}>
+          <span className={styles.iconeDoMembro} aria-hidden>
+            {membro.classIcon || '🛡️'}
+          </span>
+          <span className={styles.nomeDoMembro}>{membro.name}</span>
+          <div className={`${jogo.trilho} ${styles.trilhoDoMembro}`}>
+            <div
+              className={`${jogo.preenchimento} ${jogo.vida}`}
+              style={{ width: `${Math.max(0, Math.min(100, (membro.hp / Math.max(1, membro.maxHp)) * 100))}%` }}
+            />
+          </div>
+          <span className={styles.vidaDoMembro}>{membro.hp <= 0 ? 'caiu' : `${membro.hp} / ${membro.maxHp}`}</span>
+        </li>
+      ))}
+    </ul>
   );
 }

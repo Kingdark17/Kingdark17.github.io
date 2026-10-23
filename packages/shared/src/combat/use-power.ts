@@ -19,10 +19,12 @@ import { hasDebuffEffect, type Companion, type Hero } from '../hero/hero.js';
 import { masteryDamageMult } from '../hero/mastery.js';
 import { defaultRng, randomInt, type Rng } from '../rng.js';
 import { modifyDamageByAffinity } from './damage.js';
+import { criarEsqueleto, esqueletosDePe, MAX_ESQUELETOS } from './invocacao.js';
 import type { CombatMonsterView } from './monster-state.js';
 import { applyPowerStatus } from './status-effects.js';
 
-export type UsePowerOutcome = 'no_mana' | 'damage' | 'heal' | 'buff';
+/** `summon`: ergueu um esqueleto (`summoned`); `summon_full`: já há o máximo de pé, e nada foi gasto. */
+export type UsePowerOutcome = 'no_mana' | 'damage' | 'heal' | 'buff' | 'summon' | 'summon_full';
 
 export interface UsePowerOptions {
   rng?: Rng;
@@ -44,6 +46,8 @@ export interface UsePowerResult {
   /** Vida devolvida ao herói: pela cura, ou pelo dreno de um poder com `healRatio`. */
   healed?: number;
   allyHealed?: number;
+  /** O esqueleto que o poder ergueu (já no fim de `party`). */
+  summoned?: Companion;
   monsterDefeated: boolean;
 }
 
@@ -64,6 +68,11 @@ export function castPower(
   const rng = options.rng ?? defaultRng;
   const manaCost = powerManaCost(hero, power);
 
+  // O esqueleto do necromante: com o máximo de pé, avisa sem gastar a mana.
+  if (power.type === 'invocar' && esqueletosDePe(party) >= MAX_ESQUELETOS) {
+    return { hero, party: [...party], monster, outcome: 'summon_full', manaCost, savedMana: false, monsterDefeated: false };
+  }
+
   if (hero.mp < manaCost) {
     return { hero, party: [...party], monster, outcome: 'no_mana', manaCost, savedMana: false, monsterDefeated: false };
   }
@@ -71,6 +80,11 @@ export function castPower(
   const savedMana = (options.petManaSaveChance ?? 0) > 0 && rng() * 100 < (options.petManaSaveChance ?? 0);
   const heroAfterCost: Hero = savedMana ? hero : { ...hero, mp: hero.mp - manaCost };
   const d = heroAfterCost.derived;
+
+  if (power.type === 'invocar') {
+    const esqueleto = criarEsqueleto(heroAfterCost, party);
+    return { hero: heroAfterCost, party: [...party, esqueleto], monster, outcome: 'summon', manaCost, savedMana, summoned: esqueleto, monsterDefeated: false };
+  }
 
   if (power.type === 'dano_fisico' || power.type === 'dano_magico') {
     const base = power.type === 'dano_fisico' ? d.dmgFisico : d.dmgMagico;

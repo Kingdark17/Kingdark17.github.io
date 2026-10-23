@@ -585,6 +585,15 @@
       "turns": 3,
       "amount": 0.25,
       "soDaClasse": "bardo"
+    },
+    {
+      "id": "levantar_esqueleto",
+      "name": "Levantar Esqueleto",
+      "icon": "💀",
+      "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+      "cost": 14,
+      "type": "invocar",
+      "soDaClasse": "necromante"
     }
   ],
   "DEBUFFS": [

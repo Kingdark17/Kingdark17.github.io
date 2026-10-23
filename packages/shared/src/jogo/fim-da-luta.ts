@@ -14,6 +14,7 @@
  * caiu.
  */
 
+import { FIM_DOS_ESQUELETOS, semInvocados } from '../combat/invocacao.js';
 import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from '../combat/monster-state.js';
 import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
 import type { DungeonCell } from '../dungeon/generate.js';
@@ -144,7 +145,8 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
   const sala = celulaAtual(estado) as DungeonCell;
   const log: string[] = [];
 
-  const { party, saindo } = despedirTemporarios(estado.party);
+  if (estado.party.some((membro) => membro.invocado)) log.push(FIM_DOS_ESQUELETOS);
+  const { party, saindo } = despedirTemporarios(semInvocados(estado.party));
   for (const membro of saindo) log.push(`${membro.name} se despede da equipe após cumprir sua promessa.`);
 
   let hero = estado.hero;
@@ -255,7 +257,7 @@ export function perderLuta(estado: EstadoNaMasmorra, rng: Rng = defaultRng): Pas
   }
 
   const revivido: Hero = { ...hero, hp: Math.max(1, Math.floor(hero.maxHp * 0.3)), buffs: {} };
-  const equipe = estado.party.map((membro) => ({ ...membro, hp: Math.max(1, Math.floor(membro.maxHp * 0.3)) }));
+  const equipe = semInvocados(estado.party).map((membro) => ({ ...membro, hp: Math.max(1, Math.floor(membro.maxHp * 0.3)) }));
   log.push('Você foi derrotado! O grupo retorna à cidade inicial.');
 
   return { estado: voltarParaCidade({ ...estado, hero: revivido, party: equipe, inventory }), log };

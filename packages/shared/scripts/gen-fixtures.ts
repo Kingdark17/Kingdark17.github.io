@@ -860,6 +860,7 @@ caso('isTwoHanded: null', 'isTwoHanded', { item: null }, (a) => E.isTwoHanded(a.
     ['save antigo: só os nomes, um que não existe mais', { ...heroi({ classe: 'mago' }), powerIds: undefined, powerNames: ['Bola de Fogo', 'Poder Esquecido'] }],
     ['o bardo ganha a Canção de Batalha da classe', bardo],
     ['o bardo que já tem a Canção não a recebe duas vezes', { ...bardo, powerIds: ['cancao_debilitante', 'cancao_de_batalha'] }],
+    ['o necromante ganha Levantar Esqueleto da classe', heroi({ classe: 'necromante', extra: { powerIds: ['maldicao_sombria'], powerNames: ['Maldição Sombria'] } })],
     ['Aprendiz sem poderes', heroi({ classe: null })],
   ] as const) {
     caso(`heroPowers: ${nome}`, 'heroPowers', { hero }, (a) => E.heroPowers(a.hero as never));
@@ -1998,6 +1999,33 @@ caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'trig
   const cura = E.powerById('cura_menor')!;
   const julgamento = E.powerById('julgamento_sagrado')!;
   cp('sem mana não gasta nada', heroi({ extra: { mp: 3 } }), [], monstro(), bola, { sequence: [0] });
+
+  // O esqueleto do necromante (combat/invocacao.ts): até 3 de pé, à parte dos recrutas.
+  const levantar = E.powerById('levantar_esqueleto')!;
+  const necromante = heroi({ classe: 'necromante', level: 7, attrs: { intelecto: 17 } });
+  const esqueleto = (o: Partial<Companion> = {}): Companion => ({ ...E.criarEsqueleto(necromante, []), ...o });
+  for (const [nome, hero, party] of [
+    ['nível 1, Inteligência 14, sem ninguém', heroi({ classe: 'necromante', attrs: { intelecto: 14 } }), []],
+    ['nível 7, depois de dois esqueletos', necromante, [esqueleto(), esqueleto({ name: 'Esqueleto 2' })]],
+    ['com recrutas na equipe', necromante, [companheiro('guerreiro'), companheiro('mago')]],
+  ] as const) {
+    caso(`criarEsqueleto: ${nome}`, 'criarEsqueleto', { hero, party }, (a) => E.criarEsqueleto(a.hero, a.party));
+  }
+  const tresDePe = [esqueleto(), esqueleto({ name: 'Esqueleto 2' }), esqueleto({ name: 'Esqueleto 3' })];
+  const umCaido = [esqueleto({ hp: 0 }), esqueleto({ name: 'Esqueleto 2' }), esqueleto({ name: 'Esqueleto 3' })];
+  for (const [nome, party] of [
+    ['ninguém', []],
+    ['recrutas não contam', [companheiro('guerreiro'), companheiro('mago')]],
+    ['três de pé', tresDePe],
+    ['um caído', umCaido],
+  ] as const) {
+    caso(`esqueletosDePe: ${nome}`, 'esqueletosDePe', { party }, (a) => E.esqueletosDePe(a.party));
+    caso(`semInvocados: ${nome}`, 'semInvocados', { party }, (a) => E.semInvocados(a.party));
+  }
+  cp('levantar_esqueleto: com 3 de pé, avisa e não gasta', necromante, [companheiro('guerreiro'), ...tresDePe], monstro(), levantar, { sequence: [] });
+  cp('levantar_esqueleto: com um caído, levanta outro', necromante, [companheiro('guerreiro'), ...umCaido], monstro(), levantar, { sequence: [] });
+  cp('levantar_esqueleto: sem mana', heroi({ classe: 'necromante', extra: { mp: 5 } }), [], monstro(), levantar, { sequence: [] });
+  cp('levantar_esqueleto: com o pet que poupa mana', necromante, [], monstro(), levantar, { sequence: [0.1] }, { petManaSaveChance: 20 });
   cp('Mana Instável cobra o custo maior', heroi({ classe: 'mago', debuff: 'mana_instavel', extra: { mp: 17 } }), [], monstro(), bola, { sequence: [0] });
   cp('Mana Instável sem mana pro custo maior', heroi({ classe: 'mago', debuff: 'mana_instavel', extra: { mp: 16 } }), [], monstro(), bola, { sequence: [0] });
   cp('maestria nível 10 no poder', heroi({ classe: 'guerreiro', arma: 'espada', extra: { masteryBattles: 550 } }), [], monstro(), golpe, { sequence: [0] });
@@ -2719,6 +2747,7 @@ for (const service of [...Object.keys(E.NPC_SERVICE_INFO), 'xyz']) caso(`npcServ
     ['equipe vazia, outra seed', [], 2],
     ['dois na equipe', [companheiro('guerreiro'), companheiro('mago')], 3],
     ['equipe cheia, sem sortear', [companheiro('guerreiro'), companheiro('mago'), companheiro('bardo')], 1],
+    ['dois recrutas e dois esqueletos: os esqueletos não ocupam vaga', [companheiro('guerreiro'), companheiro('mago'), { ...companheiro('bardo'), invocado: true }, { ...companheiro('bardo'), invocado: true }], 4],
   ] as const) {
     caso(`resolveRecruit: ${nome}`, 'resolveRecruit', { party }, (a, { rng }) => E.resolveRecruit(a.party, rng), { rng: { seed } });
   }
@@ -4104,6 +4133,9 @@ caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: 
   perde('perde 10% do ouro e um item comum ou incomum', comGradeInteira(naSalaDaMasmorra(umMonstro, nivel(6, 300), mochila)), { sequence: [0.6] });
   perde('o ouro perdido para em 500', comGradeInteira(naSalaDaMasmorra(umMonstro, nivel(20, 9000), [])), { sequence: [0] });
   perde('a equipe volta com 30%', comGradeInteira({ ...naSalaDaMasmorra(umMonstro, nivel(2, 0)), party: [companheiro('guerreiro', { hp: 0 }), fiel] }), { sequence: [] });
+  const ossos = { ...companheiro('bardo', { name: 'Esqueleto' }), invocado: true };
+  perde('os esqueletos ficam pra trás', comGradeInteira({ ...naSalaDaMasmorra(umMonstro, nivel(2, 0)), party: [ossos, fiel] }), { sequence: [] });
+  limpa('os esqueletos voltam ao pó, o fiel fica', { ...ultimo.estado, party: [ossos, temporario, fiel] }, ultimo.abatido, { sequence: [0.99] });
 }
 
 function naSalaInterage(nome: string, estado: EstadoDoJogo, semente: number, pet: string | null = null): void {
@@ -4580,6 +4612,19 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     simula('runas: uma de cada, em seis golpes', abrir({ ...zumbi(), hero: comRunas([tres('eletrica'), tres('fogo'), tres('gelo'), tres('vampirica')]) }), golpesSeguidos(6), { seed: 860 });
     simula('runas: quatro elétricas, o choque derruba', abrir({ ...salaCom([bicho('zumbi', { hp: 100, maxHp: 100 })]), hero: comRunas([tres('eletrica'), tres('eletrica'), tres('eletrica'), tres('eletrica')]) }), golpesSeguidos(4), { seed: 861 });
     simula('runas: a vampírica cura o herói ferido', abrir({ ...zumbi(), hero: comRunas([tres('vampirica'), tres('vampirica')], { hp: 100 }) }), golpesSeguidos(5), { seed: 862 });
+  }
+
+  // O esqueleto do necromante na arena: o poder ergue, ele bate no tempo dele, e o quarto avisa.
+  {
+    const necromante = forte({ classe: 'necromante', attrs: { intelecto: 16 }, extra: { mp: 200, maxMp: 200 } });
+    const levantar = (passo: number): EntradaDaLuta[] => parado(passo).map((e, i) => (i === 0 ? { ...e, poder: 'levantar_esqueleto' } : e));
+    const tresVezes: EntradaDaLuta[] = [];
+    for (let vez = 0; vez < 4; vez++) tresVezes.push(...levantar(E.RECARGA_DO_PODER + 2));
+    simula('esqueleto: o necromante levanta um e ele bate no zumbi', abrir({ ...zumbi(), hero: necromante }), [...levantar(1), ...parado(400)], { seed: 880 });
+    simula('esqueleto: três de pé, e o quarto avisa', abrir({ ...zumbi(), hero: necromante }), tresVezes, { seed: 881 });
+    simula('esqueleto: a aranha também mira nele', abrir({ ...salaCom([bicho('aranha', { hp: 900, maxHp: 900 })], necromante) }), [...levantar(1), ...parado(500)], { seed: 882 });
+    const comOssos = { ...zumbi(), hero: necromante, party: [{ ...E.criarEsqueleto(necromante, []), hp: 12 }] };
+    caso('abrirLuta: retomada com um esqueleto na equipe', 'abrirLuta', { estado: comOssos, chegada: E.roomArrival(null), pet: null }, (a) => E.abrirLuta(a.estado, a.chegada, a.pet as never));
   }
 
   // A armadura encantada (a Encantadora, só do app): o escudo do vigor, a robustez e as resistências.

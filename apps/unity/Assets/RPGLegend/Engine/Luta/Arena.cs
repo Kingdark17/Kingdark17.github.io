@@ -690,6 +690,11 @@ namespace RPGLegend.Engine
                 Contar(l, Aviso("Mana insuficiente para " + poder.Name));
                 return;
             }
+            if (uso.Outcome == UsePowerOutcomes.SummonFull)
+            {
+                Contar(l, Aviso("Seus " + Js.NumberToString(Invocacao.MaxEsqueletos) + " esqueletos já estão de pé"));
+                return;
+            }
             l.Arena.RecargaDosPoderes.Set(id, D.RecargaDoPoder);
             var comUso = estado.Clone();
             comUso.Hero = uso.Hero;
@@ -705,6 +710,12 @@ namespace RPGLegend.Engine
             {
                 Contar(l, Numero("heroi", 0, "+" + Js.NumberToString(uso.Healed ?? 0), "cura"));
                 Contar(l, Som("heal"));
+            }
+            else if (uso.Outcome == UsePowerOutcomes.Summon)
+            {
+                // O esqueleto entra no fim da equipe e começa a bater no tempo dele, como os companheiros da entrada.
+                l.Arena.Companheiros.Add(new CompanheiroNaArena { Indice = uso.Party.Count - 1, Tempo = D.CadenciaDoCompanheiro / 2 });
+                Contar(l, Aviso(poder.Icon + " " + (uso.Summoned?.Name ?? "Esqueleto") + " se ergue"));
             }
             else
             {

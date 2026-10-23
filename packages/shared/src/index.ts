@@ -30,6 +30,7 @@ export * from './monsters/generate.js';
 export * from './combat/monster-state.js';
 export * from './combat/damage.js';
 export * from './combat/status-effects.js';
+export * from './combat/invocacao.js';
 export * from './combat/weapon-proc.js';
 export * from './combat/hero-status.js';
 export * from './combat/class-passives.js';

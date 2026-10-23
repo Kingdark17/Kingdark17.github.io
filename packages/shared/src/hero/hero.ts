@@ -592,6 +592,11 @@ export interface Companion {
   /** Companheiro recrutado por tempo limitado (serviço de NPC) em vez de permanente. */
   temporary?: boolean;
   combatsLeft?: number;
+  /**
+   * O esqueleto do necromante (`combat/invocacao.ts`): é da luta, não da
+   * equipe — não ocupa vaga de recruta e some quando a luta acaba.
+   */
+  invocado?: boolean;
 }
 
 /** Por id da classe, não pelo nome — ver a nota em `catalog.ts`. */

@@ -666,6 +666,15 @@
           "turns": 3,
           "amount": 0.25,
           "soDaClasse": "bardo"
+        },
+        {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
         }
       ]
     }
@@ -10792,6 +10801,113 @@
           "turns": 3,
           "amount": 0.25,
           "soDaClasse": "bardo"
+        }
+      ]
+    }
+  },
+  {
+    "name": "heroPowers: o necromante ganha Levantar Esqueleto da classe",
+    "input": {
+      "fn": "heroPowers",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [
+            "Maldição Sombria"
+          ],
+          "powerIds": [
+            "maldicao_sombria"
+          ],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 70,
+          "mp": 70,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "maldicao_sombria",
+          "name": "Maldição Sombria",
+          "icon": "☠️",
+          "desc": "Causa dano e reduz o dano do inimigo por 3 turnos.",
+          "cost": 12,
+          "type": "dano_magico",
+          "power": 1.25,
+          "status": "enfraquecido",
+          "turns": 3,
+          "amount": 0.25
+        },
+        {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
         }
       ]
     }

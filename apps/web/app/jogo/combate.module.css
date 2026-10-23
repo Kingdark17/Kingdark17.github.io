@@ -363,6 +363,66 @@
 
 /* ---------- a caixa ---------- */
 
+/* ---------- a equipe ----------
+   Os recrutas e os esqueletos do necromante, numa faixa entre o palco e a
+   caixa (pedido do usuário, 2026-10-23: o primeiro companheiro desenhado
+   no site). O caído fica apagado até a luta acabar. */
+
+.equipe {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.membro {
+  composes: painel from '../acabamento.module.css';
+  flex: 1 1 9.5rem;
+  max-width: 14rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'icone nome'
+    'icone trilho'
+    'icone vida';
+  column-gap: 0.5rem;
+  row-gap: 0.15rem;
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+}
+
+.membro[data-caido] {
+  opacity: 0.45;
+}
+
+.iconeDoMembro {
+  grid-area: icone;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.nomeDoMembro {
+  grid-area: nome;
+  font-size: 0.85rem;
+  color: var(--parchment);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trilhoDoMembro {
+  grid-area: trilho;
+}
+
+.vidaDoMembro {
+  grid-area: vida;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  color: var(--parchment-dim);
+}
+
 .caixa {
   composes: painel from '../acabamento.module.css';
   padding: 0.85rem 1rem;

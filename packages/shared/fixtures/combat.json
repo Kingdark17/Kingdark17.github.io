@@ -114141,6 +114141,187 @@
     }
   },
   {
+    "name": "powerManaCost: levantar_esqueleto",
+    "input": {
+      "fn": "powerManaCost",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "power": {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": 14
+    }
+  },
+  {
+    "name": "powerManaCost: levantar_esqueleto com Mana Instável (ceil de ×1,2)",
+    "input": {
+      "fn": "powerManaCost",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "mana_instavel",
+            "name": "Mana Instável",
+            "icon": "💢",
+            "desc": "-1 Intelecto e poderes custam 20% mais Mana.",
+            "attr": "intelecto",
+            "effect": "manaCostPenalty"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "power": {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": 17
+    }
+  },
+  {
     "name": "castPower: golpe_poderoso, d6 em 0",
     "input": {
       "fn": "castPower",
@@ -127883,6 +128064,892 @@
     }
   },
   {
+    "name": "castPower: levantar_esqueleto, d6 em 0",
+    "input": {
+      "fn": "castPower",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 30,
+          "maxMp": 70,
+          "mp": 70,
+          "buffs": {
+            "esquivaTurns": 1,
+            "esquivaAmount": 5
+          }
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 5,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 0,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 19,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "power": {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
+        },
+        "options": {}
+      },
+      "rng": {
+        "sequence": [
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 30,
+          "maxMp": 70,
+          "mp": 56,
+          "buffs": {
+            "esquivaTurns": 1,
+            "esquivaAmount": 5
+          }
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 5,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 0,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 19,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 44,
+            "maxHp": 44,
+            "attack": 9,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "outcome": "summon",
+        "manaCost": 14,
+        "savedMana": false,
+        "summoned": {
+          "name": "Esqueleto",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 44,
+          "maxHp": 44,
+          "attack": 9,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "invocado": true
+        },
+        "monsterDefeated": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "castPower: levantar_esqueleto, d6 no máximo",
+    "input": {
+      "fn": "castPower",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 18,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 15,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 105,
+            "dmgFisico": 36,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 15,
+            "resistMagica": 15,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 30,
+          "maxMp": 105,
+          "mp": 105,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 5,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 0,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 19,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {
+            "atordoado": 1
+          },
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "power": {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
+        },
+        "options": {}
+      },
+      "rng": {
+        "sequence": [
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 18,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 15,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 105,
+            "dmgFisico": 36,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 15,
+            "resistMagica": 15,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 30,
+          "maxMp": 105,
+          "mp": 91,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 5,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 0,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Bardo",
+            "classIcon": "🎵",
+            "classId": "bardo",
+            "hp": 19,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 58,
+            "maxHp": 58,
+            "attack": 12,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {
+            "atordoado": 1
+          },
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "outcome": "summon",
+        "manaCost": 14,
+        "savedMana": false,
+        "summoned": {
+          "name": "Esqueleto",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 58,
+          "maxHp": 58,
+          "attack": 12,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "invocado": true
+        },
+        "monsterDefeated": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
     "name": "castPower: sem mana não gasta nada",
     "input": {
       "fn": "castPower",
@@ -128143,6 +129210,2385 @@
         "monsterDefeated": false
       },
       "rngCalls": 0
+    }
+  },
+  {
+    "name": "criarEsqueleto: nível 1, Inteligência 14, sem ninguém",
+    "input": {
+      "fn": "criarEsqueleto",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 14,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 90,
+            "dmgFisico": 20,
+            "dmgMagico": 42,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 90,
+          "mp": 90,
+          "buffs": {}
+        },
+        "party": []
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 52,
+        "maxHp": 52,
+        "attack": 11,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Ossos Erguidos",
+        "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+        "invocado": true
+      }
+    }
+  },
+  {
+    "name": "criarEsqueleto: nível 7, depois de dois esqueletos",
+    "input": {
+      "fn": "criarEsqueleto",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 250,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 155,
+            "maxMp": 117,
+            "dmgFisico": 20,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 155,
+          "hp": 155,
+          "maxMp": 117,
+          "mp": 117,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto 3",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 82,
+        "maxHp": 82,
+        "attack": 18,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Ossos Erguidos",
+        "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+        "invocado": true
+      }
+    }
+  },
+  {
+    "name": "criarEsqueleto: com recrutas na equipe",
+    "input": {
+      "fn": "criarEsqueleto",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 250,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 155,
+            "maxMp": 117,
+            "dmgFisico": 20,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 155,
+          "hp": 155,
+          "maxMp": 117,
+          "mp": 117,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 82,
+        "maxHp": 82,
+        "attack": 18,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Ossos Erguidos",
+        "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+        "invocado": true
+      }
+    }
+  },
+  {
+    "name": "esqueletosDePe: ninguém",
+    "input": {
+      "fn": "esqueletosDePe",
+      "args": {
+        "party": []
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "semInvocados: ninguém",
+    "input": {
+      "fn": "semInvocados",
+      "args": {
+        "party": []
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "esqueletosDePe: recrutas não contam",
+    "input": {
+      "fn": "esqueletosDePe",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "semInvocados: recrutas não contam",
+    "input": {
+      "fn": "semInvocados",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "name": "Aliado",
+          "raceIcon": "🧑",
+          "race": "Humano",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "hp": 20,
+          "maxHp": 20,
+          "attack": 5,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "stance": "equilibrada",
+          "ability": "",
+          "abilityDesc": ""
+        },
+        {
+          "name": "Aliado",
+          "raceIcon": "🧑",
+          "race": "Humano",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "classId": "mago",
+          "hp": 20,
+          "maxHp": 20,
+          "attack": 5,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "stance": "equilibrada",
+          "ability": "",
+          "abilityDesc": ""
+        }
+      ]
+    }
+  },
+  {
+    "name": "esqueletosDePe: três de pé",
+    "input": {
+      "fn": "esqueletosDePe",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "semInvocados: três de pé",
+    "input": {
+      "fn": "semInvocados",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "esqueletosDePe: um caído",
+    "input": {
+      "fn": "esqueletosDePe",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "semInvocados: um caído",
+    "input": {
+      "fn": "semInvocados",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "castPower: levantar_esqueleto: com 3 de pé, avisa e não gasta",
+    "input": {
+      "fn": "castPower",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 250,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 155,
+            "maxMp": 117,
+            "dmgFisico": 20,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 155,
+          "hp": 155,
+          "maxMp": 117,
+          "mp": 117,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "power": {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
+        },
+        "options": {}
+      },
+      "rng": {
+        "sequence": []
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 250,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 155,
+            "maxMp": 117,
+            "dmgFisico": 20,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 155,
+          "hp": 155,
+          "maxMp": 117,
+          "mp": 117,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "outcome": "summon_full",
+        "manaCost": 14,
+        "savedMana": false,
+        "monsterDefeated": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "castPower: levantar_esqueleto: com um caído, levanta outro",
+    "input": {
+      "fn": "castPower",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 250,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 155,
+            "maxMp": 117,
+            "dmgFisico": 20,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 155,
+          "hp": 155,
+          "maxMp": 117,
+          "mp": 117,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "power": {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
+        },
+        "options": {}
+      },
+      "rng": {
+        "sequence": []
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 250,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 155,
+            "maxMp": 117,
+            "dmgFisico": 20,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 155,
+          "hp": 155,
+          "maxMp": 117,
+          "mp": 103,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 4",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "outcome": "summon",
+        "manaCost": 14,
+        "savedMana": false,
+        "summoned": {
+          "name": "Esqueleto 4",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 82,
+          "maxHp": 82,
+          "attack": 18,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "invocado": true
+        },
+        "monsterDefeated": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "castPower: levantar_esqueleto: sem mana",
+    "input": {
+      "fn": "castPower",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 70,
+          "mp": 5,
+          "buffs": {}
+        },
+        "party": [],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "power": {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
+        },
+        "options": {}
+      },
+      "rng": {
+        "sequence": []
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 70,
+          "mp": 5,
+          "buffs": {}
+        },
+        "party": [],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "outcome": "no_mana",
+        "manaCost": 14,
+        "savedMana": false,
+        "monsterDefeated": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "castPower: levantar_esqueleto: com o pet que poupa mana",
+    "input": {
+      "fn": "castPower",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 250,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 155,
+            "maxMp": 117,
+            "dmgFisico": 20,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 155,
+          "hp": 155,
+          "maxMp": 117,
+          "mp": 117,
+          "buffs": {}
+        },
+        "party": [],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "power": {
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
+        },
+        "options": {
+          "petManaSaveChance": 20
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 250,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 155,
+            "maxMp": 117,
+            "dmgFisico": 20,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 155,
+          "hp": 155,
+          "maxMp": 117,
+          "mp": 117,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
+          }
+        ],
+        "monster": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 5,
+          "hp": 100,
+          "maxHp": 100,
+          "dmg": 5,
+          "speed": 8,
+          "xp": 10,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin Corrompido",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        },
+        "outcome": "summon",
+        "manaCost": 14,
+        "savedMana": true,
+        "summoned": {
+          "name": "Esqueleto",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 82,
+          "maxHp": 82,
+          "attack": 18,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "invocado": true
+        },
+        "monsterDefeated": false
+      },
+      "rngCalls": 1
     }
   },
   {
@@ -132040,13 +135486,15 @@
           "enemyClassLabel": "Feiticeiro"
         },
         "power": {
-          "id": "renovacao_natural",
-          "name": "Renovação Natural",
-          "icon": "🌱",
-          "desc": "Cura poderosa para o herói, companheiros e parceiro online.",
-          "cost": 15,
-          "type": "cura",
-          "power": 1.8
+          "id": "cancao_de_batalha",
+          "name": "Canção de Batalha",
+          "icon": "🎼",
+          "desc": "Inspira você e os companheiros: +25% de dano por 3 rodadas.",
+          "cost": 10,
+          "type": "buff_grupo",
+          "turns": 3,
+          "amount": 0.25,
+          "soDaClasse": "bardo"
         },
         "options": {}
       },
@@ -132123,11 +135571,13 @@
             "descontoLoja": 4.5
           },
           "maxHp": 405,
-          "hp": 405,
+          "hp": 400,
           "maxMp": 107,
-          "mp": 23,
+          "mp": 29,
           "buffs": {
-            "shield": 0.5
+            "shield": 0.5,
+            "inspiracaoTurns": 3,
+            "inspiracaoAmount": 0.25
           }
         },
         "party": [
@@ -132138,7 +135588,7 @@
             "className": "Paladino",
             "classIcon": "🛡️",
             "classId": "paladino",
-            "hp": 30,
+            "hp": 13,
             "maxHp": 36,
             "attack": 4,
             "attrs": {
@@ -132199,11 +135649,9 @@
           "abilityDesc": "Reduz parte do dano físico recebido.",
           "enemyClassLabel": "Feiticeiro"
         },
-        "outcome": "heal",
-        "manaCost": 18,
+        "outcome": "buff",
+        "manaCost": 12,
         "savedMana": false,
-        "healed": 24,
-        "allyHealed": 17,
         "monsterDefeated": false
       },
       "rngCalls": 0
@@ -132362,16 +135810,16 @@
           "enemyClassLabel": "Chefe Brutamontes"
         },
         "power": {
-          "id": "cancao_debilitante",
-          "name": "Canção Debilitante",
-          "icon": "🎶",
-          "desc": "Torna o inimigo vulnerável a ataques por 3 turnos.",
-          "cost": 10,
-          "type": "dano_magico",
-          "power": 0.7,
-          "status": "vulneravel",
+          "id": "flecha_serrilhada",
+          "name": "Flecha Serrilhada",
+          "icon": "🩸",
+          "desc": "Causa dano físico e sangramento por 3 turnos.",
+          "cost": 9,
+          "type": "dano_fisico",
+          "power": 1.25,
+          "status": "sangramento",
           "turns": 3,
-          "amount": 0.2
+          "dotRatio": 0.2
         },
         "options": {
           "petManaSaveChance": 30
@@ -132481,7 +135929,7 @@
           "speciesId": "aranha",
           "enemyClassId": "brutamontes",
           "floor": 2,
-          "hp": -16,
+          "hp": 18,
           "maxHp": 277,
           "dmg": 16,
           "speed": 18,
@@ -132494,9 +135942,9 @@
               "turns": 2,
               "dmg": 6
             },
-            "vulneravel": {
+            "sangramento": {
               "turns": 3,
-              "amount": 0.2
+              "dmg": 15
             }
           },
           "attackCount": 2,
@@ -132535,10 +135983,10 @@
           "enemyClassLabel": "Chefe Brutamontes"
         },
         "outcome": "damage",
-        "manaCost": 10,
+        "manaCost": 9,
         "savedMana": true,
-        "damage": 42,
-        "monsterDefeated": true
+        "damage": 8,
+        "monsterDefeated": false
       },
       "rngCalls": 2
     }
@@ -133575,13 +137023,15 @@
           "enemyClassLabel": "Feiticeiro"
         },
         "power": {
-          "id": "renovacao_natural",
-          "name": "Renovação Natural",
-          "icon": "🌱",
-          "desc": "Cura poderosa para o herói, companheiros e parceiro online.",
-          "cost": 15,
-          "type": "cura",
-          "power": 1.8
+          "id": "cancao_de_batalha",
+          "name": "Canção de Batalha",
+          "icon": "🎼",
+          "desc": "Inspira você e os companheiros: +25% de dano por 3 rodadas.",
+          "cost": 10,
+          "type": "buff_grupo",
+          "turns": 3,
+          "amount": 0.25,
+          "soDaClasse": "bardo"
         },
         "options": {
           "petManaSaveChance": 30
@@ -133669,12 +137119,14 @@
             "descontoLoja": 4
           },
           "maxHp": 277,
-          "hp": 204,
+          "hp": 171,
           "maxMp": 27,
-          "mp": 2,
+          "mp": 7,
           "buffs": {
             "forcaTurns": 3,
-            "forcaAmount": 0.3
+            "forcaAmount": 0.3,
+            "inspiracaoTurns": 3,
+            "inspiracaoAmount": 0.25
           }
         },
         "party": [],
@@ -133723,11 +137175,9 @@
           "abilityDesc": "Reduz parte do dano físico recebido.",
           "enemyClassLabel": "Feiticeiro"
         },
-        "outcome": "heal",
-        "manaCost": 15,
+        "outcome": "buff",
+        "manaCost": 10,
         "savedMana": false,
-        "healed": 33,
-        "allyHealed": 23,
         "monsterDefeated": false
       },
       "rngCalls": 1
@@ -133853,15 +137303,16 @@
           "enemyClassLabel": "Guardião"
         },
         "power": {
-          "id": "golpe_atordoante",
-          "name": "Golpe Atordoante",
-          "icon": "💫",
-          "desc": "Ataque físico que atordoa o inimigo.",
+          "id": "cancao_debilitante",
+          "name": "Canção Debilitante",
+          "icon": "🎶",
+          "desc": "Torna o inimigo vulnerável a ataques por 3 turnos.",
           "cost": 10,
-          "type": "dano_fisico",
-          "power": 1.15,
-          "status": "atordoado",
-          "turns": 1
+          "type": "dano_magico",
+          "power": 0.7,
+          "status": "vulneravel",
+          "turns": 3,
+          "amount": 0.2
         },
         "options": {}
       },
@@ -134169,15 +137620,13 @@
           "enemyClassLabel": "Assassino"
         },
         "power": {
-          "id": "cancao_de_batalha",
-          "name": "Canção de Batalha",
-          "icon": "🎼",
-          "desc": "Inspira você e os companheiros: +25% de dano por 3 rodadas.",
-          "cost": 10,
-          "type": "buff_grupo",
-          "turns": 3,
-          "amount": 0.25,
-          "soDaClasse": "bardo"
+          "id": "levantar_esqueleto",
+          "name": "Levantar Esqueleto",
+          "icon": "💀",
+          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
+          "cost": 14,
+          "type": "invocar",
+          "soDaClasse": "necromante"
         },
         "options": {}
       },
@@ -134255,12 +137704,10 @@
           "maxHp": 275,
           "hp": 184,
           "maxMp": 154,
-          "mp": 58,
+          "mp": 54,
           "buffs": {
             "precisaoTurns": 2,
-            "precisaoAmount": 7,
-            "inspiracaoTurns": 3,
-            "inspiracaoAmount": 0.25
+            "precisaoAmount": 7
           }
         },
         "party": [
@@ -134307,6 +137754,28 @@
             "stance": "equilibrada",
             "ability": "",
             "abilityDesc": ""
+          },
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 164,
+            "maxHp": 164,
+            "attack": 39,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "invocado": true
           }
         ],
         "monster": {
@@ -134359,9 +137828,31 @@
           "abilityDesc": "Reduz parte do dano físico recebido.",
           "enemyClassLabel": "Assassino"
         },
-        "outcome": "buff",
-        "manaCost": 10,
+        "outcome": "summon",
+        "manaCost": 14,
         "savedMana": false,
+        "summoned": {
+          "name": "Esqueleto",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 164,
+          "maxHp": 164,
+          "attack": 39,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "invocado": true
+        },
         "monsterDefeated": false
       },
       "rngCalls": 0
@@ -135588,16 +139079,13 @@
           "enemyClassLabel": "Chefe Assassino"
         },
         "power": {
-          "id": "rajada_glacial",
-          "name": "Rajada Glacial",
-          "icon": "❄️",
-          "desc": "Causa dano mágico e deixa o inimigo lento.",
-          "cost": 12,
-          "type": "dano_magico",
-          "power": 1.3,
-          "status": "lento",
-          "turns": 3,
-          "amount": 0.2
+          "id": "renovacao_natural",
+          "name": "Renovação Natural",
+          "icon": "🌱",
+          "desc": "Cura poderosa para o herói, companheiros e parceiro online.",
+          "cost": 15,
+          "type": "cura",
+          "power": 1.8
         },
         "options": {}
       },
@@ -135673,9 +139161,9 @@
             "descontoLoja": 3
           },
           "maxHp": 298,
-          "hp": 158,
+          "hp": 184,
           "maxMp": 95,
-          "mp": 36,
+          "mp": 33,
           "buffs": {
             "esquivaTurns": 2,
             "esquivaAmount": 20
@@ -135689,7 +139177,7 @@
             "className": "Ladino",
             "classIcon": "🗡",
             "classId": "ladino",
-            "hp": 8,
+            "hp": 16,
             "maxHp": 16,
             "attack": 11,
             "attrs": {
@@ -135733,7 +139221,7 @@
             "className": "Caçador",
             "classIcon": "🐺",
             "classId": "cacador",
-            "hp": 14,
+            "hp": 22,
             "maxHp": 22,
             "attack": 10,
             "attrs": {
@@ -135753,7 +139241,7 @@
           "speciesId": "elemental_fogo",
           "enemyClassId": "assassino",
           "floor": 2,
-          "hp": 93,
+          "hp": 128,
           "maxHp": 163,
           "dmg": 28,
           "speed": 4,
@@ -135761,8 +139249,8 @@
           "gold": 10,
           "isBoss": true,
           "status": {
-            "lento": {
-              "turns": 3,
+            "vulneravel": {
+              "turns": 1,
               "amount": 0.2
             }
           },
@@ -135801,13 +139289,14 @@
           "abilityDesc": "Pode queimar e drenar mana.",
           "enemyClassLabel": "Chefe Assassino"
         },
-        "outcome": "damage",
-        "manaCost": 15,
+        "outcome": "heal",
+        "manaCost": 18,
         "savedMana": false,
-        "damage": 35,
+        "healed": 26,
+        "allyHealed": 18,
         "monsterDefeated": false
       },
-      "rngCalls": 1
+      "rngCalls": 0
     }
   },
   {
@@ -136014,13 +139503,15 @@
           "enemyClassLabel": "Assassino"
         },
         "power": {
-          "id": "renovacao_natural",
-          "name": "Renovação Natural",
-          "icon": "🌱",
-          "desc": "Cura poderosa para o herói, companheiros e parceiro online.",
-          "cost": 15,
-          "type": "cura",
-          "power": 1.8
+          "id": "cancao_de_batalha",
+          "name": "Canção de Batalha",
+          "icon": "🎼",
+          "desc": "Inspira você e os companheiros: +25% de dano por 3 rodadas.",
+          "cost": 10,
+          "type": "buff_grupo",
+          "turns": 3,
+          "amount": 0.25,
+          "soDaClasse": "bardo"
         },
         "options": {}
       },
@@ -136106,12 +139597,12 @@
             "descontoLoja": 4
           },
           "maxHp": 470,
-          "hp": 326,
+          "hp": 294,
           "maxMp": 210,
-          "mp": 101,
+          "mp": 106,
           "buffs": {
             "shield": 0.5,
-            "inspiracaoTurns": 1,
+            "inspiracaoTurns": 3,
             "inspiracaoAmount": 0.25
           }
         },
@@ -136123,7 +139614,7 @@
             "className": "Monge",
             "classIcon": "🥋",
             "classId": "monge",
-            "hp": 27,
+            "hp": 23,
             "maxHp": 27,
             "attack": 8,
             "attrs": {
@@ -136145,7 +139636,7 @@
             "className": "Bárbaro",
             "classIcon": "🪓",
             "classId": "barbaro",
-            "hp": 25,
+            "hp": 15,
             "maxHp": 25,
             "attack": 10,
             "attrs": {
@@ -136167,7 +139658,7 @@
             "className": "Monge",
             "classIcon": "🥋",
             "classId": "monge",
-            "hp": 28,
+            "hp": 6,
             "maxHp": 29,
             "attack": 12,
             "attrs": {
@@ -136228,11 +139719,9 @@
           "abilityDesc": "Tem chance de evitar ataques comuns.",
           "enemyClassLabel": "Assassino"
         },
-        "outcome": "heal",
-        "manaCost": 15,
+        "outcome": "buff",
+        "manaCost": 10,
         "savedMana": false,
-        "healed": 32,
-        "allyHealed": 22,
         "monsterDefeated": false
       },
       "rngCalls": 0
@@ -137186,16 +140675,16 @@
           "enemyClassLabel": "Feiticeiro"
         },
         "power": {
-          "id": "cancao_debilitante",
-          "name": "Canção Debilitante",
-          "icon": "🎶",
-          "desc": "Torna o inimigo vulnerável a ataques por 3 turnos.",
-          "cost": 10,
-          "type": "dano_magico",
-          "power": 0.7,
-          "status": "vulneravel",
+          "id": "flecha_serrilhada",
+          "name": "Flecha Serrilhada",
+          "icon": "🩸",
+          "desc": "Causa dano físico e sangramento por 3 turnos.",
+          "cost": 9,
+          "type": "dano_fisico",
+          "power": 1.25,
+          "status": "sangramento",
           "turns": 3,
-          "amount": 0.2
+          "dotRatio": 0.2
         },
         "options": {}
       },
@@ -137272,7 +140761,7 @@
           "maxHp": 215,
           "hp": 58,
           "maxMp": 164,
-          "mp": 145,
+          "mp": 146,
           "buffs": {}
         },
         "party": [
@@ -137325,7 +140814,7 @@
           "speciesId": "zumbi",
           "enemyClassId": "feiticeiro",
           "floor": 27,
-          "hp": 46,
+          "hp": 91,
           "maxHp": 221,
           "dmg": 17,
           "speed": 17,
@@ -137333,9 +140822,9 @@
           "gold": 10,
           "isBoss": false,
           "status": {
-            "vulneravel": {
+            "sangramento": {
               "turns": 3,
-              "amount": 0.2
+              "dmg": 14
             }
           },
           "attackCount": 1,
@@ -137372,9 +140861,9 @@
           "enemyClassLabel": "Feiticeiro"
         },
         "outcome": "damage",
-        "manaCost": 10,
+        "manaCost": 9,
         "savedMana": false,
-        "damage": 83,
+        "damage": 38,
         "monsterDefeated": false
       },
       "rngCalls": 1
@@ -138984,15 +142473,16 @@
           "enemyClassLabel": "Xamã"
         },
         "power": {
-          "id": "golpe_atordoante",
-          "name": "Golpe Atordoante",
-          "icon": "💫",
-          "desc": "Ataque físico que atordoa o inimigo.",
+          "id": "cancao_debilitante",
+          "name": "Canção Debilitante",
+          "icon": "🎶",
+          "desc": "Torna o inimigo vulnerável a ataques por 3 turnos.",
           "cost": 10,
-          "type": "dano_fisico",
-          "power": 1.15,
-          "status": "atordoado",
-          "turns": 1
+          "type": "dano_magico",
+          "power": 0.7,
+          "status": "vulneravel",
+          "turns": 3,
+          "amount": 0.2
         },
         "options": {
           "petManaSaveChance": 30
@@ -139105,7 +142595,7 @@
           "speciesId": "espectro_gelado",
           "enemyClassId": "xama",
           "floor": 16,
-          "hp": 27,
+          "hp": 51,
           "maxHp": 100,
           "dmg": 9,
           "speed": 16,
@@ -139117,7 +142607,10 @@
               "turns": 1,
               "dmg": 2
             },
-            "atordoado": 1
+            "vulneravel": {
+              "turns": 3,
+              "amount": 0.2
+            }
           },
           "attackCount": 2,
           "guardHits": 0,
@@ -139155,7 +142648,7 @@
         "outcome": "damage",
         "manaCost": 10,
         "savedMana": false,
-        "damage": 43,
+        "damage": 19,
         "monsterDefeated": false
       },
       "rngCalls": 2
@@ -139671,14 +143164,16 @@
           "enemyClassLabel": "Guardião"
         },
         "power": {
-          "id": "julgamento_sagrado",
-          "name": "Julgamento Sagrado",
-          "icon": "🌟",
-          "desc": "Golpe mágico que também recupera um pouco de Vida.",
+          "id": "maldicao_sombria",
+          "name": "Maldição Sombria",
+          "icon": "☠️",
+          "desc": "Causa dano e reduz o dano do inimigo por 3 turnos.",
           "cost": 12,
           "type": "dano_magico",
-          "power": 1.35,
-          "healRatio": 0.3
+          "power": 1.25,
+          "status": "enfraquecido",
+          "turns": 3,
+          "amount": 0.25
         },
         "options": {
           "petManaSaveChance": 30
@@ -139766,7 +143261,7 @@
             "descontoLoja": 8.5
           },
           "maxHp": 285,
-          "hp": 31,
+          "hp": 26,
           "maxMp": 83,
           "mp": 2,
           "buffs": {}
@@ -139843,7 +143338,7 @@
           "speciesId": "morcego",
           "enemyClassId": "guardiao",
           "floor": 5,
-          "hp": 111,
+          "hp": 114,
           "maxHp": 257,
           "dmg": 15,
           "speed": 12,
@@ -139852,8 +143347,8 @@
           "isBoss": false,
           "status": {
             "enfraquecido": {
-              "turns": 2,
-              "amount": 0.3
+              "turns": 3,
+              "amount": 0.25
             },
             "vulneravel": {
               "turns": 2,
@@ -139896,8 +143391,7 @@
         "outcome": "damage",
         "manaCost": 12,
         "savedMana": false,
-        "damage": 16,
-        "healed": 5,
+        "damage": 13,
         "monsterDefeated": false
       },
       "rngCalls": 2
@@ -140557,13 +144051,12 @@
           "enemyClassLabel": "Brutamontes"
         },
         "power": {
-          "id": "cura_menor",
-          "name": "Cura Menor",
-          "icon": "✨",
-          "desc": "Restaura Vida do herói, companheiros e parceiro online.",
-          "cost": 10,
-          "type": "cura",
-          "power": 1
+          "id": "furtividade_sombria",
+          "name": "Furtividade Sombria",
+          "icon": "🌑",
+          "desc": "O próximo ataque é um acerto crítico garantido.",
+          "cost": 8,
+          "type": "buff_crit"
         },
         "options": {}
       },
@@ -140649,12 +144142,13 @@
             "descontoLoja": 10
           },
           "maxHp": 218,
-          "hp": 43,
+          "hp": 30,
           "maxMp": 154,
-          "mp": 125,
+          "mp": 127,
           "buffs": {
             "esquivaTurns": 0,
-            "esquivaAmount": 20
+            "esquivaAmount": 20,
+            "critNext": true
           }
         },
         "party": [
@@ -140731,11 +144225,9 @@
           "abilityDesc": "Reduz parte do dano físico recebido.",
           "enemyClassLabel": "Brutamontes"
         },
-        "outcome": "heal",
-        "manaCost": 10,
+        "outcome": "buff",
+        "manaCost": 8,
         "savedMana": false,
-        "healed": 13,
-        "allyHealed": 9,
         "monsterDefeated": false
       },
       "rngCalls": 0
@@ -140904,16 +144396,16 @@
           "enemyClassLabel": "Chefe Xamã"
         },
         "power": {
-          "id": "flecha_serrilhada",
-          "name": "Flecha Serrilhada",
-          "icon": "🩸",
-          "desc": "Causa dano físico e sangramento por 3 turnos.",
-          "cost": 9,
-          "type": "dano_fisico",
-          "power": 1.25,
-          "status": "sangramento",
+          "id": "rajada_glacial",
+          "name": "Rajada Glacial",
+          "icon": "❄️",
+          "desc": "Causa dano mágico e deixa o inimigo lento.",
+          "cost": 12,
+          "type": "dano_magico",
+          "power": 1.3,
+          "status": "lento",
           "turns": 3,
-          "dotRatio": 0.2
+          "amount": 0.2
         },
         "options": {}
       },
@@ -141001,7 +144493,7 @@
           "maxHp": 334,
           "hp": 207,
           "maxMp": 134,
-          "mp": 34,
+          "mp": 31,
           "buffs": {}
         },
         "party": [
@@ -141032,7 +144524,7 @@
           "speciesId": "aranha",
           "enemyClassId": "xama",
           "floor": 29,
-          "hp": -61,
+          "hp": -70,
           "maxHp": 263,
           "dmg": 30,
           "speed": 7,
@@ -141043,10 +144535,6 @@
             "lento": {
               "turns": 3,
               "amount": 0.2
-            },
-            "sangramento": {
-              "turns": 3,
-              "dmg": 11
             }
           },
           "attackCount": 3,
@@ -141085,9 +144573,9 @@
           "enemyClassLabel": "Chefe Xamã"
         },
         "outcome": "damage",
-        "manaCost": 9,
+        "manaCost": 12,
         "savedMana": false,
-        "damage": 63,
+        "damage": 72,
         "monsterDefeated": true
       },
       "rngCalls": 1
@@ -141253,13 +144741,15 @@
           "enemyClassLabel": "Assassino"
         },
         "power": {
-          "id": "renovacao_natural",
-          "name": "Renovação Natural",
-          "icon": "🌱",
-          "desc": "Cura poderosa para o herói, companheiros e parceiro online.",
-          "cost": 15,
-          "type": "cura",
-          "power": 1.8
+          "id": "cancao_de_batalha",
+          "name": "Canção de Batalha",
+          "icon": "🎼",
+          "desc": "Inspira você e os companheiros: +25% de dano por 3 rodadas.",
+          "cost": 10,
+          "type": "buff_grupo",
+          "turns": 3,
+          "amount": 0.25,
+          "soDaClasse": "bardo"
         },
         "options": {}
       },
@@ -141344,14 +144834,16 @@
             "descontoLoja": 12
           },
           "maxHp": 260,
-          "hp": 108,
+          "hp": 70,
           "maxMp": 81,
-          "mp": 44,
+          "mp": 49,
           "buffs": {
             "precisaoTurns": 0,
             "precisaoAmount": 25,
             "forcaTurns": 3,
-            "forcaAmount": 0.3
+            "forcaAmount": 0.3,
+            "inspiracaoTurns": 3,
+            "inspiracaoAmount": 0.25
           }
         },
         "party": [
@@ -141362,7 +144854,7 @@
             "className": "Paladino",
             "classIcon": "🛡️",
             "classId": "paladino",
-            "hp": 25,
+            "hp": 12,
             "maxHp": 25,
             "attack": 3,
             "attrs": {
@@ -141423,11 +144915,9 @@
           "abilityDesc": "A cada 3 ataques, causa dano elevado.",
           "enemyClassLabel": "Assassino"
         },
-        "outcome": "heal",
-        "manaCost": 15,
+        "outcome": "buff",
+        "manaCost": 10,
         "savedMana": false,
-        "healed": 38,
-        "allyHealed": 27,
         "monsterDefeated": false
       },
       "rngCalls": 0
@@ -141623,16 +145113,16 @@
           "enemyClassLabel": "Guardião"
         },
         "power": {
-          "id": "cancao_debilitante",
-          "name": "Canção Debilitante",
-          "icon": "🎶",
-          "desc": "Torna o inimigo vulnerável a ataques por 3 turnos.",
-          "cost": 10,
-          "type": "dano_magico",
-          "power": 0.7,
-          "status": "vulneravel",
+          "id": "flecha_serrilhada",
+          "name": "Flecha Serrilhada",
+          "icon": "🩸",
+          "desc": "Causa dano físico e sangramento por 3 turnos.",
+          "cost": 9,
+          "type": "dano_fisico",
+          "power": 1.25,
+          "status": "sangramento",
           "turns": 3,
-          "amount": 0.2
+          "dotRatio": 0.2
         },
         "options": {}
       },
@@ -141710,7 +145200,7 @@
           "maxHp": 130,
           "hp": 8,
           "maxMp": 104,
-          "mp": 83,
+          "mp": 84,
           "buffs": {}
         },
         "party": [
@@ -141785,7 +145275,7 @@
           "speciesId": "slime",
           "enemyClassId": "guardiao",
           "floor": 34,
-          "hp": -6,
+          "hp": 13,
           "maxHp": 23,
           "dmg": 16,
           "speed": 16,
@@ -141793,9 +145283,9 @@
           "gold": 10,
           "isBoss": false,
           "status": {
-            "vulneravel": {
+            "sangramento": {
               "turns": 3,
-              "amount": 0.2
+              "dmg": 8
             }
           },
           "attackCount": 2,
@@ -141832,10 +145322,10 @@
           "enemyClassLabel": "Guardião"
         },
         "outcome": "damage",
-        "manaCost": 10,
+        "manaCost": 9,
         "savedMana": false,
-        "damage": 28,
-        "monsterDefeated": true
+        "damage": 9,
+        "monsterDefeated": false
       },
       "rngCalls": 1
     }
@@ -142016,16 +145506,16 @@
           "enemyClassLabel": "Assassino"
         },
         "power": {
-          "id": "maldicao_sombria",
-          "name": "Maldição Sombria",
-          "icon": "☠️",
-          "desc": "Causa dano e reduz o dano do inimigo por 3 turnos.",
-          "cost": 12,
+          "id": "esporos_venenosos",
+          "name": "Esporos Venenosos",
+          "icon": "☣️",
+          "desc": "Envenena o inimigo por 4 turnos.",
+          "cost": 11,
           "type": "dano_magico",
-          "power": 1.25,
-          "status": "enfraquecido",
-          "turns": 3,
-          "amount": 0.25
+          "power": 0.9,
+          "status": "veneno",
+          "turns": 4,
+          "dotRatio": 0.22
         },
         "options": {
           "petCuraBonus": 15
@@ -142113,7 +145603,7 @@
           "maxHp": 225,
           "hp": 18,
           "maxMp": 145,
-          "mp": 111,
+          "mp": 112,
           "buffs": {}
         },
         "party": [
@@ -142166,7 +145656,7 @@
           "speciesId": "orc",
           "enemyClassId": "assassino",
           "floor": 1,
-          "hp": 68,
+          "hp": 78,
           "maxHp": 152,
           "dmg": 4,
           "speed": 17,
@@ -142174,9 +145664,9 @@
           "gold": 10,
           "isBoss": false,
           "status": {
-            "enfraquecido": {
-              "turns": 3,
-              "amount": 0.25
+            "veneno": {
+              "turns": 4,
+              "dmg": 5
             }
           },
           "attackCount": 0,
@@ -142213,9 +145703,9 @@
           "enemyClassLabel": "Assassino"
         },
         "outcome": "damage",
-        "manaCost": 12,
+        "manaCost": 11,
         "savedMana": false,
-        "damage": 34,
+        "damage": 24,
         "monsterDefeated": false
       },
       "rngCalls": 1
@@ -142757,14 +146247,14 @@
           "enemyClassLabel": "Chefe Guardião"
         },
         "power": {
-          "id": "passo_veloz",
-          "name": "Passo Veloz",
-          "icon": "💨",
-          "desc": "Aumenta a chance de esquiva por um tempo.",
-          "cost": 6,
-          "type": "buff_esquiva",
-          "turns": 3,
-          "amount": 20
+          "id": "julgamento_sagrado",
+          "name": "Julgamento Sagrado",
+          "icon": "🌟",
+          "desc": "Golpe mágico que também recupera um pouco de Vida.",
+          "cost": 12,
+          "type": "dano_magico",
+          "power": 1.35,
+          "healRatio": 0.3
         },
         "options": {
           "petCuraBonus": 15
@@ -142862,14 +146352,12 @@
             "descontoLoja": 11.5
           },
           "maxHp": 160,
-          "hp": 55,
+          "hp": 64,
           "maxMp": 107,
-          "mp": 22,
+          "mp": 16,
           "buffs": {
             "precisaoTurns": 2,
-            "precisaoAmount": 100,
-            "esquivaTurns": 3,
-            "esquivaAmount": 20
+            "precisaoAmount": 100
           }
         },
         "party": [],
@@ -142877,7 +146365,7 @@
           "speciesId": "morcego",
           "enemyClassId": "guardiao",
           "floor": 36,
-          "hp": 69,
+          "hp": 39,
           "maxHp": 163,
           "dmg": 10,
           "speed": 17,
@@ -142891,7 +146379,7 @@
               "amount": 0.2
             },
             "vulneravel": {
-              "turns": 2,
+              "turns": 1,
               "amount": 0.2
             }
           },
@@ -142930,12 +146418,14 @@
           "abilityDesc": "Tem chance de evitar ataques comuns.",
           "enemyClassLabel": "Chefe Guardião"
         },
-        "outcome": "buff",
-        "manaCost": 6,
+        "outcome": "damage",
+        "manaCost": 12,
         "savedMana": false,
+        "damage": 30,
+        "healed": 9,
         "monsterDefeated": false
       },
-      "rngCalls": 0
+      "rngCalls": 1
     }
   },
   {

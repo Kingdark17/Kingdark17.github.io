@@ -10,6 +10,10 @@ namespace RPGLegend.Engine
         public const string Damage = "damage";
         public const string Heal = "heal";
         public const string Buff = "buff";
+        /// <summary>Ergueu um esqueleto (<see cref="UsePowerResult.Summoned"/>).</summary>
+        public const string Summon = "summon";
+        /// <summary>Já há o máximo de esqueletos de pé, e nada foi gasto.</summary>
+        public const string SummonFull = "summon_full";
     }
 
     /// <summary>TS: UsePowerOptions.</summary>
@@ -39,6 +43,8 @@ namespace RPGLegend.Engine
         /// <summary>Vida devolvida ao herói: pela cura, ou pelo dreno de um poder com healRatio (ausente sem dreno).</summary>
         public double? Healed;
         public double? AllyHealed;
+        /// <summary>O esqueleto que o poder ergueu (já no fim de Party).</summary>
+        public Companion Summoned;
         public bool MonsterDefeated;
     }
 
@@ -72,6 +78,21 @@ namespace RPGLegend.Engine
             var rng = options.Rng ?? Rng.Default;
             double manaCost = PowerManaCost(hero, power);
 
+            // O esqueleto do necromante: com o máximo de pé, avisa sem gastar a mana.
+            if (power.Type == "invocar" && Invocacao.EsqueletosDePe(party) >= Invocacao.MaxEsqueletos)
+            {
+                return new UsePowerResult
+                {
+                    Hero = hero,
+                    Party = new List<Companion>(party),
+                    Monster = monster,
+                    Outcome = UsePowerOutcomes.SummonFull,
+                    ManaCost = manaCost,
+                    SavedMana = false,
+                    MonsterDefeated = false,
+                };
+            }
+
             if (hero.Mp < manaCost)
             {
                 return new UsePowerResult
@@ -94,6 +115,23 @@ namespace RPGLegend.Engine
                 heroAfterCost.Mp = hero.Mp - manaCost;
             }
             var d = heroAfterCost.Derived;
+
+            if (power.Type == "invocar")
+            {
+                var esqueleto = Invocacao.CriarEsqueleto(heroAfterCost, party);
+                var comEle = new List<Companion>(party) { esqueleto };
+                return new UsePowerResult
+                {
+                    Hero = heroAfterCost,
+                    Party = comEle,
+                    Monster = monster,
+                    Outcome = UsePowerOutcomes.Summon,
+                    ManaCost = manaCost,
+                    SavedMana = savedMana,
+                    Summoned = esqueleto,
+                    MonsterDefeated = false,
+                };
+            }
 
             if (power.Type == "dano_fisico" || power.Type == "dano_magico")
             {

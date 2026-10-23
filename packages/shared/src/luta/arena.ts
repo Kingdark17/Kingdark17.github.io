@@ -59,6 +59,7 @@ import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepara
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
+import { MAX_ESQUELETOS } from '../combat/invocacao.js';
 import { eventoDaArma, eventoDoAtaque, lerEvento, TAMANHO_DO_DESENHO, type EventoDeArma, type JogadaDoEvento, type TipoDeEvento } from './eventos-de-arma.js';
 
 // ---------- números ----------
@@ -653,6 +654,10 @@ function usarPoder(l: Luta, id: string): void {
     contar(l, { tipo: 'aviso', texto: `Mana insuficiente para ${poder.name}` });
     return;
   }
+  if (uso.outcome === 'summon_full') {
+    contar(l, { tipo: 'aviso', texto: `Seus ${MAX_ESQUELETOS} esqueletos já estão de pé` });
+    return;
+  }
   l.arena.recargaDosPoderes[id] = RECARGA_DO_PODER;
   l.estado = gravarMonstro({ ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster);
 
@@ -662,6 +667,10 @@ function usarPoder(l: Luta, id: string): void {
   } else if (uso.outcome === 'heal') {
     contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `+${uso.healed}`, tom: 'cura' });
     contar(l, { tipo: 'som', som: 'heal' });
+  } else if (uso.outcome === 'summon') {
+    // O esqueleto entra no fim da equipe e começa a bater no tempo dele, como os companheiros da entrada.
+    l.arena.companheiros.push({ indice: uso.party.length - 1, tempo: CADENCIA_DO_COMPANHEIRO / 2 });
+    contar(l, { tipo: 'aviso', texto: `${poder.icon} ${uso.summoned?.name ?? 'Esqueleto'} se ergue` });
   } else {
     contar(l, { tipo: 'aviso', texto: `${poder.icon} ${poder.name}` });
   }

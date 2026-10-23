@@ -158,7 +158,9 @@ namespace RPGLegend.Engine
 
             var party = new List<Companion>();
             var saindo = new List<Companion>();
-            foreach (var membro in estado.Party ?? new List<Companion>())
+            var equipeDaLuta = estado.Party ?? new List<Companion>();
+            if (equipeDaLuta.Exists(membro => membro.Invocado == true)) log.Add(Invocacao.FimDosEsqueletos);
+            foreach (var membro in Invocacao.SemInvocados(equipeDaLuta))
             {
                 var depois = membro;
                 if (membro.Temporary == true)
@@ -326,7 +328,7 @@ namespace RPGLegend.Engine
             revivido.Hp = Js.Max(1, Math.Floor(hero.MaxHp * 0.3));
             revivido.Buffs = new HeroBuffs();
             var equipe = new List<Companion>();
-            foreach (var membro in estado.Party ?? new List<Companion>())
+            foreach (var membro in Invocacao.SemInvocados(estado.Party ?? new List<Companion>()))
             {
                 var voltou = membro.Clone();
                 voltou.Hp = Js.Max(1, Math.Floor(membro.MaxHp * 0.3));

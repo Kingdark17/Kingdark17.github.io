@@ -13,6 +13,7 @@
  * até agora), mas a lógica em si já sai pronta.
  */
 
+import { semInvocados } from '../combat/invocacao.js';
 import type { Companion, Hero } from '../hero/hero.js';
 import { generateCompanion } from '../hero/hero.js';
 import type { DungeonCell } from '../dungeon/generate.js';
@@ -174,7 +175,8 @@ const MAX_PARTY_SIZE = 3;
 const TEMPORARY_RECRUIT_COMBATS = 3;
 
 export function resolveRecruit(party: readonly Companion[], rng: Rng = defaultRng): RecruitResult {
-  if (party.length >= MAX_PARTY_SIZE) return { party: [...party], outcome: { kind: 'party_full' }, used: false };
+  // Os esqueletos do necromante não ocupam vaga: são da luta, não da equipe.
+  if (semInvocados(party).length >= MAX_PARTY_SIZE) return { party: [...party], outcome: { kind: 'party_full' }, used: false };
 
   const companion: Companion = { ...generateCompanion(rng), temporary: true, combatsLeft: TEMPORARY_RECRUIT_COMBATS };
   return { party: [...party, companion], outcome: { kind: 'recruited', companion }, used: true };
