@@ -83,7 +83,7 @@ namespace RPGLegend.Game.Jogo
             _palcoDaLuta.Esconder();
             palco.Insert(0, _palcoDaLuta);
             // O pet fica de fora da luta: o bônus dele vale, mas o canto da sala é o palco dos monstros.
-            _botaoDoBicho = palco.Q<Button>("bichinho");
+            _botaoDoBicho = _palco.Q<Button>("bichinho");
 
             _hud = new VisualElement { name = "hud-da-luta", pickingMode = PickingMode.Ignore };
             _hud.AddToClassList("hud-da-luta");
@@ -316,7 +316,7 @@ namespace RPGLegend.Game.Jogo
             var aberto = arena.Evento;
             _eventoNaTela.Mostrar(aberto, _palcoDaLuta.AreaDoPalco);
             float topoDaCaixa = _palcoDaLuta.TopoDaCaixa;
-            if (topoDaCaixa > 0) _avisosDaLuta.style.bottom = Mathf.Max(0f, _palco.contentRect.height - topoDaCaixa + 6f);
+            if (topoDaCaixa > 0) _avisosDaLuta.style.bottom = Mathf.Max(0f, _areaDaSala.contentRect.height - topoDaCaixa + 6f);
             _dicaDoEvento.text = aberto != null ? DicaDoEvento(aberto.Evento.Tipo) : "";
             _dicaDoEvento.EnableInClassList("escondido", aberto == null);
             if (aberto == null || aberto.Evento.Tipo != TiposDeEvento.Desenho) _dedoNoDesenho = null;
@@ -539,7 +539,7 @@ namespace RPGLegend.Game.Jogo
             _palcoDaLuta.Esconder();
             _mirar = null;
             _menuDeItens.AddToClassList("escondido");
-            _eventoNaTela.Mostrar(null, _palco.contentRect);
+            _eventoNaTela.Mostrar(null, _areaDaSala.contentRect);
             _dicaDoEvento.AddToClassList("escondido");
             _dedoNoDesenho = null;
             _apertou = _soltou = _tocou = false;

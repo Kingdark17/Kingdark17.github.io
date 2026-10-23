@@ -116,6 +116,37 @@ namespace RPGLegend.Game.Jogo
             if (Textura != null) Textura.Release();
         }
 
+        /// <summary>
+        /// A proporção do palco (largura / altura), que é a tela toda: a textura acompanha, com a mesma altura, e a câmera
+        /// mostra mais dos lados — na cidade, mais mapa; na sala, o escuro em volta dela. Devolve se a textura mudou
+        /// (quem a mostra precisa pegar a nova).
+        /// </summary>
+        public bool AjustarVista(float proporcao)
+        {
+            int altura = Textura.height;
+            int largura = Mathf.Max(2, Mathf.RoundToInt(altura * Mathf.Max(0.5f, proporcao)));
+            if (largura == Textura.width) return false;
+            var antiga = Textura;
+            Textura = new RenderTexture(largura, altura, 24) { filterMode = FilterMode.Point, name = "Sala" };
+            Textura.Create();
+            _camera.targetTexture = Textura;
+            _camera.ResetAspect();
+            antiga.Release();
+            Destroy(antiga);
+            AjustarZoom();
+            ColocarHeroi(false);
+            return true;
+        }
+
+        /// <summary>
+        /// A altura que a câmera mostra: na cidade, a de sempre (10,5 casas); na sala, a sala inteira, mesmo que a tela
+        /// seja mais estreita que ela.
+        /// </summary>
+        private void AjustarZoom()
+        {
+            _camera.orthographicSize = _naCidade ? _altura / 2f : Mathf.Max(_altura, _largura / _camera.aspect) / 2f;
+        }
+
         /// <summary>Do pixel do site (x pra direita, y pra baixo) para o mundo.</summary>
         private Vector3 Mundo(float x, float y) => Origem + new Vector3(x, _altura - y, 0f);
 
@@ -204,6 +235,7 @@ namespace RPGLegend.Game.Jogo
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
             _doMeio.Clear();
             _naCidade = true;
+            AjustarZoom();
             _escala = (float)(MapaDaCidade.PixelsPorCasa / GameData.RoomWalkTable.TileUnits);
             foreach (var camada in MapaDaCidade.Camadas)
             {
@@ -231,6 +263,7 @@ namespace RPGLegend.Game.Jogo
                 _naCidade = false;
                 _escala = _escalaDaSala;
                 _camera.transform.position = Origem + new Vector3(_largura / 2f, _altura / 2f, -10f);
+                AjustarZoom();
             }
 
             int linhas = planta.Solid.Count;
@@ -375,8 +408,11 @@ namespace RPGLegend.Game.Jogo
                 // A janela segue o herói, sem passar da borda do mapa, em meio pixel (a textura é 2×): fração faz a arte tremer.
                 float larguraDoMapa = (float)(MapaDaCidade.Cols * MapaDaCidade.PixelsPorCasa);
                 float alturaDoMapa = (float)(MapaDaCidade.Rows * MapaDaCidade.PixelsPorCasa);
-                float cx = Mathf.Round(Mathf.Clamp(x, _largura / 2f, larguraDoMapa - _largura / 2f) * 2f) / 2f;
-                float cy = Mathf.Round(Mathf.Clamp(y - Lado / 2f, _altura / 2f, alturaDoMapa - _altura / 2f) * 2f) / 2f;
+                // A janela tem a proporção da tela; mais larga que o mapa (não acontece deitado), fica no meio dele.
+                float meiaJanela = Mathf.Min(_camera.orthographicSize * _camera.aspect, larguraDoMapa / 2f);
+                float meiaAltura = Mathf.Min(_camera.orthographicSize, alturaDoMapa / 2f);
+                float cx = Mathf.Round(Mathf.Clamp(x, meiaJanela, larguraDoMapa - meiaJanela) * 2f) / 2f;
+                float cy = Mathf.Round(Mathf.Clamp(y - Lado / 2f, meiaAltura, alturaDoMapa - meiaAltura) * 2f) / 2f;
                 _camera.transform.position = Mundo(cx, cy) + new Vector3(0f, 0f, -10f);
 
                 // Quem cobre o herói (a árvore da praça, a loja...) fica meio transparente, pra ele não sumir atrás.

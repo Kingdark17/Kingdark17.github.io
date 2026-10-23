@@ -22,10 +22,11 @@ namespace RPGLegend.Game.Jogo
     {
         private const float RaioDoJoystick = 56f;
         private const float ZonaMorta = 0.15f;
-        /// <summary>A coluna da direita nunca fica mais estreita que isto: antes, a sala encolhe.</summary>
-        private const float MinimoDoLado = 380f;
-        /// <summary>Daqui pra cima, o resumo do herói e o minimapa cabem lado a lado.</summary>
-        private const float LadoLargo = 560f;
+        /// <summary>
+        /// Quanto o que fala do lugar fica na tela depois da chegada: um tanto fixo mais o tempo de ler, entre o mínimo
+        /// e o máximo. Depois some apagando.
+        /// </summary>
+        private const float SegundosDoLugar = 3f, SegundosPorLetra = 0.05f, MinimoDoLugar = 5f, MaximoDoLugar = 15f, SegundosDoApagar = 0.4f;
 
         private static readonly Dictionary<string, Color> CorDoTipo = new Dictionary<string, Color>
         {
@@ -40,14 +41,15 @@ namespace RPGLegend.Game.Jogo
         /// <summary>A pessoa saiu da partida, já gravada: quem abriu volta pra lista de personagens.</summary>
         public event Action AoSair;
 
-        private VisualElement _tela, _palco, _lado, _baseDoJoystick, _alavanca, _minimapa, _caixa, _escolhas, _recado, _sobre, _botoesDaJanela, _vida, _mana;
+        private VisualElement _tela, _palco, _areaDaSala, _caixaDoLugar, _baseDoJoystick, _alavanca, _minimapa, _caixa, _escolhas, _recado, _sobre, _botoesDaJanela, _vida, _mana;
         private VisualElement _janelaEl, _colunasDaJanela;
         private Label _dica, _nome, _nivel, _numeroDaVida, _numeroDaMana, _lugar, _iconeDaCaixa, _tituloDaCaixa, _textoDaCaixa, _tituloDoRecado, _textoDoRecado, _salvamento, _tituloDaJanela, _carregando;
         private Label _ouroDaJanela, _linhaDaJanela;
         private VisualElement _narracao;
-        private ScrollView _meio, _conteudoDaJanela;
-        /// <summary>O aviso e o recado já mostrados: quando chega um novo, o meio da coluna rola até ele.</summary>
-        private object _avisoMostrado, _recadoMostrado;
+        private ScrollView _conteudoDaJanela;
+        /// <summary>O lugar cuja chegada a caixa do lugar já mostrou, e até quando (Time.unscaledTime) ela fica.</summary>
+        private string _lugarMostrado;
+        private float _lugarAte, _lugarSomeEm;
         private Button _mochila, _diario, _sairDoJogo;
 
         private Partida _partida;
@@ -84,6 +86,8 @@ namespace RPGLegend.Game.Jogo
             _janela = null;
             _saindo = false;
             _nivelMostrado = -1;
+            _lugarMostrado = null;
+            _caixaDoLugar.AddToClassList("escondida");
             EsquecerEscolhas();
             EsquecerLuta();
             _bicho.Mostrar(null);
@@ -153,6 +157,7 @@ namespace RPGLegend.Game.Jogo
                 _sala.AoSair = direcao => _partida != null && _partida.Mover(direcao);
                 _sala.AoEncostar = id => _partida?.AoEncostar(id);
                 _palco.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(_sala.Textura));
+                AjustarPalco();
             }
             _sala.gameObject.SetActive(true);
 
@@ -208,7 +213,8 @@ namespace RPGLegend.Game.Jogo
         {
             _tela = raiz.Q("jogo");
             _palco = raiz.Q("palco");
-            _lado = raiz.Q("lado");
+            _areaDaSala = raiz.Q("area-da-sala");
+            _caixaDoLugar = raiz.Q("caixa-do-lugar");
             _baseDoJoystick = raiz.Q("base-do-joystick");
             _alavanca = raiz.Q("alavanca-do-joystick");
             _dica = raiz.Q<Label>("dica-do-joystick");
@@ -220,7 +226,6 @@ namespace RPGLegend.Game.Jogo
             _numeroDaMana = raiz.Q<Label>("numero-da-mana");
             _minimapa = raiz.Q("minimapa");
             _lugar = raiz.Q<Label>("lugar");
-            _meio = raiz.Q<ScrollView>("meio-do-lado");
             _narracao = raiz.Q("narracao");
             _caixa = raiz.Q("caixa");
             _iconeDaCaixa = raiz.Q<Label>("icone-da-caixa");
@@ -253,6 +258,8 @@ namespace RPGLegend.Game.Jogo
             _bicho = new BichoDeEstimacao(raiz.Q<Button>("bichinho"));
             raiz.Q<Button>("botao-ficha").clicked += AbrirFicha;
             _sairDoJogo.clicked += PerguntarSaida;
+            // Tocar no que fala do lugar fecha antes da hora.
+            _caixaDoLugar.RegisterCallback<PointerDownEvent>(_ => ApagarLugar());
 
             _tela.RegisterCallback<GeometryChangedEvent>(_ => AjustarPalco());
             _palco.RegisterCallback<PointerDownEvent>(ApertarDedo);
@@ -261,25 +268,27 @@ namespace RPGLegend.Game.Jogo
             _palco.RegisterCallback<PointerCancelEvent>(e => SoltarDedo(e.pointerId));
             _palco.RegisterCallback<PointerCaptureOutEvent>(e => SoltarDedo(e.pointerId));
 
-            CriarHudDaLuta(_palco);
+            CriarHudDaLuta(_areaDaSala);
         }
 
         /// <summary>
-        /// A sala é 9 × 7 quadrados, na altura toda — menos quando a coluna da direita ficaria mais estreita que
-        /// <see cref="MinimoDoLado"/> (a tela 16:9 do PC): aí ela encolhe. O celular deitado é mais comprido e sobra
-        /// largura, e então o resumo do herói e o minimapa ficam lado a lado.
+        /// O palco é a tela toda (decisão do usuário em 2026-10-23, só no app): a cena ganha a proporção dele, e a
+        /// cidade enche a tela; a sala da masmorra (9 × 7) fica no meio, na altura toda, e a área dela recebe a luta.
         /// </summary>
         private void AjustarPalco()
         {
-            var area = _tela.contentRect;
+            var area = _palco.contentRect;
             if (float.IsNaN(area.height) || area.height <= 0 || area.width <= 0) return;
+            if (_sala != null && _sala.AjustarVista(area.width / area.height))
+                _palco.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(_sala.Textura));
+
             float proporcao = (float)(RoomWalk.RoomCols / RoomWalk.RoomRows);
-            float margem = _lado.resolvedStyle.marginLeft;
-            float largura = Mathf.Floor(Mathf.Max(200f, Mathf.Min(area.height * proporcao, area.width - margem - MinimoDoLado)));
+            float largura = Mathf.Floor(Mathf.Min(area.width, area.height * proporcao));
             float altura = Mathf.Floor(largura / proporcao);
-            if (Mathf.Abs(_palco.resolvedStyle.width - largura) > 0.5f) _palco.style.width = largura;
-            if (Mathf.Abs(_palco.resolvedStyle.height - altura) > 0.5f) _palco.style.height = altura;
-            _lado.EnableInClassList("lado-largo", area.width - margem - largura >= LadoLargo);
+            _areaDaSala.style.width = largura;
+            _areaDaSala.style.height = altura;
+            _areaDaSala.style.left = Mathf.Floor((area.width - largura) / 2f);
+            _areaDaSala.style.top = Mathf.Floor((area.height - altura) / 2f);
         }
 
         // ---------- a cada quadro ----------
@@ -295,6 +304,9 @@ namespace RPGLegend.Game.Jogo
             if (!Andando && _dedo.HasValue) SoltarDedo(-1);
             AtualizarLuta();
             if (_partida == null) return;
+            AtualizarLugar();
+            // Na luta os nomes dos monstros ficam no alto da sala: os botões descem em coluna pelo escuro da esquerda.
+            _tela.EnableInClassList("em-luta", _partida.Luta != null);
 
             // Esc no PC, e o "voltar" do Android, que chega como Esc.
             var teclado = Keyboard.current;
@@ -375,9 +387,9 @@ namespace RPGLegend.Game.Jogo
             DesenharMinimapa(estado, visual);
             _lugar.text = secreta != null ? "Sala Secreta" : visual.Lugar;
             DesenharNarracao(estado, celula, secreta);
+            MostrarLugarNaChegada(secreta != null);
             DesenharCaixa(celula, visual);
             DesenharRecado();
-            MostrarNovidade();
             double pontos = estado.Hero.AttrPoints ?? 0;
             _mochila.text = pontos > 0 ? "MOCHILA (" + Js.NumberToString(pontos) + ")" : "MOCHILA";
             _diario.text = _partida.Diario.Count > 0 ? "DIÁRIO (" + _partida.Diario.Count + ")" : "DIÁRIO";
@@ -537,18 +549,49 @@ namespace RPGLegend.Game.Jogo
             _escolhas.EnableInClassList("escondida", !pergunta);
         }
 
-        /// <summary>Aviso, pergunta ou recado novo rola o meio da coluna até ele (na tela 16:9 ele pode ter caído pra baixo).</summary>
-        private void MostrarNovidade()
+        /// <summary>
+        /// O que fala do lugar aparece quando o herói chega a outro lugar (outra sala, a secreta, a cidade) e some
+        /// sozinho depois do tempo de ler (decisão do usuário em 2026-10-23). Fechar uma loja ou mudar algo na sala não
+        /// conta como chegar.
+        /// </summary>
+        private void MostrarLugarNaChegada(bool naSecreta)
         {
-            object aviso = _partida.Confirmando ? (object)"pergunta" : _partida.Aviso;
-            object recado = _partida.Recado;
-            VisualElement alvo = null;
-            if (recado != null && !ReferenceEquals(recado, _recadoMostrado)) alvo = _recado;
-            if (aviso != null && !ReferenceEquals(aviso, _avisoMostrado)) alvo = _caixa;
-            _avisoMostrado = aviso;
-            _recadoMostrado = recado;
-            // Depois do layout: a caixa acabou de aparecer e ainda não tem posição.
-            if (alvo != null) _meio.schedule.Execute(() => _meio.ScrollTo(alvo));
+            var lugar = _partida.ChaveDaSala + (naSecreta ? ":secreta" : "");
+            if (lugar == _lugarMostrado) return;
+            _lugarMostrado = lugar;
+            int letras = _lugar.text.Length;
+            foreach (var linha in _narracao.Children())
+                if (linha is Label rotulo) letras += rotulo.text.Length;
+            _lugarAte = Time.unscaledTime + Mathf.Clamp(SegundosDoLugar + letras * SegundosPorLetra, MinimoDoLugar, MaximoDoLugar);
+            _lugarSomeEm = 0f;
+            _caixaDoLugar.RemoveFromClassList("apagando");
+            _caixaDoLugar.RemoveFromClassList("escondida");
+        }
+
+        /// <summary>Começa a apagar o que fala do lugar (some de vez depois da transição).</summary>
+        private void ApagarLugar()
+        {
+            if (_lugarSomeEm > 0f || _caixaDoLugar.ClassListContains("escondida")) return;
+            _lugarAte = 0f;
+            _lugarSomeEm = Time.unscaledTime + SegundosDoApagar;
+            _caixaDoLugar.AddToClassList("apagando");
+        }
+
+        /// <summary>A cada quadro: na hora, apaga; apagado, sai do caminho do dedo. Em luta não aparece.</summary>
+        private void AtualizarLugar()
+        {
+            if (_partida.Luta != null && !_caixaDoLugar.ClassListContains("escondida"))
+            {
+                _caixaDoLugar.AddToClassList("escondida");
+                _lugarSomeEm = 0f;
+                return;
+            }
+            if (_lugarAte > 0f && Time.unscaledTime >= _lugarAte) ApagarLugar();
+            if (_lugarSomeEm > 0f && Time.unscaledTime >= _lugarSomeEm)
+            {
+                _lugarSomeEm = 0f;
+                _caixaDoLugar.AddToClassList("escondida");
+            }
         }
 
         private void DesenharRecado()

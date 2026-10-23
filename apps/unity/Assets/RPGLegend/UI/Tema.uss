@@ -500,25 +500,28 @@
     opacity: 1;
 }
 
-/* ---------- jogo: a sala à esquerda, o resto à direita (o site no celular deitado) ---------- */
+/* ---------- jogo: o mapa na tela toda, e por cima dele os botões, o herói e o que fala do lugar ---------- */
 
 .jogo {
-    flex-direction: row;
-    padding: 12px;
+    background-color: #05060a;
 }
 
-/* O tamanho sai do código (TelaDeJogo.AjustarPalco): 9 × 7 quadrados na altura toda, ou menor se a coluna
-   da direita ficasse estreita demais — aí a sala fica no meio da altura. */
+/* A textura da cena tem a proporção do palco (TelaDeJogo.AjustarPalco): na cidade o mapa enche a tela; na
+   masmorra a sala (9 × 7) fica no meio, com o escuro dos lados. */
 .palco {
-    flex-shrink: 0;
-    align-self: center;
-    height: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     background-color: #05060a;
-    border-width: 1px;
-    border-color: var(--line);
-    border-radius: 4px;
     -unity-background-scale-mode: scale-to-fit;
     overflow: hidden;
+}
+
+/* A sala da masmorra dentro do palco (o tamanho sai do código): a luta e o pet do canto moram aqui. */
+.area-da-sala {
+    position: absolute;
 }
 
 .base-do-joystick {
@@ -558,39 +561,69 @@
     -unity-text-align: middle-center;
 }
 
-.lado {
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-width: 0;
-    margin-left: 14px;
+/* Em cima à esquerda: os botões e o salvamento. */
+.topo-do-jogo {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: 10px;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+/* Na luta a sala ocupa a altura toda, com os nomes dos monstros no alto: os botões descem em coluna pelo escuro
+   da esquerda (a classe sai do TelaDeJogo). */
+.em-luta .acoes-do-jogo {
     flex-direction: column;
 }
 
-/* Coluna estreita (PC 16:9): o resumo em cima e o minimapa embaixo. Larga (celular deitado, que é mais
-   comprido): os dois lado a lado, pra sobrar altura pra narração. A classe sai do TelaDeJogo. */
-.topo-do-lado {
-    flex-direction: column;
-    align-items: flex-start;
-    flex-shrink: 0;
+/* Embaixo à esquerda: nome, nível e as duas barras. */
+.resumo-do-heroi {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    width: 250px;
+    padding: 8px 12px 10px 12px;
+    background-color: rgba(16, 18, 26, 0.78);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 6px;
+}
+
+/* À direita: o minimapa (só na masmorra), o lugar (na chegada), a pergunta, o aviso e o recado, um embaixo do
+   outro. */
+.avisos-do-jogo {
+    position: absolute;
+    right: 12px;
+    top: 10px;
+    width: 30%;
+    max-width: 400px;
+    align-items: stretch;
+}
+
+.avisos-do-jogo .minimapa {
+    align-self: flex-end;
     margin-bottom: 6px;
 }
 
-.lado-largo .topo-do-lado {
-    flex-direction: row;
-    justify-content: space-between;
+.avisos-do-jogo .painel {
+    background-color: rgba(16, 18, 26, 0.86);
 }
 
-.resumo-do-heroi {
-    align-self: stretch;
-    flex-shrink: 1;
-    min-width: 0;
-    margin-bottom: 8px;
+.caixa-do-lugar {
+    padding: 10px 14px 6px 14px;
+    margin-bottom: 6px;
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 0.4s;
 }
 
-.lado-largo .resumo-do-heroi {
-    flex-grow: 1;
-    margin-right: 12px;
-    margin-bottom: 0;
+.caixa-do-lugar.apagando {
+    opacity: 0;
+}
+
+.caixa-do-lugar.escondida {
+    display: none;
 }
 
 .linha-do-nome {
@@ -616,20 +649,9 @@
     color: var(--parchment-dim);
 }
 
-.barras {
-    flex-direction: row;
-}
-
 /* A barra curta do site: o rótulo e o número numa linha, a trilha fina embaixo. */
 .barra {
-    flex-grow: 1;
-    flex-basis: 0;
-    min-width: 0;
-    margin-right: 12px;
-}
-
-.barra.ultima-barra {
-    margin-right: 0;
+    margin-top: 4px;
 }
 
 .rotulo-da-barra {
@@ -677,7 +699,7 @@
     flex-shrink: 0;
     flex-direction: column;
     padding: 5px;
-    background-color: #05060a;
+    background-color: rgba(5, 6, 10, 0.86);
     border-width: 1px;
     border-color: var(--line);
     border-radius: 4px;
@@ -753,13 +775,6 @@
     color: var(--gold-bright);
     white-space: normal;
     margin-bottom: 4px;
-}
-
-.meio-do-lado {
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-height: 0;
-    margin-bottom: 6px;
 }
 
 .narracao {
@@ -886,13 +901,17 @@
 .acoes-do-jogo {
     flex-direction: row;
     flex-wrap: wrap;
-    flex-shrink: 0;
+    flex-shrink: 1;
+    align-items: flex-start;
 }
 
 .estado-do-salvamento {
     font-size: 14px;
     color: var(--parchment-dim);
-    min-height: 18px;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: var(--contorno);
+    margin-left: 4px;
+    margin-top: 12px;
     flex-shrink: 0;
 }
 

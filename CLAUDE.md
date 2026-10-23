@@ -256,6 +256,12 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   igreja, o Bram dentro do ferreiro, e cada masmorra tem a entrada dela
   (Floresta ao sul, Caverna ao norte, atrás dos troncos que saem quando a
   Floresta é zerada, e Torre a leste), que abre o portão com ela fixa.
+- Tela do jogo no app (2026-10-23, **só no app**; o site continua com a
+  coluna): o mapa na tela toda, com os botões em cima, nome, nível, vida e
+  mana embaixo à esquerda, e à direita o minimapa (na masmorra) e o que fala
+  do lugar, que aparece na chegada e some sozinho (as perguntas e os recados
+  ficam até a resposta). Na masmorra a sala 9 × 7 fica no meio, na altura
+  toda, e a luta acontece dentro dela; na luta os botões descem em coluna.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no
