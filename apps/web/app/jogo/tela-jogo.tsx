@@ -1053,7 +1053,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
                       </p>
                     )}
                     {textoDosExtras && <p className={styles.linhaDaCena}>{textoDosExtras}</p>}
-                    <p className={styles.pistasDasPortas}>{narracao.portas.join(' ')}</p>
+                    {/* As pistas das portas (Norte: parede…) saíram em 2026-10-23, a pedido do usuário: a sala desenhada
+                        e o minimapa já mostram o que elas diziam. */}
                   </div>
                 )
               )}

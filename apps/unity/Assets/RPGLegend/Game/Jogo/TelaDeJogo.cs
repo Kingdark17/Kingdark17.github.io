@@ -512,7 +512,8 @@ namespace RPGLegend.Game.Jogo
             if (!string.IsNullOrEmpty(narracao.Conteudo)) Linha(narracao.Conteudo, "linha-da-narracao");
             var extras = ExtrasDaSala.DescricaoDosExtras(celula);
             if (!string.IsNullOrEmpty(extras)) Linha(extras, "linha-da-narracao");
-            if (narracao.Portas != null) Linha(string.Join(" ", narracao.Portas), "pistas-das-portas");
+            // As pistas das portas (Norte: parede…) saíram em 2026-10-23, a pedido do usuário, no app e no site: a sala
+            // desenhada e o minimapa já mostram o que elas diziam.
         }
 
         private void Linha(string texto, string classe)
