@@ -111,7 +111,10 @@ namespace RPGLegend.Engine
                 var extra = extras[indice];
                 if (extra.Kind == "pot" && (extra.Used ?? false)) continue;
                 if (extra.Kind == "crack" && (extra.Used ?? false)) continue;
-                objetos.Add(new RoomObject { Id = IdDoExtra(indice), Col = extra.Col, Row = extra.Row });
+                // A parede rachada fica no vão do lado dela, e não na casa gravada: o andar gravado quando a sala era
+                // 9 × 7 a guardou no vão de lá.
+                var vao = extra.Kind == "crack" && !string.IsNullOrEmpty(extra.Side) ? RoomWalk.DoorTile[extra.Side] : null;
+                objetos.Add(new RoomObject { Id = IdDoExtra(indice), Col = vao?.Col ?? extra.Col, Row = vao?.Row ?? extra.Row });
             }
             return objetos;
         }

@@ -256,6 +256,15 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   igreja, o Bram dentro do ferreiro, e cada masmorra tem a entrada dela
   (Floresta ao sul, Caverna ao norte, atrás dos troncos que saem quando a
   Floresta é zerada, e Torre a leste), que abre o portão com ela fixa.
+- Sala da Floresta (2026-10-24, **site e app**): a arte do Breno veio em
+  9 × 9, e **todas as salas de masmorra passaram a 9 × 9** (eram 9 × 7;
+  decisão do usuário). As camadas de cada masmorra com arte estão em
+  `dungeon/arte-da-sala.ts` (o chão, um caminho só pras portas que a sala
+  tem, e as copas por cima do herói); a arte mora em `img/salas/<masmorra>/`
+  e `Art/Jogo/Resources/Salas/<masmorra>`. Caverna e Torre seguem com os
+  quadradinhos até ganharem arte. A parede rachada se põe pelo lado dela
+  (`DOOR_TILE[side]`), e não pela casa gravada. No app a luta continua na
+  proporção 9 × 7 em que foi afinada (`area-da-luta`).
 - Tela do jogo no app (2026-10-23, **só no app**; o site continua com a
   coluna): o mapa na tela toda, com os botões em cima, nome, nível, vida e
   mana embaixo à esquerda, e à direita o minimapa (na masmorra) e o que fala

@@ -82,8 +82,8 @@
              fala do lugar (à direita, só quando chega; decisão do usuário em 2026-10-23, só no app). -->
         <ui:VisualElement name="jogo" class="tela jogo oculto">
             <ui:VisualElement name="palco" class="palco">
-                <!-- A sala da masmorra (9 × 7) no meio do palco: a luta e o pet do canto ficam dentro dela. -->
-                <ui:VisualElement name="area-da-sala" class="area-da-sala" picking-mode="Ignore" />
+                <!-- A área da luta (9 × 7, a proporção em que ela foi afinada) no meio do palco. -->
+                <ui:VisualElement name="area-da-luta" class="area-da-luta" picking-mode="Ignore" />
                 <ui:VisualElement name="base-do-joystick" class="base-do-joystick escondido" picking-mode="Ignore">
                     <ui:VisualElement name="alavanca-do-joystick" class="alavanca-do-joystick" picking-mode="Ignore" />
                 </ui:VisualElement>

@@ -49,17 +49,19 @@ export interface DungeonExtra {
  * Os cantos onde os extras ficam: fora da cruz do meio da sala (a coluna do
  * vão norte/sul e a linha do vão leste/oeste), que é o caminho entre as
  * portas e até o conteúdo. Nenhum fecha passagem nem fica onde o herói
- * chega.
+ * chega. Na sala 9 × 9 os de baixo ficam na linha 6, e não na 7: as copas
+ * de baixo da Floresta cobrem a linha 7. Os gravados na linha 5, da sala
+ * 9 × 7, continuam valendo.
  */
 export const EXTRA_TILES = [
   { col: 1, row: 1 },
   { col: 2, row: 1 },
   { col: 6, row: 1 },
   { col: 7, row: 1 },
-  { col: 1, row: 5 },
-  { col: 2, row: 5 },
-  { col: 6, row: 5 },
-  { col: 7, row: 5 },
+  { col: 1, row: 6 },
+  { col: 2, row: 6 },
+  { col: 6, row: 6 },
+  { col: 7, row: 6 },
 ] as const;
 
 /** Chance de o andar ter uma parede rachada (no máximo uma). */

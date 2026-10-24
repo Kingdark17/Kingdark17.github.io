@@ -1015,6 +1015,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               planta={planta}
               cidade={troncosAgora === null ? null : { troncos: troncosAgora }}
               tema={TEMAS[estado.mapMode === 'dungeon' ? estado.masmorra.dungeon : 'cidade']}
+              masmorra={estado.mapMode === 'dungeon' ? estado.masmorra.dungeon : null}
               figuras={figuras}
               heroi={heroiNaCena}
               chegada={chegadaDaCena}

@@ -27,6 +27,8 @@ namespace RPGLegend.Game.Jogo
         /// <summary>A cena mostra a cidade desenhada do Breno (camadas e câmera seguindo o herói), e não uma sala.</summary>
         private bool _naCidade;
         private const int OrdemDeCima = 30000;
+        /// <summary>A rachadura na sala desenhada: por cima das camadas de cima (as árvores dos lados cobrem a parede).</summary>
+        private const int OrdemDaRachaduraNaArte = OrdemDeCima + 100;
         /// <summary>Na cidade, as camadas do meio, que ficam meio transparentes quando cobrem o herói.</summary>
         private readonly List<(CamadaDaCidade Camada, SpriteRenderer Desenho)> _doMeio = new List<(CamadaDaCidade, SpriteRenderer)>();
         /// <summary>Quanto se vê da camada que cobre o herói (meio transparente), e em quantos segundos chega lá.</summary>
@@ -177,9 +179,10 @@ namespace RPGLegend.Game.Jogo
 
         /// <summary>
         /// Mostra a sala. <paramref name="chave"/> muda quando o jogador troca de sala (ou entra e sai da secreta): aí o
-        /// herói aparece em <paramref name="chegada"/>. Com a mesma chave, só o desenho se atualiza.
+        /// herói aparece em <paramref name="chegada"/>. Com a mesma chave, só o desenho se atualiza. Com
+        /// <paramref name="masmorra"/> que tem arte (<see cref="ArteDaSala"/>), a sala é a do Breno, e não os quadradinhos.
         /// </summary>
-        public void Mostrar(string chave, RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras, Walker chegada)
+        public void Mostrar(string chave, RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras, Walker chegada, string masmorra = null)
         {
             _planta = planta;
             if (chave != _salaDaCena)
@@ -190,11 +193,11 @@ namespace RPGLegend.Game.Jogo
                 _sobra = 0;
             }
 
-            var assinatura = string.Join(",", planta.Doors) + "#" + DesenhoDasObjetos(planta) + "#" + FigurasDaSala.Assinatura(figuras) + "#" + tema.GetHashCode();
+            var assinatura = string.Join(",", planta.Doors) + "#" + DesenhoDasObjetos(planta) + "#" + FigurasDaSala.Assinatura(figuras) + "#" + tema.GetHashCode() + "#" + masmorra;
             if (assinatura != _assinaturaDoDesenho)
             {
                 _assinaturaDoDesenho = assinatura;
-                Desenhar(planta, tema, figuras);
+                Desenhar(planta, tema, figuras, masmorra);
             }
             ColocarHeroi(false);
         }
@@ -237,6 +240,7 @@ namespace RPGLegend.Game.Jogo
             _naCidade = true;
             AjustarZoom();
             _escala = (float)(MapaDaCidade.PixelsPorCasa / GameData.RoomWalkTable.TileUnits);
+            int noChao = 0, emCima = 0;
             foreach (var camada in MapaDaCidade.Camadas)
             {
                 if (camada.SoComTroncos == true && !troncos) continue;
@@ -249,12 +253,13 @@ namespace RPGLegend.Game.Jogo
                 var renderizador = objeto.AddComponent<SpriteRenderer>();
                 renderizador.sprite = sprite;
                 // Ordenada com o herói pela linha onde a camada encosta no chão (o herói vai pelo pé, em pixel).
-                renderizador.sortingOrder = camada.Plano == "chao" ? OrdemDoChao : camada.Plano == "cima" ? OrdemDeCima : (int)(camada.Base * MapaDaCidade.PixelsPorCasa);
+                // Dentro do mesmo plano, na ordem da lista (com a mesma ordem a Unity não garante quem fica por cima).
+                renderizador.sortingOrder = camada.Plano == "chao" ? OrdemDoChao + noChao++ : camada.Plano == "cima" ? OrdemDeCima + emCima++ : (int)(camada.Base * MapaDaCidade.PixelsPorCasa);
                 if (camada.Plano == "meio") _doMeio.Add((camada, renderizador));
             }
         }
 
-        private void Desenhar(RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras)
+        private void Desenhar(RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras, string masmorra)
         {
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
             _doMeio.Clear();
@@ -266,7 +271,11 @@ namespace RPGLegend.Game.Jogo
                 AjustarZoom();
             }
 
-            int linhas = planta.Solid.Count;
+            // A sala desenhada da masmorra, quando ela tem (a Floresta do Breno): o chão, os caminhos das portas que
+            // existem e as copas por cima de tudo. Sem arte, os quadradinhos na cor do lugar.
+            var camadas = masmorra != null ? ArteDaSala.CamadasDaSala(masmorra, planta.Doors) : null;
+            if (camadas != null) DesenharArte(masmorra, camadas);
+            int linhas = camadas != null ? 0 : planta.Solid.Count;
             for (int row = 0; row < linhas; row++)
             {
                 var linha = planta.Solid[row];
@@ -298,7 +307,8 @@ namespace RPGLegend.Game.Jogo
                 float py = (float)objeto.Row * Lado;
                 if (figura.Rachadura)
                 {
-                    Rachadura(px, py);
+                    // Na sala desenhada as árvores dos lados passam por cima da parede: a rachadura vai por cima delas.
+                    Rachadura(px, py, camadas != null ? OrdemDaRachaduraNaArte : OrdemDaRachadura);
                     continue;
                 }
 
@@ -331,19 +341,41 @@ namespace RPGLegend.Game.Jogo
             renderizador.sortingOrder = ordem;
         }
 
+        /// <summary>As camadas da arte da sala, no tamanho da sala (a arte tem 32 px por casa; a sala, <see cref="Lado"/>).</summary>
+        private void DesenharArte(string masmorra, List<CamadaDaSala> camadas)
+        {
+            float escala = Lado / (float)ArteDaSala.PixelsDaSala;
+            // Cada camada uma ordem acima da anterior no mesmo plano: com a mesma ordem a Unity não garante quem fica
+            // por cima, e o caminho sumia debaixo da grama.
+            int chao = 0, cima = 0;
+            foreach (var camada in camadas)
+            {
+                var sprite = Resources.Load<Sprite>("Salas/" + masmorra + "/" + camada.Arquivo);
+                if (sprite == null) continue;
+                var objeto = new GameObject(camada.Arquivo);
+                objeto.transform.SetParent(_desenho, false);
+                objeto.transform.localScale = new Vector3(escala, escala, 1f);
+                // O canto de cima à esquerda da arte no (0, 0) da sala.
+                objeto.transform.position = Mundo(0f, 0f) + new Vector3(-sprite.bounds.min.x * escala, -sprite.bounds.max.y * escala, 0f);
+                var renderizador = objeto.AddComponent<SpriteRenderer>();
+                renderizador.sprite = sprite;
+                renderizador.sortingOrder = camada.Plano == "cima" ? OrdemDeCima + cima++ : OrdemDoChao + chao++;
+            }
+        }
+
         /// <summary>A parede rachada riscada na própria pedra (o mesmo zigue-zague do site).</summary>
-        private void Rachadura(float px, float py)
+        private void Rachadura(float px, float py, int ordem)
         {
             var pontos = new[]
             {
                 new Vector2(px + Lado * 0.5f, py + 4), new Vector2(px + Lado * 0.38f, py + Lado * 0.32f), new Vector2(px + Lado * 0.6f, py + Lado * 0.52f),
                 new Vector2(px + Lado * 0.42f, py + Lado * 0.78f), new Vector2(px + Lado * 0.52f, py + Lado - 4),
             };
-            for (int i = 0; i + 1 < pontos.Length; i++) Risco(pontos[i], pontos[i + 1]);
-            Risco(new Vector2(px + Lado * 0.6f, py + Lado * 0.52f), new Vector2(px + Lado * 0.8f, py + Lado * 0.6f));
+            for (int i = 0; i + 1 < pontos.Length; i++) Risco(pontos[i], pontos[i + 1], ordem);
+            Risco(new Vector2(px + Lado * 0.6f, py + Lado * 0.52f), new Vector2(px + Lado * 0.8f, py + Lado * 0.6f), ordem);
         }
 
-        private void Risco(Vector2 de, Vector2 para)
+        private void Risco(Vector2 de, Vector2 para, int ordem)
         {
             var meio = (de + para) / 2f;
             var delta = para - de;
@@ -356,7 +388,7 @@ namespace RPGLegend.Game.Jogo
             var renderizador = risco.AddComponent<SpriteRenderer>();
             renderizador.sprite = _branco;
             renderizador.color = CorDaRachadura;
-            renderizador.sortingOrder = OrdemDaRachadura;
+            renderizador.sortingOrder = ordem;
         }
 
         // ---------- o andar, a cada quadro ----------

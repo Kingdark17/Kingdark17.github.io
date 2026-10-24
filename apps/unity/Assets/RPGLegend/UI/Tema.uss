@@ -507,7 +507,7 @@
 }
 
 /* A textura da cena tem a proporção do palco (TelaDeJogo.AjustarPalco): na cidade o mapa enche a tela; na
-   masmorra a sala (9 × 7) fica no meio, com o escuro dos lados. */
+   masmorra a sala (9 × 9) fica no meio, com o escuro dos lados. */
 .palco {
     position: absolute;
     left: 0;
@@ -519,8 +519,8 @@
     overflow: hidden;
 }
 
-/* A sala da masmorra dentro do palco (o tamanho sai do código): a luta e o pet do canto moram aqui. */
-.area-da-sala {
+/* A área da luta no meio do palco (o tamanho sai do código, na proporção 9 × 7 em que a luta foi afinada). */
+.area-da-luta {
     position: absolute;
 }
 

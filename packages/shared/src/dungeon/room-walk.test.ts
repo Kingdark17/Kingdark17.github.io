@@ -40,9 +40,9 @@ describe('roomLayout', () => {
     expect(planta.doors).toEqual(['N', 'E']);
     expect(planta.solid[0]?.[4]).toBe(false);
     expect(planta.solid[ROOM_ROWS - 1]?.[4]).toBe(true);
-    expect(planta.solid[3]?.[ROOM_COLS - 1]).toBe(false);
-    expect(planta.solid[3]?.[0]).toBe(true);
-    expect(planta.solid[3]?.[4]).toBe(true);
+    expect(planta.solid[CONTENT_TILE.row]?.[ROOM_COLS - 1]).toBe(false);
+    expect(planta.solid[CONTENT_TILE.row]?.[0]).toBe(true);
+    expect(planta.solid[CONTENT_TILE.row]?.[4]).toBe(true);
     expect(planta.solid[1]?.[1]).toBe(false);
   });
 });
@@ -118,9 +118,9 @@ describe('walkTick', () => {
 
   it('sai pelas quatro portas', () => {
     for (const [porta, inicio, input] of [
-      ['S', { x: c(4), y: c(5) }, { x: 0, y: STICK_MAX }],
-      ['W', { x: c(1), y: c(3) }, { x: -STICK_MAX, y: 0 }],
-      ['E', { x: c(7), y: c(3) }, { x: STICK_MAX, y: 0 }],
+      ['S', { x: c(4), y: c(ROOM_ROWS - 2) }, { x: 0, y: STICK_MAX }],
+      ['W', { x: c(1), y: c(CONTENT_TILE.row) }, { x: -STICK_MAX, y: 0 }],
+      ['E', { x: c(7), y: c(CONTENT_TILE.row) }, { x: STICK_MAX, y: 0 }],
     ] as const) {
       expect(andar(planta, { ...inicio, facing: 'S' }, input, 60).exit).toBe(porta);
     }
@@ -130,11 +130,11 @@ describe('walkTick', () => {
 describe('roomArrival', () => {
   it('quem andou pro norte chega pelo vão do sul, um quadrado pra dentro', () => {
     expect(roomArrival('N')).toEqual({ x: c(4), y: c(ROOM_ROWS - 2), facing: 'N' });
-    expect(roomArrival('E')).toEqual({ x: c(1), y: c(3), facing: 'E' });
+    expect(roomArrival('E')).toEqual({ x: c(1), y: c(CONTENT_TILE.row), facing: 'E' });
   });
 
   it('sem direção, logo abaixo do conteúdo, olhando pra baixo', () => {
-    expect(roomArrival(null)).toEqual({ x: c(4), y: c(5), facing: 'S' });
+    expect(roomArrival(null)).toEqual({ x: c(4), y: c(CONTENT_TILE.row + 2), facing: 'S' });
   });
 
   it('quem chega não sai de novo no mesmo passo nem começa encostado no conteúdo', () => {

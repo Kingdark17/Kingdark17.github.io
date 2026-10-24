@@ -63,6 +63,23 @@ describe('ids e objetos da sala', () => {
     expect(passagemSecreta(celula)).toEqual({ lado: 'N', indice: 2 });
   });
 
+  it('a parede rachada gravada na sala 9 × 7 vai pro vão do lado dela na sala de agora', () => {
+    const celula = {
+      type: 'normal',
+      x: 0,
+      y: 0,
+      doors: {},
+      extras: [
+        { kind: 'crack', col: 4, row: 6, side: 'S', used: false },
+        { kind: 'crack', col: 0, row: 3, side: 'W', used: false },
+      ],
+    } as DungeonCell;
+    expect(objetosDaSala(celula, false)).toEqual([
+      { id: idDoExtra(0), ...DOOR_TILE.S },
+      { id: idDoExtra(1), ...DOOR_TILE.W },
+    ]);
+  });
+
   it('a sala secreta tem uma porta só, de volta, e o baú no centro', () => {
     const planta = plantaDaSalaSecreta('N');
     expect(planta.doors).toEqual(['S']);

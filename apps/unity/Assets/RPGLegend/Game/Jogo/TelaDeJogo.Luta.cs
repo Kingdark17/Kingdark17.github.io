@@ -316,7 +316,7 @@ namespace RPGLegend.Game.Jogo
             var aberto = arena.Evento;
             _eventoNaTela.Mostrar(aberto, _palcoDaLuta.AreaDoPalco);
             float topoDaCaixa = _palcoDaLuta.TopoDaCaixa;
-            if (topoDaCaixa > 0) _avisosDaLuta.style.bottom = Mathf.Max(0f, _areaDaSala.contentRect.height - topoDaCaixa + 6f);
+            if (topoDaCaixa > 0) _avisosDaLuta.style.bottom = Mathf.Max(0f, _areaDaLuta.contentRect.height - topoDaCaixa + 6f);
             _dicaDoEvento.text = aberto != null ? DicaDoEvento(aberto.Evento.Tipo) : "";
             _dicaDoEvento.EnableInClassList("escondido", aberto == null);
             if (aberto == null || aberto.Evento.Tipo != TiposDeEvento.Desenho) _dedoNoDesenho = null;
@@ -539,7 +539,7 @@ namespace RPGLegend.Game.Jogo
             _palcoDaLuta.Esconder();
             _mirar = null;
             _menuDeItens.AddToClassList("escondido");
-            _eventoNaTela.Mostrar(null, _areaDaSala.contentRect);
+            _eventoNaTela.Mostrar(null, _areaDaLuta.contentRect);
             _dicaDoEvento.AddToClassList("escondido");
             _dedoNoDesenho = null;
             _apertou = _soltou = _tocou = false;

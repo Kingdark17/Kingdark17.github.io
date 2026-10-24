@@ -16,6 +16,7 @@ namespace RPGLegend.Engine.Json
             GameData.DungeonsTable = JsSerializer.Parse<DungeonsData>(readTable("dungeon/dungeons"));
             GameData.RoomWalkTable = JsSerializer.Parse<RoomWalkData>(readTable("dungeon/room-walk"));
             GameData.ExtrasTable = JsSerializer.Parse<ExtrasData>(readTable("dungeon/extras"));
+            GameData.ArteDaSalaTable = JsSerializer.Parse<ArteDaSalaData>(readTable("dungeon/arte-da-sala"));
         }
     }
 }

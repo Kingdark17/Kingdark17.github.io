@@ -26,6 +26,7 @@ namespace RPGLegend.Game.Jogo
         /// Quanto o que fala do lugar fica na tela depois da chegada: um tanto fixo mais o tempo de ler, entre o mínimo
         /// e o máximo. Depois some apagando.
         /// </summary>
+        private const float ProporcaoDaLuta = 9f / 7f;
         private const float SegundosDoLugar = 3f, SegundosPorLetra = 0.05f, MinimoDoLugar = 5f, MaximoDoLugar = 15f, SegundosDoApagar = 0.4f;
 
         private static readonly Dictionary<string, Color> CorDoTipo = new Dictionary<string, Color>
@@ -41,7 +42,7 @@ namespace RPGLegend.Game.Jogo
         /// <summary>A pessoa saiu da partida, já gravada: quem abriu volta pra lista de personagens.</summary>
         public event Action AoSair;
 
-        private VisualElement _tela, _palco, _areaDaSala, _caixaDoLugar, _baseDoJoystick, _alavanca, _minimapa, _caixa, _escolhas, _recado, _sobre, _botoesDaJanela, _vida, _mana;
+        private VisualElement _tela, _palco, _areaDaLuta, _caixaDoLugar, _baseDoJoystick, _alavanca, _minimapa, _caixa, _escolhas, _recado, _sobre, _botoesDaJanela, _vida, _mana;
         private VisualElement _janelaEl, _colunasDaJanela;
         private Label _dica, _nome, _nivel, _numeroDaVida, _numeroDaMana, _lugar, _iconeDaCaixa, _tituloDaCaixa, _textoDaCaixa, _tituloDoRecado, _textoDoRecado, _salvamento, _tituloDaJanela, _carregando;
         private Label _ouroDaJanela, _linhaDaJanela;
@@ -213,7 +214,7 @@ namespace RPGLegend.Game.Jogo
         {
             _tela = raiz.Q("jogo");
             _palco = raiz.Q("palco");
-            _areaDaSala = raiz.Q("area-da-sala");
+            _areaDaLuta = raiz.Q("area-da-luta");
             _caixaDoLugar = raiz.Q("caixa-do-lugar");
             _baseDoJoystick = raiz.Q("base-do-joystick");
             _alavanca = raiz.Q("alavanca-do-joystick");
@@ -268,12 +269,12 @@ namespace RPGLegend.Game.Jogo
             _palco.RegisterCallback<PointerCancelEvent>(e => SoltarDedo(e.pointerId));
             _palco.RegisterCallback<PointerCaptureOutEvent>(e => SoltarDedo(e.pointerId));
 
-            CriarHudDaLuta(_areaDaSala);
+            CriarHudDaLuta(_areaDaLuta);
         }
 
         /// <summary>
         /// O palco é a tela toda (decisão do usuário em 2026-10-23, só no app): a cena ganha a proporção dele, e a
-        /// cidade enche a tela; a sala da masmorra (9 × 7) fica no meio, na altura toda, e a área dela recebe a luta.
+        /// cidade enche a tela; a sala da masmorra (9 × 9) fica no meio, na altura toda; e a área da luta, também no meio.
         /// </summary>
         private void AjustarPalco()
         {
@@ -282,13 +283,15 @@ namespace RPGLegend.Game.Jogo
             if (_sala != null && _sala.AjustarVista(area.width / area.height))
                 _palco.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(_sala.Textura));
 
-            float proporcao = (float)(RoomWalk.RoomCols / RoomWalk.RoomRows);
+            // A área da luta no meio, na altura toda. A luta foi afinada na sala 9 × 7 e continua nessa proporção
+            // depois que a sala virou 9 × 9 (2026-10-24): quadrada, os botões dos poderes cobriam a caixa e os monstros.
+            float proporcao = ProporcaoDaLuta;
             float largura = Mathf.Floor(Mathf.Min(area.width, area.height * proporcao));
             float altura = Mathf.Floor(largura / proporcao);
-            _areaDaSala.style.width = largura;
-            _areaDaSala.style.height = altura;
-            _areaDaSala.style.left = Mathf.Floor((area.width - largura) / 2f);
-            _areaDaSala.style.top = Mathf.Floor((area.height - altura) / 2f);
+            _areaDaLuta.style.width = largura;
+            _areaDaLuta.style.height = altura;
+            _areaDaLuta.style.left = Mathf.Floor((area.width - largura) / 2f);
+            _areaDaLuta.style.top = Mathf.Floor((area.height - altura) / 2f);
         }
 
         // ---------- a cada quadro ----------
@@ -676,7 +679,7 @@ namespace RPGLegend.Game.Jogo
 
             var heroi = estado.Hero;
             _sala.DefinirHeroi(Catalog.IdDaRaca(heroi.RaceId, heroi.Race), string.IsNullOrEmpty(heroi.RaceIcon) ? "🙂" : heroi.RaceIcon);
-            _sala.Mostrar(chave, planta, TemaDaSala.Do(estado), figuras, chegada);
+            _sala.Mostrar(chave, planta, TemaDaSala.Do(estado), figuras, chegada, estado.MapMode == "dungeon" ? estado.Masmorra?.Dungeon : null);
         }
 
         // ---------- janelas por cima ----------

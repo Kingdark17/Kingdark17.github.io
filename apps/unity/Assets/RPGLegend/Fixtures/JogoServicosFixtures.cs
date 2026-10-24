@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RPGLegend.Engine;
 using RPGLegend.Engine.Json;
 using static RPGLegend.Tests.FixtureRegistry;
@@ -83,6 +84,7 @@ namespace RPGLegend.Tests
             Fn(M, "plantaDaCidade", (a, c) => W(MapaDaCidade.PlantaDaCidade(JsJson.Truthy(a["troncosNoCaminho"]))));
             Fn(M, "chegadaNoPonto", (a, c) => W(MapaDaCidade.ChegadaNoPonto(Str(a["ponto"]))));
             Fn(M, "cobreOHeroi", (a, c) => W(MapaDaCidade.CobreOHeroi(R<CamadaDaCidade>(a["camada"]), R<Walker>(a["walker"]))));
+            Fn(M, "camadasDaSala", (a, c) => W(ArteDaSala.CamadasDaSala(Str(a["dungeon"]), R<List<string>>(a["portas"]))));
             Fn(M, "pontoDaSala", (a, c) => W(MapaDaCidade.PontoDaSala(R<CityCell>(a["celula"]))));
             Fn(M, "pistasDaCidade", (a, c) => W(Cidades.PistasDaCidade(R<EstadoNaCidade>(a["estado"]))));
             Const(M, "TEXTO_DA_CIDADE", () => W(Cidades.TextoDaCidade));

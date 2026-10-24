@@ -3932,6 +3932,18 @@ for (const ponto of [...new Set(E.PONTOS_DA_CIDADE.map((p) => p.id)), 'castelo']
     }
   }
 }
+
+// --- a arte das salas da masmorra (dungeon/arte-da-sala.ts) ---
+for (const [dungeon, portas] of [
+  ['floresta', []],
+  ['floresta', ['N']],
+  ['floresta', ['S', 'W']],
+  ['floresta', ['N', 'E', 'S', 'W']],
+  ['caverna', ['N', 'S']],
+  ['torre', ['E']],
+] as const) {
+  caso(`camadasDaSala: ${dungeon}, ${portas.join('') || 'sem portas'}`, 'camadasDaSala', { dungeon, portas }, (a) => E.camadasDaSala(a.dungeon, a.portas));
+}
 {
   const salas = E.generateCityLayout(6, 6).rooms;
   const recrutador = { ...salas.find((s) => s.type === 'npc')!, npc: { ...salas.find((s) => s.type === 'npc')!.npc!, service: 'recruit' as const } };

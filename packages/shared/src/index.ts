@@ -48,6 +48,7 @@ export * from './dungeon/dungeons.js';
 export * from './dungeon/generate.js';
 export * from './dungeon/room-walk.js';
 export * from './dungeon/extras.js';
+export * from './dungeon/arte-da-sala.js';
 
 export * from './inventory/inventory.js';
 export * from './npc/npc-services.js';

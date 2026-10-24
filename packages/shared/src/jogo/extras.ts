@@ -15,7 +15,7 @@
 import { extraChestGold, potCoins, signHint, type DungeonExtra } from '../dungeon/extras.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import { DIR_OPP, type Direction } from '../dungeon/graph.js';
-import { CONTENT_TILE, roomLayout, type RoomLayout, type RoomObject } from '../dungeon/room-walk.js';
+import { CONTENT_TILE, DOOR_TILE, roomLayout, type RoomLayout, type RoomObject } from '../dungeon/room-walk.js';
 import { addItem } from '../inventory/inventory.js';
 import { concordar, displayName, type Item } from '../items/item.js';
 import { onItemCollected } from '../quests/quests.js';
@@ -56,14 +56,17 @@ export function passagemSecreta(celula: CelulaDoMapa | null): { lado: Direction;
 /**
  * Os objetos da sala na planta do andar: o conteúdo no centro (quando há) e
  * os extras que ainda ocupam lugar. Vaso quebrado some; parede aberta deixa
- * de ser objeto e vira vão (ver `passagemSecreta`).
+ * de ser objeto e vira vão (ver `passagemSecreta`). A parede rachada fica
+ * no vão do lado dela, e não na casa gravada: o andar gravado quando a sala
+ * era 9 × 7 a guardou no vão de lá.
  */
 export function objetosDaSala(celula: CelulaDoMapa | null, temConteudo: boolean): RoomObject[] {
   const objetos: RoomObject[] = temConteudo ? [{ id: ID_DO_CONTEUDO, ...CONTENT_TILE }] : [];
   extrasDe(celula).forEach((extra, indice) => {
     if (extra.kind === 'pot' && extra.used) return;
     if (extra.kind === 'crack' && extra.used) return;
-    objetos.push({ id: idDoExtra(indice), col: extra.col, row: extra.row });
+    const casa = extra.kind === 'crack' && extra.side ? DOOR_TILE[extra.side] : extra;
+    objetos.push({ id: idDoExtra(indice), col: casa.col, row: casa.row });
   });
   return objetos;
 }

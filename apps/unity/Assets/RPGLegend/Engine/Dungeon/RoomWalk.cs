@@ -70,6 +70,8 @@ namespace RPGLegend.Engine
         public static double StickMax => D.StickMax;
         public static double DoorAssist => D.DoorAssist;
         public static TileRef ContentTile => D.ContentTile;
+        /// <summary>O vão de cada porta, no meio de cada parede.</summary>
+        public static OrderedMap<TileRef> DoorTile => D.DoorTile;
 
         /// <summary>TS: roomLayout — parede em volta, vão onde há porta e os objetos, cada um no seu quadrado.</summary>
         public static RoomLayout Layout(DoorMap doors, IReadOnlyList<RoomObject> objects)

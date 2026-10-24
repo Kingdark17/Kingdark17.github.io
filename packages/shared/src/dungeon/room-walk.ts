@@ -23,8 +23,13 @@
 
 import { DIR_OPP, DIR_ORDER, DIR_VECTORS, type Direction } from './graph.js';
 
+/**
+ * 9 × 9 desde a sala da Floresta do Breno (2026-10-24: a arte veio em 9 × 9,
+ * e o usuário decidiu que todas as masmorras passam a ter esse tamanho; até
+ * então eram 9 × 7).
+ */
 export const ROOM_COLS = 9;
-export const ROOM_ROWS = 7;
+export const ROOM_ROWS = 9;
 
 /** Unidades por quadrado. 960 divide por 2, 3, 4, 5, 6 e 8 — sobra espaço pra afinar velocidade e tamanho sem fração. */
 export const TILE_UNITS = 960;
@@ -52,14 +57,14 @@ export const STICK_MAX = 127;
 export const DOOR_ASSIST = 480;
 
 /** O quadrado do conteúdo da sala (baú, monstro, loja…): o centro. */
-export const CONTENT_TILE = { col: 4, row: 3 } as const;
+export const CONTENT_TILE = { col: 4, row: 4 } as const;
 
 /** O vão de cada porta: no meio de cada parede. A parede rachada dos extras fica no vão de uma porta que não existe. */
 export const DOOR_TILE: Record<Direction, { col: number; row: number }> = {
   N: { col: 4, row: 0 },
   S: { col: 4, row: ROOM_ROWS - 1 },
-  W: { col: 0, row: 3 },
-  E: { col: ROOM_COLS - 1, row: 3 },
+  W: { col: 0, row: 4 },
+  E: { col: ROOM_COLS - 1, row: 4 },
 };
 
 /** Algo da sala que se aciona encostando. Ocupa um quadrado inteiro, sólido. */

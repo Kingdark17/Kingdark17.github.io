@@ -1,0 +1,35 @@
+{
+  "PIXELS_DA_SALA": 32,
+  "CAMADAS_DAS_SALAS": {
+    "floresta": [
+      {
+        "arquivo": "1_grama",
+        "plano": "chao"
+      },
+      {
+        "arquivo": "2_caminho_cima",
+        "plano": "chao",
+        "porta": "N"
+      },
+      {
+        "arquivo": "3_caminho_direita",
+        "plano": "chao",
+        "porta": "E"
+      },
+      {
+        "arquivo": "4_caminho_esquerda",
+        "plano": "chao",
+        "porta": "W"
+      },
+      {
+        "arquivo": "5_caminho_baixo",
+        "plano": "chao",
+        "porta": "S"
+      },
+      {
+        "arquivo": "6_floresta_cima",
+        "plano": "cima"
+      }
+    ]
+  }
+}

@@ -2612,13 +2612,13 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ]
             },
@@ -2650,7 +2650,7 @@
                 {
                   "kind": "chest",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_vida_1700000000000_39952",
                     "templateId": "pot_vida",
@@ -2687,7 +2687,7 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -2762,7 +2762,7 @@
                 {
                   "kind": "pot",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -2783,7 +2783,7 @@
                 {
                   "kind": "pot",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -2863,7 +2863,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -2886,7 +2886,7 @@
                 {
                   "kind": "crack",
                   "col": 0,
-                  "row": 3,
+                  "row": 4,
                   "side": "W",
                   "used": false,
                   "secretItem": {
@@ -3019,7 +3019,7 @@
                 {
                   "kind": "chest",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -3055,7 +3055,7 @@
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ]
             },
@@ -3142,7 +3142,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_mana_1700000000000_93224",
                     "templateId": "pot_mana",
@@ -3300,13 +3300,13 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ]
             },
@@ -3338,7 +3338,7 @@
                 {
                   "kind": "chest",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_vida_1700000000000_39952",
                     "templateId": "pot_vida",
@@ -3375,7 +3375,7 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -3451,7 +3451,7 @@
                 {
                   "kind": "pot",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -3472,7 +3472,7 @@
                 {
                   "kind": "pot",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -3553,7 +3553,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -3576,7 +3576,7 @@
                 {
                   "kind": "crack",
                   "col": 0,
-                  "row": 3,
+                  "row": 4,
                   "side": "W",
                   "used": false,
                   "secretItem": {
@@ -3711,7 +3711,7 @@
                 {
                   "kind": "chest",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -3748,7 +3748,7 @@
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ],
               "revealed": true
@@ -3836,7 +3836,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_mana_1700000000000_93224",
                     "templateId": "pot_mana",
@@ -4000,13 +4000,13 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ]
             },
@@ -4038,7 +4038,7 @@
                 {
                   "kind": "chest",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_vida_1700000000000_39952",
                     "templateId": "pot_vida",
@@ -4075,7 +4075,7 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -4150,7 +4150,7 @@
                 {
                   "kind": "pot",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -4171,7 +4171,7 @@
                 {
                   "kind": "pot",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -4251,7 +4251,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -4274,7 +4274,7 @@
                 {
                   "kind": "crack",
                   "col": 0,
-                  "row": 3,
+                  "row": 4,
                   "side": "W",
                   "used": false,
                   "secretItem": {
@@ -4407,7 +4407,7 @@
                 {
                   "kind": "chest",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -4443,7 +4443,7 @@
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ]
             },
@@ -4530,7 +4530,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_mana_1700000000000_93224",
                     "templateId": "pot_mana",
@@ -4690,13 +4690,13 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ]
             },
@@ -4728,7 +4728,7 @@
                 {
                   "kind": "chest",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_vida_1700000000000_39952",
                     "templateId": "pot_vida",
@@ -4766,7 +4766,7 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -4841,7 +4841,7 @@
                 {
                   "kind": "pot",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ],
@@ -4863,7 +4863,7 @@
                 {
                   "kind": "pot",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -4943,7 +4943,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -4966,7 +4966,7 @@
                 {
                   "kind": "crack",
                   "col": 0,
-                  "row": 3,
+                  "row": 4,
                   "side": "W",
                   "used": false,
                   "secretItem": {
@@ -5099,7 +5099,7 @@
                 {
                   "kind": "chest",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -5135,7 +5135,7 @@
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ]
             },
@@ -5222,7 +5222,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_mana_1700000000000_93224",
                     "templateId": "pot_mana",
@@ -5385,13 +5385,13 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ]
             },
@@ -5423,7 +5423,7 @@
                 {
                   "kind": "chest",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_vida_1700000000000_39952",
                     "templateId": "pot_vida",
@@ -5460,7 +5460,7 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -5535,7 +5535,7 @@
                 {
                   "kind": "pot",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -5556,7 +5556,7 @@
                 {
                   "kind": "pot",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -5636,7 +5636,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -5659,7 +5659,7 @@
                 {
                   "kind": "crack",
                   "col": 0,
-                  "row": 3,
+                  "row": 4,
                   "side": "W",
                   "used": false,
                   "secretItem": {
@@ -5792,7 +5792,7 @@
                 {
                   "kind": "chest",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -5828,7 +5828,7 @@
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ],
               "revealed": true
@@ -5916,7 +5916,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_mana_1700000000000_93224",
                     "templateId": "pot_mana",
@@ -6075,13 +6075,13 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ]
             },
@@ -6113,7 +6113,7 @@
                 {
                   "kind": "chest",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_vida_1700000000000_39952",
                     "templateId": "pot_vida",
@@ -6150,7 +6150,7 @@
                 {
                   "kind": "pot",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -6226,7 +6226,7 @@
                 {
                   "kind": "pot",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -6247,7 +6247,7 @@
                 {
                   "kind": "pot",
                   "col": 2,
-                  "row": 5,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -6328,7 +6328,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -6351,7 +6351,7 @@
                 {
                   "kind": "crack",
                   "col": 0,
-                  "row": 3,
+                  "row": 4,
                   "side": "W",
                   "used": false,
                   "secretItem": {
@@ -6486,7 +6486,7 @@
                 {
                   "kind": "chest",
                   "col": 6,
-                  "row": 5,
+                  "row": 6,
                   "item": null,
                   "used": false
                 },
@@ -6523,7 +6523,7 @@
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 5
+                  "row": 6
                 }
               ],
               "revealed": true
@@ -6611,7 +6611,7 @@
                 {
                   "kind": "chest",
                   "col": 1,
-                  "row": 5,
+                  "row": 6,
                   "item": {
                     "uid": "pot_mana_1700000000000_93224",
                     "templateId": "pot_mana",

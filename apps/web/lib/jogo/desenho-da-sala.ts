@@ -26,12 +26,15 @@ import {
   CIDADE_COLS,
   CIDADE_ROWS,
   HERO_HALF,
+  PIXELS_DA_SALA,
   PIXELS_POR_CASA,
   ROOM_COLS,
   ROOM_ROWS,
   TILE_UNITS,
+  camadasDaSala,
   cobreOHeroi,
   type CamadaDaCidade,
+  type DungeonId,
   type RoomLayout,
   type Walker,
 } from '@rpg-legend/shared';
@@ -88,8 +91,11 @@ export interface Figura {
 }
 
 export interface Cena {
-  /** `figuras`: a figura de cada objeto da planta, pelo id; objeto sem figura não é desenhado. */
-  desenharSala(planta: RoomLayout, tema: TemaDaSala, figuras: Readonly<Record<string, Figura>>): Promise<void>;
+  /**
+   * `figuras`: a figura de cada objeto da planta, pelo id; objeto sem figura não é desenhado. Com uma `masmorra`
+   * que tem arte (`dungeon/arte-da-sala.ts`: a Floresta do Breno), a sala é a dela, e não os quadradinhos do `tema`.
+   */
+  desenharSala(planta: RoomLayout, tema: TemaDaSala, figuras: Readonly<Record<string, Figura>>, masmorra?: DungeonId | null): Promise<void>;
   /**
    * A cidade desenhada do Breno no lugar da sala (`city/mapa-da-cidade.ts`):
    * as camadas dele, e a janela seguindo o herói. `troncos`: os troncos
@@ -191,15 +197,28 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
   let vez = 0;
 
   return {
-    async desenharSala(planta, tema, figuras) {
+    async desenharSala(planta, tema, figuras, masmorra) {
       const esta = ++vez;
+      // A arte da sala carrega antes de limpar a anterior, pra não piscar um quadro vazio.
+      const camadas = masmorra ? camadasDaSala(masmorra, planta.doors) : null;
+      const arte = camadas && masmorra ? await Promise.all(camadas.map((camada) => textura(pixi, `/img/salas/${masmorra}/${camada.arquivo}.png`))) : null;
+      if (esta !== vez) return;
       limpar();
       naCidade = false;
       escala = ESCALA;
       palco.position.set(0, 0);
 
+      // A arte tem 32 px por casa; a sala, LADO: estica por igual, no pixel mais próximo.
+      camadas?.forEach((camada, i) => {
+        const tex = arte?.[i];
+        if (!tex) return;
+        const sprite = new pixi.Sprite(tex);
+        sprite.scale.set(LADO / PIXELS_DA_SALA);
+        (camada.plano === 'cima' ? acima : chao).addChild(sprite);
+      });
+
       const ladrilhos = new pixi.Graphics();
-      planta.solid.forEach((linha, row) => {
+      if (!camadas) planta.solid.forEach((linha, row) => {
         linha.forEach((solido, col) => {
           const px = col * LADO;
           const py = row * LADO;
@@ -232,7 +251,8 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
           .lineTo(px + LADO * 0.8, py + LADO * 0.6)
           .stroke({ width: 3, color: 0x1a0b09 });
       }
-      chao.addChild(rachaduras);
+      // Na sala desenhada as árvores dos lados passam por cima da parede: a rachadura vai por cima delas.
+      (camadas ? acima : chao).addChild(rachaduras);
 
       const desenhos = await Promise.all(
         planta.objects.map(async (objeto) => {

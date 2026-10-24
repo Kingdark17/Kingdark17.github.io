@@ -25,7 +25,7 @@
 
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 
-import { andarNoQuadro, passosDoQuadro, type Direction, type PosicaoNaSala, type RoomLayout, type Vetor, type Walker } from '@rpg-legend/shared';
+import { andarNoQuadro, passosDoQuadro, type Direction, type DungeonId, type PosicaoNaSala, type RoomLayout, type Vetor, type Walker } from '@rpg-legend/shared';
 
 import { criarCena, type Cena, type Figura, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
 import styles from './jogo.module.css';
@@ -40,6 +40,8 @@ interface Props {
    */
   cidade: { troncos: boolean } | null;
   tema: TemaDaSala;
+  /** Na masmorra: qual, pra desenhar a sala dela quando tem arte (a Floresta do Breno). `null` na cidade. */
+  masmorra: DungeonId | null;
   /** A figura de cada objeto da planta (conteúdo e extras), pelo id. */
   figuras: Readonly<Record<string, Figura>>;
   heroi: Figura;
@@ -59,7 +61,7 @@ interface Props {
   children?: ReactNode;
 }
 
-export function CenaDaSala({ sala, planta, cidade, tema, figuras, heroi, chegada, posicao, ativo, entrada, onSaida, onEncostar, children }: Readonly<Props>) {
+export function CenaDaSala({ sala, planta, cidade, tema, masmorra, figuras, heroi, chegada, posicao, ativo, entrada, onSaida, onEncostar, children }: Readonly<Props>) {
   const alvo = useRef<HTMLDivElement>(null);
   const cena = useRef<Cena | null>(null);
   const [pronta, setPronta] = useState(false);
@@ -99,9 +101,9 @@ export function CenaDaSala({ sala, planta, cidade, tema, figuras, heroi, chegada
   const troncos = cidade ? cidade.troncos : null;
   useEffect(() => {
     if (!pronta) return;
-    if (troncos === null) void cena.current?.desenharSala(planta, tema, figuras);
+    if (troncos === null) void cena.current?.desenharSala(planta, tema, figuras, masmorra);
     else void cena.current?.desenharCidade(troncos);
-  }, [pronta, planta, tema, figuras, troncos]);
+  }, [pronta, planta, tema, figuras, troncos, masmorra]);
 
   useEffect(() => {
     const desenho = cena.current;
