@@ -11,6 +11,8 @@ namespace RPGLegend.Engine
         [JsName("CAMADAS_DAS_SALAS")] public OrderedMap<List<CamadaDaSala>> CamadasDasSalas = new OrderedMap<List<CamadaDaSala>>();
         /// <summary>As casas de dentro que a arte faz de parede, além da borda (os cantos da Caverna).</summary>
         [JsName("PAREDES_DAS_SALAS")] public OrderedMap<List<TileRef>> ParedesDasSalas = new OrderedMap<List<TileRef>>();
+        /// <summary>As casas onde a arte põe um enfeite na parede (as tochas da Caverna): anda-se nelas, mas extra não fica.</summary>
+        [JsName("ENFEITES_DAS_SALAS")] public OrderedMap<List<TileRef>> EnfeitesDasSalas = new OrderedMap<List<TileRef>>();
     }
 
     /// <summary>
@@ -67,11 +69,19 @@ namespace RPGLegend.Engine
         /// TS: paredesDaSala — as casas de dentro que são parede nas salas desta masmorra (nenhuma fora dela, ou quando
         /// a arte não fecha nada).
         /// </summary>
-        public static List<TileRef> ParedesDaSala(string dungeon)
+        public static List<TileRef> ParedesDaSala(string dungeon) => Casas(D.ParedesDasSalas, dungeon);
+
+        /// <summary>
+        /// TS: enfeitesDaSala — as casas de enfeite das salas desta masmorra (as tochas da Caverna): um extra ali anda rumo
+        /// ao meio, como o do canto.
+        /// </summary>
+        public static List<TileRef> EnfeitesDaSala(string dungeon) => Casas(D.EnfeitesDasSalas, dungeon);
+
+        private static List<TileRef> Casas(OrderedMap<List<TileRef>> tabela, string dungeon)
         {
             var lista = new List<TileRef>();
-            if (string.IsNullOrEmpty(dungeon) || !D.ParedesDasSalas.TryGet(dungeon, out var paredes) || paredes == null) return lista;
-            foreach (var casa in paredes) lista.Add(new TileRef { Col = casa.Col, Row = casa.Row });
+            if (string.IsNullOrEmpty(dungeon) || !tabela.TryGet(dungeon, out var casas) || casas == null) return lista;
+            foreach (var casa in casas) lista.Add(new TileRef { Col = casa.Col, Row = casa.Row });
             return lista;
         }
 

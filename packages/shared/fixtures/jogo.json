@@ -92634,12 +92634,12 @@
         {
           "id": "extra-1",
           "col": 2,
-          "row": 1
+          "row": 2
         },
         {
           "id": "extra-2",
           "col": 6,
-          "row": 1
+          "row": 2
         },
         {
           "id": "extra-3",
@@ -92744,7 +92744,7 @@
         {
           "id": "extra-1",
           "col": 2,
-          "row": 1
+          "row": 2
         },
         {
           "id": "extra-3",
@@ -163305,6 +163305,18 @@
     }
   },
   {
+    "name": "enfeitesDaSala: floresta",
+    "input": {
+      "fn": "enfeitesDaSala",
+      "args": {
+        "dungeon": "floresta"
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
     "name": "paredesDaSala: caverna",
     "input": {
       "fn": "paredesDaSala",
@@ -163334,6 +163346,35 @@
     }
   },
   {
+    "name": "enfeitesDaSala: caverna",
+    "input": {
+      "fn": "enfeitesDaSala",
+      "args": {
+        "dungeon": "caverna"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 2,
+          "row": 1
+        },
+        {
+          "col": 6,
+          "row": 1
+        },
+        {
+          "col": 2,
+          "row": 6
+        },
+        {
+          "col": 6,
+          "row": 6
+        }
+      ]
+    }
+  },
+  {
     "name": "paredesDaSala: torre",
     "input": {
       "fn": "paredesDaSala",
@@ -163346,9 +163387,33 @@
     }
   },
   {
+    "name": "enfeitesDaSala: torre",
+    "input": {
+      "fn": "enfeitesDaSala",
+      "args": {
+        "dungeon": "torre"
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
     "name": "paredesDaSala: fora da masmorra",
     "input": {
       "fn": "paredesDaSala",
+      "args": {
+        "dungeon": null
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "enfeitesDaSala: fora da masmorra",
+    "input": {
+      "fn": "enfeitesDaSala",
       "args": {
         "dungeon": null
       }

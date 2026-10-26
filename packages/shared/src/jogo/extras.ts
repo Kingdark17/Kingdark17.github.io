@@ -12,7 +12,7 @@
  * Só na masmorra: a cidade não tem extras.
  */
 
-import { paredesDaSala } from '../dungeon/arte-da-sala.js';
+import { enfeitesDaSala, paredesDaSala } from '../dungeon/arte-da-sala.js';
 import type { DungeonId } from '../dungeon/dungeons.js';
 import { extraChestGold, potCoins, signHint, type DungeonExtra } from '../dungeon/extras.js';
 import type { DungeonCell } from '../dungeon/generate.js';
@@ -63,20 +63,21 @@ export function passagemSecreta(celula: CelulaDoMapa | null): { lado: Direction;
  * era 9 × 7 a guardou no vão de lá.
  *
  * O extra que caiu numa casa que a arte da masmorra faz de parede (os
- * cantos da Caverna, `paredesDaSala`) anda rumo ao meio da sala até sair
- * dela: os dois cantos de cima dos extras descem uma casa.
+ * cantos da Caverna, `paredesDaSala`) ou enfeita (as tochas dela,
+ * `enfeitesDaSala`) anda rumo ao meio da sala até sair dela: os de cima
+ * descem uma casa, os de baixo sobem.
  */
 export function objetosDaSala(celula: CelulaDoMapa | null, temConteudo: boolean, masmorra: DungeonId | null = null): RoomObject[] {
   const objetos: RoomObject[] = temConteudo ? [{ id: ID_DO_CONTEUDO, ...CONTENT_TILE }] : [];
-  const paredes = paredesDaSala(masmorra);
-  const naParede = (col: number, row: number) => paredes.some((p) => p.col === col && p.row === row);
+  const tomadas = [...paredesDaSala(masmorra), ...enfeitesDaSala(masmorra)];
+  const tomada = (col: number, row: number) => tomadas.some((p) => p.col === col && p.row === row);
   extrasDe(celula).forEach((extra, indice) => {
     if (extra.kind === 'pot' && extra.used) return;
     if (extra.kind === 'crack' && extra.used) return;
     const casa = extra.kind === 'crack' && extra.side ? DOOR_TILE[extra.side] : extra;
     const rumo = Math.sign(CONTENT_TILE.row - casa.row);
     let row = casa.row;
-    while (rumo !== 0 && naParede(casa.col, row)) row += rumo;
+    while (rumo !== 0 && tomada(casa.col, row)) row += rumo;
     objetos.push({ id: idDoExtra(indice), col: casa.col, row });
   });
   return objetos;

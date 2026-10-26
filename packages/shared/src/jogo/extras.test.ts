@@ -80,7 +80,7 @@ describe('ids e objetos da sala', () => {
     ]);
   });
 
-  it('na Caverna, o extra num canto de cima desce uma casa (o canto é parede lá); fora dela fica onde está', () => {
+  it('na Caverna, o extra num canto (parede) ou numa tocha anda uma casa rumo ao meio; fora dela fica onde está', () => {
     const celula = {
       type: 'normal',
       x: 0,
@@ -91,19 +91,22 @@ describe('ids e objetos da sala', () => {
         { kind: 'pot', col: 2, row: 1, used: false },
         { kind: 'sign', col: 7, row: 1 },
         { kind: 'pot', col: 7, row: 6, used: false },
+        { kind: 'chest', col: 6, row: 6, item: null, used: false },
       ],
     } as DungeonCell;
     expect(objetosDaSala(celula, false, 'caverna')).toEqual([
       { id: idDoExtra(0), col: 1, row: 2 },
-      { id: idDoExtra(1), col: 2, row: 1 },
+      { id: idDoExtra(1), col: 2, row: 2 },
       { id: idDoExtra(2), col: 7, row: 2 },
       { id: idDoExtra(3), col: 7, row: 6 },
+      { id: idDoExtra(4), col: 6, row: 5 },
     ]);
     expect(objetosDaSala(celula, false, 'floresta').map((o) => [o.col, o.row])).toEqual([
       [1, 1],
       [2, 1],
       [7, 1],
       [7, 6],
+      [6, 6],
     ]);
   });
 

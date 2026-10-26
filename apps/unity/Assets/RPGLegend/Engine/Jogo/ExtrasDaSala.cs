@@ -101,12 +101,13 @@ namespace RPGLegend.Engine
         /// <summary>
         /// TS: objetosDaSala — o conteúdo no centro (quando há) e os extras que ainda ocupam lugar. Vaso quebrado
         /// some; parede aberta deixa de ser objeto e vira vão. O extra que caiu numa casa que a arte da masmorra faz de
-        /// parede (os cantos da Caverna) anda rumo ao meio da sala até sair dela.
+        /// parede (os cantos da Caverna) ou enfeita (as tochas dela) anda rumo ao meio da sala até sair dela.
         /// </summary>
         public static List<RoomObject> ObjetosDaSala(RoomCell celula, bool temConteudo, string masmorra = null)
         {
             var objetos = temConteudo ? new List<RoomObject> { AndarNaSala.Conteudo() } : new List<RoomObject>();
             var paredes = ArteDaSala.ParedesDaSala(masmorra);
+            paredes.AddRange(ArteDaSala.EnfeitesDaSala(masmorra));
             var meio = GameData.RoomWalkTable.ContentTile.Row;
             var extras = ExtrasDe(celula);
             for (int indice = 0; indice < extras.Count; indice++)

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { CAMADAS_DAS_SALAS, camadasDaSala, paredesDaSala } from './arte-da-sala.js';
+import { CAMADAS_DAS_SALAS, camadasDaSala, enfeitesDaSala, paredesDaSala } from './arte-da-sala.js';
 import { EXTRA_TILES } from './extras.js';
 import { CONTENT_TILE, DOOR_TILE, roomLayout } from './room-walk.js';
 
@@ -53,6 +53,18 @@ describe('as paredes de dentro da sala', () => {
     expect(planta.solid[7]![7]).toBe(true);
     expect(planta.solid[2]![1]).toBe(false);
     expect(roomLayout({ N: true }, []).solid[1]![1]).toBe(false);
+  });
+
+  it('as tochas da Caverna são enfeite (anda-se nelas); fora dela, nenhum', () => {
+    expect(enfeitesDaSala('caverna')).toEqual([
+      { col: 2, row: 1 },
+      { col: 6, row: 1 },
+      { col: 2, row: 6 },
+      { col: 6, row: 6 },
+    ]);
+    expect(enfeitesDaSala('floresta')).toEqual([]);
+    expect(enfeitesDaSala(null)).toEqual([]);
+    expect(roomLayout({}, [], paredesDaSala('caverna')).solid[1]![2]).toBe(false);
   });
 
   it('os cantos de baixo dos extras (linha 6) ficam livres na Caverna', () => {

@@ -3990,6 +3990,7 @@ for (const [dungeon, portas] of [
 }
 for (const dungeon of ['floresta', 'caverna', 'torre', null] as const) {
   caso(`paredesDaSala: ${dungeon ?? 'fora da masmorra'}`, 'paredesDaSala', { dungeon }, (a) => E.paredesDaSala(a.dungeon));
+  caso(`enfeitesDaSala: ${dungeon ?? 'fora da masmorra'}`, 'enfeitesDaSala', { dungeon }, (a) => E.enfeitesDaSala(a.dungeon));
 }
 {
   const salas = E.generateCityLayout(6, 6).rooms;

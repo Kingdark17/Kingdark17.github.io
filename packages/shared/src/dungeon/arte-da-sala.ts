@@ -85,6 +85,27 @@ export function camadasDaSala(dungeon: DungeonId, portas: readonly Direction[]):
   return camadas.filter((camada) => !camada.porta || portas.includes(camada.porta)).map((camada) => ({ ...camada }));
 }
 
+/**
+ * As casas onde a arte põe um enfeite na parede: as tochas da Caverna, duas
+ * em cima e duas logo acima da parede da frente. Dá pra andar nelas, mas um
+ * extra ali fica na frente do enfeite, e então ele anda rumo ao meio da sala,
+ * como o do canto (decisão do usuário, 2026-10-26).
+ */
+export const ENFEITES_DAS_SALAS: Partial<Record<DungeonId, readonly CasaDaSala[]>> = {
+  caverna: [
+    { col: 2, row: 1 },
+    { col: 6, row: 1 },
+    { col: 2, row: 6 },
+    { col: 6, row: 6 },
+  ],
+};
+
+/** As casas de enfeite das salas desta masmorra (nenhuma fora dela, ou quando a arte não tem). */
+export function enfeitesDaSala(dungeon: DungeonId | null): CasaDaSala[] {
+  if (!dungeon) return [];
+  return (ENFEITES_DAS_SALAS[dungeon] ?? []).map((casa) => ({ ...casa }));
+}
+
 /** As casas de dentro que são parede nas salas desta masmorra (nenhuma fora dela, ou quando a arte não fecha nada). */
 export function paredesDaSala(dungeon: DungeonId | null): CasaDaSala[] {
   if (!dungeon) return [];

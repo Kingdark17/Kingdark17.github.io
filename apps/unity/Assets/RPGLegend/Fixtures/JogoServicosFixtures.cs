@@ -86,6 +86,7 @@ namespace RPGLegend.Tests
             Fn(M, "cobreOHeroi", (a, c) => W(MapaDaCidade.CobreOHeroi(R<CamadaDaCidade>(a["camada"]), R<Walker>(a["walker"]))));
             Fn(M, "camadasDaSala", (a, c) => W(ArteDaSala.CamadasDaSala(Str(a["dungeon"]), R<List<string>>(a["portas"]))));
             Fn(M, "paredesDaSala", (a, c) => W(ArteDaSala.ParedesDaSala(Str(a["dungeon"]))));
+            Fn(M, "enfeitesDaSala", (a, c) => W(ArteDaSala.EnfeitesDaSala(Str(a["dungeon"]))));
             Fn(M, "pontoDaSala", (a, c) => W(MapaDaCidade.PontoDaSala(R<CityCell>(a["celula"]))));
             Fn(M, "pistasDaCidade", (a, c) => W(Cidades.PistasDaCidade(R<EstadoNaCidade>(a["estado"]))));
             Const(M, "TEXTO_DA_CIDADE", () => W(Cidades.TextoDaCidade));
