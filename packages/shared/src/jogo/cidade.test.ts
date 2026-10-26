@@ -156,8 +156,8 @@ describe('a cidade no jogo', () => {
   });
 
   it('entrada fechada diz o que falta, e o Aprendiz é barrado pelo guarda', () => {
-    expect(entrarNoPonto(cidade(1, FLORESTA_ZERADA), 'caverna').aviso?.texto).toBe('A entrada da Caverna ainda não abre. Para entrar: Nível 15.');
-    expect(entrarNoPonto(cidade(40, FLORESTA_ZERADA), 'torre').aviso?.texto).toBe('A entrada da Torre ainda não abre. Para entrar: Zere a Caverna no Normal.');
+    expect(entrarNoPonto(cidade(1, FLORESTA_ZERADA), 'caverna').aviso?.texto).toBe('A entrada da Caverna ainda não abre. Para entrar: Nível 70.');
+    expect(entrarNoPonto(cidade(150, FLORESTA_ZERADA), 'torre').aviso?.texto).toBe('A entrada da Torre ainda não abre. Para entrar: Zere a Caverna no Normal.');
     expect(entrarNoPonto(aprendiz(), 'floresta').aviso?.titulo).toBe('Portão da Masmorra');
   });
 

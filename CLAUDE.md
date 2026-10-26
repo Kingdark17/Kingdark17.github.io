@@ -72,8 +72,9 @@ Grafo de salas conectadas por portas (N/S/L/O), neblina revela só a silhueta
 das salas vizinhas, até 3 monstros por sala lutando juntos (luta em grupo,
 2026-10-17: o jogador escolhe o alvo, um monstro ataca por rodada revezando
 entre os de pé, derrubar um não encerra a rodada, fuga e esquiva contra o
-mais rápido de pé, o da vez atordoado perde o ataque), tesouro bônus ao
-limpar a sala, movimento em direção absoluta fixa.
+mais rápido de pé, o da vez atordoado perde o ataque; o chefe final do
+andar 100 chama 4 lacaios, e o palco chega a 5), tesouro bônus ao limpar a
+sala, movimento em direção absoluta fixa.
 
 ---
 
@@ -261,10 +262,26 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   decisão do usuário). As camadas de cada masmorra com arte estão em
   `dungeon/arte-da-sala.ts` (o chão, um caminho só pras portas que a sala
   tem, e as copas por cima do herói); a arte mora em `img/salas/<masmorra>/`
-  e `Art/Jogo/Resources/Salas/<masmorra>`. Caverna e Torre seguem com os
-  quadradinhos até ganharem arte. A parede rachada se põe pelo lado dela
-  (`DOOR_TILE[side]`), e não pela casa gravada. No app a luta continua na
-  proporção 9 × 7 em que foi afinada (`area-da-luta`).
+  e `Art/Jogo/Resources/Salas/<masmorra>`. A Caverna ganhou a dela em
+  2026-10-25 (chão, parede de trás com tochas, uma passagem por porta e a
+  parede da frente por cima); a colisão dele fecha os quatro cantos de
+  dentro (`paredesDaSala`), e o extra gravado num canto anda rumo ao meio.
+  A Torre segue com os quadradinhos até ganhar arte. A parede rachada se
+  põe pelo lado dela (`DOOR_TILE[side]`), e não pela casa gravada. No app a
+  luta continua na proporção 9 × 7 em que foi afinada (`area-da-luta`).
+- Níveis e chefe final (2026-10-25, **site e app**; o Breno zerou a
+  Floresta e achou a batalha final fraca): os monstros ganharam nível
+  (`monsterLevel`: 9 em cada 10 andares de força), o degrau da escada
+  cresceu pra `FLOORS_PER_DUNGEON` = 77 (a Caverna Normal começa com
+  monstros de nível 70 e a Torre com 140, e a entrada pede isso), e o
+  chefe do andar 100 de cada masmorra virou o chefe final
+  (`jogo/chefe-final.ts`): 30% mais forte, um poder a cada 3 golpes (Golpe
+  Devastador ou Rugido), 4 lacaios na metade da vida, imune até eles
+  caírem, e furioso depois. Zerar abre a tela de vitória com o baú do
+  chefe (uma peça lendária e ouro, abaixo do teto de +5000 da API) e um
+  título no cartão de guilda, tirado de `progresso.cleared`
+  (`jogo/conquista.ts`). O item único de cada masmorra ainda vai ser
+  desenhado.
 - Tela do jogo no app (2026-10-23, **só no app**; o site continua com a
   coluna): o mapa na tela toda, com os botões em cima, nome, nível, vida e
   mana embaixo à esquerda, e à direita o minimapa (na masmorra) e o que fala

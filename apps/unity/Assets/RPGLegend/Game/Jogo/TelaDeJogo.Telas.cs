@@ -382,6 +382,25 @@ namespace RPGLegend.Game.Jogo
             }, ("FECHAR", FecharJanela));
         }
 
+        /// <summary>
+        /// A tela de vitória de quem zera a masmorra (<see cref="Conquistas"/>; o Breno sentiu falta de "mensagem
+        /// especial"): o que foi zerado, o chefe vencido, o baú do chefe, o título conquistado e o que abriu no portão.
+        /// </summary>
+        private void AbrirVitoria(Conquista conquista)
+        {
+            if (_partida == null || _janela != null) return;
+            _janela = "vitoria";
+            Janela("🏆 " + conquista.Nome + " zerada!", conteudo =>
+            {
+                conteudo.Add(PecasDaTela.Texto("Você venceu " + conquista.Chefe + ".", "linha-da-vitoria"));
+                conteudo.Add(PecasDaTela.Secao("Baú do chefe"));
+                conteudo.Add(PecasDaTela.CartaDeItem(conquista.Item, "+" + PecasDaTela.Inteiro(conquista.Ouro) + " de ouro", false, null));
+                conteudo.Add(PecasDaTela.Secao("Título conquistado"));
+                conteudo.Add(PecasDaTela.Texto("🏆 " + conquista.Titulo, "titulo-da-vitoria"));
+                foreach (var linha in conquista.Abertos ?? new List<string>()) conteudo.Add(PecasDaTela.Texto(linha, "linha-da-vitoria"));
+            }, ("VOLTAR À CIDADE", FecharJanela));
+        }
+
         /// <summary>O cartão de guilda inteiro, com o retrato: o "Ficha" da faixa do site no celular.</summary>
         private void AbrirFicha()
         {
@@ -389,7 +408,7 @@ namespace RPGLegend.Game.Jogo
             _janela = "ficha";
             Janela("Ficha do herói", conteudo =>
             {
-                var cartao = CartaoDeGuilda.Criar(_partida.Estado.Hero, true, null);
+                var cartao = CartaoDeGuilda.Criar(_partida.Estado.Hero, true, null, Conquistas.TituloDoHeroi(_partida.Estado.Progresso));
                 // Como o max-width do site: esticado na janela, os atributos se espalhavam pelo papel.
                 cartao.AddToClassList("cartao-sozinho");
                 conteudo.Add(cartao);

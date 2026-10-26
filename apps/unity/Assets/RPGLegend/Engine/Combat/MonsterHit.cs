@@ -378,7 +378,8 @@ namespace RPGLegend.Engine
 
             if (monster.Behavior == "agressivo" && rng() < 0.25) attackMult = 1.45;
             if (monster.Behavior == "lento" && (nextMonster.AttackCount ?? 0) % 3 == 0) attackMult = 1.7;
-            if (nextMonster.IsMainBoss == true && (nextMonster.AttackCount ?? 0) % 3 == 0) attackMult = 1.9;
+            // O chefe final (ChefeFinal) troca o golpe pesado pelos poderes dele.
+            if (nextMonster.IsMainBoss == true && nextMonster.ChefeFinal != true && (nextMonster.AttackCount ?? 0) % 3 == 0) attackMult = 1.9;
 
             var classPower = ClassPassives.TriggerEnemyClassPower(nextMonster, hero);
             // { ...nextMonster, ...classPower.monster }: o monstro do poder saiu de nextMonster (ou é ele).

@@ -179,6 +179,8 @@ namespace RPGLegend.Game.Jogo
                 _tamanhoDoGrupo = total;
                 _grupo.EnableInClassList("grupo-de-dois", total == 2);
                 _grupo.EnableInClassList("grupo-de-tres", total >= 3);
+                // O chefe final chama 4 lacaios: o palco chega a cinco monstros.
+                _grupo.EnableInClassList("grupo-de-cinco", total >= 4);
             }
 
             float agora = Time.unscaledTime;
@@ -191,7 +193,7 @@ namespace RPGLegend.Game.Jogo
                 bool caido = m.Fase == "caido";
 
                 l.Nome.text = Js.Str(visao.Name) + (visao.IsBoss ? " 👑" : "");
-                l.Subtitulo.text = caido ? "Caiu" : visao.EnemyClassLabel ?? "";
+                l.Subtitulo.text = caido ? "Caiu" : "Nv " + Js.NumberToString(Monsters.MonsterLevel(instancias[i].Floor)) + " · " + (visao.EnemyClassLabel ?? "");
                 double vida = Math.Max(0, instancias[i].Hp);
                 double maximo = Math.Max(1, instancias[i].MaxHp);
                 l.Preenchimento.style.width = Length.Percent((float)Math.Min(100.0, vida / maximo * 100.0));
@@ -206,10 +208,10 @@ namespace RPGLegend.Game.Jogo
                 bool avisando = m.Fase == "avisando";
                 l.Raiz.EnableInClassList("lutador-avisando", avisando);
                 l.Corpo.style.opacity = caido ? 0.38f : m.Fase == "investindo" ? 0.15f : 1f;
-                l.Vez.text = avisando ? (m.Alvo >= 0 ? "⚠️ mira um aliado" : "⚠️ vai atacar!") : "";
+                l.Vez.text = avisando ? TextoDoAviso(m) : "";
                 l.Vez.style.display = avisando ? DisplayStyle.Flex : DisplayStyle.None;
 
-                var chips = Chips(m, visao);
+                var chips = Chips(m, visao, Protegido(arena, instancias, i));
                 if (chips != l.Chips)
                 {
                     l.Chips = chips;
@@ -239,11 +241,37 @@ namespace RPGLegend.Game.Jogo
             }
         }
 
-        /// <summary>O que pesa sobre o monstro (a mesma lista do site) e a guarda do defensivo, separados por "|".</summary>
-        private static string Chips(MonstroNaArena m, CombatMonsterView visao)
+        /// <summary>O aviso de quem vai golpear: o chefe final diz o poder que vem (<see cref="ChefeFinal"/>).</summary>
+        private static string TextoDoAviso(MonstroNaArena m)
+        {
+            var poder = m.Poder != null ? ChefeFinal.Poder(m.Poder) : null;
+            if (poder != null) return "⚠️ " + poder.Icone + " " + poder.Nome + "!";
+            return m.Alvo >= 0 ? "⚠️ mira um aliado" : "⚠️ vai atacar!";
+        }
+
+        /// <summary>O chefe final com lacaio de pé no palco: golpe nenhum o fere.</summary>
+        private static bool Protegido(Arena arena, List<MonsterInstance> instancias, int indice)
+        {
+            if (indice >= instancias.Count || instancias[indice].ChefeFinal != true) return false;
+            foreach (var outro in arena.Monstros)
+            {
+                int i = (int)outro.Indice;
+                if (outro.Fase != "caido" && i < instancias.Count && instancias[i].Lacaio == true) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// O que pesa sobre o monstro (a mesma lista do site), a guarda do defensivo e, no chefe final, a proteção dos
+        /// lacaios e o poder que o próximo golpe solta, separados por "|".
+        /// </summary>
+        private static string Chips(MonstroNaArena m, CombatMonsterView visao, bool protegido)
         {
             if (m.Fase == "caido") return "";
             var lista = new List<string>();
+            if (protegido) lista.Add("🛡️ Protegido pelos lacaios");
+            var proximo = m.Fase != "avisando" ? ChefeFinal.Poder(ChefeFinal.PoderDaVez(visao) ?? "") : null;
+            if (proximo != null) lista.Add("⚠️ " + proximo.Icone + " " + proximo.Nome);
             var s = visao.Status;
             if (s != null)
             {
@@ -370,7 +398,7 @@ namespace RPGLegend.Game.Jogo
                 rotulo.style.display = mergulhando ? DisplayStyle.Flex : DisplayStyle.None;
                 if (!mergulhando) continue;
                 var visao = Monsters.View(instancias[i]);
-                var jeito = Arenas.JeitoDoComportamento(visao.Behavior);
+                var jeito = Arenas.JeitoDoGolpe(visao, m.Poder);
                 float lado = (float)jeito.Tamanho * 2f * escala;
                 if (rotulo.text != visao.Icon) rotulo.text = visao.Icon;
                 rotulo.style.fontSize = lado * 0.8f;
@@ -437,6 +465,7 @@ namespace RPGLegend.Game.Jogo
             private Arena _arena;
             private List<MonsterInstance> _instancias;
             private readonly List<string> _fasesAntes = new List<string>();
+            private readonly List<string> _poderesAntes = new List<string>();
             private readonly List<(float x, float y, float raio, float desde)> _impactos = new List<(float, float, float, float)>();
 
             public TintaDaCaixa()
@@ -455,11 +484,14 @@ namespace RPGLegend.Game.Jogo
                     string antes = i < _fasesAntes.Count ? _fasesAntes[i] : null;
                     if (antes == "avisando" && m.Fase != "avisando" && m.Alvo < 0 && i < instancias.Count)
                     {
-                        var jeito = Arenas.JeitoDoComportamento(Monsters.View(instancias[i]).Behavior);
+                        // O poder já saiu do monstro quando o golpe caiu: o estalo usa o do aviso.
+                        var jeito = Arenas.JeitoDoGolpe(Monsters.View(instancias[i]), i < _poderesAntes.Count ? _poderesAntes[i] : null);
                         if (jeito.Golpe == "perto") _impactos.Add(((float)m.X, (float)m.Y, (float)jeito.Tamanho, Time.unscaledTime));
                     }
                     if (i < _fasesAntes.Count) _fasesAntes[i] = m.Fase;
                     else _fasesAntes.Add(m.Fase);
+                    if (i < _poderesAntes.Count) _poderesAntes[i] = m.Poder;
+                    else _poderesAntes.Add(m.Poder);
                 }
                 _impactos.RemoveAll(x => Time.unscaledTime - x.desde > TempoDoImpacto);
                 _arena = arena;
@@ -470,6 +502,7 @@ namespace RPGLegend.Game.Jogo
             public void Esquecer()
             {
                 _fasesAntes.Clear();
+                _poderesAntes.Clear();
                 _impactos.Clear();
                 _arena = null;
             }
@@ -486,7 +519,7 @@ namespace RPGLegend.Game.Jogo
                 {
                     var m = _arena.Monstros[i];
                     if (m.Fase != "avisando" || m.Alvo >= 0) continue;
-                    var jeito = Arenas.JeitoDoComportamento(Monsters.View(_instancias[i]).Behavior);
+                    var jeito = Arenas.JeitoDoGolpe(Monsters.View(_instancias[i]), m.Poder);
                     float progresso = jeito.Aviso > 0 ? 1f - Mathf.Clamp01((float)(m.Tempo / jeito.Aviso)) : 1f;
                     // Pisca mais rápido perto de cair.
                     float pisca = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * (10f + 20f * progresso));

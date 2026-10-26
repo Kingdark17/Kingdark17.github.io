@@ -14,6 +14,8 @@ namespace RPGLegend.Engine
     public sealed class SalaLimpa : PassoDaLuta<EstadoDoJogo>
     {
         [KeepNull] public Item Loot;
+        /// <summary>O chefe final caiu e a masmorra foi zerada: o que a tela de vitória mostra (<see cref="Conquistas"/>).</summary>
+        public Conquista Conquista;
     }
 
     /// <summary>As tabelas de jogo/fim-da-luta.ts (todas privadas no TS).</summary>
@@ -128,7 +130,10 @@ namespace RPGLegend.Engine
             pago.KillCount = estado.Hero.KillCount + 1;
             pago.Gold = estado.Hero.Gold + abatido.Gold;
             var xp = Heroes.GainXP(pago, abatido.Xp);
-            log.Add("Você derrotou " + Js.Str(abatido.Name) + "! +" + Js.NumberToString(abatido.Xp) + " XP e +" + Js.NumberToString(abatido.Gold) + " ouro.");
+            // O lacaio do chefe final não dá ouro: o diário não fala em "+0 ouro".
+            log.Add(abatido.Gold > 0
+                ? "Você derrotou " + Js.Str(abatido.Name) + "! +" + Js.NumberToString(abatido.Xp) + " XP e +" + Js.NumberToString(abatido.Gold) + " ouro."
+                : "Você derrotou " + Js.Str(abatido.Name) + "! +" + Js.NumberToString(abatido.Xp) + " XP.");
             if (xp.LeveledUp) log.Add("Você subiu " + Js.NumberToString(xp.Levels) + " nível(is)!");
 
             var comRecompensa = estado.Clone();
@@ -235,14 +240,29 @@ namespace RPGLegend.Engine
 
             if (sala.Type == DungeonRoomTypes.Boss && estado.Floor >= Dungeons.Floors)
             {
-                // O chefe do último andar: a masmorra está zerada nesta dificuldade.
+                // O chefe do último andar: a masmorra está zerada nesta dificuldade, vem o baú do chefe e o título,
+                // e o diário diz o que abriu no portão. A tela de vitória mostra a conquista.
                 var progresso = Dungeons.MarkCleared(limpo.Progresso, limpo.Masmorra);
-                log.Add("Você venceu " + Js.Str(abatido.Name) + " e zerou " + Dungeons.RunName(limpo.Masmorra) + "!");
-                log.AddRange(AbertosAoZerar(limpo, progresso));
+                var bau = Conquistas.AbrirBauDoChefe(limpo, rng, now, app);
+                var abertos = AbertosAoZerar(limpo, progresso);
+                var conquista = new Conquista
+                {
+                    Masmorra = new DungeonRun { Dungeon = limpo.Masmorra.Dungeon, Difficulty = limpo.Masmorra.Difficulty },
+                    Nome = Dungeons.RunName(limpo.Masmorra),
+                    Chefe = Js.Str(abatido.Name),
+                    Item = bau.Item,
+                    Ouro = bau.Ouro,
+                    Titulo = Conquistas.TituloDe(limpo.Masmorra),
+                    Abertos = abertos,
+                };
+                log.Add("Você venceu " + Js.Str(abatido.Name) + " e zerou " + conquista.Nome + "!");
+                log.Add("No baú do chefe: " + Items.DisplayName(bau.Item) + " e " + Js.NumberToString(bau.Ouro) + " de ouro.");
+                log.Add("Título conquistado: " + conquista.Titulo + ".");
+                log.AddRange(abertos);
                 log.Add("O caminho de volta se abre, e o grupo retorna à cidade.");
-                var comProgresso = limpo.Clone();
+                var comProgresso = bau.Estado.Clone();
                 comProgresso.Progresso = progresso;
-                return new SalaLimpa { Estado = Estados.VoltarParaCidade(comProgresso), Log = log, Loot = loot };
+                return new SalaLimpa { Estado = Estados.VoltarParaCidade(comProgresso), Log = log, Loot = loot, Conquista = conquista };
             }
 
             if (sala.Type == DungeonRoomTypes.Boss)

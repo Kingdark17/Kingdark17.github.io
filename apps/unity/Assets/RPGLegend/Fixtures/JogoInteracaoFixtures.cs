@@ -39,6 +39,17 @@ namespace RPGLegend.Tests
                 JsJson.Truthy(a["app"]))));
             Fn(M, "perderLuta", (a, c) => W(FimDaLuta.PerderLuta(R<EstadoNaMasmorra>(a["estado"]), c.RngFn)));
 
+            // O chefe final e o prêmio de quem zera.
+            Fn(M, "poderDaVez", (a, c) => W(ChefeFinal.PoderDaVez(R<CombatMonster>(a["monstro"]))));
+            Fn(M, "ferirMonstro", (a, c) => W(ChefeFinal.FerirMonstro(R<EstadoNaMasmorra>(a["estado"]), Num(a["indice"]), R<CombatMonster>(a["depois"]), c.RngFn)));
+            Fn(M, "lacaiosDePe", (a, c) => W(ChefeFinal.LacaiosDePe(R<DungeonCell>(a["sala"]))));
+            Fn(M, "protegido", (a, c) => W(ChefeFinal.Protegido(R<DungeonCell>(a["sala"]), Num(a["indice"]))));
+            Fn(M, "enfurecer", (a, c) => W(ChefeFinal.Enfurecer(R<EstadoNaMasmorra>(a["estado"]))));
+            Fn(M, "tituloDe", (a, c) => W(Conquistas.TituloDe(R<DungeonRun>(a["run"]))));
+            Fn(M, "tituloDoHeroi", (a, c) => W(Conquistas.TituloDoHeroi(R<DungeonProgress>(a["progresso"]))));
+            Fn(M, "ouroDoBau", (a, c) => N(Conquistas.OuroDoBau(Num(a["andar"]))));
+            Fn(M, "abrirBauDoChefe", (a, c) => W(Conquistas.AbrirBauDoChefe(R<EstadoNaMasmorra>(a["estado"]), c.RngFn, c.NowOrFail, JsJson.Truthy(a["app"]))));
+
             Fn(M, "criacaoVazia", (a, c) => W(Criacoes.CriacaoVazia(Str(a["nome"]))));
             Fn(M, "faltaParaComecar", (a, c) => W(Criacoes.FaltaParaComecar(R<Criacao>(a["criacao"]))));
             Fn(M, "montarSaveInicial", (a, c) => W(Criacoes.MontarSaveInicial(R<Criacao>(a["criacao"]), c.RngFn, c.NowOrFail)));

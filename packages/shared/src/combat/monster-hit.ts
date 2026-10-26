@@ -91,7 +91,8 @@ function resolveAttackMultiplier(monster: CombatMonsterView, hero: Hero, rng: Rn
 
   if (monster.behavior === 'agressivo' && rng() < 0.25) attackMult = 1.45;
   if (monster.behavior === 'lento' && (nextMonster.attackCount ?? 0) % 3 === 0) attackMult = 1.7;
-  if (nextMonster.isMainBoss && (nextMonster.attackCount ?? 0) % 3 === 0) attackMult = 1.9;
+  // O chefe final (`jogo/chefe-final.ts`) troca o golpe pesado pelos poderes dele.
+  if (nextMonster.isMainBoss && !nextMonster.chefeFinal && (nextMonster.attackCount ?? 0) % 3 === 0) attackMult = 1.9;
 
   const classPower = triggerEnemyClassPower(nextMonster, hero);
   nextMonster = { ...nextMonster, ...classPower.monster };

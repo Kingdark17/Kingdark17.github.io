@@ -28,6 +28,10 @@ namespace RPGLegend.Engine
         public double Indice;
         public CombatMonsterView Monstro;
         public bool Vivo;
+        /// <summary>O chefe final com lacaios de pé: golpe nenhum o fere (<see cref="ChefeFinal"/>).</summary>
+        public bool Protegido;
+        /// <summary>O poder que o próximo golpe do chefe final solta — o aviso; null pros outros.</summary>
+        [KeepNull] public string Poder;
     }
 
     /// <summary>TS: Combate — a luta aberta na sala.</summary>
@@ -101,7 +105,14 @@ namespace RPGLegend.Engine
             var sala = SalaDeCombate(estado);
             if (sala?.Monsters == null) return grupo;
             for (int i = 0; i < sala.Monsters.Count; i++)
-                grupo.Add(new InimigoNaLuta { Indice = i, Monstro = Monsters.View(sala.Monsters[i]), Vivo = VivoNaSala(sala, i) });
+                grupo.Add(new InimigoNaLuta
+                {
+                    Indice = i,
+                    Monstro = Monsters.View(sala.Monsters[i]),
+                    Vivo = VivoNaSala(sala, i),
+                    Protegido = ChefeFinal.Protegido(sala, i),
+                    Poder = ChefeFinal.PoderDaVez(sala.Monsters[i]),
+                });
             return grupo;
         }
 

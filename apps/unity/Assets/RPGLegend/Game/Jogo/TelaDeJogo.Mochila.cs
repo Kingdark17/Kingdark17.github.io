@@ -46,7 +46,7 @@ namespace RPGLegend.Game.Jogo
                 {
                     var proxima = Mochilas.GastarPonto(mochila, chave);
                     SeguirMochila(proxima);
-                }));
+                }, Conquistas.TituloDoHeroi(mochila.Estado.Progresso)));
                 colunas.Add(cartao);
 
                 var equipado = Coluna("rolagem-do-equipado", "coluna-larga");

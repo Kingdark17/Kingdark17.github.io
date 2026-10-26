@@ -12,6 +12,8 @@
  * Só na masmorra: a cidade não tem extras.
  */
 
+import { paredesDaSala } from '../dungeon/arte-da-sala.js';
+import type { DungeonId } from '../dungeon/dungeons.js';
 import { extraChestGold, potCoins, signHint, type DungeonExtra } from '../dungeon/extras.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import { DIR_OPP, type Direction } from '../dungeon/graph.js';
@@ -59,21 +61,30 @@ export function passagemSecreta(celula: CelulaDoMapa | null): { lado: Direction;
  * de ser objeto e vira vão (ver `passagemSecreta`). A parede rachada fica
  * no vão do lado dela, e não na casa gravada: o andar gravado quando a sala
  * era 9 × 7 a guardou no vão de lá.
+ *
+ * O extra que caiu numa casa que a arte da masmorra faz de parede (os
+ * cantos da Caverna, `paredesDaSala`) anda rumo ao meio da sala até sair
+ * dela: os dois cantos de cima dos extras descem uma casa.
  */
-export function objetosDaSala(celula: CelulaDoMapa | null, temConteudo: boolean): RoomObject[] {
+export function objetosDaSala(celula: CelulaDoMapa | null, temConteudo: boolean, masmorra: DungeonId | null = null): RoomObject[] {
   const objetos: RoomObject[] = temConteudo ? [{ id: ID_DO_CONTEUDO, ...CONTENT_TILE }] : [];
+  const paredes = paredesDaSala(masmorra);
+  const naParede = (col: number, row: number) => paredes.some((p) => p.col === col && p.row === row);
   extrasDe(celula).forEach((extra, indice) => {
     if (extra.kind === 'pot' && extra.used) return;
     if (extra.kind === 'crack' && extra.used) return;
     const casa = extra.kind === 'crack' && extra.side ? DOOR_TILE[extra.side] : extra;
-    objetos.push({ id: idDoExtra(indice), col: casa.col, row: casa.row });
+    const rumo = Math.sign(CONTENT_TILE.row - casa.row);
+    let row = casa.row;
+    while (rumo !== 0 && naParede(casa.col, row)) row += rumo;
+    objetos.push({ id: idDoExtra(indice), col: casa.col, row });
   });
   return objetos;
 }
 
 /** A planta da sala secreta: uma porta só, de volta pra sala da parede, e o baú no centro. */
-export function plantaDaSalaSecreta(ladoDaParede: Direction): RoomLayout {
-  return roomLayout({ [DIR_OPP[ladoDaParede]]: true }, [{ id: ID_DO_BAU_SECRETO, ...CONTENT_TILE }]);
+export function plantaDaSalaSecreta(ladoDaParede: Direction, masmorra: DungeonId | null = null): RoomLayout {
+  return roomLayout({ [DIR_OPP[ladoDaParede]]: true }, [{ id: ID_DO_BAU_SECRETO, ...CONTENT_TILE }], paredesDaSala(masmorra));
 }
 
 export interface ResultadoDoExtra {

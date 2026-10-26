@@ -44,6 +44,8 @@ import {
   fugir,
   heroPowers,
   inimigosDaLuta,
+  monsterLevel,
+  PODERES_DO_CHEFE,
   powerManaCost,
   usarItem,
   usarPoder,
@@ -52,6 +54,7 @@ import {
   type CombatMonsterView,
   type Combate,
   type Companion,
+  type Conquista,
   type Flutuante,
   type InimigoNaLuta,
   type Item,
@@ -62,6 +65,7 @@ import {
 import { TEMAS, type LugarDoTema } from '@/lib/jogo/desenho-da-sala';
 import { tocar } from '@/lib/som/efeitos';
 import { AtaqueComMira } from './ataque-com-mira';
+import { CartaItem } from './carta-item';
 import styles from './combate.module.css';
 import jogo from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
@@ -280,7 +284,8 @@ export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoPar
         if (evento.currentTarget === evento.target) setTremida(false);
       }}
     >
-      <div className={styles.palco} style={corDoCenario(cenario)}>
+      {/* Com a masmorra zerada, o palco cresce pra caber a tela de vitória inteira. */}
+      <div className={`${styles.palco} ${acabou && combate.conquista ? styles.palcoDaConquista : ''}`} style={corDoCenario(cenario)}>
         {/* O golpe que o herói toma fica sobre o palco inteiro, embaixo; o que
             cai num monstro sobe de cima dele. Cada número se remove quando a
             própria animação termina. */}
@@ -316,6 +321,7 @@ export function TelaCombate({ combate, lugar, onCombate, onEncerrar, onCuraDoPar
             ))}
           </div>
         )}
+        {acabou && combate.conquista && <Conquistada conquista={combate.conquista} />}
       </div>
 
       {combate.estado.party.length > 0 && <Equipe membros={combate.estado.party} />}
@@ -502,7 +508,9 @@ interface PropsDoLutador {
  */
 function Lutador({ inimigo, emGrupo, escolhido, daVez, golpeado, travado, numeros, onEscolher, onFimDoGolpe }: Readonly<PropsDoLutador>) {
   const { monstro, vivo } = inimigo;
-  const status = vivo ? statusAtivos(monstro) : [];
+  // O chefe final (`chefe-final.ts`): protegido pelos lacaios, e o aviso do poder que o próximo golpe dele solta.
+  const poder = vivo && inimigo.poder ? PODERES_DO_CHEFE[inimigo.poder] : null;
+  const status = vivo ? [...(inimigo.protegido ? ['🛡️ protegido pelos lacaios'] : []), ...(poder ? [`⚠️ ${poder.icone} ${poder.nome}`] : []), ...statusAtivos(monstro)] : [];
   // O atordoado só baixa quando chega a vez dele: o da vez atordoado perde o
   // ataque com certeza, e a placa não pode prometer um golpe que não vem.
   const perdeAVez = (monstro.status?.atordoado ?? 0) > 0;
@@ -514,7 +522,7 @@ function Lutador({ inimigo, emGrupo, escolhido, daVez, golpeado, travado, numero
           {monstro.name}
           {monstro.isBoss ? ' 👑' : ''}
         </h2>
-        <p className={styles.subtitulo}>{vivo ? monstro.enemyClassLabel : 'Caiu'}</p>
+        <p className={styles.subtitulo}>{vivo ? `Nv ${monsterLevel(monstro.floor)} · ${monstro.enemyClassLabel}` : 'Caiu'}</p>
         <div className={jogo.trilho}>
           <div
             className={`${jogo.preenchimento} ${jogo.vida}`}
@@ -533,7 +541,7 @@ function Lutador({ inimigo, emGrupo, escolhido, daVez, golpeado, travado, numero
             ))}
           </ul>
         )}
-        {daVez && <p className={styles.daVez}>{perdeAVez ? '💫 perde a vez' : '⚔️ ataca nesta rodada'}</p>}
+        {daVez && <p className={styles.daVez}>{textoDaVez(perdeAVez, poder)}</p>}
       </div>
 
       <div
@@ -566,6 +574,39 @@ function Lutador({ inimigo, emGrupo, escolhido, daVez, golpeado, travado, numero
     >
       {conteudo}
     </button>
+  );
+}
+
+function textoDaVez(perdeAVez: boolean, poder: { nome: string; icone: string } | null): string {
+  if (perdeAVez) return '💫 perde a vez';
+  return poder ? `⚠️ solta o ${poder.icone} ${poder.nome} nesta rodada` : '⚔️ ataca nesta rodada';
+}
+
+/**
+ * A tela de vitória de quem zera a masmorra (`conquista.ts`; o Breno sentiu
+ * falta de "mensagem especial"): o que foi zerado, o chefe vencido, o baú do
+ * chefe, o título conquistado e o que abriu no portão.
+ */
+function Conquistada({ conquista }: Readonly<{ conquista: Conquista }>) {
+  return (
+    <div className={styles.conquista} role="status">
+      <p className={styles.trofeu} aria-hidden>
+        🏆
+      </p>
+      <h2 className={styles.tituloDaConquista}>{conquista.nome} zerada!</h2>
+      <p className={styles.chefeVencido}>Você venceu {conquista.chefe}.</p>
+      <div className={styles.bauDoChefe}>
+        <p className={styles.rotuloDaConquista}>Baú do chefe</p>
+        <CartaItem item={conquista.item} rodape={`+${conquista.ouro} de ouro`} />
+      </div>
+      <p className={styles.rotuloDaConquista}>Título conquistado</p>
+      <p className={styles.tituloGanho}>{conquista.titulo}</p>
+      {conquista.abertos.map((linha) => (
+        <p key={linha} className={styles.aberto}>
+          {linha}
+        </p>
+      ))}
+    </div>
   );
 }
 

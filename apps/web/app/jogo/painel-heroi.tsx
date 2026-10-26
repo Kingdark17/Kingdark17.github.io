@@ -102,9 +102,15 @@ interface Props {
    * houver ponto. Arranjo "Assim" do usuário, 2026-10-02.
    */
   onPonto?: (chave: AttrKey) => void;
+  /**
+   * O título da maior conquista (`tituloDoHeroi`: "Sobrevivente da Floresta",
+   * "Lenda da Torre"), prêmio de quem zera uma masmorra (decisão do usuário,
+   * 2026-10-25). Ausente pra quem ainda não zerou nada.
+   */
+  titulo?: string | null;
 }
 
-export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
+export function PainelHeroi({ hero, golpes = 0, onPonto, titulo = null }: Readonly<Props>) {
   const naMochila = onPonto !== undefined;
   const comPontos = naMochila && hero.attrPoints > 0;
   const treinado = hasClass(hero);
@@ -280,6 +286,7 @@ export function PainelHeroi({ hero, golpes = 0, onPonto }: Readonly<Props>) {
             </>
           )}
         </p>
+        {titulo && <p className={cartao.titulo}>🏆 {titulo}</p>}
 
         <div className={cartao.medidores}>
           <Medidor rotulo="Vida" atual={hero.hp} maximo={hero.maxHp} cor={cartao.vida} />

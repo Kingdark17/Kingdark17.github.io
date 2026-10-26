@@ -2697,5 +2697,79 @@
         "message": "Espécie desconhecida: nada"
       }
     }
+  },
+  {
+    "name": "generateBoss: o chefe final",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 100,
+        "options": {
+          "species": [
+            "goblin",
+            "lobo_sombras",
+            "aranha",
+            "slime"
+          ],
+          "main": true,
+          "final": true
+        }
+      },
+      "rng": {
+        "seed": 9
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "goblin",
+        "enemyClassId": "feiticeiro",
+        "floor": 100,
+        "hp": 1122,
+        "maxHp": 1122,
+        "dmg": 111,
+        "speed": 64,
+        "xp": 560,
+        "gold": 680,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Devorador",
+        "chefeFinal": true
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "generateBoss: o chefe final da Torre no Pesadelo",
+    "input": {
+      "fn": "generateBoss",
+      "args": {
+        "floor": 331,
+        "options": {
+          "main": true,
+          "final": true
+        }
+      },
+      "rng": {
+        "seed": 10
+      }
+    },
+    "expected": {
+      "result": {
+        "speciesId": "orc",
+        "enemyClassId": "feiticeiro",
+        "floor": 331,
+        "hp": 5012,
+        "maxHp": 5012,
+        "dmg": 342,
+        "speed": 173,
+        "xp": 1715,
+        "gold": 2066,
+        "isBoss": true,
+        "isMainBoss": true,
+        "bossTitle": "o Eterno",
+        "chefeFinal": true
+      },
+      "rngCalls": 3
+    }
   }
 ]

@@ -80,10 +80,39 @@ describe('ids e objetos da sala', () => {
     ]);
   });
 
+  it('na Caverna, o extra num canto de cima desce uma casa (o canto é parede lá); fora dela fica onde está', () => {
+    const celula = {
+      type: 'normal',
+      x: 0,
+      y: 0,
+      doors: {},
+      extras: [
+        { kind: 'chest', col: 1, row: 1, item: null, used: false },
+        { kind: 'pot', col: 2, row: 1, used: false },
+        { kind: 'sign', col: 7, row: 1 },
+        { kind: 'pot', col: 7, row: 6, used: false },
+      ],
+    } as DungeonCell;
+    expect(objetosDaSala(celula, false, 'caverna')).toEqual([
+      { id: idDoExtra(0), col: 1, row: 2 },
+      { id: idDoExtra(1), col: 2, row: 1 },
+      { id: idDoExtra(2), col: 7, row: 2 },
+      { id: idDoExtra(3), col: 7, row: 6 },
+    ]);
+    expect(objetosDaSala(celula, false, 'floresta').map((o) => [o.col, o.row])).toEqual([
+      [1, 1],
+      [2, 1],
+      [7, 1],
+      [7, 6],
+    ]);
+  });
+
   it('a sala secreta tem uma porta só, de volta, e o baú no centro', () => {
     const planta = plantaDaSalaSecreta('N');
     expect(planta.doors).toEqual(['S']);
     expect(planta.objects).toEqual([{ id: ID_DO_BAU_SECRETO, ...CONTENT_TILE }]);
+    expect(planta.solid[1]![1]).toBe(false);
+    expect(plantaDaSalaSecreta('N', 'caverna').solid[1]![1]).toBe(true);
   });
 });
 

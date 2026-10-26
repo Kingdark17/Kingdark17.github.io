@@ -35,6 +35,8 @@ namespace RPGLegend.Engine
         public double Y;
         public double RumoX;
         public double RumoY;
+        /// <summary>O chefe final: o poder do golpe em curso (<see cref="ChefeFinal"/>). Ausente (null) no golpe comum.</summary>
+        public string Poder;
 
         public MonstroNaArena Clone() => (MonstroNaArena)MemberwiseClone();
     }
@@ -115,6 +117,8 @@ namespace RPGLegend.Engine
         public bool Teclado;
         [KeepNull] public string Fim;
         [KeepNull] public Item Loot;
+        /// <summary>O chefe final caiu e a masmorra foi zerada: a tela de vitória (<see cref="Conquistas"/>).</summary>
+        public Conquista Conquista;
     }
 
     /// <summary>Onde o dedo está, na caixa do desenho.</summary>
@@ -228,6 +232,7 @@ namespace RPGLegend.Engine
             public bool Teclado;
             public string Fim;
             public Item Loot;
+            public Conquista Conquista;
             public RngFn Rng;
             public Func<double> Now;
             public List<Acontecimento> Acontecimentos = new List<Acontecimento>();
@@ -317,7 +322,7 @@ namespace RPGLegend.Engine
         public static QuadroDaLuta PassoDaLuta(LutaEmTempoReal luta, EntradaDaLuta entrada, RngFn rng, Func<double> now = null)
         {
             if (luta.Fim != null) return new QuadroDaLuta { Luta = luta, Acontecimentos = new List<Acontecimento>() };
-            var l = new Luta { Estado = luta.Estado, Arena = CopiarArena(luta.Arena), Pet = luta.Pet, Teclado = luta.Teclado, Fim = luta.Fim, Loot = luta.Loot, Rng = rng, Now = now };
+            var l = new Luta { Estado = luta.Estado, Arena = CopiarArena(luta.Arena), Pet = luta.Pet, Teclado = luta.Teclado, Fim = luta.Fim, Loot = luta.Loot, Conquista = luta.Conquista, Rng = rng, Now = now };
 
             if (entrada.Mirar != null) Mirar(l, entrada.Mirar.Value);
             if (l.Arena.Evento != null) SeguirEvento(l, entrada);
@@ -334,7 +339,7 @@ namespace RPGLegend.Engine
 
             return new QuadroDaLuta
             {
-                Luta = new LutaEmTempoReal { Estado = l.Estado, Arena = l.Arena, Pet = l.Pet, Teclado = l.Teclado, Fim = l.Fim, Loot = l.Loot },
+                Luta = new LutaEmTempoReal { Estado = l.Estado, Arena = l.Arena, Pet = l.Pet, Teclado = l.Teclado, Fim = l.Fim, Loot = l.Loot, Conquista = l.Conquista },
                 Acontecimentos = l.Acontecimentos,
             };
         }
@@ -412,6 +417,32 @@ namespace RPGLegend.Engine
         private static CombatMonsterView MonstroNo(Luta l, double indice) => Monsters.View(Sala(l).Monsters[(int)indice]);
 
         private static JeitoDeLutar JeitoDe(CombatMonsterView monstro) => JeitoDoComportamento(monstro.Behavior);
+
+        /// <summary>
+        /// TS: jeitoDoGolpe — o jeito do golpe em curso: o do comportamento, e o chefe final mexe nele. Na fúria o aviso
+        /// e o descanso encurtam; o Golpe Devastador avisa por mais tempo e pega mais longe (a tela desenha o aviso
+        /// com este tamanho).
+        /// </summary>
+        public static JeitoDeLutar JeitoDoGolpe(CombatMonsterView monstro, string poder = null)
+        {
+            var jeito = JeitoDe(monstro);
+            if (monstro.ChefeFinal == true && monstro.Furia == true)
+                jeito = Com(jeito, aviso: Math.Truncate(jeito.Aviso * 2 / 3), descanso: Math.Truncate(jeito.Descanso / 2));
+            if (poder == ChefeFinal.Devastador)
+                jeito = Com(jeito, aviso: Math.Truncate(jeito.Aviso * 3 / 2), tamanho: Math.Truncate(jeito.Tamanho * 13 / 10));
+            return jeito;
+        }
+
+        /// <summary>O <c>{ ...jeito, campo }</c> do TS: um jeito novo, com só o que mudou.</summary>
+        private static JeitoDeLutar Com(JeitoDeLutar jeito, double? aviso = null, double? descanso = null, double? tamanho = null) => new JeitoDeLutar
+        {
+            Aviso = aviso ?? jeito.Aviso,
+            Golpe = jeito.Golpe,
+            Tamanho = tamanho ?? jeito.Tamanho,
+            Velocidade = jeito.Velocidade,
+            Descanso = descanso ?? jeito.Descanso,
+            Guarda = jeito.Guarda,
+        };
 
         /// <summary>O monstro da arena no índice, se o índice for um inteiro dentro da lista (o <c>monstros[i]</c> do TS).</summary>
         private static MonstroNaArena MonstroDaArena(Luta l, double indice)
@@ -608,7 +639,7 @@ namespace RPGLegend.Engine
                 new ResolveAttackOptions { Rng = l.Rng, PetCriticoBonus = Pets.Bonus(l.Pet).Critico ?? 0 });
             var comHeroi = estado.Clone();
             comHeroi.Hero = golpe.Hero;
-            l.Estado = FimDaLuta.GravarMonstro(comHeroi, alvo.Indice, golpe.Monster);
+            var ferida = FerirNaArena(l, comHeroi, alvo.Indice, golpe.Monster);
 
             if (golpe.Outcome == ResolveAttackOutcomes.NoMana)
             {
@@ -621,15 +652,40 @@ namespace RPGLegend.Engine
                 Contar(l, Som("miss"));
                 return;
             }
-            Contar(l, Numero("monstro", alvo.Indice, "-" + Js.NumberToString(golpe.Damage ?? 0), golpe.IsCrit == true ? "critico" : "dano"));
+            Contar(l, NumeroNoMonstro(ferida, alvo.Indice, "-" + Js.NumberToString(golpe.Damage ?? 0), golpe.IsCrit == true ? "critico" : "dano"));
             Contar(l, Som(golpe.IsCrit == true ? "crit" : "hit"));
-            if (golpe.MonsterDefeated)
+            if (ferida.Caiu)
             {
                 Abater(l, alvo.Indice, golpe.Monster);
                 return;
             }
-            AplicarRunasDoGolpe(l, alvo.Indice, golpe.Monster, golpe.Damage ?? 0);
+            if (!ferida.Protegido) AplicarRunasDoGolpe(l, alvo.Indice, Monsters.View(ferida.Monstro), golpe.Damage ?? 0);
         }
+
+        /// <summary>
+        /// TS: ferirNaArena — grava o golpe no monstro com a regra do chefe final (<see cref="ChefeFinal.FerirMonstro"/>):
+        /// o protegido não sente nada, e o que chega à metade chama os lacaios — eles entram no palco esperando a vez,
+        /// e o alvo passa pro primeiro deles.
+        /// </summary>
+        private static Ferida FerirNaArena(Luta l, EstadoNaMasmorra estado, double indice, CombatMonster depois)
+        {
+            var ferida = ChefeFinal.FerirMonstro(estado, indice, depois, l.Rng);
+            l.Estado = ferida.Estado;
+            if (ferida.Lacaios.Count > 0)
+            {
+                foreach (var novo in ferida.Lacaios)
+                    l.Arena.Monstros.Add(new MonstroNaArena { Indice = novo, Fase = "esperando", Tempo = 0, Forca = 1, Alvo = -1, X = 0, Y = 0, RumoX = 0, RumoY = 0 });
+                l.Arena.Alvo = ferida.Lacaios[0];
+                string texto = ChefeFinal.TextoDosLacaios(Js.Str(Monsters.View(ferida.Monstro).Name));
+                Contar(l, Aviso(texto));
+                Diario(l, new[] { texto });
+            }
+            return ferida;
+        }
+
+        /// <summary>TS: numeroNoMonstro — o dano, ou o escudo quando o chefe final está protegido pelos lacaios.</summary>
+        private static Acontecimento NumeroNoMonstro(Ferida ferida, double indice, string texto, string tom) =>
+            ferida.Protegido ? Numero("monstro", indice, "🛡️", "erro") : Numero("monstro", indice, texto, tom);
 
         /// <summary>
         /// TS: aplicarRunasDoGolpe — as runas da arma no golpe que acertou. Só a arena as aplica: no site a arma vale só
@@ -642,7 +698,7 @@ namespace RPGLegend.Engine
             if (runas.Disparos.Count == 0) return;
             var comHeroi = (EstadoNaMasmorra)estado.Clone();
             comHeroi.Hero = runas.Hero;
-            l.Estado = FimDaLuta.GravarMonstro(comHeroi, indice, runas.Monster);
+            var ferida = FerirNaArena(l, comHeroi, indice, runas.Monster);
             foreach (var disparo in runas.Disparos)
             {
                 string icone = Runas.IconeDe(disparo.Runa);
@@ -652,7 +708,7 @@ namespace RPGLegend.Engine
                 }
                 else if (disparo.Runa == "eletrica")
                 {
-                    Contar(l, Numero("monstro", indice, icone + "-" + Js.NumberToString(disparo.Valor), "dano"));
+                    Contar(l, NumeroNoMonstro(ferida, indice, icone + "-" + Js.NumberToString(disparo.Valor), "dano"));
                 }
                 else
                 {
@@ -660,7 +716,7 @@ namespace RPGLegend.Engine
                     Contar(l, Numero("monstro", indice, icone, "erro"));
                 }
             }
-            if (runas.Monster.Hp <= 0) Abater(l, indice, runas.Monster);
+            if (ferida.Caiu) Abater(l, indice, runas.Monster);
         }
 
         // ---------- poderes e itens ----------
@@ -699,11 +755,11 @@ namespace RPGLegend.Engine
             var comUso = estado.Clone();
             comUso.Hero = uso.Hero;
             comUso.Party = uso.Party;
-            l.Estado = FimDaLuta.GravarMonstro(comUso, alvo.Value, uso.Monster);
+            var ferida = FerirNaArena(l, comUso, alvo.Value, uso.Monster);
 
             if (uso.Outcome == UsePowerOutcomes.Damage)
             {
-                Contar(l, Numero("monstro", alvo.Value, poder.Icon + " -" + Js.NumberToString(uso.Damage ?? 0), "critico"));
+                Contar(l, NumeroNoMonstro(ferida, alvo.Value, poder.Icon + " -" + Js.NumberToString(uso.Damage ?? 0), "critico"));
                 Contar(l, Som("crit"));
             }
             else if (uso.Outcome == UsePowerOutcomes.Heal)
@@ -722,7 +778,7 @@ namespace RPGLegend.Engine
                 Contar(l, Aviso(poder.Icon + " " + poder.Name));
             }
             if (Js.Truthy(uso.Healed) && uso.Outcome == UsePowerOutcomes.Damage) Contar(l, Numero("heroi", 0, "+" + Js.NumberToString(uso.Healed.Value), "cura"));
-            if (uso.MonsterDefeated) Abater(l, alvo.Value, uso.Monster);
+            if (ferida.Caiu) Abater(l, alvo.Value, uso.Monster);
         }
 
         private static void UsarItem(Luta l, string uid)
@@ -815,7 +871,7 @@ namespace RPGLegend.Engine
 
         private static void AgirMonstro(Luta l, MonstroNaArena m)
         {
-            var jeito = JeitoDe(MonstroNo(l, m.Indice));
+            var jeito = JeitoDoGolpe(MonstroNo(l, m.Indice), m.Poder);
             switch (m.Fase)
             {
                 case "esperando":
@@ -866,16 +922,29 @@ namespace RPGLegend.Engine
         /// O monstro tenta golpear: atordoado ou lento demais, perde o golpe; senão sorteia em quem cai, como no
         /// site, e o aviso começa. Golpe no herói trava o desenho na caixa (o círculo e a investida miram onde o
         /// coração está agora). Perder a vez também é a vez: o respiro do próximo começa igual.
+        ///
+        /// O chefe final, na vez de um poder (<see cref="ChefeFinal.PoderDaVez"/>), avisa o nome dele e mira sempre o
+        /// coração: o Golpe Devastador com o dobro da força, o Rugido com a de sempre, mas pegando também os
+        /// companheiros quando o aviso acaba. O poder conta já no começo, pra o aviso do próximo sair certo.
         /// </summary>
         private static void ComecarGolpe(Luta l, MonstroNaArena m)
         {
             var estado = Masmorra(l);
             var monstro = MonstroNo(l, m.Indice);
-            var jeito = JeitoDe(monstro);
+            string poder = ChefeFinal.PoderDaVez(monstro);
+            var jeito = JeitoDoGolpe(monstro, poder);
             var inicio = MonsterHit.StartMonsterAttack(monstro, estado.Hero, l.Rng);
+            bool solta = poder != null && inicio.Outcome == MonsterAttackStart.Ready;
+            CombatMonster gravado = inicio.Monster;
+            if (solta)
+            {
+                var contado = inicio.Monster.Clone();
+                contado.Poderes = (inicio.Monster.Poderes ?? 0) + 1;
+                gravado = contado;
+            }
             var comHeroi = estado.Clone();
             comHeroi.Hero = inicio.Hero;
-            l.Estado = FimDaLuta.GravarMonstro(comHeroi, m.Indice, inicio.Monster);
+            l.Estado = FimDaLuta.GravarMonstro(comHeroi, m.Indice, gravado);
             l.Arena.Vez = m.Indice;
             if (inicio.Outcome == MonsterAttackStart.Stunned)
             {
@@ -898,7 +967,18 @@ namespace RPGLegend.Engine
             m.Fase = "avisando";
             m.Tempo = jeito.Aviso;
             m.Forca = inicio.AttackMult;
-            m.Alvo = MonsterHit.PickMonsterTarget(Masmorra(l).Party ?? new List<Companion>(), l.Rng) ?? -1;
+            if (solta)
+            {
+                m.Poder = poder;
+                m.Alvo = -1;
+                if (poder == ChefeFinal.Devastador) m.Forca = inicio.AttackMult * ChefeFinal.ForcaDoDevastador;
+                var def = ChefeFinal.Poder(poder);
+                Contar(l, Aviso(def.Icone + " " + Js.Str(monstro.Name) + ": " + def.Nome + "!"));
+            }
+            else
+            {
+                m.Alvo = MonsterHit.PickMonsterTarget(Masmorra(l).Party ?? new List<Companion>(), l.Rng) ?? -1;
+            }
             m.RumoX = 0;
             m.RumoY = 0;
             if (m.Alvo >= 0)
@@ -926,9 +1006,10 @@ namespace RPGLegend.Engine
             }
         }
 
-        /// <summary>O aviso acabou: o golpe sai.</summary>
+        /// <summary>O aviso acabou: o golpe sai. O Rugido do chefe final pega antes cada companheiro de pé.</summary>
         private static void SoltarGolpe(Luta l, MonstroNaArena m, JeitoDeLutar jeito)
         {
+            if (m.Poder == ChefeFinal.Rugido) RugirNaEquipe(l, m);
             if (m.Alvo >= 0)
             {
                 GolpeNoCompanheiro(l, m, m.Alvo);
@@ -955,9 +1036,35 @@ namespace RPGLegend.Engine
             Descansar(l, m, jeito);
         }
 
+        /// <summary>TS: rugirNaEquipe — o Rugido do chefe final pega cada companheiro de pé, na força do golpe.</summary>
+        private static void RugirNaEquipe(Luta l, MonstroNaArena m)
+        {
+            var estado = Masmorra(l);
+            var monstro = MonstroNo(l, m.Indice);
+            var equipe = estado.Party ?? new List<Companion>();
+            var novaEquipe = new List<Companion>(equipe.Count);
+            for (int i = 0; i < equipe.Count; i++)
+            {
+                var membro = equipe[i];
+                if (membro.Hp <= 0)
+                {
+                    novaEquipe.Add(membro);
+                    continue;
+                }
+                var acerto = MonsterHit.HitPartyMember(membro, monstro, m.Forca, l.Rng);
+                Contar(l, Numero("companheiro", i, "-" + Js.NumberToString(acerto.Damage), "dano"));
+                if (acerto.Defeated) Diario(l, new[] { Js.Str(membro.Name) + " caiu!" });
+                novaEquipe.Add(acerto.Member);
+            }
+            var comEquipe = estado.Clone();
+            comEquipe.Party = novaEquipe;
+            l.Estado = comEquipe;
+        }
+
         /// <summary>O golpe acabou: o monstro descansa, e o próximo golpe espera o respiro.</summary>
         private static void Descansar(Luta l, MonstroNaArena m, JeitoDeLutar jeito)
         {
+            m.Poder = null;
             if (l.Fim != null) return;
             m.Fase = "descansando";
             m.Tempo = jeito.Descanso;
@@ -1074,7 +1181,7 @@ namespace RPGLegend.Engine
             var acao = Party.PartyMemberAct(estado.Hero, membro, monstro, l.Rng);
             var comHeroi = estado.Clone();
             comHeroi.Hero = acao.Hero;
-            l.Estado = FimDaLuta.GravarMonstro(comHeroi, alvo.Value, acao.Monster);
+            var ferida = FerirNaArena(l, comHeroi, alvo.Value, acao.Monster);
             var resultado = acao.Outcome;
             if (resultado.Kind == PartyOutcomeKinds.HealedHero)
             {
@@ -1086,8 +1193,8 @@ namespace RPGLegend.Engine
             }
             else
             {
-                Contar(l, Numero("monstro", alvo.Value, "-" + Js.NumberToString(resultado.Amount ?? 0), "dano"));
-                if (acao.Monster.Hp <= 0) Abater(l, alvo.Value, Monsters.View(acao.Monster));
+                Contar(l, NumeroNoMonstro(ferida, alvo.Value, "-" + Js.NumberToString(resultado.Amount ?? 0), "dano"));
+                if (ferida.Caiu) Abater(l, alvo.Value, Monsters.View(acao.Monster));
             }
         }
 
@@ -1137,9 +1244,9 @@ namespace RPGLegend.Engine
             {
                 var monstro = MonstroNo(l, indice);
                 var dot = StatusEffects.TickMonsterDot(monstro);
-                l.Estado = FimDaLuta.GravarMonstro(Masmorra(l), indice, dot.Monster);
-                if (dot.Damage > 0) Contar(l, Numero("monstro", indice, "-" + Js.NumberToString(dot.Damage), "dano"));
-                if (dot.Defeated) Abater(l, indice, Monsters.View(dot.Monster));
+                var ferida = FerirNaArena(l, Masmorra(l), indice, dot.Monster);
+                if (dot.Damage > 0) Contar(l, NumeroNoMonstro(ferida, indice, "-" + Js.NumberToString(dot.Damage), "dano"));
+                if (ferida.Caiu) Abater(l, indice, Monsters.View(dot.Monster));
                 if (l.Fim != null) return;
             }
 
@@ -1159,8 +1266,12 @@ namespace RPGLegend.Engine
             int i = (int)indice;
             if (i >= 0 && i < l.Arena.Monstros.Count) l.Arena.Monstros[i].Fase = "caido";
             var pago = FimDaLuta.PagarAbate(Masmorra(l), abatido);
-            l.Estado = pago.Estado;
+            // Caiu o último lacaio: o chefe final fica furioso.
+            var furia = ChefeFinal.Enfurecer(pago.Estado);
+            l.Estado = furia.Estado;
             Diario(l, pago.Log);
+            Diario(l, furia.Log);
+            foreach (var texto in furia.Log) Contar(l, Aviso(texto));
             var dePe = FimDaLuta.IndicesDePe(Sala(l));
             if (dePe.Count > 0)
             {
@@ -1172,6 +1283,7 @@ namespace RPGLegend.Engine
             var limpa = FimDaLuta.LimparSala(Masmorra(l), abatido, l.Rng, l.Now, true);
             l.Estado = limpa.Estado;
             l.Loot = limpa.Loot;
+            if (limpa.Conquista != null) l.Conquista = limpa.Conquista;
             l.Fim = "vitoria";
             l.Arena.Evento = null;
             l.Arena.Tiros = new List<Tiro>();

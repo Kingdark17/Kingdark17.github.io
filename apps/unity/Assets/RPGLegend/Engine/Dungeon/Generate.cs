@@ -116,7 +116,7 @@ namespace RPGLegend.Engine
             double monsterRoomCount = Js.Min(pool.Count - reservedRooms, 3 + Math.Floor((floor - 1) * 1.3));
             PopulateMonsterRooms(Place(DungeonRoomTypes.Monster, Js.Max(2, monsterRoomCount)), forca, species, rng, now, o.App);
 
-            if (IsBossFloor(floor)) PlaceBoss(First(Place(DungeonRoomTypes.Boss, 1)), forca, floor % 10 == 0, species, rng);
+            if (IsBossFloor(floor)) PlaceBoss(First(Place(DungeonRoomTypes.Boss, 1)), forca, floor % 10 == 0, species, rng, floor >= Dungeons.Floors);
 
             PopulateRoomContent(res.Rooms, forca, rng, now, o.App);
             // Por último: o resto do andar sai igual ao de antes pra mesma semente.
@@ -373,13 +373,16 @@ namespace RPGLegend.Engine
             }
         }
 
-        /// <summary>TS: placeBoss — o chefe na sala reservada; sem sala, nada (nem sorteio).</summary>
-        private static void PlaceBoss(DungeonCell bossRoom, double floor, bool main, IReadOnlyList<string> species, RngFn rng)
+        /// <summary>
+        /// TS: placeBoss — o chefe na sala reservada; sem sala, nada (nem sorteio). <paramref name="final"/>: o andar 100,
+        /// cujo chefe é a batalha final da masmorra.
+        /// </summary>
+        private static void PlaceBoss(DungeonCell bossRoom, double floor, bool main, IReadOnlyList<string> species, RngFn rng, bool final)
         {
             if (bossRoom == null) return;
             bossRoom.Monsters = new List<MonsterInstance>
             {
-                Monsters.GenerateBoss(floor, new Monsters.GenerateOptions { Rng = rng, Species = species, Main = main }),
+                Monsters.GenerateBoss(floor, new Monsters.GenerateOptions { Rng = rng, Species = species, Main = main, Final = final }),
             };
             bossRoom.MonsterIndex = 0;
             bossRoom.Beaten = false;

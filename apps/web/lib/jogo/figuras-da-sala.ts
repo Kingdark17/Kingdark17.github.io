@@ -10,7 +10,7 @@
  * a célula muda depois do render.
  */
 
-import { ID_DO_BAU_SECRETO, ID_DO_CONTEUDO, extrasDe, idDoExtra, objetosDaSala, type CelulaDoMapa, type RoomObject } from '@rpg-legend/shared';
+import { ID_DO_BAU_SECRETO, ID_DO_CONTEUDO, extrasDe, idDoExtra, objetosDaSala, type CelulaDoMapa, type DungeonId, type RoomObject } from '@rpg-legend/shared';
 
 import type { Figura } from './desenho-da-sala';
 import { arteDoTipo } from './icones-do-mapa';
@@ -22,9 +22,9 @@ export function assinaturaDosExtras(celula: CelulaDoMapa | null): string {
     .join(',');
 }
 
-/** Os objetos da planta como texto, pra memorizar pela chave. */
-export function chaveDosObjetos(celula: CelulaDoMapa | null, temConteudo: boolean): string {
-  return objetosDaSala(celula, temConteudo)
+/** Os objetos da planta como texto, pra memorizar pela chave. A masmorra muda onde cai o extra de um canto que a arte dela fecha. */
+export function chaveDosObjetos(celula: CelulaDoMapa | null, temConteudo: boolean, masmorra: DungeonId | null): string {
+  return objetosDaSala(celula, temConteudo, masmorra)
     .map((o) => `${o.id}:${o.col}:${o.row}`)
     .join('|');
 }

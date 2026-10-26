@@ -12,7 +12,7 @@ namespace RPGLegend.Game.Jogo
     /// </summary>
     public static class CartaoDeGuilda
     {
-        public static VisualElement Criar(Hero hero, bool comRetrato, Action<string> aoGastarPonto)
+        public static VisualElement Criar(Hero hero, bool comRetrato, Action<string> aoGastarPonto, string titulo = null)
         {
             bool treinado = Heroes.HasClass(hero);
             double pontos = hero.AttrPoints ?? 0;
@@ -33,6 +33,8 @@ namespace RPGLegend.Game.Jogo
 
             var linha = ((hero.RaceIcon ?? "") + " " + (hero.Race ?? "")).Trim() + " · " + ((hero.ClassIcon ?? "") + " " + (hero.ClassName ?? "")).Trim();
             cartao.Add(PecasDaTela.Rico(TextoDoJogo.ParaTela(linha) + (treinado ? "" : " · <i>provisório</i>"), "linha-do-cartao"));
+            // O título da maior conquista (Conquistas.TituloDoHeroi), prêmio de quem zera uma masmorra.
+            if (!string.IsNullOrEmpty(titulo)) cartao.Add(PecasDaTela.Texto("🏆 " + titulo, "titulo-no-cartao"));
 
             var medidores = PecasDaTela.Bloco("medidores-do-cartao");
             medidores.Add(Medidor("Vida", hero.Hp, hero.MaxHp, "vida-no-cartao", null, null));

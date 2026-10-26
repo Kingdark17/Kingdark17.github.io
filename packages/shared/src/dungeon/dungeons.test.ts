@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
+import { monsterLevel } from '../monsters/generate.js';
 import {
   DEFAULT_RUN,
+  DUNGEONS,
   effectiveFloor,
   emptyProgress,
   entryFloors,
@@ -37,10 +39,20 @@ describe('a escada de força', () => {
     }
   });
 
-  it('a Caverna começa na força do andar 15 de antes e a Torre na do 29', () => {
+  it('a Caverna começa na força 78 (monstros de nível 70, o pedido do Breno) e a Torre na 155 (nível 140)', () => {
     expect(effectiveFloor(FLORESTA, 1)).toBe(1);
-    expect(effectiveFloor(CAVERNA, 1)).toBe(15);
-    expect(effectiveFloor(TORRE, 1)).toBe(29);
+    expect(effectiveFloor(FLORESTA_DIFICIL, 1)).toBe(40);
+    expect(effectiveFloor(CAVERNA, 1)).toBe(78);
+    expect(effectiveFloor(TORRE, 1)).toBe(155);
+    expect(effectiveFloor(TORRE_PESADELO, 100)).toBe(331);
+    expect(monsterLevel(effectiveFloor(CAVERNA, 1))).toBe(70);
+    expect(monsterLevel(effectiveFloor(TORRE, 1))).toBe(140);
+  });
+
+  it('a entrada de cada masmorra pede o nível dos monstros do primeiro andar dela no Normal', () => {
+    for (const masmorra of DUNGEONS) {
+      expect(masmorra.minLevel).toBe(monsterLevel(effectiveFloor({ dungeon: masmorra.id, difficulty: 'normal' }, 1)));
+    }
   });
 
   it('dentro da masmorra sobe um por andar, como sempre', () => {
@@ -53,17 +65,18 @@ describe('o que está aberto', () => {
     expect(lockReason(emptyProgress(), 1, FLORESTA)).toBeNull();
   });
 
-  it('a Caverna pede nível 15 antes de tudo', () => {
-    expect(lockReason(emptyProgress(), 14, CAVERNA)).toEqual({ kind: 'level', minLevel: 15 });
+  it('a Caverna pede nível 70 antes de tudo', () => {
+    expect(lockReason(emptyProgress(), 69, CAVERNA)).toEqual({ kind: 'level', minLevel: 70 });
+    expect(lockReason(markCleared(emptyProgress(), FLORESTA), 69, CAVERNA)).toEqual({ kind: 'level', minLevel: 70 });
   });
 
   it('com o nível, a Caverna ainda pede a Floresta zerada no Normal', () => {
-    expect(lockReason(emptyProgress(), 40, CAVERNA)).toEqual({ kind: 'previous_dungeon', dungeon: 'floresta' });
-    expect(lockReason(markCleared(emptyProgress(), FLORESTA), 40, CAVERNA)).toBeNull();
+    expect(lockReason(emptyProgress(), 80, CAVERNA)).toEqual({ kind: 'previous_dungeon', dungeon: 'floresta' });
+    expect(lockReason(markCleared(emptyProgress(), FLORESTA), 80, CAVERNA)).toBeNull();
   });
 
   it('zerar a Floresta no Difícil sem o Normal não abre a Caverna', () => {
-    expect(lockReason(markCleared(emptyProgress(), FLORESTA_DIFICIL), 40, CAVERNA)?.kind).toBe('previous_dungeon');
+    expect(lockReason(markCleared(emptyProgress(), FLORESTA_DIFICIL), 80, CAVERNA)?.kind).toBe('previous_dungeon');
   });
 
   it('o Difícil pede o Normal zerado, e o Pesadelo pede o Difícil', () => {
@@ -73,10 +86,10 @@ describe('o que está aberto', () => {
     expect(lockReason(normal, 1, FLORESTA_PESADELO)).toEqual({ kind: 'previous_difficulty', difficulty: 'dificil' });
   });
 
-  it('a Torre pede nível 30 e a Caverna zerada', () => {
+  it('a Torre pede nível 140 e a Caverna zerada', () => {
     const cavernaZerada = markCleared(markCleared(emptyProgress(), FLORESTA), CAVERNA);
-    expect(lockReason(cavernaZerada, 29, TORRE)?.kind).toBe('level');
-    expect(lockReason(cavernaZerada, 30, TORRE)).toBeNull();
+    expect(lockReason(cavernaZerada, 139, TORRE)).toEqual({ kind: 'level', minLevel: 140 });
+    expect(lockReason(cavernaZerada, 140, TORRE)).toBeNull();
   });
 });
 

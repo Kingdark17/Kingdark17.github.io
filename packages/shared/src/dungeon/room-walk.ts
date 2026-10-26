@@ -113,15 +113,21 @@ export interface WalkStep {
 
 /**
  * A planta da sala: parede em volta, vão onde há porta e os objetos, cada
- * um tomando o seu quadrado.
+ * um tomando o seu quadrado. `walls` são as casas de dentro que a arte da
+ * masmorra faz de parede (os cantos da Caverna, `paredesDaSala`).
  */
-export function roomLayout(doors: Partial<Record<Direction, unknown>>, objects: readonly RoomObject[]): RoomLayout {
+export function roomLayout(
+  doors: Partial<Record<Direction, unknown>>,
+  objects: readonly RoomObject[],
+  walls: readonly { col: number; row: number }[] = [],
+): RoomLayout {
   const solid: boolean[][] = [];
   for (let row = 0; row < ROOM_ROWS; row++) {
     const linha: boolean[] = [];
     for (let col = 0; col < ROOM_COLS; col++) linha.push(col === 0 || row === 0 || col === ROOM_COLS - 1 || row === ROOM_ROWS - 1);
     solid.push(linha);
   }
+  for (const parede of walls) (solid[parede.row] as boolean[])[parede.col] = true;
   const abertas: Direction[] = [];
   for (const direcao of DIR_ORDER) {
     if (!doors[direcao]) continue;

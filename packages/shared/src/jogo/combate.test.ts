@@ -346,9 +346,9 @@ describe('o fim da masmorra', () => {
   it('o diário diz o que abriu: a dificuldade seguinte e, no Normal, a próxima masmorra', () => {
     const fraco = atacar(emCombate(noChefeDoAndar(100)), EM_CHEIO, 'normal', NUNCA).log;
     expect(fraco).toContain('Floresta no Difícil está aberta no portão.');
-    expect(fraco).toContain('A Caverna abre a partir do nível 15.');
+    expect(fraco).toContain('A Caverna abre a partir do nível 70.');
 
-    const forte = atacar(emCombate(noChefeDoAndar(100, undefined, 20)), EM_CHEIO, 'normal', NUNCA).log;
+    const forte = atacar(emCombate(noChefeDoAndar(100, undefined, 80)), EM_CHEIO, 'normal', NUNCA).log;
     expect(forte).toContain('A Caverna está aberta no portão.');
   });
 

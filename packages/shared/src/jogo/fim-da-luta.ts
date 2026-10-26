@@ -36,6 +36,7 @@ import {
   type EstadoNaCidade,
   type EstadoNaMasmorra,
 } from './estado.js';
+import { abrirBauDoChefe, tituloDe, type Conquista } from './conquista.js';
 import { maestriaSubiu } from './maestria.js';
 
 const CHANCE_DE_LOOT_NORMAL = 0.25;
@@ -52,6 +53,8 @@ export interface PassoDaLuta<E extends EstadoDoJogo = EstadoNaMasmorra> {
 /** A sala limpa: o estado (que pode já ser o andar seguinte ou a cidade), o diário e o item achado. */
 export interface SalaLimpa extends PassoDaLuta<EstadoDoJogo> {
   loot: Item | null;
+  /** O chefe final caiu e a masmorra foi zerada: o que a tela de vitória mostra (`conquista.ts`). */
+  conquista?: Conquista;
 }
 
 /**
@@ -118,7 +121,8 @@ export function pagarAbate(estado: EstadoNaMasmorra, abatido: CombatMonsterView)
   const log: string[] = [];
 
   const xp = gainXP({ ...estado.hero, killCount: estado.hero.killCount + 1, gold: estado.hero.gold + abatido.gold }, abatido.xp);
-  log.push(`Você derrotou ${abatido.name}! +${abatido.xp} XP e +${abatido.gold} ouro.`);
+  // O lacaio do chefe final não dá ouro (`chefe-final.ts`): o diário não fala em "+0 ouro".
+  log.push(abatido.gold > 0 ? `Você derrotou ${abatido.name}! +${abatido.xp} XP e +${abatido.gold} ouro.` : `Você derrotou ${abatido.name}! +${abatido.xp} XP.`);
   if (xp.leveledUp) log.push(`Você subiu ${xp.levels} nível(is)!`);
 
   const comRecompensa: EstadoNaMasmorra = { ...estado, hero: xp.hero, quests: onMonsterKilled(estado.quests) };
@@ -190,13 +194,29 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
   );
 
   if (sala.type === 'boss' && estado.floor >= DUNGEON_FLOORS) {
-    // O chefe do último andar: a masmorra está zerada nesta dificuldade, e o
-    // diário diz o que abriu no portão.
+    // O chefe do último andar: a masmorra está zerada nesta dificuldade, vem
+    // o baú do chefe e o título (`conquista.ts`), e o diário diz o que abriu
+    // no portão. A tela de vitória mostra a `conquista`.
     const progresso = markCleared(limpo.progresso, limpo.masmorra);
-    log.push(`Você venceu ${abatido.name} e zerou ${runName(limpo.masmorra)}!`);
-    log.push(...abertosAoZerar(limpo, progresso));
-    log.push('O caminho de volta se abre, e o grupo retorna à cidade.');
-    return { estado: voltarParaCidade({ ...limpo, progresso }), log, loot };
+    const bau = abrirBauDoChefe(limpo, rng, now, app);
+    const abertos = abertosAoZerar(limpo, progresso);
+    const conquista: Conquista = {
+      masmorra: { ...limpo.masmorra },
+      nome: runName(limpo.masmorra),
+      chefe: abatido.name,
+      item: bau.item,
+      ouro: bau.ouro,
+      titulo: tituloDe(limpo.masmorra),
+      abertos,
+    };
+    log.push(
+      `Você venceu ${abatido.name} e zerou ${conquista.nome}!`,
+      `No baú do chefe: ${displayName(bau.item)} e ${bau.ouro} de ouro.`,
+      `Título conquistado: ${conquista.titulo}.`,
+      ...abertos,
+      'O caminho de volta se abre, e o grupo retorna à cidade.',
+    );
+    return { estado: voltarParaCidade({ ...bau.estado, progresso }), log, loot, conquista };
   }
 
   if (sala.type === 'boss') {

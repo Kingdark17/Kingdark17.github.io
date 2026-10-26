@@ -45,6 +45,20 @@ import { displayName, type Item } from '../items/item.js';
 import { monsterView } from '../monsters/generate.js';
 import { petBonus, type PetId } from '../pets/pets.js';
 import { defaultRng, type Rng } from '../rng.js';
+import {
+  enfurecer,
+  ferirMonstro,
+  PODERES_DO_CHEFE,
+  poderDaVez,
+  protegido,
+  soltarPoder,
+  textoDoAviso,
+  textoDosLacaios,
+  textoProtegido,
+  type PoderDoChefe,
+  type PoderSolto,
+} from './chefe-final.js';
+import type { Conquista } from './conquista.js';
 import type { Efeito } from './efeitos.js';
 import { celulaAtual, substituirCelulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from './estado.js';
 import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta, vivoNaSala } from './fim-da-luta.js';
@@ -105,6 +119,8 @@ export interface Combate {
    * nunca acerta defunto.
    */
   alvo: number;
+  /** O chefe final caiu e a masmorra foi zerada: a tela de vitória (`conquista.ts`). Só no fim dessa luta. */
+  conquista?: Conquista;
 }
 
 export interface Rolagem {
@@ -150,13 +166,23 @@ export interface InimigoNaLuta {
   indice: number;
   monstro: CombatMonsterView;
   vivo: boolean;
+  /** O chefe final com lacaios de pé: golpe nenhum o fere (`chefe-final.ts`). */
+  protegido: boolean;
+  /** O poder que o próximo golpe do chefe final solta — o aviso; `null` pros outros. */
+  poder: PoderDoChefe | null;
 }
 
 /** O grupo inteiro, na ordem da sala, com quem ainda está de pé: a tela da luta mostra todos. */
 export function inimigosDaLuta(estado: EstadoDoJogo): InimigoNaLuta[] {
   const sala = salaDeCombate(estado);
   if (!sala?.monsters) return [];
-  return sala.monsters.map((bruto, indice) => ({ indice, monstro: monsterView(bruto as CombatMonster), vivo: vivoNaSala(sala, indice) }));
+  return sala.monsters.map((bruto, indice) => ({
+    indice,
+    monstro: monsterView(bruto as CombatMonster),
+    vivo: vivoNaSala(sala, indice),
+    protegido: protegido(sala, indice),
+    poder: poderDaVez(bruto as CombatMonster),
+  }));
 }
 
 /**
@@ -309,21 +335,35 @@ export function atacar(combate: Combate, jogada: JogadaDeAtaque, estilo: AttackS
     log.push('Você erra o ataque!');
   }
 
+  const ferida = ferir({ ...combate, alvo, log }, { ...estado, hero: ataque.hero }, alvo, ataque.monster, rng);
   const depois: Combate = {
-    ...combate,
-    estado: gravarMonstro({ ...estado, hero: ataque.hero }, alvo, ataque.monster),
-    alvo,
+    ...ferida.combate,
     dado,
-    log,
     som: somDoGolpe(ataque.outcome === 'hit', ataque.isCrit),
-    flutuantes:
-      ataque.outcome === 'hit'
-        ? [{ texto: `${ataque.isCrit ? 'CRÍTICO! ' : ''}-${ataque.damage}`, tom: ataque.isCrit ? 'critico' : 'dano', alvo: 'inimigo', indice: alvo }]
-        : [],
+    flutuantes: ataque.outcome === 'hit' ? [numeroNoMonstro(ferida.protegido, `${ataque.isCrit ? 'CRÍTICO! ' : ''}-${ataque.damage}`, ataque.isCrit, alvo)] : [],
   };
 
-  if (ataque.monsterDefeated) return heroiMatou(depois, alvo, monstro, rng);
+  if (ferida.caiu) return heroiMatou(depois, alvo, monstro, rng);
   return turnoDosOutros(depois, rng);
+}
+
+/** O número que sobe no monstro golpeado: o dano, ou o escudo quando o chefe final está protegido. */
+function numeroNoMonstro(protegido: boolean, texto: string, critico: boolean | undefined, indice: number): Flutuante {
+  if (protegido) return { texto: '🛡️', tom: 'dano', alvo: 'inimigo', indice };
+  return { texto, tom: critico ? 'critico' : 'dano', alvo: 'inimigo', indice };
+}
+
+/**
+ * Grava o golpe no monstro `indice` com a regra do chefe final
+ * (`ferirMonstro`): o protegido não sente nada, e o que chega à metade chama
+ * os lacaios — e o alvo passa pro primeiro deles. Quem caiu, quem chama
+ * confere em `caiu`.
+ */
+function ferir(combate: Combate, estado: EstadoNaMasmorra, indice: number, depois: CombatMonster, rng: Rng): { combate: Combate; caiu: boolean; protegido: boolean } {
+  const ferida = ferirMonstro(estado, indice, depois, rng);
+  const nome = monsterView(ferida.monstro).name;
+  const log = [...combate.log, ...(ferida.protegido ? [textoProtegido(nome)] : []), ...(ferida.lacaios.length ? [textoDosLacaios(nome)] : [])];
+  return { combate: { ...combate, estado: ferida.estado, log, alvo: ferida.lacaios[0] ?? combate.alvo }, caiu: ferida.caiu, protegido: ferida.protegido };
 }
 
 /**
@@ -375,18 +415,16 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
   else log.push(`Você usa ${poder.name}.`);
   if (uso.healed && uso.outcome === 'damage') log.push(`O golpe devolve ${uso.healed} de vida a você.`);
 
+  const ferida = ferir({ ...combate, alvo, log }, { ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster, rng);
   const depois: Combate = {
-    ...combate,
-    estado: gravarMonstro({ ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster),
-    alvo,
-    log,
+    ...ferida.combate,
     // Poder que cura não é golpe; o original só tinha som de acerto.
     som: uso.outcome === 'damage' ? 'crit' : null,
-    flutuantes: uso.outcome === 'damage' ? [{ texto: `${poder.icon} -${uso.damage}`, tom: 'critico', alvo: 'inimigo', indice: alvo }] : [],
+    flutuantes: uso.outcome === 'damage' ? [numeroNoMonstro(ferida.protegido, `${poder.icon} -${uso.damage}`, true, alvo)] : [],
   };
 
   const curaDoParceiro = uso.outcome === 'heal' ? (uso.allyHealed ?? 0) : 0;
-  const fim = uso.monsterDefeated ? heroiMatou(depois, alvo, monstro, rng) : turnoDosOutros(depois, rng);
+  const fim = ferida.caiu ? heroiMatou(depois, alvo, monstro, rng) : turnoDosOutros(depois, rng);
   return { combate: fim, curaDoParceiro };
 }
 
@@ -542,8 +580,8 @@ function equipeAge(combate: Combate, alvo: number, rng: Rng): Combate {
     else if (acao.kind === 'hit') log.push(`${acao.member.name} acerta ${monstro.name} causando ${acao.amount}.`);
     else log.push(`${acao.member.name} erra o golpe.`);
   }
-  const depois = { ...combate, estado: gravarMonstro({ ...estado, hero: equipe.hero }, alvo, equipe.monster), log };
-  return equipe.defeated ? abaterNoTurno(depois, alvo, monstro, rng) : depois;
+  const ferida = ferir({ ...combate, log }, { ...estado, hero: equipe.hero }, alvo, equipe.monster, rng);
+  return ferida.caiu ? abaterNoTurno(ferida.combate, alvo, monstro, rng) : ferida.combate;
 }
 
 /** A queimadura e o sangramento correm em cada monstro de pé que os tiver: estão todos na luta. */
@@ -554,8 +592,9 @@ function danoContinuo(combate: Combate, rng: Rng): Combate {
     const monstro = monstroNo(estado, indice);
     const dot = tickMonsterDot(monstro);
     const log = dot.damage > 0 ? [...atual.log, `Os efeitos contínuos causam ${dot.damage} de dano em ${monstro.name}.`] : atual.log;
-    atual = { ...atual, estado: gravarMonstro(estado, indice, dot.monster), log };
-    if (dot.defeated) atual = abaterNoTurno(atual, indice, monstro, rng);
+    const ferida = ferir({ ...atual, log }, estado, indice, dot.monster, rng);
+    atual = ferida.combate;
+    if (ferida.caiu) atual = abaterNoTurno(atual, indice, monstro, rng);
     if (atual.fase !== 'combate') return atual;
   }
   return atual;
@@ -573,6 +612,8 @@ function golpeDaVez(combate: Combate, rng: Rng, opcoes: OpcoesDaRodada): Combate
   const vez = vezDoMonstro(estado);
   if (vez === null) return combate;
   const atacante = monstroNo(estado, vez);
+  const poder = poderDaVez(atacante);
+  if (poder) return golpeComPoder(combate, vez, atacante, poder, rng, opcoes);
   const golpe = applyMonsterHit(estado.hero, estado.party, atacante, {
     rng,
     petEsquivaBonus: petBonus(combate.pet).esquiva ?? 0,
@@ -580,7 +621,8 @@ function golpeDaVez(combate: Combate, rng: Rng, opcoes: OpcoesDaRodada): Combate
   });
   const comGolpe = gravarMonstro({ ...estado, hero: golpe.hero, party: golpe.party }, vez, golpe.monster);
   const sala = celulaAtual(comGolpe) as DungeonCell;
-  const log = [...combate.log, textoDoGolpe(golpe, atacante.name)];
+  const aviso = poderDaVez(golpe.monster);
+  const log = [...combate.log, textoDoGolpe(golpe, atacante.name), ...(aviso ? [textoDoAviso(atacante.name, aviso)] : [])];
 
   const depois: Combate = {
     ...combate,
@@ -592,6 +634,48 @@ function golpeDaVez(combate: Combate, rng: Rng, opcoes: OpcoesDaRodada): Combate
   };
 
   return golpe.heroDefeated ? derrota(depois, log, rng) : depois;
+}
+
+/**
+ * A vez do chefe final quando o golpe dele é um poder (`soltarPoder`): o
+ * Golpe Devastador no herói, ou o Rugido no grupo todo. Atordoado ou lento,
+ * perde a vez como qualquer um, e o poder fica pro próximo golpe.
+ */
+function golpeComPoder(combate: Combate, vez: number, atacante: CombatMonsterView, poder: PoderDoChefe, rng: Rng, opcoes: OpcoesDaRodada): Combate {
+  const estado = exigirMasmorra(combate);
+  const solto = soltarPoder(estado.hero, estado.party, atacante, poder, {
+    rng,
+    petEsquivaBonus: petBonus(combate.pet).esquiva ?? 0,
+    esquivaCerta: opcoes.esquivaCerta,
+  });
+  const comGolpe = gravarMonstro({ ...estado, hero: solto.hero, party: solto.party }, vez, solto.monster);
+  const sala = celulaAtual(comGolpe) as DungeonCell;
+  const aviso = poderDaVez(solto.monster);
+  const log = [...combate.log, ...textoDoPoder(solto, atacante.name, poder, estado.party), ...(aviso ? [textoDoAviso(atacante.name, aviso)] : [])];
+  const icone = PODERES_DO_CHEFE[poder].icone;
+
+  const depois: Combate = {
+    ...combate,
+    estado: substituirCelulaAtual(comGolpe, { ...sala, monsterTurn: vez + 1 }),
+    log,
+    flutuantes: solto.damage ? [...combate.flutuantes, { texto: `${icone}-${solto.damage}`, tom: 'critico' as const, alvo: 'heroi' as const }] : combate.flutuantes,
+  };
+  return solto.heroDefeated ? derrota(depois, log, rng) : depois;
+}
+
+function textoDoPoder(solto: PoderSolto, nome: string, poder: PoderDoChefe, equipe: readonly { name: string }[]): string[] {
+  if (solto.outcome === 'stunned') return [`${nome} está atordoado e perde o turno.`];
+  if (solto.outcome === 'lento_skip') return [`${nome} está lento demais para agir.`];
+  const { nome: nomeDoPoder, icone } = PODERES_DO_CHEFE[poder];
+  if (poder === 'devastador') {
+    return [solto.outcome === 'dodged' ? `Você desvia do ${icone} ${nomeDoPoder} de ${nome}!` : `${icone} ${nome} solta o ${nomeDoPoder} e acerta você causando ${solto.damage} de dano!`];
+  }
+  const linhas = [`${icone} ${nome} solta um ${nomeDoPoder} que atinge o grupo todo!`];
+  for (const atingido of solto.companheiros) {
+    linhas.push(`${equipe[atingido.indice]?.name ?? 'Um companheiro'} sofre ${atingido.damage} de dano${atingido.defeated ? ' e cai' : ''}.`);
+  }
+  linhas.push(solto.outcome === 'dodged' ? 'Você resiste ao Rugido.' : `Você sofre ${solto.damage} de dano.`);
+  return linhas;
 }
 
 function textoDoGolpe(golpe: ReturnType<typeof applyMonsterHit>, nome: string): string {
@@ -646,20 +730,23 @@ function morteNoVeneno(combate: Combate, hero: Hero, log: string[], rng: Rng): C
  */
 function pagarNaLuta(combate: Combate, indice: number, abatido: CombatMonsterView): Combate {
   const pago = pagarAbate(exigirMasmorra(combate), abatido);
-  const primeiroDePe = indicesDePe(celulaAtual(pago.estado) as DungeonCell)[0];
+  // Caiu o último lacaio: o chefe final fica furioso.
+  const furia = enfurecer(pago.estado);
+  const primeiroDePe = indicesDePe(celulaAtual(furia.estado) as DungeonCell)[0];
   return {
     ...combate,
-    estado: pago.estado,
+    estado: furia.estado,
     alvo: combate.alvo === indice && primeiroDePe !== undefined ? primeiroDePe : combate.alvo,
     fase: 'combate',
-    log: [...combate.log, ...pago.log],
+    log: [...combate.log, ...pago.log, ...furia.log],
   };
 }
 
 /** Último inimigo caiu: a vitória, com o que `limparSala` decidiu. */
 function vencer(combate: Combate, abatido: CombatMonsterView, rng: Rng): Combate {
   const limpa = limparSala(exigirMasmorra(combate), abatido, rng);
-  return { ...combate, estado: limpa.estado, fase: 'vitoria', log: [...combate.log, ...limpa.log], loot: limpa.loot, som: 'victory' };
+  const vitoria: Combate = { ...combate, estado: limpa.estado, fase: 'vitoria', log: [...combate.log, ...limpa.log], loot: limpa.loot, som: 'victory' };
+  return limpa.conquista ? { ...vitoria, conquista: limpa.conquista } : vitoria;
 }
 
 /** A derrota (`perderLuta`): o grupo volta pra cidade. */

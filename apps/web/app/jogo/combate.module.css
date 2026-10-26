@@ -692,3 +692,106 @@
     opacity: 0;
   }
 }
+
+/* ---------- o chefe final e os lacaios ----------
+ *
+ * O chefe do andar 100 chama 4 lacaios na metade da vida (`chefe-final.ts`):
+ * o palco chega a cinco monstros, menores e com a placa mais enxuta. */
+
+.grupo[data-tamanho='4'] .figura,
+.grupo[data-tamanho='5'] .figura {
+  font-size: clamp(2.2rem, 8vw, 4.2rem);
+}
+
+.grupo[data-tamanho='4'] .placa,
+.grupo[data-tamanho='5'] .placa {
+  padding: 0.25rem 0.25rem 0.3rem;
+}
+
+.grupo[data-tamanho='5'] .nome {
+  font-size: 0.75rem;
+}
+
+.grupo[data-tamanho='5'] .subtitulo,
+.grupo[data-tamanho='5'] .daVez {
+  font-size: 0.68rem;
+}
+
+.numeros[data-tamanho='4'] .numeroNoHeroi {
+  left: 25%;
+}
+
+.numeros[data-tamanho='5'] .numeroNoHeroi {
+  left: 20%;
+}
+
+/* ---------- a tela de vitória de quem zera a masmorra (`conquista.ts`) ---------- */
+
+/* O palco tem altura fixa; com a tela de vitória ele cresce até caber tudo. */
+.palcoDaConquista {
+  height: auto;
+  min-height: clamp(18rem, 64vw, 23rem);
+}
+
+
+.conquista {
+  grid-row: 1 / -1;
+  align-self: center;
+  width: min(24rem, calc(100% - 1.5rem));
+  margin: 0.75rem 0;
+  padding: 1rem 1rem 1.1rem;
+  background: rgba(16, 18, 26, 0.86);
+  border: 1px solid var(--gold);
+  border-radius: 0.3rem;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4), 0 0 24px rgba(240, 192, 64, 0.25);
+  display: grid;
+  gap: 0.35rem;
+  text-align: center;
+}
+
+.trofeu {
+  margin: 0;
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.tituloDaConquista {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold-bright);
+  font-size: 1.35rem;
+  text-wrap: balance;
+}
+
+.chefeVencido {
+  margin: 0 0 0.35rem;
+  color: var(--parchment);
+}
+
+.bauDoChefe {
+  display: grid;
+  gap: 0.3rem;
+  justify-items: stretch;
+  text-align: left;
+}
+
+.rotuloDaConquista {
+  margin: 0.25rem 0 0;
+  color: var(--parchment-dim);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tituloGanho {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--gold);
+  font-size: 1.1rem;
+}
+
+.aberto {
+  margin: 0;
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+}

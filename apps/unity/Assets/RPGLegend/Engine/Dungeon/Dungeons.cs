@@ -119,8 +119,11 @@ namespace RPGLegend.Engine
         /// <summary>TS: DEFAULT_RUN — Floresta Normal. O mesmo objeto sempre, como a constante do TS: não altere.</summary>
         public static DungeonRun DefaultRun => D.DefaultRun;
 
-        /// <summary>TS: FLOORS_PER_TIER — andares de antes que cada degrau de força soma.</summary>
-        public static double FloorsPerTier => D.FloorsPerTier;
+        /// <summary>
+        /// TS: FLOORS_PER_DUNGEON — andares de força entre o começo de uma masmorra e o da seguinte, no Normal (77:
+        /// a Caverna começa na força 78, monstros de nível 70); cada dificuldade sobe meio disso.
+        /// </summary>
+        public static double FloorsPerDungeon => D.FloorsPerDungeon;
 
         /// <summary>TS: dungeonById.</summary>
         public static DungeonDef ById(string id)
@@ -178,7 +181,10 @@ namespace RPGLegend.Engine
         /// TS: effectiveFloor — o andar que os monstros, o ouro e os itens enxergam: dentro da masmorra sobe um
         /// por andar; o degrau só muda onde ela começa.
         /// </summary>
-        public static double EffectiveFloor(DungeonRun run, double floor) => floor + TierOf(run) * FloorsPerTier;
+        public static double EffectiveFloor(DungeonRun run, double floor) => floor + TierOffset(run);
+
+        /// <summary>TS: tierOffset — quantos andares de força o degrau soma: 0, 39, 77, 116, 154, 193, 231.</summary>
+        public static double TierOffset(DungeonRun run) => Math.Floor((TierOf(run) * FloorsPerDungeon + 1) / 2);
 
         /// <summary>TS: isTotemFloor — <c>TOTEM_FLOORS.includes(floor)</c>.</summary>
         public static bool IsTotemFloor(double floor) => IncludesNumber(TotemFloors, floor);

@@ -47,6 +47,16 @@ namespace RPGLegend.Engine
         public string BossTitle;
         /// <summary>Só no Mímico.</summary>
         public MonsterOverrides Overrides;
+        /// <summary>O chefe do andar 100, a batalha final de cada masmorra (<see cref="ChefeFinal"/>).</summary>
+        public bool? ChefeFinal;
+        /// <summary>Chefe final: já chamou os lacaios (a segunda fase começou).</summary>
+        public bool? Chamou;
+        /// <summary>Chefe final: os lacaios caíram e ele ficou furioso.</summary>
+        public bool? Furia;
+        /// <summary>Chefe final: quantos poderes já soltou (a vez de cada um se alterna).</summary>
+        public double? Poderes;
+        /// <summary>Chamado pelo chefe final: não dá ouro.</summary>
+        public bool? Lacaio;
 
         /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
         [JsExtra] public JsExtras Extra;
@@ -78,6 +88,11 @@ namespace RPGLegend.Engine
             target.IsMainBoss = IsMainBoss;
             target.BossTitle = BossTitle;
             target.Overrides = Overrides;
+            target.ChefeFinal = ChefeFinal;
+            target.Chamou = Chamou;
+            target.Furia = Furia;
+            target.Poderes = Poderes;
+            target.Lacaio = Lacaio;
             target.Extra = Extra?.Clone();
         }
 
@@ -112,7 +127,19 @@ namespace RPGLegend.Engine
             /// andar de força em floor, e quem decide se é o chefe principal é o andar real.
             /// </summary>
             public bool? Main;
+
+            /// <summary>Só no chefe: é o chefe final, o do andar 100 (FORCA_DO_CHEFE_FINAL a mais de vida e dano).</summary>
+            public bool Final;
         }
+
+        /// <summary>TS: FORCA_DO_CHEFE_FINAL — quanto o chefe final é mais forte que um chefe principal, na vida e no dano.</summary>
+        public static double ForcaDoChefeFinal => GameData.MonstersGenerateTable.ForcaDoChefeFinal;
+
+        /// <summary>
+        /// TS: monsterLevel — o nível do monstro, no cartão dele: o do herói que venceu todos os monstros até ali, 9 em
+        /// cada 10 andares de força, arredondado (andar 78, o começo da Caverna, dá 70).
+        /// </summary>
+        public static double MonsterLevel(double floor) => Math.Max(1, Math.Floor((floor * 9 + 5) / 10));
 
         /// <summary>TS: especiesPermitidas — o filtro guarda a ordem de SPECIES, não a da lista de ids.</summary>
         private static List<SpeciesDef> EspeciesPermitidas(IReadOnlyList<string> ids)
@@ -155,7 +182,9 @@ namespace RPGLegend.Engine
 
         /// <summary>
         /// TS: generateBoss — mini-chefe a cada 5 andares, chefe principal a cada 10. Sorteia espécie,
-        /// classe de inimigo e título (3 números do rng); o resto é conta fixa.
+        /// classe de inimigo e título (3 números do rng); o resto é conta fixa. O chefe final
+        /// (<see cref="GenerateOptions.Final"/>, o do andar 100) sorteia igual e ganha FORCA_DO_CHEFE_FINAL a mais de
+        /// vida e dano.
         /// </summary>
         public static MonsterInstance GenerateBoss(double floor, GenerateOptions options = null)
         {
@@ -166,15 +195,16 @@ namespace RPGLegend.Engine
             string title = Rng.Pick(MonsterCatalog.BossTitles, rng);
             double mult = isMain ? 3.2 : 2.1;
             double hp = Js.Round(species.BaseHp * (1 + (floor - 1) * 0.27) * mult * enemyClass.HpMult) + 20;
+            double dmg = Js.Round((species.BaseDmg + Math.Floor((floor - 1) * 0.65) + (isMain ? 5 : 3)) * enemyClass.DmgMult);
 
-            return new MonsterInstance
+            var chefe = new MonsterInstance
             {
                 SpeciesId = species.Id,
                 EnemyClassId = enemyClass.Id,
                 Floor = floor,
                 Hp = hp,
                 MaxHp = hp,
-                Dmg = Js.Round((species.BaseDmg + Math.Floor((floor - 1) * 0.65) + (isMain ? 5 : 3)) * enemyClass.DmgMult),
+                Dmg = dmg,
                 Speed = Js.Round(species.BaseSpeed * (1 + (floor - 1) * 0.08) * 0.9),
                 Xp = (isMain ? 60 : 30) + floor * 5,
                 Gold = (isMain ? 80 : 40) + floor * 6,
@@ -182,6 +212,13 @@ namespace RPGLegend.Engine
                 IsMainBoss = isMain,
                 BossTitle = title,
             };
+            if (options == null || !options.Final) return chefe;
+            double vida = Js.Round(hp * ForcaDoChefeFinal);
+            chefe.Hp = vida;
+            chefe.MaxHp = vida;
+            chefe.Dmg = Js.Round(dmg * ForcaDoChefeFinal);
+            chefe.ChefeFinal = true;
+            return chefe;
         }
 
         /// <summary>

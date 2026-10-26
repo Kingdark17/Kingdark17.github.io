@@ -1,0 +1,12 @@
+{
+  "TITULOS": {
+    "normal": "Sobrevivente",
+    "dificil": "Terror",
+    "pesadelo": "Lenda"
+  },
+  "RARIDADE_DO_BAU": "lendario",
+  "OURO_DO_BAU": {
+    "base": 1000,
+    "porAndar": 3
+  }
+}

@@ -52,7 +52,7 @@ namespace RPGLegend.Engine
         [JsName("DUNGEON_FLOORS")] public double DungeonFloors;
         [JsName("TOTEM_FLOORS")] public List<double> TotemFloors = new List<double>();
         [JsName("DEFAULT_RUN")] public DungeonRun DefaultRun;
-        [JsName("FLOORS_PER_TIER")] public double FloorsPerTier;
+        [JsName("FLOORS_PER_DUNGEON")] public double FloorsPerDungeon;
     }
 
     public static partial class GameData

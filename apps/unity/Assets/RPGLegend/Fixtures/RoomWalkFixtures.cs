@@ -23,7 +23,8 @@ namespace RPGLegend.Tests
             Const(M, "DOOR_ASSIST", () => N(RoomWalk.DoorAssist));
             Const(M, "CONTENT_TILE", () => W(RoomWalk.ContentTile));
 
-            Fn(M, "roomLayout", (a, c) => W(RoomWalk.Layout(R<DoorMap>(a["doors"]), R<List<RoomObject>>(a["objects"]))));
+            Fn(M, "roomLayout", (a, c) => W(RoomWalk.Layout(R<DoorMap>(a["doors"]), R<List<RoomObject>>(a["objects"]),
+                a["walls"] == null ? null : R<List<TileRef>>(a["walls"]))));
             Fn(M, "stickInput", (a, c) => W(RoomWalk.StickInput(Num(a["x"]), Num(a["y"]))));
             Fn(M, "roomArrival", (a, c) => W(RoomWalk.Arrival(a["movedTowards"].Type == JTokenType.Null ? null : Str(a["movedTowards"]))));
             Fn(M, "walkTick", (a, c) => W(RoomWalk.Tick(R<RoomLayout>(a["layout"]), R<Walker>(a["walker"]), R<WalkInput>(a["input"]))));

@@ -17,7 +17,7 @@ import { randomItem, type Item } from '../items/item.js';
 import { CHANCE_DA_RUNA_NO_BAU, sortearRuna } from '../items/runas.js';
 import type { NpcService } from '../npc/npc-services.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
-import { DEFAULT_RUN, dungeonById, effectiveFloor, isTotemFloor, type DungeonRun } from './dungeons.js';
+import { DEFAULT_RUN, DUNGEON_FLOORS, dungeonById, effectiveFloor, isTotemFloor, type DungeonRun } from './dungeons.js';
 import { placeExtras, type DungeonExtra } from './extras.js';
 import { distancesFrom, generateRoomGraph, DIR_VECTORS, type Direction, type RoomCell, type RoomGraph } from './graph.js';
 
@@ -254,9 +254,10 @@ function populateMonsterRooms(rooms: DungeonCell[], floor: number, species: read
   }
 }
 
-function placeBoss(bossRoom: DungeonCell | undefined, floor: number, main: boolean, species: readonly string[], rng: Rng): void {
+/** `final`: o andar 100, cujo chefe é a batalha final da masmorra (`jogo/chefe-final.ts`). */
+function placeBoss(bossRoom: DungeonCell | undefined, floor: number, main: boolean, species: readonly string[], rng: Rng, final: boolean): void {
   if (!bossRoom) return;
-  bossRoom.monsters = [generateBoss(floor, { rng, species, main })];
+  bossRoom.monsters = [generateBoss(floor, { rng, species, main, ...(final ? { final } : {}) })];
   bossRoom.monsterIndex = 0;
   bossRoom.beaten = false;
 }
@@ -348,7 +349,7 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
   const monsterRoomCount = Math.min(pool.length - reservedRooms, 3 + Math.floor((floor - 1) * 1.3));
   populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), forca, species, rng, now, app);
 
-  if (isBossFloor(floor)) placeBoss(place('boss', 1)[0], forca, floor % 10 === 0, species, rng);
+  if (isBossFloor(floor)) placeBoss(place('boss', 1)[0], forca, floor % 10 === 0, species, rng, floor >= DUNGEON_FLOORS);
 
   populateRoomContent(res.rooms as DungeonCell[], forca, rng, now, app);
   // Por último: o resto do andar sai igual ao de antes pra mesma semente.

@@ -1052,3 +1052,24 @@
     height: 28px;
     background-image: url("project://database/Assets/RPGLegend/UI/Imagens/selo-da-guilda.png");
 }
+
+/* O título da maior conquista (Conquistas.TituloDoHeroi), prêmio de quem zera uma masmorra. */
+.titulo-no-cartao {
+    font-size: 15px;
+    color: #ad3636;
+    margin-top: -4px;
+    margin-bottom: 6px;
+}
+
+/* A tela de vitória de quem zera a masmorra (Conquistas). */
+.linha-da-vitoria {
+    font-size: 17px;
+    white-space: normal;
+    margin: 4px 0;
+}
+
+.titulo-da-vitoria {
+    font-size: 22px;
+    color: var(--gold);
+    margin: 4px 0 8px 0;
+}

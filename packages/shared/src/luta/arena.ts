@@ -53,8 +53,10 @@ import type { Item } from '../items/item.js';
 import { monsterView } from '../monsters/generate.js';
 import { petBonus, type PetId } from '../pets/pets.js';
 import { randomInt, type Rng } from '../rng.js';
+import type { Conquista } from '../jogo/conquista.js';
 import type { Efeito } from '../jogo/efeitos.js';
 import { celulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from '../jogo/estado.js';
+import { enfurecer, FORCA_DO_DEVASTADOR, ferirMonstro, PODERES_DO_CHEFE, poderDaVez, textoDosLacaios, type Ferida, type PoderDoChefe } from '../jogo/chefe-final.js';
 import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta } from '../jogo/fim-da-luta.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
@@ -173,6 +175,8 @@ export interface MonstroNaArena {
   /** O rumo da investida, travado no começo do aviso, já na velocidade dela. */
   rumoX: number;
   rumoY: number;
+  /** O chefe final: o poder do golpe em curso (`jogo/chefe-final.ts`). Ausente no golpe comum. */
+  poder?: PoderDoChefe;
 }
 
 export interface CompanheiroNaArena {
@@ -254,6 +258,8 @@ export interface LutaEmTempoReal {
   fim: FimDaLuta | null;
   /** O item achado ao vencer. */
   loot: Item | null;
+  /** O chefe final caiu e a masmorra foi zerada: a tela de vitória (`jogo/conquista.ts`). */
+  conquista?: Conquista;
 }
 
 /** O que a pessoa fez neste passo. */
@@ -384,7 +390,8 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
     if (!lento || l.arena.lento % LENTIDAO === 0) passoDoMundo(l, entrada);
   }
 
-  return { luta: { estado: l.estado, arena: l.arena, pet: l.pet, teclado: l.teclado, fim: l.fim, loot: l.loot }, acontecimentos: l.acontecimentos };
+  const fora: LutaEmTempoReal = { estado: l.estado, arena: l.arena, pet: l.pet, teclado: l.teclado, fim: l.fim, loot: l.loot };
+  return { luta: l.conquista ? { ...fora, conquista: l.conquista } : fora, acontecimentos: l.acontecimentos };
 }
 
 /**
@@ -450,6 +457,18 @@ function monstroNo(l: Luta, indice: number): CombatMonsterView {
 
 function jeitoDe(monstro: CombatMonsterView): JeitoDeLutar {
   return JEITOS_DE_LUTAR[monstro.behavior] ?? JEITOS_DE_LUTAR.agressivo;
+}
+
+/**
+ * O jeito do golpe em curso: o do comportamento, e o chefe final mexe nele.
+ * Na fúria o aviso e o descanso encurtam; o Golpe Devastador avisa por mais
+ * tempo e pega mais longe (a tela desenha o aviso com este tamanho).
+ */
+export function jeitoDoGolpe(monstro: CombatMonsterView, poder?: PoderDoChefe): JeitoDeLutar {
+  let jeito = jeitoDe(monstro);
+  if (monstro.chefeFinal && monstro.furia) jeito = { ...jeito, aviso: Math.trunc((jeito.aviso * 2) / 3), descanso: Math.trunc(jeito.descanso / 2) };
+  if (poder === 'devastador') jeito = { ...jeito, aviso: Math.trunc((jeito.aviso * 3) / 2), tamanho: Math.trunc((jeito.tamanho * 13) / 10) };
+  return jeito;
 }
 
 /** O alvo do jogador, se ainda está de pé; senão o primeiro de pé. `null`, ninguém de pé. */
@@ -595,7 +614,7 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
   }
   const estado = masmorra(l);
   const golpe = resolverGolpe(estado.hero, monstro, dado, lida, estilo, { rng: l.rng, petCriticoBonus: petBonus(l.pet).critico ?? 0 });
-  l.estado = gravarMonstro({ ...estado, hero: golpe.hero }, alvo.indice, golpe.monster);
+  const ferida = ferirNaArena(l, { ...estado, hero: golpe.hero }, alvo.indice, golpe.monster);
 
   if (golpe.outcome === 'no_mana') {
     contar(l, { tipo: 'aviso', texto: 'Mana insuficiente' });
@@ -606,13 +625,37 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     contar(l, { tipo: 'som', som: 'miss' });
     return;
   }
-  contar(l, { tipo: 'numero', onde: 'monstro', indice: alvo.indice, texto: `-${golpe.damage}`, tom: golpe.isCrit ? 'critico' : 'dano' });
+  contar(l, numeroNoMonstro(ferida, alvo.indice, `-${golpe.damage}`, golpe.isCrit ? 'critico' : 'dano'));
   contar(l, { tipo: 'som', som: golpe.isCrit ? 'crit' : 'hit' });
-  if (golpe.monsterDefeated) {
+  if (ferida.caiu) {
     abater(l, alvo.indice, golpe.monster);
     return;
   }
-  aplicarRunasDoGolpe(l, alvo.indice, golpe.monster, golpe.damage ?? 0);
+  if (!ferida.protegido) aplicarRunasDoGolpe(l, alvo.indice, monsterView(ferida.monstro), golpe.damage ?? 0);
+}
+
+/**
+ * Grava o golpe no monstro com a regra do chefe final (`ferirMonstro`): o
+ * protegido não sente nada, e o que chega à metade chama os lacaios — eles
+ * entram no palco esperando a vez, e o alvo passa pro primeiro deles.
+ */
+function ferirNaArena(l: Luta, estado: EstadoNaMasmorra, indice: number, depois: CombatMonster): Ferida {
+  const ferida = ferirMonstro(estado, indice, depois, l.rng);
+  l.estado = ferida.estado;
+  if (ferida.lacaios.length > 0) {
+    for (const novo of ferida.lacaios) l.arena.monstros.push({ indice: novo, fase: 'esperando', tempo: 0, forca: 1, alvo: -1, x: 0, y: 0, rumoX: 0, rumoY: 0 });
+    l.arena.alvo = ferida.lacaios[0] as number;
+    const texto = textoDosLacaios(monsterView(ferida.monstro).name);
+    contar(l, { tipo: 'aviso', texto });
+    diario(l, [texto]);
+  }
+  return ferida;
+}
+
+/** O número do golpe no monstro: o dano, ou o escudo quando o chefe final está protegido pelos lacaios. */
+function numeroNoMonstro(ferida: Ferida, indice: number, texto: string, tom: 'dano' | 'critico'): Acontecimento {
+  if (ferida.protegido) return { tipo: 'numero', onde: 'monstro', indice, texto: '🛡️', tom: 'erro' };
+  return { tipo: 'numero', onde: 'monstro', indice, texto, tom };
 }
 
 /**
@@ -623,19 +666,19 @@ function aplicarRunasDoGolpe(l: Luta, indice: number, monstro: CombatMonsterView
   const estado = masmorra(l);
   const runas = aplicarRunas(estado.hero, monstro, dano, l.rng);
   if (runas.disparos.length === 0) return;
-  l.estado = gravarMonstro({ ...estado, hero: runas.hero }, indice, runas.monster);
+  const ferida = ferirNaArena(l, { ...estado, hero: runas.hero }, indice, runas.monster);
   for (const disparo of runas.disparos) {
     const icone = RUNAS[disparo.runa].icone;
     if (disparo.runa === 'vampirica') {
       if (disparo.valor > 0) contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `${icone}+${disparo.valor}`, tom: 'cura' });
     } else if (disparo.runa === 'eletrica') {
-      contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: `${icone}-${disparo.valor}`, tom: 'dano' });
+      contar(l, numeroNoMonstro(ferida, indice, `${icone}-${disparo.valor}`, 'dano'));
     } else {
       // Queimar e gelar só marcam o monstro, como o 💫 e o 🐌: sem dano agora, ele não treme.
       contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: icone, tom: 'erro' });
     }
   }
-  if (runas.monster.hp <= 0) abater(l, indice, runas.monster);
+  if (ferida.caiu) abater(l, indice, runas.monster);
 }
 
 // ---------- poderes e itens ----------
@@ -659,10 +702,10 @@ function usarPoder(l: Luta, id: string): void {
     return;
   }
   l.arena.recargaDosPoderes[id] = RECARGA_DO_PODER;
-  l.estado = gravarMonstro({ ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster);
+  const ferida = ferirNaArena(l, { ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster);
 
   if (uso.outcome === 'damage') {
-    contar(l, { tipo: 'numero', onde: 'monstro', indice: alvo, texto: `${poder.icon} -${uso.damage}`, tom: 'critico' });
+    contar(l, numeroNoMonstro(ferida, alvo, `${poder.icon} -${uso.damage}`, 'critico'));
     contar(l, { tipo: 'som', som: 'crit' });
   } else if (uso.outcome === 'heal') {
     contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `+${uso.healed}`, tom: 'cura' });
@@ -675,7 +718,7 @@ function usarPoder(l: Luta, id: string): void {
     contar(l, { tipo: 'aviso', texto: `${poder.icon} ${poder.name}` });
   }
   if (uso.healed && uso.outcome === 'damage') contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `+${uso.healed}`, tom: 'cura' });
-  if (uso.monsterDefeated) abater(l, alvo, uso.monster);
+  if (ferida.caiu) abater(l, alvo, uso.monster);
 }
 
 function usarItem(l: Luta, uid: string): void {
@@ -752,7 +795,7 @@ function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
 }
 
 function agirMonstro(l: Luta, m: MonstroNaArena): void {
-  const jeito = jeitoDe(monstroNo(l, m.indice));
+  const jeito = jeitoDoGolpe(monstroNo(l, m.indice), m.poder);
   switch (m.fase) {
     case 'esperando':
       return;
@@ -795,13 +838,20 @@ function proximoDaVez(l: Luta): MonstroNaArena | null {
  * sorteia em quem cai, como no site, e o aviso começa. Golpe no herói trava
  * o desenho na caixa (o círculo e a investida miram onde o coração está
  * agora). Perder a vez também é a vez: o respiro do próximo começa igual.
+ *
+ * O chefe final, na vez de um poder (`poderDaVez`), avisa o nome dele e mira
+ * sempre o coração: o Golpe Devastador com o dobro da força, o Rugido com a
+ * de sempre, mas pegando também os companheiros quando o aviso acaba. O
+ * poder conta já no começo, pra o aviso do próximo sair certo.
  */
 function comecarGolpe(l: Luta, m: MonstroNaArena): void {
   const estado = masmorra(l);
   const monstro = monstroNo(l, m.indice);
-  const jeito = jeitoDe(monstro);
+  const poder = poderDaVez(monstro);
+  const jeito = jeitoDoGolpe(monstro, poder ?? undefined);
   const inicio = startMonsterAttack(monstro, estado.hero, l.rng);
-  l.estado = gravarMonstro({ ...estado, hero: inicio.hero }, m.indice, inicio.monster);
+  const solta = poder !== null && inicio.outcome === 'ready';
+  l.estado = gravarMonstro({ ...estado, hero: inicio.hero }, m.indice, solta ? { ...inicio.monster, poderes: (inicio.monster.poderes ?? 0) + 1 } : inicio.monster);
   l.arena.vez = m.indice;
   if (inicio.outcome === 'stunned') {
     m.fase = 'atordoado';
@@ -822,7 +872,15 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
   m.fase = 'avisando';
   m.tempo = jeito.aviso;
   m.forca = inicio.attackMult;
-  m.alvo = pickMonsterTarget(masmorra(l).party, l.rng) ?? -1;
+  if (solta) {
+    m.poder = poder;
+    m.alvo = -1;
+    if (poder === 'devastador') m.forca = inicio.attackMult * FORCA_DO_DEVASTADOR;
+    const { nome, icone } = PODERES_DO_CHEFE[poder];
+    contar(l, { tipo: 'aviso', texto: `${icone} ${monstro.name}: ${nome}!` });
+  } else {
+    m.alvo = pickMonsterTarget(masmorra(l).party, l.rng) ?? -1;
+  }
   m.rumoX = 0;
   m.rumoY = 0;
   if (m.alvo >= 0) {
@@ -847,8 +905,9 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
   }
 }
 
-/** O aviso acabou: o golpe sai. */
+/** O aviso acabou: o golpe sai. O Rugido do chefe final pega antes cada companheiro de pé. */
 function soltarGolpe(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
+  if (m.poder === 'rugido') rugirNaEquipe(l, m);
   if (m.alvo >= 0) {
     golpeNoCompanheiro(l, m, m.alvo);
     descansar(l, m, jeito);
@@ -872,8 +931,23 @@ function soltarGolpe(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   descansar(l, m, jeito);
 }
 
+/** O Rugido do chefe final pega cada companheiro de pé, na força do golpe, como o golpe do site num companheiro. */
+function rugirNaEquipe(l: Luta, m: MonstroNaArena): void {
+  const estado = masmorra(l);
+  const monstro = monstroNo(l, m.indice);
+  const party = estado.party.map((membro, indice) => {
+    if (membro.hp <= 0) return membro;
+    const golpe = hitPartyMember(membro, monstro, m.forca, l.rng);
+    contar(l, { tipo: 'numero', onde: 'companheiro', indice, texto: `-${golpe.damage}`, tom: 'dano' });
+    if (golpe.defeated) diario(l, [`${membro.name} caiu!`]);
+    return golpe.member;
+  });
+  l.estado = { ...estado, party };
+}
+
 /** O golpe acabou: o monstro descansa, e o próximo golpe espera o respiro. */
 function descansar(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
+  delete m.poder;
   if (l.fim) return;
   m.fase = 'descansando';
   m.tempo = jeito.descanso;
@@ -964,15 +1038,15 @@ function agirCompanheiro(l: Luta, c: CompanheiroNaArena): void {
   c.tempo = CADENCIA_DO_COMPANHEIRO;
   const monstro = monstroNo(l, alvo);
   const acao = partyMemberAct(estado.hero, membro, monstro, l.rng);
-  l.estado = gravarMonstro({ ...estado, hero: acao.hero }, alvo, acao.monster);
+  const ferida = ferirNaArena(l, { ...estado, hero: acao.hero }, alvo, acao.monster);
   const resultado = acao.outcome;
   if (resultado.kind === 'healed_hero') {
     contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `+${resultado.amount}`, tom: 'cura' });
   } else if (resultado.kind === 'miss') {
     contar(l, { tipo: 'numero', onde: 'monstro', indice: alvo, texto: 'Errou', tom: 'erro' });
   } else {
-    contar(l, { tipo: 'numero', onde: 'monstro', indice: alvo, texto: `-${resultado.amount}`, tom: 'dano' });
-    if (acao.monster.hp <= 0) abater(l, alvo, monsterView(acao.monster));
+    contar(l, numeroNoMonstro(ferida, alvo, `-${resultado.amount}`, 'dano'));
+    if (ferida.caiu) abater(l, alvo, monsterView(acao.monster));
   }
 }
 
@@ -1013,9 +1087,9 @@ function rodada(l: Luta): void {
   for (const indice of indicesDePe(sala(l))) {
     const monstro = monstroNo(l, indice);
     const dot = tickMonsterDot(monstro);
-    l.estado = gravarMonstro(masmorra(l), indice, dot.monster);
-    if (dot.damage > 0) contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: `-${dot.damage}`, tom: 'dano' });
-    if (dot.defeated) abater(l, indice, monsterView(dot.monster as CombatMonster));
+    const ferida = ferirNaArena(l, masmorra(l), indice, dot.monster as CombatMonster);
+    if (dot.damage > 0) contar(l, numeroNoMonstro(ferida, indice, `-${dot.damage}`, 'dano'));
+    if (ferida.caiu) abater(l, indice, monsterView(dot.monster as CombatMonster));
     if (l.fim) return;
   }
 
@@ -1032,8 +1106,11 @@ function abater(l: Luta, indice: number, abatido: CombatMonsterView): void {
   const m = l.arena.monstros[indice];
   if (m) m.fase = 'caido';
   const pago = pagarAbate(masmorra(l), abatido);
-  l.estado = pago.estado;
-  diario(l, pago.log);
+  // Caiu o último lacaio: o chefe final fica furioso.
+  const furia = enfurecer(pago.estado);
+  l.estado = furia.estado;
+  diario(l, [...pago.log, ...furia.log]);
+  for (const texto of furia.log) contar(l, { tipo: 'aviso', texto });
   const dePe = indicesDePe(sala(l));
   if (dePe.length > 0) {
     if (!dePe.includes(l.arena.alvo)) l.arena.alvo = dePe[0] as number;
@@ -1044,6 +1121,7 @@ function abater(l: Luta, indice: number, abatido: CombatMonsterView): void {
   const limpa = limparSala(masmorra(l), abatido, l.rng, l.now, true);
   l.estado = limpa.estado;
   l.loot = limpa.loot;
+  if (limpa.conquista) l.conquista = limpa.conquista;
   l.fim = 'vitoria';
   l.arena.evento = null;
   l.arena.tiros = [];

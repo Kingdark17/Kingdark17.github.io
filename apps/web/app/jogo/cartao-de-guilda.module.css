@@ -241,3 +241,9 @@
   font-size: 0.8125rem;
   color: #5a3f2a;
 }
+
+/* O título da maior conquista (`conquista.ts`), o prêmio de quem zera uma masmorra. */
+.titulo {
+  margin: -0.25rem 0 0;
+  color: var(--vermelho);
+}

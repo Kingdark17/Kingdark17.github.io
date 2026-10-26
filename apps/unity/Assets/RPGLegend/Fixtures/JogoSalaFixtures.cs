@@ -26,9 +26,10 @@ namespace RPGLegend.Tests
             {
                 var portas = R<DoorMap>(a["portas"]);
                 var objetos = a["objetos"];
+                var masmorra = Str(a["masmorra"]);
                 return objetos.Type == JTokenType.Boolean
-                    ? W(AndarNaSala.PlantaDaSala(portas, (bool)objetos))
-                    : W(AndarNaSala.PlantaDaSala(portas, R<List<RoomObject>>(objetos)));
+                    ? W(AndarNaSala.PlantaDaSala(portas, (bool)objetos, masmorra))
+                    : W(AndarNaSala.PlantaDaSala(portas, R<List<RoomObject>>(objetos), masmorra));
             });
             Fn(M, "passosDoQuadro", (a, c) => W(AndarNaSala.PassosDoQuadro(Num(a["sobra"]), Num(a["decorridoMs"]))));
             Fn(M, "vetorDasTeclas", (a, c) => W(AndarNaSala.VetorDasTeclas(R<List<string>>(a["teclas"]))));
@@ -44,8 +45,8 @@ namespace RPGLegend.Tests
             Fn(M, "extrasDe", (a, c) => W(ExtrasDaSala.ExtrasDe(R<DungeonCell>(a["celula"]))));
             Fn(M, "passagemSecreta", (a, c) => W(ExtrasDaSala.PassagemSecreta(R<DungeonCell>(a["celula"]))));
             Fn(M, "descricaoDosExtras", (a, c) => W(ExtrasDaSala.DescricaoDosExtras(R<DungeonCell>(a["celula"]))));
-            Fn(M, "objetosDaSala", (a, c) => W(ExtrasDaSala.ObjetosDaSala(R<DungeonCell>(a["celula"]), (bool)a["temConteudo"])));
-            Fn(M, "plantaDaSalaSecreta", (a, c) => W(ExtrasDaSala.PlantaDaSalaSecreta(Str(a["lado"]))));
+            Fn(M, "objetosDaSala", (a, c) => W(ExtrasDaSala.ObjetosDaSala(R<DungeonCell>(a["celula"]), (bool)a["temConteudo"], Str(a["masmorra"]))));
+            Fn(M, "plantaDaSalaSecreta", (a, c) => W(ExtrasDaSala.PlantaDaSalaSecreta(Str(a["lado"]), Str(a["masmorra"]))));
             Fn(M, "textoDaSecreta", (a, c) => W(ExtrasDaSala.TextoDaSecreta(R<DungeonCell>(a["celula"]), Num(a["indice"]))));
             Fn(M, "tocarExtra", (a, c) => W(ExtrasDaSala.TocarExtra(Masmorra(a["estado"]), Num(a["indice"]), c.RngFn)));
             Fn(M, "abrirBauSecreto", (a, c) => W(ExtrasDaSala.AbrirBauSecreto(Masmorra(a["estado"]), Num(a["indice"]))));

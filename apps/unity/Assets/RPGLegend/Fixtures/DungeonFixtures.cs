@@ -27,7 +27,7 @@ namespace RPGLegend.Tests
             Const(M, "DUNGEON_FLOORS", () => N(Dungeons.Floors));
             Const(M, "TOTEM_FLOORS", () => W(Dungeons.TotemFloors));
             Const(M, "DEFAULT_RUN", () => W(Dungeons.DefaultRun));
-            Const(M, "FLOORS_PER_TIER", () => N(Dungeons.FloorsPerTier));
+            Const(M, "FLOORS_PER_DUNGEON", () => N(Dungeons.FloorsPerDungeon));
 
             // ---------- o sort do V8 (o embaralhamento do grafo e do andar) ----------
             Fn(M, "Array.prototype.sort", (a, c) =>
@@ -69,6 +69,8 @@ namespace RPGLegend.Tests
 
             // ---------- dungeons ----------
             Fn(M, "tierOf", (a, c) => N(Dungeons.TierOf(R<DungeonRun>(a["run"]))));
+            Fn(M, "tierOffset", (a, c) => N(Dungeons.TierOffset(R<DungeonRun>(a["run"]))));
+            Fn(M, "monsterLevel", (a, c) => N(Monsters.MonsterLevel(Num(a["floor"]))));
             Fn(M, "runName", (a, c) => W(Dungeons.RunName(R<DungeonRun>(a["run"]))));
             Fn(M, "runKey", (a, c) => W(Dungeons.RunKey(R<DungeonRun>(a["run"]))));
             Fn(M, "effectiveFloor", (a, c) => N(Dungeons.EffectiveFloor(R<DungeonRun>(a["run"]), Num(a["floor"]))));

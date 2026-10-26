@@ -1514,6 +1514,15 @@ for (const floor of [1, 3, 7, 8, 20]) {
   caso('monsterView: espécie que sumiu lança', 'monsterView', { monster: { ...comum, speciesId: 'nada' } }, (a) => E.monsterView(a.monster));
 }
 
+// O chefe final (jogo/chefe-final.ts): um chefe principal 30% mais forte, sorteado igual.
+{
+  const DA_FLORESTA = ['goblin', 'lobo_sombras', 'aranha', 'slime'];
+  caso('generateBoss: o chefe final', 'generateBoss', { floor: 100, options: { species: DA_FLORESTA, main: true, final: true } }, (a, { rng }) =>
+    E.generateBoss(a.floor, { ...a.options, rng }), { rng: { seed: 9 } });
+  caso('generateBoss: o chefe final da Torre no Pesadelo', 'generateBoss', { floor: 331, options: { main: true, final: true } }, (a, { rng }) =>
+    E.generateBoss(a.floor, { ...a.options, rng }), { rng: { seed: 10 } });
+}
+
 // =====================================================================
 // combat
 // =====================================================================
@@ -2110,7 +2119,7 @@ constante('DIFFICULTIES', E.DIFFICULTIES);
 constante('DUNGEON_FLOORS', E.DUNGEON_FLOORS);
 constante('TOTEM_FLOORS', E.TOTEM_FLOORS);
 constante('DEFAULT_RUN', E.DEFAULT_RUN);
-constante('FLOORS_PER_TIER', E.FLOORS_PER_TIER);
+constante('FLOORS_PER_DUNGEON', E.FLOORS_PER_DUNGEON);
 
 // --- a ordenação que o grafo e o andar usam pra embaralhar ---
 
@@ -2202,10 +2211,12 @@ for (const [rows, cols, roomCount, seed] of [
 const TODAS_AS_MASMORRAS: DungeonRun[] = E.DUNGEONS.flatMap((d) => E.DIFFICULTIES.map((f) => ({ dungeon: d.id, difficulty: f.id })));
 for (const run of TODAS_AS_MASMORRAS) {
   caso(`tierOf: ${E.runKey(run)}`, 'tierOf', { run }, (a) => E.tierOf(a.run));
+  caso(`tierOffset: ${E.runKey(run)}`, 'tierOffset', { run }, (a) => E.tierOffset(a.run));
   caso(`runName: ${E.runKey(run)}`, 'runName', { run }, (a) => E.runName(a.run));
   caso(`runKey: ${E.runKey(run)}`, 'runKey', { run }, (a) => E.runKey(a.run));
   for (const floor of [1, 4, 100]) caso(`effectiveFloor: ${E.runKey(run)}, andar ${floor}`, 'effectiveFloor', { run, floor }, (a) => E.effectiveFloor(a.run, a.floor));
 }
+for (const floor of [-3, 0, 1, 2, 9, 10, 11, 78, 100, 155, 331]) caso(`monsterLevel: andar ${floor}`, 'monsterLevel', { floor }, (a) => E.monsterLevel(a.floor));
 for (const floor of [1, 19, 20, 40, 60, 80, 100]) caso(`isTotemFloor: ${floor}`, 'isTotemFloor', { floor }, (a) => E.isTotemFloor(a.floor));
 for (const [nome, raw] of [
   ['válido', { dungeon: 'torre', difficulty: 'pesadelo' }],
@@ -2369,6 +2380,9 @@ for (const nome of ['ROOM_COLS', 'ROOM_ROWS', 'TILE_UNITS', 'WALK_TICKS_PER_SECO
     caso(`roomLayout: portas ${rotulo(doors)}, com o conteúdo no centro`, 'roomLayout', { doors, objects: conteudo }, (a) => E.roomLayout(a.doors, a.objects));
   }
   caso('roomLayout: dois objetos', 'roomLayout', { doors: { N: true, W: true }, objects: [{ id: 'a', col: 2, row: 2 }, { id: 'b', col: 6, row: 4 }] }, (a) => E.roomLayout(a.doors, a.objects));
+  caso('roomLayout: com os cantos da Caverna', 'roomLayout', { doors: { N: true, S: true, E: true, W: true }, objects: conteudo, walls: E.paredesDaSala('caverna') }, (a) =>
+    E.roomLayout(a.doors, a.objects, a.walls),
+  );
 
   for (const [x, y] of [
     [0, 0],
@@ -2523,6 +2537,15 @@ for (const [floor, seed] of [
     caso(`signHint: grade feita à mão, placa em (${x}, ${y})`, 'signHint', { grid: grade, cell: { type: 'normal', x, y, doors: {} } }, (a) => E.signHint(a.grid, a.cell));
   }
   caso('signHint: sem escada, parede oca nem chefe', 'signHint', { grid: [[grade[0]![0]!]], cell: grade[0]![0]! }, (a) => E.signHint(a.grid, a.cell));
+}
+
+// O andar 100: o chefe é o chefe final.
+{
+  for (const run of [{ dungeon: 'floresta', difficulty: 'normal' }, { dungeon: 'caverna', difficulty: 'pesadelo' }] as const) {
+    caso(`generateDungeonFloor: o andar 100, ${E.runKey(run)}`, 'generateDungeonFloor', { floor: 100, rows: 6, cols: 6, options: { now: AGORA, run } }, (a, { rng, now }) =>
+      andarCompacto(E.generateDungeonFloor(a.floor, a.rows, a.cols, { ...a.options, rng, now })), { rng: { seed: 61 }, now: AGORA });
+  }
+
 }
 
 // =====================================================================
@@ -3321,6 +3344,13 @@ for (const [nome, portas, objetos] of [
 ] as const) {
   caso(`plantaDaSala: ${nome}`, 'plantaDaSala', { portas, objetos }, (a) => E.plantaDaSala(a.portas, a.objetos as boolean | RoomObject[]));
 }
+for (const [nome, portas, objetos, masmorra] of [
+  ['na Caverna, só o conteúdo', { N: true, S: true, E: true, W: true }, true, 'caverna'],
+  ['na Caverna, com extras', { N: true, W: true }, [conteudoDaSala, { id: 'extra-0', col: 1, row: 2 }, { id: 'extra-1', col: 7, row: 6 }], 'caverna'],
+  ['na Floresta, sala vazia', { E: true }, false, 'floresta'],
+] as const) {
+  caso(`plantaDaSala: ${nome}`, 'plantaDaSala', { portas, objetos, masmorra }, (a) => E.plantaDaSala(a.portas, a.objetos as boolean | RoomObject[], a.masmorra));
+}
 
 for (const [sobra, decorridoMs] of [
   [0, 16],
@@ -3423,7 +3453,19 @@ for (const [nome, celula, temConteudo] of [
 ] as const) {
   caso(`objetosDaSala: ${nome}`, 'objetosDaSala', { celula, temConteudo }, (a) => E.objetosDaSala(a.celula, a.temConteudo));
 }
+// Os cantos de cima dos extras são parede na Caverna: o baú de (1,1) e a placa de (7,1) descem uma casa.
+for (const [nome, celula, masmorra] of [
+  ['na Caverna, extras novos', salaCom(extrasNovos), 'caverna'],
+  ['na Caverna, extras usados', salaCom(extrasUsados), 'caverna'],
+  ['na Floresta, extras novos', salaCom(extrasNovos), 'floresta'],
+  ['na Torre, extras novos', salaCom(extrasNovos), 'torre'],
+] as const) {
+  caso(`objetosDaSala: ${nome}`, 'objetosDaSala', { celula, temConteudo: true, masmorra }, (a) => E.objetosDaSala(a.celula, a.temConteudo, a.masmorra));
+}
 for (const lado of E.DIR_ORDER) caso(`plantaDaSalaSecreta: parede ${lado}`, 'plantaDaSalaSecreta', { lado }, (a) => E.plantaDaSalaSecreta(a.lado));
+for (const lado of ['N', 'E'] as const) {
+  caso(`plantaDaSalaSecreta: parede ${lado}, na Caverna`, 'plantaDaSalaSecreta', { lado, masmorra: 'caverna' }, (a) => E.plantaDaSalaSecreta(a.lado, a.masmorra));
+}
 for (const [nome, celula, indice] of [
   ['baú cheio', salaCom(paredeAberta), 4],
   ['baú vazio', salaCom(extrasUsados), 4],
@@ -3939,10 +3981,15 @@ for (const [dungeon, portas] of [
   ['floresta', ['N']],
   ['floresta', ['S', 'W']],
   ['floresta', ['N', 'E', 'S', 'W']],
+  ['caverna', []],
   ['caverna', ['N', 'S']],
+  ['caverna', ['N', 'E', 'S', 'W']],
   ['torre', ['E']],
 ] as const) {
   caso(`camadasDaSala: ${dungeon}, ${portas.join('') || 'sem portas'}`, 'camadasDaSala', { dungeon, portas }, (a) => E.camadasDaSala(a.dungeon, a.portas));
+}
+for (const dungeon of ['floresta', 'caverna', 'torre', null] as const) {
+  caso(`paredesDaSala: ${dungeon ?? 'fora da masmorra'}`, 'paredesDaSala', { dungeon }, (a) => E.paredesDaSala(a.dungeon));
 }
 {
   const salas = E.generateCityLayout(6, 6).rooms;
@@ -4385,6 +4432,93 @@ for (const [nome, criacao, semente] of [
     rng: { seed: semente },
     now: AGORA,
   });
+}
+
+// ---------- o chefe final (jogo/chefe-final.ts) e o prêmio de quem zera (jogo/conquista.ts) ----------
+
+{
+  const DA_FLORESTA = ['goblin', 'lobo_sombras', 'aranha', 'slime'];
+  const final = (o: Partial<CombatMonster> = {}): CombatMonster => ({
+    ...E.freshCombatMonster(E.generateBoss(100, { rng: E.seededRng(9), species: DA_FLORESTA, main: true, final: true })),
+    ...o,
+  });
+  for (const [nome, monstro] of [
+    ['primeiro golpe', final()],
+    ['o terceiro golpe é o Golpe Devastador', final({ attackCount: 2 })],
+    ['o sexto é o Rugido', final({ attackCount: 5, poderes: 1 })],
+    ['na fúria, a cada 2', final({ attackCount: 1, furia: true })],
+    ['na fúria, golpe comum', final({ attackCount: 2, furia: true, poderes: 1 })],
+    ['chefe que não é o final', { ...final({ attackCount: 2 }), chefeFinal: undefined }],
+  ] as const) {
+    caso(`poderDaVez: ${nome}`, 'poderDaVez', { monstro }, (a) => E.poderDaVez(a.monstro));
+  }
+
+  const noFundo = (monsters: MonsterInstance[], o: Partial<EstadoNaMasmorra> = {}) =>
+    naSalaDaMasmorra({ ...chefe, monsters, monsterIndex: 0, beaten: false }, cidade.hero, [], { floor: E.DUNGEON_FLOORS, ...o });
+  const salaDo = (estado: EstadoNaMasmorra) => E.celulaAtual(estado) as DungeonCell;
+  const fresco = final();
+  const sozinho = noFundo([fresco]);
+  const chamou = E.ferirMonstro(sozinho, 0, { ...fresco, hp: 0 }, E.seededRng(3)).estado;
+  const comLacaios = salaDo(chamou).monsters as CombatMonster[];
+  const semLacaios = noFundo(comLacaios.map((m, i) => (i === 0 ? m : { ...m, hp: 0 })));
+  const furioso = E.enfurecer(semLacaios).estado;
+  const comum = E.freshCombatMonster((umMonstro.monsters ?? [])[0] as MonsterInstance);
+  for (const [nome, estado, indice, depois, seed] of [
+    ['monstro comum', naSalaDaMasmorra(umMonstro), 0, { ...comum, hp: 1 }, 1],
+    ['o chefe perde vida, longe da metade', sozinho, 0, { ...fresco, hp: fresco.hp - 7 }, 2],
+    ['o chefe passaria da metade: para nela e chama os lacaios', sozinho, 0, { ...fresco, hp: -5 }, 3],
+    ['no Pesadelo da Caverna, os lacaios são de lá', noFundo([fresco], { masmorra: { dungeon: 'caverna', difficulty: 'pesadelo' } }), 0, { ...fresco, hp: 0 }, 4],
+    ['protegido pelos lacaios', chamou, 0, { ...(comLacaios[0] as CombatMonster), hp: 1 }, 5],
+    ['golpe num lacaio', chamou, 2, { ...(comLacaios[2] as CombatMonster), hp: 0 }, 6],
+    ['sem dano, nada muda', chamou, 0, comLacaios[0] as CombatMonster, 7],
+    ['depois dos lacaios, abaixo da metade, cai de verdade', furioso, 0, { ...(salaDo(furioso).monsters?.[0] as CombatMonster), hp: 0 }, 8],
+  ] as const) {
+    caso(`ferirMonstro: ${nome}`, 'ferirMonstro', { estado, indice, depois }, (a, ctx) => E.ferirMonstro(a.estado, a.indice, a.depois as CombatMonster, ctx.rng), { rng: { seed } });
+  }
+  for (const [nome, estado] of [
+    ['sozinho', sozinho],
+    ['com os lacaios', chamou],
+    ['lacaios caídos', semLacaios],
+    ['sala comum', naSalaDaMasmorra(grupo)],
+  ] as const) {
+    const sala = salaDo(estado);
+    caso(`lacaiosDePe: ${nome}`, 'lacaiosDePe', { sala }, (a) => E.lacaiosDePe(a.sala));
+    for (const indice of [0, 1]) caso(`protegido: ${nome}, ${indice}`, 'protegido', { sala, indice }, (a) => E.protegido(a.sala, a.indice));
+    caso(`inimigosDaLuta: chefe final, ${nome}`, 'inimigosDaLuta', { estado }, (a) => E.inimigosDaLuta(a.estado));
+    caso(`enfurecer: ${nome}`, 'enfurecer', { estado }, (a) => E.enfurecer(a.estado));
+  }
+  caso('enfurecer: já furioso', 'enfurecer', { estado: furioso }, (a) => E.enfurecer(a.estado));
+  caso('inimigosDaLuta: o chefe final avisa o Golpe Devastador', 'inimigosDaLuta', { estado: noFundo([final({ attackCount: 2 })]) }, (a) => E.inimigosDaLuta(a.estado));
+
+  const lacaioCaido = { ...(comLacaios[1] as CombatMonster), hp: 0 };
+  caso('pagarAbate: um lacaio do chefe final, sem ouro', 'pagarAbate', { estado: chamou, abatido: E.monsterView(lacaioCaido) }, (a) => E.pagarAbate(a.estado, a.abatido));
+  const ultimoGolpe = noFundo([{ ...(salaDo(furioso).monsters?.[0] as CombatMonster), hp: 0 }]);
+  caso('limparSala: no app, o chefe final zera a masmorra', 'limparSala', { estado: { ...ultimoGolpe, mapRows: 6, mapCols: 6 }, abatido: E.monsterView({ ...fresco, hp: 0 }), app: true }, (a, ctx) =>
+    E.limparSala(a.estado, a.abatido, ctx.rng, ctx.now, a.app), { rng: { seed: 71 }, now: AGORA });
+
+  for (const masmorra of E.DUNGEONS) {
+    for (const dificuldade of E.DIFFICULTIES) {
+      const run = { dungeon: masmorra.id, difficulty: dificuldade.id };
+      caso(`tituloDe: ${E.runKey(run)}`, 'tituloDe', { run }, (a) => E.tituloDe(a.run));
+    }
+  }
+  for (const [nome, cleared] of [
+    ['nada zerado', []],
+    ['a Floresta no Normal', ['floresta:normal']],
+    ['Normal e Difícil', ['floresta:normal', 'floresta:dificil']],
+    ['empate de degrau: a masmorra mais adiante', ['floresta:normal', 'floresta:dificil', 'floresta:pesadelo', 'caverna:normal']],
+    ['a Torre no Pesadelo', ['torre:pesadelo', 'floresta:normal']],
+  ] as const) {
+    caso(`tituloDoHeroi: ${nome}`, 'tituloDoHeroi', { progresso: { cleared, totems: {} } }, (a) => E.tituloDoHeroi(a.progresso as DungeonProgress));
+  }
+  for (const andar of [1, 100, 177, 331]) caso(`ouroDoBau: força ${andar}`, 'ouroDoBau', { andar }, (a) => E.ouroDoBau(a.andar));
+  for (const [nome, estado, app, seed] of [
+    ['no site, Floresta Normal', noFundo([fresco]), false, 81],
+    ['no app, Caverna Normal', noFundo([fresco], { masmorra: { dungeon: 'caverna', difficulty: 'normal' } }), true, 82],
+  ] as const) {
+    caso(`abrirBauDoChefe: ${nome}`, 'abrirBauDoChefe', { estado, app }, (a, ctx) => E.abrirBauDoChefe(a.estado, ctx.rng, ctx.now, a.app), { rng: { seed }, now: AGORA });
+  }
+
 }
 
 // =====================================================================
@@ -4859,6 +4993,48 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     const luta = noPc ? E.abrirLuta(estado, E.roomArrival(E.DIR_ORDER[i % 4] as Direction), null, true).luta : abrir(estado, E.DIR_ORDER[i % 4] as Direction);
     simula(`robô ${i}${noPc ? ' no PC' : ''}: ${classe} contra ${monsters.map((m) => m.speciesId).join(', ')}`, luta, entradas, { seed: 950 + i });
   }
+}
+
+// ---------- o chefe final na arena (jogo/chefe-final.ts) ----------
+
+{
+  const DA_FLORESTA = ['goblin', 'lobo_sombras', 'aranha', 'slime'];
+
+  const final = (o: Partial<CombatMonster> = {}): CombatMonster => ({
+    ...E.freshCombatMonster(E.generateBoss(100, { rng: E.seededRng(9), species: DA_FLORESTA, main: true, final: true })),
+    ...o,
+  });
+  const noFundo = (monsters: MonsterInstance[], o: Partial<EstadoNaMasmorra> = {}) =>
+    naSalaDaMasmorra({ ...chefe, monsters, monsterIndex: 0, beaten: false }, cidade.hero, [], { floor: E.DUNGEON_FLOORS, ...o });
+  const salaDo = (estado: EstadoNaMasmorra) => E.celulaAtual(estado) as DungeonCell;
+  const fresco = final();
+  const chamou = E.ferirMonstro(noFundo([fresco]), 0, { ...fresco, hp: 0 }, E.seededRng(3)).estado;
+  const semLacaios = noFundo((salaDo(chamou).monsters as CombatMonster[]).map((m, i) => (i === 0 ? m : { ...m, hp: 0 })));
+  const furioso = E.enfurecer(semLacaios).estado;
+  // A arena: o chefe final de verdade, contra um herói forte, com e sem companheiros.
+  const forte = { ...heroi({ classe: 'guerreiro', level: 90 }), hp: 5000, maxHp: 5000 };
+  const simula = (nome: string, luta: LutaEmTempoReal, entradas: EntradaDaLuta[], seed: number) =>
+    caso(`simularLuta: ${nome}`, 'simularLuta', { luta, entradas }, (a, ctx) => E.simularLuta(a.luta, a.entradas, ctx.rng, ctx.now), { rng: { seed }, now: AGORA });
+  const rodando = (n: number): EntradaDaLuta[] =>
+    Array.from({ length: n }, (_, i) => {
+      const fase = Math.floor(i / 35) % 4;
+      return { x: fase === 0 ? 127 : fase === 2 ? -127 : 0, y: fase === 1 ? 127 : fase === 3 ? -127 : 0 };
+    });
+  const abrir = (estado: EstadoNaMasmorra) => E.abrirLuta(estado, E.roomArrival('N')).luta;
+  const naArena = (monsters: MonsterInstance[], party: Companion[] = []) => ({ ...noFundo(monsters), hero: forte, party });
+
+  simula('chefe final: os poderes, com companheiros', abrir(naArena([final()], [companheiro('guerreiro', { hp: 900, maxHp: 900 }), companheiro('clerigo', { hp: 900, maxHp: 900 })])), rodando(1400), 91);
+  simula('chefe final: furioso, depois dos lacaios', abrir(naArena([{ ...(salaDo(furioso).monsters?.[0] as CombatMonster) }])), rodando(600), 92);
+  // O dano contínuo que passa da metade: os lacaios entram no palco.
+  const queimando = abrir(naArena([final()]));
+  const salaQueimando = salaDo(queimando.estado as EstadoNaMasmorra);
+  const bossQueimando = { ...(salaQueimando.monsters?.[0] as CombatMonster), hp: Math.floor(fresco.maxHp / 2) + 3, status: { queimadura: { turns: 3, dmg: 6 } } };
+  const lutaQueimando = { ...queimando, estado: E.substituirCelulaAtual(queimando.estado as EstadoNaMasmorra, { ...salaQueimando, monsters: [bossQueimando] }) };
+  simula('chefe final: o dano contínuo chama os lacaios', lutaQueimando, rodando(E.RODADA + 240), 93);
+  // Com os lacaios de pé: ataques no chefe protegido e nos lacaios.
+  const atacando = (n: number): EntradaDaLuta[] =>
+    rodando(n).map((e, i) => (i % 40 === 0 ? { ...e, atacar: true, mirar: Math.floor(i / 40) % 5 } : i % 7 === 3 ? { ...e, tocar: true } : e));
+  simula('chefe final: protegido pelos lacaios', abrir({ ...chamou, hero: forte }), atacando(900), 94);
 }
 
 // =====================================================================

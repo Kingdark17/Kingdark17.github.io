@@ -1522,3 +1522,30 @@
     padding: 0;
     -unity-text-align: middle-center;
 }
+
+/* O chefe final chama 4 lacaios (ChefeFinal): até cinco monstros no palco, menores e com a placa enxuta. */
+.grupo-de-cinco .figura-do-lutador {
+    font-size: 64px;
+}
+
+.grupo-de-cinco .lutador-chefe .figura-do-lutador {
+    font-size: 100px;
+}
+
+.grupo-de-cinco .placa-da-luta {
+    width: 98%;
+    padding: 3px 3px 4px 3px;
+}
+
+.grupo-de-cinco .nome-do-lutador {
+    font-size: 15px;
+}
+
+.grupo-de-cinco .subtitulo-do-lutador,
+.grupo-de-cinco .vez-do-lutador {
+    font-size: 12px;
+}
+
+.grupo-de-cinco .marcador-da-luta {
+    font-size: 11px;
+}

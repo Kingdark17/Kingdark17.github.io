@@ -100,11 +100,14 @@ namespace RPGLegend.Engine
 
         /// <summary>
         /// TS: objetosDaSala — o conteúdo no centro (quando há) e os extras que ainda ocupam lugar. Vaso quebrado
-        /// some; parede aberta deixa de ser objeto e vira vão.
+        /// some; parede aberta deixa de ser objeto e vira vão. O extra que caiu numa casa que a arte da masmorra faz de
+        /// parede (os cantos da Caverna) anda rumo ao meio da sala até sair dela.
         /// </summary>
-        public static List<RoomObject> ObjetosDaSala(RoomCell celula, bool temConteudo)
+        public static List<RoomObject> ObjetosDaSala(RoomCell celula, bool temConteudo, string masmorra = null)
         {
             var objetos = temConteudo ? new List<RoomObject> { AndarNaSala.Conteudo() } : new List<RoomObject>();
+            var paredes = ArteDaSala.ParedesDaSala(masmorra);
+            var meio = GameData.RoomWalkTable.ContentTile.Row;
             var extras = ExtrasDe(celula);
             for (int indice = 0; indice < extras.Count; indice++)
             {
@@ -114,18 +117,30 @@ namespace RPGLegend.Engine
                 // A parede rachada fica no vão do lado dela, e não na casa gravada: o andar gravado quando a sala era
                 // 9 × 7 a guardou no vão de lá.
                 var vao = extra.Kind == "crack" && !string.IsNullOrEmpty(extra.Side) ? RoomWalk.DoorTile[extra.Side] : null;
-                objetos.Add(new RoomObject { Id = IdDoExtra(indice), Col = vao?.Col ?? extra.Col, Row = vao?.Row ?? extra.Row });
+                double col = vao?.Col ?? extra.Col;
+                double row = vao?.Row ?? extra.Row;
+                int rumo = Math.Sign(meio - row);
+                while (rumo != 0 && NaParede(paredes, col, row)) row += rumo;
+                objetos.Add(new RoomObject { Id = IdDoExtra(indice), Col = col, Row = row });
             }
             return objetos;
         }
 
+        private static bool NaParede(List<TileRef> paredes, double col, double row)
+        {
+            foreach (var parede in paredes)
+                if (parede.Col == col && parede.Row == row) return true;
+            return false;
+        }
+
         /// <summary>TS: plantaDaSalaSecreta — uma porta só, de volta pra sala da parede, e o baú no centro.</summary>
-        public static RoomLayout PlantaDaSalaSecreta(string ladoDaParede)
+        public static RoomLayout PlantaDaSalaSecreta(string ladoDaParede, string masmorra = null)
         {
             var portas = new DoorMap();
             portas.Set(Directions.Opposite.Get(ladoDaParede), true);
             var centro = GameData.RoomWalkTable.ContentTile;
-            return RoomWalk.Layout(portas, new List<RoomObject> { new RoomObject { Id = IdDoBauSecreto, Col = centro.Col, Row = centro.Row } });
+            return RoomWalk.Layout(portas, new List<RoomObject> { new RoomObject { Id = IdDoBauSecreto, Col = centro.Col, Row = centro.Row } },
+                ArteDaSala.ParedesDaSala(masmorra));
         }
 
         private static ResultadoDoExtra Resultado(EstadoNaMasmorra estado, string icone, string titulo, string texto, string som = null) =>

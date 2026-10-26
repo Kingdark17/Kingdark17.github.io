@@ -36,13 +36,13 @@ describe('o que o portão mostra', () => {
   it('Caverna e Torre aparecem fechadas, com o que falta', () => {
     expect(masmorras(abrirPortao(cidade(1))).map((m) => [m.id, m.falta])).toEqual([
       ['floresta', null],
-      ['caverna', 'Nível 15'],
-      ['torre', 'Nível 30'],
+      ['caverna', 'Nível 70'],
+      ['torre', 'Nível 140'],
     ]);
   });
 
   it('com o nível mas sem a Floresta zerada, diz o que zerar', () => {
-    expect(masmorras(abrirPortao(cidade(20))).find((m) => m.id === 'caverna')?.falta).toBe('Zere a Floresta no Normal');
+    expect(masmorras(abrirPortao(cidade(80))).find((m) => m.id === 'caverna')?.falta).toBe('Zere a Floresta no Normal');
   });
 
   it('as dificuldades dizem qual zerar antes', () => {
@@ -58,7 +58,7 @@ describe('escolher', () => {
 
   it('trocar de masmorra leva a dificuldade mais alta aberta nela', () => {
     const progresso = markCleared(markCleared({ cleared: [], totems: {} }, FLORESTA), { dungeon: 'caverna', difficulty: 'normal' });
-    const portao = escolherMasmorra(abrirPortao(cidade(20, progresso)), 'caverna');
+    const portao = escolherMasmorra(abrirPortao(cidade(80, progresso)), 'caverna');
     expect(portao.escolha).toEqual({ dungeon: 'caverna', difficulty: 'dificil' });
   });
 

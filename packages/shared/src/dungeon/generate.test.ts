@@ -155,13 +155,13 @@ describe('generateDungeonFloor — masmorras (2026-10)', () => {
     }
   });
 
-  it('os monstros nascem com o andar de força: o 1 da Caverna é o 15', () => {
+  it('os monstros nascem com o andar de força: o 1 da Caverna é o 78', () => {
     const monstros = monstrosDe(generateDungeonFloor(1, 6, 6, { rng: seededRng(3), run: CAVERNA }));
     expect(monstros.length).toBeGreaterThan(0);
-    for (const m of monstros) expect(m.floor).toBe(15);
+    for (const m of monstros) expect(m.floor).toBe(78);
   });
 
-  it('chefe principal pelo andar real: o 10 da Caverna é andar de força 24 e ainda é chefe principal', () => {
+  it('chefe principal pelo andar real: o 10 da Caverna é andar de força 87 e ainda é chefe principal', () => {
     const chefe = (andar: number) => generateDungeonFloor(andar, 6, 6, { rng: seededRng(5), run: CAVERNA }).rooms.find((r) => r.type === 'boss')?.monsters?.[0];
     expect(chefe(10)?.isMainBoss).toBe(true);
     expect(chefe(15)?.isMainBoss).toBe(false);

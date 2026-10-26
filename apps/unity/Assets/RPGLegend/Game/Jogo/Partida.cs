@@ -63,6 +63,8 @@ namespace RPGLegend.Game.Jogo
         public event Action<List<Acontecimento>> NaLuta;
         /// <summary>A luta acabou, com o herói neste ponto da sala (a cena continua dali, se a sala for a mesma).</summary>
         public event Action<Walker> LutaAcabou;
+        /// <summary>O chefe final caiu e a masmorra foi zerada: a tela de vitória (<see cref="Conquistas"/>).</summary>
+        public event Action<Conquista> Zerou;
 
         public Partida(int slot, EstadoDoJogo estado, string assinatura)
         {
@@ -321,12 +323,26 @@ namespace RPGLegend.Game.Jogo
                     if (a.Tipo == "diario" && a.Texto != null) linhas.Add(a.Texto);
                 aviso = new Aviso("💀", "Derrota", string.Join(" ", linhas));
             }
+            else if (final.Conquista != null)
+            {
+                // A masmorra zerada tem a tela de vitória dela (TelaDeJogo): o diário guarda a conquista, e a caixa de
+                // aviso fica livre.
+                var c = final.Conquista;
+                Diario = Engine.Diario.Anotar(Diario, new Anotacao
+                {
+                    Icone = "🏆",
+                    Titulo = c.Nome + " zerada!",
+                    Texto = "Você venceu " + c.Chefe + ". No baú do chefe: <b>" + Items.DisplayName(c.Item) + "</b> e " + Js.NumberToString(c.Ouro) + " de ouro. Título conquistado: " + c.Titulo + ".",
+                });
+                aviso = null;
+            }
             else
             {
                 aviso = new Aviso("🏆", "Vitória", "Você venceu a batalha!" + (final.Loot != null ? " Encontrou <b>" + Items.DisplayName(final.Loot) + "</b>." : ""));
             }
             LutaAcabou?.Invoke(final.Arena.Chegada);
             RegistrarMudanca(final.Estado, aviso);
+            if (final.Conquista != null) Zerou?.Invoke(final.Conquista);
         }
 
         // ---------- telas por cima da sala ----------

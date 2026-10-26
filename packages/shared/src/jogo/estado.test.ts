@@ -274,7 +274,7 @@ describe('masmorras (2026-10)', () => {
 
   it('o andar de força soma o degrau da masmorra', () => {
     const naCaverna = entrarNaMasmorra(estadoNovo(), seededRng(4), { dungeon: 'caverna', difficulty: 'normal' });
-    expect(andarDeForca(naCaverna)).toBe(15);
+    expect(andarDeForca(naCaverna)).toBe(78);
   });
 
   it('entrar por um totem começa naquele andar', () => {

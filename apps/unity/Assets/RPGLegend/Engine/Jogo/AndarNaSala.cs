@@ -87,12 +87,16 @@ namespace RPGLegend.Engine
             return new RoomObject { Id = IdDoConteudo, Col = centro.Col, Row = centro.Row };
         }
 
-        /// <summary>TS: plantaDaSala com <c>true</c>/<c>false</c> — só o conteúdo no centro, ou nada.</summary>
-        public static RoomLayout PlantaDaSala(DoorMap portas, bool comConteudo) =>
-            RoomWalk.Layout(portas, comConteudo ? new List<RoomObject> { Conteudo() } : new List<RoomObject>());
+        /// <summary>
+        /// TS: plantaDaSala com <c>true</c>/<c>false</c> — só o conteúdo no centro, ou nada. A masmorra traz as paredes
+        /// que a arte dela põe dentro da sala.
+        /// </summary>
+        public static RoomLayout PlantaDaSala(DoorMap portas, bool comConteudo, string masmorra = null) =>
+            RoomWalk.Layout(portas, comConteudo ? new List<RoomObject> { Conteudo() } : new List<RoomObject>(), ArteDaSala.ParedesDaSala(masmorra));
 
         /// <summary>TS: plantaDaSala com a lista — o conteúdo e os extras (ver <see cref="ExtrasDaSala.ObjetosDaSala"/>).</summary>
-        public static RoomLayout PlantaDaSala(DoorMap portas, IReadOnlyList<RoomObject> objetos) => RoomWalk.Layout(portas, objetos);
+        public static RoomLayout PlantaDaSala(DoorMap portas, IReadOnlyList<RoomObject> objetos, string masmorra = null) =>
+            RoomWalk.Layout(portas, objetos, ArteDaSala.ParedesDaSala(masmorra));
 
         /// <summary>TS: passosDoQuadro — quantos passos cabem no tempo que passou, e o que sobra pro próximo quadro.</summary>
         public static PassosDoQuadro PassosDoQuadro(double sobra, double decorridoMs)

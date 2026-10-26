@@ -149,6 +149,7 @@ namespace RPGLegend.Game.Jogo
             _partida.Som += Sons.Tocar;
             _partida.NaLuta += MostrarAcontecimentos;
             _partida.LutaAcabou += AoAcabarALuta;
+            _partida.Zerou += AbrirVitoria;
             _partida.PosicaoDoHeroi = () => _sala?.Walker;
 
             if (_sala == null)
@@ -651,13 +652,15 @@ namespace RPGLegend.Game.Jogo
                 _volta = 0;
             }
 
+            // A masmorra da sala: a arte dela e as paredes que ela põe dentro (os cantos da Caverna).
+            var masmorra = estado.MapMode == "dungeon" ? estado.Masmorra?.Dungeon : null;
             RoomLayout planta;
             Dictionary<string, Figura> figuras;
             string chave;
             Walker chegada;
             if (secreta != null)
             {
-                planta = ExtrasDaSala.PlantaDaSalaSecreta(secreta.Lado);
+                planta = ExtrasDaSala.PlantaDaSalaSecreta(secreta.Lado, masmorra);
                 figuras = FigurasDaSala.Da(celula, null, secreta.Indice);
                 chave = salaAgora + "#secreta";
                 chegada = RoomWalk.Arrival(secreta.Lado);
@@ -670,7 +673,7 @@ namespace RPGLegend.Game.Jogo
                     if (celula?.Doors != null && celula.Doors.TryGet(d, out var aberta) && aberta) portas.Set(d, true);
                 var passagem = ExtrasDaSala.PassagemSecreta(celula);
                 if (passagem != null) portas.Set(passagem.Lado, true);
-                planta = AndarNaSala.PlantaDaSala(portas, ExtrasDaSala.ObjetosDaSala(celula, icone != ""));
+                planta = AndarNaSala.PlantaDaSala(portas, ExtrasDaSala.ObjetosDaSala(celula, icone != "", masmorra), masmorra);
                 var conteudo = icone == "" ? null : new Figura { Arte = FigurasDaSala.ArteDoTipo(celula.Type), Emoji = icone };
                 figuras = FigurasDaSala.Da(celula, conteudo, null);
                 chave = salaAgora + "#" + _volta;
@@ -679,7 +682,7 @@ namespace RPGLegend.Game.Jogo
 
             var heroi = estado.Hero;
             _sala.DefinirHeroi(Catalog.IdDaRaca(heroi.RaceId, heroi.Race), string.IsNullOrEmpty(heroi.RaceIcon) ? "🙂" : heroi.RaceIcon);
-            _sala.Mostrar(chave, planta, TemaDaSala.Do(estado), figuras, chegada, estado.MapMode == "dungeon" ? estado.Masmorra?.Dungeon : null);
+            _sala.Mostrar(chave, planta, TemaDaSala.Do(estado), figuras, chegada, masmorra);
         }
 
         // ---------- janelas por cima ----------
@@ -805,8 +808,8 @@ namespace RPGLegend.Game.Jogo
                 ("SIM, SAIR", Sair), ("CONTINUAR JOGANDO", FecharJanela));
         }
 
-        /// <summary>A janela aberta não é tela de sala: o diário, o guia, a ficha ou a pergunta de saída.</summary>
-        private bool JanelaSemTela => _janela == "diario" || _janela == "guia" || _janela == "ficha" || _janela == "saida";
+        /// <summary>A janela aberta não é tela de sala: o diário, o guia, a ficha, a pergunta de saída ou a vitória de quem zera.</summary>
+        private bool JanelaSemTela => _janela == "diario" || _janela == "guia" || _janela == "ficha" || _janela == "saida" || _janela == "vitoria";
 
         private void FecharJanela()
         {

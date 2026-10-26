@@ -66,6 +66,7 @@ import {
   roomArrival,
   TEXTO_DA_CIDADE,
   textoDaSecreta,
+  tituloDoHeroi,
   tocarExtra,
   troncosNoCaminho,
   vizinhaEm,
@@ -228,6 +229,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const salaAgora = estado ? (estado.mapMode === 'city' ? `${mapaAgora}:cidade` : `${mapaAgora}:${estado.pos.x},${estado.pos.y}`) : '';
   /** Os troncos no caminho da caverna, na cidade; `null` na masmorra. */
   const troncosAgora = estado?.mapMode === 'city' ? troncosNoCaminho(estado) : null;
+  /** A masmorra da sala, pra arte e pras paredes que ela põe dentro (`paredesDaSala`); `null` na cidade. */
+  const masmorraAgora = estado?.mapMode === 'dungeon' ? estado.masmorra.dungeon : null;
+  /** O título da maior conquista, no cartão de guilda (`conquista.ts`). */
+  const tituloAgora = estado ? tituloDoHeroi(estado.progresso) : null;
   const portasAgora = (['N', 'S', 'E', 'W'] as const).filter((d) => celulaAgora?.doors?.[d]).join('');
   const iconeAgora = estado && celulaAgora ? apresentacaoDe(estado).icone(celulaAgora) : '';
   const arteAgora = iconeAgora ? arteDoTipo(celulaAgora?.type) : null;
@@ -237,7 +242,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   // Os extras da sala (`extras.ts`): baú pequeno, vaso, placa, parede
   // rachada. Tudo o que sai da célula vira texto aqui, antes das
   // memorizações: as plantas e as figuras só mudam quando o texto muda.
-  const objetosAgora = chaveDosObjetos(celulaAgora, iconeAgora !== '');
+  const objetosAgora = chaveDosObjetos(celulaAgora, iconeAgora !== '', masmorraAgora);
   const extrasAgora = assinaturaDosExtras(celulaAgora);
   const ladoDaPassagem = passagemSecreta(celulaAgora)?.lado ?? null;
 
@@ -252,10 +257,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
 
   const planta = useMemo(() => {
     if (troncosAgora !== null) return plantaDaCidade(troncosAgora);
-    if (ladoDaSecreta) return plantaDaSalaSecreta(ladoDaSecreta);
+    if (ladoDaSecreta) return plantaDaSalaSecreta(ladoDaSecreta, masmorraAgora);
     const portas = Object.fromEntries([...portasAgora, ...(ladoDaPassagem ? [ladoDaPassagem] : [])].map((d) => [d, true]));
-    return plantaDaSala(portas, lerObjetos(objetosAgora));
-  }, [troncosAgora, ladoDaSecreta, portasAgora, ladoDaPassagem, objetosAgora]);
+    return plantaDaSala(portas, lerObjetos(objetosAgora), masmorraAgora);
+  }, [troncosAgora, ladoDaSecreta, portasAgora, ladoDaPassagem, objetosAgora, masmorraAgora]);
   const figuras = useMemo(
     () => figurasDaSala(iconeAgora ? { arte: arteAgora, emoji: iconeAgora } : null, extrasAgora, secretaAgora?.indice ?? null),
     [iconeAgora, arteAgora, extrasAgora, secretaAgora?.indice],
@@ -946,7 +951,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   if (guiaAberto) {
     return (
       <div className={styles.conteudo}>
-        <PainelHeroi hero={estado.hero} />
+        <PainelHeroi hero={estado.hero} titulo={tituloAgora} />
         <TelaGuia estado={estado} onFechar={() => setGuiaAberto(false)} />
         {enfeites}
       </div>
@@ -959,7 +964,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   if (diarioAberto) {
     return (
       <div className={styles.conteudo}>
-        <PainelHeroi hero={estado.hero} />
+        <PainelHeroi hero={estado.hero} titulo={tituloAgora} />
         <TelaDiario anotacoes={diario} onFechar={() => setDiarioAberto(false)} />
         {enfeites}
       </div>
@@ -974,6 +979,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
             com o padrão e o boneco não gira — não há o que girar por. */}
         <PainelHeroi
           hero={estado.hero}
+          titulo={tituloAgora}
           golpes={golpes}
           onPonto={
             tela.tipo === 'mochila'
@@ -1000,7 +1006,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
 
   return (
     <div className={styles.conteudo}>
-      <PainelHeroi hero={estado.hero} />
+      <PainelHeroi hero={estado.hero} titulo={tituloAgora} />
 
       <section className={styles.exploracao}>
         {/* A narração vem antes do mapa no HTML, e não só no desenho: é o
@@ -1015,7 +1021,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               planta={planta}
               cidade={troncosAgora === null ? null : { troncos: troncosAgora }}
               tema={TEMAS[estado.mapMode === 'dungeon' ? estado.masmorra.dungeon : 'cidade']}
-              masmorra={estado.mapMode === 'dungeon' ? estado.masmorra.dungeon : null}
+              masmorra={masmorraAgora}
               figuras={figuras}
               heroi={heroiNaCena}
               chegada={chegadaDaCena}

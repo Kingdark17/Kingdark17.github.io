@@ -9,8 +9,8 @@
  *   o chefe do andar 100;
  * - a dificuldade é escolhida no portão (Normal, Difícil, Pesadelo), e
  *   zerar uma libera a seguinte da mesma masmorra;
- * - Floresta pede nível 1, Caverna 15 e Torre 30, além de a anterior estar
- *   zerada no Normal;
+ * - cada uma pede um nível mínimo, além de a anterior estar zerada no
+ *   Normal (eram 1, 15 e 30; desde 2026-10-25, 1, 70 e 140, ver abaixo);
  * - a força segue a escada que ele descreveu — "a Floresta no Pesadelo tem
  *   a dificuldade dos 4 primeiros andares da Caverna no Normal, e a Caverna
  *   no Pesadelo a dos 4 primeiros da Torre" — **só nos começos**: dentro de
@@ -18,6 +18,13 @@
  * - um totem nos andares 20, 40, 60 e 80 guarda o ponto de volta, por
  *   masmorra e dificuldade;
  * - os monstros de hoje se dividem por masmorra, com repetição.
+ *
+ * Em 2026-10-25, depois de o Breno zerar a Floresta (nível 80, "nivel min
+ * dos bixo da caverna deve ser 70 no modo normal"), o usuário decidiu: os
+ * monstros ganham nível (`monsterLevel`), a Caverna Normal começa com
+ * monstros de nível 70, a escada continua valendo (o degrau cresceu, ver
+ * `FLOORS_PER_DUNGEON`) e a entrada pede o nível dos monstros do primeiro
+ * andar: 70 a Caverna, 140 a Torre.
  *
  * Aqui só tem regra e dado. Gerar o andar é de `generate.ts`; o portão, o
  * totem e o save são de quem orquestra.
@@ -30,6 +37,7 @@ export interface DungeonDef {
   id: DungeonId;
   name: string;
   icon: string;
+  /** O nível dos monstros do primeiro andar no Normal (`monsterLevel(effectiveFloor(normal, 1))`). */
   minLevel: number;
   /** A masmorra que precisa estar zerada, no Normal, antes desta abrir. */
   requires: DungeonId | null;
@@ -39,8 +47,8 @@ export interface DungeonDef {
 
 export const DUNGEONS: readonly DungeonDef[] = [
   { id: 'floresta', name: 'Floresta', icon: '🌲', minLevel: 1, requires: null, species: ['goblin', 'lobo_sombras', 'aranha', 'slime'] },
-  { id: 'caverna', name: 'Caverna', icon: '🦇', minLevel: 15, requires: 'floresta', species: ['morcego', 'esqueleto', 'orc', 'zumbi', 'aranha'] },
-  { id: 'torre', name: 'Torre', icon: '🗼', minLevel: 30, requires: 'caverna', species: ['elemental_fogo', 'espectro_gelado', 'esqueleto', 'orc'] },
+  { id: 'caverna', name: 'Caverna', icon: '🦇', minLevel: 70, requires: 'floresta', species: ['morcego', 'esqueleto', 'orc', 'zumbi', 'aranha'] },
+  { id: 'torre', name: 'Torre', icon: '🗼', minLevel: 140, requires: 'caverna', species: ['elemental_fogo', 'espectro_gelado', 'esqueleto', 'orc'] },
 ];
 
 export interface DifficultyDef {
@@ -104,18 +112,26 @@ export function tierOf(run: DungeonRun): number {
 }
 
 /**
- * Andares de antes que cada degrau soma. Com 7, a Caverna Normal começa na
- * força do andar 15 da masmorra antiga e a Torre Normal na do 29 — onde
- * chegava, jogando direto, quem tinha os níveis mínimos delas (15 e 30).
+ * Andares de força entre o começo de uma masmorra e o da seguinte, no
+ * Normal; cada dificuldade sobe meio disso, e o Pesadelo de uma cai no
+ * Normal da seguinte (a escada do usuário). Com 77, a Caverna Normal começa
+ * na força 78 — monstros de nível 70, o que o Breno pediu — e a Torre Normal
+ * na 155, nível 140. Até 2026-10-25 eram 7 andares por degrau (a Caverna
+ * começava na força 15).
  */
-export const FLOORS_PER_TIER = 7;
+export const FLOORS_PER_DUNGEON = 77;
+
+/** Quantos andares de força o degrau desta masmorra nesta dificuldade soma: 0, 39, 77, 116, 154, 193, 231. */
+export function tierOffset(run: DungeonRun): number {
+  return Math.floor((tierOf(run) * FLOORS_PER_DUNGEON + 1) / 2);
+}
 
 /**
  * O andar que os monstros, o ouro e os itens enxergam. Dentro da masmorra
  * sobe um por andar, como sempre subiu; o degrau só muda onde ela começa.
  */
 export function effectiveFloor(run: DungeonRun, floor: number): number {
-  return floor + tierOf(run) * FLOORS_PER_TIER;
+  return floor + tierOffset(run);
 }
 
 export function isTotemFloor(floor: number): boolean {

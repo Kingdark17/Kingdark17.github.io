@@ -20,6 +20,8 @@ namespace RPGLegend.Engine.Json
             GameData.SalaTable = JsSerializer.Parse<SalaData>(readTable("jogo/sala"));
             GameData.CidadeTable = JsSerializer.Parse<CidadeData>(readTable("jogo/cidade"));
             GameData.FimDaLutaTable = JsSerializer.Parse<FimDaLutaData>(readTable("jogo/fim-da-luta"));
+            GameData.ChefeFinalTable = JsSerializer.Parse<ChefeFinalData>(readTable("jogo/chefe-final"));
+            GameData.ConquistaTable = JsSerializer.Parse<ConquistaData>(readTable("jogo/conquista"));
         }
     }
 }

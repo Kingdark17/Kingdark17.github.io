@@ -9,6 +9,8 @@ namespace RPGLegend.Engine
         [JsName("PIXELS_DA_SALA")] public double PixelsDaSala;
         /// <summary>As camadas de cada masmorra que tem arte, na ordem em que se desenham.</summary>
         [JsName("CAMADAS_DAS_SALAS")] public OrderedMap<List<CamadaDaSala>> CamadasDasSalas = new OrderedMap<List<CamadaDaSala>>();
+        /// <summary>As casas de dentro que a arte faz de parede, além da borda (os cantos da Caverna).</summary>
+        [JsName("PAREDES_DAS_SALAS")] public OrderedMap<List<TileRef>> ParedesDasSalas = new OrderedMap<List<TileRef>>();
     }
 
     /// <summary>
@@ -58,6 +60,18 @@ namespace RPGLegend.Engine
                 if (camada.Porta != null && !Contem(portas, camada.Porta)) continue;
                 lista.Add(new CamadaDaSala { Arquivo = camada.Arquivo, Plano = camada.Plano, Porta = camada.Porta });
             }
+            return lista;
+        }
+
+        /// <summary>
+        /// TS: paredesDaSala — as casas de dentro que são parede nas salas desta masmorra (nenhuma fora dela, ou quando
+        /// a arte não fecha nada).
+        /// </summary>
+        public static List<TileRef> ParedesDaSala(string dungeon)
+        {
+            var lista = new List<TileRef>();
+            if (string.IsNullOrEmpty(dungeon) || !D.ParedesDasSalas.TryGet(dungeon, out var paredes) || paredes == null) return lista;
+            foreach (var casa in paredes) lista.Add(new TileRef { Col = casa.Col, Row = casa.Row });
             return lista;
         }
 

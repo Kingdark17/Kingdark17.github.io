@@ -51,6 +51,19 @@ export interface MonsterInstance {
   /** Título sorteado do chefe — guardado porque é aleatório e precisa ficar estável. */
   bossTitle?: string;
   overrides?: MonsterOverrides;
+  /**
+   * O chefe do andar 100, a batalha final de cada masmorra (`jogo/chefe-final.ts`):
+   * mais forte, chama lacaios na metade da vida e solta poderes.
+   */
+  chefeFinal?: boolean;
+  /** Chefe final: já chamou os lacaios (a segunda fase começou). */
+  chamou?: boolean;
+  /** Chefe final: os lacaios caíram e ele ficou furioso. */
+  furia?: boolean;
+  /** Chefe final: quantos poderes já soltou (a vez de cada um se alterna). */
+  poderes?: number;
+  /** Chamado pelo chefe final: não dá ouro. */
+  lacaio?: boolean;
 }
 
 export interface GenerateOptions {
@@ -67,6 +80,21 @@ export interface GenerateOptions {
    * que o jogador está, e quem decide se é chefe principal é o andar real.
    */
   main?: boolean;
+  /** Só pro chefe: é o chefe final, o do andar 100 (`FORCA_DO_CHEFE_FINAL` a mais de vida e dano). */
+  final?: boolean;
+}
+
+/** Quanto o chefe final é mais forte que um chefe principal, na vida e no dano (decisão do usuário, 2026-10-25: "30% mais forte"). */
+export const FORCA_DO_CHEFE_FINAL = 1.3;
+
+/**
+ * O nível do monstro, que aparece no cartão dele (decisão do usuário,
+ * 2026-10-25: "coloca nível neles"). Sai do andar de força: é o nível em que
+ * costuma estar o herói que venceu todos os monstros até ali — 9 em cada 10
+ * andares, arredondado. Andar 1 → 1, 78 (o começo da Caverna) → 70, 100 → 90.
+ */
+export function monsterLevel(floor: number): number {
+  return Math.max(1, Math.floor((floor * 9 + 5) / 10));
 }
 
 function especiesPermitidas(ids: readonly string[] | undefined): readonly Species[] {
@@ -95,24 +123,28 @@ export function generate(floor: number, { rng = defaultRng, species: ids }: Gene
   };
 }
 
-/** Mini-chefe a cada 5 andares, chefe principal a cada 10 (`floor % 10 === 0`). */
-export function generateBoss(floor: number, { rng = defaultRng, species: ids, main }: GenerateOptions = {}): MonsterInstance {
+/**
+ * Mini-chefe a cada 5 andares, chefe principal a cada 10 (`floor % 10 === 0`).
+ * O chefe final (`final`, o do andar 100) é um chefe principal com
+ * `FORCA_DO_CHEFE_FINAL` a mais de vida e dano, sorteado igual: o rng anda o
+ * mesmo tanto.
+ */
+export function generateBoss(floor: number, { rng = defaultRng, species: ids, main, final }: GenerateOptions = {}): MonsterInstance {
   const species = pick(especiesPermitidas(ids), rng);
   const enemyClass = pick(ENEMY_CLASSES, rng);
   const isMain = main ?? floor % 10 === 0;
   const title = pick(BOSS_TITLES, rng);
   const mult = isMain ? 3.2 : 2.1;
   const hp = Math.round(species.baseHp * (1 + (floor - 1) * 0.27) * mult * enemyClass.hpMult) + 20;
+  const dmg = Math.round((species.baseDmg + Math.floor((floor - 1) * 0.65) + (isMain ? 5 : 3)) * enemyClass.dmgMult);
 
-  return {
+  const chefe: MonsterInstance = {
     speciesId: species.id,
     enemyClassId: enemyClass.id,
     floor,
     hp,
     maxHp: hp,
-    dmg: Math.round(
-      (species.baseDmg + Math.floor((floor - 1) * 0.65) + (isMain ? 5 : 3)) * enemyClass.dmgMult,
-    ),
+    dmg,
     speed: Math.round(species.baseSpeed * (1 + (floor - 1) * 0.08) * 0.9),
     xp: (isMain ? 60 : 30) + floor * 5,
     gold: (isMain ? 80 : 40) + floor * 6,
@@ -120,6 +152,9 @@ export function generateBoss(floor: number, { rng = defaultRng, species: ids, ma
     isMainBoss: isMain,
     bossTitle: title,
   };
+  if (!final) return chefe;
+  const vida = Math.round(hp * FORCA_DO_CHEFE_FINAL);
+  return { ...chefe, hp: vida, maxHp: vida, dmg: Math.round(dmg * FORCA_DO_CHEFE_FINAL), chefeFinal: true };
 }
 
 /**

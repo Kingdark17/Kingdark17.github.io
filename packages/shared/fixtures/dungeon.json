@@ -91,7 +91,7 @@
           "id": "caverna",
           "name": "Caverna",
           "icon": "🦇",
-          "minLevel": 15,
+          "minLevel": 70,
           "requires": "floresta",
           "species": [
             "morcego",
@@ -105,7 +105,7 @@
           "id": "torre",
           "name": "Torre",
           "icon": "🗼",
-          "minLevel": 30,
+          "minLevel": 140,
           "requires": "caverna",
           "species": [
             "elemental_fogo",
@@ -175,12 +175,12 @@
     }
   },
   {
-    "name": "FLOORS_PER_TIER (constante)",
+    "name": "FLOORS_PER_DUNGEON (constante)",
     "input": {
-      "const": "FLOORS_PER_TIER"
+      "const": "FLOORS_PER_DUNGEON"
     },
     "expected": {
-      "value": 7
+      "value": 77
     }
   },
   {
@@ -6995,6 +6995,21 @@
     }
   },
   {
+    "name": "tierOffset: floresta:normal",
+    "input": {
+      "fn": "tierOffset",
+      "args": {
+        "run": {
+          "dungeon": "floresta",
+          "difficulty": "normal"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
     "name": "runName: floresta:normal",
     "input": {
       "fn": "runName",
@@ -7088,6 +7103,21 @@
     }
   },
   {
+    "name": "tierOffset: floresta:dificil",
+    "input": {
+      "fn": "tierOffset",
+      "args": {
+        "run": {
+          "dungeon": "floresta",
+          "difficulty": "dificil"
+        }
+      }
+    },
+    "expected": {
+      "result": 39
+    }
+  },
+  {
     "name": "runName: floresta:dificil",
     "input": {
       "fn": "runName",
@@ -7130,7 +7160,7 @@
       }
     },
     "expected": {
-      "result": 8
+      "result": 40
     }
   },
   {
@@ -7146,7 +7176,7 @@
       }
     },
     "expected": {
-      "result": 11
+      "result": 43
     }
   },
   {
@@ -7162,7 +7192,7 @@
       }
     },
     "expected": {
-      "result": 107
+      "result": 139
     }
   },
   {
@@ -7178,6 +7208,21 @@
     },
     "expected": {
       "result": 2
+    }
+  },
+  {
+    "name": "tierOffset: floresta:pesadelo",
+    "input": {
+      "fn": "tierOffset",
+      "args": {
+        "run": {
+          "dungeon": "floresta",
+          "difficulty": "pesadelo"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
     }
   },
   {
@@ -7223,7 +7268,7 @@
       }
     },
     "expected": {
-      "result": 15
+      "result": 78
     }
   },
   {
@@ -7239,7 +7284,7 @@
       }
     },
     "expected": {
-      "result": 18
+      "result": 81
     }
   },
   {
@@ -7255,7 +7300,7 @@
       }
     },
     "expected": {
-      "result": 114
+      "result": 177
     }
   },
   {
@@ -7271,6 +7316,21 @@
     },
     "expected": {
       "result": 2
+    }
+  },
+  {
+    "name": "tierOffset: caverna:normal",
+    "input": {
+      "fn": "tierOffset",
+      "args": {
+        "run": {
+          "dungeon": "caverna",
+          "difficulty": "normal"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
     }
   },
   {
@@ -7316,7 +7376,7 @@
       }
     },
     "expected": {
-      "result": 15
+      "result": 78
     }
   },
   {
@@ -7332,7 +7392,7 @@
       }
     },
     "expected": {
-      "result": 18
+      "result": 81
     }
   },
   {
@@ -7348,7 +7408,7 @@
       }
     },
     "expected": {
-      "result": 114
+      "result": 177
     }
   },
   {
@@ -7364,6 +7424,21 @@
     },
     "expected": {
       "result": 3
+    }
+  },
+  {
+    "name": "tierOffset: caverna:dificil",
+    "input": {
+      "fn": "tierOffset",
+      "args": {
+        "run": {
+          "dungeon": "caverna",
+          "difficulty": "dificil"
+        }
+      }
+    },
+    "expected": {
+      "result": 116
     }
   },
   {
@@ -7409,7 +7484,7 @@
       }
     },
     "expected": {
-      "result": 22
+      "result": 117
     }
   },
   {
@@ -7425,7 +7500,7 @@
       }
     },
     "expected": {
-      "result": 25
+      "result": 120
     }
   },
   {
@@ -7441,7 +7516,7 @@
       }
     },
     "expected": {
-      "result": 121
+      "result": 216
     }
   },
   {
@@ -7457,6 +7532,21 @@
     },
     "expected": {
       "result": 4
+    }
+  },
+  {
+    "name": "tierOffset: caverna:pesadelo",
+    "input": {
+      "fn": "tierOffset",
+      "args": {
+        "run": {
+          "dungeon": "caverna",
+          "difficulty": "pesadelo"
+        }
+      }
+    },
+    "expected": {
+      "result": 154
     }
   },
   {
@@ -7502,7 +7592,7 @@
       }
     },
     "expected": {
-      "result": 29
+      "result": 155
     }
   },
   {
@@ -7518,7 +7608,7 @@
       }
     },
     "expected": {
-      "result": 32
+      "result": 158
     }
   },
   {
@@ -7534,7 +7624,7 @@
       }
     },
     "expected": {
-      "result": 128
+      "result": 254
     }
   },
   {
@@ -7550,6 +7640,21 @@
     },
     "expected": {
       "result": 4
+    }
+  },
+  {
+    "name": "tierOffset: torre:normal",
+    "input": {
+      "fn": "tierOffset",
+      "args": {
+        "run": {
+          "dungeon": "torre",
+          "difficulty": "normal"
+        }
+      }
+    },
+    "expected": {
+      "result": 154
     }
   },
   {
@@ -7595,7 +7700,7 @@
       }
     },
     "expected": {
-      "result": 29
+      "result": 155
     }
   },
   {
@@ -7611,7 +7716,7 @@
       }
     },
     "expected": {
-      "result": 32
+      "result": 158
     }
   },
   {
@@ -7627,7 +7732,7 @@
       }
     },
     "expected": {
-      "result": 128
+      "result": 254
     }
   },
   {
@@ -7643,6 +7748,21 @@
     },
     "expected": {
       "result": 5
+    }
+  },
+  {
+    "name": "tierOffset: torre:dificil",
+    "input": {
+      "fn": "tierOffset",
+      "args": {
+        "run": {
+          "dungeon": "torre",
+          "difficulty": "dificil"
+        }
+      }
+    },
+    "expected": {
+      "result": 193
     }
   },
   {
@@ -7688,7 +7808,7 @@
       }
     },
     "expected": {
-      "result": 36
+      "result": 194
     }
   },
   {
@@ -7704,7 +7824,7 @@
       }
     },
     "expected": {
-      "result": 39
+      "result": 197
     }
   },
   {
@@ -7720,7 +7840,7 @@
       }
     },
     "expected": {
-      "result": 135
+      "result": 293
     }
   },
   {
@@ -7736,6 +7856,21 @@
     },
     "expected": {
       "result": 6
+    }
+  },
+  {
+    "name": "tierOffset: torre:pesadelo",
+    "input": {
+      "fn": "tierOffset",
+      "args": {
+        "run": {
+          "dungeon": "torre",
+          "difficulty": "pesadelo"
+        }
+      }
+    },
+    "expected": {
+      "result": 231
     }
   },
   {
@@ -7781,7 +7916,7 @@
       }
     },
     "expected": {
-      "result": 43
+      "result": 232
     }
   },
   {
@@ -7797,7 +7932,7 @@
       }
     },
     "expected": {
-      "result": 46
+      "result": 235
     }
   },
   {
@@ -7813,7 +7948,139 @@
       }
     },
     "expected": {
-      "result": 142
+      "result": 331
+    }
+  },
+  {
+    "name": "monsterLevel: andar -3",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": -3
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "monsterLevel: andar 0",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 0
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "monsterLevel: andar 1",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 1
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "monsterLevel: andar 2",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 2
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "monsterLevel: andar 9",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 9
+      }
+    },
+    "expected": {
+      "result": 8
+    }
+  },
+  {
+    "name": "monsterLevel: andar 10",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 10
+      }
+    },
+    "expected": {
+      "result": 9
+    }
+  },
+  {
+    "name": "monsterLevel: andar 11",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 11
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "monsterLevel: andar 78",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 78
+      }
+    },
+    "expected": {
+      "result": 70
+    }
+  },
+  {
+    "name": "monsterLevel: andar 100",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 100
+      }
+    },
+    "expected": {
+      "result": 90
+    }
+  },
+  {
+    "name": "monsterLevel: andar 155",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 155
+      }
+    },
+    "expected": {
+      "result": 140
+    }
+  },
+  {
+    "name": "monsterLevel: andar 331",
+    "input": {
+      "fn": "monsterLevel",
+      "args": {
+        "floor": 331
+      }
+    },
+    "expected": {
+      "result": 298
     }
   },
   {
@@ -8000,7 +8267,7 @@
         "id": "caverna",
         "name": "Caverna",
         "icon": "🦇",
-        "minLevel": 15,
+        "minLevel": 70,
         "requires": "floresta",
         "species": [
           "morcego",
@@ -8329,7 +8596,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 15
+        "minLevel": 70
       }
     }
   },
@@ -8351,8 +8618,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_dungeon",
-        "dungeon": "floresta"
+        "kind": "level",
+        "minLevel": 70
       }
     }
   },
@@ -8394,7 +8661,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 15
+        "minLevel": 70
       }
     }
   },
@@ -8416,8 +8683,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_dungeon",
-        "dungeon": "floresta"
+        "kind": "level",
+        "minLevel": 70
       }
     }
   },
@@ -8459,7 +8726,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 15
+        "minLevel": 70
       }
     }
   },
@@ -8481,8 +8748,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_dungeon",
-        "dungeon": "floresta"
+        "kind": "level",
+        "minLevel": 70
       }
     }
   },
@@ -8524,7 +8791,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 30
+        "minLevel": 140
       }
     }
   },
@@ -8546,8 +8813,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_dungeon",
-        "dungeon": "caverna"
+        "kind": "level",
+        "minLevel": 140
       }
     }
   },
@@ -8589,7 +8856,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 30
+        "minLevel": 140
       }
     }
   },
@@ -8611,8 +8878,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_dungeon",
-        "dungeon": "caverna"
+        "kind": "level",
+        "minLevel": 140
       }
     }
   },
@@ -8654,7 +8921,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 30
+        "minLevel": 140
       }
     }
   },
@@ -8676,8 +8943,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_dungeon",
-        "dungeon": "caverna"
+        "kind": "level",
+        "minLevel": 140
       }
     }
   },
@@ -8922,7 +9189,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 15
+        "minLevel": 70
       }
     }
   },
@@ -8945,7 +9212,10 @@
       }
     },
     "expected": {
-      "result": null
+      "result": {
+        "kind": "level",
+        "minLevel": 70
+      }
     }
   },
   {
@@ -8990,7 +9260,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 15
+        "minLevel": 70
       }
     }
   },
@@ -9014,8 +9284,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_difficulty",
-        "difficulty": "normal"
+        "kind": "level",
+        "minLevel": 70
       }
     }
   },
@@ -9061,7 +9331,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 15
+        "minLevel": 70
       }
     }
   },
@@ -9085,8 +9355,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_difficulty",
-        "difficulty": "dificil"
+        "kind": "level",
+        "minLevel": 70
       }
     }
   },
@@ -9132,7 +9402,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 30
+        "minLevel": 140
       }
     }
   },
@@ -9156,8 +9426,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_dungeon",
-        "dungeon": "caverna"
+        "kind": "level",
+        "minLevel": 140
       }
     }
   },
@@ -9203,7 +9473,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 30
+        "minLevel": 140
       }
     }
   },
@@ -9227,8 +9497,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_dungeon",
-        "dungeon": "caverna"
+        "kind": "level",
+        "minLevel": 140
       }
     }
   },
@@ -9274,7 +9544,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 30
+        "minLevel": 140
       }
     }
   },
@@ -9298,8 +9568,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_dungeon",
-        "dungeon": "caverna"
+        "kind": "level",
+        "minLevel": 140
       }
     }
   },
@@ -9610,7 +9880,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 15
+        "minLevel": 70
       }
     }
   },
@@ -9640,7 +9910,10 @@
       }
     },
     "expected": {
-      "result": null
+      "result": {
+        "kind": "level",
+        "minLevel": 70
+      }
     }
   },
   {
@@ -9699,7 +9972,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 15
+        "minLevel": 70
       }
     }
   },
@@ -9729,7 +10002,10 @@
       }
     },
     "expected": {
-      "result": null
+      "result": {
+        "kind": "level",
+        "minLevel": 70
+      }
     }
   },
   {
@@ -9788,7 +10064,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 15
+        "minLevel": 70
       }
     }
   },
@@ -9819,8 +10095,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_difficulty",
-        "difficulty": "dificil"
+        "kind": "level",
+        "minLevel": 70
       }
     }
   },
@@ -9880,7 +10156,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 30
+        "minLevel": 140
       }
     }
   },
@@ -9910,7 +10186,10 @@
       }
     },
     "expected": {
-      "result": null
+      "result": {
+        "kind": "level",
+        "minLevel": 140
+      }
     }
   },
   {
@@ -9969,7 +10248,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 30
+        "minLevel": 140
       }
     }
   },
@@ -10000,8 +10279,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_difficulty",
-        "difficulty": "normal"
+        "kind": "level",
+        "minLevel": 140
       }
     }
   },
@@ -10061,7 +10340,7 @@
     "expected": {
       "result": {
         "kind": "level",
-        "minLevel": 30
+        "minLevel": 140
       }
     }
   },
@@ -10092,8 +10371,8 @@
     },
     "expected": {
       "result": {
-        "kind": "previous_difficulty",
-        "difficulty": "dificil"
+        "kind": "level",
+        "minLevel": 140
       }
     }
   },
@@ -19716,15 +19995,16 @@
                   "speciesId": "slime",
                   "enemyClassId": "guardiao",
                   "floor": 100,
-                  "hp": 1817,
-                  "maxHp": 1817,
-                  "dmg": 67,
+                  "hp": 2362,
+                  "maxHp": 2362,
+                  "dmg": 87,
                   "speed": 32,
                   "xp": 560,
                   "gold": 680,
                   "isBoss": true,
                   "isMainBoss": true,
-                  "bossTitle": "o Ímpio"
+                  "bossTitle": "o Ímpio",
+                  "chefeFinal": true
                 }
               ],
               "monsterIndex": 0,
@@ -20328,13 +20608,13 @@
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "assassino",
-                  "floor": 15,
-                  "hp": 57,
-                  "maxHp": 57,
-                  "dmg": 12,
-                  "speed": 17,
-                  "xp": 54,
-                  "gold": 38,
+                  "floor": 78,
+                  "hp": 256,
+                  "maxHp": 256,
+                  "dmg": 55,
+                  "speed": 59,
+                  "xp": 243,
+                  "gold": 164,
                   "isBoss": false
                 }
               ],
@@ -20551,13 +20831,13 @@
                 {
                   "speciesId": "aranha",
                   "enemyClassId": "guardiao",
-                  "floor": 15,
-                  "hp": 55,
-                  "maxHp": 55,
-                  "dmg": 11,
-                  "speed": 20,
-                  "xp": 52,
-                  "gold": 37,
+                  "floor": 78,
+                  "hp": 238,
+                  "maxHp": 238,
+                  "dmg": 48,
+                  "speed": 70,
+                  "xp": 241,
+                  "gold": 163,
                   "isBoss": false
                 }
               ],
@@ -20654,13 +20934,13 @@
                     "templateId": "marreta",
                     "rarity": "incomum",
                     "stats": {
-                      "ataque": 11,
+                      "ataque": 16,
                       "velocidade": -3
                     },
                     "value": 35,
                     "equipped": false,
                     "procChance": 0.135,
-                    "foundFloor": 15
+                    "foundFloor": 78
                   },
                   "secretCollected": false
                 }
@@ -20892,25 +21172,25 @@
                 {
                   "speciesId": "zumbi",
                   "enemyClassId": "assassino",
-                  "floor": 38,
-                  "hp": 158,
-                  "maxHp": 158,
-                  "dmg": 29,
-                  "speed": 16,
-                  "xp": 122,
-                  "gold": 84,
+                  "floor": 164,
+                  "hp": 648,
+                  "maxHp": 648,
+                  "dmg": 115,
+                  "speed": 59,
+                  "xp": 500,
+                  "gold": 336,
                   "isBoss": false
                 },
                 {
                   "speciesId": "morcego",
                   "enemyClassId": "xama",
-                  "floor": 38,
-                  "hp": 77,
-                  "maxHp": 77,
-                  "dmg": 25,
-                  "speed": 61,
-                  "xp": 120,
-                  "gold": 85,
+                  "floor": 164,
+                  "hp": 315,
+                  "maxHp": 315,
+                  "dmg": 104,
+                  "speed": 219,
+                  "xp": 498,
+                  "gold": 337,
                   "isBoss": false
                 }
               ],
@@ -21033,13 +21313,13 @@
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "guardiao",
-                  "floor": 38,
-                  "hp": 637,
-                  "maxHp": 637,
-                  "dmg": 29,
-                  "speed": 21,
-                  "xp": 250,
-                  "gold": 308,
+                  "floor": 164,
+                  "hp": 2548,
+                  "maxHp": 2548,
+                  "dmg": 106,
+                  "speed": 76,
+                  "xp": 880,
+                  "gold": 1064,
                   "isBoss": true,
                   "isMainBoss": true,
                   "bossTitle": "Senhor das Trevas"
@@ -21131,37 +21411,37 @@
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "xama",
-                  "floor": 38,
-                  "hp": 145,
-                  "maxHp": 145,
-                  "dmg": 25,
-                  "speed": 26,
-                  "xp": 122,
-                  "gold": 83,
+                  "floor": 164,
+                  "hp": 587,
+                  "maxHp": 587,
+                  "dmg": 104,
+                  "speed": 94,
+                  "xp": 500,
+                  "gold": 335,
                   "isBoss": false
                 },
                 {
                   "speciesId": "orc",
                   "enemyClassId": "brutamontes",
-                  "floor": 38,
-                  "hp": 179,
-                  "maxHp": 179,
-                  "dmg": 31,
-                  "speed": 27,
-                  "xp": 123,
-                  "gold": 80,
+                  "floor": 164,
+                  "hp": 727,
+                  "maxHp": 727,
+                  "dmg": 121,
+                  "speed": 99,
+                  "xp": 501,
+                  "gold": 332,
                   "isBoss": false
                 },
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "assassino",
-                  "floor": 38,
-                  "hp": 132,
-                  "maxHp": 132,
-                  "dmg": 28,
-                  "speed": 32,
-                  "xp": 123,
-                  "gold": 85,
+                  "floor": 164,
+                  "hp": 530,
+                  "maxHp": 530,
+                  "dmg": 114,
+                  "speed": 118,
+                  "xp": 501,
+                  "gold": 337,
                   "isBoss": false
                 }
               ],
@@ -21224,13 +21504,13 @@
                     "templateId": "cajado",
                     "rarity": "incomum",
                     "stats": {
-                      "ataque": 6,
-                      "mana": 16
+                      "ataque": 7,
+                      "mana": 18
                     },
                     "value": 31,
                     "equipped": false,
                     "procChance": 0.115,
-                    "foundFloor": 38
+                    "foundFloor": 164
                   },
                   "secretCollected": false
                 }
@@ -21274,37 +21554,37 @@
                 {
                   "speciesId": "morcego",
                   "enemyClassId": "xama",
-                  "floor": 38,
-                  "hp": 78,
-                  "maxHp": 78,
-                  "dmg": 25,
-                  "speed": 61,
-                  "xp": 120,
-                  "gold": 82,
+                  "floor": 164,
+                  "hp": 316,
+                  "maxHp": 316,
+                  "dmg": 104,
+                  "speed": 219,
+                  "xp": 498,
+                  "gold": 334,
                   "isBoss": false
                 },
                 {
                   "speciesId": "zumbi",
                   "enemyClassId": "xama",
-                  "floor": 38,
-                  "hp": 176,
-                  "maxHp": 176,
-                  "dmg": 26,
-                  "speed": 13,
-                  "xp": 120,
-                  "gold": 85,
+                  "floor": 164,
+                  "hp": 720,
+                  "maxHp": 720,
+                  "dmg": 105,
+                  "speed": 47,
+                  "xp": 498,
+                  "gold": 337,
                   "isBoss": false
                 },
                 {
                   "speciesId": "aranha",
                   "enemyClassId": "guardiao",
-                  "floor": 38,
-                  "hp": 121,
-                  "maxHp": 121,
-                  "dmg": 25,
-                  "speed": 38,
-                  "xp": 122,
-                  "gold": 80,
+                  "floor": 164,
+                  "hp": 488,
+                  "maxHp": 488,
+                  "dmg": 96,
+                  "speed": 138,
+                  "xp": 500,
+                  "gold": 332,
                   "isBoss": false
                 }
               ],
@@ -21432,37 +21712,37 @@
                 {
                   "speciesId": "morcego",
                   "enemyClassId": "xama",
-                  "floor": 38,
-                  "hp": 79,
-                  "maxHp": 79,
-                  "dmg": 25,
-                  "speed": 61,
-                  "xp": 121,
-                  "gold": 81,
+                  "floor": 164,
+                  "hp": 317,
+                  "maxHp": 317,
+                  "dmg": 104,
+                  "speed": 219,
+                  "xp": 499,
+                  "gold": 333,
                   "isBoss": false
                 },
                 {
                   "speciesId": "morcego",
                   "enemyClassId": "feiticeiro",
-                  "floor": 38,
-                  "hp": 74,
-                  "maxHp": 74,
-                  "dmg": 28,
-                  "speed": 64,
-                  "xp": 121,
-                  "gold": 80,
+                  "floor": 164,
+                  "hp": 300,
+                  "maxHp": 300,
+                  "dmg": 117,
+                  "speed": 230,
+                  "xp": 499,
+                  "gold": 332,
                   "isBoss": false
                 },
                 {
                   "speciesId": "aranha",
                   "enemyClassId": "feiticeiro",
-                  "floor": 38,
-                  "hp": 85,
-                  "maxHp": 85,
-                  "dmg": 31,
-                  "speed": 50,
-                  "xp": 123,
-                  "gold": 85,
+                  "floor": 164,
+                  "hp": 343,
+                  "maxHp": 343,
+                  "dmg": 119,
+                  "speed": 181,
+                  "xp": 501,
+                  "gold": 337,
                   "isBoss": false
                 }
               ],
@@ -21727,13 +22007,13 @@
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "feiticeiro",
-                  "floor": 60,
-                  "hp": 178,
-                  "maxHp": 178,
-                  "dmg": 47,
-                  "speed": 60,
-                  "xp": 187,
-                  "gold": 129,
+                  "floor": 218,
+                  "hp": 624,
+                  "maxHp": 624,
+                  "dmg": 159,
+                  "speed": 194,
+                  "xp": 661,
+                  "gold": 445,
                   "isBoss": false
                 }
               ],
@@ -21809,13 +22089,13 @@
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "guardiao",
-                  "floor": 60,
-                  "hp": 299,
-                  "maxHp": 299,
-                  "dmg": 35,
-                  "speed": 30,
-                  "xp": 189,
-                  "gold": 125,
+                  "floor": 218,
+                  "hp": 1048,
+                  "maxHp": 1048,
+                  "dmg": 125,
+                  "speed": 99,
+                  "xp": 663,
+                  "gold": 441,
                   "isBoss": false
                 }
               ],
@@ -21902,32 +22182,32 @@
                 {
                   "speciesId": "orc",
                   "enemyClassId": "brutamontes",
-                  "floor": 60,
-                  "hp": 275,
-                  "maxHp": 275,
-                  "dmg": 47,
-                  "speed": 40,
-                  "xp": 187,
-                  "gold": 127,
+                  "floor": 218,
+                  "hp": 961,
+                  "maxHp": 961,
+                  "dmg": 161,
+                  "speed": 129,
+                  "xp": 661,
+                  "gold": 443,
                   "isBoss": false
                 },
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "feiticeiro",
-                  "floor": 60,
-                  "hp": 180,
-                  "maxHp": 180,
-                  "dmg": 47,
-                  "speed": 60,
-                  "xp": 186,
-                  "gold": 124,
+                  "floor": 218,
+                  "hp": 626,
+                  "maxHp": 626,
+                  "dmg": 159,
+                  "speed": 194,
+                  "xp": 660,
+                  "gold": 440,
                   "isBoss": false
                 }
               ],
               "monsterIndex": 0,
               "beaten": false,
               "bonusTreasure": {
-                "gold": 195
+                "gold": 669
               },
               "extras": [
                 {
@@ -21953,13 +22233,13 @@
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "guardiao",
-                  "floor": 60,
-                  "hp": 548,
-                  "maxHp": 548,
-                  "dmg": 44,
-                  "speed": 46,
-                  "xp": 330,
-                  "gold": 400,
+                  "floor": 218,
+                  "hp": 1878,
+                  "maxHp": 1878,
+                  "dmg": 142,
+                  "speed": 149,
+                  "xp": 1120,
+                  "gold": 1348,
                   "isBoss": true,
                   "isMainBoss": false,
                   "bossTitle": "Senhor das Trevas"
@@ -22013,37 +22293,37 @@
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "feiticeiro",
-                  "floor": 60,
-                  "hp": 180,
-                  "maxHp": 180,
-                  "dmg": 47,
-                  "speed": 60,
-                  "xp": 189,
-                  "gold": 129,
+                  "floor": 218,
+                  "hp": 626,
+                  "maxHp": 626,
+                  "dmg": 159,
+                  "speed": 194,
+                  "xp": 663,
+                  "gold": 445,
                   "isBoss": false
                 },
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "feiticeiro",
-                  "floor": 60,
-                  "hp": 210,
-                  "maxHp": 210,
-                  "dmg": 44,
-                  "speed": 40,
-                  "xp": 188,
-                  "gold": 126,
+                  "floor": 218,
+                  "hp": 737,
+                  "maxHp": 737,
+                  "dmg": 156,
+                  "speed": 129,
+                  "xp": 662,
+                  "gold": 442,
                   "isBoss": false
                 },
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "guardiao",
-                  "floor": 60,
-                  "hp": 253,
-                  "maxHp": 253,
-                  "dmg": 38,
-                  "speed": 45,
-                  "xp": 188,
-                  "gold": 127,
+                  "floor": 218,
+                  "hp": 887,
+                  "maxHp": 887,
+                  "dmg": 128,
+                  "speed": 148,
+                  "xp": 662,
+                  "gold": 443,
                   "isBoss": false
                 }
               ],
@@ -22090,13 +22370,13 @@
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "guardiao",
-                  "floor": 60,
-                  "hp": 298,
-                  "maxHp": 298,
-                  "dmg": 35,
-                  "speed": 30,
-                  "xp": 188,
-                  "gold": 129,
+                  "floor": 218,
+                  "hp": 1047,
+                  "maxHp": 1047,
+                  "dmg": 125,
+                  "speed": 99,
+                  "xp": 662,
+                  "gold": 445,
                   "isBoss": false
                 }
               ],
@@ -25001,15 +25281,16 @@
                   "speciesId": "slime",
                   "enemyClassId": "guardiao",
                   "floor": 100,
-                  "hp": 1817,
-                  "maxHp": 1817,
-                  "dmg": 67,
+                  "hp": 2362,
+                  "maxHp": 2362,
+                  "dmg": 87,
                   "speed": 32,
                   "xp": 560,
                   "gold": 680,
                   "isBoss": true,
                   "isMainBoss": true,
-                  "bossTitle": "o Ímpio"
+                  "bossTitle": "o Ímpio",
+                  "chefeFinal": true
                 }
               ],
               "monsterIndex": 0,
@@ -25679,7 +25960,7 @@
                 "equipped": false,
                 "procChance": 0.15,
                 "degrau": 2,
-                "foundFloor": 60
+                "foundFloor": 218
               },
               "collected": false,
               "extras": [
@@ -25724,13 +26005,13 @@
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "feiticeiro",
-                  "floor": 60,
-                  "hp": 178,
-                  "maxHp": 178,
-                  "dmg": 47,
-                  "speed": 60,
-                  "xp": 187,
-                  "gold": 129,
+                  "floor": 218,
+                  "hp": 624,
+                  "maxHp": 624,
+                  "dmg": 159,
+                  "speed": 194,
+                  "xp": 661,
+                  "gold": 445,
                   "isBoss": false
                 }
               ],
@@ -25773,7 +26054,7 @@
                 "value": 39,
                 "equipped": false,
                 "degrau": 2,
-                "foundFloor": 60
+                "foundFloor": 218
               },
               "collected": false,
               "extras": [
@@ -25849,13 +26130,13 @@
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "guardiao",
-                  "floor": 60,
-                  "hp": 299,
-                  "maxHp": 299,
-                  "dmg": 35,
-                  "speed": 30,
-                  "xp": 189,
-                  "gold": 125,
+                  "floor": 218,
+                  "hp": 1048,
+                  "maxHp": 1048,
+                  "dmg": 125,
+                  "speed": 99,
+                  "xp": 663,
+                  "gold": 441,
                   "isBoss": false
                 }
               ],
@@ -25936,32 +26217,32 @@
                 {
                   "speciesId": "orc",
                   "enemyClassId": "brutamontes",
-                  "floor": 60,
-                  "hp": 275,
-                  "maxHp": 275,
-                  "dmg": 47,
-                  "speed": 40,
-                  "xp": 187,
-                  "gold": 127,
+                  "floor": 218,
+                  "hp": 961,
+                  "maxHp": 961,
+                  "dmg": 161,
+                  "speed": 129,
+                  "xp": 661,
+                  "gold": 443,
                   "isBoss": false
                 },
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "feiticeiro",
-                  "floor": 60,
-                  "hp": 180,
-                  "maxHp": 180,
-                  "dmg": 47,
-                  "speed": 60,
-                  "xp": 186,
-                  "gold": 124,
+                  "floor": 218,
+                  "hp": 626,
+                  "maxHp": 626,
+                  "dmg": 159,
+                  "speed": 194,
+                  "xp": 660,
+                  "gold": 440,
                   "isBoss": false
                 }
               ],
               "monsterIndex": 0,
               "beaten": false,
               "bonusTreasure": {
-                "gold": 195
+                "gold": 669
               },
               "extras": [
                 {
@@ -25986,13 +26267,13 @@
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "guardiao",
-                  "floor": 60,
-                  "hp": 548,
-                  "maxHp": 548,
-                  "dmg": 44,
-                  "speed": 46,
-                  "xp": 330,
-                  "gold": 400,
+                  "floor": 218,
+                  "hp": 1878,
+                  "maxHp": 1878,
+                  "dmg": 142,
+                  "speed": 149,
+                  "xp": 1120,
+                  "gold": 1348,
                   "isBoss": true,
                   "isMainBoss": false,
                   "bossTitle": "Senhor das Trevas"
@@ -26058,37 +26339,37 @@
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "feiticeiro",
-                  "floor": 60,
-                  "hp": 180,
-                  "maxHp": 180,
-                  "dmg": 47,
-                  "speed": 60,
-                  "xp": 189,
-                  "gold": 129,
+                  "floor": 218,
+                  "hp": 626,
+                  "maxHp": 626,
+                  "dmg": 159,
+                  "speed": 194,
+                  "xp": 663,
+                  "gold": 445,
                   "isBoss": false
                 },
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "feiticeiro",
-                  "floor": 60,
-                  "hp": 210,
-                  "maxHp": 210,
-                  "dmg": 44,
-                  "speed": 40,
-                  "xp": 188,
-                  "gold": 126,
+                  "floor": 218,
+                  "hp": 737,
+                  "maxHp": 737,
+                  "dmg": 156,
+                  "speed": 129,
+                  "xp": 662,
+                  "gold": 442,
                   "isBoss": false
                 },
                 {
                   "speciesId": "elemental_fogo",
                   "enemyClassId": "guardiao",
-                  "floor": 60,
-                  "hp": 253,
-                  "maxHp": 253,
-                  "dmg": 38,
-                  "speed": 45,
-                  "xp": 188,
-                  "gold": 127,
+                  "floor": 218,
+                  "hp": 887,
+                  "maxHp": 887,
+                  "dmg": 128,
+                  "speed": 148,
+                  "xp": 662,
+                  "gold": 443,
                   "isBoss": false
                 }
               ],
@@ -26144,13 +26425,13 @@
                 {
                   "speciesId": "esqueleto",
                   "enemyClassId": "guardiao",
-                  "floor": 60,
-                  "hp": 298,
-                  "maxHp": 298,
-                  "dmg": 35,
-                  "speed": 30,
-                  "xp": 188,
-                  "gold": 129,
+                  "floor": 218,
+                  "hp": 1047,
+                  "maxHp": 1047,
+                  "dmg": 125,
+                  "speed": 99,
+                  "xp": 662,
+                  "gold": 445,
                   "isBoss": false
                 }
               ],
@@ -35389,6 +35670,163 @@
     }
   },
   {
+    "name": "roomLayout: com os cantos da Caverna",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 4
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 1,
+            "row": 7
+          },
+          {
+            "col": 7,
+            "row": 7
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S",
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 4,
+            "row": 4
+          }
+        ]
+      }
+    }
+  },
+  {
     "name": "stickInput: (0, 0)",
     "input": {
       "fn": "stickInput",
@@ -43605,6 +44043,1524 @@
     },
     "expected": {
       "result": "A placa está gasta demais para ler."
+    }
+  },
+  {
+    "name": "generateDungeonFloor: o andar 100, floresta:normal",
+    "input": {
+      "fn": "generateDungeonFloor",
+      "args": {
+        "floor": 100,
+        "rows": 6,
+        "cols": 6,
+        "options": {
+          "now": 1700000000000,
+          "run": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          }
+        }
+      },
+      "rng": {
+        "seed": 61
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "grid": [
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "monster",
+              "x": 0,
+              "y": 2,
+              "doors": {
+                "S": true
+              },
+              "startBranch": "2,3",
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 100,
+                  "hp": 263,
+                  "maxHp": 263,
+                  "dmg": 73,
+                  "speed": 83,
+                  "xp": 308,
+                  "gold": 208,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 6,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_19599",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "S": true
+              },
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 6,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true
+              },
+              "npc": {
+                "name": "Prisioneiro Esquecido",
+                "role": "Sobrevivente",
+                "service": "heal",
+                "icon": "🧍",
+                "lines": [
+                  "Você... você é real? Há quanto tempo estou aqui...",
+                  "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
+                  "Se encontrar a saída, corra e não olhe para trás."
+                ],
+                "serviceUsed": false
+              },
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 6,
+                  "row": 6
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 6
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "isMimic": false,
+              "giveGold": false,
+              "item": {
+                "uid": "adaga_1700000000000_30861",
+                "templateId": "adaga",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 5,
+                  "critico": 14
+                },
+                "value": 20,
+                "equipped": false,
+                "procChance": 0.15,
+                "foundFloor": 100
+              },
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 1,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "S": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "xama",
+                  "floor": 100,
+                  "hp": 225,
+                  "maxHp": 225,
+                  "dmg": 66,
+                  "speed": 109,
+                  "xp": 309,
+                  "gold": 207,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "guardiao",
+                  "floor": 100,
+                  "hp": 302,
+                  "maxHp": 302,
+                  "dmg": 60,
+                  "speed": 87,
+                  "xp": 306,
+                  "gold": 207,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "guardiao",
+                  "floor": 100,
+                  "hp": 339,
+                  "maxHp": 339,
+                  "dmg": 59,
+                  "speed": 103,
+                  "xp": 307,
+                  "gold": 206,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "bonusTreasure": {
+                "item": {
+                  "uid": "robe_1700000000000_83409",
+                  "templateId": "robe",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 4,
+                    "mana": 16
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "foundFloor": 100
+                }
+              },
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 6,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "boss",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "W": true,
+                "S": true,
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "assassino",
+                  "floor": 100,
+                  "hp": 1065,
+                  "maxHp": 1065,
+                  "dmg": 108,
+                  "speed": 64,
+                  "xp": 560,
+                  "gold": 680,
+                  "isBoss": true,
+                  "isMainBoss": true,
+                  "bossTitle": "o Eterno",
+                  "chefeFinal": true
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "N": true
+              },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 6,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 3,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 4,
+              "doors": {
+                "E": true
+              },
+              "startBranch": "2,3",
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 6,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_97490",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 1,
+              "y": 4,
+              "doors": {
+                "N": true,
+                "S": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 100,
+                  "hp": 264,
+                  "maxHp": 264,
+                  "dmg": 73,
+                  "speed": 83,
+                  "xp": 307,
+                  "gold": 206,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "assassino",
+                  "floor": 100,
+                  "hp": 227,
+                  "maxHp": 227,
+                  "dmg": 71,
+                  "speed": 161,
+                  "xp": 308,
+                  "gold": 209,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_94844",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 1,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 4,
+              "doors": {
+                "N": true,
+                "E": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "goblin",
+                  "enemyClassId": "guardiao",
+                  "floor": 100,
+                  "hp": 376,
+                  "maxHp": 376,
+                  "dmg": 59,
+                  "speed": 63,
+                  "xp": 308,
+                  "gold": 204,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "brutamontes",
+                  "floor": 100,
+                  "hp": 480,
+                  "maxHp": 480,
+                  "dmg": 73,
+                  "speed": 36,
+                  "xp": 306,
+                  "gold": 206,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 100,
+                  "hp": 396,
+                  "maxHp": 396,
+                  "dmg": 72,
+                  "speed": 42,
+                  "xp": 309,
+                  "gold": 204,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "bonusTreasure": {
+                "gold": 312
+              },
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 6,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "event",
+              "x": 3,
+              "y": 4,
+              "doors": {
+                "W": true
+              },
+              "event": {
+                "templateId": "porta"
+              },
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 6,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "exit",
+              "x": 1,
+              "y": 5,
+              "doors": {
+                "N": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 4,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 6,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 6,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "stairs",
+              "x": 2,
+              "y": 5,
+              "doors": {
+                "W": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 5,
+              "doors": {
+                "W": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
+                "lines": [
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
+                ],
+                "serviceUsed": false
+              },
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 6,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "rooms": [
+          [
+            3,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "start": [
+          3,
+          3
+        ]
+      },
+      "rngCalls": 339
+    }
+  },
+  {
+    "name": "generateDungeonFloor: o andar 100, caverna:pesadelo",
+    "input": {
+      "fn": "generateDungeonFloor",
+      "args": {
+        "floor": 100,
+        "rows": 6,
+        "cols": 6,
+        "options": {
+          "now": 1700000000000,
+          "run": {
+            "dungeon": "caverna",
+            "difficulty": "pesadelo"
+          }
+        }
+      },
+      "rng": {
+        "seed": 61
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "grid": [
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 0,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 0,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 2,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 3,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 1,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 1,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "monster",
+              "x": 0,
+              "y": 2,
+              "doors": {
+                "S": true
+              },
+              "startBranch": "2,3",
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 254,
+                  "hp": 527,
+                  "maxHp": 527,
+                  "dmg": 183,
+                  "speed": 275,
+                  "xp": 770,
+                  "gold": 516,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 6,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_19599",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 1,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "treasure",
+              "x": 2,
+              "y": 2,
+              "doors": {
+                "S": true
+              },
+              "isMimic": true,
+              "giveGold": true,
+              "item": null,
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 6,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 2,
+              "doors": {
+                "S": true
+              },
+              "npc": {
+                "name": "Prisioneiro Esquecido",
+                "role": "Sobrevivente",
+                "service": "heal",
+                "icon": "🧍",
+                "lines": [
+                  "Você... você é real? Há quanto tempo estou aqui...",
+                  "Os monstros ficam mais fortes quanto mais fundo você vai. Tome cuidado.",
+                  "Se encontrar a saída, corra e não olhe para trás."
+                ],
+                "serviceUsed": false
+              },
+              "extras": [
+                {
+                  "kind": "sign",
+                  "col": 6,
+                  "row": 6
+                },
+                {
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 6
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 2,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 2,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "N": true
+              },
+              "isMimic": false,
+              "giveGold": false,
+              "item": {
+                "uid": "adaga_1700000000000_30861",
+                "templateId": "adaga",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 5,
+                  "critico": 14
+                },
+                "value": 20,
+                "equipped": false,
+                "procChance": 0.15,
+                "foundFloor": 254
+              },
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 1,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "S": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "morcego",
+                  "enemyClassId": "xama",
+                  "floor": 254,
+                  "hp": 488,
+                  "maxHp": 488,
+                  "dmg": 161,
+                  "speed": 333,
+                  "xp": 771,
+                  "gold": 515,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "orc",
+                  "enemyClassId": "guardiao",
+                  "floor": 254,
+                  "hp": 1313,
+                  "maxHp": 1313,
+                  "dmg": 147,
+                  "speed": 133,
+                  "xp": 768,
+                  "gold": 515,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "orc",
+                  "enemyClassId": "guardiao",
+                  "floor": 254,
+                  "hp": 1312,
+                  "maxHp": 1312,
+                  "dmg": 147,
+                  "speed": 133,
+                  "xp": 769,
+                  "gold": 514,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "bonusTreasure": {
+                "item": {
+                  "uid": "robe_1700000000000_83409",
+                  "templateId": "robe",
+                  "rarity": "raro",
+                  "stats": {
+                    "defesa": 4,
+                    "mana": 16
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "foundFloor": 254
+                }
+              },
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 6,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "boss",
+              "x": 2,
+              "y": 3,
+              "doors": {
+                "E": true,
+                "W": true,
+                "S": true,
+                "N": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "esqueleto",
+                  "enemyClassId": "assassino",
+                  "floor": 254,
+                  "hp": 3400,
+                  "maxHp": 3400,
+                  "dmg": 256,
+                  "speed": 115,
+                  "xp": 1330,
+                  "gold": 1604,
+                  "isBoss": true,
+                  "isMainBoss": true,
+                  "bossTitle": "o Eterno",
+                  "chefeFinal": true
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "start",
+              "x": 3,
+              "y": 3,
+              "doors": {
+                "W": true,
+                "N": true
+              },
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 6,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 3,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 3,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "treasure",
+              "x": 0,
+              "y": 4,
+              "doors": {
+                "E": true
+              },
+              "startBranch": "2,3",
+              "isMimic": false,
+              "giveGold": true,
+              "item": null,
+              "collected": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 6,
+                  "item": {
+                    "uid": "pot_vida_1700000000000_97490",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 1,
+              "y": 4,
+              "doors": {
+                "N": true,
+                "S": true,
+                "W": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "esqueleto",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 254,
+                  "hp": 857,
+                  "maxHp": 857,
+                  "dmg": 181,
+                  "speed": 150,
+                  "xp": 769,
+                  "gold": 514,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "assassino",
+                  "floor": 254,
+                  "hp": 501,
+                  "maxHp": 501,
+                  "dmg": 178,
+                  "speed": 327,
+                  "xp": 770,
+                  "gold": 517,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": {
+                    "uid": "pot_mana_1700000000000_94844",
+                    "templateId": "pot_mana",
+                    "rarity": "comum",
+                    "stats": {
+                      "curaMana": 16
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 1,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "monster",
+              "x": 2,
+              "y": 4,
+              "doors": {
+                "N": true,
+                "E": true
+              },
+              "monsters": [
+                {
+                  "speciesId": "aranha",
+                  "enemyClassId": "guardiao",
+                  "floor": 254,
+                  "hp": 751,
+                  "maxHp": 751,
+                  "dmg": 147,
+                  "speed": 209,
+                  "xp": 770,
+                  "gold": 512,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "morcego",
+                  "enemyClassId": "brutamontes",
+                  "floor": 254,
+                  "hp": 560,
+                  "maxHp": 560,
+                  "dmg": 184,
+                  "speed": 300,
+                  "xp": 768,
+                  "gold": 514,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "morcego",
+                  "enemyClassId": "feiticeiro",
+                  "floor": 254,
+                  "hp": 462,
+                  "maxHp": 462,
+                  "dmg": 181,
+                  "speed": 349,
+                  "xp": 771,
+                  "gold": 512,
+                  "isBoss": false
+                }
+              ],
+              "monsterIndex": 0,
+              "beaten": false,
+              "bonusTreasure": {
+                "gold": 774
+              },
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 7,
+                  "row": 6,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "event",
+              "x": 3,
+              "y": 4,
+              "doors": {
+                "W": true
+              },
+              "event": {
+                "templateId": "porta"
+              },
+              "resolved": false,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 1,
+                  "used": false
+                },
+                {
+                  "kind": "pot",
+                  "col": 1,
+                  "row": 6,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 4,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 4,
+              "doors": {}
+            }
+          ],
+          [
+            {
+              "type": "void",
+              "x": 0,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "exit",
+              "x": 1,
+              "y": 5,
+              "doors": {
+                "N": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 4,
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 6,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 6,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "stairs",
+              "x": 2,
+              "y": 5,
+              "doors": {
+                "W": true,
+                "E": true
+              },
+              "startBranch": "2,3",
+              "distanceFromStart": 5,
+              "extras": [
+                {
+                  "kind": "chest",
+                  "col": 1,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "npc",
+              "x": 3,
+              "y": 5,
+              "doors": {
+                "W": true
+              },
+              "npc": {
+                "name": "Erma, a Vidente",
+                "role": "Mística Errante",
+                "service": "reveal",
+                "icon": "🔮",
+                "lines": [
+                  "Você se aventura fundo demais — ou talvez não o bastante...",
+                  "Os corredores mudam quando ninguém observa.",
+                  "Cuidado com o que dorme nas profundezas."
+                ],
+                "serviceUsed": false
+              },
+              "extras": [
+                {
+                  "kind": "pot",
+                  "col": 6,
+                  "row": 6,
+                  "used": false
+                }
+              ]
+            },
+            {
+              "type": "void",
+              "x": 4,
+              "y": 5,
+              "doors": {}
+            },
+            {
+              "type": "void",
+              "x": 5,
+              "y": 5,
+              "doors": {}
+            }
+          ]
+        ],
+        "rooms": [
+          [
+            3,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "start": [
+          3,
+          3
+        ]
+      },
+      "rngCalls": 339
     }
   }
 ]

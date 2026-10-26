@@ -1,0 +1,17 @@
+{
+  "LACAIOS_DO_CHEFE": 4,
+  "PODER_A_CADA": 3,
+  "PODER_A_CADA_NA_FURIA": 2,
+  "VELOCIDADE_NA_FURIA": 1.5,
+  "FORCA_DO_DEVASTADOR": 2,
+  "PODERES_DO_CHEFE": {
+    "devastador": {
+      "nome": "Golpe Devastador",
+      "icone": "💥"
+    },
+    "rugido": {
+      "nome": "Rugido",
+      "icone": "📢"
+    }
+  }
+}

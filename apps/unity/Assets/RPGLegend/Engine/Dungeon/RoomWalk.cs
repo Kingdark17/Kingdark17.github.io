@@ -73,8 +73,11 @@ namespace RPGLegend.Engine
         /// <summary>O vão de cada porta, no meio de cada parede.</summary>
         public static OrderedMap<TileRef> DoorTile => D.DoorTile;
 
-        /// <summary>TS: roomLayout — parede em volta, vão onde há porta e os objetos, cada um no seu quadrado.</summary>
-        public static RoomLayout Layout(DoorMap doors, IReadOnlyList<RoomObject> objects)
+        /// <summary>
+        /// TS: roomLayout — parede em volta, vão onde há porta e os objetos, cada um no seu quadrado. <paramref name="walls"/>
+        /// são as casas de dentro que a arte da masmorra faz de parede (<see cref="ArteDaSala.ParedesDaSala"/>).
+        /// </summary>
+        public static RoomLayout Layout(DoorMap doors, IReadOnlyList<RoomObject> objects, IReadOnlyList<TileRef> walls = null)
         {
             var solid = new List<List<bool>>();
             for (int row = 0; row < RoomRows; row++)
@@ -83,6 +86,8 @@ namespace RPGLegend.Engine
                 for (int col = 0; col < RoomCols; col++) linha.Add(col == 0 || row == 0 || col == RoomCols - 1 || row == RoomRows - 1);
                 solid.Add(linha);
             }
+            if (walls != null)
+                foreach (var parede in walls) solid[(int)parede.Row][(int)parede.Col] = true;
             var abertas = new List<string>();
             foreach (var direcao in Directions.Order)
             {
