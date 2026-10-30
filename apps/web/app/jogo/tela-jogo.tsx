@@ -40,6 +40,7 @@ import {
   celulaAtual,
   chegadaNaCidade,
   confirmaAoTocar,
+  continuarNaVizinha,
   curarNaTela,
   curarPeloParceiro,
   defaultRng,
@@ -65,6 +66,7 @@ import {
   plantaDaSalaSecreta,
   retomarSave,
   roomArrival,
+  salasEmVolta,
   TEXTO_DA_CIDADE,
   textoDaSecreta,
   tituloDoHeroi,
@@ -93,7 +95,7 @@ import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { arteDoTipo } from '@/lib/jogo/icones-do-mapa';
-import { TEMAS, type Figura } from '@/lib/jogo/desenho-da-sala';
+import { TEMAS, type Figura, type SalaDesenhada } from '@/lib/jogo/desenho-da-sala';
 import { assinaturaDosExtras, chaveDosObjetos, figurasDaSala, lerObjetos } from '@/lib/jogo/figuras-da-sala';
 import { direcaoAoSoltar, direcaoDaTecla, estaDigitando } from '@/lib/jogo/teclado';
 import { tocar } from '@/lib/som/efeitos';
@@ -268,6 +270,52 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     () => figurasDaSala(iconeAgora ? { arte: arteAgora, emoji: iconeAgora } : null, extrasAgora, secretaAgora?.indice ?? null),
     [iconeAgora, arteAgora, extrasAgora, secretaAgora?.indice],
   );
+  /**
+   * As salas emendadas em volta da atual (2026-10-30, pedido do Breno): a
+   * cena desenha cada uma no lugar dela e a câmera segue o herói. Como as
+   * plantas e as figuras lá de cima, tudo vira texto antes da memorização. A
+   * vizinha em que ele ainda não entrou vai sem objetos: fica na sombra. Na
+   * sala secreta, que fica fora do mapa, nenhuma.
+   */
+  const vizinhanca =
+    estado && masmorraAgora && !secretaAgora
+      ? JSON.stringify(
+          salasEmVolta(estado).map((s) => {
+            const icone = s.acesa ? apresentacaoDe(estado).icone(s.celula) : '';
+            return {
+              x: s.x,
+              y: s.y,
+              atual: s.dx === 0 && s.dy === 0,
+              acesa: s.acesa,
+              portas: s.portas.join(''),
+              objetos: s.acesa ? chaveDosObjetos(s.celula, icone !== '', masmorraAgora) : '',
+              extras: s.acesa ? assinaturaDosExtras(s.celula) : '',
+              icone,
+              tipo: s.celula.type,
+            };
+          }),
+        )
+      : '';
+  const salasDaCena = useMemo<SalaDesenhada[] | null>(() => {
+    if (!vizinhanca) return null;
+    const lidas = JSON.parse(vizinhanca) as { x: number; y: number; atual: boolean; acesa: boolean; portas: string; objetos: string; extras: string; icone: string; tipo: string }[];
+    return lidas.map((sala) => {
+      // A atual é a mesma planta em que o herói anda, com as mesmas figuras.
+      if (sala.atual) return { x: sala.x, y: sala.y, planta, figuras, acesa: true };
+      const portas = Object.fromEntries([...sala.portas].map((d) => [d, true]));
+      return {
+        x: sala.x,
+        y: sala.y,
+        planta: plantaDaSala(portas, lerObjetos(sala.objetos), masmorraAgora),
+        figuras: sala.acesa ? figurasDaSala(sala.icone ? { arte: arteDoTipo(sala.tipo), emoji: sala.icone } : null, sala.extras, null) : {},
+        acesa: sala.acesa,
+      };
+    });
+  }, [vizinhanca, planta, figuras, masmorraAgora]);
+  const origemX = estado?.pos.x ?? 0;
+  const origemY = estado?.pos.y ?? 0;
+  const origemDaCena = useMemo(() => (salasDaCena ? { x: origemX, y: origemY } : null), [origemX, origemY, salasDaCena]);
+
   // Provisório: o corpo da raça do paperdoll faz o papel do boneco do mapa
   // até o Breno desenhar o de 4 direções.
   const heroiNaCena = useMemo<Figura>(() => ({ arte: racaAgora ? `/img/paperdoll/corpo/${racaAgora}.png` : null, emoji: emojiDaRaca }), [racaAgora, emojiDaRaca]);
@@ -280,13 +328,20 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
    * totem, derrota — aparece no meio.
    */
   const [naSala, setNaSala] = useState<{ sala: string; mapa: string; x: number; y: number; chegada: Walker; volta: number } | null>(null);
+  /**
+   * Onde o herói estava quando atravessou a porta andando, e de que sala:
+   * com as salas emendadas ele continua dali na vizinha (`continuarNaVizinha`),
+   * sem pulo. Quem chega de outro jeito (o parceiro do co-op andou) cai na porta.
+   */
+  const [saidaPelaPorta, setSaidaPelaPorta] = useState<{ de: string; walker: Walker } | null>(null);
   if (estado && naSala?.sala !== salaAgora) {
     const dx = estado.pos.x - (naSala?.x ?? 0);
     const dy = estado.pos.y - (naSala?.y ?? 0);
     const vizinha = naSala?.mapa === mapaAgora && Math.abs(dx) + Math.abs(dy) === 1;
     const veioPor: Direction | null = vizinha ? (dx === 1 ? 'E' : dx === -1 ? 'W' : dy === 1 ? 'S' : 'N') : null;
     // Na cidade: quem volta da masmorra aparece na entrada dela; quem carrega o jogo, na porta da sala do save.
-    const chegada = estado.mapMode === 'city' ? chegadaNaCidade(estado, naSala?.mapa.startsWith('dungeon') ?? false) : roomArrival(veioPor, geometriaAgora);
+    const andouAte = vizinha && veioPor && saidaPelaPorta && saidaPelaPorta.de === naSala?.sala ? continuarNaVizinha(saidaPelaPorta.walker, veioPor, geometriaAgora) : null;
+    const chegada = estado.mapMode === 'city' ? chegadaNaCidade(estado, naSala?.mapa.startsWith('dungeon') ?? false) : (andouAte ?? roomArrival(veioPor, geometriaAgora));
     setNaSala({ sala: salaAgora, mapa: mapaAgora, x: estado.pos.x, y: estado.pos.y, chegada, volta: 0 });
   }
   const chegadaNaSala = naSala?.sala === salaAgora ? naSala.chegada : estado?.mapMode === 'city' ? chegadaNaCidade(estado) : roomArrival(null, geometriaAgora);
@@ -751,6 +806,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     if (emCoop) travarParceiro();
 
     if (!vizinhaEm(estado, direcao)) return false;
+    setSaidaPelaPorta({ de: salaAgora, walker: posicao.current.walker });
     return entrar(estado, direcao);
   }
 
@@ -1026,6 +1082,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               tema={TEMAS[estado.mapMode === 'dungeon' ? estado.masmorra.dungeon : 'cidade']}
               masmorra={masmorraAgora}
               figuras={figuras}
+              salas={salasDaCena}
+              origem={origemDaCena}
               heroi={heroiNaCena}
               chegada={chegadaDaCena}
               posicao={posicao}

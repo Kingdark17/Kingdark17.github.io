@@ -21,13 +21,17 @@
  *
  * O canvas é enfeite pra quem lê a tela com leitor: a narração em texto ao
  * lado continua dizendo o que tem na sala e por onde dá pra ir.
+ *
+ * Na masmorra as salas são emendadas (2026-10-30): com `salas`, a cena
+ * desenha as em volta da atual e a câmera segue o herói; `origem` é a sala
+ * em que ele está, e a posição dele é contada do canto dela.
  */
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
 
 import { ROOM_COLS, ROOM_ROWS, andarNoQuadro, passosDoQuadro, type Direction, type DungeonId, type PosicaoNaSala, type RoomLayout, type Vetor, type Walker } from '@rpg-legend/shared';
 
-import { criarCena, type Cena, type Figura, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
+import { criarCena, type Cena, type Figura, type OrigemDaSala, type SalaDesenhada, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
 import styles from './jogo.module.css';
 
 interface Props {
@@ -44,6 +48,13 @@ interface Props {
   masmorra: DungeonId | null;
   /** A figura de cada objeto da planta (conteúdo e extras), pelo id. */
   figuras: Readonly<Record<string, Figura>>;
+  /**
+   * Na masmorra emendada: as salas em volta da atual (ela inclusive), cada uma no lugar dela. Ausente na cidade e
+   * na sala secreta, que é desenhada sozinha.
+   */
+  salas?: readonly SalaDesenhada[] | null;
+  /** A sala em que o herói está, na grade do andar (com `salas`). */
+  origem?: OrigemDaSala | null;
   heroi: Figura;
   /** Onde o herói aparece nesta sala. */
   chegada: Walker;
@@ -61,15 +72,32 @@ interface Props {
   children?: ReactNode;
 }
 
-export function CenaDaSala({ sala, planta, cidade, tema, masmorra, figuras, heroi, chegada, posicao, ativo, entrada, onSaida, onEncostar, children }: Readonly<Props>) {
+export function CenaDaSala({
+  sala,
+  planta,
+  cidade,
+  tema,
+  masmorra,
+  figuras,
+  salas = null,
+  origem = null,
+  heroi,
+  chegada,
+  posicao,
+  ativo,
+  entrada,
+  onSaida,
+  onEncostar,
+  children,
+}: Readonly<Props>) {
   const alvo = useRef<HTMLDivElement>(null);
   const cena = useRef<Cena | null>(null);
   const [pronta, setPronta] = useState(false);
 
   // O relógio do Pixi lê os valores mais recentes por aqui, sem reassinar a cada render.
-  const atual = useRef({ sala, planta, chegada, posicao, ativo, entrada, onSaida, onEncostar });
+  const atual = useRef({ sala, planta, chegada, origem, posicao, ativo, entrada, onSaida, onEncostar });
   useEffect(() => {
-    atual.current = { sala, planta, chegada, posicao, ativo, entrada, onSaida, onEncostar };
+    atual.current = { sala, planta, chegada, origem, posicao, ativo, entrada, onSaida, onEncostar };
   });
   /** O tempo que sobrou do quadro anterior, e de que sala o herói já saiu (esperando a vizinha chegar). */
   const relogio = useRef<{ sobra: number; saiuDe: string | null }>({ sobra: 0, saiuDe: null });
@@ -101,9 +129,10 @@ export function CenaDaSala({ sala, planta, cidade, tema, masmorra, figuras, hero
   const troncos = cidade ? cidade.troncos : null;
   useEffect(() => {
     if (!pronta) return;
-    if (troncos === null) void cena.current?.desenharSala(planta, tema, figuras, masmorra);
-    else void cena.current?.desenharCidade(troncos);
-  }, [pronta, planta, tema, figuras, troncos, masmorra]);
+    if (troncos !== null) void cena.current?.desenharCidade(troncos);
+    else if (salas) void cena.current?.desenharMasmorra(salas, tema, masmorra);
+    else void cena.current?.desenharSala(planta, tema, figuras, masmorra);
+  }, [pronta, planta, tema, figuras, salas, troncos, masmorra]);
 
   useEffect(() => {
     const desenho = cena.current;
@@ -123,7 +152,7 @@ export function CenaDaSala({ sala, planta, cidade, tema, masmorra, figuras, hero
       }
       if (!agora.ativo || r.saiuDe === p.sala) {
         r.sobra = 0;
-        desenho.colocarHeroi(p.walker, false);
+        desenho.colocarHeroi(p.walker, false, agora.origem);
         return;
       }
 
@@ -141,7 +170,7 @@ export function CenaDaSala({ sala, planta, cidade, tema, masmorra, figuras, hero
       } else if (quadro.encostou) {
         agora.onEncostar(quadro.encostou);
       }
-      desenho.colocarHeroi(p.walker, quadro.andou);
+      desenho.colocarHeroi(p.walker, quadro.andou, agora.origem);
     });
   }, [pronta]);
 

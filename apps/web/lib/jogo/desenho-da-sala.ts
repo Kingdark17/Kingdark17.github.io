@@ -17,6 +17,13 @@
  * parede na cor de cada lugar, o ícone do minimapa no centro e o corpo da
  * raça do paperdoll como boneco. Quando a arte chegar, troca este arquivo;
  * a regra de andar fica.
+ *
+ * Na masmorra as salas são emendadas (2026-10-30, pedido do Breno): a cena
+ * desenha a sala atual e as em volta (`salasEmVolta`), cada uma no lugar
+ * dela no andar, e a câmera segue o herói. O herói fica na posição da sala
+ * atual mais a dele dentro dela, então trocar de sala não move nada na
+ * tela: a vizinha já estava desenhada ali. A vizinha em que ele ainda não
+ * entrou fica na sombra, sem o que tem dentro.
  */
 
 import type * as Pixi from 'pixi.js';
@@ -60,6 +67,10 @@ const ESCALA_DA_CIDADE = PIXELS_POR_CASA / TILE_UNITS;
 const LARGURA_DA_CIDADE = CIDADE_COLS * PIXELS_POR_CASA;
 const ALTURA_DA_CIDADE = CIDADE_ROWS * PIXELS_POR_CASA;
 
+/** A sombra da sala vizinha em que o herói ainda não entrou: dá pra ver as paredes, não o que tem dentro. */
+const COR_DA_SOMBRA = 0x05060a;
+const ALFA_DA_SOMBRA = 0.78;
+
 /** Quanto se vê da camada que cobre o herói (meio transparente), e quanto leva pra chegar lá. */
 const ALFA_DE_QUEM_COBRE = 0.5;
 const MS_DO_ESMAECER = 150;
@@ -94,20 +105,43 @@ export interface Figura {
   forma?: 'rachadura';
 }
 
+/** Uma sala da masmorra emendada, no lugar dela na grade do andar. */
+export interface SalaDesenhada {
+  x: number;
+  y: number;
+  planta: RoomLayout;
+  /** A figura de cada objeto da planta, pelo id. A sala apagada não mostra nenhuma. */
+  figuras: Readonly<Record<string, Figura>>;
+  /** Já entrou nela (ou é a atual): sem sombra. */
+  acesa: boolean;
+}
+
+/** A posição da sala atual na grade do andar: o herói anda contado do canto dela. */
+export interface OrigemDaSala {
+  x: number;
+  y: number;
+}
+
 export interface Cena {
   /**
-   * `figuras`: a figura de cada objeto da planta, pelo id; objeto sem figura não é desenhado. Com uma `masmorra`
-   * que tem arte (`dungeon/arte-da-sala.ts`: a Floresta do Breno), a sala é a dela, e não os quadradinhos do `tema`.
+   * Uma sala sozinha, parada no meio da cena (a sala secreta, fora do mapa). `figuras`: a figura de cada objeto
+   * da planta, pelo id; objeto sem figura não é desenhado. Com uma `masmorra` que tem arte
+   * (`dungeon/arte-da-sala.ts`), a sala é a dela, e não os quadradinhos do `tema`.
    */
   desenharSala(planta: RoomLayout, tema: TemaDaSala, figuras: Readonly<Record<string, Figura>>, masmorra?: DungeonId | null): Promise<void>;
+  /** A masmorra emendada: as salas em volta da atual, cada uma no lugar dela, e a câmera seguindo o herói. */
+  desenharMasmorra(salas: readonly SalaDesenhada[], tema: TemaDaSala, masmorra: DungeonId | null): Promise<void>;
   /**
    * A cidade desenhada do Breno no lugar da sala (`city/mapa-da-cidade.ts`):
    * as camadas dele, e a janela seguindo o herói. `troncos`: os troncos
    * ainda fecham o caminho da caverna.
    */
   desenharCidade(troncos: boolean): Promise<void>;
-  /** Põe o herói onde a regra diz. `andando` balança o boneco, que ainda não tem quadros de caminhada. */
-  colocarHeroi(walker: Walker, andando: boolean): void;
+  /**
+   * Põe o herói onde a regra diz. `andando` balança o boneco, que ainda não tem quadros de caminhada. `origem`: na
+   * masmorra emendada, a sala em que ele está (a posição dele é contada do canto dela).
+   */
+  colocarHeroi(walker: Walker, andando: boolean, origem?: OrigemDaSala | null): void;
   /** Chama `fn` a cada quadro da tela, com os milissegundos desde o anterior. Devolve como parar. */
   aCadaQuadro(fn: (decorridoMs: number) => void): () => void;
   destruir(): void;
@@ -177,20 +211,25 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
   mundo.sortableChildren = true;
   /** O que vai por cima de tudo: na cidade, as árvores da borda e a grade das pontes. */
   const acima = new pixi.Container();
-  /** O que a câmera move. Na sala fica parado; na cidade, segue o herói. */
+  /** A sombra das salas vizinhas em que o herói ainda não entrou: por cima até das copas. */
+  const sombra = new pixi.Container();
+  /** O que a câmera move. Na sala sozinha fica parado; na cidade e na masmorra, segue o herói. */
   const palco = new pixi.Container();
-  palco.addChild(chao, mundo, acima);
+  palco.addChild(chao, mundo, acima, sombra);
   app.stage.addChild(palco);
   /** Os objetos desenhados na sala atual, pra sair quando ela troca. */
   let objetos: Pixi.Container[] = [];
   /** Na cidade, as camadas do meio, que ficam meio transparentes quando cobrem o herói. */
   let doMeio: Array<{ camada: CamadaDaCidade; sprite: Pixi.Sprite }> = [];
   let naCidade = false;
+  /** Na masmorra emendada: o tamanho de uma sala, em pixel, pra achar o canto da sala atual. */
+  let salaEmPixel: { largura: number; altura: number } | null = null;
   let escala = ESCALA;
 
   function limpar() {
     chao.removeChildren().forEach((filho) => filho.destroy());
     acima.removeChildren().forEach((filho) => filho.destroy());
+    sombra.removeChildren().forEach((filho) => filho.destroy());
     for (const objeto of objetos) objeto.destroy();
     objetos = [];
     doMeio = [];
@@ -210,88 +249,148 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
    */
   let vez = 0;
 
+  /** As texturas da arte das salas desta masmorra, pelas portas de cada uma (`null` sem arte). */
+  async function arteDasSalas(plantas: readonly RoomLayout[], masmorra: DungeonId | null | undefined) {
+    return Promise.all(
+      plantas.map(async (planta) => {
+        const camadas = masmorra ? camadasDaSala(masmorra, planta.doors) : null;
+        if (!camadas || !masmorra) return null;
+        const texturas = await Promise.all(camadas.map((camada) => textura(pixi, `/img/salas/${masmorra}/${camada.arquivo}.png`)));
+        return { camadas, texturas };
+      }),
+    );
+  }
+
+  /** As figuras dos objetos da planta, já no lugar, com o canto da sala em (`ox`, `oy`). */
+  async function figurasDaPlanta(planta: RoomLayout, figuras: Readonly<Record<string, Figura>>, ox: number, oy: number) {
+    return Promise.all(
+      planta.objects.map(async (objeto) => {
+        const figura = figuras[objeto.id];
+        if (!figura || figura.forma === 'rachadura') return null;
+        const desenho = await figuraEm(pixi, figura, LADO * (figura.escala ?? 1));
+        const pe = peNoQuadrado(objeto.col, objeto.row);
+        desenho.position.set(ox + pe.x, oy + pe.y);
+        desenho.zIndex = oy + pe.y;
+        if (figura.apagada) desenho.alpha = 0.45;
+        return desenho;
+      }),
+    );
+  }
+
+  /**
+   * Uma sala com o canto em (`ox`, `oy`): a arte (ou os quadradinhos do `tema`), as rachaduras e as figuras já
+   * carregadas. Apagada, ganha a sombra por cima.
+   */
+  function pintarSala(
+    planta: RoomLayout,
+    tema: TemaDaSala,
+    figuras: Readonly<Record<string, Figura>>,
+    arte: Awaited<ReturnType<typeof arteDasSalas>>[number],
+    desenhos: readonly (Pixi.Container | null)[],
+    ox: number,
+    oy: number,
+    acesa: boolean,
+  ) {
+    const colunas = planta.cols ?? ROOM_COLS;
+    const linhas = planta.rows ?? ROOM_ROWS;
+    // A arte tem 32 px por casa; a sala, LADO: estica por igual, no pixel mais próximo.
+    arte?.camadas.forEach((camada, i) => {
+      const tex = arte.texturas[i];
+      if (!tex) return;
+      const sprite = new pixi.Sprite(tex);
+      sprite.scale.set(LADO / PIXELS_DA_SALA);
+      sprite.position.set(ox, oy);
+      (camada.plano === 'cima' ? acima : chao).addChild(sprite);
+    });
+
+    const ladrilhos = new pixi.Graphics();
+    if (!arte) planta.solid.forEach((linha, row) => {
+      linha.forEach((solido, col) => {
+        const px = ox + col * LADO;
+        const py = oy + row * LADO;
+        const borda = col === 0 || row === 0 || col === colunas - 1 || row === linhas - 1;
+        if (borda && solido) {
+          ladrilhos.rect(px, py, LADO, LADO).fill({ color: tema.parede });
+          ladrilhos.rect(px + 2, py + 2, LADO - 4, LADO - 4).stroke({ width: 2, color: tema.bordaDaParede });
+        } else {
+          // Vão de porta na borda; dentro, chão xadrez — também debaixo do conteúdo.
+          const xadrez = (col + row) % 2 === 0 ? tema.chao : tema.chaoAlternado;
+          ladrilhos.rect(px, py, LADO, LADO).fill({ color: borda ? tema.vao : xadrez });
+        }
+      });
+    });
+    chao.addChild(ladrilhos);
+
+    // A parede rachada é riscada na própria pedra, por cima do ladrilho.
+    const rachaduras = new pixi.Graphics();
+    for (const objeto of planta.objects) {
+      if (figuras[objeto.id]?.forma !== 'rachadura') continue;
+      const px = ox + objeto.col * LADO;
+      const py = oy + objeto.row * LADO;
+      rachaduras
+        .moveTo(px + LADO * 0.5, py + 4)
+        .lineTo(px + LADO * 0.38, py + LADO * 0.32)
+        .lineTo(px + LADO * 0.6, py + LADO * 0.52)
+        .lineTo(px + LADO * 0.42, py + LADO * 0.78)
+        .lineTo(px + LADO * 0.52, py + LADO - 4)
+        .moveTo(px + LADO * 0.6, py + LADO * 0.52)
+        .lineTo(px + LADO * 0.8, py + LADO * 0.6)
+        .stroke({ width: 3, color: 0x1a0b09 });
+    }
+    // Na sala desenhada as árvores dos lados passam por cima da parede: a rachadura vai por cima delas.
+    (arte ? acima : chao).addChild(rachaduras);
+
+    for (const desenho of desenhos) {
+      if (!desenho) continue;
+      mundo.addChild(desenho);
+      objetos.push(desenho);
+    }
+
+    if (!acesa) sombra.addChild(new pixi.Graphics().rect(ox, oy, colunas * LADO, linhas * LADO).fill({ color: COR_DA_SOMBRA, alpha: ALFA_DA_SOMBRA }));
+  }
+
   return {
     async desenharSala(planta, tema, figuras, masmorra) {
       const esta = ++vez;
-      // A arte da sala carrega antes de limpar a anterior, pra não piscar um quadro vazio.
-      const camadas = masmorra ? camadasDaSala(masmorra, planta.doors) : null;
-      const arte = camadas && masmorra ? await Promise.all(camadas.map((camada) => textura(pixi, `/img/salas/${masmorra}/${camada.arquivo}.png`))) : null;
-      if (esta !== vez) return;
-      limpar();
-      naCidade = false;
-      escala = ESCALA;
-      palco.position.set(0, 0);
-      const colunas = planta.cols ?? ROOM_COLS;
-      const linhas = planta.rows ?? ROOM_ROWS;
-      tamanho(colunas * LADO, linhas * LADO);
-
-      // A arte tem 32 px por casa; a sala, LADO: estica por igual, no pixel mais próximo.
-      camadas?.forEach((camada, i) => {
-        const tex = arte?.[i];
-        if (!tex) return;
-        const sprite = new pixi.Sprite(tex);
-        sprite.scale.set(LADO / PIXELS_DA_SALA);
-        (camada.plano === 'cima' ? acima : chao).addChild(sprite);
-      });
-
-      const ladrilhos = new pixi.Graphics();
-      if (!camadas) planta.solid.forEach((linha, row) => {
-        linha.forEach((solido, col) => {
-          const px = col * LADO;
-          const py = row * LADO;
-          const borda = col === 0 || row === 0 || col === colunas - 1 || row === linhas - 1;
-          if (borda && solido) {
-            ladrilhos.rect(px, py, LADO, LADO).fill({ color: tema.parede });
-            ladrilhos.rect(px + 2, py + 2, LADO - 4, LADO - 4).stroke({ width: 2, color: tema.bordaDaParede });
-          } else {
-            // Vão de porta na borda; dentro, chão xadrez — também debaixo do conteúdo.
-            const xadrez = (col + row) % 2 === 0 ? tema.chao : tema.chaoAlternado;
-            ladrilhos.rect(px, py, LADO, LADO).fill({ color: borda ? tema.vao : xadrez });
-          }
-        });
-      });
-      chao.addChild(ladrilhos);
-
-      // A parede rachada é riscada na própria pedra, por cima do ladrilho.
-      const rachaduras = new pixi.Graphics();
-      for (const objeto of planta.objects) {
-        if (figuras[objeto.id]?.forma !== 'rachadura') continue;
-        const px = objeto.col * LADO;
-        const py = objeto.row * LADO;
-        rachaduras
-          .moveTo(px + LADO * 0.5, py + 4)
-          .lineTo(px + LADO * 0.38, py + LADO * 0.32)
-          .lineTo(px + LADO * 0.6, py + LADO * 0.52)
-          .lineTo(px + LADO * 0.42, py + LADO * 0.78)
-          .lineTo(px + LADO * 0.52, py + LADO - 4)
-          .moveTo(px + LADO * 0.6, py + LADO * 0.52)
-          .lineTo(px + LADO * 0.8, py + LADO * 0.6)
-          .stroke({ width: 3, color: 0x1a0b09 });
-      }
-      // Na sala desenhada as árvores dos lados passam por cima da parede: a rachadura vai por cima delas.
-      (camadas ? acima : chao).addChild(rachaduras);
-
-      const desenhos = await Promise.all(
-        planta.objects.map(async (objeto) => {
-          const figura = figuras[objeto.id];
-          if (!figura || figura.forma === 'rachadura') return null;
-          const desenho = await figuraEm(pixi, figura, LADO * (figura.escala ?? 1));
-          const pe = peNoQuadrado(objeto.col, objeto.row);
-          desenho.position.set(pe.x, pe.y);
-          desenho.zIndex = pe.y;
-          if (figura.apagada) desenho.alpha = 0.45;
-          return desenho;
-        }),
-      );
+      // A arte e as figuras carregam antes de limpar a sala anterior, pra não piscar um quadro vazio.
+      const [arte] = await arteDasSalas([planta], masmorra);
+      const desenhos = await figurasDaPlanta(planta, figuras, 0, 0);
       if (esta !== vez) {
         for (const desenho of desenhos) desenho?.destroy();
         return;
       }
-      for (const desenho of desenhos) {
-        if (!desenho) continue;
-        mundo.addChild(desenho);
-        objetos.push(desenho);
+      limpar();
+      naCidade = false;
+      salaEmPixel = null;
+      escala = ESCALA;
+      palco.position.set(0, 0);
+      tamanho((planta.cols ?? ROOM_COLS) * LADO, (planta.rows ?? ROOM_ROWS) * LADO);
+      pintarSala(planta, tema, figuras, arte ?? null, desenhos, 0, 0, true);
+    },
+
+    async desenharMasmorra(salas, tema, masmorra) {
+      const esta = ++vez;
+      const primeira = salas[0];
+      if (!primeira) return;
+      const largura = (primeira.planta.cols ?? ROOM_COLS) * LADO;
+      const altura = (primeira.planta.rows ?? ROOM_ROWS) * LADO;
+      const artes = await arteDasSalas(
+        salas.map((sala) => sala.planta),
+        masmorra,
+      );
+      const desenhos = await Promise.all(salas.map((sala) => figurasDaPlanta(sala.planta, sala.acesa ? sala.figuras : {}, sala.x * largura, sala.y * altura)));
+      if (esta !== vez) {
+        for (const lista of desenhos) for (const desenho of lista) desenho?.destroy();
+        return;
       }
+      limpar();
+      naCidade = false;
+      salaEmPixel = { largura, altura };
+      escala = ESCALA;
+      tamanho(largura, altura);
+      salas.forEach((sala, i) =>
+        pintarSala(sala.planta, tema, sala.acesa ? sala.figuras : {}, artes[i] ?? null, desenhos[i] ?? [], sala.x * largura, sala.y * altura, sala.acesa),
+      );
     },
 
     async desenharCidade(troncos) {
@@ -301,6 +400,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       if (esta !== vez) return;
       limpar();
       naCidade = true;
+      salaEmPixel = null;
       escala = ESCALA_DA_CIDADE;
       tamanho(LARGURA_DA_CENA, ALTURA_DA_CENA);
       camadas.forEach((camada, i) => {
@@ -319,10 +419,16 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       });
     },
 
-    colocarHeroi(walker, andando) {
-      // O pé do boneco fica na borda de baixo da base que bate nas paredes.
-      const x = walker.x * escala;
-      const y = (walker.y + HERO_HALF) * escala;
+    colocarHeroi(walker, andando, origem) {
+      // O pé do boneco fica na borda de baixo da base que bate nas paredes. Na masmorra emendada, contado do canto
+      // da sala atual, que fica no lugar dela no andar.
+      const canto = salaEmPixel && origem ? { x: origem.x * salaEmPixel.largura, y: origem.y * salaEmPixel.altura } : { x: 0, y: 0 };
+      const x = canto.x + walker.x * escala;
+      const y = canto.y + (walker.y + HERO_HALF) * escala;
+      if (salaEmPixel) {
+        // A câmera no herói, em pixel inteiro (fração faz a arte tremer): parado no meio da sala, ela a enquadra inteira.
+        palco.position.set(Math.round(app.renderer.width / 2 - x), Math.round(app.renderer.height / 2 - (y - LADO / 2)));
+      }
       if (naCidade) {
         // A janela segue o herói, sem passar da borda do mapa, em pixel inteiro (fração faz a arte tremer).
         const meioX = Math.min(0, Math.max(LARGURA_DA_CENA - LARGURA_DA_CIDADE, LARGURA_DA_CENA / 2 - x));
