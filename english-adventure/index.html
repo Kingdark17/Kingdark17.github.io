@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>English Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- HUD -->
+<div id="hud" class="hidden">
+  <div class="hud-left">
+    <div class="hud-name"><span id="hudName">Player</span> <span class="hud-lv" id="hudLevel">Lv 1</span></div>
+    <div class="xpbar"><div id="hudXpFill"></div><span id="hudXpText">0 XP</span></div>
+    <div class="hud-coins">🪙 <span id="hudCoins">0</span> <span id="hudTime"></span></div>
+  </div>
+  <div class="hud-quest" id="hudQuest" title="Open quests"></div>
+  <div class="hud-btns">
+    <button id="btnMusic" title="Music on/off">🎵</button>
+    <button id="btnPet" title="My Pet">🐾</button>
+    <button id="btnQuests" title="Quests">📜</button>
+    <button id="btnInv" title="Inventory (I)">🎒</button>
+    <button id="btnMap" title="Map (M)">🗺️</button>
+    <button id="btnSettings" title="Settings (Esc)">⚙️</button>
+  </div>
+</div>
+<div id="controlsHint" class="hidden">WASD / Arrows: move &nbsp;•&nbsp; E: interact &nbsp;•&nbsp; I: inventory &nbsp;•&nbsp; M: map &nbsp;•&nbsp; Q: quests</div>
+<div id="prompt" class="hidden"></div>
+<div id="toasts"></div>
+
+<!-- Dialogue -->
+<div id="dialog" class="hidden">
+  <div class="dlg-head"><span id="dlgName"></span><span class="dlg-audio"><button id="dlgListen" class="listen" title="Listen">🔊 Listen</button><button id="dlgSlow" class="listen" title="Listen slowly">🐢 Slow</button><button id="dlgPtBtn" class="listen" title="Ouvir em português">🇧🇷 PT</button></span></div>
+  <div id="dlgText"></div>
+  <div id="dlgPt"></div>
+  <div id="dlgFeedback"></div>
+  <div id="dlgChoices"></div>
+</div>
+
+<!-- Overlay for menus & minigames -->
+<div id="overlay" class="hidden"><div id="panel"></div></div>
+
+<!-- Title screen -->
+<div id="title">
+  <canvas id="titleBg"></canvas>
+  <div class="title-box">
+    <h1>ENGLISH<br>ADVENTURE</h1>
+    <p class="subtitle">Learn English. Explore the World. Have Fun!</p>
+    <div class="title-btns">
+      <button id="tPlay" class="big">▶ PLAY</button>
+      <button id="tContinue" class="big">⏩ CONTINUE</button>
+      <button id="tSettings" class="big">⚙ SETTINGS</button>
+      <button id="tHow" class="big">❓ HOW TO PLAY</button>
+      <button id="tAbout" class="big">ℹ ABOUT</button>
+    </div>
+  </div>
+</div>
+
+<!-- Touch controls -->
+<div id="touch" class="hidden">
+  <div id="dpad">
+    <button data-k="up">▲</button>
+    <button data-k="left">◀</button>
+    <button data-k="right">▶</button>
+    <button data-k="down">▼</button>
+  </div>
+  <button id="touchE">E</button>
+</div>
+<div id="fade"></div>
+
+<script src="js/data.js"></script>
+<script src="js/voice-manifest.js"></script>
+<script src="js/dialogs.js"></script>
+<script src="js/core.js"></script>
+<script src="js/music.js"></script>
+<script src="js/art.js"></script>
+<script src="js/maps.js"></script>
+<script src="js/world.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/ui2.js"></script>
+<script src="js/minigames.js"></script>
+<script src="js/minigames2.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
