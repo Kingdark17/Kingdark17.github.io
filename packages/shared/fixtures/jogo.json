@@ -92941,33 +92941,33 @@
       "result": [
         {
           "id": "conteudo",
-          "col": 4,
-          "row": 4
+          "col": 5,
+          "row": 6
         },
         {
           "id": "extra-0",
-          "col": 1,
-          "row": 1
+          "col": 2,
+          "row": 2
         },
         {
           "id": "extra-1",
           "col": 2,
-          "row": 1
+          "row": 3
         },
         {
           "id": "extra-2",
-          "col": 6,
-          "row": 1
+          "col": 8,
+          "row": 3
         },
         {
           "id": "extra-3",
-          "col": 7,
-          "row": 1
+          "col": 8,
+          "row": 2
         },
         {
           "id": "extra-4",
-          "col": 4,
-          "row": 8
+          "col": 5,
+          "row": 11
         }
       ]
     }
@@ -93465,6 +93465,954 @@
             "row": 4
           }
         ]
+      }
+    }
+  },
+  {
+    "name": "plantaDaSalaSecreta: parede N, na Torre",
+    "input": {
+      "fn": "plantaDaSalaSecreta",
+      "args": {
+        "lado": "N",
+        "masmorra": "torre"
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "S"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "bau-secreto",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "cols": 11,
+        "rows": 12,
+        "portas": {
+          "N": {
+            "col": 5,
+            "row": 1,
+            "largura": 3,
+            "fundo": 2
+          },
+          "S": {
+            "col": 5,
+            "row": 11,
+            "largura": 3,
+            "fundo": 1
+          },
+          "E": {
+            "col": 10,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "plantaDaSalaSecreta: parede W, na Torre",
+    "input": {
+      "fn": "plantaDaSalaSecreta",
+      "args": {
+        "lado": "W",
+        "masmorra": "torre"
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "bau-secreto",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "cols": 11,
+        "rows": 12,
+        "portas": {
+          "N": {
+            "col": 5,
+            "row": 1,
+            "largura": 3,
+            "fundo": 2
+          },
+          "S": {
+            "col": 5,
+            "row": 11,
+            "largura": 3,
+            "fundo": 1
+          },
+          "E": {
+            "col": 10,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "objetosDaSala: na Torre, parede aberta",
+    "input": {
+      "fn": "objetosDaSala",
+      "args": {
+        "celula": {
+          "type": "start",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "chest",
+              "col": 1,
+              "row": 1,
+              "item": {
+                "uid": "pot_vida_1700000000000_62706",
+                "templateId": "pot_vida",
+                "rarity": "comum",
+                "stats": {
+                  "cura": 22
+                },
+                "value": 14,
+                "equipped": false
+              },
+              "used": false
+            },
+            {
+              "kind": "chest",
+              "col": 2,
+              "row": 1,
+              "item": null,
+              "used": false
+            },
+            {
+              "kind": "pot",
+              "col": 6,
+              "row": 1,
+              "used": false
+            },
+            {
+              "kind": "sign",
+              "col": 7,
+              "row": 1
+            },
+            {
+              "kind": "crack",
+              "col": 4,
+              "row": 6,
+              "side": "S",
+              "used": true,
+              "secretItem": {
+                "uid": "colar_forca_1700000000000_72021",
+                "templateId": "colar_forca",
+                "rarity": "incomum",
+                "stats": {
+                  "ataque": 3,
+                  "vida": 10
+                },
+                "value": 29,
+                "equipped": false
+              },
+              "secretCollected": false
+            }
+          ],
+          "visited": true,
+          "revealed": true
+        },
+        "temConteudo": true,
+        "masmorra": "torre"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "conteudo",
+          "col": 5,
+          "row": 6
+        },
+        {
+          "id": "extra-0",
+          "col": 2,
+          "row": 2
+        },
+        {
+          "id": "extra-1",
+          "col": 2,
+          "row": 3
+        },
+        {
+          "id": "extra-2",
+          "col": 8,
+          "row": 3
+        },
+        {
+          "id": "extra-3",
+          "col": 8,
+          "row": 2
+        }
+      ]
+    }
+  },
+  {
+    "name": "plantaDaSala: na Torre, sem portas",
+    "input": {
+      "fn": "plantaDaSala",
+      "args": {
+        "portas": {},
+        "objetos": true,
+        "masmorra": "torre"
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "conteudo",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "cols": 11,
+        "rows": 12,
+        "portas": {
+          "N": {
+            "col": 5,
+            "row": 1,
+            "largura": 3,
+            "fundo": 2
+          },
+          "S": {
+            "col": 5,
+            "row": 11,
+            "largura": 3,
+            "fundo": 1
+          },
+          "E": {
+            "col": 10,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "plantaDaSala: na Torre, norte e leste",
+    "input": {
+      "fn": "plantaDaSala",
+      "args": {
+        "portas": {
+          "N": true,
+          "E": true
+        },
+        "objetos": true,
+        "masmorra": "torre"
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "E"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "conteudo",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "cols": 11,
+        "rows": 12,
+        "portas": {
+          "N": {
+            "col": 5,
+            "row": 1,
+            "largura": 3,
+            "fundo": 2
+          },
+          "S": {
+            "col": 5,
+            "row": 11,
+            "largura": 3,
+            "fundo": 1
+          },
+          "E": {
+            "col": 10,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          }
+        }
       }
     }
   },
@@ -163278,6 +164226,43 @@
     }
   },
   {
+    "name": "camadasDaSala: torre, sem portas",
+    "input": {
+      "fn": "camadasDaSala",
+      "args": {
+        "dungeon": "torre",
+        "portas": []
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "arquivo": "1_fundo_torre",
+          "plano": "chao"
+        },
+        {
+          "arquivo": "6_close_cima",
+          "plano": "chao",
+          "semPorta": "N"
+        },
+        {
+          "arquivo": "8_frente_torre",
+          "plano": "cima"
+        },
+        {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W"
+        },
+        {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E"
+        }
+      ]
+    }
+  },
+  {
     "name": "camadasDaSala: torre, E",
     "input": {
       "fn": "camadasDaSala",
@@ -163289,7 +164274,178 @@
       }
     },
     "expected": {
-      "result": null
+      "result": [
+        {
+          "arquivo": "1_fundo_torre",
+          "plano": "chao"
+        },
+        {
+          "arquivo": "2_tapete_direirta",
+          "plano": "chao",
+          "porta": "E"
+        },
+        {
+          "arquivo": "6_close_cima",
+          "plano": "chao",
+          "semPorta": "N"
+        },
+        {
+          "arquivo": "8_frente_torre",
+          "plano": "cima"
+        },
+        {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W"
+        }
+      ]
+    }
+  },
+  {
+    "name": "camadasDaSala: torre, NS",
+    "input": {
+      "fn": "camadasDaSala",
+      "args": {
+        "dungeon": "torre",
+        "portas": [
+          "N",
+          "S"
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "arquivo": "1_fundo_torre",
+          "plano": "chao"
+        },
+        {
+          "arquivo": "3_tapete_cima",
+          "plano": "chao",
+          "porta": "N"
+        },
+        {
+          "arquivo": "4_tapete_baixo",
+          "plano": "chao",
+          "porta": "S"
+        },
+        {
+          "arquivo": "8_frente_torre",
+          "plano": "cima"
+        },
+        {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N"
+        },
+        {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W"
+        },
+        {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E"
+        }
+      ]
+    }
+  },
+  {
+    "name": "camadasDaSala: torre, NESW",
+    "input": {
+      "fn": "camadasDaSala",
+      "args": {
+        "dungeon": "torre",
+        "portas": [
+          "N",
+          "E",
+          "S",
+          "W"
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "arquivo": "1_fundo_torre",
+          "plano": "chao"
+        },
+        {
+          "arquivo": "2_tapete_direirta",
+          "plano": "chao",
+          "porta": "E"
+        },
+        {
+          "arquivo": "3_tapete_cima",
+          "plano": "chao",
+          "porta": "N"
+        },
+        {
+          "arquivo": "4_tapete_baixo",
+          "plano": "chao",
+          "porta": "S"
+        },
+        {
+          "arquivo": "5_tapete_esquerda",
+          "plano": "chao",
+          "porta": "W"
+        },
+        {
+          "arquivo": "8_frente_torre",
+          "plano": "cima"
+        },
+        {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N"
+        }
+      ]
+    }
+  },
+  {
+    "name": "geometriaDaSala: floresta",
+    "input": {
+      "fn": "geometriaDaSala",
+      "args": {
+        "dungeon": "floresta"
+      }
+    },
+    "expected": {
+      "result": {
+        "cols": 9,
+        "rows": 9,
+        "conteudo": {
+          "col": 4,
+          "row": 4
+        },
+        "portas": {
+          "N": {
+            "col": 4,
+            "row": 0,
+            "largura": 1,
+            "fundo": 1
+          },
+          "S": {
+            "col": 4,
+            "row": 8,
+            "largura": 1,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 4,
+            "largura": 1,
+            "fundo": 1
+          },
+          "E": {
+            "col": 8,
+            "row": 4,
+            "largura": 1,
+            "fundo": 1
+          }
+        }
+      }
     }
   },
   {
@@ -163314,6 +164470,51 @@
     },
     "expected": {
       "result": []
+    }
+  },
+  {
+    "name": "geometriaDaSala: caverna",
+    "input": {
+      "fn": "geometriaDaSala",
+      "args": {
+        "dungeon": "caverna"
+      }
+    },
+    "expected": {
+      "result": {
+        "cols": 9,
+        "rows": 9,
+        "conteudo": {
+          "col": 4,
+          "row": 4
+        },
+        "portas": {
+          "N": {
+            "col": 4,
+            "row": 0,
+            "largura": 1,
+            "fundo": 1
+          },
+          "S": {
+            "col": 4,
+            "row": 8,
+            "largura": 1,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 4,
+            "largura": 1,
+            "fundo": 1
+          },
+          "E": {
+            "col": 8,
+            "row": 4,
+            "largura": 1,
+            "fundo": 1
+          }
+        }
+      }
     }
   },
   {
@@ -163375,6 +164576,85 @@
     }
   },
   {
+    "name": "geometriaDaSala: torre",
+    "input": {
+      "fn": "geometriaDaSala",
+      "args": {
+        "dungeon": "torre"
+      }
+    },
+    "expected": {
+      "result": {
+        "cols": 11,
+        "rows": 12,
+        "conteudo": {
+          "col": 5,
+          "row": 6
+        },
+        "portas": {
+          "N": {
+            "col": 5,
+            "row": 1,
+            "largura": 3,
+            "fundo": 2
+          },
+          "S": {
+            "col": 5,
+            "row": 11,
+            "largura": 3,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          },
+          "E": {
+            "col": 10,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          }
+        },
+        "extras": [
+          {
+            "col": 2,
+            "row": 2
+          },
+          {
+            "col": 2,
+            "row": 3
+          },
+          {
+            "col": 8,
+            "row": 3
+          },
+          {
+            "col": 8,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 10
+          },
+          {
+            "col": 2,
+            "row": 10
+          },
+          {
+            "col": 8,
+            "row": 10
+          },
+          {
+            "col": 9,
+            "row": 10
+          }
+        ]
+      }
+    }
+  },
+  {
     "name": "paredesDaSala: torre",
     "input": {
       "fn": "paredesDaSala",
@@ -163383,7 +164663,68 @@
       }
     },
     "expected": {
-      "result": []
+      "result": [
+        {
+          "col": 1,
+          "row": 1
+        },
+        {
+          "col": 2,
+          "row": 1
+        },
+        {
+          "col": 3,
+          "row": 1
+        },
+        {
+          "col": 4,
+          "row": 1
+        },
+        {
+          "col": 5,
+          "row": 1
+        },
+        {
+          "col": 6,
+          "row": 1
+        },
+        {
+          "col": 7,
+          "row": 1
+        },
+        {
+          "col": 8,
+          "row": 1
+        },
+        {
+          "col": 9,
+          "row": 1
+        },
+        {
+          "col": 3,
+          "row": 2
+        },
+        {
+          "col": 7,
+          "row": 2
+        },
+        {
+          "col": 1,
+          "row": 4
+        },
+        {
+          "col": 9,
+          "row": 4
+        },
+        {
+          "col": 1,
+          "row": 8
+        },
+        {
+          "col": 9,
+          "row": 8
+        }
+      ]
     }
   },
   {
@@ -163396,6 +164737,51 @@
     },
     "expected": {
       "result": []
+    }
+  },
+  {
+    "name": "geometriaDaSala: fora da masmorra",
+    "input": {
+      "fn": "geometriaDaSala",
+      "args": {
+        "dungeon": null
+      }
+    },
+    "expected": {
+      "result": {
+        "cols": 9,
+        "rows": 9,
+        "conteudo": {
+          "col": 4,
+          "row": 4
+        },
+        "portas": {
+          "N": {
+            "col": 4,
+            "row": 0,
+            "largura": 1,
+            "fundo": 1
+          },
+          "S": {
+            "col": 4,
+            "row": 8,
+            "largura": 1,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 4,
+            "largura": 1,
+            "fundo": 1
+          },
+          "E": {
+            "col": 8,
+            "row": 4,
+            "largura": 1,
+            "fundo": 1
+          }
+        }
+      }
     }
   },
   {

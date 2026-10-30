@@ -13,6 +13,8 @@ namespace RPGLegend.Engine
         [JsName("PAREDES_DAS_SALAS")] public OrderedMap<List<TileRef>> ParedesDasSalas = new OrderedMap<List<TileRef>>();
         /// <summary>As casas onde a arte põe um enfeite na parede (as tochas da Caverna): anda-se nelas, mas extra não fica.</summary>
         [JsName("ENFEITES_DAS_SALAS")] public OrderedMap<List<TileRef>> EnfeitesDasSalas = new OrderedMap<List<TileRef>>();
+        /// <summary>O formato da sala de cada masmorra que não é a de sempre (a Torre: 11 × 12, vãos de 3).</summary>
+        [JsName("GEOMETRIAS_DAS_SALAS")] public OrderedMap<GeometriaDaSala> GeometriasDasSalas = new OrderedMap<GeometriaDaSala>();
     }
 
     /// <summary>
@@ -24,6 +26,8 @@ namespace RPGLegend.Engine
         public string Arquivo;
         public string Plano;
         public string Porta;
+        /// <summary>Só aparece quando a sala NÃO tem porta deste lado: a parede que fecha o vão (a Torre).</summary>
+        public string SemPorta;
     }
 
     public static partial class GameData
@@ -60,7 +64,8 @@ namespace RPGLegend.Engine
             foreach (var camada in camadas)
             {
                 if (camada.Porta != null && !Contem(portas, camada.Porta)) continue;
-                lista.Add(new CamadaDaSala { Arquivo = camada.Arquivo, Plano = camada.Plano, Porta = camada.Porta });
+                if (camada.SemPorta != null && Contem(portas, camada.SemPorta)) continue;
+                lista.Add(new CamadaDaSala { Arquivo = camada.Arquivo, Plano = camada.Plano, Porta = camada.Porta, SemPorta = camada.SemPorta });
             }
             return lista;
         }
@@ -70,6 +75,10 @@ namespace RPGLegend.Engine
         /// a arte não fecha nada).
         /// </summary>
         public static List<TileRef> ParedesDaSala(string dungeon) => Casas(D.ParedesDasSalas, dungeon);
+
+        /// <summary>TS: geometriaDaSala — o formato das salas desta masmorra: o dela, ou o de sempre.</summary>
+        public static GeometriaDaSala GeometriaDaSala(string dungeon) =>
+            !string.IsNullOrEmpty(dungeon) && D.GeometriasDasSalas.TryGet(dungeon, out var g) && g != null ? g : RoomWalk.GeometriaPadrao;
 
         /// <summary>
         /// TS: enfeitesDaSala — as casas de enfeite das salas desta masmorra (as tochas da Caverna): um extra ali anda rumo

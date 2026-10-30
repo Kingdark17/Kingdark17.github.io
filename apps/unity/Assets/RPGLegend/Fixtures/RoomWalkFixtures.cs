@@ -24,15 +24,18 @@ namespace RPGLegend.Tests
             Const(M, "CONTENT_TILE", () => W(RoomWalk.ContentTile));
 
             Fn(M, "roomLayout", (a, c) => W(RoomWalk.Layout(R<DoorMap>(a["doors"]), R<List<RoomObject>>(a["objects"]),
-                a["walls"] == null ? null : R<List<TileRef>>(a["walls"]))));
+                a["walls"] == null ? null : R<List<TileRef>>(a["walls"]), a["geometria"] == null ? null : R<GeometriaDaSala>(a["geometria"]))));
+            Fn(M, "casasDoVao", (a, c) => W(RoomWalk.CasasDoVao(R<GeometriaDaSala>(a["geometria"]), Str(a["lado"]))));
             Fn(M, "stickInput", (a, c) => W(RoomWalk.StickInput(Num(a["x"]), Num(a["y"]))));
-            Fn(M, "roomArrival", (a, c) => W(RoomWalk.Arrival(a["movedTowards"].Type == JTokenType.Null ? null : Str(a["movedTowards"]))));
+            Fn(M, "roomArrival", (a, c) => W(RoomWalk.Arrival(a["movedTowards"].Type == JTokenType.Null ? null : Str(a["movedTowards"]),
+                a["geometria"] == null ? null : R<GeometriaDaSala>(a["geometria"]))));
             Fn(M, "walkTick", (a, c) => W(RoomWalk.Tick(R<RoomLayout>(a["layout"]), R<Walker>(a["walker"]), R<WalkInput>(a["input"]))));
 
             // Cola de teste (o mesmo laço do gerador): vários passos, segmento por segmento, parando no vão.
             Fn(M, "walkTicks", (a, c) =>
             {
-                var layout = RoomWalk.Layout(R<DoorMap>(a["doors"]), R<List<RoomObject>>(a["objects"]));
+                var layout = RoomWalk.Layout(R<DoorMap>(a["doors"]), R<List<RoomObject>>(a["objects"]),
+                    a["walls"] == null ? null : R<List<TileRef>>(a["walls"]), a["geometria"] == null ? null : R<GeometriaDaSala>(a["geometria"]));
                 var walker = R<Walker>(a["walker"]);
                 double ticks = 0;
                 var trace = new JArray();

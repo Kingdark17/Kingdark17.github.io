@@ -15,10 +15,10 @@
  * a tela de exploração.
  */
 
-import { paredesDaSala } from '../dungeon/arte-da-sala.js';
+import { geometriaDaSala, paredesDaSala } from '../dungeon/arte-da-sala.js';
 import type { DungeonId } from '../dungeon/dungeons.js';
 import { DIR_VECTORS, type Direction } from '../dungeon/graph.js';
-import { CONTENT_TILE, WALK_TICKS_PER_SECOND, roomLayout, stickInput, walkTick, type RoomLayout, type RoomObject, type Walker } from '../dungeon/room-walk.js';
+import { WALK_TICKS_PER_SECOND, roomLayout, stickInput, walkTick, type RoomLayout, type RoomObject, type Walker } from '../dungeon/room-walk.js';
 
 /** Quanto tempo de tela vale um passo de simulação. */
 export const MS_POR_PASSO = 1000 / WALK_TICKS_PER_SECOND;
@@ -44,7 +44,8 @@ export const PARADO: Vetor = { x: 0, y: 0 };
  * A planta da sala na regra da engine: portas e objetos. Com `true`, só o
  * conteúdo no centro; com a lista, o que vier (conteúdo e extras, ver
  * `objetosDaSala` em `extras.ts`). A masmorra traz as paredes que a arte
- * dela põe dentro da sala (`paredesDaSala`).
+ * dela põe dentro da sala (`paredesDaSala`) e o formato dela
+ * (`geometriaDaSala`: a Torre é 11 × 12, com o conteúdo no meio dela).
  */
 export function plantaDaSala(
   portas: Partial<Record<Direction, unknown>>,
@@ -52,8 +53,9 @@ export function plantaDaSala(
   masmorra: DungeonId | null = null,
 ): RoomLayout {
   const paredes = paredesDaSala(masmorra);
-  if (typeof objetos !== 'boolean') return roomLayout(portas, objetos, paredes);
-  return roomLayout(portas, objetos ? [{ id: ID_DO_CONTEUDO, ...CONTENT_TILE }] : [], paredes);
+  const geometria = geometriaDaSala(masmorra);
+  if (typeof objetos !== 'boolean') return roomLayout(portas, objetos, paredes, geometria);
+  return roomLayout(portas, objetos ? [{ id: ID_DO_CONTEUDO, ...geometria.conteudo }] : [], paredes, geometria);
 }
 
 /** Quantos passos cabem no tempo que passou, e o que sobra pro próximo quadro. */

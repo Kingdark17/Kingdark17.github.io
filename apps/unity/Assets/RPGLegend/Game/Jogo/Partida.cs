@@ -76,6 +76,9 @@ namespace RPGLegend.Game.Jogo
         // ---------- onde o herói está ----------
 
         /// <summary>A chave do mapa: lugar, masmorra, dificuldade e andar.</summary>
+        /// <summary>O formato das salas da masmorra em que se está (a Torre é 11 × 12): onde se chega por cada porta.</summary>
+        public GeometriaDaSala Geometria => ArteDaSala.GeometriaDaSala(Estado.MapMode == "dungeon" ? Estado.Masmorra?.Dungeon : null);
+
         public string ChaveDoMapa => Estado.MapMode + ":" + Estado.Masmorra?.Dungeon + ":" + Estado.Masmorra?.Difficulty + ":" + Js.NumberToString(Estado.Floor);
 
         /// <summary>A chave da sala atual (sem a secreta).</summary>
@@ -151,7 +154,7 @@ namespace RPGLegend.Game.Jogo
             TocarSom(resultado.Som ?? "step");
             RegistrarMudanca(resultado.Estado, resultado.Aviso);
             Recadar(resultado.Recado ?? passo.Recado);
-            AbrirTela(resultado.Tela, RoomWalk.Arrival(direcao));
+            AbrirTela(resultado.Tela, RoomWalk.Arrival(direcao, Geometria));
             return true;
         }
 
@@ -263,7 +266,7 @@ namespace RPGLegend.Game.Jogo
         {
             if (tela?.Tipo == "combate")
             {
-                AbrirLuta(chegada ?? PosicaoDoHeroi?.Invoke() ?? RoomWalk.Arrival(null));
+                AbrirLuta(chegada ?? PosicaoDoHeroi?.Invoke() ?? RoomWalk.Arrival(null, Geometria));
                 tela = null;
             }
             Tela = tela;
@@ -276,7 +279,7 @@ namespace RPGLegend.Game.Jogo
         public void RetomarLutaSeHouver()
         {
             if (Luta != null || Estado.MapMode != "dungeon" || !Salas.LutaAoEntrar(CelulaAtual)) return;
-            InteragirAqui(RoomWalk.Arrival(null));
+            InteragirAqui(RoomWalk.Arrival(null, Geometria));
         }
 
         private void AbrirLuta(Walker chegada)

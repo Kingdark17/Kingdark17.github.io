@@ -980,15 +980,16 @@
   color: var(--parchment);
 }
 
-/* A sala (9 × 9 desde a Floresta do Breno, 2026-10-24). A proporção reserva
-   o lugar antes de o PixiJS chegar, pra narração não pular quando o canvas
-   aparece. `relative` porque o joystick fica por cima, ocupando a sala
-   inteira. */
+/* A sala (9 × 9 desde a Floresta do Breno, 2026-10-24; a Torre, 11 × 12,
+   chega em --colunas e --linhas). A proporção reserva o lugar antes de o
+   PixiJS chegar, pra narração não pular quando o canvas aparece. O teto é
+   48 px por casa, o tamanho da cena. `relative` porque o joystick fica por
+   cima, ocupando a sala inteira. */
 .cenaDaSala {
   position: relative;
   width: 100%;
-  max-width: 432px;
-  aspect-ratio: 1;
+  max-width: calc(var(--colunas, 9) * 48px);
+  aspect-ratio: var(--colunas, 9) / var(--linhas, 9);
   margin: 0 0 0.75rem;
   border-radius: 4px;
   overflow: hidden;

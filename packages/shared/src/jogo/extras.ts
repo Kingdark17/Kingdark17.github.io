@@ -12,12 +12,12 @@
  * Só na masmorra: a cidade não tem extras.
  */
 
-import { enfeitesDaSala, paredesDaSala } from '../dungeon/arte-da-sala.js';
+import { enfeitesDaSala, geometriaDaSala, paredesDaSala } from '../dungeon/arte-da-sala.js';
 import type { DungeonId } from '../dungeon/dungeons.js';
-import { extraChestGold, potCoins, signHint, type DungeonExtra } from '../dungeon/extras.js';
+import { EXTRA_TILES, extraChestGold, potCoins, signHint, type DungeonExtra } from '../dungeon/extras.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import { DIR_OPP, type Direction } from '../dungeon/graph.js';
-import { CONTENT_TILE, DOOR_TILE, roomLayout, type RoomLayout, type RoomObject } from '../dungeon/room-walk.js';
+import { roomLayout, type RoomLayout, type RoomObject } from '../dungeon/room-walk.js';
 import { addItem } from '../inventory/inventory.js';
 import { concordar, displayName, type Item } from '../items/item.js';
 import { onItemCollected } from '../quests/quests.js';
@@ -66,26 +66,40 @@ export function passagemSecreta(celula: CelulaDoMapa | null): { lado: Direction;
  * cantos da Caverna, `paredesDaSala`) ou enfeita (as tochas dela,
  * `enfeitesDaSala`) anda rumo ao meio da sala até sair dela: os de cima
  * descem uma casa, os de baixo sobem.
+ *
+ * Numa sala de outro formato (a Torre, `geometriaDaSala`), o conteúdo fica
+ * no meio dela, a parede rachada no vão dela, e cada casa de extra gravada
+ * (`EXTRA_TILES`) vira a casa correspondente da sala.
  */
 export function objetosDaSala(celula: CelulaDoMapa | null, temConteudo: boolean, masmorra: DungeonId | null = null): RoomObject[] {
-  const objetos: RoomObject[] = temConteudo ? [{ id: ID_DO_CONTEUDO, ...CONTENT_TILE }] : [];
+  const geometria = geometriaDaSala(masmorra);
+  const objetos: RoomObject[] = temConteudo ? [{ id: ID_DO_CONTEUDO, ...geometria.conteudo }] : [];
   const tomadas = [...paredesDaSala(masmorra), ...enfeitesDaSala(masmorra)];
   const tomada = (col: number, row: number) => tomadas.some((p) => p.col === col && p.row === row);
   extrasDe(celula).forEach((extra, indice) => {
     if (extra.kind === 'pot' && extra.used) return;
     if (extra.kind === 'crack' && extra.used) return;
-    const casa = extra.kind === 'crack' && extra.side ? DOOR_TILE[extra.side] : extra;
-    const rumo = Math.sign(CONTENT_TILE.row - casa.row);
+    const casa = extra.kind === 'crack' && extra.side ? geometria.portas[extra.side] : casaDoExtra(extra, geometria.extras);
+    const rumo = Math.sign(geometria.conteudo.row - casa.row);
     let row = casa.row;
-    while (rumo !== 0 && tomada(casa.col, row)) row += rumo;
+    // A parede rachada é parede: fica no vão dela (na Torre, dentro da parede de cima).
+    while (extra.kind !== 'crack' && rumo !== 0 && tomada(casa.col, row)) row += rumo;
     objetos.push({ id: idDoExtra(indice), col: casa.col, row });
   });
   return objetos;
 }
 
+/** A casa de um extra gravado, na sala de outro formato: a da posição correspondente; fora das casas de sempre, a gravada. */
+function casaDoExtra(extra: { col: number; row: number }, casas: readonly { col: number; row: number }[] | undefined): { col: number; row: number } {
+  if (!casas) return extra;
+  const indice = EXTRA_TILES.findIndex((t) => t.col === extra.col && t.row === extra.row);
+  return indice >= 0 && casas[indice] ? casas[indice] : extra;
+}
+
 /** A planta da sala secreta: uma porta só, de volta pra sala da parede, e o baú no centro. */
 export function plantaDaSalaSecreta(ladoDaParede: Direction, masmorra: DungeonId | null = null): RoomLayout {
-  return roomLayout({ [DIR_OPP[ladoDaParede]]: true }, [{ id: ID_DO_BAU_SECRETO, ...CONTENT_TILE }], paredesDaSala(masmorra));
+  const geometria = geometriaDaSala(masmorra);
+  return roomLayout({ [DIR_OPP[ladoDaParede]]: true }, [{ id: ID_DO_BAU_SECRETO, ...geometria.conteudo }], paredesDaSala(masmorra), geometria);
 }
 
 export interface ResultadoDoExtra {

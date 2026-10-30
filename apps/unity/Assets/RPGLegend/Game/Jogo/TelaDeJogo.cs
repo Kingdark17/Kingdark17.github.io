@@ -143,7 +143,7 @@ namespace RPGLegend.Game.Jogo
             _partida.SaiuDaSecreta += direcao =>
             {
                 // Quem sai da secreta reaparece na passagem, e não por onde entrou na sala da outra vez.
-                _chegada = RoomWalk.Arrival(direcao);
+                _chegada = RoomWalk.Arrival(direcao, _partida.Geometria);
                 _volta++;
             };
             _partida.Som += Sons.Tocar;
@@ -638,6 +638,9 @@ namespace RPGLegend.Game.Jogo
                 return;
             }
 
+            // A masmorra da sala: a arte dela, as paredes que ela põe dentro (os cantos da Caverna) e o formato (a Torre).
+            var masmorra = estado.MapMode == "dungeon" ? estado.Masmorra?.Dungeon : null;
+            var geometria = ArteDaSala.GeometriaDaSala(masmorra);
             if (salaAgora != _salaDaChegada)
             {
                 double dx = estado.Pos.X - _xDaChegada;
@@ -648,12 +651,10 @@ namespace RPGLegend.Game.Jogo
                 _mapaDaChegada = mapaAgora;
                 _xDaChegada = estado.Pos.X;
                 _yDaChegada = estado.Pos.Y;
-                _chegada = RoomWalk.Arrival(veioPor);
+                _chegada = RoomWalk.Arrival(veioPor, geometria);
                 _volta = 0;
             }
 
-            // A masmorra da sala: a arte dela e as paredes que ela põe dentro (os cantos da Caverna).
-            var masmorra = estado.MapMode == "dungeon" ? estado.Masmorra?.Dungeon : null;
             RoomLayout planta;
             Dictionary<string, Figura> figuras;
             string chave;
@@ -663,7 +664,7 @@ namespace RPGLegend.Game.Jogo
                 planta = ExtrasDaSala.PlantaDaSalaSecreta(secreta.Lado, masmorra);
                 figuras = FigurasDaSala.Da(celula, null, secreta.Indice);
                 chave = salaAgora + "#secreta";
-                chegada = RoomWalk.Arrival(secreta.Lado);
+                chegada = RoomWalk.Arrival(secreta.Lado, geometria);
             }
             else
             {

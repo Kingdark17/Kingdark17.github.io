@@ -23,9 +23,9 @@
  * lado continua dizendo o que tem na sala e por onde dá pra ir.
  */
 
-import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
 
-import { andarNoQuadro, passosDoQuadro, type Direction, type DungeonId, type PosicaoNaSala, type RoomLayout, type Vetor, type Walker } from '@rpg-legend/shared';
+import { ROOM_COLS, ROOM_ROWS, andarNoQuadro, passosDoQuadro, type Direction, type DungeonId, type PosicaoNaSala, type RoomLayout, type Vetor, type Walker } from '@rpg-legend/shared';
 
 import { criarCena, type Cena, type Figura, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
 import styles from './jogo.module.css';
@@ -117,6 +117,9 @@ export function CenaDaSala({ sala, planta, cidade, tema, masmorra, figuras, hero
         p.walker = agora.chegada;
         p.tocando = null;
         r.sobra = 0;
+        // Já é outra sala: a de que ele saiu pela porta não segura mais o andar (voltar à mesma chave sem passar
+        // por outra porta — morrer na vizinha e entrar de novo pelo portão — deixava o herói parado).
+        r.saiuDe = null;
       }
       if (!agora.ativo || r.saiuDe === p.sala) {
         r.sobra = 0;
@@ -142,8 +145,14 @@ export function CenaDaSala({ sala, planta, cidade, tema, masmorra, figuras, hero
     });
   }, [pronta]);
 
+  // A caixa tem o formato da sala (a Torre é 11 × 12); a cidade é vista por uma janela de sala de sempre.
+  const formato = {
+    '--colunas': cidade ? ROOM_COLS : (planta.cols ?? ROOM_COLS),
+    '--linhas': cidade ? ROOM_ROWS : (planta.rows ?? ROOM_ROWS),
+  } as CSSProperties;
+
   return (
-    <div className={styles.cenaDaSala}>
+    <div className={styles.cenaDaSala} style={formato}>
       <div ref={alvo} className={styles.telaDaSala} />
       {children}
     </div>

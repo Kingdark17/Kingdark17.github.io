@@ -29,5 +29,39 @@
       "col": 8,
       "row": 4
     }
+  },
+  "GEOMETRIA_PADRAO": {
+    "cols": 9,
+    "rows": 9,
+    "conteudo": {
+      "col": 4,
+      "row": 4
+    },
+    "portas": {
+      "N": {
+        "col": 4,
+        "row": 0,
+        "largura": 1,
+        "fundo": 1
+      },
+      "S": {
+        "col": 4,
+        "row": 8,
+        "largura": 1,
+        "fundo": 1
+      },
+      "W": {
+        "col": 0,
+        "row": 4,
+        "largura": 1,
+        "fundo": 1
+      },
+      "E": {
+        "col": 8,
+        "row": 4,
+        "largura": 1,
+        "fundo": 1
+      }
+    }
   }
 }

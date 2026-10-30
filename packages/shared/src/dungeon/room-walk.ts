@@ -67,6 +67,75 @@ export const DOOR_TILE: Record<Direction, { col: number; row: number }> = {
   E: { col: ROOM_COLS - 1, row: 4 },
 };
 
+/**
+ * Uma porta da sala: a casa do vão mais pra dentro, no meio dele (é onde a
+ * parede rachada fica e por onde se chega), a largura do vão em casas e a
+ * grossura da parede daquele lado. A sala de sempre tem vãos de 1 casa numa
+ * parede de 1; a da Torre, de 3, e a parede de cima dela tem 2.
+ */
+export interface PortaDaSala {
+  col: number;
+  row: number;
+  largura: number;
+  fundo: number;
+}
+
+/**
+ * O formato de uma sala: o tamanho, o meio (onde fica o conteúdo) e as
+ * portas. Cada masmorra pode ter o seu (`geometriaDaSala`; a Torre do Breno
+ * é 11 × 12); sem um, vale `GEOMETRIA_PADRAO`.
+ */
+export interface GeometriaDaSala {
+  cols: number;
+  rows: number;
+  conteudo: { col: number; row: number };
+  portas: Record<Direction, PortaDaSala>;
+  /**
+   * Onde ficam os extras, na ordem de `EXTRA_TILES` (os andares gravam as
+   * casas da sala de sempre). Ausente, ficam onde foram gravados.
+   */
+  extras?: readonly { col: number; row: number }[];
+}
+
+/** A sala de sempre: 9 × 9, o conteúdo no meio e um vão de 1 casa no meio de cada parede. */
+export const GEOMETRIA_PADRAO: GeometriaDaSala = {
+  cols: ROOM_COLS,
+  rows: ROOM_ROWS,
+  conteudo: CONTENT_TILE,
+  portas: {
+    N: { col: 4, row: 0, largura: 1, fundo: 1 },
+    S: { col: 4, row: ROOM_ROWS - 1, largura: 1, fundo: 1 },
+    W: { col: 0, row: 4, largura: 1, fundo: 1 },
+    E: { col: ROOM_COLS - 1, row: 4, largura: 1, fundo: 1 },
+  },
+};
+
+/** É a sala de sempre? A planta dela não leva o tamanho nem as portas, como sempre foi. */
+export function geometriaPadrao(geometria: GeometriaDaSala): boolean {
+  if (geometria.cols !== ROOM_COLS || geometria.rows !== ROOM_ROWS) return false;
+  return DIR_ORDER.every((lado) => {
+    const porta = geometria.portas[lado];
+    const padrao = GEOMETRIA_PADRAO.portas[lado];
+    return porta.col === padrao.col && porta.row === padrao.row && porta.largura === 1 && porta.fundo === 1;
+  });
+}
+
+/** As casas do vão da porta `lado`: a largura dela, em toda a grossura da parede. */
+export function casasDoVao(geometria: GeometriaDaSala, lado: Direction): { col: number; row: number }[] {
+  const porta = geometria.portas[lado];
+  const meia = Math.trunc((porta.largura - 1) / 2);
+  const casas: { col: number; row: number }[] = [];
+  for (let k = -meia; k <= meia; k++) {
+    for (let f = 0; f < porta.fundo; f++) {
+      if (lado === 'N') casas.push({ col: porta.col + k, row: f });
+      else if (lado === 'S') casas.push({ col: porta.col + k, row: geometria.rows - 1 - f });
+      else if (lado === 'W') casas.push({ col: f, row: porta.row + k });
+      else casas.push({ col: geometria.cols - 1 - f, row: porta.row + k });
+    }
+  }
+  return casas;
+}
+
 /** Algo da sala que se aciona encostando. Ocupa um quadrado inteiro, sólido. */
 export interface RoomObject {
   id: string;
@@ -84,6 +153,8 @@ export interface RoomLayout {
    */
   cols?: number;
   rows?: number;
+  /** As portas, quando não são as da sala de sempre (a Torre: vãos de 3, parede de cima de 2). */
+  portas?: Record<Direction, PortaDaSala>;
   /** `[row][col]`: parede, ou quadrado ocupado por um objeto. */
   solid: boolean[][];
   objects: RoomObject[];
@@ -114,17 +185,21 @@ export interface WalkStep {
 /**
  * A planta da sala: parede em volta, vão onde há porta e os objetos, cada
  * um tomando o seu quadrado. `walls` são as casas de dentro que a arte da
- * masmorra faz de parede (os cantos da Caverna, `paredesDaSala`).
+ * masmorra faz de parede (os cantos da Caverna, `paredesDaSala`), e
+ * `geometria` o formato da sala (`geometriaDaSala`): a porta abre o vão
+ * inteiro dela. Fora da sala de sempre, a planta leva o tamanho e as portas.
  */
 export function roomLayout(
   doors: Partial<Record<Direction, unknown>>,
   objects: readonly RoomObject[],
   walls: readonly { col: number; row: number }[] = [],
+  geometria: GeometriaDaSala = GEOMETRIA_PADRAO,
 ): RoomLayout {
+  const { cols, rows } = geometria;
   const solid: boolean[][] = [];
-  for (let row = 0; row < ROOM_ROWS; row++) {
+  for (let row = 0; row < rows; row++) {
     const linha: boolean[] = [];
-    for (let col = 0; col < ROOM_COLS; col++) linha.push(col === 0 || row === 0 || col === ROOM_COLS - 1 || row === ROOM_ROWS - 1);
+    for (let col = 0; col < cols; col++) linha.push(col === 0 || row === 0 || col === cols - 1 || row === rows - 1);
     solid.push(linha);
   }
   for (const parede of walls) (solid[parede.row] as boolean[])[parede.col] = true;
@@ -132,11 +207,14 @@ export function roomLayout(
   for (const direcao of DIR_ORDER) {
     if (!doors[direcao]) continue;
     abertas.push(direcao);
-    const vao = DOOR_TILE[direcao];
-    (solid[vao.row] as boolean[])[vao.col] = false;
+    for (const vao of casasDoVao(geometria, direcao)) (solid[vao.row] as boolean[])[vao.col] = false;
   }
   for (const objeto of objects) (solid[objeto.row] as boolean[])[objeto.col] = true;
-  return { doors: abertas, solid, objects: objects.map((o) => ({ ...o })) };
+  const planta: RoomLayout = { doors: abertas, solid, objects: objects.map((o) => ({ ...o })) };
+  if (geometriaPadrao(geometria)) return planta;
+  const portas = {} as Record<Direction, PortaDaSala>;
+  for (const lado of DIR_ORDER) portas[lado] = { ...geometria.portas[lado] };
+  return { ...planta, cols, rows, portas };
 }
 
 /**
@@ -148,10 +226,15 @@ export function stickInput(x: number, y: number): WalkInput {
   return { x: limitar(x), y: limitar(y) };
 }
 
-/** Onde o herói aparece numa sala. Quem andou pro norte chega pelo vão do sul, um quadrado pra dentro; sem direção (carregar o jogo, portão, escada, totem), logo abaixo do centro, olhando pra baixo. */
-export function roomArrival(movedTowards: Direction | null): Walker {
-  if (!movedTowards) return { x: centro(CONTENT_TILE.col), y: centro(CONTENT_TILE.row + 2), facing: 'S' };
-  const vao = DOOR_TILE[DIR_OPP[movedTowards]];
+/**
+ * Onde o herói aparece numa sala. Quem andou pro norte chega pelo vão do sul,
+ * um quadrado pra dentro; sem direção (carregar o jogo, portão, escada,
+ * totem), logo abaixo do centro, olhando pra baixo. `geometria`: o formato
+ * da sala (o vão e o centro dela).
+ */
+export function roomArrival(movedTowards: Direction | null, geometria: GeometriaDaSala = GEOMETRIA_PADRAO): Walker {
+  if (!movedTowards) return { x: centro(geometria.conteudo.col), y: centro(geometria.conteudo.row + 2), facing: 'S' };
+  const vao = geometria.portas[DIR_OPP[movedTowards]];
   const vetor = DIR_VECTORS[movedTowards];
   return { x: centro(vao.col + vetor.x), y: centro(vao.row + vetor.y), facing: movedTowards };
 }
@@ -257,17 +340,19 @@ function moverEmY(layout: RoomLayout, x: number, y: number, dy: number): { pos: 
 function ajudaNaPorta(layout: RoomLayout, x: number, y: number, lado: Direction, eixo: 'x' | 'y'): number {
   const atual = eixo === 'x' ? x : y;
   if (!layout.doors.includes(lado)) return atual;
-  const vao = DOOR_TILE[lado];
-  // Colado na parede: a base encosta no primeiro quadrado depois do chão.
+  const porta = layout.portas?.[lado] ?? GEOMETRIA_PADRAO.portas[lado];
+  // Colado na parede: a base encosta no primeiro quadrado depois do chão (a parede tem `fundo` casas).
   const colado =
-    lado === 'N' ? y - HERO_HALF === TILE_UNITS
-    : lado === 'S' ? y + HERO_HALF === (linhas(layout) - 1) * TILE_UNITS
-    : lado === 'W' ? x - HERO_HALF === TILE_UNITS
-    : x + HERO_HALF === (colunas(layout) - 1) * TILE_UNITS;
+    lado === 'N' ? y - HERO_HALF === porta.fundo * TILE_UNITS
+    : lado === 'S' ? y + HERO_HALF === (linhas(layout) - porta.fundo) * TILE_UNITS
+    : lado === 'W' ? x - HERO_HALF === porta.fundo * TILE_UNITS
+    : x + HERO_HALF === (colunas(layout) - porta.fundo) * TILE_UNITS;
   if (!colado) return atual;
-  const meio = centro(eixo === 'x' ? vao.col : vao.row);
+  const meio = centro(eixo === 'x' ? porta.col : porta.row);
   const falta = meio - atual;
-  if (falta === 0 || Math.abs(falta) > DOOR_ASSIST) return atual;
+  // O vão largo puxa de mais longe: o alcance cresce meia casa por casa a mais de vão.
+  const alcance = DOOR_ASSIST + ((porta.largura - 1) * TILE_UNITS) / 2;
+  if (falta === 0 || Math.abs(falta) > alcance) return atual;
   const passo = Math.sign(falta) * Math.min(Math.abs(falta), HERO_SPEED);
   return eixo === 'x' ? moverEmX(layout, x, y, passo).pos : moverEmY(layout, x, y, passo).pos;
 }

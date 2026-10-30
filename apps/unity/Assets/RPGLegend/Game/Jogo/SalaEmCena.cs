@@ -191,6 +191,9 @@ namespace RPGLegend.Game.Jogo
                 _walker = chegada;
                 _tocando = null;
                 _sobra = 0;
+                // Já é outra sala: a de que ele saiu pela porta não segura mais o andar. Sem isso, quem saía da sala
+                // do início, caía na luta da vizinha e voltava pelo portão chegava à mesma chave e não andava mais.
+                _saiuDe = null;
             }
 
             var assinatura = string.Join(",", planta.Doors) + "#" + DesenhoDasObjetos(planta) + "#" + FigurasDaSala.Assinatura(figuras) + "#" + tema.GetHashCode() + "#" + masmorra;
@@ -223,6 +226,9 @@ namespace RPGLegend.Game.Jogo
                 _walker = chegada;
                 _tocando = null;
                 _sobra = 0;
+                // Já é outra sala: a de que ele saiu pela porta não segura mais o andar. Sem isso, quem saía da sala
+                // do início, caía na luta da vizinha e voltava pelo portão chegava à mesma chave e não andava mais.
+                _saiuDe = null;
             }
             var assinatura = "cidade#" + troncos;
             if (assinatura != _assinaturaDoDesenho)
@@ -233,11 +239,22 @@ namespace RPGLegend.Game.Jogo
             ColocarHeroi(false);
         }
 
+        /// <summary>
+        /// O tamanho da sala em pixels do site: o da planta (a Torre é 11 × 12), ou o de sempre. A cidade fica com o de
+        /// sempre, que é o tamanho da janela dela.
+        /// </summary>
+        private void Tamanho(double cols, double rows)
+        {
+            _largura = (float)cols * Lado;
+            _altura = (float)rows * Lado;
+        }
+
         private void DesenharCidade(bool troncos)
         {
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
             _doMeio.Clear();
             _naCidade = true;
+            Tamanho(GameData.RoomWalkTable.RoomCols, GameData.RoomWalkTable.RoomRows);
             AjustarZoom();
             _escala = (float)(MapaDaCidade.PixelsPorCasa / GameData.RoomWalkTable.TileUnits);
             int noChao = 0, emCima = 0;
@@ -263,7 +280,10 @@ namespace RPGLegend.Game.Jogo
         {
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
             _doMeio.Clear();
-            if (_naCidade)
+            var regra = GameData.RoomWalkTable;
+            float larguraAntes = _largura, alturaAntes = _altura;
+            Tamanho(planta.Cols ?? regra.RoomCols, planta.Rows ?? regra.RoomRows);
+            if (_naCidade || larguraAntes != _largura || alturaAntes != _altura)
             {
                 _naCidade = false;
                 _escala = _escalaDaSala;
@@ -413,9 +433,13 @@ namespace RPGLegend.Game.Jogo
 
             if (quadro.Saida != null)
             {
-                // A sala vizinha pode chegar já dentro do AoSair (a tela redesenha na hora): a chave é a de antes.
+                // A sala vizinha pode chegar já dentro do AoSair (a tela redesenha na hora): aí ela já está na cena, e não
+                // há o que segurar. Senão, o andar para até ela chegar.
                 var sala = _salaDaCena;
-                if (AoSair != null && AoSair(quadro.Saida)) _saiuDe = sala;
+                if (AoSair != null && AoSair(quadro.Saida))
+                {
+                    if (_salaDaCena == sala) _saiuDe = sala;
+                }
                 else _walker = antes;
             }
             else if (quadro.Encostou != null)

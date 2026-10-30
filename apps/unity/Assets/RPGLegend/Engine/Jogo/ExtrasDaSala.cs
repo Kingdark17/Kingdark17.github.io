@@ -105,10 +105,13 @@ namespace RPGLegend.Engine
         /// </summary>
         public static List<RoomObject> ObjetosDaSala(RoomCell celula, bool temConteudo, string masmorra = null)
         {
-            var objetos = temConteudo ? new List<RoomObject> { AndarNaSala.Conteudo() } : new List<RoomObject>();
+            var geometria = ArteDaSala.GeometriaDaSala(masmorra);
+            var objetos = temConteudo
+                ? new List<RoomObject> { new RoomObject { Id = AndarNaSala.IdDoConteudo, Col = geometria.Conteudo.Col, Row = geometria.Conteudo.Row } }
+                : new List<RoomObject>();
             var paredes = ArteDaSala.ParedesDaSala(masmorra);
             paredes.AddRange(ArteDaSala.EnfeitesDaSala(masmorra));
-            var meio = GameData.RoomWalkTable.ContentTile.Row;
+            var meio = geometria.Conteudo.Row;
             var extras = ExtrasDe(celula);
             for (int indice = 0; indice < extras.Count; indice++)
             {
@@ -117,14 +120,28 @@ namespace RPGLegend.Engine
                 if (extra.Kind == "crack" && (extra.Used ?? false)) continue;
                 // A parede rachada fica no vão do lado dela, e não na casa gravada: o andar gravado quando a sala era
                 // 9 × 7 a guardou no vão de lá.
-                var vao = extra.Kind == "crack" && !string.IsNullOrEmpty(extra.Side) ? RoomWalk.DoorTile[extra.Side] : null;
-                double col = vao?.Col ?? extra.Col;
-                double row = vao?.Row ?? extra.Row;
+                var vao = extra.Kind == "crack" && !string.IsNullOrEmpty(extra.Side) ? geometria.Portas.Get(extra.Side) : null;
+                var casa = vao == null ? CasaDoExtra(extra.Col, extra.Row, geometria.Extras) : null;
+                double col = vao?.Col ?? casa.Col;
+                double row = vao?.Row ?? casa.Row;
                 int rumo = Math.Sign(meio - row);
-                while (rumo != 0 && NaParede(paredes, col, row)) row += rumo;
+                // A parede rachada é parede: fica no vão dela (na Torre, dentro da parede de cima).
+                while (extra.Kind != "crack" && rumo != 0 && NaParede(paredes, col, row)) row += rumo;
                 objetos.Add(new RoomObject { Id = IdDoExtra(indice), Col = col, Row = row });
             }
             return objetos;
+        }
+
+        /// <summary>TS: casaDoExtra — na sala de outro formato, a casa da posição correspondente; fora das casas de sempre, a gravada.</summary>
+        private static TileRef CasaDoExtra(double col, double row, List<TileRef> casas)
+        {
+            if (casas != null)
+            {
+                var sempre = RoomExtras.ExtraTiles;
+                for (int i = 0; i < sempre.Count && i < casas.Count; i++)
+                    if (sempre[i].Col == col && sempre[i].Row == row) return casas[i];
+            }
+            return new TileRef { Col = col, Row = row };
         }
 
         private static bool NaParede(List<TileRef> paredes, double col, double row)
@@ -139,9 +156,10 @@ namespace RPGLegend.Engine
         {
             var portas = new DoorMap();
             portas.Set(Directions.Opposite.Get(ladoDaParede), true);
-            var centro = GameData.RoomWalkTable.ContentTile;
+            var geometria = ArteDaSala.GeometriaDaSala(masmorra);
+            var centro = geometria.Conteudo;
             return RoomWalk.Layout(portas, new List<RoomObject> { new RoomObject { Id = IdDoBauSecreto, Col = centro.Col, Row = centro.Row } },
-                ArteDaSala.ParedesDaSala(masmorra));
+                ArteDaSala.ParedesDaSala(masmorra), geometria);
         }
 
         private static ResultadoDoExtra Resultado(EstadoNaMasmorra estado, string icone, string titulo, string texto, string som = null) =>

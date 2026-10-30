@@ -22,6 +22,8 @@ namespace RPGLegend.Engine
         /// </summary>
         public double? Cols;
         public double? Rows;
+        /// <summary>As portas, quando não são as da sala de sempre (a Torre: vãos de 3, parede de cima de 2).</summary>
+        public OrderedMap<PortaDaSala> Portas;
         /// <summary>[row][col]: parede, ou quadrado ocupado por um objeto.</summary>
         public List<List<bool>> Solid;
         public List<RoomObject> Objects;
@@ -73,17 +75,57 @@ namespace RPGLegend.Engine
         /// <summary>O vão de cada porta, no meio de cada parede.</summary>
         public static OrderedMap<TileRef> DoorTile => D.DoorTile;
 
+        /// <summary>TS: GEOMETRIA_PADRAO — a sala de sempre.</summary>
+        public static GeometriaDaSala GeometriaPadrao => D.GeometriaPadrao;
+
+        /// <summary>TS: geometriaPadrao — é a sala de sempre? A planta dela não leva o tamanho nem as portas.</summary>
+        public static bool EhGeometriaPadrao(GeometriaDaSala geometria)
+        {
+            if (geometria.Cols != RoomCols || geometria.Rows != RoomRows) return false;
+            foreach (var lado in Directions.Order)
+            {
+                var porta = geometria.Portas.Get(lado);
+                var padrao = GeometriaPadrao.Portas.Get(lado);
+                if (porta == null || porta.Col != padrao.Col || porta.Row != padrao.Row || porta.Largura != 1 || porta.Fundo != 1) return false;
+            }
+            return true;
+        }
+
+        /// <summary>TS: casasDoVao — as casas do vão da porta: a largura dela, em toda a grossura da parede.</summary>
+        public static List<TileRef> CasasDoVao(GeometriaDaSala geometria, string lado)
+        {
+            var porta = geometria.Portas.Get(lado);
+            double meia = Math.Truncate((porta.Largura - 1) / 2);
+            var casas = new List<TileRef>();
+            for (double k = -meia; k <= meia; k++)
+            {
+                for (double f = 0; f < porta.Fundo; f++)
+                {
+                    if (lado == "N") casas.Add(new TileRef { Col = porta.Col + k, Row = f });
+                    else if (lado == "S") casas.Add(new TileRef { Col = porta.Col + k, Row = geometria.Rows - 1 - f });
+                    else if (lado == "W") casas.Add(new TileRef { Col = f, Row = porta.Row + k });
+                    else casas.Add(new TileRef { Col = geometria.Cols - 1 - f, Row = porta.Row + k });
+                }
+            }
+            return casas;
+        }
+
         /// <summary>
         /// TS: roomLayout — parede em volta, vão onde há porta e os objetos, cada um no seu quadrado. <paramref name="walls"/>
-        /// são as casas de dentro que a arte da masmorra faz de parede (<see cref="ArteDaSala.ParedesDaSala"/>).
+        /// são as casas de dentro que a arte da masmorra faz de parede (<see cref="ArteDaSala.ParedesDaSala"/>), e
+        /// <paramref name="geometria"/> o formato da sala (<see cref="ArteDaSala.GeometriaDaSala"/>): a porta abre o vão
+        /// inteiro dela. Fora da sala de sempre, a planta leva o tamanho e as portas.
         /// </summary>
-        public static RoomLayout Layout(DoorMap doors, IReadOnlyList<RoomObject> objects, IReadOnlyList<TileRef> walls = null)
+        public static RoomLayout Layout(DoorMap doors, IReadOnlyList<RoomObject> objects, IReadOnlyList<TileRef> walls = null, GeometriaDaSala geometria = null)
         {
+            geometria = geometria ?? GeometriaPadrao;
+            int cols = (int)geometria.Cols;
+            int rows = (int)geometria.Rows;
             var solid = new List<List<bool>>();
-            for (int row = 0; row < RoomRows; row++)
+            for (int row = 0; row < rows; row++)
             {
                 var linha = new List<bool>();
-                for (int col = 0; col < RoomCols; col++) linha.Add(col == 0 || row == 0 || col == RoomCols - 1 || row == RoomRows - 1);
+                for (int col = 0; col < cols; col++) linha.Add(col == 0 || row == 0 || col == cols - 1 || row == rows - 1);
                 solid.Add(linha);
             }
             if (walls != null)
@@ -93,8 +135,7 @@ namespace RPGLegend.Engine
             {
                 if (doors == null || !doors.TryGet(direcao, out var aberta) || !aberta) continue;
                 abertas.Add(direcao);
-                var vao = D.DoorTile[direcao];
-                solid[(int)vao.Row][(int)vao.Col] = false;
+                foreach (var vao in CasasDoVao(geometria, direcao)) solid[(int)vao.Row][(int)vao.Col] = false;
             }
             var copias = new List<RoomObject>();
             foreach (var objeto in objects)
@@ -102,7 +143,13 @@ namespace RPGLegend.Engine
                 solid[(int)objeto.Row][(int)objeto.Col] = true;
                 copias.Add(new RoomObject { Id = objeto.Id, Col = objeto.Col, Row = objeto.Row });
             }
-            return new RoomLayout { Doors = abertas, Solid = solid, Objects = copias };
+            var planta = new RoomLayout { Doors = abertas, Solid = solid, Objects = copias };
+            if (EhGeometriaPadrao(geometria)) return planta;
+            planta.Cols = cols;
+            planta.Rows = rows;
+            planta.Portas = new OrderedMap<PortaDaSala>();
+            foreach (var lado in Directions.Order) planta.Portas.Set(lado, geometria.Portas.Get(lado).Clone());
+            return planta;
         }
 
         /// <summary>TS: stickInput — do joystick (-1 a 1 em cada eixo) pro inteiro da regra.</summary>
@@ -111,10 +158,11 @@ namespace RPGLegend.Engine
         private static double Limitar(double v) => Math.Truncate(Math.Max(-1, Math.Min(1, v)) * StickMax);
 
         /// <summary>TS: roomArrival — onde o herói aparece numa sala.</summary>
-        public static Walker Arrival(string movedTowards)
+        public static Walker Arrival(string movedTowards, GeometriaDaSala geometria = null)
         {
-            if (movedTowards == null) return new Walker { X = Centro(ContentTile.Col), Y = Centro(ContentTile.Row + 2), Facing = "S" };
-            var vao = D.DoorTile[Directions.Opposite[movedTowards]];
+            geometria = geometria ?? GeometriaPadrao;
+            if (movedTowards == null) return new Walker { X = Centro(geometria.Conteudo.Col), Y = Centro(geometria.Conteudo.Row + 2), Facing = "S" };
+            var vao = geometria.Portas.Get(Directions.Opposite[movedTowards]);
             var vetor = Directions.Vectors[movedTowards];
             return new Walker { X = Centro(vao.Col + vetor.X), Y = Centro(vao.Row + vetor.Y), Facing = movedTowards };
         }
@@ -217,16 +265,19 @@ namespace RPGLegend.Engine
         {
             double atual = eixoX ? x : y;
             if (!layout.Doors.Contains(lado)) return atual;
-            var vao = D.DoorTile[lado];
+            var porta = layout.Portas?.Get(lado) ?? GeometriaPadrao.Portas.Get(lado);
+            // Colado na parede: a base encosta no primeiro quadrado depois do chão (a parede tem Fundo casas).
             bool colado =
-                lado == "N" ? y - HeroHalf == TileUnits
-                : lado == "S" ? y + HeroHalf == (Linhas(layout) - 1) * TileUnits
-                : lado == "W" ? x - HeroHalf == TileUnits
-                : x + HeroHalf == (Colunas(layout) - 1) * TileUnits;
+                lado == "N" ? y - HeroHalf == porta.Fundo * TileUnits
+                : lado == "S" ? y + HeroHalf == (Linhas(layout) - porta.Fundo) * TileUnits
+                : lado == "W" ? x - HeroHalf == porta.Fundo * TileUnits
+                : x + HeroHalf == (Colunas(layout) - porta.Fundo) * TileUnits;
             if (!colado) return atual;
-            double meio = Centro(eixoX ? vao.Col : vao.Row);
+            double meio = Centro(eixoX ? porta.Col : porta.Row);
             double falta = meio - atual;
-            if (falta == 0 || Math.Abs(falta) > DoorAssist) return atual;
+            // O vão largo puxa de mais longe: o alcance cresce meia casa por casa a mais de vão.
+            double alcance = DoorAssist + (porta.Largura - 1) * TileUnits / 2;
+            if (falta == 0 || Math.Abs(falta) > alcance) return atual;
             double passo = Math.Sign(falta) * Math.Min(Math.Abs(falta), HeroSpeed);
             return eixoX ? MoverEmX(layout, x, y, passo).Pos : MoverEmY(layout, x, y, passo).Pos;
         }

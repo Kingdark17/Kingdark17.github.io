@@ -36035,6 +36035,2062 @@
     }
   },
   {
+    "name": "roomArrival: na Torre, sem direção",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": null,
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 5280,
+        "y": 8160,
+        "facing": "S"
+      }
+    }
+  },
+  {
+    "name": "roomArrival: na Torre, N",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": "N",
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 5280,
+        "y": 10080,
+        "facing": "N"
+      }
+    }
+  },
+  {
+    "name": "roomArrival: na Torre, S",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": "S",
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 5280,
+        "y": 2400,
+        "facing": "S"
+      }
+    }
+  },
+  {
+    "name": "roomArrival: na Torre, E",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": "E",
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 1440,
+        "y": 6240,
+        "facing": "E"
+      }
+    }
+  },
+  {
+    "name": "roomArrival: na Torre, W",
+    "input": {
+      "fn": "roomArrival",
+      "args": {
+        "movedTowards": "W",
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 9120,
+        "y": 6240,
+        "facing": "W"
+      }
+    }
+  },
+  {
+    "name": "casasDoVao: na Torre, N",
+    "input": {
+      "fn": "casasDoVao",
+      "args": {
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        },
+        "lado": "N"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 0
+        },
+        {
+          "col": 4,
+          "row": 1
+        },
+        {
+          "col": 5,
+          "row": 0
+        },
+        {
+          "col": 5,
+          "row": 1
+        },
+        {
+          "col": 6,
+          "row": 0
+        },
+        {
+          "col": 6,
+          "row": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "casasDoVao: na sala de sempre, N",
+    "input": {
+      "fn": "casasDoVao",
+      "args": {
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "lado": "N"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 0
+        }
+      ]
+    }
+  },
+  {
+    "name": "casasDoVao: na Torre, S",
+    "input": {
+      "fn": "casasDoVao",
+      "args": {
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        },
+        "lado": "S"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 11
+        },
+        {
+          "col": 5,
+          "row": 11
+        },
+        {
+          "col": 6,
+          "row": 11
+        }
+      ]
+    }
+  },
+  {
+    "name": "casasDoVao: na sala de sempre, S",
+    "input": {
+      "fn": "casasDoVao",
+      "args": {
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "lado": "S"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 8
+        }
+      ]
+    }
+  },
+  {
+    "name": "casasDoVao: na Torre, E",
+    "input": {
+      "fn": "casasDoVao",
+      "args": {
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        },
+        "lado": "E"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 10,
+          "row": 5
+        },
+        {
+          "col": 10,
+          "row": 6
+        },
+        {
+          "col": 10,
+          "row": 7
+        }
+      ]
+    }
+  },
+  {
+    "name": "casasDoVao: na sala de sempre, E",
+    "input": {
+      "fn": "casasDoVao",
+      "args": {
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "lado": "E"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 8,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "casasDoVao: na Torre, W",
+    "input": {
+      "fn": "casasDoVao",
+      "args": {
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        },
+        "lado": "W"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 0,
+          "row": 5
+        },
+        {
+          "col": 0,
+          "row": 6
+        },
+        {
+          "col": 0,
+          "row": 7
+        }
+      ]
+    }
+  },
+  {
+    "name": "casasDoVao: na sala de sempre, W",
+    "input": {
+      "fn": "casasDoVao",
+      "args": {
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "lado": "W"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 0,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "roomLayout: na Torre, sem portas",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {},
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "cols": 11,
+        "rows": 12,
+        "portas": {
+          "N": {
+            "col": 5,
+            "row": 1,
+            "largura": 3,
+            "fundo": 2
+          },
+          "S": {
+            "col": 5,
+            "row": 11,
+            "largura": 3,
+            "fundo": 1
+          },
+          "E": {
+            "col": 10,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "roomLayout: na Torre, norte e oeste",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "cols": 11,
+        "rows": 12,
+        "portas": {
+          "N": {
+            "col": 5,
+            "row": 1,
+            "largura": 3,
+            "fundo": 2
+          },
+          "S": {
+            "col": 5,
+            "row": 11,
+            "largura": 3,
+            "fundo": 1
+          },
+          "E": {
+            "col": 10,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "roomLayout: na Torre, todas",
+    "input": {
+      "fn": "roomLayout",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "doors": [
+          "N",
+          "S",
+          "E",
+          "W"
+        ],
+        "solid": [
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            true,
+            true,
+            true,
+            true,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ]
+        ],
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "cols": 11,
+        "rows": 12,
+        "portas": {
+          "N": {
+            "col": 5,
+            "row": 1,
+            "largura": 3,
+            "fundo": 2
+          },
+          "S": {
+            "col": 5,
+            "row": 11,
+            "largura": 3,
+            "fundo": 1
+          },
+          "E": {
+            "col": 10,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          },
+          "W": {
+            "col": 0,
+            "row": 6,
+            "largura": 3,
+            "fundo": 1
+          }
+        }
+      }
+    }
+  },
+  {
     "name": "walkTicks: reto pro leste até a parede",
     "input": {
       "fn": "walkTicks",
@@ -36741,6 +38797,1310 @@
           }
         ],
         "ticks": 200
+      }
+    }
+  },
+  {
+    "name": "walkTicks: na Torre, sai pelo norte, pela parede de 2",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walker": {
+          "x": 5280,
+          "y": 2400,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 200
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 5280,
+              "y": 416,
+              "facing": "N"
+            },
+            "exit": "N",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 31
+      }
+    }
+  },
+  {
+    "name": "walkTicks: na Torre, sai pelo leste pela beira do vão",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walker": {
+          "x": 8160,
+          "y": 5280,
+          "facing": "E"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 200
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 10144,
+              "y": 5280,
+              "facing": "E"
+            },
+            "exit": "E",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 31
+      }
+    }
+  },
+  {
+    "name": "walkTicks: na Torre, sai pelo oeste pela outra beira",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walker": {
+          "x": 2400,
+          "y": 7200,
+          "facing": "W"
+        },
+        "inputs": [
+          {
+            "x": -127,
+            "y": 0,
+            "ticks": 200
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 416,
+              "y": 7200,
+              "facing": "W"
+            },
+            "exit": "W",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 31
+      }
+    }
+  },
+  {
+    "name": "walkTicks: na Torre, sai pelo sul",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walker": {
+          "x": 5280,
+          "y": 10080,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": 127,
+            "ticks": 200
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 5280,
+              "y": 11104,
+              "facing": "S"
+            },
+            "exit": "S",
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 16
+      }
+    }
+  },
+  {
+    "name": "walkTicks: na Torre, o pilar ao lado do vão segura",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walker": {
+          "x": 3360,
+          "y": 3360,
+          "facing": "N"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 120
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 3360,
+              "y": 3168,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 120
+      }
+    }
+  },
+  {
+    "name": "walkTicks: na Torre, porta fechada segura",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "S": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walker": {
+          "x": 5280,
+          "y": 2400,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 0,
+            "y": -127,
+            "ticks": 120
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 5280,
+              "y": 2208,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          }
+        ],
+        "touches": [],
+        "ticks": 120
+      }
+    }
+  },
+  {
+    "name": "walkTicks: na Torre, volta pela sala, contornando o pentagrama",
+    "input": {
+      "fn": "walkTicks",
+      "args": {
+        "doors": {
+          "N": true,
+          "S": true,
+          "E": true,
+          "W": true
+        },
+        "objects": [
+          {
+            "id": "content",
+            "col": 5,
+            "row": 6
+          }
+        ],
+        "walker": {
+          "x": 5280,
+          "y": 8160,
+          "facing": "S"
+        },
+        "inputs": [
+          {
+            "x": 127,
+            "y": -127,
+            "ticks": 60
+          },
+          {
+            "x": -127,
+            "y": -127,
+            "ticks": 80
+          },
+          {
+            "x": -127,
+            "y": 127,
+            "ticks": 80
+          },
+          {
+            "x": 127,
+            "y": 0,
+            "ticks": 60
+          }
+        ],
+        "walls": [
+          {
+            "col": 1,
+            "row": 1
+          },
+          {
+            "col": 2,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 1
+          },
+          {
+            "col": 4,
+            "row": 1
+          },
+          {
+            "col": 5,
+            "row": 1
+          },
+          {
+            "col": 6,
+            "row": 1
+          },
+          {
+            "col": 7,
+            "row": 1
+          },
+          {
+            "col": 8,
+            "row": 1
+          },
+          {
+            "col": 9,
+            "row": 1
+          },
+          {
+            "col": 3,
+            "row": 2
+          },
+          {
+            "col": 7,
+            "row": 2
+          },
+          {
+            "col": 1,
+            "row": 4
+          },
+          {
+            "col": 9,
+            "row": 4
+          },
+          {
+            "col": 1,
+            "row": 8
+          },
+          {
+            "col": 9,
+            "row": 8
+          }
+        ],
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "trace": [
+          {
+            "walker": {
+              "x": 7920,
+              "y": 5520,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4400,
+              "y": 2000,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 1812,
+              "y": 5520,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4512,
+              "y": 5520,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": "content"
+          }
+        ],
+        "touches": [
+          {
+            "tick": 262,
+            "id": "content"
+          }
+        ],
+        "ticks": 280
       }
     }
   },

@@ -64,6 +64,56 @@
         "arquivo": "7_caverna_frente",
         "plano": "cima"
       }
+    ],
+    "torre": [
+      {
+        "arquivo": "1_fundo_torre",
+        "plano": "chao"
+      },
+      {
+        "arquivo": "2_tapete_direirta",
+        "plano": "chao",
+        "porta": "E"
+      },
+      {
+        "arquivo": "3_tapete_cima",
+        "plano": "chao",
+        "porta": "N"
+      },
+      {
+        "arquivo": "4_tapete_baixo",
+        "plano": "chao",
+        "porta": "S"
+      },
+      {
+        "arquivo": "5_tapete_esquerda",
+        "plano": "chao",
+        "porta": "W"
+      },
+      {
+        "arquivo": "6_close_cima",
+        "plano": "chao",
+        "semPorta": "N"
+      },
+      {
+        "arquivo": "8_frente_torre",
+        "plano": "cima"
+      },
+      {
+        "arquivo": "9_portal_frente",
+        "plano": "cima",
+        "porta": "N"
+      },
+      {
+        "arquivo": "10_close_esquerda",
+        "plano": "cima",
+        "semPorta": "W"
+      },
+      {
+        "arquivo": "11_close_direita",
+        "plano": "cima",
+        "semPorta": "E"
+      }
     ]
   },
   "PAREDES_DAS_SALAS": {
@@ -84,7 +134,139 @@
         "col": 7,
         "row": 7
       }
+    ],
+    "torre": [
+      {
+        "col": 1,
+        "row": 1
+      },
+      {
+        "col": 2,
+        "row": 1
+      },
+      {
+        "col": 3,
+        "row": 1
+      },
+      {
+        "col": 4,
+        "row": 1
+      },
+      {
+        "col": 5,
+        "row": 1
+      },
+      {
+        "col": 6,
+        "row": 1
+      },
+      {
+        "col": 7,
+        "row": 1
+      },
+      {
+        "col": 8,
+        "row": 1
+      },
+      {
+        "col": 9,
+        "row": 1
+      },
+      {
+        "col": 3,
+        "row": 2
+      },
+      {
+        "col": 7,
+        "row": 2
+      },
+      {
+        "col": 1,
+        "row": 4
+      },
+      {
+        "col": 9,
+        "row": 4
+      },
+      {
+        "col": 1,
+        "row": 8
+      },
+      {
+        "col": 9,
+        "row": 8
+      }
     ]
+  },
+  "GEOMETRIAS_DAS_SALAS": {
+    "torre": {
+      "cols": 11,
+      "rows": 12,
+      "conteudo": {
+        "col": 5,
+        "row": 6
+      },
+      "portas": {
+        "N": {
+          "col": 5,
+          "row": 1,
+          "largura": 3,
+          "fundo": 2
+        },
+        "S": {
+          "col": 5,
+          "row": 11,
+          "largura": 3,
+          "fundo": 1
+        },
+        "W": {
+          "col": 0,
+          "row": 6,
+          "largura": 3,
+          "fundo": 1
+        },
+        "E": {
+          "col": 10,
+          "row": 6,
+          "largura": 3,
+          "fundo": 1
+        }
+      },
+      "extras": [
+        {
+          "col": 2,
+          "row": 2
+        },
+        {
+          "col": 2,
+          "row": 3
+        },
+        {
+          "col": 8,
+          "row": 3
+        },
+        {
+          "col": 8,
+          "row": 2
+        },
+        {
+          "col": 1,
+          "row": 10
+        },
+        {
+          "col": 2,
+          "row": 10
+        },
+        {
+          "col": 8,
+          "row": 10
+        },
+        {
+          "col": 9,
+          "row": 10
+        }
+      ]
+    }
   },
   "ENFEITES_DAS_SALAS": {
     "caverna": [

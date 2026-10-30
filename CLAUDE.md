@@ -266,8 +266,14 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   2026-10-25 (chão, parede de trás com tochas, uma passagem por porta e a
   parede da frente por cima); a colisão dele fecha os quatro cantos de
   dentro (`paredesDaSala`), e o extra gravado num canto anda rumo ao meio.
-  A Torre segue com os quadradinhos até ganhar arte. A parede rachada se
-  põe pelo lado dela (`DOOR_TILE[side]`), e não pela casa gravada. No app a
+  A Torre ganhou a dela em 2026-10-30 e é a única sala de outro formato
+  (decisão do usuário): 11 × 12, parede de cima de 2 casas e portas de 3
+  (`GEOMETRIAS_DAS_SALAS`; as outras usam `GEOMETRIA_PADRAO`). O formato vai
+  na planta (`cols`, `rows`, `portas`) e em `roomArrival(lado, geometria)`;
+  as camadas `semPorta` fecham o vão de quem não tem porta, e falta a 7 dele
+  (a porta de baixo fechada), que a parede inteira dispensa. No site a caixa
+  da sala toma a proporção dela, e no app a câmera. A parede rachada se põe
+  pelo lado dela (a porta da geometria), e não pela casa gravada. No app a
   luta continua na proporção 9 × 7 em que foi afinada (`area-da-luta`).
 - Níveis e chefe final (2026-10-25, **site e app**; o Breno zerou a
   Floresta e achou a batalha final fraca): os monstros ganharam nível

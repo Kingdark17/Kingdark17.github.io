@@ -41,6 +41,10 @@ import {
 
 /** Pixels de tela por quadradinho: 16 de arte × 3, a escala do pixel art do jogo. */
 export const LADO = 48;
+/**
+ * O tamanho da cena na sala de sempre, e da janela da cidade. A sala de
+ * outro formato (a Torre, 11 × 12) muda a cena pro tamanho dela.
+ */
 export const LARGURA_DA_CENA = ROOM_COLS * LADO;
 export const ALTURA_DA_CENA = ROOM_ROWS * LADO;
 
@@ -149,8 +153,18 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
     resolution: Math.min(2, window.devicePixelRatio || 1),
     autoDensity: true,
   });
-  app.canvas.style.width = '100%';
-  app.canvas.style.height = 'auto';
+  /** O canvas ocupa a largura da caixa, com a altura na proporção dele. */
+  function esticar() {
+    app.canvas.style.width = '100%';
+    app.canvas.style.height = 'auto';
+  }
+  esticar();
+  /** A cena no tamanho da sala. O autoDensity do PixiJS volta o estilo pro tamanho em pixel a cada troca. */
+  function tamanho(largura: number, altura: number) {
+    if (app.renderer.width === largura && app.renderer.height === altura) return;
+    app.renderer.resize(largura, altura);
+    esticar();
+  }
   app.canvas.style.imageRendering = 'pixelated';
   app.canvas.setAttribute('aria-hidden', 'true');
   alvo.appendChild(app.canvas);
@@ -207,6 +221,9 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       naCidade = false;
       escala = ESCALA;
       palco.position.set(0, 0);
+      const colunas = planta.cols ?? ROOM_COLS;
+      const linhas = planta.rows ?? ROOM_ROWS;
+      tamanho(colunas * LADO, linhas * LADO);
 
       // A arte tem 32 px por casa; a sala, LADO: estica por igual, no pixel mais próximo.
       camadas?.forEach((camada, i) => {
@@ -222,7 +239,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
         linha.forEach((solido, col) => {
           const px = col * LADO;
           const py = row * LADO;
-          const borda = col === 0 || row === 0 || col === ROOM_COLS - 1 || row === ROOM_ROWS - 1;
+          const borda = col === 0 || row === 0 || col === colunas - 1 || row === linhas - 1;
           if (borda && solido) {
             ladrilhos.rect(px, py, LADO, LADO).fill({ color: tema.parede });
             ladrilhos.rect(px + 2, py + 2, LADO - 4, LADO - 4).stroke({ width: 2, color: tema.bordaDaParede });
@@ -285,6 +302,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       limpar();
       naCidade = true;
       escala = ESCALA_DA_CIDADE;
+      tamanho(LARGURA_DA_CENA, ALTURA_DA_CENA);
       camadas.forEach((camada, i) => {
         const tex = texturas[i];
         if (!tex) return;

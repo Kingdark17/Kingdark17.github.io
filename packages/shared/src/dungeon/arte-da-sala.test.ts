@@ -22,14 +22,22 @@ describe('a arte das salas', () => {
     expect(camadasDaSala('caverna', ['N', 'E', 'S', 'W'])!.filter((c) => c.plano === 'cima').map((c) => c.arquivo)).toEqual(['7_caverna_frente']);
   });
 
-  it('masmorra sem arte fica com os quadradinhos', () => {
-    expect(camadasDaSala('torre', [])).toBeNull();
-    expect(camadasDaSala('torre', ['N'])).toBeNull();
+  it('a sala da Torre leva o tapete das portas que tem e fecha o vão das que não tem; o arco de cima só com a porta de cima', () => {
+    expect(camadasDaSala('torre', ['N', 'S'])!.map((c) => c.arquivo)).toEqual([
+      '1_fundo_torre',
+      '3_tapete_cima',
+      '4_tapete_baixo',
+      '8_frente_torre',
+      '9_portal_frente',
+      '10_close_esquerda',
+      '11_close_direita',
+    ]);
+    expect(camadasDaSala('torre', ['W'])!.map((c) => c.arquivo)).toEqual(['1_fundo_torre', '5_tapete_esquerda', '6_close_cima', '8_frente_torre', '11_close_direita']);
   });
 });
 
 describe('as paredes de dentro da sala', () => {
-  it('a Caverna fecha os quatro cantos de dentro; a Floresta, a Torre e fora da masmorra, nenhum', () => {
+  it('a Caverna fecha os quatro cantos de dentro; a Floresta e fora da masmorra, nenhum', () => {
     expect(paredesDaSala('caverna')).toEqual([
       { col: 1, row: 1 },
       { col: 7, row: 1 },
@@ -37,7 +45,6 @@ describe('as paredes de dentro da sala', () => {
       { col: 7, row: 7 },
     ]);
     expect(paredesDaSala('floresta')).toEqual([]);
-    expect(paredesDaSala('torre')).toEqual([]);
     expect(paredesDaSala(null)).toEqual([]);
   });
 

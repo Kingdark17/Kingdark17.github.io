@@ -49,6 +49,7 @@ import {
   entrarNoPonto,
   falarComOBram,
   gastarPonto,
+  geometriaDaSala,
   idDaRaca,
   indiceDoExtra,
   instantaneoDaSala,
@@ -231,6 +232,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const troncosAgora = estado?.mapMode === 'city' ? troncosNoCaminho(estado) : null;
   /** A masmorra da sala, pra arte e pras paredes que ela põe dentro (`paredesDaSala`); `null` na cidade. */
   const masmorraAgora = estado?.mapMode === 'dungeon' ? estado.masmorra.dungeon : null;
+  /** O formato das salas dela (a Torre é 11 × 12): onde se chega por cada porta. */
+  const geometriaAgora = useMemo(() => geometriaDaSala(masmorraAgora), [masmorraAgora]);
   /** O título da maior conquista, no cartão de guilda (`conquista.ts`). */
   const tituloAgora = estado ? tituloDoHeroi(estado.progresso) : null;
   const portasAgora = (['N', 'S', 'E', 'W'] as const).filter((d) => celulaAgora?.doors?.[d]).join('');
@@ -283,16 +286,16 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     const vizinha = naSala?.mapa === mapaAgora && Math.abs(dx) + Math.abs(dy) === 1;
     const veioPor: Direction | null = vizinha ? (dx === 1 ? 'E' : dx === -1 ? 'W' : dy === 1 ? 'S' : 'N') : null;
     // Na cidade: quem volta da masmorra aparece na entrada dela; quem carrega o jogo, na porta da sala do save.
-    const chegada = estado.mapMode === 'city' ? chegadaNaCidade(estado, naSala?.mapa.startsWith('dungeon') ?? false) : roomArrival(veioPor);
+    const chegada = estado.mapMode === 'city' ? chegadaNaCidade(estado, naSala?.mapa.startsWith('dungeon') ?? false) : roomArrival(veioPor, geometriaAgora);
     setNaSala({ sala: salaAgora, mapa: mapaAgora, x: estado.pos.x, y: estado.pos.y, chegada, volta: 0 });
   }
-  const chegadaNaSala = naSala?.sala === salaAgora ? naSala.chegada : estado?.mapMode === 'city' ? chegadaNaCidade(estado) : roomArrival(null);
+  const chegadaNaSala = naSala?.sala === salaAgora ? naSala.chegada : estado?.mapMode === 'city' ? chegadaNaCidade(estado) : roomArrival(null, geometriaAgora);
   /**
    * A cena põe o herói na chegada quando esta chave muda. Entrar e sair da
    * sala secreta também mudam: na volta (`volta`), ele aparece na passagem.
    */
   const chaveDaCena = secretaAgora ? `${salaAgora}#secreta` : `${salaAgora}#${naSala?.sala === salaAgora ? naSala.volta : 0}`;
-  const chegadaDaCena = secretaAgora ? roomArrival(secretaAgora.lado) : chegadaNaSala;
+  const chegadaDaCena = secretaAgora ? roomArrival(secretaAgora.lado, geometriaAgora) : chegadaNaSala;
 
   /** Onde o herói está agora: a cena escreve aqui a cada passo, e sobrevive a ela desmontar. */
   const posicao = useRef<PosicaoNaSala>({ sala: null, walker: roomArrival(null), tocando: null });
@@ -730,7 +733,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     if (secretaAgora) {
       if (direcao !== DIR_OPP[secretaAgora.lado]) return false;
       setNaSecreta(null);
-      if (naSala) setNaSala({ ...naSala, chegada: roomArrival(direcao), volta: naSala.volta + 1 });
+      if (naSala) setNaSala({ ...naSala, chegada: roomArrival(direcao, geometriaAgora), volta: naSala.volta + 1 });
       tocar('step');
       return true;
     }

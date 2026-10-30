@@ -109,6 +109,7 @@ import type {
   Tutorial,
   Walker,
   WalkStep,
+  GeometriaDaSala,
 } from '../src/index.js';
 import type {
   Encantadora,
@@ -2425,6 +2426,23 @@ for (const nome of ['ROOM_COLS', 'ROOM_ROWS', 'TILE_UNITS', 'WALK_TICKS_PER_SECO
   }
 
   for (const d of [null, ...DIRS]) caso(`roomArrival: ${d ?? 'sem direção'}`, 'roomArrival', { movedTowards: d }, (a) => E.roomArrival(a.movedTowards));
+  // A sala da Torre (dungeon/arte-da-sala.ts): 11 × 12, vãos de 3, a parede de cima de 2.
+  const geometriaDaTorre = E.geometriaDaSala('torre');
+  for (const d of [null, ...DIRS]) {
+    caso(`roomArrival: na Torre, ${d ?? 'sem direção'}`, 'roomArrival', { movedTowards: d, geometria: geometriaDaTorre }, (a) => E.roomArrival(a.movedTowards, a.geometria));
+  }
+  for (const d of DIRS) {
+    caso(`casasDoVao: na Torre, ${d}`, 'casasDoVao', { geometria: geometriaDaTorre, lado: d }, (a) => E.casasDoVao(a.geometria, a.lado));
+    caso(`casasDoVao: na sala de sempre, ${d}`, 'casasDoVao', { geometria: E.GEOMETRIA_PADRAO, lado: d }, (a) => E.casasDoVao(a.geometria, a.lado));
+  }
+  for (const [nome, doors] of [
+    ['sem portas', {}],
+    ['norte e oeste', { N: true, W: true }],
+    ['todas', { N: true, S: true, E: true, W: true }],
+  ] as const) {
+    caso(`roomLayout: na Torre, ${nome}`, 'roomLayout', { doors, objects: [{ id: 'content', col: 5, row: 6 }], walls: E.paredesDaSala('torre'), geometria: geometriaDaTorre }, (a) =>
+      E.roomLayout(a.doors, a.objects, a.walls, a.geometria));
+  }
 
   /** Vários passos seguidos, segmento por segmento; para no vão. O C# repete o mesmo laço (cola de teste, como o sort). */
   interface Segmento {
@@ -2432,8 +2450,15 @@ for (const nome of ['ROOM_COLS', 'ROOM_ROWS', 'TILE_UNITS', 'WALK_TICKS_PER_SECO
     y: number;
     ticks: number;
   }
-  const andarVarios = (a: { doors: Record<string, unknown>; objects: { id: string; col: number; row: number }[]; walker: Walker; inputs: Segmento[] }) => {
-    const layout = E.roomLayout(a.doors, a.objects);
+  const andarVarios = (a: {
+    doors: Record<string, unknown>;
+    objects: { id: string; col: number; row: number }[];
+    walker: Walker;
+    inputs: Segmento[];
+    walls?: { col: number; row: number }[];
+    geometria?: GeometriaDaSala;
+  }) => {
+    const layout = E.roomLayout(a.doors, a.objects, a.walls ?? [], a.geometria ?? E.GEOMETRIA_PADRAO);
     let walker = a.walker;
     let ticks = 0;
     const trace: WalkStep[] = [];
@@ -2477,6 +2502,20 @@ for (const nome of ['ROOM_COLS', 'ROOM_ROWS', 'TILE_UNITS', 'WALK_TICKS_PER_SECO
   ];
   for (const [nome, doors, comConteudo, walker, inputs] of cenarios) {
     caso(`walkTicks: ${nome}`, 'walkTicks', { doors, objects: comConteudo ? conteudo : [], walker, inputs }, andarVarios);
+  }
+  // Na Torre: atravessar a parede grossa de cima, as beiras do vão largo, os pilares e a porta fechada.
+  const naTorre = { walls: E.paredesDaSala('torre'), geometria: geometriaDaTorre };
+  const noMeio = [{ id: 'content', col: 5, row: 6 }];
+  for (const [nome, doors, walker, inputs] of [
+    ['sai pelo norte, pela parede de 2', todas, E.roomArrival('S', geometriaDaTorre), [{ x: 0, y: -M, ticks: 200 }]],
+    ['sai pelo leste pela beira do vão', todas, { x: c(8), y: c(5), facing: 'E' }, [{ x: M, y: 0, ticks: 200 }]],
+    ['sai pelo oeste pela outra beira', todas, { x: c(2), y: c(7), facing: 'W' }, [{ x: -M, y: 0, ticks: 200 }]],
+    ['sai pelo sul', todas, E.roomArrival('N', geometriaDaTorre), [{ x: 0, y: M, ticks: 200 }]],
+    ['o pilar ao lado do vão segura', todas, { x: c(3), y: c(3), facing: 'N' }, [{ x: 0, y: -M, ticks: 120 }]],
+    ['porta fechada segura', { S: true }, E.roomArrival('S', geometriaDaTorre), [{ x: 0, y: -M, ticks: 120 }]],
+    ['volta pela sala, contornando o pentagrama', todas, E.roomArrival(null, geometriaDaTorre), [{ x: M, y: -M, ticks: 60 }, { x: -M, y: -M, ticks: 80 }, { x: -M, y: M, ticks: 80 }, { x: M, y: 0, ticks: 60 }]],
+  ] as const) {
+    caso(`walkTicks: na Torre, ${nome}`, 'walkTicks', { doors, objects: noMeio, walker, inputs, ...naTorre }, andarVarios);
   }
 
   const sorteio = E.seededRng(20261011);
@@ -3490,6 +3529,13 @@ for (const [nome, celula, masmorra] of [
   caso(`objetosDaSala: ${nome}`, 'objetosDaSala', { celula, temConteudo: true, masmorra }, (a) => E.objetosDaSala(a.celula, a.temConteudo, a.masmorra));
 }
 for (const lado of E.DIR_ORDER) caso(`plantaDaSalaSecreta: parede ${lado}`, 'plantaDaSalaSecreta', { lado }, (a) => E.plantaDaSalaSecreta(a.lado));
+for (const lado of ['N', 'W'] as const) {
+  caso(`plantaDaSalaSecreta: parede ${lado}, na Torre`, 'plantaDaSalaSecreta', { lado, masmorra: 'torre' }, (a) => E.plantaDaSalaSecreta(a.lado, a.masmorra));
+}
+caso('objetosDaSala: na Torre, parede aberta', 'objetosDaSala', { celula: salaCom(paredeAberta), temConteudo: true, masmorra: 'torre' }, (a) => E.objetosDaSala(a.celula, a.temConteudo, a.masmorra));
+for (const [nome, portas] of [['sem portas', {}], ['norte e leste', { N: true, E: true }]] as const) {
+  caso(`plantaDaSala: na Torre, ${nome}`, 'plantaDaSala', { portas, objetos: true, masmorra: 'torre' }, (a) => E.plantaDaSala(a.portas, a.objetos, a.masmorra));
+}
 for (const lado of ['N', 'E'] as const) {
   caso(`plantaDaSalaSecreta: parede ${lado}, na Caverna`, 'plantaDaSalaSecreta', { lado, masmorra: 'caverna' }, (a) => E.plantaDaSalaSecreta(a.lado, a.masmorra));
 }
@@ -4011,11 +4057,15 @@ for (const [dungeon, portas] of [
   ['caverna', []],
   ['caverna', ['N', 'S']],
   ['caverna', ['N', 'E', 'S', 'W']],
+  ['torre', []],
   ['torre', ['E']],
+  ['torre', ['N', 'S']],
+  ['torre', ['N', 'E', 'S', 'W']],
 ] as const) {
   caso(`camadasDaSala: ${dungeon}, ${portas.join('') || 'sem portas'}`, 'camadasDaSala', { dungeon, portas }, (a) => E.camadasDaSala(a.dungeon, a.portas));
 }
 for (const dungeon of ['floresta', 'caverna', 'torre', null] as const) {
+  caso(`geometriaDaSala: ${dungeon ?? 'fora da masmorra'}`, 'geometriaDaSala', { dungeon }, (a) => E.geometriaDaSala(a.dungeon));
   caso(`paredesDaSala: ${dungeon ?? 'fora da masmorra'}`, 'paredesDaSala', { dungeon }, (a) => E.paredesDaSala(a.dungeon));
   caso(`enfeitesDaSala: ${dungeon ?? 'fora da masmorra'}`, 'enfeitesDaSala', { dungeon }, (a) => E.enfeitesDaSala(a.dungeon));
 }
