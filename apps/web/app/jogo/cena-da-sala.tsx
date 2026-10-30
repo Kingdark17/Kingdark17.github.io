@@ -55,6 +55,8 @@ interface Props {
   salas?: readonly SalaDesenhada[] | null;
   /** A sala em que o herói está, na grade do andar (com `salas`). */
   origem?: OrigemDaSala | null;
+  /** Na luta no mapa: a câmera enquadra a sala inteira, em vez de seguir o herói. */
+  enquadrar?: boolean;
   heroi: Figura;
   /** Onde o herói aparece nesta sala. */
   chegada: Walker;
@@ -81,6 +83,7 @@ export function CenaDaSala({
   figuras,
   salas = null,
   origem = null,
+  enquadrar = false,
   heroi,
   chegada,
   posicao,
@@ -95,9 +98,9 @@ export function CenaDaSala({
   const [pronta, setPronta] = useState(false);
 
   // O relógio do Pixi lê os valores mais recentes por aqui, sem reassinar a cada render.
-  const atual = useRef({ sala, planta, chegada, origem, posicao, ativo, entrada, onSaida, onEncostar });
+  const atual = useRef({ sala, planta, chegada, origem, enquadrar, posicao, ativo, entrada, onSaida, onEncostar });
   useEffect(() => {
-    atual.current = { sala, planta, chegada, origem, posicao, ativo, entrada, onSaida, onEncostar };
+    atual.current = { sala, planta, chegada, origem, enquadrar, posicao, ativo, entrada, onSaida, onEncostar };
   });
   /** O tempo que sobrou do quadro anterior, e de que sala o herói já saiu (esperando a vizinha chegar). */
   const relogio = useRef<{ sobra: number; saiuDe: string | null }>({ sobra: 0, saiuDe: null });
@@ -152,7 +155,7 @@ export function CenaDaSala({
       }
       if (!agora.ativo || r.saiuDe === p.sala) {
         r.sobra = 0;
-        desenho.colocarHeroi(p.walker, false, agora.origem);
+        desenho.colocarHeroi(p.walker, false, agora.origem, agora.enquadrar);
         return;
       }
 
@@ -170,7 +173,7 @@ export function CenaDaSala({
       } else if (quadro.encostou) {
         agora.onEncostar(quadro.encostou);
       }
-      desenho.colocarHeroi(p.walker, quadro.andou, agora.origem);
+      desenho.colocarHeroi(p.walker, quadro.andou, agora.origem, agora.enquadrar);
     });
   }, [pronta]);
 

@@ -53,6 +53,8 @@ namespace RPGLegend.Tests
                     lista.Add(new JObject { ["x"] = N(s.X), ["y"] = N(s.Y), ["dx"] = N(s.Dx), ["dy"] = N(s.Dy), ["acesa"] = s.Acesa, ["portas"] = W(s.Portas) });
                 return lista;
             });
+            Fn(M, "lugaresNaLuta", (a, c) => W(LutaNoMapa.LugaresNaLuta(Num(a["quantos"]), R<GeometriaDaSala>(a["geometria"]))));
+            Fn(M, "heroiNaLuta", (a, c) => W(LutaNoMapa.HeroiNaLuta(R<Walker>(a["walker"]), R<GeometriaDaSala>(a["geometria"]))));
             Fn(M, "portasDaPlanta", (a, c) => W(SalasEmendadas.PortasDaPlanta(a["celula"].Type == JTokenType.Null ? null : R<DungeonCell>(a["celula"]))));
             Fn(M, "objetosDaSala", (a, c) => W(ExtrasDaSala.ObjetosDaSala(R<DungeonCell>(a["celula"]), (bool)a["temConteudo"], Str(a["masmorra"]))));
             Fn(M, "plantaDaSalaSecreta", (a, c) => W(ExtrasDaSala.PlantaDaSalaSecreta(Str(a["lado"]), Str(a["masmorra"]))));

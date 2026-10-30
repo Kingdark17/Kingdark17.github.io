@@ -22,6 +22,7 @@ namespace RPGLegend.Engine.Json
             GameData.FimDaLutaTable = JsSerializer.Parse<FimDaLutaData>(readTable("jogo/fim-da-luta"));
             GameData.ChefeFinalTable = JsSerializer.Parse<ChefeFinalData>(readTable("jogo/chefe-final"));
             GameData.ConquistaTable = JsSerializer.Parse<ConquistaData>(readTable("jogo/conquista"));
+            GameData.LutaNoMapaTable = JsSerializer.Parse<LutaNoMapaData>(readTable("jogo/luta-no-mapa"));
         }
     }
 }

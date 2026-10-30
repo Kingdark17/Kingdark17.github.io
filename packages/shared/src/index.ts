@@ -93,6 +93,7 @@ export * from './jogo/mochila.js';
 export * from './jogo/narrador.js';
 export * from './jogo/neblina.js';
 export * from './jogo/salas-emendadas.js';
+export * from './jogo/luta-no-mapa.js';
 export * from './jogo/portao.js';
 export * from './jogo/professor.js';
 export * from './jogo/sala.js';

@@ -1,7 +1,8 @@
 /* =========================================================
-   O combate em primeira pessoa (doc do Breno, regras de 2026-10-09):
-   o cenário do lugar atrás, o monstro grande no meio, a caixa embaixo e
-   o menu Lutar / Poderes / Itens / Fugir, como no Undertale.
+   O combate no mapa (2026-10-30, pedido do Breno; antes era em primeira
+   pessoa): os monstros em pé na própria sala, cada um na casa dele, e
+   embaixo dela a faixa com as placas, a caixa e o menu
+   Lutar / Poderes / Itens / Fugir.
 
    Módulo próprio porque a tela de combate é a única que usa isto. O que
    é de todo o jogo (botão de pedra, barra de vida, erro) continua em
@@ -36,43 +37,48 @@
   }
 }
 
-/* ---------- o palco ---------- */
+/* ---------- os monstros na sala ----------
+ *
+ * A camada vai por cima da cena (a tela de jogo a põe lá, e esta tela
+ * desenha nela por portal). A câmera enquadra a sala inteira na luta, então
+ * cada monstro vai por porcentagem dela, com o pé na casa dele, e o tamanho
+ * sai da largura da sala (`cqw`) dividida pelas colunas dela. */
 
-/* O cenário é provisório: as cores do tema do mapa (`TEMAS`), em parede
-   em cima e chão embaixo, até o Breno desenhar o fundo de cada masmorra.
-   As cores chegam por variável no `style` do elemento. */
-.palco {
-  position: relative;
-  overflow: hidden;
-  /* Altura fixa pela faixa, e não `aspect-ratio`: com teto de altura, a
-     proporção encolhia a largura e o palco não enchia a coluna. */
-  width: 100%;
-  height: clamp(18rem, 64vw, 23rem);
-  border: 1px solid var(--line);
-  border-radius: 0.375rem;
-  /* Parede até 58%, um fio de rodapé, e o chão com juntas de ladrilho. */
-  background:
-    repeating-linear-gradient(90deg, transparent 0 46px, rgba(0, 0, 0, 0.14) 46px 48px) 0 100% / 100% 40% no-repeat,
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--parede) 55%, black) 0%,
-      var(--parede) 58%,
-      var(--borda) 58%,
-      var(--borda) 60%,
-      var(--chao) 60%,
-      color-mix(in srgb, var(--chao) 70%, black) 100%
-    );
-  display: grid;
-  grid-template-rows: auto 1fr;
-  justify-items: center;
-  image-rendering: pixelated;
+.noMapa {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  container-type: size;
 }
 
-/* A placa do inimigo: nome, vida e o que pesa sobre ele, no alto. */
+.figuraNoMapa {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: grid;
+  justify-items: center;
+}
+
+.figuraNoMapa .figura {
+  font-size: calc(100cqw / var(--colunas, 9) * 0.9);
+}
+
+.figuraNoMapa[data-chefe] .figura {
+  font-size: calc(100cqw / var(--colunas, 9) * 1.35);
+}
+
+.figuraNoMapa[data-caido] .monstro {
+  opacity: 0.38;
+  filter: grayscale(0.8);
+}
+
+.figuraNoMapa[data-caido] .figura {
+  animation: none;
+}
+
+/* A placa do inimigo: nome, vida e o que pesa sobre ele, no alto. *//* A placa do inimigo: nome, vida e o que pesa sobre ele, no alto. */
 .placa {
-  width: min(22rem, calc(100% - 1.5rem));
-  margin-top: 0.75rem;
-  padding: 0.5rem 0.75rem 0.55rem;
+  width: 100%;
+  padding: 0.4rem 0.6rem 0.45rem;
   background: rgba(16, 18, 26, 0.72);
   border: 1px solid var(--line);
   border-radius: 0.3rem;
@@ -125,24 +131,17 @@
 }
 
 /* O monstro em pé no chão, com a sombra embaixo. Emoji provisório até a
-   arte do Breno — grande, porque é ele o centro da tela. */
+   arte do Breno. */
 .monstro {
-  align-self: end;
   position: relative;
   display: grid;
   justify-items: center;
-  margin-bottom: 5%;
 }
 
 .figura {
-  font-size: clamp(4.5rem, 17vw, 8.5rem);
   line-height: 1;
   filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.35));
   animation: respira 2.6s ease-in-out infinite;
-}
-
-.monstroChefe .figura {
-  font-size: clamp(5.5rem, 21vw, 10.5rem);
 }
 
 .sombra {
@@ -190,21 +189,15 @@
   }
 }
 
-/* ---------- o grupo ----------
+/* ---------- as placas ----------
  *
- * Uma coluna por monstro (pedido do usuário, 2026-10-16): a placa em cima e
- * a figura no chão. Sozinho na sala é o palco de sempre — a coluna ocupa a
- * largura toda. Em grupo cada um é o botão que escolhe o alvo, e a placa diz
- * quem ataca nesta rodada. */
+ * Uma placa por monstro, numa fileira em cima da caixa (pedido do usuário,
+ * 2026-10-16: em grupo, tocar na placa escolhe o alvo, e ela diz quem ataca
+ * nesta rodada). Sozinho na sala, a placa ocupa a largura toda. */
 
-.grupo {
-  grid-row: 1 / -1;
-  align-self: stretch;
-  justify-self: stretch;
+.placas {
   display: flex;
-  justify-content: space-evenly;
-  gap: 0.5rem;
-  padding: 0 0.5rem;
+  gap: 0.4rem;
 }
 
 .lutador {
@@ -212,20 +205,12 @@
   flex: 1 1 0;
   min-width: 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
   padding: 0;
   background: none;
   border: 0;
   color: inherit;
   font: inherit;
   text-align: center;
-}
-
-/* Na coluna o `align-self: end` do palco antigo empurraria a figura pro lado. */
-.lutador .monstro {
-  align-self: center;
 }
 
 .lutadorClicavel {
@@ -251,33 +236,21 @@
   box-shadow: inset 0 0 0 1px var(--gold-bright);
 }
 
-/* Quem caiu fica no lugar, apagado, até a luta acabar. Só a placa e a
-   figura: o número do golpe que o derrubou sobe com a cor de sempre. */
-.lutador[data-caido] .placa,
-.lutador[data-caido] .monstro {
+/* Quem caiu fica no lugar, apagado, até a luta acabar. */
+.lutador[data-caido] .placa {
   opacity: 0.38;
   filter: grayscale(0.8);
 }
 
-.lutador[data-caido] .figura {
-  animation: none;
+.placas:not([data-tamanho='1']) .placa {
+  padding: 0.3rem 0.35rem 0.35rem;
 }
 
-.grupo:not([data-tamanho='1']) .placa {
-  width: 100%;
-  padding: 0.35rem 0.4rem 0.4rem;
-}
-
-.grupo:not([data-tamanho='1']) .nome {
-  font-size: 0.9rem;
-}
-
-.grupo[data-tamanho='2'] .figura {
-  font-size: clamp(3.5rem, 13vw, 6.5rem);
-}
-
-.grupo[data-tamanho='3'] .figura {
-  font-size: clamp(3rem, 11vw, 5.5rem);
+.placas:not([data-tamanho='1']) .nome {
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .daVez {
@@ -331,23 +304,12 @@
   font-size: 1.35rem;
 }
 
-/* Em primeira pessoa o herói não está no palco: o golpe que ele toma
-   aparece embaixo, perto da caixa — é onde ele "está". */
+/* O golpe que o herói toma sobe no pé da sala, perto da faixa, longe dos
+   monstros (que ficam no meio dela). */
 .numeroNoHeroi {
   color: #ff9f6b;
-  left: 18%;
   top: auto;
   bottom: 0.6rem;
-}
-
-/* Em grupo, os 18% cairiam em cima do primeiro monstro e o golpe no herói
-   pareceria dano nele: o número sobe no vão entre as figuras. */
-.numeros[data-tamanho='2'] .numeroNoHeroi {
-  left: 50%;
-}
-
-.numeros[data-tamanho='3'] .numeroNoHeroi {
-  left: 33.3%;
 }
 
 @keyframes sobeESome {
@@ -696,49 +658,27 @@
 /* ---------- o chefe final e os lacaios ----------
  *
  * O chefe do andar 100 chama 4 lacaios na metade da vida (`chefe-final.ts`):
- * o palco chega a cinco monstros, menores e com a placa mais enxuta. */
+ * a fileira chega a cinco placas, mais enxutas. */
 
-.grupo[data-tamanho='4'] .figura,
-.grupo[data-tamanho='5'] .figura {
-  font-size: clamp(2.2rem, 8vw, 4.2rem);
-}
-
-.grupo[data-tamanho='4'] .placa,
-.grupo[data-tamanho='5'] .placa {
+.placas[data-tamanho='4'] .placa,
+.placas[data-tamanho='5'] .placa {
   padding: 0.25rem 0.25rem 0.3rem;
 }
 
-.grupo[data-tamanho='5'] .nome {
+.placas[data-tamanho='5'] .nome {
   font-size: 0.75rem;
 }
 
-.grupo[data-tamanho='5'] .subtitulo,
-.grupo[data-tamanho='5'] .daVez {
+.placas[data-tamanho='5'] .subtitulo,
+.placas[data-tamanho='5'] .daVez {
   font-size: 0.68rem;
-}
-
-.numeros[data-tamanho='4'] .numeroNoHeroi {
-  left: 25%;
-}
-
-.numeros[data-tamanho='5'] .numeroNoHeroi {
-  left: 20%;
 }
 
 /* ---------- a tela de vitória de quem zera a masmorra (`conquista.ts`) ---------- */
 
-/* O palco tem altura fixa; com a tela de vitória ele cresce até caber tudo. */
-.palcoDaConquista {
-  height: auto;
-  min-height: clamp(18rem, 64vw, 23rem);
-}
-
-
+/* Na faixa, em cima da caixa: a sala continua à vista, sem os monstros. */
 .conquista {
-  grid-row: 1 / -1;
-  align-self: center;
-  width: min(24rem, calc(100% - 1.5rem));
-  margin: 0.75rem 0;
+  width: 100%;
   padding: 1rem 1rem 1.1rem;
   background: rgba(16, 18, 26, 0.86);
   border: 1px solid var(--gold);

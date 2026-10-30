@@ -139,9 +139,10 @@ export interface Cena {
   desenharCidade(troncos: boolean): Promise<void>;
   /**
    * Põe o herói onde a regra diz. `andando` balança o boneco, que ainda não tem quadros de caminhada. `origem`: na
-   * masmorra emendada, a sala em que ele está (a posição dele é contada do canto dela).
+   * masmorra emendada, a sala em que ele está (a posição dele é contada do canto dela). `enquadrar`: a câmera
+   * enquadra essa sala inteira em vez de seguir o herói (a luta no mapa).
    */
-  colocarHeroi(walker: Walker, andando: boolean, origem?: OrigemDaSala | null): void;
+  colocarHeroi(walker: Walker, andando: boolean, origem?: OrigemDaSala | null, enquadrar?: boolean): void;
   /** Chama `fn` a cada quadro da tela, com os milissegundos desde o anterior. Devolve como parar. */
   aCadaQuadro(fn: (decorridoMs: number) => void): () => void;
   destruir(): void;
@@ -419,13 +420,16 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       });
     },
 
-    colocarHeroi(walker, andando, origem) {
+    colocarHeroi(walker, andando, origem, enquadrar) {
       // O pé do boneco fica na borda de baixo da base que bate nas paredes. Na masmorra emendada, contado do canto
       // da sala atual, que fica no lugar dela no andar.
       const canto = salaEmPixel && origem ? { x: origem.x * salaEmPixel.largura, y: origem.y * salaEmPixel.altura } : { x: 0, y: 0 };
       const x = canto.x + walker.x * escala;
       const y = canto.y + (walker.y + HERO_HALF) * escala;
-      if (salaEmPixel) {
+      if (salaEmPixel && enquadrar) {
+        // Na luta, a sala inteira: os monstros ficam por porcentagem dela, por cima do canvas.
+        palco.position.set(-canto.x, -canto.y);
+      } else if (salaEmPixel) {
         // A câmera no herói, em pixel inteiro (fração faz a arte tremer): parado no meio da sala, ela a enquadra inteira.
         palco.position.set(Math.round(app.renderer.width / 2 - x), Math.round(app.renderer.height / 2 - (y - LADO / 2)));
       }

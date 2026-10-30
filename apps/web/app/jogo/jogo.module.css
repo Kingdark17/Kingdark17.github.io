@@ -1000,6 +1000,14 @@
   display: block;
 }
 
+/* A luta no mapa: a camada por cima da sala onde a tela de combate põe os
+   monstros (por portal). Não pega toque: escolher o alvo é na placa. */
+.palcoNoMapa {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 /* O joystick: a sala inteira é a área de toque. `touch-action: none` pra o
    arraste andar o herói, e não rolar a página. */
 .areaDoJoystick {

@@ -100997,6 +100997,1958 @@
     }
   },
   {
+    "name": "lugaresNaLuta: floresta, 0",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 0,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: floresta, 1",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 1,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: floresta, 2",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 2,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 3,
+          "row": 4
+        },
+        {
+          "col": 5,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: floresta, 3",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 3,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 2,
+          "row": 4
+        },
+        {
+          "col": 4,
+          "row": 4
+        },
+        {
+          "col": 6,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: floresta, 4",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 4,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 1,
+          "row": 4
+        },
+        {
+          "col": 3,
+          "row": 4
+        },
+        {
+          "col": 5,
+          "row": 4
+        },
+        {
+          "col": 7,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: floresta, 5",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 5,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 3
+        },
+        {
+          "col": 1,
+          "row": 4
+        },
+        {
+          "col": 3,
+          "row": 5
+        },
+        {
+          "col": 5,
+          "row": 5
+        },
+        {
+          "col": 7,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: caverna, 0",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 0,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: caverna, 1",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 1,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: caverna, 2",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 2,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 3,
+          "row": 4
+        },
+        {
+          "col": 5,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: caverna, 3",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 3,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 2,
+          "row": 4
+        },
+        {
+          "col": 4,
+          "row": 4
+        },
+        {
+          "col": 6,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: caverna, 4",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 4,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 1,
+          "row": 4
+        },
+        {
+          "col": 3,
+          "row": 4
+        },
+        {
+          "col": 5,
+          "row": 4
+        },
+        {
+          "col": 7,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: caverna, 5",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 5,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 3
+        },
+        {
+          "col": 1,
+          "row": 4
+        },
+        {
+          "col": 3,
+          "row": 5
+        },
+        {
+          "col": 5,
+          "row": 5
+        },
+        {
+          "col": 7,
+          "row": 4
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: torre, 0",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 0,
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 5,
+          "row": 6
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: torre, 1",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 1,
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 5,
+          "row": 6
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: torre, 2",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 2,
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 4,
+          "row": 6
+        },
+        {
+          "col": 6,
+          "row": 6
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: torre, 3",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 3,
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 3,
+          "row": 6
+        },
+        {
+          "col": 5,
+          "row": 6
+        },
+        {
+          "col": 7,
+          "row": 6
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: torre, 4",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 4,
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 2,
+          "row": 6
+        },
+        {
+          "col": 4,
+          "row": 6
+        },
+        {
+          "col": 6,
+          "row": 6
+        },
+        {
+          "col": 8,
+          "row": 6
+        }
+      ]
+    }
+  },
+  {
+    "name": "lugaresNaLuta: torre, 5",
+    "input": {
+      "fn": "lugaresNaLuta",
+      "args": {
+        "quantos": 5,
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "col": 5,
+          "row": 5
+        },
+        {
+          "col": 2,
+          "row": 6
+        },
+        {
+          "col": 4,
+          "row": 7
+        },
+        {
+          "col": 6,
+          "row": 7
+        },
+        {
+          "col": 8,
+          "row": 6
+        }
+      ]
+    }
+  },
+  {
+    "name": "heroiNaLuta: sala de sempre, entrou pelo norte",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 4320,
+          "y": 40,
+          "facing": "S"
+        },
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 4320,
+        "y": 1440,
+        "facing": "S"
+      }
+    }
+  },
+  {
+    "name": "heroiNaLuta: sala de sempre, entrou pelo sul",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 4320,
+          "y": 8610,
+          "facing": "N"
+        },
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 4320,
+        "y": 7200,
+        "facing": "N"
+      }
+    }
+  },
+  {
+    "name": "heroiNaLuta: sala de sempre, entrou pelo oeste",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 12,
+          "y": 4320,
+          "facing": "E"
+        },
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 1440,
+        "y": 4320,
+        "facing": "E"
+      }
+    }
+  },
+  {
+    "name": "heroiNaLuta: sala de sempre, entrou pelo leste",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 8639,
+          "y": 4320,
+          "facing": "W"
+        },
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 7200,
+        "y": 4320,
+        "facing": "W"
+      }
+    }
+  },
+  {
+    "name": "heroiNaLuta: sala de sempre, já dentro",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 2400,
+          "y": 3360,
+          "facing": "S"
+        },
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 2400,
+        "y": 3360,
+        "facing": "S"
+      }
+    }
+  },
+  {
+    "name": "heroiNaLuta: Torre, entrou pelo norte",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 5280,
+          "y": 40,
+          "facing": "S"
+        },
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 5280,
+        "y": 2400,
+        "facing": "S"
+      }
+    }
+  },
+  {
+    "name": "heroiNaLuta: Torre, entrou pelo sul",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 5280,
+          "y": 11490,
+          "facing": "N"
+        },
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 5280,
+        "y": 10080,
+        "facing": "N"
+      }
+    }
+  },
+  {
+    "name": "heroiNaLuta: Torre, entrou pelo oeste",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 12,
+          "y": 6240,
+          "facing": "E"
+        },
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 1440,
+        "y": 6240,
+        "facing": "E"
+      }
+    }
+  },
+  {
+    "name": "heroiNaLuta: Torre, entrou pelo leste",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 10559,
+          "y": 6240,
+          "facing": "W"
+        },
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 9120,
+        "y": 6240,
+        "facing": "W"
+      }
+    }
+  },
+  {
+    "name": "heroiNaLuta: Torre, já dentro",
+    "input": {
+      "fn": "heroiNaLuta",
+      "args": {
+        "walker": {
+          "x": 2400,
+          "y": 3360,
+          "facing": "S"
+        },
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 2400,
+        "y": 3360,
+        "facing": "S"
+      }
+    }
+  },
+  {
     "name": "portasDaPlanta: parede aberta",
     "input": {
       "fn": "portasDaPlanta",

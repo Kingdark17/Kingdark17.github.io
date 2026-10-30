@@ -51,6 +51,7 @@ import {
   falarComOBram,
   gastarPonto,
   geometriaDaSala,
+  heroiNaLuta,
   idDaRaca,
   indiceDoExtra,
   instantaneoDaSala,
@@ -78,12 +79,15 @@ import {
   type Combate,
   type CosmeticosDoJogador,
   type Direction,
+  type DungeonId,
   type EstadoDoJogo,
   type EstadoNaCidade,
+  type GeometriaDaSala,
   type Item,
   type PetId,
   type PontoDaCidade,
   type PosicaoNaSala,
+  type RoomLayout,
   type Recado,
   type ResultadoDoExtra,
   type SaveCarregado,
@@ -95,7 +99,7 @@ import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { arteDoTipo } from '@/lib/jogo/icones-do-mapa';
-import { TEMAS, type Figura, type SalaDesenhada } from '@/lib/jogo/desenho-da-sala';
+import { TEMAS, type Figura, type OrigemDaSala, type SalaDesenhada, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
 import { assinaturaDosExtras, chaveDosObjetos, figurasDaSala, lerObjetos } from '@/lib/jogo/figuras-da-sala';
 import { direcaoAoSoltar, direcaoDaTecla, estaDigitando } from '@/lib/jogo/teclado';
 import { tocar } from '@/lib/som/efeitos';
@@ -143,6 +147,27 @@ function Abrindo() {
  * uma espera na hora que o monstro aparece.
  */
 const TelaAdm = dynamic(() => import('./tela-adm').then((m) => m.TelaAdm), { ssr: false, loading: Abrindo });
+/** A sala da luta, congelada quando ela abre (ver `cenaDaLuta`). */
+interface CenaDaLuta {
+  sala: string;
+  planta: RoomLayout;
+  figuras: Readonly<Record<string, Figura>>;
+  salas: SalaDesenhada[] | null;
+  origem: OrigemDaSala | null;
+  chegada: Walker;
+  tema: TemaDaSala;
+  masmorra: DungeonId | null;
+  geometria: GeometriaDaSala;
+  lugar: string;
+}
+
+/** As figuras sem a do conteúdo da sala: na luta, os monstros ficam no lugar dele. */
+function semConteudo(figuras: Readonly<Record<string, Figura>>): Record<string, Figura> {
+  const resto = { ...figuras };
+  delete resto[ID_DO_CONTEUDO];
+  return resto;
+}
+
 const TelaCombate = dynamic(() => import('./tela-combate').then((m) => m.TelaCombate), { ssr: false, loading: Abrindo });
 const TelaDialogo = dynamic(() => import('./tela-dialogo').then((m) => m.TelaDialogo), { ssr: false, loading: Abrindo });
 const TelaDiario = dynamic(() => import('./tela-diario').then((m) => m.TelaDiario), { ssr: false, loading: Abrindo });
@@ -351,6 +376,37 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
    */
   const chaveDaCena = secretaAgora ? `${salaAgora}#secreta` : `${salaAgora}#${naSala?.sala === salaAgora ? naSala.volta : 0}`;
   const chegadaDaCena = secretaAgora ? roomArrival(secretaAgora.lado, geometriaAgora) : chegadaNaSala;
+
+  /**
+   * A luta no mapa (2026-10-30, pedido do Breno): a sala da luta fica na
+   * cena, parada, com a câmera enquadrando a sala inteira, e a tela de
+   * combate é a faixa embaixo dela. Congela quando a luta abre: perder (ou
+   * zerar a masmorra) leva o estado pra cidade antes da tela de "Continuar",
+   * e a sala não pode trocar de lugar no meio do resultado. O ícone do
+   * conteúdo sai: no lugar dele ficam os monstros, cada um na casa dele.
+   */
+  const [cenaDaLuta, setCenaDaLuta] = useState<CenaDaLuta | null>(null);
+  /** A camada por cima da cena onde a tela de combate põe os monstros. */
+  const [palcoDaLuta, setPalcoDaLuta] = useState<HTMLDivElement | null>(null);
+  const emLuta = tela?.tipo === 'combate';
+  // Só com a chegada já da sala da luta: no render em que a sala acabou de
+  // mudar, `naSala` ainda é a anterior (o React renderiza de novo em seguida).
+  if (emLuta && !cenaDaLuta && estado && estado.mapMode === 'dungeon' && naSala?.sala === salaAgora) {
+    setCenaDaLuta({
+      sala: chaveDaCena,
+      planta,
+      figuras: semConteudo(figuras),
+      salas: salasDaCena?.map((sala) => (sala.x === estado.pos.x && sala.y === estado.pos.y ? { ...sala, figuras: semConteudo(sala.figuras) } : sala)) ?? null,
+      origem: origemDaCena,
+      // Ele entrou andando e está no vão da porta: dá um passo pra dentro, senão a sala enquadrada o corta.
+      chegada: heroiNaLuta(chegadaDaCena, geometriaAgora),
+      tema: TEMAS[estado.masmorra.dungeon],
+      masmorra: masmorraAgora,
+      geometria: geometriaAgora,
+      lugar: apresentacaoDe(estado).lugar,
+    });
+  }
+  if (!emLuta && cenaDaLuta) setCenaDaLuta(null);
 
   /** Onde o herói está agora: a cena escreve aqui a cada passo, e sobrevive a ela desmontar. */
   const posicao = useRef<PosicaoNaSala>({ sala: null, walker: roomArrival(null), tocando: null });
@@ -871,7 +927,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
         return (
           <TelaCombate
             combate={aberta.combate}
-            lugar={aberta.combate.estado.mapMode === 'dungeon' ? aberta.combate.estado.masmorra.dungeon : 'cidade'}
+            palco={palcoDaLuta}
+            geometria={cenaDaLuta?.geometria ?? geometriaAgora}
             onCombate={(proximo) => {
               // Número flutuante sobre o inimigo é o que a regra já sabe
               // sobre "o herói acertou" — ler isso é melhor que inventar um
@@ -1025,6 +1082,44 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
       <div className={styles.conteudo}>
         <PainelHeroi hero={estado.hero} titulo={tituloAgora} />
         <TelaDiario anotacoes={diario} onFechar={() => setDiarioAberto(false)} />
+        {enfeites}
+      </div>
+    );
+  }
+
+  // A luta no mapa: a sala em cima, com os monstros, e a faixa da luta embaixo (no celular deitado, ao lado).
+  if (tela?.tipo === 'combate' && cenaDaLuta) {
+    return (
+      <div className={styles.conteudo}>
+        <PainelHeroi hero={estado.hero} titulo={tituloAgora} golpes={golpes} />
+        <section className={styles.exploracao}>
+          <div className={styles.cena}>
+            <div className={styles.narracao}>
+              <h1 className={`${styles.local} ${styles.tituloDaCena}`}>{cenaDaLuta.lugar}</h1>
+              <CenaDaSala
+                sala={cenaDaLuta.sala}
+                planta={cenaDaLuta.planta}
+                cidade={null}
+                tema={cenaDaLuta.tema}
+                masmorra={cenaDaLuta.masmorra}
+                figuras={cenaDaLuta.figuras}
+                salas={cenaDaLuta.salas}
+                origem={cenaDaLuta.origem}
+                heroi={heroiNaCena}
+                chegada={cenaDaLuta.chegada}
+                posicao={posicao}
+                ativo={false}
+                enquadrar
+                entrada={entrada}
+                onSaida={mover}
+                onEncostar={aoEncostar}
+              >
+                <div ref={setPalcoDaLuta} className={styles.palcoNoMapa} />
+              </CenaDaSala>
+              <div className={styles.ladoDaCena}>{conteudoDaTela(tela)}</div>
+            </div>
+          </div>
+        </section>
         {enfeites}
       </div>
     );

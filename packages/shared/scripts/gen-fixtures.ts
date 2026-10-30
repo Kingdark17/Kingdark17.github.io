@@ -3559,6 +3559,25 @@ for (const semente of [3, 11, 29]) {
   caso(`salasEmVolta: uma sala adiante, semente ${semente}`, 'salasEmVolta', { estado: andou }, (a) => emVolta(a.estado));
 }
 caso('salasEmVolta: na cidade', 'salasEmVolta', { estado: cidade }, (a) => emVolta(a.estado));
+// A luta no mapa (2026-10-30): onde cada monstro do grupo se põe na sala.
+for (const masmorra of ['floresta', 'caverna', 'torre'] as const) {
+  for (let quantos = 0; quantos <= 5; quantos++) {
+    caso(`lugaresNaLuta: ${masmorra}, ${quantos}`, 'lugaresNaLuta', { quantos, geometria: E.geometriaDaSala(masmorra) }, (a) => E.lugaresNaLuta(a.quantos, a.geometria));
+  }
+}
+// Onde o herói fica na luta: quem acabou de entrar pela porta dá um passo pra dentro.
+for (const [nome, geometria] of [['sala de sempre', E.GEOMETRIA_PADRAO], ['Torre', E.geometriaDaSala('torre')]] as const) {
+  const T = E.TILE_UNITS;
+  for (const [onde, walker] of [
+    ['entrou pelo norte', { x: (geometria.portas.N.col + 0.5) * T, y: 40, facing: 'S' }],
+    ['entrou pelo sul', { x: (geometria.portas.S.col + 0.5) * T, y: geometria.rows * T - 30, facing: 'N' }],
+    ['entrou pelo oeste', { x: 12, y: (geometria.portas.W.row + 0.5) * T, facing: 'E' }],
+    ['entrou pelo leste', { x: geometria.cols * T - 1, y: (geometria.portas.E.row + 0.5) * T, facing: 'W' }],
+    ['já dentro', { x: 2.5 * T, y: 3.5 * T, facing: 'S' }],
+  ] as const) {
+    caso(`heroiNaLuta: ${nome}, ${onde}`, 'heroiNaLuta', { walker, geometria }, (a) => E.heroiNaLuta(a.walker, a.geometria));
+  }
+}
 for (const [nome, celula] of [
   ['parede aberta', salaCom(paredeAberta)],
   ['extras novos', salaCom(extrasNovos)],
