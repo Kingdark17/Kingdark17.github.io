@@ -83,7 +83,7 @@ namespace RPGLegend.Tests
             });
 
             // ---------- use-power ----------
-            Fn(M, "powerManaCost", (a, c) => N(UsePower.PowerManaCost(R<Hero>(a["hero"]), R<PowerDef>(a["power"]))));
+            Fn(M, "powerManaCost", (a, c) => N(UsePower.PowerManaCost(R<Hero>(a["hero"]), R<PowerDef>(a["power"]), JsJson.ToOptionalNumber(a["desconto"]) ?? 0)));
             // O gerador chama castPower(hero, party, monster, power, { ...args.options, rng }).
             Fn(M, "castPower", (a, c) =>
             {
@@ -93,6 +93,7 @@ namespace RPGLegend.Tests
                     Rng = c.RngFn,
                     PetCuraBonus = JsJson.ToOptionalNumber(JsJson.Prop(o, "petCuraBonus")),
                     PetManaSaveChance = JsJson.ToOptionalNumber(JsJson.Prop(o, "petManaSaveChance")),
+                    DescontoDeMana = JsJson.ToOptionalNumber(JsJson.Prop(o, "descontoDeMana")),
                 };
                 return W(UsePower.CastPower(R<Hero>(a["hero"]), Equipe(a["party"]), Monstro(a["monster"]), R<PowerDef>(a["power"]), options));
             });

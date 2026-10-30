@@ -1,0 +1,8 @@
+{
+  "ACESSORIOS_UNICOS": {
+    "floresta": "amuleto_floresta",
+    "caverna": "presa_morcego",
+    "torre": "coroa_arquimago"
+  },
+  "RARIDADE_DO_UNICO": "lendario"
+}

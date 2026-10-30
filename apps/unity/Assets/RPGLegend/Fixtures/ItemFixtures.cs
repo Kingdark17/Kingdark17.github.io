@@ -106,6 +106,10 @@ namespace RPGLegend.Tests
                 return list;
             });
             Fn(M, "displayName", (a, c) => W(Items.DisplayName(R<Item>(a["item"]))));
+            // Os acessórios únicos das masmorras.
+            Fn(M, "acessorioUnico", (a, c) => W(AcessoriosUnicos.AcessorioUnico(R<DungeonRun>(a["run"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "efeitoDoUnico", (a, c) => W(AcessoriosUnicos.EfeitoDoUnico(R<Hero>(a["hero"]))));
+            Fn(M, "descontoDeMana", (a, c) => N(AcessoriosUnicos.DescontoDeMana(R<Hero>(a["hero"]))));
             Fn(M, "itemView", (a, c) => W(Items.View(R<Item>(a["item"]))));
             Fn(M, "itemCategory", (a, c) => W(Items.CategoryOf(R<Item>(a["item"]))));
             Fn(M, "concordar", (a, c) => W(Items.Concordar(R<Item>(a["item"]), R<List<string>>(a["formas"]))));

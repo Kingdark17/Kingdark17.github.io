@@ -36,6 +36,18 @@ namespace RPGLegend.Engine
         public string NomeSemMaterial;
         /// <summary>Numa runa, o tipo dela ("eletrica", "fogo", "gelo", "vampirica").</summary>
         public string Runa;
+        /// <summary>
+        /// O acessório único de uma masmorra (<see cref="AcessoriosUnicos"/>): o efeito e o valor de cada versão. Fora dos
+        /// sorteios de loja, baú e loot.
+        /// </summary>
+        public EfeitoDoUnico Unico;
+    }
+
+    /// <summary>TS: EfeitoDoUnico — "regeneracao", "roubo_de_vida" ou "desconto_de_mana", e uma fração por versão.</summary>
+    public sealed class EfeitoDoUnico
+    {
+        public string Efeito;
+        public List<double> Valores = new List<double>();
     }
 
     /// <summary>As tabelas de items/templates.ts (fixtures/data/items/templates.json).</summary>

@@ -141,6 +141,30 @@ export interface ItemTemplate {
   nomeSemMaterial?: string;
   /** Numa runa, o tipo dela. */
   runa?: RunaId;
+  /**
+   * O acessório único de uma masmorra (`items/acessorios-unicos.ts`): o
+   * efeito dele e o valor de cada versão (Normal, Difícil, Pesadelo). Só a
+   * arena do app aplica o efeito; no site a peça vale pelos atributos. Fora
+   * dos sorteios de loja, baú e loot: só cai de quem zera.
+   */
+  unico?: EfeitoDoUnico;
+}
+
+/** O que o acessório único faz na arena do app. */
+export type EfeitoUnicoId = 'regeneracao' | 'roubo_de_vida' | 'desconto_de_mana';
+
+export interface EfeitoDoUnico {
+  efeito: EfeitoUnicoId;
+  /** Uma fração por versão: Normal, Difícil e Pesadelo. */
+  valores: readonly number[];
+}
+
+/** A frase do efeito, pra descrição da peça: diz que vale no app. */
+export function textoDoEfeitoUnico(efeito: EfeitoUnicoId, valor: number): string {
+  const pct = Math.round(valor * 100);
+  if (efeito === 'regeneracao') return `No app: recupera ${pct}% da vida máxima a cada rodada de luta.`;
+  if (efeito === 'roubo_de_vida') return `No app: cada golpe seu devolve em vida ${pct}% do dano.`;
+  return `No app: os poderes custam ${pct}% menos mana.`;
 }
 
 /**
@@ -578,6 +602,44 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     base: {},
     value: 40,
     runa: 'vampirica',
+  },
+
+  // ---------- os acessórios únicos das masmorras ----------
+  // O terceiro prêmio de quem zera (decisão do usuário, 2026-10-26): um por
+  // masmorra, na primeira vez de cada dificuldade. A arte é provisória, a de
+  // outro acessório, até o Breno desenhar.
+  {
+    id: 'amuleto_floresta',
+    name: 'Amuleto da Floresta Antiga',
+    genero: 'm',
+    category: 'acessorio',
+    desc: 'A seiva da árvore mais velha da Floresta ainda corre por ele.',
+    sprite: 'accessories/amuleto_sab.png',
+    base: { vida: 10, mana: 4 },
+    value: 60,
+    unico: { efeito: 'regeneracao', valores: [0.02, 0.03, 0.04] },
+  },
+  {
+    id: 'presa_morcego',
+    name: 'Presa do Morcego',
+    genero: 'f',
+    category: 'acessorio',
+    desc: 'Um anel com a presa do morcego mais velho da Caverna.',
+    sprite: 'accessories/anel_som.png',
+    base: { ataque: 3, critico: 4 },
+    value: 60,
+    unico: { efeito: 'roubo_de_vida', valores: [0.06, 0.09, 0.12] },
+  },
+  {
+    id: 'coroa_arquimago',
+    name: 'Coroa do Arquimago',
+    genero: 'f',
+    category: 'acessorio',
+    desc: 'Coroou o último mestre da Torre.',
+    sprite: 'accessories/colar_forca.png',
+    base: { mana: 10, critico: 2 },
+    value: 60,
+    unico: { efeito: 'desconto_de_mana', valores: [0.1, 0.15, 0.2] },
   },
 ];
 

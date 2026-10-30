@@ -599,6 +599,12 @@ function Conquistada({ conquista }: Readonly<{ conquista: Conquista }>) {
         <p className={styles.rotuloDaConquista}>Baú do chefe</p>
         <CartaItem item={conquista.item} rodape={`+${conquista.ouro} de ouro`} />
       </div>
+      {conquista.acessorio && (
+        <div className={styles.bauDoChefe}>
+          <p className={styles.rotuloDaConquista}>Acessório único da masmorra</p>
+          <CartaItem item={conquista.acessorio} rodape="O efeito vale no app." />
+        </div>
+      )}
       <p className={styles.rotuloDaConquista}>Título conquistado</p>
       <p className={styles.tituloGanho}>{conquista.titulo}</p>
       {conquista.abertos.map((linha) => (

@@ -44,6 +44,8 @@ namespace RPGLegend.Engine
         public string Titulo;
         /// <summary>O que abriu no portão (a dificuldade seguinte, a próxima masmorra).</summary>
         public List<string> Abertos;
+        /// <summary>O acessório único da masmorra: só na primeira vez que se zera esta dificuldade.</summary>
+        public Item Acessorio;
     }
 
     /// <summary>TS: o que abrirBauDoChefe devolve.</summary>

@@ -9,8 +9,9 @@
  *   se zera;
  * - **um título no cartão de guilda**, o da maior conquista. Sai do que o
  *   save já guarda (`progresso.cleared`): não há campo novo;
- * - o item único de cada masmorra, que ainda vai ser desenhado (e o Breno
- *   faz a arte). Não está aqui.
+ * - **o acessório único da masmorra** (`items/acessorios-unicos.ts`), na
+ *   primeira vez que se zera cada dificuldade (decisão do usuário,
+ *   2026-10-26). Quem o dá é `limparSala`; aqui só a `Conquista` o leva.
  *
  * O ouro respeita o teto da API (+5000 por gravação, `isValidTransition`):
  * no fim da Torre no Pesadelo, o chefe paga 2066 e o baú 1993.
@@ -75,6 +76,8 @@ export interface Conquista {
   titulo: string;
   /** O que abriu no portão (a dificuldade seguinte, a próxima masmorra). */
   abertos: string[];
+  /** O acessório único da masmorra: só na primeira vez que se zera esta dificuldade. */
+  acessorio?: Item;
 }
 
 /**

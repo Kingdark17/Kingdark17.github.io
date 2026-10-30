@@ -1408,6 +1408,26 @@ for (const [nome, it] of ITENS_DE_NOME) {
   caso(`itemCategory: ${nome}`, 'itemCategory', { item: it }, (a) => E.itemCategory(a.item));
   caso(`concordar: ${nome}`, 'concordar', { item: it, formas: ['escondido', 'escondida', 'escondidos', 'escondidas'] }, (a) => E.concordar(a.item, a.formas as never));
 }
+
+// Os acessórios únicos das masmorras (items/acessorios-unicos.ts): a versão vai no nome, o efeito na descrição.
+for (const masmorra of E.DUNGEONS) {
+  for (const dificuldade of E.DIFFICULTIES) {
+    const run = { dungeon: masmorra.id, difficulty: dificuldade.id };
+    caso(`acessorioUnico: ${E.runKey(run)}`, 'acessorioUnico', { run }, (a, ctx) => E.acessorioUnico(a.run, ctx.rng, ctx.now), { rng: { seed: 7 }, now: AGORA });
+    const peca = E.acessorioUnico(run, E.seededRng(7), () => AGORA);
+    caso(`displayName: o único de ${E.runKey(run)}`, 'displayName', { item: peca }, (a) => E.displayName(a.item));
+    caso(`itemView: o único de ${E.runKey(run)}`, 'itemView', { item: peca }, (a) => E.itemView(a.item));
+    const comEle = { ...heroi(), equip: { ...heroi().equip, acessorio: { ...peca, equipped: true } } };
+    caso(`efeitoDoUnico: ${E.runKey(run)}`, 'efeitoDoUnico', { hero: comEle }, (a) => E.efeitoDoUnico(a.hero));
+    caso(`descontoDeMana: ${E.runKey(run)}`, 'descontoDeMana', { hero: comEle }, (a) => E.descontoDeMana(a.hero));
+  }
+}
+caso('efeitoDoUnico: sem acessório', 'efeitoDoUnico', { hero: heroi() }, (a) => E.efeitoDoUnico(a.hero));
+caso('efeitoDoUnico: acessório comum', 'efeitoDoUnico', { hero: { ...heroi(), equip: { ...heroi().equip, acessorio: item('anel_som', 'raro') } } }, (a) => E.efeitoDoUnico(a.hero));
+// O sorteio por categoria nunca dá o único: as mesmas sementes, a mesma peça de antes.
+for (const semente of [1, 2, 3, 4, 5, 6, 7, 8]) {
+  caso(`randomItem: acessório, semente ${semente} (sem os únicos)`, 'randomItem', { options: { category: 'acessorio', floor: 30, now: AGORA } }, (a, { rng, now }) => E.randomItem({ ...a.options, rng, now } as never), { rng: { seed: semente }, now: AGORA });
+}
 caso('itemTemplate: template que sumiu lança', 'itemTemplate', { item: { templateId: 'nada' } }, (a) => E.itemTemplate(a.item));
 caso('statTags: sinal, polaridade e stat zerado', 'statTags', { item: { stats: { ataque: 5, defesa: -2, vida: 0, critico: 3, curaMana: 10 } } }, (a) => E.statTags(a.item));
 
@@ -2021,9 +2041,12 @@ caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'trig
   for (const power of E.POWERS) {
     caso(`powerManaCost: ${power.id}`, 'powerManaCost', { hero: heroi(), power }, (a) => E.powerManaCost(a.hero, a.power));
     caso(`powerManaCost: ${power.id} com Mana Instável (ceil de ×1,2)`, 'powerManaCost', { hero: heroi({ debuff: 'mana_instavel' }), power }, (a) => E.powerManaCost(a.hero, a.power));
+    for (const desconto of [0.1, 0.15, 0.2]) {
+      caso(`powerManaCost: ${power.id} com a Coroa (${desconto})`, 'powerManaCost', { hero: heroi({ debuff: 'mana_instavel' }), power, desconto }, (a) => E.powerManaCost(a.hero, a.power, a.desconto));
+    }
   }
 
-  const cp = (nome: string, hero: Hero, party: Companion[], monster: CombatMonsterView, power: Power, rng: RngSpec, options: { petCuraBonus?: number; petManaSaveChance?: number } = {}) =>
+  const cp = (nome: string, hero: Hero, party: Companion[], monster: CombatMonsterView, power: Power, rng: RngSpec, options: { petCuraBonus?: number; petManaSaveChance?: number; descontoDeMana?: number } = {}) =>
     caso(`castPower: ${nome}`, 'castPower', { hero, party, monster, power, options }, (a, ctx) => E.castPower(a.hero, a.party, a.monster, a.power, { ...a.options, rng: ctx.rng }), { rng });
 
   const ferido = heroi({ classe: 'clerigo', extra: { hp: 30 } });
@@ -2038,6 +2061,10 @@ caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'trig
   const cura = E.powerById('cura_menor')!;
   const julgamento = E.powerById('julgamento_sagrado')!;
   cp('sem mana não gasta nada', heroi({ extra: { mp: 3 } }), [], monstro(), bola, { sequence: [0] });
+  // A Coroa do Arquimago (só a arena passa): o poder custa menos, e a mana justa do custo com desconto já basta.
+  const comDesconto = E.powerManaCost(heroi(), bola, 0.2);
+  cp('com a Coroa, custa menos', heroi(), [], monstro(), bola, { sequence: [0.5] }, { descontoDeMana: 0.2 });
+  cp('com a Coroa, a mana justa do desconto basta', heroi({ extra: { mp: comDesconto } }), [], monstro(), bola, { sequence: [0.5] }, { descontoDeMana: 0.2 });
 
   // O esqueleto do necromante (combat/invocacao.ts): até 3 de pé, à parte dos recrutas.
   const levantar = E.powerById('levantar_esqueleto')!;
@@ -4496,6 +4523,10 @@ for (const [nome, criacao, semente] of [
   const ultimoGolpe = noFundo([{ ...(salaDo(furioso).monsters?.[0] as CombatMonster), hp: 0 }]);
   caso('limparSala: no app, o chefe final zera a masmorra', 'limparSala', { estado: { ...ultimoGolpe, mapRows: 6, mapCols: 6 }, abatido: E.monsterView({ ...fresco, hp: 0 }), app: true }, (a, ctx) =>
     E.limparSala(a.estado, a.abatido, ctx.rng, ctx.now, a.app), { rng: { seed: 71 }, now: AGORA });
+  // Zerar de novo a mesma dificuldade: o baú e o ouro, sem o acessório único.
+  const jaZerada = { ...ultimoGolpe, mapRows: 6, mapCols: 6, progresso: { cleared: [E.runKey(ultimoGolpe.masmorra)], totems: {} } };
+  caso('limparSala: no app, zerar de novo não dá o acessório único', 'limparSala', { estado: jaZerada, abatido: E.monsterView({ ...fresco, hp: 0 }), app: true }, (a, ctx) =>
+    E.limparSala(a.estado, a.abatido, ctx.rng, ctx.now, a.app), { rng: { seed: 71 }, now: AGORA });
 
   for (const masmorra of E.DUNGEONS) {
     for (const dificuldade of E.DIFFICULTIES) {
@@ -5036,6 +5067,21 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
   const atacando = (n: number): EntradaDaLuta[] =>
     rodando(n).map((e, i) => (i % 40 === 0 ? { ...e, atacar: true, mirar: Math.floor(i / 40) % 5 } : i % 7 === 3 ? { ...e, tocar: true } : e));
   simula('chefe final: protegido pelos lacaios', abrir({ ...chamou, hero: forte }), atacando(900), 94);
+
+  // Os acessórios únicos (items/acessorios-unicos.ts): só a arena aplica o efeito.
+  const usando = (dungeon: 'floresta' | 'caverna' | 'torre', base: Hero = forte) => {
+    const peca = E.acessorioUnico({ dungeon, difficulty: 'pesadelo' }, E.seededRng(7), () => AGORA);
+    return { ...base, hp: 2000, maxHp: 5000, mp: 300, maxMp: 300, equip: { ...base.equip, acessorio: { ...peca, equipped: true } } };
+  };
+  const maga = usando('torre', { ...heroi({ classe: 'mago', level: 90 }), powerIds: ['bola_de_fogo'], powerNames: ['Bola de Fogo'] });
+  const comum = (heroiDaLuta: Hero) => ({ ...naSalaDaMasmorra({ ...chefe, monsters: [{ ...final(), hp: 3000, maxHp: 3000, chefeFinal: undefined, isMainBoss: false }], monsterIndex: 0, beaten: false }, heroiDaLuta, []), party: [] });
+  simula('acessório único: o Amuleto da Floresta Antiga, a cada rodada', abrir(comum(usando('floresta'))), rodando(600), 95);
+  // O toque no meio da barra: o golpe acerta, e a Presa cura.
+  const meioDaBarra = E.DURACAO_DA_BARRA / 2;
+  const golpeando = rodando(600).map((e, i) => (i % 60 === 0 ? { ...e, atacar: true } : i % 60 === meioDaBarra ? { ...e, tocar: true } : e));
+  simula('acessório único: a Presa do Morcego, no golpe', abrir(comum(usando('caverna'))), golpeando, 96);
+  const poderDaCoroa = E.heroPowers(maga).find((p) => p.cost > 0)!.id;
+  simula('acessório único: a Coroa do Arquimago, no poder', abrir(comum(maga)), rodando(400).map((e, i) => (i % 200 === 5 ? { ...e, poder: poderDaCoroa } : e)), 97);
 }
 
 // =====================================================================

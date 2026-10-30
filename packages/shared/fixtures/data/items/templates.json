@@ -549,6 +549,69 @@
       "base": {},
       "value": 40,
       "runa": "vampirica"
+    },
+    {
+      "id": "amuleto_floresta",
+      "name": "Amuleto da Floresta Antiga",
+      "genero": "m",
+      "category": "acessorio",
+      "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+      "sprite": "accessories/amuleto_sab.png",
+      "base": {
+        "vida": 10,
+        "mana": 4
+      },
+      "value": 60,
+      "unico": {
+        "efeito": "regeneracao",
+        "valores": [
+          0.02,
+          0.03,
+          0.04
+        ]
+      }
+    },
+    {
+      "id": "presa_morcego",
+      "name": "Presa do Morcego",
+      "genero": "f",
+      "category": "acessorio",
+      "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+      "sprite": "accessories/anel_som.png",
+      "base": {
+        "ataque": 3,
+        "critico": 4
+      },
+      "value": 60,
+      "unico": {
+        "efeito": "roubo_de_vida",
+        "valores": [
+          0.06,
+          0.09,
+          0.12
+        ]
+      }
+    },
+    {
+      "id": "coroa_arquimago",
+      "name": "Coroa do Arquimago",
+      "genero": "f",
+      "category": "acessorio",
+      "desc": "Coroou o último mestre da Torre.",
+      "sprite": "accessories/colar_forca.png",
+      "base": {
+        "mana": 10,
+        "critico": 2
+      },
+      "value": 60,
+      "unico": {
+        "efeito": "desconto_de_mana",
+        "valores": [
+          0.1,
+          0.15,
+          0.2
+        ]
+      }
     }
   ],
   "$privadas": [

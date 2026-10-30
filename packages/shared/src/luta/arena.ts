@@ -53,6 +53,7 @@ import type { Item } from '../items/item.js';
 import { monsterView } from '../monsters/generate.js';
 import { petBonus, type PetId } from '../pets/pets.js';
 import { randomInt, type Rng } from '../rng.js';
+import { descontoDeMana, efeitoDoUnico } from '../items/acessorios-unicos.js';
 import type { Conquista } from '../jogo/conquista.js';
 import type { Efeito } from '../jogo/efeitos.js';
 import { celulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from '../jogo/estado.js';
@@ -627,6 +628,7 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
   }
   contar(l, numeroNoMonstro(ferida, alvo.indice, `-${golpe.damage}`, golpe.isCrit ? 'critico' : 'dano'));
   contar(l, { tipo: 'som', som: golpe.isCrit ? 'crit' : 'hit' });
+  if (!ferida.protegido) roubarVida(l, golpe.damage ?? 0);
   if (ferida.caiu) {
     abater(l, alvo.indice, golpe.monster);
     return;
@@ -692,7 +694,14 @@ function usarPoder(l: Luta, id: string): void {
 
   const bonus = petBonus(l.pet);
   const monstro = monstroNo(l, alvo);
-  const uso = castPower(estado.hero, estado.party, monstro, poder, { rng: l.rng, petCuraBonus: bonus.healing ?? 0, petManaSaveChance: bonus.manaSave ?? 0 });
+  // A Coroa do Arquimago (`items/acessorios-unicos.ts`) tira parte do custo: só aqui, na arena.
+  const desconto = descontoDeMana(estado.hero);
+  const uso = castPower(estado.hero, estado.party, monstro, poder, {
+    rng: l.rng,
+    petCuraBonus: bonus.healing ?? 0,
+    petManaSaveChance: bonus.manaSave ?? 0,
+    ...(desconto > 0 ? { descontoDeMana: desconto } : {}),
+  });
   if (uso.outcome === 'no_mana') {
     contar(l, { tipo: 'aviso', texto: `Mana insuficiente para ${poder.name}` });
     return;
@@ -1083,6 +1092,7 @@ function rodada(l: Luta): void {
     perder(l);
     return;
   }
+  regenerar(l);
 
   for (const indice of indicesDePe(sala(l))) {
     const monstro = monstroNo(l, indice);
@@ -1094,6 +1104,31 @@ function rodada(l: Luta): void {
   }
 
   l.estado = { ...masmorra(l), hero: passarRodadaDaCancao(masmorra(l).hero) };
+}
+
+// ---------- os acessórios únicos (`items/acessorios-unicos.ts`; só a arena os aplica) ----------
+
+/** A Presa do Morcego: o golpe que acertou devolve em vida parte do dano, como a runa vampírica. */
+function roubarVida(l: Luta, dano: number): void {
+  const estado = masmorra(l);
+  const efeito = efeitoDoUnico(estado.hero);
+  if (efeito?.efeito !== 'roubo_de_vida' || dano <= 0) return;
+  const hero = estado.hero;
+  const cura = Math.max(0, Math.min(hero.maxHp - hero.hp, Math.max(1, Math.round(dano * efeito.valor))));
+  if (cura <= 0) return;
+  l.estado = { ...estado, hero: { ...hero, hp: hero.hp + cura } };
+  contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `🦇+${cura}`, tom: 'cura' });
+}
+
+/** O Amuleto da Floresta Antiga: a cada rodada da luta, uma parte da vida máxima volta. */
+function regenerar(l: Luta): void {
+  const estado = masmorra(l);
+  const efeito = efeitoDoUnico(estado.hero);
+  const hero = estado.hero;
+  if (efeito?.efeito !== 'regeneracao' || hero.hp <= 0 || hero.hp >= hero.maxHp) return;
+  const cura = Math.min(hero.maxHp - hero.hp, Math.max(1, Math.floor(hero.maxHp * efeito.valor)));
+  l.estado = { ...estado, hero: { ...hero, hp: hero.hp + cura } };
+  contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `🌲+${cura}`, tom: 'cura' });
 }
 
 // ---------- quem cai ----------

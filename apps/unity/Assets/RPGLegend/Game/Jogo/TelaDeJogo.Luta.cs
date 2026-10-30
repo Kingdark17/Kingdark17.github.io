@@ -293,7 +293,8 @@ namespace RPGLegend.Game.Jogo
             {
                 var poder = poderes.Find(p => p.Id == b.Id);
                 if (poder == null) continue;
-                double custo = UsePower.PowerManaCost(hero, poder);
+                // A Coroa do Arquimago barateia o poder na arena: o botão mostra o custo com o desconto.
+                double custo = UsePower.PowerManaCost(hero, poder, AcessoriosUnicos.DescontoDeMana(hero));
                 b.Custo.text = Js.NumberToString(custo);
                 double falta = arena.RecargaDosPoderes.TryGet(b.Id, out var resta) ? resta : 0;
                 b.Espera.style.height = Length.Percent((float)(falta / recargaTotal * 100.0));

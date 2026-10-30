@@ -32,6 +32,8 @@ namespace RPGLegend.Engine
         public List<RunaNaArma> Runas;
         /// <summary>Numa armadura, a fortificação da Encantadora (<see cref="Encantamentos"/>; só o app encanta).</summary>
         public EncantamentoNaPeca Encantamento;
+        /// <summary>Num acessório único (<see cref="AcessoriosUnicos"/>), a versão: 1 Normal, 2 Difícil, 3 Pesadelo. Ausente, 1.</summary>
+        public double? NivelDoUnico;
 
         /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
         [JsExtra] public JsExtras Extra;
@@ -64,6 +66,7 @@ namespace RPGLegend.Engine
             target.TierDaRuna = TierDaRuna;
             target.Runas = Runas;
             target.Encantamento = Encantamento;
+            target.NivelDoUnico = NivelDoUnico;
             target.Extra = Extra;
         }
     }

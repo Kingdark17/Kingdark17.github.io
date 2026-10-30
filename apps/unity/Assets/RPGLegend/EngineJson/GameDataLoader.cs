@@ -47,6 +47,7 @@ namespace RPGLegend.Engine.Json
             GameData.MateriaisTable = JsSerializer.Parse<MateriaisData>(readTable("items/materiais"));
             GameData.RunasTable = JsSerializer.Parse<RunasData>(readTable("items/runas"));
             GameData.EncantamentosTable = JsSerializer.Parse<EncantamentosData>(readTable("items/encantamentos"));
+            GameData.AcessoriosUnicosTable = JsSerializer.Parse<AcessoriosUnicosData>(readTable("items/acessorios-unicos"));
             GameData.TierTable = JsSerializer.Parse<TierData>(readTable("items/tiers"));
         }
     }

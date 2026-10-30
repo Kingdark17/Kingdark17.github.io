@@ -1,5 +1,6 @@
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import { multiplicadorDoDegrau, nomeComMaterial, sortearDegrau, ULTIMO_DEGRAU } from './materiais.js';
+import { DIFFICULTIES } from '../dungeon/dungeons.js';
 import { pickRarity, RARITIES, rarityById, type Rarity, type RarityId } from './rarity.js';
 import {
   isEquippable,
@@ -15,6 +16,7 @@ import {
   type RunaId,
   type StatBlock,
   ROMANOS,
+  textoDoEfeitoUnico,
 } from './templates.js';
 
 /**
@@ -56,6 +58,11 @@ export interface Item {
   runas?: RunaNaArma[];
   /** Numa armadura, a fortificação da Encantadora (`items/encantamentos.ts`; só o app encanta). */
   encantamento?: EncantamentoNaPeca;
+  /**
+   * Num acessório único (`items/acessorios-unicos.ts`), a versão: 1 Normal,
+   * 2 Difícil, 3 Pesadelo — a dificuldade zerada. Ausente, 1.
+   */
+  nivelDoUnico?: number;
 }
 
 /** Uma runa engastada numa arma: o tipo e o tier. Tirada da arma, ela volta a ser item. */
@@ -113,25 +120,34 @@ export function concordar(item: Pick<Item, 'templateId'>, [m, f, mp, fp]: Formas
  * Até 2026-10 a raridade vinha antes e sempre no masculino ("Lendário
  * Espada"), herança do `items.js` do jogo antigo.
  */
-export function displayName(item: Pick<Item, 'templateId' | 'rarity' | 'degrau' | 'tierDaRuna'>): string {
+export function displayName(item: Pick<Item, 'templateId' | 'rarity' | 'degrau' | 'tierDaRuna' | 'nivelDoUnico'>): string {
   const template = itemTemplate(item);
   // A runa leva o tier no nome: "Runa de Fogo II".
   if (template.runa) return `${template.name} ${ROMANOS[Math.min(ROMANOS.length, Math.max(1, Math.trunc(item.tierDaRuna ?? 1))) - 1]}`;
+  // O acessório único leva a dificuldade em que caiu: "Presa do Morcego · Difícil".
+  if (template.unico) return `${template.name} · ${(DIFFICULTIES[nivelDoUnico(item) - 1] ?? DIFFICULTIES[0])!.name}`;
   const nome = nomeComMaterial(template, item.degrau);
   const rarity = rarityById(item.rarity);
   if (!rarity || rarity.id === 'comum') return nome;
   return `${nome} ${concordar(item, rarity.adjetivo)}`;
 }
 
+/** A versão do acessório único, de 1 (Normal) a 3 (Pesadelo). */
+export function nivelDoUnico(item: Pick<Item, 'nivelDoUnico'>): number {
+  return Math.max(1, Math.min(DIFFICULTIES.length, Math.trunc(item.nivelDoUnico ?? 1)));
+}
+
 export function itemView(item: Item): ItemView {
   const template = itemTemplate(item);
   const rarity = rarityById(item.rarity) ?? (rarityById('comum') as Rarity);
+  // O acessório único diz o que faz (e que só vale no app).
+  const efeito = template.unico ? textoDoEfeitoUnico(template.unico.efeito, template.unico.valores[nivelDoUnico(item) - 1] ?? 0) : null;
 
   return {
     ...item,
     template,
     name: displayName(item),
-    desc: template.desc,
+    desc: efeito ? `${template.desc} ${efeito}` : template.desc,
     sprite: template.sprite,
     category: template.category,
     // A runa não mostra raridade: o que conta nela é o tier, que já vai no nome ("Runa de Fogo II").
@@ -204,13 +220,17 @@ export interface RandomItemOptions extends InstantiateOptions {
   tetoDoDegrau?: number;
 }
 
-/** O que o sorteio de item sem categoria escolhe: tudo menos as runas, que só caem de baú e de chefe no app. */
-const SORTEAVEIS = TEMPLATES.filter((t) => t.category !== 'runa');
+/**
+ * O que o sorteio de item sem categoria escolhe: tudo menos as runas, que só
+ * caem de baú e de chefe no app, e os acessórios únicos, que só caem de quem
+ * zera uma masmorra (`items/acessorios-unicos.ts`).
+ */
+const SORTEAVEIS = TEMPLATES.filter((t) => t.category !== 'runa' && !t.unico);
 
 export function randomItem(options: RandomItemOptions = {}): Item {
   const { category, rarity: forcedRarity, floor = 1, rng = defaultRng, now } = options;
 
-  const pool = category ? templatesByCategory(category) : SORTEAVEIS;
+  const pool = category ? templatesByCategory(category).filter((t) => !t.unico) : SORTEAVEIS;
   const template = pick(pool, rng);
   // Uma raridade forçada e desconhecida cai para comum, igual ao original.
   const rarity =

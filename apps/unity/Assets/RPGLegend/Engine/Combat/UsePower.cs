@@ -25,6 +25,8 @@ namespace RPGLegend.Engine
         public double? PetCuraBonus;
         /// <summary>Chance de 0 a 100 do pet poupar a mana do poder — 0 se ausente (aí não sorteia).</summary>
         public double? PetManaSaveChance;
+        /// <summary>A fração que a Coroa do Arquimago tira do custo (<see cref="AcessoriosUnicos"/>); só a arena passa.</summary>
+        public double? DescontoDeMana;
     }
 
     /// <summary>TS: UsePowerResult. Campo opcional do TS é anulável aqui (null = ausente).</summary>
@@ -62,8 +64,8 @@ namespace RPGLegend.Engine
         /// TS: powerManaCost — o custo do poder, com a Mana Instável (×1,2, para cima). É o mesmo número que o
         /// botão do poder mostra antes do clique. Do poder só o custo importa.
         /// </summary>
-        public static double PowerManaCost(Hero hero, PowerDef power) =>
-            Math.Ceiling(power.Cost * (Heroes.HasDebuffEffect(hero, "manaCostPenalty") ? PenalidadeDeMana : 1));
+        public static double PowerManaCost(Hero hero, PowerDef power, double desconto = 0) =>
+            Math.Ceiling(power.Cost * (Heroes.HasDebuffEffect(hero, "manaCostPenalty") ? PenalidadeDeMana : 1) * (1 - desconto));
 
         /// <summary>
         /// TS: castPower (o <c>usePower()</c> do original; o prefixo use é reservado a hooks no lint do React).
@@ -76,7 +78,7 @@ namespace RPGLegend.Engine
         {
             options = options ?? new UsePowerOptions();
             var rng = options.Rng ?? Rng.Default;
-            double manaCost = PowerManaCost(hero, power);
+            double manaCost = PowerManaCost(hero, power, options?.DescontoDeMana ?? 0);
 
             // O esqueleto do necromante: com o máximo de pé, avisa sem gastar a mana.
             if (power.Type == "invocar" && Invocacao.EsqueletosDePe(party) >= Invocacao.MaxEsqueletos)

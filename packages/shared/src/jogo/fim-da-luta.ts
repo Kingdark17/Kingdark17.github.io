@@ -16,11 +16,12 @@
 
 import { FIM_DOS_ESQUELETOS, semInvocados } from '../combat/invocacao.js';
 import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from '../combat/monster-state.js';
-import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
+import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, isCleared, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import { gainXP, type Companion, type Hero } from '../hero/hero.js';
 import { winBattle } from '../hero/mastery.js';
 import { addItem } from '../inventory/inventory.js';
+import { acessorioUnico } from '../items/acessorios-unicos.js';
 import { concordar, displayName, randomItem, type Item } from '../items/item.js';
 import { CHANCE_DA_RUNA_NO_CHEFE, sortearRuna } from '../items/runas.js';
 import { applyNpcBlessing } from '../npc/npc-services.js';
@@ -195,10 +196,14 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
 
   if (sala.type === 'boss' && estado.floor >= DUNGEON_FLOORS) {
     // O chefe do último andar: a masmorra está zerada nesta dificuldade, vem
-    // o baú do chefe e o título (`conquista.ts`), e o diário diz o que abriu
-    // no portão. A tela de vitória mostra a `conquista`.
+    // o baú do chefe e o título (`conquista.ts`) e, na primeira vez desta
+    // dificuldade, o acessório único da masmorra (`items/acessorios-unicos.ts`);
+    // o diário diz o que abriu no portão. A tela de vitória mostra a `conquista`.
+    const primeiraVez = !isCleared(limpo.progresso, limpo.masmorra);
     const progresso = markCleared(limpo.progresso, limpo.masmorra);
     const bau = abrirBauDoChefe(limpo, rng, now, app);
+    const acessorio = primeiraVez ? acessorioUnico(limpo.masmorra, rng, now) : null;
+    const premiado = acessorio ? { ...bau.estado, inventory: addItem(bau.estado.inventory, acessorio) } : bau.estado;
     const abertos = abertosAoZerar(limpo, progresso);
     const conquista: Conquista = {
       masmorra: { ...limpo.masmorra },
@@ -208,15 +213,17 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
       ouro: bau.ouro,
       titulo: tituloDe(limpo.masmorra),
       abertos,
+      ...(acessorio ? { acessorio } : {}),
     };
     log.push(
       `Você venceu ${abatido.name} e zerou ${conquista.nome}!`,
       `No baú do chefe: ${displayName(bau.item)} e ${bau.ouro} de ouro.`,
+      ...(acessorio ? [`Na primeira vez nesta dificuldade, o acessório único da masmorra: ${displayName(acessorio)}.`] : []),
       `Título conquistado: ${conquista.titulo}.`,
       ...abertos,
       'O caminho de volta se abre, e o grupo retorna à cidade.',
     );
-    return { estado: voltarParaCidade({ ...bau.estado, progresso }), log, loot, conquista };
+    return { estado: voltarParaCidade({ ...premiado, progresso }), log, loot, conquista };
   }
 
   if (sala.type === 'boss') {

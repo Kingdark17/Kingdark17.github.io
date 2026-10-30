@@ -22,6 +22,7 @@ export * from './items/item.js';
 export * from './items/materiais.js';
 export * from './items/runas.js';
 export * from './items/encantamentos.js';
+export * from './items/acessorios-unicos.js';
 export * from './items/tiers.js';
 
 export * from './monsters/species.js';

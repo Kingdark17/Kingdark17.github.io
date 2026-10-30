@@ -654,6 +654,7 @@ namespace RPGLegend.Engine
             }
             Contar(l, NumeroNoMonstro(ferida, alvo.Indice, "-" + Js.NumberToString(golpe.Damage ?? 0), golpe.IsCrit == true ? "critico" : "dano"));
             Contar(l, Som(golpe.IsCrit == true ? "crit" : "hit"));
+            if (!ferida.Protegido) RoubarVida(l, golpe.Damage ?? 0);
             if (ferida.Caiu)
             {
                 Abater(l, alvo.Indice, golpe.Monster);
@@ -740,7 +741,14 @@ namespace RPGLegend.Engine
             var bonus = Pets.Bonus(l.Pet);
             var monstro = MonstroNo(l, alvo.Value);
             var uso = UsePower.CastPower(estado.Hero, estado.Party, monstro, poder,
-                new UsePowerOptions { Rng = l.Rng, PetCuraBonus = bonus.Healing ?? 0, PetManaSaveChance = bonus.ManaSave ?? 0 });
+                new UsePowerOptions
+                {
+                    Rng = l.Rng,
+                    PetCuraBonus = bonus.Healing ?? 0,
+                    PetManaSaveChance = bonus.ManaSave ?? 0,
+                    // A Coroa do Arquimago tira parte do custo: só aqui, na arena.
+                    DescontoDeMana = AcessoriosUnicos.DescontoDeMana(estado.Hero) > 0 ? AcessoriosUnicos.DescontoDeMana(estado.Hero) : (double?)null,
+                });
             if (uso.Outcome == UsePowerOutcomes.NoMana)
             {
                 Contar(l, Aviso("Mana insuficiente para " + poder.Name));
@@ -1239,6 +1247,7 @@ namespace RPGLegend.Engine
                 Perder(l);
                 return;
             }
+            Regenerar(l);
 
             foreach (var indice in FimDaLuta.IndicesDePe(Sala(l)))
             {
@@ -1253,6 +1262,41 @@ namespace RPGLegend.Engine
             var comCancao = Masmorra(l).Clone();
             comCancao.Hero = Party.PassarRodadaDaCancao(comCancao.Hero);
             l.Estado = comCancao;
+        }
+
+        // ---------- os acessórios únicos (AcessoriosUnicos; só a arena os aplica) ----------
+
+        /// <summary>TS: roubarVida — a Presa do Morcego: o golpe que acertou devolve em vida parte do dano.</summary>
+        private static void RoubarVida(Luta l, double dano)
+        {
+            var estado = Masmorra(l);
+            var efeito = AcessoriosUnicos.EfeitoDoUnico(estado.Hero);
+            if (efeito == null || efeito.Efeito != "roubo_de_vida" || dano <= 0) return;
+            var hero = estado.Hero;
+            double cura = Js.Max(0, Js.Min(hero.MaxHp - hero.Hp, Js.Max(1, Js.Round(dano * efeito.Valor))));
+            if (cura <= 0) return;
+            var curado = hero.Clone();
+            curado.Hp = hero.Hp + cura;
+            var comCura = estado.Clone();
+            comCura.Hero = curado;
+            l.Estado = comCura;
+            Contar(l, Numero("heroi", 0, "🦇+" + Js.NumberToString(cura), "cura"));
+        }
+
+        /// <summary>TS: regenerar — o Amuleto da Floresta Antiga: a cada rodada da luta, uma parte da vida máxima volta.</summary>
+        private static void Regenerar(Luta l)
+        {
+            var estado = Masmorra(l);
+            var efeito = AcessoriosUnicos.EfeitoDoUnico(estado.Hero);
+            var hero = estado.Hero;
+            if (efeito == null || efeito.Efeito != "regeneracao" || hero.Hp <= 0 || hero.Hp >= hero.MaxHp) return;
+            double cura = Js.Min(hero.MaxHp - hero.Hp, Js.Max(1, Math.Floor(hero.MaxHp * efeito.Valor)));
+            var curado = hero.Clone();
+            curado.Hp = hero.Hp + cura;
+            var comCura = estado.Clone();
+            comCura.Hero = curado;
+            l.Estado = comCura;
+            Contar(l, Numero("heroi", 0, "🌲+" + Js.NumberToString(cura), "cura"));
         }
 
         // ---------- quem cai ----------

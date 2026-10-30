@@ -226088,6 +226088,17 @@
               "equipped": false,
               "procChance": 0.2,
               "foundFloor": 100
+            },
+            {
+              "uid": "amuleto_floresta_1700000000000_6335",
+              "templateId": "amuleto_floresta",
+              "rarity": "lendario",
+              "stats": {
+                "vida": 30,
+                "mana": 12
+              },
+              "value": 180,
+              "equipped": false
             }
           ],
           "quests": [],
@@ -226691,6 +226702,7 @@
         "log": [
           "Você venceu Goblin, Senhor das Trevas e zerou Floresta · Normal!",
           "No baú do chefe: Cajado Arcano Lendário e 1300 de ouro.",
+          "Na primeira vez nesta dificuldade, o acessório único da masmorra: Amuleto da Floresta Antiga · Normal.",
           "Título conquistado: Sobrevivente da Floresta.",
           "Floresta no Difícil está aberta no portão.",
           "A Caverna abre a partir do nível 70.",
@@ -226722,10 +226734,21 @@
           "abertos": [
             "Floresta no Difícil está aberta no portão.",
             "A Caverna abre a partir do nível 70."
-          ]
+          ],
+          "acessorio": {
+            "uid": "amuleto_floresta_1700000000000_6335",
+            "templateId": "amuleto_floresta",
+            "rarity": "lendario",
+            "stats": {
+              "vida": 30,
+              "mana": 12
+            },
+            "value": 180,
+            "equipped": false
+          }
         }
       },
-      "rngCalls": 4
+      "rngCalls": 5
     }
   },
   {
@@ -227016,6 +227039,18 @@
               "equipped": false,
               "procChance": 0.25,
               "foundFloor": 216
+            },
+            {
+              "uid": "presa_morcego_1700000000000_63632",
+              "templateId": "presa_morcego",
+              "rarity": "lendario",
+              "stats": {
+                "ataque": 9,
+                "critico": 12
+              },
+              "value": 180,
+              "equipped": false,
+              "nivelDoUnico": 2
             }
           ],
           "quests": [],
@@ -227619,6 +227654,7 @@
         "log": [
           "Você venceu Goblin, Senhor das Trevas e zerou Caverna · Difícil!",
           "No baú do chefe: Espada Lendária e 1648 de ouro.",
+          "Na primeira vez nesta dificuldade, o acessório único da masmorra: Presa do Morcego · Difícil.",
           "Título conquistado: Terror da Caverna.",
           "Caverna no Pesadelo está aberta no portão.",
           "O caminho de volta se abre, e o grupo retorna à cidade."
@@ -227647,10 +227683,22 @@
           "titulo": "Terror da Caverna",
           "abertos": [
             "Caverna no Pesadelo está aberta no portão."
-          ]
+          ],
+          "acessorio": {
+            "uid": "presa_morcego_1700000000000_63632",
+            "templateId": "presa_morcego",
+            "rarity": "lendario",
+            "stats": {
+              "ataque": 9,
+              "critico": 12
+            },
+            "value": 180,
+            "equipped": false,
+            "nivelDoUnico": 2
+          }
         }
       },
-      "rngCalls": 4
+      "rngCalls": 5
     }
   },
   {
@@ -266596,6 +266644,1003 @@
           },
           "progresso": {
             "cleared": [],
+            "totems": {}
+          },
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "boss",
+                "x": 3,
+                "y": 1,
+                "doors": {
+                  "S": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 7,
+                    "row": 1,
+                    "used": false
+                  },
+                  {
+                    "kind": "sign",
+                    "col": 1,
+                    "row": 1
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "feiticeiro",
+                    "floor": 100,
+                    "hp": 0,
+                    "maxHp": 1122,
+                    "dmg": 111,
+                    "speed": 96,
+                    "xp": 560,
+                    "gold": 680,
+                    "isBoss": true,
+                    "isMainBoss": true,
+                    "bossTitle": "o Devorador",
+                    "chefeFinal": true,
+                    "status": {},
+                    "attackCount": 0,
+                    "chamou": true,
+                    "furia": true
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "abatido": {
+          "speciesId": "goblin",
+          "enemyClassId": "feiticeiro",
+          "floor": 100,
+          "hp": 0,
+          "maxHp": 1122,
+          "dmg": 111,
+          "speed": 64,
+          "xp": 560,
+          "gold": 680,
+          "isBoss": true,
+          "isMainBoss": true,
+          "bossTitle": "o Devorador",
+          "chefeFinal": true,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "feiticeiro",
+            "name": "Feiticeiro",
+            "icon": "🧙",
+            "power": "Ruptura Arcana",
+            "powerDesc": "A cada 3 ataques drena Mana e aumenta o dano mágico.",
+            "hpMult": 0.95,
+            "dmgMult": 1.18,
+            "speedMult": 1.05
+          },
+          "name": "Goblin, o Devorador",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Chefe Feiticeiro"
+        },
+        "app": true
+      },
+      "rng": {
+        "seed": 71
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 1400,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 1,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "cajado_1700000000000_48927",
+              "templateId": "cajado",
+              "rarity": "incomum",
+              "stats": {
+                "ataque": 9,
+                "mana": 23
+              },
+              "value": 39,
+              "equipped": false,
+              "procChance": 0.115,
+              "degrau": 2,
+              "foundFloor": 100
+            },
+            {
+              "uid": "runa_eletrica_1700000000000_30402",
+              "templateId": "runa_eletrica",
+              "rarity": "comum",
+              "stats": {},
+              "value": 160,
+              "equipped": false,
+              "tierDaRuna": 3
+            },
+            {
+              "uid": "botas_1700000000000_54068",
+              "templateId": "botas",
+              "rarity": "lendario",
+              "stats": {
+                "defesa": 7,
+                "velocidade": 7
+              },
+              "value": 53,
+              "equipped": false,
+              "degrau": 2,
+              "foundFloor": 100
+            },
+            {
+              "uid": "amuleto_floresta_1700000000000_54479",
+              "templateId": "amuleto_floresta",
+              "rarity": "lendario",
+              "stats": {
+                "vida": 30,
+                "mana": 12
+              },
+              "value": 180,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 100,
+          "mapRows": 6,
+          "mapCols": 6,
+          "cityMap": [
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 3,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 0,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "gate",
+                "x": 3,
+                "y": 1,
+                "doors": {
+                  "S": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 1,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "guild",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "N": true,
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 2,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 3,
+                "doors": {}
+              },
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              },
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              },
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "questboard",
+                "x": 5,
+                "y": 3,
+                "doors": {
+                  "W": true
+                }
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 4,
+                "doors": {
+                  "N": true,
+                  "S": true
+                },
+                "npc": {
+                  "name": "Velho Ferreiro Bram",
+                  "role": "Ferreiro",
+                  "service": "barter",
+                  "icon": "🔨",
+                  "lines": [
+                    "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                    "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                    "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 4,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 5,
+                "doors": {
+                  "N": true
+                },
+                "npc": {
+                  "name": "Erma, a Vidente",
+                  "role": "Mística",
+                  "service": "blessing",
+                  "icon": "🔮",
+                  "lines": [
+                    "As sombras sussurram seu nome, viajante...",
+                    "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                    "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 5,
+                "doors": {}
+              }
+            ]
+          ],
+          "cityStart": {
+            "x": 3,
+            "y": 3
+          },
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [
+              "floresta:normal"
+            ],
+            "totems": {}
+          },
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 3,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 0,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "gate",
+                "x": 3,
+                "y": 1,
+                "doors": {
+                  "S": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 1,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "guild",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "N": true,
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 2,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 3,
+                "doors": {}
+              },
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              },
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              },
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "questboard",
+                "x": 5,
+                "y": 3,
+                "doors": {
+                  "W": true
+                }
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 4,
+                "doors": {
+                  "N": true,
+                  "S": true
+                },
+                "npc": {
+                  "name": "Velho Ferreiro Bram",
+                  "role": "Ferreiro",
+                  "service": "barter",
+                  "icon": "🔨",
+                  "lines": [
+                    "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                    "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                    "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 4,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 5,
+                "doors": {
+                  "N": true
+                },
+                "npc": {
+                  "name": "Erma, a Vidente",
+                  "role": "Mística",
+                  "service": "blessing",
+                  "icon": "🔮",
+                  "lines": [
+                    "As sombras sussurram seu nome, viajante...",
+                    "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                    "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 5,
+                "doors": {}
+              }
+            ]
+          ],
+          "pos": {
+            "x": 3,
+            "y": 3
+          }
+        },
+        "log": [
+          "Encontrou Cajado Arcano de Ébano Incomum após a batalha.",
+          "O chefe deixa cair Runa Elétrica III.",
+          "Você venceu Goblin, o Devorador e zerou Floresta · Normal!",
+          "No baú do chefe: Botas de Couro Reforçado Lendárias e 1300 de ouro.",
+          "Na primeira vez nesta dificuldade, o acessório único da masmorra: Amuleto da Floresta Antiga · Normal.",
+          "Título conquistado: Sobrevivente da Floresta.",
+          "Floresta no Difícil está aberta no portão.",
+          "A Caverna abre a partir do nível 70.",
+          "O caminho de volta se abre, e o grupo retorna à cidade."
+        ],
+        "loot": {
+          "uid": "cajado_1700000000000_48927",
+          "templateId": "cajado",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 9,
+            "mana": 23
+          },
+          "value": 39,
+          "equipped": false,
+          "procChance": 0.115,
+          "degrau": 2,
+          "foundFloor": 100
+        },
+        "conquista": {
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "nome": "Floresta · Normal",
+          "chefe": "Goblin, o Devorador",
+          "item": {
+            "uid": "botas_1700000000000_54068",
+            "templateId": "botas",
+            "rarity": "lendario",
+            "stats": {
+              "defesa": 7,
+              "velocidade": 7
+            },
+            "value": 53,
+            "equipped": false,
+            "degrau": 2,
+            "foundFloor": 100
+          },
+          "ouro": 1300,
+          "titulo": "Sobrevivente da Floresta",
+          "abertos": [
+            "Floresta no Difícil está aberta no portão.",
+            "A Caverna abre a partir do nível 70."
+          ],
+          "acessorio": {
+            "uid": "amuleto_floresta_1700000000000_54479",
+            "templateId": "amuleto_floresta",
+            "rarity": "lendario",
+            "stats": {
+              "vida": 30,
+              "mana": 12
+            },
+            "value": 180,
+            "equipped": false
+          }
+        }
+      },
+      "rngCalls": 14
+    }
+  },
+  {
+    "name": "limparSala: no app, zerar de novo não dá o acessório único",
+    "input": {
+      "fn": "limparSala",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 100,
+          "mapRows": 6,
+          "mapCols": 6,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [
+              "floresta:normal"
+            ],
             "totems": {}
           },
           "mapMode": "dungeon",

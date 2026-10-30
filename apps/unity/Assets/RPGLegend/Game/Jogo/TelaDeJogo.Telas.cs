@@ -395,6 +395,11 @@ namespace RPGLegend.Game.Jogo
                 conteudo.Add(PecasDaTela.Texto("Você venceu " + conquista.Chefe + ".", "linha-da-vitoria"));
                 conteudo.Add(PecasDaTela.Secao("Baú do chefe"));
                 conteudo.Add(PecasDaTela.CartaDeItem(conquista.Item, "+" + PecasDaTela.Inteiro(conquista.Ouro) + " de ouro", false, null));
+                if (conquista.Acessorio != null)
+                {
+                    conteudo.Add(PecasDaTela.Secao("Acessório único da masmorra"));
+                    conteudo.Add(PecasDaTela.CartaDeItem(conquista.Acessorio, "Na primeira vez nesta dificuldade", false, null));
+                }
                 conteudo.Add(PecasDaTela.Secao("Título conquistado"));
                 conteudo.Add(PecasDaTela.Texto("🏆 " + conquista.Titulo, "titulo-da-vitoria"));
                 foreach (var linha in conquista.Abertos ?? new List<string>()) conteudo.Add(PecasDaTela.Texto(linha, "linha-da-vitoria"));

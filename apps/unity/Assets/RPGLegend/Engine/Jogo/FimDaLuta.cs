@@ -242,8 +242,17 @@ namespace RPGLegend.Engine
             {
                 // O chefe do último andar: a masmorra está zerada nesta dificuldade, vem o baú do chefe e o título,
                 // e o diário diz o que abriu no portão. A tela de vitória mostra a conquista.
+                bool primeiraVez = !Dungeons.IsCleared(limpo.Progresso, limpo.Masmorra);
                 var progresso = Dungeons.MarkCleared(limpo.Progresso, limpo.Masmorra);
                 var bau = Conquistas.AbrirBauDoChefe(limpo, rng, now, app);
+                // Na primeira vez desta dificuldade, o acessório único da masmorra (AcessoriosUnicos).
+                var acessorio = primeiraVez ? AcessoriosUnicos.AcessorioUnico(limpo.Masmorra, rng, now) : null;
+                var premiado = bau.Estado;
+                if (acessorio != null)
+                {
+                    premiado = premiado.Clone();
+                    premiado.Inventory = Inventory.AddItem(bau.Estado.Inventory, acessorio);
+                }
                 var abertos = AbertosAoZerar(limpo, progresso);
                 var conquista = new Conquista
                 {
@@ -254,13 +263,15 @@ namespace RPGLegend.Engine
                     Ouro = bau.Ouro,
                     Titulo = Conquistas.TituloDe(limpo.Masmorra),
                     Abertos = abertos,
+                    Acessorio = acessorio,
                 };
                 log.Add("Você venceu " + Js.Str(abatido.Name) + " e zerou " + conquista.Nome + "!");
                 log.Add("No baú do chefe: " + Items.DisplayName(bau.Item) + " e " + Js.NumberToString(bau.Ouro) + " de ouro.");
+                if (acessorio != null) log.Add("Na primeira vez nesta dificuldade, o acessório único da masmorra: " + Items.DisplayName(acessorio) + ".");
                 log.Add("Título conquistado: " + conquista.Titulo + ".");
                 log.AddRange(abertos);
                 log.Add("O caminho de volta se abre, e o grupo retorna à cidade.");
-                var comProgresso = bau.Estado.Clone();
+                var comProgresso = premiado.Clone();
                 comProgresso.Progresso = progresso;
                 return new SalaLimpa { Estado = Estados.VoltarParaCidade(comProgresso), Log = log, Loot = loot, Conquista = conquista };
             }

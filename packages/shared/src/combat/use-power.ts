@@ -32,6 +32,8 @@ export interface UsePowerOptions {
   petCuraBonus?: number;
   /** Chance de 0 a 100 do pet poupar a mana do poder (ainda não portado) — 0 se ausente. */
   petManaSaveChance?: number;
+  /** A fração que a Coroa do Arquimago tira do custo (`items/acessorios-unicos.ts`); só a arena do app passa. */
+  descontoDeMana?: number;
 }
 
 export interface UsePowerResult {
@@ -53,9 +55,12 @@ export interface UsePowerResult {
 
 const PENALIDADE_DE_MANA = 1.2;
 
-/** O mesmo número que o botão do poder precisa mostrar antes de o jogador clicar. */
-export function powerManaCost(hero: Hero, power: Pick<Power, 'cost'>): number {
-  return Math.ceil(power.cost * (hasDebuffEffect(hero, 'manaCostPenalty') ? PENALIDADE_DE_MANA : 1));
+/**
+ * O mesmo número que o botão do poder precisa mostrar antes de o jogador
+ * clicar. `desconto`: a fração que a Coroa do Arquimago tira (só no app).
+ */
+export function powerManaCost(hero: Hero, power: Pick<Power, 'cost'>, desconto = 0): number {
+  return Math.ceil(power.cost * (hasDebuffEffect(hero, 'manaCostPenalty') ? PENALIDADE_DE_MANA : 1) * (1 - desconto));
 }
 
 export function castPower(
@@ -66,7 +71,7 @@ export function castPower(
   options: UsePowerOptions = {},
 ): UsePowerResult {
   const rng = options.rng ?? defaultRng;
-  const manaCost = powerManaCost(hero, power);
+  const manaCost = powerManaCost(hero, power, options.descontoDeMana ?? 0);
 
   // O esqueleto do necromante: com o máximo de pé, avisa sem gastar a mana.
   if (power.type === 'invocar' && esqueletosDePe(party) >= MAX_ESQUELETOS) {

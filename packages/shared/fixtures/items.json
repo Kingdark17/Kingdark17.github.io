@@ -661,6 +661,69 @@
           "base": {},
           "value": 40,
           "runa": "vampirica"
+        },
+        {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        },
+        {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        },
+        {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
         }
       ]
     }
@@ -1840,6 +1903,69 @@
             "vida": 8
           },
           "value": 22
+        },
+        {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        },
+        {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        },
+        {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
         }
       ]
     }
@@ -2714,6 +2840,102 @@
             "vida": 8
           },
           "value": 22
+        }
+      }
+    },
+    "expected": {
+      "result": "acessorio"
+    }
+  },
+  {
+    "name": "slotForTemplate: amuleto_floresta",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "acessorio"
+    }
+  },
+  {
+    "name": "slotForTemplate: presa_morcego",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "acessorio"
+    }
+  },
+  {
+    "name": "slotForTemplate: coroa_arquimago",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
         }
       }
     },
@@ -8710,6 +8932,567 @@
     }
   },
   {
+    "name": "instantiate: amuleto_floresta em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "amuleto_floresta_1700000000000_62706",
+          "templateId": "amuleto_floresta",
+          "rarity": "comum",
+          "stats": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "equipped": false
+        },
+        {
+          "uid": "amuleto_floresta_1700000000000_273",
+          "templateId": "amuleto_floresta",
+          "rarity": "incomum",
+          "stats": {
+            "vida": 13,
+            "mana": 5
+          },
+          "value": 78,
+          "equipped": false
+        },
+        {
+          "uid": "amuleto_floresta_1700000000000_52744",
+          "templateId": "amuleto_floresta",
+          "rarity": "raro",
+          "stats": {
+            "vida": 17,
+            "mana": 7
+          },
+          "value": 102,
+          "equipped": false
+        },
+        {
+          "uid": "amuleto_floresta_1700000000000_98104",
+          "templateId": "amuleto_floresta",
+          "rarity": "epico",
+          "stats": {
+            "vida": 22,
+            "mana": 9
+          },
+          "value": 132,
+          "equipped": false
+        },
+        {
+          "uid": "amuleto_floresta_1700000000000_96836",
+          "templateId": "amuleto_floresta",
+          "rarity": "lendario",
+          "stats": {
+            "vida": 30,
+            "mana": 12
+          },
+          "value": 180,
+          "equipped": false
+        },
+        {
+          "uid": "amuleto_floresta_1700000000000_28110",
+          "templateId": "amuleto_floresta",
+          "rarity": "mitico",
+          "stats": {
+            "vida": 40,
+            "mana": 16
+          },
+          "value": 240,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: presa_morcego em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "presa_morcego_1700000000000_62706",
+          "templateId": "presa_morcego",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "equipped": false
+        },
+        {
+          "uid": "presa_morcego_1700000000000_273",
+          "templateId": "presa_morcego",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 4,
+            "critico": 5
+          },
+          "value": 78,
+          "equipped": false
+        },
+        {
+          "uid": "presa_morcego_1700000000000_52744",
+          "templateId": "presa_morcego",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 5,
+            "critico": 7
+          },
+          "value": 102,
+          "equipped": false
+        },
+        {
+          "uid": "presa_morcego_1700000000000_98104",
+          "templateId": "presa_morcego",
+          "rarity": "epico",
+          "stats": {
+            "ataque": 7,
+            "critico": 9
+          },
+          "value": 132,
+          "equipped": false
+        },
+        {
+          "uid": "presa_morcego_1700000000000_96836",
+          "templateId": "presa_morcego",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 9,
+            "critico": 12
+          },
+          "value": 180,
+          "equipped": false
+        },
+        {
+          "uid": "presa_morcego_1700000000000_28110",
+          "templateId": "presa_morcego",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 12,
+            "critico": 16
+          },
+          "value": 240,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: coroa_arquimago em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "coroa_arquimago_1700000000000_62706",
+          "templateId": "coroa_arquimago",
+          "rarity": "comum",
+          "stats": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "equipped": false
+        },
+        {
+          "uid": "coroa_arquimago_1700000000000_273",
+          "templateId": "coroa_arquimago",
+          "rarity": "incomum",
+          "stats": {
+            "mana": 13,
+            "critico": 3
+          },
+          "value": 78,
+          "equipped": false
+        },
+        {
+          "uid": "coroa_arquimago_1700000000000_52744",
+          "templateId": "coroa_arquimago",
+          "rarity": "raro",
+          "stats": {
+            "mana": 17,
+            "critico": 3
+          },
+          "value": 102,
+          "equipped": false
+        },
+        {
+          "uid": "coroa_arquimago_1700000000000_98104",
+          "templateId": "coroa_arquimago",
+          "rarity": "epico",
+          "stats": {
+            "mana": 22,
+            "critico": 4
+          },
+          "value": 132,
+          "equipped": false
+        },
+        {
+          "uid": "coroa_arquimago_1700000000000_96836",
+          "templateId": "coroa_arquimago",
+          "rarity": "lendario",
+          "stats": {
+            "mana": 30,
+            "critico": 6
+          },
+          "value": 180,
+          "equipped": false
+        },
+        {
+          "uid": "coroa_arquimago_1700000000000_28110",
+          "templateId": "coroa_arquimago",
+          "rarity": "mitico",
+          "stats": {
+            "mana": 40,
+            "critico": 8
+          },
+          "value": 240,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
     "name": "instantiate: arredondamento de .5 e −.5, e o teto de 0,5 na chance do proc",
     "input": {
       "fn": "instantiate",
@@ -12066,6 +12849,147 @@
         "Runa Vampírica",
         "Runa Vampírica",
         "Runa Vampírica"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: amuleto_floresta",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Amuleto da Floresta Antiga",
+        "Amuleto da Floresta Antiga",
+        "Amuleto da Floresta Antiga",
+        "Amuleto da Floresta Antiga",
+        "Amuleto da Floresta Antiga",
+        "Amuleto da Floresta Antiga"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: presa_morcego",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Presa do Morcego",
+        "Presa do Morcego",
+        "Presa do Morcego",
+        "Presa do Morcego",
+        "Presa do Morcego",
+        "Presa do Morcego"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: coroa_arquimago",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Coroa do Arquimago",
+        "Coroa do Arquimago",
+        "Coroa do Arquimago",
+        "Coroa do Arquimago",
+        "Coroa do Arquimago",
+        "Coroa do Arquimago"
       ]
     }
   },
@@ -17095,6 +18019,702 @@
             "vida": 32
           },
           "value": 88,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: amuleto_floresta no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "amuleto_floresta_1700000000000_62706",
+          "templateId": "amuleto_floresta",
+          "rarity": "comum",
+          "stats": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "equipped": false
+        },
+        {
+          "uid": "amuleto_floresta_1700000000000_273",
+          "templateId": "amuleto_floresta",
+          "rarity": "raro",
+          "stats": {
+            "vida": 17,
+            "mana": 7
+          },
+          "value": 102,
+          "equipped": false
+        },
+        {
+          "uid": "amuleto_floresta_1700000000000_52744",
+          "templateId": "amuleto_floresta",
+          "rarity": "mitico",
+          "stats": {
+            "vida": 40,
+            "mana": 16
+          },
+          "value": 240,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: amuleto_floresta no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "amuleto_floresta_1700000000000_62706",
+          "templateId": "amuleto_floresta",
+          "rarity": "comum",
+          "stats": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "equipped": false
+        },
+        {
+          "uid": "amuleto_floresta_1700000000000_273",
+          "templateId": "amuleto_floresta",
+          "rarity": "raro",
+          "stats": {
+            "vida": 17,
+            "mana": 7
+          },
+          "value": 102,
+          "equipped": false
+        },
+        {
+          "uid": "amuleto_floresta_1700000000000_52744",
+          "templateId": "amuleto_floresta",
+          "rarity": "mitico",
+          "stats": {
+            "vida": 40,
+            "mana": 16
+          },
+          "value": 240,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: presa_morcego no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "presa_morcego_1700000000000_62706",
+          "templateId": "presa_morcego",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "equipped": false
+        },
+        {
+          "uid": "presa_morcego_1700000000000_273",
+          "templateId": "presa_morcego",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 5,
+            "critico": 7
+          },
+          "value": 102,
+          "equipped": false
+        },
+        {
+          "uid": "presa_morcego_1700000000000_52744",
+          "templateId": "presa_morcego",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 12,
+            "critico": 16
+          },
+          "value": 240,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: presa_morcego no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "presa_morcego_1700000000000_62706",
+          "templateId": "presa_morcego",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "equipped": false
+        },
+        {
+          "uid": "presa_morcego_1700000000000_273",
+          "templateId": "presa_morcego",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 5,
+            "critico": 7
+          },
+          "value": 102,
+          "equipped": false
+        },
+        {
+          "uid": "presa_morcego_1700000000000_52744",
+          "templateId": "presa_morcego",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 12,
+            "critico": 16
+          },
+          "value": 240,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: coroa_arquimago no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "coroa_arquimago_1700000000000_62706",
+          "templateId": "coroa_arquimago",
+          "rarity": "comum",
+          "stats": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "equipped": false
+        },
+        {
+          "uid": "coroa_arquimago_1700000000000_273",
+          "templateId": "coroa_arquimago",
+          "rarity": "raro",
+          "stats": {
+            "mana": 17,
+            "critico": 3
+          },
+          "value": 102,
+          "equipped": false
+        },
+        {
+          "uid": "coroa_arquimago_1700000000000_52744",
+          "templateId": "coroa_arquimago",
+          "rarity": "mitico",
+          "stats": {
+            "mana": 40,
+            "critico": 8
+          },
+          "value": 240,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: coroa_arquimago no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "coroa_arquimago_1700000000000_62706",
+          "templateId": "coroa_arquimago",
+          "rarity": "comum",
+          "stats": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "equipped": false
+        },
+        {
+          "uid": "coroa_arquimago_1700000000000_273",
+          "templateId": "coroa_arquimago",
+          "rarity": "raro",
+          "stats": {
+            "mana": 17,
+            "critico": 3
+          },
+          "value": 102,
+          "equipped": false
+        },
+        {
+          "uid": "coroa_arquimago_1700000000000_52744",
+          "templateId": "coroa_arquimago",
+          "rarity": "mitico",
+          "stats": {
+            "mana": 40,
+            "critico": 8
+          },
+          "value": 240,
           "equipped": false
         }
       ],
@@ -28952,6 +30572,3143 @@
     },
     "expected": {
       "result": "escondido"
+    }
+  },
+  {
+    "name": "acessorioUnico: floresta:normal",
+    "input": {
+      "fn": "acessorioUnico",
+      "args": {
+        "run": {
+          "dungeon": "floresta",
+          "difficulty": "normal"
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "amuleto_floresta_1700000000000_1170",
+        "templateId": "amuleto_floresta",
+        "rarity": "lendario",
+        "stats": {
+          "vida": 30,
+          "mana": 12
+        },
+        "value": 180,
+        "equipped": false
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "displayName: o único de floresta:normal",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "amuleto_floresta_1700000000000_1170",
+          "templateId": "amuleto_floresta",
+          "rarity": "lendario",
+          "stats": {
+            "vida": 30,
+            "mana": 12
+          },
+          "value": 180,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": "Amuleto da Floresta Antiga · Normal"
+    }
+  },
+  {
+    "name": "itemView: o único de floresta:normal",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "amuleto_floresta_1700000000000_1170",
+          "templateId": "amuleto_floresta",
+          "rarity": "lendario",
+          "stats": {
+            "vida": 30,
+            "mana": 12
+          },
+          "value": 180,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "amuleto_floresta_1700000000000_1170",
+        "templateId": "amuleto_floresta",
+        "rarity": "lendario",
+        "stats": {
+          "vida": 30,
+          "mana": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "template": {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        },
+        "name": "Amuleto da Floresta Antiga · Normal",
+        "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele. No app: recupera 2% da vida máxima a cada rodada de luta.",
+        "sprite": "accessories/amuleto_sab.png",
+        "category": "acessorio",
+        "rarityLabel": "Lendário",
+        "rarityColorVar": "--r-lendario",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "efeitoDoUnico: floresta:normal",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "amuleto_floresta_1700000000000_1170",
+              "templateId": "amuleto_floresta",
+              "rarity": "lendario",
+              "stats": {
+                "vida": 30,
+                "mana": 12
+              },
+              "value": 180,
+              "equipped": true
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "efeito": "regeneracao",
+        "valor": 0.02
+      }
+    }
+  },
+  {
+    "name": "descontoDeMana: floresta:normal",
+    "input": {
+      "fn": "descontoDeMana",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "amuleto_floresta_1700000000000_1170",
+              "templateId": "amuleto_floresta",
+              "rarity": "lendario",
+              "stats": {
+                "vida": 30,
+                "mana": 12
+              },
+              "value": 180,
+              "equipped": true
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "acessorioUnico: floresta:dificil",
+    "input": {
+      "fn": "acessorioUnico",
+      "args": {
+        "run": {
+          "dungeon": "floresta",
+          "difficulty": "dificil"
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "amuleto_floresta_1700000000000_1170",
+        "templateId": "amuleto_floresta",
+        "rarity": "lendario",
+        "stats": {
+          "vida": 30,
+          "mana": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "displayName: o único de floresta:dificil",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "amuleto_floresta_1700000000000_1170",
+          "templateId": "amuleto_floresta",
+          "rarity": "lendario",
+          "stats": {
+            "vida": 30,
+            "mana": 12
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 2
+        }
+      }
+    },
+    "expected": {
+      "result": "Amuleto da Floresta Antiga · Difícil"
+    }
+  },
+  {
+    "name": "itemView: o único de floresta:dificil",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "amuleto_floresta_1700000000000_1170",
+          "templateId": "amuleto_floresta",
+          "rarity": "lendario",
+          "stats": {
+            "vida": 30,
+            "mana": 12
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 2
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "amuleto_floresta_1700000000000_1170",
+        "templateId": "amuleto_floresta",
+        "rarity": "lendario",
+        "stats": {
+          "vida": 30,
+          "mana": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 2,
+        "template": {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        },
+        "name": "Amuleto da Floresta Antiga · Difícil",
+        "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele. No app: recupera 3% da vida máxima a cada rodada de luta.",
+        "sprite": "accessories/amuleto_sab.png",
+        "category": "acessorio",
+        "rarityLabel": "Lendário",
+        "rarityColorVar": "--r-lendario",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "efeitoDoUnico: floresta:dificil",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "amuleto_floresta_1700000000000_1170",
+              "templateId": "amuleto_floresta",
+              "rarity": "lendario",
+              "stats": {
+                "vida": 30,
+                "mana": 12
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 2
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "efeito": "regeneracao",
+        "valor": 0.03
+      }
+    }
+  },
+  {
+    "name": "descontoDeMana: floresta:dificil",
+    "input": {
+      "fn": "descontoDeMana",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "amuleto_floresta_1700000000000_1170",
+              "templateId": "amuleto_floresta",
+              "rarity": "lendario",
+              "stats": {
+                "vida": 30,
+                "mana": 12
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 2
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "acessorioUnico: floresta:pesadelo",
+    "input": {
+      "fn": "acessorioUnico",
+      "args": {
+        "run": {
+          "dungeon": "floresta",
+          "difficulty": "pesadelo"
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "amuleto_floresta_1700000000000_1170",
+        "templateId": "amuleto_floresta",
+        "rarity": "lendario",
+        "stats": {
+          "vida": 30,
+          "mana": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "displayName: o único de floresta:pesadelo",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "amuleto_floresta_1700000000000_1170",
+          "templateId": "amuleto_floresta",
+          "rarity": "lendario",
+          "stats": {
+            "vida": 30,
+            "mana": 12
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 3
+        }
+      }
+    },
+    "expected": {
+      "result": "Amuleto da Floresta Antiga · Pesadelo"
+    }
+  },
+  {
+    "name": "itemView: o único de floresta:pesadelo",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "amuleto_floresta_1700000000000_1170",
+          "templateId": "amuleto_floresta",
+          "rarity": "lendario",
+          "stats": {
+            "vida": 30,
+            "mana": 12
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 3
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "amuleto_floresta_1700000000000_1170",
+        "templateId": "amuleto_floresta",
+        "rarity": "lendario",
+        "stats": {
+          "vida": 30,
+          "mana": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 3,
+        "template": {
+          "id": "amuleto_floresta",
+          "name": "Amuleto da Floresta Antiga",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele.",
+          "sprite": "accessories/amuleto_sab.png",
+          "base": {
+            "vida": 10,
+            "mana": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "regeneracao",
+            "valores": [
+              0.02,
+              0.03,
+              0.04
+            ]
+          }
+        },
+        "name": "Amuleto da Floresta Antiga · Pesadelo",
+        "desc": "A seiva da árvore mais velha da Floresta ainda corre por ele. No app: recupera 4% da vida máxima a cada rodada de luta.",
+        "sprite": "accessories/amuleto_sab.png",
+        "category": "acessorio",
+        "rarityLabel": "Lendário",
+        "rarityColorVar": "--r-lendario",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "efeitoDoUnico: floresta:pesadelo",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "amuleto_floresta_1700000000000_1170",
+              "templateId": "amuleto_floresta",
+              "rarity": "lendario",
+              "stats": {
+                "vida": 30,
+                "mana": 12
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 3
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "efeito": "regeneracao",
+        "valor": 0.04
+      }
+    }
+  },
+  {
+    "name": "descontoDeMana: floresta:pesadelo",
+    "input": {
+      "fn": "descontoDeMana",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "amuleto_floresta_1700000000000_1170",
+              "templateId": "amuleto_floresta",
+              "rarity": "lendario",
+              "stats": {
+                "vida": 30,
+                "mana": 12
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 3
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "acessorioUnico: caverna:normal",
+    "input": {
+      "fn": "acessorioUnico",
+      "args": {
+        "run": {
+          "dungeon": "caverna",
+          "difficulty": "normal"
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "presa_morcego_1700000000000_1170",
+        "templateId": "presa_morcego",
+        "rarity": "lendario",
+        "stats": {
+          "ataque": 9,
+          "critico": 12
+        },
+        "value": 180,
+        "equipped": false
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "displayName: o único de caverna:normal",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "presa_morcego_1700000000000_1170",
+          "templateId": "presa_morcego",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 9,
+            "critico": 12
+          },
+          "value": 180,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": "Presa do Morcego · Normal"
+    }
+  },
+  {
+    "name": "itemView: o único de caverna:normal",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "presa_morcego_1700000000000_1170",
+          "templateId": "presa_morcego",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 9,
+            "critico": 12
+          },
+          "value": 180,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "presa_morcego_1700000000000_1170",
+        "templateId": "presa_morcego",
+        "rarity": "lendario",
+        "stats": {
+          "ataque": 9,
+          "critico": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "template": {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        },
+        "name": "Presa do Morcego · Normal",
+        "desc": "Um anel com a presa do morcego mais velho da Caverna. No app: cada golpe seu devolve em vida 6% do dano.",
+        "sprite": "accessories/anel_som.png",
+        "category": "acessorio",
+        "rarityLabel": "Lendária",
+        "rarityColorVar": "--r-lendario",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "efeitoDoUnico: caverna:normal",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "presa_morcego_1700000000000_1170",
+              "templateId": "presa_morcego",
+              "rarity": "lendario",
+              "stats": {
+                "ataque": 9,
+                "critico": 12
+              },
+              "value": 180,
+              "equipped": true
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "efeito": "roubo_de_vida",
+        "valor": 0.06
+      }
+    }
+  },
+  {
+    "name": "descontoDeMana: caverna:normal",
+    "input": {
+      "fn": "descontoDeMana",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "presa_morcego_1700000000000_1170",
+              "templateId": "presa_morcego",
+              "rarity": "lendario",
+              "stats": {
+                "ataque": 9,
+                "critico": 12
+              },
+              "value": 180,
+              "equipped": true
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "acessorioUnico: caverna:dificil",
+    "input": {
+      "fn": "acessorioUnico",
+      "args": {
+        "run": {
+          "dungeon": "caverna",
+          "difficulty": "dificil"
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "presa_morcego_1700000000000_1170",
+        "templateId": "presa_morcego",
+        "rarity": "lendario",
+        "stats": {
+          "ataque": 9,
+          "critico": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "displayName: o único de caverna:dificil",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "presa_morcego_1700000000000_1170",
+          "templateId": "presa_morcego",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 9,
+            "critico": 12
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 2
+        }
+      }
+    },
+    "expected": {
+      "result": "Presa do Morcego · Difícil"
+    }
+  },
+  {
+    "name": "itemView: o único de caverna:dificil",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "presa_morcego_1700000000000_1170",
+          "templateId": "presa_morcego",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 9,
+            "critico": 12
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 2
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "presa_morcego_1700000000000_1170",
+        "templateId": "presa_morcego",
+        "rarity": "lendario",
+        "stats": {
+          "ataque": 9,
+          "critico": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 2,
+        "template": {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        },
+        "name": "Presa do Morcego · Difícil",
+        "desc": "Um anel com a presa do morcego mais velho da Caverna. No app: cada golpe seu devolve em vida 9% do dano.",
+        "sprite": "accessories/anel_som.png",
+        "category": "acessorio",
+        "rarityLabel": "Lendária",
+        "rarityColorVar": "--r-lendario",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "efeitoDoUnico: caverna:dificil",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "presa_morcego_1700000000000_1170",
+              "templateId": "presa_morcego",
+              "rarity": "lendario",
+              "stats": {
+                "ataque": 9,
+                "critico": 12
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 2
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "efeito": "roubo_de_vida",
+        "valor": 0.09
+      }
+    }
+  },
+  {
+    "name": "descontoDeMana: caverna:dificil",
+    "input": {
+      "fn": "descontoDeMana",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "presa_morcego_1700000000000_1170",
+              "templateId": "presa_morcego",
+              "rarity": "lendario",
+              "stats": {
+                "ataque": 9,
+                "critico": 12
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 2
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "acessorioUnico: caverna:pesadelo",
+    "input": {
+      "fn": "acessorioUnico",
+      "args": {
+        "run": {
+          "dungeon": "caverna",
+          "difficulty": "pesadelo"
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "presa_morcego_1700000000000_1170",
+        "templateId": "presa_morcego",
+        "rarity": "lendario",
+        "stats": {
+          "ataque": 9,
+          "critico": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "displayName: o único de caverna:pesadelo",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "presa_morcego_1700000000000_1170",
+          "templateId": "presa_morcego",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 9,
+            "critico": 12
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 3
+        }
+      }
+    },
+    "expected": {
+      "result": "Presa do Morcego · Pesadelo"
+    }
+  },
+  {
+    "name": "itemView: o único de caverna:pesadelo",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "presa_morcego_1700000000000_1170",
+          "templateId": "presa_morcego",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 9,
+            "critico": 12
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 3
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "presa_morcego_1700000000000_1170",
+        "templateId": "presa_morcego",
+        "rarity": "lendario",
+        "stats": {
+          "ataque": 9,
+          "critico": 12
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 3,
+        "template": {
+          "id": "presa_morcego",
+          "name": "Presa do Morcego",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Um anel com a presa do morcego mais velho da Caverna.",
+          "sprite": "accessories/anel_som.png",
+          "base": {
+            "ataque": 3,
+            "critico": 4
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "roubo_de_vida",
+            "valores": [
+              0.06,
+              0.09,
+              0.12
+            ]
+          }
+        },
+        "name": "Presa do Morcego · Pesadelo",
+        "desc": "Um anel com a presa do morcego mais velho da Caverna. No app: cada golpe seu devolve em vida 12% do dano.",
+        "sprite": "accessories/anel_som.png",
+        "category": "acessorio",
+        "rarityLabel": "Lendária",
+        "rarityColorVar": "--r-lendario",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "efeitoDoUnico: caverna:pesadelo",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "presa_morcego_1700000000000_1170",
+              "templateId": "presa_morcego",
+              "rarity": "lendario",
+              "stats": {
+                "ataque": 9,
+                "critico": 12
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 3
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "efeito": "roubo_de_vida",
+        "valor": 0.12
+      }
+    }
+  },
+  {
+    "name": "descontoDeMana: caverna:pesadelo",
+    "input": {
+      "fn": "descontoDeMana",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "presa_morcego_1700000000000_1170",
+              "templateId": "presa_morcego",
+              "rarity": "lendario",
+              "stats": {
+                "ataque": 9,
+                "critico": 12
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 3
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "acessorioUnico: torre:normal",
+    "input": {
+      "fn": "acessorioUnico",
+      "args": {
+        "run": {
+          "dungeon": "torre",
+          "difficulty": "normal"
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "coroa_arquimago_1700000000000_1170",
+        "templateId": "coroa_arquimago",
+        "rarity": "lendario",
+        "stats": {
+          "mana": 30,
+          "critico": 6
+        },
+        "value": 180,
+        "equipped": false
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "displayName: o único de torre:normal",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "coroa_arquimago_1700000000000_1170",
+          "templateId": "coroa_arquimago",
+          "rarity": "lendario",
+          "stats": {
+            "mana": 30,
+            "critico": 6
+          },
+          "value": 180,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": "Coroa do Arquimago · Normal"
+    }
+  },
+  {
+    "name": "itemView: o único de torre:normal",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "coroa_arquimago_1700000000000_1170",
+          "templateId": "coroa_arquimago",
+          "rarity": "lendario",
+          "stats": {
+            "mana": 30,
+            "critico": 6
+          },
+          "value": 180,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "coroa_arquimago_1700000000000_1170",
+        "templateId": "coroa_arquimago",
+        "rarity": "lendario",
+        "stats": {
+          "mana": 30,
+          "critico": 6
+        },
+        "value": 180,
+        "equipped": false,
+        "template": {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
+        },
+        "name": "Coroa do Arquimago · Normal",
+        "desc": "Coroou o último mestre da Torre. No app: os poderes custam 10% menos mana.",
+        "sprite": "accessories/colar_forca.png",
+        "category": "acessorio",
+        "rarityLabel": "Lendária",
+        "rarityColorVar": "--r-lendario",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "efeitoDoUnico: torre:normal",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "coroa_arquimago_1700000000000_1170",
+              "templateId": "coroa_arquimago",
+              "rarity": "lendario",
+              "stats": {
+                "mana": 30,
+                "critico": 6
+              },
+              "value": 180,
+              "equipped": true
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "efeito": "desconto_de_mana",
+        "valor": 0.1
+      }
+    }
+  },
+  {
+    "name": "descontoDeMana: torre:normal",
+    "input": {
+      "fn": "descontoDeMana",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "coroa_arquimago_1700000000000_1170",
+              "templateId": "coroa_arquimago",
+              "rarity": "lendario",
+              "stats": {
+                "mana": 30,
+                "critico": 6
+              },
+              "value": 180,
+              "equipped": true
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0.1
+    }
+  },
+  {
+    "name": "acessorioUnico: torre:dificil",
+    "input": {
+      "fn": "acessorioUnico",
+      "args": {
+        "run": {
+          "dungeon": "torre",
+          "difficulty": "dificil"
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "coroa_arquimago_1700000000000_1170",
+        "templateId": "coroa_arquimago",
+        "rarity": "lendario",
+        "stats": {
+          "mana": 30,
+          "critico": 6
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 2
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "displayName: o único de torre:dificil",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "coroa_arquimago_1700000000000_1170",
+          "templateId": "coroa_arquimago",
+          "rarity": "lendario",
+          "stats": {
+            "mana": 30,
+            "critico": 6
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 2
+        }
+      }
+    },
+    "expected": {
+      "result": "Coroa do Arquimago · Difícil"
+    }
+  },
+  {
+    "name": "itemView: o único de torre:dificil",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "coroa_arquimago_1700000000000_1170",
+          "templateId": "coroa_arquimago",
+          "rarity": "lendario",
+          "stats": {
+            "mana": 30,
+            "critico": 6
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 2
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "coroa_arquimago_1700000000000_1170",
+        "templateId": "coroa_arquimago",
+        "rarity": "lendario",
+        "stats": {
+          "mana": 30,
+          "critico": 6
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 2,
+        "template": {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
+        },
+        "name": "Coroa do Arquimago · Difícil",
+        "desc": "Coroou o último mestre da Torre. No app: os poderes custam 15% menos mana.",
+        "sprite": "accessories/colar_forca.png",
+        "category": "acessorio",
+        "rarityLabel": "Lendária",
+        "rarityColorVar": "--r-lendario",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "efeitoDoUnico: torre:dificil",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "coroa_arquimago_1700000000000_1170",
+              "templateId": "coroa_arquimago",
+              "rarity": "lendario",
+              "stats": {
+                "mana": 30,
+                "critico": 6
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 2
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "efeito": "desconto_de_mana",
+        "valor": 0.15
+      }
+    }
+  },
+  {
+    "name": "descontoDeMana: torre:dificil",
+    "input": {
+      "fn": "descontoDeMana",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "coroa_arquimago_1700000000000_1170",
+              "templateId": "coroa_arquimago",
+              "rarity": "lendario",
+              "stats": {
+                "mana": 30,
+                "critico": 6
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 2
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0.15
+    }
+  },
+  {
+    "name": "acessorioUnico: torre:pesadelo",
+    "input": {
+      "fn": "acessorioUnico",
+      "args": {
+        "run": {
+          "dungeon": "torre",
+          "difficulty": "pesadelo"
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "coroa_arquimago_1700000000000_1170",
+        "templateId": "coroa_arquimago",
+        "rarity": "lendario",
+        "stats": {
+          "mana": 30,
+          "critico": 6
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 3
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "displayName: o único de torre:pesadelo",
+    "input": {
+      "fn": "displayName",
+      "args": {
+        "item": {
+          "uid": "coroa_arquimago_1700000000000_1170",
+          "templateId": "coroa_arquimago",
+          "rarity": "lendario",
+          "stats": {
+            "mana": 30,
+            "critico": 6
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 3
+        }
+      }
+    },
+    "expected": {
+      "result": "Coroa do Arquimago · Pesadelo"
+    }
+  },
+  {
+    "name": "itemView: o único de torre:pesadelo",
+    "input": {
+      "fn": "itemView",
+      "args": {
+        "item": {
+          "uid": "coroa_arquimago_1700000000000_1170",
+          "templateId": "coroa_arquimago",
+          "rarity": "lendario",
+          "stats": {
+            "mana": 30,
+            "critico": 6
+          },
+          "value": 180,
+          "equipped": false,
+          "nivelDoUnico": 3
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "uid": "coroa_arquimago_1700000000000_1170",
+        "templateId": "coroa_arquimago",
+        "rarity": "lendario",
+        "stats": {
+          "mana": 30,
+          "critico": 6
+        },
+        "value": 180,
+        "equipped": false,
+        "nivelDoUnico": 3,
+        "template": {
+          "id": "coroa_arquimago",
+          "name": "Coroa do Arquimago",
+          "genero": "f",
+          "category": "acessorio",
+          "desc": "Coroou o último mestre da Torre.",
+          "sprite": "accessories/colar_forca.png",
+          "base": {
+            "mana": 10,
+            "critico": 2
+          },
+          "value": 60,
+          "unico": {
+            "efeito": "desconto_de_mana",
+            "valores": [
+              0.1,
+              0.15,
+              0.2
+            ]
+          }
+        },
+        "name": "Coroa do Arquimago · Pesadelo",
+        "desc": "Coroou o último mestre da Torre. No app: os poderes custam 20% menos mana.",
+        "sprite": "accessories/colar_forca.png",
+        "category": "acessorio",
+        "rarityLabel": "Lendária",
+        "rarityColorVar": "--r-lendario",
+        "proc": null
+      }
+    }
+  },
+  {
+    "name": "efeitoDoUnico: torre:pesadelo",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "coroa_arquimago_1700000000000_1170",
+              "templateId": "coroa_arquimago",
+              "rarity": "lendario",
+              "stats": {
+                "mana": 30,
+                "critico": 6
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 3
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "efeito": "desconto_de_mana",
+        "valor": 0.2
+      }
+    }
+  },
+  {
+    "name": "descontoDeMana: torre:pesadelo",
+    "input": {
+      "fn": "descontoDeMana",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "coroa_arquimago_1700000000000_1170",
+              "templateId": "coroa_arquimago",
+              "rarity": "lendario",
+              "stats": {
+                "mana": 30,
+                "critico": 6
+              },
+              "value": 180,
+              "equipped": true,
+              "nivelDoUnico": 3
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": 0.2
+    }
+  },
+  {
+    "name": "efeitoDoUnico: sem acessório",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "efeitoDoUnico: acessório comum",
+    "input": {
+      "fn": "efeitoDoUnico",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "machado_1700000000000_62706",
+              "templateId": "machado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 6,
+                "velocidade": -1
+              },
+              "value": 26,
+              "equipped": false,
+              "procChance": 0.12
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": {
+              "uid": "anel_som_1700000000000_62706",
+              "templateId": "anel_som",
+              "rarity": "raro",
+              "stats": {
+                "critico": 9,
+                "esquiva": 3
+              },
+              "value": 34,
+              "equipped": false
+            }
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Bárbaro",
+          "classIcon": "🪓",
+          "classId": "barbaro",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 9,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "randomItem: acessório, semente 1 (sem os únicos)",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "acessorio",
+          "floor": 30,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "bota_vento_1700000000000_52744",
+        "templateId": "bota_vento",
+        "rarity": "comum",
+        "stats": {
+          "velocidade": 4,
+          "esquiva": 1
+        },
+        "value": 18,
+        "equipped": false,
+        "foundFloor": 30
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "randomItem: acessório, semente 2 (sem os únicos)",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "acessorio",
+          "floor": 30,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 2
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "bota_vento_1700000000000_28529",
+        "templateId": "bota_vento",
+        "rarity": "comum",
+        "stats": {
+          "velocidade": 4,
+          "esquiva": 1
+        },
+        "value": 18,
+        "equipped": false,
+        "foundFloor": 30
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "randomItem: acessório, semente 3 (sem os únicos)",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "acessorio",
+          "floor": 30,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 3
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "bota_vento_1700000000000_45618",
+        "templateId": "bota_vento",
+        "rarity": "comum",
+        "stats": {
+          "velocidade": 4,
+          "esquiva": 1
+        },
+        "value": 18,
+        "equipped": false,
+        "foundFloor": 30
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "randomItem: acessório, semente 4 (sem os únicos)",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "acessorio",
+          "floor": 30,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 4
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "colar_forca_1700000000000_22166",
+        "templateId": "colar_forca",
+        "rarity": "comum",
+        "stats": {
+          "ataque": 3,
+          "vida": 11
+        },
+        "value": 22,
+        "equipped": false,
+        "foundFloor": 30
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "randomItem: acessório, semente 5 (sem os únicos)",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "acessorio",
+          "floor": 30,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 5
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "bota_vento_1700000000000_21976",
+        "templateId": "bota_vento",
+        "rarity": "raro",
+        "stats": {
+          "velocidade": 7,
+          "esquiva": 3
+        },
+        "value": 31,
+        "equipped": false,
+        "foundFloor": 30
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "randomItem: acessório, semente 6 (sem os únicos)",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "acessorio",
+          "floor": 30,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 6
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "bota_vento_1700000000000_66316",
+        "templateId": "bota_vento",
+        "rarity": "comum",
+        "stats": {
+          "velocidade": 4,
+          "esquiva": 1
+        },
+        "value": 18,
+        "equipped": false,
+        "foundFloor": 30
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "randomItem: acessório, semente 7 (sem os únicos)",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "acessorio",
+          "floor": 30,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 7
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "anel_som_1700000000000_97689",
+        "templateId": "anel_som",
+        "rarity": "comum",
+        "stats": {
+          "critico": 7,
+          "esquiva": 3
+        },
+        "value": 20,
+        "equipped": false,
+        "foundFloor": 30
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "randomItem: acessório, semente 8 (sem os únicos)",
+    "input": {
+      "fn": "randomItem",
+      "args": {
+        "options": {
+          "category": "acessorio",
+          "floor": 30,
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 8
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "uid": "anel_som_1700000000000_30066",
+        "templateId": "anel_som",
+        "rarity": "incomum",
+        "stats": {
+          "critico": 10,
+          "esquiva": 4
+        },
+        "value": 26,
+        "equipped": false,
+        "foundFloor": 30
+      },
+      "rngCalls": 3
     }
   },
   {

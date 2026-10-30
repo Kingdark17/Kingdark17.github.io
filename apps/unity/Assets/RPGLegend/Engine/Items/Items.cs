@@ -127,10 +127,29 @@ namespace RPGLegend.Engine
                 double tier = Js.Min(romanos.Count, Js.Max(1, Math.Truncate(item.TierDaRuna ?? 1)));
                 return template.Name + " " + romanos[(int)tier - 1];
             }
+            // O acessório único leva a dificuldade em que caiu: "Presa do Morcego · Difícil".
+            if (template.Unico != null)
+            {
+                var dificuldades = Dungeons.Difficulties;
+                return template.Name + " · " + dificuldades[(int)NivelDoUnico(item) - 1].Name;
+            }
             string nome = Materiais.NomeComMaterial(template, item.Degrau);
             var rarity = Rarities.ById(item.Rarity);
             if (rarity == null || rarity.Id == "comum") return nome;
             return nome + " " + Concordar(item, rarity.Adjetivo);
+        }
+
+        /// <summary>TS: nivelDoUnico — a versão do acessório único, de 1 (Normal) a 3 (Pesadelo).</summary>
+        public static double NivelDoUnico(Item item) =>
+            Js.Max(1, Js.Min(Dungeons.Difficulties.Count, Math.Truncate(item.NivelDoUnico ?? 1)));
+
+        /// <summary>TS: textoDoEfeitoUnico — a frase do efeito, pra descrição da peça; diz que vale no app.</summary>
+        public static string TextoDoEfeitoUnico(string efeito, double valor)
+        {
+            string pct = Js.NumberToString(Js.Round(valor * 100));
+            if (efeito == "regeneracao") return "No app: recupera " + pct + "% da vida máxima a cada rodada de luta.";
+            if (efeito == "roubo_de_vida") return "No app: cada golpe seu devolve em vida " + pct + "% do dano.";
+            return "No app: os poderes custam " + pct + "% menos mana.";
         }
 
         /// <summary>TS: itemView.</summary>
@@ -141,7 +160,14 @@ namespace RPGLegend.Engine
             var view = ItemView.From(item);
             view.Template = template;
             view.Name = DisplayName(item);
-            view.Desc = template.Desc;
+            // O acessório único diz o que faz (e que só vale no app).
+            if (template.Unico != null)
+            {
+                int nivel = (int)NivelDoUnico(item) - 1;
+                double valor = nivel < template.Unico.Valores.Count ? template.Unico.Valores[nivel] : 0;
+                view.Desc = template.Desc + " " + TextoDoEfeitoUnico(template.Unico.Efeito, valor);
+            }
+            else view.Desc = template.Desc;
             view.Sprite = template.Sprite;
             view.Category = template.Category;
             // A runa não mostra raridade: o que conta nela é o tier, que já vai no nome ("Runa de Fogo II").
@@ -200,7 +226,8 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: SORTEAVEIS — o que o sorteio sem categoria escolhe: o catálogo sem as runas.</summary>
-        private static List<ItemTemplate> Sorteaveis => ItemTemplates.All.FindAll(t => t.Category != "runa");
+        /// <summary>Tudo menos as runas (só caem de baú e chefe no app) e os acessórios únicos (só de quem zera).</summary>
+        private static List<ItemTemplate> Sorteaveis => ItemTemplates.All.FindAll(t => t.Category != "runa" && t.Unico == null);
 
         /// <summary>TS: RandomItemOptions.</summary>
         public sealed class RandomItemOptions
@@ -229,7 +256,7 @@ namespace RPGLegend.Engine
             var rng = o.Rng ?? Rng.Default;
 
             // Sem categoria, tudo menos as runas: elas só caem de baú e de chefe no app.
-            var pool = Js.Truthy(o.Category) ? ItemTemplates.ByCategory(o.Category) : Sorteaveis;
+            var pool = Js.Truthy(o.Category) ? ItemTemplates.ByCategory(o.Category).FindAll(t => t.Unico == null) : Sorteaveis;
             var template = Rng.Pick(pool, rng);
             // Uma raridade forçada e desconhecida cai para comum, igual ao original.
             var rarity = (Js.Truthy(o.Rarity) ? Rarities.ById(o.Rarity) : Rarities.Pick(floor, rng)) ?? Rarities.All[0];
