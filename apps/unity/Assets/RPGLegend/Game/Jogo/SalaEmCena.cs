@@ -5,6 +5,18 @@ using UnityEngine;
 
 namespace RPGLegend.Game.Jogo
 {
+    /// <summary>Uma sala da masmorra emendada, no lugar dela na grade do andar (desenho-da-sala.ts: SalaDesenhada).</summary>
+    public sealed class SalaNaCena
+    {
+        public double X;
+        public double Y;
+        public RoomLayout Planta;
+        /// <summary>A figura de cada objeto da planta, pelo id. A sala apagada não mostra nenhuma.</summary>
+        public Dictionary<string, Figura> Figuras;
+        /// <summary>Já entrou nela (ou é a atual): sem sombra.</summary>
+        public bool Acesa;
+    }
+
     /// <summary>
     /// A sala desenhada e o herói andando solto nela (o desenho-da-sala.ts e a cena-da-sala.tsx do site): chão xadrez
     /// e paredes na cor do lugar, o conteúdo e os extras ancorados no pé, a parede rachada riscada e o herói —
@@ -13,6 +25,10 @@ namespace RPGLegend.Game.Jogo
     /// A regra de andar é da engine (<see cref="AndarNaSala"/> e <see cref="RoomWalk"/>), a mesma do site: aqui ficam
     /// o relógio (passos fixos de 1/60 s) e o desenho. A cena desenha numa textura que a tela mostra no palco; as
     /// coordenadas são as do site (48 px por quadrado, y pra baixo), num canto longe da cena da porta.
+    ///
+    /// Na masmorra as salas são emendadas (2026-10-30, pedido do Breno, como no site): <see cref="MostrarMasmorra"/>
+    /// desenha a sala atual e as em volta, cada uma no lugar dela no andar, e a câmera segue o herói, que fica na
+    /// posição da sala atual mais a dele dentro dela. A vizinha em que ele ainda não entrou fica na sombra.
     /// </summary>
     public sealed partial class SalaEmCena : MonoBehaviour
     {
@@ -29,6 +45,12 @@ namespace RPGLegend.Game.Jogo
         private const int OrdemDeCima = 30000;
         /// <summary>A rachadura na sala desenhada: por cima das camadas de cima (as árvores dos lados cobrem a parede).</summary>
         private const int OrdemDaRachaduraNaArte = OrdemDeCima + 100;
+        /// <summary>A sombra da vizinha em que o herói ainda não entrou: por cima de tudo, até das copas.</summary>
+        private const int OrdemDaSombra = OrdemDaRachaduraNaArte + 100;
+        private static readonly Color CorDaSombra = new Color(0.02f, 0.024f, 0.04f, 0.78f);
+        /// <summary>A masmorra emendada: a câmera segue o herói, contado do canto da sala atual (em pixel do site).</summary>
+        private bool _emendada;
+        private float _origemX, _origemY;
         /// <summary>Na cidade, as camadas do meio, que ficam meio transparentes quando cobrem o herói.</summary>
         private readonly List<(CamadaDaCidade Camada, SpriteRenderer Desenho)> _doMeio = new List<(CamadaDaCidade, SpriteRenderer)>();
         /// <summary>Quanto se vê da camada que cobre o herói (meio transparente), e em quantos segundos chega lá.</summary>
@@ -185,6 +207,11 @@ namespace RPGLegend.Game.Jogo
         public void Mostrar(string chave, RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras, Walker chegada, string masmorra = null)
         {
             _planta = planta;
+            if (_emendada)
+            {
+                _emendada = false;
+                _assinaturaDoDesenho = null;
+            }
             if (chave != _salaDaCena)
             {
                 _salaDaCena = chave;
@@ -200,8 +227,44 @@ namespace RPGLegend.Game.Jogo
             if (assinatura != _assinaturaDoDesenho)
             {
                 _assinaturaDoDesenho = assinatura;
-                Desenhar(planta, tema, figuras, masmorra);
+                PrepararSala(planta);
+                DesenharUmaSala(planta, tema, figuras, masmorra, 0f, 0f, true);
             }
+            ColocarHeroi(false);
+        }
+
+        /// <summary>
+        /// A masmorra emendada: as <paramref name="salas"/> em volta da atual (ela inclusive), cada uma no lugar dela, e a
+        /// câmera seguindo o herói. <paramref name="planta"/> é a da sala atual, em que ele anda; (<paramref name="origemX"/>,
+        /// <paramref name="origemY"/>) é a posição dela na grade do andar. A chave funciona como a de <see cref="Mostrar"/>.
+        /// </summary>
+        public void MostrarMasmorra(string chave, List<SalaNaCena> salas, RoomLayout planta, TemaDaSala tema, Walker chegada, string masmorra, double origemX, double origemY)
+        {
+            _planta = planta;
+            if (chave != _salaDaCena)
+            {
+                _salaDaCena = chave;
+                _walker = chegada;
+                _tocando = null;
+                _sobra = 0;
+                _saiuDe = null;
+            }
+
+            var partes = new List<string> { tema.GetHashCode().ToString(), masmorra };
+            foreach (var sala in salas)
+                partes.Add(sala.X + "," + sala.Y + "," + sala.Acesa + "," + string.Join("", sala.Planta.Doors) + "," + DesenhoDasObjetos(sala.Planta) + "," + FigurasDaSala.Assinatura(sala.Figuras));
+            var assinatura = "masmorra#" + string.Join(";", partes);
+            if (assinatura != _assinaturaDoDesenho)
+            {
+                _assinaturaDoDesenho = assinatura;
+                PrepararSala(planta);
+                _emendada = true;
+                foreach (var sala in salas)
+                    DesenharUmaSala(sala.Planta, tema, sala.Acesa ? sala.Figuras : new Dictionary<string, Figura>(), masmorra, (float)sala.X * _largura, (float)sala.Y * _altura, sala.Acesa);
+            }
+            _emendada = true;
+            _origemX = (float)origemX * _largura;
+            _origemY = (float)origemY * _altura;
             ColocarHeroi(false);
         }
 
@@ -220,6 +283,7 @@ namespace RPGLegend.Game.Jogo
         public void MostrarCidade(string chave, RoomLayout planta, bool troncos, Walker chegada)
         {
             _planta = planta;
+            _emendada = false;
             if (chave != _salaDaCena)
             {
                 _salaDaCena = chave;
@@ -276,7 +340,8 @@ namespace RPGLegend.Game.Jogo
             }
         }
 
-        private void Desenhar(RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras, string masmorra)
+        /// <summary>Apaga o desenho anterior e acerta o tamanho e a câmera pra uma sala do formato desta planta.</summary>
+        private void PrepararSala(RoomLayout planta)
         {
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
             _doMeio.Clear();
@@ -290,19 +355,26 @@ namespace RPGLegend.Game.Jogo
                 _camera.transform.position = Origem + new Vector3(_largura / 2f, _altura / 2f, -10f);
                 AjustarZoom();
             }
+        }
 
+        /// <summary>
+        /// Uma sala com o canto em (<paramref name="ox"/>, <paramref name="oy"/>), em pixel do site: a arte (ou os
+        /// quadradinhos do tema), as rachaduras e as figuras. Apagada, ganha a sombra por cima.
+        /// </summary>
+        private void DesenharUmaSala(RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras, string masmorra, float ox, float oy, bool acesa)
+        {
             // A sala desenhada da masmorra, quando ela tem (a Floresta do Breno): o chão, os caminhos das portas que
             // existem e as copas por cima de tudo. Sem arte, os quadradinhos na cor do lugar.
             var camadas = masmorra != null ? ArteDaSala.CamadasDaSala(masmorra, planta.Doors) : null;
-            if (camadas != null) DesenharArte(masmorra, camadas);
+            if (camadas != null) DesenharArte(masmorra, camadas, ox, oy);
             int linhas = camadas != null ? 0 : planta.Solid.Count;
             for (int row = 0; row < linhas; row++)
             {
                 var linha = planta.Solid[row];
                 for (int col = 0; col < linha.Count; col++)
                 {
-                    float px = col * Lado;
-                    float py = row * Lado;
+                    float px = ox + col * Lado;
+                    float py = oy + row * Lado;
                     bool borda = col == 0 || row == 0 || col == linha.Count - 1 || row == linhas - 1;
                     if (borda && linha[col])
                     {
@@ -323,8 +395,8 @@ namespace RPGLegend.Game.Jogo
             foreach (var objeto in planta.Objects)
             {
                 if (!figuras.TryGetValue(objeto.Id, out var figura)) continue;
-                float px = (float)objeto.Col * Lado;
-                float py = (float)objeto.Row * Lado;
+                float px = ox + (float)objeto.Col * Lado;
+                float py = oy + (float)objeto.Row * Lado;
                 if (figura.Rachadura)
                 {
                     // Na sala desenhada as árvores dos lados passam por cima da parede: a rachadura vai por cima delas.
@@ -347,6 +419,12 @@ namespace RPGLegend.Game.Jogo
                 renderizador.sortingOrder = (int)peY;
                 if (figura.Apagada) renderizador.color = new Color(1f, 1f, 1f, 0.45f);
             }
+
+            if (!acesa)
+            {
+                var regra = GameData.RoomWalkTable;
+                Quadrado(ox, oy, (float)(planta.Cols ?? regra.RoomCols) * Lado, (float)(planta.Rows ?? regra.RoomRows) * Lado, CorDaSombra, OrdemDaSombra);
+            }
         }
 
         private void Quadrado(float x, float y, float largura, float altura, Color cor, int ordem)
@@ -362,7 +440,7 @@ namespace RPGLegend.Game.Jogo
         }
 
         /// <summary>As camadas da arte da sala, no tamanho da sala (a arte tem 32 px por casa; a sala, <see cref="Lado"/>).</summary>
-        private void DesenharArte(string masmorra, List<CamadaDaSala> camadas)
+        private void DesenharArte(string masmorra, List<CamadaDaSala> camadas, float ox, float oy)
         {
             float escala = Lado / (float)ArteDaSala.PixelsDaSala;
             // Cada camada uma ordem acima da anterior no mesmo plano: com a mesma ordem a Unity não garante quem fica
@@ -375,8 +453,8 @@ namespace RPGLegend.Game.Jogo
                 var objeto = new GameObject(camada.Arquivo);
                 objeto.transform.SetParent(_desenho, false);
                 objeto.transform.localScale = new Vector3(escala, escala, 1f);
-                // O canto de cima à esquerda da arte no (0, 0) da sala.
-                objeto.transform.position = Mundo(0f, 0f) + new Vector3(-sprite.bounds.min.x * escala, -sprite.bounds.max.y * escala, 0f);
+                // O canto de cima à esquerda da arte no canto da sala.
+                objeto.transform.position = Mundo(ox, oy) + new Vector3(-sprite.bounds.min.x * escala, -sprite.bounds.max.y * escala, 0f);
                 var renderizador = objeto.AddComponent<SpriteRenderer>();
                 renderizador.sprite = sprite;
                 renderizador.sortingOrder = camada.Plano == "cima" ? OrdemDeCima + cima++ : OrdemDoChao + chao++;
@@ -453,8 +531,16 @@ namespace RPGLegend.Game.Jogo
         private void ColocarHeroi(bool andando)
         {
             if (_walker == null) return;
-            float x = (float)_walker.X * _escala;
-            float y = (float)(_walker.Y + GameData.RoomWalkTable.HeroHalf) * _escala;
+            // Na masmorra emendada, contado do canto da sala atual, que fica no lugar dela no andar.
+            float x = (_emendada ? _origemX : 0f) + (float)_walker.X * _escala;
+            float y = (_emendada ? _origemY : 0f) + (float)(_walker.Y + GameData.RoomWalkTable.HeroHalf) * _escala;
+            if (_emendada)
+            {
+                // A câmera no herói, em meio pixel (a textura é 2×): parado no meio da sala, ela a enquadra inteira.
+                float cx = Mathf.Round(x * 2f) / 2f;
+                float cy = Mathf.Round((y - Lado / 2f) * 2f) / 2f;
+                _camera.transform.position = Mundo(cx, cy) + new Vector3(0f, 0f, -10f);
+            }
             if (andando) _fase++;
             float pulo = andando ? Mathf.Abs(Mathf.Sin(_fase * 0.35f)) * 3f : 0f;
             _boneco.position = Mundo(x, y - pulo);

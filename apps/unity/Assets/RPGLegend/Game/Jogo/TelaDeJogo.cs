@@ -651,7 +651,10 @@ namespace RPGLegend.Game.Jogo
                 _mapaDaChegada = mapaAgora;
                 _xDaChegada = estado.Pos.X;
                 _yDaChegada = estado.Pos.Y;
-                _chegada = RoomWalk.Arrival(veioPor, geometria);
+                // Salas emendadas: quem atravessou a porta andando continua do ponto em que saiu (a cena o segura lá
+                // até a sala nova chegar). Quem chega de outro jeito, na porta.
+                var saiu = _sala.Walker;
+                _chegada = veioPor != null && SaiuPorAli(saiu, veioPor, geometria) ? RoomWalk.ContinuarNaVizinha(saiu, veioPor, geometria) : RoomWalk.Arrival(veioPor, geometria);
                 _volta = 0;
             }
 
@@ -683,7 +686,56 @@ namespace RPGLegend.Game.Jogo
 
             var heroi = estado.Hero;
             _sala.DefinirHeroi(Catalog.IdDaRaca(heroi.RaceId, heroi.Race), string.IsNullOrEmpty(heroi.RaceIcon) ? "🙂" : heroi.RaceIcon);
-            _sala.Mostrar(chave, planta, TemaDaSala.Do(estado), figuras, chegada, masmorra);
+            // A sala secreta fica fora do mapa e é desenhada sozinha; as outras, emendadas com as em volta.
+            if (secreta != null || masmorra == null) _sala.Mostrar(chave, planta, TemaDaSala.Do(estado), figuras, chegada, masmorra);
+            else _sala.MostrarMasmorra(chave, SalasDaCena(estado, planta, figuras, visual, masmorra), planta, TemaDaSala.Do(estado), chegada, masmorra, estado.Pos.X, estado.Pos.Y);
+        }
+
+        /// <summary>O herói está fora da sala, do lado de onde veio: atravessou a porta andando (a continuação vale).</summary>
+        private static bool SaiuPorAli(Walker walker, string lado, GeometriaDaSala geometria)
+        {
+            if (walker == null) return false;
+            double unidades = GameData.RoomWalkTable.TileUnits;
+            // Veio pelo lado "lado" da vizinha: saiu da sala anterior pelo lado oposto.
+            if (lado == "N") return walker.Y < 0;
+            if (lado == "S") return walker.Y >= geometria.Rows * unidades;
+            if (lado == "W") return walker.X < 0;
+            return walker.X >= geometria.Cols * unidades;
+        }
+
+        /// <summary>
+        /// As salas emendadas em volta da atual (<see cref="SalasEmendadas.SalasEmVolta"/>): a atual com a planta em que
+        /// ele anda; as visitadas com o que têm dentro; as outras na sombra, só as paredes.
+        /// </summary>
+        private static List<SalaNaCena> SalasDaCena(EstadoDoJogo estado, RoomLayout planta, Dictionary<string, Figura> figuras, Apresentacao visual, string masmorra)
+        {
+            var salas = new List<SalaNaCena>();
+            foreach (var em in SalasEmendadas.SalasEmVolta(estado))
+            {
+                if (em.Dx == 0 && em.Dy == 0)
+                {
+                    salas.Add(new SalaNaCena { X = em.X, Y = em.Y, Planta = planta, Figuras = figuras, Acesa = true });
+                    continue;
+                }
+                var portas = new DoorMap();
+                foreach (var lado in em.Portas) portas.Set(lado, true);
+                if (!em.Acesa)
+                {
+                    salas.Add(new SalaNaCena { X = em.X, Y = em.Y, Planta = AndarNaSala.PlantaDaSala(portas, new List<RoomObject>(), masmorra), Figuras = new Dictionary<string, Figura>(), Acesa = false });
+                    continue;
+                }
+                var icone = visual.Icone(em.Celula) ?? "";
+                var conteudo = icone == "" ? null : new Figura { Arte = FigurasDaSala.ArteDoTipo(em.Celula.Type), Emoji = icone };
+                salas.Add(new SalaNaCena
+                {
+                    X = em.X,
+                    Y = em.Y,
+                    Planta = AndarNaSala.PlantaDaSala(portas, ExtrasDaSala.ObjetosDaSala(em.Celula, icone != "", masmorra), masmorra),
+                    Figuras = FigurasDaSala.Da(em.Celula, conteudo, null),
+                    Acesa = true,
+                });
+            }
+            return salas;
         }
 
         // ---------- janelas por cima ----------
