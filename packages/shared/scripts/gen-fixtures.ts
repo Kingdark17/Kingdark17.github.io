@@ -2431,6 +2431,20 @@ for (const nome of ['ROOM_COLS', 'ROOM_ROWS', 'TILE_UNITS', 'WALK_TICKS_PER_SECO
   for (const d of [null, ...DIRS]) {
     caso(`roomArrival: na Torre, ${d ?? 'sem direção'}`, 'roomArrival', { movedTowards: d, geometria: geometriaDaTorre }, (a) => E.roomArrival(a.movedTowards, a.geometria));
   }
+  // Salas emendadas (2026-10-30): o herói que saiu (centro fora da sala) continua no vão da vizinha.
+  const TU = E.TILE_UNITS;
+  for (const [nome, geometria] of [['sala de sempre', E.GEOMETRIA_PADRAO], ['Torre', geometriaDaTorre]] as const) {
+    const meioX = (geometria.portas.N.col + 0.5) * TU;
+    const meioY = (geometria.portas.W.row + 0.5) * TU;
+    for (const [saida, walker] of [
+      ['N', { x: meioX, y: -40, facing: 'N' }],
+      ['S', { x: meioX, y: geometria.rows * TU + 12, facing: 'S' }],
+      ['W', { x: -64, y: meioY + 100, facing: 'W' }],
+      ['E', { x: geometria.cols * TU, y: meioY - 100, facing: 'E' }],
+    ] as const) {
+      caso(`continuarNaVizinha: ${nome}, ${saida}`, 'continuarNaVizinha', { walker, saida, geometria }, (a) => E.continuarNaVizinha(a.walker, a.saida, a.geometria));
+    }
+  }
   for (const d of DIRS) {
     caso(`casasDoVao: na Torre, ${d}`, 'casasDoVao', { geometria: geometriaDaTorre, lado: d }, (a) => E.casasDoVao(a.geometria, a.lado));
     caso(`casasDoVao: na sala de sempre, ${d}`, 'casasDoVao', { geometria: E.GEOMETRIA_PADRAO, lado: d }, (a) => E.casasDoVao(a.geometria, a.lado));
@@ -3535,6 +3549,22 @@ for (const lado of ['N', 'W'] as const) {
 caso('objetosDaSala: na Torre, parede aberta', 'objetosDaSala', { celula: salaCom(paredeAberta), temConteudo: true, masmorra: 'torre' }, (a) => E.objetosDaSala(a.celula, a.temConteudo, a.masmorra));
 for (const [nome, portas] of [['sem portas', {}], ['norte e leste', { N: true, E: true }]] as const) {
   caso(`plantaDaSala: na Torre, ${nome}`, 'plantaDaSala', { portas, objetos: true, masmorra: 'torre' }, (a) => E.plantaDaSala(a.portas, a.objetos, a.masmorra));
+}
+// Salas emendadas (2026-10-30): as salas em volta da atual, pra quem desenha a masmorra (a célula vai pela posição).
+const emVolta = (estado: EstadoDoJogo) => E.salasEmVolta(estado).map((s) => ({ x: s.x, y: s.y, dx: s.dx, dy: s.dy, acesa: s.acesa, portas: s.portas }));
+for (const semente of [3, 11, 29]) {
+  const inicio = naMasmorra(cidade, semente);
+  caso(`salasEmVolta: começo do andar, semente ${semente}`, 'salasEmVolta', { estado: inicio }, (a) => emVolta(a.estado));
+  const andou = E.andar(inicio, primeiraPorta(inicio));
+  caso(`salasEmVolta: uma sala adiante, semente ${semente}`, 'salasEmVolta', { estado: andou }, (a) => emVolta(a.estado));
+}
+caso('salasEmVolta: na cidade', 'salasEmVolta', { estado: cidade }, (a) => emVolta(a.estado));
+for (const [nome, celula] of [
+  ['parede aberta', salaCom(paredeAberta)],
+  ['extras novos', salaCom(extrasNovos)],
+  ['nenhuma sala', null],
+] as const) {
+  caso(`portasDaPlanta: ${nome}`, 'portasDaPlanta', { celula }, (a) => E.portasDaPlanta(a.celula));
 }
 for (const lado of ['N', 'E'] as const) {
   caso(`plantaDaSalaSecreta: parede ${lado}, na Caverna`, 'plantaDaSalaSecreta', { lado, masmorra: 'caverna' }, (a) => E.plantaDaSalaSecreta(a.lado, a.masmorra));

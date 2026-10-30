@@ -45,6 +45,15 @@ namespace RPGLegend.Tests
             Fn(M, "extrasDe", (a, c) => W(ExtrasDaSala.ExtrasDe(R<DungeonCell>(a["celula"]))));
             Fn(M, "passagemSecreta", (a, c) => W(ExtrasDaSala.PassagemSecreta(R<DungeonCell>(a["celula"]))));
             Fn(M, "descricaoDosExtras", (a, c) => W(ExtrasDaSala.DescricaoDosExtras(R<DungeonCell>(a["celula"]))));
+            // Salas emendadas: a célula vai pela posição, como no gerador.
+            Fn(M, "salasEmVolta", (a, c) =>
+            {
+                var lista = new JArray();
+                foreach (var s in SalasEmendadas.SalasEmVolta(JogoJson.LerEstado(a["estado"])))
+                    lista.Add(new JObject { ["x"] = N(s.X), ["y"] = N(s.Y), ["dx"] = N(s.Dx), ["dy"] = N(s.Dy), ["acesa"] = s.Acesa, ["portas"] = W(s.Portas) });
+                return lista;
+            });
+            Fn(M, "portasDaPlanta", (a, c) => W(SalasEmendadas.PortasDaPlanta(a["celula"].Type == JTokenType.Null ? null : R<DungeonCell>(a["celula"]))));
             Fn(M, "objetosDaSala", (a, c) => W(ExtrasDaSala.ObjetosDaSala(R<DungeonCell>(a["celula"]), (bool)a["temConteudo"], Str(a["masmorra"]))));
             Fn(M, "plantaDaSalaSecreta", (a, c) => W(ExtrasDaSala.PlantaDaSalaSecreta(Str(a["lado"]), Str(a["masmorra"]))));
             Fn(M, "textoDaSecreta", (a, c) => W(ExtrasDaSala.TextoDaSecreta(R<DungeonCell>(a["celula"]), Num(a["indice"]))));

@@ -8,6 +8,7 @@ import {
   ROOM_ROWS,
   STICK_MAX,
   TILE_UNITS,
+  continuarNaVizinha,
   roomArrival,
   roomLayout,
   stickInput,
@@ -124,6 +125,49 @@ describe('walkTick', () => {
     ] as const) {
       expect(andar(planta, { ...inicio, facing: 'S' }, input, 60).exit).toBe(porta);
     }
+  });
+});
+
+describe('salas emendadas', () => {
+  const planta = roomLayout(TODAS, []);
+
+  it('a saída só conta com o centro fora da sala, andando no vão além da porta', () => {
+    const passo = andar(planta, { x: c(4), y: c(2), facing: 'N' }, { x: 0, y: -STICK_MAX }, 120);
+    expect(passo.exit).toBe('N');
+    expect(passo.walker.y).toBeLessThan(0);
+    expect(passo.walker.y).toBeGreaterThanOrEqual(-HERO_SPEED);
+  });
+
+  it('fora do vão, a borda continua parede, mesmo além da porta', () => {
+    // Encostado no lado do vão: além da sala, só a largura da porta é chão.
+    const passo = andar(planta, { x: c(4), y: c(1), facing: 'N' }, { x: STICK_MAX, y: -STICK_MAX }, 120);
+    expect(passo.walker.x + HERO_HALF).toBeLessThanOrEqual(5 * TILE_UNITS);
+  });
+
+  it('continua na vizinha do ponto em que saiu, sem ser devolvido, e segue andando', () => {
+    for (const [lado, inicio, input] of [
+      ['N', { x: c(4), y: c(2) }, { x: 0, y: -STICK_MAX }],
+      ['S', { x: c(4), y: c(ROOM_ROWS - 3) }, { x: 0, y: STICK_MAX }],
+      ['W', { x: c(2), y: c(4) }, { x: -STICK_MAX, y: 0 }],
+      ['E', { x: c(ROOM_COLS - 3), y: c(4) }, { x: STICK_MAX, y: 0 }],
+    ] as const) {
+      const saiu = andar(planta, { ...inicio, facing: 'S' }, input, 120);
+      expect(saiu.exit).toBe(lado);
+      const la = continuarNaVizinha(saiu.walker, lado);
+      // O mesmo ponto do mundo: a vizinha começa uma sala inteira pro lado.
+      expect(la.x - saiu.walker.x + (la.y - saiu.walker.y)).toBe(
+        lado === 'N' ? ROOM_ROWS * TILE_UNITS : lado === 'S' ? -ROOM_ROWS * TILE_UNITS : lado === 'W' ? ROOM_COLS * TILE_UNITS : -ROOM_COLS * TILE_UNITS,
+      );
+      const passo = walkTick(planta, la, input);
+      expect(passo.exit).toBeNull();
+      expect(passo.walker).not.toEqual(la);
+    }
+  });
+
+  it('voltar logo depois de entrar devolve pela mesma porta', () => {
+    const saiu = andar(planta, { x: c(4), y: c(2), facing: 'N' }, { x: 0, y: -STICK_MAX }, 120);
+    const la = continuarNaVizinha(saiu.walker, 'N');
+    expect(andar(planta, la, { x: 0, y: STICK_MAX }, 10).exit).toBe('S');
   });
 });
 

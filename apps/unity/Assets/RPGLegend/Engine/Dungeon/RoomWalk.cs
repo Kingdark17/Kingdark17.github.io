@@ -158,6 +158,24 @@ namespace RPGLegend.Engine
         private static double Limitar(double v) => Math.Truncate(Math.Max(-1, Math.Min(1, v)) * StickMax);
 
         /// <summary>TS: roomArrival — onde o herói aparece numa sala.</summary>
+        /// <summary>
+        /// TS: continuarNaVizinha — salas emendadas (2026-10-30): onde o herói continua na vizinha depois de atravessar
+        /// a porta <paramref name="saida"/>. O mesmo ponto, contado do canto dela, que fica uma sala inteira pro lado
+        /// de onde ele saiu: cai dentro do vão da vizinha, e ela não o devolve.
+        /// </summary>
+        public static Walker ContinuarNaVizinha(Walker walker, string saida, GeometriaDaSala geometria = null)
+        {
+            geometria = geometria ?? GeometriaPadrao;
+            double largura = geometria.Cols * TileUnits;
+            double altura = geometria.Rows * TileUnits;
+            var la = new Walker { X = walker.X, Y = walker.Y, Facing = walker.Facing };
+            if (saida == "N") la.Y += altura;
+            else if (saida == "S") la.Y -= altura;
+            else if (saida == "W") la.X += largura;
+            else la.X -= largura;
+            return la;
+        }
+
         public static Walker Arrival(string movedTowards, GeometriaDaSala geometria = null)
         {
             geometria = geometria ?? GeometriaPadrao;
@@ -216,8 +234,24 @@ namespace RPGLegend.Engine
 
         private static bool Solido(RoomLayout layout, double col, double row)
         {
-            if (row < 0 || row >= Linhas(layout) || col < 0 || col >= Colunas(layout)) return true;
+            if (row < 0 || row >= Linhas(layout) || col < 0 || col >= Colunas(layout)) return !AlemDoVao(layout, col, row);
             return layout.Solid[(int)row][(int)col];
+        }
+
+        /// <summary>TS: alemDoVao — fora da sala, mas em frente ao vão de uma porta aberta: é o vão da vizinha, e se anda nele.</summary>
+        private static bool AlemDoVao(RoomLayout layout, double col, double row)
+        {
+            foreach (var lado in layout.Doors)
+            {
+                var porta = layout.Portas?.Get(lado) ?? GeometriaPadrao.Portas.Get(lado);
+                double meia = Math.Truncate((porta.Largura - 1) / 2);
+                bool NaLargura(double casa, double meio) => casa >= meio - meia && casa <= meio + meia;
+                if (lado == "N" && row < 0 && NaLargura(col, porta.Col)) return true;
+                if (lado == "S" && row >= Linhas(layout) && NaLargura(col, porta.Col)) return true;
+                if (lado == "W" && col < 0 && NaLargura(row, porta.Row)) return true;
+                if (lado == "E" && col >= Colunas(layout) && NaLargura(row, porta.Row)) return true;
+            }
+            return false;
         }
 
         private static bool ColunaBarra(RoomLayout layout, double col, double y)
@@ -282,15 +316,15 @@ namespace RPGLegend.Engine
             return eixoX ? MoverEmX(layout, x, y, passo).Pos : MoverEmY(layout, x, y, passo).Pos;
         }
 
+        /// <summary>TS: saida — o centro saiu da sala pelo vão de uma porta: atravessou.</summary>
         private static string Saida(RoomLayout layout, double x, double y)
         {
-            double meio = TileUnits / 2;
             foreach (var direcao in layout.Doors)
             {
-                if (direcao == "N" && y < meio) return "N";
-                if (direcao == "S" && y > Linhas(layout) * TileUnits - meio) return "S";
-                if (direcao == "W" && x < meio) return "W";
-                if (direcao == "E" && x > Colunas(layout) * TileUnits - meio) return "E";
+                if (direcao == "N" && y < 0) return "N";
+                if (direcao == "S" && y >= Linhas(layout) * TileUnits) return "S";
+                if (direcao == "W" && x < 0) return "W";
+                if (direcao == "E" && x >= Colunas(layout) * TileUnits) return "E";
             }
             return null;
         }

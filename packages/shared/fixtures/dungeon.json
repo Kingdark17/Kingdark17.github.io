@@ -36455,6 +36455,582 @@
     }
   },
   {
+    "name": "continuarNaVizinha: sala de sempre, N",
+    "input": {
+      "fn": "continuarNaVizinha",
+      "args": {
+        "walker": {
+          "x": 4320,
+          "y": -40,
+          "facing": "N"
+        },
+        "saida": "N",
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 4320,
+        "y": 8600,
+        "facing": "N"
+      }
+    }
+  },
+  {
+    "name": "continuarNaVizinha: sala de sempre, S",
+    "input": {
+      "fn": "continuarNaVizinha",
+      "args": {
+        "walker": {
+          "x": 4320,
+          "y": 8652,
+          "facing": "S"
+        },
+        "saida": "S",
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 4320,
+        "y": 12,
+        "facing": "S"
+      }
+    }
+  },
+  {
+    "name": "continuarNaVizinha: sala de sempre, W",
+    "input": {
+      "fn": "continuarNaVizinha",
+      "args": {
+        "walker": {
+          "x": -64,
+          "y": 4420,
+          "facing": "W"
+        },
+        "saida": "W",
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 8576,
+        "y": 4420,
+        "facing": "W"
+      }
+    }
+  },
+  {
+    "name": "continuarNaVizinha: sala de sempre, E",
+    "input": {
+      "fn": "continuarNaVizinha",
+      "args": {
+        "walker": {
+          "x": 8640,
+          "y": 4220,
+          "facing": "E"
+        },
+        "saida": "E",
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 0,
+        "y": 4220,
+        "facing": "E"
+      }
+    }
+  },
+  {
+    "name": "continuarNaVizinha: Torre, N",
+    "input": {
+      "fn": "continuarNaVizinha",
+      "args": {
+        "walker": {
+          "x": 5280,
+          "y": -40,
+          "facing": "N"
+        },
+        "saida": "N",
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 5280,
+        "y": 11480,
+        "facing": "N"
+      }
+    }
+  },
+  {
+    "name": "continuarNaVizinha: Torre, S",
+    "input": {
+      "fn": "continuarNaVizinha",
+      "args": {
+        "walker": {
+          "x": 5280,
+          "y": 11532,
+          "facing": "S"
+        },
+        "saida": "S",
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 5280,
+        "y": 12,
+        "facing": "S"
+      }
+    }
+  },
+  {
+    "name": "continuarNaVizinha: Torre, W",
+    "input": {
+      "fn": "continuarNaVizinha",
+      "args": {
+        "walker": {
+          "x": -64,
+          "y": 6340,
+          "facing": "W"
+        },
+        "saida": "W",
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 10496,
+        "y": 6340,
+        "facing": "W"
+      }
+    }
+  },
+  {
+    "name": "continuarNaVizinha: Torre, E",
+    "input": {
+      "fn": "continuarNaVizinha",
+      "args": {
+        "walker": {
+          "x": 10560,
+          "y": 6140,
+          "facing": "E"
+        },
+        "saida": "E",
+        "geometria": {
+          "cols": 11,
+          "rows": 12,
+          "conteudo": {
+            "col": 5,
+            "row": 6
+          },
+          "portas": {
+            "N": {
+              "col": 5,
+              "row": 1,
+              "largura": 3,
+              "fundo": 2
+            },
+            "S": {
+              "col": 5,
+              "row": 11,
+              "largura": 3,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            },
+            "E": {
+              "col": 10,
+              "row": 6,
+              "largura": 3,
+              "fundo": 1
+            }
+          },
+          "extras": [
+            {
+              "col": 2,
+              "row": 2
+            },
+            {
+              "col": 2,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 3
+            },
+            {
+              "col": 8,
+              "row": 2
+            },
+            {
+              "col": 1,
+              "row": 10
+            },
+            {
+              "col": 2,
+              "row": 10
+            },
+            {
+              "col": 8,
+              "row": 10
+            },
+            {
+              "col": 9,
+              "row": 10
+            }
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 0,
+        "y": 6140,
+        "facing": "E"
+      }
+    }
+  },
+  {
     "name": "casasDoVao: na Torre, N",
     "input": {
       "fn": "casasDoVao",
@@ -38338,7 +38914,7 @@
           {
             "walker": {
               "x": 4320,
-              "y": 416,
+              "y": -32,
               "facing": "N"
             },
             "exit": "N",
@@ -38346,7 +38922,7 @@
           }
         ],
         "touches": [],
-        "ticks": 31
+        "ticks": 38
       }
     }
   },
@@ -38388,7 +38964,7 @@
           {
             "walker": {
               "x": 4484,
-              "y": 416,
+              "y": -32,
               "facing": "N"
             },
             "exit": "N",
@@ -38396,7 +38972,7 @@
           }
         ],
         "touches": [],
-        "ticks": 20
+        "ticks": 27
       }
     }
   },
@@ -38438,7 +39014,7 @@
           {
             "walker": {
               "x": 4176,
-              "y": 8224,
+              "y": 8672,
               "facing": "S"
             },
             "exit": "S",
@@ -38446,7 +39022,7 @@
           }
         ],
         "touches": [],
-        "ticks": 50
+        "ticks": 57
       }
     }
   },
@@ -38678,7 +39254,7 @@
         "trace": [
           {
             "walker": {
-              "x": 456,
+              "x": -28,
               "y": 4512,
               "facing": "S"
             },
@@ -38687,7 +39263,7 @@
           }
         ],
         "touches": [],
-        "ticks": 75
+        "ticks": 86
       }
     }
   },
@@ -38968,7 +39544,7 @@
           {
             "walker": {
               "x": 5280,
-              "y": 416,
+              "y": -32,
               "facing": "N"
             },
             "exit": "N",
@@ -38976,7 +39552,7 @@
           }
         ],
         "touches": [],
-        "ticks": 31
+        "ticks": 38
       }
     }
   },
@@ -39147,7 +39723,7 @@
         "trace": [
           {
             "walker": {
-              "x": 10144,
+              "x": 10592,
               "y": 5280,
               "facing": "E"
             },
@@ -39156,7 +39732,7 @@
           }
         ],
         "touches": [],
-        "ticks": 31
+        "ticks": 38
       }
     }
   },
@@ -39327,7 +39903,7 @@
         "trace": [
           {
             "walker": {
-              "x": 416,
+              "x": -32,
               "y": 7200,
               "facing": "W"
             },
@@ -39336,7 +39912,7 @@
           }
         ],
         "touches": [],
-        "ticks": 31
+        "ticks": 38
       }
     }
   },
@@ -39508,7 +40084,7 @@
           {
             "walker": {
               "x": 5280,
-              "y": 11104,
+              "y": 11552,
               "facing": "S"
             },
             "exit": "S",
@@ -39516,7 +40092,7 @@
           }
         ],
         "touches": [],
-        "ticks": 16
+        "ticks": 23
       }
     }
   },
@@ -40149,7 +40725,7 @@
           {
             "walker": {
               "x": 4128,
-              "y": 449,
+              "y": -21,
               "facing": "N"
             },
             "exit": "N",
@@ -40157,7 +40733,7 @@
           }
         ],
         "touches": [],
-        "ticks": 22
+        "ticks": 32
       }
     }
   },
@@ -41044,7 +41620,7 @@
           {
             "walker": {
               "x": 4512,
-              "y": 440,
+              "y": -10,
               "facing": "N"
             },
             "exit": "N",
@@ -41052,7 +41628,7 @@
           }
         ],
         "touches": [],
-        "ticks": 20
+        "ticks": 29
       }
     }
   },
@@ -42742,15 +43318,60 @@
           {
             "walker": {
               "x": 4320,
-              "y": 8224,
+              "y": 8416,
               "facing": "S"
             },
-            "exit": "S",
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 4320,
+              "y": 6240,
+              "facing": "N"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6688,
+              "y": 6240,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6688,
+              "y": 6240,
+              "facing": "E"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 6868,
+              "y": 6500,
+              "facing": "S"
+            },
+            "exit": null,
+            "touching": null
+          },
+          {
+            "walker": {
+              "x": 7392,
+              "y": 6500,
+              "facing": "E"
+            },
+            "exit": null,
             "touching": null
           }
         ],
         "touches": [],
-        "ticks": 31
+        "ticks": 176
       }
     }
   },
@@ -43027,7 +43648,7 @@
           },
           {
             "walker": {
-              "x": 8195,
+              "x": 8654,
               "y": 4512,
               "facing": "E"
             },
@@ -43036,7 +43657,7 @@
           }
         ],
         "touches": [],
-        "ticks": 115
+        "ticks": 124
       }
     }
   },
@@ -45609,7 +46230,7 @@
           "y": 426,
           "facing": "N"
         },
-        "exit": "N",
+        "exit": null,
         "touching": null
       }
     }

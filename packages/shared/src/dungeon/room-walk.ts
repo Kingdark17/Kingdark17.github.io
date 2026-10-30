@@ -11,6 +11,12 @@
  * no conteúdo (baú, NPC, loja…) é o que o aciona — quem decide o que isso
  * faz é o jogo, não esta regra.
  *
+ * As salas são emendadas (2026-10-30, pedido do Breno, site e app): a sala
+ * vizinha fica colada do outro lado da porta, e o herói passa de uma pra
+ * outra andando, sem pulo. O chão logo além de uma porta aberta é o vão da
+ * vizinha, e se anda nele; a vez da vizinha é quando o centro do herói sai
+ * da sala, e ele continua de onde estava (`continuarNaVizinha`).
+ *
  * **Tudo em números inteiros.** Uma sala tem `ROOM_COLS × ROOM_ROWS`
  * quadrados de `TILE_UNITS` unidades, o herói anda um passo de simulação por
  * vez (`WALK_TICKS_PER_SECOND`), e o joystick chega como inteiro de
@@ -227,9 +233,25 @@ export function stickInput(x: number, y: number): WalkInput {
 }
 
 /**
- * Onde o herói aparece numa sala. Quem andou pro norte chega pelo vão do sul,
- * um quadrado pra dentro; sem direção (carregar o jogo, portão, escada,
- * totem), logo abaixo do centro, olhando pra baixo. `geometria`: o formato
+ * Onde o herói continua na sala vizinha depois de atravessar a porta `saida`:
+ * o mesmo ponto, contado a partir do canto dela, que fica uma sala inteira
+ * pro lado de onde ele saiu. Como a saída só conta com o centro já fora da
+ * sala, o ponto cai dentro do vão da vizinha, e ela não o devolve. As salas
+ * da mesma masmorra têm o mesmo formato (`geometria`).
+ */
+export function continuarNaVizinha(walker: Walker, saida: Direction, geometria: GeometriaDaSala = GEOMETRIA_PADRAO): Walker {
+  const largura = geometria.cols * TILE_UNITS;
+  const altura = geometria.rows * TILE_UNITS;
+  if (saida === 'N') return { ...walker, y: walker.y + altura };
+  if (saida === 'S') return { ...walker, y: walker.y - altura };
+  if (saida === 'W') return { ...walker, x: walker.x + largura };
+  return { ...walker, x: walker.x - largura };
+}
+
+/**
+ * Onde o herói aparece numa sala sem vir andando da vizinha. Quem andou pro norte chega pelo vão do sul,
+ * um quadrado pra dentro (a sala secreta, que fica fora do mapa); sem direção
+ * (carregar o jogo, portão, escada, totem), logo abaixo do centro, olhando pra baixo. `geometria`: o formato
  * da sala (o vão e o centro dela).
  */
 export function roomArrival(movedTowards: Direction | null, geometria: GeometriaDaSala = GEOMETRIA_PADRAO): Walker {
@@ -289,8 +311,22 @@ function linhas(layout: RoomLayout): number {
 }
 
 function solido(layout: RoomLayout, col: number, row: number): boolean {
-  if (row < 0 || row >= linhas(layout) || col < 0 || col >= colunas(layout)) return true;
+  if (row < 0 || row >= linhas(layout) || col < 0 || col >= colunas(layout)) return !alemDoVao(layout, col, row);
   return (layout.solid[row] as boolean[])[col] as boolean;
+}
+
+/** Fora da sala, mas em frente ao vão de uma porta aberta: é o vão da sala vizinha, e se anda nele. */
+function alemDoVao(layout: RoomLayout, col: number, row: number): boolean {
+  for (const lado of layout.doors) {
+    const porta = layout.portas?.[lado] ?? GEOMETRIA_PADRAO.portas[lado];
+    const meia = Math.trunc((porta.largura - 1) / 2);
+    const naLargura = (casa: number, meio: number) => casa >= meio - meia && casa <= meio + meia;
+    if (lado === 'N' && row < 0 && naLargura(col, porta.col)) return true;
+    if (lado === 'S' && row >= linhas(layout) && naLargura(col, porta.col)) return true;
+    if (lado === 'W' && col < 0 && naLargura(row, porta.row)) return true;
+    if (lado === 'E' && col >= colunas(layout) && naLargura(row, porta.row)) return true;
+  }
+  return false;
 }
 
 /** A coluna inteira de quadrados que a base cobre, de `y - HERO_HALF` a `y + HERO_HALF - 1`, tem algo sólido? */
@@ -357,14 +393,13 @@ function ajudaNaPorta(layout: RoomLayout, x: number, y: number, lado: Direction,
   return eixo === 'x' ? moverEmX(layout, x, y, passo).pos : moverEmY(layout, x, y, passo).pos;
 }
 
-/** Passou da metade do vão de uma porta, pra fora: atravessou. */
+/** O centro saiu da sala pelo vão de uma porta: atravessou. */
 function saida(layout: RoomLayout, x: number, y: number): Direction | null {
-  const meio = TILE_UNITS / 2;
   for (const direcao of layout.doors) {
-    if (direcao === 'N' && y < meio) return 'N';
-    if (direcao === 'S' && y > linhas(layout) * TILE_UNITS - meio) return 'S';
-    if (direcao === 'W' && x < meio) return 'W';
-    if (direcao === 'E' && x > colunas(layout) * TILE_UNITS - meio) return 'E';
+    if (direcao === 'N' && y < 0) return 'N';
+    if (direcao === 'S' && y >= linhas(layout) * TILE_UNITS) return 'S';
+    if (direcao === 'W' && x < 0) return 'W';
+    if (direcao === 'E' && x >= colunas(layout) * TILE_UNITS) return 'E';
   }
   return null;
 }

@@ -27,6 +27,7 @@ namespace RPGLegend.Tests
                 a["walls"] == null ? null : R<List<TileRef>>(a["walls"]), a["geometria"] == null ? null : R<GeometriaDaSala>(a["geometria"]))));
             Fn(M, "casasDoVao", (a, c) => W(RoomWalk.CasasDoVao(R<GeometriaDaSala>(a["geometria"]), Str(a["lado"]))));
             Fn(M, "stickInput", (a, c) => W(RoomWalk.StickInput(Num(a["x"]), Num(a["y"]))));
+            Fn(M, "continuarNaVizinha", (a, c) => W(RoomWalk.ContinuarNaVizinha(R<Walker>(a["walker"]), Str(a["saida"]), R<GeometriaDaSala>(a["geometria"]))));
             Fn(M, "roomArrival", (a, c) => W(RoomWalk.Arrival(a["movedTowards"].Type == JTokenType.Null ? null : Str(a["movedTowards"]),
                 a["geometria"] == null ? null : R<GeometriaDaSala>(a["geometria"]))));
             Fn(M, "walkTick", (a, c) => W(RoomWalk.Tick(R<RoomLayout>(a["layout"]), R<Walker>(a["walker"]), R<WalkInput>(a["input"]))));

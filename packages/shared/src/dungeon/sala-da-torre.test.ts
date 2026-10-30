@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { geometriaDaSala, paredesDaSala } from './arte-da-sala.js';
 import { EXTRA_TILES } from './extras.js';
-import { casasDoVao, GEOMETRIA_PADRAO, roomArrival, roomLayout, TILE_UNITS, walkTick, type Walker } from './room-walk.js';
+import { casasDoVao, continuarNaVizinha, GEOMETRIA_PADRAO, roomArrival, roomLayout, TILE_UNITS, walkTick, type Walker } from './room-walk.js';
 import { objetosDaSala, plantaDaSalaSecreta } from '../jogo/extras.js';
 import { plantaDaSala } from '../jogo/andar-na-sala.js';
 import type { DungeonCell } from './generate.js';
@@ -104,6 +104,23 @@ describe('a sala da Torre', () => {
     for (const casa of torre.extras!) {
       expect(paredesDaSala('torre').some((p) => p.col === casa.col && p.row === casa.row)).toBe(false);
     }
+  });
+
+  it('emendadas: sai pela parede grossa de cima e continua no vão de baixo da vizinha, pela beira do vão também', () => {
+    const planta = plantaDaSala({ N: true, S: true, E: true, W: true }, true, 'torre');
+    for (const coluna of [4, 5, 6]) {
+      const saiu = andar(planta, { x: centro(coluna), y: centro(3), facing: 'N' }, 0, -127);
+      expect(saiu.saiu).toBe('N');
+      const la = continuarNaVizinha(saiu.walker, 'N', torre);
+      expect(la.y).toBe(saiu.walker.y + 12 * TILE_UNITS);
+      const passo = walkTick(planta, la, { x: 0, y: -127 });
+      expect(passo.exit).toBeNull();
+      expect(passo.walker.y).toBeLessThan(la.y);
+    }
+    // Pro lado, a vizinha começa 11 casas adiante.
+    const saiu = andar(planta, { x: centro(8), y: centro(7), facing: 'E' }, 127, 0);
+    expect(saiu.saiu).toBe('E');
+    expect(continuarNaVizinha(saiu.walker, 'E', torre).x).toBe(saiu.walker.x - 11 * TILE_UNITS);
   });
 
   it('a sala secreta da Torre é do formato dela', () => {
