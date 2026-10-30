@@ -680,6 +680,8 @@ namespace RPGLegend.Game.Jogo
                 planta = AndarNaSala.PlantaDaSala(portas, ExtrasDaSala.ObjetosDaSala(celula, icone != "", masmorra), masmorra);
                 var conteudo = icone == "" ? null : new Figura { Arte = FigurasDaSala.ArteDoTipo(celula.Type), Emoji = icone };
                 figuras = FigurasDaSala.Da(celula, conteudo, null);
+                // Na luta no mapa os monstros ficam em pé na sala, no lugar do ícone do conteúdo.
+                if (_partida.Luta != null) figuras.Remove(AndarNaSala.IdDoConteudo);
                 chave = salaAgora + "#" + _volta;
                 chegada = _chegada;
             }

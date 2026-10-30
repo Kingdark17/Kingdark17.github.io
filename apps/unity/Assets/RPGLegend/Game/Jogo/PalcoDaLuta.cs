@@ -7,11 +7,12 @@ using UnityEngine.UIElements;
 namespace RPGLegend.Game.Jogo
 {
     /// <summary>
-    /// A luta em primeira pessoa, como a tela de combate do site (tela-combate.tsx): o cenário do lugar atrás, os
-    /// monstros de frente no palco, cada um com a placa (nome, vida e o que pesa sobre ele) — tocar num deles muda o
-    /// alvo —, e embaixo a caixa preta do Undertale, onde o coração desvia dos golpes: o círculo do golpe de perto,
-    /// a faixa da investida (com o monstro mergulhando por ela), a bola do mágico. Os companheiros ficam ao lado da
-    /// caixa. Pedida pelo usuário como teste em 2026-10-17 e mantida por ele.
+    /// A luta no mapa (2026-10-30, pedido do Breno, como no site): a sala continua à vista em cima, com a câmera
+    /// enquadrando-a em <see cref="AreaDaSala"/>, e cada monstro em pé na casa dele (<see cref="LutaNoMapa"/>); ao lado
+    /// da sala, a coluna das placas (nome, vida e o que pesa sobre ele) — tocar numa placa ou no monstro muda o alvo
+    /// —; e embaixo a caixa preta do Undertale, onde o coração desvia dos golpes: o círculo do golpe de perto, a faixa
+    /// da investida (com o monstro mergulhando por ela), a bola do mágico. Os companheiros ficam ao lado da caixa.
+    /// Até 2026-10-30 a luta era em primeira pessoa, com um cenário pintado no lugar da sala.
     ///
     /// Só desenha, a cada quadro: onde está cada coisa é a arena que diz (<see cref="Arenas"/>).
     /// </summary>
@@ -36,14 +37,20 @@ namespace RPGLegend.Game.Jogo
             ["lento"] = "❄️ Lento",
         };
 
-        private readonly VisualElement _parede, _rodape, _chao, _grupo, _aliados, _caixa;
+        /// <summary>A coluna das placas ao lado da sala: esta parte da largura do palco, entre os limites.</summary>
+        private const float ParteDasPlacas = 0.26f;
+        private const float PlacasNoMinimo = 170f;
+        private const float PlacasNoMaximo = 260f;
+
+        private readonly VisualElement _placas, _figuras, _aliados, _caixa;
         private readonly TintaDaCaixa _tinta;
         private readonly CoracaoNaCaixa _coracao;
         private readonly List<Lutador> _lutadores = new List<Lutador>();
         private readonly List<Aliado> _listaDeAliados = new List<Aliado>();
         private readonly List<Label> _mergulhos = new List<Label>();
-        private string _temaMostrado;
         private int _tamanhoDoGrupo = -1;
+        /// <summary>O formato da sala da luta (a Torre é 11 × 12): a área dela no palco segue a proporção.</summary>
+        private double _colunas = 9, _linhas = 9;
         private bool _visivel = true;
 
         /// <summary>Tocou num monstro de pé: o índice dele na sala.</summary>
@@ -55,9 +62,13 @@ namespace RPGLegend.Game.Jogo
         /// <summary>O palco dos monstros: do alto até a caixa (o palco inteiro, antes do primeiro desenho).</summary>
         public Rect AreaDoPalco => TopoDaCaixa > 0 ? new Rect(0f, 0f, contentRect.width, TopoDaCaixa) : contentRect;
 
+        /// <summary>Onde a sala fica no palco, na proporção dela: a cena a enquadra aí, e os monstros vão por cima.</summary>
+        public Rect AreaDaSala { get; private set; }
+
+        /// <summary>Um monstro: a placa (`Raiz`, na coluna ao lado da sala) e o corpo (em pé na casa dele, na sala).</summary>
         private sealed class Lutador
         {
-            public VisualElement Raiz, Placa, Preenchimento, Marcadores, Corpo;
+            public VisualElement Raiz, Placa, Preenchimento, Marcadores, Corpo, Sombra;
             public Label Nome, Subtitulo, Vida, Vez, Mira, Figura;
             public string Chips;
             public float ApanhouEm = -10f;
@@ -74,16 +85,14 @@ namespace RPGLegend.Game.Jogo
             AddToClassList("palco-da-luta");
             pickingMode = PickingMode.Position;
 
-            var cenario = new VisualElement { pickingMode = PickingMode.Ignore };
-            cenario.AddToClassList("cenario-da-luta");
-            _parede = Pedaco(cenario, "parede-da-luta");
-            _rodape = Pedaco(cenario, "rodape-da-luta");
-            _chao = Pedaco(cenario, "chao-da-luta");
-            Add(cenario);
+            // Sem cenário pintado: por trás do palco está a sala de verdade, que a cena enquadra em AreaDaSala.
+            _figuras = new VisualElement { pickingMode = PickingMode.Ignore };
+            _figuras.AddToClassList("figuras-da-luta");
+            Add(_figuras);
 
-            _grupo = new VisualElement { pickingMode = PickingMode.Ignore };
-            _grupo.AddToClassList("grupo-da-luta");
-            Add(_grupo);
+            _placas = new VisualElement { pickingMode = PickingMode.Ignore };
+            _placas.AddToClassList("placas-da-luta");
+            Add(_placas);
 
             _aliados = new VisualElement { pickingMode = PickingMode.Ignore };
             _aliados.AddToClassList("aliados-da-luta");
@@ -100,15 +109,10 @@ namespace RPGLegend.Game.Jogo
             RegisterCallback<GeometryChangedEvent>(_ => Ajustar());
         }
 
-        private static VisualElement Pedaco(VisualElement pai, string classe)
-        {
-            var pedaco = new VisualElement { pickingMode = PickingMode.Ignore };
-            pedaco.AddToClassList(classe);
-            pai.Add(pedaco);
-            return pedaco;
-        }
-
-        /// <summary>A caixa no meio, embaixo, na proporção da engine; o palco dos monstros em cima dela; os aliados ao lado.</summary>
+        /// <summary>
+        /// A caixa no meio, embaixo, na proporção da engine; em cima dela, a sala (na proporção dela, o mais alta que
+        /// couber) e a coluna das placas à direita; os aliados ao lado da caixa.
+        /// </summary>
         private void Ajustar()
         {
             var r = contentRect;
@@ -123,33 +127,49 @@ namespace RPGLegend.Game.Jogo
             _caixa.style.height = altura;
             _caixa.style.left = esquerda;
             _caixa.style.top = topoDaCaixa;
-            _grupo.style.height = Mathf.Max(80f, topoDaCaixa - 6f);
             _aliados.style.top = topoDaCaixa;
             _aliados.style.width = Mathf.Max(40f, esquerda - 16f);
+
+            const float folga = 8f;
+            float larguraDasPlacas = Mathf.Clamp(Mathf.Round(r.width * ParteDasPlacas), PlacasNoMinimo, PlacasNoMaximo);
+            _placas.style.width = larguraDasPlacas;
+            _placas.style.right = folga;
+            _placas.style.top = folga;
+            _placas.style.maxHeight = Mathf.Max(80f, topoDaCaixa - 2f * folga);
+
+            // A sala na proporção dela, à esquerda das placas, o mais alta que couber acima da caixa.
+            float larguraLivre = r.width - larguraDasPlacas - 3f * folga;
+            float alturaLivre = topoDaCaixa - 2f * folga;
+            float proporcao = (float)(_colunas / _linhas);
+            float alturaDaSala = Mathf.Max(40f, Mathf.Floor(Mathf.Min(alturaLivre, larguraLivre / proporcao)));
+            float larguraDaSala = Mathf.Floor(alturaDaSala * proporcao);
+            AreaDaSala = new Rect(folga + Mathf.Floor((larguraLivre - larguraDaSala) / 2f), folga + Mathf.Floor((alturaLivre - alturaDaSala) / 2f), larguraDaSala, alturaDaSala);
         }
 
         // ---------- a cada quadro ----------
 
-        /// <summary>Desenha a luta como ela está agora.</summary>
-        public void Mostrar(LutaEmTempoReal luta, TemaDaSala tema, string lugar)
+        /// <summary>
+        /// Desenha a luta como ela está agora, na sala do formato <paramref name="geometria"/>: cada monstro em pé na casa
+        /// dele (<see cref="LutaNoMapa.LugaresNaLuta"/>).
+        /// </summary>
+        public void Mostrar(LutaEmTempoReal luta, GeometriaDaSala geometria)
         {
             if (!_visivel)
             {
                 _visivel = true;
                 style.display = DisplayStyle.Flex;
             }
-            if (lugar != _temaMostrado)
+            if (geometria.Cols != _colunas || geometria.Rows != _linhas)
             {
-                _temaMostrado = lugar;
-                _parede.style.backgroundColor = tema.Parede;
-                _rodape.style.backgroundColor = tema.BordaDaParede;
-                _chao.style.backgroundColor = tema.Chao;
+                _colunas = geometria.Cols;
+                _linhas = geometria.Rows;
+                Ajustar();
             }
 
             var arena = luta.Arena;
             var sala = Estados.CelulaAtual(luta.Estado) as DungeonCell;
             var instancias = sala?.Monsters ?? new List<MonsterInstance>();
-            MostrarGrupo(arena, instancias);
+            MostrarGrupo(arena, instancias, LutaNoMapa.LugaresNaLuta(arena.Monstros.Count, geometria));
             MostrarAliados(arena, (luta.Estado as EstadoNaMasmorra)?.Party ?? new List<Companion>());
             MostrarMergulhos(arena, instancias);
             _tinta.Mostrar(arena, instancias);
@@ -164,24 +184,28 @@ namespace RPGLegend.Game.Jogo
             _tinta.Esquecer();
         }
 
-        private void MostrarGrupo(Arena arena, List<MonsterInstance> instancias)
+        private void MostrarGrupo(Arena arena, List<MonsterInstance> instancias, List<LugarNaLuta> lugares)
         {
             int total = arena.Monstros.Count;
             while (_lutadores.Count < total) _lutadores.Add(NovoLutador(_lutadores.Count));
             for (int i = 0; i < _lutadores.Count; i++)
             {
                 bool usado = i < total;
-                if (usado && _lutadores[i].Raiz.parent != _grupo) _grupo.Add(_lutadores[i].Raiz);
+                if (usado && _lutadores[i].Raiz.parent != _placas) _placas.Add(_lutadores[i].Raiz);
+                if (usado && _lutadores[i].Corpo.parent != _figuras) _figuras.Add(_lutadores[i].Corpo);
                 if (!usado && _lutadores[i].Raiz.parent != null) _lutadores[i].Raiz.RemoveFromHierarchy();
+                if (!usado && _lutadores[i].Corpo.parent != null) _lutadores[i].Corpo.RemoveFromHierarchy();
             }
             if (total != _tamanhoDoGrupo)
             {
                 _tamanhoDoGrupo = total;
-                _grupo.EnableInClassList("grupo-de-dois", total == 2);
-                _grupo.EnableInClassList("grupo-de-tres", total >= 3);
-                // O chefe final chama 4 lacaios: o palco chega a cinco monstros.
-                _grupo.EnableInClassList("grupo-de-cinco", total >= 4);
+                // O chefe final chama 4 lacaios: a coluna chega a cinco placas, mais enxutas.
+                _placas.EnableInClassList("placas-enxutas", total >= 3);
             }
+
+            // O tamanho de uma casa da sala no palco: o monstro tem quase uma casa de altura (o chefe, mais).
+            var area = AreaDaSala;
+            float casa = area.width / (float)_colunas;
 
             float agora = Time.unscaledTime;
             for (int i = 0; i < total; i++)
@@ -204,9 +228,20 @@ namespace RPGLegend.Game.Jogo
                 l.Raiz.EnableInClassList("lutador-alvo", !caido && total > 1 && arena.Alvo == m.Indice);
                 l.Mira.style.display = !caido && total > 1 && arena.Alvo == m.Indice ? DisplayStyle.Flex : DisplayStyle.None;
 
+                // O corpo em pé na casa dele, com o pé no fundo dela.
+                var lugar = lugares[Math.Min(i, lugares.Count - 1)];
+                float altura = casa * (visao.IsBoss ? 1.35f : 0.95f);
+                l.Figura.style.fontSize = altura;
+                l.Mira.style.fontSize = Mathf.Max(14f, casa * 0.4f);
+                l.Mira.style.height = Mathf.Max(16f, casa * 0.45f);
+                l.Sombra.style.width = casa * 0.7f;
+                l.Corpo.style.left = area.x + ((float)lugar.Col + 0.5f) * casa;
+                l.Corpo.style.top = area.y + ((float)lugar.Row + 1f) * casa;
+
                 // Quem vai golpear avisa; quem mergulhou na caixa some do palco enquanto isso.
                 bool avisando = m.Fase == "avisando";
                 l.Raiz.EnableInClassList("lutador-avisando", avisando);
+                l.Corpo.EnableInClassList("lutador-avisando", avisando);
                 l.Corpo.style.opacity = caido ? 0.38f : m.Fase == "investindo" ? 0.15f : 1f;
                 l.Vez.text = avisando ? TextoDoAviso(m) : "";
                 l.Vez.style.display = avisando ? DisplayStyle.Flex : DisplayStyle.None;
@@ -318,15 +353,20 @@ namespace RPGLegend.Game.Jogo
             l.Vez = Rotulo(l.Placa, "vez-do-lutador");
             l.Raiz.Add(l.Placa);
 
-            l.Corpo = new VisualElement { pickingMode = PickingMode.Ignore };
+            // O corpo fica na sala, fora da placa: tocar nele também escolhe o alvo.
+            l.Corpo = new VisualElement();
             l.Corpo.AddToClassList("corpo-do-lutador");
+            l.Corpo.RegisterCallback<PointerDownEvent>(e =>
+            {
+                e.StopPropagation();
+                AoMirar?.Invoke(indice);
+            });
             l.Mira = Rotulo(l.Corpo, "mira-do-lutador");
             l.Mira.text = "🎯";
             l.Figura = Rotulo(l.Corpo, "figura-do-lutador");
-            var sombra = new VisualElement { pickingMode = PickingMode.Ignore };
-            sombra.AddToClassList("sombra-do-lutador");
-            l.Corpo.Add(sombra);
-            l.Raiz.Add(l.Corpo);
+            l.Sombra = new VisualElement { pickingMode = PickingMode.Ignore };
+            l.Sombra.AddToClassList("sombra-do-lutador");
+            l.Corpo.Add(l.Sombra);
             return l;
         }
 

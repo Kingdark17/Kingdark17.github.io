@@ -534,7 +534,7 @@ namespace RPGLegend.Game.Jogo
             // Na masmorra emendada, contado do canto da sala atual, que fica no lugar dela no andar.
             float x = (_emendada ? _origemX : 0f) + (float)_walker.X * _escala;
             float y = (_emendada ? _origemY : 0f) + (float)(_walker.Y + GameData.RoomWalkTable.HeroHalf) * _escala;
-            if (_emendada)
+            if (_emendada && !EmLuta)
             {
                 // A câmera no herói, em meio pixel (a textura é 2×): parado no meio da sala, ela a enquadra inteira.
                 float cx = Mathf.Round(x * 2f) / 2f;

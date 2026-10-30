@@ -173,7 +173,8 @@ namespace RPGLegend.Game.Jogo
                 _palcoDaLuta.Esconder();
                 return;
             }
-            _sala?.EntrarNaLuta();
+            // O herói da sala dá um passo pra dentro da porta (o mesmo lugar a que a arena o devolve no fim).
+            _sala?.EntrarNaLuta(_partida.Luta.Arena.Chegada);
 
             LerTecladoDaLuta(luta);
             bool pausada = _janela != null || _saindo;
@@ -188,9 +189,8 @@ namespace RPGLegend.Game.Jogo
                 _palcoDaLuta.Esconder();
                 return;
             }
-            var estado = _partida.Luta.Estado;
-            string lugar = estado.MapMode == "dungeon" ? estado.Masmorra?.Dungeon ?? "floresta" : "cidade";
-            _palcoDaLuta.Mostrar(_partida.Luta, TemaDaSala.Do(estado), lugar);
+            _palcoDaLuta.Mostrar(_partida.Luta, _partida.Geometria);
+            EnquadrarASala();
             DesenharHud(_partida.Luta);
         }
 
@@ -531,6 +531,21 @@ namespace RPGLegend.Game.Jogo
                 f.Rotulo.style.opacity = 1f - t * t;
                 if (f.Rotulo.ClassListContains("numero-da-luta")) f.Rotulo.style.translate = new Translate(Length.Percent(-50), -28f * t);
             }
+        }
+
+        /// <summary>
+        /// A luta no mapa: a cena enquadra a sala na área que o palco reserva pra ela (em fração do palco, que é a tela
+        /// toda e tem a proporção da textura da cena).
+        /// </summary>
+        private void EnquadrarASala()
+        {
+            if (_sala == null) return;
+            var palco = _palco.worldBound;
+            if (palco.width <= 0 || palco.height <= 0) return;
+            var area = _palcoDaLuta.AreaDaSala;
+            if (area.width <= 0) return;
+            var canto = _palcoDaLuta.LocalToWorld(area.position);
+            _sala.EnquadrarNaLuta(new Rect((canto.x - palco.x) / palco.width, (canto.y - palco.y) / palco.height, area.width / palco.width, area.height / palco.height));
         }
 
         /// <summary>A luta acabou: a sala volta, com o herói na porta por onde entrou, e o que era da luta sai da tela.</summary>

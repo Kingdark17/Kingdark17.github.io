@@ -227,10 +227,10 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   teclado ou joystick). Grava na nuvem como o site (2,5 s, teto de 10 s,
   `baseSignature`). Desde a etapa 5.4, a sala de monstro abre a luta em tempo
   real (`luta/arena.ts`, no C# `Arenas`): a `Partida` troca o combate por
-  turnos pela arena, e só se sai vencendo ou caindo. A luta é em primeira
-  pessoa, como a do site, com o coração do Undertale numa caixa
-  (`PalcoDaLuta`): **decisão do usuário em 2026-10-17**, depois de pedir
-  como teste; a versão com a luta dentro da sala ficou no commit 82b03da.
+  turnos pela arena, e só se sai vencendo ou caindo. O golpe nele se desvia
+  com o coração do Undertale numa caixa (`PalcoDaLuta`): **decisão do
+  usuário em 2026-10-17**. Desde 2026-10-30 a luta acontece na própria sala,
+  e não mais em primeira pessoa (ver "Salas emendadas e luta no mapa").
   No PC, o cajado pede letras (U, I, O e P, uma por vez, com um aro
   fechando) em vez do desenho, que fica no celular. As telas de sala
   são as do site, nos mesmos moldes (a carta seleciona, a ficha age):
@@ -278,7 +278,8 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   (a porta de baixo fechada), que a parede inteira dispensa. No site a caixa
   da sala toma a proporção dela, e no app a câmera. A parede rachada se põe
   pelo lado dela (a porta da geometria), e não pela casa gravada. No app a
-  luta continua na proporção 9 × 7 em que foi afinada (`area-da-luta`).
+  área da luta (a caixa e os botões) continua na proporção 9 × 7 em que foi
+  afinada (`area-da-luta`).
 - Níveis e chefe final (2026-10-25, **site e app**; o Breno zerou a
   Floresta e achou a batalha final fraca): os monstros ganharam nível
   (`monsterLevel`: 9 em cada 10 andares de força), o degrau da escada
@@ -296,8 +297,22 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   coluna): o mapa na tela toda, com os botões em cima, nome, nível, vida e
   mana embaixo à esquerda, e à direita o minimapa (na masmorra) e o que fala
   do lugar, que aparece na chegada e some sozinho (as perguntas e os recados
-  ficam até a resposta). Na masmorra a sala 9 × 7 fica no meio, na altura
-  toda, e a luta acontece dentro dela; na luta os botões descem em coluna.
+  ficam até a resposta). Na masmorra a câmera segue o herói pelas salas
+  emendadas; na luta os botões descem em coluna.
+- Salas emendadas e luta no mapa (2026-10-30, **site e app**, pedido do
+  Breno): as salas da masmorra ficam coladas e o herói passa de uma pra
+  outra andando, com a câmera junto (`continuarNaVizinha`: o chão além de
+  uma porta aberta é o vão da vizinha, e a saída conta com o centro dele
+  fora da sala; `salasEmVolta`: o 3 × 3 em volta, e a vizinha ainda não
+  visitada fica na sombra, sem o que tem dentro). A luta é na própria sala,
+  no lugar da primeira pessoa (decisão do usuário, que desfaz a de
+  2026-10-17): os monstros em pé nas casas de `lugaresNaLuta`, o herói um
+  passo pra dentro da porta (`heroiNaLuta`), a câmera enquadrando a sala, e
+  embaixo uma faixa própria. No site, as placas (tocar escolhe o alvo), a
+  caixa e o menu, com a sala congelada (a derrota leva o estado pra cidade
+  antes do "Continuar"); no app, a caixa do coração e os botões, com as
+  placas numa coluna ao lado da sala. A sala secreta continua uma cena à
+  parte, e a cidade não muda.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no
