@@ -172694,7 +172694,18 @@
         },
         {
           "arquivo": "6_floresta_cima",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
         }
       ]
     }
@@ -172723,7 +172734,18 @@
         },
         {
           "arquivo": "6_floresta_cima",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
         }
       ]
     }
@@ -172758,7 +172780,18 @@
         },
         {
           "arquivo": "6_floresta_cima",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
         }
       ]
     }
@@ -172805,7 +172838,18 @@
         },
         {
           "arquivo": "6_floresta_cima",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
         }
       ]
     }
@@ -172831,7 +172875,18 @@
         },
         {
           "arquivo": "7_caverna_frente",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
         }
       ]
     }
@@ -172870,7 +172925,18 @@
         },
         {
           "arquivo": "7_caverna_frente",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
         }
       ]
     }
@@ -172921,7 +172987,18 @@
         },
         {
           "arquivo": "7_caverna_frente",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
         }
       ]
     }
@@ -172948,17 +173025,59 @@
         },
         {
           "arquivo": "8_frente_torre",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
         },
         {
           "arquivo": "10_close_esquerda",
           "plano": "cima",
-          "semPorta": "W"
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
         },
         {
           "arquivo": "11_close_direita",
           "plano": "cima",
-          "semPorta": "E"
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
         }
       ]
     }
@@ -172992,12 +173111,40 @@
         },
         {
           "arquivo": "8_frente_torre",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
         },
         {
           "arquivo": "10_close_esquerda",
           "plano": "cima",
-          "semPorta": "W"
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
         }
       ]
     }
@@ -173032,22 +173179,78 @@
         },
         {
           "arquivo": "8_frente_torre",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
         },
         {
           "arquivo": "9_portal_frente",
           "plano": "cima",
-          "porta": "N"
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
         },
         {
           "arquivo": "10_close_esquerda",
           "plano": "cima",
-          "semPorta": "W"
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
         },
         {
           "arquivo": "11_close_direita",
           "plano": "cima",
-          "semPorta": "E"
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
         }
       ]
     }
@@ -173094,14 +173297,2182 @@
         },
         {
           "arquivo": "8_frente_torre",
-          "plano": "cima"
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
         },
         {
           "arquivo": "9_portal_frente",
           "plano": "cima",
-          "porta": "N"
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
         }
       ]
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, no vão de cima",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": 5280,
+          "y": 480
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, no vão da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": 480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, no vão de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": 4320,
+          "y": 8160
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, no meio",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": 4320,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, junto da parede de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": 2400,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, atrás do pilar da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": 1440,
+          "y": 3360
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, no vão de baixo da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": 5280,
+          "y": 11040
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, na vizinha da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": -480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, encostando na beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": 1219,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/1_grama, logo antes da beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "1_grama",
+          "plano": "chao"
+        },
+        "walker": {
+          "x": 1220,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, no vão de cima",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 480
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, no vão da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, no vão de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 8160
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, no meio",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, junto da parede de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, atrás do pilar da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 1440,
+          "y": 3360
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, no vão de baixo da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 11040
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, na vizinha da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": -480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, encostando na beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 1219,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: floresta/6_floresta_cima, logo antes da beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "6_floresta_cima",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#.......#",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 1220,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, no vão de cima",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 480
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, no vão da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, no vão de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 8160
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, no meio",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, junto da parede de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, atrás do pilar da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 1440,
+          "y": 3360
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, no vão de baixo da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 11040
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, na vizinha da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": -480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, encostando na beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 1219,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: caverna/7_caverna_frente, logo antes da beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "7_caverna_frente",
+          "plano": "cima",
+          "cobre": [
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            ".........",
+            "#.......#",
+            "#.......#",
+            "###...###",
+            "#########"
+          ]
+        },
+        "walker": {
+          "x": 1220,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, no vão de cima",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 480
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, no vão da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": 480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, no vão de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 8160
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, no meio",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, junto da parede de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, atrás do pilar da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": 1440,
+          "y": 3360
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, no vão de baixo da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 11040
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, na vizinha da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": -480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, encostando na beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": 1219,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/8_frente_torre, logo antes da beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "8_frente_torre",
+          "plano": "cima",
+          "cobre": [
+            "...........",
+            "...........",
+            ".#.......#.",
+            "...........",
+            "...........",
+            "...........",
+            "##.......##",
+            "##.......##",
+            "##.......##",
+            "#.........#",
+            "#..#...#..#",
+            "###########"
+          ]
+        },
+        "walker": {
+          "x": 1220,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, no vão de cima",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 480
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, no vão da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, no vão de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 8160
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, no meio",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, junto da parede de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, atrás do pilar da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 1440,
+          "y": 3360
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, no vão de baixo da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 11040
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, na vizinha da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": -480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, encostando na beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 1219,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/9_portal_frente, logo antes da beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "9_portal_frente",
+          "plano": "cima",
+          "porta": "N",
+          "cobre": [
+            "....#.#....",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 1220,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, no vão de cima",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 480
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, no vão da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, no vão de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 8160
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, no meio",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, junto da parede de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, atrás do pilar da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 1440,
+          "y": 3360
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, no vão de baixo da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 11040
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, na vizinha da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": -480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, encostando na beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 1219,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/10_close_esquerda, logo antes da beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "10_close_esquerda",
+          "plano": "cima",
+          "semPorta": "W",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "#..........",
+            "#..........",
+            "#..........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 1220,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, no vão de cima",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 480
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, no vão da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, no vão de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 8160
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, no meio",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 4320,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, junto da parede de baixo",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 2400,
+          "y": 7200
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, atrás do pilar da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 1440,
+          "y": 3360
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, no vão de baixo da Torre",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 5280,
+          "y": 11040
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, na vizinha da esquerda",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": -480,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, encostando na beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 1219,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "cobreOHeroiNaSala: torre/11_close_direita, logo antes da beirada",
+    "input": {
+      "fn": "cobreOHeroiNaSala",
+      "args": {
+        "camada": {
+          "arquivo": "11_close_direita",
+          "plano": "cima",
+          "semPorta": "E",
+          "cobre": [
+            "...........",
+            "...........",
+            "...........",
+            "..........#",
+            "..........#",
+            "..........#",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "...........",
+            "..........."
+          ]
+        },
+        "walker": {
+          "x": 1220,
+          "y": 4320
+        }
+      }
+    },
+    "expected": {
+      "result": false
     }
   },
   {

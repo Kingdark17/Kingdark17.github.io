@@ -17,7 +17,7 @@
 
 import type { DungeonId } from './dungeons.js';
 import type { Direction } from './graph.js';
-import { GEOMETRIA_PADRAO, type GeometriaDaSala } from './room-walk.js';
+import { GEOMETRIA_PADRAO, HERO_HALF, TILE_UNITS, type GeometriaDaSala, type Walker } from './room-walk.js';
 
 /** Pixels da arte por casa da sala (a sala do Breno tem 288 × 288). */
 export const PIXELS_DA_SALA = 32;
@@ -35,6 +35,12 @@ export interface CamadaDaSala {
   porta?: Direction;
   /** Só aparece quando a sala NÃO tem porta deste lado: a parede que fecha o vão (a Torre). */
   semPorta?: Direction;
+  /**
+   * Só nas de `cima`: as casas em que a arte tem desenho bastante pra esconder o herói (`#`, mais da metade dos
+   * pixels), uma linha por fileira, medidas pelo `scripts/cobertura-das-salas.ts`. É o que diz se a camada está
+   * cobrindo o herói (`cobreOHeroiNaSala`). Arte nova → rodar o script e colar.
+   */
+  cobre?: readonly string[];
 }
 
 /** As camadas de cada masmorra que tem arte, na ordem em que se desenham. */
@@ -46,7 +52,11 @@ export const CAMADAS_DAS_SALAS: Partial<Record<DungeonId, readonly CamadaDaSala[
     { arquivo: '3_caminho_direita', plano: 'chao', porta: 'E' },
     { arquivo: '4_caminho_esquerda', plano: 'chao', porta: 'W' },
     { arquivo: '5_caminho_baixo', plano: 'chao', porta: 'S' },
-    { arquivo: '6_floresta_cima', plano: 'cima' },
+    {
+      arquivo: '6_floresta_cima',
+      plano: 'cima',
+      cobre: ['.........', '.........', '.........', '#.......#', '#.......#', '#.......#', '#.......#', '#.......#', '#########'],
+    },
   ],
   caverna: [
     { arquivo: '1_caverna_chao', plano: 'chao' },
@@ -57,7 +67,11 @@ export const CAMADAS_DAS_SALAS: Partial<Record<DungeonId, readonly CamadaDaSala[
     { arquivo: '5_portal_esquerda', plano: 'chao', porta: 'W' },
     // Na ordem dele, debaixo da parede da frente: só o alto do arco aparece.
     { arquivo: '6_portal_baixo', plano: 'chao', porta: 'S' },
-    { arquivo: '7_caverna_frente', plano: 'cima' },
+    {
+      arquivo: '7_caverna_frente',
+      plano: 'cima',
+      cobre: ['.........', '.........', '.........', '.........', '.........', '#.......#', '#.......#', '###...###', '#########'],
+    },
   ],
   // Os nomes são os dele, com o "direirta". Falta a camada 7 (a porta de baixo
   // fechada): a parede de baixo já é inteira, e o usuário mandou seguir sem ela.
@@ -68,11 +82,43 @@ export const CAMADAS_DAS_SALAS: Partial<Record<DungeonId, readonly CamadaDaSala[
     { arquivo: '4_tapete_baixo', plano: 'chao', porta: 'S' },
     { arquivo: '5_tapete_esquerda', plano: 'chao', porta: 'W' },
     { arquivo: '6_close_cima', plano: 'chao', semPorta: 'N' },
-    { arquivo: '8_frente_torre', plano: 'cima' },
+    {
+      arquivo: '8_frente_torre',
+      plano: 'cima',
+      cobre: [
+        '...........',
+        '...........',
+        '.#.......#.',
+        '...........',
+        '...........',
+        '...........',
+        '##.......##',
+        '##.......##',
+        '##.......##',
+        '#.........#',
+        '#..#...#..#',
+        '###########',
+      ],
+    },
     // O arco do vão de cima, por cima de quem passa por ele.
-    { arquivo: '9_portal_frente', plano: 'cima', porta: 'N' },
-    { arquivo: '10_close_esquerda', plano: 'cima', semPorta: 'W' },
-    { arquivo: '11_close_direita', plano: 'cima', semPorta: 'E' },
+    {
+      arquivo: '9_portal_frente',
+      plano: 'cima',
+      porta: 'N',
+      cobre: ['....#.#....', '...........', '...........', '...........', '...........', '...........', '...........', '...........', '...........', '...........', '...........', '...........'],
+    },
+    {
+      arquivo: '10_close_esquerda',
+      plano: 'cima',
+      semPorta: 'W',
+      cobre: ['...........', '...........', '...........', '#..........', '#..........', '#..........', '...........', '...........', '...........', '...........', '...........', '...........'],
+    },
+    {
+      arquivo: '11_close_direita',
+      plano: 'cima',
+      semPorta: 'E',
+      cobre: ['...........', '...........', '...........', '..........#', '..........#', '..........#', '...........', '...........', '...........', '...........', '...........', '...........'],
+    },
   ],
 };
 
@@ -162,6 +208,34 @@ export function camadasDaSala(dungeon: DungeonId, portas: readonly Direction[]):
   return camadas
     .filter((camada) => (!camada.porta || portas.includes(camada.porta)) && (!camada.semPorta || !portas.includes(camada.semPorta)))
     .map((camada) => ({ ...camada }));
+}
+
+/**
+ * O corpo do herói desenhado na sala, em unidades, a partir do pé: o boneco tem 1,25 casa de altura no site e no app
+ * (`LADO * 1.25`, 1200 unidades), e o corpo, como na cidade, vai de 2/60 a 54/60 dela acima do pé, com 13/60 pra
+ * cada lado.
+ */
+const CORPO_NA_SALA = { meiaLargura: 260, de: 40, ate: 1080 };
+
+/**
+ * Se a camada de cima está por cima do desenho do herói: aí ela fica meio transparente, como as construções da cidade
+ * (decisão do usuário, 2026-10-30), pra ele não sumir debaixo das copas da Floresta ao cruzar uma porta, atrás da
+ * parede da frente da Caverna ou dos pilares da Torre. `walker` contado do canto desta sala; o da sala vizinha, na
+ * masmorra emendada, fica além da borda dela.
+ */
+export function cobreOHeroiNaSala(camada: CamadaDaSala, walker: Pick<Walker, 'x' | 'y'>): boolean {
+  if (camada.plano !== 'cima' || !camada.cobre) return false;
+  const esquerda = walker.x - CORPO_NA_SALA.meiaLargura;
+  const direita = walker.x + CORPO_NA_SALA.meiaLargura;
+  const pe = walker.y + HERO_HALF;
+  const topo = pe - CORPO_NA_SALA.ate;
+  const baixo = pe - CORPO_NA_SALA.de;
+  return camada.cobre.some((linha, row) =>
+    [...linha].some(
+      (casa, col) =>
+        casa === '#' && col * TILE_UNITS < direita && (col + 1) * TILE_UNITS > esquerda && row * TILE_UNITS < baixo && (row + 1) * TILE_UNITS > topo,
+    ),
+  );
 }
 
 /**

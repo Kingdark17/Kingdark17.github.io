@@ -4113,6 +4113,31 @@ for (const [dungeon, portas] of [
 ] as const) {
   caso(`camadasDaSala: ${dungeon}, ${portas.join('') || 'sem portas'}`, 'camadasDaSala', { dungeon, portas }, (a) => E.camadasDaSala(a.dungeon, a.portas));
 }
+{
+  // Quem cobre o herói na sala: cada camada de cima contra os vãos, o meio, a beirada da sala e a vizinha.
+  const naCasa = (col: number, row: number) => ({ x: col * E.TILE_UNITS + E.TILE_UNITS / 2, y: row * E.TILE_UNITS + E.TILE_UNITS / 2 });
+  const lugares = [
+    ['no vão de cima', naCasa(5, 0)],
+    ['no vão da esquerda', naCasa(0, 4)],
+    ['no vão de baixo', naCasa(4, 8)],
+    ['no meio', naCasa(4, 4)],
+    ['junto da parede de baixo', naCasa(2, 7)],
+    ['atrás do pilar da Torre', naCasa(1, 3)],
+    ['no vão de baixo da Torre', naCasa(5, 11)],
+    ['na vizinha da esquerda', naCasa(-1, 4)],
+    // O corpo vai até 260 unidades pra cada lado do pé: aqui ele encosta na casa 0 por uma unidade, e logo antes não.
+    ['encostando na beirada', { x: E.TILE_UNITS + 259, y: 4 * E.TILE_UNITS + E.TILE_UNITS / 2 }],
+    ['logo antes da beirada', { x: E.TILE_UNITS + 260, y: 4 * E.TILE_UNITS + E.TILE_UNITS / 2 }],
+  ] as const;
+  for (const [dungeon, camadas] of Object.entries(E.CAMADAS_DAS_SALAS)) {
+    for (const camada of camadas ?? []) {
+      if (camada.plano !== 'cima' && camada.arquivo !== '1_grama') continue;
+      for (const [nome, walker] of lugares) {
+        caso(`cobreOHeroiNaSala: ${dungeon}/${camada.arquivo}, ${nome}`, 'cobreOHeroiNaSala', { camada, walker }, (a) => E.cobreOHeroiNaSala(a.camada, a.walker));
+      }
+    }
+  }
+}
 for (const dungeon of ['floresta', 'caverna', 'torre', null] as const) {
   caso(`geometriaDaSala: ${dungeon ?? 'fora da masmorra'}`, 'geometriaDaSala', { dungeon }, (a) => E.geometriaDaSala(a.dungeon));
   caso(`paredesDaSala: ${dungeon ?? 'fora da masmorra'}`, 'paredesDaSala', { dungeon }, (a) => E.paredesDaSala(a.dungeon));

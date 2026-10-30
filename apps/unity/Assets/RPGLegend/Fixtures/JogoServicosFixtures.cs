@@ -85,6 +85,7 @@ namespace RPGLegend.Tests
             Fn(M, "chegadaNoPonto", (a, c) => W(MapaDaCidade.ChegadaNoPonto(Str(a["ponto"]))));
             Fn(M, "cobreOHeroi", (a, c) => W(MapaDaCidade.CobreOHeroi(R<CamadaDaCidade>(a["camada"]), R<Walker>(a["walker"]))));
             Fn(M, "camadasDaSala", (a, c) => W(ArteDaSala.CamadasDaSala(Str(a["dungeon"]), R<List<string>>(a["portas"]))));
+            Fn(M, "cobreOHeroiNaSala", (a, c) => W(ArteDaSala.CobreOHeroiNaSala(R<CamadaDaSala>(a["camada"]), R<Walker>(a["walker"]))));
             Fn(M, "paredesDaSala", (a, c) => W(ArteDaSala.ParedesDaSala(Str(a["dungeon"]))));
             Fn(M, "enfeitesDaSala", (a, c) => W(ArteDaSala.EnfeitesDaSala(Str(a["dungeon"]))));
             Fn(M, "geometriaDaSala", (a, c) => W(ArteDaSala.GeometriaDaSala(a["dungeon"].Type == Newtonsoft.Json.Linq.JTokenType.Null ? null : Str(a["dungeon"]))));

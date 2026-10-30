@@ -53,6 +53,13 @@ namespace RPGLegend.Game.Jogo
         private float _origemX, _origemY;
         /// <summary>Na cidade, as camadas do meio, que ficam meio transparentes quando cobrem o herói.</summary>
         private readonly List<(CamadaDaCidade Camada, SpriteRenderer Desenho)> _doMeio = new List<(CamadaDaCidade, SpriteRenderer)>();
+        /// <summary>
+        /// Na masmorra, as camadas de cima de cada sala (as copas, a parede da frente), com o canto dela em pixel do site:
+        /// ficam meio transparentes quando cobrem o herói, como as da cidade.
+        /// </summary>
+        private readonly List<(CamadaDaSala Camada, SpriteRenderer Desenho, float Ox, float Oy)> _copas = new List<(CamadaDaSala, SpriteRenderer, float, float)>();
+        /// <summary>As copas acabaram de ser desenhadas: vão direto pra transparência certa, sem piscar inteiras na troca de sala.</summary>
+        private bool _copasNovas;
         /// <summary>Quanto se vê da camada que cobre o herói (meio transparente), e em quantos segundos chega lá.</summary>
         private const float AlfaDeQuemCobre = 0.5f;
         private const float SegundosDoEsmaecer = 0.15f;
@@ -317,6 +324,7 @@ namespace RPGLegend.Game.Jogo
         {
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
             _doMeio.Clear();
+            _copas.Clear();
             _naCidade = true;
             Tamanho(GameData.RoomWalkTable.RoomCols, GameData.RoomWalkTable.RoomRows);
             AjustarZoom();
@@ -345,6 +353,7 @@ namespace RPGLegend.Game.Jogo
         {
             for (int i = _desenho.childCount - 1; i >= 0; i--) Destroy(_desenho.GetChild(i).gameObject);
             _doMeio.Clear();
+            _copas.Clear();
             var regra = GameData.RoomWalkTable;
             float larguraAntes = _largura, alturaAntes = _altura;
             Tamanho(planta.Cols ?? regra.RoomCols, planta.Rows ?? regra.RoomRows);
@@ -458,6 +467,11 @@ namespace RPGLegend.Game.Jogo
                 var renderizador = objeto.AddComponent<SpriteRenderer>();
                 renderizador.sprite = sprite;
                 renderizador.sortingOrder = camada.Plano == "cima" ? OrdemDeCima + cima++ : OrdemDoChao + chao++;
+                if (camada.Plano == "cima")
+                {
+                    _copas.Add((camada, renderizador, ox, oy));
+                    _copasNovas = true;
+                }
             }
         }
 
@@ -559,17 +573,31 @@ namespace RPGLegend.Game.Jogo
 
                 // Quem cobre o herói (a árvore da praça, a loja...) fica meio transparente, pra ele não sumir atrás.
                 float passo = Mathf.Min(1f, Time.deltaTime / SegundosDoEsmaecer) * (1f - AlfaDeQuemCobre);
-                foreach (var (camada, desenho) in _doMeio)
+                foreach (var (camada, desenho) in _doMeio) Esmaecer(desenho, MapaDaCidade.CobreOHeroi(camada, _walker), passo);
+            }
+            if (_copas.Count > 0)
+            {
+                // As copas e a parede da frente que cobrem o herói também; cada sala conta o herói a partir do canto dela.
+                float passo = _copasNovas ? 1f : Mathf.Min(1f, Time.deltaTime / SegundosDoEsmaecer) * (1f - AlfaDeQuemCobre);
+                _copasNovas = false;
+                float cantoX = _emendada ? _origemX : 0f, cantoY = _emendada ? _origemY : 0f;
+                foreach (var (camada, desenho, ox, oy) in _copas)
                 {
-                    float alvo = MapaDaCidade.CobreOHeroi(camada, _walker) ? AlfaDeQuemCobre : 1f;
-                    var cor = desenho.color;
-                    cor.a = Mathf.MoveTowards(cor.a, alvo, passo);
-                    desenho.color = cor;
+                    var naSala = new Walker { X = _walker.X + (cantoX - ox) / _escala, Y = _walker.Y + (cantoY - oy) / _escala, Facing = _walker.Facing };
+                    Esmaecer(desenho, ArteDaSala.CobreOHeroiNaSala(camada, naSala), passo);
                 }
             }
             // Provisório: o corpo só tem frente. Espelhar pro lado que anda já diz pra onde ele vai.
             if (_walker.Facing == "W") _corpo.flipX = true;
             else if (_walker.Facing == "E") _corpo.flipX = false;
+        }
+
+        /// <summary>Leva a camada rumo ao meio transparente (se cobre o herói) ou ao inteiro, <paramref name="passo"/> por quadro.</summary>
+        private static void Esmaecer(SpriteRenderer desenho, bool cobre, float passo)
+        {
+            var cor = desenho.color;
+            cor.a = Mathf.MoveTowards(cor.a, cobre ? AlfaDeQuemCobre : 1f, passo);
+            desenho.color = cor;
         }
     }
 }

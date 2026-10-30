@@ -40,7 +40,9 @@ import {
   TILE_UNITS,
   camadasDaSala,
   cobreOHeroi,
+  cobreOHeroiNaSala,
   type CamadaDaCidade,
+  type CamadaDaSala,
   type DungeonId,
   type RoomLayout,
   type Walker,
@@ -222,6 +224,13 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
   let objetos: Pixi.Container[] = [];
   /** Na cidade, as camadas do meio, que ficam meio transparentes quando cobrem o herói. */
   let doMeio: Array<{ camada: CamadaDaCidade; sprite: Pixi.Sprite }> = [];
+  /**
+   * Na masmorra, as camadas de cima de cada sala (as copas, a parede da frente), com o canto dela, em pixel: ficam meio
+   * transparentes quando cobrem o herói, como as da cidade.
+   */
+  let copas: Array<{ camada: CamadaDaSala; sprite: Pixi.Sprite; ox: number; oy: number }> = [];
+  /** As copas acabaram de ser desenhadas: vão direto pra transparência certa, sem piscar inteiras na troca de sala. */
+  let copasNovas = false;
   let naCidade = false;
   /** Na masmorra emendada: o tamanho de uma sala, em pixel, pra achar o canto da sala atual. */
   let salaEmPixel: { largura: number; altura: number } | null = null;
@@ -234,6 +243,13 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
     for (const objeto of objetos) objeto.destroy();
     objetos = [];
     doMeio = [];
+    copas = [];
+  }
+
+  /** Leva a camada rumo ao meio transparente (se cobre o herói) ou ao inteiro, `passo` por quadro. */
+  function esmaecer(sprite: Pixi.Sprite, cobre: boolean, passo: number) {
+    const alvo = cobre ? ALFA_DE_QUEM_COBRE : 1;
+    sprite.alpha = alvo < sprite.alpha ? Math.max(alvo, sprite.alpha - passo) : Math.min(alvo, sprite.alpha + passo);
   }
 
   const boneco = await figuraEm(pixi, heroi, LADO * 1.25);
@@ -301,7 +317,11 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       const sprite = new pixi.Sprite(tex);
       sprite.scale.set(LADO / PIXELS_DA_SALA);
       sprite.position.set(ox, oy);
-      (camada.plano === 'cima' ? acima : chao).addChild(sprite);
+      if (camada.plano === 'cima') {
+        acima.addChild(sprite);
+        copas.push({ camada, sprite, ox, oy });
+        copasNovas = true;
+      } else chao.addChild(sprite);
     });
 
     const ladrilhos = new pixi.Graphics();
@@ -440,9 +460,14 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
         palco.position.set(Math.round(meioX), Math.round(meioY));
         // Quem cobre o herói (a árvore da praça, a loja...) fica meio transparente, pra ele não sumir atrás.
         const passo = semMovimento ? 1 : Math.min(1, app.ticker.deltaMS / MS_DO_ESMAECER) * (1 - ALFA_DE_QUEM_COBRE);
-        for (const { camada, sprite } of doMeio) {
-          const alvo = cobreOHeroi(camada, walker) ? ALFA_DE_QUEM_COBRE : 1;
-          sprite.alpha = alvo < sprite.alpha ? Math.max(alvo, sprite.alpha - passo) : Math.min(alvo, sprite.alpha + passo);
+        for (const { camada, sprite } of doMeio) esmaecer(sprite, cobreOHeroi(camada, walker), passo);
+      }
+      if (copas.length) {
+        // As copas e a parede da frente que cobrem o herói também; cada sala conta o herói a partir do canto dela.
+        const passo = semMovimento || copasNovas ? 1 : Math.min(1, app.ticker.deltaMS / MS_DO_ESMAECER) * (1 - ALFA_DE_QUEM_COBRE);
+        copasNovas = false;
+        for (const { camada, sprite, ox, oy } of copas) {
+          esmaecer(sprite, cobreOHeroiNaSala(camada, { x: walker.x + (canto.x - ox) / escala, y: walker.y + (canto.y - oy) / escala }), passo);
         }
       }
       if (andando && !semMovimento) fase += 1;

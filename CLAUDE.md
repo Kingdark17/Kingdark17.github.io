@@ -279,7 +279,12 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   da sala toma a proporção dela, e no app a câmera. A parede rachada se põe
   pelo lado dela (a porta da geometria), e não pela casa gravada. No app a
   área da luta (a caixa e os botões) continua na proporção 9 × 7 em que foi
-  afinada (`area-da-luta`).
+  afinada (`area-da-luta`). Desde 2026-10-30 a camada de cima (as copas, a
+  parede da frente, os pilares da Torre) fica meio transparente quando cobre
+  o herói, como as construções da cidade (`cobreOHeroiNaSala`): o `cobre` de
+  cada camada diz as casas em que ela esconde alguém, e sai da arte com
+  `packages/shared/scripts/cobertura-das-salas.ts` (arte nova → rodar o
+  script e colar).
 - Níveis e chefe final (2026-10-25, **site e app**; o Breno zerou a
   Floresta e achou a batalha final fraca): os monstros ganharam nível
   (`monsterLevel`: 9 em cada 10 andares de força), o degrau da escada

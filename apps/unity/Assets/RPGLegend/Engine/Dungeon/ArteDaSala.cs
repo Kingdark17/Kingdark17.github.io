@@ -15,6 +15,8 @@ namespace RPGLegend.Engine
         [JsName("ENFEITES_DAS_SALAS")] public OrderedMap<List<TileRef>> EnfeitesDasSalas = new OrderedMap<List<TileRef>>();
         /// <summary>O formato da sala de cada masmorra que não é a de sempre (a Torre: 11 × 12, vãos de 3).</summary>
         [JsName("GEOMETRIAS_DAS_SALAS")] public OrderedMap<GeometriaDaSala> GeometriasDasSalas = new OrderedMap<GeometriaDaSala>();
+        /// <summary>Privada no TS: o corpo do herói desenhado na sala, em unidades, a partir do pé (o boneco tem 1,25 casa).</summary>
+        [JsName("CORPO_NA_SALA")] public CorpoDoHeroi CorpoNaSala = new CorpoDoHeroi();
     }
 
     /// <summary>
@@ -28,6 +30,11 @@ namespace RPGLegend.Engine
         public string Porta;
         /// <summary>Só aparece quando a sala NÃO tem porta deste lado: a parede que fecha o vão (a Torre).</summary>
         public string SemPorta;
+        /// <summary>
+        /// Só nas de "cima": as casas em que a arte esconde o herói ('#'), uma linha por fileira. É o que diz se a camada
+        /// está cobrindo o herói (<see cref="ArteDaSala.CobreOHeroiNaSala"/>).
+        /// </summary>
+        public List<string> Cobre;
     }
 
     public static partial class GameData
@@ -65,9 +72,35 @@ namespace RPGLegend.Engine
             {
                 if (camada.Porta != null && !Contem(portas, camada.Porta)) continue;
                 if (camada.SemPorta != null && Contem(portas, camada.SemPorta)) continue;
-                lista.Add(new CamadaDaSala { Arquivo = camada.Arquivo, Plano = camada.Plano, Porta = camada.Porta, SemPorta = camada.SemPorta });
+                lista.Add(new CamadaDaSala { Arquivo = camada.Arquivo, Plano = camada.Plano, Porta = camada.Porta, SemPorta = camada.SemPorta, Cobre = camada.Cobre });
             }
             return lista;
+        }
+
+        /// <summary>
+        /// TS: cobreOHeroiNaSala — se a camada de cima está por cima do desenho do herói: aí ela fica meio transparente,
+        /// como as construções da cidade. <paramref name="walker"/> contado do canto desta sala (o da vizinha fica além
+        /// da borda dela).
+        /// </summary>
+        public static bool CobreOHeroiNaSala(CamadaDaSala camada, Walker walker)
+        {
+            if (camada.Plano != "cima" || camada.Cobre == null) return false;
+            var corpo = D.CorpoNaSala;
+            double t = RoomWalk.TileUnits;
+            double esquerda = walker.X - corpo.MeiaLargura;
+            double direita = walker.X + corpo.MeiaLargura;
+            double pe = walker.Y + RoomWalk.HeroHalf;
+            double topo = pe - corpo.Ate;
+            double baixo = pe - corpo.De;
+            for (int row = 0; row < camada.Cobre.Count; row++)
+            {
+                var linha = camada.Cobre[row];
+                for (int col = 0; col < linha.Length; col++)
+                {
+                    if (linha[col] == '#' && col * t < direita && (col + 1) * t > esquerda && row * t < baixo && (row + 1) * t > topo) return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
