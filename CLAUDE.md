@@ -206,7 +206,11 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   animada estilo Genshin: a câmera se aproxima da porta trancada, o cadeado cai
   e a porta abre quando a pessoa entra; depois menu e lista de personagens
   (com o boneco de cada um; criar e apagar como no site, em
-  `TelaDeCriacao`/`AppScreens`). UI Toolkit para as telas + cena 2D para a
+  `TelaDeCriacao`/`AppScreens`). Desde 2026-10-30 o menu também leva às
+  Configurações (`TelaDeConfiguracoes`: o som, guardado no aparelho em
+  `PreferenciaDeSom`, como o site guarda no navegador) e à Loja de
+  cosméticos (`TelaDaLoja`: a compra sai do ouro de um personagem, e
+  escolher o que usar continua no site, em Conta e perfil). UI Toolkit para as telas + cena 2D para a
   porta; visual igual ao site; **celular deitado** (só paisagem). A arte da
   porta é **provisória** (o Breno substitui com os mesmos nomes em
   `Art/Entrada`). **Login com Google fica para uma

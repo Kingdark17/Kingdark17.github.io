@@ -14,7 +14,8 @@ namespace RPGLegend.Game.App
     /// 3. com a sessão, o cadeado cai, a porta abre e a câmera mergulha na luz até o menu;
     /// 4. o menu leva à lista de personagens (lida da nuvem); sair da conta volta à porta trancada;
     /// 5. o JOGAR de um personagem abre a partida (<see cref="TelaDeJogo"/>), que ao sair volta à lista;
-    /// 6. o slot vazio cria personagem (<see cref="TelaDeCriacao"/>), e o ocupado pode ser apagado, como no site.
+    /// 6. o slot vazio cria personagem (<see cref="TelaDeCriacao"/>), e o ocupado pode ser apagado, como no site;
+    /// 7. o menu também leva às Configurações (<see cref="TelaDeConfiguracoes"/>) e à Loja (<see cref="TelaDaLoja"/>).
     /// </summary>
     public sealed class AppFlow : MonoBehaviour
     {
@@ -24,13 +25,15 @@ namespace RPGLegend.Game.App
         private static readonly Color Preto = Color.black;
         private static readonly Color Ouro = new Color(1f, 0.93f, 0.7f);
 
-        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Jogando, Criando, Trocando }
+        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Jogando, Criando, Configuracoes, Loja, Trocando }
 
         /// <summary>Só no Editor: o slot que o menu "RPG Legend > Jogar direto" abre sem passar pela porta (0 = nenhum).</summary>
         public const string ChaveJogarDireto = "RPGLegend.JogarDireto";
 
         private AppScreens _telas;
         private TelaDeCriacao _criacao;
+        private TelaDeConfiguracoes _configuracoes;
+        private TelaDaLoja _loja;
         private TelaDeJogo _jogo;
         private Estado _estado = Estado.Chegando;
         private bool _tocou;
@@ -45,9 +48,10 @@ namespace RPGLegend.Game.App
                 _telas.AoEsqueci += () => Application.OpenURL(ApiConfig.Site + "/esqueci-senha");
                 _telas.AoTocar += () => _tocou = true;
                 _telas.AoJogar += Jogar;
+                _telas.AoConfiguracoes += AbrirConfiguracoes;
+                _telas.AoLoja += AbrirLoja;
                 _telas.AoVoltar += Voltar;
                 _telas.AoSair += Sair;
-                _telas.AoEmBreve += _telas.Aviso;
                 _telas.AoJogarSlot += JogarSlot;
                 _telas.AoCriarSlot += CriarSlot;
                 _telas.AoApagarSlot += ApagarSlot;
@@ -55,6 +59,12 @@ namespace RPGLegend.Game.App
                 _criacao = new TelaDeCriacao(documento.rootVisualElement);
                 _criacao.AoVoltar += VoltarDaCriacao;
                 _criacao.AoCriado += CriouPersonagem;
+
+                _configuracoes = new TelaDeConfiguracoes(documento.rootVisualElement);
+                _configuracoes.AoVoltar += VoltarDaConfiguracoes;
+                _loja = new TelaDaLoja(documento.rootVisualElement);
+                _loja.AoVoltar += VoltarDaLoja;
+                _loja.AoSessaoExpirada += SessaoExpiradaNaLoja;
 
                 _jogo = gameObject.AddComponent<TelaDeJogo>();
                 _jogo.AoSair += SairDoJogo;
@@ -89,6 +99,8 @@ namespace RPGLegend.Game.App
             if (Keyboard.current == null || !Keyboard.current.escapeKey.wasPressedThisFrame) return;
             if (_estado == Estado.Personagens) Voltar();
             else if (_estado == Estado.Criando) VoltarDaCriacao();
+            else if (_estado == Estado.Configuracoes) VoltarDaConfiguracoes();
+            else if (_estado == Estado.Loja) VoltarDaLoja();
         }
 
         // ---------- porta ----------
@@ -242,6 +254,83 @@ namespace RPGLegend.Game.App
                     _telas.MostrarMenu(true);
                 });
                 _estado = Estado.Menu;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        // ---------- configurações e loja ----------
+
+        private async void AbrirConfiguracoes()
+        {
+            if (_estado != Estado.Menu) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _telas.MostrarMenu(false);
+                    _configuracoes.Abrir();
+                });
+                _estado = Estado.Configuracoes;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        private async void VoltarDaConfiguracoes()
+        {
+            if (_estado != Estado.Configuracoes) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _configuracoes.Fechar();
+                    _telas.MostrarMenu(true);
+                });
+                _estado = Estado.Menu;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        private async void AbrirLoja()
+        {
+            if (_estado != Estado.Menu) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _telas.MostrarMenu(false);
+                    _loja.Abrir();
+                });
+                _estado = Estado.Loja;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        private async void VoltarDaLoja()
+        {
+            if (_estado != Estado.Loja) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _loja.Fechar();
+                    _telas.MostrarMenu(true);
+                });
+                _estado = Estado.Menu;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        private async void SessaoExpiradaNaLoja()
+        {
+            try
+            {
+                Session.Limpar();
+                await VoltarParaAPorta("Sua sessão expirou. Entre de novo.");
             }
             catch (OperationCanceledException) { }
             catch (Exception e) { Debug.LogException(e); }
@@ -403,6 +492,8 @@ namespace RPGLegend.Game.App
             {
                 _telas.MostrarMenu(false);
                 _telas.MostrarPersonagens(false);
+                _configuracoes.Fechar();
+                _loja.Fechar();
                 cena.Mostrar(true);
                 cena.Resetar();
             });

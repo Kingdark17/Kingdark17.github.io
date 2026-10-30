@@ -66,6 +66,32 @@ namespace RPGLegend.Game.App
         public string Signature;
     }
 
+    /// <summary>Um item da loja de cosméticos (GET /api/account/profile/catalog).</summary>
+    public sealed class ItemDeCosmetico
+    {
+        public string Id;
+        /// <summary>"pet", "frame" ou "color".</summary>
+        public string Tipo;
+        /// <summary>O que a conta guarda quando tem o item: o id do pet, da moldura, ou a cor.</summary>
+        public string Valor;
+        public string Nome;
+        public string Icone;
+        public int Preco;
+        public bool SoDoAdm;
+    }
+
+    /// <summary>A vitrine e o que a conta já tem (owned), que decide entre "Comprar" e "já é seu".</summary>
+    public sealed class CatalogoDaLoja
+    {
+        public List<ItemDeCosmetico> Itens = new List<ItemDeCosmetico>();
+        public List<string> Molduras = new List<string>();
+        public List<string> Cores = new List<string>();
+        public List<string> Pets = new List<string>();
+
+        public bool Possui(ItemDeCosmetico item) =>
+            (item.Tipo == "frame" ? Molduras : item.Tipo == "color" ? Cores : Pets).Contains(item.Valor);
+    }
+
     /// <summary>
     /// As rotas da API que o app usa, as mesmas do site (<c>/api/account/*</c> e <c>/api/characters</c>). O app
     /// não é navegador: em vez do cookie, manda o token no cabeçalho <c>Authorization: Bearer</c>, que a API
@@ -132,6 +158,20 @@ namespace RPGLegend.Game.App
             await Enviar("POST", "/api/save/reset", new JObject { ["slot"] = slot }, token);
         }
 
+        /// <summary>A loja de cosméticos, com o que a conta já tem (GET /api/account/profile/catalog).</summary>
+        public static async Awaitable<CatalogoDaLoja> Catalogo(string token) =>
+            LerCatalogo(await Enviar("GET", "/api/account/profile/catalog", null, token));
+
+        /// <summary>
+        /// Compra o item com o ouro do personagem do slot (POST /api/account/profile/purchase). O servidor desconta o ouro
+        /// daquele save e devolve o save novo e a assinatura: quem tivesse a partida aberta precisaria adotar os dois, mas
+        /// a loja do app só abre pelo menu, com nenhuma partida aberta.
+        /// </summary>
+        public static async Awaitable ComprarCosmetico(string token, string id, int slot)
+        {
+            await Enviar("POST", "/api/account/profile/purchase", new JObject { ["id"] = id, ["slot"] = slot }, token);
+        }
+
         // ---------- leitura das respostas (sem Unity: dá para testar com JSON de exemplo) ----------
 
         public static ApiSession LerSessao(JObject json)
@@ -176,6 +216,35 @@ namespace RPGLegend.Game.App
                     lista.Characters.Add(resumo);
                 }
             return lista;
+        }
+
+        public static CatalogoDaLoja LerCatalogo(JObject json)
+        {
+            var catalogo = new CatalogoDaLoja();
+            if (json["catalog"] is JArray itens)
+                foreach (var i in itens)
+                    catalogo.Itens.Add(new ItemDeCosmetico
+                    {
+                        Id = Texto(i["id"]),
+                        Tipo = Texto(i["type"]),
+                        Valor = Texto(i["value"]),
+                        Nome = Texto(i["name"]),
+                        Icone = Texto(i["icon"]),
+                        Preco = Inteiro(i["price"], 0),
+                        SoDoAdm = i["adminOnly"]?.Type == JTokenType.Boolean && (bool)i["adminOnly"],
+                    });
+            var dono = json["owned"];
+            Textos(dono?["frames"], catalogo.Molduras);
+            Textos(dono?["colors"], catalogo.Cores);
+            Textos(dono?["pets"], catalogo.Pets);
+            return catalogo;
+        }
+
+        private static void Textos(JToken lista, List<string> destino)
+        {
+            if (!(lista is JArray itens)) return;
+            foreach (var t in itens)
+                if (t.Type == JTokenType.String) destino.Add((string)t);
         }
 
         private static string Texto(JToken t) => t != null && t.Type == JTokenType.String ? (string)t : "";

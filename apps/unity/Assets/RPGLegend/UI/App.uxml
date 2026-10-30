@@ -49,6 +49,62 @@
             <ui:VisualElement name="grade" class="grade" />
         </ui:VisualElement>
 
+        <!-- Configurações (painel-configuracoes.tsx): o som, que é deste aparelho, e os créditos. -->
+        <ui:VisualElement name="configuracoes" class="tela configuracoes oculto">
+            <ui:VisualElement class="cabecalho">
+                <ui:VisualElement class="cabecalho-textos">
+                    <ui:Label text="Configurações" class="titulo-tela" />
+                    <ui:Label text="Valem para este aparelho." class="subtitulo" />
+                </ui:VisualElement>
+                <ui:Button name="botao-voltar-config" text="VOLTAR AO MENU" class="botao" />
+            </ui:VisualElement>
+            <ui:ScrollView class="corpo-da-config rolagem-fina" horizontal-scroller-visibility="Hidden">
+                <ui:Label text="Som" class="titulo-da-secao" />
+                <ui:VisualElement class="linha-da-config">
+                    <ui:Label text="Som do jogo" class="rotulo-da-config" />
+                    <ui:Button name="botao-som" class="botao botao-pequeno" />
+                </ui:VisualElement>
+                <ui:VisualElement class="campo-da-config">
+                    <ui:VisualElement class="linha-da-config">
+                        <ui:Label text="Volume geral" class="rotulo-da-config" />
+                        <ui:Label name="valor-do-volume" class="valor-da-config" />
+                    </ui:VisualElement>
+                    <ui:SliderInt name="volume-geral" low-value="0" high-value="100" class="deslizante" />
+                    <ui:Label text="Vale pra todo o som do jogo." class="dica-da-config" />
+                </ui:VisualElement>
+                <ui:VisualElement class="campo-da-config">
+                    <ui:VisualElement class="linha-da-config">
+                        <ui:Label text="Efeitos sonoros" class="rotulo-da-config" />
+                        <ui:Label name="valor-dos-efeitos" class="valor-da-config" />
+                    </ui:VisualElement>
+                    <ui:SliderInt name="volume-dos-efeitos" low-value="0" high-value="100" class="deslizante" />
+                    <ui:Label text="Golpe, moeda, porta, nível. Abaixa só eles." class="dica-da-config" />
+                </ui:VisualElement>
+                <ui:Button name="botao-testar-som" text="TESTAR EFEITO" class="botao botao-pequeno botao-testar" />
+                <ui:Label text="A preferência é deste aparelho, não da conta: quem joga no celular e no computador ajusta cada um do seu jeito." class="nota-da-config" />
+                <!-- Obrigatório: a licença CC BY 4.0 da fonte dos títulos pede crédito visível (ver UI/Fontes). -->
+                <ui:Label text="Créditos" class="titulo-da-secao" />
+                <ui:Label text="Fonte dos títulos: Alkhemikal, de jeti, sob a licença CC BY 4.0." class="nota-da-config" />
+                <ui:VisualElement class="links-da-config">
+                    <ui:Button name="link-da-fonte" text="Página da fonte" class="link" />
+                    <ui:Button name="link-da-licenca" text="Licença CC BY 4.0" class="link" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:VisualElement>
+
+        <!-- Loja (painel-loja.tsx): pets, molduras e cores de nome, pagos com o ouro de um personagem. -->
+        <ui:VisualElement name="loja" class="tela loja oculto">
+            <ui:VisualElement class="cabecalho">
+                <ui:VisualElement class="cabecalho-textos">
+                    <ui:Label text="Loja" class="titulo-tela" />
+                    <ui:Label text="Pets, molduras e cores de nome. O ouro sai do personagem." class="subtitulo" />
+                </ui:VisualElement>
+                <ui:Button name="botao-voltar-loja" text="VOLTAR AO MENU" class="botao" />
+            </ui:VisualElement>
+            <ui:Label name="estado-da-loja" class="estado" />
+            <ui:ScrollView name="corpo-da-loja" class="corpo-da-loja rolagem-fina" horizontal-scroller-visibility="Hidden" />
+        </ui:VisualElement>
+
         <!-- Novo personagem (formulario-criacao.tsx): a prévia ao lado das escolhas, nome, raça e cabelo. -->
         <ui:VisualElement name="criacao" class="tela criacao oculto">
             <ui:VisualElement class="cabecalho">

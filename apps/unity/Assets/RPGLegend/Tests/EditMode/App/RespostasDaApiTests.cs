@@ -42,6 +42,40 @@ namespace RPGLegend.Tests
         }
 
         [Test]
+        public void CatalogoTrazOsItensEOQueAContaJaTem()
+        {
+            var catalogo = RpgApi.LerCatalogo(JObject.Parse(@"{
+                ""catalog"": [
+                    { ""id"": ""frame_gold"", ""type"": ""frame"", ""value"": ""gold"", ""name"": ""Moldura Dourada"", ""icon"": ""🟡"", ""price"": 600 },
+                    { ""id"": ""color_blue"", ""type"": ""color"", ""value"": ""#6ee7ff"", ""name"": ""Nome Azul"", ""icon"": ""🔵"", ""price"": 150 },
+                    { ""id"": ""pet_fox"", ""type"": ""pet"", ""value"": ""fox"", ""name"": ""Raposa Astuta"", ""icon"": ""🦊"", ""price"": 900 },
+                    { ""id"": ""pet_dragon"", ""type"": ""pet"", ""value"": ""dragon"", ""name"": ""Dragão"", ""icon"": ""🐉"", ""price"": 0, ""adminOnly"": true }
+                ],
+                ""owned"": { ""frames"": [""gold""], ""colors"": [], ""pets"": [""dragon""] }
+            }"));
+
+            Assert.AreEqual(4, catalogo.Itens.Count);
+            var raposa = catalogo.Itens[2];
+            Assert.AreEqual("pet", raposa.Tipo);
+            Assert.AreEqual(900, raposa.Preco);
+            Assert.IsFalse(raposa.SoDoAdm);
+            Assert.IsTrue(catalogo.Itens[3].SoDoAdm);
+            // O que a conta tem é pelo valor e pelo tipo: a cor "gold" não seria a moldura "gold".
+            Assert.IsTrue(catalogo.Possui(catalogo.Itens[0]));
+            Assert.IsFalse(catalogo.Possui(catalogo.Itens[1]));
+            Assert.IsFalse(catalogo.Possui(raposa));
+            Assert.IsTrue(catalogo.Possui(catalogo.Itens[3]));
+        }
+
+        [Test]
+        public void CatalogoSemOwnedLeVazio()
+        {
+            var catalogo = RpgApi.LerCatalogo(JObject.Parse(@"{ ""catalog"": [{ ""id"": ""pet_cat"", ""type"": ""pet"", ""value"": ""cat"", ""name"": ""Gato"", ""icon"": ""🐈"", ""price"": 650 }] }"));
+            Assert.AreEqual(1, catalogo.Itens.Count);
+            Assert.IsFalse(catalogo.Possui(catalogo.Itens[0]));
+        }
+
+        [Test]
         public void UsuarioTrazOPet()
         {
             Assert.AreEqual("slime", RpgApi.LerUsuario(JObject.Parse(@"{ ""username"": ""a"", ""pet"": ""slime"" }")).Pet);

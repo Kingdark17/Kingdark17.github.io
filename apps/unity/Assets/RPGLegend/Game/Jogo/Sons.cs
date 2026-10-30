@@ -8,13 +8,14 @@ namespace RPGLegend.Game.Jogo
     /// original): cada efeito é um punhado de ondas simples tocadas juntas, que somem num decaimento exponencial, mais o
     /// eco único do barramento do site. Cada um é sintetizado na primeira vez que toca.
     ///
-    /// O volume é o padrão do site (0,28 do teto de 0,48); o controle de volume vem com a tela de configurações.
+    /// O clipe sai no teto do mestre do site (0,48), e cada efeito toca com o ganho da tela de Configurações
+    /// (<see cref="PreferenciaDeSom"/>): o volume geral, zero com o som desligado, vezes o dos efeitos. No padrão
+    /// (0,28 e 100%) soa como antes da tela existir.
     /// </summary>
     public static class Sons
     {
         private const int Taxa = 44100;
         private const float Teto = 0.48f;
-        private const float VolumePadrao = 0.28f;
         private const float AtrasoDoEco = 0.24f;
         private const float GanhoDoEco = 0.16f;
         /// <summary>O oscilador do site para 20 ms depois do fim da rampa.</summary>
@@ -57,12 +58,14 @@ namespace RPGLegend.Game.Jogo
         public static void Tocar(string efeito)
         {
             if (efeito == null || !Efeitos.TryGetValue(efeito, out var notas)) return;
+            float ganho = PreferenciaDeSom.GanhoDosEfeitos;
+            if (ganho <= 0f) return;
             if (!Prontos.TryGetValue(efeito, out var clipe))
             {
                 clipe = Sintetizar(efeito, notas);
                 Prontos[efeito] = clipe;
             }
-            Fonte().PlayOneShot(clipe);
+            Fonte().PlayOneShot(clipe, ganho);
         }
 
         private static AudioSource Fonte()
@@ -101,7 +104,7 @@ namespace RPGLegend.Game.Jogo
             for (int i = 0; i < amostras; i++)
             {
                 float eco = i >= atraso ? seco[i - atraso] * GanhoDoEco : 0f;
-                dados[i] = (seco[i] + eco) * Teto * VolumePadrao;
+                dados[i] = (seco[i] + eco) * Teto;
             }
 
             var clipe = AudioClip.Create("som-" + nome, amostras, 1, Taxa, false);
