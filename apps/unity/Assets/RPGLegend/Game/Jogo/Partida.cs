@@ -341,7 +341,10 @@ namespace RPGLegend.Game.Jogo
             }
             else
             {
-                aviso = new Aviso("🏆", "Vitória", "Você venceu a batalha!" + (final.Loot != null ? " Encontrou <b>" + Items.DisplayName(final.Loot) + "</b>." : ""));
+                // O chefe vencido deixa a chave da escada e o pilar de volta (o mesmo aviso do site).
+                bool chefe = Estados.CelulaAtual(final.Estado)?.Type == DungeonRoomTypes.Boss;
+                aviso = new Aviso("🏆", "Vitória", "Você venceu a batalha!" + (final.Loot != null ? " Encontrou <b>" + Items.DisplayName(final.Loot) + "</b>." : "") +
+                    (chefe ? " O guardião deixou a chave da escada, e o pilar do covil pode levar você de volta à cidade." : ""));
             }
             LutaAcabou?.Invoke(final.Arena.Chegada);
             RegistrarMudanca(final.Estado, aviso);

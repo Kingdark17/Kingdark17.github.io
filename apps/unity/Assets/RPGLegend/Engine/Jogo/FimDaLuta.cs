@@ -278,9 +278,11 @@ namespace RPGLegend.Engine
 
             if (sala.Type == DungeonRoomTypes.Boss)
             {
-                var proximo = Estados.AvancarAndar(limpo, rng, now, app);
-                log.Add("Após vencer " + Js.Str(abatido.Name) + ", o grupo avança automaticamente para o Andar " + Js.NumberToString(proximo.Floor) + ".");
-                return new SalaLimpa { Estado = proximo, Log = log, Loot = loot };
+                // O chefe não leva mais pro andar de baixo sozinho: ele deixa a chave da escada, que fica logo atrás do
+                // covil, e no covil o pilar de volta à cidade pode ser aceso.
+                log.Add(Js.Str(abatido.Name) + " cai e deixa uma chave de ferro: a escada do andar está aberta.");
+                log.Add("No meio do covil, um pilar apagado pode levar o grupo de volta à cidade.");
+                return new SalaLimpa { Estado = limpo, Log = log, Loot = loot };
             }
 
             return new SalaLimpa { Estado = limpo, Log = log, Loot = loot };

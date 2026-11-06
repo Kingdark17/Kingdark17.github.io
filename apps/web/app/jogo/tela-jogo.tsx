@@ -98,7 +98,7 @@ import {
 import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
-import { arteDoTipo } from '@/lib/jogo/icones-do-mapa';
+import { arteDoConteudo, arteDoTipo } from '@/lib/jogo/icones-do-mapa';
 import { TEMAS, type Figura, type OrigemDaSala, type SalaDesenhada, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
 import { assinaturaDosExtras, chaveDosObjetos, figurasDaSala, lerObjetos } from '@/lib/jogo/figuras-da-sala';
 import { direcaoAoSoltar, direcaoDaTecla, estaDigitando } from '@/lib/jogo/teclado';
@@ -265,7 +265,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const tituloAgora = estado ? tituloDoHeroi(estado.progresso) : null;
   const portasAgora = (['N', 'S', 'E', 'W'] as const).filter((d) => celulaAgora?.doors?.[d]).join('');
   const iconeAgora = estado && celulaAgora ? apresentacaoDe(estado).icone(celulaAgora) : '';
-  const arteAgora = iconeAgora ? arteDoTipo(celulaAgora?.type) : null;
+  const arteAgora = iconeAgora ? arteDoConteudo(celulaAgora) : null;
   const racaAgora = estado ? idDaRaca(estado.hero) : null;
   const emojiDaRaca = estado?.hero.raceIcon || '🙂';
 
@@ -316,14 +316,14 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               objetos: s.acesa ? chaveDosObjetos(s.celula, icone !== '', masmorraAgora) : '',
               extras: s.acesa ? assinaturaDosExtras(s.celula) : '',
               icone,
-              tipo: s.celula.type,
+              arte: icone ? arteDoConteudo(s.celula) : null,
             };
           }),
         )
       : '';
   const salasDaCena = useMemo<SalaDesenhada[] | null>(() => {
     if (!vizinhanca) return null;
-    const lidas = JSON.parse(vizinhanca) as { x: number; y: number; atual: boolean; acesa: boolean; portas: string; objetos: string; extras: string; icone: string; tipo: string }[];
+    const lidas = JSON.parse(vizinhanca) as { x: number; y: number; atual: boolean; acesa: boolean; portas: string; objetos: string; extras: string; icone: string; arte: string | null }[];
     return lidas.map((sala) => {
       // A atual é a mesma planta em que o herói anda, com as mesmas figuras.
       if (sala.atual) return { x: sala.x, y: sala.y, planta, figuras, acesa: true };
@@ -332,7 +332,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
         x: sala.x,
         y: sala.y,
         planta: plantaDaSala(portas, lerObjetos(sala.objetos), masmorraAgora),
-        figuras: sala.acesa ? figurasDaSala(sala.icone ? { arte: arteDoTipo(sala.tipo), emoji: sala.icone } : null, sala.extras, null) : {},
+        figuras: sala.acesa ? figurasDaSala(sala.icone ? { arte: sala.arte, emoji: sala.icone } : null, sala.extras, null) : {},
         acesa: sala.acesa,
       };
     });
@@ -1415,12 +1415,17 @@ function temaDaCena(estado: EstadoDoJogo | null, tela: TelaAberta | null): Tema 
   return estado.mapMode === 'dungeon' ? 'dungeon' : 'city';
 }
 
+/** O que o aviso da vitória acrescenta quando quem caiu foi o chefe do andar. */
+const TEXTO_DO_CHEFE_VENCIDO = 'O guardião deixou a chave da escada, e o pilar do covil pode levar você de volta à cidade.';
+
 function avisoDoFim(final: Combate): Aviso {
   if (final.fase === 'derrota') return { icone: '💀', titulo: 'Derrota', texto: final.log.join(' ') };
   if (final.fase === 'fuga') return { icone: '🏃', titulo: 'Fuga', texto: 'Você escapa da batalha, ofegante.' };
+  // O chefe vencido deixa a chave da escada e o pilar de volta (o registro da luta, que diz isso, fecha sozinho).
+  const chefe = celulaAtual(final.estado)?.type === 'boss';
   return {
     icone: '🏆',
     titulo: 'Vitória',
-    texto: `Você venceu a batalha!${final.loot ? ` Encontrou <b>${displayName(final.loot)}</b>.` : ''}`,
+    texto: `Você venceu a batalha!${final.loot ? ` Encontrou <b>${displayName(final.loot)}</b>.` : ''}${chefe ? ` ${TEXTO_DO_CHEFE_VENCIDO}` : ''}`,
   };
 }

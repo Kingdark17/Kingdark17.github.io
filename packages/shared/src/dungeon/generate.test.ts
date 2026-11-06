@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import { seededRng, type Rng } from '../rng.js';
 import type { MonsterInstance } from '../monsters/generate.js';
+import { DIR_VECTORS } from './graph.js';
 import {
+  ICONE_DO_PILAR,
   entryText,
   generateDungeonFloor,
   iconFor,
@@ -65,13 +67,33 @@ describe('monsterGroupSize', () => {
 });
 
 describe('generateDungeonFloor — estrutura do andar', () => {
-  it('tem exatamente uma sala start, uma stairs e uma exit', () => {
+  it('tem uma sala start e uma stairs, e nenhuma saída fora do andar de entrada', () => {
     const floor = generateDungeonFloor(7, 11, 11, { rng: seededRng(1) });
     const byType = (t: string) => floor.rooms.filter((r) => r.type === t);
     expect(byType('start')).toHaveLength(1);
     expect(byType('stairs')).toHaveLength(1);
-    expect(byType('exit')).toHaveLength(1);
+    expect(byType('exit')).toHaveLength(0);
     expect(floor.start.type).toBe('start');
+  });
+
+  it('no andar de entrada, a sala de início é a saída pra cidade', () => {
+    const floor = generateDungeonFloor(7, 11, 11, { rng: seededRng(1), entrada: true });
+    expect(floor.start.type).toBe('exit');
+    expect(floor.rooms.filter((r) => r.type === 'exit')).toEqual([floor.start]);
+    expect(floor.rooms.filter((r) => r.type === 'start')).toHaveLength(0);
+  });
+
+  it('no andar de chefe, a escada fica numa ponta, e a única porta dela dá na sala do chefe', () => {
+    for (const semente of [1, 2, 3, 4, 5, 6, 7, 8]) {
+      for (const andar of [5, 10, 20, 50, 100]) {
+        const floor = generateDungeonFloor(andar, 11, 11, { rng: seededRng(semente) });
+        const escada = floor.rooms.find((r) => r.type === 'stairs')!;
+        const portas = Object.keys(escada.doors) as (keyof typeof DIR_VECTORS)[];
+        expect(portas).toHaveLength(1);
+        const v = DIR_VECTORS[portas[0]!];
+        expect(floor.grid[escada.y + v.y]?.[escada.x + v.x]?.type).toBe('boss');
+      }
+    }
   });
 
   it('só tem sala de chefe em andar de chefe, e nunca mais de uma', () => {
@@ -238,8 +260,10 @@ describe('iconFor / shortLabel / roomDesc / entryText', () => {
     const vivo = cellFixture({ type: 'boss', monsters: [monsterFixture({ isBoss: true, bossTitle: 'o Feroz' })], beaten: false });
     const vazio = cellFixture({ type: 'boss', beaten: true });
     expect(roomDesc(vivo)).toContain('Goblin');
-    expect(roomDesc(vazio)).toBe('O covil do guardião agora está silencioso e vazio.');
-    expect(iconFor(vazio)).toBe('');
+    // Vencido, o covil guarda o pilar de volta à cidade.
+    expect(roomDesc(vazio)).toContain('pilar');
+    expect(iconFor(vazio)).toBe(ICONE_DO_PILAR);
+    expect(entryText(vazio)).toContain('voltar à cidade');
   });
 
   it('salas fixas (start/stairs/exit) têm ícone e textos estáveis', () => {

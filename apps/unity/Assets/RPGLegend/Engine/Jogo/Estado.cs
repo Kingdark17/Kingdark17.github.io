@@ -271,7 +271,8 @@ namespace RPGLegend.Engine
 
             var semAndar = new EstadoNaMasmorra();
             Comuns(save, semAndar);
-            return GerarAndar(semAndar, save.Floor, rng, now);
+            // Sem o andar gravado, ele recomeça como quem acaba de chegar: com a saída na sala de início.
+            return GerarAndar(semAndar, save.Floor, rng, now, false, true);
         }
 
         /// <summary>
@@ -317,7 +318,8 @@ namespace RPGLegend.Engine
         {
             var comMasmorra = estado.Clone();
             comMasmorra.Masmorra = masmorra ?? estado.Masmorra;
-            return GerarAndar(comMasmorra, andar ?? PrimeiroAndar, rng ?? Rng.Default, now, app);
+            // Quem entra pelo portão tem a saída na sala de início.
+            return GerarAndar(comMasmorra, andar ?? PrimeiroAndar, rng ?? Rng.Default, now, app, true);
         }
 
         /// <summary>TS: voltarParaCidade — a saída devolve o jogador à cidade guardada. O andar não é zerado.</summary>
@@ -334,7 +336,7 @@ namespace RPGLegend.Engine
             return new ResultadoDaEscada { Kind = "desceu", Estado = AvancarAndar(estado, rng, now, app) };
         }
 
-        /// <summary>TS: avancarAndar — o próximo andar sem passar pela escada (depois de vencer o chefe).</summary>
+        /// <summary>TS: avancarAndar — o próximo andar (quem desce é a escada; desde 2026-11-06 o chefe só a abre).</summary>
         public static EstadoNaMasmorra AvancarAndar(EstadoNaMasmorra estado, RngFn rng = null, Func<double> now = null, bool app = false) =>
             GerarAndar(estado, estado.Floor + 1, rng ?? Rng.Default, now, app);
 
@@ -364,7 +366,7 @@ namespace RPGLegend.Engine
         /// TS: gerarAndar. <paramref name="now"/> é o relógio do uid dos itens que o andar sorteia; ausente,
         /// o relógio de verdade. <paramref name="app"/>: quem desce é o app, e os itens do andar podem vir com material.
         /// </summary>
-        private static EstadoNaMasmorra GerarAndar(EstadoDoJogo baseDoAndar, double floor, RngFn rng, Func<double> now, bool app = false)
+        private static EstadoNaMasmorra GerarAndar(EstadoDoJogo baseDoAndar, double floor, RngFn rng, Func<double> now, bool app = false, bool entrada = false)
         {
             var teacher = ProfessorDoAndar(baseDoAndar.Hero, floor, rng);
             var andar = DungeonFloors.Generate(floor, baseDoAndar.MapRows, baseDoAndar.MapCols, new DungeonGenerateOptions
@@ -374,6 +376,7 @@ namespace RPGLegend.Engine
                 Teacher = teacher,
                 Now = now,
                 App = app,
+                Entrada = entrada,
             });
             var inicio = new Posicao(andar.Start.X, andar.Start.Y);
 

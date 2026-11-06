@@ -161,6 +161,12 @@ export interface DungeonGenerateOptions {
   teacher?: Omit<DungeonTeacher, 'taught'>;
   /** Quem gera o andar é o app: os itens dos baús e das salas podem vir com material (`items/materiais.ts`). */
   app?: boolean;
+  /**
+   * O andar em que se entra pelo portão (o 1 ou o de um totem): a sala de início é a saída pra cidade, como se o
+   * herói tivesse acabado de entrar pela floresta (pedido do Breno, 2026-11-06). Os outros andares não têm saída: a
+   * volta é pelo pilar da sala do chefe, depois de vencê-lo.
+   */
+  entrada?: boolean;
 }
 
 interface DistantRoomsResult {
@@ -214,7 +220,22 @@ function resolveDistantRooms(rows: number, cols: number, roomCount: number, rng:
   return { res, distances, distantRooms: distantRooms as DungeonCell[], pool: pool as DungeonCell[] };
 }
 
-/** Reserva a sala mais distante disponível pra um tipo fixo (escada, saída), removendo-a de `distantRooms` e `pool`. */
+/**
+ * A sala logo antes desta no caminho do início (a de uma porta a menos), se não for o próprio início. No andar de
+ * chefe é onde ele fica: a escada, numa ponta, só se alcança por ela.
+ */
+function salaAntes(grid: DungeonCell[][], distances: Record<string, number>, cell: DungeonCell): DungeonCell | null {
+  const distancia = distances[`${cell.x},${cell.y}`] ?? 0;
+  if (distancia < 2) return null;
+  for (const dir of Object.keys(cell.doors) as Direction[]) {
+    const v = DIR_VECTORS[dir];
+    const vizinha = grid[cell.y + v.y]?.[cell.x + v.x];
+    if (vizinha && distances[`${vizinha.x},${vizinha.y}`] === distancia - 1) return vizinha;
+  }
+  return null;
+}
+
+/** Reserva a sala mais distante disponível pra um tipo fixo (a escada), removendo-a de `distantRooms` e `pool`. */
 function reserveDistant(
   distantRooms: DungeonCell[],
   pool: DungeonCell[],
@@ -298,10 +319,17 @@ const MAX_ROOMS = 14;
 const MAX_TREASURES = 3;
 
 /**
- * Gera um andar completo: grafo de salas, escada e saída reservadas nas
- * rotas mais distantes do início (pra obrigar exploração antes de descer ou
- * voltar), e o conteúdo de cada sala restante (NPC, evento, tesouro, totem,
- * monstros, chefe em andar de chefe).
+ * Gera um andar completo: grafo de salas, a escada reservada na rota mais
+ * distante do início (pra obrigar exploração antes de descer), e o conteúdo
+ * de cada sala restante (NPC, evento, tesouro, totem, monstros, chefe em
+ * andar de chefe).
+ *
+ * Desde 2026-11-06 (doc do Breno, decidido com o usuário) não há mais sala
+ * de saída em todo andar: só o andar de entrada (`options.entrada`) sai pela
+ * sala de início, e o resto volta pelo pilar do chefe. No andar de chefe, a
+ * escada fica logo atrás da sala dele: o andar é uma árvore e a sala mais
+ * distante do início é uma ponta, com uma porta só, então a de antes dela é
+ * a única passagem, e é ali que o chefe fica.
  *
  * Dois andares em jogo: `floor`, o andar em que o jogador está, decide o
  * tamanho, o totem e onde há chefe; o andar **de força** (`effectiveFloor`,
@@ -320,7 +348,13 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
   const { res, distances, distantRooms, pool } = resolveDistantRooms(rows, cols, roomCount, rng);
 
   const stairsRoom = reserveDistant(distantRooms, pool, distances, 'stairs');
-  reserveDistant(distantRooms, pool, distances, 'exit', stairsRoom?.startBranch);
+  if (options.entrada) res.start.type = 'exit';
+  const bossRoom = isBossFloor(floor) && stairsRoom ? salaAntes(res.grid as DungeonCell[][], distances, stairsRoom) : null;
+  if (bossRoom) {
+    const indice = pool.indexOf(bossRoom);
+    if (indice >= 0) pool.splice(indice, 1);
+    bossRoom.type = 'boss';
+  }
 
   function place(type: DungeonRoomType, count: number): DungeonCell[] {
     const out: DungeonCell[] = [];
@@ -343,13 +377,13 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
     if (sala) sala.teacher = { classId: options.teacher.classId, number: options.teacher.number };
   }
 
-  // Sempre reserva salas para escada e saída; em andares de chefe, reserva
-  // uma terceira sala para o chefe.
-  const reservedRooms = isBossFloor(floor) ? 1 : 0;
+  // Em andar de chefe sem a sala de antes da escada (a escada colada no
+  // início), o chefe fica numa sala qualquer: reserva uma pra ele.
+  const reservedRooms = isBossFloor(floor) && !bossRoom ? 1 : 0;
   const monsterRoomCount = Math.min(pool.length - reservedRooms, 3 + Math.floor((floor - 1) * 1.3));
   populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), forca, species, rng, now, app);
 
-  if (isBossFloor(floor)) placeBoss(place('boss', 1)[0], forca, floor % 10 === 0, species, rng, floor >= DUNGEON_FLOORS);
+  if (isBossFloor(floor)) placeBoss(bossRoom ?? place('boss', 1)[0], forca, floor % 10 === 0, species, rng, floor >= DUNGEON_FLOORS);
 
   populateRoomContent(res.rooms as DungeonCell[], forca, rng, now, app);
   // Por último: o resto do andar sai igual ao de antes pra mesma semente.
@@ -366,10 +400,13 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
 /** Ícone das salas que não mudam depois de visitadas. */
 const ICONES_FIXOS: Partial<Record<DungeonRoomType, string>> = { npc: '🧙', stairs: '⬇️', exit: '🚪', start: '🚀', totem: '🗿' };
 
+/** O pilar de volta à cidade, no covil do chefe vencido (pedido do Breno, 2026-11-06). Arte provisória. */
+export const ICONE_DO_PILAR = '🕯️';
+
 export function iconFor(cell: DungeonCell): string {
   if (cell.type === 'treasure') return cell.collected ? '' : '🧰';
   if (cell.type === 'monster') return cell.beaten || !cell.monsters?.length ? '' : monsterView(cell.monsters[cell.monsterIndex || 0] as MonsterInstance).icon;
-  if (cell.type === 'boss') return cell.beaten ? '' : '👑';
+  if (cell.type === 'boss') return cell.beaten ? ICONE_DO_PILAR : '👑';
   if (cell.type === 'event') return cell.resolved ? '' : '❓';
   if (cell.type === 'teacher') return cell.teacher?.taught ? '' : '🎓';
   return ICONES_FIXOS[cell.type] ?? '';
@@ -384,7 +421,7 @@ export function shortLabel(cell: DungeonCell): string {
     if (cell.beaten) return 'os restos de uma batalha';
     return (cell.monsters?.length ?? 0) > 1 ? 'um grupo de criaturas' : 'uma criatura hostil';
   }
-  if (cell.type === 'boss') return cell.beaten ? 'um covil agora silencioso' : 'uma presença poderosa e perigosa';
+  if (cell.type === 'boss') return cell.beaten ? 'o pilar de volta à cidade' : 'uma presença poderosa e perigosa';
   if (cell.type === 'event') return cell.resolved ? 'vestígios de um acontecimento' : 'algo incomum';
   if (cell.type === 'teacher') return cell.teacher?.taught ? 'uma sala onde alguém ensinou' : nomeDoMestre(cell);
   const labels: Partial<Record<DungeonRoomType, string>> = {
@@ -409,7 +446,7 @@ export function roomDesc(cell: DungeonCell): string {
   }
   if (cell.type === 'boss') {
     return cell.beaten
-      ? 'O covil do guardião agora está silencioso e vazio.'
+      ? 'O covil do guardião está silencioso. No meio dele, um pilar apagado pode ser aceso para levar o grupo de volta à cidade.'
       : `Uma presença imensa e hostil domina esta câmara: <b>${monsterView(cell.monsters?.[0] as MonsterInstance).name}</b>.`;
   }
   if (cell.type === 'event') return cell.resolved ? 'O acontecimento desta sala já chegou ao fim.' : 'Algo incomum nesta sala convida a uma escolha.';
@@ -434,7 +471,7 @@ export function entryText(cell: DungeonCell): string {
   if (cell.type === 'npc') return `Você avista ${cell.npc?.name}. Deseja se aproximar e conversar?`;
   if (cell.type === 'treasure') return 'Um baú está logo à frente. Deseja abri-lo?';
   if (cell.type === 'monster') return `${(cell.monsters?.length ?? 0) > 1 ? 'Várias criaturas bloqueiam' : 'Uma criatura bloqueia'} o caminho. Deseja entrar na sala?`;
-  if (cell.type === 'boss') return 'Uma presença poderosa emana desta sala. Deseja enfrentar o guardião?';
+  if (cell.type === 'boss') return cell.beaten ? 'Deseja acender o pilar e voltar à cidade?' : 'Uma presença poderosa emana desta sala. Deseja enfrentar o guardião?';
   if (cell.type === 'event') return 'Algo incomum aguarda nesta sala. Deseja investigar?';
   if (cell.type === 'stairs') return 'Escadas descem para um andar mais profundo da masmorra. Deseja descer?';
   if (cell.type === 'exit') return 'Um caminho leva de volta à cidade. Deseja sair da masmorra?';

@@ -678,7 +678,7 @@ namespace RPGLegend.Game.Jogo
                 var passagem = ExtrasDaSala.PassagemSecreta(celula);
                 if (passagem != null) portas.Set(passagem.Lado, true);
                 planta = AndarNaSala.PlantaDaSala(portas, ExtrasDaSala.ObjetosDaSala(celula, icone != "", masmorra), masmorra);
-                var conteudo = icone == "" ? null : new Figura { Arte = FigurasDaSala.ArteDoTipo(celula.Type), Emoji = icone };
+                var conteudo = icone == "" ? null : new Figura { Arte = FigurasDaSala.ArteDoConteudo(celula), Emoji = icone };
                 figuras = FigurasDaSala.Da(celula, conteudo, null);
                 // Na luta no mapa os monstros ficam em pé na sala, no lugar do ícone do conteúdo.
                 if (_partida.Luta != null) figuras.Remove(AndarNaSala.IdDoConteudo);
@@ -727,7 +727,7 @@ namespace RPGLegend.Game.Jogo
                     continue;
                 }
                 var icone = visual.Icone(em.Celula) ?? "";
-                var conteudo = icone == "" ? null : new Figura { Arte = FigurasDaSala.ArteDoTipo(em.Celula.Type), Emoji = icone };
+                var conteudo = icone == "" ? null : new Figura { Arte = FigurasDaSala.ArteDoConteudo(em.Celula), Emoji = icone };
                 salas.Add(new SalaNaCena
                 {
                     X = em.X,

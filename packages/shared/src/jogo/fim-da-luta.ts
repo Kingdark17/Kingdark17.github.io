@@ -29,7 +29,6 @@ import { onItemCollected, onMonsterKilled } from '../quests/quests.js';
 import { defaultRng, type Rng } from '../rng.js';
 import {
   andarDeForca,
-  avancarAndar,
   celulaAtual,
   substituirCelulaAtual,
   voltarParaCidade,
@@ -227,9 +226,10 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
   }
 
   if (sala.type === 'boss') {
-    const proximo = avancarAndar(limpo, rng, now, app);
-    log.push(`Após vencer ${abatido.name}, o grupo avança automaticamente para o Andar ${proximo.floor}.`);
-    return { estado: proximo, log, loot };
+    // O chefe não leva mais pro andar de baixo sozinho (pedido do Breno, 2026-11-06): ele deixa a chave da escada,
+    // que fica logo atrás do covil, e no covil o pilar de volta à cidade pode ser aceso.
+    log.push(`${abatido.name} cai e deixa uma chave de ferro: a escada do andar está aberta.`, 'No meio do covil, um pilar apagado pode levar o grupo de volta à cidade.');
+    return { estado: limpo, log, loot };
   }
 
   return { estado: limpo, log, loot };

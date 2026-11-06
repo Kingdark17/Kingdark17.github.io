@@ -86,9 +86,10 @@ namespace RPGLegend.Engine
             celula != null && (celula.Type == DungeonRoomTypes.Monster || celula.Type == DungeonRoomTypes.Boss) &&
             !((celula as DungeonCell)?.Beaten ?? false);
 
-        /// <summary>TS: confirmaAoTocar — só o que não tem volta: a escada e a saída.</summary>
+        /// <summary>TS: confirmaAoTocar — só o que não tem volta: a escada, a saída e o pilar do chefe vencido.</summary>
         public static bool ConfirmaAoTocar(RoomCell celula) =>
-            celula != null && (celula.Type == DungeonRoomTypes.Stairs || celula.Type == DungeonRoomTypes.Exit);
+            celula != null && (celula.Type == DungeonRoomTypes.Stairs || celula.Type == DungeonRoomTypes.Exit ||
+                (celula.Type == DungeonRoomTypes.Boss && ((celula as DungeonCell)?.Beaten ?? false)));
 
         private static ResultadoDaInteracao Nada(EstadoDoJogo estado) => new ResultadoDaInteracao { Estado = estado, Aviso = null, Tela = null };
 
@@ -177,8 +178,13 @@ namespace RPGLegend.Engine
             {
                 case DungeonRoomTypes.Treasure:
                     return AbrirBau(estado, celula, rng, pet);
-                case DungeonRoomTypes.Monster:
                 case DungeonRoomTypes.Boss:
+                    // O chefe vencido deixa o pilar de volta à cidade: acendê-lo é a saída do andar.
+                    if (celula.Beaten ?? false)
+                        return ComAviso(Estados.VoltarParaCidade(estado), DungeonFloors.IconeDoPilar, "Pilar Aceso",
+                            "Você acende o pilar do covil. A chama sobe, e o caminho de volta leva o grupo à cidade.", "door");
+                    return ComTela(estado, new TelaAberta { Tipo = "combate", Combate = Combates.IniciarEncontro(estado, pet) });
+                case DungeonRoomTypes.Monster:
                     if (celula.Beaten ?? false) return ComAviso(estado, "👾", "Sala Vazia", "Não há mais nada aqui.");
                     return ComTela(estado, new TelaAberta { Tipo = "combate", Combate = Combates.IniciarEncontro(estado, pet) });
                 case DungeonRoomTypes.Stairs:
@@ -219,7 +225,7 @@ namespace RPGLegend.Engine
         {
             var resultado = Estados.DescerEscada(estado, rng, now, app);
             if (resultado.Kind == "selado")
-                return ComAviso(estado, "👑", "Caminho Selado", "O poder do chefe bloqueia as escadas. Derrote-o para avançar.");
+                return ComAviso(estado, "🔒", "Escada Trancada", "A escada está trancada, e a chave fica com o guardião do andar. Derrote-o para descer.");
             if (resultado.Kind == "fundo")
                 return ComAviso(estado, "🕳️", "O Fundo", "Não há mais escadas: este é o último andar da masmorra.");
             return ComAviso(resultado.Estado, "⬇️", "Escadas",

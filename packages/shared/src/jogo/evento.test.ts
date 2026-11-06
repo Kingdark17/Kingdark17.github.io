@@ -41,7 +41,7 @@ function eventoDe(estado: EstadoNaMasmorra): Evento {
 
 describe('abrirEvento', () => {
   it('devolve null onde não há evento', () => {
-    expect(abrirEvento(emCimaDe(masmorra(), 'start'))).toBeNull();
+    expect(abrirEvento(emCimaDe(masmorra(), 'stairs'))).toBeNull();
   });
 
   it('abre com o texto do template e sem estar resolvido', () => {

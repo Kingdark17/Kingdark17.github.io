@@ -26,6 +26,8 @@ namespace RPGLegend.Engine
         [JsName("MAX_TREASURES")] public double MaxTreasures;
         /// <summary>Ícone das salas que não mudam depois de visitadas, por tipo de sala.</summary>
         [JsName("ICONES_FIXOS")] public OrderedMap<string> IconesFixos = new OrderedMap<string>();
+        /// <summary>O pilar de volta à cidade, no covil do chefe vencido (arte provisória).</summary>
+        [JsName("ICONE_DO_PILAR")] public string IconeDoPilar;
     }
 
     /// <summary>A parte de dungeon/generate.ts em GameData (carregada por DungeonGenerateTables).</summary>

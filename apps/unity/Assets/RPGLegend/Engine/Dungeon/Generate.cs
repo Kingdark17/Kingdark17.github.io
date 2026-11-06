@@ -18,6 +18,11 @@ namespace RPGLegend.Engine
         public DungeonTeacher Teacher;
         /// <summary>Quem gera o andar é o app: os itens dos baús e das salas podem vir com material.</summary>
         public bool App;
+        /// <summary>
+        /// O andar em que se entra pelo portão (o 1 ou o de um totem): a sala de início é a saída pra cidade. Os outros
+        /// andares não têm saída: a volta é pelo pilar da sala do chefe, depois de vencê-lo.
+        /// </summary>
+        public bool Entrada;
     }
 
     /// <summary>
@@ -35,6 +40,9 @@ namespace RPGLegend.Engine
 
         /// <summary>TS: MAX_TREASURES (privada) — teto de baús por andar.</summary>
         public static double MaxTreasures => D.MaxTreasures;
+
+        /// <summary>TS: ICONE_DO_PILAR — o pilar de volta à cidade, no covil do chefe vencido.</summary>
+        public static string IconeDoPilar => D.IconeDoPilar;
 
         /// <summary>
         /// TS: isBossFloor — chefe a cada 5 andares (o principal, a cada 10, quem decide é quem chama). O % do JS:
@@ -56,8 +64,9 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>
-        /// TS: generateDungeonFloor — um andar completo: o grafo, a escada e a saída nas salas mais distantes do
-        /// início (em ramificações diferentes, quando dá) e o conteúdo das outras salas.
+        /// TS: generateDungeonFloor — um andar completo: o grafo, a escada na sala mais distante do início e o
+        /// conteúdo das outras salas. Só o andar de entrada (options.Entrada) tem saída, na sala de início; no andar
+        /// de chefe, o chefe fica na sala logo antes da escada (o andar é uma árvore, e a escada, uma ponta).
         ///
         /// Dois andares em jogo: <paramref name="floor"/>, o andar em que o jogador está, decide o tamanho, o totem
         /// e onde há chefe; o andar de força (<see cref="Dungeons.EffectiveFloor"/>, pela masmorra e dificuldade de
@@ -84,7 +93,14 @@ namespace RPGLegend.Engine
             var pool = distant.Pool;
 
             var stairsRoom = ReserveDistant(distantRooms, pool, distances, DungeonRoomTypes.Stairs);
-            ReserveDistant(distantRooms, pool, distances, DungeonRoomTypes.Exit, stairsRoom?.StartBranch);
+            if (o.Entrada) res.Start.Type = DungeonRoomTypes.Exit;
+            var bossRoom = IsBossFloor(floor) && stairsRoom != null ? SalaAntes(res.Grid, distances, stairsRoom) : null;
+            if (bossRoom != null)
+            {
+                int indice = pool.IndexOf(bossRoom);
+                if (indice >= 0) pool.RemoveAt(indice);
+                bossRoom.Type = DungeonRoomTypes.Boss;
+            }
 
             // TS: place — tira salas do fim do pool embaralhado e dá o tipo a elas.
             List<DungeonCell> Place(string type, double count)
@@ -111,12 +127,13 @@ namespace RPGLegend.Engine
                 if (sala != null) sala.Teacher = new DungeonTeacher { ClassId = o.Teacher.ClassId, Number = o.Teacher.Number };
             }
 
-            // Escada e saída já estão reservadas; em andar de chefe, uma sala fica para ele.
-            double reservedRooms = IsBossFloor(floor) ? 1 : 0;
+            // Em andar de chefe sem a sala de antes da escada (a escada colada no início), o chefe fica numa sala
+            // qualquer: reserva uma pra ele.
+            double reservedRooms = IsBossFloor(floor) && bossRoom == null ? 1 : 0;
             double monsterRoomCount = Js.Min(pool.Count - reservedRooms, 3 + Math.Floor((floor - 1) * 1.3));
             PopulateMonsterRooms(Place(DungeonRoomTypes.Monster, Js.Max(2, monsterRoomCount)), forca, species, rng, now, o.App);
 
-            if (IsBossFloor(floor)) PlaceBoss(First(Place(DungeonRoomTypes.Boss, 1)), forca, floor % 10 == 0, species, rng, floor >= Dungeons.Floors);
+            if (IsBossFloor(floor)) PlaceBoss(bossRoom ?? First(Place(DungeonRoomTypes.Boss, 1)), forca, floor % 10 == 0, species, rng, floor >= Dungeons.Floors);
 
             PopulateRoomContent(res.Rooms, forca, rng, now, o.App);
             // Por último: o resto do andar sai igual ao de antes pra mesma semente.
@@ -138,7 +155,7 @@ namespace RPGLegend.Engine
                 double index = Js.Truthy(cell.MonsterIndex) ? cell.MonsterIndex.Value : 0;
                 return Monsters.View(MonsterAt(cell.Monsters, index)).Icon;
             }
-            if (cell.Type == DungeonRoomTypes.Boss) return cell.Beaten == true ? "" : "👑";
+            if (cell.Type == DungeonRoomTypes.Boss) return cell.Beaten == true ? D.IconeDoPilar : "👑";
             if (cell.Type == DungeonRoomTypes.Event) return cell.Resolved == true ? "" : "❓";
             if (cell.Type == DungeonRoomTypes.Teacher) return cell.Teacher?.Taught == true ? "" : "🎓";
             return D.IconesFixos.TryGet(cell.Type, out var icon) && icon != null ? icon : "";
@@ -152,7 +169,7 @@ namespace RPGLegend.Engine
                 if (cell.Beaten == true) return "os restos de uma batalha";
                 return (cell.Monsters?.Count ?? 0) > 1 ? "um grupo de criaturas" : "uma criatura hostil";
             }
-            if (cell.Type == DungeonRoomTypes.Boss) return cell.Beaten == true ? "um covil agora silencioso" : "uma presença poderosa e perigosa";
+            if (cell.Type == DungeonRoomTypes.Boss) return cell.Beaten == true ? "o pilar de volta à cidade" : "uma presença poderosa e perigosa";
             if (cell.Type == DungeonRoomTypes.Event) return cell.Resolved == true ? "vestígios de um acontecimento" : "algo incomum";
             if (cell.Type == DungeonRoomTypes.Teacher) return cell.Teacher?.Taught == true ? "uma sala onde alguém ensinou" : NomeDoMestre(cell);
             switch (cell.Type)
@@ -182,7 +199,7 @@ namespace RPGLegend.Engine
             if (cell.Type == DungeonRoomTypes.Boss)
             {
                 return cell.Beaten == true
-                    ? "O covil do guardião agora está silencioso e vazio."
+                    ? "O covil do guardião está silencioso. No meio dele, um pilar apagado pode ser aceso para levar o grupo de volta à cidade."
                     : "Uma presença imensa e hostil domina esta câmara: <b>" + Js.Str(Monsters.View(MonsterAt(cell.Monsters, 0)).Name) + "</b>.";
             }
             if (cell.Type == DungeonRoomTypes.Event)
@@ -215,7 +232,8 @@ namespace RPGLegend.Engine
             if (cell.Type == DungeonRoomTypes.Treasure) return "Um baú está logo à frente. Deseja abri-lo?";
             if (cell.Type == DungeonRoomTypes.Monster)
                 return ((cell.Monsters?.Count ?? 0) > 1 ? "Várias criaturas bloqueiam" : "Uma criatura bloqueia") + " o caminho. Deseja entrar na sala?";
-            if (cell.Type == DungeonRoomTypes.Boss) return "Uma presença poderosa emana desta sala. Deseja enfrentar o guardião?";
+            if (cell.Type == DungeonRoomTypes.Boss)
+                return cell.Beaten == true ? "Deseja acender o pilar e voltar à cidade?" : "Uma presença poderosa emana desta sala. Deseja enfrentar o guardião?";
             if (cell.Type == DungeonRoomTypes.Event) return "Algo incomum aguarda nesta sala. Deseja investigar?";
             if (cell.Type == DungeonRoomTypes.Stairs) return "Escadas descem para um andar mais profundo da masmorra. Deseja descer?";
             if (cell.Type == DungeonRoomTypes.Exit) return "Um caminho leva de volta à cidade. Deseja sair da masmorra?";
@@ -322,6 +340,23 @@ namespace RPGLegend.Engine
                 current = previous;
             }
             return DungeonGraph.PositionKey(current.X, current.Y);
+        }
+
+        /// <summary>
+        /// TS: salaAntes — a sala logo antes desta no caminho do início (a de uma porta a menos), se não for o próprio
+        /// início. No andar de chefe é onde ele fica: a escada, numa ponta, só se alcança por ela.
+        /// </summary>
+        private static DungeonCell SalaAntes(List<List<DungeonCell>> grid, OrderedMap<double> distances, DungeonCell cell)
+        {
+            double distancia = DistanceOrZero(distances, cell);
+            if (distancia < 2) return null;
+            foreach (var dir in DoorKeys(cell))
+            {
+                var v = VectorOf(dir);
+                var vizinha = DungeonGraph.CellAt(grid, cell.X + v.X, cell.Y + v.Y);
+                if (vizinha != null && distances.TryGet(DungeonGraph.PositionKey(vizinha.X, vizinha.Y), out var d) && d == distancia - 1) return vizinha;
+            }
+            return null;
         }
 
         /// <summary>

@@ -2337,6 +2337,15 @@ for (const [floor, rows, cols, seed, run, teacher] of ANDARES) {
     now: AGORA,
   });
 }
+// O andar em que se entra pelo portão: a sala de início é a saída pra cidade (o 20 também é de chefe).
+for (const [floor, seed] of [
+  [1, 3],
+  [20, 20],
+  [40, 8],
+] as const) {
+  caso(`generateDungeonFloor: andar de entrada ${floor}, seed ${seed}`, 'generateDungeonFloor', { floor, rows: 6, cols: 6, options: { now: AGORA, entrada: true } }, (a, { rng, now }) =>
+    andarCompacto(E.generateDungeonFloor(a.floor, a.rows, a.cols, { ...a.options, rng, now })), { rng: { seed }, now: AGORA });
+}
 // O andar gerado no app: os itens dos baús, das salas e da sala secreta podem vir com material.
 for (const [floor, seed, run] of [
   [30, 4, undefined],

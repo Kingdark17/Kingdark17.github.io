@@ -32,6 +32,7 @@ namespace RPGLegend.Tests
                     Run = R<DungeonRun>(JsJson.Prop(o, "run")),
                     Teacher = R<DungeonTeacher>(JsJson.Prop(o, "teacher")),
                     App = JsJson.Truthy(JsJson.Prop(o, "app")),
+                    Entrada = JsJson.Truthy(JsJson.Prop(o, "entrada")),
                 });
                 return Compact(andar);
             });

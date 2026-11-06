@@ -19,7 +19,7 @@
 
 import { restAtTavern } from '../city/city.js';
 import { dungeonById } from '../dungeon/dungeons.js';
-import type { DungeonCell, DungeonTreasureBonus } from '../dungeon/generate.js';
+import { ICONE_DO_PILAR, type DungeonCell, type DungeonTreasureBonus } from '../dungeon/generate.js';
 import { hasClass } from '../hero/hero.js';
 import { addItem } from '../inventory/inventory.js';
 import { concordar, displayName, type Item } from '../items/item.js';
@@ -125,11 +125,13 @@ export function lutaAoEntrar(celula: CelulaDoMapa | null): boolean {
 
 /**
  * O que pergunta antes, ao encostar: só o que não tem volta. A escada troca
- * de andar e a saída tira da masmorra; o resto abre uma tela com o próprio
- * "voltar" (loja, conversa, portão, totem) ou só dá o que tem (baú).
+ * de andar, e a saída e o pilar do chefe vencido tiram da masmorra; o resto
+ * abre uma tela com o próprio "voltar" (loja, conversa, portão, totem) ou só
+ * dá o que tem (baú).
  */
 export function confirmaAoTocar(celula: CelulaDoMapa | null): boolean {
-  return !!celula && (celula.type === 'stairs' || celula.type === 'exit');
+  if (!celula) return false;
+  return celula.type === 'stairs' || celula.type === 'exit' || (celula.type === 'boss' && !!(celula as DungeonCell).beaten);
 }
 
 function aviso(icone: string, titulo: string, texto: string): Aviso {
@@ -232,8 +234,18 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null, now: 
   switch (celula.type) {
     case 'treasure':
       return abrirBau(estado, celula, rng, pet);
-    case 'monster':
     case 'boss':
+      // O chefe vencido deixa o pilar de volta à cidade (pedido do Breno, 2026-11-06): acendê-lo é a saída do andar.
+      if (celula.beaten) {
+        return {
+          estado: voltarParaCidade(estado),
+          aviso: aviso(ICONE_DO_PILAR, 'Pilar Aceso', 'Você acende o pilar do covil. A chama sobe, e o caminho de volta leva o grupo à cidade.'),
+          tela: null,
+          som: 'door',
+        };
+      }
+      return { estado, aviso: null, tela: { tipo: 'combate', combate: iniciarEncontro(estado, pet) } };
+    case 'monster':
       if (celula.beaten) return { estado, aviso: aviso('👾', 'Sala Vazia', 'Não há mais nada aqui.'), tela: null };
       return { estado, aviso: null, tela: { tipo: 'combate', combate: iniciarEncontro(estado, pet) } };
     case 'stairs':
@@ -292,7 +304,7 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null, now: 
 function descer(estado: EstadoNaMasmorra, rng: Rng, now: (() => number) | undefined, app: boolean): ResolucaoDaSala {
   const resultado = descerEscada(estado, rng, now, app);
   if (resultado.kind === 'selado') {
-    return { estado, aviso: aviso('👑', 'Caminho Selado', 'O poder do chefe bloqueia as escadas. Derrote-o para avançar.'), tela: null };
+    return { estado, aviso: aviso('🔒', 'Escada Trancada', 'A escada está trancada, e a chave fica com o guardião do andar. Derrote-o para descer.'), tela: null };
   }
   if (resultado.kind === 'fundo') {
     return { estado, aviso: aviso('🕳️', 'O Fundo', 'Não há mais escadas: este é o último andar da masmorra.'), tela: null };

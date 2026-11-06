@@ -162,12 +162,12 @@ describe('revelar', () => {
 });
 
 describe('entrarNaMasmorra', () => {
-  it('entra sempre pelo andar 1, na sala de início', () => {
+  it('entra sempre pelo andar 1, na sala de início, que é a saída pra cidade', () => {
     const masmorra = entrarNaMasmorra(estadoNovo(), seededRng(1));
 
     expect(masmorra.mapMode).toBe('dungeon');
     expect(masmorra.floor).toBe(1);
-    expect(celulaAtual(masmorra)?.type).toBe('start');
+    expect(celulaAtual(masmorra)?.type).toBe('exit');
     expect(celulaAtual(masmorra)?.visited).toBe(true);
   });
 
@@ -294,11 +294,11 @@ describe('retomarSave', () => {
     expect(retomado.map).toEqual(andado.map);
   });
 
-  it('gera um andar novo quando o save diz masmorra mas não tem mapa', () => {
+  it('gera um andar novo quando o save diz masmorra mas não tem mapa, com a saída na sala de início', () => {
     const retomado = masmorraNoAndar(3);
 
     expect(retomado.floor).toBe(3);
-    expect(celulaAtual(retomado)?.type).toBe('start');
+    expect(celulaAtual(retomado)?.type).toBe('exit');
   });
 
   it('cai na cidade quando o save é de cidade', () => {

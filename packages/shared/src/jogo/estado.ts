@@ -156,7 +156,8 @@ export function retomarSave(entrada: SaveCarregado, rng: Rng = defaultRng, now?:
     return { ...comuns(save), mapMode: 'dungeon', map: mapa, pos: save.pos };
   }
 
-  return gerarAndar(comuns(save), save.floor, rng, now);
+  // Sem o andar gravado, ele recomeça como quem acaba de chegar: com a saída na sala de início.
+  return gerarAndar(comuns(save), save.floor, rng, now, false, true);
 }
 
 /**
@@ -196,7 +197,8 @@ export function entrarNaMasmorra(
   now?: () => number,
   app = false,
 ): EstadoNaMasmorra {
-  return gerarAndar({ ...estado, masmorra }, andar, rng, now, app);
+  // Quem entra pelo portão tem a saída na sala de início (`generateDungeonFloor`, `entrada`).
+  return gerarAndar({ ...estado, masmorra }, andar, rng, now, app, true);
 }
 
 /** A saída da masmorra devolve o jogador à cidade guardada, no ponto de partida dela. O andar atual não é zerado — só o portão faz isso. */
@@ -218,9 +220,9 @@ export function descerEscada(estado: EstadoNaMasmorra, rng: Rng = defaultRng, no
 }
 
 /**
- * Gera o próximo andar sem passar pela escada. É o que o original faz
- * depois de derrotar um chefe (`advanceAfterBoss`): o caminho se abre e o
- * grupo desce sozinho.
+ * Gera o próximo andar. Era também o que vinha depois de derrotar um chefe
+ * (`advanceAfterBoss` do original, o grupo descia sozinho); desde
+ * 2026-11-06 o chefe só abre a escada, e quem desce é ela.
  */
 export function avancarAndar(estado: EstadoNaMasmorra, rng: Rng = defaultRng, now?: () => number, app = false): EstadoNaMasmorra {
   return gerarAndar(estado, estado.floor + 1, rng, now, app);
@@ -246,11 +248,19 @@ function professorDoAndar(hero: Hero, floor: number, rng: Rng): { classId: strin
  * `now` é o relógio do `uid` dos itens que o andar sorteia (baús, extras).
  * Ausente, `Date.now`, como sempre foi; quem passa são os casos do porte
  * pro C#, pra o andar sair igual nos dois lados. `app`: quem desce é o app,
- * e os itens do andar podem vir com material.
+ * e os itens do andar podem vir com material. `entrada`: o andar em que se
+ * entra pelo portão, com a saída na sala de início.
  */
-function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng, now?: () => number, app = false): EstadoNaMasmorra {
+function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng, now?: () => number, app = false, entrada = false): EstadoNaMasmorra {
   const teacher = professorDoAndar(base.hero, floor, rng);
-  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, { rng, run: base.masmorra, teacher, now, ...(app ? { app } : {}) });
+  const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, {
+    rng,
+    run: base.masmorra,
+    teacher,
+    now,
+    ...(app ? { app } : {}),
+    ...(entrada ? { entrada } : {}),
+  });
   const inicio = { x: andar.start.x, y: andar.start.y };
 
   return {

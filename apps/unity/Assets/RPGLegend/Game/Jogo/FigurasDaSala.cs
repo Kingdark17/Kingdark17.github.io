@@ -70,6 +70,13 @@ namespace RPGLegend.Game.Jogo
         /// <summary>A arte do tipo de sala (Resources "Mapa/…"), ou null quando ainda não há — aí vale o emoji.</summary>
         public static string ArteDoTipo(string tipo) => tipo != null && ArtePorTipo.TryGetValue(tipo, out var arquivo) ? "Mapa/" + arquivo : null;
 
+        /// <summary>
+        /// A arte do conteúdo da sala na cena: a do tipo, menos no covil do chefe vencido, onde fica o pilar de volta à
+        /// cidade (o emoji dele, até a arte do Breno).
+        /// </summary>
+        public static string ArteDoConteudo(RoomCell celula) =>
+            celula == null || (celula.Type == DungeonRoomTypes.Boss && ((celula as DungeonCell)?.Beaten ?? false)) ? null : ArteDoTipo(celula.Type);
+
         public const string ArteDoBau = "Mapa/bau";
 
         /// <summary>As figuras pelo id do objeto da planta. Na sala secreta (<paramref name="indiceDaSecreta"/>), só o baú dela.</summary>

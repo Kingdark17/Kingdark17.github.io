@@ -45,3 +45,12 @@ export function arteDoTipo(tipo: string | undefined): string | null {
   const arquivo = tipo ? POR_TIPO[tipo] : undefined;
   return arquivo ? `${RAIZ}/${arquivo}.png` : null;
 }
+
+/**
+ * A arte do conteúdo da sala na cena: a do tipo, menos no covil do chefe vencido, onde fica o pilar de volta à
+ * cidade (o emoji dele, até a arte do Breno).
+ */
+export function arteDoConteudo(celula: { type: string; beaten?: boolean } | null | undefined): string | null {
+  if (!celula || (celula.type === 'boss' && celula.beaten)) return null;
+  return arteDoTipo(celula.type);
+}

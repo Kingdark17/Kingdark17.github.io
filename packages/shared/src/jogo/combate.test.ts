@@ -227,14 +227,16 @@ describe('atacar', () => {
     expect(combate.estado.inventory).toHaveLength(inicio.inventory.length + 1);
   });
 
-  it('vencer o chefe abre o próximo andar sozinho', () => {
+  it('vencer o chefe deixa a chave da escada, sem descer sozinho', () => {
     const inicio = comSalaDeMonstro({ type: 'boss', monsters: [monstro({ hp: 1, isBoss: true })] });
 
     const combate = atacar(emCombate(inicio), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.fase).toBe('vitoria');
-    expect(combate.estado.floor).toBe(3);
-    expect(celulaAtual(combate.estado)?.type).toBe('start');
+    expect(combate.estado.floor).toBe(inicio.floor);
+    expect(celulaAtual(combate.estado)?.type).toBe('boss');
+    expect((celulaAtual(combate.estado) as DungeonCell).beaten).toBe(true);
+    expect(combate.log.some((linha) => linha.includes('chave'))).toBe(true);
   });
 
   it('não muta o estado anterior', () => {
@@ -357,11 +359,11 @@ describe('o fim da masmorra', () => {
     expect(log.some((linha) => linha.includes('aberta no portão') || linha.includes('abre a partir'))).toBe(false);
   });
 
-  it('o chefe do andar 95 continua levando pro 96', () => {
+  it('o chefe do andar 95 só abre a escada: nada de zerar', () => {
     const combate = atacar(emCombate(noChefeDoAndar(95)), EM_CHEIO, 'normal', NUNCA);
 
     expect(combate.estado.mapMode).toBe('dungeon');
-    expect(combate.estado.floor).toBe(96);
+    expect(combate.estado.floor).toBe(95);
     expect(combate.estado.progresso.cleared).toEqual([]);
   });
 });

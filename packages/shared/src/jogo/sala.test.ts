@@ -227,7 +227,28 @@ describe('interagir na masmorra', () => {
     const { estado, aviso } = interagir(naEscada, seededRng(3));
 
     expect(estado).toBe(naEscada);
-    expect(aviso?.titulo).toBe('Caminho Selado');
+    expect(aviso?.titulo).toBe('Escada Trancada');
+  });
+
+  it('o chefe vencido deixa o pilar: pergunta antes e, aceso, volta pra cidade sem zerar o andar', () => {
+    const vivo = emCimaDe(masmorraNoAndar(5), 'boss');
+    expect(confirmaAoTocar(celulaAtual(vivo))).toBe(false);
+    const vencido = comSalaAtual(vivo, { beaten: true });
+    expect(confirmaAoTocar(celulaAtual(vencido))).toBe(true);
+
+    const { estado, aviso } = interagir(vencido, seededRng(3));
+
+    expect(estado.mapMode).toBe('city');
+    expect(estado.floor).toBe(5);
+    expect(aviso?.titulo).toBe('Pilar Aceso');
+  });
+
+  it('com o chefe vencido, a escada desce', () => {
+    const andar = masmorraNoAndar(5);
+    const semChefe = { ...andar, map: andar.map.map((linha) => linha.map((c) => (c.type === 'boss' ? { ...c, beaten: true } : c))) };
+    const { estado } = interagir(emCimaDe(semChefe, 'stairs'), seededRng(3));
+
+    expect(estado.floor).toBe(6);
   });
 
   it('a saída volta pra cidade sem zerar o andar', () => {

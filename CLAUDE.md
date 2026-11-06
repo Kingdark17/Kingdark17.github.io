@@ -325,6 +325,16 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   lugar, a cor da borda das paredes da arte (`fundo` do tema); e a luta do
   site fecha sozinha 1 s depois do último golpe, sem o "Continuar" (o
   resultado vira o aviso da sala), menos a tela de quem zera a masmorra.
+- O andar (2026-11-06, **site e app**, doc do Breno decidido com o
+  usuário): não há mais sala de saída em todo andar. Só o andar em que se
+  entra pelo portão (o 1 ou o de um totem, e o save sem mapa) sai pela sala
+  de início, que vira a saída (`generateDungeonFloor`, `entrada`). Nos
+  andares de chefe (a cada 5) a escada fica numa ponta logo atrás da sala
+  dele (o andar é uma árvore: a sala mais distante é uma ponta, e a de antes
+  dela vira o covil); vencê-lo não desce mais sozinho: ele deixa a "chave"
+  (a escada, trancada com o chefe vivo, abre), e no covil fica o pilar de
+  volta à cidade (`ICONE_DO_PILAR`, arte provisória), que pergunta antes de
+  acender. Os totens de 20, 40, 60 e 80 continuam.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no
