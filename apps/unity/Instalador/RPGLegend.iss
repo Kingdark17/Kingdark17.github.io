@@ -24,6 +24,8 @@ DisableProgramGroupPage=yes
 ; Instala só para quem está usando o computador (em AppData\Local\Programs), sem pedir administrador.
 PrivilegesRequired=lowest
 OutputBaseFilename=RPG Legend - Instalação
+; O brasão, gerado pelo menu RPG Legend > Atualizar ícone do app.
+SetupIconFile=icone.ico
 UninstallDisplayIcon={app}\RPG Legend.exe
 UninstallDisplayName=RPG Legend
 Compression=lzma2/max

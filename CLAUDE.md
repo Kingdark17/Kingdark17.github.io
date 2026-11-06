@@ -235,6 +235,11 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   mudança por gravar segura, grava e fecha (`Application.wantsToQuit` na
   `TelaDeJogo`; se a gravação falhar, avisa, e fechar de novo sai); no
   celular, ir pro fundo já grava (`OnApplicationPause`).
+  O ícone do app (celular, PC e instalador, desde 2026-11-06) é o brasão do
+  menu, o mesmo da aba do site: o menu RPG Legend > Atualizar ícone do app
+  gera de `UI/Imagens/logo.png` o padrão (o do executável), o adaptável do
+  Android (o brasão no círculo seguro, sobre o fundo `--ink` das telas) e o
+  `Instalador/icone.ico`, e os põe nas configurações. Logo nova → rodar de novo.
 - Jogar pelo app (etapa 4, desde 2026-10-16): o JOGAR do cartão abre a
   partida (`Game/Jogo`): `Partida` é o espelho sem desenho da tela-jogo.tsx
   (estado, avisos, diário, sala secreta, quando gravar), `TelaDeJogo` liga
