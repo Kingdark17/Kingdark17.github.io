@@ -10,6 +10,7 @@ namespace RPGLegend.Engine.Json
         {
             GameData.SpeciesTable = JsSerializer.Parse<MonsterSpeciesData>(readTable("monsters/species"));
             GameData.MonstersGenerateTable = JsSerializer.Parse<MonstersGenerateData>(readTable("monsters/generate"));
+            GameData.MecanicasDoChefeTable = JsSerializer.Parse<MecanicasDoChefeData>(readTable("monsters/mecanicas-do-chefe"));
         }
     }
 }

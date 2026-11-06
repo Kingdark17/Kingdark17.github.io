@@ -50,8 +50,12 @@ import {
   heroPowers,
   inimigosDaLuta,
   lugaresNaLuta,
+  celulaAtual,
+  escuroNaLuta,
+  marcasDoChefe,
   monsterLevel,
   PODERES_DO_CHEFE,
+  type DungeonCell,
   powerManaCost,
   usarItem,
   usarPoder,
@@ -453,6 +457,7 @@ export function TelaCombate({ combate, palco, geometria, onCombate, onEncerrar, 
             rotulo={rotuloDoAtaque(caixa.ataque)}
             onFim={(jogada) => golpear(caixa.ataque, jogada)}
             onVoltar={() => setCaixa({ tipo: 'lutar' })}
+            escuro={escuroNaLuta(celulaAtual(combate.estado) as DungeonCell | null)}
           />
         )}
       </div>
@@ -525,7 +530,10 @@ function Placa({ inimigo, emGrupo, escolhido, daVez, travado, onEscolher }: Read
   const { monstro, vivo } = inimigo;
   // O chefe final (`chefe-final.ts`): protegido pelos lacaios, e o aviso do poder que o próximo golpe dele solta.
   const poder = vivo && inimigo.poder ? PODERES_DO_CHEFE[inimigo.poder] : null;
-  const status = vivo ? [...(inimigo.protegido ? ['🛡️ protegido pelos lacaios'] : []), ...(poder ? [`⚠️ ${poder.icone} ${poder.nome}`] : []), ...statusAtivos(monstro)] : [];
+  // E as mecânicas do chefe de andar 5 que estão valendo (`marcasDoChefe`): o escudo, a barreira, o escuro, a fúria.
+  const status = vivo
+    ? [...(inimigo.protegido ? ['🛡️ protegido pelos lacaios'] : []), ...(poder ? [`⚠️ ${poder.icone} ${poder.nome}`] : []), ...marcasDoChefe(monstro), ...statusAtivos(monstro)]
+    : [];
   // O atordoado só baixa quando chega a vez dele: o da vez atordoado perde o
   // ataque com certeza, e a placa não pode prometer um golpe que não vem.
   const perdeAVez = (monstro.status?.atordoado ?? 0) > 0;

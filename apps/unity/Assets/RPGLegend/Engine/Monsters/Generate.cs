@@ -57,6 +57,18 @@ namespace RPGLegend.Engine
         public double? Poderes;
         /// <summary>Chamado pelo chefe final: não dá ouro.</summary>
         public bool? Lacaio;
+        /// <summary>Chefe de andar 5: as mecânicas sorteadas dele (<see cref="MecanicasDoChefe"/>).</summary>
+        public List<string> Mecanicas;
+        /// <summary>Chefe: já passou da metade da vida (a segunda fase).</summary>
+        public bool? Fase2;
+        /// <summary>Chefe da Caverna na segunda fase: a luz se apagou, e a mira some.</summary>
+        public bool? Escuro;
+        /// <summary>Chefe da Torre na segunda fase: o escudo elemental.</summary>
+        public bool? EscudoElemental;
+        /// <summary>Chefe com a barreira: quanto dano ela ainda segura.</summary>
+        public double? Barreira;
+        /// <summary>Chefe com a cura: já se curou.</summary>
+        public bool? Curou;
 
         /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
         [JsExtra] public JsExtras Extra;
@@ -93,6 +105,12 @@ namespace RPGLegend.Engine
             target.Furia = Furia;
             target.Poderes = Poderes;
             target.Lacaio = Lacaio;
+            target.Mecanicas = Mecanicas;
+            target.Fase2 = Fase2;
+            target.Escuro = Escuro;
+            target.EscudoElemental = EscudoElemental;
+            target.Barreira = Barreira;
+            target.Curou = Curou;
             target.Extra = Extra?.Clone();
         }
 
@@ -133,6 +151,9 @@ namespace RPGLegend.Engine
 
             /// <summary>A dificuldade do personagem: o Peso dela multiplica a vida e o dano. Ausente, o Normal.</summary>
             public string Dificuldade;
+
+            /// <summary>Só no chefe: a masmorra dele, pras mecânicas (na Floresta não sai o invocar).</summary>
+            public string Masmorra;
         }
 
         /// <summary>TS: ENDURECIMENTO — todo monstro com 30% mais vida e dano; ouro e XP não mudam.</summary>
@@ -227,7 +248,13 @@ namespace RPGLegend.Engine
                 IsMainBoss = isMain,
                 BossTitle = title,
             };
-            if (options == null || !options.Final) return chefe;
+            if (options == null || !options.Final)
+            {
+                // O chefe de andar 5 sorteia uma ou duas mecânicas, depois de tudo.
+                chefe.Mecanicas = MecanicasDoChefe.SortearMecanicas(options?.Masmorra, rng);
+                if (chefe.Mecanicas.Contains("barreira")) chefe.Barreira = Js.Round(hp * MecanicasDoChefe.BarreiraDoChefe);
+                return chefe;
+            }
             double vida = Js.Round(hp * ForcaDoChefeFinal);
             chefe.Hp = vida;
             chefe.MaxHp = vida;

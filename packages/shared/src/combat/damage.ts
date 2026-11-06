@@ -1,5 +1,6 @@
 import { classById, idDaClasse } from '../hero/catalog.js';
 import { hasDebuffEffect, type Hero } from '../hero/hero.js';
+import { escudoDoChefe, PASSA_PELO_ESCUDO } from '../monsters/mecanicas-do-chefe.js';
 import type { AffinityType } from '../monsters/species.js';
 import { decrementField, setStatusField, type CombatMonster } from './monster-state.js';
 
@@ -59,6 +60,8 @@ export function modifyDamageByAffinity(
 ): DamageModifierResult {
   let next = dmg;
   if (weakness === type) next = Math.round(next * 1.25);
+  // O escudo elemental do chefe da Torre segura a maior parte do dano do tipo dele (`mecanicas-do-chefe.ts`).
+  if (escudoDoChefe(monster) === type) next = Math.round(next * PASSA_PELO_ESCUDO);
   if (resistance === type) next = Math.round(next * (halfResist ? 0.9 : 0.8));
 
   let status = monster.status;

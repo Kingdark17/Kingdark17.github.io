@@ -4727,6 +4727,74 @@ for (const [nome, criacao, semente] of [
     caso(`enfurecer: ${nome}`, 'enfurecer', { estado }, (a) => E.enfurecer(a.estado));
   }
   caso('enfurecer: já furioso', 'enfurecer', { estado: furioso }, (a) => E.enfurecer(a.estado));
+
+  // As mecânicas dos chefes de andar 5 (monsters/mecanicas-do-chefe.ts; 2026-11-06).
+  for (const [masmorra, semente] of [
+    ['floresta', 1],
+    ['floresta', 2],
+    ['caverna', 3],
+    ['torre', 4],
+    ['torre', 5],
+  ] as const) {
+    caso(`sortearMecanicas: ${masmorra}, seed ${semente}`, 'sortearMecanicas', { masmorra }, (a, { rng }) => E.sortearMecanicas(a.masmorra, rng), { rng: { seed: semente } });
+    caso(`generateBoss: andar 5 da ${masmorra}, seed ${semente}`, 'generateBoss', { floor: 5, options: { masmorra } }, (a, { rng }) =>
+      E.generateBoss(a.floor, { ...a.options, rng } as never), { rng: { seed: semente } });
+  }
+  for (const [nome, monstro] of [
+    ['sem escudo', {}],
+    ['escudo, golpe 0', { escudoElemental: true, attackCount: 0 }],
+    ['escudo, golpe 3', { escudoElemental: true, attackCount: 3 }],
+    ['barreira, escuro e fúria', { barreira: 12, escuro: true, furia: true }],
+    ['fúria do chefe final', { furia: true, chefeFinal: true }],
+  ] as const) {
+    caso(`escudoDoChefe: ${nome}`, 'escudoDoChefe', { monstro }, (a) => E.escudoDoChefe(a.monstro));
+    caso(`marcasDoChefe: ${nome}`, 'marcasDoChefe', { monstro }, (a) => E.marcasDoChefe(a.monstro));
+  }
+  {
+    const doAndar5 = (mecanicas: string[], o: Partial<CombatMonster> = {}): CombatMonster => ({
+      ...E.freshCombatMonster({ ...E.generateBoss(5, { rng: E.seededRng(9), species: DA_FLORESTA }), mecanicas: mecanicas as never }),
+      hp: 100,
+      maxHp: 100,
+      ...o,
+    });
+    const naSalaDoChefe = (monstro: CombatMonster, dungeon: 'floresta' | 'caverna' | 'torre') =>
+      naSalaDaMasmorra({ ...chefe, monsters: [monstro], monsterIndex: 0, beaten: false }, cidade.hero, [], { floor: 5, masmorra: { dungeon, difficulty: 'normal' } });
+    for (const [nome, dungeon, monstro, vida, seed] of [
+      ['Floresta, na metade: os lobos', 'floresta', doAndar5([]), 40, 11],
+      ['Caverna, na metade: o escuro', 'caverna', doAndar5([]), 40, 12],
+      ['Torre, na metade: o escudo', 'torre', doAndar5([]), 40, 13],
+      ['Caverna com invocar', 'caverna', doAndar5(['invocar']), 30, 14],
+      ['golpe que derrubaria de cima da metade', 'torre', doAndar5([]), -20, 15],
+      ['a barreira segura', 'caverna', doAndar5(['barreira'], { barreira: 15 }), 90, 16],
+      ['a barreira quebra', 'caverna', doAndar5(['barreira'], { barreira: 5 }), 80, 17],
+      ['cura e fúria com 30%', 'caverna', doAndar5(['cura', 'furia'], { fase2: true }), 20, 18],
+      ['já curado', 'caverna', doAndar5(['cura'], { fase2: true, curou: true }), 10, 19],
+      ['de 1 de vida, cai sem fase', 'floresta', doAndar5([], { hp: 1 }), 0, 20],
+    ] as const) {
+      const estado = naSalaDoChefe(monstro, dungeon);
+      caso(`ferirMonstro: chefe de andar 5, ${nome}`, 'ferirMonstro', { estado, indice: 0, depois: { ...monstro, hp: vida } }, (a, ctx) =>
+        E.ferirMonstro(a.estado, a.indice, a.depois as CombatMonster, ctx.rng), { rng: { seed } });
+    }
+    const escuro = E.ferirMonstro(naSalaDoChefe(doAndar5([]), 'caverna'), 0, { ...doAndar5([]), hp: 40 }, E.seededRng(1)).estado;
+    caso('escuroNaLuta: a Caverna no escuro', 'escuroNaLuta', { sala: salaDo(escuro) }, (a) => E.escuroNaLuta(a.sala));
+    caso('escuroNaLuta: sala comum', 'escuroNaLuta', { sala: salaDo(naSalaDaMasmorra(grupo)) }, (a) => E.escuroNaLuta(a.sala));
+    for (const [nome, monstro] of [
+      ['carregado, golpe 3 (o quarto)', doAndar5(['carregado'], { attackCount: 3 })],
+      ['carregado, golpe 4', doAndar5(['carregado'], { attackCount: 4 })],
+      ['sem carregado', doAndar5(['cura'], { attackCount: 3 })],
+    ] as const) {
+      caso(`poderDaVez: chefe de andar 5, ${nome}`, 'poderDaVez', { monstro }, (a) => E.poderDaVez(a.monstro));
+    }
+    const comEscudo = doAndar5([], { escudoElemental: true, attackCount: 0 });
+    for (const tipo of ['fisico', 'magico'] as const) {
+      caso(
+        `modifyDamageByAffinity: escudo elemental contra ${tipo}`,
+        'modifyDamageByAffinity',
+        { monster: comEscudo, weakness: 'gelo', resistance: 'raio', dmg: 100, type: tipo, halfResist: false },
+        (a) => E.modifyDamageByAffinity(a.monster, a.weakness as never, a.resistance as never, a.dmg, a.type, a.halfResist),
+      );
+    }
+  }
   caso('inimigosDaLuta: o chefe final avisa o Golpe Devastador', 'inimigosDaLuta', { estado: noFundo([final({ attackCount: 2 })]) }, (a) => E.inimigosDaLuta(a.estado));
 
   const lacaioCaido = { ...(comLacaios[1] as CombatMonster), hp: 0 };

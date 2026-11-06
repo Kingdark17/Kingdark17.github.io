@@ -1,0 +1,18 @@
+{
+  "MECANICAS_DO_CHEFE": [
+    "invocar",
+    "barreira",
+    "carregado",
+    "cura",
+    "furia"
+  ],
+  "BARREIRA_DO_CHEFE": 0.2,
+  "AJUDANTES_DO_CHEFE": 2,
+  "CARGA_A_CADA": 4,
+  "LIMITE_DO_DESESPERO": 0.3,
+  "CURA_DO_CHEFE": 0.25,
+  "FORCA_NA_FURIA": 1.3,
+  "VELOCIDADE_NA_FURIA_DO_CHEFE": 1.5,
+  "PASSA_PELO_ESCUDO": 0.3,
+  "ESCUDO_TROCA_A_CADA": 2
+}

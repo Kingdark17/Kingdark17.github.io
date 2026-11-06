@@ -86,6 +86,16 @@ namespace RPGLegend.Tests
             Fn(M, "cobreOHeroi", (a, c) => W(MapaDaCidade.CobreOHeroi(R<CamadaDaCidade>(a["camada"]), R<Walker>(a["walker"]))));
             Fn(M, "camadasDaSala", (a, c) => W(ArteDaSala.CamadasDaSala(Str(a["dungeon"]), R<List<string>>(a["portas"]))));
 
+            // As mecânicas dos chefes de andar 5 (2026-11-06); generateBoss e modifyDamageByAffinity também moram em
+            // outros módulos, e os casos daqui são do bloco do chefe.
+            Fn(M, "sortearMecanicas", (a, c) => W(MecanicasDoChefe.SortearMecanicas(Str(a["masmorra"]), c.RngFn)));
+            Fn(M, "escudoDoChefe", (a, c) => W(MecanicasDoChefe.EscudoDoChefe(R<CombatMonster>(a["monstro"]))));
+            Fn(M, "marcasDoChefe", (a, c) => W(MecanicasDoChefe.MarcasDoChefe(R<CombatMonster>(a["monstro"]))));
+            Fn(M, "generateBoss", (a, c) => W(Monsters.GenerateBoss(Num(a["floor"]), new Monsters.GenerateOptions { Rng = c.RngFn, Masmorra = R<string>(JsJson.Prop(a["options"], "masmorra")) })));
+            Fn(M, "modifyDamageByAffinity", (a, c) => W(Damage.ModifyDamageByAffinity(
+                R<CombatMonster>(a["monster"]), Str(a["weakness"]), Str(a["resistance"]), Num(a["dmg"]), Str(a["type"]), JsJson.Truthy(a["halfResist"]))));
+            Fn(M, "escuroNaLuta", (a, c) => W(ChefeFinal.EscuroNaLuta(R<DungeonCell>(a["sala"]))));
+
             // Armadilhas e ferimentos (2026-11-06).
             Fn(M, "chanceDeVer", (a, c) => W(Armadilhas.ChanceDeVer(Num(a["sabedoria"]))));
             Fn(M, "armadilhaSob", (a, c) => W(Armadilhas.ArmadilhaSob(R<DungeonCell>(a["celula"]), R<Walker>(a["walker"]))));

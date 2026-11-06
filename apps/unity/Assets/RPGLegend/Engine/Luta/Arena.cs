@@ -677,10 +677,13 @@ namespace RPGLegend.Engine
                 foreach (var novo in ferida.Lacaios)
                     l.Arena.Monstros.Add(new MonstroNaArena { Indice = novo, Fase = "esperando", Tempo = 0, Forca = 1, Alvo = -1, X = 0, Y = 0, RumoX = 0, RumoY = 0 });
                 l.Arena.Alvo = ferida.Lacaios[0];
-                string texto = ChefeFinal.TextoDosLacaios(Js.Str(Monsters.View(ferida.Monstro).Name));
-                Contar(l, Aviso(texto));
-                Diario(l, new[] { texto });
             }
+            // O chefe final que chamou os lacaios tem o texto dele; o de andar 5 diz o que as mecânicas fizeram.
+            var textos = ferida.Lacaios.Count > 0 && ferida.Monstro.ChefeFinal == true
+                ? new List<string> { ChefeFinal.TextoDosLacaios(Js.Str(Monsters.View(ferida.Monstro).Name)) }
+                : ferida.Textos;
+            foreach (var texto in textos) Contar(l, Aviso(texto));
+            if (textos.Count > 0) Diario(l, textos.ToArray());
             return ferida;
         }
 

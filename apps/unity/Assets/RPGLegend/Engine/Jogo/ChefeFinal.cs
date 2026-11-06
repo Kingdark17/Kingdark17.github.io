@@ -45,6 +45,8 @@ namespace RPGLegend.Engine
         public bool Protegido;
         /// <summary>Os índices, na sala, dos lacaios que ele acabou de chamar (quase sempre vazio).</summary>
         public List<double> Lacaios = new List<double>();
+        /// <summary>O que as mecânicas do chefe de andar 5 disseram neste golpe, pro diário.</summary>
+        public List<string> Textos = new List<string>();
     }
 
     /// <summary>
@@ -93,7 +95,14 @@ namespace RPGLegend.Engine
         /// </summary>
         public static string PoderDaVez(MonsterInstance monstro)
         {
-            if (monstro?.ChefeFinal != true) return null;
+            if (monstro == null) return null;
+            if (monstro.ChefeFinal != true)
+            {
+                // O chefe de andar 5 com o golpe carregado: o Devastador, com aviso, a cada quatro golpes.
+                if (monstro.Mecanicas == null || !monstro.Mecanicas.Contains("carregado")) return null;
+                double seguinte = (CombatMonster.From(monstro).AttackCount ?? 0) + 1;
+                return seguinte % MecanicasDoChefe.CargaACada == 0 ? Devastador : null;
+            }
             var combate = CombatMonster.From(monstro);
             double proximo = (combate.AttackCount ?? 0) + 1;
             double cada = monstro.Furia == true ? D.PoderACadaNaFuria : D.PoderACada;
@@ -114,7 +123,9 @@ namespace RPGLegend.Engine
             var bruto = MonstroEm(sala, indice);
             var antes = bruto == null ? null : CombatMonster.From(bruto);
             // Sem dano (o dano contínuo que não correu, um golpe que só pôs status), não há o que proteger nem metade a cruzar.
-            if (antes?.ChefeFinal != true || depois.Hp >= antes.Hp) return Comum(estado, indice, depois);
+            if (antes == null || depois.Hp >= antes.Hp) return Comum(estado, indice, depois);
+            if (antes.IsBoss && antes.ChefeFinal != true) return FerirChefe(estado, indice, antes, depois, rng);
+            if (antes.ChefeFinal != true) return Comum(estado, indice, depois);
 
             if (LacaiosDePe(sala).Count > 0)
             {
@@ -150,6 +161,110 @@ namespace RPGLegend.Engine
             var resultado = new Ferida { Estado = Estados.SubstituirCelulaAtual(comChefe, comLacaios), Monstro = parado, Caiu = false, Protegido = false };
             for (int i = 0; i < novos.Count; i++) resultado.Lacaios.Add(primeiro + i);
             return resultado;
+        }
+
+        /// <summary>
+        /// TS: ferirChefe — o golpe num chefe de andar 5: a barreira segura o dano primeiro; na metade da vida entra a
+        /// segunda fase (a mecânica da masmorra, e os ajudantes do invocar), e o golpe que a pularia de cima para nela;
+        /// com 30%, a cura (uma vez) e a fúria. O rng só anda quando nascem ajudantes.
+        /// </summary>
+        private static Ferida FerirChefe(EstadoNaMasmorra estado, double indice, CombatMonster antes, CombatMonster depois, RngFn rng)
+        {
+            string nome = Js.Str(Monsters.View(antes).Name);
+            var textos = new List<string>();
+            var monstro = depois.Clone();
+
+            if (Js.Truthy(antes.Barreira))
+            {
+                double absorve = Js.Min(antes.Hp - depois.Hp, antes.Barreira.Value);
+                double sobra = antes.Barreira.Value - absorve;
+                monstro.Hp = depois.Hp + absorve;
+                monstro.Barreira = sobra > 0 ? sobra : (double?)null;
+                textos.Add(sobra > 0 ? "A barreira de " + nome + " segura o golpe." : "A barreira de " + nome + " se quebra!");
+            }
+
+            double metade = Js.Max(1, Math.Floor(antes.MaxHp / 2));
+            int ajudantes = 0;
+            bool lobos = false;
+            if (antes.Fase2 != true && monstro.Hp <= metade && (monstro.Hp > 0 || antes.Hp > metade))
+            {
+                if (monstro.Hp <= 0) monstro.Hp = metade;
+                monstro.Fase2 = true;
+                string masmorra = estado.Masmorra.Dungeon;
+                if (masmorra == "floresta")
+                {
+                    ajudantes += (int)MecanicasDoChefe.AjudantesDoChefe;
+                    lobos = true;
+                    textos.Add(nome + " uiva, e " + Js.NumberToString(MecanicasDoChefe.AjudantesDoChefe) + " lobos saem do mato!");
+                }
+                else if (masmorra == "caverna")
+                {
+                    monstro.Escuro = true;
+                    textos.Add(nome + " apaga as tochas: no escuro, a mira some.");
+                }
+                else if (masmorra == "torre")
+                {
+                    monstro.EscudoElemental = true;
+                    textos.Add(nome + " ergue um escudo elemental, que muda de cor a cada dois golpes dele.");
+                }
+                if (antes.Mecanicas != null && antes.Mecanicas.Contains("invocar"))
+                {
+                    ajudantes += (int)MecanicasDoChefe.AjudantesDoChefe;
+                    textos.Add(nome + " chama " + Js.NumberToString(MecanicasDoChefe.AjudantesDoChefe) + " ajudantes!");
+                }
+            }
+
+            double limite = Math.Floor(antes.MaxHp * MecanicasDoChefe.LimiteDoDesespero);
+            if (monstro.Hp > 0 && monstro.Hp <= limite)
+            {
+                if (antes.Mecanicas != null && antes.Mecanicas.Contains("cura") && antes.Curou != true)
+                {
+                    monstro.Hp = Js.Min(antes.MaxHp, monstro.Hp + Js.Round(antes.MaxHp * MecanicasDoChefe.CuraDoChefe));
+                    monstro.Curou = true;
+                    textos.Add(nome + " se cura com o que resta das forças!");
+                }
+                if (antes.Mecanicas != null && antes.Mecanicas.Contains("furia") && antes.Furia != true)
+                {
+                    monstro.Furia = true;
+                    monstro.Dmg = Js.Round(monstro.Dmg * MecanicasDoChefe.ForcaNaFuria);
+                    monstro.Speed = Js.Round(monstro.Speed * MecanicasDoChefe.VelocidadeNaFuriaDoChefe);
+                    textos.Add(nome + " fica furioso: bate mais forte e mais rápido!");
+                }
+            }
+
+            var comChefe = FimDaLuta.GravarMonstro(estado, indice, monstro);
+            if (ajudantes == 0) return new Ferida { Estado = comChefe, Monstro = monstro, Caiu = monstro.Hp <= 0, Protegido = false, Textos = textos };
+
+            // Os lobos da Floresta são lobos; o invocar chama monstros da masmorra. Não dão ouro.
+            var daMasmorra = Dungeons.ById(estado.Masmorra.Dungeon)?.Species ?? new List<string>();
+            var soLobos = new List<string> { "lobo_sombras" };
+            var novos = new List<CombatMonster>();
+            for (int i = 0; i < ajudantes; i++)
+            {
+                IReadOnlyList<string> daVez = lobos && i < MecanicasDoChefe.AjudantesDoChefe ? soLobos : daMasmorra;
+                var ajudante = Monsters.Generate(antes.Floor, new Monsters.GenerateOptions { Rng = rng, Species = daVez, Dificuldade = estado.Masmorra.Difficulty });
+                ajudante.Gold = 0;
+                ajudante.Lacaio = true;
+                novos.Add(MonsterState.FreshCombatMonster(ajudante));
+            }
+            var sala = (DungeonCell)Estados.CelulaAtual(comChefe);
+            var monsters = new List<MonsterInstance>(sala.Monsters ?? new List<MonsterInstance>());
+            int primeiro = monsters.Count;
+            monsters.AddRange(novos);
+            var comAjudantes = sala.Clone();
+            comAjudantes.Monsters = monsters;
+            var resultado = new Ferida { Estado = Estados.SubstituirCelulaAtual(comChefe, comAjudantes), Monstro = monstro, Caiu = false, Protegido = false, Textos = textos };
+            for (int i = 0; i < novos.Count; i++) resultado.Lacaios.Add(primeiro + i);
+            return resultado;
+        }
+
+        /// <summary>TS: escuroNaLuta — a luz da sala está apagada: um chefe de pé com a escuridão da Caverna.</summary>
+        public static bool EscuroNaLuta(DungeonCell sala)
+        {
+            if (sala?.Monsters == null) return false;
+            for (int i = 0; i < sala.Monsters.Count; i++)
+                if (sala.Monsters[i]?.Escuro == true && FimDaLuta.VivoNaSala(sala, i)) return true;
+            return false;
         }
 
         private static Ferida Comum(EstadoNaMasmorra estado, double indice, CombatMonster monstro) =>

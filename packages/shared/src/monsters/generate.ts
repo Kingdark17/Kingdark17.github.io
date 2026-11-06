@@ -1,4 +1,5 @@
-import { difficultyById, type DifficultyId } from '../dungeon/dungeons.js';
+import { difficultyById, type DifficultyId, type DungeonId } from '../dungeon/dungeons.js';
+import { BARREIRA_DO_CHEFE, sortearMecanicas, type MecanicaDoChefe } from './mecanicas-do-chefe.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import {
   BOSS_TITLES,
@@ -65,6 +66,18 @@ export interface MonsterInstance {
   poderes?: number;
   /** Chamado pelo chefe final: não dá ouro. */
   lacaio?: boolean;
+  /** Chefe de andar 5: as mecânicas sorteadas dele (`mecanicas-do-chefe.ts`). */
+  mecanicas?: MecanicaDoChefe[];
+  /** Chefe: já passou da metade da vida (a segunda fase, com a mecânica da masmorra). */
+  fase2?: boolean;
+  /** Chefe da Caverna na segunda fase: a luz se apagou, e a mira some. */
+  escuro?: boolean;
+  /** Chefe da Torre na segunda fase: o escudo elemental (`escudoDoChefe`). */
+  escudoElemental?: boolean;
+  /** Chefe com a barreira: quanto dano ela ainda segura. */
+  barreira?: number;
+  /** Chefe com a cura: já se curou. */
+  curou?: boolean;
 }
 
 export interface GenerateOptions {
@@ -85,6 +98,8 @@ export interface GenerateOptions {
   final?: boolean;
   /** A dificuldade do personagem: o `peso` dela multiplica a vida e o dano. Ausente, o Normal. */
   dificuldade?: DifficultyId;
+  /** Só pro chefe: a masmorra dele, pras mecânicas (na Floresta não sai o invocar). */
+  masmorra?: DungeonId;
 }
 
 /**
@@ -148,7 +163,7 @@ export function generate(floor: number, { rng = defaultRng, species: ids, dificu
  * `FORCA_DO_CHEFE_FINAL` a mais de vida e dano, sorteado igual: o rng anda o
  * mesmo tanto.
  */
-export function generateBoss(floor: number, { rng = defaultRng, species: ids, main, final, dificuldade }: GenerateOptions = {}): MonsterInstance {
+export function generateBoss(floor: number, { rng = defaultRng, species: ids, main, final, dificuldade, masmorra }: GenerateOptions = {}): MonsterInstance {
   const species = pick(especiesPermitidas(ids), rng);
   const enemyClass = pick(ENEMY_CLASSES, rng);
   const isMain = main ?? floor % 10 === 0;
@@ -172,7 +187,11 @@ export function generateBoss(floor: number, { rng = defaultRng, species: ids, ma
     isMainBoss: isMain,
     bossTitle: title,
   };
-  if (!final) return chefe;
+  if (!final) {
+    // O chefe de andar 5 sorteia uma ou duas mecânicas (`mecanicas-do-chefe.ts`), depois de tudo.
+    const mecanicas = sortearMecanicas(masmorra, rng);
+    return { ...chefe, mecanicas, ...(mecanicas.includes('barreira') ? { barreira: Math.round(hp * BARREIRA_DO_CHEFE) } : {}) };
+  }
   const vida = Math.round(hp * FORCA_DO_CHEFE_FINAL);
   return { ...chefe, hp: vida, maxHp: vida, dmg: Math.round(dmg * FORCA_DO_CHEFE_FINAL), chefeFinal: true };
 }

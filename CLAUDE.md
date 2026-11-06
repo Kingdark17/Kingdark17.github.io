@@ -362,6 +362,18 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   tiram vida a cada sala e passam sozinhos; o golpe de chefe que acerta tem
   15% de quebrar um membro. A taverna sara tudo, e a tala (consumível novo,
   arte provisória em `img/potions/tala.png`) conserta os membros.
+- Mecânicas de chefe (2026-11-06, **site e app**, doc do Breno; o usuário
+  quis as duas coisas): todo chefe de andar 5 (menos o final, que tem as
+  fases dele) ganha a mecânica da masmorra na metade da vida, a segunda fase
+  (a Floresta chama 2 lobos; a Caverna apaga a luz, e a zona da mira some;
+  a Torre ergue um escudo elemental que reveza físico e mágico a cada 2
+  golpes dele e segura 70% do dano daquele tipo), e uma ou duas sorteadas
+  na geração (`monsters/mecanicas-do-chefe.ts`): invocar (2 ajudantes na
+  metade), barreira (segura 20% da vida antes do dano), golpe carregado (o
+  Devastador com aviso a cada 4 golpes), cura (25% uma vez, com 30% da
+  vida) e fúria (com 30%, mais dano e velocidade). Tudo passa por
+  `ferirMonstro` (`jogo/chefe-final.ts`); a placa mostra `marcasDoChefe`, e o
+  golpe que o derrubaria de cima da metade para nela.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no

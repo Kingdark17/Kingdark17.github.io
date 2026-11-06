@@ -85,6 +85,8 @@ namespace RPGLegend.Engine
         {
             double next = dmg;
             if (weakness == type) next = Js.Round(next * 1.25);
+            // O escudo elemental do chefe da Torre segura a maior parte do dano do tipo dele.
+            if (MecanicasDoChefe.EscudoDoChefe(monster) == type) next = Js.Round(next * MecanicasDoChefe.PassaPeloEscudo);
             if (resistance == type) next = Js.Round(next * (halfResist ? 0.9 : 0.8));
 
             var status = monster.Status;

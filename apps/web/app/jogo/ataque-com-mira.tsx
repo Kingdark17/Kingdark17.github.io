@@ -55,9 +55,11 @@ interface Props {
   onFim: (jogada: JogadaDeAtaque) => void;
   /** Só antes do giro — ver o comentário do arquivo. */
   onVoltar: () => void;
+  /** O chefe da Caverna apagou a luz (`escuroNaLuta`): a barra corre, mas a zona e a faixa do crítico somem. */
+  escuro?: boolean;
 }
 
-export function AtaqueComMira({ ataque, rotulo, onFim, onVoltar }: Props) {
+export function AtaqueComMira({ ataque, rotulo, onFim, onVoltar, escuro = false }: Props) {
   const [fase, setFase] = useState<Fase>({ tipo: 'dado' });
   const relogios = useRef<number[]>([]);
   const corredor = useRef<HTMLSpanElement>(null);
@@ -208,8 +210,12 @@ export function AtaqueComMira({ ataque, rotulo, onFim, onVoltar }: Props) {
               }}
               aria-label="Parar a barra de mira"
             >
-              <span className={styles.zona} style={{ left: `${trechos.zona.inicio}%`, width: `${trechos.zona.largura}%` }} />
-              <span className={styles.faixaCritica} style={{ left: `${trechos.critica.inicio}%`, width: `${trechos.critica.largura}%` }} />
+              {!escuro && (
+                <>
+                  <span className={styles.zona} style={{ left: `${trechos.zona.inicio}%`, width: `${trechos.zona.largura}%` }} />
+                  <span className={styles.faixaCritica} style={{ left: `${trechos.critica.inicio}%`, width: `${trechos.critica.largura}%` }} />
+                </>
+              )}
               <span ref={corredor} className={styles.corredor}>
                 <span className={styles.cursor} />
               </span>

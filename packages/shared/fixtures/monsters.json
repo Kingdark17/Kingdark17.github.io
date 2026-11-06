@@ -1680,9 +1680,14 @@
         "gold": 70,
         "isBoss": true,
         "isMainBoss": false,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "furia",
+          "barreira"
+        ],
+        "barreira": 19
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1709,9 +1714,13 @@
         "gold": 70,
         "isBoss": true,
         "isMainBoss": false,
-        "bossTitle": "o Flagelo"
+        "bossTitle": "o Flagelo",
+        "mecanicas": [
+          "furia",
+          "carregado"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1738,9 +1747,14 @@
         "gold": 140,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "furia",
+          "barreira"
+        ],
+        "barreira": 37
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1767,9 +1781,13 @@
         "gold": 140,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Flagelo"
+        "bossTitle": "o Flagelo",
+        "mecanicas": [
+          "furia",
+          "carregado"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1796,9 +1814,14 @@
         "gold": 130,
         "isBoss": true,
         "isMainBoss": false,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "furia",
+          "barreira"
+        ],
+        "barreira": 34
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1825,9 +1848,13 @@
         "gold": 130,
         "isBoss": true,
         "isMainBoss": false,
-        "bossTitle": "o Flagelo"
+        "bossTitle": "o Flagelo",
+        "mecanicas": [
+          "furia",
+          "carregado"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1854,9 +1881,14 @@
         "gold": 200,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "furia",
+          "barreira"
+        ],
+        "barreira": 60
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1883,9 +1915,13 @@
         "gold": 200,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Flagelo"
+        "bossTitle": "o Flagelo",
+        "mecanicas": [
+          "furia",
+          "carregado"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1912,9 +1948,14 @@
         "gold": 190,
         "isBoss": true,
         "isMainBoss": false,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "furia",
+          "barreira"
+        ],
+        "barreira": 49
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1941,9 +1982,13 @@
         "gold": 190,
         "isBoss": true,
         "isMainBoss": false,
-        "bossTitle": "o Flagelo"
+        "bossTitle": "o Flagelo",
+        "mecanicas": [
+          "furia",
+          "carregado"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1970,9 +2015,14 @@
         "gold": 680,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "furia",
+          "barreira"
+        ],
+        "barreira": 248
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -1999,9 +2049,13 @@
         "gold": 680,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Flagelo"
+        "bossTitle": "o Flagelo",
+        "mecanicas": [
+          "furia",
+          "carregado"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -2061,9 +2115,12 @@
         "gold": 140,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "cura"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 5
     }
   },
   {
@@ -2160,9 +2217,12 @@
         "gold": 140,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "cura"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 5
     }
   },
   {
@@ -2259,9 +2319,12 @@
         "gold": 140,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "cura"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 5
     }
   },
   {
@@ -2328,9 +2391,14 @@
         "gold": 224,
         "isBoss": true,
         "isMainBoss": true,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "furia",
+          "barreira"
+        ],
+        "barreira": 70
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -2360,9 +2428,14 @@
         "gold": 160,
         "isBoss": true,
         "isMainBoss": false,
-        "bossTitle": "o Ímpio"
+        "bossTitle": "o Ímpio",
+        "mecanicas": [
+          "furia",
+          "barreira"
+        ],
+        "barreira": 42
       },
-      "rngCalls": 3
+      "rngCalls": 6
     }
   },
   {
@@ -2394,9 +2467,12 @@
         "gold": 70,
         "isBoss": true,
         "isMainBoss": false,
-        "bossTitle": "o Eterno"
+        "bossTitle": "o Eterno",
+        "mecanicas": [
+          "carregado"
+        ]
       },
-      "rngCalls": 3
+      "rngCalls": 5
     }
   },
   {
@@ -2775,7 +2851,11 @@
           "gold": 140,
           "isBoss": true,
           "isMainBoss": true,
-          "bossTitle": "o Flagelo"
+          "bossTitle": "o Flagelo",
+          "mecanicas": [
+            "invocar",
+            "cura"
+          ]
         }
       }
     },
@@ -2793,6 +2873,10 @@
         "isBoss": true,
         "isMainBoss": true,
         "bossTitle": "o Flagelo",
+        "mecanicas": [
+          "invocar",
+          "cura"
+        ],
         "species": {
           "id": "morcego",
           "name": "Morcego Vampírico",
@@ -2842,7 +2926,11 @@
           "gold": 70,
           "isBoss": true,
           "isMainBoss": false,
-          "bossTitle": "o Flagelo"
+          "bossTitle": "o Flagelo",
+          "mecanicas": [
+            "furia",
+            "carregado"
+          ]
         }
       }
     },
@@ -2860,6 +2948,10 @@
         "isBoss": true,
         "isMainBoss": false,
         "bossTitle": "o Flagelo",
+        "mecanicas": [
+          "furia",
+          "carregado"
+        ],
         "species": {
           "id": "zumbi",
           "name": "Zumbi Cambaleante",

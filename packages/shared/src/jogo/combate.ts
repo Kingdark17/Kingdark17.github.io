@@ -362,7 +362,9 @@ function numeroNoMonstro(protegido: boolean, texto: string, critico: boolean | u
 function ferir(combate: Combate, estado: EstadoNaMasmorra, indice: number, depois: CombatMonster, rng: Rng): { combate: Combate; caiu: boolean; protegido: boolean } {
   const ferida = ferirMonstro(estado, indice, depois, rng);
   const nome = monsterView(ferida.monstro).name;
-  const log = [...combate.log, ...(ferida.protegido ? [textoProtegido(nome)] : []), ...(ferida.lacaios.length ? [textoDosLacaios(nome)] : [])];
+  // O chefe final que chamou os lacaios tem o texto dele; o de andar 5 diz o que as mecânicas fizeram (`ferida.textos`).
+  const chamouLacaios = ferida.lacaios.length > 0 && !!ferida.monstro.chefeFinal;
+  const log = [...combate.log, ...(ferida.protegido ? [textoProtegido(nome)] : []), ...(chamouLacaios ? [textoDosLacaios(nome)] : []), ...ferida.textos];
   return { combate: { ...combate, estado: ferida.estado, log, alvo: ferida.lacaios[0] ?? combate.alvo }, caiu: ferida.caiu, protegido: ferida.protegido };
 }
 

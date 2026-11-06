@@ -647,10 +647,11 @@ function ferirNaArena(l: Luta, estado: EstadoNaMasmorra, indice: number, depois:
   if (ferida.lacaios.length > 0) {
     for (const novo of ferida.lacaios) l.arena.monstros.push({ indice: novo, fase: 'esperando', tempo: 0, forca: 1, alvo: -1, x: 0, y: 0, rumoX: 0, rumoY: 0 });
     l.arena.alvo = ferida.lacaios[0] as number;
-    const texto = textoDosLacaios(monsterView(ferida.monstro).name);
-    contar(l, { tipo: 'aviso', texto });
-    diario(l, [texto]);
   }
+  // O chefe final que chamou os lacaios tem o texto dele; o de andar 5 diz o que as mecânicas fizeram.
+  const textos = ferida.lacaios.length > 0 && ferida.monstro.chefeFinal ? [textoDosLacaios(monsterView(ferida.monstro).name)] : ferida.textos;
+  for (const texto of textos) contar(l, { tipo: 'aviso', texto });
+  if (textos.length) diario(l, textos);
   return ferida;
 }
 

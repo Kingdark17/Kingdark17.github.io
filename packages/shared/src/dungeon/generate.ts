@@ -287,9 +287,9 @@ function populateMonsterRooms(rooms: DungeonCell[], floor: number, species: read
 }
 
 /** `final`: o andar 100, cujo chefe é a batalha final da masmorra (`jogo/chefe-final.ts`). */
-function placeBoss(bossRoom: DungeonCell | undefined, floor: number, main: boolean, species: readonly string[], dificuldade: DifficultyId, rng: Rng, final: boolean): void {
+function placeBoss(bossRoom: DungeonCell | undefined, floor: number, main: boolean, species: readonly string[], run: DungeonRun, rng: Rng, final: boolean): void {
   if (!bossRoom) return;
-  bossRoom.monsters = [generateBoss(floor, { rng, species, main, dificuldade, ...(final ? { final } : {}) })];
+  bossRoom.monsters = [generateBoss(floor, { rng, species, main, dificuldade: run.difficulty, masmorra: run.dungeon, ...(final ? { final } : {}) })];
   bossRoom.monsterIndex = 0;
   bossRoom.beaten = false;
 }
@@ -394,7 +394,7 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
   const monsterRoomCount = Math.min(pool.length - reservedRooms, 3 + Math.floor((floor - 1) * 1.3));
   populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), forca, species, run.difficulty, rng, now, app);
 
-  if (isBossFloor(floor)) placeBoss(bossRoom ?? place('boss', 1)[0], forca, floor % 10 === 0, species, run.difficulty, rng, floor >= DUNGEON_FLOORS);
+  if (isBossFloor(floor)) placeBoss(bossRoom ?? place('boss', 1)[0], forca, floor % 10 === 0, species, run, rng, floor >= DUNGEON_FLOORS);
 
   populateRoomContent(res.rooms as DungeonCell[], forca, rng, now, app);
   // Por último: o resto do andar sai igual ao de antes pra mesma semente.

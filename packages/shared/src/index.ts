@@ -28,6 +28,7 @@ export * from './items/tiers.js';
 
 export * from './monsters/species.js';
 export * from './monsters/generate.js';
+export * from './monsters/mecanicas-do-chefe.js';
 
 export * from './combat/monster-state.js';
 export * from './combat/damage.js';

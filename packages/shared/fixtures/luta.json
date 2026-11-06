@@ -132815,14 +132815,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -132842,6 +132837,9 @@
                       "isBoss": true,
                       "isMainBoss": false,
                       "bossTitle": "Senhor das Trevas",
+                      "mecanicas": [
+                        "cura"
+                      ],
                       "status": {},
                       "attackCount": 0
                     }
@@ -133223,14 +133221,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -133250,6 +133243,9 @@
                       "isBoss": true,
                       "isMainBoss": false,
                       "bossTitle": "Senhor das Trevas",
+                      "mecanicas": [
+                        "cura"
+                      ],
                       "status": {},
                       "attackCount": 0,
                       "guardHits": 0
@@ -186368,14 +186364,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -192217,14 +192208,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -192743,14 +192729,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -195343,14 +195324,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -195620,14 +195596,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -197140,14 +197111,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -197498,14 +197464,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -201570,14 +201531,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -202215,14 +202171,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -204820,14 +204771,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -205103,14 +205049,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -207730,14 +207671,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -208179,14 +208115,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,
@@ -209991,14 +209922,9 @@
                   "extras": [
                     {
                       "kind": "pot",
-                      "col": 7,
-                      "row": 1,
-                      "used": false
-                    },
-                    {
-                      "kind": "sign",
                       "col": 1,
-                      "row": 1
+                      "row": 6,
+                      "used": false
                     }
                   ],
                   "visited": true,

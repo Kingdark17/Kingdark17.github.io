@@ -307,6 +307,8 @@ namespace RPGLegend.Game.Jogo
             if (protegido) lista.Add("🛡️ Protegido pelos lacaios");
             var proximo = m.Fase != "avisando" ? ChefeFinal.Poder(ChefeFinal.PoderDaVez(visao) ?? "") : null;
             if (proximo != null) lista.Add("⚠️ " + proximo.Icone + " " + proximo.Nome);
+            // As mecânicas do chefe de andar 5 que estão valendo: o escudo, a barreira, o escuro, a fúria.
+            lista.AddRange(MecanicasDoChefe.MarcasDoChefe(visao));
             var s = visao.Status;
             if (s != null)
             {

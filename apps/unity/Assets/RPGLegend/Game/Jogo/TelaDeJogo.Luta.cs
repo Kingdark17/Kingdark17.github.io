@@ -315,6 +315,8 @@ namespace RPGLegend.Game.Jogo
 
             // O evento da arma, se houver um aberto, no palco dos monstros (a caixa do coração fica livre).
             var aberto = arena.Evento;
+            // No escuro do chefe da Caverna, a zona do evento some (a mira).
+            _eventoNaTela.Escuro = luta.Estado is EstadoNaMasmorra && ChefeFinal.EscuroNaLuta(Estados.CelulaAtual(luta.Estado) as DungeonCell);
             _eventoNaTela.Mostrar(aberto, _palcoDaLuta.AreaDoPalco);
             float topoDaCaixa = _palcoDaLuta.TopoDaCaixa;
             if (topoDaCaixa > 0) _avisosDaLuta.style.bottom = Mathf.Max(0f, _areaDaLuta.contentRect.height - topoDaCaixa + 6f);
@@ -593,6 +595,11 @@ namespace RPGLegend.Game.Jogo
         private static readonly Color Moldura = new Color32(0xc9, 0xa2, 0x27, 200);
         private static readonly Color Zona = new Color(0.79f, 0.64f, 0.15f, 0.35f);
         private static readonly Color Critico = new Color32(0xe8, 0xc6, 0x5a, 255);
+
+        /// <summary>O chefe da Caverna apagou a luz (<see cref="ChefeFinal.EscuroNaLuta"/>): o evento corre, mas a zona e a faixa do crítico somem.</summary>
+        public bool Escuro;
+        private Color CorDaZona => Escuro ? Color.clear : Zona;
+        private Color CorDoCritico => Escuro ? Color.clear : Critico;
         private static readonly Color Cursor = new Color32(0xec, 0xdf, 0xc0, 255);
         private static readonly Color Traco = new Color32(0xe8, 0xc6, 0x5a, 255);
         private static readonly Color Simbolo = new Color(0.93f, 0.87f, 0.75f, 0.28f);
@@ -708,8 +715,8 @@ namespace RPGLegend.Game.Jogo
                     var centro = r.center;
                     float raio = Mathf.Min(r.width, r.height) * 0.47f;
                     Circulo(p, centro, raio, Fundo, true, 0);
-                    Circulo(p, centro, raio * 0.5f, Zona, false, raio * zona);
-                    Circulo(p, centro, raio * 0.5f, Critico, false, Mathf.Max(2f, raio * faixa));
+                    Circulo(p, centro, raio * 0.5f, CorDaZona, false, raio * zona);
+                    Circulo(p, centro, raio * 0.5f, CorDoCritico, false, Mathf.Max(2f, raio * faixa));
                     Circulo(p, centro, Mathf.Max(1f, raio * (1f - progresso)), Cursor, false, 3f);
                     break;
                 }
@@ -717,8 +724,8 @@ namespace RPGLegend.Game.Jogo
                 {
                     Retangulo(p, r, Fundo);
                     float h = r.height;
-                    Retangulo(p, new Rect(r.x, r.y + h * (0.5f - zona / 2f), r.width, h * zona), Zona);
-                    Retangulo(p, new Rect(r.x, r.y + h * (0.5f - faixa / 2f), r.width, Mathf.Max(2f, h * faixa)), Critico);
+                    Retangulo(p, new Rect(r.x, r.y + h * (0.5f - zona / 2f), r.width, h * zona), CorDaZona);
+                    Retangulo(p, new Rect(r.x, r.y + h * (0.5f - faixa / 2f), r.width, Mathf.Max(2f, h * faixa)), CorDoCritico);
                     // Enche de baixo pra cima: o meio da barra é o meio do tempo.
                     Retangulo(p, new Rect(r.x + r.width * 0.3f, r.yMax - h * progresso, r.width * 0.4f, h * progresso), Cursor);
                     Contorno(p, r);
@@ -738,8 +745,8 @@ namespace RPGLegend.Game.Jogo
                 {
                     Retangulo(p, r, Fundo);
                     float w = r.width;
-                    Retangulo(p, new Rect(r.x + w * (0.5f - zona / 2f), r.y, w * zona, r.height), Zona);
-                    Retangulo(p, new Rect(r.x + w * (0.5f - faixa / 2f), r.y, Mathf.Max(2f, w * faixa), r.height), Critico);
+                    Retangulo(p, new Rect(r.x + w * (0.5f - zona / 2f), r.y, w * zona, r.height), CorDaZona);
+                    Retangulo(p, new Rect(r.x + w * (0.5f - faixa / 2f), r.y, Mathf.Max(2f, w * faixa), r.height), CorDoCritico);
                     Retangulo(p, new Rect(r.x + w * progresso - 2f, r.y - 4f, 4f, r.height + 8f), Cursor);
                     Contorno(p, r);
                     break;
@@ -755,8 +762,8 @@ namespace RPGLegend.Game.Jogo
             double janela = evento.Janela ?? 1;
             float porPasso = r.width * 0.75f / (float)Math.Max(1, evento.Duracao);
             float meia = (float)(janela * zona) * porPasso;
-            Retangulo(p, new Rect(linha - meia, r.y, meia * 2f, r.height), Zona);
-            Retangulo(p, new Rect(linha - 2f, r.y, 4f, r.height), Critico);
+            Retangulo(p, new Rect(linha - meia, r.y, meia * 2f, r.height), CorDaZona);
+            Retangulo(p, new Rect(linha - 2f, r.y, 4f, r.height), CorDoCritico);
             float meio = r.center.y;
             if (evento.Notas != null)
             {
@@ -792,8 +799,8 @@ namespace RPGLegend.Game.Jogo
             int k = LetraDaVez(evento, _aberto.Passo);
             if (k >= 0)
             {
-                Circulo(p, centro, raio * 0.5f, Zona, false, raio * zona);
-                Circulo(p, centro, raio * 0.5f, Critico, false, Mathf.Max(2f, raio * faixa));
+                Circulo(p, centro, raio * 0.5f, CorDaZona, false, raio * zona);
+                Circulo(p, centro, raio * 0.5f, CorDoCritico, false, Mathf.Max(2f, raio * faixa));
                 var leitura = LeituraDaLetra(evento, k);
                 Circulo(p, centro, raio * 0.28f, FundoDaLetra, true, 0);
                 Circulo(p, centro, raio * 0.28f, CorDaLetra(leitura, Cursor), false, 2f);
