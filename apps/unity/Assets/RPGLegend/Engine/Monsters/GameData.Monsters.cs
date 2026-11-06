@@ -5,6 +5,10 @@ namespace RPGLegend.Engine
     {
         /// <summary>Quanto o chefe final é mais forte que um chefe principal, na vida e no dano.</summary>
         [JsName("FORCA_DO_CHEFE_FINAL")] public double ForcaDoChefeFinal;
+        /// <summary>Todo monstro com 30% mais vida e dano (2026-11-06, o Moderado).</summary>
+        [JsName("ENDURECIMENTO")] public double Endurecimento;
+        /// <summary>O chefe, mais 30% por cima.</summary>
+        [JsName("ENDURECIMENTO_DO_CHEFE")] public double EndurecimentoDoChefe;
     }
 
     /// <summary>As tabelas de monstros (carregadas por RPGLegend.Engine.Json.MonsterTables).</summary>

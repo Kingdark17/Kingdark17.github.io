@@ -50,9 +50,7 @@ namespace RPGLegend.Engine
                 case LockReason.KindLevel:
                     return "Nível " + Js.NumberToString(bloqueio.MinLevel ?? double.NaN);
                 case LockReason.KindPreviousDungeon:
-                    return "Zere a " + (Dungeons.ById(bloqueio.Dungeon)?.Name ?? Js.Str(bloqueio.Dungeon)) + " no Normal";
-                case LockReason.KindPreviousDifficulty:
-                    return "Zere o " + (Dungeons.DifficultyById(bloqueio.Difficulty)?.Name ?? Js.Str(bloqueio.Difficulty));
+                    return "Zere a " + (Dungeons.ById(bloqueio.Dungeon)?.Name ?? Js.Str(bloqueio.Dungeon));
                 default:
                     // O switch do TS não tem default: motivo desconhecido devolve undefined.
                     return null;
@@ -70,29 +68,20 @@ namespace RPGLegend.Engine
             return andares.Count > 0 ? andares[andares.Count - 1] : 1;
         }
 
-        /// <summary>TS: dificuldadeAberta — a mais difícil já aberta nesta masmorra.</summary>
-        private static string DificuldadeAberta(EstadoNaCidade estado, string dungeon)
-        {
-            string aberta = null;
-            foreach (var d in Dungeons.Difficulties)
-                if (Bloqueio(estado, Run(dungeon, d.Id)) == null) aberta = d.Id;
-            return aberta ?? "normal";
-        }
-
         /// <summary>
-        /// TS: abrirPortao — abre na última descida, se ainda estiver aberta; senão, na Floresta Normal. Com
-        /// <paramref name="masmorra"/> (a entrada da cidade desenhada), ela fica fixa: na última dificuldade em que se
-        /// desceu nela ou, sem essa, na mais difícil aberta.
+        /// TS: abrirPortao — abre na última masmorra em que se desceu, se ainda estiver aberta; senão, na Floresta.
+        /// Sempre na dificuldade do personagem. Com <paramref name="masmorra"/> (a entrada da cidade desenhada), ela
+        /// fica fixa.
         /// </summary>
         public static Portao AbrirPortao(EstadoNaCidade estado, bool app = false, string masmorra = null)
         {
-            var ultima = Bloqueio(estado, estado.Masmorra) != null ? null : estado.Masmorra;
             if (masmorra != null)
             {
-                var fixa = ultima != null && ultima.Dungeon == masmorra ? ultima : Run(masmorra, DificuldadeAberta(estado, masmorra));
+                var fixa = Run(masmorra, estado.Dificuldade);
                 return new Portao { Estado = estado, Escolha = fixa, Andar = AndarMaisFundo(estado, fixa), App = app ? true : (bool?)null, Fixa = true };
             }
-            var escolha = ultima ?? Run("floresta", "normal");
+            var ultima = Run(estado.Masmorra.Dungeon, estado.Dificuldade);
+            var escolha = Bloqueio(estado, ultima) != null ? Run("floresta", estado.Dificuldade) : ultima;
             return new Portao { Estado = estado, Escolha = escolha, Andar = AndarMaisFundo(estado, escolha), App = app ? true : (bool?)null };
         }
 
@@ -102,45 +91,26 @@ namespace RPGLegend.Engine
             var opcoes = new List<OpcaoDoPortao>();
             foreach (var masmorra in Dungeons.All)
             {
-                var fechada = Bloqueio(portao.Estado, Run(masmorra.Id, "normal"));
+                var fechada = Bloqueio(portao.Estado, Run(masmorra.Id, portao.Estado.Dificuldade));
                 opcoes.Add(new OpcaoDoPortao { Id = masmorra.Id, Nome = masmorra.Name, Icone = masmorra.Icon, Falta = fechada != null ? Motivo(fechada) : null });
             }
             return opcoes;
         }
 
-        /// <summary>TS: dificuldades.</summary>
-        public static List<OpcaoDoPortao> Dificuldades(Portao portao)
-        {
-            var opcoes = new List<OpcaoDoPortao>();
-            foreach (var dificuldade in Dungeons.Difficulties)
-            {
-                var fechada = Bloqueio(portao.Estado, Run(portao.Escolha.Dungeon, dificuldade.Id));
-                opcoes.Add(new OpcaoDoPortao { Id = dificuldade.Id, Nome = dificuldade.Name, Icone = "", Falta = fechada != null ? Motivo(fechada) : null });
-            }
-            return opcoes;
-        }
+        /// <summary>TS: dificuldadeDoPortao — a dificuldade do personagem, que o portão mostra (não se escolhe ali).</summary>
+        public static DifficultyDef DificuldadeDoPortao(Portao portao) => Dungeons.DifficultyById(portao.Estado.Dificuldade) ?? Dungeons.Difficulties[0];
 
         /// <summary>TS: andares — o 1 e os totens tocados desta escolha.</summary>
         public static List<double> Andares(Portao portao) => Dungeons.EntryFloors(portao.Estado.Progresso, portao.Escolha);
 
-        /// <summary>TS: escolherMasmorra — leva junto a dificuldade mais alta aberta nela e o totem mais fundo. Fechada: a mesma.</summary>
+        /// <summary>TS: escolherMasmorra — leva junto o totem mais fundo dela. Fechada: a mesma.</summary>
         public static Portao EscolherMasmorra(Portao portao, string dungeon)
         {
-            if (portao.Fixa == true || Bloqueio(portao.Estado, Run(dungeon, "normal")) != null) return portao;
-            var c = portao.Clone();
-            c.Escolha = Run(dungeon, DificuldadeAberta(portao.Estado, dungeon));
-            c.Andar = AndarMaisFundo(portao.Estado, c.Escolha);
-            return c;
-        }
-
-        /// <summary>TS: escolherDificuldade — fechada devolve o mesmo portão.</summary>
-        public static Portao EscolherDificuldade(Portao portao, string difficulty)
-        {
-            var escolha = Run(portao.Escolha.Dungeon, difficulty);
-            if (Bloqueio(portao.Estado, escolha) != null) return portao;
+            var escolha = Run(dungeon, portao.Estado.Dificuldade);
+            if (portao.Fixa == true || Bloqueio(portao.Estado, escolha) != null) return portao;
             var c = portao.Clone();
             c.Escolha = escolha;
-            c.Andar = AndarMaisFundo(portao.Estado, escolha);
+            c.Andar = AndarMaisFundo(portao.Estado, c.Escolha);
             return c;
         }
 

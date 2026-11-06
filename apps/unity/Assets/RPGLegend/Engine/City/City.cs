@@ -172,12 +172,22 @@ namespace RPGLegend.Engine
             return next;
         }
 
-        /// <summary>TS: restAtTavern — vida e mana do herói cheias, e a vida da equipe inteira (cópias).</summary>
+        /// <summary>TS: OURO_DA_TAVERNA_POR_NIVEL — o preço da noite, por nível.</summary>
+        public static double OuroDaTavernaPorNivel => D.OuroDaTavernaPorNivel;
+
+        /// <summary>TS: precoDaTaverna — 5 de ouro por nível.</summary>
+        public static double PrecoDaTaverna(Hero hero) => OuroDaTavernaPorNivel * hero.Level;
+
+        /// <summary>
+        /// TS: restAtTavern — vida e mana do herói cheias, a vida da equipe inteira (cópias), e o preço da noite pago
+        /// (quem chama confere se o herói tem o ouro).
+        /// </summary>
         public static TavernRest RestAtTavern(Hero hero, IReadOnlyList<Companion> party)
         {
             var nextHero = hero.Clone();
             nextHero.Hp = hero.MaxHp;
             nextHero.Mp = hero.MaxMp;
+            nextHero.Gold = hero.Gold - PrecoDaTaverna(hero);
             var nextParty = new List<Companion>(party.Count);
             foreach (var m in party)
             {

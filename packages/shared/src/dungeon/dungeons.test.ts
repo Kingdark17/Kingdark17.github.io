@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { monsterLevel } from '../monsters/generate.js';
 import {
   DEFAULT_RUN,
+  DIFFICULTIES,
   DUNGEONS,
   effectiveFloor,
   emptyProgress,
@@ -28,23 +29,21 @@ const TORRE: DungeonRun = { dungeon: 'torre', difficulty: 'normal' };
 const TORRE_PESADELO: DungeonRun = { dungeon: 'torre', difficulty: 'pesadelo' };
 
 describe('a escada de força', () => {
-  it('cada dificuldade é um degrau, e o Pesadelo de uma é o Normal da seguinte', () => {
-    expect([FLORESTA, FLORESTA_DIFICIL, FLORESTA_PESADELO, CAVERNA, CAVERNA_PESADELO, TORRE, TORRE_PESADELO].map(tierOf)).toEqual([0, 1, 2, 2, 4, 4, 6]);
+  it('o degrau é só da masmorra: a dificuldade do personagem não sobe a escada', () => {
+    expect([FLORESTA, FLORESTA_DIFICIL, FLORESTA_PESADELO, CAVERNA, CAVERNA_PESADELO, TORRE, TORRE_PESADELO].map(tierOf)).toEqual([0, 0, 0, 2, 2, 4, 4]);
   });
 
-  it('a regra do usuário: os 4 primeiros andares da Caverna Normal são a Floresta no Pesadelo, e os da Torre Normal são a Caverna no Pesadelo', () => {
-    for (const andar of [1, 2, 3, 4]) {
-      expect(effectiveFloor(FLORESTA_PESADELO, andar)).toBe(effectiveFloor(CAVERNA, andar));
-      expect(effectiveFloor(CAVERNA_PESADELO, andar)).toBe(effectiveFloor(TORRE, andar));
-    }
+  it('a dificuldade multiplica os monstros, e o Pesadelo pesa mais que o Difícil', () => {
+    expect(DIFFICULTIES.map((d) => d.peso)).toEqual([1, 1.25, 1.6]);
   });
 
-  it('a Caverna começa na força 78 (monstros de nível 70, o pedido do Breno) e a Torre na 155 (nível 140)', () => {
+  it('a Caverna começa na força 78 (monstros de nível 70, o pedido do Breno) e a Torre na 155 (nível 140), em toda dificuldade', () => {
     expect(effectiveFloor(FLORESTA, 1)).toBe(1);
-    expect(effectiveFloor(FLORESTA_DIFICIL, 1)).toBe(40);
+    expect(effectiveFloor(FLORESTA_DIFICIL, 1)).toBe(1);
     expect(effectiveFloor(CAVERNA, 1)).toBe(78);
+    expect(effectiveFloor(CAVERNA_PESADELO, 1)).toBe(78);
     expect(effectiveFloor(TORRE, 1)).toBe(155);
-    expect(effectiveFloor(TORRE_PESADELO, 100)).toBe(331);
+    expect(effectiveFloor(TORRE_PESADELO, 100)).toBe(254);
     expect(monsterLevel(effectiveFloor(CAVERNA, 1))).toBe(70);
     expect(monsterLevel(effectiveFloor(TORRE, 1))).toBe(140);
   });
@@ -79,11 +78,12 @@ describe('o que está aberto', () => {
     expect(lockReason(markCleared(emptyProgress(), FLORESTA_DIFICIL), 80, CAVERNA)?.kind).toBe('previous_dungeon');
   });
 
-  it('o Difícil pede o Normal zerado, e o Pesadelo pede o Difícil', () => {
-    expect(lockReason(emptyProgress(), 1, FLORESTA_DIFICIL)).toEqual({ kind: 'previous_difficulty', difficulty: 'normal' });
+  it('a Floresta abre em toda dificuldade, e a Caverna pede a Floresta zerada na mesma dificuldade', () => {
+    expect(lockReason(emptyProgress(), 1, FLORESTA_PESADELO)).toBeNull();
     const normal = markCleared(emptyProgress(), FLORESTA);
-    expect(lockReason(normal, 1, FLORESTA_DIFICIL)).toBeNull();
-    expect(lockReason(normal, 1, FLORESTA_PESADELO)).toEqual({ kind: 'previous_difficulty', difficulty: 'dificil' });
+    expect(lockReason(normal, 70, CAVERNA)).toBeNull();
+    expect(lockReason(normal, 70, CAVERNA_PESADELO)).toEqual({ kind: 'previous_dungeon', dungeon: 'floresta' });
+    expect(lockReason(markCleared(emptyProgress(), FLORESTA_PESADELO), 70, CAVERNA_PESADELO)).toBeNull();
   });
 
   it('a Torre pede nível 140 e a Caverna zerada', () => {

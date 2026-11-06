@@ -1504,6 +1504,16 @@ for (const floor of [5, 10, 15, 20, 25, 100]) {
     caso(`generateBoss: andar ${floor}, seed ${seed}`, 'generateBoss', { floor }, (a, { rng }) => E.generateBoss(a.floor, { rng }), { rng: { seed } });
   }
 }
+// A dificuldade do personagem multiplica a vida e o dano (2026-11-06).
+for (const dificuldade of ['dificil', 'pesadelo', 'xyz'] as const) {
+  caso(`generate: andar 10, ${dificuldade}`, 'generate', { floor: 10, options: { dificuldade } }, (a, { rng }) => E.generate(a.floor, { ...a.options, rng } as never), { rng: { seed: 3 } });
+  caso(`generateBoss: andar 10, ${dificuldade}`, 'generateBoss', { floor: 10, options: { dificuldade } }, (a, { rng }) => E.generateBoss(a.floor, { ...a.options, rng } as never), {
+    rng: { seed: 3 },
+  });
+  caso(`generateMimic: andar 10, ${dificuldade}`, 'generateMimic', { floor: 10, options: { dificuldade } }, (a, { rng }) => E.generateMimic(a.floor, { ...a.options, rng } as never), {
+    rng: { seed: 3 },
+  });
+}
 caso('generateBoss: quem chama decide o chefe principal (24, main true)', 'generateBoss', { floor: 24, options: { main: true } }, (a, { rng }) =>
   E.generateBoss(a.floor, { ...a.options, rng }),
 { rng: { seed: 1 } });
@@ -2302,6 +2312,10 @@ for (const [floor, sequence] of [
   [4, [0.1, 0.1]],
   [3, [0.1, 0.1]],
   [4, [0.99, 0.1]],
+  [29, [0.1, 0.1, 0.1]],
+  [30, [0.1, 0.1, 0.1]],
+  [30, [0.1, 0.1, 0.9]],
+  [30, [0.9, 0.9, 0.1]],
 ] as const) {
   caso(`monsterGroupSize: andar ${floor}, rolos ${sequence.join(' e ')}`, 'monsterGroupSize', { floor }, (a, { rng }) => E.monsterGroupSize(a.floor, rng), { rng: { sequence: [...sequence] } });
 }
@@ -4016,7 +4030,6 @@ for (const [nome, bloqueio] of [
   ['nível', { kind: 'level', minLevel: 15 }],
   ['masmorra anterior', { kind: 'previous_dungeon', dungeon: 'floresta' }],
   ['masmorra anterior desconhecida', { kind: 'previous_dungeon', dungeon: 'xyz' }],
-  ['dificuldade anterior', { kind: 'previous_difficulty', difficulty: 'normal' }],
 ] as const) {
   caso(`motivo: ${nome}`, 'motivo', { bloqueio }, (a) => E.motivo(a.bloqueio as never));
 }
@@ -4030,23 +4043,20 @@ for (const [nome, estado] of [
   ['herói novo', portaoDe(guerreiro, { cleared: [], totems: {} })],
   ['veterano volta pra caverna', naCidadeDoVeterano],
   ['última descida fechada', portaoDe(guerreiro, { cleared: [], totems: {} }, { dungeon: 'torre', difficulty: 'pesadelo' })],
+  // A dificuldade é do personagem: no Pesadelo, a Caverna pede a Floresta zerada no Pesadelo.
+  ['veterano no Pesadelo', { ...portaoDe(veteranoDoPortao, progressoDeVeterano), dificuldade: 'pesadelo' } as EstadoNaCidade],
+  ['veterano no Pesadelo com a Floresta zerada nele', { ...portaoDe(veteranoDoPortao, { cleared: ['floresta:pesadelo'], totems: {} }), dificuldade: 'pesadelo' } as EstadoNaCidade],
 ] as const) {
   caso(`abrirPortao: ${nome}`, 'abrirPortao', { estado }, (a) => E.abrirPortao(a.estado));
   const portao = E.abrirPortao(estado);
   caso(`masmorras: ${nome}`, 'masmorras', { portao }, (a) => E.masmorras(a.portao));
-  caso(`dificuldades: ${nome}`, 'dificuldades', { portao }, (a) => E.dificuldades(a.portao));
+  caso(`dificuldadeDoPortao: ${nome}`, 'dificuldadeDoPortao', { portao }, (a) => E.dificuldadeDoPortao(a.portao));
   caso(`andares: ${nome}`, 'andares', { portao }, (a) => E.andares(a.portao));
 }
 const portaoDoVeterano = E.abrirPortao(naCidadeDoVeterano);
 caso('escolherMasmorra: aberta', 'escolherMasmorra', { portao: portaoDoVeterano, dungeon: 'floresta' }, (a) => E.escolherMasmorra(a.portao, a.dungeon as never));
 caso('escolherMasmorra: fechada devolve o mesmo', 'escolherMasmorra (fechada devolve o mesmo)', { portao: portaoDoVeterano, dungeon: 'torre' }, (a) =>
   E.escolherMasmorra(a.portao, a.dungeon as never) === a.portao,
-);
-caso('escolherDificuldade: aberta', 'escolherDificuldade', { portao: E.escolherMasmorra(portaoDoVeterano, 'floresta'), difficulty: 'dificil' }, (a) =>
-  E.escolherDificuldade(a.portao, a.difficulty as never),
-);
-caso('escolherDificuldade: fechada devolve o mesmo', 'escolherDificuldade (fechada devolve o mesmo)', { portao: portaoDoVeterano, difficulty: 'pesadelo' }, (a) =>
-  E.escolherDificuldade(a.portao, a.difficulty as never) === a.portao,
 );
 caso('escolherAndar: um totem tocado', 'escolherAndar', { portao: E.escolherMasmorra(portaoDoVeterano, 'floresta'), andar: 40 }, (a) =>
   E.escolherAndar(a.portao, a.andar),
@@ -4518,6 +4528,8 @@ function naSalaInterage(nome: string, estado: EstadoDoJogo, semente: number, pet
 naSalaInterage('portão de aprendiz', naSalaDaCidade('gate', aprendizNovo), 110);
 naSalaInterage('portão com classe', naSalaDaCidade('gate', guerreiro), 111);
 naSalaInterage('taverna', { ...naSalaDaCidade('tavern', machucado), party: [companheiro('guerreiro', { hp: 5 })] }, 112);
+// A noite custa 5 de ouro por nível (2026-11-06): sem o ouro, não dorme.
+naSalaInterage('taverna sem ouro', naSalaDaCidade('tavern', { ...machucado, gold: 0 }), 117);
 naSalaInterage('vendedor', naSalaDaCidade('shop'), 113);
 naSalaInterage('ferreiro', naSalaDaCidade('blacksmith'), 114);
 naSalaInterage('quadro de missões', naSalaDaCidade('questboard'), 115);
@@ -4577,17 +4589,18 @@ naSalaInterageNoApp('encantadora', naSalaDaCidade('encantadora'), 153);
 const humano = E.raceById('humano')!;
 caso('criacaoVazia: com nome', 'criacaoVazia', { nome: 'Lia' }, (a) => E.criacaoVazia(a.nome));
 for (const [nome, criacao] of [
-  ['sem nome', { nome: '   ', raca: humano, cabelo: null }],
-  ['sem raça', { nome: 'Lia', raca: null, cabelo: null }],
-  ['pronta', { nome: 'Lia', raca: humano, cabelo: 'longo' }],
+  ['sem nome', { nome: '   ', raca: humano, cabelo: null, dificuldade: 'normal' }],
+  ['sem raça', { nome: 'Lia', raca: null, cabelo: null, dificuldade: 'normal' }],
+  ['pronta', { nome: 'Lia', raca: humano, cabelo: 'longo', dificuldade: 'normal' }],
 ] as const) {
   caso(`faltaParaComecar: ${nome}`, 'faltaParaComecar', { criacao }, (a) => E.faltaParaComecar(a.criacao));
 }
 for (const [nome, criacao, semente] of [
-  ['humano', { nome: ' Lia ', raca: humano, cabelo: null }, 150],
-  ['elfo de cabelo escolhido', { nome: 'Ilen', raca: E.raceById('elfo')!, cabelo: 'curto' }, 151],
-  ['outra semente', { nome: 'Lia', raca: humano, cabelo: null }, 152],
-  ['sem raça', { nome: 'Lia', raca: null, cabelo: null }, 153],
+  ['humano', { nome: ' Lia ', raca: humano, cabelo: null, dificuldade: 'normal' }, 150],
+  ['elfo de cabelo escolhido', { nome: 'Ilen', raca: E.raceById('elfo')!, cabelo: 'curto', dificuldade: 'normal' }, 151],
+  ['outra semente', { nome: 'Lia', raca: humano, cabelo: null, dificuldade: 'normal' }, 152],
+  ['sem raça', { nome: 'Lia', raca: null, cabelo: null, dificuldade: 'normal' }, 153],
+  ['no Pesadelo', { nome: 'Lia', raca: humano, cabelo: null, dificuldade: 'pesadelo' }, 154],
 ] as const) {
   caso(`montarSaveInicial: ${nome}`, 'montarSaveInicial', { criacao }, (a, ctx) => E.montarSaveInicial(a.criacao, ctx.rng, ctx.now), {
     rng: { seed: semente },

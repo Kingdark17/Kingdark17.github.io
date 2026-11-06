@@ -14,7 +14,7 @@ import { montarSaveInicial } from './save-inicial.js';
 const MAGO = classById('mago')!;
 
 function guildaDoAprendiz() {
-  return abrirGuilda(entrarNaCidade(montarSaveInicial({ nome: 'Novato', raca: raceById('humano')!, cabelo: null }, seededRng(7))));
+  return abrirGuilda(entrarNaCidade(montarSaveInicial({ nome: 'Novato', raca: raceById('humano')!, cabelo: null, dificuldade: 'normal' }, seededRng(7))));
 }
 
 describe('treinar', () => {

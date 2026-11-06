@@ -189,7 +189,9 @@ namespace RPGLegend.Engine
             // hero.derived.descontoLoja do JS: sem derived, o JS lança ao ler o desconto.
             var derived = hero.Derived ?? throw ReadOfUndefined("descontoLoja");
             double descontoLoja = Js.Truthy(derived.DescontoLoja) ? derived.DescontoLoja : 0;
-            return Js.Max(1, Js.Round(item.Value * (1 - Js.Min(0.6, descontoLoja / 100 + discount))));
+            // A poção custa SOBREPRECO_DA_POCAO a mais; a venda continua pelo valor do item.
+            double valor = D.Pocoes.Contains(item.TemplateId) ? item.Value * D.SobreprecoDaPocao : item.Value;
+            return Js.Max(1, Js.Round(valor * (1 - Js.Min(0.6, descontoLoja / 100 + discount))));
         }
 
         /// <summary>TS: sellPrice — metade do valor, para baixo; nunca menos de 1.</summary>

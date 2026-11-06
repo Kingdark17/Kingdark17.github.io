@@ -1,7 +1,8 @@
 'use client';
 
 /**
- * Criação de personagem: nome, raça e cabelo.
+ * Criação de personagem: nome, raça, cabelo e, desde 2026-11-06, a
+ * dificuldade, que vale pra sempre (como o modo de um mundo do Minecraft).
  *
  * Classe, poderes e a Roleta do Destino saíram daqui (doc do Breno,
  * 2026-10): o herói nasce Aprendiz e escolhe a classe no Treinamento de
@@ -15,7 +16,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { RACES, criacaoVazia, faltaParaComecar, montarSaveInicial, type Criacao, type Race } from '@rpg-legend/shared';
+import { DIFFICULTIES, RACES, criacaoVazia, faltaParaComecar, montarSaveInicial, type Criacao, type Race } from '@rpg-legend/shared';
 import { ErroDaApi } from '@/lib/api/client';
 import { CABELO_PADRAO, CORPOS, PENTEADOS, SEM_CABELO } from '@/lib/paperdoll/camadas';
 import { gravarSave } from '@/lib/api/save';
@@ -176,6 +177,27 @@ export function FormularioCriacao({ slot }: { slot: number }) {
             </ul>
           </section>
         )}
+
+        {/* Começa no Normal: é escolha, mas não trava o começo. */}
+        <section className={styles.secao}>
+          <h2 className={styles.tituloSecao}>Dificuldade</h2>
+          <ul className={styles.grade}>
+            {DIFFICULTIES.map((dificuldade) => (
+              <li key={dificuldade.id}>
+                <button
+                  type="button"
+                  className={`${styles.carta} ${criacao.dificuldade === dificuldade.id ? styles.cartaEscolhida : ''}`}
+                  aria-pressed={criacao.dificuldade === dificuldade.id}
+                  onClick={() => setCriacao((atual) => ({ ...atual, dificuldade: dificuldade.id }))}
+                >
+                  <span className={styles.nomeCarta}>{dificuldade.name}</span>
+                  <span className={styles.descricao}>{dificuldade.desc}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <p className={styles.dica}>Vale para as três masmorras e não muda depois.</p>
+        </section>
 
         <div className={styles.acoes}>
           <button type="button" className={styles.botao} onClick={comecar} disabled={salvando}>

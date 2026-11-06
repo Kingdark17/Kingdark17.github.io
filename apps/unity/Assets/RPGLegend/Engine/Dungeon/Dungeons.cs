@@ -60,29 +60,24 @@ namespace RPGLegend.Engine
     }
 
     /// <summary>
-    /// TS: LockReason — por que uma masmorra numa dificuldade está fechada. No TS é uma união pelo
+    /// TS: LockReason — por que uma masmorra está fechada pra quem joga numa dificuldade. No TS é uma união pelo
     /// <c>kind</c>; aqui é uma classe só, e cada kind preenche só o seu campo (os outros ficam ausentes):
-    /// "level" → MinLevel, "previous_dungeon" → Dungeon, "previous_difficulty" → Difficulty.
+    /// "level" → MinLevel, "previous_dungeon" → Dungeon.
     /// </summary>
     public sealed class LockReason
     {
         public const string KindLevel = "level";
         public const string KindPreviousDungeon = "previous_dungeon";
-        public const string KindPreviousDifficulty = "previous_difficulty";
 
         public string Kind;
         /// <summary>kind "level": o nível mínimo da masmorra.</summary>
         public double? MinLevel;
-        /// <summary>kind "previous_dungeon": a masmorra que falta zerar no Normal.</summary>
+        /// <summary>kind "previous_dungeon": a masmorra que falta zerar na dificuldade do personagem.</summary>
         public string Dungeon;
-        /// <summary>kind "previous_difficulty": a dificuldade que falta zerar nesta masmorra.</summary>
-        public string Difficulty;
 
         public static LockReason Level(double minLevel) => new LockReason { Kind = KindLevel, MinLevel = minLevel };
 
         public static LockReason PreviousDungeon(string dungeon) => new LockReason { Kind = KindPreviousDungeon, Dungeon = dungeon };
-
-        public static LockReason PreviousDifficulty(string difficulty) => new LockReason { Kind = KindPreviousDifficulty, Difficulty = difficulty };
     }
 
     /// <summary>
@@ -156,6 +151,10 @@ namespace RPGLegend.Engine
             };
         }
 
+        /// <summary>TS: normalizeDifficulty — a dificuldade do personagem, do save: sem ela ou desconhecida, o Normal.</summary>
+        public static string NormalizeDifficulty(object raw) =>
+            (raw is string id ? DifficultyById(id)?.Id : null) ?? DefaultRun.Difficulty;
+
         /// <summary>TS: runName — "Floresta · Difícil"; id desconhecido aparece como está.</summary>
         public static string RunName(DungeonRun run) =>
             (ById(run.Dungeon)?.Name ?? Js.Str(run.Dungeon)) + " · " + (DifficultyById(run.Difficulty)?.Name ?? Js.Str(run.Difficulty));
@@ -166,16 +165,11 @@ namespace RPGLegend.Engine
         // ---------- força ----------
 
         /// <summary>
-        /// TS: tierOf — o degrau de força: Floresta Normal 0, Difícil 1, Pesadelo 2; Caverna Normal 2… O
-        /// Pesadelo de uma é o mesmo degrau do Normal da seguinte (o "* 2" é fixo no TS). Desconhecido conta
-        /// como o primeiro.
+        /// TS: tierOf — o degrau de força da masmorra: Floresta 0, Caverna 2, Torre 4. Desde 2026-11-06 a
+        /// dificuldade é do personagem e só multiplica os monstros (o Peso dela), sem subir a escada. Desconhecida
+        /// conta como a primeira.
         /// </summary>
-        public static double TierOf(DungeonRun run)
-        {
-            double masmorra = Js.Max(0, IndexOfDungeon(run.Dungeon));
-            double dificuldade = Js.Max(0, IndexOfDifficulty(run.Difficulty));
-            return masmorra * 2 + dificuldade;
-        }
+        public static double TierOf(DungeonRun run) => Js.Max(0, IndexOfDungeon(run.Dungeon)) * 2;
 
         /// <summary>
         /// TS: effectiveFloor — o andar que os monstros, o ouro e os itens enxergam: dentro da masmorra sobe um
@@ -239,22 +233,17 @@ namespace RPGLegend.Engine
         public static bool IsCleared(DungeonProgress progress, DungeonRun run) => progress.Cleared.Contains(RunKey(run));
 
         /// <summary>
-        /// TS: lockReason — por que esta masmorra nesta dificuldade está fechada, ou null se abre (masmorra
-        /// desconhecida também abre). Na ordem: nível mínimo; a masmorra anterior zerada no Normal; a
-        /// dificuldade anterior desta masmorra zerada.
+        /// TS: lockReason — por que esta masmorra está fechada pra quem joga nesta dificuldade (a do personagem,
+        /// em run), ou null se abre (masmorra desconhecida também abre): falta nível, ou zerar a masmorra anterior
+        /// na mesma dificuldade.
         /// </summary>
         public static LockReason LockReasonOf(DungeonProgress progress, double heroLevel, DungeonRun run)
         {
             var masmorra = ById(run.Dungeon);
             if (masmorra == null) return null;
             if (heroLevel < masmorra.MinLevel) return LockReason.Level(masmorra.MinLevel);
-            // "normal" é literal no TS (não é DIFFICULTIES[0]).
-            if (Js.Truthy(masmorra.Requires) && !IsCleared(progress, new DungeonRun { Dungeon = masmorra.Requires, Difficulty = "normal" }))
+            if (Js.Truthy(masmorra.Requires) && !IsCleared(progress, new DungeonRun { Dungeon = masmorra.Requires, Difficulty = run.Difficulty }))
                 return LockReason.PreviousDungeon(masmorra.Requires);
-            int indice = IndexOfDifficulty(run.Difficulty);
-            var anterior = indice > 0 ? Difficulties[indice - 1] : null;
-            if (anterior != null && !IsCleared(progress, new DungeonRun { Dungeon = run.Dungeon, Difficulty = anterior.Id }))
-                return LockReason.PreviousDifficulty(anterior.Id);
             return null;
         }
 
@@ -319,12 +308,6 @@ namespace RPGLegend.Engine
         private static int IndexOfDungeon(string id)
         {
             for (int i = 0; i < All.Count; i++) if (All[i].Id == id) return i;
-            return -1;
-        }
-
-        private static int IndexOfDifficulty(string id)
-        {
-            for (int i = 0; i < Difficulties.Count; i++) if (Difficulties[i].Id == id) return i;
             return -1;
         }
 

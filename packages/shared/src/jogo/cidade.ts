@@ -38,13 +38,13 @@ const ENTRADAS: Partial<Record<PontoDaCidade, DungeonId>> = { floresta: 'florest
 
 /**
  * Os troncos ainda fecham o caminho da caverna: a masmorra que a Caverna
- * pede (a Floresta) não foi zerada no Normal (decisão do usuário,
- * 2026-10-23). O nível não entra: quem zerou a Floresta vê o caminho aberto,
+ * pede (a Floresta) não foi zerada na dificuldade do personagem (decisão do
+ * usuário, 2026-10-23; até 2026-11-06, no Normal). O nível não entra: quem zerou a Floresta vê o caminho aberto,
  * e a entrada da Caverna é que diz se falta nível.
  */
-export function troncosNoCaminho(estado: Pick<EstadoNaCidade, 'progresso'>): boolean {
+export function troncosNoCaminho(estado: Pick<EstadoNaCidade, 'progresso' | 'dificuldade'>): boolean {
   const requer = dungeonById('caverna')?.requires;
-  return !!requer && !isCleared(estado.progresso, { dungeon: requer, difficulty: 'normal' });
+  return !!requer && !isCleared(estado.progresso, { dungeon: requer, difficulty: estado.dificuldade });
 }
 
 /** A narração da cidade desenhada, no lugar da narração da sala: o que há em volta da praça. */
@@ -52,13 +52,13 @@ export const TEXTO_DA_CIDADE =
   'A cidade se espalha em volta da árvore da praça: a taverna, a loja de poções e a igreja a oeste; o ferreiro, a guilda e o quadro de avisos a leste; a cabana da vidente ao sul.';
 
 /** Como entrar e por onde vão as masmorras; com os troncos no caminho, avisa que a Caverna está fechada. */
-export function pistasDaCidade(estado: Pick<EstadoNaCidade, 'progresso'>): string {
+export function pistasDaCidade(estado: Pick<EstadoNaCidade, 'progresso' | 'dificuldade'>): string {
   const pistas = 'Encoste numa porta para entrar. A Floresta fica pelo caminho do sul, a Caverna ao norte e a Torre pela estrada do leste.';
   return troncosNoCaminho(estado) ? `${pistas} Troncos caídos fecham o caminho da Caverna.` : pistas;
 }
 
 /** A planta da cidade como ela está pra este jogador: com ou sem os troncos. */
-export function plantaDaCidadeAgora(estado: Pick<EstadoNaCidade, 'progresso'>): RoomLayout {
+export function plantaDaCidadeAgora(estado: Pick<EstadoNaCidade, 'progresso' | 'dificuldade'>): RoomLayout {
   return plantaDaCidade(troncosNoCaminho(estado));
 }
 
@@ -127,7 +127,7 @@ function acionar(estado: EstadoNaCidade, ponto: PontoDaCidade, rng: Rng, pet: Pe
   // O Aprendiz é barrado pelo guarda do portão, em qualquer entrada.
   if (!masmorra || !hasClass(naSala.hero)) return interagir(naSala, rng, pet, now, app);
 
-  const fechada = lockReason(naSala.progresso, naSala.hero.level, { dungeon: masmorra, difficulty: 'normal' });
+  const fechada = lockReason(naSala.progresso, naSala.hero.level, { dungeon: masmorra, difficulty: naSala.dificuldade });
   if (fechada) {
     const def = dungeonById(masmorra);
     return {

@@ -820,6 +820,10 @@
     width: 104px;
 }
 
+.carta.carta-de-dificuldade {
+    width: 168px;
+}
+
 .unity-button.botao-comecar {
     align-self: flex-start;
     margin-top: 8px;

@@ -35,11 +35,14 @@ namespace RPGLegend.Engine
     {
         private static CidadeData D => GameData.CidadeTable;
 
-        /// <summary>TS: troncosNoCaminho — a masmorra que a Caverna pede (a Floresta) ainda não foi zerada no Normal.</summary>
+        /// <summary>
+        /// TS: troncosNoCaminho — a masmorra que a Caverna pede (a Floresta) ainda não foi zerada na dificuldade do
+        /// personagem.
+        /// </summary>
         public static bool TroncosNoCaminho(EstadoDoJogo estado)
         {
             string requer = Dungeons.ById("caverna")?.Requires;
-            return requer != null && !Dungeons.IsCleared(estado.Progresso, new DungeonRun { Dungeon = requer, Difficulty = "normal" });
+            return requer != null && !Dungeons.IsCleared(estado.Progresso, new DungeonRun { Dungeon = requer, Difficulty = estado.Dificuldade });
         }
 
         /// <summary>TS: TEXTO_DA_CIDADE — o que há em volta da praça.</summary>
@@ -126,7 +129,7 @@ namespace RPGLegend.Engine
             // O Aprendiz é barrado pelo guarda do portão, em qualquer entrada.
             if (masmorra == null || !Heroes.HasClass(naSala.Hero)) return Salas.Interagir(naSala, rng, pet, now, app);
 
-            var fechada = Dungeons.LockReasonOf(naSala.Progresso, naSala.Hero.Level, new DungeonRun { Dungeon = masmorra, Difficulty = "normal" });
+            var fechada = Dungeons.LockReasonOf(naSala.Progresso, naSala.Hero.Level, new DungeonRun { Dungeon = masmorra, Difficulty = naSala.Dificuldade });
             if (fechada != null)
             {
                 var def = Dungeons.ById(masmorra);

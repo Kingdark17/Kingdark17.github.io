@@ -8,13 +8,13 @@ using UnityEngine.UIElements;
 namespace RPGLegend.Game.App
 {
     /// <summary>
-    /// Novo personagem (formulario-criacao.tsx do site): nome, raça e cabelo, com o boneco ao lado das escolhas. O
+    /// Novo personagem (formulario-criacao.tsx do site): nome, raça, cabelo e a dificuldade, com o boneco ao lado das escolhas. O
     /// herói nasce Aprendiz — a classe e o primeiro poder vêm do Treinamento de Guilda, na cidade. Quem monta o save é
     /// a engine (<see cref="Criacoes.MontarSaveInicial"/>); aqui só tem tela e estado.
     /// </summary>
     public sealed class TelaDeCriacao
     {
-        private readonly VisualElement _tela, _balao, _racas, _secaoDoCabelo, _cabelos;
+        private readonly VisualElement _tela, _balao, _racas, _secaoDoCabelo, _cabelos, _dificuldades;
         private readonly Label _slot, _legenda, _erro;
         private readonly TextField _nome;
         private readonly Button _comecar;
@@ -33,6 +33,7 @@ namespace RPGLegend.Game.App
             _racas = raiz.Q("racas-da-criacao");
             _secaoDoCabelo = raiz.Q("secao-do-cabelo");
             _cabelos = raiz.Q("cabelos-da-criacao");
+            _dificuldades = raiz.Q("dificuldades-da-criacao");
             _slot = raiz.Q<Label>("slot-da-criacao");
             _legenda = raiz.Q<Label>("legenda-da-criacao");
             _erro = raiz.Q<Label>("erro-da-criacao");
@@ -94,6 +95,22 @@ namespace RPGLegend.Game.App
                     Desenhar();
                 });
                 _racas.Add(carta);
+            }
+
+            // A dificuldade (desde 2026-11-06): começa no Normal e vale pra sempre, nas três masmorras.
+            _dificuldades.Clear();
+            foreach (var opcao in Dungeons.Difficulties)
+            {
+                var esta = opcao;
+                var carta = PecasDaTela.Bloco("carta", "carta-de-dificuldade");
+                carta.Add(PecasDaTela.Texto(opcao.Name, "nome-da-carta"));
+                carta.Add(PecasDaTela.Texto(opcao.Desc, "meta-da-carta"));
+                PecasDaTela.Clicavel(carta, _criacao.Dificuldade == opcao.Id, () =>
+                {
+                    _criacao.Dificuldade = esta.Id;
+                    Desenhar();
+                });
+                _dificuldades.Add(carta);
             }
 
             // Só pra quem leva cabelo desenhado: oferecer penteado que não vai aparecer seria mentir pro jogador.

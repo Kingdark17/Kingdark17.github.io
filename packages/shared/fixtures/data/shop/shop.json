@@ -5,6 +5,11 @@
     "acessorio"
   ],
   "DEGRAU_DA_LOJA": 2,
+  "SOBREPRECO_DA_POCAO": 1.5,
+  "POCOES": [
+    "pot_vida",
+    "pot_mana"
+  ],
   "FORGE_MATERIALS": {
     "minerio": {
       "cost": 20,
@@ -88,6 +93,7 @@
     }
   },
   "$privadas": [
-    "BLACKSMITH_CATEGORIES"
+    "BLACKSMITH_CATEGORIES",
+    "POCOES"
   ]
 }

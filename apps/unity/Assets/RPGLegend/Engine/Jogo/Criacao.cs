@@ -3,13 +3,15 @@ using System.Collections.Generic;
 
 namespace RPGLegend.Engine
 {
-    /// <summary>TS: Criacao — o que a criação de personagem decide: nome, raça e cabelo.</summary>
+    /// <summary>TS: Criacao — o que a criação de personagem decide: nome, raça, cabelo e a dificuldade (pra sempre).</summary>
     public sealed class Criacao
     {
         public string Nome;
         [KeepNull] public RaceDef Raca;
         /// <summary>Penteado: começa no padrão e só muda se a pessoa quiser.</summary>
         [KeepNull] public string Cabelo;
+        /// <summary>Começa no Normal, e não trava o começo.</summary>
+        public string Dificuldade;
     }
 
     /// <summary>TS: SaveInicial — o save de um personagem recém-criado.</summary>
@@ -22,6 +24,8 @@ namespace RPGLegend.Engine
         public double Floor;
         /// <summary>Sempre vazia (o <c>never[]</c> do TS).</summary>
         public List<Quest> Quests;
+        /// <summary>A dificuldade do personagem, escolhida na criação, pra sempre.</summary>
+        public string Dificuldade;
     }
 
     /// <summary>
@@ -31,7 +35,7 @@ namespace RPGLegend.Engine
     public static class Criacoes
     {
         /// <summary>TS: criacaoVazia.</summary>
-        public static Criacao CriacaoVazia(string nome) => new Criacao { Nome = nome, Raca = null, Cabelo = null };
+        public static Criacao CriacaoVazia(string nome) => new Criacao { Nome = nome, Raca = null, Cabelo = null, Dificuldade = "normal" };
 
         /// <summary>TS: faltaParaComecar — "nome", "raca" ou null; o cabelo não trava o começo.</summary>
         public static string FaltaParaComecar(Criacao criacao)
@@ -70,7 +74,10 @@ namespace RPGLegend.Engine
                 Now = now,
             }));
 
-            return new SaveInicial { Hero = hero, Inventory = inventory, Party = new List<Companion>(), Floor = 1, Quests = new List<Quest>() };
+            return new SaveInicial
+            {
+                Hero = hero, Inventory = inventory, Party = new List<Companion>(), Floor = 1, Quests = new List<Quest>(), Dificuldade = criacao.Dificuldade,
+            };
         }
     }
 }

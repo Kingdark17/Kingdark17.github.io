@@ -43,5 +43,5 @@ export function saveSorteado(nome: string, rngDoSorteio: Rng, rngDoSave: Rng = r
     rngDoSave,
   );
   const inventory = addItem([], randomItem({ category: 'consumivel', floor: 1, rng: rngDoSave }));
-  return { hero, inventory, party: [], floor: 1, quests: [] };
+  return { hero, inventory, party: [], floor: 1, quests: [], dificuldade: 'normal' };
 }

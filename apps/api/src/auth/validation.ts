@@ -7,7 +7,7 @@
  * rastreados só sobem até +10 e ficam entre 1 e 99.
  */
 
-import { entryFloors, legacyProgress, normalizeProgress, normalizeRun, type DungeonProgress } from '@rpg-legend/shared';
+import { entryFloors, legacyProgress, normalizeDifficulty, normalizeProgress, normalizeRun, type DungeonProgress } from '@rpg-legend/shared';
 
 export const MAX_SLOTS = 4;
 
@@ -32,6 +32,8 @@ export interface SaveData {
   mapMode?: unknown;
   masmorra?: unknown;
   progresso?: unknown;
+  /** A dificuldade do personagem (desde 2026-11-06). Ausente: Normal. */
+  dificuldade?: unknown;
 }
 
 export function isValidSave(data: unknown): data is SaveData {
@@ -96,6 +98,10 @@ export function isValidTransition(oldSave: SaveData | null | undefined, next: Sa
   const newGold = Number(b.gold) || 0;
   if (newLevel < oldLevel || newLevel > oldLevel + 5) return false;
   if (newGold < 0 || newGold > oldGold + 5000) return false;
+
+  // A dificuldade é do personagem, escolhida na criação e pra sempre (decisão do usuário, 2026-11-06): um save não
+  // a troca. Quem é de antes dela é Normal, com o campo ou sem.
+  if (normalizeDifficulty(next.dificuldade) !== normalizeDifficulty(oldSave.dificuldade)) return false;
 
   const oldFloor = Number(oldSave.floor) || 1;
   const newFloor = Number(next.floor) || 1;

@@ -235,17 +235,12 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
   return { estado: limpo, log, loot };
 }
 
-/** O que a masmorra zerada abre no portão: a dificuldade seguinte e, no Normal, a próxima masmorra. */
+/** O que a masmorra zerada abre no portão: a próxima masmorra, na dificuldade do personagem. */
 function abertosAoZerar(estado: EstadoNaMasmorra, progresso: DungeonProgress): string[] {
   const linhas: string[] = [];
-  const indice = DIFFICULTIES.findIndex((d) => d.id === estado.masmorra.difficulty);
-  const seguinte = DIFFICULTIES[indice + 1];
-  const masmorra = dungeonById(estado.masmorra.dungeon);
-  if (seguinte && masmorra) linhas.push(`${masmorra.name} no ${seguinte.name} está aberta no portão.`);
-
   const proxima = DUNGEONS.find((d) => d.requires === estado.masmorra.dungeon);
-  if (proxima && estado.masmorra.difficulty === 'normal') {
-    const falta = lockReason(progresso, estado.hero.level, { dungeon: proxima.id, difficulty: 'normal' });
+  if (proxima) {
+    const falta = lockReason(progresso, estado.hero.level, { dungeon: proxima.id, difficulty: estado.masmorra.difficulty });
     linhas.push(falta?.kind === 'level' ? `A ${proxima.name} abre a partir do nível ${falta.minLevel}.` : `A ${proxima.name} está aberta no portão.`);
   }
   return linhas;

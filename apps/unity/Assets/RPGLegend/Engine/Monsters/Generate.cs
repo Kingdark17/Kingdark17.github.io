@@ -130,7 +130,20 @@ namespace RPGLegend.Engine
 
             /// <summary>Só no chefe: é o chefe final, o do andar 100 (FORCA_DO_CHEFE_FINAL a mais de vida e dano).</summary>
             public bool Final;
+
+            /// <summary>A dificuldade do personagem: o Peso dela multiplica a vida e o dano. Ausente, o Normal.</summary>
+            public string Dificuldade;
         }
+
+        /// <summary>TS: ENDURECIMENTO — todo monstro com 30% mais vida e dano; ouro e XP não mudam.</summary>
+        public static double Endurecimento => GameData.MonstersGenerateTable.Endurecimento;
+
+        /// <summary>TS: ENDURECIMENTO_DO_CHEFE — o chefe, mais 30% por cima.</summary>
+        public static double EndurecimentoDoChefe => GameData.MonstersGenerateTable.EndurecimentoDoChefe;
+
+        /// <summary>TS: multiplicadorDeForca — o endurecimento de todos, o do chefe e o peso da dificuldade.</summary>
+        private static double MultiplicadorDeForca(string dificuldade, bool chefe) =>
+            Endurecimento * (chefe ? EndurecimentoDoChefe : 1) * (Dungeons.DifficultyById(dificuldade ?? "normal")?.Peso ?? 1);
 
         /// <summary>TS: FORCA_DO_CHEFE_FINAL — quanto o chefe final é mais forte que um chefe principal, na vida e no dano.</summary>
         public static double ForcaDoChefeFinal => GameData.MonstersGenerateTable.ForcaDoChefeFinal;
@@ -162,7 +175,8 @@ namespace RPGLegend.Engine
             var species = Rng.Pick(EspeciesPermitidas(options?.Species), rng);
             var enemyClass = Rng.Pick(MonsterCatalog.EnemyClasses, rng);
             double scale = 1 + (floor - 1) * 0.27;
-            double hp = Js.Round(species.BaseHp * scale * enemyClass.HpMult) + Rng.RandomInt(4, rng);
+            double forca = MultiplicadorDeForca(options?.Dificuldade, false);
+            double hp = Js.Round((Js.Round(species.BaseHp * scale * enemyClass.HpMult) + Rng.RandomInt(4, rng)) * forca);
 
             var monster = new MonsterInstance
             {
@@ -171,7 +185,7 @@ namespace RPGLegend.Engine
                 Floor = floor,
                 Hp = hp,
                 MaxHp = hp,
-                Dmg = Js.Max(1, Js.Round((species.BaseDmg + Math.Floor((floor - 1) * 0.6)) * enemyClass.DmgMult)),
+                Dmg = Js.Max(1, Js.Round(Js.Round((species.BaseDmg + Math.Floor((floor - 1) * 0.6)) * enemyClass.DmgMult) * forca)),
                 Speed = Js.Max(1, Js.Round(species.BaseSpeed * (1 + (floor - 1) * 0.09) * enemyClass.SpeedMult)),
             };
             monster.Xp = 6 + floor * 3 + Rng.RandomInt(4, rng);
@@ -194,8 +208,9 @@ namespace RPGLegend.Engine
             bool isMain = options?.Main ?? floor % 10 == 0;
             string title = Rng.Pick(MonsterCatalog.BossTitles, rng);
             double mult = isMain ? 3.2 : 2.1;
-            double hp = Js.Round(species.BaseHp * (1 + (floor - 1) * 0.27) * mult * enemyClass.HpMult) + 20;
-            double dmg = Js.Round((species.BaseDmg + Math.Floor((floor - 1) * 0.65) + (isMain ? 5 : 3)) * enemyClass.DmgMult);
+            double forca = MultiplicadorDeForca(options?.Dificuldade, true);
+            double hp = Js.Round((Js.Round(species.BaseHp * (1 + (floor - 1) * 0.27) * mult * enemyClass.HpMult) + 20) * forca);
+            double dmg = Js.Round(Js.Round((species.BaseDmg + Math.Floor((floor - 1) * 0.65) + (isMain ? 5 : 3)) * enemyClass.DmgMult) * forca);
 
             var chefe = new MonsterInstance
             {
@@ -229,7 +244,7 @@ namespace RPGLegend.Engine
         public static MonsterInstance GenerateMimic(double floor, GenerateOptions options = null)
         {
             var rng = options?.Rng ?? Rng.Default;
-            var b = Generate(floor + 1, new GenerateOptions { Rng = rng, Species = options?.Species });
+            var b = Generate(floor + 1, new GenerateOptions { Rng = rng, Species = options?.Species, Dificuldade = options?.Dificuldade });
             double hp = Js.Round(b.Hp * 1.45);
 
             var mimic = b.Clone();

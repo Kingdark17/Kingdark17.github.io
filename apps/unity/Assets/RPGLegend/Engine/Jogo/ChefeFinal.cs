@@ -136,7 +136,7 @@ namespace RPGLegend.Engine
             var novos = new List<CombatMonster>();
             for (int i = 0; i < D.LacaiosDoChefe; i++)
             {
-                var lacaio = Monsters.Generate(antes.Floor, new Monsters.GenerateOptions { Rng = rng, Species = especies });
+                var lacaio = Monsters.Generate(antes.Floor, new Monsters.GenerateOptions { Rng = rng, Species = especies, Dificuldade = estado.Masmorra.Difficulty });
                 lacaio.Gold = 0;
                 lacaio.Lacaio = true;
                 novos.Add(MonsterState.FreshCombatMonster(lacaio));

@@ -17,7 +17,7 @@ import { randomItem, type Item } from '../items/item.js';
 import { CHANCE_DA_RUNA_NO_BAU, sortearRuna } from '../items/runas.js';
 import type { NpcService } from '../npc/npc-services.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
-import { DEFAULT_RUN, DUNGEON_FLOORS, dungeonById, effectiveFloor, isTotemFloor, type DungeonRun } from './dungeons.js';
+import { DEFAULT_RUN, DUNGEON_FLOORS, dungeonById, effectiveFloor, isTotemFloor, type DifficultyId, type DungeonRun } from './dungeons.js';
 import { placeExtras, type DungeonExtra } from './extras.js';
 import { distancesFrom, generateRoomGraph, DIR_VECTORS, type Direction, type RoomCell, type RoomGraph } from './graph.js';
 
@@ -115,12 +115,18 @@ export function isBossFloor(floor: number): boolean {
   return floor % 5 === 0;
 }
 
-/** Quantos monstros aparecem juntos numa sala — às vezes mais de um, mais provável a partir do andar 4. */
+/**
+ * Quantos monstros aparecem juntos numa sala. `floor` é o andar de força.
+ * Desde 2026-11-06 (doc do Breno, "deixar mais difícil", o Moderado) os
+ * grupos de 2 e de 3 são mais comuns (eram 35% e 20%), e a partir do andar
+ * de força 30 pode vir um de 4.
+ */
 export function monsterGroupSize(floor: number, rng: Rng = defaultRng): number {
   let n = 1;
-  if (rng() < 0.35) n = 2;
-  if (floor >= 4 && rng() < 0.2) n = 3;
-  return Math.min(3, n);
+  if (rng() < 0.5) n = 2;
+  if (floor >= 4 && rng() < 0.3) n = 3;
+  if (floor >= 30 && rng() < 0.2) n = 4;
+  return Math.min(4, n);
 }
 
 /**
@@ -262,11 +268,11 @@ function reserveDistant(
  * recompensa extra em salas com mais de um inimigo. `floor` aqui é o andar
  * **de força** (`effectiveFloor`), e `species`, as da masmorra.
  */
-function populateMonsterRooms(rooms: DungeonCell[], floor: number, species: readonly string[], rng: Rng, now?: () => number, app = false): void {
+function populateMonsterRooms(rooms: DungeonCell[], floor: number, species: readonly string[], dificuldade: DifficultyId, rng: Rng, now?: () => number, app = false): void {
   for (const cell of rooms) {
     const groupSize = monsterGroupSize(floor, rng);
     cell.monsters = [];
-    for (let i = 0; i < groupSize; i++) cell.monsters.push(generateMonster(floor, { rng, species }));
+    for (let i = 0; i < groupSize; i++) cell.monsters.push(generateMonster(floor, { rng, species, dificuldade }));
     cell.monsterIndex = 0;
     cell.beaten = false;
     if (groupSize > 1 && rng() < 0.35) {
@@ -276,9 +282,9 @@ function populateMonsterRooms(rooms: DungeonCell[], floor: number, species: read
 }
 
 /** `final`: o andar 100, cujo chefe é a batalha final da masmorra (`jogo/chefe-final.ts`). */
-function placeBoss(bossRoom: DungeonCell | undefined, floor: number, main: boolean, species: readonly string[], rng: Rng, final: boolean): void {
+function placeBoss(bossRoom: DungeonCell | undefined, floor: number, main: boolean, species: readonly string[], dificuldade: DifficultyId, rng: Rng, final: boolean): void {
   if (!bossRoom) return;
-  bossRoom.monsters = [generateBoss(floor, { rng, species, main, ...(final ? { final } : {}) })];
+  bossRoom.monsters = [generateBoss(floor, { rng, species, main, dificuldade, ...(final ? { final } : {}) })];
   bossRoom.monsterIndex = 0;
   bossRoom.beaten = false;
 }
@@ -381,9 +387,9 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
   // início), o chefe fica numa sala qualquer: reserva uma pra ele.
   const reservedRooms = isBossFloor(floor) && !bossRoom ? 1 : 0;
   const monsterRoomCount = Math.min(pool.length - reservedRooms, 3 + Math.floor((floor - 1) * 1.3));
-  populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), forca, species, rng, now, app);
+  populateMonsterRooms(place('monster', Math.max(2, monsterRoomCount)), forca, species, run.difficulty, rng, now, app);
 
-  if (isBossFloor(floor)) placeBoss(bossRoom ?? place('boss', 1)[0], forca, floor % 10 === 0, species, rng, floor >= DUNGEON_FLOORS);
+  if (isBossFloor(floor)) placeBoss(bossRoom ?? place('boss', 1)[0], forca, floor % 10 === 0, species, run.difficulty, rng, floor >= DUNGEON_FLOORS);
 
   populateRoomContent(res.rooms as DungeonCell[], forca, rng, now, app);
   // Por último: o resto do andar sai igual ao de antes pra mesma semente.

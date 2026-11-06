@@ -127,6 +127,9 @@
                         <ui:Label text="Cabelo" class="titulo-da-secao" />
                         <ui:VisualElement name="cabelos-da-criacao" class="grade-de-cartas" />
                     </ui:VisualElement>
+                    <ui:Label text="Dificuldade" class="titulo-da-secao" />
+                    <ui:VisualElement name="dificuldades-da-criacao" class="grade-de-cartas" />
+                    <ui:Label text="Vale para as três masmorras e não muda depois." class="dica-da-criacao" />
                     <ui:Button name="botao-comecar" text="COMEÇAR AVENTURA" class="botao botao-forte botao-comecar" />
                     <ui:Label text="Você começa como Aprendiz. A classe e o primeiro poder vêm do Treinamento de Guilda, na cidade — sem ele, o portão da masmorra não abre." class="dica-da-criacao" />
                     <ui:Label name="erro-da-criacao" class="erro" />

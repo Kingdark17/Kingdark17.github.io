@@ -59,6 +59,8 @@ namespace RPGLegend.Engine
         [JsName("CRACK_CHANCE")] public double CrackChance;
         [JsName("EXTRA_CHEST_CHANCE")] public double ExtraChestChance;
         [JsName("EXTRA_POT_CHANCE")] public double ExtraPotChance;
+        /// <summary>Chance de o baú pequeno guardar uma poção (era metade; desde 2026-11-06, metade disso).</summary>
+        [JsName("CHANCE_DA_POCAO_NO_BAU")] public double ChanceDaPocaoNoBau;
         [JsName("EXTRA_POTIONS")] public List<string> ExtraPotions = new List<string>();
     }
 
@@ -86,6 +88,7 @@ namespace RPGLegend.Engine
         public static double CrackChance => D.CrackChance;
         public static double ExtraChestChance => D.ExtraChestChance;
         public static double ExtraPotChance => D.ExtraPotChance;
+        public static double ChanceDaPocaoNoBau => D.ChanceDaPocaoNoBau;
         public static List<string> ExtraPotions => D.ExtraPotions;
 
         /// <summary>TS: placeExtras — roda por último na geração do andar; <paramref name="floor"/> é o andar de força.</summary>
@@ -106,7 +109,7 @@ namespace RPGLegend.Engine
                     if (sorteio < ExtraChestChance)
                     {
                         var bau = new DungeonExtra { Kind = "chest", Col = lugar.Col, Row = lugar.Row };
-                        bau.Item = rng() < 0.5 ? SmallPotion(rng, now) : null;
+                        bau.Item = rng() < ChanceDaPocaoNoBau ? SmallPotion(rng, now) : null;
                         bau.Used = false;
                         extras.Add(bau);
                     }

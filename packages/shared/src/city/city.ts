@@ -199,8 +199,16 @@ export function withEncantadora(grid: CityCell[][]): CityCell[][] {
 }
 
 /** Restaura Vida e Mana do herói e Vida da equipe inteira — a única regra por trás da taverna. */
+/** O preço da noite na taverna: 5 de ouro por nível (doc do Breno de 2026-11-06, "deixar mais difícil", o Moderado). */
+export const OURO_DA_TAVERNA_POR_NIVEL = 5;
+
+export function precoDaTaverna(hero: Pick<Hero, 'level'>): number {
+  return OURO_DA_TAVERNA_POR_NIVEL * hero.level;
+}
+
+/** Descansa uma noite, pagando `precoDaTaverna` (quem chama confere se o herói tem o ouro). */
 export function restAtTavern(hero: Hero, party: readonly Companion[]): { hero: Hero; party: Companion[] } {
-  const nextHero: Hero = { ...hero, hp: hero.maxHp, mp: hero.maxMp };
+  const nextHero: Hero = { ...hero, hp: hero.maxHp, mp: hero.maxMp, gold: hero.gold - precoDaTaverna(hero) };
   const nextParty = party.map((m) => ({ ...m, hp: m.maxHp }));
   return { hero: nextHero, party: nextParty };
 }

@@ -51,16 +51,18 @@ namespace RPGLegend.Engine
         public static bool IsBossFloor(double floor) => floor % 5 == 0;
 
         /// <summary>
-        /// TS: monsterGroupSize — quantos monstros aparecem juntos numa sala: 2 com 35%, e a partir do andar 4
-        /// mais um sorteio de 20% para 3. Um ou dois números do rng.
+        /// TS: monsterGroupSize — quantos monstros aparecem juntos numa sala (floor é o andar de força): 2 com 50%,
+        /// a partir do andar 4 mais um sorteio de 30% para 3, e a partir do 30 um de 20% para 4. De um a três
+        /// números do rng.
         /// </summary>
         public static double MonsterGroupSize(double floor, RngFn rng = null)
         {
             rng = rng ?? Rng.Default;
             double n = 1;
-            if (rng() < 0.35) n = 2;
-            if (floor >= 4 && rng() < 0.2) n = 3;
-            return Js.Min(3, n);
+            if (rng() < 0.5) n = 2;
+            if (floor >= 4 && rng() < 0.3) n = 3;
+            if (floor >= 30 && rng() < 0.2) n = 4;
+            return Js.Min(4, n);
         }
 
         /// <summary>
@@ -131,9 +133,9 @@ namespace RPGLegend.Engine
             // qualquer: reserva uma pra ele.
             double reservedRooms = IsBossFloor(floor) && bossRoom == null ? 1 : 0;
             double monsterRoomCount = Js.Min(pool.Count - reservedRooms, 3 + Math.Floor((floor - 1) * 1.3));
-            PopulateMonsterRooms(Place(DungeonRoomTypes.Monster, Js.Max(2, monsterRoomCount)), forca, species, rng, now, o.App);
+            PopulateMonsterRooms(Place(DungeonRoomTypes.Monster, Js.Max(2, monsterRoomCount)), forca, species, run.Difficulty, rng, now, o.App);
 
-            if (IsBossFloor(floor)) PlaceBoss(bossRoom ?? First(Place(DungeonRoomTypes.Boss, 1)), forca, floor % 10 == 0, species, rng, floor >= Dungeons.Floors);
+            if (IsBossFloor(floor)) PlaceBoss(bossRoom ?? First(Place(DungeonRoomTypes.Boss, 1)), forca, floor % 10 == 0, species, run.Difficulty, rng, floor >= Dungeons.Floors);
 
             PopulateRoomContent(res.Rooms, forca, rng, now, o.App);
             // Por último: o resto do andar sai igual ao de antes pra mesma semente.
@@ -389,14 +391,14 @@ namespace RPGLegend.Engine
         /// chance de recompensa extra (35%) nas salas com mais de um: ouro (70%) ou um item. floor é o andar de
         /// força, e species, as da masmorra.
         /// </summary>
-        private static void PopulateMonsterRooms(List<DungeonCell> rooms, double floor, IReadOnlyList<string> species, RngFn rng, Func<double> now, bool app)
+        private static void PopulateMonsterRooms(List<DungeonCell> rooms, double floor, IReadOnlyList<string> species, string dificuldade, RngFn rng, Func<double> now, bool app)
         {
             foreach (var cell in rooms)
             {
                 double groupSize = MonsterGroupSize(floor, rng);
                 cell.Monsters = new List<MonsterInstance>();
                 for (double i = 0; i < groupSize; i++)
-                    cell.Monsters.Add(Monsters.Generate(floor, new Monsters.GenerateOptions { Rng = rng, Species = species }));
+                    cell.Monsters.Add(Monsters.Generate(floor, new Monsters.GenerateOptions { Rng = rng, Species = species, Dificuldade = dificuldade }));
                 cell.MonsterIndex = 0;
                 cell.Beaten = false;
                 if (groupSize > 1 && rng() < 0.35)
@@ -412,12 +414,12 @@ namespace RPGLegend.Engine
         /// TS: placeBoss — o chefe na sala reservada; sem sala, nada (nem sorteio). <paramref name="final"/>: o andar 100,
         /// cujo chefe é a batalha final da masmorra.
         /// </summary>
-        private static void PlaceBoss(DungeonCell bossRoom, double floor, bool main, IReadOnlyList<string> species, RngFn rng, bool final)
+        private static void PlaceBoss(DungeonCell bossRoom, double floor, bool main, IReadOnlyList<string> species, string dificuldade, RngFn rng, bool final)
         {
             if (bossRoom == null) return;
             bossRoom.Monsters = new List<MonsterInstance>
             {
-                Monsters.GenerateBoss(floor, new Monsters.GenerateOptions { Rng = rng, Species = species, Main = main, Final = final }),
+                Monsters.GenerateBoss(floor, new Monsters.GenerateOptions { Rng = rng, Species = species, Main = main, Final = final, Dificuldade = dificuldade }),
             };
             bossRoom.MonsterIndex = 0;
             bossRoom.Beaten = false;

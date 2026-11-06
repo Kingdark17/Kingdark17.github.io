@@ -42,7 +42,7 @@ describe('fraquezaNoCartao', () => {
 
 describe('poderesNoCartao', () => {
   it('o Aprendiz ainda não tem poder', () => {
-    const { hero } = montarSaveInicial({ nome: 'Novato', raca: raceById('humano')!, cabelo: null }, seededRng(3));
+    const { hero } = montarSaveInicial({ nome: 'Novato', raca: raceById('humano')!, cabelo: null, dificuldade: 'normal' }, seededRng(3));
 
     expect(poderesNoCartao(hero)).toEqual([]);
   });

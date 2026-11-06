@@ -1,5 +1,7 @@
 /**
- * O que a criação de personagem decide: nome, raça e cabelo.
+ * O que a criação de personagem decide: nome, raça, cabelo e, desde
+ * 2026-11-06, a dificuldade (pra sempre, como o modo de um mundo do
+ * Minecraft; `dungeon/dungeons.ts`).
  *
  * Até 2026-10 ela também escolhia a classe, e a "Roleta do Destino"
  * sorteava dois poderes, a fraqueza e os atributos. O doc do Breno tirou
@@ -14,6 +16,7 @@
  * `heroi-sorteado.ts`, que só os testes usam.
  */
 
+import type { DifficultyId } from '../dungeon/dungeons.js';
 import type { Race } from '../hero/catalog.js';
 
 export interface Criacao {
@@ -25,10 +28,12 @@ export interface Criacao {
    * aparência seria cobrar uma decisão que o jogo não precisa.
    */
   cabelo: string | null;
+  /** Começa no Normal, e não entra em `faltaParaComecar`: é escolha, mas não obrigatória. */
+  dificuldade: DifficultyId;
 }
 
 export function criacaoVazia(nome: string): Criacao {
-  return { nome, raca: null, cabelo: null };
+  return { nome, raca: null, cabelo: null, dificuldade: 'normal' };
 }
 
 export type FaltaParaComecar = 'nome' | 'raca';

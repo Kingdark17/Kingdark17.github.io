@@ -128,7 +128,7 @@ export function ferirMonstro(estado: EstadoNaMasmorra, indice: number, depois: C
   const especies = dungeonById(estado.masmorra.dungeon)?.species ?? [];
   const novos: CombatMonster[] = [];
   for (let i = 0; i < LACAIOS_DO_CHEFE; i++) {
-    novos.push(freshCombatMonster({ ...generate(antes.floor, { rng, species: especies }), gold: 0, lacaio: true }));
+    novos.push(freshCombatMonster({ ...generate(antes.floor, { rng, species: especies, dificuldade: estado.masmorra.difficulty }), gold: 0, lacaio: true }));
   }
   const salaDoChefe = celulaAtual(comChefe) as DungeonCell;
   const primeiro = (salaDoChefe.monsters ?? []).length;

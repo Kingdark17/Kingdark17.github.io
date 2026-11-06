@@ -158,7 +158,7 @@ describe('interagir na cidade', () => {
 
 describe('o Aprendiz na cidade', () => {
   function cidadeDoAprendiz(): EstadoNaCidade {
-    return entrarNaCidade(montarSaveInicial({ nome: 'Novato', raca: RACES[0]!, cabelo: null }, seededRng(3)));
+    return entrarNaCidade(montarSaveInicial({ nome: 'Novato', raca: RACES[0]!, cabelo: null, dificuldade: 'normal' }, seededRng(3)));
   }
 
   it('o portão não abre pra quem ainda não treinou', () => {

@@ -44,15 +44,21 @@
   "DIFFICULTIES": [
     {
       "id": "normal",
-      "name": "Normal"
+      "name": "Normal",
+      "peso": 1,
+      "desc": "A força de sempre de cada masmorra."
     },
     {
       "id": "dificil",
-      "name": "Difícil"
+      "name": "Difícil",
+      "peso": 1.25,
+      "desc": "Monstros com 25% mais vida e dano."
     },
     {
       "id": "pesadelo",
-      "name": "Pesadelo"
+      "name": "Pesadelo",
+      "peso": 1.6,
+      "desc": "Monstros com 60% mais vida e dano."
     }
   ],
   "DUNGEON_FLOORS": 100,

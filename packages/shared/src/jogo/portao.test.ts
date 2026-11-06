@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { markCleared, touchTotem, type DungeonProgress } from '../dungeon/dungeons.js';
+import { markCleared, touchTotem, type DifficultyId, type DungeonProgress } from '../dungeon/dungeons.js';
 import { seededRng } from '../rng.js';
 import { entrarNaCidade, type EstadoNaCidade } from './estado.js';
 import { saveSorteado } from './heroi-sorteado.js';
-import { abrirPortao, andares, dificuldades, entrar, escolherAndar, escolherDificuldade, escolherMasmorra, masmorras } from './portao.js';
+import { abrirPortao, andares, dificuldadeDoPortao, entrar, escolherAndar, escolherMasmorra, masmorras } from './portao.js';
 
-function cidade(nivel = 1, progresso?: DungeonProgress): EstadoNaCidade {
+function cidade(nivel = 1, progresso?: DungeonProgress, dificuldade: DifficultyId = 'normal'): EstadoNaCidade {
   const save = saveSorteado('Aria', seededRng(4));
-  const base = entrarNaCidade({ ...save, hero: { ...save.hero, level: nivel } });
+  const base = entrarNaCidade({ ...save, hero: { ...save.hero, level: nivel }, dificuldade });
   return progresso ? { ...base, progresso } : base;
 }
 
@@ -42,11 +42,14 @@ describe('o que o portão mostra', () => {
   });
 
   it('com o nível mas sem a Floresta zerada, diz o que zerar', () => {
-    expect(masmorras(abrirPortao(cidade(80))).find((m) => m.id === 'caverna')?.falta).toBe('Zere a Floresta no Normal');
+    expect(masmorras(abrirPortao(cidade(80))).find((m) => m.id === 'caverna')?.falta).toBe('Zere a Floresta');
   });
 
-  it('as dificuldades dizem qual zerar antes', () => {
-    expect(dificuldades(abrirPortao(cidade())).map((d) => d.falta)).toEqual([null, 'Zere o Normal', 'Zere o Difícil']);
+  it('mostra a dificuldade do personagem, que não se escolhe ali', () => {
+    expect(dificuldadeDoPortao(abrirPortao(cidade())).name).toBe('Normal');
+    const pesadelo = abrirPortao(cidade(1, undefined, 'pesadelo'));
+    expect(dificuldadeDoPortao(pesadelo).name).toBe('Pesadelo');
+    expect(pesadelo.escolha).toEqual({ dungeon: 'floresta', difficulty: 'pesadelo' });
   });
 });
 
@@ -56,15 +59,16 @@ describe('escolher', () => {
     expect(escolherMasmorra(portao, 'caverna')).toBe(portao);
   });
 
-  it('trocar de masmorra leva a dificuldade mais alta aberta nela', () => {
-    const progresso = markCleared(markCleared({ cleared: [], totems: {} }, FLORESTA), { dungeon: 'caverna', difficulty: 'normal' });
-    const portao = escolherMasmorra(abrirPortao(cidade(80, progresso)), 'caverna');
-    expect(portao.escolha).toEqual({ dungeon: 'caverna', difficulty: 'dificil' });
+  it('trocar de masmorra fica na dificuldade do personagem', () => {
+    const portao = escolherMasmorra(abrirPortao(cidade(80, markCleared({ cleared: [], totems: {} }, FLORESTA))), 'caverna');
+    expect(portao.escolha).toEqual({ dungeon: 'caverna', difficulty: 'normal' });
   });
 
-  it('dificuldade fechada não é escolhida', () => {
-    const portao = abrirPortao(cidade());
-    expect(escolherDificuldade(portao, 'pesadelo')).toBe(portao);
+  it('no Pesadelo, a Caverna pede a Floresta zerada no Pesadelo', () => {
+    const soNormal = abrirPortao(cidade(80, markCleared({ cleared: [], totems: {} }, FLORESTA), 'pesadelo'));
+    expect(masmorras(soNormal).find((m) => m.id === 'caverna')?.falta).toBe('Zere a Floresta');
+    const zerada = abrirPortao(cidade(80, markCleared({ cleared: [], totems: {} }, { dungeon: 'floresta', difficulty: 'pesadelo' }), 'pesadelo'));
+    expect(masmorras(zerada).find((m) => m.id === 'caverna')?.falta).toBeNull();
   });
 
   it('só os andares de entrada podem ser escolhidos, e cada dificuldade tem os seus totens', () => {
@@ -74,7 +78,8 @@ describe('escolher', () => {
     expect(andares(portao)).toEqual([1, 20]);
     expect(escolherAndar(portao, 33)).toBe(portao);
     expect(escolherAndar(portao, 1).andar).toBe(1);
-    expect(andares(escolherDificuldade(portao, 'dificil'))).toEqual([1]);
+    // Os totens do Normal não valem pra quem joga no Difícil.
+    expect(andares(abrirPortao(cidade(1, progresso, 'dificil')))).toEqual([1]);
   });
 });
 

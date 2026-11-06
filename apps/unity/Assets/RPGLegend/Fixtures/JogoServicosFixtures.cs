@@ -98,19 +98,13 @@ namespace RPGLegend.Tests
             Fn(M, "entrarNoPonto", (a, c) => W(Cidades.EntrarNoPonto(R<EstadoNaCidade>(a["estado"]), Str(a["ponto"]), c.RngFn, Str(a["pet"]), c.NowOrFail, JsJson.Truthy(a["app"]))));
             Fn(M, "falarComOBram", (a, c) => W(Cidades.FalarComOBram(R<EstadoNaCidade>(a["estado"]), c.RngFn, c.NowOrFail, JsJson.Truthy(a["app"]))));
             Fn(M, "masmorras", (a, c) => W(Portoes.Masmorras(R<Portao>(a["portao"]))));
-            Fn(M, "dificuldades", (a, c) => W(Portoes.Dificuldades(R<Portao>(a["portao"]))));
+            Fn(M, "dificuldadeDoPortao", (a, c) => W(Portoes.DificuldadeDoPortao(R<Portao>(a["portao"]))));
             Fn(M, "andares", (a, c) => W(Portoes.Andares(R<Portao>(a["portao"]))));
             Fn(M, "escolherMasmorra", (a, c) => W(Portoes.EscolherMasmorra(R<Portao>(a["portao"]), Str(a["dungeon"]))));
             Fn(M, "escolherMasmorra (fechada devolve o mesmo)", (a, c) =>
             {
                 var portao = R<Portao>(a["portao"]);
                 return W(ReferenceEquals(Portoes.EscolherMasmorra(portao, Str(a["dungeon"])), portao));
-            });
-            Fn(M, "escolherDificuldade", (a, c) => W(Portoes.EscolherDificuldade(R<Portao>(a["portao"]), Str(a["difficulty"]))));
-            Fn(M, "escolherDificuldade (fechada devolve o mesmo)", (a, c) =>
-            {
-                var portao = R<Portao>(a["portao"]);
-                return W(ReferenceEquals(Portoes.EscolherDificuldade(portao, Str(a["difficulty"])), portao));
             });
             Fn(M, "escolherAndar", (a, c) => W(Portoes.EscolherAndar(R<Portao>(a["portao"]), Num(a["andar"]))));
             Fn(M, "escolherAndar (andar sem totem devolve o mesmo)", (a, c) =>

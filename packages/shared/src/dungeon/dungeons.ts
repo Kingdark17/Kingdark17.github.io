@@ -26,6 +26,15 @@
  * `FLOORS_PER_DUNGEON`) e a entrada pede o nível dos monstros do primeiro
  * andar: 70 a Caverna, 140 a Torre.
  *
+ * Em 2026-11-06 (doc do Breno: "nível de dificuldade geral ao invés do
+ * atual por masmorra") a dificuldade passou a ser do personagem, escolhida
+ * na criação, como o modo de um mundo do Minecraft, e vale pra sempre e pras
+ * três masmorras; quem já existia ficou no Normal. Ela não sobe mais a
+ * escada de força (o Pesadelo de um herói novo cairia em monstros de nível
+ * 70): cada masmorra começa onde o Normal dela começa, e a dificuldade só
+ * multiplica a vida e o dano dos monstros (`peso`), sem pagar mais. Zerar
+ * uma masmorra abre a seguinte na dificuldade do personagem.
+ *
  * Aqui só tem regra e dado. Gerar o andar é de `generate.ts`; o portão, o
  * totem e o save são de quem orquestra.
  */
@@ -54,12 +63,16 @@ export const DUNGEONS: readonly DungeonDef[] = [
 export interface DifficultyDef {
   id: DifficultyId;
   name: string;
+  /** Quanto a vida e o dano dos monstros sobem nela (decisão do usuário, 2026-11-06). Ouro e XP não mudam. */
+  peso: number;
+  /** O que a criação de personagem diz dela. */
+  desc: string;
 }
 
 export const DIFFICULTIES: readonly DifficultyDef[] = [
-  { id: 'normal', name: 'Normal' },
-  { id: 'dificil', name: 'Difícil' },
-  { id: 'pesadelo', name: 'Pesadelo' },
+  { id: 'normal', name: 'Normal', peso: 1, desc: 'A força de sempre de cada masmorra.' },
+  { id: 'dificil', name: 'Difícil', peso: 1.25, desc: 'Monstros com 25% mais vida e dano.' },
+  { id: 'pesadelo', name: 'Pesadelo', peso: 1.6, desc: 'Monstros com 60% mais vida e dano.' },
 ];
 
 export const DUNGEON_FLOORS = 100;
@@ -79,6 +92,11 @@ export function dungeonById(id: string): DungeonDef | null {
 
 export function difficultyById(id: string): DifficultyDef | null {
   return DIFFICULTIES.find((d) => d.id === id) ?? null;
+}
+
+/** A dificuldade do personagem, do save: sem ela (quem é de antes de 2026-11-06) ou desconhecida, o Normal. */
+export function normalizeDifficulty(raw: unknown): DifficultyId {
+  return (typeof raw === 'string' ? difficultyById(raw)?.id : undefined) ?? DEFAULT_RUN.difficulty;
 }
 
 /** O que veio do save ou da rede: o que não for masmorra e dificuldade conhecidas vira Floresta Normal. */
@@ -101,27 +119,25 @@ export function runKey(run: DungeonRun): string {
 // ---------- força ----------
 
 /**
- * O degrau de força de uma masmorra numa dificuldade: Floresta Normal 0,
- * Difícil 1, Pesadelo 2; Caverna Normal 2… O Pesadelo de uma é o mesmo
- * degrau do Normal da seguinte — é a regra do usuário escrita em número.
+ * O degrau de força de uma masmorra: Floresta 0, Caverna 2, Torre 4. Até
+ * 2026-11-06 a dificuldade também subia (Floresta Difícil 1, Pesadelo 2, o
+ * Pesadelo de uma no Normal da seguinte); desde que ela é do personagem, só
+ * multiplica os monstros (`peso`), e o degrau ficou com o passo de dois.
  */
 export function tierOf(run: DungeonRun): number {
-  const masmorra = Math.max(0, DUNGEONS.findIndex((d) => d.id === run.dungeon));
-  const dificuldade = Math.max(0, DIFFICULTIES.findIndex((d) => d.id === run.difficulty));
-  return masmorra * 2 + dificuldade;
+  return Math.max(0, DUNGEONS.findIndex((d) => d.id === run.dungeon)) * 2;
 }
 
 /**
- * Andares de força entre o começo de uma masmorra e o da seguinte, no
- * Normal; cada dificuldade sobe meio disso, e o Pesadelo de uma cai no
- * Normal da seguinte (a escada do usuário). Com 77, a Caverna Normal começa
+ * Andares de força entre o começo de uma masmorra e o da seguinte (até
+ * 2026-11-06 cada dificuldade subia meio disso, ver `tierOf`). Com 77, a Caverna Normal começa
  * na força 78 — monstros de nível 70, o que o Breno pediu — e a Torre Normal
  * na 155, nível 140. Até 2026-10-25 eram 7 andares por degrau (a Caverna
  * começava na força 15).
  */
 export const FLOORS_PER_DUNGEON = 77;
 
-/** Quantos andares de força o degrau desta masmorra nesta dificuldade soma: 0, 39, 77, 116, 154, 193, 231. */
+/** Quantos andares de força o degrau desta masmorra soma: 0, 77, 154. */
 export function tierOffset(run: DungeonRun): number {
   return Math.floor((tierOf(run) * FLOORS_PER_DUNGEON + 1) / 2);
 }
@@ -173,23 +189,19 @@ export function isCleared(progress: DungeonProgress, run: DungeonRun): boolean {
   return progress.cleared.includes(runKey(run));
 }
 
-export type LockReason =
-  | { kind: 'level'; minLevel: number }
-  | { kind: 'previous_dungeon'; dungeon: DungeonId }
-  | { kind: 'previous_difficulty'; difficulty: DifficultyId };
+export type LockReason = { kind: 'level'; minLevel: number } | { kind: 'previous_dungeon'; dungeon: DungeonId };
 
-/** Por que esta masmorra nesta dificuldade está fechada, ou `null` se abre. */
+/**
+ * Por que esta masmorra está fechada pra quem joga nesta dificuldade (a do
+ * personagem, em `run`), ou `null` se abre: falta nível, ou zerar a
+ * masmorra anterior na mesma dificuldade.
+ */
 export function lockReason(progress: DungeonProgress, heroLevel: number, run: DungeonRun): LockReason | null {
   const masmorra = dungeonById(run.dungeon);
   if (!masmorra) return null;
   if (heroLevel < masmorra.minLevel) return { kind: 'level', minLevel: masmorra.minLevel };
-  if (masmorra.requires && !isCleared(progress, { dungeon: masmorra.requires, difficulty: 'normal' })) {
+  if (masmorra.requires && !isCleared(progress, { dungeon: masmorra.requires, difficulty: run.difficulty })) {
     return { kind: 'previous_dungeon', dungeon: masmorra.requires };
-  }
-  const indice = DIFFICULTIES.findIndex((d) => d.id === run.difficulty);
-  const anterior = indice > 0 ? DIFFICULTIES[indice - 1] : undefined;
-  if (anterior && !isCleared(progress, { dungeon: run.dungeon, difficulty: anterior.id })) {
-    return { kind: 'previous_difficulty', difficulty: anterior.id };
   }
   return null;
 }

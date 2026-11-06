@@ -36,6 +36,7 @@
   "CRACK_CHANCE": 0.4,
   "EXTRA_CHEST_CHANCE": 0.4,
   "EXTRA_POT_CHANCE": 0.4,
+  "CHANCE_DA_POCAO_NO_BAU": 0.25,
   "EXTRA_POTIONS": [
     "pot_vida",
     "pot_mana"

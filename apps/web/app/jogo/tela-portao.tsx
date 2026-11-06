@@ -1,8 +1,9 @@
 'use client';
 
 /**
- * O portão da cidade: Floresta, Caverna ou Torre, a dificuldade e por onde
- * entrar — o andar 1 ou um totem já tocado. O que está fechado aparece
+ * O portão da cidade: Floresta, Caverna ou Torre, e por onde entrar — o
+ * andar 1 ou um totem já tocado. A dificuldade é a do personagem, escolhida
+ * na criação (desde 2026-11-06): o portão só a mostra. O que está fechado aparece
  * apagado, com o que falta escrito no próprio botão: esconder a Torre de
  * quem ainda não chegou lá esconderia também pra onde o jogo vai.
  *
@@ -11,11 +12,10 @@
 
 import {
   andares,
-  dificuldades,
+  dificuldadeDoPortao,
   dungeonById,
   entrar,
   escolherAndar,
-  escolherDificuldade,
   escolherMasmorra,
   masmorras,
   runName,
@@ -63,7 +63,7 @@ export function TelaPortao({ portao, onPortao, onEntrar, onFechar }: Readonly<Pr
 
       {/* Pela entrada da cidade desenhada a masmorra já está escolhida: é a do caminho. */}
       {portao.fixa ? (
-        <p className={styles.textoDaGuilda}>{`O caminho leva à ${dungeonById(portao.escolha.dungeon)?.name ?? portao.escolha.dungeon}. Escolha a dificuldade e por onde entrar.`}</p>
+        <p className={styles.textoDaGuilda}>{`O caminho leva à ${dungeonById(portao.escolha.dungeon)?.name ?? portao.escolha.dungeon}. Escolha por onde entrar.`}</p>
       ) : (
         <>
           <p className={styles.textoDaGuilda}>O guarda abre o portão. Para onde você vai?</p>
@@ -81,16 +81,9 @@ export function TelaPortao({ portao, onPortao, onEntrar, onFechar }: Readonly<Pr
 
       <div className={styles.grupoDoPortao}>
         <h2 className={styles.tituloDaSecao}>Dificuldade</h2>
-        <div className={styles.escolhasDoPortao}>
-          {dificuldades(portao).map((opcao) => (
-            <Opcao
-              key={opcao.id}
-              opcao={opcao}
-              escolhida={portao.escolha.difficulty === opcao.id}
-              onEscolher={(id) => onPortao(escolherDificuldade(portao, id))}
-            />
-          ))}
-        </div>
+        <p className={styles.textoDaGuilda}>
+          {`${dificuldadeDoPortao(portao).name}: ${dificuldadeDoPortao(portao).desc} É a do personagem, escolhida na criação.`}
+        </p>
       </div>
 
       <div className={styles.grupoDoPortao}>

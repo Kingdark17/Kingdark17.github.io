@@ -44,10 +44,18 @@ export function rollStock(kind: ShopKind, floor: number, options: RollStockOptio
   return stock;
 }
 
+/**
+ * As poções custam 50% a mais pra comprar (doc do Breno de 2026-11-06, "deixar mais difícil", o Moderado). A venda
+ * continua pelo valor do item.
+ */
+export const SOBREPRECO_DA_POCAO = 1.5;
+const POCOES: readonly string[] = ['pot_vida', 'pot_mana'];
+
 /** Preço de compra: desconto de loja do herói (`descontoLoja`) somado ao bônus de pechincha, teto de 60%. */
 export function buyPrice(hero: Hero, item: Item, discount = 0): number {
   const descontoLoja = hero.derived.descontoLoja || 0;
-  return Math.max(1, Math.round(item.value * (1 - Math.min(0.6, descontoLoja / 100 + discount))));
+  const valor = POCOES.includes(item.templateId) ? item.value * SOBREPRECO_DA_POCAO : item.value;
+  return Math.max(1, Math.round(valor * (1 - Math.min(0.6, descontoLoja / 100 + discount))));
 }
 
 export function sellPrice(item: Item): number {

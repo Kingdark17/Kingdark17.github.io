@@ -48,6 +48,7 @@ namespace RPGLegend.Engine.Json
             if (save == null) return null;
             save.Masmorra = JsPlain.FromToken(token["masmorra"]);
             save.Progresso = JsPlain.FromToken(token["progresso"]);
+            save.Dificuldade = JsPlain.FromToken(token["dificuldade"]);
             var mapa = token["map"];
             if (save.MapMode == "dungeon" && mapa is JArray) save.Map = JsSerializer.Read<List<List<DungeonCell>>>(mapa);
             return save;

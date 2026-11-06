@@ -17,7 +17,17 @@
  */
 
 import { generateCityLayout, withEncantadora, withGuild, type CityCell } from '../city/city.js';
-import { DUNGEON_FLOORS, effectiveFloor, legacyProgress, normalizeProgress, normalizeRun, type DungeonProgress, type DungeonRun } from '../dungeon/dungeons.js';
+import {
+  DUNGEON_FLOORS,
+  effectiveFloor,
+  legacyProgress,
+  normalizeDifficulty,
+  normalizeProgress,
+  normalizeRun,
+  type DifficultyId,
+  type DungeonProgress,
+  type DungeonRun,
+} from '../dungeon/dungeons.js';
 import { generateDungeonFloor, isBossFloor, type DungeonCell } from '../dungeon/generate.js';
 import { DIR_VECTORS, inBounds, type Direction, type RoomCell } from '../dungeon/graph.js';
 import { idDaClasse } from '../hero/catalog.js';
@@ -63,6 +73,12 @@ interface EstadoBase {
   masmorra: DungeonRun;
   /** Masmorras zeradas e totens tocados — o que o portão oferece. */
   progresso: DungeonProgress;
+  /**
+   * A dificuldade do personagem, escolhida na criação e pra sempre (decisão
+   * do usuário, 2026-11-06). Quem é de antes dela é Normal. A `masmorra`
+   * desce sempre nela.
+   */
+  dificuldade: DifficultyId;
 }
 
 export interface EstadoNaCidade extends EstadoBase {
@@ -95,9 +111,12 @@ export interface SaveCarregado {
   /** Ausentes no save de antes das masmorras (2026-10). */
   masmorra?: DungeonRun;
   progresso?: DungeonProgress;
+  /** Ausente no save de antes da dificuldade por personagem (2026-11-06): Normal. */
+  dificuldade?: DifficultyId;
 }
 
 function comuns(save: SaveCarregado): Omit<EstadoBase, 'pos'> {
+  const dificuldade = normalizeDifficulty(save.dificuldade);
   return {
     hero: save.hero,
     party: save.party ?? [],
@@ -115,8 +134,10 @@ function comuns(save: SaveCarregado): Omit<EstadoBase, 'pos'> {
     // os totens que o jogador já passou vêm junto (decisão do usuário,
     // 2026-10-09). Os dois são normalizados porque o save vem da nuvem como
     // JSON solto.
-    masmorra: normalizeRun(save.masmorra),
+    // A descida é sempre na dificuldade do personagem: quem estava num Difícil de antes dela segue no Normal.
+    masmorra: { ...normalizeRun(save.masmorra), difficulty: dificuldade },
     progresso: save.progresso ? normalizeProgress(save.progresso) : legacyProgress(save.floor),
+    dificuldade,
   };
 }
 

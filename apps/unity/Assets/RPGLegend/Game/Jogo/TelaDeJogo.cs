@@ -793,15 +793,17 @@ namespace RPGLegend.Game.Jogo
                 {
                     // Pela entrada da cidade desenhada a masmorra já está escolhida: é a do caminho.
                     var nome = Dungeons.ById(portao.Escolha?.Dungeon)?.Name ?? portao.Escolha?.Dungeon;
-                    conteudo.Add(PecasDaTela.Texto("O caminho leva à " + nome + ". Escolha a dificuldade e por onde entrar.", "fala-da-tela"));
+                    conteudo.Add(PecasDaTela.Texto("O caminho leva à " + nome + ". Escolha por onde entrar.", "fala-da-tela"));
                 }
                 else
                 {
                     conteudo.Add(Subtitulo("Masmorra"));
                     conteudo.Add(Opcoes(Portoes.Masmorras(portao), portao.Escolha?.Dungeon, id => Portao(Portoes.EscolherMasmorra(portao, id))));
                 }
+                // A dificuldade é a do personagem, escolhida na criação: o portão só a mostra.
                 conteudo.Add(Subtitulo("Dificuldade"));
-                conteudo.Add(Opcoes(Portoes.Dificuldades(portao), portao.Escolha?.Difficulty, id => Portao(Portoes.EscolherDificuldade(portao, id))));
+                var dificuldade = Portoes.DificuldadeDoPortao(portao);
+                conteudo.Add(PecasDaTela.Texto(dificuldade.Name + ": " + dificuldade.Desc + " É a do personagem, escolhida na criação.", "fala-da-tela"));
                 conteudo.Add(Subtitulo("Andar de entrada"));
                 var andares = new VisualElement();
                 andares.AddToClassList("opcoes-da-janela");

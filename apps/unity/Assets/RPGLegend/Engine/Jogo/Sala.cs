@@ -142,11 +142,15 @@ namespace RPGLegend.Engine
                     return ComTela(estado, new TelaAberta { Tipo = "portao", Portao = Portoes.AbrirPortao(estado, app) });
                 case "tavern":
                 {
+                    double preco = City.PrecoDaTaverna(estado.Hero);
+                    if (estado.Hero.Gold < preco)
+                        return ComAviso(estado, "🍺", "Taverna", "A noite custa " + Js.NumberToString(preco) + " de ouro, e você não tem o bastante.", "door");
                     var descanso = City.RestAtTavern(estado.Hero, estado.Party);
                     var descansado = estado.Clone();
                     descansado.Hero = descanso.Hero;
                     descansado.Party = descanso.Party;
-                    return ComAviso(descansado, "🍺", "Taverna", "Você descansa por uma noite. Vida e mana totalmente restauradas.", "door");
+                    return ComAviso(descansado, "🍺", "Taverna",
+                        "Você paga " + Js.NumberToString(preco) + " de ouro e descansa por uma noite. Vida e mana totalmente restauradas.", "door");
                 }
                 case "shop":
                     return ComTela(estado, new TelaAberta { Tipo = "loja", Loja = Lojas.AbrirLoja(estado, ShopKinds.Shop, rng, now, app) }, "door");
@@ -249,7 +253,7 @@ namespace RPGLegend.Engine
                 revelado.Type = DungeonRoomTypes.Monster;
                 revelado.Monsters = new List<MonsterInstance>
                 {
-                    Monsters.GenerateMimic(forca, new Monsters.GenerateOptions { Rng = rng, Species = Dungeons.ById(estado.Masmorra.Dungeon)?.Species }),
+                    Monsters.GenerateMimic(forca, new Monsters.GenerateOptions { Rng = rng, Species = Dungeons.ById(estado.Masmorra.Dungeon)?.Species, Dificuldade = estado.Masmorra.Difficulty }),
                 };
                 revelado.MonsterIndex = 0;
                 revelado.Beaten = false;

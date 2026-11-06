@@ -345,18 +345,20 @@ describe('o fim da masmorra', () => {
     expect(combate.log.some((linha) => linha.includes('zerou Floresta · Normal'))).toBe(true);
   });
 
-  it('o diário diz o que abriu: a dificuldade seguinte e, no Normal, a próxima masmorra', () => {
+  it('o diário diz o que abriu: a próxima masmorra, e nenhuma dificuldade (ela é do personagem)', () => {
     const fraco = atacar(emCombate(noChefeDoAndar(100)), EM_CHEIO, 'normal', NUNCA).log;
-    expect(fraco).toContain('Floresta no Difícil está aberta no portão.');
+    expect(fraco.some((linha) => linha.includes('Difícil'))).toBe(false);
     expect(fraco).toContain('A Caverna abre a partir do nível 70.');
 
     const forte = atacar(emCombate(noChefeDoAndar(100, undefined, 80)), EM_CHEIO, 'normal', NUNCA).log;
     expect(forte).toContain('A Caverna está aberta no portão.');
   });
 
-  it('zerar o Pesadelo não abre dificuldade nem masmorra nova', () => {
-    const log = atacar(emCombate(noChefeDoAndar(100, { dungeon: 'floresta', difficulty: 'pesadelo' })), EM_CHEIO, 'normal', NUNCA).log;
-    expect(log.some((linha) => linha.includes('aberta no portão') || linha.includes('abre a partir'))).toBe(false);
+  it('no Pesadelo, zerar a Floresta abre a Caverna no Pesadelo, e zerar a Torre não abre nada', () => {
+    const floresta = atacar(emCombate(noChefeDoAndar(100, { dungeon: 'floresta', difficulty: 'pesadelo' })), EM_CHEIO, 'normal', NUNCA).log;
+    expect(floresta).toContain('A Caverna abre a partir do nível 70.');
+    const torre = atacar(emCombate(noChefeDoAndar(100, { dungeon: 'torre', difficulty: 'pesadelo' })), EM_CHEIO, 'normal', NUNCA).log;
+    expect(torre.some((linha) => linha.includes('aberta no portão') || linha.includes('abre a partir'))).toBe(false);
   });
 
   it('o chefe do andar 95 só abre a escada: nada de zerar', () => {

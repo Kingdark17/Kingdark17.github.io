@@ -70,7 +70,8 @@ não é sinal de regressão.
 ## Mapa (resumo)
 Grafo de salas conectadas por portas (N/S/L/O), o minimapa mostra toda sala
 comum do andar como silhueta até ela ser visitada ou revelada (desde
-2026-11-06; a sala secreta nunca aparece), até 3 monstros por sala lutando juntos (luta em grupo,
+2026-11-06; a sala secreta nunca aparece), até 3 monstros por sala lutando juntos (4 a partir
+do andar de força 30, desde 2026-11-06) (luta em grupo,
 2026-10-17: o jogador escolhe o alvo, um monstro ataca por rodada revezando
 entre os de pé, derrubar um não encerra a rodada, fuga e esquiva contra o
 mais rápido de pé, o da vez atordoado perde o ataque; o chefe final do
@@ -335,6 +336,20 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   (a escada, trancada com o chefe vivo, abre), e no covil fica o pilar de
   volta à cidade (`ICONE_DO_PILAR`, arte provisória), que pergunta antes de
   acender. Os totens de 20, 40, 60 e 80 continuam.
+- Dificuldade por personagem e "mais difícil" (2026-11-06, **site e app**,
+  doc do Breno decidido com o usuário): a dificuldade (Normal, Difícil,
+  Pesadelo) é escolhida na criação do personagem e vale pra sempre e pras
+  três masmorras, como o modo de um mundo do Minecraft (`dificuldade` no
+  save; quem é de antes é Normal, e a API recusa save que a troque). Ela não
+  sobe mais a escada de força (cada masmorra começa onde o Normal dela
+  começa): só multiplica a vida e o dano dos monstros (`peso` em
+  `DIFFICULTIES`: 1, 1,25 e 1,6), sem pagar mais. O portão só a mostra, e a
+  masmorra seguinte pede a anterior zerada na mesma dificuldade. Por cima
+  disso, pra todos ("o Moderado"): monstros com 30% mais vida e dano
+  (`ENDURECIMENTO`), chefes mais 30% (`ENDURECIMENTO_DO_CHEFE`), grupos de 2
+  e 3 mais comuns e de 4 a partir do andar de força 30, a poção 50% mais
+  cara na loja e em metade dos baús pequenos, e a taverna cobrando 5 de
+  ouro por nível.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no

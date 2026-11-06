@@ -43,6 +43,11 @@ namespace RPGLegend.Engine
         public DungeonRun Masmorra;
         /// <summary>Masmorras zeradas e totens tocados — o que o portão oferece.</summary>
         public DungeonProgress Progresso;
+        /// <summary>
+        /// A dificuldade do personagem, escolhida na criação e pra sempre (2026-11-06). Quem é de antes dela é Normal.
+        /// A <see cref="Masmorra"/> desce sempre nela.
+        /// </summary>
+        public string Dificuldade;
         /// <summary>"city" ou "dungeon" — fixo em cada subclasse.</summary>
         public string MapMode;
 
@@ -76,6 +81,7 @@ namespace RPGLegend.Engine
             destino.Tutorial = Tutorial;
             destino.Masmorra = Masmorra;
             destino.Progresso = Progresso;
+            destino.Dificuldade = Dificuldade;
             destino.Extra = Extra?.Clone();
         }
     }
@@ -136,6 +142,8 @@ namespace RPGLegend.Engine
         [JsIgnore] public object Masmorra;
         /// <summary>Valor JS cru, ou um DungeonProgress já tipado.</summary>
         [JsIgnore] public object Progresso;
+        /// <summary>Valor JS cru (ausente no save de antes da dificuldade por personagem: Normal).</summary>
+        [JsIgnore] public object Dificuldade;
 
         /// <summary>O <c>{ ...save }</c> do TS.</summary>
         public SaveCarregado Clone() => (SaveCarregado)MemberwiseClone();
@@ -158,6 +166,7 @@ namespace RPGLegend.Engine
             Tutorial = estado.Tutorial,
             Masmorra = estado.Masmorra,
             Progresso = estado.Progresso,
+            Dificuldade = estado.Dificuldade,
         };
     }
 
@@ -219,8 +228,12 @@ namespace RPGLegend.Engine
             destino.CityStart = save.CityStart;
             // Só entra se o save já tinha (o ...(save.tutorial ? { tutorial } : {}) do TS).
             destino.Tutorial = save.Tutorial;
+            string dificuldade = Dungeons.NormalizeDifficulty(save.Dificuldade);
+            // A descida é sempre na dificuldade do personagem: quem estava num Difícil de antes dela segue no Normal.
             destino.Masmorra = Dungeons.NormalizeRun(save.Masmorra);
+            destino.Masmorra.Difficulty = dificuldade;
             destino.Progresso = Verdadeiro(save.Progresso) ? Dungeons.NormalizeProgress(save.Progresso) : Dungeons.LegacyProgress(save.Floor);
+            destino.Dificuldade = dificuldade;
         }
 
         /// <summary>O <c>if (valor)</c> do JS para um valor cru.</summary>

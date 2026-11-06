@@ -38,6 +38,8 @@ namespace RPGLegend.Engine
     {
         /// <summary>Onde fica a Guilda (a pracinha a oeste do caminho do portão).</summary>
         [JsName("GUILD_POS")] public GridPosition GuildPos;
+        /// <summary>O preço da noite na taverna, por nível do herói (2026-11-06, o Moderado).</summary>
+        [JsName("OURO_DA_TAVERNA_POR_NIVEL")] public double OuroDaTavernaPorNivel;
         /// <summary>Onde fica a Encantadora (a pracinha a leste do caminho do portão).</summary>
         [JsName("ENCANTADORA_POS")] public GridPosition EncantadoraPos;
         [JsName("NPC_TEMPLATES")] public List<CityNpcTemplate> NpcTemplates = new List<CityNpcTemplate>();

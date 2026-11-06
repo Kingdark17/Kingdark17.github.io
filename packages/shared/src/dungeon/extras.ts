@@ -70,6 +70,11 @@ export const CRACK_CHANCE = 0.4;
 /** Chance do baú pequeno ser baú (o resto do sorteio é vaso; a placa é a sobra de cima). */
 export const EXTRA_CHEST_CHANCE = 0.4;
 export const EXTRA_POT_CHANCE = 0.4;
+/**
+ * Chance de o baú pequeno guardar uma poção. Era metade; desde 2026-11-06
+ * (doc do Breno, "deixar mais difícil", o Moderado) é metade disso.
+ */
+export const CHANCE_DA_POCAO_NO_BAU = 0.25;
 
 /** As poções que o baú pequeno pode guardar. */
 export const EXTRA_POTIONS = ['pot_vida', 'pot_mana'] as const;
@@ -88,7 +93,7 @@ export function placeExtras(rooms: DungeonCell[], floor: number, rng: Rng, now?:
       const lugar = livres.splice(randomInt(livres.length, rng), 1)[0] as { col: number; row: number };
       const sorteio = rng();
       if (sorteio < EXTRA_CHEST_CHANCE) {
-        extras.push({ kind: 'chest', ...lugar, item: rng() < 0.5 ? smallPotion(rng, now) : null, used: false });
+        extras.push({ kind: 'chest', ...lugar, item: rng() < CHANCE_DA_POCAO_NO_BAU ? smallPotion(rng, now) : null, used: false });
       } else if (sorteio < EXTRA_CHEST_CHANCE + EXTRA_POT_CHANCE) {
         extras.push({ kind: 'pot', ...lugar, used: false });
       } else {

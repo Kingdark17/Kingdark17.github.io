@@ -10,6 +10,7 @@
  * e até lá o portão da masmorra não abre (ver `criacao.ts`).
  */
 
+import type { DifficultyId } from '../dungeon/dungeons.js';
 import { DEBUFFS } from '../hero/catalog.js';
 import { buildApprentice, type Hero } from '../hero/hero.js';
 import { addItem } from '../inventory/inventory.js';
@@ -23,6 +24,8 @@ export interface SaveInicial {
   party: never[];
   floor: number;
   quests: never[];
+  /** A dificuldade do personagem, escolhida na criação, pra sempre. */
+  dificuldade: DifficultyId;
 }
 
 export class CriacaoIncompletaError extends Error {
@@ -58,5 +61,5 @@ export function montarSaveInicial(criacao: Criacao, rng: Rng = defaultRng, now?:
   // Todo herói começa com um consumível, igual ao original.
   const inventory = addItem([], randomItem({ category: 'consumivel', floor: 1, rng, now }));
 
-  return { hero, inventory, party: [], floor: 1, quests: [] };
+  return { hero, inventory, party: [], floor: 1, quests: [], dificuldade: criacao.dificuldade };
 }

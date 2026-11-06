@@ -288,16 +288,10 @@ namespace RPGLegend.Engine
             return new SalaLimpa { Estado = limpo, Log = log, Loot = loot };
         }
 
-        /// <summary>O que a masmorra zerada abre no portão: a dificuldade seguinte e, no Normal, a próxima masmorra.</summary>
+        /// <summary>O que a masmorra zerada abre no portão: a próxima masmorra, na dificuldade do personagem.</summary>
         private static List<string> AbertosAoZerar(EstadoNaMasmorra estado, DungeonProgress progresso)
         {
             var linhas = new List<string>();
-            var dificuldades = Dungeons.Difficulties;
-            int indice = dificuldades.FindIndex(d => d.Id == estado.Masmorra.Difficulty);
-            var seguinte = indice + 1 < dificuldades.Count ? dificuldades[indice + 1] : null;
-            var masmorra = Dungeons.ById(estado.Masmorra.Dungeon);
-            if (seguinte != null && masmorra != null) linhas.Add(masmorra.Name + " no " + seguinte.Name + " está aberta no portão.");
-
             DungeonDef proxima = null;
             foreach (var d in Dungeons.All)
             {
@@ -307,9 +301,9 @@ namespace RPGLegend.Engine
                     break;
                 }
             }
-            if (proxima != null && estado.Masmorra.Difficulty == "normal")
+            if (proxima != null)
             {
-                var falta = Dungeons.LockReasonOf(progresso, estado.Hero.Level, new DungeonRun { Dungeon = proxima.Id, Difficulty = "normal" });
+                var falta = Dungeons.LockReasonOf(progresso, estado.Hero.Level, new DungeonRun { Dungeon = proxima.Id, Difficulty = estado.Masmorra.Difficulty });
                 linhas.Add(falta?.Kind == LockReason.KindLevel
                     ? "A " + proxima.Name + " abre a partir do nível " + Js.NumberToString(falta.MinLevel ?? double.NaN) + "."
                     : "A " + proxima.Name + " está aberta no portão.");

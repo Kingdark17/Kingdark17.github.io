@@ -59,6 +59,7 @@ namespace RPGLegend.Tests
             Species = R<List<string>>(JsJson.Prop(options, "species")),
             Main = R<bool?>(JsJson.Prop(options, "main")),
             Final = JsJson.Truthy(JsJson.Prop(options, "final")),
+            Dificuldade = R<string>(JsJson.Prop(options, "dificuldade")),
         };
 
         /// <summary>

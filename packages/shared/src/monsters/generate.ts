@@ -1,3 +1,4 @@
+import { difficultyById, type DifficultyId } from '../dungeon/dungeons.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import {
   BOSS_TITLES,
@@ -82,6 +83,23 @@ export interface GenerateOptions {
   main?: boolean;
   /** Só pro chefe: é o chefe final, o do andar 100 (`FORCA_DO_CHEFE_FINAL` a mais de vida e dano). */
   final?: boolean;
+  /** A dificuldade do personagem: o `peso` dela multiplica a vida e o dano. Ausente, o Normal. */
+  dificuldade?: DifficultyId;
+}
+
+/**
+ * Todo monstro com 30% mais vida e dano (doc do Breno de 2026-11-06, "deixar
+ * mais difícil"; o usuário escolheu o Moderado). Vale em toda dificuldade, e
+ * o `peso` dela soma por cima. Ouro e XP não mudam.
+ */
+export const ENDURECIMENTO = 1.3;
+
+/** O chefe (a cada 5 andares), mais 30% por cima do `ENDURECIMENTO`. */
+export const ENDURECIMENTO_DO_CHEFE = 1.3;
+
+/** Quanto a vida e o dano deste monstro sobem: o endurecimento de todos, o do chefe e o peso da dificuldade. */
+function multiplicadorDeForca(dificuldade: DifficultyId | undefined, chefe: boolean): number {
+  return ENDURECIMENTO * (chefe ? ENDURECIMENTO_DO_CHEFE : 1) * (difficultyById(dificuldade ?? 'normal')?.peso ?? 1);
 }
 
 /** Quanto o chefe final é mais forte que um chefe principal, na vida e no dano (decisão do usuário, 2026-10-25: "30% mais forte"). */
@@ -103,11 +121,12 @@ function especiesPermitidas(ids: readonly string[] | undefined): readonly Specie
   return permitidas.length ? permitidas : SPECIES;
 }
 
-export function generate(floor: number, { rng = defaultRng, species: ids }: GenerateOptions = {}): MonsterInstance {
+export function generate(floor: number, { rng = defaultRng, species: ids, dificuldade }: GenerateOptions = {}): MonsterInstance {
   const species = pick(especiesPermitidas(ids), rng);
   const enemyClass = pick(ENEMY_CLASSES, rng);
   const scale = 1 + (floor - 1) * 0.27;
-  const hp = Math.round(species.baseHp * scale * enemyClass.hpMult) + randomInt(4, rng);
+  const forca = multiplicadorDeForca(dificuldade, false);
+  const hp = Math.round((Math.round(species.baseHp * scale * enemyClass.hpMult) + randomInt(4, rng)) * forca);
 
   return {
     speciesId: species.id,
@@ -115,7 +134,7 @@ export function generate(floor: number, { rng = defaultRng, species: ids }: Gene
     floor,
     hp,
     maxHp: hp,
-    dmg: Math.max(1, Math.round((species.baseDmg + Math.floor((floor - 1) * 0.6)) * enemyClass.dmgMult)),
+    dmg: Math.max(1, Math.round(Math.round((species.baseDmg + Math.floor((floor - 1) * 0.6)) * enemyClass.dmgMult) * forca)),
     speed: Math.max(1, Math.round(species.baseSpeed * (1 + (floor - 1) * 0.09) * enemyClass.speedMult)),
     xp: 6 + floor * 3 + randomInt(4, rng),
     gold: 4 + floor * 2 + randomInt(6, rng),
@@ -129,14 +148,15 @@ export function generate(floor: number, { rng = defaultRng, species: ids }: Gene
  * `FORCA_DO_CHEFE_FINAL` a mais de vida e dano, sorteado igual: o rng anda o
  * mesmo tanto.
  */
-export function generateBoss(floor: number, { rng = defaultRng, species: ids, main, final }: GenerateOptions = {}): MonsterInstance {
+export function generateBoss(floor: number, { rng = defaultRng, species: ids, main, final, dificuldade }: GenerateOptions = {}): MonsterInstance {
   const species = pick(especiesPermitidas(ids), rng);
   const enemyClass = pick(ENEMY_CLASSES, rng);
   const isMain = main ?? floor % 10 === 0;
   const title = pick(BOSS_TITLES, rng);
   const mult = isMain ? 3.2 : 2.1;
-  const hp = Math.round(species.baseHp * (1 + (floor - 1) * 0.27) * mult * enemyClass.hpMult) + 20;
-  const dmg = Math.round((species.baseDmg + Math.floor((floor - 1) * 0.65) + (isMain ? 5 : 3)) * enemyClass.dmgMult);
+  const forca = multiplicadorDeForca(dificuldade, true);
+  const hp = Math.round((Math.round(species.baseHp * (1 + (floor - 1) * 0.27) * mult * enemyClass.hpMult) + 20) * forca);
+  const dmg = Math.round(Math.round((species.baseDmg + Math.floor((floor - 1) * 0.65) + (isMain ? 5 : 3)) * enemyClass.dmgMult) * forca);
 
   const chefe: MonsterInstance = {
     speciesId: species.id,
@@ -163,8 +183,8 @@ export function generateBoss(floor: number, { rng = defaultRng, species: ids, ma
  * só troca a fachada — fraqueza, resistência e classe de inimigo continuam as
  * do sorteio original, então dois mímicos podem ter pontos fracos diferentes.
  */
-export function generateMimic(floor: number, { rng = defaultRng, species }: GenerateOptions = {}): MonsterInstance {
-  const base = generate(floor + 1, { rng, species });
+export function generateMimic(floor: number, { rng = defaultRng, species, dificuldade }: GenerateOptions = {}): MonsterInstance {
+  const base = generate(floor + 1, { rng, species, ...(dificuldade ? { dificuldade } : {}) });
   const hp = Math.round(base.hp * 1.45);
 
   return {

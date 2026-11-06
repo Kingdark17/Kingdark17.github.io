@@ -83,6 +83,18 @@ describe('isValidTransition', () => {
     expect(isValidTransition(null, makeSave())).toBe(true);
   });
 
+  it('a dificuldade do personagem não muda de um save pro outro', () => {
+    const pesadelo = makeSave({ dificuldade: 'pesadelo' });
+    expect(isValidTransition(pesadelo, makeSave({ dificuldade: 'pesadelo' }))).toBe(true);
+    expect(isValidTransition(pesadelo, makeSave({ dificuldade: 'normal' }))).toBe(false);
+    expect(isValidTransition(pesadelo, makeSave())).toBe(false);
+  });
+
+  it('o save de antes da dificuldade é Normal: gravar com ela no Normal passa, e trocar não', () => {
+    expect(isValidTransition(makeSave(), makeSave({ dificuldade: 'normal' }))).toBe(true);
+    expect(isValidTransition(makeSave(), makeSave({ dificuldade: 'dificil' }))).toBe(false);
+  });
+
   it('aceita nível subindo até +5', () => {
     const oldSave = makeSave({}, { level: 3 });
     expect(isValidTransition(oldSave, makeSave({}, { level: 8 }))).toBe(true);

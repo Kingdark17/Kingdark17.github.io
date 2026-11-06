@@ -22,6 +22,10 @@ namespace RPGLegend.Engine
         [JsName("FORGE_MATERIALS")] public OrderedMap<ForgeMaterialConfig> ForgeMaterials = new OrderedMap<ForgeMaterialConfig>();
         /// <summary>O degrau de material mais alto que a loja do app vende.</summary>
         [JsName("DEGRAU_DA_LOJA")] public double DegrauDaLoja;
+        /// <summary>As poções custam 50% a mais pra comprar (2026-11-06, o Moderado).</summary>
+        [JsName("SOBREPRECO_DA_POCAO")] public double SobreprecoDaPocao;
+        /// <summary>Privada no TS: os templates que são poção (o sobrepreço vale só pra elas).</summary>
+        [JsName("POCOES")] public List<string> Pocoes = new List<string>();
     }
 
     public static partial class GameData

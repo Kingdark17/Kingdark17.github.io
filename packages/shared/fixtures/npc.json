@@ -2537,18 +2537,9 @@
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": {
-                    "uid": "pot_mana_1700000000000_93224",
-                    "templateId": "pot_mana",
-                    "rarity": "comum",
-                    "stats": {
-                      "curaMana": 16
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -2573,9 +2564,9 @@
                   "speciesId": "slime",
                   "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 28,
-                  "maxHp": 28,
-                  "dmg": 5,
+                  "hp": 36,
+                  "maxHp": 36,
+                  "dmg": 7,
                   "speed": 7,
                   "xp": 23,
                   "gold": 18,
@@ -2585,24 +2576,46 @@
                   "speciesId": "slime",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
                   "speed": 5,
                   "xp": 21,
                   "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
+                  "speed": 5,
+                  "xp": 23,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "bonusTreasure": {
+                "gold": 32
+              },
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 2,
+                  "col": 1,
                   "row": 6,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
                   "item": {
-                    "uid": "pot_vida_1700000000000_39952",
+                    "uid": "pot_vida_1700000000000_28959",
                     "templateId": "pot_vida",
                     "rarity": "comum",
                     "stats": {
@@ -2623,15 +2636,25 @@
                 "W": true
               },
               "startBranch": "2,3",
-              "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "isMimic": true,
+              "giveGold": false,
+              "item": {
+                "uid": "grimorio_1700000000000_69485",
+                "templateId": "grimorio",
+                "rarity": "raro",
+                "stats": {
+                  "mana": 15
+                },
+                "value": 37,
+                "equipped": false,
+                "foundFloor": 5
+              },
               "collected": false,
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -2661,18 +2684,18 @@
               "startBranch": "2,3",
               "monsters": [
                 {
-                  "speciesId": "slime",
-                  "enemyClassId": "assassino",
+                  "speciesId": "aranha",
+                  "enemyClassId": "guardiao",
                   "floor": 5,
-                  "hp": 79,
-                  "maxHp": 79,
-                  "dmg": 8,
-                  "speed": 5,
+                  "hp": 113,
+                  "maxHp": 113,
+                  "dmg": 15,
+                  "speed": 13,
                   "xp": 55,
                   "gold": 70,
                   "isBoss": true,
                   "isMainBoss": false,
-                  "bossTitle": "o Eterno"
+                  "bossTitle": "Senhor das Trevas"
                 }
               ],
               "monsterIndex": 0,
@@ -2680,14 +2703,14 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 6,
-                  "row": 6,
+                  "col": 7,
+                  "row": 1,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 6
+                  "row": 1
                 }
               ]
             },
@@ -2705,35 +2728,24 @@
                 "S": true,
                 "N": true
               },
-              "isMimic": false,
+              "isMimic": true,
               "giveGold": true,
               "item": null,
               "collected": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 6
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 },
                 {
-                  "kind": "crack",
-                  "col": 0,
-                  "row": 4,
-                  "side": "W",
-                  "used": false,
-                  "secretItem": {
-                    "uid": "amuleto_sab_1700000000000_5888",
-                    "templateId": "amuleto_sab",
-                    "rarity": "incomum",
-                    "stats": {
-                      "mana": 8,
-                      "vida": 5
-                    },
-                    "value": 26,
-                    "equipped": false,
-                    "foundFloor": 5
-                  },
-                  "secretCollected": false
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -2746,27 +2758,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
+                  "speciesId": "aranha",
+                  "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 20,
-                  "maxHp": 20,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 21,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 9,
+                  "speed": 13,
+                  "xp": 23,
                   "gold": 17,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 5,
-                  "speed": 6,
-                  "xp": 21,
-                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -2774,10 +2774,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
+                  "kind": "sign",
                   "col": 1,
-                  "row": 6,
-                  "used": false
+                  "row": 6
                 }
               ]
             },
@@ -2805,15 +2804,21 @@
               },
               "startBranch": "2,3",
               "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "giveGold": false,
+              "item": {
+                "uid": "pedra_protecao_1700000000000_46346",
+                "templateId": "pedra_protecao",
+                "rarity": "raro",
+                "stats": {},
+                "value": 94,
+                "equipped": false
+              },
               "collected": false,
               "extras": [
                 {
-                  "kind": "chest",
+                  "kind": "pot",
                   "col": 2,
-                  "row": 1,
-                  "item": null,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -2827,32 +2832,35 @@
                 "W": true
               },
               "event": {
-                "templateId": "altar"
+                "templateId": "ferido"
               },
               "resolved": false,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": null,
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
                   "used": false
                 },
                 {
-                  "kind": "chest",
-                  "col": 7,
-                  "row": 1,
-                  "item": {
-                    "uid": "pot_vida_1700000000000_28959",
-                    "templateId": "pot_vida",
-                    "rarity": "comum",
+                  "kind": "crack",
+                  "col": 4,
+                  "row": 8,
+                  "side": "S",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "robe_1700000000000_87003",
+                    "templateId": "robe",
+                    "rarity": "raro",
                     "stats": {
-                      "cura": 22
+                      "defesa": 2,
+                      "mana": 10
                     },
-                    "value": 14,
-                    "equipped": false
+                    "value": 22,
+                    "equipped": false,
+                    "foundFloor": 5
                   },
-                  "used": false
+                  "secretCollected": false
                 }
               ]
             },
@@ -2867,39 +2875,27 @@
               },
               "monsters": [
                 {
-                  "speciesId": "goblin",
-                  "enemyClassId": "xama",
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 23,
-                  "maxHp": 23,
-                  "dmg": 5,
-                  "speed": 11,
-                  "xp": 23,
-                  "gold": 17,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 8,
+                  "speed": 22,
+                  "xp": 24,
+                  "gold": 15,
                   "isBoss": false
                 },
                 {
                   "speciesId": "lobo_sombras",
                   "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 24,
-                  "maxHp": 24,
-                  "dmg": 6,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 8,
                   "speed": 16,
                   "xp": 24,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "goblin",
-                  "enemyClassId": "assassino",
-                  "floor": 5,
-                  "hp": 22,
-                  "maxHp": 22,
-                  "dmg": 6,
-                  "speed": 14,
-                  "xp": 24,
-                  "gold": 19,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
@@ -2907,9 +2903,10 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
+                  "kind": "chest",
+                  "col": 1,
                   "row": 6,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -2929,14 +2926,9 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 6,
+                  "row": 6,
                   "used": false
-                },
-                {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 1
                 }
               ]
             },
@@ -2976,39 +2968,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "aranha",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 18,
-                  "maxHp": 18,
-                  "dmg": 6,
-                  "speed": 15,
-                  "xp": 21,
-                  "gold": 16,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 21,
-                  "gold": 19,
-                  "isBoss": false
-                },
-                {
                   "speciesId": "goblin",
-                  "enemyClassId": "guardiao",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 30,
-                  "maxHp": 30,
-                  "dmg": 5,
-                  "speed": 9,
-                  "xp": 23,
-                  "gold": 14,
+                  "hp": 29,
+                  "maxHp": 29,
+                  "dmg": 8,
+                  "speed": 14,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -3016,9 +2984,16 @@
               "beaten": false,
               "extras": [
                 {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
                   "kind": "pot",
                   "col": 2,
-                  "row": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -3034,10 +3009,9 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 6,
-                  "used": false
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 6
                 }
               ]
             },
@@ -3064,7 +3038,7 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 2,
+                  "col": 6,
                   "row": 6,
                   "used": false
                 }
@@ -3111,39 +3085,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "slime",
+                  "speciesId": "goblin",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 33,
-                  "maxHp": 33,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 22,
-                  "gold": 15,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "aranha",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 17,
-                  "maxHp": 17,
+                  "hp": 31,
+                  "maxHp": 31,
                   "dmg": 7,
-                  "speed": 16,
-                  "xp": 22,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 19,
-                  "maxHp": 19,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 24,
-                  "gold": 19,
+                  "speed": 11,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -3151,9 +3101,11 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 7,
-                  "row": 1
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 6,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -3225,18 +3177,9 @@
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": {
-                    "uid": "pot_mana_1700000000000_93224",
-                    "templateId": "pot_mana",
-                    "rarity": "comum",
-                    "stats": {
-                      "curaMana": 16
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -3261,9 +3204,9 @@
                   "speciesId": "slime",
                   "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 28,
-                  "maxHp": 28,
-                  "dmg": 5,
+                  "hp": 36,
+                  "maxHp": 36,
+                  "dmg": 7,
                   "speed": 7,
                   "xp": 23,
                   "gold": 18,
@@ -3273,24 +3216,46 @@
                   "speciesId": "slime",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
                   "speed": 5,
                   "xp": 21,
                   "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
+                  "speed": 5,
+                  "xp": 23,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "bonusTreasure": {
+                "gold": 32
+              },
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 2,
+                  "col": 1,
                   "row": 6,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
                   "item": {
-                    "uid": "pot_vida_1700000000000_39952",
+                    "uid": "pot_vida_1700000000000_28959",
                     "templateId": "pot_vida",
                     "rarity": "comum",
                     "stats": {
@@ -3311,15 +3276,25 @@
                 "W": true
               },
               "startBranch": "2,3",
-              "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "isMimic": true,
+              "giveGold": false,
+              "item": {
+                "uid": "grimorio_1700000000000_69485",
+                "templateId": "grimorio",
+                "rarity": "raro",
+                "stats": {
+                  "mana": 15
+                },
+                "value": 37,
+                "equipped": false,
+                "foundFloor": 5
+              },
               "collected": false,
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -3349,18 +3324,18 @@
               "startBranch": "2,3",
               "monsters": [
                 {
-                  "speciesId": "slime",
-                  "enemyClassId": "assassino",
+                  "speciesId": "aranha",
+                  "enemyClassId": "guardiao",
                   "floor": 5,
-                  "hp": 79,
-                  "maxHp": 79,
-                  "dmg": 8,
-                  "speed": 5,
+                  "hp": 113,
+                  "maxHp": 113,
+                  "dmg": 15,
+                  "speed": 13,
                   "xp": 55,
                   "gold": 70,
                   "isBoss": true,
                   "isMainBoss": false,
-                  "bossTitle": "o Eterno"
+                  "bossTitle": "Senhor das Trevas"
                 }
               ],
               "monsterIndex": 0,
@@ -3368,14 +3343,14 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 6,
-                  "row": 6,
+                  "col": 7,
+                  "row": 1,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 6
+                  "row": 1
                 }
               ]
             },
@@ -3393,35 +3368,24 @@
                 "S": true,
                 "N": true
               },
-              "isMimic": false,
+              "isMimic": true,
               "giveGold": true,
               "item": null,
               "collected": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 6
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 },
                 {
-                  "kind": "crack",
-                  "col": 0,
-                  "row": 4,
-                  "side": "W",
-                  "used": false,
-                  "secretItem": {
-                    "uid": "amuleto_sab_1700000000000_5888",
-                    "templateId": "amuleto_sab",
-                    "rarity": "incomum",
-                    "stats": {
-                      "mana": 8,
-                      "vida": 5
-                    },
-                    "value": 26,
-                    "equipped": false,
-                    "foundFloor": 5
-                  },
-                  "secretCollected": false
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -3434,27 +3398,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
+                  "speciesId": "aranha",
+                  "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 20,
-                  "maxHp": 20,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 21,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 9,
+                  "speed": 13,
+                  "xp": 23,
                   "gold": 17,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 5,
-                  "speed": 6,
-                  "xp": 21,
-                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -3462,10 +3414,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
+                  "kind": "sign",
                   "col": 1,
-                  "row": 6,
-                  "used": false
+                  "row": 6
                 }
               ],
               "revealed": true
@@ -3494,15 +3445,21 @@
               },
               "startBranch": "2,3",
               "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "giveGold": false,
+              "item": {
+                "uid": "pedra_protecao_1700000000000_46346",
+                "templateId": "pedra_protecao",
+                "rarity": "raro",
+                "stats": {},
+                "value": 94,
+                "equipped": false
+              },
               "collected": false,
               "extras": [
                 {
-                  "kind": "chest",
+                  "kind": "pot",
                   "col": 2,
-                  "row": 1,
-                  "item": null,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -3516,32 +3473,35 @@
                 "W": true
               },
               "event": {
-                "templateId": "altar"
+                "templateId": "ferido"
               },
               "resolved": false,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": null,
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
                   "used": false
                 },
                 {
-                  "kind": "chest",
-                  "col": 7,
-                  "row": 1,
-                  "item": {
-                    "uid": "pot_vida_1700000000000_28959",
-                    "templateId": "pot_vida",
-                    "rarity": "comum",
+                  "kind": "crack",
+                  "col": 4,
+                  "row": 8,
+                  "side": "S",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "robe_1700000000000_87003",
+                    "templateId": "robe",
+                    "rarity": "raro",
                     "stats": {
-                      "cura": 22
+                      "defesa": 2,
+                      "mana": 10
                     },
-                    "value": 14,
-                    "equipped": false
+                    "value": 22,
+                    "equipped": false,
+                    "foundFloor": 5
                   },
-                  "used": false
+                  "secretCollected": false
                 }
               ]
             },
@@ -3556,39 +3516,27 @@
               },
               "monsters": [
                 {
-                  "speciesId": "goblin",
-                  "enemyClassId": "xama",
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 23,
-                  "maxHp": 23,
-                  "dmg": 5,
-                  "speed": 11,
-                  "xp": 23,
-                  "gold": 17,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 8,
+                  "speed": 22,
+                  "xp": 24,
+                  "gold": 15,
                   "isBoss": false
                 },
                 {
                   "speciesId": "lobo_sombras",
                   "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 24,
-                  "maxHp": 24,
-                  "dmg": 6,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 8,
                   "speed": 16,
                   "xp": 24,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "goblin",
-                  "enemyClassId": "assassino",
-                  "floor": 5,
-                  "hp": 22,
-                  "maxHp": 22,
-                  "dmg": 6,
-                  "speed": 14,
-                  "xp": 24,
-                  "gold": 19,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
@@ -3596,9 +3544,10 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
+                  "kind": "chest",
+                  "col": 1,
                   "row": 6,
+                  "item": null,
                   "used": false
                 }
               ],
@@ -3619,14 +3568,9 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 6,
+                  "row": 6,
                   "used": false
-                },
-                {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 1
                 }
               ],
               "revealed": true
@@ -3667,39 +3611,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "aranha",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 18,
-                  "maxHp": 18,
-                  "dmg": 6,
-                  "speed": 15,
-                  "xp": 21,
-                  "gold": 16,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 21,
-                  "gold": 19,
-                  "isBoss": false
-                },
-                {
                   "speciesId": "goblin",
-                  "enemyClassId": "guardiao",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 30,
-                  "maxHp": 30,
-                  "dmg": 5,
-                  "speed": 9,
-                  "xp": 23,
-                  "gold": 14,
+                  "hp": 29,
+                  "maxHp": 29,
+                  "dmg": 8,
+                  "speed": 14,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -3707,9 +3627,16 @@
               "beaten": false,
               "extras": [
                 {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
                   "kind": "pot",
                   "col": 2,
-                  "row": 1,
+                  "row": 6,
                   "used": false
                 }
               ],
@@ -3726,10 +3653,9 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 6,
-                  "used": false
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 6
                 }
               ],
               "revealed": true
@@ -3757,7 +3683,7 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 2,
+                  "col": 6,
                   "row": 6,
                   "used": false
                 }
@@ -3805,39 +3731,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "slime",
+                  "speciesId": "goblin",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 33,
-                  "maxHp": 33,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 22,
-                  "gold": 15,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "aranha",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 17,
-                  "maxHp": 17,
+                  "hp": 31,
+                  "maxHp": 31,
                   "dmg": 7,
-                  "speed": 16,
-                  "xp": 22,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 19,
-                  "maxHp": 19,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 24,
-                  "gold": 19,
+                  "speed": 11,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -3845,9 +3747,11 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 7,
-                  "row": 1
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 6,
+                  "item": null,
+                  "used": false
                 }
               ],
               "revealed": true
@@ -3925,18 +3829,9 @@
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": {
-                    "uid": "pot_mana_1700000000000_93224",
-                    "templateId": "pot_mana",
-                    "rarity": "comum",
-                    "stats": {
-                      "curaMana": 16
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -3961,9 +3856,9 @@
                   "speciesId": "slime",
                   "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 28,
-                  "maxHp": 28,
-                  "dmg": 5,
+                  "hp": 36,
+                  "maxHp": 36,
+                  "dmg": 7,
                   "speed": 7,
                   "xp": 23,
                   "gold": 18,
@@ -3973,24 +3868,46 @@
                   "speciesId": "slime",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
                   "speed": 5,
                   "xp": 21,
                   "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
+                  "speed": 5,
+                  "xp": 23,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "bonusTreasure": {
+                "gold": 32
+              },
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 2,
+                  "col": 1,
                   "row": 6,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
                   "item": {
-                    "uid": "pot_vida_1700000000000_39952",
+                    "uid": "pot_vida_1700000000000_28959",
                     "templateId": "pot_vida",
                     "rarity": "comum",
                     "stats": {
@@ -4011,15 +3928,25 @@
                 "W": true
               },
               "startBranch": "2,3",
-              "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "isMimic": true,
+              "giveGold": false,
+              "item": {
+                "uid": "grimorio_1700000000000_69485",
+                "templateId": "grimorio",
+                "rarity": "raro",
+                "stats": {
+                  "mana": 15
+                },
+                "value": 37,
+                "equipped": false,
+                "foundFloor": 5
+              },
               "collected": false,
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -4049,18 +3976,18 @@
               "startBranch": "2,3",
               "monsters": [
                 {
-                  "speciesId": "slime",
-                  "enemyClassId": "assassino",
+                  "speciesId": "aranha",
+                  "enemyClassId": "guardiao",
                   "floor": 5,
-                  "hp": 79,
-                  "maxHp": 79,
-                  "dmg": 8,
-                  "speed": 5,
+                  "hp": 113,
+                  "maxHp": 113,
+                  "dmg": 15,
+                  "speed": 13,
                   "xp": 55,
                   "gold": 70,
                   "isBoss": true,
                   "isMainBoss": false,
-                  "bossTitle": "o Eterno"
+                  "bossTitle": "Senhor das Trevas"
                 }
               ],
               "monsterIndex": 0,
@@ -4068,14 +3995,14 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 6,
-                  "row": 6,
+                  "col": 7,
+                  "row": 1,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 6
+                  "row": 1
                 }
               ]
             },
@@ -4093,35 +4020,24 @@
                 "S": true,
                 "N": true
               },
-              "isMimic": false,
+              "isMimic": true,
               "giveGold": true,
               "item": null,
               "collected": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 6
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 },
                 {
-                  "kind": "crack",
-                  "col": 0,
-                  "row": 4,
-                  "side": "W",
-                  "used": false,
-                  "secretItem": {
-                    "uid": "amuleto_sab_1700000000000_5888",
-                    "templateId": "amuleto_sab",
-                    "rarity": "incomum",
-                    "stats": {
-                      "mana": 8,
-                      "vida": 5
-                    },
-                    "value": 26,
-                    "equipped": false,
-                    "foundFloor": 5
-                  },
-                  "secretCollected": false
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -4134,27 +4050,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
+                  "speciesId": "aranha",
+                  "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 20,
-                  "maxHp": 20,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 21,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 9,
+                  "speed": 13,
+                  "xp": 23,
                   "gold": 17,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 5,
-                  "speed": 6,
-                  "xp": 21,
-                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -4162,10 +4066,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
+                  "kind": "sign",
                   "col": 1,
-                  "row": 6,
-                  "used": false
+                  "row": 6
                 }
               ]
             },
@@ -4193,15 +4096,21 @@
               },
               "startBranch": "2,3",
               "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "giveGold": false,
+              "item": {
+                "uid": "pedra_protecao_1700000000000_46346",
+                "templateId": "pedra_protecao",
+                "rarity": "raro",
+                "stats": {},
+                "value": 94,
+                "equipped": false
+              },
               "collected": false,
               "extras": [
                 {
-                  "kind": "chest",
+                  "kind": "pot",
                   "col": 2,
-                  "row": 1,
-                  "item": null,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -4215,32 +4124,35 @@
                 "W": true
               },
               "event": {
-                "templateId": "altar"
+                "templateId": "ferido"
               },
               "resolved": false,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": null,
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
                   "used": false
                 },
                 {
-                  "kind": "chest",
-                  "col": 7,
-                  "row": 1,
-                  "item": {
-                    "uid": "pot_vida_1700000000000_28959",
-                    "templateId": "pot_vida",
-                    "rarity": "comum",
+                  "kind": "crack",
+                  "col": 4,
+                  "row": 8,
+                  "side": "S",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "robe_1700000000000_87003",
+                    "templateId": "robe",
+                    "rarity": "raro",
                     "stats": {
-                      "cura": 22
+                      "defesa": 2,
+                      "mana": 10
                     },
-                    "value": 14,
-                    "equipped": false
+                    "value": 22,
+                    "equipped": false,
+                    "foundFloor": 5
                   },
-                  "used": false
+                  "secretCollected": false
                 }
               ]
             },
@@ -4255,39 +4167,27 @@
               },
               "monsters": [
                 {
-                  "speciesId": "goblin",
-                  "enemyClassId": "xama",
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 23,
-                  "maxHp": 23,
-                  "dmg": 5,
-                  "speed": 11,
-                  "xp": 23,
-                  "gold": 17,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 8,
+                  "speed": 22,
+                  "xp": 24,
+                  "gold": 15,
                   "isBoss": false
                 },
                 {
                   "speciesId": "lobo_sombras",
                   "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 24,
-                  "maxHp": 24,
-                  "dmg": 6,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 8,
                   "speed": 16,
                   "xp": 24,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "goblin",
-                  "enemyClassId": "assassino",
-                  "floor": 5,
-                  "hp": 22,
-                  "maxHp": 22,
-                  "dmg": 6,
-                  "speed": 14,
-                  "xp": 24,
-                  "gold": 19,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
@@ -4295,9 +4195,10 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
+                  "kind": "chest",
+                  "col": 1,
                   "row": 6,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -4317,14 +4218,9 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 6,
+                  "row": 6,
                   "used": false
-                },
-                {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 1
                 }
               ]
             },
@@ -4364,39 +4260,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "aranha",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 18,
-                  "maxHp": 18,
-                  "dmg": 6,
-                  "speed": 15,
-                  "xp": 21,
-                  "gold": 16,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 21,
-                  "gold": 19,
-                  "isBoss": false
-                },
-                {
                   "speciesId": "goblin",
-                  "enemyClassId": "guardiao",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 30,
-                  "maxHp": 30,
-                  "dmg": 5,
-                  "speed": 9,
-                  "xp": 23,
-                  "gold": 14,
+                  "hp": 29,
+                  "maxHp": 29,
+                  "dmg": 8,
+                  "speed": 14,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -4404,9 +4276,16 @@
               "beaten": false,
               "extras": [
                 {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
                   "kind": "pot",
                   "col": 2,
-                  "row": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -4422,10 +4301,9 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 6,
-                  "used": false
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 6
                 }
               ]
             },
@@ -4452,7 +4330,7 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 2,
+                  "col": 6,
                   "row": 6,
                   "used": false
                 }
@@ -4499,39 +4377,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "slime",
+                  "speciesId": "goblin",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 33,
-                  "maxHp": 33,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 22,
-                  "gold": 15,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "aranha",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 17,
-                  "maxHp": 17,
+                  "hp": 31,
+                  "maxHp": 31,
                   "dmg": 7,
-                  "speed": 16,
-                  "xp": 22,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 19,
-                  "maxHp": 19,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 24,
-                  "gold": 19,
+                  "speed": 11,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -4539,9 +4393,11 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 7,
-                  "row": 1
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 6,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -4613,18 +4469,9 @@
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": {
-                    "uid": "pot_mana_1700000000000_93224",
-                    "templateId": "pot_mana",
-                    "rarity": "comum",
-                    "stats": {
-                      "curaMana": 16
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
                   "used": false
                 }
               ],
@@ -4650,9 +4497,9 @@
                   "speciesId": "slime",
                   "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 28,
-                  "maxHp": 28,
-                  "dmg": 5,
+                  "hp": 36,
+                  "maxHp": 36,
+                  "dmg": 7,
                   "speed": 7,
                   "xp": 23,
                   "gold": 18,
@@ -4662,24 +4509,46 @@
                   "speciesId": "slime",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
                   "speed": 5,
                   "xp": 21,
                   "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
+                  "speed": 5,
+                  "xp": 23,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "bonusTreasure": {
+                "gold": 32
+              },
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 2,
+                  "col": 1,
                   "row": 6,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
                   "item": {
-                    "uid": "pot_vida_1700000000000_39952",
+                    "uid": "pot_vida_1700000000000_28959",
                     "templateId": "pot_vida",
                     "rarity": "comum",
                     "stats": {
@@ -4701,15 +4570,25 @@
                 "W": true
               },
               "startBranch": "2,3",
-              "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "isMimic": true,
+              "giveGold": false,
+              "item": {
+                "uid": "grimorio_1700000000000_69485",
+                "templateId": "grimorio",
+                "rarity": "raro",
+                "stats": {
+                  "mana": 15
+                },
+                "value": 37,
+                "equipped": false,
+                "foundFloor": 5
+              },
               "collected": false,
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -4739,18 +4618,18 @@
               "startBranch": "2,3",
               "monsters": [
                 {
-                  "speciesId": "slime",
-                  "enemyClassId": "assassino",
+                  "speciesId": "aranha",
+                  "enemyClassId": "guardiao",
                   "floor": 5,
-                  "hp": 79,
-                  "maxHp": 79,
-                  "dmg": 8,
-                  "speed": 5,
+                  "hp": 113,
+                  "maxHp": 113,
+                  "dmg": 15,
+                  "speed": 13,
                   "xp": 55,
                   "gold": 70,
                   "isBoss": true,
                   "isMainBoss": false,
-                  "bossTitle": "o Eterno"
+                  "bossTitle": "Senhor das Trevas"
                 }
               ],
               "monsterIndex": 0,
@@ -4758,14 +4637,14 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 6,
-                  "row": 6,
+                  "col": 7,
+                  "row": 1,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 6
+                  "row": 1
                 }
               ],
               "revealed": true
@@ -4784,35 +4663,24 @@
                 "S": true,
                 "N": true
               },
-              "isMimic": false,
+              "isMimic": true,
               "giveGold": true,
               "item": null,
               "collected": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 6
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 },
                 {
-                  "kind": "crack",
-                  "col": 0,
-                  "row": 4,
-                  "side": "W",
-                  "used": false,
-                  "secretItem": {
-                    "uid": "amuleto_sab_1700000000000_5888",
-                    "templateId": "amuleto_sab",
-                    "rarity": "incomum",
-                    "stats": {
-                      "mana": 8,
-                      "vida": 5
-                    },
-                    "value": 26,
-                    "equipped": false,
-                    "foundFloor": 5
-                  },
-                  "secretCollected": false
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -4825,27 +4693,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
+                  "speciesId": "aranha",
+                  "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 20,
-                  "maxHp": 20,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 21,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 9,
+                  "speed": 13,
+                  "xp": 23,
                   "gold": 17,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 5,
-                  "speed": 6,
-                  "xp": 21,
-                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -4853,10 +4709,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
+                  "kind": "sign",
                   "col": 1,
-                  "row": 6,
-                  "used": false
+                  "row": 6
                 }
               ]
             },
@@ -4884,15 +4739,21 @@
               },
               "startBranch": "2,3",
               "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "giveGold": false,
+              "item": {
+                "uid": "pedra_protecao_1700000000000_46346",
+                "templateId": "pedra_protecao",
+                "rarity": "raro",
+                "stats": {},
+                "value": 94,
+                "equipped": false
+              },
               "collected": false,
               "extras": [
                 {
-                  "kind": "chest",
+                  "kind": "pot",
                   "col": 2,
-                  "row": 1,
-                  "item": null,
+                  "row": 6,
                   "used": false
                 }
               ],
@@ -4907,32 +4768,35 @@
                 "W": true
               },
               "event": {
-                "templateId": "altar"
+                "templateId": "ferido"
               },
               "resolved": false,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": null,
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
                   "used": false
                 },
                 {
-                  "kind": "chest",
-                  "col": 7,
-                  "row": 1,
-                  "item": {
-                    "uid": "pot_vida_1700000000000_28959",
-                    "templateId": "pot_vida",
-                    "rarity": "comum",
+                  "kind": "crack",
+                  "col": 4,
+                  "row": 8,
+                  "side": "S",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "robe_1700000000000_87003",
+                    "templateId": "robe",
+                    "rarity": "raro",
                     "stats": {
-                      "cura": 22
+                      "defesa": 2,
+                      "mana": 10
                     },
-                    "value": 14,
-                    "equipped": false
+                    "value": 22,
+                    "equipped": false,
+                    "foundFloor": 5
                   },
-                  "used": false
+                  "secretCollected": false
                 }
               ]
             },
@@ -4947,39 +4811,27 @@
               },
               "monsters": [
                 {
-                  "speciesId": "goblin",
-                  "enemyClassId": "xama",
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 23,
-                  "maxHp": 23,
-                  "dmg": 5,
-                  "speed": 11,
-                  "xp": 23,
-                  "gold": 17,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 8,
+                  "speed": 22,
+                  "xp": 24,
+                  "gold": 15,
                   "isBoss": false
                 },
                 {
                   "speciesId": "lobo_sombras",
                   "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 24,
-                  "maxHp": 24,
-                  "dmg": 6,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 8,
                   "speed": 16,
                   "xp": 24,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "goblin",
-                  "enemyClassId": "assassino",
-                  "floor": 5,
-                  "hp": 22,
-                  "maxHp": 22,
-                  "dmg": 6,
-                  "speed": 14,
-                  "xp": 24,
-                  "gold": 19,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
@@ -4987,9 +4839,10 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
+                  "kind": "chest",
+                  "col": 1,
                   "row": 6,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -5009,14 +4862,9 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 6,
+                  "row": 6,
                   "used": false
-                },
-                {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 1
                 }
               ]
             },
@@ -5056,39 +4904,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "aranha",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 18,
-                  "maxHp": 18,
-                  "dmg": 6,
-                  "speed": 15,
-                  "xp": 21,
-                  "gold": 16,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 21,
-                  "gold": 19,
-                  "isBoss": false
-                },
-                {
                   "speciesId": "goblin",
-                  "enemyClassId": "guardiao",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 30,
-                  "maxHp": 30,
-                  "dmg": 5,
-                  "speed": 9,
-                  "xp": 23,
-                  "gold": 14,
+                  "hp": 29,
+                  "maxHp": 29,
+                  "dmg": 8,
+                  "speed": 14,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -5096,9 +4920,16 @@
               "beaten": false,
               "extras": [
                 {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
                   "kind": "pot",
                   "col": 2,
-                  "row": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -5114,10 +4945,9 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 6,
-                  "used": false
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 6
                 }
               ]
             },
@@ -5144,7 +4974,7 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 2,
+                  "col": 6,
                   "row": 6,
                   "used": false
                 }
@@ -5191,39 +5021,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "slime",
+                  "speciesId": "goblin",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 33,
-                  "maxHp": 33,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 22,
-                  "gold": 15,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "aranha",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 17,
-                  "maxHp": 17,
+                  "hp": 31,
+                  "maxHp": 31,
                   "dmg": 7,
-                  "speed": 16,
-                  "xp": 22,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 19,
-                  "maxHp": 19,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 24,
-                  "gold": 19,
+                  "speed": 11,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -5231,9 +5037,11 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 7,
-                  "row": 1
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 6,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -5310,18 +5118,9 @@
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": {
-                    "uid": "pot_mana_1700000000000_93224",
-                    "templateId": "pot_mana",
-                    "rarity": "comum",
-                    "stats": {
-                      "curaMana": 16
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -5346,9 +5145,9 @@
                   "speciesId": "slime",
                   "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 28,
-                  "maxHp": 28,
-                  "dmg": 5,
+                  "hp": 36,
+                  "maxHp": 36,
+                  "dmg": 7,
                   "speed": 7,
                   "xp": 23,
                   "gold": 18,
@@ -5358,24 +5157,46 @@
                   "speciesId": "slime",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
                   "speed": 5,
                   "xp": 21,
                   "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
+                  "speed": 5,
+                  "xp": 23,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "bonusTreasure": {
+                "gold": 32
+              },
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 2,
+                  "col": 1,
                   "row": 6,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
                   "item": {
-                    "uid": "pot_vida_1700000000000_39952",
+                    "uid": "pot_vida_1700000000000_28959",
                     "templateId": "pot_vida",
                     "rarity": "comum",
                     "stats": {
@@ -5396,15 +5217,25 @@
                 "W": true
               },
               "startBranch": "2,3",
-              "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "isMimic": true,
+              "giveGold": false,
+              "item": {
+                "uid": "grimorio_1700000000000_69485",
+                "templateId": "grimorio",
+                "rarity": "raro",
+                "stats": {
+                  "mana": 15
+                },
+                "value": 37,
+                "equipped": false,
+                "foundFloor": 5
+              },
               "collected": false,
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -5434,18 +5265,18 @@
               "startBranch": "2,3",
               "monsters": [
                 {
-                  "speciesId": "slime",
-                  "enemyClassId": "assassino",
+                  "speciesId": "aranha",
+                  "enemyClassId": "guardiao",
                   "floor": 5,
-                  "hp": 79,
-                  "maxHp": 79,
-                  "dmg": 8,
-                  "speed": 5,
+                  "hp": 113,
+                  "maxHp": 113,
+                  "dmg": 15,
+                  "speed": 13,
                   "xp": 55,
                   "gold": 70,
                   "isBoss": true,
                   "isMainBoss": false,
-                  "bossTitle": "o Eterno"
+                  "bossTitle": "Senhor das Trevas"
                 }
               ],
               "monsterIndex": 0,
@@ -5453,14 +5284,14 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 6,
-                  "row": 6,
+                  "col": 7,
+                  "row": 1,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 6
+                  "row": 1
                 }
               ]
             },
@@ -5478,35 +5309,24 @@
                 "S": true,
                 "N": true
               },
-              "isMimic": false,
+              "isMimic": true,
               "giveGold": true,
               "item": null,
               "collected": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 6
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 },
                 {
-                  "kind": "crack",
-                  "col": 0,
-                  "row": 4,
-                  "side": "W",
-                  "used": false,
-                  "secretItem": {
-                    "uid": "amuleto_sab_1700000000000_5888",
-                    "templateId": "amuleto_sab",
-                    "rarity": "incomum",
-                    "stats": {
-                      "mana": 8,
-                      "vida": 5
-                    },
-                    "value": 26,
-                    "equipped": false,
-                    "foundFloor": 5
-                  },
-                  "secretCollected": false
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -5519,27 +5339,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
+                  "speciesId": "aranha",
+                  "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 20,
-                  "maxHp": 20,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 21,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 9,
+                  "speed": 13,
+                  "xp": 23,
                   "gold": 17,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 5,
-                  "speed": 6,
-                  "xp": 21,
-                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -5547,10 +5355,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
+                  "kind": "sign",
                   "col": 1,
-                  "row": 6,
-                  "used": false
+                  "row": 6
                 }
               ]
             },
@@ -5578,15 +5385,21 @@
               },
               "startBranch": "2,3",
               "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "giveGold": false,
+              "item": {
+                "uid": "pedra_protecao_1700000000000_46346",
+                "templateId": "pedra_protecao",
+                "rarity": "raro",
+                "stats": {},
+                "value": 94,
+                "equipped": false
+              },
               "collected": false,
               "extras": [
                 {
-                  "kind": "chest",
+                  "kind": "pot",
                   "col": 2,
-                  "row": 1,
-                  "item": null,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -5600,32 +5413,35 @@
                 "W": true
               },
               "event": {
-                "templateId": "altar"
+                "templateId": "ferido"
               },
               "resolved": false,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": null,
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
                   "used": false
                 },
                 {
-                  "kind": "chest",
-                  "col": 7,
-                  "row": 1,
-                  "item": {
-                    "uid": "pot_vida_1700000000000_28959",
-                    "templateId": "pot_vida",
-                    "rarity": "comum",
+                  "kind": "crack",
+                  "col": 4,
+                  "row": 8,
+                  "side": "S",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "robe_1700000000000_87003",
+                    "templateId": "robe",
+                    "rarity": "raro",
                     "stats": {
-                      "cura": 22
+                      "defesa": 2,
+                      "mana": 10
                     },
-                    "value": 14,
-                    "equipped": false
+                    "value": 22,
+                    "equipped": false,
+                    "foundFloor": 5
                   },
-                  "used": false
+                  "secretCollected": false
                 }
               ]
             },
@@ -5640,39 +5456,27 @@
               },
               "monsters": [
                 {
-                  "speciesId": "goblin",
-                  "enemyClassId": "xama",
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 23,
-                  "maxHp": 23,
-                  "dmg": 5,
-                  "speed": 11,
-                  "xp": 23,
-                  "gold": 17,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 8,
+                  "speed": 22,
+                  "xp": 24,
+                  "gold": 15,
                   "isBoss": false
                 },
                 {
                   "speciesId": "lobo_sombras",
                   "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 24,
-                  "maxHp": 24,
-                  "dmg": 6,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 8,
                   "speed": 16,
                   "xp": 24,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "goblin",
-                  "enemyClassId": "assassino",
-                  "floor": 5,
-                  "hp": 22,
-                  "maxHp": 22,
-                  "dmg": 6,
-                  "speed": 14,
-                  "xp": 24,
-                  "gold": 19,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
@@ -5680,9 +5484,10 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
+                  "kind": "chest",
+                  "col": 1,
                   "row": 6,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -5702,14 +5507,9 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 6,
+                  "row": 6,
                   "used": false
-                },
-                {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 1
                 }
               ]
             },
@@ -5749,39 +5549,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "aranha",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 18,
-                  "maxHp": 18,
-                  "dmg": 6,
-                  "speed": 15,
-                  "xp": 21,
-                  "gold": 16,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 21,
-                  "gold": 19,
-                  "isBoss": false
-                },
-                {
                   "speciesId": "goblin",
-                  "enemyClassId": "guardiao",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 30,
-                  "maxHp": 30,
-                  "dmg": 5,
-                  "speed": 9,
-                  "xp": 23,
-                  "gold": 14,
+                  "hp": 29,
+                  "maxHp": 29,
+                  "dmg": 8,
+                  "speed": 14,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -5789,9 +5565,16 @@
               "beaten": false,
               "extras": [
                 {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
                   "kind": "pot",
                   "col": 2,
-                  "row": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -5807,10 +5590,9 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 6,
-                  "used": false
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 6
                 }
               ]
             },
@@ -5837,7 +5619,7 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 2,
+                  "col": 6,
                   "row": 6,
                   "used": false
                 }
@@ -5885,39 +5667,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "slime",
+                  "speciesId": "goblin",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 33,
-                  "maxHp": 33,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 22,
-                  "gold": 15,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "aranha",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 17,
-                  "maxHp": 17,
+                  "hp": 31,
+                  "maxHp": 31,
                   "dmg": 7,
-                  "speed": 16,
-                  "xp": 22,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 19,
-                  "maxHp": 19,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 24,
-                  "gold": 19,
+                  "speed": 11,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -5925,9 +5683,11 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 7,
-                  "row": 1
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 6,
+                  "item": null,
+                  "used": false
                 }
               ],
               "revealed": true
@@ -6000,18 +5760,9 @@
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": {
-                    "uid": "pot_mana_1700000000000_93224",
-                    "templateId": "pot_mana",
-                    "rarity": "comum",
-                    "stats": {
-                      "curaMana": 16
-                    },
-                    "value": 14,
-                    "equipped": false
-                  },
+                  "col": 2,
+                  "row": 1,
+                  "item": null,
                   "used": false
                 }
               ]
@@ -6036,9 +5787,9 @@
                   "speciesId": "slime",
                   "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 28,
-                  "maxHp": 28,
-                  "dmg": 5,
+                  "hp": 36,
+                  "maxHp": 36,
+                  "dmg": 7,
                   "speed": 7,
                   "xp": 23,
                   "gold": 18,
@@ -6048,24 +5799,46 @@
                   "speciesId": "slime",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
                   "speed": 5,
                   "xp": 21,
                   "gold": 19,
+                  "isBoss": false
+                },
+                {
+                  "speciesId": "slime",
+                  "enemyClassId": "xama",
+                  "floor": 5,
+                  "hp": 40,
+                  "maxHp": 40,
+                  "dmg": 5,
+                  "speed": 5,
+                  "xp": 23,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
               "monsterIndex": 0,
               "beaten": false,
+              "bonusTreasure": {
+                "gold": 32
+              },
               "extras": [
                 {
                   "kind": "chest",
-                  "col": 2,
+                  "col": 1,
                   "row": 6,
+                  "item": null,
+                  "used": false
+                },
+                {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
                   "item": {
-                    "uid": "pot_vida_1700000000000_39952",
+                    "uid": "pot_vida_1700000000000_28959",
                     "templateId": "pot_vida",
                     "rarity": "comum",
                     "stats": {
@@ -6086,15 +5859,25 @@
                 "W": true
               },
               "startBranch": "2,3",
-              "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "isMimic": true,
+              "giveGold": false,
+              "item": {
+                "uid": "grimorio_1700000000000_69485",
+                "templateId": "grimorio",
+                "rarity": "raro",
+                "stats": {
+                  "mana": 15
+                },
+                "value": 37,
+                "equipped": false,
+                "foundFloor": 5
+              },
               "collected": false,
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 1,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -6124,18 +5907,18 @@
               "startBranch": "2,3",
               "monsters": [
                 {
-                  "speciesId": "slime",
-                  "enemyClassId": "assassino",
+                  "speciesId": "aranha",
+                  "enemyClassId": "guardiao",
                   "floor": 5,
-                  "hp": 79,
-                  "maxHp": 79,
-                  "dmg": 8,
-                  "speed": 5,
+                  "hp": 113,
+                  "maxHp": 113,
+                  "dmg": 15,
+                  "speed": 13,
                   "xp": 55,
                   "gold": 70,
                   "isBoss": true,
                   "isMainBoss": false,
-                  "bossTitle": "o Eterno"
+                  "bossTitle": "Senhor das Trevas"
                 }
               ],
               "monsterIndex": 0,
@@ -6143,14 +5926,14 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 6,
-                  "row": 6,
+                  "col": 7,
+                  "row": 1,
                   "used": false
                 },
                 {
                   "kind": "sign",
                   "col": 1,
-                  "row": 6
+                  "row": 1
                 }
               ]
             },
@@ -6168,35 +5951,24 @@
                 "S": true,
                 "N": true
               },
-              "isMimic": false,
+              "isMimic": true,
               "giveGold": true,
               "item": null,
               "collected": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 6
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 },
                 {
-                  "kind": "crack",
-                  "col": 0,
-                  "row": 4,
-                  "side": "W",
-                  "used": false,
-                  "secretItem": {
-                    "uid": "amuleto_sab_1700000000000_5888",
-                    "templateId": "amuleto_sab",
-                    "rarity": "incomum",
-                    "stats": {
-                      "mana": 8,
-                      "vida": 5
-                    },
-                    "value": 26,
-                    "equipped": false,
-                    "foundFloor": 5
-                  },
-                  "secretCollected": false
+                  "kind": "chest",
+                  "col": 6,
+                  "row": 1,
+                  "item": null,
+                  "used": false
                 }
               ]
             },
@@ -6209,27 +5981,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
+                  "speciesId": "aranha",
+                  "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 20,
-                  "maxHp": 20,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 21,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 9,
+                  "speed": 13,
+                  "xp": 23,
                   "gold": 17,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 5,
-                  "speed": 6,
-                  "xp": 21,
-                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -6237,10 +5997,9 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
+                  "kind": "sign",
                   "col": 1,
-                  "row": 6,
-                  "used": false
+                  "row": 6
                 }
               ],
               "revealed": true
@@ -6269,15 +6028,21 @@
               },
               "startBranch": "2,3",
               "isMimic": false,
-              "giveGold": true,
-              "item": null,
+              "giveGold": false,
+              "item": {
+                "uid": "pedra_protecao_1700000000000_46346",
+                "templateId": "pedra_protecao",
+                "rarity": "raro",
+                "stats": {},
+                "value": 94,
+                "equipped": false
+              },
               "collected": false,
               "extras": [
                 {
-                  "kind": "chest",
+                  "kind": "pot",
                   "col": 2,
-                  "row": 1,
-                  "item": null,
+                  "row": 6,
                   "used": false
                 }
               ]
@@ -6291,32 +6056,35 @@
                 "W": true
               },
               "event": {
-                "templateId": "altar"
+                "templateId": "ferido"
               },
               "resolved": false,
               "extras": [
                 {
-                  "kind": "chest",
-                  "col": 1,
-                  "row": 6,
-                  "item": null,
+                  "kind": "pot",
+                  "col": 2,
+                  "row": 1,
                   "used": false
                 },
                 {
-                  "kind": "chest",
-                  "col": 7,
-                  "row": 1,
-                  "item": {
-                    "uid": "pot_vida_1700000000000_28959",
-                    "templateId": "pot_vida",
-                    "rarity": "comum",
+                  "kind": "crack",
+                  "col": 4,
+                  "row": 8,
+                  "side": "S",
+                  "used": false,
+                  "secretItem": {
+                    "uid": "robe_1700000000000_87003",
+                    "templateId": "robe",
+                    "rarity": "raro",
                     "stats": {
-                      "cura": 22
+                      "defesa": 2,
+                      "mana": 10
                     },
-                    "value": 14,
-                    "equipped": false
+                    "value": 22,
+                    "equipped": false,
+                    "foundFloor": 5
                   },
-                  "used": false
+                  "secretCollected": false
                 }
               ]
             },
@@ -6331,39 +6099,27 @@
               },
               "monsters": [
                 {
-                  "speciesId": "goblin",
-                  "enemyClassId": "xama",
+                  "speciesId": "lobo_sombras",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 23,
-                  "maxHp": 23,
-                  "dmg": 5,
-                  "speed": 11,
-                  "xp": 23,
-                  "gold": 17,
+                  "hp": 25,
+                  "maxHp": 25,
+                  "dmg": 8,
+                  "speed": 22,
+                  "xp": 24,
+                  "gold": 15,
                   "isBoss": false
                 },
                 {
                   "speciesId": "lobo_sombras",
                   "enemyClassId": "brutamontes",
                   "floor": 5,
-                  "hp": 24,
-                  "maxHp": 24,
-                  "dmg": 6,
+                  "hp": 30,
+                  "maxHp": 30,
+                  "dmg": 8,
                   "speed": 16,
                   "xp": 24,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "goblin",
-                  "enemyClassId": "assassino",
-                  "floor": 5,
-                  "hp": 22,
-                  "maxHp": 22,
-                  "dmg": 6,
-                  "speed": 14,
-                  "xp": 24,
-                  "gold": 19,
+                  "gold": 16,
                   "isBoss": false
                 }
               ],
@@ -6371,9 +6127,10 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
+                  "kind": "chest",
+                  "col": 1,
                   "row": 6,
+                  "item": null,
                   "used": false
                 }
               ],
@@ -6394,14 +6151,9 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 7,
-                  "row": 1,
+                  "col": 6,
+                  "row": 6,
                   "used": false
-                },
-                {
-                  "kind": "sign",
-                  "col": 1,
-                  "row": 1
                 }
               ],
               "revealed": true
@@ -6442,39 +6194,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "aranha",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 18,
-                  "maxHp": 18,
-                  "dmg": 6,
-                  "speed": 15,
-                  "xp": 21,
-                  "gold": 16,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "slime",
-                  "enemyClassId": "xama",
-                  "floor": 5,
-                  "hp": 31,
-                  "maxHp": 31,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 21,
-                  "gold": 19,
-                  "isBoss": false
-                },
-                {
                   "speciesId": "goblin",
-                  "enemyClassId": "guardiao",
+                  "enemyClassId": "assassino",
                   "floor": 5,
-                  "hp": 30,
-                  "maxHp": 30,
-                  "dmg": 5,
-                  "speed": 9,
-                  "xp": 23,
-                  "gold": 14,
+                  "hp": 29,
+                  "maxHp": 29,
+                  "dmg": 8,
+                  "speed": 14,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -6482,9 +6210,16 @@
               "beaten": false,
               "extras": [
                 {
+                  "kind": "chest",
+                  "col": 7,
+                  "row": 1,
+                  "item": null,
+                  "used": false
+                },
+                {
                   "kind": "pot",
                   "col": 2,
-                  "row": 1,
+                  "row": 6,
                   "used": false
                 }
               ],
@@ -6501,10 +6236,9 @@
               },
               "extras": [
                 {
-                  "kind": "pot",
-                  "col": 6,
-                  "row": 6,
-                  "used": false
+                  "kind": "sign",
+                  "col": 1,
+                  "row": 6
                 }
               ],
               "revealed": true
@@ -6532,7 +6266,7 @@
               "extras": [
                 {
                   "kind": "pot",
-                  "col": 2,
+                  "col": 6,
                   "row": 6,
                   "used": false
                 }
@@ -6580,39 +6314,15 @@
               },
               "monsters": [
                 {
-                  "speciesId": "slime",
+                  "speciesId": "goblin",
                   "enemyClassId": "xama",
                   "floor": 5,
-                  "hp": 33,
-                  "maxHp": 33,
-                  "dmg": 4,
-                  "speed": 5,
-                  "xp": 22,
-                  "gold": 15,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "aranha",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 17,
-                  "maxHp": 17,
+                  "hp": 31,
+                  "maxHp": 31,
                   "dmg": 7,
-                  "speed": 16,
-                  "xp": 22,
-                  "gold": 14,
-                  "isBoss": false
-                },
-                {
-                  "speciesId": "lobo_sombras",
-                  "enemyClassId": "feiticeiro",
-                  "floor": 5,
-                  "hp": 19,
-                  "maxHp": 19,
-                  "dmg": 6,
-                  "speed": 19,
-                  "xp": 24,
-                  "gold": 19,
+                  "speed": 11,
+                  "xp": 21,
+                  "gold": 18,
                   "isBoss": false
                 }
               ],
@@ -6620,9 +6330,11 @@
               "beaten": false,
               "extras": [
                 {
-                  "kind": "sign",
-                  "col": 7,
-                  "row": 1
+                  "kind": "chest",
+                  "col": 2,
+                  "row": 6,
+                  "item": null,
+                  "used": false
                 }
               ],
               "revealed": true

@@ -42,6 +42,10 @@ namespace RPGLegend.Engine
         /// <summary>TS: DifficultyId — normal, dificil, pesadelo.</summary>
         public string Id;
         public string Name;
+        /// <summary>Quanto a vida e o dano dos monstros sobem nela (ouro e XP não mudam).</summary>
+        public double Peso;
+        /// <summary>O que a criação de personagem diz dela.</summary>
+        public string Desc;
     }
 
     /// <summary>As tabelas de dungeon/dungeons.ts (fixtures/data/dungeon/dungeons.json).</summary>

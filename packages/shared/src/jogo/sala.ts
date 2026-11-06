@@ -17,7 +17,7 @@
  * abrir no lugar da exploração.
  */
 
-import { restAtTavern } from '../city/city.js';
+import { precoDaTaverna, restAtTavern } from '../city/city.js';
 import { dungeonById } from '../dungeon/dungeons.js';
 import { ICONE_DO_PILAR, type DungeonCell, type DungeonTreasureBonus } from '../dungeon/generate.js';
 import { hasClass } from '../hero/hero.js';
@@ -198,10 +198,14 @@ function naCidade(estado: EstadoNaCidade, rng: Rng, now: (() => number) | undefi
       return { estado, aviso: null, tela: { tipo: 'portao', portao: abrirPortao(estado, app) } };
     }
     case 'tavern': {
+      const preco = precoDaTaverna(estado.hero);
+      if (estado.hero.gold < preco) {
+        return { estado, aviso: aviso('🍺', 'Taverna', `A noite custa ${preco} de ouro, e você não tem o bastante.`), tela: null, som: 'door' };
+      }
       const descanso = restAtTavern(estado.hero, estado.party);
       return {
         estado: { ...estado, hero: descanso.hero, party: descanso.party },
-        aviso: aviso('🍺', 'Taverna', 'Você descansa por uma noite. Vida e mana totalmente restauradas.'),
+        aviso: aviso('🍺', 'Taverna', `Você paga ${preco} de ouro e descansa por uma noite. Vida e mana totalmente restauradas.`),
         tela: null,
         som: 'door',
       };
@@ -335,7 +339,7 @@ function abrirBau(estado: EstadoNaMasmorra, celula: DungeonCell, rng: Rng, pet: 
     const revelado: DungeonCell = {
       ...celula,
       type: 'monster',
-      monsters: [generateMimic(forca, { rng, species: dungeonById(estado.masmorra.dungeon)?.species })],
+      monsters: [generateMimic(forca, { rng, species: dungeonById(estado.masmorra.dungeon)?.species, dificuldade: estado.masmorra.difficulty })],
       monsterIndex: 0,
       beaten: false,
       bonusTreasure: bonus,
