@@ -18,22 +18,31 @@ namespace RPGLegend.Game.Jogo
         public bool Rachadura;
     }
 
-    /// <summary>As cores provisórias de um lugar, até o tileset do Breno (as mesmas do site).</summary>
+    /// <summary>As cores provisórias de um lugar, até o tileset do Breno (as mesmas do site); o fundo já é o da arte dele.</summary>
     public sealed class TemaDaSala
     {
         public Color Chao, ChaoAlternado, Parede, BordaDaParede, Vao;
+        /// <summary>
+        /// O fundo da cena em volta das salas (onde o andar não tem sala, e em volta da sala secreta): a cor que mais
+        /// aparece na borda de fora das paredes da arte do Breno (pedido dele, 2026-11-06). Na cidade, o mapa cobre tudo.
+        /// </summary>
+        public Color? Fundo;
 
         private static Color Cor(int rgb) => new Color(((rgb >> 16) & 0xff) / 255f, ((rgb >> 8) & 0xff) / 255f, (rgb & 0xff) / 255f);
 
-        private static TemaDaSala De(int chao, int alternado, int parede, int borda, int vao) =>
-            new TemaDaSala { Chao = Cor(chao), ChaoAlternado = Cor(alternado), Parede = Cor(parede), BordaDaParede = Cor(borda), Vao = Cor(vao) };
+        private static TemaDaSala De(int chao, int alternado, int parede, int borda, int vao, int? fundo) =>
+            new TemaDaSala
+            {
+                Chao = Cor(chao), ChaoAlternado = Cor(alternado), Parede = Cor(parede), BordaDaParede = Cor(borda), Vao = Cor(vao),
+                Fundo = fundo.HasValue ? Cor(fundo.Value) : (Color?)null,
+            };
 
         private static readonly Dictionary<string, TemaDaSala> Temas = new Dictionary<string, TemaDaSala>
         {
-            ["cidade"] = De(0x5d7a3f, 0x56723a, 0x6f6a60, 0x8a8478, 0x3b2f22),
-            ["floresta"] = De(0x3e5f2c, 0x395828, 0x253a1b, 0x3f5a2c, 0x1d140c),
-            ["caverna"] = De(0x5b5148, 0x544b42, 0x2f2925, 0x4a4038, 0x15110e),
-            ["torre"] = De(0x4a4258, 0x443d51, 0x2b2536, 0x40384f, 0x120f17),
+            ["cidade"] = De(0x5d7a3f, 0x56723a, 0x6f6a60, 0x8a8478, 0x3b2f22, null),
+            ["floresta"] = De(0x3e5f2c, 0x395828, 0x253a1b, 0x3f5a2c, 0x1d140c, 0x647866),
+            ["caverna"] = De(0x5b5148, 0x544b42, 0x2f2925, 0x4a4038, 0x15110e, 0x0d171c),
+            ["torre"] = De(0x4a4258, 0x443d51, 0x2b2536, 0x40384f, 0x120f17, 0xd4d1cb),
         };
 
         /// <summary>O tema do lugar do estado: a cidade, ou a masmorra da descida.</summary>

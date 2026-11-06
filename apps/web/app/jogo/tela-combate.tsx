@@ -35,7 +35,7 @@
 
 import { AnimatePresence, LazyMotion, MotionConfig } from 'motion/react';
 import * as m from 'motion/react-m';
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useEffectEvent, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 import {
@@ -77,6 +77,9 @@ import jogo from './jogo.module.css';
 import { TextoDoJogo } from './texto-do-jogo';
 
 const LINHAS_DO_LOG = 8;
+
+/** Quanto a luta que acabou fica na tela, pra se ver o último golpe, antes de fechar sozinha. */
+const MS_ATE_FECHAR = 1000;
 
 const carregarAnimacoes = () => import('./animacoes-do-log').then((modulo) => modulo.default);
 
@@ -187,6 +190,15 @@ export function TelaCombate({ combate, palco, geometria, onCombate, onEncerrar, 
   const hero = combate.estado.hero;
   const acabou = combate.fase === 'vitoria' || combate.fase === 'fuga' || combate.fase === 'derrota';
   const atacando = caixa.tipo === 'ataque';
+
+  // A luta fecha sozinha logo depois do último golpe, sem o "Continuar" (pedido do Breno, 2026-11-06): o que ela
+  // deu vira o aviso da sala e entra no diário. A tela de quem zera a masmorra (o baú e o título) espera o botão.
+  const encerrar = useEffectEvent(() => onEncerrar(combate));
+  useEffect(() => {
+    if (!acabou || combate.conquista) return;
+    const relogio = window.setTimeout(encerrar, MS_ATE_FECHAR);
+    return () => window.clearTimeout(relogio);
+  }, [acabou, combate.conquista]);
 
   // Esc fecha as opções e volta pro registro. Não interrompe o ataque: com
   // o dado girado, desistir seria rolar de novo (ver `AtaqueComMira`).
@@ -446,11 +458,13 @@ export function TelaCombate({ combate, palco, geometria, onCombate, onEncerrar, 
       </div>
 
       {acabou ? (
-        <div className={jogo.escolhas}>
-          <button type="button" className={`${jogo.botao} ${jogo.botaoPrincipal}`} onClick={() => onEncerrar(combate)}>
-            Continuar
-          </button>
-        </div>
+        combate.conquista && (
+          <div className={jogo.escolhas}>
+            <button type="button" className={`${jogo.botao} ${jogo.botaoPrincipal}`} onClick={() => onEncerrar(combate)}>
+              Continuar
+            </button>
+          </div>
+        )
       ) : (
         <nav className={styles.menu} aria-label="Ações do combate">
           <button

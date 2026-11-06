@@ -68,8 +68,9 @@ não é sinal de regressão.
 - Poder único por tipo de arma (queimadura, atordoar, sangramento, etc).
 
 ## Mapa (resumo)
-Grafo de salas conectadas por portas (N/S/L/O), neblina revela só a silhueta
-das salas vizinhas, até 3 monstros por sala lutando juntos (luta em grupo,
+Grafo de salas conectadas por portas (N/S/L/O), o minimapa mostra toda sala
+comum do andar como silhueta até ela ser visitada ou revelada (desde
+2026-11-06; a sala secreta nunca aparece), até 3 monstros por sala lutando juntos (luta em grupo,
 2026-10-17: o jogador escolhe o alvo, um monstro ataca por rodada revezando
 entre os de pé, derrubar um não encerra a rodada, fuga e esquiva contra o
 mais rápido de pé, o da vez atordoado perde o ataque; o chefe final do
@@ -317,7 +318,13 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   caixa e o menu, com a sala congelada (a derrota leva o estado pra cidade
   antes do "Continuar"); no app, a caixa do coração e os botões, com as
   placas numa coluna ao lado da sala. A sala secreta continua uma cena à
-  parte, e a cidade não muda.
+  parte, e a cidade não muda. Desde 2026-11-06 (doc novo do Breno, decidido
+  com o usuário): a câmera tem zoom de 1,5× no herói, na cidade e na
+  masmorra (`ZOOM` no site, `Zoom` no app), e só a luta enquadra a sala
+  inteira; em volta das salas (o void e a sala secreta) fica o fundo do
+  lugar, a cor da borda das paredes da arte (`fundo` do tema); e a luta do
+  site fecha sozinha 1 s depois do último golpe, sem o "Continuar" (o
+  resultado vira o aviso da sala), menos a tela de quem zera a masmorra.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no

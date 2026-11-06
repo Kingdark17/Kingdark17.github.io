@@ -73,6 +73,12 @@ const ALTURA_DA_CIDADE = CIDADE_ROWS * PIXELS_POR_CASA;
 const COR_DA_SOMBRA = 0x05060a;
 const ALFA_DA_SOMBRA = 0.78;
 
+/**
+ * O zoom da câmera no herói (pedido do Breno, 2026-11-06): uma vez e meia, na cidade e na masmorra, e a câmera o
+ * segue. Na luta não tem: ela enquadra a sala inteira, pra se ver todos os monstros.
+ */
+const ZOOM = 1.5;
+
 /** Quanto se vê da camada que cobre o herói (meio transparente), e quanto leva pra chegar lá. */
 const ALFA_DE_QUEM_COBRE = 0.5;
 const MS_DO_ESMAECER = 150;
@@ -85,14 +91,19 @@ export interface TemaDaSala {
   parede: number;
   bordaDaParede: number;
   vao: number;
+  /**
+   * O fundo da cena em volta das salas (onde o andar não tem sala, e em volta da sala secreta): a cor que mais
+   * aparece na borda de fora das paredes da arte do Breno (pedido dele, 2026-11-06). Na cidade, o mapa cobre tudo.
+   */
+  fundo: number | null;
 }
 
-/** Cores provisórias de cada lugar, até o tileset do Breno. */
+/** Cores provisórias de cada lugar, até o tileset do Breno; o fundo já é o da arte dele. */
 export const TEMAS: Record<LugarDoTema, TemaDaSala> = {
-  cidade: { chao: 0x5d7a3f, chaoAlternado: 0x56723a, parede: 0x6f6a60, bordaDaParede: 0x8a8478, vao: 0x3b2f22 },
-  floresta: { chao: 0x3e5f2c, chaoAlternado: 0x395828, parede: 0x253a1b, bordaDaParede: 0x3f5a2c, vao: 0x1d140c },
-  caverna: { chao: 0x5b5148, chaoAlternado: 0x544b42, parede: 0x2f2925, bordaDaParede: 0x4a4038, vao: 0x15110e },
-  torre: { chao: 0x4a4258, chaoAlternado: 0x443d51, parede: 0x2b2536, bordaDaParede: 0x40384f, vao: 0x120f17 },
+  cidade: { chao: 0x5d7a3f, chaoAlternado: 0x56723a, parede: 0x6f6a60, bordaDaParede: 0x8a8478, vao: 0x3b2f22, fundo: null },
+  floresta: { chao: 0x3e5f2c, chaoAlternado: 0x395828, parede: 0x253a1b, bordaDaParede: 0x3f5a2c, vao: 0x1d140c, fundo: 0x647866 },
+  caverna: { chao: 0x5b5148, chaoAlternado: 0x544b42, parede: 0x2f2925, bordaDaParede: 0x4a4038, vao: 0x15110e, fundo: 0x0d171c },
+  torre: { chao: 0x4a4258, chaoAlternado: 0x443d51, parede: 0x2b2536, bordaDaParede: 0x40384f, vao: 0x120f17, fundo: 0xd4d1cb },
 };
 
 /** Uma figura: a arte, se houver, e o emoji pra quando ela não carregar ou não existir. */
@@ -246,6 +257,12 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
     copas = [];
   }
 
+  /** O fundo da cena: a cor do lugar em volta das salas, ou nenhum (a cidade cobre a cena inteira). */
+  function pintarFundo(cor: number | null) {
+    app.renderer.background.color = cor ?? 0x000000;
+    app.renderer.background.alpha = cor === null ? 0 : 1;
+  }
+
   /** Leva a camada rumo ao meio transparente (se cobre o herói) ou ao inteiro, `passo` por quadro. */
   function esmaecer(sprite: Pixi.Sprite, cobre: boolean, passo: number) {
     const alvo = cobre ? ALFA_DE_QUEM_COBRE : 1;
@@ -386,6 +403,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       escala = ESCALA;
       palco.position.set(0, 0);
       tamanho((planta.cols ?? ROOM_COLS) * LADO, (planta.rows ?? ROOM_ROWS) * LADO);
+      pintarFundo(tema.fundo);
       pintarSala(planta, tema, figuras, arte ?? null, desenhos, 0, 0, true);
     },
 
@@ -409,6 +427,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       salaEmPixel = { largura, altura };
       escala = ESCALA;
       tamanho(largura, altura);
+      pintarFundo(tema.fundo);
       salas.forEach((sala, i) =>
         pintarSala(sala.planta, tema, sala.acesa ? sala.figuras : {}, artes[i] ?? null, desenhos[i] ?? [], sala.x * largura, sala.y * altura, sala.acesa),
       );
@@ -424,6 +443,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       salaEmPixel = null;
       escala = ESCALA_DA_CIDADE;
       tamanho(LARGURA_DA_CENA, ALTURA_DA_CENA);
+      pintarFundo(null);
       camadas.forEach((camada, i) => {
         const tex = texturas[i];
         if (!tex) return;
@@ -446,17 +466,21 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       const canto = salaEmPixel && origem ? { x: origem.x * salaEmPixel.largura, y: origem.y * salaEmPixel.altura } : { x: 0, y: 0 };
       const x = canto.x + walker.x * escala;
       const y = canto.y + (walker.y + HERO_HALF) * escala;
-      if (salaEmPixel && enquadrar) {
-        // Na luta, a sala inteira: os monstros ficam por porcentagem dela, por cima do canvas.
+      if (enquadrar) {
+        // Na luta, a sala inteira, sem zoom: os monstros ficam por porcentagem dela, por cima do canvas.
+        palco.scale.set(1);
         palco.position.set(-canto.x, -canto.y);
-      } else if (salaEmPixel) {
-        // A câmera no herói, em pixel inteiro (fração faz a arte tremer): parado no meio da sala, ela a enquadra inteira.
-        palco.position.set(Math.round(app.renderer.width / 2 - x), Math.round(app.renderer.height / 2 - (y - LADO / 2)));
+      } else if (!naCidade) {
+        // A câmera no herói, com zoom, em pixel inteiro (fração faz a arte tremer). Em volta da sala fica o fundo do
+        // lugar, e a vizinha emendada.
+        palco.scale.set(ZOOM);
+        palco.position.set(Math.round(app.renderer.width / 2 - x * ZOOM), Math.round(app.renderer.height / 2 - (y - LADO / 2) * ZOOM));
       }
       if (naCidade) {
-        // A janela segue o herói, sem passar da borda do mapa, em pixel inteiro (fração faz a arte tremer).
-        const meioX = Math.min(0, Math.max(LARGURA_DA_CENA - LARGURA_DA_CIDADE, LARGURA_DA_CENA / 2 - x));
-        const meioY = Math.min(0, Math.max(ALTURA_DA_CENA - ALTURA_DA_CIDADE, ALTURA_DA_CENA / 2 - (y - LADO / 2)));
+        // A janela segue o herói, com zoom, sem passar da borda do mapa, em pixel inteiro (fração faz a arte tremer).
+        const meioX = Math.min(0, Math.max(LARGURA_DA_CENA - LARGURA_DA_CIDADE * ZOOM, LARGURA_DA_CENA / 2 - x * ZOOM));
+        const meioY = Math.min(0, Math.max(ALTURA_DA_CENA - ALTURA_DA_CIDADE * ZOOM, ALTURA_DA_CENA / 2 - (y - LADO / 2) * ZOOM));
+        palco.scale.set(ZOOM);
         palco.position.set(Math.round(meioX), Math.round(meioY));
         // Quem cobre o herói (a árvore da praça, a loja...) fica meio transparente, pra ele não sumir atrás.
         const passo = semMovimento ? 1 : Math.min(1, app.ticker.deltaMS / MS_DO_ESMAECER) * (1 - ALFA_DE_QUEM_COBRE);

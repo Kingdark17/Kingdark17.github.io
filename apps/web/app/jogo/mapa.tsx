@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 
 /**
- * Minimapa com a mesma neblina do original: sala visitada aparece inteira,
- * sala vizinha de uma visitada aparece como silhueta, e o resto não
- * aparece. A regra mora em `isKnown()` na engine.
+ * Minimapa com a neblina do original: sala visitada aparece inteira, e a
+ * que ninguém visitou, como silhueta. Desde 2026-11-06 toda sala comum do
+ * andar aparece assim, vizinha de visitada ou não (pedido do Breno: "salas
+ * comuns sempre aparecem"); antes, a que não era vizinha mal se via. A sala
+ * secreta, que fica fora da grade, nunca aparece. A regra mora em
+ * `estadoDaSala()` na engine.
  *
  * O ícone, o rótulo e o "já esvaziei" vêm de fora (`apresentacaoDe`) porque
  * cidade e masmorra desenham a mesma grade com catálogos diferentes.
@@ -41,7 +44,7 @@ import styles from './jogo.module.css';
 /** `Record` completo: estado novo na névoa sem classe aqui vira erro de compilação. */
 const CLASSE_DO_ESTADO: Record<EstadoDaSala, string> = {
   vazia: styles.vazia,
-  inexplorada: styles.desconhecida,
+  inexplorada: styles.conhecida,
   silhueta: styles.conhecida,
   // A cor vem do `data-tipo`; o que esta classe traz é a opacidade que diz
   // "você sabe o que tem aqui, mas não pisou".
@@ -120,5 +123,5 @@ function legendaDaCelula({ x, y, aqui, estado, esgotada, rotulo }: DadosDaCelula
   if (estado === 'visitada') return `${onde}: ${rotulo}${esgotada ? ', já resolvida' : ''}`;
   if (estado === 'revelada') return `${onde}: ${rotulo}, ainda não visitada`;
   if (estado === 'silhueta') return `${onde}: sala conhecida, ainda não visitada`;
-  return `${onde}: inexplorado`;
+  return `${onde}: sala ainda não visitada`;
 }

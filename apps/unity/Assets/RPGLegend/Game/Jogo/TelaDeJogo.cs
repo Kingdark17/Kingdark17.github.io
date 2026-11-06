@@ -450,8 +450,8 @@ namespace RPGLegend.Game.Jogo
 
                     var quadro = new VisualElement();
                     quadro.AddToClassList("celula");
+                    // Toda sala comum aparece, visitada ou não (pedido do Breno, 2026-11-06); a secreta fica fora da grade.
                     quadro.AddToClassList(estadoDaSala == EstadosDaSala.Vazia ? "celula-vazia"
-                        : estadoDaSala == EstadosDaSala.Inexplorada ? "celula-desconhecida"
                         : estadoDaSala == EstadosDaSala.Visitada ? "celula-visitada" : "celula-conhecida");
                     if (aqui) quadro.AddToClassList("celula-aqui");
                     if (esgotada) quadro.AddToClassList("celula-esgotada");

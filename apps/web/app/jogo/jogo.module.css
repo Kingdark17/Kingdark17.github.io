@@ -203,11 +203,6 @@
   background: transparent;
 }
 
-.desconhecida {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: var(--line);
-}
-
 .conhecida {
   background: var(--panel-2);
   border-color: var(--line);

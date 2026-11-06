@@ -37,6 +37,11 @@ namespace RPGLegend.Game.Jogo
         private const int OrdemDaRachadura = -19000;
         private static readonly Vector3 Origem = new Vector3(10000f, 0f, 0f);
         private static readonly Color Fundo = new Color32(5, 6, 10, 255);
+        /// <summary>
+        /// O zoom da câmera no herói (pedido do Breno, 2026-11-06): uma vez e meia, na cidade e na masmorra, e a câmera o
+        /// segue. Na luta não tem: ela enquadra a sala inteira (<see cref="EnquadrarNaLuta"/>).
+        /// </summary>
+        private const float Zoom = 1.5f;
         private static readonly Color CorDaRachadura = new Color32(0x1a, 0x0b, 0x09, 255);
 
         private float _largura, _altura, _escala, _escalaDaSala;
@@ -170,12 +175,12 @@ namespace RPGLegend.Game.Jogo
         }
 
         /// <summary>
-        /// A altura que a câmera mostra: na cidade, a de sempre (10,5 casas); na sala, a sala inteira, mesmo que a tela
-        /// seja mais estreita que ela.
+        /// A altura que a câmera mostra, com o <see cref="Zoom"/>: na cidade, a da janela de sempre; na sala, a da sala
+        /// inteira (mesmo que a tela seja mais estreita que ela).
         /// </summary>
         private void AjustarZoom()
         {
-            _camera.orthographicSize = _naCidade ? _altura / 2f : Mathf.Max(_altura, _largura / _camera.aspect) / 2f;
+            _camera.orthographicSize = (_naCidade ? _altura / 2f : Mathf.Max(_altura, _largura / _camera.aspect) / 2f) / Zoom;
         }
 
         /// <summary>Do pixel do site (x pra direita, y pra baixo) para o mundo.</summary>
@@ -235,6 +240,7 @@ namespace RPGLegend.Game.Jogo
             {
                 _assinaturaDoDesenho = assinatura;
                 PrepararSala(planta);
+                _camera.backgroundColor = tema.Fundo ?? Fundo;
                 DesenharUmaSala(planta, tema, figuras, masmorra, 0f, 0f, true);
             }
             ColocarHeroi(false);
@@ -266,6 +272,7 @@ namespace RPGLegend.Game.Jogo
                 _assinaturaDoDesenho = assinatura;
                 PrepararSala(planta);
                 _emendada = true;
+                _camera.backgroundColor = tema.Fundo ?? Fundo;
                 foreach (var sala in salas)
                     DesenharUmaSala(sala.Planta, tema, sala.Acesa ? sala.Figuras : new Dictionary<string, Figura>(), masmorra, (float)sala.X * _largura, (float)sala.Y * _altura, sala.Acesa);
             }
@@ -305,6 +312,7 @@ namespace RPGLegend.Game.Jogo
             if (assinatura != _assinaturaDoDesenho)
             {
                 _assinaturaDoDesenho = assinatura;
+                _camera.backgroundColor = Fundo;
                 DesenharCidade(troncos);
             }
             ColocarHeroi(false);
@@ -548,9 +556,10 @@ namespace RPGLegend.Game.Jogo
             // Na masmorra emendada, contado do canto da sala atual, que fica no lugar dela no andar.
             float x = (_emendada ? _origemX : 0f) + (float)_walker.X * _escala;
             float y = (_emendada ? _origemY : 0f) + (float)(_walker.Y + GameData.RoomWalkTable.HeroHalf) * _escala;
-            if (_emendada && !EmLuta)
+            if (!_naCidade && !EmLuta)
             {
-                // A câmera no herói, em meio pixel (a textura é 2×): parado no meio da sala, ela a enquadra inteira.
+                // A câmera no herói, com zoom, em meio pixel (a textura é 2×). Em volta da sala fica o fundo do lugar, e a
+                // vizinha emendada.
                 float cx = Mathf.Round(x * 2f) / 2f;
                 float cy = Mathf.Round((y - Lado / 2f) * 2f) / 2f;
                 _camera.transform.position = Mundo(cx, cy) + new Vector3(0f, 0f, -10f);
