@@ -30,7 +30,7 @@ export function isEquippable(category: string): boolean {
 }
 
 /** Stats que só fazem sentido em consumível. */
-export const CONSUMABLE_STAT_KEYS = ['cura', 'curaMana'] as const;
+export const CONSUMABLE_STAT_KEYS = ['cura', 'curaMana', 'tala'] as const;
 
 export type ConsumableStatKey = (typeof CONSUMABLE_STAT_KEYS)[number];
 
@@ -48,6 +48,7 @@ export const STAT_LABELS: Record<AnyStatKey, string> = {
   esquiva: 'Esquiva',
   cura: 'Cura',
   curaMana: 'Restaura Mana',
+  tala: 'Conserta Braço e Perna',
 };
 
 export const PROC_EFFECTS = [
@@ -493,6 +494,17 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     sprite: 'potions/mana.png',
     base: { curaMana: 16 },
     value: 14,
+  },
+  // A tala (2026-11-06): conserta o braço e a perna quebrados. Arte provisória até a do Breno.
+  {
+    id: 'tala',
+    name: 'Tala',
+    genero: 'f',
+    category: 'consumivel',
+    desc: 'Firma o braço ou a perna quebrados até sararem.',
+    sprite: 'potions/tala.png',
+    base: { tala: 1 },
+    value: 20,
   },
   {
     id: 'pergaminho',

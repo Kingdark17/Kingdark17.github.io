@@ -2332,13 +2332,13 @@
             "equipped": false
           },
           {
-            "uid": "pot_mana_1700000000000_52744",
-            "templateId": "pot_mana",
+            "uid": "tala_1700000000000_52744",
+            "templateId": "tala",
             "rarity": "comum",
             "stats": {
-              "curaMana": 16
+              "tala": 1
             },
-            "value": 14,
+            "value": 20,
             "equipped": false
           }
         ],
@@ -2353,13 +2353,13 @@
             "equipped": false
           },
           "received": {
-            "uid": "pot_mana_1700000000000_52744",
-            "templateId": "pot_mana",
+            "uid": "tala_1700000000000_52744",
+            "templateId": "tala",
             "rarity": "comum",
             "stats": {
-              "curaMana": 16
+              "tala": 1
             },
-            "value": 14,
+            "value": 20,
             "equipped": false
           }
         },
@@ -2397,14 +2397,13 @@
       "result": {
         "inventory": [
           {
-            "uid": "pergaminho_1700000000000_28529",
-            "templateId": "pergaminho",
+            "uid": "tala_1700000000000_28529",
+            "templateId": "tala",
             "rarity": "comum",
             "stats": {
-              "cura": 10,
-              "curaMana": 10
+              "tala": 1
             },
-            "value": 16,
+            "value": 20,
             "equipped": false
           }
         ],
@@ -2419,14 +2418,13 @@
             "equipped": false
           },
           "received": {
-            "uid": "pergaminho_1700000000000_28529",
-            "templateId": "pergaminho",
+            "uid": "tala_1700000000000_28529",
+            "templateId": "tala",
             "rarity": "comum",
             "stats": {
-              "cura": 10,
-              "curaMana": 10
+              "tala": 1
             },
-            "value": 16,
+            "value": 20,
             "equipped": false
           }
         },
@@ -2480,14 +2478,13 @@
             "equipped": true
           },
           {
-            "uid": "pergaminho_1700000000000_45618",
-            "templateId": "pergaminho",
+            "uid": "tala_1700000000000_45618",
+            "templateId": "tala",
             "rarity": "comum",
             "stats": {
-              "cura": 10,
-              "curaMana": 10
+              "tala": 1
             },
-            "value": 16,
+            "value": 20,
             "equipped": false
           }
         ],
@@ -2502,14 +2499,13 @@
             "equipped": false
           },
           "received": {
-            "uid": "pergaminho_1700000000000_45618",
-            "templateId": "pergaminho",
+            "uid": "tala_1700000000000_45618",
+            "templateId": "tala",
             "rarity": "comum",
             "stats": {
-              "cura": 10,
-              "curaMana": 10
+              "tala": 1
             },
-            "value": 16,
+            "value": 20,
             "equipped": false
           }
         },
@@ -2639,11 +2635,12 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "grimorio_1700000000000_69485",
-                "templateId": "grimorio",
+                "uid": "couro_1700000000000_69485",
+                "templateId": "couro",
                 "rarity": "raro",
                 "stats": {
-                  "mana": 15
+                  "defesa": 5,
+                  "velocidade": 2
                 },
                 "value": 37,
                 "equipped": false,
@@ -2806,11 +2803,11 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pedra_protecao_1700000000000_46346",
-                "templateId": "pedra_protecao",
+                "uid": "catalisador_mitico_1700000000000_46346",
+                "templateId": "catalisador_mitico",
                 "rarity": "raro",
                 "stats": {},
-                "value": 94,
+                "value": 136,
                 "equipped": false
               },
               "collected": false,
@@ -3041,6 +3038,14 @@
                   "col": 6,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 1,
+                  "vista": true
                 }
               ]
             },
@@ -3279,11 +3284,12 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "grimorio_1700000000000_69485",
-                "templateId": "grimorio",
+                "uid": "couro_1700000000000_69485",
+                "templateId": "couro",
                 "rarity": "raro",
                 "stats": {
-                  "mana": 15
+                  "defesa": 5,
+                  "velocidade": 2
                 },
                 "value": 37,
                 "equipped": false,
@@ -3447,11 +3453,11 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pedra_protecao_1700000000000_46346",
-                "templateId": "pedra_protecao",
+                "uid": "catalisador_mitico_1700000000000_46346",
+                "templateId": "catalisador_mitico",
                 "rarity": "raro",
                 "stats": {},
-                "value": 94,
+                "value": 136,
                 "equipped": false
               },
               "collected": false,
@@ -3686,6 +3692,14 @@
                   "col": 6,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 1,
+                  "vista": true
                 }
               ],
               "revealed": true
@@ -3931,11 +3945,12 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "grimorio_1700000000000_69485",
-                "templateId": "grimorio",
+                "uid": "couro_1700000000000_69485",
+                "templateId": "couro",
                 "rarity": "raro",
                 "stats": {
-                  "mana": 15
+                  "defesa": 5,
+                  "velocidade": 2
                 },
                 "value": 37,
                 "equipped": false,
@@ -4098,11 +4113,11 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pedra_protecao_1700000000000_46346",
-                "templateId": "pedra_protecao",
+                "uid": "catalisador_mitico_1700000000000_46346",
+                "templateId": "catalisador_mitico",
                 "rarity": "raro",
                 "stats": {},
-                "value": 94,
+                "value": 136,
                 "equipped": false
               },
               "collected": false,
@@ -4333,6 +4348,14 @@
                   "col": 6,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 1,
+                  "vista": true
                 }
               ]
             },
@@ -4573,11 +4596,12 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "grimorio_1700000000000_69485",
-                "templateId": "grimorio",
+                "uid": "couro_1700000000000_69485",
+                "templateId": "couro",
                 "rarity": "raro",
                 "stats": {
-                  "mana": 15
+                  "defesa": 5,
+                  "velocidade": 2
                 },
                 "value": 37,
                 "equipped": false,
@@ -4741,11 +4765,11 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pedra_protecao_1700000000000_46346",
-                "templateId": "pedra_protecao",
+                "uid": "catalisador_mitico_1700000000000_46346",
+                "templateId": "catalisador_mitico",
                 "rarity": "raro",
                 "stats": {},
-                "value": 94,
+                "value": 136,
                 "equipped": false
               },
               "collected": false,
@@ -4977,6 +5001,14 @@
                   "col": 6,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 1,
+                  "vista": true
                 }
               ]
             },
@@ -5220,11 +5252,12 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "grimorio_1700000000000_69485",
-                "templateId": "grimorio",
+                "uid": "couro_1700000000000_69485",
+                "templateId": "couro",
                 "rarity": "raro",
                 "stats": {
-                  "mana": 15
+                  "defesa": 5,
+                  "velocidade": 2
                 },
                 "value": 37,
                 "equipped": false,
@@ -5387,11 +5420,11 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pedra_protecao_1700000000000_46346",
-                "templateId": "pedra_protecao",
+                "uid": "catalisador_mitico_1700000000000_46346",
+                "templateId": "catalisador_mitico",
                 "rarity": "raro",
                 "stats": {},
-                "value": 94,
+                "value": 136,
                 "equipped": false
               },
               "collected": false,
@@ -5622,6 +5655,14 @@
                   "col": 6,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 1,
+                  "vista": true
                 }
               ],
               "revealed": true
@@ -5862,11 +5903,12 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "grimorio_1700000000000_69485",
-                "templateId": "grimorio",
+                "uid": "couro_1700000000000_69485",
+                "templateId": "couro",
                 "rarity": "raro",
                 "stats": {
-                  "mana": 15
+                  "defesa": 5,
+                  "velocidade": 2
                 },
                 "value": 37,
                 "equipped": false,
@@ -6030,11 +6072,11 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pedra_protecao_1700000000000_46346",
-                "templateId": "pedra_protecao",
+                "uid": "catalisador_mitico_1700000000000_46346",
+                "templateId": "catalisador_mitico",
                 "rarity": "raro",
                 "stats": {},
-                "value": 94,
+                "value": 136,
                 "equipped": false
               },
               "collected": false,
@@ -6269,6 +6311,14 @@
                   "col": 6,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 1,
+                  "vista": true
                 }
               ],
               "revealed": true

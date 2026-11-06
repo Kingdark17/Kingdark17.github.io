@@ -8,6 +8,7 @@
  * a jogada com o mesmo número que o cliente usou.
  */
 
+import { FUGA_COM_PERNA_QUEBRADA } from '../hero/ferimentos.js';
 import type { Hero } from '../hero/hero.js';
 import { fleeBonus } from './damage.js';
 import type { CombatMonster } from './monster-state.js';
@@ -24,6 +25,7 @@ export interface FleeAttemptResult {
 
 export function attemptFlee(hero: Hero, monster: Pick<CombatMonster, 'speed'>, roll: number): FleeAttemptResult {
   const bonus = fleeBonus(hero, monster);
-  const total = roll + bonus;
+  // A perna quebrada tira da rolagem (`hero/ferimentos.ts`); o bônus mostrado continua o da velocidade.
+  const total = roll + bonus - (hero.ferimentos?.perna ? FUGA_COM_PERNA_QUEBRADA : 0);
   return { roll, bonus, total, success: total >= FLEE_TARGET };
 }

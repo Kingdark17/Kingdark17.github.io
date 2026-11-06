@@ -11,6 +11,7 @@
  * jamais sorteia (lá só `heal`/`reveal` aparecem) — fecha esse gap.
  */
 
+import { curarTudo } from '../hero/ferimentos.js';
 import type { Companion, Hero } from '../hero/hero.js';
 import type { Item } from '../items/item.js';
 import type { NpcService } from '../npc/npc-services.js';
@@ -208,7 +209,8 @@ export function precoDaTaverna(hero: Pick<Hero, 'level'>): number {
 
 /** Descansa uma noite, pagando `precoDaTaverna` (quem chama confere se o herói tem o ouro). */
 export function restAtTavern(hero: Hero, party: readonly Companion[]): { hero: Hero; party: Companion[] } {
-  const nextHero: Hero = { ...hero, hp: hero.maxHp, mp: hero.maxMp, gold: hero.gold - precoDaTaverna(hero) };
+  // A noite também sara os ferimentos: o membro quebrado, o veneno e o sangramento.
+  const nextHero: Hero = { ...curarTudo(hero), hp: hero.maxHp, mp: hero.maxMp, gold: hero.gold - precoDaTaverna(hero) };
   const nextParty = party.map((m) => ({ ...m, hp: m.maxHp }));
   return { hero: nextHero, party: nextParty };
 }

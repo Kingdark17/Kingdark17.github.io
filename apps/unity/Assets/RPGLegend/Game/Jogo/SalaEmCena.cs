@@ -15,6 +15,8 @@ namespace RPGLegend.Game.Jogo
         public Dictionary<string, Figura> Figuras;
         /// <summary>Já entrou nela (ou é a atual): sem sombra.</summary>
         public bool Acesa;
+        /// <summary>As marcas de armadilha no chão (<see cref="Armadilhas.MarcasDasArmadilhas"/>), só na sala acesa.</summary>
+        public List<MarcaDeArmadilha> Marcas;
     }
 
     /// <summary>
@@ -95,6 +97,10 @@ namespace RPGLegend.Game.Jogo
         public Func<string, bool> AoSair;
         /// <summary>Encostou neste objeto agora.</summary>
         public Action<string> AoEncostar;
+        /// <summary>Deu um passo e está aqui agora: quem chama confere se pisou numa armadilha.</summary>
+        public Action<Walker> AoPassar;
+        /// <summary>O ritmo do andar: a perna quebrada anda mais devagar (<see cref="FerimentosDoHeroi.RitmoDoAndar"/>).</summary>
+        public double Ritmo = 1;
 
         /// <summary>Onde o herói está, pra quem quiser saber (ex.: o diário de testes).</summary>
         public Walker Walker => _walker;
@@ -265,7 +271,7 @@ namespace RPGLegend.Game.Jogo
 
             var partes = new List<string> { tema.GetHashCode().ToString(), masmorra };
             foreach (var sala in salas)
-                partes.Add(sala.X + "," + sala.Y + "," + sala.Acesa + "," + string.Join("", sala.Planta.Doors) + "," + DesenhoDasObjetos(sala.Planta) + "," + FigurasDaSala.Assinatura(sala.Figuras));
+                partes.Add(sala.X + "," + sala.Y + "," + sala.Acesa + "," + string.Join("", sala.Planta.Doors) + "," + DesenhoDasObjetos(sala.Planta) + "," + FigurasDaSala.Assinatura(sala.Figuras) + "," + AssinaturaDasMarcas(sala.Marcas));
             var assinatura = "masmorra#" + string.Join(";", partes);
             if (assinatura != _assinaturaDoDesenho)
             {
@@ -274,12 +280,20 @@ namespace RPGLegend.Game.Jogo
                 _emendada = true;
                 _camera.backgroundColor = tema.Fundo ?? Fundo;
                 foreach (var sala in salas)
-                    DesenharUmaSala(sala.Planta, tema, sala.Acesa ? sala.Figuras : new Dictionary<string, Figura>(), masmorra, (float)sala.X * _largura, (float)sala.Y * _altura, sala.Acesa);
+                    DesenharUmaSala(sala.Planta, tema, sala.Acesa ? sala.Figuras : new Dictionary<string, Figura>(), masmorra, (float)sala.X * _largura, (float)sala.Y * _altura, sala.Acesa, sala.Acesa ? sala.Marcas : null);
             }
             _emendada = true;
             _origemX = (float)origemX * _largura;
             _origemY = (float)origemY * _altura;
             ColocarHeroi(false);
+        }
+
+        private static string AssinaturaDasMarcas(List<MarcaDeArmadilha> marcas)
+        {
+            if (marcas == null) return "";
+            var partes = new List<string>();
+            foreach (var m in marcas) partes.Add(m.Col + ":" + m.Row + ":" + m.Icone);
+            return string.Join("|", partes);
         }
 
         private static string DesenhoDasObjetos(RoomLayout planta)
@@ -378,7 +392,7 @@ namespace RPGLegend.Game.Jogo
         /// Uma sala com o canto em (<paramref name="ox"/>, <paramref name="oy"/>), em pixel do site: a arte (ou os
         /// quadradinhos do tema), as rachaduras e as figuras. Apagada, ganha a sombra por cima.
         /// </summary>
-        private void DesenharUmaSala(RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras, string masmorra, float ox, float oy, bool acesa)
+        private void DesenharUmaSala(RoomLayout planta, TemaDaSala tema, Dictionary<string, Figura> figuras, string masmorra, float ox, float oy, bool acesa, List<MarcaDeArmadilha> marcas = null)
         {
             // A sala desenhada da masmorra, quando ela tem (a Floresta do Breno): o chão, os caminhos das portas que
             // existem e as copas por cima de tudo. Sem arte, os quadradinhos na cor do lugar.
@@ -435,6 +449,25 @@ namespace RPGLegend.Game.Jogo
                 PorNoPe(renderizador, sprite, Lado * figura.Escala);
                 renderizador.sortingOrder = (int)peY;
                 if (figura.Apagada) renderizador.color = new Color(1f, 1f, 1f, 0.45f);
+            }
+
+            // As marcas de armadilha no chão: a disparada e o brilho da que o herói viu, por baixo de tudo que está em pé.
+            if (marcas != null)
+            {
+                foreach (var marca in marcas)
+                {
+                    var sprite = EmojiDoSistema.Sprite(marca.Icone);
+                    if (sprite == null) continue;
+                    var pe = new GameObject("marca").transform;
+                    pe.SetParent(_desenho, false);
+                    pe.position = Mundo(ox + (float)marca.Col * Lado + Lado / 2f, oy + (float)marca.Row * Lado + Lado * 0.72f);
+                    var desenho = new GameObject("Figura");
+                    desenho.transform.SetParent(pe, false);
+                    var renderizador = desenho.AddComponent<SpriteRenderer>();
+                    PorNoPe(renderizador, sprite, Lado * 0.45f);
+                    renderizador.sortingOrder = OrdemDoChao + 500;
+                    renderizador.color = new Color(1f, 1f, 1f, 0.85f);
+                }
             }
 
             if (!acesa)
@@ -524,7 +557,7 @@ namespace RPGLegend.Game.Jogo
                 return;
             }
 
-            var passos = AndarNaSala.PassosDoQuadro(_sobra, Time.deltaTime * 1000.0);
+            var passos = AndarNaSala.PassosDoQuadro(_sobra, Time.deltaTime * 1000.0 * Ritmo);
             _sobra = passos.Sobra;
             var antes = _walker;
             var quadro = AndarNaSala.AndarNoQuadro(_planta, antes, Entrada?.Invoke() ?? AndarNaSala.Parado, passos.Passos, _tocando);
@@ -545,6 +578,10 @@ namespace RPGLegend.Game.Jogo
             else if (quadro.Encostou != null)
             {
                 AoEncostar?.Invoke(quadro.Encostou);
+            }
+            else if (quadro.Andou)
+            {
+                AoPassar?.Invoke(_walker);
             }
             ColocarHeroi(quadro.Andou);
         }

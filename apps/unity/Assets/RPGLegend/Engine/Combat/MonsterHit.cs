@@ -109,6 +109,8 @@ namespace RPGLegend.Engine
         /// <summary>A resistência mágica da Encantadora segurou o dreno de mana (só com as defesas; ausente, null).</summary>
         public bool? DrainResisted;
         public CombatMonsterView Monster;
+        /// <summary>O golpe de chefe quebrou este membro do herói ("braco" ou "perna"); ausente, null.</summary>
+        public string Quebrou;
     }
 
     /// <summary>Port de shared/src/combat/monster-hit.ts: o turno de ataque do monstro.</summary>
@@ -199,6 +201,13 @@ namespace RPGLegend.Engine
                 gasto.PoisonStrike = false;
                 gasto.ForgetExtras("poisonStrike");
                 heroHit.Monster = gasto;
+            }
+            // O golpe de chefe que acerta pode quebrar um braço ou uma perna (doc do Breno de 2026-11-06).
+            if (!heroHit.Dodged && monster.IsBoss && rng() < FerimentosDoHeroi.ChanceDeQuebrarNoChefe)
+            {
+                var quebra = FerimentosDoHeroi.QuebrarMembro(heroHit.Hero, rng);
+                heroHit.Hero = quebra.Hero;
+                heroHit.Quebrou = quebra.Membro;
             }
             return heroHit;
         }

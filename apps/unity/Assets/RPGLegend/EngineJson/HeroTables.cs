@@ -11,6 +11,7 @@ namespace RPGLegend.Engine.Json
             GameData.HeroTable = JsSerializer.Parse<HeroData>(readTable("hero/hero"));
             GameData.MasteryTable = JsSerializer.Parse<MasteryData>(readTable("hero/mastery"));
             GameData.TeacherTable = JsSerializer.Parse<TeacherData>(readTable("hero/teachers"));
+            GameData.FerimentosTable = JsSerializer.Parse<FerimentosData>(readTable("hero/ferimentos"));
         }
     }
 }

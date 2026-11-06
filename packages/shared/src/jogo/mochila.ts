@@ -37,7 +37,7 @@ export function podeEquipar(item: Item): boolean {
 }
 
 export function podeUsar(item: Item): boolean {
-  return itemCategory(item) === 'consumivel' && (!!item.stats.cura || !!item.stats.curaMana);
+  return itemCategory(item) === 'consumivel' && (!!item.stats.cura || !!item.stats.curaMana || !!item.stats.tala);
 }
 
 export function slotDoItem(estado: EstadoDoJogo, item: Item): EquipSlot | null {

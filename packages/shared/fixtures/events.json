@@ -1308,12 +1308,12 @@
           "kind": "studied",
           "success": true,
           "item": {
-            "uid": "anel_som_1700000000000_52744",
-            "templateId": "anel_som",
+            "uid": "amuleto_sab_1700000000000_52744",
+            "templateId": "amuleto_sab",
             "rarity": "comum",
             "stats": {
-              "critico": 5,
-              "esquiva": 2
+              "mana": 6,
+              "vida": 4
             },
             "value": 20,
             "equipped": false
@@ -1673,16 +1673,14 @@
           "kind": "studied",
           "success": true,
           "item": {
-            "uid": "colar_forca_1700000000000_45618",
-            "templateId": "colar_forca",
+            "uid": "pot_vida_1700000000000_45618",
+            "templateId": "pot_vida",
             "rarity": "comum",
             "stats": {
-              "ataque": 2,
-              "vida": 8
+              "cura": 22
             },
-            "value": 22,
-            "equipped": false,
-            "foundFloor": 5
+            "value": 14,
+            "equipped": false
           }
         },
         "resolved": true,
@@ -2039,14 +2037,14 @@
           "kind": "studied",
           "success": true,
           "item": {
-            "uid": "bota_vento_1700000000000_21976",
-            "templateId": "bota_vento",
+            "uid": "colar_forca_1700000000000_21976",
+            "templateId": "colar_forca",
             "rarity": "raro",
             "stats": {
-              "velocidade": 9,
-              "esquiva": 4
+              "ataque": 5,
+              "vida": 25
             },
-            "value": 31,
+            "value": 37,
             "equipped": false,
             "foundFloor": 90
           }
@@ -2224,14 +2222,13 @@
           "kind": "studied",
           "success": true,
           "item": {
-            "uid": "robe_calca_1700000000000_20216",
-            "templateId": "robe_calca",
+            "uid": "robe_chapeu_1700000000000_20216",
+            "templateId": "robe_chapeu",
             "rarity": "comum",
             "stats": {
-              "defesa": 2,
-              "mana": 5
+              "mana": 4
             },
-            "value": 8,
+            "value": 5,
             "equipped": false,
             "foundFloor": 90
           }

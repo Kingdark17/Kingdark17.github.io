@@ -11203,6 +11203,13 @@
                   "row": 1,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 3,
+                  "row": 3
+                }
               ]
             },
             {
@@ -11483,6 +11490,13 @@
                   "row": 6,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 2,
+                  "row": 3
+                }
               ]
             },
             {
@@ -11510,6 +11524,13 @@
                   "col": 2,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 2
                 }
               ]
             }
@@ -11638,7 +11659,7 @@
           3
         ]
       },
-      "rngCalls": 376
+      "rngCalls": 393
     }
   },
   {
@@ -11938,6 +11959,13 @@
                   "row": 1,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 6,
+                  "row": 7
                 }
               ]
             },
@@ -12278,7 +12306,7 @@
           3
         ]
       },
-      "rngCalls": 384
+      "rngCalls": 397
     }
   },
   {
@@ -12756,6 +12784,14 @@
                   "col": 7,
                   "row": 6
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 7,
+                  "row": 1,
+                  "vista": true
+                }
               ]
             },
             {
@@ -12821,16 +12857,14 @@
               "beaten": false,
               "bonusTreasure": {
                 "item": {
-                  "uid": "colar_forca_1700000000000_76879",
-                  "templateId": "colar_forca",
+                  "uid": "pot_vida_1700000000000_76879",
+                  "templateId": "pot_vida",
                   "rarity": "incomum",
                   "stats": {
-                    "ataque": 3,
-                    "vida": 10
+                    "cura": 29
                   },
-                  "value": 29,
-                  "equipped": false,
-                  "foundFloor": 4
+                  "value": 18,
+                  "equipped": false
                 }
               },
               "extras": [
@@ -12839,6 +12873,13 @@
                   "col": 1,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 2
                 }
               ]
             },
@@ -13062,7 +13103,7 @@
           3
         ]
       },
-      "rngCalls": 486
+      "rngCalls": 503
     }
   },
   {
@@ -13200,11 +13241,12 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "grimorio_1700000000000_69485",
-                "templateId": "grimorio",
+                "uid": "couro_1700000000000_69485",
+                "templateId": "couro",
                 "rarity": "raro",
                 "stats": {
-                  "mana": 15
+                  "defesa": 5,
+                  "velocidade": 2
                 },
                 "value": 37,
                 "equipped": false,
@@ -13367,11 +13409,11 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pedra_protecao_1700000000000_46346",
-                "templateId": "pedra_protecao",
+                "uid": "catalisador_mitico_1700000000000_46346",
+                "templateId": "catalisador_mitico",
                 "rarity": "raro",
                 "stats": {},
-                "value": 94,
+                "value": 136,
                 "equipped": false
               },
               "collected": false,
@@ -13603,6 +13645,14 @@
                   "row": 6,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 1,
+                  "vista": true
+                }
               ]
             },
             {
@@ -13779,7 +13829,7 @@
           3
         ]
       },
-      "rngCalls": 339
+      "rngCalls": 353
     }
   },
   {
@@ -14118,6 +14168,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 2,
+                  "row": 2
+                }
               ]
             },
             {
@@ -14312,6 +14369,13 @@
                   "row": 1,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 3,
+                  "row": 2
                 }
               ]
             },
@@ -14583,6 +14647,13 @@
                   "col": 2,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 5,
+                  "row": 1
                 }
               ]
             },
@@ -15058,7 +15129,7 @@
           5
         ]
       },
-      "rngCalls": 533
+      "rngCalls": 554
     }
   },
   {
@@ -15613,6 +15684,13 @@
                   "row": 1,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 3,
+                  "row": 3
+                }
               ]
             },
             {
@@ -15762,6 +15840,13 @@
                   "row": 1,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 5,
+                  "row": 5
                 }
               ]
             },
@@ -16337,7 +16422,7 @@
           5
         ]
       },
-      "rngCalls": 775
+      "rngCalls": 793
     }
   },
   {
@@ -16766,6 +16851,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 4,
+                  "row": 6
+                }
               ]
             },
             {
@@ -17095,7 +17187,7 @@
           3
         ]
       },
-      "rngCalls": 363
+      "rngCalls": 377
     }
   },
   {
@@ -17483,6 +17575,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 3,
+                  "row": 7
+                }
               ]
             },
             {
@@ -17789,7 +17888,7 @@
           3
         ]
       },
-      "rngCalls": 395
+      "rngCalls": 409
     }
   },
   {
@@ -18172,6 +18271,14 @@
                   "row": 6,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 5,
+                  "row": 6,
+                  "vista": true
+                }
               ]
             },
             {
@@ -18284,6 +18391,13 @@
                   "col": 7,
                   "row": 1
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 1
+                }
               ]
             },
             {
@@ -18304,6 +18418,13 @@
                   "col": 1,
                   "row": 1,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 7,
+                  "row": 1
                 }
               ]
             },
@@ -18454,7 +18575,7 @@
           3
         ]
       },
-      "rngCalls": 322
+      "rngCalls": 342
     }
   },
   {
@@ -18694,6 +18815,13 @@
                   "row": 1,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 2,
+                  "row": 5
+                }
               ]
             }
           ],
@@ -18807,6 +18935,13 @@
                   "row": 1,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 1,
+                  "row": 7
+                }
               ]
             },
             {
@@ -18847,11 +18982,12 @@
               "beaten": false,
               "bonusTreasure": {
                 "item": {
-                  "uid": "grimorio_1700000000000_66391",
-                  "templateId": "grimorio",
+                  "uid": "couro_1700000000000_66391",
+                  "templateId": "couro",
                   "rarity": "incomum",
                   "stats": {
-                    "mana": 18
+                    "defesa": 7,
+                    "velocidade": 2
                   },
                   "value": 29,
                   "equipped": false,
@@ -18865,6 +19001,13 @@
                   "row": 1,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 2,
+                  "row": 6
                 }
               ]
             },
@@ -18985,6 +19128,13 @@
                     "equipped": false
                   },
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 1,
+                  "row": 5
                 }
               ]
             },
@@ -19194,7 +19344,7 @@
           3
         ]
       },
-      "rngCalls": 348
+      "rngCalls": 371
     }
   },
   {
@@ -19531,14 +19681,14 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "cajado_1700000000000_6945",
-                "templateId": "cajado",
+                "uid": "maca_1700000000000_6945",
+                "templateId": "maca",
                 "rarity": "comum",
                 "stats": {
                   "ataque": 5,
-                  "mana": 14
+                  "vida": 11
                 },
-                "value": 24,
+                "value": 22,
                 "equipped": false,
                 "procChance": 0.1,
                 "foundFloor": 77
@@ -19628,6 +19778,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 3,
+                  "row": 3
+                }
               ]
             },
             {
@@ -19678,6 +19835,13 @@
                   "col": 7,
                   "row": 6,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 7,
+                  "row": 2
                 }
               ]
             },
@@ -19969,7 +20133,7 @@
           3
         ]
       },
-      "rngCalls": 443
+      "rngCalls": 461
     }
   },
   {
@@ -20139,6 +20303,13 @@
                   "row": 6,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 5,
+                  "row": 6
+                }
               ]
             },
             {
@@ -20239,6 +20410,13 @@
                   "kind": "sign",
                   "col": 1,
                   "row": 6
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 1,
+                  "row": 5
                 }
               ]
             },
@@ -20512,6 +20690,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 4,
+                  "row": 1
+                }
               ]
             },
             {
@@ -20718,7 +20903,7 @@
           3
         ]
       },
-      "rngCalls": 362
+      "rngCalls": 382
     }
   },
   {
@@ -21112,6 +21297,13 @@
                   },
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 2,
+                  "row": 6
+                }
               ]
             },
             {
@@ -21376,7 +21568,7 @@
           3
         ]
       },
-      "rngCalls": 439
+      "rngCalls": 450
     }
   },
   {
@@ -21774,6 +21966,14 @@
                   "row": 6,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 5,
+                  "row": 1,
+                  "vista": true
+                }
               ]
             },
             {
@@ -22037,6 +22237,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 2,
+                  "row": 5
+                }
               ]
             },
             {
@@ -22148,7 +22355,7 @@
           3
         ]
       },
-      "rngCalls": 368
+      "rngCalls": 385
     }
   },
   {
@@ -22497,6 +22704,13 @@
                   "row": 6,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 2,
+                  "row": 8
+                }
               ]
             },
             {
@@ -22611,6 +22825,14 @@
                   "row": 1,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 6,
+                  "row": 3,
+                  "vista": true
                 }
               ]
             },
@@ -22941,7 +23163,7 @@
           3
         ]
       },
-      "rngCalls": 369
+      "rngCalls": 386
     }
   },
   {
@@ -23140,6 +23362,14 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 4,
+                  "row": 1,
+                  "vista": true
+                }
               ]
             }
           ],
@@ -23285,7 +23515,7 @@
           1
         ]
       },
-      "rngCalls": 8020
+      "rngCalls": 8031
     }
   },
   {
@@ -23469,6 +23699,13 @@
                   "row": 6,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 7,
+                  "row": 6
+                }
               ]
             },
             {
@@ -23482,14 +23719,13 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "placas_1700000000000_35285",
-                "templateId": "placas",
+                "uid": "placas_elmo_1700000000000_35285",
+                "templateId": "placas_elmo",
                 "rarity": "incomum",
                 "stats": {
-                  "defesa": 6,
-                  "esquiva": -1
+                  "defesa": 1
                 },
-                "value": 22,
+                "value": 7,
                 "equipped": false,
                 "foundFloor": 8
               },
@@ -23696,6 +23932,13 @@
                   "col": 6,
                   "row": 1
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 2,
+                  "row": 5
+                }
               ]
             }
           ],
@@ -23815,6 +24058,13 @@
                   "col": 2,
                   "row": 1,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 2,
+                  "row": 5
                 }
               ]
             },
@@ -23941,7 +24191,7 @@
           2
         ]
       },
-      "rngCalls": 495
+      "rngCalls": 516
     }
   },
   {
@@ -24248,6 +24498,13 @@
                   },
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 1,
+                  "row": 4
+                }
               ]
             },
             {
@@ -24336,6 +24593,13 @@
                   "kind": "sign",
                   "col": 2,
                   "row": 1
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 1,
+                  "row": 2
                 }
               ]
             },
@@ -24532,7 +24796,7 @@
           3
         ]
       },
-      "rngCalls": 405
+      "rngCalls": 419
     }
   },
   {
@@ -24921,6 +25185,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 3,
+                  "row": 7
+                }
               ]
             },
             {
@@ -25227,7 +25498,7 @@
           3
         ]
       },
-      "rngCalls": 395
+      "rngCalls": 409
     }
   },
   {
@@ -25473,6 +25744,13 @@
                   "col": 1,
                   "row": 1
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 7,
+                  "row": 6
+                }
               ]
             },
             {
@@ -25658,6 +25936,13 @@
                   },
                   "secretCollected": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 6,
+                  "row": 2
+                }
               ]
             },
             {
@@ -25735,6 +26020,14 @@
                   "kind": "sign",
                   "col": 6,
                   "row": 6
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 2,
+                  "row": 4,
+                  "vista": true
                 }
               ]
             }
@@ -25979,7 +26272,7 @@
           3
         ]
       },
-      "rngCalls": 345
+      "rngCalls": 365
     }
   },
   {
@@ -26158,6 +26451,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 2,
+                  "row": 4
+                }
               ]
             },
             {
@@ -26333,6 +26633,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 5,
+                  "row": 5
+                }
               ]
             },
             {
@@ -26372,6 +26679,13 @@
                   "row": 1,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 5,
+                  "row": 3
                 }
               ]
             },
@@ -26591,6 +26905,13 @@
                   "col": 2,
                   "row": 6
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 6,
+                  "row": 7
+                }
               ]
             },
             {
@@ -26725,7 +27046,7 @@
           3
         ]
       },
-      "rngCalls": 364
+      "rngCalls": 387
     }
   },
   {
@@ -26962,6 +27283,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 2,
+                  "row": 5
+                }
               ]
             }
           ],
@@ -27097,11 +27425,12 @@
               "beaten": false,
               "bonusTreasure": {
                 "item": {
-                  "uid": "grimorio_1700000000000_74136",
-                  "templateId": "grimorio",
+                  "uid": "couro_1700000000000_74136",
+                  "templateId": "couro",
                   "rarity": "incomum",
                   "stats": {
-                    "mana": 18
+                    "defesa": 7,
+                    "velocidade": 2
                   },
                   "value": 29,
                   "equipped": false,
@@ -27114,6 +27443,13 @@
                   "col": 7,
                   "row": 1,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 2,
+                  "row": 6
                 }
               ]
             },
@@ -27253,6 +27589,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 2,
+                  "row": 5
+                }
               ]
             },
             {
@@ -27266,14 +27609,14 @@
               "isMimic": true,
               "giveGold": false,
               "item": {
-                "uid": "robe_1700000000000_65440",
-                "templateId": "robe",
+                "uid": "robe_calca_1700000000000_65440",
+                "templateId": "robe_calca",
                 "rarity": "incomum",
                 "stats": {
                   "defesa": 2,
-                  "mana": 12
+                  "mana": 7
                 },
-                "value": 17,
+                "value": 10,
                 "equipped": false,
                 "foundFloor": 60
               },
@@ -27455,7 +27798,7 @@
           3
         ]
       },
-      "rngCalls": 351
+      "rngCalls": 371
     }
   },
   {
@@ -27888,6 +28231,13 @@
                   "row": 6,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 6,
+                  "row": 6
+                }
               ]
             },
             {
@@ -27926,6 +28276,13 @@
                   "item": null,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 5,
+                  "row": 1
+                }
               ]
             },
             {
@@ -27954,6 +28311,13 @@
                   "col": 1,
                   "row": 6
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 3,
+                  "row": 7
+                }
               ]
             },
             {
@@ -27981,6 +28345,13 @@
                   "row": 1,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 2,
+                  "row": 5
                 }
               ]
             },
@@ -28186,7 +28557,7 @@
           3
         ]
       },
-      "rngCalls": 360
+      "rngCalls": 383
     }
   },
   {
@@ -28446,6 +28817,13 @@
                   "row": 6,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 9,
+                  "row": 2
                 }
               ]
             },
@@ -29002,7 +29380,7 @@
           3
         ]
       },
-      "rngCalls": 384
+      "rngCalls": 398
     }
   },
   {
@@ -29363,13 +29741,13 @@
               "isMimic": false,
               "giveGold": false,
               "item": {
-                "uid": "pot_mana_1700000000000_54920",
-                "templateId": "pot_mana",
+                "uid": "tala_1700000000000_54920",
+                "templateId": "tala",
                 "rarity": "comum",
                 "stats": {
-                  "curaMana": 16
+                  "tala": 1
                 },
-                "value": 14,
+                "value": 20,
                 "equipped": false
               },
               "collected": false,
@@ -29654,7 +30032,7 @@
           3
         ]
       },
-      "rngCalls": 393
+      "rngCalls": 403
     }
   },
   {
@@ -29910,6 +30288,13 @@
                   "row": 6,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "dardo",
+                  "col": 7,
+                  "row": 1
                 }
               ]
             },
@@ -30466,7 +30851,7 @@
           3
         ]
       },
-      "rngCalls": 384
+      "rngCalls": 398
     }
   },
   {
@@ -31766,6 +32151,13 @@
               "item": null,
               "used": false
             }
+          ],
+          "armadilhas": [
+            {
+              "tipo": "pedras",
+              "col": 4,
+              "row": 3
+            }
           ]
         }
       }
@@ -31834,6 +32226,13 @@
               "row": 1,
               "item": null,
               "used": false
+            }
+          ],
+          "armadilhas": [
+            {
+              "tipo": "pedras",
+              "col": 4,
+              "row": 3
             }
           ]
         }
@@ -31904,6 +32303,13 @@
               "item": null,
               "used": false
             }
+          ],
+          "armadilhas": [
+            {
+              "tipo": "pedras",
+              "col": 4,
+              "row": 3
+            }
           ]
         }
       }
@@ -31972,6 +32378,13 @@
               "row": 1,
               "item": null,
               "used": false
+            }
+          ],
+          "armadilhas": [
+            {
+              "tipo": "pedras",
+              "col": 4,
+              "row": 3
             }
           ]
         }
@@ -32116,13 +32529,13 @@
           "isMimic": false,
           "giveGold": false,
           "item": {
-            "uid": "pot_mana_1700000000000_49359",
-            "templateId": "pot_mana",
+            "uid": "tala_1700000000000_49359",
+            "templateId": "tala",
             "rarity": "incomum",
             "stats": {
-              "curaMana": 21
+              "tala": 1
             },
-            "value": 18,
+            "value": 26,
             "equipped": false
           },
           "collected": false,
@@ -32163,13 +32576,13 @@
           "isMimic": false,
           "giveGold": false,
           "item": {
-            "uid": "pot_mana_1700000000000_49359",
-            "templateId": "pot_mana",
+            "uid": "tala_1700000000000_49359",
+            "templateId": "tala",
             "rarity": "incomum",
             "stats": {
-              "curaMana": 21
+              "tala": 1
             },
-            "value": 18,
+            "value": 26,
             "equipped": false
           },
           "collected": false,
@@ -32210,13 +32623,13 @@
           "isMimic": false,
           "giveGold": false,
           "item": {
-            "uid": "pot_mana_1700000000000_49359",
-            "templateId": "pot_mana",
+            "uid": "tala_1700000000000_49359",
+            "templateId": "tala",
             "rarity": "incomum",
             "stats": {
-              "curaMana": 21
+              "tala": 1
             },
-            "value": 18,
+            "value": 26,
             "equipped": false
           },
           "collected": false,
@@ -32257,13 +32670,13 @@
           "isMimic": false,
           "giveGold": false,
           "item": {
-            "uid": "pot_mana_1700000000000_49359",
-            "templateId": "pot_mana",
+            "uid": "tala_1700000000000_49359",
+            "templateId": "tala",
             "rarity": "incomum",
             "stats": {
-              "curaMana": 21
+              "tala": 1
             },
-            "value": 18,
+            "value": 26,
             "equipped": false
           },
           "collected": false,
@@ -32449,6 +32862,13 @@
               "row": 6,
               "used": false
             }
+          ],
+          "armadilhas": [
+            {
+              "tipo": "espinhos",
+              "col": 6,
+              "row": 2
+            }
           ]
         }
       }
@@ -32488,6 +32908,13 @@
               "col": 1,
               "row": 6,
               "used": false
+            }
+          ],
+          "armadilhas": [
+            {
+              "tipo": "espinhos",
+              "col": 6,
+              "row": 2
             }
           ]
         }
@@ -32529,6 +32956,13 @@
               "row": 6,
               "used": false
             }
+          ],
+          "armadilhas": [
+            {
+              "tipo": "espinhos",
+              "col": 6,
+              "row": 2
+            }
           ]
         }
       }
@@ -32568,6 +33002,13 @@
               "col": 1,
               "row": 6,
               "used": false
+            }
+          ],
+          "armadilhas": [
+            {
+              "tipo": "espinhos",
+              "col": 6,
+              "row": 2
             }
           ]
         }
@@ -49503,7 +49944,7 @@
           "hint": "Uma seta riscada na madeira aponta o caminho: a escada fica a nordoeste."
         }
       ],
-      "rngCalls": 339
+      "rngCalls": 353
     }
   },
   {
@@ -49593,7 +50034,7 @@
           "hint": "Uma seta riscada na madeira aponta o caminho: a escada fica a nordoeste."
         }
       ],
-      "rngCalls": 363
+      "rngCalls": 377
     }
   },
   {
@@ -49683,7 +50124,7 @@
           "hint": "Alguém escreveu, com pressa: \"há uma parede oca neste andar, ao norte\"."
         }
       ],
-      "rngCalls": 367
+      "rngCalls": 391
     }
   },
   {
@@ -49773,7 +50214,7 @@
           "hint": "Um aviso gasto: \"o guardião deste andar teme a magia\"."
         }
       ],
-      "rngCalls": 395
+      "rngCalls": 409
     }
   },
   {
@@ -49863,7 +50304,7 @@
           "hint": "Uma seta riscada na madeira aponta o caminho: a escada fica a nordoeste."
         }
       ],
-      "rngCalls": 324
+      "rngCalls": 338
     }
   },
   {
@@ -51282,6 +51723,13 @@
                   "row": 1,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 1,
+                  "row": 7
+                }
               ]
             },
             {
@@ -51440,6 +51888,13 @@
                   "row": 6,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 6,
+                  "row": 5
                 }
               ]
             },
@@ -51663,7 +52118,7 @@
           3
         ]
       },
-      "rngCalls": 340
+      "rngCalls": 357
     }
   },
   {
@@ -52012,6 +52467,13 @@
                   "row": 1,
                   "used": false
                 }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "espinhos",
+                  "col": 7,
+                  "row": 6
+                }
               ]
             },
             {
@@ -52170,6 +52632,13 @@
                   "row": 6,
                   "item": null,
                   "used": false
+                }
+              ],
+              "armadilhas": [
+                {
+                  "tipo": "pedras",
+                  "col": 5,
+                  "row": 5
                 }
               ]
             },
@@ -52393,7 +52862,7 @@
           3
         ]
       },
-      "rngCalls": 340
+      "rngCalls": 357
     }
   }
 ]

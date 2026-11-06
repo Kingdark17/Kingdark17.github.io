@@ -4116,6 +4116,71 @@ for (const ponto of [...new Set(E.PONTOS_DA_CIDADE.map((p) => p.id)), 'castelo']
   }
 }
 
+// --- armadilhas e ferimentos (dungeon/armadilhas.ts, hero/ferimentos.ts, jogo/armadilhas.ts; 2026-11-06) ---
+for (const sabedoria of [6, 8, 10, 13, 18, 30]) caso(`chanceDeVer: ${sabedoria}`, 'chanceDeVer', { sabedoria }, (a) => E.chanceDeVer(a.sabedoria));
+{
+  const nasCasa = (col: number, row: number) => ({ x: col * E.TILE_UNITS + E.TILE_UNITS / 2, y: row * E.TILE_UNITS + E.TILE_UNITS / 2 });
+  const armada = { armadilhas: [{ tipo: 'dardo', col: 2, row: 3 }, { tipo: 'pedras', col: 5, row: 5, vista: true }, { tipo: 'espinhos', col: 6, row: 2, disparada: true }] };
+  for (const [nome, walker] of [
+    ['na casa do dardo', nasCasa(2, 3)],
+    ['na beirada da casa do dardo', { x: 3 * E.TILE_UNITS - 1, y: 4 * E.TILE_UNITS - 1 }],
+    ['na casa vizinha', nasCasa(3, 3)],
+    ['na casa da disparada', nasCasa(6, 2)],
+  ] as const) {
+    caso(`armadilhaSob: ${nome}`, 'armadilhaSob', { celula: armada, walker }, (a) => E.armadilhaSob(a.celula as never, a.walker));
+  }
+  caso('armadilhaSob: sala sem armadilha', 'armadilhaSob', { celula: {}, walker: nasCasa(2, 3) }, (a) => E.armadilhaSob(a.celula as never, a.walker));
+  caso('marcasDasArmadilhas', 'marcasDasArmadilhas', { celula: armada }, (a) => E.marcasDasArmadilhas(a.celula as never));
+}
+for (const [dungeon, sabedoria, semente] of [
+  ['floresta', 10, 1],
+  ['caverna', 14, 2],
+  ['torre', 20, 3],
+] as const) {
+  const salas = E.generateDungeonFloor(7, 6, 6, { rng: E.seededRng(semente), run: { dungeon, difficulty: 'normal' } }).rooms.map((s) => ({ ...s, armadilhas: undefined }));
+  caso(`colocarArmadilhas: ${dungeon}, sabedoria ${sabedoria}`, 'colocarArmadilhas', { rooms: salas, dungeon, sabedoria }, (a, { rng }) => {
+    const copia = structuredClone(a.rooms) as DungeonCell[];
+    E.colocarArmadilhas(copia, a.dungeon, a.sabedoria, rng);
+    return copia.map((s) => s.armadilhas ?? null);
+  }, { rng: { seed: semente + 40 } });
+}
+{
+  const ferido = (ferimentos: object) => ({ ...heroi({ classe: 'guerreiro', extra: { hp: 60 } }), ferimentos });
+  for (const [nome, hero] of [
+    ['inteiro', heroi({ classe: 'guerreiro' })],
+    ['envenenado por 2', ferido({ veneno: 2 })],
+    ['sangrando por 1 e de braço quebrado', ferido({ sangramento: 1, braco: true })],
+    ['os dois, com 1 de vida', { ...ferido({ veneno: 3, sangramento: 2 }), hp: 1 }],
+  ] as const) {
+    caso(`passarDeSala: ${nome}`, 'passarDeSala', { hero }, (a) => E.passarDeSala(a.hero as Hero));
+    caso(`curarMembros: ${nome}`, 'curarMembros', { hero }, (a) => E.curarMembros(a.hero as Hero));
+    caso(`curarTudo: ${nome}`, 'curarTudo', { hero }, (a) => E.curarTudo(a.hero as Hero));
+    caso(`textosDosFerimentos: ${nome}`, 'textosDosFerimentos', { hero }, (a) => E.textosDosFerimentos(a.hero as Hero));
+    caso(`forcaDoBraco: ${nome}`, 'forcaDoBraco', { hero }, (a) => E.forcaDoBraco(a.hero as Hero));
+    caso(`ritmoDoAndar: ${nome}`, 'ritmoDoAndar', { hero }, (a) => E.ritmoDoAndar(a.hero as Hero));
+  }
+  for (const semente of [1, 2]) {
+    caso(`quebrarMembro: seed ${semente}`, 'quebrarMembro', { hero: ferido({ veneno: 1 }) }, (a, { rng }) => E.quebrarMembro(a.hero as Hero, rng), { rng: { seed: semente } });
+  }
+  caso('attemptFlee: perna quebrada', 'attemptFlee', { hero: ferido({ perna: true }), monster: { speed: 5 }, roll: 14 }, (a) => E.attemptFlee(a.hero as Hero, a.monster, a.roll));
+}
+for (const [tipo, semente] of [
+  ['espinhos', 1],
+  ['dardo', 2],
+  ['pedras', 3],
+  ['pedras', 9],
+] as const) {
+  const estado = naSalaDaMasmorra({ armadilhas: [{ tipo, col: 2, row: 2 }] }, heroi({ classe: 'guerreiro', extra: { hp: 50 } }));
+  caso(`pisarNaArmadilha: ${tipo}, seed ${semente}`, 'pisarNaArmadilha', { estado, indice: 0 }, (a, { rng }) => E.pisarNaArmadilha(a.estado, a.indice, rng), { rng: { seed: semente } });
+}
+caso(
+  'pisarNaArmadilha: já disparada',
+  'pisarNaArmadilha',
+  { estado: naSalaDaMasmorra({ armadilhas: [{ tipo: 'dardo', col: 2, row: 2, disparada: true }] }), indice: 0 },
+  (a, { rng }) => E.pisarNaArmadilha(a.estado, a.indice, rng),
+  { rng: { seed: 1 } },
+);
+
 // --- a arte das salas da masmorra (dungeon/arte-da-sala.ts) ---
 for (const [dungeon, portas] of [
   ['floresta', []],

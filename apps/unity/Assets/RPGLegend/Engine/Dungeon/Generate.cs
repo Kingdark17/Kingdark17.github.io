@@ -23,6 +23,8 @@ namespace RPGLegend.Engine
         /// andares não têm saída: a volta é pelo pilar da sala do chefe, depois de vencê-lo.
         /// </summary>
         public bool Entrada;
+        /// <summary>A Sabedoria de quem desce: às vezes ele vê o brilho de uma armadilha antes de pisar. Ausente, 10.</summary>
+        public double? Sabedoria;
     }
 
     /// <summary>
@@ -140,6 +142,8 @@ namespace RPGLegend.Engine
             PopulateRoomContent(res.Rooms, forca, rng, now, o.App);
             // Por último: o resto do andar sai igual ao de antes pra mesma semente.
             RoomExtras.PlaceExtras(res.Rooms, forca, rng, now, o.App);
+            // E as armadilhas, depois de tudo (2026-11-06).
+            Armadilhas.ColocarArmadilhas(res.Rooms, run.Dungeon, o.Sabedoria ?? 10, rng);
 
             return new RoomGraph<DungeonCell> { Grid = res.Grid, Rooms = res.Rooms, Start = res.Start };
         }

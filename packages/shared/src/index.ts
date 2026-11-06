@@ -15,6 +15,7 @@ export * from './hero/catalog.js';
 export * from './hero/hero.js';
 export * from './hero/mastery.js';
 export * from './hero/teachers.js';
+export * from './hero/ferimentos.js';
 
 export * from './items/rarity.js';
 export * from './items/templates.js';
@@ -49,6 +50,7 @@ export * from './dungeon/dungeons.js';
 export * from './dungeon/generate.js';
 export * from './dungeon/room-walk.js';
 export * from './dungeon/extras.js';
+export * from './dungeon/armadilhas.js';
 export * from './dungeon/arte-da-sala.js';
 
 export * from './inventory/inventory.js';
@@ -83,6 +85,7 @@ export * from './jogo/encantadora.js';
 export * from './jogo/estado.js';
 export * from './jogo/evento.js';
 export * from './jogo/extras.js';
+export * from './jogo/armadilhas.js';
 export * from './jogo/fim-da-luta.js';
 export * from './jogo/guilda.js';
 export * from './jogo/impacto.js';

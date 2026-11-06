@@ -161,6 +161,21 @@ namespace RPGLegend.Game.Jogo
         // ---------- encostar ----------
 
         /// <summary>O herói encostou em algo da sala: o conteúdo, um extra ou, na sala secreta, o baú dela.</summary>
+        /// <summary>
+        /// O herói deu um passo na sala: se pisou numa armadilha ainda armada, ela dispara (o aviso e o estado novo,
+        /// como no site).
+        /// </summary>
+        public void AoPassar(Walker walker)
+        {
+            if (Tela != null || Luta != null || Secreta != null || !(Estado is EstadoNaMasmorra masmorra)) return;
+            var indice = Armadilhas.ArmadilhaSob(CelulaAtual as DungeonCell, walker);
+            if (indice == null) return;
+            var pisou = ArmadilhasDoJogo.PisarNaArmadilha(masmorra, (int)indice.Value, Rng.Default);
+            if (pisou == null) return;
+            TocarSom("hit");
+            RegistrarMudanca(pisou.Estado, pisou.Aviso);
+        }
+
         public void AoEncostar(string id)
         {
             if (Tela != null || Luta != null) return;

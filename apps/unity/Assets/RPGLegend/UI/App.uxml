@@ -181,6 +181,7 @@
                     </ui:VisualElement>
                     <ui:VisualElement class="trilho"><ui:VisualElement name="mana" class="enchimento mana" /></ui:VisualElement>
                 </ui:VisualElement>
+                <ui:Label name="ferimentos-do-heroi" class="ferimentos-do-heroi escondida" />
             </ui:VisualElement>
             <!-- À direita: o que fala do lugar (aparece na chegada e some sozinho; tocar fecha), a pergunta de SIM/NÃO
                  e os avisos, que ficam até a resposta, e o recado, que fica até o ×. -->

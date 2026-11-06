@@ -70,6 +70,8 @@ namespace RPGLegend.Engine
         public HeroBuffs Buffs;
         /// <summary>Bênção de NPC: esquiva extra por N combates inteiros. Opcional.</summary>
         public NpcBlessing NpcBlessing;
+        /// <summary>Braço ou perna quebrados, veneno e sangramento de sala em sala (<see cref="FerimentosDoHeroi"/>). Ausente: inteiro.</summary>
+        public Ferimentos Ferimentos;
 
         /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
         [JsExtra] public JsExtras Extra;

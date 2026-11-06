@@ -16,7 +16,18 @@
 import Image from 'next/image';
 import { useEffect, useId, useRef, useState } from 'react';
 
-import { ATTR_KEYS, ATTR_LABELS, fraquezaNoCartao, hasClass, idDaRaca, maestriaNoCartao, poderesNoCartao, type AttrKey, type Hero } from '@rpg-legend/shared';
+import {
+  ATTR_KEYS,
+  ATTR_LABELS,
+  fraquezaNoCartao,
+  hasClass,
+  idDaRaca,
+  maestriaNoCartao,
+  poderesNoCartao,
+  textosDosFerimentos,
+  type AttrKey,
+  type Hero,
+} from '@rpg-legend/shared';
 
 import { sinaisDoHeroi } from '@/lib/paperdoll/sinais';
 import { tocar } from '@/lib/som/efeitos';
@@ -116,6 +127,7 @@ export function PainelHeroi({ hero, golpes = 0, onPonto, titulo = null }: Readon
   const treinado = hasClass(hero);
   const poderes = poderesNoCartao(hero);
   const fraqueza = fraquezaNoCartao(hero);
+  const ferimentos = textosDosFerimentos(hero);
   const maestria = maestriaNoCartao(hero);
   const [subiu, setSubiu] = useState(false);
   const nivelAnterior = useRef(hero.level);
@@ -338,6 +350,16 @@ export function PainelHeroi({ hero, golpes = 0, onPonto, titulo = null }: Readon
           ))}
           {poderes.length === 0 && <p className={cartao.provisorio}>{treinado ? 'Nenhum.' : 'Nenhum ainda: a Guilda ensina o primeiro.'}</p>}
         </section>
+
+        {ferimentos.length > 0 && (
+          <section className={cartao.secao}>
+            <h3 className={cartao.rotulo}>Ferimentos</h3>
+            {ferimentos.map((texto) => (
+              <p key={texto}>{texto}</p>
+            ))}
+            <p className={cartao.efeito}>A tala conserta o braço e a perna; uma noite na taverna sara tudo.</p>
+          </section>
+        )}
 
         {fraqueza && (
           <section className={cartao.secao}>

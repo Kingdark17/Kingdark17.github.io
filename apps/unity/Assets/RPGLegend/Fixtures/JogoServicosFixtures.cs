@@ -85,6 +85,28 @@ namespace RPGLegend.Tests
             Fn(M, "chegadaNoPonto", (a, c) => W(MapaDaCidade.ChegadaNoPonto(Str(a["ponto"]))));
             Fn(M, "cobreOHeroi", (a, c) => W(MapaDaCidade.CobreOHeroi(R<CamadaDaCidade>(a["camada"]), R<Walker>(a["walker"]))));
             Fn(M, "camadasDaSala", (a, c) => W(ArteDaSala.CamadasDaSala(Str(a["dungeon"]), R<List<string>>(a["portas"]))));
+
+            // Armadilhas e ferimentos (2026-11-06).
+            Fn(M, "chanceDeVer", (a, c) => W(Armadilhas.ChanceDeVer(Num(a["sabedoria"]))));
+            Fn(M, "armadilhaSob", (a, c) => W(Armadilhas.ArmadilhaSob(R<DungeonCell>(a["celula"]), R<Walker>(a["walker"]))));
+            Fn(M, "marcasDasArmadilhas", (a, c) => W(Armadilhas.MarcasDasArmadilhas(R<DungeonCell>(a["celula"]))));
+            Fn(M, "colocarArmadilhas", (a, c) =>
+            {
+                var salas = R<List<DungeonCell>>(a["rooms"]);
+                Armadilhas.ColocarArmadilhas(salas, Str(a["dungeon"]), Num(a["sabedoria"]), c.RngFn);
+                var lista = new List<List<Armadilha>>();
+                foreach (var sala in salas) lista.Add(sala.Armadilhas);
+                return W(lista);
+            });
+            Fn(M, "passarDeSala", (a, c) => W(FerimentosDoHeroi.PassarDeSala(R<Hero>(a["hero"]))));
+            Fn(M, "curarMembros", (a, c) => W(FerimentosDoHeroi.CurarMembros(R<Hero>(a["hero"]))));
+            Fn(M, "curarTudo", (a, c) => W(FerimentosDoHeroi.CurarTudo(R<Hero>(a["hero"]))));
+            Fn(M, "textosDosFerimentos", (a, c) => W(FerimentosDoHeroi.TextosDosFerimentos(R<Hero>(a["hero"]))));
+            Fn(M, "forcaDoBraco", (a, c) => W(FerimentosDoHeroi.ForcaDoBraco(R<Hero>(a["hero"]))));
+            Fn(M, "attemptFlee", (a, c) => W(Flee.AttemptFlee(R<Hero>(a["hero"]), R<MonsterInstance>(a["monster"]), Num(a["roll"]))));
+            Fn(M, "ritmoDoAndar", (a, c) => W(FerimentosDoHeroi.RitmoDoAndar(R<Hero>(a["hero"]))));
+            Fn(M, "quebrarMembro", (a, c) => W(FerimentosDoHeroi.QuebrarMembro(R<Hero>(a["hero"]), c.RngFn)));
+            Fn(M, "pisarNaArmadilha", (a, c) => W(ArmadilhasDoJogo.PisarNaArmadilha(R<EstadoNaMasmorra>(a["estado"]), (int)Num(a["indice"]), c.RngFn)));
             Fn(M, "cobreOHeroiNaSala", (a, c) => W(ArteDaSala.CobreOHeroiNaSala(R<CamadaDaSala>(a["camada"]), R<Walker>(a["walker"]))));
             Fn(M, "paredesDaSala", (a, c) => W(ArteDaSala.ParedesDaSala(Str(a["dungeon"]))));
             Fn(M, "enfeitesDaSala", (a, c) => W(ArteDaSala.EnfeitesDaSala(Str(a["dungeon"]))));

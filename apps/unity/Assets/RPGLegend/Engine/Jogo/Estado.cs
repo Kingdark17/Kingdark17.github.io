@@ -390,6 +390,7 @@ namespace RPGLegend.Engine
                 Now = now,
                 App = app,
                 Entrada = entrada,
+                Sabedoria = baseDoAndar.Hero.Attrs.Sabedoria,
             });
             var inicio = new Posicao(andar.Start.X, andar.Start.Y);
 
@@ -479,6 +480,8 @@ namespace RPGLegend.Engine
             var naMasmorra = masmorra.Clone();
             naMasmorra.Pos = destino;
             naMasmorra.Map = MarcarVisitada(masmorra.Map, destino);
+            // Entrar noutra sala é quando o veneno e o sangramento tiram a parte deles (FerimentosDoHeroi).
+            naMasmorra.Hero = FerimentosDoHeroi.PassarDeSala(masmorra.Hero).Hero;
             return naMasmorra;
         }
 

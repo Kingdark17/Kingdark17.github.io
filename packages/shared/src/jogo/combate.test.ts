@@ -567,7 +567,7 @@ describe('usar item na luta', () => {
   it('só oferece o que faz alguma coisa', () => {
     const { combate, item } = comPocao();
     expect(consumiveisDoCombate(combate).map((i) => i.uid)).toContain(item.uid);
-    expect(consumiveisDoCombate(combate).every((i) => i.stats.cura || i.stats.curaMana)).toBe(true);
+    expect(consumiveisDoCombate(combate).every((i) => i.stats.cura || i.stats.curaMana || i.stats.tala)).toBe(true);
   });
 
   it('cura, some da mochila e gasta o turno — a criatura revida', () => {

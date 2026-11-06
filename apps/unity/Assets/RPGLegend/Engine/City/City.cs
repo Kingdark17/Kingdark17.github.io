@@ -184,7 +184,8 @@ namespace RPGLegend.Engine
         /// </summary>
         public static TavernRest RestAtTavern(Hero hero, IReadOnlyList<Companion> party)
         {
-            var nextHero = hero.Clone();
+            // A noite também sara os ferimentos: o membro quebrado, o veneno e o sangramento.
+            var nextHero = FerimentosDoHeroi.CurarTudo(hero).Clone();
             nextHero.Hp = hero.MaxHp;
             nextHero.Mp = hero.MaxMp;
             nextHero.Gold = hero.Gold - PrecoDaTaverna(hero);

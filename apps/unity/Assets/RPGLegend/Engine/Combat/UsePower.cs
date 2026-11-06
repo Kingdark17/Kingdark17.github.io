@@ -140,7 +140,9 @@ namespace RPGLegend.Engine
                 double baseDoPoder = power.Type == "dano_fisico" ? d.DmgFisico : d.DmgMagico;
                 // Maestria: +2% por nível com a arma da classe na mão, como no golpe. Fica no golpe do poder;
                 // o dano contínuo que ele deixa não muda.
-                double bruto = Js.Round((Js.Round(baseDoPoder * (power.PowerValue ?? 1)) + Rng.RandomInt(6, rng)) * Mastery.DamageMult(heroAfterCost));
+                double bruto = Js.Round(
+                    Js.Round((Js.Round(baseDoPoder * (power.PowerValue ?? 1)) + Rng.RandomInt(6, rng)) * Mastery.DamageMult(heroAfterCost)) *
+                    FerimentosDoHeroi.ForcaDoBraco(heroAfterCost));
                 var mod = Damage.ModifyDamageByAffinity(
                     monster,
                     monster.Species.Weakness,

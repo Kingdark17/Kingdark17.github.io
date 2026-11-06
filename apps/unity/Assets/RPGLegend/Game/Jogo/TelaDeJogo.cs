@@ -44,6 +44,7 @@ namespace RPGLegend.Game.Jogo
 
         private VisualElement _tela, _palco, _areaDaLuta, _caixaDoLugar, _baseDoJoystick, _alavanca, _minimapa, _caixa, _escolhas, _recado, _sobre, _botoesDaJanela, _vida, _mana;
         private VisualElement _janelaEl, _colunasDaJanela;
+        private Label _ferimentos;
         private Label _dica, _nome, _nivel, _numeroDaVida, _numeroDaMana, _lugar, _iconeDaCaixa, _tituloDaCaixa, _textoDaCaixa, _tituloDoRecado, _textoDoRecado, _salvamento, _tituloDaJanela, _carregando;
         private Label _ouroDaJanela, _linhaDaJanela;
         private VisualElement _narracao;
@@ -158,6 +159,7 @@ namespace RPGLegend.Game.Jogo
                 _sala.Entrada = Entrada;
                 _sala.AoSair = direcao => _partida != null && _partida.Mover(direcao);
                 _sala.AoEncostar = id => _partida?.AoEncostar(id);
+                _sala.AoPassar = walker => _partida?.AoPassar(walker);
                 _palco.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(_sala.Textura));
                 AjustarPalco();
             }
@@ -226,6 +228,7 @@ namespace RPGLegend.Game.Jogo
             _mana = raiz.Q("mana");
             _numeroDaVida = raiz.Q<Label>("numero-da-vida");
             _numeroDaMana = raiz.Q<Label>("numero-da-mana");
+            _ferimentos = raiz.Q<Label>("ferimentos-do-heroi");
             _minimapa = raiz.Q("minimapa");
             _lugar = raiz.Q<Label>("lugar");
             _narracao = raiz.Q("narracao");
@@ -410,6 +413,11 @@ namespace RPGLegend.Game.Jogo
             _nivel.text = "nv " + Js.NumberToString(hero.Level);
             Encher(_vida, _numeroDaVida, hero.Hp, hero.MaxHp);
             Encher(_mana, _numeroDaMana, hero.Mp, hero.MaxMp);
+            // Os ferimentos (braço, perna, veneno, sangramento), e o ritmo do andar com a perna quebrada.
+            var ferimentos = FerimentosDoHeroi.TextosDosFerimentos(hero);
+            _ferimentos.text = string.Join(" · ", ferimentos);
+            _ferimentos.EnableInClassList("escondida", ferimentos.Count == 0);
+            if (_sala != null) _sala.Ritmo = FerimentosDoHeroi.RitmoDoAndar(hero);
         }
 
         private static void Encher(VisualElement barra, Label numero, double atual, double maximo)
@@ -716,7 +724,7 @@ namespace RPGLegend.Game.Jogo
             {
                 if (em.Dx == 0 && em.Dy == 0)
                 {
-                    salas.Add(new SalaNaCena { X = em.X, Y = em.Y, Planta = planta, Figuras = figuras, Acesa = true });
+                    salas.Add(new SalaNaCena { X = em.X, Y = em.Y, Planta = planta, Figuras = figuras, Acesa = true, Marcas = Armadilhas.MarcasDasArmadilhas(em.Celula as DungeonCell) });
                     continue;
                 }
                 var portas = new DoorMap();
@@ -735,6 +743,7 @@ namespace RPGLegend.Game.Jogo
                     Planta = AndarNaSala.PlantaDaSala(portas, ExtrasDaSala.ObjetosDaSala(em.Celula, icone != "", masmorra), masmorra),
                     Figuras = FigurasDaSala.Da(em.Celula, conteudo, null),
                     Acesa = true,
+                    Marcas = Armadilhas.MarcasDasArmadilhas(em.Celula as DungeonCell),
                 });
             }
             return salas;

@@ -32,7 +32,7 @@ namespace RPGLegend.Engine
 
         /// <summary>TS: podeUsar — consumível que cura Vida ou Mana.</summary>
         public static bool PodeUsar(Item item) =>
-            Items.CategoryOf(item) == "consumivel" && (Js.Truthy(item.Stats?.Get("cura")) || Js.Truthy(item.Stats?.Get("curaMana")));
+            Items.CategoryOf(item) == "consumivel" && (Js.Truthy(item.Stats?.Get("cura")) || Js.Truthy(item.Stats?.Get("curaMana")) || Js.Truthy(item.Stats?.Get("tala")));
 
         /// <summary>TS: slotDoItem.</summary>
         public static string SlotDoItem(EstadoDoJogo estado, Item item) => Heroes.EquippedSlot(estado.Hero, item);

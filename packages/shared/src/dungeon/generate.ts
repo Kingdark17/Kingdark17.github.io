@@ -18,6 +18,7 @@ import { CHANCE_DA_RUNA_NO_BAU, sortearRuna } from '../items/runas.js';
 import type { NpcService } from '../npc/npc-services.js';
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
 import { DEFAULT_RUN, DUNGEON_FLOORS, dungeonById, effectiveFloor, isTotemFloor, type DifficultyId, type DungeonRun } from './dungeons.js';
+import { colocarArmadilhas, type Armadilha } from './armadilhas.js';
 import { placeExtras, type DungeonExtra } from './extras.js';
 import { distancesFrom, generateRoomGraph, DIR_VECTORS, type Direction, type RoomCell, type RoomGraph } from './graph.js';
 
@@ -102,6 +103,8 @@ export interface DungeonCell extends RoomCell {
   teacher?: DungeonTeacher;
   /** Baú pequeno, vaso, placa, parede rachada (`extras.ts`). Andar gerado antes deles não tem. */
   extras?: DungeonExtra[];
+  /** A armadilha escondida no chão (`armadilhas.ts`, desde 2026-11-06). Andar gerado antes delas não tem. */
+  armadilhas?: Armadilha[];
 }
 
 export interface DungeonFloor {
@@ -173,6 +176,8 @@ export interface DungeonGenerateOptions {
    * volta é pelo pilar da sala do chefe, depois de vencê-lo.
    */
   entrada?: boolean;
+  /** A Sabedoria de quem desce: às vezes ele vê o brilho de uma armadilha antes de pisar. Ausente, 10. */
+  sabedoria?: number;
 }
 
 interface DistantRoomsResult {
@@ -394,6 +399,8 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
   populateRoomContent(res.rooms as DungeonCell[], forca, rng, now, app);
   // Por último: o resto do andar sai igual ao de antes pra mesma semente.
   placeExtras(res.rooms as DungeonCell[], forca, rng, now, app);
+  // E as armadilhas, depois de tudo (2026-11-06).
+  colocarArmadilhas(res.rooms as DungeonCell[], run.dungeon, options.sabedoria ?? 10, rng);
 
   return { grid: res.grid as DungeonCell[][], rooms: res.rooms as DungeonCell[], start: res.start as DungeonCell };
 }

@@ -24,7 +24,8 @@
   ],
   "CONSUMABLE_STAT_KEYS": [
     "cura",
-    "curaMana"
+    "curaMana",
+    "tala"
   ],
   "STAT_LABELS": {
     "ataque": "Ataque",
@@ -35,7 +36,8 @@
     "velocidade": "Velocidade",
     "esquiva": "Esquiva",
     "cura": "Cura",
-    "curaMana": "Restaura Mana"
+    "curaMana": "Restaura Mana",
+    "tala": "Conserta Braço e Perna"
   },
   "PROC_EFFECTS": [
     "queimadura",
@@ -442,6 +444,18 @@
         "curaMana": 16
       },
       "value": 14
+    },
+    {
+      "id": "tala",
+      "name": "Tala",
+      "genero": "f",
+      "category": "consumivel",
+      "desc": "Firma o braço ou a perna quebrados até sararem.",
+      "sprite": "potions/tala.png",
+      "base": {
+        "tala": 1
+      },
+      "value": 20
     },
     {
       "id": "pergaminho",

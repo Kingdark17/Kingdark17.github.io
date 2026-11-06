@@ -654,6 +654,18 @@
     margin-top: 4px;
 }
 
+/* Os ferimentos do herói (braço, perna, veneno, sangramento), embaixo das barras. */
+.ferimentos-do-heroi {
+    margin-top: 4px;
+    font-size: 15px;
+    color: #e8a090;
+    white-space: normal;
+}
+
+.ferimentos-do-heroi.escondida {
+    display: none;
+}
+
 .rotulo-da-barra {
     flex-direction: row;
     justify-content: space-between;

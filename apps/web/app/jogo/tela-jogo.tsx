@@ -37,6 +37,7 @@ import {
   anotar,
   aplicarRemoto,
   apresentacaoDe,
+  armadilhaSob,
   celulaAtual,
   chegadaNaCidade,
   confirmaAoTocar,
@@ -57,15 +58,18 @@ import {
   instantaneoDaSala,
   interagir,
   lutaAoEntrar,
+  marcasDasArmadilhas,
   marcar,
   monstroAtual,
   narrar,
   passagemSecreta,
+  pisarNaArmadilha,
   pistasDaCidade,
   plantaDaCidade,
   plantaDaSala,
   plantaDaSalaSecreta,
   retomarSave,
+  ritmoDoAndar,
   roomArrival,
   salasEmVolta,
   TEXTO_DA_CIDADE,
@@ -79,6 +83,7 @@ import {
   type Combate,
   type CosmeticosDoJogador,
   type Direction,
+  type DungeonCell,
   type DungeonId,
   type EstadoDoJogo,
   type EstadoNaCidade,
@@ -99,7 +104,7 @@ import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { arteDoConteudo, arteDoTipo } from '@/lib/jogo/icones-do-mapa';
-import { TEMAS, type Figura, type OrigemDaSala, type SalaDesenhada, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
+import { TEMAS, type Figura, type MarcaNoChao, type OrigemDaSala, type SalaDesenhada, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
 import { assinaturaDosExtras, chaveDosObjetos, figurasDaSala, lerObjetos } from '@/lib/jogo/figuras-da-sala';
 import { direcaoAoSoltar, direcaoDaTecla, estaDigitando } from '@/lib/jogo/teclado';
 import { tocar } from '@/lib/som/efeitos';
@@ -317,21 +322,23 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               extras: s.acesa ? assinaturaDosExtras(s.celula) : '',
               icone,
               arte: icone ? arteDoConteudo(s.celula) : null,
+              marcas: s.acesa ? marcasDasArmadilhas(s.celula as DungeonCell) : [],
             };
           }),
         )
       : '';
   const salasDaCena = useMemo<SalaDesenhada[] | null>(() => {
     if (!vizinhanca) return null;
-    const lidas = JSON.parse(vizinhanca) as { x: number; y: number; atual: boolean; acesa: boolean; portas: string; objetos: string; extras: string; icone: string; arte: string | null }[];
+    const lidas = JSON.parse(vizinhanca) as { x: number; y: number; atual: boolean; acesa: boolean; portas: string; objetos: string; extras: string; icone: string; arte: string | null; marcas: MarcaNoChao[] }[];
     return lidas.map((sala) => {
       // A atual é a mesma planta em que o herói anda, com as mesmas figuras.
-      if (sala.atual) return { x: sala.x, y: sala.y, planta, figuras, acesa: true };
+      if (sala.atual) return { x: sala.x, y: sala.y, planta, figuras, acesa: true, marcas: sala.marcas };
       const portas = Object.fromEntries([...sala.portas].map((d) => [d, true]));
       return {
         x: sala.x,
         y: sala.y,
         planta: plantaDaSala(portas, lerObjetos(sala.objetos), masmorraAgora),
+        marcas: sala.marcas,
         figuras: sala.acesa ? figurasDaSala(sala.icone ? { arte: sala.arte, emoji: sala.icone } : null, sala.extras, null) : {},
         acesa: sala.acesa,
       };
@@ -723,6 +730,25 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
     registrarMudanca(resultado.estado, resultado.aviso);
     recadar(resultado.recado);
     setTela(resultado.tela);
+  }
+
+  /**
+   * O herói deu um passo na sala: se pisou numa armadilha ainda armada, ela
+   * dispara (`pisarNaArmadilha`). A mesma armadilha não dispara duas vezes
+   * enquanto o estado novo não chega ao próximo quadro.
+   */
+  const ultimaArmadilha = useRef<string | null>(null);
+  function aoPassar(walker: Walker) {
+    if (!estado || estado.mapMode !== 'dungeon' || !conduzo || tela || secretaAgora) return;
+    const indice = armadilhaSob(celulaAtual(estado) as DungeonCell | null, walker);
+    if (indice === null) return;
+    const chave = `${salaAgora}:${indice}`;
+    if (ultimaArmadilha.current === chave) return;
+    ultimaArmadilha.current = chave;
+    const pisou = pisarNaArmadilha(estado, indice);
+    if (!pisou) return;
+    tocar('hit');
+    registrarMudanca(pisou.estado, pisou.aviso);
   }
 
   /**
@@ -1186,6 +1212,8 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               entrada={entrada}
               onSaida={mover}
               onEncostar={aoEncostar}
+              ritmo={ritmoDoAndar(estado.hero)}
+              onPasso={aoPassar}
             >
               <Joystick onVetor={moverJoystick} ativo={andando} />
             </CenaDaSala>

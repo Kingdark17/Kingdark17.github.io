@@ -590,13 +590,13 @@
     "expected": {
       "result": [
         {
-          "uid": "pot_mana_1700000000000_52744",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_52744",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "curaMana": 16
+            "tala": 1
           },
-          "value": 14,
+          "value": 20,
           "equipped": false
         },
         {
@@ -611,13 +611,13 @@
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_42579",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_42579",
+          "templateId": "tala",
           "rarity": "incomum",
           "stats": {
-            "curaMana": 21
+            "tala": 1
           },
-          "value": 18,
+          "value": 26,
           "equipped": false
         },
         {
@@ -664,24 +664,23 @@
     "expected": {
       "result": [
         {
-          "uid": "pergaminho_1700000000000_28529",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_28529",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_63082",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_63082",
+          "templateId": "tala",
           "rarity": "incomum",
           "stats": {
-            "curaMana": 21
+            "tala": 1
           },
-          "value": 18,
+          "value": 26,
           "equipped": false
         },
         {
@@ -737,13 +736,13 @@
     "expected": {
       "result": [
         {
-          "uid": "pot_mana_1700000000000_52744",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_52744",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "curaMana": 16
+            "tala": 1
           },
-          "value": 14,
+          "value": 20,
           "equipped": false
         },
         {
@@ -758,13 +757,13 @@
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_42579",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_42579",
+          "templateId": "tala",
           "rarity": "incomum",
           "stats": {
-            "curaMana": 21
+            "tala": 1
           },
-          "value": 18,
+          "value": 26,
           "equipped": false
         },
         {
@@ -811,24 +810,23 @@
     "expected": {
       "result": [
         {
-          "uid": "pergaminho_1700000000000_28529",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_28529",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_63082",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_63082",
+          "templateId": "tala",
           "rarity": "raro",
           "stats": {
-            "curaMana": 27
+            "tala": 2
           },
-          "value": 24,
+          "value": 34,
           "equipped": false
         },
         {
@@ -884,13 +882,13 @@
     "expected": {
       "result": [
         {
-          "uid": "pot_mana_1700000000000_52744",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_52744",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "curaMana": 16
+            "tala": 1
           },
-          "value": 14,
+          "value": 20,
           "equipped": false
         },
         {
@@ -905,13 +903,13 @@
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_42579",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_42579",
+          "templateId": "tala",
           "rarity": "raro",
           "stats": {
-            "curaMana": 27
+            "tala": 2
           },
-          "value": 24,
+          "value": 34,
           "equipped": false
         },
         {
@@ -958,24 +956,23 @@
     "expected": {
       "result": [
         {
-          "uid": "pergaminho_1700000000000_28529",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_28529",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_63082",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_63082",
+          "templateId": "tala",
           "rarity": "raro",
           "stats": {
-            "curaMana": 27
+            "tala": 2
           },
-          "value": 24,
+          "value": 34,
           "equipped": false
         },
         {
@@ -19910,13 +19907,13 @@
     "expected": {
       "result": [
         {
-          "uid": "pot_mana_1700000000000_52744",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_52744",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "curaMana": 16
+            "tala": 1
           },
-          "value": 14,
+          "value": 20,
           "equipped": false
         },
         {
@@ -19931,13 +19928,13 @@
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_42579",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_42579",
+          "templateId": "tala",
           "rarity": "incomum",
           "stats": {
-            "curaMana": 21
+            "tala": 1
           },
-          "value": 18,
+          "value": 26,
           "equipped": false
         },
         {
@@ -19985,24 +19982,23 @@
     "expected": {
       "result": [
         {
-          "uid": "pergaminho_1700000000000_28529",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_28529",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_63082",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_63082",
+          "templateId": "tala",
           "rarity": "incomum",
           "stats": {
-            "curaMana": 21
+            "tala": 1
           },
-          "value": 18,
+          "value": 26,
           "equipped": false
         },
         {
@@ -20059,14 +20055,13 @@
     "expected": {
       "result": [
         {
-          "uid": "pergaminho_1700000000000_45618",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_45618",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         },
         {
@@ -20090,24 +20085,23 @@
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_8359",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_8359",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "curaMana": 16
+            "tala": 1
           },
-          "value": 14,
+          "value": 20,
           "equipped": false
         },
         {
-          "uid": "pergaminho_1700000000000_79372",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_79372",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         }
       ],
@@ -20134,13 +20128,13 @@
     "expected": {
       "result": [
         {
-          "uid": "pot_mana_1700000000000_52744",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_52744",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "curaMana": 16
+            "tala": 1
           },
-          "value": 14,
+          "value": 20,
           "equipped": false
         },
         {
@@ -20155,13 +20149,13 @@
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_42579",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_42579",
+          "templateId": "tala",
           "rarity": "raro",
           "stats": {
-            "curaMana": 27
+            "tala": 2
           },
-          "value": 24,
+          "value": 34,
           "equipped": false
         },
         {
@@ -20209,24 +20203,23 @@
     "expected": {
       "result": [
         {
-          "uid": "pergaminho_1700000000000_28529",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_28529",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_63082",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_63082",
+          "templateId": "tala",
           "rarity": "raro",
           "stats": {
-            "curaMana": 27
+            "tala": 2
           },
-          "value": 24,
+          "value": 34,
           "equipped": false
         },
         {
@@ -20283,14 +20276,13 @@
     "expected": {
       "result": [
         {
-          "uid": "pergaminho_1700000000000_45618",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_45618",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         },
         {
@@ -20314,24 +20306,23 @@
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_8359",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_8359",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "curaMana": 16
+            "tala": 1
           },
-          "value": 14,
+          "value": 20,
           "equipped": false
         },
         {
-          "uid": "pergaminho_1700000000000_79372",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_79372",
+          "templateId": "tala",
           "rarity": "incomum",
           "stats": {
-            "cura": 13,
-            "curaMana": 13
+            "tala": 1
           },
-          "value": 21,
+          "value": 26,
           "equipped": false
         }
       ],
@@ -20358,13 +20349,13 @@
     "expected": {
       "result": [
         {
-          "uid": "pot_mana_1700000000000_52744",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_52744",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "curaMana": 16
+            "tala": 1
           },
-          "value": 14,
+          "value": 20,
           "equipped": false
         },
         {
@@ -20379,13 +20370,13 @@
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_42579",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_42579",
+          "templateId": "tala",
           "rarity": "raro",
           "stats": {
-            "curaMana": 27
+            "tala": 2
           },
-          "value": 24,
+          "value": 34,
           "equipped": false
         },
         {
@@ -20433,24 +20424,23 @@
     "expected": {
       "result": [
         {
-          "uid": "pergaminho_1700000000000_28529",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_28529",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_63082",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_63082",
+          "templateId": "tala",
           "rarity": "raro",
           "stats": {
-            "curaMana": 27
+            "tala": 2
           },
-          "value": 24,
+          "value": 34,
           "equipped": false
         },
         {
@@ -20507,14 +20497,13 @@
     "expected": {
       "result": [
         {
-          "uid": "pergaminho_1700000000000_45618",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_45618",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "cura": 10,
-            "curaMana": 10
+            "tala": 1
           },
-          "value": 16,
+          "value": 20,
           "equipped": false
         },
         {
@@ -20538,24 +20527,23 @@
           "equipped": false
         },
         {
-          "uid": "pot_mana_1700000000000_8359",
-          "templateId": "pot_mana",
+          "uid": "tala_1700000000000_8359",
+          "templateId": "tala",
           "rarity": "comum",
           "stats": {
-            "curaMana": 16
+            "tala": 1
           },
-          "value": 14,
+          "value": 20,
           "equipped": false
         },
         {
-          "uid": "pergaminho_1700000000000_79372",
-          "templateId": "pergaminho",
+          "uid": "tala_1700000000000_79372",
+          "templateId": "tala",
           "rarity": "incomum",
           "stats": {
-            "cura": 13,
-            "curaMana": 13
+            "tala": 1
           },
-          "value": 21,
+          "value": 26,
           "equipped": false
         }
       ],

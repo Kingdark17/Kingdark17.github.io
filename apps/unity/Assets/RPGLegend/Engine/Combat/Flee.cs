@@ -26,7 +26,8 @@ namespace RPGLegend.Engine
         public static FleeAttemptResult AttemptFlee(Hero hero, MonsterInstance monster, double roll)
         {
             double bonus = Damage.FleeBonus(hero, monster);
-            double total = roll + bonus;
+            // A perna quebrada tira da rolagem; o bônus mostrado continua o da velocidade.
+            double total = roll + bonus - (hero.Ferimentos?.Perna == true ? FerimentosDoHeroi.FugaComPernaQuebrada : 0);
             return new FleeAttemptResult { Roll = roll, Bonus = bonus, Total = total, Success = total >= FleeTarget };
         }
     }

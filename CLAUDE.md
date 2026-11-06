@@ -350,6 +350,18 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   e 3 mais comuns e de 4 a partir do andar de força 30, a poção 50% mais
   cara na loja e em metade dos baús pequenos, e a taverna cobrando 5 de
   ouro por nível.
+- Armadilhas e ferimentos (2026-11-06, **site e app**, doc do Breno decidido
+  com o usuário): armadilhas escondidas no chão de salas sorteadas (20%, nunca
+  no início, na saída, na escada nem no covil; `dungeon/armadilhas.ts`)
+  disparam ao pisar (`armadilhaSob` a cada passo, `pisarNaArmadilha`):
+  espinhos (dano e sangramento), dardo (veneno) e pedras (podem quebrar um
+  membro); disparada fica à vista, e quem tem Sabedoria às vezes vê o brilho
+  antes. O dano nunca mata (para em 1). Os ferimentos moram no herói
+  (`hero.ferimentos`, `hero/ferimentos.ts`): braço quebrado bate 30% mais
+  fraco, perna quebrada anda a 60% e tira 4 da fuga, veneno e sangramento
+  tiram vida a cada sala e passam sozinhos; o golpe de chefe que acerta tem
+  15% de quebrar um membro. A taverna sara tudo, e a tala (consumível novo,
+  arte provisória em `img/potions/tala.png`) conserta os membros.
 - **API local: nunca com o `apps/api/.env`** — ele aponta para o banco de
   produção e tem a chave do Resend. Subir com `DOTENV_CONFIG_PATH=/nao/existe`,
   a `DATABASE_URL` do `pnpm dev:db` e `RESEND_API_KEY` vazio (receita no

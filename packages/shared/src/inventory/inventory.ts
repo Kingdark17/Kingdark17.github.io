@@ -13,6 +13,7 @@
  * componente. Mesmo motivo do `castPower()`.
  */
 
+import { curarMembros } from '../hero/ferimentos.js';
 import type { Hero } from '../hero/hero.js';
 import type { Item } from '../items/item.js';
 
@@ -58,12 +59,14 @@ export function consumeItem(hero: Hero, inventory: readonly Item[], item: Item):
   const hpGained = item.stats.cura ? Math.min(hero.maxHp, hero.hp + item.stats.cura) - hero.hp : 0;
   const mpGained = item.stats.curaMana ? Math.min(hero.maxMp, hero.mp + item.stats.curaMana) - hero.mp : 0;
 
-  if (!item.stats.cura && !item.stats.curaMana) {
+  if (!item.stats.cura && !item.stats.curaMana && !item.stats.tala) {
     return { hero, inventory: [...inventory], outcome: { kind: 'no_effect' } };
   }
 
+  // A tala conserta o braço e a perna quebrados (`hero/ferimentos.ts`).
+  const tratado = item.stats.tala ? curarMembros(hero) : hero;
   return {
-    hero: { ...hero, hp: hero.hp + hpGained, mp: hero.mp + mpGained },
+    hero: { ...tratado, hp: hero.hp + hpGained, mp: hero.mp + mpGained },
     inventory: removeByUid(inventory, item.uid).inventory,
     outcome: { kind: 'used', hpGained, mpGained },
   };

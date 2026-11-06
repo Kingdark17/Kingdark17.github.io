@@ -1,5 +1,6 @@
 import { classById, idDaClasse } from '../hero/catalog.js';
 import { equipmentBonus } from '../hero/derived.js';
+import { forcaDoBraco } from '../hero/ferimentos.js';
 import { hasDebuffEffect, weaponAffinityPct, type Hero } from '../hero/hero.js';
 import { masteryDamageMult } from '../hero/mastery.js';
 import type { ProcTemplate } from '../items/templates.js';
@@ -329,6 +330,7 @@ export function resolverGolpe(
   const critChance = (d.critico + (bonus.critico ?? 0) + petCritico + (idDaClasse(heroAfterCost) === 'arqueiro' ? 8 : 0)) / 100;
   const isCrit = guaranteedCrit || rng() < critChance || leitura.critico;
   if (isCrit) dmg = Math.round(dmg * 1.6);
+  dmg = Math.round(dmg * forcaDoBraco(heroAfterCost));
 
   nextMonster = { ...nextMonster, hp: nextMonster.hp - dmg };
 

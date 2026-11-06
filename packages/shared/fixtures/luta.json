@@ -101999,11 +101999,11 @@
             "party": [],
             "inventory": [
               {
-                "uid": "pot_vida_1700000000000_48672",
-                "templateId": "pot_vida",
+                "uid": "pot_mana_1700000000000_48672",
+                "templateId": "pot_mana",
                 "rarity": "comum",
                 "stats": {
-                  "cura": 22
+                  "curaMana": 16
                 },
                 "value": 14,
                 "equipped": false
@@ -102118,11 +102118,11 @@
           "teclado": false,
           "fim": "vitoria",
           "loot": {
-            "uid": "pot_vida_1700000000000_48672",
-            "templateId": "pot_vida",
+            "uid": "pot_mana_1700000000000_48672",
+            "templateId": "pot_mana",
             "rarity": "comum",
             "stats": {
-              "cura": 22
+              "curaMana": 16
             },
             "value": 14,
             "equipped": false
@@ -102146,7 +102146,7 @@
           },
           {
             "tipo": "diario",
-            "texto": "Encontrou Poção de Vida após a batalha."
+            "texto": "Encontrou Poção de Mana após a batalha."
           },
           {
             "tipo": "som",
@@ -150433,16 +150433,17 @@
             ],
             "inventory": [
               {
-                "uid": "marreta_1700000000000_2224",
-                "templateId": "marreta",
+                "uid": "violao_1700000000000_2224",
+                "templateId": "violao",
                 "rarity": "comum",
                 "stats": {
-                  "ataque": 7,
-                  "velocidade": -2
+                  "ataque": 3,
+                  "critico": 6,
+                  "esquiva": 2
                 },
-                "value": 27,
+                "value": 23,
                 "equipped": false,
-                "procChance": 0.12
+                "procChance": 0.15
               }
             ],
             "quests": [],
@@ -150617,16 +150618,17 @@
           "teclado": false,
           "fim": "vitoria",
           "loot": {
-            "uid": "marreta_1700000000000_2224",
-            "templateId": "marreta",
+            "uid": "violao_1700000000000_2224",
+            "templateId": "violao",
             "rarity": "comum",
             "stats": {
-              "ataque": 7,
-              "velocidade": -2
+              "ataque": 3,
+              "critico": 6,
+              "esquiva": 2
             },
-            "value": 27,
+            "value": 23,
             "equipped": false,
-            "procChance": 0.12
+            "procChance": 0.15
           }
         },
         "acontecimentos": [
@@ -150877,7 +150879,7 @@
           },
           {
             "tipo": "diario",
-            "texto": "Encontrou Marreta de Guerra após a batalha."
+            "texto": "Encontrou Violão Encantado após a batalha."
           },
           {
             "tipo": "som",
@@ -175794,14 +175796,13 @@
                 "equipped": false
               },
               {
-                "uid": "robe_calca_1700000000000_14985",
-                "templateId": "robe_calca",
+                "uid": "robe_chapeu_1700000000000_14985",
+                "templateId": "robe_chapeu",
                 "rarity": "incomum",
                 "stats": {
-                  "defesa": 1,
-                  "mana": 4
+                  "mana": 3
                 },
-                "value": 10,
+                "value": 7,
                 "equipped": false
               }
             ],
@@ -175951,14 +175952,13 @@
           "teclado": false,
           "fim": "vitoria",
           "loot": {
-            "uid": "robe_calca_1700000000000_14985",
-            "templateId": "robe_calca",
+            "uid": "robe_chapeu_1700000000000_14985",
+            "templateId": "robe_chapeu",
             "rarity": "incomum",
             "stats": {
-              "defesa": 1,
-              "mana": 4
+              "mana": 3
             },
-            "value": 10,
+            "value": 7,
             "equipped": false
           }
         },
@@ -176224,7 +176224,7 @@
           },
           {
             "tipo": "diario",
-            "texto": "Encontrou Calça de Mago Incomum após a batalha."
+            "texto": "Encontrou Chapéu de Mago Incomum após a batalha."
           },
           {
             "tipo": "som",
@@ -185975,11 +185975,11 @@
                 "equipped": false
               },
               {
-                "uid": "pot_vida_1700000000000_61284",
-                "templateId": "pot_vida",
+                "uid": "pot_mana_1700000000000_61284",
+                "templateId": "pot_mana",
                 "rarity": "comum",
                 "stats": {
-                  "cura": 22
+                  "curaMana": 16
                 },
                 "value": 14,
                 "equipped": false
@@ -186101,11 +186101,11 @@
           "teclado": true,
           "fim": "vitoria",
           "loot": {
-            "uid": "pot_vida_1700000000000_61284",
-            "templateId": "pot_vida",
+            "uid": "pot_mana_1700000000000_61284",
+            "templateId": "pot_mana",
             "rarity": "comum",
             "stats": {
-              "cura": 22
+              "curaMana": 16
             },
             "value": 14,
             "equipped": false
@@ -186205,7 +186205,7 @@
           },
           {
             "tipo": "diario",
-            "texto": "Encontrou Poção de Vida após a batalha."
+            "texto": "Encontrou Poção de Mana após a batalha."
           },
           {
             "tipo": "som",
@@ -192136,7 +192136,7 @@
                 "descontoLoja": 5
               },
               "maxHp": 5000,
-              "hp": 4453,
+              "hp": 4566,
               "maxMp": 240,
               "mp": 0,
               "buffs": {}
@@ -192624,12 +192624,12 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-113",
-            "tom": "dano"
+            "texto": "Desviou",
+            "tom": "erro"
           },
           {
             "tipo": "som",
-            "som": "hit"
+            "som": "miss"
           }
         ]
       },
@@ -195304,10 +195304,13 @@
                 "descontoLoja": 5
               },
               "maxHp": 5000,
-              "hp": 4379,
+              "hp": 4383,
               "maxMp": 240,
               "mp": 16,
-              "buffs": {}
+              "buffs": {},
+              "ferimentos": {
+                "perna": true
+              }
             },
             "party": [],
             "inventory": [],
@@ -195465,7 +195468,7 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-189",
+            "texto": "-188",
             "tom": "dano"
           },
           {
@@ -195494,7 +195497,7 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-190",
+            "texto": "-187",
             "tom": "dano"
           },
           {
@@ -195507,7 +195510,7 @@
           }
         ]
       },
-      "rngCalls": 17
+      "rngCalls": 21
     }
   },
   {
@@ -201689,7 +201692,7 @@
                 "indice": 0,
                 "fase": "avisando",
                 "tempo": 22,
-                "forca": 2.6,
+                "forca": 3.77,
                 "alvo": -1,
                 "x": 768,
                 "y": -728,
@@ -202091,7 +202094,7 @@
           }
         ]
       },
-      "rngCalls": 31
+      "rngCalls": 32
     }
   },
   {
@@ -207689,7 +207692,7 @@
                 "descontoLoja": 5
               },
               "maxHp": 5000,
-              "hp": 1698,
+              "hp": 1700,
               "maxMp": 300,
               "mp": 188,
               "buffs": {
@@ -207745,7 +207748,7 @@
                       "speciesId": "goblin",
                       "enemyClassId": "feiticeiro",
                       "floor": 100,
-                      "hp": 1909,
+                      "hp": 1895,
                       "maxHp": 3000,
                       "dmg": 187,
                       "speed": 64,
@@ -207754,12 +207757,7 @@
                       "isBoss": true,
                       "isMainBoss": false,
                       "bossTitle": "o Devorador",
-                      "status": {
-                        "queimadura": {
-                          "turns": 2,
-                          "dmg": 6
-                        }
-                      },
+                      "status": {},
                       "attackCount": 4,
                       "guardHits": 0
                     }
@@ -207867,7 +207865,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "-114",
+            "texto": "-91",
             "tom": "critico"
           },
           {
@@ -207878,14 +207876,14 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "🦇+14",
+            "texto": "🦇+11",
             "tom": "cura"
           },
           {
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "-123",
+            "texto": "-125",
             "tom": "critico"
           },
           {
@@ -207916,6 +207914,13 @@
             "indice": 0,
             "texto": "🦇+11",
             "tom": "cura"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-6",
+            "tom": "dano"
           },
           {
             "tipo": "numero",
@@ -207928,7 +207933,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "-91",
+            "texto": "-125",
             "tom": "critico"
           },
           {
@@ -207939,14 +207944,14 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "🦇+11",
+            "texto": "🦇+15",
             "tom": "cura"
           },
           {
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "-123",
+            "texto": "-128",
             "tom": "critico"
           },
           {
@@ -207964,7 +207969,7 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-247",
+            "texto": "-244",
             "tom": "dano"
           },
           {
@@ -207982,7 +207987,25 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "-101",
+            "texto": "-90",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "🦇+11",
+            "tom": "cura"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-104",
             "tom": "critico"
           },
           {
@@ -207994,24 +208017,6 @@
             "onde": "heroi",
             "indice": 0,
             "texto": "🦇+12",
-            "tom": "cura"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "-109",
-            "tom": "critico"
-          },
-          {
-            "tipo": "som",
-            "som": "crit"
-          },
-          {
-            "tipo": "numero",
-            "onde": "heroi",
-            "indice": 0,
-            "texto": "🦇+13",
             "tom": "cura"
           },
           {
@@ -208032,7 +208037,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "-114",
+            "texto": "-120",
             "tom": "critico"
           },
           {
@@ -208048,7 +208053,7 @@
           }
         ]
       },
-      "rngCalls": 40
+      "rngCalls": 42
     }
   },
   {

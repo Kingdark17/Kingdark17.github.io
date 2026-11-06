@@ -349,6 +349,8 @@ namespace RPGLegend.Engine
             double critChance = (d.Critico + bonus["critico"] + petCritico + (IdDaClasse(heroAfterCost) == "arqueiro" ? 8 : 0)) / 100;
             bool isCrit = guaranteedCrit || rng() < critChance || leitura.Critico;
             if (isCrit) dmg = Js.Round(dmg * 1.6);
+            // O braço quebrado bate mais fraco (FerimentosDoHeroi).
+            dmg = Js.Round(dmg * FerimentosDoHeroi.ForcaDoBraco(heroAfterCost));
 
             var golpeado = nextMonster.Clone();
             golpeado.Hp = nextMonster.Hp - dmg;

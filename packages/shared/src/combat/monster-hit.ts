@@ -1,5 +1,6 @@
 import { idDaClasse } from '../hero/catalog.js';
 import { equipmentBonus } from '../hero/derived.js';
+import { CHANCE_DE_QUEBRAR_NO_CHEFE, quebrarMembro, type Membro } from '../hero/ferimentos.js';
 import { hasDebuffEffect, type Companion, type Hero } from '../hero/hero.js';
 import type { DefesasDoHeroi } from '../items/encantamentos.js';
 import { defaultRng, randomInt, type Rng } from '../rng.js';
@@ -296,6 +297,8 @@ export function hitPartyMember(member: Companion, monster: CombatMonsterView, at
 /** O golpe que foi no herói, com o monstro depois dele (o veneno de golpe se gasta ao acertar). */
 export interface HeroHit extends HeroDamageResult {
   monster: CombatMonsterView;
+  /** O golpe de chefe quebrou este membro do herói. */
+  quebrou?: Membro;
 }
 
 /**
@@ -313,7 +316,13 @@ export function landHitOnHero(
 ): HeroHit {
   const heroHit = resolveHeroDamage(hero, monster, attackMult, rng, petEsquiva, defesas);
   if (heroHit.dodged) return { ...heroHit, monster };
-  return { ...heroHit, monster: monster.poisonStrike ? { ...monster, poisonStrike: false } : monster };
+  const depois = monster.poisonStrike ? { ...monster, poisonStrike: false } : monster;
+  // O golpe de chefe que acerta pode quebrar um braço ou uma perna (doc do Breno de 2026-11-06).
+  if (monster.isBoss && rng() < CHANCE_DE_QUEBRAR_NO_CHEFE) {
+    const quebra = quebrarMembro(heroHit.hero, rng);
+    return { ...heroHit, hero: quebra.hero, monster: depois, quebrou: quebra.membro };
+  }
+  return { ...heroHit, monster: depois };
 }
 
 /**

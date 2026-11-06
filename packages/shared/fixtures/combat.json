@@ -80315,7 +80315,10 @@
           "hp": 118,
           "maxMp": 62,
           "mp": 62,
-          "buffs": {}
+          "buffs": {},
+          "ferimentos": {
+            "braco": true
+          }
         },
         "party": [],
         "outcome": "hit_hero",
@@ -80328,7 +80331,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": false
       },
-      "rngCalls": 3
+      "rngCalls": 5
     }
   },
   {
@@ -80555,7 +80558,10 @@
           "hp": 118,
           "maxMp": 62,
           "mp": 62,
-          "buffs": {}
+          "buffs": {},
+          "ferimentos": {
+            "braco": true
+          }
         },
         "party": [],
         "outcome": "hit_hero",
@@ -80568,7 +80574,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": false
       },
-      "rngCalls": 3
+      "rngCalls": 5
     }
   },
   {
@@ -88287,7 +88293,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": false
       },
-      "rngCalls": 3
+      "rngCalls": 4
     }
   },
   {
@@ -89503,7 +89509,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": false
       },
-      "rngCalls": 3
+      "rngCalls": 4
     }
   },
   {
@@ -90705,7 +90711,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": false
       },
-      "rngCalls": 4
+      "rngCalls": 5
     }
   },
   {
@@ -91782,6 +91788,9 @@
             "precisaoAmount": 5,
             "poisonTurns": 3,
             "poisonDmg": 7
+          },
+          "ferimentos": {
+            "perna": true
           }
         },
         "party": [
@@ -91818,7 +91827,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": false
       },
-      "rngCalls": 4
+      "rngCalls": 6
     }
   },
   {
@@ -95007,7 +95016,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": false
       },
-      "rngCalls": 3
+      "rngCalls": 4
     }
   },
   {
@@ -97645,7 +97654,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": false
       },
-      "rngCalls": 4
+      "rngCalls": 5
     }
   },
   {
@@ -98500,7 +98509,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": false
       },
-      "rngCalls": 3
+      "rngCalls": 4
     }
   },
   {
@@ -99795,7 +99804,7 @@
         "defensivePassiveTriggered": false,
         "shieldConsumed": true
       },
-      "rngCalls": 3
+      "rngCalls": 4
     }
   },
   {

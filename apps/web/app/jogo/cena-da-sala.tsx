@@ -70,6 +70,10 @@ interface Props {
   onSaida: (direcao: Direction) => boolean;
   /** Encostou neste objeto agora. */
   onEncostar: (id: string) => void;
+  /** O ritmo do andar: a perna quebrada anda mais devagar (`ritmoDoAndar`). Ausente, o de sempre. */
+  ritmo?: number;
+  /** O herói deu um passo e está aqui agora: quem chama confere se pisou numa armadilha. */
+  onPasso?: (walker: Walker) => void;
   /** O que vai por cima da sala (o joystick). */
   children?: ReactNode;
 }
@@ -91,6 +95,8 @@ export function CenaDaSala({
   entrada,
   onSaida,
   onEncostar,
+  ritmo = 1,
+  onPasso,
   children,
 }: Readonly<Props>) {
   const alvo = useRef<HTMLDivElement>(null);
@@ -98,9 +104,9 @@ export function CenaDaSala({
   const [pronta, setPronta] = useState(false);
 
   // O relógio do Pixi lê os valores mais recentes por aqui, sem reassinar a cada render.
-  const atual = useRef({ sala, planta, chegada, origem, enquadrar, posicao, ativo, entrada, onSaida, onEncostar });
+  const atual = useRef({ sala, planta, chegada, origem, enquadrar, posicao, ativo, entrada, onSaida, onEncostar, ritmo, onPasso });
   useEffect(() => {
-    atual.current = { sala, planta, chegada, origem, enquadrar, posicao, ativo, entrada, onSaida, onEncostar };
+    atual.current = { sala, planta, chegada, origem, enquadrar, posicao, ativo, entrada, onSaida, onEncostar, ritmo, onPasso };
   });
   /** O tempo que sobrou do quadro anterior, e de que sala o herói já saiu (esperando a vizinha chegar). */
   const relogio = useRef<{ sobra: number; saiuDe: string | null }>({ sobra: 0, saiuDe: null });
@@ -159,7 +165,7 @@ export function CenaDaSala({
         return;
       }
 
-      const { passos, sobra } = passosDoQuadro(r.sobra, decorridoMs);
+      const { passos, sobra } = passosDoQuadro(r.sobra, decorridoMs * agora.ritmo);
       r.sobra = sobra;
       const antes = p.walker;
       const quadro = andarNoQuadro(agora.planta, antes, agora.entrada(), passos, p.tocando);
@@ -172,6 +178,8 @@ export function CenaDaSala({
         else p.walker = antes;
       } else if (quadro.encostou) {
         agora.onEncostar(quadro.encostou);
+      } else if (quadro.andou) {
+        agora.onPasso?.(p.walker);
       }
       desenho.colocarHeroi(p.walker, quadro.andou, agora.origem, agora.enquadrar);
     });

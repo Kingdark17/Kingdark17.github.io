@@ -22,6 +22,7 @@ import {
   type Power,
 } from './catalog.js';
 import { derivedStats, xpForLevel } from './derived.js';
+import type { Ferimentos } from './ferimentos.js';
 import { veteranMasteryBattles } from './mastery.js';
 import { ATTR_KEYS, emptyAttributes, EQUIP_SLOTS, type AttrKey, type Attributes, type DerivedStats, type EquipSlot, type HeroCore } from './stats.js';
 
@@ -115,6 +116,8 @@ export interface Hero extends HeroCore {
   maxMp: number;
   derived: DerivedStats;
   buffs?: HeroBuffs;
+  /** Braço ou perna quebrados, veneno e sangramento de sala em sala (`ferimentos.ts`). Ausente: inteiro. */
+  ferimentos?: Ferimentos;
   /** Bênção de um NPC do mapa: bônus de esquiva que dura N combates inteiros (não turnos) — distinto de `HeroBuffs`, que zera a cada combate. Concedida por `npc-services.js`'s `blessing()`, consumida no início de cada combate. */
   npcBlessing?: { combats: number; dodge: number };
 }

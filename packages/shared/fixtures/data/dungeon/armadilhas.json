@@ -1,0 +1,40 @@
+{
+  "ARMADILHAS": {
+    "espinhos": {
+      "nome": "Espinhos",
+      "icone": "🗡️",
+      "dano": 0.12,
+      "sangramento": 2
+    },
+    "dardo": {
+      "nome": "Dardo Envenenado",
+      "icone": "🎯",
+      "dano": 0.05,
+      "veneno": 3
+    },
+    "pedras": {
+      "nome": "Pedras Caindo",
+      "icone": "🪨",
+      "dano": 0.1,
+      "quebra": 0.4
+    }
+  },
+  "TIPOS": [
+    "espinhos",
+    "dardo",
+    "pedras"
+  ],
+  "ICONE_DO_BRILHO": "✨",
+  "CHANCE_DE_ARMADILHA": 0.2,
+  "SEM_ARMADILHA": [
+    "void",
+    "start",
+    "exit",
+    "stairs",
+    "boss"
+  ],
+  "$privadas": [
+    "TIPOS",
+    "SEM_ARMADILHA"
+  ]
+}

@@ -31,6 +31,7 @@ import {
 import { generateDungeonFloor, isBossFloor, type DungeonCell } from '../dungeon/generate.js';
 import { DIR_VECTORS, inBounds, type Direction, type RoomCell } from '../dungeon/graph.js';
 import { idDaClasse } from '../hero/catalog.js';
+import { passarDeSala } from '../hero/ferimentos.js';
 import { hydrateSavedHero, type Companion, type Hero } from '../hero/hero.js';
 import { teacherAppears, teacherFor } from '../hero/teachers.js';
 import type { Item } from '../items/item.js';
@@ -281,6 +282,7 @@ function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng, now?
     now,
     ...(app ? { app } : {}),
     ...(entrada ? { entrada } : {}),
+    sabedoria: base.hero.attrs.sabedoria,
   });
   const inicio = { x: andar.start.x, y: andar.start.y };
 
@@ -343,7 +345,8 @@ export function andar(estado: EstadoDoJogo, direcao: Direction): EstadoDoJogo {
     const mapa = marcarVisitada(estado.map, destino);
     return { ...estado, pos: destino, map: mapa, cityMap: mapa };
   }
-  return { ...estado, pos: destino, map: marcarVisitada(estado.map, destino) };
+  // Entrar noutra sala é quando o veneno e o sangramento tiram a parte deles (`hero/ferimentos.ts`).
+  return { ...estado, hero: passarDeSala(estado.hero).hero, pos: destino, map: marcarVisitada(estado.map, destino) };
 }
 
 /**

@@ -98,10 +98,11 @@ namespace RPGLegend.Engine
             double hpGained = stats.Truthy("cura") ? Js.Min(hero.MaxHp, hero.Hp + stats.OrZero("cura")) - hero.Hp : 0;
             double mpGained = stats.Truthy("curaMana") ? Js.Min(hero.MaxMp, hero.Mp + stats.OrZero("curaMana")) - hero.Mp : 0;
 
-            if (!stats.Truthy("cura") && !stats.Truthy("curaMana"))
+            if (!stats.Truthy("cura") && !stats.Truthy("curaMana") && !stats.Truthy("tala"))
                 return new ConsumeItemResult { Hero = hero, Inventory = Copy(inventory), Outcome = ConsumeItemOutcome.NoEffect() };
 
-            var next = hero.Clone();
+            // A tala conserta o braço e a perna quebrados (FerimentosDoHeroi).
+            var next = (stats.Truthy("tala") ? FerimentosDoHeroi.CurarMembros(hero) : hero).Clone();
             next.Hp = hero.Hp + hpGained;
             next.Mp = hero.Mp + mpGained;
             return new ConsumeItemResult

@@ -127,6 +127,15 @@ export interface SalaDesenhada {
   figuras: Readonly<Record<string, Figura>>;
   /** Já entrou nela (ou é a atual): sem sombra. */
   acesa: boolean;
+  /** As marcas de armadilha no chão (só na sala acesa). */
+  marcas?: readonly MarcaNoChao[];
+}
+
+/** Uma marca no chão da sala: a armadilha disparada, ou o brilho da que o herói viu (`marcasDasArmadilhas`). */
+export interface MarcaNoChao {
+  col: number;
+  row: number;
+  icone: string;
 }
 
 /** A posição da sala atual na grade do andar: o herói anda contado do canto dela. */
@@ -311,6 +320,17 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
     );
   }
 
+  /** As marcas de armadilha no chão, como emoji no meio da casa, por baixo do herói. */
+  function marcasNoChao(marcas: readonly MarcaNoChao[], ox: number, oy: number): Pixi.Container[] {
+    return marcas.map((marca) => {
+      const texto = new pixi.Text({ text: marca.icone, style: { fontSize: Math.round(LADO * 0.45) } });
+      texto.anchor.set(0.5);
+      texto.position.set(ox + marca.col * LADO + LADO / 2, oy + marca.row * LADO + LADO / 2);
+      texto.alpha = 0.85;
+      return texto;
+    });
+  }
+
   /**
    * Uma sala com o canto em (`ox`, `oy`): a arte (ou os quadradinhos do `tema`), as rachaduras e as figuras já
    * carregadas. Apagada, ganha a sombra por cima.
@@ -324,6 +344,7 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
     ox: number,
     oy: number,
     acesa: boolean,
+    marcas: readonly Pixi.Container[] = [],
   ) {
     const colunas = planta.cols ?? ROOM_COLS;
     const linhas = planta.rows ?? ROOM_ROWS;
@@ -358,6 +379,8 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       });
     });
     chao.addChild(ladrilhos);
+
+    for (const marca of marcas) chao.addChild(marca);
 
     // A parede rachada é riscada na própria pedra, por cima do ladrilho.
     const rachaduras = new pixi.Graphics();
@@ -429,7 +452,17 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       tamanho(largura, altura);
       pintarFundo(tema.fundo);
       salas.forEach((sala, i) =>
-        pintarSala(sala.planta, tema, sala.acesa ? sala.figuras : {}, artes[i] ?? null, desenhos[i] ?? [], sala.x * largura, sala.y * altura, sala.acesa),
+        pintarSala(
+          sala.planta,
+          tema,
+          sala.acesa ? sala.figuras : {},
+          artes[i] ?? null,
+          desenhos[i] ?? [],
+          sala.x * largura,
+          sala.y * altura,
+          sala.acesa,
+          sala.acesa ? marcasNoChao(sala.marcas ?? [], sala.x * largura, sala.y * altura) : [],
+        ),
       );
     },
 

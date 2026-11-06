@@ -142,6 +142,8 @@ namespace RPGLegend.Engine
         public DungeonTeacher Teacher;
         /// <summary>Baú pequeno, vaso, placa, parede rachada (RoomExtras). Andar gerado antes deles não tem: null.</summary>
         public List<DungeonExtra> Extras;
+        /// <summary>A armadilha escondida no chão (<see cref="Armadilhas"/>, desde 2026-11-06). Andar gerado antes delas não tem: null.</summary>
+        public List<Armadilha> Armadilhas;
 
         /// <summary>O <c>{ ...cell }</c> do TS: cópia rasa (portas, monstros, NPC e item continuam os mesmos objetos).</summary>
         public new DungeonCell Clone() => (DungeonCell)base.Clone();
