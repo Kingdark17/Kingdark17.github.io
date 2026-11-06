@@ -16,13 +16,17 @@ namespace RPGLegend.EditorTools
     /// <summary>
     /// "RPG Legend > Build do app (Windows)": builda o app de verdade (a cena Scenes/App.unity) para Windows 64
     /// em Mono (o IL2CPP do Windows não está instalado), apontando para a API de produção, como o do celular. A
-    /// pasta Builds/AppWindows/RPG Legend é o jogo inteiro: é ela que se zipa e se manda. Depois do build, abre o
-    /// executável numa janela de 1280 × 720 e confere se ele não jogou exceção ao abrir. O resultado vai para o
-    /// Console e para Builds/AppWindows/build-report.txt (fora da pasta do jogo, junto com o log da conferência).
+    /// pasta Builds/AppWindows/RPG Legend é o jogo inteiro. Depois do build, abre o executável numa janela de
+    /// 1280 × 720 e confere se ele não jogou exceção ao abrir; e o Inno Setup junta a pasta no instalador
+    /// (Builds/AppWindows/RPG Legend - Instalação.exe), que é o que se manda. O resultado vai para o Console e para
+    /// Builds/AppWindows/build-report.txt (fora da pasta do jogo, junto com o log da conferência).
     /// </summary>
     public static class WindowsAppBuild
     {
         private const string ProductName = "RPG Legend";
+
+        /// <summary>O nome do instalador (sem o .exe): o OutputBaseFilename de Instalador/RPGLegend.iss.</summary>
+        private const string InstallerName = "RPG Legend - Instalação";
 
         /// <summary>Quanto esperar depois de abrir o executável antes de ler o log (a chegada à porta leva uns 5 s).</summary>
         private const int LogWaitMs = 10000;
@@ -58,6 +62,7 @@ namespace RPGLegend.EditorTools
 
         private static bool Run(string pasta, StringBuilder relatorio)
         {
+            var projeto = Directory.GetParent(Application.dataPath).FullName;
             var jogo = Path.Combine(pasta, ProductName);
             var exe = Path.Combine(jogo, ProductName + ".exe");
             var log = Path.Combine(pasta, "app.log");
@@ -119,7 +124,7 @@ namespace RPGLegend.EditorTools
             if (existia && Reg("export \"" + chave + "\" \"" + copia + "\" /y") != 0)
             {
                 relatorio.AppendLine("Não consegui guardar as preferências do jogo (" + chave + ") para a conferência: abra o executável à mão.");
-                return true;
+                return Instalador(projeto, pasta, jogo, relatorio);
             }
             try
             {
@@ -169,6 +174,59 @@ namespace RPGLegend.EditorTools
                 return false;
             }
             relatorio.AppendLine("executável: abriu, sem exceção no log nos primeiros " + LogWaitMs / 1000 + " s. Log: " + log);
+            return Instalador(projeto, pasta, jogo, relatorio);
+        }
+
+        /// <summary>
+        /// 4. O instalador, um .exe só para mandar: o Inno Setup compila Instalador/RPGLegend.iss com a pasta do jogo e a
+        /// versão (a data e a hora do build). Sem o Inno Setup no computador, o build vale e só o instalador fica de fora.
+        /// </summary>
+        private static bool Instalador(string projeto, string pasta, string jogo, StringBuilder relatorio)
+        {
+            var iscc = new[]
+            {
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Inno Setup 6", "ISCC.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Inno Setup 6", "ISCC.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Inno Setup 6", "ISCC.exe"),
+            }.FirstOrDefault(File.Exists);
+            if (iscc == null)
+            {
+                relatorio.AppendLine("instalador: o Inno Setup não está instalado (winget install JRSoftware.InnoSetup), então só a pasta saiu.");
+                return true;
+            }
+
+            var instalador = Path.Combine(pasta, InstallerName + ".exe");
+            if (File.Exists(instalador)) File.Delete(instalador);
+            var versao = DateTime.Now.ToString("yyyy.M.d.Hmm");
+            var roteiro = Path.Combine(projeto, "Instalador", "RPGLegend.iss");
+            string saida;
+            int codigo;
+            using (var processo = Process.Start(new ProcessStartInfo
+                   {
+                       FileName = iscc,
+                       Arguments = "/Q \"/DPasta=" + jogo + "\" \"/DVersao=" + versao + "\" \"/O" + pasta + "\" \"" + roteiro + "\"",
+                       UseShellExecute = false,
+                       CreateNoWindow = true,
+                       RedirectStandardOutput = true,
+                       RedirectStandardError = true,
+                   }))
+            {
+                if (processo == null)
+                {
+                    relatorio.AppendLine("instalador: não consegui abrir " + iscc);
+                    return false;
+                }
+                saida = processo.StandardOutput.ReadToEnd() + processo.StandardError.ReadToEnd();
+                processo.WaitForExit();
+                codigo = processo.ExitCode;
+            }
+            if (codigo != 0 || !File.Exists(instalador))
+            {
+                relatorio.AppendLine("instalador: o Inno Setup falhou (código " + codigo + "):");
+                relatorio.AppendLine(saida.Trim());
+                return false;
+            }
+            relatorio.AppendLine("instalador: versão " + versao + ", " + new FileInfo(instalador).Length / (1024 * 1024) + " MB -> " + instalador);
             return true;
         }
 

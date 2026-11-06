@@ -91,6 +91,10 @@ namespace RPGLegend.Game.App
             raiz.Q<Button>("botao-jogar").clicked += () => AoJogar?.Invoke();
             raiz.Q<Button>("botao-config").clicked += () => AoConfiguracoes?.Invoke();
             raiz.Q<Button>("botao-loja").clicked += () => AoLoja?.Invoke();
+            // No celular o jogo fecha pelo próprio aparelho; no PC, pelo SAIR (a partida já gravou ao voltar pro menu).
+            var fechar = raiz.Q<Button>("botao-fechar");
+            fechar.style.display = Application.isMobilePlatform ? DisplayStyle.None : DisplayStyle.Flex;
+            fechar.clicked += Application.Quit;
             raiz.Q<Button>("botao-sair").clicked += () => AoSair?.Invoke();
             raiz.Q<Button>("botao-voltar").clicked += () => AoVoltar?.Invoke();
 

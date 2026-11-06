@@ -223,11 +223,18 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   para a API do computador pelo cabo (`adb reverse`). Ainda com identificador
   de teste (`br.com.rpglegend.teste`) e nome "RPG Legend" só durante o build.
   O menu RPG Legend > Build do app (Windows) (desde 2026-11-06) builda o app
-  de PC em Mono na pasta `Builds/AppWindows/RPG Legend` (ela inteira é o
-  jogo: zipa e manda), apontando para produção (`-api <url>` no executável
-  aponta para outra), abre numa janela por 10 s e confere o log. A Unity
-  grava o tamanho dessa janela no registro, então a conferência devolve a
-  chave do jogo (`HKCU\Software\DefaultCompany\RPG Legend`) ao que era.
+  de PC em Mono na pasta `Builds/AppWindows/RPG Legend`, apontando para
+  produção (`-api <url>` no executável aponta para outra), abre numa janela
+  por 10 s e confere o log, e junta a pasta no instalador
+  `Builds/AppWindows/RPG Legend - Instalação.exe` (é ele que se manda) com o
+  Inno Setup (`apps/unity/Instalador/RPGLegend.iss`, UTF-8 com BOM; o AppId
+  dele não muda nunca; instala por usuário, sem administrador). A Unity
+  grava o tamanho da janela da conferência no registro, então ela devolve a
+  chave do jogo (`HKCU\Software\DefaultCompany\RPG Legend`) ao que era. No
+  PC o menu tem o SAIR (no celular fica escondido), e fechar a janela com
+  mudança por gravar segura, grava e fecha (`Application.wantsToQuit` na
+  `TelaDeJogo`; se a gravação falhar, avisa, e fechar de novo sai); no
+  celular, ir pro fundo já grava (`OnApplicationPause`).
 - Jogar pelo app (etapa 4, desde 2026-10-16): o JOGAR do cartão abre a
   partida (`Game/Jogo`): `Partida` é o espelho sem desenho da tela-jogo.tsx
   (estado, avisos, diário, sala secreta, quando gravar), `TelaDeJogo` liga

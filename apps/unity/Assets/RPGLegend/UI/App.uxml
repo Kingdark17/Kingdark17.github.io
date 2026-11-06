@@ -22,7 +22,7 @@
             <ui:Label name="toque-para-entrar" text="Toque para entrar" class="toque escondido" />
         </ui:VisualElement>
 
-        <!-- Menu principal: o brasão à esquerda, os três botões de pedra à direita. -->
+        <!-- Menu principal: o brasão à esquerda, os botões de pedra à direita (o SAIR, que fecha o jogo, só no PC). -->
         <ui:VisualElement name="menu" class="tela menu oculto">
             <ui:VisualElement name="brasao" class="brasao" />
             <ui:VisualElement class="coluna-menu">
@@ -30,6 +30,7 @@
                 <ui:Button name="botao-jogar" text="JOGAR" class="botao botao-menu botao-forte" />
                 <ui:Button name="botao-config" text="CONFIGURAÇÕES" class="botao botao-menu" />
                 <ui:Button name="botao-loja" text="LOJA" class="botao botao-menu" />
+                <ui:Button name="botao-fechar" text="SAIR" class="botao botao-menu" />
             </ui:VisualElement>
             <ui:Button name="botao-sair" text="Sair da conta" class="link canto" />
             <!-- Obrigatório: a licença CC BY 4.0 da fonte dos títulos pede crédito visível (ver UI/Fontes). -->

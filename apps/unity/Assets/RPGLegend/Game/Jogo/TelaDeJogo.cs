@@ -87,6 +87,7 @@ namespace RPGLegend.Game.Jogo
             _partida = null;
             _janela = null;
             _saindo = false;
+            _fecharSemGravar = false;
             _nivelMostrado = -1;
             _lugarMostrado = null;
             _caixaDoLugar.AddToClassList("escondida");
@@ -1041,6 +1042,7 @@ namespace RPGLegend.Game.Jogo
 
             if (erro == null)
             {
+                _fecharSemGravar = false;
                 if (partida == _partida) Salvamento("Progresso salvo na nuvem.", false);
                 if (saindo) TerminarSaida();
                 return;
@@ -1091,6 +1093,69 @@ namespace RPGLegend.Game.Jogo
             _janela = null;
             _sobre.AddToClassList("oculto");
             AoSair?.Invoke();
+        }
+
+        // ---------- fechar o jogo ----------
+
+        /// <summary>Fechar segura enquanto grava; depois de uma gravação que falhou, o próximo fechar sai sem gravar.</summary>
+        private bool _gravandoParaFechar, _fecharSemGravar;
+
+        private void OnEnable() => Application.wantsToQuit += AntesDeFechar;
+
+        private void OnDisable() => Application.wantsToQuit -= AntesDeFechar;
+
+        /// <summary>
+        /// Fechar o jogo no PC (o X da janela, Alt+F4) com mudança por gravar segura o fechamento, grava e fecha, como o
+        /// "Sair" da partida. Se a gravação falhar, a mensagem fica na tela e fechar de novo sai sem gravar.
+        /// </summary>
+        private bool AntesDeFechar()
+        {
+            if (_partida == null || _fecharSemGravar || !(_partida.TemMudancaPorGravar || _partida.Gravando)) return true;
+            if (!_gravandoParaFechar) GravarEFechar();
+            return false;
+        }
+
+        private async void GravarEFechar()
+        {
+            _gravandoParaFechar = true;
+            var tentou = false;
+            try
+            {
+                while (true)
+                {
+                    while (_partida != null && _partida.Gravando) await Awaitable.NextFrameAsync(destroyCancellationToken);
+                    if (_partida == null || !_partida.TemMudancaPorGravar || tentou) break;
+                    tentou = true;
+                    Gravar(false);
+                    Salvamento("Salvando antes de fechar…", false);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                _gravandoParaFechar = false;
+            }
+
+            _fecharSemGravar = true;
+            if (_partida != null && _partida.TemMudancaPorGravar)
+            {
+                // O erro da gravação já está na tela.
+                Salvamento(_salvamento.text + " Feche de novo para sair sem salvar.", true);
+                return;
+            }
+            Application.Quit();
+        }
+
+        /// <summary>
+        /// No celular não dá pra segurar o fechamento: ir pro fundo (o botão de início, trocar de app) já grava o que
+        /// estiver na fila, porque o aparelho pode fechar o jogo de lá sem avisar.
+        /// </summary>
+        private void OnApplicationPause(bool pausado)
+        {
+            if (pausado && _partida != null && _partida.TemMudancaPorGravar && !_partida.Gravando) Gravar(false);
         }
     }
 }
