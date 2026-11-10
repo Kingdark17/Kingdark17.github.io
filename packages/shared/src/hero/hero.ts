@@ -369,9 +369,17 @@ export function recomputeDerived<T extends HeroCore & { hp: number; mp: number; 
   };
 }
 
-/** Gasta 1 ponto de atributo livre. Devolve o herói inalterado se não houver pontos. */
+/** O teto de um atributo. */
+export const ATRIBUTO_MAXIMO = 99;
+
+/**
+ * Gasta 1 ponto de atributo livre. Devolve o herói inalterado se não houver
+ * pontos, ou se o atributo já está no teto (desde 2026-11-10: antes o ponto
+ * sumia sem subir nada).
+ */
 export function spendAttrPoint(hero: Hero, key: AttrKey): Hero {
   if (!hero.attrPoints || hero.attrPoints <= 0) return hero;
+  if (hero.attrs[key] >= ATRIBUTO_MAXIMO) return hero;
   const next: Hero = {
     ...hero,
     attrs: { ...hero.attrs, [key]: clamp(hero.attrs[key] + 1, 1, 99) },

@@ -13,7 +13,7 @@
  * continua marcada como equipada na mochila (ou o contrário).
  */
 
-import { cabeNaMaoLivre, equipItem, equippedSlot, isOffhandEligible, spendAttrPoint, unequipItem, type Hero } from '../hero/hero.js';
+import { ATRIBUTO_MAXIMO, cabeNaMaoLivre, equipItem, equippedSlot, isOffhandEligible, spendAttrPoint, unequipItem, type Hero } from '../hero/hero.js';
 import { EQUIP_SLOTS, type AttrKey, type EquipSlot } from '../hero/stats.js';
 import { addItem, consumeItem, removeByUid } from '../inventory/inventory.js';
 import { concordar, displayName, itemCategory, type Item } from '../items/item.js';
@@ -215,8 +215,12 @@ export function comPecaTrocada(estado: EstadoDoJogo, peca: Item): EstadoDoJogo {
 
 /** Level up é manual: 2 pontos por nível, gastos um a um pelo jogador. */
 export function gastarPonto(mochila: Mochila, chave: AttrKey): Mochila {
-  const hero = spendAttrPoint(mochila.estado.hero, chave);
-  if (hero === mochila.estado.hero) return { ...mochila, log: ['Você não tem pontos para distribuir.'] };
+  const antes = mochila.estado.hero;
+  const hero = spendAttrPoint(antes, chave);
+  if (hero === antes) {
+    const noTeto = (antes.attrPoints ?? 0) > 0 && antes.attrs[chave] >= ATRIBUTO_MAXIMO;
+    return { ...mochila, log: [noTeto ? `Esse atributo já está no máximo (${ATRIBUTO_MAXIMO}).` : 'Você não tem pontos para distribuir.'] };
+  }
 
   return { estado: { ...mochila.estado, hero }, log: [] };
 }

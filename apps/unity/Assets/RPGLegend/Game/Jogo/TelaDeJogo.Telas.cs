@@ -347,6 +347,13 @@ namespace RPGLegend.Game.Jogo
 
         // ---------- guia e ficha ----------
 
+        /// <summary>As teclas do app no PC, pro guia. Mudou uma tecla (Entrada, LerTeclasDaLuta) → mudar aqui.</summary>
+        private const string TeclasDoGuia =
+            "Andar: W, A, S, D ou as setas.\n" +
+            "Na luta: Espaço ou J ataca · 1, 2 e 3 usam os poderes · Q abre os itens · Tab troca o alvo · " +
+            "com o cajado, as letras U, I, O e P quando o aro pedir.\n" +
+            "Esc fecha a janela aberta ou abre o menu de sair.";
+
         /// <summary>TS: TelaGuia — o progresso dos Primeiros Passos em cima, os textos do guia embaixo. Só mostra.</summary>
         private void AbrirGuia()
         {
@@ -372,6 +379,14 @@ namespace RPGLegend.Game.Jogo
                 }
                 conteudo.Add(PecasDaTela.Texto(tutorial.Rewarded ? "✓ Recompensa recebida: 40 de ouro e uma poção." : "Conclua tudo: 40 de ouro e uma poção.", "vazio"));
                 conteudo.Add(PecasDaTela.Secao("Guia"));
+                // No PC, as teclas primeiro (pedido do Breno): as mesmas que a TelaDeJogo e a luta leem.
+                if (_partida.Teclado)
+                {
+                    var teclas = PecasDaTela.Bloco("carta-do-guia");
+                    teclas.Add(PecasDaTela.Texto("⌨️ Teclado", "nome-do-passo"));
+                    teclas.Add(PecasDaTela.Texto(TeclasDoGuia, "dica-do-passo"));
+                    conteudo.Add(teclas);
+                }
                 foreach (var guia in Tutoriais.Guias)
                 {
                     var carta = PecasDaTela.Bloco("carta-do-guia");

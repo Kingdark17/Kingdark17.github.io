@@ -168,6 +168,8 @@ describe('spendAttrPoint', () => {
     const hero = { ...novoHeroi(), attrPoints: 5, attrs: { ...novoHeroi().attrs, forca: 99 } };
     const depois = spendAttrPoint(hero, 'forca');
     expect(depois.attrs.forca).toBe(99);
+    // E o ponto não some: fica pra outro atributo.
+    expect(depois).toBe(hero);
   });
 });
 

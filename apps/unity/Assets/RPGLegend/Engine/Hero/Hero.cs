@@ -314,13 +314,17 @@ namespace RPGLegend.Engine
             return next;
         }
 
+        /// <summary>TS: ATRIBUTO_MAXIMO.</summary>
+        public const double AtributoMaximo = 99;
+
         /// <summary>
         /// TS: spendAttrPoint — gasta 1 ponto livre no atributo (teto 99) e recalcula. Sem pontos
-        /// (ausente, 0, NaN ou negativo), devolve o mesmo herói.
+        /// (ausente, 0, NaN ou negativo) ou com o atributo já no teto, devolve o mesmo herói.
         /// </summary>
         public static Hero SpendAttrPoint(Hero hero, string key)
         {
             if (!Js.Truthy(hero.AttrPoints) || hero.AttrPoints.Value <= 0) return hero;
+            if (hero.Attrs[key] >= AtributoMaximo) return hero;
             var attrs = hero.Attrs.Clone();
             attrs[key] = Clamp(hero.Attrs[key] + 1, 1, 99);
             var next = hero.Clone();

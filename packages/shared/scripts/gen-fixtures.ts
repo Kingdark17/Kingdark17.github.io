@@ -837,8 +837,8 @@ for (const [arma, peca] of [
   const gastar = (a: { hero: Hero; key: string }) => E.spendAttrPoint(a.hero, a.key as keyof Attributes);
   caso('spendAttrPoint: gasta um ponto e recalcula', 'spendAttrPoint', { hero: comPontos, key: 'constituicao' }, gastar);
   caso('spendAttrPoint: sem pontos devolve igual', 'spendAttrPoint', { hero: guerreiro, key: 'forca' }, gastar);
-  caso('spendAttrPoint: 99 é o teto', 'spendAttrPoint', { hero: { ...comPontos, attrs: { ...comPontos.attrs, forca: 99 } }, key: 'forca' }, gastar);
-  caso('spendAttrPoint: 999 (do painel ADM) cai pra 99', 'spendAttrPoint', { hero: { ...comPontos, attrs: { ...comPontos.attrs, forca: 999 } }, key: 'forca' }, gastar);
+  caso('spendAttrPoint: no teto de 99 não gasta o ponto', 'spendAttrPoint', { hero: { ...comPontos, attrs: { ...comPontos.attrs, forca: 99 } }, key: 'forca' }, gastar);
+  caso('spendAttrPoint: 999 (do painel ADM) também não gasta', 'spendAttrPoint', { hero: { ...comPontos, attrs: { ...comPontos.attrs, forca: 999 } }, key: 'forca' }, gastar);
 
   const comEscudo = { ...guerreiro, equip: { ...guerreiro.equip, secundaria: item('escudo') } };
   caso('equipItem: arma de duas mãos esvazia a secundária', 'equipItem', { hero: comEscudo, item: item('machado') }, (a) => E.equipItem(a.hero, a.item));
@@ -3776,6 +3776,9 @@ naMochila('peça que não está na mochila', 'descartar', mochilaCom(guerreiro, 
 }
 
 naMochila('com pontos', 'gastarPonto', mochilaCom(heroi({ classe: 'guerreiro', extra: { attrPoints: 2 } }), []), { chave: 'forca' }, (m, a) =>
+  E.gastarPonto(m, a.chave as AttrKey),
+);
+naMochila('no teto de 99', 'gastarPonto', mochilaCom(heroi({ classe: 'guerreiro', extra: { attrPoints: 2, attrs: { ...guerreiro.attrs, forca: 99 } } }), []), { chave: 'forca' }, (m, a) =>
   E.gastarPonto(m, a.chave as AttrKey),
 );
 naMochila('sem pontos', 'gastarPonto', mochilaCom(guerreiro, []), { chave: 'sabedoria' }, (m, a) => E.gastarPonto(m, a.chave as AttrKey));

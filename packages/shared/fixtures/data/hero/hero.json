@@ -4,6 +4,7 @@
     "name": "Aprendiz",
     "icon": "🎒"
   },
+  "ATRIBUTO_MAXIMO": 99,
   "MAX_NIVEIS_POR_GANHO": 500,
   "OFFHAND_WEAPON_IDS": [
     "espada",

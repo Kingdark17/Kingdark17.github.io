@@ -232,8 +232,13 @@ namespace RPGLegend.Engine
         /// <summary>TS: gastarPonto — level up é manual, um ponto por vez.</summary>
         public static Mochila GastarPonto(Mochila mochila, string chave)
         {
-            var hero = Heroes.SpendAttrPoint(mochila.Estado.Hero, chave);
-            if (ReferenceEquals(hero, mochila.Estado.Hero)) return ComLog(mochila.Estado, "Você não tem pontos para distribuir.");
+            var antes = mochila.Estado.Hero;
+            var hero = Heroes.SpendAttrPoint(antes, chave);
+            if (ReferenceEquals(hero, antes))
+            {
+                bool noTeto = (antes.AttrPoints ?? 0) > 0 && antes.Attrs[chave] >= Heroes.AtributoMaximo;
+                return ComLog(mochila.Estado, noTeto ? "Esse atributo já está no máximo (" + Js.NumberToString(Heroes.AtributoMaximo) + ")." : "Você não tem pontos para distribuir.");
+            }
 
             var estado = mochila.Estado.Clone();
             estado.Hero = hero;

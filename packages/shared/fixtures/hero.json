@@ -8574,7 +8574,7 @@
     }
   },
   {
-    "name": "spendAttrPoint: 99 é o teto",
+    "name": "spendAttrPoint: no teto de 99 não gasta o ponto",
     "input": {
       "fn": "spendAttrPoint",
       "args": {
@@ -8689,7 +8689,7 @@
         "raceId": "humano",
         "xp": 0,
         "xpNext": 40,
-        "attrPoints": 1,
+        "attrPoints": 2,
         "gold": 100,
         "powerNames": [],
         "powerIds": [],
@@ -8705,7 +8705,7 @@
         "derived": {
           "maxHp": 145,
           "maxMp": 62,
-          "dmgFisico": 198,
+          "dmgFisico": 20,
           "dmgMagico": 30,
           "esquiva": 5,
           "critico": 10,
@@ -8723,7 +8723,7 @@
     }
   },
   {
-    "name": "spendAttrPoint: 999 (do painel ADM) cai pra 99",
+    "name": "spendAttrPoint: 999 (do painel ADM) também não gasta",
     "input": {
       "fn": "spendAttrPoint",
       "args": {
@@ -8803,7 +8803,7 @@
       "result": {
         "level": 1,
         "attrs": {
-          "forca": 99,
+          "forca": 999,
           "destreza": 10,
           "constituicao": 12,
           "intelecto": 10,
@@ -8838,7 +8838,7 @@
         "raceId": "humano",
         "xp": 0,
         "xpNext": 40,
-        "attrPoints": 1,
+        "attrPoints": 2,
         "gold": 100,
         "powerNames": [],
         "powerIds": [],
@@ -8854,7 +8854,7 @@
         "derived": {
           "maxHp": 145,
           "maxMp": 62,
-          "dmgFisico": 198,
+          "dmgFisico": 20,
           "dmgMagico": 30,
           "esquiva": 5,
           "critico": 10,

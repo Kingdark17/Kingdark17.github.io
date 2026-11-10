@@ -128726,6 +128726,245 @@
     }
   },
   {
+    "name": "gastarPonto: no teto de 99",
+    "input": {
+      "fn": "gastarPonto",
+      "args": {
+        "mochila": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 99,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 2,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "start",
+                  "x": 3,
+                  "y": 3,
+                  "doors": {
+                    "N": true,
+                    "W": true,
+                    "E": true,
+                    "S": true
+                  },
+                  "visited": true,
+                  "revealed": true
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "chave": "forca"
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 99,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 2,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "Esse atributo já está no máximo (99)."
+        ]
+      }
+    }
+  },
+  {
     "name": "gastarPonto: sem pontos",
     "input": {
       "fn": "gastarPonto",
@@ -175250,7 +175489,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1793985229253_55026",
+                  "uid": "pot_mana_1794350707841_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -175380,7 +175619,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1793985229253_90893",
+                  "uid": "anel_som_1794350707841_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -175669,7 +175908,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1793985229255_87912",
+                  "uid": "pot_mana_1794350707842_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -175886,7 +176125,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1793985229255_18536",
+                  "uid": "pot_vida_1794350707842_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -176088,7 +176327,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1793985229255_69928",
+                  "uid": "bota_vento_1794350707842_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -176164,7 +176403,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1793985229255_12429",
+                "uid": "tala_1794350707842_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -176338,7 +176577,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1793985229259_23232",
+              "uid": "placas_elmo_1794350707843_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -176420,7 +176659,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1793985229259_3788",
+                  "uid": "pot_vida_1794350707843_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -176537,7 +176776,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1793985229259_56339",
+                  "uid": "amuleto_sab_1794350707843_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -176703,7 +176942,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1793985229259_93474",
+              "uid": "anel_som_1794350707843_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {
