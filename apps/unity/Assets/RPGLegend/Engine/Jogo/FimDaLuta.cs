@@ -164,8 +164,9 @@ namespace RPGLegend.Engine
             var party = new List<Companion>();
             var saindo = new List<Companion>();
             var equipeDaLuta = estado.Party ?? new List<Companion>();
-            if (equipeDaLuta.Exists(membro => membro.Invocado == true)) log.Add(Invocacao.FimDosEsqueletos);
-            foreach (var membro in Invocacao.SemInvocados(equipeDaLuta))
+            // Os esqueletos de pé seguem o herói pra próxima sala; só os caídos somem.
+            if (Invocacao.TemInvocadoCaido(equipeDaLuta)) log.Add(Invocacao.FimDosEsqueletos);
+            foreach (var membro in Invocacao.SemInvocadosCaidos(equipeDaLuta))
             {
                 var depois = membro;
                 if (membro.Temporary == true)

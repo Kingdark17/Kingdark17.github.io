@@ -35,7 +35,7 @@ namespace RPGLegend.Engine
         /// <summary>TS: MAX_ESQUELETOS — quantos podem estar de pé ao mesmo tempo.</summary>
         public static double MaxEsqueletos => D.MaxEsqueletos;
 
-        /// <summary>TS: FIM_DOS_ESQUELETOS — a linha do registro quando a luta acaba com esqueletos na equipe.</summary>
+        /// <summary>TS: FIM_DOS_ESQUELETOS — a linha do registro quando a luta acaba com esqueletos caídos na equipe.</summary>
         public static string FimDosEsqueletos => D.FimDosEsqueletos;
 
         /// <summary>TS: esqueletosDePe — os esqueletos de pé agora.</summary>
@@ -47,7 +47,24 @@ namespace RPGLegend.Engine
             return n;
         }
 
-        /// <summary>TS: semInvocados — a equipe sem os esqueletos: o que fica quando a luta acaba.</summary>
+        /// <summary>TS: temInvocadoCaido — há esqueleto caído na equipe.</summary>
+        public static bool TemInvocadoCaido(IReadOnlyList<Companion> party)
+        {
+            foreach (var membro in party)
+                if (membro.Invocado == true && membro.Hp <= 0) return true;
+            return false;
+        }
+
+        /// <summary>TS: semInvocadosCaidos — a equipe sem os esqueletos que caíram; os de pé seguem o herói.</summary>
+        public static List<Companion> SemInvocadosCaidos(IReadOnlyList<Companion> party)
+        {
+            var ficam = new List<Companion>();
+            foreach (var membro in party)
+                if (membro.Invocado != true || membro.Hp > 0) ficam.Add(membro);
+            return ficam;
+        }
+
+        /// <summary>TS: semInvocados — a equipe sem os esqueletos: o que chega à cidade.</summary>
         public static List<Companion> SemInvocados(IReadOnlyList<Companion> party)
         {
             var ficam = new List<Companion>();
@@ -56,20 +73,24 @@ namespace RPGLegend.Engine
             return ficam;
         }
 
+        private static string NomeDoNumero(double n) => n > 1 ? "Esqueleto " + Js.NumberToString(n) : "Esqueleto";
+
         /// <summary>
         /// TS: criarEsqueleto — um esqueleto novo, na força do necromante: vida 20 + 4 × nível + 2 × Inteligência,
-        /// ataque 3 + nível + Inteligência ÷ 2, agressivo. O nome conta os que já se levantaram nesta luta.
+        /// ataque 3 + nível + Inteligência ÷ 2, agressivo. O nome leva o primeiro número livre entre os esqueletos.
         /// </summary>
         public static Companion CriarEsqueleto(Hero hero, IReadOnlyList<Companion> party)
         {
             double inteligencia = hero.Attrs?.Intelecto ?? 0;
             double maxHp = 20 + 4 * hero.Level + 2 * inteligencia;
-            double numero = 1;
+            var usados = new HashSet<string>();
             foreach (var membro in party)
-                if (membro.Invocado == true) numero++;
+                if (membro.Invocado == true) usados.Add(membro.Name);
+            double numero = 1;
+            while (usados.Contains(NomeDoNumero(numero))) numero++;
             return new Companion
             {
-                Name = numero > 1 ? "Esqueleto " + Js.NumberToString(numero) : "Esqueleto",
+                Name = NomeDoNumero(numero),
                 RaceIcon = "💀",
                 Race = "Morto-vivo",
                 ClassName = "Esqueleto",
@@ -80,7 +101,7 @@ namespace RPGLegend.Engine
                 Attrs = Attributes.Empty(),
                 Stance = CompanionStances.Agressiva,
                 Ability = "Ossos Erguidos",
-                AbilityDesc = "Luta ao lado do necromante até o fim da batalha.",
+                AbilityDesc = "Luta ao lado do necromante até cair ou até a volta à cidade.",
                 Invocado = true,
             };
         }

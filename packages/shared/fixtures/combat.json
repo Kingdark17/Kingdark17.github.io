@@ -133482,7 +133482,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ],
@@ -133551,7 +133551,7 @@
           },
           "stance": "agressiva",
           "ability": "Ossos Erguidos",
-          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
           "invocado": true
         },
         "monsterDefeated": false
@@ -133922,7 +133922,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ],
@@ -133993,7 +133993,7 @@
           },
           "stance": "agressiva",
           "ability": "Ossos Erguidos",
-          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
           "invocado": true
         },
         "monsterDefeated": false
@@ -134906,7 +134906,7 @@
         },
         "stance": "agressiva",
         "ability": "Ossos Erguidos",
-        "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+        "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
         "invocado": true
       }
     }
@@ -135006,7 +135006,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135028,7 +135028,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ]
@@ -135054,7 +135054,133 @@
         },
         "stance": "agressiva",
         "ability": "Ossos Erguidos",
-        "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+        "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+        "invocado": true
+      }
+    }
+  },
+  {
+    "name": "criarEsqueleto: o primeiro caiu e saiu: o novo pega o número livre",
+    "input": {
+      "fn": "criarEsqueleto",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 17,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 250,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 155,
+            "maxMp": 117,
+            "dmgFisico": 20,
+            "dmgMagico": 51,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 155,
+          "hp": 155,
+          "maxMp": 117,
+          "mp": 117,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 82,
+        "maxHp": 82,
+        "attack": 18,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Ossos Erguidos",
+        "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
         "invocado": true
       }
     }
@@ -135202,7 +135328,7 @@
         },
         "stance": "agressiva",
         "ability": "Ossos Erguidos",
-        "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+        "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
         "invocado": true
       }
     }
@@ -135229,6 +135355,30 @@
     },
     "expected": {
       "result": []
+    }
+  },
+  {
+    "name": "semInvocadosCaidos: ninguém",
+    "input": {
+      "fn": "semInvocadosCaidos",
+      "args": {
+        "party": []
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "temInvocadoCaido: ninguém",
+    "input": {
+      "fn": "temInvocadoCaido",
+      "args": {
+        "party": []
+      }
+    },
+    "expected": {
+      "result": false
     }
   },
   {
@@ -135391,6 +135541,165 @@
     }
   },
   {
+    "name": "semInvocadosCaidos: recrutas não contam",
+    "input": {
+      "fn": "semInvocadosCaidos",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "name": "Aliado",
+          "raceIcon": "🧑",
+          "race": "Humano",
+          "className": "Guerreiro",
+          "classIcon": "⚔️",
+          "classId": "guerreiro",
+          "hp": 20,
+          "maxHp": 20,
+          "attack": 5,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "stance": "equilibrada",
+          "ability": "",
+          "abilityDesc": ""
+        },
+        {
+          "name": "Aliado",
+          "raceIcon": "🧑",
+          "race": "Humano",
+          "className": "Mago",
+          "classIcon": "🧙",
+          "classId": "mago",
+          "hp": 20,
+          "maxHp": 20,
+          "attack": 5,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "stance": "equilibrada",
+          "ability": "",
+          "abilityDesc": ""
+        }
+      ]
+    }
+  },
+  {
+    "name": "temInvocadoCaido: recrutas não contam",
+    "input": {
+      "fn": "temInvocadoCaido",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
     "name": "esqueletosDePe: três de pé",
     "input": {
       "fn": "esqueletosDePe",
@@ -135415,7 +135724,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135437,7 +135746,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135459,7 +135768,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ]
@@ -135494,7 +135803,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135516,7 +135825,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135538,7 +135847,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ]
@@ -135546,6 +135855,231 @@
     },
     "expected": {
       "result": []
+    }
+  },
+  {
+    "name": "semInvocadosCaidos: três de pé",
+    "input": {
+      "fn": "semInvocadosCaidos",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "name": "Esqueleto",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 82,
+          "maxHp": 82,
+          "attack": 18,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+          "invocado": true
+        },
+        {
+          "name": "Esqueleto 2",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 82,
+          "maxHp": 82,
+          "attack": 18,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+          "invocado": true
+        },
+        {
+          "name": "Esqueleto 3",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 82,
+          "maxHp": 82,
+          "attack": 18,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+          "invocado": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "temInvocadoCaido: três de pé",
+    "input": {
+      "fn": "temInvocadoCaido",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": false
     }
   },
   {
@@ -135573,7 +136107,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135595,7 +136129,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135617,7 +136151,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ]
@@ -135652,7 +136186,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135674,7 +136208,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135696,7 +136230,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ]
@@ -135704,6 +136238,209 @@
     },
     "expected": {
       "result": []
+    }
+  },
+  {
+    "name": "semInvocadosCaidos: um caído",
+    "input": {
+      "fn": "semInvocadosCaidos",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "name": "Esqueleto 2",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 82,
+          "maxHp": 82,
+          "attack": 18,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+          "invocado": true
+        },
+        {
+          "name": "Esqueleto 3",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 82,
+          "maxHp": 82,
+          "attack": 18,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Ossos Erguidos",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+          "invocado": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "temInvocadoCaido: um caído",
+    "input": {
+      "fn": "temInvocadoCaido",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          },
+          {
+            "name": "Esqueleto 3",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 18,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Ossos Erguidos",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
+            "invocado": true
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": true
     }
   },
   {
@@ -135823,7 +136560,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135845,7 +136582,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -135867,7 +136604,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ],
@@ -136043,7 +136780,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -136065,7 +136802,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -136087,7 +136824,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ],
@@ -136259,7 +136996,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -136281,7 +137018,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -136303,7 +137040,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ],
@@ -136479,7 +137216,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -136501,7 +137238,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -136523,7 +137260,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           },
           {
@@ -136545,7 +137282,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ],
@@ -136614,7 +137351,7 @@
           },
           "stance": "agressiva",
           "ability": "Ossos Erguidos",
-          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
           "invocado": true
         },
         "monsterDefeated": false
@@ -137110,7 +137847,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ],
@@ -137179,7 +137916,7 @@
           },
           "stance": "agressiva",
           "ability": "Ossos Erguidos",
-          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
           "invocado": true
         },
         "monsterDefeated": false
@@ -143370,7 +144107,7 @@
             },
             "stance": "agressiva",
             "ability": "Ossos Erguidos",
-            "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+            "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
             "invocado": true
           }
         ],
@@ -143446,7 +144183,7 @@
           },
           "stance": "agressiva",
           "ability": "Ossos Erguidos",
-          "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+          "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
           "invocado": true
         },
         "monsterDefeated": false

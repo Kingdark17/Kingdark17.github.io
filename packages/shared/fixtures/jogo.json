@@ -175489,7 +175489,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1794350707841_55026",
+                  "uid": "pot_mana_1794350899847_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -175619,7 +175619,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1794350707841_90893",
+                  "uid": "anel_som_1794350899847_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -175908,7 +175908,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1794350707842_87912",
+                  "uid": "pot_mana_1794350899848_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -176125,7 +176125,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794350707842_18536",
+                  "uid": "pot_vida_1794350899848_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -176327,7 +176327,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1794350707842_69928",
+                  "uid": "bota_vento_1794350899848_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -176403,7 +176403,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1794350707842_12429",
+                "uid": "tala_1794350899848_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -176577,7 +176577,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1794350707843_23232",
+              "uid": "placas_elmo_1794350899849_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -176659,7 +176659,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794350707843_3788",
+                  "uid": "pot_vida_1794350899849_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -176776,7 +176776,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1794350707843_56339",
+                  "uid": "amuleto_sab_1794350899849_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -176942,7 +176942,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1794350707843_93474",
+              "uid": "anel_som_1794350899849_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {
@@ -255981,6 +255981,29 @@
           },
           "party": [
             {
+              "name": "Esqueleto",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Bardo",
+              "classIcon": "🎵",
+              "classId": "bardo",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": "",
+              "invocado": true
+            },
+            {
               "name": "Aliado",
               "raceIcon": "🧑",
               "race": "Humano",
@@ -256073,7 +256096,6 @@
           }
         },
         "log": [
-          "Os esqueletos voltam ao pó.",
           "Aliado se despede da equipe após cumprir sua promessa."
         ],
         "loot": null

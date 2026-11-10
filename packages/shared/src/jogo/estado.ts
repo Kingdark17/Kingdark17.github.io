@@ -17,6 +17,7 @@
  */
 
 import { generateCityLayout, withEncantadora, withGuild, type CityCell } from '../city/city.js';
+import { semInvocados } from '../combat/invocacao.js';
 import {
   DUNGEON_FLOORS,
   effectiveFloor,
@@ -203,7 +204,10 @@ export function entrarNaCidade(save: SaveCarregado): EstadoNaCidade {
   const posicao = save.mapMode === 'city' && save.pos ? save.pos : inicio;
   const mapa = marcarVisitada(grid, posicao);
 
-  return { ...base, mapMode: 'city', map: mapa, cityMap: mapa, cityStart: inicio, pos: posicao };
+  // Os esqueletos do necromante não passam do portão: seguem o herói só na masmorra.
+  const party = base.party.some((membro) => membro.invocado) ? semInvocados(base.party) : base.party;
+
+  return { ...base, party, mapMode: 'city', map: mapa, cityMap: mapa, cityStart: inicio, pos: posicao };
 }
 
 /**

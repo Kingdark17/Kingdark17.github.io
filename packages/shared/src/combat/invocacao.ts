@@ -5,8 +5,10 @@
  * - um poder que só o necromante tem (`soDaClasse`), e que todo necromante
  *   ganha, inclusive quem já tinha o personagem;
  * - o esqueleto luta ao lado do herói como um companheiro (ataca depois dele,
- *   e os monstros podem mirar nele) e some quando a luta acaba — vencendo,
- *   perdendo ou fugindo;
+ *   e os monstros podem mirar nele). Desde 2026-11-10 (doc do Breno, decidido
+ *   com o usuário) ele não some mais no fim da luta: segue o herói de sala em
+ *   sala, com a vida que tiver, até cair, até a volta à cidade ou até o herói
+ *   ser derrotado;
  * - até 3 de pé ao mesmo tempo; com 3, o poder avisa e não gasta mana. Um que
  *   caiu pode ser trocado por outro na mesma luta;
  * - é do necromante, à parte dos recrutas: não ocupa vaga na equipe;
@@ -14,8 +16,9 @@
  *   na postura agressiva.
  *
  * Os esqueletos moram em `party`, marcados com `invocado`. Os caídos ficam na
- * lista até a luta acabar: a arena do app guarda os companheiros pelo índice
- * na equipe, e tirar um do meio trocaria quem é quem.
+ * lista até a luta acabar (`semInvocadosCaidos` os tira aí): a arena do app
+ * guarda os companheiros pelo índice na equipe, e tirar um do meio trocaria
+ * quem é quem.
  */
 
 import { emptyAttributes } from '../hero/stats.js';
@@ -24,30 +27,43 @@ import type { Companion, Hero } from '../hero/hero.js';
 /** Quantos esqueletos podem estar de pé ao mesmo tempo. */
 export const MAX_ESQUELETOS = 3;
 
-/** A linha do registro quando a luta acaba com esqueletos na equipe. */
-export const FIM_DOS_ESQUELETOS = 'Os esqueletos voltam ao pó.';
+/** A linha do registro quando a luta acaba com esqueletos caídos na equipe. */
+export const FIM_DOS_ESQUELETOS = 'Os esqueletos caídos voltam ao pó.';
 
 /** Os esqueletos de pé agora. */
 export function esqueletosDePe(party: readonly Companion[]): number {
   return party.filter((membro) => membro.invocado && membro.hp > 0).length;
 }
 
-/** A equipe sem os esqueletos: o que fica quando a luta acaba. */
+/** A equipe sem os esqueletos: o que chega à cidade, e o que conta nas vagas dos recrutas. */
 export function semInvocados(party: readonly Companion[]): Companion[] {
   return party.filter((membro) => !membro.invocado);
 }
 
+/** Há esqueleto caído na equipe. */
+export function temInvocadoCaido(party: readonly Companion[]): boolean {
+  return party.some((membro) => membro.invocado && membro.hp <= 0);
+}
+
+/** A equipe sem os esqueletos que caíram: o que fica quando a luta acaba. Os de pé seguem o herói. */
+export function semInvocadosCaidos(party: readonly Companion[]): Companion[] {
+  return party.filter((membro) => !membro.invocado || membro.hp > 0);
+}
+
 /**
- * Um esqueleto novo, na força do necromante. O nome conta os que já se
- * levantaram nesta luta ("Esqueleto", "Esqueleto 2"…), pra o registro dizer
- * qual deles fez o quê.
+ * Um esqueleto novo, na força do necromante. O nome leva o primeiro número
+ * livre entre os esqueletos da equipe ("Esqueleto", "Esqueleto 2"…), pra o
+ * registro dizer qual deles fez o quê.
  */
 export function criarEsqueleto(hero: Pick<Hero, 'level' | 'attrs'>, party: readonly Companion[]): Companion {
   const inteligencia = hero.attrs.intelecto ?? 0;
   const maxHp = 20 + 4 * hero.level + 2 * inteligencia;
-  const numero = party.filter((membro) => membro.invocado).length + 1;
+  const nomeDoNumero = (n: number): string => (n > 1 ? `Esqueleto ${n}` : 'Esqueleto');
+  const usados = new Set(party.filter((membro) => membro.invocado).map((membro) => membro.name));
+  let numero = 1;
+  while (usados.has(nomeDoNumero(numero))) numero++;
   return {
-    name: numero > 1 ? `Esqueleto ${numero}` : 'Esqueleto',
+    name: nomeDoNumero(numero),
     raceIcon: '💀',
     race: 'Morto-vivo',
     className: 'Esqueleto',
@@ -58,7 +74,7 @@ export function criarEsqueleto(hero: Pick<Hero, 'level' | 'attrs'>, party: reado
     attrs: emptyAttributes(),
     stance: 'agressiva',
     ability: 'Ossos Erguidos',
-    abilityDesc: 'Luta ao lado do necromante até o fim da batalha.',
+    abilityDesc: 'Luta ao lado do necromante até cair ou até a volta à cidade.',
     invocado: true,
   };
 }

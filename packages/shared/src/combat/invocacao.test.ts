@@ -5,7 +5,7 @@ import { roomArrival } from '../dungeon/room-walk.js';
 import { powerById } from '../hero/catalog.js';
 import { generateCompanion, heroPowers, type Companion, type Hero } from '../hero/hero.js';
 import { iniciarEncontro, fugir, usarPoder } from '../jogo/combate.js';
-import { celulaAtual, retomarSave, substituirCelulaAtual, type EstadoNaMasmorra } from '../jogo/estado.js';
+import { celulaAtual, retomarSave, substituirCelulaAtual, voltarParaCidade, type EstadoNaMasmorra } from '../jogo/estado.js';
 import { limparSala, perderLuta } from '../jogo/fim-da-luta.js';
 import { saveSorteado } from '../jogo/heroi-sorteado.js';
 import { abrirLuta, passoDaLuta } from '../luta/arena.js';
@@ -89,7 +89,7 @@ describe('o esqueleto', () => {
     expect(resolveRecruit(comEsqueletos, seededRng(5)).outcome.kind).toBe('recruited');
   });
 
-  it('no site: levanta, luta no turno da equipe e some quando o herói foge', () => {
+  it('no site: levanta, luta no turno da equipe e foge junto com o herói', () => {
     const combate = iniciarEncontro(naSala());
     const { combate: depois } = usarPoder(combate, levantar, NUNCA);
     expect(depois.log[0]).toBe('Você usa Levantar Esqueleto: Esqueleto se ergue para lutar ao seu lado!');
@@ -98,16 +98,23 @@ describe('o esqueleto', () => {
 
     const fuga = fugir(depois, 20, NUNCA);
     expect(fuga.fase).toBe('fuga');
-    expect((fuga.estado as EstadoNaMasmorra).party).toEqual([]);
-    expect(fuga.log).toContain(FIM_DOS_ESQUELETOS);
+    // Desde 2026-11-10 o esqueleto de pé segue o herói; só o caído fica pra trás.
+    expect((fuga.estado as EstadoNaMasmorra).party.map((m) => m.name)).toEqual(['Esqueleto']);
+    expect(fuga.log).not.toContain(FIM_DOS_ESQUELETOS);
   });
 
-  it('some no fim da luta, vencendo ou perdendo; os recrutas ficam', () => {
+  it('segue o herói depois da vitória; o caído some, e a derrota e a cidade levam todos', () => {
     const recruta = generateCompanion(seededRng(3));
-    const estado = naSala({}, [recruta, criarEsqueleto(naSala().hero, [recruta])]);
+    const dePe = criarEsqueleto(naSala().hero, [recruta]);
+    const caido = { ...criarEsqueleto(naSala().hero, [recruta, dePe]), hp: 0 };
+    const estado = naSala({}, [recruta, dePe, caido]);
     const vitoria = limparSala(estado, alvo(), NUNCA, agora);
-    expect(vitoria.estado.party.map((m) => m.name)).toEqual([recruta.name]);
+    expect(vitoria.estado.party.map((m) => m.name)).toEqual([recruta.name, 'Esqueleto']);
     expect(vitoria.log).toContain(FIM_DOS_ESQUELETOS);
+    expect(limparSala(naSala({}, [recruta, dePe]), alvo(), NUNCA, agora).log).not.toContain(FIM_DOS_ESQUELETOS);
+    // O próximo esqueleto pega o número que ficou livre.
+    expect(criarEsqueleto(estado.hero, vitoria.estado.party).name).toBe('Esqueleto 2');
+    expect(voltarParaCidade(vitoria.estado as EstadoNaMasmorra).party.map((m) => m.name)).toEqual([recruta.name]);
     expect(perderLuta(estado, NUNCA).estado.party.map((m) => m.name)).toEqual([recruta.name]);
     expect(semInvocados(estado.party)).toEqual([recruta]);
   });

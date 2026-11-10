@@ -319,6 +319,8 @@ namespace RPGLegend.Engine
             estado.CityMap = mapa;
             estado.CityStart = inicio;
             estado.Pos = posicao;
+            // Os esqueletos do necromante não passam do portão: seguem o herói só na masmorra.
+            if (estado.Party != null && estado.Party.Exists(membro => membro.Invocado == true)) estado.Party = Invocacao.SemInvocados(estado.Party);
             return estado;
         }
 

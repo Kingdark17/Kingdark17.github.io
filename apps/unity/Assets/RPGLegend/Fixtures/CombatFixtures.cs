@@ -59,6 +59,8 @@ namespace RPGLegend.Tests
             Fn(M, "criarEsqueleto", (a, c) => W(Invocacao.CriarEsqueleto(R<Hero>(a["hero"]), Equipe(a["party"]))));
             Fn(M, "esqueletosDePe", (a, c) => N(Invocacao.EsqueletosDePe(Equipe(a["party"]))));
             Fn(M, "semInvocados", (a, c) => W(Invocacao.SemInvocados(Equipe(a["party"]))));
+            Fn(M, "semInvocadosCaidos", (a, c) => W(Invocacao.SemInvocadosCaidos(Equipe(a["party"]))));
+            Fn(M, "temInvocadoCaido", (a, c) => W(Invocacao.TemInvocadoCaido(Equipe(a["party"]))));
             Fn(M, "hitPartyMember", (a, c) => W(MonsterHit.HitPartyMember(R<Companion>(a["member"]), Monstro(a["monster"]), Num(a["attackMult"]), c.RngFn)));
             Fn(M, "pickMonsterTarget", (a, c) => W(MonsterHit.PickMonsterTarget(Equipe(a["party"]), c.RngFn)));
 

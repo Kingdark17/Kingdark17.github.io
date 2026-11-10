@@ -171,8 +171,11 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   do vigor. O esqueleto do necromante (`combat/invocacao.ts`, desde
   2026-10-23) é do site e do app: o poder `levantar_esqueleto` (tipo
   `invocar`) põe na equipe um companheiro marcado `invocado`, até 3 de pé e
-  fora da vaga dos recrutas; ele some no fim da luta (vitória, derrota ou
-  fuga), e o site mostra a equipe num cartão na tela da luta.
+  fora da vaga dos recrutas; desde 2026-11-10 (doc do Breno) o esqueleto de
+  pé segue o herói de sala em sala com a vida que tiver, e some ao cair, na
+  volta à cidade (`entrarNaCidade`) ou na derrota; o site mostra a equipe num
+  cartão na tela da luta. O atributo no teto de 99 não gasta mais o ponto
+  (`ATRIBUTO_MAXIMO`), e o Guia do app no PC abre com as teclas.
 
 - `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
   paridade exata: mesma entrada → mesmo resultado e a mesma sequência de

@@ -31,7 +31,7 @@
 import { attemptDodge } from '../combat/dodge.js';
 import { attemptFlee } from '../combat/flee.js';
 import { tickHeroStatus } from '../combat/hero-status.js';
-import { FIM_DOS_ESQUELETOS, MAX_ESQUELETOS, semInvocados } from '../combat/invocacao.js';
+import { FIM_DOS_ESQUELETOS, MAX_ESQUELETOS, semInvocadosCaidos, temInvocadoCaido } from '../combat/invocacao.js';
 import { applyMonsterHit } from '../combat/monster-hit.js';
 import type { CombatMonster, CombatMonsterView } from '../combat/monster-state.js';
 import { applyPartyTurn, passarRodadaDaCancao } from '../combat/party.js';
@@ -448,11 +448,11 @@ export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Co
   const dado: Rolagem = { valor: roll, lados: 20 };
 
   if (tentativa.success) {
-    // Os esqueletos do necromante são da luta: ficam pra trás.
-    const comEsqueletos = estado.party.some((membro) => membro.invocado);
+    // Os esqueletos de pé fogem junto; os caídos ficam pra trás.
+    const comEsqueletos = temInvocadoCaido(estado.party);
     return {
       ...combate,
-      estado: comEsqueletos ? { ...estado, party: semInvocados(estado.party) } : estado,
+      estado: comEsqueletos ? { ...estado, party: semInvocadosCaidos(estado.party) } : estado,
       fase: 'fuga',
       dado,
       log: [`Você rolou ${roll}${comBonus} e fugiu com sucesso.`, 'Você escapa da batalha, ofegante.', ...(comEsqueletos ? [FIM_DOS_ESQUELETOS] : [])],

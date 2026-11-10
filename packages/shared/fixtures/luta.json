@@ -109953,7 +109953,7 @@
                 },
                 "stance": "agressiva",
                 "ability": "Ossos Erguidos",
-                "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+                "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
                 "invocado": true
               }
             ],
@@ -113349,7 +113349,7 @@
                 },
                 "stance": "agressiva",
                 "ability": "Ossos Erguidos",
-                "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+                "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
                 "invocado": true
               },
               {
@@ -113371,7 +113371,7 @@
                 },
                 "stance": "agressiva",
                 "ability": "Ossos Erguidos",
-                "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+                "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
                 "invocado": true
               },
               {
@@ -113393,7 +113393,7 @@
                 },
                 "stance": "agressiva",
                 "ability": "Ossos Erguidos",
-                "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+                "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
                 "invocado": true
               }
             ],
@@ -116015,7 +116015,7 @@
                 },
                 "stance": "agressiva",
                 "ability": "Ossos Erguidos",
-                "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+                "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
                 "invocado": true
               }
             ],
@@ -116341,7 +116341,7 @@
               },
               "stance": "agressiva",
               "ability": "Ossos Erguidos",
-              "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+              "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
               "invocado": true
             }
           ],
@@ -116514,7 +116514,7 @@
                 },
                 "stance": "agressiva",
                 "ability": "Ossos Erguidos",
-                "abilityDesc": "Luta ao lado do necromante até o fim da batalha.",
+                "abilityDesc": "Luta ao lado do necromante até cair ou até a volta à cidade.",
                 "invocado": true
               }
             ],

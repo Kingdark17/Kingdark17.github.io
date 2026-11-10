@@ -2084,6 +2084,7 @@ caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'trig
   for (const [nome, hero, party] of [
     ['nível 1, Inteligência 14, sem ninguém', heroi({ classe: 'necromante', attrs: { intelecto: 14 } }), []],
     ['nível 7, depois de dois esqueletos', necromante, [esqueleto(), esqueleto({ name: 'Esqueleto 2' })]],
+    ['o primeiro caiu e saiu: o novo pega o número livre', necromante, [esqueleto({ name: 'Esqueleto 2' })]],
     ['com recrutas na equipe', necromante, [companheiro('guerreiro'), companheiro('mago')]],
   ] as const) {
     caso(`criarEsqueleto: ${nome}`, 'criarEsqueleto', { hero, party }, (a) => E.criarEsqueleto(a.hero, a.party));
@@ -2098,6 +2099,8 @@ caso('triggerEnemyClassPower: Feiticeiro drena no máximo a mana que há', 'trig
   ] as const) {
     caso(`esqueletosDePe: ${nome}`, 'esqueletosDePe', { party }, (a) => E.esqueletosDePe(a.party));
     caso(`semInvocados: ${nome}`, 'semInvocados', { party }, (a) => E.semInvocados(a.party));
+    caso(`semInvocadosCaidos: ${nome}`, 'semInvocadosCaidos', { party }, (a) => E.semInvocadosCaidos(a.party));
+    caso(`temInvocadoCaido: ${nome}`, 'temInvocadoCaido', { party }, (a) => E.temInvocadoCaido(a.party));
   }
   cp('levantar_esqueleto: com 3 de pé, avisa e não gasta', necromante, [companheiro('guerreiro'), ...tresDePe], monstro(), levantar, { sequence: [] });
   cp('levantar_esqueleto: com um caído, levanta outro', necromante, [companheiro('guerreiro'), ...umCaido], monstro(), levantar, { sequence: [] });

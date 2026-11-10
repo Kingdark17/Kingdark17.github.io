@@ -14,7 +14,7 @@
  * caiu.
  */
 
-import { FIM_DOS_ESQUELETOS, semInvocados } from '../combat/invocacao.js';
+import { FIM_DOS_ESQUELETOS, semInvocados, semInvocadosCaidos, temInvocadoCaido } from '../combat/invocacao.js';
 import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from '../combat/monster-state.js';
 import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, isCleared, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
 import type { DungeonCell } from '../dungeon/generate.js';
@@ -149,8 +149,9 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
   const sala = celulaAtual(estado) as DungeonCell;
   const log: string[] = [];
 
-  if (estado.party.some((membro) => membro.invocado)) log.push(FIM_DOS_ESQUELETOS);
-  const { party, saindo } = despedirTemporarios(semInvocados(estado.party));
+  // Os esqueletos de pé seguem o herói pra próxima sala (2026-11-10); só os caídos somem.
+  if (temInvocadoCaido(estado.party)) log.push(FIM_DOS_ESQUELETOS);
+  const { party, saindo } = despedirTemporarios(semInvocadosCaidos(estado.party));
   for (const membro of saindo) log.push(`${membro.name} se despede da equipe após cumprir sua promessa.`);
 
   let hero = estado.hero;
