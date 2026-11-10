@@ -642,7 +642,7 @@ namespace RPGLegend.Game.Jogo
                     _volta = 0;
                 }
                 var quem = estado.Hero;
-                _sala.DefinirHeroi(Catalog.IdDaRaca(quem.RaceId, quem.Race), string.IsNullOrEmpty(quem.RaceIcon) ? "🙂" : quem.RaceIcon);
+                _sala.DefinirHeroi(quem);
                 _sala.MostrarCidade(salaAgora, Cidades.PlantaDaCidadeAgora(cidade), Cidades.TroncosNoCaminho(cidade), _chegada);
                 return;
             }
@@ -696,7 +696,7 @@ namespace RPGLegend.Game.Jogo
             }
 
             var heroi = estado.Hero;
-            _sala.DefinirHeroi(Catalog.IdDaRaca(heroi.RaceId, heroi.Race), string.IsNullOrEmpty(heroi.RaceIcon) ? "🙂" : heroi.RaceIcon);
+            _sala.DefinirHeroi(heroi);
             // A sala secreta fica fora do mapa e é desenhada sozinha; as outras, emendadas com as em volta.
             if (secreta != null || masmorra == null) _sala.Mostrar(chave, planta, TemaDaSala.Do(estado), figuras, chegada, masmorra);
             else _sala.MostrarMasmorra(chave, SalasDaCena(estado, planta, figuras, visual, masmorra), planta, TemaDaSala.Do(estado), chegada, masmorra, estado.Pos.X, estado.Pos.Y);

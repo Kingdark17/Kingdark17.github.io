@@ -104,6 +104,59 @@ namespace RPGLegend.Game.Jogo
             if (!string.IsNullOrEmpty(id) && Existe(pasta + "/" + id)) camadas.Add(pasta + "/" + id);
         }
 
+        // ---------- o mini boneco (o herói no mapa) ----------
+
+        /// <summary>TS: LARGURA_DO_MINI e ALTURA_DO_MINI — a arte do mini boneco, em pixel dela.</summary>
+        public const float LarguraDoMini = 31f;
+        public const float AlturaDoMini = 32f;
+
+        private static readonly Dictionary<string, Sprite> ArtesDoMini = new Dictionary<string, Sprite>();
+
+        /// <summary>A arte de uma camada do mini boneco ("frente/corpo/humano"), de Resources/Mini. Null se não existe.</summary>
+        public static Sprite ArteDoMini(string camada)
+        {
+            if (!ArtesDoMini.TryGetValue(camada, out var sprite))
+            {
+                sprite = Resources.Load<Sprite>("Mini/" + camada);
+                ArtesDoMini[camada] = sprite;
+            }
+            return sprite;
+        }
+
+        /// <summary>
+        /// TS: montarMini (lib/paperdoll/mini.ts) — as camadas do mini boneco do Breno, de trás pra frente: corpo, roupa
+        /// de baixo, perneira, peitoral, cabelo, elmo, o extra da raça (de frente, auréola, chifres, orelhas e presas; de
+        /// costas, asas e cauda) e o escudo. A peça sem arte mini não aparece. Vazia: sem raça ou sem mini corpo.
+        /// </summary>
+        public static List<string> Mini(Hero hero, bool costas)
+        {
+            var camadas = new List<string>();
+            var lado = costas ? "costas/" : "frente/";
+            var raca = Catalog.IdDaRaca(hero.RaceId, hero.Race);
+            if (string.IsNullOrEmpty(raca) || ArteDoMini(lado + "corpo/" + raca) == null) return camadas;
+            void Por(string camada)
+            {
+                if (ArteDoMini(lado + camada) != null) camadas.Add(lado + camada);
+            }
+            void VestirMini(string pasta, string slot)
+            {
+                var id = hero.Equip?.Get(slot)?.TemplateId;
+                if (!string.IsNullOrEmpty(id)) Por(pasta + "/" + id);
+            }
+
+            camadas.Add(lado + "corpo/" + raca);
+            Por("base/calca");
+            Por("base/roupa");
+            VestirMini("calca", "calca");
+            VestirMini("armadura", "armadura");
+            var penteado = CabeloDe(raca, hero.Hair);
+            if (penteado != null) Por("cabelo/" + penteado);
+            VestirMini("elmo", "elmo");
+            Por("extra/" + raca);
+            VestirMini("secundaria", "secundaria");
+            return camadas;
+        }
+
         /// <summary>TS: montarCamadas — as camadas de trás pra frente. Vazia: sem raça, ou raça sem corpo desenhado.</summary>
         public static List<string> Camadas(Hero hero)
         {

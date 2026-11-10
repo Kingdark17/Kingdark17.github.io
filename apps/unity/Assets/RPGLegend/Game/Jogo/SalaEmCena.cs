@@ -74,7 +74,10 @@ namespace RPGLegend.Game.Jogo
         private Sprite _branco;
         private Transform _desenho;
         private Transform _boneco;
-        private SpriteRenderer _corpo;
+        /// <summary>Os dois lados do mini boneco (só um aparece) e as camadas de cada um.</summary>
+        private Transform _deFrente, _deCostas;
+        private readonly List<SpriteRenderer> _camadasDoHeroi = new List<SpriteRenderer>();
+        private bool _heroiDeEmoji, _temCostas, _espelhado;
         private string _arteDoHeroi;
         private int _fase;
 
@@ -148,9 +151,11 @@ namespace RPGLegend.Game.Jogo
 
             _boneco = new GameObject("Herói").transform;
             _boneco.SetParent(transform, false);
-            var corpo = new GameObject("Corpo");
-            corpo.transform.SetParent(_boneco, false);
-            _corpo = corpo.AddComponent<SpriteRenderer>();
+            _deFrente = new GameObject("De frente").transform;
+            _deFrente.SetParent(_boneco, false);
+            _deCostas = new GameObject("De costas").transform;
+            _deCostas.SetParent(_boneco, false);
+            _deCostas.gameObject.SetActive(false);
         }
 
         private void OnDestroy()
@@ -194,15 +199,51 @@ namespace RPGLegend.Game.Jogo
 
         // ---------- o boneco ----------
 
-        /// <summary>O boneco: o corpo da raça do paperdoll (provisório), ou o emoji dela.</summary>
-        public void DefinirHeroi(string raca, string emoji)
+        /// <summary>
+        /// O boneco: o mini boneco do Breno (<see cref="Paperdoll.Mini"/>) com a raça, o cabelo e o que o herói veste, de
+        /// frente e de costas; sem mini corpo (o anão), o emoji da raça. Só refaz quando a roupa muda.
+        /// </summary>
+        public void DefinirHeroi(Hero hero)
         {
-            var arte = raca != null ? "Corpo/" + raca : null;
-            var chave = arte + "|" + emoji;
+            var frente = Paperdoll.Mini(hero, false);
+            var costas = Paperdoll.Mini(hero, true);
+            var emoji = string.IsNullOrEmpty(hero.RaceIcon) ? "🙂" : hero.RaceIcon;
+            var chave = string.Join(",", frente) + "|" + string.Join(",", costas) + "|" + emoji;
             if (chave == _arteDoHeroi) return;
             _arteDoHeroi = chave;
-            var sprite = (arte != null ? Resources.Load<Sprite>(arte) : null) ?? EmojiDoSistema.Sprite(emoji);
-            PorNoPe(_corpo, sprite, Lado * 1.25f);
+
+            foreach (var camada in _camadasDoHeroi) Destroy(camada.gameObject);
+            _camadasDoHeroi.Clear();
+            _heroiDeEmoji = frente.Count == 0;
+            _temCostas = costas.Count > 0;
+            if (_heroiDeEmoji)
+            {
+                PorNoPe(NovaCamada(_deFrente, 0), EmojiDoSistema.Sprite(emoji), Lado * 1.25f);
+                return;
+            }
+            for (int i = 0; i < frente.Count; i++) PorCamadaDoMini(NovaCamada(_deFrente, i), frente[i]);
+            for (int i = 0; i < costas.Count; i++) PorCamadaDoMini(NovaCamada(_deCostas, i), costas[i]);
+        }
+
+        /// <summary>Uma camada do boneco: as de cima um fio mais perto da câmera, que é o que as ordena (a ordem de desenho é a mesma pra todas).</summary>
+        private SpriteRenderer NovaCamada(Transform lado, int indice)
+        {
+            var camada = new GameObject("Camada " + indice);
+            camada.transform.SetParent(lado, false);
+            camada.transform.localPosition = new Vector3(0f, 0f, -0.001f * (indice + 1));
+            var renderizador = camada.AddComponent<SpriteRenderer>();
+            _camadasDoHeroi.Add(renderizador);
+            return renderizador;
+        }
+
+        /// <summary>A arte da camada, pela esquerda e pelo pé (há camada um pixel mais larga que as outras).</summary>
+        private static void PorCamadaDoMini(SpriteRenderer renderizador, string camada)
+        {
+            var sprite = Paperdoll.ArteDoMini(camada);
+            renderizador.sprite = sprite;
+            if (sprite == null) return;
+            var z = renderizador.transform.localPosition.z;
+            renderizador.transform.localPosition = new Vector3(-Paperdoll.LarguraDoMini / 2f - sprite.bounds.min.x, -sprite.bounds.min.y, z);
         }
 
         /// <summary>Põe o sprite com o pé no ponto do pai, na altura pedida.</summary>
@@ -212,7 +253,7 @@ namespace RPGLegend.Game.Jogo
             if (sprite == null) return;
             float escala = altura / sprite.bounds.size.y;
             renderizador.transform.localScale = new Vector3(escala, escala, 1f);
-            renderizador.transform.localPosition = new Vector3(-sprite.bounds.center.x * escala, -sprite.bounds.min.y * escala, 0f);
+            renderizador.transform.localPosition = new Vector3(-sprite.bounds.center.x * escala, -sprite.bounds.min.y * escala, renderizador.transform.localPosition.z);
         }
 
         // ---------- a sala ----------
@@ -604,7 +645,20 @@ namespace RPGLegend.Game.Jogo
             if (andando) _fase++;
             float pulo = andando ? Mathf.Abs(Mathf.Sin(_fase * 0.35f)) * 3f : 0f;
             _boneco.position = Mundo(x, y - pulo);
-            _corpo.sortingOrder = (int)y;
+            foreach (var camada in _camadasDoHeroi) camada.sortingOrder = (int)y;
+            // De costas ao subir; de frente ao descer e pros lados (não há arte de lado: espelha-se a de frente pro lado
+            // que anda). A arte fica na escala do chão: uma casa de altura.
+            if (_walker.Facing == "W") _espelhado = true;
+            else if (_walker.Facing == "E") _espelhado = false;
+            bool deCostas = _walker.Facing == "N" && _temCostas;
+            if (_deCostas.gameObject.activeSelf != deCostas)
+            {
+                _deCostas.gameObject.SetActive(deCostas);
+                _deFrente.gameObject.SetActive(!deCostas);
+            }
+            float tamanho = _heroiDeEmoji ? 1f : _escala * (float)GameData.RoomWalkTable.TileUnits / Paperdoll.AlturaDoMini;
+            _deFrente.localScale = new Vector3(_espelhado ? -tamanho : tamanho, tamanho, 1f);
+            _deCostas.localScale = new Vector3(tamanho, tamanho, 1f);
             if (_naCidade)
             {
                 // A janela segue o herói, sem passar da borda do mapa, em meio pixel (a textura é 2×): fração faz a arte tremer.
@@ -633,9 +687,6 @@ namespace RPGLegend.Game.Jogo
                     Esmaecer(desenho, ArteDaSala.CobreOHeroiNaSala(camada, naSala), passo);
                 }
             }
-            // Provisório: o corpo só tem frente. Espelhar pro lado que anda já diz pra onde ele vai.
-            if (_walker.Facing == "W") _corpo.flipX = true;
-            else if (_walker.Facing == "E") _corpo.flipX = false;
         }
 
         /// <summary>Leva a camada rumo ao meio transparente (se cobre o herói) ou ao inteiro, <paramref name="passo"/> por quadro.</summary>

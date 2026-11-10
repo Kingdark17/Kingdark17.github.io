@@ -243,6 +243,17 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   gera de `UI/Imagens/logo.png` o padrão (o do executável), o adaptável do
   Android (o brasão no círculo seguro, sobre o fundo `--ink` das telas) e o
   `Instalador/icone.ico`, e os põe nas configurações. Logo nova → rodar de novo.
+- O herói no mapa (2026-11-10, **site e app**, arte do Breno decidida com o
+  usuário): é o mini boneco, 31 × 32 (uma casa do mapa dele, desenhado na
+  escala do chão), com a raça, o cabelo e o que tem arte mini (placas, robe e
+  escudo; o resto fica com a roupa de baixo), de frente ao descer e pros
+  lados (espelhado; não há arte de lado) e de costas ao subir. As camadas
+  saem de `lib/paperdoll/mini.ts` (`montarMini`; no app, `Paperdoll.Mini`),
+  e a arte mora em `img/mini/<frente|costas>/` e `Art/Jogo/Resources/Mini`,
+  com os nomes do paperdoll grande: arte nova → rodar
+  `packages/shared/scripts/copia-mini-boneco.mjs <pasta do Drive>` (a roupa
+  de baixo de costas é a de frente, emprestada). Raça sem mini (o anão)
+  fica com o emoji.
 - Jogar pelo app (etapa 4, desde 2026-10-16): o JOGAR do cartão abre a
   partida (`Game/Jogo`): `Partida` é o espelho sem desenho da tela-jogo.tsx
   (estado, avisos, diário, sala secreta, quando gravar), `TelaDeJogo` liga

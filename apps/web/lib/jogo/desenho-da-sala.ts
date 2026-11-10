@@ -47,6 +47,7 @@ import {
   type RoomLayout,
   type Walker,
 } from '@rpg-legend/shared';
+import { ALTURA_DO_MINI, LARGURA_DO_MINI } from '../paperdoll/mini';
 
 /** Pixels de tela por quadradinho: 16 de arte × 3, a escala do pixel art do jogo. */
 export const LADO = 48;
@@ -118,6 +119,17 @@ export interface Figura {
   forma?: 'rachadura';
 }
 
+/**
+ * O herói no mapa: o mini boneco do Breno (`lib/paperdoll/mini.ts`), as
+ * camadas de frente e as de costas, de trás pra frente; e o emoji da raça
+ * pra quando não há arte (o anão) ou ela não carrega.
+ */
+export interface BonecoDoHeroi {
+  frente: readonly string[];
+  costas: readonly string[];
+  emoji: string;
+}
+
 /** Uma sala da masmorra emendada, no lugar dela na grade do andar. */
 export interface SalaDesenhada {
   x: number;
@@ -165,6 +177,8 @@ export interface Cena {
    * enquadra essa sala inteira em vez de seguir o herói (a luta no mapa).
    */
   colocarHeroi(walker: Walker, andando: boolean, origem?: OrigemDaSala | null, enquadrar?: boolean): void;
+  /** Troca a roupa do boneco (equipou, desequipou, mudou de raça no ADM) sem refazer a cena. */
+  vestirHeroi(heroi: BonecoDoHeroi): Promise<void>;
   /** Chama `fn` a cada quadro da tela, com os milissegundos desde o anterior. Devolve como parar. */
   aCadaQuadro(fn: (decorridoMs: number) => void): () => void;
   destruir(): void;
@@ -200,7 +214,7 @@ function peNoQuadrado(col: number, row: number): { x: number; y: number } {
   return { x: col * LADO + LADO / 2, y: row * LADO + LADO - 4 };
 }
 
-export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Figura): Promise<Cena> {
+export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: BonecoDoHeroi): Promise<Cena> {
   const app = new pixi.Application();
   await app.init({
     width: LARGURA_DA_CENA,
@@ -278,8 +292,49 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
     sprite.alpha = alvo < sprite.alpha ? Math.max(alvo, sprite.alpha - passo) : Math.min(alvo, sprite.alpha + passo);
   }
 
-  const boneco = await figuraEm(pixi, heroi, LADO * 1.25);
+  // O boneco: um lado de frente e um de costas, e só um aparece. A arte tem o tamanho de uma casa do mapa do
+  // Breno, então ele é desenhado na escala do chão (`colocarHeroi`), com o pé no ponto.
+  const boneco = new pixi.Container();
+  const deFrente = new pixi.Container();
+  const deCostas = new pixi.Container();
+  deCostas.visible = false;
+  boneco.addChild(deFrente, deCostas);
   mundo.addChild(boneco);
+  /** O boneco é o emoji (sem arte): não segue a escala do chão. */
+  let bonecoDeEmoji = false;
+  let vezDoBoneco = 0;
+
+  async function ladoDoBoneco(camadas: readonly string[]): Promise<Pixi.Sprite[]> {
+    const texturas = await Promise.all(camadas.map((camada) => textura(pixi, camada)));
+    return texturas.flatMap((tex) => {
+      if (!tex) return [];
+      const sprite = new pixi.Sprite(tex);
+      // Pela esquerda e pelo pé: há camada um pixel mais larga que as outras.
+      sprite.anchor.set(0, 1);
+      sprite.x = -LARGURA_DO_MINI / 2;
+      return [sprite];
+    });
+  }
+
+  async function vestirHeroi(novo: BonecoDoHeroi) {
+    const minhaVez = ++vezDoBoneco;
+    const [frente, costas] = await Promise.all([ladoDoBoneco(novo.frente), ladoDoBoneco(novo.costas)]);
+    if (minhaVez !== vezDoBoneco) {
+      for (const sprite of [...frente, ...costas]) sprite.destroy();
+      return;
+    }
+    deFrente.removeChildren().forEach((filho) => filho.destroy());
+    deCostas.removeChildren().forEach((filho) => filho.destroy());
+    bonecoDeEmoji = frente.length === 0;
+    if (bonecoDeEmoji) {
+      deFrente.addChild(await figuraEm(pixi, { arte: null, emoji: novo.emoji }, LADO * 1.25));
+      return;
+    }
+    deFrente.addChild(...frente);
+    // Sem arte de costas, a de frente serve.
+    if (costas.length) deCostas.addChild(...costas);
+  }
+  await vestirHeroi(heroi);
 
   const semMovimento = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   /** Fase do balanço do passo: avança só enquanto o herói anda. */
@@ -532,10 +587,17 @@ export async function criarCena(pixi: typeof Pixi, alvo: HTMLElement, heroi: Fig
       const pulo = andando && !semMovimento ? Math.abs(Math.sin(fase * 0.35)) * 3 : 0;
       boneco.position.set(x, y - pulo);
       boneco.zIndex = y;
-      // Provisório: o corpo do paperdoll só tem frente. Espelhar pro lado
-      // que anda já diz pra onde ele vai; as quatro direções vêm do Breno.
-      if (walker.facing === 'W' || walker.facing === 'E') boneco.scale.x = Math.abs(boneco.scale.x) * (walker.facing === 'W' ? -1 : 1);
+      // De costas ao subir; de frente ao descer e pros lados (não há arte de lado: espelha-se a de frente pro
+      // lado que anda). A arte fica na escala do chão: uma casa de altura.
+      const costas = walker.facing === 'N' && deCostas.children.length > 0;
+      deCostas.visible = costas;
+      deFrente.visible = !costas;
+      const tamanho = bonecoDeEmoji ? 1 : (escala * TILE_UNITS) / ALTURA_DO_MINI;
+      const espelhado = walker.facing === 'W' ? true : walker.facing === 'E' ? false : boneco.scale.x < 0;
+      boneco.scale.set(espelhado && !costas ? -tamanho : tamanho, tamanho);
     },
+
+    vestirHeroi,
 
     aCadaQuadro(fn) {
       const chamar = (ticker: Pixi.Ticker) => fn(ticker.deltaMS);

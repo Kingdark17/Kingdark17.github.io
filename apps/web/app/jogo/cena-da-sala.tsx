@@ -31,7 +31,7 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type R
 
 import { ROOM_COLS, ROOM_ROWS, andarNoQuadro, passosDoQuadro, type Direction, type DungeonId, type PosicaoNaSala, type RoomLayout, type Vetor, type Walker } from '@rpg-legend/shared';
 
-import { criarCena, type Cena, type Figura, type OrigemDaSala, type SalaDesenhada, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
+import { criarCena, type BonecoDoHeroi, type Cena, type Figura, type OrigemDaSala, type SalaDesenhada, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
 import styles from './jogo.module.css';
 
 interface Props {
@@ -57,7 +57,7 @@ interface Props {
   origem?: OrigemDaSala | null;
   /** Na luta no mapa: a câmera enquadra a sala inteira, em vez de seguir o herói. */
   enquadrar?: boolean;
-  heroi: Figura;
+  heroi: BonecoDoHeroi;
   /** Onde o herói aparece nesta sala. */
   chegada: Walker;
   /** Onde ele está agora — da tela, pra sobreviver à cena desmontar. */
@@ -111,13 +111,18 @@ export function CenaDaSala({
   /** O tempo que sobrou do quadro anterior, e de que sala o herói já saiu (esperando a vizinha chegar). */
   const relogio = useRef<{ sobra: number; saiuDe: string | null }>({ sobra: 0, saiuDe: null });
 
-  // Uma cena por boneco: trocar de raça (ADM) refaz; andar não.
+  // Uma cena só: trocar a roupa do boneco não a refaz (o efeito de baixo o veste de novo).
+  const heroiAgora = useRef(heroi);
+  useEffect(() => {
+    heroiAgora.current = heroi;
+    if (pronta) void cena.current?.vestirHeroi(heroi);
+  }, [heroi, pronta]);
   useEffect(() => {
     let cancelado = false;
     void (async () => {
       const pixi = await import('pixi.js');
       if (cancelado || !alvo.current) return;
-      const criada = await criarCena(pixi, alvo.current, heroi);
+      const criada = await criarCena(pixi, alvo.current, heroiAgora.current);
       // Desmontou enquanto o PixiJS iniciava (o StrictMode faz isso no
       // desenvolvimento): a cena nasceu órfã e sai junto.
       if (cancelado) {
@@ -133,7 +138,7 @@ export function CenaDaSala({
       cena.current = null;
       setPronta(false);
     };
-  }, [heroi]);
+  }, []);
 
   const troncos = cidade ? cidade.troncos : null;
   useEffect(() => {

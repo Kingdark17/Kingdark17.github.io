@@ -104,7 +104,8 @@ import { usuarioAtual } from '@/lib/api/account';
 import { ErroDaApi } from '@/lib/api/client';
 import { carregarSave, gravarSave } from '@/lib/api/save';
 import { arteDoConteudo, arteDoTipo } from '@/lib/jogo/icones-do-mapa';
-import { TEMAS, type Figura, type MarcaNoChao, type OrigemDaSala, type SalaDesenhada, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
+import { TEMAS, type BonecoDoHeroi, type Figura, type MarcaNoChao, type OrigemDaSala, type SalaDesenhada, type TemaDaSala } from '@/lib/jogo/desenho-da-sala';
+import { montarMini } from '@/lib/paperdoll/mini';
 import { assinaturaDosExtras, chaveDosObjetos, figurasDaSala, lerObjetos } from '@/lib/jogo/figuras-da-sala';
 import { direcaoAoSoltar, direcaoDaTecla, estaDigitando } from '@/lib/jogo/teclado';
 import { tocar } from '@/lib/som/efeitos';
@@ -348,9 +349,18 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
   const origemY = estado?.pos.y ?? 0;
   const origemDaCena = useMemo(() => (salasDaCena ? { x: origemX, y: origemY } : null), [origemX, origemY, salasDaCena]);
 
-  // Provisório: o corpo da raça do paperdoll faz o papel do boneco do mapa
-  // até o Breno desenhar o de 4 direções.
-  const heroiNaCena = useMemo<Figura>(() => ({ arte: racaAgora ? `/img/paperdoll/corpo/${racaAgora}.png` : null, emoji: emojiDaRaca }), [racaAgora, emojiDaRaca]);
+  // O mini boneco do Breno (2026-11-10): a raça, o cabelo e o que está vestido, de frente e de costas. As
+  // dependências são os ids, e não o herói: ele muda a cada passo, e o boneco só quando troca de roupa.
+  const equipado = estado?.hero.equip;
+  const cabeloAgora = estado?.hero.hair ?? null;
+  const armaduraAgora = equipado?.armadura?.templateId ?? null;
+  const elmoAgora = equipado?.elmo?.templateId ?? null;
+  const calcaAgora = equipado?.calca?.templateId ?? null;
+  const secundariaAgora = equipado?.secundaria?.templateId ?? null;
+  const heroiNaCena = useMemo<BonecoDoHeroi>(() => {
+    const vestido = { raca: racaAgora, cabelo: cabeloAgora, armadura: armaduraAgora, elmo: elmoAgora, calca: calcaAgora, secundaria: secundariaAgora };
+    return { frente: montarMini(vestido, 'frente'), costas: montarMini(vestido, 'costas'), emoji: emojiDaRaca };
+  }, [racaAgora, cabeloAgora, armaduraAgora, elmoAgora, calcaAgora, secundariaAgora, emojiDaRaca]);
 
   /**
    * Onde o herói aparece nesta sala, junto da sala a que isso pertence.
