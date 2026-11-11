@@ -135,7 +135,14 @@ namespace RPGLegend.Engine
             }
 
             var c = ComLog(dialogo, resultado.Mensagem);
-            c.Estado = resultado.Usado ? ComNpc(resultado.Estado, npc) : resultado.Estado;
+            if (resultado.Usado)
+            {
+                // O serviço de um NPC treina o Carisma (Treino).
+                var comTreino = resultado.Estado.Clone();
+                comTreino.Hero = Treino.AnotarUso(resultado.Estado.Hero, "carisma");
+                c.Estado = ComNpc(comTreino, npc);
+            }
+            else c.Estado = resultado.Estado;
             c.Npc = npc;
             return c;
         }

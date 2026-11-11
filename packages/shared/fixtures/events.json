@@ -1422,7 +1422,7 @@
           "attrs": {
             "forca": 10,
             "destreza": 10,
-            "constituicao": 10,
+            "constituicao": 11,
             "intelecto": 13,
             "sabedoria": 10,
             "carisma": 10
@@ -1456,7 +1456,7 @@
           "raceId": "humano",
           "xp": 58,
           "xpNext": 75,
-          "attrPoints": 2,
+          "attrPoints": 0,
           "gold": 100,
           "powerNames": [],
           "powerIds": [],
@@ -1470,7 +1470,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 136,
+            "maxHp": 146,
             "maxMp": 79,
             "dmgFisico": 20,
             "dmgMagico": 39,
@@ -1481,8 +1481,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 136,
-          "hp": 65,
+          "maxHp": 146,
+          "hp": 75,
           "maxMp": 79,
           "mp": 32,
           "buffs": {}
@@ -1787,7 +1787,7 @@
           "attrs": {
             "forca": 10,
             "destreza": 10,
-            "constituicao": 10,
+            "constituicao": 12,
             "intelecto": 13,
             "sabedoria": 10,
             "carisma": 10
@@ -1821,7 +1821,7 @@
           "raceId": "humano",
           "xp": 73,
           "xpNext": 110,
-          "attrPoints": 4,
+          "attrPoints": 0,
           "gold": 100,
           "powerNames": [],
           "powerIds": [],
@@ -1835,7 +1835,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 141,
+            "maxHp": 161,
             "maxMp": 81,
             "dmgFisico": 20,
             "dmgMagico": 39,
@@ -1846,8 +1846,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 141,
-          "hp": 70,
+          "maxHp": 161,
+          "hp": 90,
           "maxMp": 81,
           "mp": 34,
           "buffs": {}
@@ -1968,7 +1968,7 @@
           "attrs": {
             "forca": 10,
             "destreza": 10,
-            "constituicao": 10,
+            "constituicao": 13,
             "intelecto": 13,
             "sabedoria": 10,
             "carisma": 10
@@ -2002,7 +2002,7 @@
           "raceId": "humano",
           "xp": 53,
           "xpNext": 145,
-          "attrPoints": 6,
+          "attrPoints": 0,
           "gold": 100,
           "powerNames": [],
           "powerIds": [],
@@ -2016,7 +2016,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 146,
+            "maxHp": 176,
             "maxMp": 83,
             "dmgFisico": 20,
             "dmgMagico": 39,
@@ -2027,8 +2027,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 146,
-          "hp": 75,
+          "maxHp": 176,
+          "hp": 105,
           "maxMp": 83,
           "mp": 36,
           "buffs": {}
@@ -2153,7 +2153,7 @@
           "attrs": {
             "forca": 10,
             "destreza": 10,
-            "constituicao": 10,
+            "constituicao": 13,
             "intelecto": 13,
             "sabedoria": 10,
             "carisma": 10
@@ -2187,7 +2187,7 @@
           "raceId": "humano",
           "xp": 53,
           "xpNext": 145,
-          "attrPoints": 6,
+          "attrPoints": 0,
           "gold": 100,
           "powerNames": [],
           "powerIds": [],
@@ -2201,7 +2201,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 146,
+            "maxHp": 176,
             "maxMp": 83,
             "dmgFisico": 20,
             "dmgMagico": 39,
@@ -2212,8 +2212,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 146,
-          "hp": 75,
+          "maxHp": 176,
+          "hp": 105,
           "maxMp": 83,
           "mp": 36,
           "buffs": {}
@@ -4745,7 +4745,7 @@
           "attrs": {
             "forca": 10,
             "destreza": 10,
-            "constituicao": 10,
+            "constituicao": 11,
             "intelecto": 10,
             "sabedoria": 12,
             "carisma": 10
@@ -4779,7 +4779,7 @@
           "raceId": "humano",
           "xp": 6,
           "xpNext": 75,
-          "attrPoints": 2,
+          "attrPoints": 0,
           "gold": 130,
           "powerNames": [],
           "powerIds": [],
@@ -4793,7 +4793,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 136,
+            "maxHp": 146,
             "maxMp": 64,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -4804,8 +4804,8 @@
             "resistMagica": 12,
             "descontoLoja": 5
           },
-          "maxHp": 136,
-          "hp": 65,
+          "maxHp": 146,
+          "hp": 75,
           "maxMp": 64,
           "mp": 32,
           "buffs": {}

@@ -45,6 +45,7 @@ import { ataquesDisponiveis, LADOS_DO_DANO, resolverGolpe, type AttackStyle, typ
 import { tickHeroStatus } from '../combat/hero-status.js';
 import { tickMonsterDot } from '../combat/status-effects.js';
 import { castPower } from '../combat/use-power.js';
+import { anotarUso, atributoDoGolpe, textoDaHabilidade, treinarPoder } from '../hero/treino.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import { STICK_MAX, type Walker } from '../dungeon/room-walk.js';
 import type { Behavior } from '../monsters/species.js';
@@ -615,7 +616,9 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
   }
   const estado = masmorra(l);
   const golpe = resolverGolpe(estado.hero, monstro, dado, lida, estilo, { rng: l.rng, petCriticoBonus: petBonus(l.pet).critico ?? 0 });
-  const ferida = ferirNaArena(l, { ...estado, hero: golpe.hero }, alvo.indice, golpe.monster);
+  // O golpe que acerta treina o atributo dele (`treino.ts`).
+  const treinado = golpe.outcome === 'hit' ? anotarUso(golpe.hero, atributoDoGolpe(golpe.hero, estilo)) : golpe.hero;
+  const ferida = ferirNaArena(l, { ...estado, hero: treinado }, alvo.indice, golpe.monster);
 
   if (golpe.outcome === 'no_mana') {
     contar(l, { tipo: 'aviso', texto: 'Mana insuficiente' });
@@ -712,7 +715,13 @@ function usarPoder(l: Luta, id: string): void {
     return;
   }
   l.arena.recargaDosPoderes[id] = RECARGA_DO_PODER;
-  const ferida = ferirNaArena(l, { ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster);
+  // O poder usado treina o atributo dele e sobe o próprio nível pelo uso.
+  const treino = treinarPoder(uso.hero, poder);
+  if (treino.subiu) {
+    diario(l, [textoDaHabilidade(poder.name, treino.subiu)]);
+    contar(l, { tipo: 'aviso', texto: `⭐ ${poder.name} nível ${treino.subiu}` });
+  }
+  const ferida = ferirNaArena(l, { ...estado, hero: treino.hero, party: uso.party }, alvo, uso.monster);
 
   if (uso.outcome === 'damage') {
     contar(l, numeroNoMonstro(ferida, alvo, `${poder.icon} -${uso.damage}`, 'critico'));
@@ -988,7 +997,8 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   const monstro = monstroNo(l, indice);
   const golpe = landHitOnHero(estado.hero, monstro, forca, l.rng, petBonus(l.pet).esquiva ?? 0, defesasDoHeroi(estado.hero));
   if (golpe.dodged) {
-    l.estado = gravarMonstro({ ...estado, hero: golpe.hero }, indice, golpe.monster);
+    // Esquivar treina a Destreza.
+    l.estado = gravarMonstro({ ...estado, hero: anotarUso(golpe.hero, 'destreza') }, indice, golpe.monster);
     contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: 'Desviou', tom: 'erro' });
     contar(l, { tipo: 'som', som: 'miss' });
     return;

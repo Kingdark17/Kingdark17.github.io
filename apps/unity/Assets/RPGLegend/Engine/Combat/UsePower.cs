@@ -65,7 +65,7 @@ namespace RPGLegend.Engine
         /// botão do poder mostra antes do clique. Do poder só o custo importa.
         /// </summary>
         public static double PowerManaCost(Hero hero, PowerDef power, double desconto = 0) =>
-            Math.Ceiling(power.Cost * (Heroes.HasDebuffEffect(hero, "manaCostPenalty") ? PenalidadeDeMana : 1) * (1 - desconto));
+            Math.Ceiling(power.Cost * (Heroes.HasDebuffEffect(hero, "manaCostPenalty") ? PenalidadeDeMana : 1) * (1 - desconto) * (1 - Treino.DescontoDaHabilidade(hero, power.Id)));
 
         /// <summary>
         /// TS: castPower (o <c>usePower()</c> do original; o prefixo use é reservado a hooks no lint do React).
@@ -117,6 +117,8 @@ namespace RPGLegend.Engine
                 heroAfterCost.Mp = hero.Mp - manaCost;
             }
             var d = heroAfterCost.Derived;
+            // O nível da habilidade: +4% no dano e na cura por nível acima do primeiro.
+            double efeito = Treino.EfeitoDaHabilidade(hero, power.Id);
 
             if (power.Type == "invocar")
             {
@@ -141,7 +143,7 @@ namespace RPGLegend.Engine
                 // Maestria: +2% por nível com a arma da classe na mão, como no golpe. Fica no golpe do poder;
                 // o dano contínuo que ele deixa não muda.
                 double bruto = Js.Round(
-                    Js.Round((Js.Round(baseDoPoder * (power.PowerValue ?? 1)) + Rng.RandomInt(6, rng)) * Mastery.DamageMult(heroAfterCost)) *
+                    Js.Round((Js.Round(baseDoPoder * (power.PowerValue ?? 1) * efeito) + Rng.RandomInt(6, rng)) * Mastery.DamageMult(heroAfterCost)) *
                     FerimentosDoHeroi.ForcaDoBraco(heroAfterCost));
                 var mod = Damage.ModifyDamageByAffinity(
                     monster,
@@ -182,7 +184,7 @@ namespace RPGLegend.Engine
             if (power.Type == "cura")
             {
                 double penalidade = Heroes.HasDebuffEffect(heroAfterCost, "healingPenalty") ? 0.75 : 1;
-                double heal = Js.Round((10 * (power.PowerValue ?? 1) + d.CuraBonus) * penalidade * (1 + (options.PetCuraBonus ?? 0) / 100));
+                double heal = Js.Round((10 * (power.PowerValue ?? 1) + d.CuraBonus) * penalidade * (1 + (options.PetCuraBonus ?? 0) / 100) * efeito);
                 double allyHeal = Js.Max(1, Js.Round(heal * 0.7));
 
                 var curado = heroAfterCost.Clone();

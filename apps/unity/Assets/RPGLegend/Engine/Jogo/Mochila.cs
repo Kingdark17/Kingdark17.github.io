@@ -82,7 +82,8 @@ namespace RPGLegend.Engine
             if (mana > 0) partes.Add(Js.NumberToString(mana) + " de Mana");
 
             var estado = mochila.Estado.Clone();
-            estado.Hero = resultado.Hero;
+            // Usar poção treina a Sabedoria (Treino).
+            estado.Hero = Treino.AnotarUso(resultado.Hero, "sabedoria");
             estado.Inventory = resultado.Inventory;
             return ComLog(estado, partes.Count > 0
                 ? "Você usa " + Items.DisplayName(item) + " e recupera " + string.Join(" e ", partes) + "."

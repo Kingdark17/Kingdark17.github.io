@@ -243,6 +243,21 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   gera de `UI/Imagens/logo.png` o padrão (o do executável), o adaptável do
   Android (o brasão no círculo seguro, sobre o fundo `--ink` das telas) e o
   `Instalador/icone.ico`, e os põe nas configurações. Logo nova → rodar de novo.
+- Atributos e habilidades pelo uso (2026-11-10, **site e app**, doc do Breno
+  decidido com o usuário; substitui os 2 pontos por nível): cada ação anota um
+  uso no atributo dela (`hero/treino.ts`, `anotarUso`: Força no golpe corpo a
+  corpo e no poder físico; Destreza no tiro, na esquiva e na fuga;
+  Inteligência no golpe e no poder mágico e na invocação; Sabedoria na cura,
+  no apoio e na poção; Carisma no serviço de NPC, na compra e na venda), e o
+  XP de cada abate se reparte por esses usos (`treinarComXp`, em
+  `pagarAbate`): um ponto custa o XP do nível ÷ 1,5 (`custoDoPonto`), então o
+  ritmo fica perto do de antes. A Constituição sobe 1 por nível (`gainXP`).
+  Os pontos guardados de antes (`attrPoints`) não se gastam mais: 2 por
+  abate viram XP do personagem (25% do nível cada), aos poucos por causa do
+  teto de +5 níveis por save da API. Cada poder conta os usos
+  (`hero.usosDePoder`): 10 níveis (5, 15, 30… usos), +4% de dano e cura e
+  −2% de mana por nível, dentro de `castPower` e `powerManaCost`. O cartão
+  de guilda mostra a barrinha do treino e o nível de cada poder.
 - O herói no mapa (2026-11-10, **site e app**, arte do Breno decidida com o
   usuário): é o mini boneco, 31 × 32 (uma casa do mapa dele, desenhado na
   escala do chão), com a raça, o cabelo e o que tem arte mini (placas, robe e

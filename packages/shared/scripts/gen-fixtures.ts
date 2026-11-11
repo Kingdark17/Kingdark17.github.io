@@ -838,6 +838,39 @@ for (const [arma, peca] of [
   caso('spendAttrPoint: gasta um ponto e recalcula', 'spendAttrPoint', { hero: comPontos, key: 'constituicao' }, gastar);
   caso('spendAttrPoint: sem pontos devolve igual', 'spendAttrPoint', { hero: guerreiro, key: 'forca' }, gastar);
   caso('spendAttrPoint: no teto de 99 não gasta o ponto', 'spendAttrPoint', { hero: { ...comPontos, attrs: { ...comPontos.attrs, forca: 99 } }, key: 'forca' }, gastar);
+  // Atributos e habilidades pelo uso (hero/treino.ts, 2026-11-10).
+  const usado = { ...guerreiro, usosDeAtributo: { forca: 3, destreza: 1 }, treino: { forca: 5 } };
+  for (const nivel of [1, 2, 10, 50, 200]) caso(`custoDoPonto: nível ${nivel}`, 'custoDoPonto', { nivel }, (x) => E.custoDoPonto(x.nivel));
+  const anotar = (x: { hero: Hero; chave: string; quantos?: number }) => E.anotarUso(x.hero, x.chave as keyof Attributes, x.quantos);
+  caso('anotarUso: o primeiro uso', 'anotarUso', { hero: guerreiro, chave: 'forca' }, anotar);
+  caso('anotarUso: soma ao que já tinha', 'anotarUso', { hero: usado, chave: 'forca', quantos: 2 }, anotar);
+  caso('anotarUso: a Constituição não é de uso', 'anotarUso', { hero: guerreiro, chave: 'constituicao' }, anotar);
+  const treinar = (x: { hero: Hero; xp: number }) => E.treinarComXp(x.hero, x.xp);
+  caso('treinarComXp: reparte pelos usos', 'treinarComXp', { hero: usado, xp: 10 }, treinar);
+  caso('treinarComXp: sobe dois atributos', 'treinarComXp', { hero: usado, xp: 400 }, treinar);
+  caso('treinarComXp: sem uso não treina', 'treinarComXp', { hero: guerreiro, xp: 400 }, treinar);
+  caso('treinarComXp: no teto não guarda', 'treinarComXp', { hero: { ...usado, attrs: { ...usado.attrs, forca: 99 } }, xp: 400 }, treinar);
+  caso('treinarComXp: xp zero só zera a anotação', 'treinarComXp', { hero: usado, xp: 0 }, treinar);
+  for (const chave of ['forca', 'destreza', 'constituicao'] as const) caso(`progressoDoTreino: ${chave}`, 'progressoDoTreino', { hero: usado, chave }, (x) => E.progressoDoTreino(x.hero, x.chave));
+  const converter = (x: { hero: Hero }) => E.converterPontosGuardados(x.hero);
+  caso('converterPontosGuardados: sem pontos', 'converterPontosGuardados', { hero: guerreiro }, converter);
+  caso('converterPontosGuardados: dois de cinco', 'converterPontosGuardados', { hero: { ...guerreiro, attrPoints: 5 } }, converter);
+  caso('converterPontosGuardados: o último', 'converterPontosGuardados', { hero: { ...guerreiro, attrPoints: 1 } }, converter);
+  caso('converterPontosGuardados: sobe de nível', 'converterPontosGuardados', { hero: { ...guerreiro, attrPoints: 9, xp: guerreiro.xpNext - 1 } }, converter);
+  for (const usos of [0, 4, 5, 14, 15, 104, 105, 225, 9999]) {
+    const hero = { ...guerreiro, usosDePoder: { golpe_poderoso: usos } };
+    caso(`nivelDaHabilidade: ${usos} usos`, 'nivelDaHabilidade', { hero, poder: 'golpe_poderoso' }, (x) => E.nivelDaHabilidade(x.hero, x.poder));
+    caso(`efeitoDaHabilidade: ${usos} usos`, 'efeitoDaHabilidade', { hero, poder: 'golpe_poderoso' }, (x) => E.efeitoDaHabilidade(x.hero, x.poder));
+    caso(`descontoDaHabilidade: ${usos} usos`, 'descontoDaHabilidade', { hero, poder: 'golpe_poderoso' }, (x) => E.descontoDaHabilidade(x.hero, x.poder));
+    caso(`usosAteOProximoNivel: ${usos} usos`, 'usosAteOProximoNivel', { hero, poder: 'golpe_poderoso' }, (x) => E.usosAteOProximoNivel(x.hero, x.poder));
+    caso(`usarHabilidade: ${usos} usos`, 'usarHabilidade', { hero, poder: 'golpe_poderoso' }, (x) => E.usarHabilidade(x.hero, x.poder));
+  }
+  caso('nivelDaHabilidade: poder nunca usado', 'nivelDaHabilidade', { hero: guerreiro, poder: 'cura_menor' }, (x) => E.nivelDaHabilidade(x.hero, x.poder));
+  for (const estilo of ['normal', 'magic', 'physical', 'ranged'] as const) caso(`atributoDoGolpe: ${estilo}`, 'atributoDoGolpe', { hero: guerreiro, estilo }, (x) => E.atributoDoGolpe(x.hero, x.estilo));
+  for (const tipo of ['dano_fisico', 'dano_magico', 'invocar', 'cura', 'buff_forca', 'escudo']) caso(`atributoDoPoder: ${tipo}`, 'atributoDoPoder', { tipo }, (x) => E.atributoDoPoder(x.tipo));
+  caso('treinarPoder: cura', 'treinarPoder', { hero: guerreiro, poder: { id: 'cura_menor', type: 'cura' } }, (x) => E.treinarPoder(x.hero, x.poder));
+  caso('treinarPoder: passa de nível', 'treinarPoder', { hero: { ...guerreiro, usosDePoder: { bola_de_fogo: 4 } }, poder: { id: 'bola_de_fogo', type: 'dano_magico' } }, (x) => E.treinarPoder(x.hero, x.poder));
+  caso('textoDaHabilidade', 'textoDaHabilidade', { nome: 'Bola de Fogo', nivel: 3 }, (x) => E.textoDaHabilidade(x.nome, x.nivel));
   caso('spendAttrPoint: 999 (do painel ADM) também não gasta', 'spendAttrPoint', { hero: { ...comPontos, attrs: { ...comPontos.attrs, forca: 999 } }, key: 'forca' }, gastar);
 
   const comEscudo = { ...guerreiro, equip: { ...guerreiro.equip, secundaria: item('escudo') } };

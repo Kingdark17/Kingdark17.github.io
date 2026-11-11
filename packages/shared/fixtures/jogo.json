@@ -70602,6 +70602,10 @@
           "texto": "Queimadura, veneno e sangramento causam dano contínuo. Atordoamento impede ataques; lentidão, vulnerabilidade e fraqueza reduzem a defesa do inimigo."
         },
         {
+          "titulo": "📈 Atributos e habilidades",
+          "texto": "Os atributos sobem pelo uso: Força com golpes corpo a corpo, Destreza com tiros, esquivas e fugas, Inteligência com magia e invocação, Sabedoria com cura, apoio e poções, Carisma com NPCs e lojas. A Constituição sobe 1 a cada nível. Cada poder também sobe de nível quanto mais é usado: bate mais forte e gasta menos Mana."
+        },
+        {
           "titulo": "🎒 Itens e tiers",
           "texto": "Compare atributos e tiers antes de equipar. A ordem é E, D, C, B, A, S, SS, SSS, SSS+ e MAX."
         },
@@ -87069,19 +87073,22 @@
           "id": "golpe_poderoso",
           "icone": "💥",
           "nome": "Golpe Poderoso",
-          "custo": 8
+          "custo": 8,
+          "nivel": 1
         },
         {
           "id": "bola_de_fogo",
           "icone": "🔥",
           "nome": "Bola de Fogo",
-          "custo": 14
+          "custo": 14,
+          "nivel": 1
         },
         {
           "id": "cura_menor",
           "icone": "✨",
           "nome": "Cura Menor",
-          "custo": 10
+          "custo": 10,
+          "nivel": 1
         }
       ]
     }
@@ -87174,19 +87181,22 @@
           "id": "golpe_poderoso",
           "icone": "💥",
           "nome": "Golpe Poderoso",
-          "custo": 10
+          "custo": 10,
+          "nivel": 1
         },
         {
           "id": "bola_de_fogo",
           "icone": "🔥",
           "nome": "Bola de Fogo",
-          "custo": 17
+          "custo": 17,
+          "nivel": 1
         },
         {
           "id": "cura_menor",
           "icone": "✨",
           "nome": "Cura Menor",
-          "custo": 12
+          "custo": 12,
+          "nivel": 1
         }
       ]
     }
@@ -87345,13 +87355,15 @@
           "id": "furtividade_sombria",
           "icone": "🌑",
           "nome": "Furtividade Sombria",
-          "custo": 8
+          "custo": 8,
+          "nivel": 1
         },
         {
           "id": "tiro_certeiro",
           "icone": "🎯",
           "nome": "Tiro Certeiro",
-          "custo": 6
+          "custo": 6,
+          "nivel": 1
         }
       ]
     }
@@ -120223,7 +120235,10 @@
             "hp": 42,
             "maxMp": 62,
             "mp": 3,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "sabedoria": 1
+            }
           },
           "party": [],
           "inventory": [
@@ -120503,7 +120518,10 @@
             "hp": 20,
             "maxMp": 62,
             "mp": 19,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "sabedoria": 1
+            }
           },
           "party": [],
           "inventory": [
@@ -120773,7 +120791,10 @@
             "hp": 125,
             "maxMp": 62,
             "mp": 62,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "sabedoria": 1
+            }
           },
           "party": [],
           "inventory": [],
@@ -121034,7 +121055,10 @@
             "hp": 30,
             "maxMp": 62,
             "mp": 13,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "sabedoria": 1
+            }
           },
           "party": [],
           "inventory": [],
@@ -136101,7 +136125,10 @@
             "hp": 125,
             "maxMp": 62,
             "mp": 62,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "carisma": 1
+            }
           },
           "party": [],
           "inventory": [
@@ -136637,7 +136664,10 @@
             "hp": 125,
             "maxMp": 62,
             "mp": 62,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "carisma": 1
+            }
           },
           "party": [],
           "inventory": [
@@ -137658,7 +137688,10 @@
             "hp": 125,
             "maxMp": 62,
             "mp": 62,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "carisma": 1
+            }
           },
           "party": [],
           "inventory": [
@@ -146178,7 +146211,7 @@
             "attrs": {
               "forca": 10,
               "destreza": 10,
-              "constituicao": 10,
+              "constituicao": 11,
               "intelecto": 10,
               "sabedoria": 10,
               "carisma": 10
@@ -146211,7 +146244,7 @@
             "raceId": "humano",
             "xp": 29,
             "xpNext": 75,
-            "attrPoints": 2,
+            "attrPoints": 0,
             "gold": 122,
             "powerNames": [],
             "powerIds": [],
@@ -146225,7 +146258,7 @@
             "killCount": 0,
             "masteryBattles": 0,
             "derived": {
-              "maxHp": 130,
+              "maxHp": 140,
               "maxMp": 64,
               "dmgFisico": 20,
               "dmgMagico": 30,
@@ -146236,8 +146269,8 @@
               "resistMagica": 10,
               "descontoLoja": 5
             },
-            "maxHp": 130,
-            "hp": 130,
+            "maxHp": 140,
+            "hp": 140,
             "maxMp": 64,
             "mp": 64,
             "buffs": {}
@@ -149170,7 +149203,10 @@
             "hp": 66,
             "maxMp": 62,
             "mp": 24,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "carisma": 1
+            }
           },
           "party": [],
           "inventory": [],
@@ -150107,6 +150143,9 @@
             "npcBlessing": {
               "combats": 3,
               "dodge": 12
+            },
+            "usosDeAtributo": {
+              "carisma": 1
             }
           },
           "party": [],
@@ -150437,7 +150476,10 @@
             "hp": 125,
             "maxMp": 62,
             "mp": 62,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "carisma": 1
+            }
           },
           "party": [],
           "inventory": [
@@ -151871,7 +151913,10 @@
             "hp": 125,
             "maxMp": 62,
             "mp": 62,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "carisma": 1
+            }
           },
           "party": [],
           "inventory": [
@@ -153237,7 +153282,10 @@
             "hp": 125,
             "maxMp": 62,
             "mp": 62,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "carisma": 1
+            }
           },
           "party": [
             {
@@ -154626,7 +154674,10 @@
             "hp": 66,
             "maxMp": 62,
             "mp": 24,
-            "buffs": {}
+            "buffs": {},
+            "usosDeAtributo": {
+              "carisma": 1
+            }
           },
           "party": [],
           "inventory": [],
@@ -160510,7 +160561,7 @@
             "attrs": {
               "forca": 10,
               "destreza": 10,
-              "constituicao": 10,
+              "constituicao": 13,
               "intelecto": 25,
               "sabedoria": 10,
               "carisma": 10
@@ -160544,7 +160595,7 @@
             "raceId": "humano",
             "xp": 53,
             "xpNext": 145,
-            "attrPoints": 6,
+            "attrPoints": 0,
             "gold": 100,
             "powerNames": [],
             "powerIds": [],
@@ -160558,7 +160609,7 @@
             "killCount": 0,
             "masteryBattles": 0,
             "derived": {
-              "maxHp": 140,
+              "maxHp": 170,
               "maxMp": 151,
               "dmgFisico": 20,
               "dmgMagico": 75,
@@ -160569,8 +160620,8 @@
               "resistMagica": 10,
               "descontoLoja": 5
             },
-            "maxHp": 140,
-            "hp": 140,
+            "maxHp": 170,
+            "hp": 170,
             "maxMp": 151,
             "mp": 151,
             "buffs": {}
@@ -160803,7 +160854,7 @@
             "attrs": {
               "forca": 10,
               "destreza": 10,
-              "constituicao": 10,
+              "constituicao": 13,
               "intelecto": 25,
               "sabedoria": 10,
               "carisma": 10
@@ -160837,7 +160888,7 @@
             "raceId": "humano",
             "xp": 53,
             "xpNext": 145,
-            "attrPoints": 6,
+            "attrPoints": 0,
             "gold": 100,
             "powerNames": [],
             "powerIds": [],
@@ -160851,7 +160902,7 @@
             "killCount": 0,
             "masteryBattles": 0,
             "derived": {
-              "maxHp": 140,
+              "maxHp": 170,
               "maxMp": 151,
               "dmgFisico": 20,
               "dmgMagico": 75,
@@ -160862,8 +160913,8 @@
               "resistMagica": 10,
               "descontoLoja": 5
             },
-            "maxHp": 140,
-            "hp": 140,
+            "maxHp": 170,
+            "hp": 170,
             "maxMp": 151,
             "mp": 151,
             "buffs": {}
@@ -161096,7 +161147,7 @@
             "attrs": {
               "forca": 10,
               "destreza": 10,
-              "constituicao": 10,
+              "constituicao": 13,
               "intelecto": 25,
               "sabedoria": 10,
               "carisma": 10
@@ -161130,7 +161181,7 @@
             "raceId": "humano",
             "xp": 53,
             "xpNext": 145,
-            "attrPoints": 6,
+            "attrPoints": 0,
             "gold": 100,
             "powerNames": [],
             "powerIds": [],
@@ -161144,7 +161195,7 @@
             "killCount": 0,
             "masteryBattles": 0,
             "derived": {
-              "maxHp": 140,
+              "maxHp": 170,
               "maxMp": 151,
               "dmgFisico": 20,
               "dmgMagico": 75,
@@ -161155,8 +161206,8 @@
               "resistMagica": 10,
               "descontoLoja": 5
             },
-            "maxHp": 140,
-            "hp": 140,
+            "maxHp": 170,
+            "hp": 170,
             "maxMp": 151,
             "mp": 151,
             "buffs": {}
@@ -175489,7 +175540,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1794350899847_55026",
+                  "uid": "pot_mana_1794392279955_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -175619,7 +175670,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1794350899847_90893",
+                  "uid": "anel_som_1794392279955_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -175908,7 +175959,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1794350899848_87912",
+                  "uid": "pot_mana_1794392279956_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -176125,7 +176176,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794350899848_18536",
+                  "uid": "pot_vida_1794392279956_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -176327,7 +176378,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1794350899848_69928",
+                  "uid": "bota_vento_1794392279956_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -176403,7 +176454,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1794350899848_12429",
+                "uid": "tala_1794392279956_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -176577,7 +176628,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1794350899849_23232",
+              "uid": "placas_elmo_1794392279957_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -176659,7 +176710,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794350899849_3788",
+                  "uid": "pot_vida_1794392279957_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -176776,7 +176827,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1794350899849_56339",
+                  "uid": "amuleto_sab_1794392279957_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -176942,7 +176993,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1794350899849_93474",
+              "uid": "anel_som_1794392279957_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {
@@ -242317,7 +242368,7 @@
             "attrs": {
               "forca": 10,
               "destreza": 10,
-              "constituicao": 10,
+              "constituicao": 11,
               "intelecto": 10,
               "sabedoria": 10,
               "carisma": 10
@@ -242350,7 +242401,7 @@
             "raceId": "humano",
             "xp": 16,
             "xpNext": 75,
-            "attrPoints": 2,
+            "attrPoints": 0,
             "gold": 110,
             "powerNames": [],
             "powerIds": [],
@@ -242364,7 +242415,7 @@
             "killCount": 1,
             "masteryBattles": 0,
             "derived": {
-              "maxHp": 130,
+              "maxHp": 140,
               "maxMp": 64,
               "dmgFisico": 20,
               "dmgMagico": 30,
@@ -242375,8 +242426,8 @@
               "resistMagica": 10,
               "descontoLoja": 5
             },
-            "maxHp": 130,
-            "hp": 130,
+            "maxHp": 140,
+            "hp": 140,
             "maxMp": 64,
             "mp": 64,
             "buffs": {}
@@ -287698,7 +287749,7 @@
             "attrs": {
               "forca": 10,
               "destreza": 10,
-              "constituicao": 10,
+              "constituicao": 13,
               "intelecto": 10,
               "sabedoria": 10,
               "carisma": 10
@@ -287731,7 +287782,7 @@
             "raceId": "humano",
             "xp": 81,
             "xpNext": 145,
-            "attrPoints": 6,
+            "attrPoints": 0,
             "gold": 100,
             "powerNames": [
               "Golpe Poderoso"
@@ -287749,7 +287800,7 @@
             "killCount": 1,
             "masteryBattles": 0,
             "derived": {
-              "maxHp": 140,
+              "maxHp": 170,
               "maxMp": 68,
               "dmgFisico": 20,
               "dmgMagico": 30,
@@ -287760,8 +287811,8 @@
               "resistMagica": 10,
               "descontoLoja": 5
             },
-            "maxHp": 140,
-            "hp": 140,
+            "maxHp": 170,
+            "hp": 170,
             "maxMp": 68,
             "mp": 68,
             "buffs": {}

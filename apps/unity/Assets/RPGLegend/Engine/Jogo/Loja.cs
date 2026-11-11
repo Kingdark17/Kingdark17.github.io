@@ -110,7 +110,8 @@ namespace RPGLegend.Engine
             }
 
             var comCompra = loja.Estado.Clone();
-            comCompra.Hero = compra.Hero;
+            // Comprar e vender treinam o Carisma (Treino).
+            comCompra.Hero = Treino.AnotarUso(compra.Hero, "carisma");
             comCompra.Inventory = compra.Inventory;
             var nova = loja.ComLog("Você compra " + Items.DisplayName(item) + " por " + Js.NumberToString(compra.Outcome.Price ?? double.NaN) + " de ouro.");
             nova.Estado = Estados.SubstituirCelulaAtual(comCompra, ComEstoque(sala, compra.ForSale));
@@ -122,7 +123,7 @@ namespace RPGLegend.Engine
         {
             var venda = Shop.ResolveSell(loja.Estado.Hero, loja.Estado.Inventory, item);
             var comVenda = loja.Estado.Clone();
-            comVenda.Hero = venda.Hero;
+            comVenda.Hero = Treino.AnotarUso(venda.Hero, "carisma");
             comVenda.Inventory = venda.Inventory;
             var nova = loja.ComLog("Você vende " + Items.DisplayName(item) + " por " + Js.NumberToString(venda.Outcome.Price) + " de ouro.");
             nova.Estado = comVenda;

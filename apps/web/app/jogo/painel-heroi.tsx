@@ -17,6 +17,8 @@ import Image from 'next/image';
 import { useEffect, useId, useRef, useState } from 'react';
 
 import {
+  ATRIBUTO_MAXIMO,
+  ATRIBUTOS_DE_USO,
   ATTR_KEYS,
   ATTR_LABELS,
   fraquezaNoCartao,
@@ -24,8 +26,8 @@ import {
   idDaRaca,
   maestriaNoCartao,
   poderesNoCartao,
+  progressoDoTreino,
   textosDosFerimentos,
-  type AttrKey,
   type Hero,
 } from '@rpg-legend/shared';
 
@@ -107,12 +109,12 @@ interface Props {
    */
   golpes?: number;
   /**
-   * Gastar um ponto de atributo. Só chega com a **mochila aberta**, que é
-   * onde o level up acontece: ali o boneco já está no meio da tela, então o
-   * cartão tira o retrato e põe um "+" ao lado de cada atributo enquanto
-   * houver ponto. Arranjo "Assim" do usuário, 2026-10-02.
+   * Com a **mochila aberta** o boneco já está no meio da tela, então o
+   * cartão tira o retrato (arranjo "Assim" do usuário, 2026-10-02). Até
+   * 2026-11-10 era aqui que se gastavam os pontos de atributo; hoje eles
+   * sobem pelo uso.
    */
-  onPonto?: (chave: AttrKey) => void;
+  naMochila?: boolean;
   /**
    * O título da maior conquista (`tituloDoHeroi`: "Sobrevivente da Floresta",
    * "Lenda da Torre"), prêmio de quem zera uma masmorra (decisão do usuário,
@@ -121,9 +123,7 @@ interface Props {
   titulo?: string | null;
 }
 
-export function PainelHeroi({ hero, golpes = 0, onPonto, titulo = null }: Readonly<Props>) {
-  const naMochila = onPonto !== undefined;
-  const comPontos = naMochila && hero.attrPoints > 0;
+export function PainelHeroi({ hero, golpes = 0, naMochila = false, titulo = null }: Readonly<Props>) {
   const treinado = hasClass(hero);
   const poderes = poderesNoCartao(hero);
   const fraqueza = fraquezaNoCartao(hero);
@@ -145,7 +145,7 @@ export function PainelHeroi({ hero, golpes = 0, onPonto, titulo = null }: Readon
    * nele. No computador nada muda — a faixa nem aparece.
    */
   const [fichaAberta, setFichaAberta] = useState(false);
-  const mostraFicha = fichaAberta || comPontos;
+  const mostraFicha = fichaAberta;
   const idDaFicha = useId();
 
   // O painel percebe o nível novo sozinho, como o `renderHero()` do
@@ -239,7 +239,6 @@ export function PainelHeroi({ hero, golpes = 0, onPonto, titulo = null }: Readon
           onClick={() => setFichaAberta((aberta) => !aberta)}
         >
           {mostraFicha ? 'Fechar' : 'Ficha'}
-          {hero.attrPoints > 0 && <span className={styles.marcaDePontos}>{hero.attrPoints}</span>}
         </button>
       </div>
       <aside
@@ -316,9 +315,10 @@ export function PainelHeroi({ hero, golpes = 0, onPonto, titulo = null }: Readon
           )}
         </div>
 
-        {comPontos && (
+        {/* Os pontos de antes dos atributos por uso (2026-11-10): não se gastam mais, viram XP a cada monstro vencido. */}
+        {hero.attrPoints > 0 && (
           <p className={cartao.pontos}>
-            Subiu de nível: {hero.attrPoints} {hero.attrPoints === 1 ? 'ponto' : 'pontos'}
+            {hero.attrPoints} {hero.attrPoints === 1 ? 'ponto guardado vira' : 'pontos guardados viram'} XP a cada vitória
           </p>
         )}
 
@@ -327,15 +327,18 @@ export function PainelHeroi({ hero, golpes = 0, onPonto, titulo = null }: Readon
             <div key={chave} className={cartao.atributo}>
               <dt>{ATTR_LABELS[chave]}</dt>
               <dd>{hero.attrs[chave]}</dd>
-              {comPontos && (
-                <button
-                  type="button"
-                  className={cartao.mais}
-                  onClick={() => onPonto(chave)}
-                  aria-label={`Mais um ponto em ${ATTR_LABELS[chave]}`}
+              {/* O atributo sobe pelo uso: a barrinha é o quanto falta pro próximo ponto. A Constituição sobe com o nível. */}
+              {ATRIBUTOS_DE_USO.includes(chave) && hero.attrs[chave] < ATRIBUTO_MAXIMO && (
+                <span
+                  className={cartao.treino}
+                  role="progressbar"
+                  aria-label={`Treino de ${ATTR_LABELS[chave]}`}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(progressoDoTreino(hero, chave) * 100)}
                 >
-                  +
-                </button>
+                  <span style={{ width: `${Math.round(progressoDoTreino(hero, chave) * 100)}%` }} />
+                </span>
               )}
             </div>
           ))}
@@ -345,7 +348,10 @@ export function PainelHeroi({ hero, golpes = 0, onPonto, titulo = null }: Readon
           <h3 className={cartao.rotulo}>{poderes.length > 1 ? 'Poderes' : 'Poder'}</h3>
           {poderes.map((poder) => (
             <p key={poder.id}>
-              {poder.icone} {poder.nome} <span className={cartao.custo}>· {poder.custo} MP</span>
+              {poder.icone} {poder.nome}{' '}
+              <span className={cartao.custo}>
+                · nível {poder.nivel} · {poder.custo} MP
+              </span>
             </p>
           ))}
           {poderes.length === 0 && <p className={cartao.provisorio}>{treinado ? 'Nenhum.' : 'Nenhum ainda: a Guilda ensina o primeiro.'}</p>}

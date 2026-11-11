@@ -14,6 +14,7 @@ import { displayName } from '../items/item.js';
 import { npcServiceInfo, resolveBarter, resolveBlessing, resolveHeal, resolveRecruit, resolveReveal, type NpcService } from '../npc/npc-services.js';
 import { defaultRng, type Rng } from '../rng.js';
 import { andarDeForca, celulaAtual, substituirCelulaAtual, type EstadoDoJogo } from './estado.js';
+import { anotarUso } from '../hero/treino.js';
 
 /** Cidade e masmorra guardam o mesmo formato de NPC, com o mesmo serviço. */
 export type Npc = CityNpc | DungeonNpc;
@@ -68,7 +69,9 @@ export function usarServico(dialogo: Dialogo, rng: Rng = defaultRng, now?: () =>
   const { estado, usado, mensagem } = acao(dialogo.estado, rng, now);
   const npc: Npc = usado ? { ...dialogo.npc, serviceUsed: true } : dialogo.npc;
 
-  return { ...dialogo, estado: usado ? comNpc(estado, npc) : estado, npc, log: [mensagem] };
+  // O serviço de um NPC (a conversa que rende: cura, mapa, recruta…) treina o Carisma (`treino.ts`).
+  const comTreino = usado ? { ...estado, hero: anotarUso(estado.hero, 'carisma') } : estado;
+  return { ...dialogo, estado: usado ? comNpc(comTreino, npc) : estado, npc, log: [mensagem] };
 }
 
 interface ResultadoDoServico {

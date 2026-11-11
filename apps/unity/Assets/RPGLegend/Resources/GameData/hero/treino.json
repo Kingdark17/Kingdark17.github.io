@@ -1,0 +1,45 @@
+{
+  "ATRIBUTOS_DE_USO": [
+    "forca",
+    "destreza",
+    "intelecto",
+    "sabedoria",
+    "carisma"
+  ],
+  "PONTOS_POR_NIVEL": 1.5,
+  "XP_DO_PONTO_GUARDADO": 0.25,
+  "PONTOS_CONVERTIDOS_POR_ABATE": 2,
+  "USOS_POR_NIVEL_DA_HABILIDADE": [
+    5,
+    15,
+    30,
+    50,
+    75,
+    105,
+    140,
+    180,
+    225
+  ],
+  "EFEITO_POR_NIVEL_DA_HABILIDADE": 0.04,
+  "MANA_POR_NIVEL_DA_HABILIDADE": 0.02,
+  "ICONES": {
+    "forca": "💪",
+    "destreza": "🏹",
+    "constituicao": "❤️",
+    "intelecto": "🧠",
+    "sabedoria": "🔮",
+    "carisma": "🗣️"
+  },
+  "NOMES": {
+    "forca": "Força",
+    "destreza": "Destreza",
+    "constituicao": "Constituição",
+    "intelecto": "Inteligência",
+    "sabedoria": "Sabedoria",
+    "carisma": "Carisma"
+  },
+  "$privadas": [
+    "ICONES",
+    "NOMES"
+  ]
+}

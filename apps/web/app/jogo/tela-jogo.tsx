@@ -50,7 +50,6 @@ import {
   entradaCombinada,
   entrarNoPonto,
   falarComOBram,
-  gastarPonto,
   geometriaDaSala,
   heroiNaLuta,
   idDaRaca,
@@ -1171,14 +1170,7 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
           hero={estado.hero}
           titulo={tituloAgora}
           golpes={golpes}
-          onPonto={
-            tela.tipo === 'mochila'
-              ? (chave) => {
-                  const proxima = gastarPonto(tela.mochila, chave);
-                  seguir({ tipo: 'mochila', mochila: proxima }, proxima.estado);
-                }
-              : undefined
-          }
+          naMochila={tela.tipo === 'mochila'}
         />
         {conteudoDaTela(tela)}
         {enfeites}
@@ -1303,11 +1295,10 @@ export function TelaJogo({ slot, sala: codigoDaSala }: { slot: number; sala?: st
               <div className={styles.acoesDaExploracao}>
                 <button
                   type="button"
-                  className={`${styles.botao} ${estado.hero.attrPoints > 0 ? styles.botaoPrincipal : ''}`}
+                  className={styles.botao}
                   onClick={() => abrirTelaDaMochila(estado)}
                 >
                   🎒 Mochila
-                  {estado.hero.attrPoints > 0 && <span className={styles.marcaDePontos}>{estado.hero.attrPoints}</span>}
                 </button>
 
                 <button type="button" className={styles.botao} onClick={() => setDiarioAberto(true)}>

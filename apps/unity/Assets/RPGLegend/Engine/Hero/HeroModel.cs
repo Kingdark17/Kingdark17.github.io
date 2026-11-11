@@ -72,6 +72,12 @@ namespace RPGLegend.Engine
         public NpcBlessing NpcBlessing;
         /// <summary>Braço ou perna quebrados, veneno e sangramento de sala em sala (<see cref="FerimentosDoHeroi"/>). Ausente: inteiro.</summary>
         public Ferimentos Ferimentos;
+        /// <summary>O progresso de cada atributo rumo ao próximo ponto, em XP de treino (<see cref="RPGLegend.Engine.Treino"/>).</summary>
+        public OrderedMap<double> Treino;
+        /// <summary>Os usos de cada atributo desde o último abate: o XP do próximo se reparte por eles.</summary>
+        public OrderedMap<double> UsosDeAtributo;
+        /// <summary>Quantas vezes cada poder foi usado: é o que dá o nível dele.</summary>
+        public OrderedMap<double> UsosDePoder;
 
         /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
         [JsExtra] public JsExtras Extra;

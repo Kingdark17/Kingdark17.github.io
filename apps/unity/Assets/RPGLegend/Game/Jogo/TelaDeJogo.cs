@@ -398,8 +398,6 @@ namespace RPGLegend.Game.Jogo
             MostrarLugarNaChegada(secreta != null);
             DesenharCaixa(celula, visual);
             DesenharRecado();
-            double pontos = estado.Hero.AttrPoints ?? 0;
-            _mochila.text = pontos > 0 ? "MOCHILA (" + Js.NumberToString(pontos) + ")" : "MOCHILA";
             _diario.text = _partida.Diario.Count > 0 ? "DIÁRIO (" + _partida.Diario.Count + ")" : "DIÁRIO";
             DesenharTela();
             DesenharSala(estado, celula, secreta, visual);

@@ -44687,7 +44687,10 @@
               "hp": 386,
               "maxMp": 72,
               "mp": 72,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "destreza": 2
+              }
             },
             "party": [],
             "inventory": [],
@@ -53152,7 +53155,10 @@
               "hp": 386,
               "maxMp": 72,
               "mp": 72,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "destreza": 1
+              }
             },
             "party": [],
             "inventory": [],
@@ -66541,6 +66547,9 @@
               "buffs": {
                 "poisonTurns": 0,
                 "poisonDmg": 2
+              },
+              "usosDeAtributo": {
+                "destreza": 1
               }
             },
             "party": [],
@@ -70231,6 +70240,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 1
               }
             },
             "party": [],
@@ -71791,6 +71803,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "destreza": 1
               }
             },
             "party": [],
@@ -72394,6 +72409,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 1
               }
             },
             "party": [],
@@ -74120,6 +74138,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 1
               }
             },
             "party": [],
@@ -74804,6 +74825,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 1
               }
             },
             "party": [],
@@ -75383,6 +75407,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 1
               }
             },
             "party": [],
@@ -76409,6 +76436,9 @@
               "mp": 75,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "intelecto": 1
               }
             },
             "party": [],
@@ -77283,6 +77313,9 @@
               "mp": 80,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 1
               }
             },
             "party": [],
@@ -79356,6 +79389,9 @@
               "mp": 75,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "intelecto": 1
               }
             },
             "party": [],
@@ -80797,6 +80833,9 @@
               "mp": 75,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "intelecto": 1
               }
             },
             "party": [],
@@ -85107,6 +85146,9 @@
               "mp": 80,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 1
               }
             },
             "party": [],
@@ -85724,6 +85766,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 1
               }
             },
             "party": [],
@@ -86374,6 +86419,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 1
               }
             },
             "party": [],
@@ -87691,6 +87739,10 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {},
+              "treino": {
+                "forca": 17
               }
             },
             "party": [],
@@ -88924,7 +88976,13 @@
               "hp": 396,
               "maxMp": 72,
               "mp": 44,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "forca": 2
+              },
+              "usosDePoder": {
+                "golpe_poderoso": 2
+              }
             },
             "party": [],
             "inventory": [],
@@ -89472,7 +89530,13 @@
               "hp": 120,
               "maxMp": 72,
               "mp": 50,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "sabedoria": 1
+              },
+              "usosDePoder": {
+                "cura_menor": 1
+              }
             },
             "party": [],
             "inventory": [],
@@ -91101,7 +91165,10 @@
               "hp": 72,
               "maxMp": 72,
               "mp": 72,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "sabedoria": 1
+              }
             },
             "party": [],
             "inventory": [],
@@ -101994,7 +102061,11 @@
               "hp": 400,
               "maxMp": 72,
               "mp": 72,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "treino": {
+                "forca": 17
+              }
             },
             "party": [],
             "inventory": [
@@ -102625,7 +102696,11 @@
               "hp": 400,
               "maxMp": 72,
               "mp": 72,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "treino": {
+                "forca": 17
+              }
             },
             "party": [],
             "inventory": [
@@ -104578,6 +104653,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 6
               }
             },
             "party": [],
@@ -106155,7 +106233,11 @@
               "hp": 400,
               "maxMp": 72,
               "mp": 72,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "treino": {
+                "forca": 17
+              }
             },
             "party": [],
             "inventory": [],
@@ -107825,6 +107907,9 @@
               "mp": 72,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 5
               }
             },
             "party": [],
@@ -109931,7 +110016,14 @@
               "hp": 381,
               "maxMp": 200,
               "mp": 186,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "intelecto": 1,
+                "destreza": 1
+              },
+              "usosDePoder": {
+                "levantar_esqueleto": 1
+              }
             },
             "party": [
               {
@@ -113327,7 +113419,13 @@
               "hp": 351,
               "maxMp": 200,
               "mp": 158,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "intelecto": 3
+              },
+              "usosDePoder": {
+                "levantar_esqueleto": 3
+              }
             },
             "party": [
               {
@@ -115993,7 +116091,13 @@
               "hp": 381,
               "maxMp": 200,
               "mp": 186,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "intelecto": 1
+              },
+              "usosDePoder": {
+                "levantar_esqueleto": 1
+              }
             },
             "party": [
               {
@@ -132565,7 +132669,11 @@
               "hp": 400,
               "maxMp": 72,
               "mp": 72,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "treino": {
+                "forca": 17
+              }
             },
             "party": [],
             "inventory": [],
@@ -133176,7 +133284,11 @@
               "hp": 400,
               "maxMp": 72,
               "mp": 72,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "treino": {
+                "forca": 55
+              }
             },
             "party": [],
             "inventory": [
@@ -140484,7 +140596,10 @@
               "hp": 362,
               "maxMp": 80,
               "mp": 0,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "sabedoria": 1
+              }
             },
             "party": [],
             "inventory": [],
@@ -145516,7 +145631,15 @@
               "hp": 382,
               "maxMp": 72,
               "mp": 70,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "usosDePoder": {
+                "cancao_debilitante": 1
+              },
+              "treino": {
+                "forca": 28.333333333333336,
+                "intelecto": 5.666666666666667
+              }
             },
             "party": [
               {
@@ -150401,7 +150524,15 @@
               "hp": 400,
               "maxMp": 72,
               "mp": 70,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "treino": {
+                "forca": 39.666666666666664,
+                "sabedoria": 11.333333333333334
+              },
+              "usosDePoder": {
+                "grito_de_guerra": 1
+              }
             },
             "party": [
               {
@@ -155490,6 +155621,14 @@
                 "critNext": false,
                 "poisonTurns": 2,
                 "poisonDmg": 2
+              },
+              "usosDeAtributo": {
+                "forca": 4,
+                "sabedoria": 1,
+                "intelecto": 1
+              },
+              "usosDePoder": {
+                "cancao_debilitante": 1
               }
             },
             "party": [],
@@ -160454,7 +160593,15 @@
               "hp": 393,
               "maxMp": 72,
               "mp": 70,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "usosDePoder": {
+                "grito_de_guerra": 1
+              },
+              "treino": {
+                "forca": 28.333333333333336,
+                "sabedoria": 5.666666666666667
+              }
             },
             "party": [
               {
@@ -165412,6 +165559,16 @@
               "mp": 68,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {},
+              "usosDePoder": {
+                "julgamento_sagrado": 1
+              },
+              "treino": {
+                "forca": 14.166666666666668,
+                "intelecto": 5.666666666666667,
+                "sabedoria": 5.666666666666667,
+                "destreza": 8.5
               }
             },
             "party": [
@@ -170640,7 +170797,15 @@
               "hp": 376,
               "maxMp": 72,
               "mp": 64,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "usosDePoder": {
+                "tiro_certeiro": 2
+              },
+              "treino": {
+                "destreza": 17,
+                "sabedoria": 17
+              }
             },
             "party": [
               {
@@ -175754,7 +175919,14 @@
               "hp": 374,
               "maxMp": 80,
               "mp": 69,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "usosDePoder": {
+                "esporos_venenosos": 1
+              },
+              "treino": {
+                "intelecto": 17
+              }
             },
             "party": [
               {
@@ -180983,6 +181155,13 @@
               "mp": 60,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "intelecto": 2,
+                "forca": 1
+              },
+              "usosDePoder": {
+                "cancao_debilitante": 2
               }
             },
             "party": [],
@@ -185933,7 +186112,14 @@
               "hp": 396,
               "maxMp": 80,
               "mp": 72,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {},
+              "usosDePoder": {
+                "golpe_poderoso": 1
+              },
+              "treino": {
+                "forca": 17
+              }
             },
             "party": [
               {
@@ -192130,7 +192316,10 @@
               "hp": 4566,
               "maxMp": 240,
               "mp": 0,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "destreza": 1
+              }
             },
             "party": [
               {
@@ -207638,6 +207827,9 @@
               "mp": 188,
               "buffs": {
                 "critNext": false
+              },
+              "usosDeAtributo": {
+                "forca": 10
               }
             },
             "party": [],
@@ -209889,7 +210081,13 @@
               "hp": 2000,
               "maxMp": 300,
               "mp": 164,
-              "buffs": {}
+              "buffs": {},
+              "usosDeAtributo": {
+                "intelecto": 2
+              },
+              "usosDePoder": {
+                "bola_de_fogo": 2
+              }
             },
             "party": [],
             "inventory": [],

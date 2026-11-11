@@ -16,8 +16,10 @@ namespace RPGLegend.Engine
         public string Id;
         public string Icone;
         public string Nome;
-        /// <summary>O mesmo custo que o botão do combate mostra, já com a Mana Instável.</summary>
+        /// <summary>O mesmo custo que o botão do combate mostra, já com a Mana Instável e o desconto do nível.</summary>
         public double Custo;
+        /// <summary>O nível da habilidade (1 a 10), que sobe com o uso (<see cref="Treino"/>).</summary>
+        public double Nivel;
     }
 
     /// <summary>Port de shared/src/jogo/cartao.ts: o que o cartão de guilda escreve além do que já está no herói.</summary>
@@ -41,7 +43,7 @@ namespace RPGLegend.Engine
         {
             var poderes = new List<PoderNoCartao>();
             foreach (var poder in Heroes.HeroPowers(hero))
-                poderes.Add(new PoderNoCartao { Id = poder.Id, Icone = poder.Icon, Nome = poder.Name, Custo = UsePower.PowerManaCost(hero, poder) });
+                poderes.Add(new PoderNoCartao { Id = poder.Id, Icone = poder.Icon, Nome = poder.Name, Custo = UsePower.PowerManaCost(hero, poder), Nivel = Treino.NivelDaHabilidade(hero, poder.Id) });
             return poderes;
         }
     }

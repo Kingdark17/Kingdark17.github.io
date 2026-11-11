@@ -135,9 +135,14 @@ namespace RPGLegend.Engine
                 ? "Você derrotou " + Js.Str(abatido.Name) + "! +" + Js.NumberToString(abatido.Xp) + " XP e +" + Js.NumberToString(abatido.Gold) + " ouro."
                 : "Você derrotou " + Js.Str(abatido.Name) + "! +" + Js.NumberToString(abatido.Xp) + " XP.");
             if (xp.LeveledUp) log.Add("Você subiu " + Js.NumberToString(xp.Levels) + " nível(is)!");
+            // O XP do abate também treina os atributos usados na luta, e os pontos guardados de antes viram XP aos poucos.
+            var treino = Treino.TreinarComXp(xp.Hero, abatido.Xp);
+            var convertido = Treino.ConverterPontosGuardados(treino.Hero);
+            log.AddRange(treino.Log);
+            log.AddRange(convertido.Log);
 
             var comRecompensa = estado.Clone();
-            comRecompensa.Hero = xp.Hero;
+            comRecompensa.Hero = convertido.Hero;
             comRecompensa.Quests = Quests.OnMonsterKilled(estado.Quests);
             var sala = (DungeonCell)Estados.CelulaAtual(comRecompensa);
             var dePe = IndicesDePe(sala);

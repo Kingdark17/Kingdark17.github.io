@@ -51,7 +51,7 @@ describe('poderesNoCartao', () => {
     const [bolaDeFogo] = poderesNoCartao(mago());
 
     // 14 de Mana, mais 20%, arredondado pra cima — o que o combate cobra.
-    expect(bolaDeFogo).toEqual({ id: 'bola_de_fogo', icone: '🔥', nome: 'Bola de Fogo', custo: 17 });
+    expect(bolaDeFogo).toEqual({ id: 'bola_de_fogo', icone: '🔥', nome: 'Bola de Fogo', custo: 17, nivel: 1 });
   });
 
   it('sem a Mana Instável, o custo é o do catálogo', () => {

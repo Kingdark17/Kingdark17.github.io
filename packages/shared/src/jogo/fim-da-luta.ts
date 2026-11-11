@@ -19,6 +19,7 @@ import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from '
 import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, isCleared, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import { gainXP, type Companion, type Hero } from '../hero/hero.js';
+import { converterPontosGuardados, treinarComXp } from '../hero/treino.js';
 import { winBattle } from '../hero/mastery.js';
 import { addItem } from '../inventory/inventory.js';
 import { acessorioUnico } from '../items/acessorios-unicos.js';
@@ -124,8 +125,12 @@ export function pagarAbate(estado: EstadoNaMasmorra, abatido: CombatMonsterView)
   // O lacaio do chefe final não dá ouro (`chefe-final.ts`): o diário não fala em "+0 ouro".
   log.push(abatido.gold > 0 ? `Você derrotou ${abatido.name}! +${abatido.xp} XP e +${abatido.gold} ouro.` : `Você derrotou ${abatido.name}! +${abatido.xp} XP.`);
   if (xp.leveledUp) log.push(`Você subiu ${xp.levels} nível(is)!`);
+  // O XP do abate também treina os atributos usados na luta, e os pontos guardados de antes viram XP aos poucos (`treino.ts`).
+  const treino = treinarComXp(xp.hero, abatido.xp);
+  const convertido = converterPontosGuardados(treino.hero);
+  log.push(...treino.log, ...convertido.log);
 
-  const comRecompensa: EstadoNaMasmorra = { ...estado, hero: xp.hero, quests: onMonsterKilled(estado.quests) };
+  const comRecompensa: EstadoNaMasmorra = { ...estado, hero: convertido.hero, quests: onMonsterKilled(estado.quests) };
   const sala = celulaAtual(comRecompensa) as DungeonCell;
   const primeiroDePe = indicesDePe(sala)[0];
   // Ninguém de pé: o índice fica onde estava, como na fila — quem lê a sala vencida olha `beaten`.

@@ -95,7 +95,18 @@ export interface Hero extends HeroCore {
   hair?: string;
   xp: number;
   xpNext: number;
+  /**
+   * Pontos por distribuir, de quando o nível dava 2 deles. Desde 2026-11-10
+   * os atributos sobem pelo uso (`treino.ts`): nível novo não dá mais ponto,
+   * e os que sobraram aqui viram XP aos poucos (`converterPontosGuardados`).
+   */
   attrPoints: number;
+  /** O progresso de cada atributo rumo ao próximo ponto, em XP de treino (`treino.ts`). */
+  treino?: Partial<Record<AttrKey, number>>;
+  /** Os usos de cada atributo desde o último abate: o XP do próximo se reparte por eles. */
+  usosDeAtributo?: Partial<Record<AttrKey, number>>;
+  /** Quantas vezes cada poder foi usado: é o que dá o nível dele (`nivelDaHabilidade`). */
+  usosDePoder?: Record<string, number>;
   gold: number;
   powerNames: string[];
   /** Idem: id é o que vale, `powerNames` fica pro save antigo e pra exibição. */
@@ -372,6 +383,9 @@ export function recomputeDerived<T extends HeroCore & { hp: number; mp: number; 
 /** O teto de um atributo. */
 export const ATRIBUTO_MAXIMO = 99;
 
+/** O atributo que sobe 1 a cada nível do personagem (a Vitalidade do doc do Breno). */
+export const ATRIBUTO_DO_NIVEL: AttrKey = 'constituicao';
+
 /**
  * Gasta 1 ponto de atributo livre. Devolve o herói inalterado se não houver
  * pontos, ou se o atributo já está no teto (desde 2026-11-10: antes o ponto
@@ -413,8 +427,10 @@ function numeroSao(valor: number, padrao: number): number {
 }
 
 /**
- * Aplica XP e sobe de nível quantas vezes o total permitir. Nenhum atributo
- * sobe sozinho — o jogador ganha 2 pontos por nível para distribuir.
+ * Aplica XP e sobe de nível quantas vezes o total permitir. Cada nível dá
+ * +1 de Constituição (`ATRIBUTO_DO_NIVEL`, até o teto); os outros atributos
+ * sobem pelo uso (`treino.ts`). Até 2026-11-10 o nível dava 2 pontos pra
+ * distribuir.
  *
  * As entradas são checadas porque esta função roda no navegador de quem
  * joga: um `NaN` que passasse daqui envenenaria o save calado, e um
@@ -427,19 +443,20 @@ export function gainXP(hero: Hero, amount: number): { hero: Hero; leveledUp: boo
   // `xpForLevel` devolve pelo menos 40 — mas sem este piso a primeira
   // comparação seria contra lixo.
   let xpNext = numeroSao(hero.xpNext, xpForLevel(numeroSao(level, 1)));
-  let attrPoints = hero.attrPoints;
   let levels = 0;
 
   while (xp >= xpNext && levels < MAX_NIVEIS_POR_GANHO) {
     xp -= xpNext;
     level += 1;
     xpNext = xpForLevel(level);
-    attrPoints += 2;
     levels++;
   }
 
-  let next: Hero = { ...hero, xp, level, xpNext, attrPoints };
-  if (levels > 0) next = recomputeDerived(next);
+  let next: Hero = { ...hero, xp, level, xpNext };
+  if (levels > 0) {
+    const doNivel = Math.min(ATRIBUTO_MAXIMO, Math.max(hero.attrs[ATRIBUTO_DO_NIVEL], hero.attrs[ATRIBUTO_DO_NIVEL] + levels));
+    next = recomputeDerived({ ...next, attrs: { ...hero.attrs, [ATRIBUTO_DO_NIVEL]: doNivel } });
+  }
   return { hero: next, leveledUp: levels > 0, levels };
 }
 

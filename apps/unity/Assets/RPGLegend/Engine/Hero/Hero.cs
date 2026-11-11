@@ -317,6 +317,9 @@ namespace RPGLegend.Engine
         /// <summary>TS: ATRIBUTO_MAXIMO.</summary>
         public const double AtributoMaximo = 99;
 
+        /// <summary>TS: ATRIBUTO_DO_NIVEL — o atributo que sobe 1 a cada nível do personagem.</summary>
+        public const string AtributoDoNivel = "constituicao";
+
         /// <summary>
         /// TS: spendAttrPoint — gasta 1 ponto livre no atributo (teto 99) e recalcula. Sem pontos
         /// (ausente, 0, NaN ou negativo) ou com o atributo já no teto, devolve o mesmo herói.
@@ -343,9 +346,6 @@ namespace RPGLegend.Engine
             double xp = NumeroSao(hero.Xp, 0) + NumeroSao(amount, 0);
             double level = hero.Level;
             double xpNext = NumeroSao(hero.XpNext, Derived.XpForLevel(NumeroSao(level, 1)));
-            // attrPoints pode não existir no save antigo: ausente continua ausente se não subir de nível,
-            // e vira NaN se subir (o undefined + 2 do JS).
-            double? attrPoints = hero.AttrPoints;
             double levels = 0;
 
             while (xp >= xpNext && levels < D.MaxNiveisPorGanho)
@@ -353,7 +353,6 @@ namespace RPGLegend.Engine
                 xp -= xpNext;
                 level += 1;
                 xpNext = Derived.XpForLevel(level);
-                attrPoints = Js.Num(attrPoints) + 2;
                 levels++;
             }
 
@@ -361,8 +360,14 @@ namespace RPGLegend.Engine
             next.Xp = xp;
             next.Level = level;
             next.XpNext = xpNext;
-            next.AttrPoints = attrPoints;
-            if (levels > 0) next = RecomputeDerived(next);
+            if (levels > 0)
+            {
+                // Cada nível dá +1 de Constituição (ATRIBUTO_DO_NIVEL), até o teto; os outros atributos sobem pelo uso.
+                var attrs = hero.Attrs.Clone();
+                attrs[AtributoDoNivel] = Math.Min(AtributoMaximo, Math.Max(hero.Attrs[AtributoDoNivel], hero.Attrs[AtributoDoNivel] + levels));
+                next.Attrs = attrs;
+                next = RecomputeDerived(next);
+            }
             return new GainXpResult { Hero = next, LeveledUp = levels > 0, Levels = levels };
         }
 

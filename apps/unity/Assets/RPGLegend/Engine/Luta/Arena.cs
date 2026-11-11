@@ -638,7 +638,8 @@ namespace RPGLegend.Engine
             var golpe = Attack.ResolverGolpe(estado.Hero, monstro, dado, lida, estilo,
                 new ResolveAttackOptions { Rng = l.Rng, PetCriticoBonus = Pets.Bonus(l.Pet).Critico ?? 0 });
             var comHeroi = estado.Clone();
-            comHeroi.Hero = golpe.Hero;
+            // O golpe que acerta treina o atributo dele (Treino).
+            comHeroi.Hero = golpe.Outcome == "hit" ? Treino.AnotarUso(golpe.Hero, Treino.AtributoDoGolpe(golpe.Hero, estilo)) : golpe.Hero;
             var ferida = FerirNaArena(l, comHeroi, alvo.Indice, golpe.Monster);
 
             if (golpe.Outcome == ResolveAttackOutcomes.NoMana)
@@ -763,8 +764,15 @@ namespace RPGLegend.Engine
                 return;
             }
             l.Arena.RecargaDosPoderes.Set(id, D.RecargaDoPoder);
+            // O poder usado treina o atributo dele e sobe o próprio nível pelo uso.
+            var treino = Treino.TreinarPoder(uso.Hero, poder.Id, poder.Type);
+            if (treino.Subiu.HasValue)
+            {
+                Diario(l, new[] { Treino.TextoDaHabilidade(poder.Name, treino.Subiu.Value) });
+                Contar(l, Aviso("⭐ " + poder.Name + " nível " + Js.NumberToString(treino.Subiu.Value)));
+            }
             var comUso = estado.Clone();
-            comUso.Hero = uso.Hero;
+            comUso.Hero = treino.Hero;
             comUso.Party = uso.Party;
             var ferida = FerirNaArena(l, comUso, alvo.Value, uso.Monster);
 
@@ -1112,7 +1120,8 @@ namespace RPGLegend.Engine
             if (golpe.Dodged)
             {
                 var desviou = estado.Clone();
-                desviou.Hero = golpe.Hero;
+                // Esquivar treina a Destreza.
+                desviou.Hero = Treino.AnotarUso(golpe.Hero, "destreza");
                 l.Estado = FimDaLuta.GravarMonstro(desviou, indice, golpe.Monster);
                 Contar(l, Numero("heroi", 0, "Desviou", "erro"));
                 Contar(l, Som("miss"));

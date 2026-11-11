@@ -18,6 +18,7 @@ import { concordar, displayName, type Item } from '../items/item.js';
 import { defaultRng, type Rng } from '../rng.js';
 import { buyPrice, discountForRoll, resolveBuy, resolveForge, resolveRestock, resolveSell, rollStock, sellPrice, type ShopKind } from '../shop/shop.js';
 import { andarDeForca, celulaAtual, substituirCelulaAtual, type EstadoNaCidade } from './estado.js';
+import { anotarUso } from '../hero/treino.js';
 
 export interface Loja {
   estado: EstadoNaCidade;
@@ -100,7 +101,8 @@ export function comprar(loja: Loja, item: Item): Loja {
   return {
     ...loja,
     estado: substituirCelulaAtual(
-      { ...loja.estado, hero: compra.hero, inventory: compra.inventory },
+      // Comprar e vender treinam o Carisma (`treino.ts`).
+      { ...loja.estado, hero: anotarUso(compra.hero, 'carisma'), inventory: compra.inventory },
       { ...sala, forSale: compra.forSale },
     ),
     log: [`Você compra ${displayName(item)} por ${compra.outcome.price} de ouro.`],
@@ -112,7 +114,7 @@ export function vender(loja: Loja, item: Item): Loja {
 
   return {
     ...loja,
-    estado: { ...loja.estado, hero: venda.hero, inventory: venda.inventory },
+    estado: { ...loja.estado, hero: anotarUso(venda.hero, 'carisma'), inventory: venda.inventory },
     log: [`Você vende ${displayName(item)} por ${venda.outcome.price} de ouro.`],
   };
 }

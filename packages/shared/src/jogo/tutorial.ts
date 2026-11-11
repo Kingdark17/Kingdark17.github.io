@@ -69,6 +69,11 @@ export const GUIAS: { titulo: string; texto: string }[] = [
     texto:
       'Queimadura, veneno e sangramento causam dano contínuo. Atordoamento impede ataques; lentidão, vulnerabilidade e fraqueza reduzem a defesa do inimigo.',
   },
+  {
+    titulo: '📈 Atributos e habilidades',
+    texto:
+      'Os atributos sobem pelo uso: Força com golpes corpo a corpo, Destreza com tiros, esquivas e fugas, Inteligência com magia e invocação, Sabedoria com cura, apoio e poções, Carisma com NPCs e lojas. A Constituição sobe 1 a cada nível. Cada poder também sobe de nível quanto mais é usado: bate mais forte e gasta menos Mana.',
+  },
   { titulo: '🎒 Itens e tiers', texto: 'Compare atributos e tiers antes de equipar. A ordem é E, D, C, B, A, S, SS, SSS, SSS+ e MAX.' },
   {
     titulo: '⚒️ Reforja',

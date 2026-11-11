@@ -16,6 +16,7 @@ export * from './hero/hero.js';
 export * from './hero/mastery.js';
 export * from './hero/teachers.js';
 export * from './hero/ferimentos.js';
+export * from './hero/treino.js';
 
 export * from './items/rarity.js';
 export * from './items/templates.js';

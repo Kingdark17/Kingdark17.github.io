@@ -38,6 +38,7 @@ import { applyPartyTurn, passarRodadaDaCancao } from '../combat/party.js';
 import { LADOS_DO_DANO, resolveAttack, type AttackStyle, type JogadaDeAtaque } from '../combat/resolve-attack.js';
 import { tickMonsterDot } from '../combat/status-effects.js';
 import { castPower } from '../combat/use-power.js';
+import { anotarUso, atributoDoGolpe, textoDaHabilidade, treinarPoder } from '../hero/treino.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import type { Power } from '../hero/catalog.js';
 import type { Hero } from '../hero/hero.js';
@@ -335,7 +336,9 @@ export function atacar(combate: Combate, jogada: JogadaDeAtaque, estilo: AttackS
     log.push('Você erra o ataque!');
   }
 
-  const ferida = ferir({ ...combate, alvo, log }, { ...estado, hero: ataque.hero }, alvo, ataque.monster, rng);
+  // O golpe que acerta treina o atributo dele (`treino.ts`).
+  const treinado = ataque.outcome === 'hit' ? anotarUso(ataque.hero, atributoDoGolpe(ataque.hero, estilo)) : ataque.hero;
+  const ferida = ferir({ ...combate, alvo, log }, { ...estado, hero: treinado }, alvo, ataque.monster, rng);
   const depois: Combate = {
     ...ferida.combate,
     dado,
@@ -416,8 +419,11 @@ export function usarPoder(combate: Combate, poder: Power, rng: Rng = defaultRng)
   else if (uso.outcome === 'summon') log.push(`Você usa ${poder.name}: ${uso.summoned?.name ?? 'um esqueleto'} se ergue para lutar ao seu lado!`);
   else log.push(`Você usa ${poder.name}.`);
   if (uso.healed && uso.outcome === 'damage') log.push(`O golpe devolve ${uso.healed} de vida a você.`);
+  // O poder usado treina o atributo dele e sobe o próprio nível pelo uso.
+  const treino = treinarPoder(uso.hero, poder);
+  if (treino.subiu) log.push(textoDaHabilidade(poder.name, treino.subiu));
 
-  const ferida = ferir({ ...combate, alvo, log }, { ...estado, hero: uso.hero, party: uso.party }, alvo, uso.monster, rng);
+  const ferida = ferir({ ...combate, alvo, log }, { ...estado, hero: treino.hero, party: uso.party }, alvo, uso.monster, rng);
   const depois: Combate = {
     ...ferida.combate,
     // Poder que cura não é golpe; o original só tinha som de acerto.
@@ -450,9 +456,11 @@ export function fugir(combate: Combate, roll: number, rng: Rng = defaultRng): Co
   if (tentativa.success) {
     // Os esqueletos de pé fogem junto; os caídos ficam pra trás.
     const comEsqueletos = temInvocadoCaido(estado.party);
+    // Fugir treina a Destreza.
+    const fugiu = { ...estado, hero: anotarUso(estado.hero, 'destreza') };
     return {
       ...combate,
-      estado: comEsqueletos ? { ...estado, party: semInvocadosCaidos(estado.party) } : estado,
+      estado: comEsqueletos ? { ...fugiu, party: semInvocadosCaidos(estado.party) } : fugiu,
       fase: 'fuga',
       dado,
       log: [`Você rolou ${roll}${comBonus} e fugiu com sucesso.`, 'Você escapa da batalha, ofegante.', ...(comEsqueletos ? [FIM_DOS_ESQUELETOS] : [])],
@@ -497,7 +505,8 @@ export function esquivar(combate: Combate, roll: number, rng: Rng = defaultRng):
   );
 
   return turnoDosOutros(
-    { ...combate, estado: { ...estado, hero: veneno.hero }, dado: { valor: roll, lados: 20 }, log, som: null, flutuantes: [] },
+    // Esquivar treina a Destreza.
+    { ...combate, estado: { ...estado, hero: tentativa.success ? anotarUso(veneno.hero, 'destreza') : veneno.hero }, dado: { valor: roll, lados: 20 }, log, som: null, flutuantes: [] },
     rng,
     { esquivaCerta: tentativa.success },
   );

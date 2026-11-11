@@ -5,6 +5,7 @@
     "icon": "🎒"
   },
   "ATRIBUTO_MAXIMO": 99,
+  "ATRIBUTO_DO_NIVEL": "constituicao",
   "MAX_NIVEIS_POR_GANHO": 500,
   "OFFHAND_WEAPON_IDS": [
     "espada",

@@ -18,6 +18,7 @@ import type { Power } from '../hero/catalog.js';
 import { forcaDoBraco } from '../hero/ferimentos.js';
 import { hasDebuffEffect, type Companion, type Hero } from '../hero/hero.js';
 import { masteryDamageMult } from '../hero/mastery.js';
+import { descontoDaHabilidade, efeitoDaHabilidade } from '../hero/treino.js';
 import { defaultRng, randomInt, type Rng } from '../rng.js';
 import { modifyDamageByAffinity } from './damage.js';
 import { criarEsqueleto, esqueletosDePe, MAX_ESQUELETOS } from './invocacao.js';
@@ -60,8 +61,10 @@ const PENALIDADE_DE_MANA = 1.2;
  * O mesmo número que o botão do poder precisa mostrar antes de o jogador
  * clicar. `desconto`: a fração que a Coroa do Arquimago tira (só no app).
  */
-export function powerManaCost(hero: Hero, power: Pick<Power, 'cost'>, desconto = 0): number {
-  return Math.ceil(power.cost * (hasDebuffEffect(hero, 'manaCostPenalty') ? PENALIDADE_DE_MANA : 1) * (1 - desconto));
+export function powerManaCost(hero: Hero, power: Pick<Power, 'cost'> & { id?: string }, desconto = 0): number {
+  // O nível da habilidade (`treino.ts`) também poupa mana: 2% por nível acima do primeiro.
+  const daHabilidade = descontoDaHabilidade(hero, power.id);
+  return Math.ceil(power.cost * (hasDebuffEffect(hero, 'manaCostPenalty') ? PENALIDADE_DE_MANA : 1) * (1 - desconto) * (1 - daHabilidade));
 }
 
 export function castPower(
@@ -86,6 +89,8 @@ export function castPower(
   const savedMana = (options.petManaSaveChance ?? 0) > 0 && rng() * 100 < (options.petManaSaveChance ?? 0);
   const heroAfterCost: Hero = savedMana ? hero : { ...hero, mp: hero.mp - manaCost };
   const d = heroAfterCost.derived;
+  // O nível da habilidade: +4% no dano e na cura por nível acima do primeiro.
+  const efeito = efeitoDaHabilidade(hero, power.id);
 
   if (power.type === 'invocar') {
     const esqueleto = criarEsqueleto(heroAfterCost, party);
@@ -97,7 +102,7 @@ export function castPower(
     // Maestria: +2% por nível com a arma da classe na mão, como no golpe.
     // Fica no golpe do poder; o dano contínuo que ele deixa não muda.
     const bruto = Math.round(
-      Math.round((Math.round(base * (power.power ?? 1)) + randomInt(6, rng)) * masteryDamageMult(heroAfterCost)) * forcaDoBraco(heroAfterCost),
+      Math.round((Math.round(base * (power.power ?? 1) * efeito) + randomInt(6, rng)) * masteryDamageMult(heroAfterCost)) * forcaDoBraco(heroAfterCost),
     );
     const mod = modifyDamageByAffinity(
       monster,
@@ -131,7 +136,7 @@ export function castPower(
 
   if (power.type === 'cura') {
     const penalidade = hasDebuffEffect(heroAfterCost, 'healingPenalty') ? 0.75 : 1;
-    const heal = Math.round((10 * (power.power ?? 1) + d.curaBonus) * penalidade * (1 + (options.petCuraBonus ?? 0) / 100));
+    const heal = Math.round((10 * (power.power ?? 1) + d.curaBonus) * penalidade * (1 + (options.petCuraBonus ?? 0) / 100) * efeito);
     const allyHeal = Math.max(1, Math.round(heal * 0.7));
 
     return {

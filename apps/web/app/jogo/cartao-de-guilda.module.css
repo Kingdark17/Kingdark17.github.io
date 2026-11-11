@@ -196,6 +196,20 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* O treino do atributo (ele sobe pelo uso): uma barrinha curta ao lado do número. */
+.treino {
+  align-self: center;
+  width: 22px;
+  height: 4px;
+  background: rgba(26, 11, 9, 0.18);
+}
+
+.treino span {
+  display: block;
+  height: 100%;
+  background: var(--vermelho);
+}
+
 /* O "+" do nível no vermelho da moldura: o dourado do jogo some no papel. */
 .mais {
   width: 18px;

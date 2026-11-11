@@ -239,20 +239,22 @@ describe('gainXP', () => {
     expect(depois.level).toBe(1);
   });
 
-  it('sobe de nível e concede 2 pontos de atributo', () => {
+  it('sobe de nível e ganha 1 de Constituição, sem ponto pra distribuir', () => {
     const hero = novoHeroi();
     const { hero: depois, leveledUp, levels } = gainXP(hero, hero.xpNext);
     expect(leveledUp).toBe(true);
     expect(levels).toBe(1);
     expect(depois.level).toBe(2);
-    expect(depois.attrPoints).toBe(2);
+    expect(depois.attrPoints).toBe(0);
+    expect(depois.attrs.constituicao).toBe(hero.attrs.constituicao + 1);
   });
 
   it('sobe múltiplos níveis de uma vez com XP suficiente', () => {
     const hero = novoHeroi();
     const { hero: depois, levels } = gainXP(hero, 1000);
     expect(levels).toBeGreaterThan(1);
-    expect(depois.attrPoints).toBe(levels * 2);
+    expect(depois.attrPoints).toBe(0);
+    expect(depois.attrs.constituicao).toBe(hero.attrs.constituicao + levels);
   });
 
   it('subir de nível cura pela diferença de maxHp (via recomputeDerived)', () => {

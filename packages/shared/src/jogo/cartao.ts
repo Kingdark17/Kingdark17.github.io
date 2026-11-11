@@ -10,6 +10,7 @@
 import { powerManaCost } from '../combat/use-power.js';
 import { DEBUFFS, debuffById } from '../hero/catalog.js';
 import { heroPowers, type Hero } from '../hero/hero.js';
+import { nivelDaHabilidade } from '../hero/treino.js';
 
 export interface FraquezaNoCartao {
   icone: string;
@@ -35,10 +36,12 @@ export interface PoderNoCartao {
   id: string;
   icone: string;
   nome: string;
-  /** O mesmo custo que o botão do combate mostra, já com a Mana Instável. */
+  /** O mesmo custo que o botão do combate mostra, já com a Mana Instável e o desconto do nível. */
   custo: number;
+  /** O nível da habilidade (1 a 10), que sobe com o uso (`hero/treino.ts`). */
+  nivel: number;
 }
 
 export function poderesNoCartao(hero: Hero): PoderNoCartao[] {
-  return heroPowers(hero).map((poder) => ({ id: poder.id, icone: poder.icon, nome: poder.name, custo: powerManaCost(hero, poder) }));
+  return heroPowers(hero).map((poder) => ({ id: poder.id, icone: poder.icon, nome: poder.name, custo: powerManaCost(hero, poder), nivel: nivelDaHabilidade(hero, poder.id) }));
 }

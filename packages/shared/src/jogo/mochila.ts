@@ -15,6 +15,7 @@
 
 import { ATRIBUTO_MAXIMO, cabeNaMaoLivre, equipItem, equippedSlot, isOffhandEligible, spendAttrPoint, unequipItem, type Hero } from '../hero/hero.js';
 import { EQUIP_SLOTS, type AttrKey, type EquipSlot } from '../hero/stats.js';
+import { anotarUso } from '../hero/treino.js';
 import { addItem, consumeItem, removeByUid } from '../inventory/inventory.js';
 import { concordar, displayName, itemCategory, type Item } from '../items/item.js';
 import { engastar, nomeDaRuna, QUEBRA_AO_TIRAR, tirar } from '../items/runas.js';
@@ -93,7 +94,8 @@ export function usar(mochila: Mochila, item: Item): Mochila {
   if (mpGained > 0) partes.push(`${mpGained} de Mana`);
 
   return {
-    estado: { ...mochila.estado, hero: resultado.hero, inventory: resultado.inventory },
+    // Usar poção treina a Sabedoria (`treino.ts`).
+    estado: { ...mochila.estado, hero: anotarUso(resultado.hero, 'sabedoria'), inventory: resultado.inventory },
     log: [partes.length ? `Você usa ${displayName(item)} e recupera ${partes.join(' e ')}.` : `Você usa ${displayName(item)}.`],
   };
 }

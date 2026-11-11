@@ -15,8 +15,9 @@ namespace RPGLegend.Game.Jogo
         public static VisualElement Criar(Hero hero, bool comRetrato, Action<string> aoGastarPonto, string titulo = null)
         {
             bool treinado = Heroes.HasClass(hero);
+            // Desde 2026-11-10 os atributos sobem pelo uso (Treino): o "+" não existe mais, e os pontos guardados de
+            // antes viram XP a cada monstro vencido. O aoGastarPonto ficou só pra quem chama não mudar.
             double pontos = hero.AttrPoints ?? 0;
-            bool comPontos = aoGastarPonto != null && pontos > 0;
 
             var cartao = PecasDaTela.Bloco("cartao-de-guilda");
             if (comRetrato)
@@ -45,23 +46,23 @@ namespace RPGLegend.Game.Jogo
                 medidores.Add(Medidor("Maestria " + PecasDaTela.Inteiro(maestria.Nivel), maestria.Atual, maestria.Maximo, "maestria-no-cartao", maestria.Contagem, maestria.Bonus));
             cartao.Add(medidores);
 
-            if (comPontos)
-                cartao.Add(PecasDaTela.Texto("Subiu de nível: " + PecasDaTela.Inteiro(pontos) + (pontos == 1 ? " ponto" : " pontos"), "pontos-do-cartao"));
+            if (pontos > 0)
+                cartao.Add(PecasDaTela.Texto(PecasDaTela.Inteiro(pontos) + (pontos == 1 ? " ponto guardado vira" : " pontos guardados viram") + " XP a cada vitória", "pontos-do-cartao"));
 
-            // Três por linha, cada número colado no rótulo dele; com o "+" (do tamanho de um botão, pro dedo), dois.
+            // Três por linha, cada número colado no rótulo dele, e a barrinha do treino (o quanto falta pro próximo ponto).
             var atributos = PecasDaTela.Bloco("atributos-do-cartao");
-            if (comPontos) atributos.AddToClassList("com-pontos");
             foreach (var chave in StatKeys.Attrs)
             {
                 var atributo = PecasDaTela.Bloco("atributo-do-cartao");
                 atributo.Add(PecasDaTela.Texto(GameData.HeroCatalog.AttrLabels.Get(chave) ?? chave, "rotulo-do-cartao"));
                 atributo.Add(PecasDaTela.Texto(PecasDaTela.Inteiro(hero.Attrs[chave]), "valor-do-cartao"));
-                if (comPontos)
+                if (Treino.EhDeUso(chave) && hero.Attrs[chave] < Heroes.AtributoMaximo)
                 {
-                    var esta = chave;
-                    var mais = new Button(() => aoGastarPonto(esta)) { text = "+" };
-                    mais.AddToClassList("mais-do-cartao");
-                    atributo.Add(mais);
+                    var trilho = PecasDaTela.Bloco("treino-do-cartao");
+                    var enchimento = PecasDaTela.Bloco("enchimento-do-treino");
+                    enchimento.style.width = Length.Percent((float)Treino.ProgressoDoTreino(hero, chave) * 100f);
+                    trilho.Add(enchimento);
+                    atributo.Add(trilho);
                 }
                 atributos.Add(atributo);
             }
@@ -73,7 +74,7 @@ namespace RPGLegend.Game.Jogo
             foreach (var poder in poderes)
             {
                 var nome = TextoDoJogo.ParaTela(((poder.Icone ?? "") + " " + poder.Nome).Trim());
-                secao.Add(PecasDaTela.Rico(nome + " <color=#6e5137>· " + PecasDaTela.Inteiro(poder.Custo) + " MP</color>", "texto-do-cartao"));
+                secao.Add(PecasDaTela.Rico(nome + " <color=#6e5137>· nível " + PecasDaTela.Inteiro(poder.Nivel) + " · " + PecasDaTela.Inteiro(poder.Custo) + " MP</color>", "texto-do-cartao"));
             }
             if (poderes.Count == 0)
                 secao.Add(PecasDaTela.Rico(treinado ? "<i>Nenhum.</i>" : "<i>Nenhum ainda: a Guilda ensina o primeiro.</i>", "texto-do-cartao"));

@@ -1228,3 +1228,17 @@
     border-color: rgba(138, 43, 43, 0.7);
     border-radius: 4px;
 }
+
+/* O treino do atributo (ele sobe pelo uso): uma barrinha curta ao lado do número. */
+.treino-do-cartao {
+    width: 26px;
+    height: 5px;
+    margin-left: 6px;
+    align-self: center;
+    background-color: rgba(26, 11, 9, 0.18);
+}
+
+.enchimento-do-treino {
+    height: 100%;
+    background-color: rgb(138, 43, 43);
+}
