@@ -7,24 +7,23 @@ using UnityEngine.UIElements;
 namespace RPGLegend.Game.Jogo
 {
     /// <summary>
-    /// A luta no mapa (2026-10-30, pedido do Breno, como no site): a sala continua à vista em cima, com a câmera
+    /// A sala é a arena (2026-11-11, doc do Breno decidido com o usuário): a sala fica à vista, com a câmera
     /// enquadrando-a em <see cref="AreaDaSala"/>, e cada monstro em pé na casa dele (<see cref="LutaNoMapa"/>); ao lado
-    /// da sala, a coluna das placas (nome, vida e o que pesa sobre ele) — tocar numa placa ou no monstro muda o alvo
-    /// —; e embaixo a caixa preta do Undertale, onde o coração desvia dos golpes: o círculo do golpe de perto, a faixa
-    /// da investida (com o monstro mergulhando por ela), a bola do mágico. Os companheiros ficam ao lado da caixa.
-    /// Até 2026-10-30 a luta era em primeira pessoa, com um cenário pintado no lugar da sala.
+    /// da sala, a coluna das placas (nome, vida e o que pesa sobre ele) — tocar numa placa ou no monstro muda o alvo.
+    /// O herói é o da cena, andando pela sala; por cima do chão dela vão os golpes dos monstros: o círculo do golpe de
+    /// perto, a faixa da investida (com o monstro saindo da casa dele por ela), a bola do mágico. Os companheiros ficam
+    /// numa coluna à esquerda. Até 2026-11-11 o herói era um coração numa caixa preta embaixo da sala.
     ///
     /// Só desenha, a cada quadro: onde está cada coisa é a arena que diz (<see cref="Arenas"/>).
     /// </summary>
     public sealed class PalcoDaLuta : VisualElement
     {
-        /// <summary>A caixa ocupa esta parte da largura do palco; a altura vem da proporção da caixa da engine.</summary>
-        private const float ParteDaLargura = 0.56f;
-        /// <summary>A caixa fica um pouco à esquerda do meio, pra não encostar nos botões em volta do ataque.</summary>
-        private const float DesvioDaCaixa = 50f;
         private const float TempoDaTremida = 0.36f;
-        private const float TempoDoPiscar = 0.6f;
         private const float TempoDoImpacto = 0.25f;
+        /// <summary>As placas descem até esta parte da altura: embaixo delas ficam os botões da luta.</summary>
+        private const float AlturaDasPlacas = 0.6f;
+        /// <summary>O evento da arma toma esta parte de cima da sala, pra o herói continuar à vista embaixo.</summary>
+        private const float ParteDoEvento = 0.55f;
 
         private static readonly Dictionary<string, string> RotulosDeStatus = new Dictionary<string, string>
         {
@@ -42,12 +41,10 @@ namespace RPGLegend.Game.Jogo
         private const float PlacasNoMinimo = 170f;
         private const float PlacasNoMaximo = 260f;
 
-        private readonly VisualElement _placas, _figuras, _aliados, _caixa;
-        private readonly TintaDaCaixa _tinta;
-        private readonly CoracaoNaCaixa _coracao;
+        private readonly VisualElement _placas, _figuras, _aliados;
+        private readonly TintaDaSala _tinta;
         private readonly List<Lutador> _lutadores = new List<Lutador>();
         private readonly List<Aliado> _listaDeAliados = new List<Aliado>();
-        private readonly List<Label> _mergulhos = new List<Label>();
         private int _tamanhoDoGrupo = -1;
         /// <summary>O formato da sala da luta (a Torre é 11 × 12): a área dela no palco segue a proporção.</summary>
         private double _colunas = 9, _linhas = 9;
@@ -56,11 +53,8 @@ namespace RPGLegend.Game.Jogo
         /// <summary>Tocou num monstro de pé: o índice dele na sala.</summary>
         public event Action<int> AoMirar;
 
-        /// <summary>Onde a caixa começa, do alto do palco (0 antes do primeiro desenho).</summary>
-        public float TopoDaCaixa { get; private set; }
-
-        /// <summary>O palco dos monstros: do alto até a caixa (o palco inteiro, antes do primeiro desenho).</summary>
-        public Rect AreaDoPalco => TopoDaCaixa > 0 ? new Rect(0f, 0f, contentRect.width, TopoDaCaixa) : contentRect;
+        /// <summary>Onde o evento da arma se desenha: a parte de cima da sala (o palco inteiro, antes do primeiro desenho).</summary>
+        public Rect AreaDoEvento => AreaDaSala.width > 0 ? new Rect(AreaDaSala.x, AreaDaSala.y, AreaDaSala.width, AreaDaSala.height * ParteDoEvento) : contentRect;
 
         /// <summary>Onde a sala fica no palco, na proporção dela: a cena a enquadra aí, e os monstros vão por cima.</summary>
         public Rect AreaDaSala { get; private set; }
@@ -85,7 +79,10 @@ namespace RPGLegend.Game.Jogo
             AddToClassList("palco-da-luta");
             pickingMode = PickingMode.Position;
 
-            // Sem cenário pintado: por trás do palco está a sala de verdade, que a cena enquadra em AreaDaSala.
+            // Sem cenário pintado: por trás do palco está a sala de verdade, que a cena enquadra em AreaDaSala. Os
+            // golpes se desenham no chão dela, por baixo dos monstros.
+            _tinta = new TintaDaSala();
+            Add(_tinta);
             _figuras = new VisualElement { pickingMode = PickingMode.Ignore };
             _figuras.AddToClassList("figuras-da-luta");
             Add(_figuras);
@@ -98,52 +95,38 @@ namespace RPGLegend.Game.Jogo
             _aliados.AddToClassList("aliados-da-luta");
             Add(_aliados);
 
-            _caixa = new VisualElement { pickingMode = PickingMode.Ignore };
-            _caixa.AddToClassList("caixa-da-luta");
-            _tinta = new TintaDaCaixa();
-            _caixa.Add(_tinta);
-            _coracao = new CoracaoNaCaixa();
-            _caixa.Add(_coracao);
-            Add(_caixa);
-
             RegisterCallback<GeometryChangedEvent>(_ => Ajustar());
         }
 
         /// <summary>
-        /// A caixa no meio, embaixo, na proporção da engine; em cima dela, a sala (na proporção dela, o mais alta que
-        /// couber) e a coluna das placas à direita; os aliados ao lado da caixa.
+        /// A sala na proporção dela, o mais alta que couber, encostada na coluna das placas (à direita); os aliados
+        /// numa coluna à esquerda dela.
         /// </summary>
         private void Ajustar()
         {
             var r = contentRect;
             if (float.IsNaN(r.width) || r.width <= 0 || r.height <= 0) return;
-            float largura = Mathf.Round(r.width * ParteDaLargura);
-            float altura = Mathf.Round(largura * (float)(Arenas.AlturaDaCaixa / Arenas.LarguraDaCaixa));
-            float baixo = Mathf.Round(r.height * 0.045f);
-            float topoDaCaixa = r.height - baixo - altura;
-            float esquerda = Mathf.Max(8f, Mathf.Round((r.width - largura) / 2f - DesvioDaCaixa));
-            TopoDaCaixa = topoDaCaixa;
-            _caixa.style.width = largura;
-            _caixa.style.height = altura;
-            _caixa.style.left = esquerda;
-            _caixa.style.top = topoDaCaixa;
-            _aliados.style.top = topoDaCaixa;
-            _aliados.style.width = Mathf.Max(40f, esquerda - 16f);
 
             const float folga = 8f;
             float larguraDasPlacas = Mathf.Clamp(Mathf.Round(r.width * ParteDasPlacas), PlacasNoMinimo, PlacasNoMaximo);
             _placas.style.width = larguraDasPlacas;
             _placas.style.right = folga;
             _placas.style.top = folga;
-            _placas.style.maxHeight = Mathf.Max(80f, topoDaCaixa - 2f * folga);
+            _placas.style.maxHeight = Mathf.Max(80f, r.height * AlturaDasPlacas);
 
-            // A sala na proporção dela, à esquerda das placas, o mais alta que couber acima da caixa.
             float larguraLivre = r.width - larguraDasPlacas - 3f * folga;
-            float alturaLivre = topoDaCaixa - 2f * folga;
+            float alturaLivre = r.height - 2f * folga;
             float proporcao = (float)(_colunas / _linhas);
             float alturaDaSala = Mathf.Max(40f, Mathf.Floor(Mathf.Min(alturaLivre, larguraLivre / proporcao)));
             float larguraDaSala = Mathf.Floor(alturaDaSala * proporcao);
-            AreaDaSala = new Rect(folga + Mathf.Floor((larguraLivre - larguraDaSala) / 2f), folga + Mathf.Floor((alturaLivre - alturaDaSala) / 2f), larguraDaSala, alturaDaSala);
+            AreaDaSala = new Rect(folga + Mathf.Floor(larguraLivre - larguraDaSala), folga + Mathf.Floor((alturaLivre - alturaDaSala) / 2f), larguraDaSala, alturaDaSala);
+
+            _tinta.style.left = AreaDaSala.x;
+            _tinta.style.top = AreaDaSala.y;
+            _tinta.style.width = AreaDaSala.width;
+            _tinta.style.height = AreaDaSala.height;
+            _aliados.style.top = Mathf.Round(r.height * 0.22f);
+            _aliados.style.width = Mathf.Max(40f, AreaDaSala.x - 16f);
         }
 
         // ---------- a cada quadro ----------
@@ -171,9 +154,7 @@ namespace RPGLegend.Game.Jogo
             var instancias = sala?.Monsters ?? new List<MonsterInstance>();
             MostrarGrupo(arena, instancias, LutaNoMapa.LugaresNaLuta(arena.Monstros.Count, geometria));
             MostrarAliados(arena, (luta.Estado as EstadoNaMasmorra)?.Party ?? new List<Companion>());
-            MostrarMergulhos(arena, instancias);
-            _tinta.Mostrar(arena, instancias);
-            _coracao.Mostrar(arena);
+            _tinta.Mostrar(arena, instancias, _colunas);
         }
 
         public void Esconder()
@@ -235,14 +216,24 @@ namespace RPGLegend.Game.Jogo
                 l.Mira.style.fontSize = Mathf.Max(14f, casa * 0.4f);
                 l.Mira.style.height = Mathf.Max(16f, casa * 0.45f);
                 l.Sombra.style.width = casa * 0.7f;
-                l.Corpo.style.left = area.x + ((float)lugar.Col + 0.5f) * casa;
-                l.Corpo.style.top = area.y + ((float)lugar.Row + 1f) * casa;
+                // Quem investe no herói sai da casa dele e cruza a sala: o corpo vai onde a arena diz (o meio dele).
+                if (m.Fase == "investindo" && m.Alvo < 0)
+                {
+                    float unidade = casa / (float)RoomWalk.TileUnits;
+                    l.Corpo.style.left = area.x + (float)m.X * unidade;
+                    l.Corpo.style.top = area.y + (float)m.Y * unidade + casa * 0.5f;
+                }
+                else
+                {
+                    l.Corpo.style.left = area.x + ((float)lugar.Col + 0.5f) * casa;
+                    l.Corpo.style.top = area.y + ((float)lugar.Row + 1f) * casa;
+                }
 
-                // Quem vai golpear avisa; quem mergulhou na caixa some do palco enquanto isso.
+                // Quem vai golpear avisa.
                 bool avisando = m.Fase == "avisando";
                 l.Raiz.EnableInClassList("lutador-avisando", avisando);
                 l.Corpo.EnableInClassList("lutador-avisando", avisando);
-                l.Corpo.style.opacity = caido ? 0.38f : m.Fase == "investindo" ? 0.15f : 1f;
+                l.Corpo.style.opacity = caido ? 0.38f : 1f;
                 l.Vez.text = avisando ? TextoDoAviso(m) : "";
                 l.Vez.style.display = avisando ? DisplayStyle.Flex : DisplayStyle.None;
 
@@ -418,39 +409,6 @@ namespace RPGLegend.Game.Jogo
             }
         }
 
-        /// <summary>O monstro que investe mergulha pela caixa: o emoji dele, no tamanho do que pega.</summary>
-        private void MostrarMergulhos(Arena arena, List<MonsterInstance> instancias)
-        {
-            var r = _caixa.contentRect;
-            float escala = r.width / (float)Arenas.LarguraDaCaixa;
-            while (_mergulhos.Count < arena.Monstros.Count)
-            {
-                var rotulo = new Label { pickingMode = PickingMode.Ignore };
-                rotulo.AddToClassList("mergulho-na-caixa");
-                _caixa.Add(rotulo);
-                _mergulhos.Add(rotulo);
-                // O coração fica por cima de quem mergulha.
-                _coracao.BringToFront();
-            }
-            for (int i = 0; i < _mergulhos.Count; i++)
-            {
-                var rotulo = _mergulhos[i];
-                var m = i < arena.Monstros.Count ? arena.Monstros[i] : null;
-                bool mergulhando = m != null && m.Fase == "investindo" && m.Alvo < 0 && i < instancias.Count && escala > 0;
-                rotulo.style.display = mergulhando ? DisplayStyle.Flex : DisplayStyle.None;
-                if (!mergulhando) continue;
-                var visao = Monsters.View(instancias[i]);
-                var jeito = Arenas.JeitoDoGolpe(visao, m.Poder);
-                float lado = (float)jeito.Tamanho * 2f * escala;
-                if (rotulo.text != visao.Icon) rotulo.text = visao.Icon;
-                rotulo.style.fontSize = lado * 0.8f;
-                rotulo.style.width = lado;
-                rotulo.style.height = lado;
-                rotulo.style.left = (float)m.X * escala - lado / 2f;
-                rotulo.style.top = (float)m.Y * escala - lado / 2f;
-            }
-        }
-
         // ---------- pra quem põe os números ----------
 
         /// <summary>Em cima da figura do monstro, no sistema do palco (o mesmo dos números da luta).</summary>
@@ -461,13 +419,13 @@ namespace RPGLegend.Game.Jogo
             return this.WorldToLocal(new Vector2(b.center.x, b.yMin + b.height * 0.2f));
         }
 
-        /// <summary>Em cima do coração, na caixa.</summary>
-        public Vector2 PosicaoDoCoracao(Arena arena)
+        /// <summary>Em cima da cabeça do herói, na sala.</summary>
+        public Vector2 PosicaoDoHeroi(Arena arena)
         {
-            var r = _caixa.contentRect;
-            float escala = r.width / (float)Arenas.LarguraDaCaixa;
-            var local = new Vector2((float)arena.Coracao.X * escala, (float)arena.Coracao.Y * escala - 18f);
-            return this.WorldToLocal(_caixa.LocalToWorld(local));
+            var area = AreaDaSala;
+            float casa = area.width / (float)_colunas;
+            float unidade = casa / (float)RoomWalk.TileUnits;
+            return new Vector2(area.x + (float)arena.Heroi.X * unidade, area.y + (float)arena.Heroi.Y * unidade - casa * 0.75f);
         }
 
         /// <summary>Em cima do companheiro (pelo índice na equipe).</summary>
@@ -479,7 +437,7 @@ namespace RPGLegend.Game.Jogo
                 var b = _listaDeAliados[k].Raiz.worldBound;
                 return this.WorldToLocal(new Vector2(b.center.x, b.yMin));
             }
-            return PosicaoDoCoracao(arena);
+            return PosicaoDoHeroi(arena);
         }
 
         /// <summary>O monstro apanhou: treme.</summary>
@@ -488,17 +446,17 @@ namespace RPGLegend.Game.Jogo
             if (indice >= 0 && indice < _lutadores.Count) _lutadores[indice].ApanhouEm = Time.unscaledTime;
         }
 
-        /// <summary>O coração apanhou: pisca.</summary>
-        public void CoracaoApanhou() => _coracao.Apanhou();
+        /// <summary>O herói apanhou: um estalo em volta dele.</summary>
+        public void HeroiApanhou(Arena arena) => _tinta.Estalo((float)arena.Heroi.X, (float)arena.Heroi.Y, (float)RoomWalk.TileUnits * 0.6f);
 
-        // ---------- a caixa ----------
+        // ---------- o chão da sala ----------
 
         /// <summary>
-        /// O que vai dentro da caixa, por baixo do coração: o aviso de cada golpe (o círculo de perto, a faixa da
-        /// investida, a mira do tiro), o estalo do golpe de perto quando ele cai e as bolas voando. As medidas são as da
-        /// engine, na escala da caixa.
+        /// O que vai no chão da sala, por baixo dos monstros: o aviso de cada golpe (o círculo de perto, a faixa da
+        /// investida, a mira do tiro), o estalo do golpe quando ele cai e as bolas voando. As medidas são as da
+        /// engine, em unidades da sala, na escala em que ela aparece.
         /// </summary>
-        private sealed class TintaDaCaixa : VisualElement
+        private sealed class TintaDaSala : VisualElement
         {
             private static readonly Color Aviso = new Color(0.9f, 0.16f, 0.14f, 1f);
             private static readonly Color Bola = new Color(1f, 1f, 1f, 1f);
@@ -506,18 +464,19 @@ namespace RPGLegend.Game.Jogo
 
             private Arena _arena;
             private List<MonsterInstance> _instancias;
+            private double _colunas = 9;
             private readonly List<string> _fasesAntes = new List<string>();
             private readonly List<string> _poderesAntes = new List<string>();
             private readonly List<(float x, float y, float raio, float desde)> _impactos = new List<(float, float, float, float)>();
 
-            public TintaDaCaixa()
+            public TintaDaSala()
             {
                 pickingMode = PickingMode.Ignore;
-                AddToClassList("tinta-da-caixa");
+                AddToClassList("tinta-da-sala");
                 generateVisualContent += Desenhar;
             }
 
-            public void Mostrar(Arena arena, List<MonsterInstance> instancias)
+            public void Mostrar(Arena arena, List<MonsterInstance> instancias, double colunas)
             {
                 // O golpe de perto não deixa rastro na arena: o estalo é daqui, quando o aviso acaba.
                 for (int i = 0; i < arena.Monstros.Count; i++)
@@ -538,8 +497,12 @@ namespace RPGLegend.Game.Jogo
                 _impactos.RemoveAll(x => Time.unscaledTime - x.desde > TempoDoImpacto);
                 _arena = arena;
                 _instancias = instancias;
+                _colunas = colunas;
                 MarkDirtyRepaint();
             }
+
+            /// <summary>Um estalo em (x, y), em unidades da sala: o golpe que pegou no herói.</summary>
+            public void Estalo(float x, float y, float raio) => _impactos.Add((x, y, raio, Time.unscaledTime));
 
             public void Esquecer()
             {
@@ -554,8 +517,9 @@ namespace RPGLegend.Game.Jogo
                 if (_arena == null) return;
                 var p = contexto.painter2D;
                 var r = contentRect;
-                float escala = r.width / (float)Arenas.LarguraDaCaixa;
+                float escala = r.width / (float)(_colunas * RoomWalk.TileUnits);
                 if (escala <= 0) return;
+                var heroi = new Vector2((float)_arena.Heroi.X * escala, (float)_arena.Heroi.Y * escala);
 
                 for (int i = 0; i < _arena.Monstros.Count && i < _instancias.Count; i++)
                 {
@@ -565,7 +529,7 @@ namespace RPGLegend.Game.Jogo
                     float progresso = jeito.Aviso > 0 ? 1f - Mathf.Clamp01((float)(m.Tempo / jeito.Aviso)) : 1f;
                     // Pisca mais rápido perto de cair.
                     float pisca = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * (10f + 20f * progresso));
-                    float alfa = 0.14f + 0.22f * progresso + 0.08f * pisca;
+                    float alfa = 0.16f + 0.24f * progresso + 0.08f * pisca;
                     var centro = new Vector2((float)m.X * escala, (float)m.Y * escala);
                     if (jeito.Golpe == "perto")
                     {
@@ -574,25 +538,22 @@ namespace RPGLegend.Game.Jogo
                     }
                     else if (jeito.Golpe == "investida")
                     {
+                        // A faixa sai da casa do monstro, no rumo travado, até a parede (o que passa dela, a sala corta).
                         var rumo = new Vector2((float)m.RumoX, (float)m.RumoY);
                         if (rumo.sqrMagnitude < 1f) rumo = Vector2.up;
                         rumo.Normalize();
-                        float meia = (float)jeito.Tamanho * escala;
-                        float comprimento = (r.width + r.height) * 1.5f;
-                        Faixa(p, centro, rumo, comprimento, meia, Cor(Aviso, alfa));
+                        Faixa(p, centro, rumo, (r.width + r.height) * 1.5f, (float)jeito.Tamanho * escala, Cor(Aviso, alfa));
                     }
                     else
                     {
-                        // O tiro: a mira do alto até o coração, e a bola crescendo na borda.
-                        var coracao = new Vector2((float)_arena.Coracao.X * escala, (float)_arena.Coracao.Y * escala);
-                        var borda = new Vector2(centro.x, 0f);
+                        // O tiro: a mira do monstro até o herói, e a bola crescendo em cima dele.
                         p.lineWidth = 2f;
                         p.strokeColor = Cor(Aviso, 0.35f + 0.4f * pisca);
                         p.BeginPath();
-                        p.MoveTo(borda);
-                        p.LineTo(coracao);
+                        p.MoveTo(centro);
+                        p.LineTo(heroi);
                         p.Stroke();
-                        Circulo(p, borda, Mathf.Max(2f, (float)jeito.Tamanho * escala * progresso), Cor(AuraDaBola, 0.9f), true, 0f);
+                        Circulo(p, centro, Mathf.Max(2f, (float)jeito.Tamanho * escala * progresso), Cor(AuraDaBola, 0.9f), true, 0f);
                     }
                 }
 
@@ -613,7 +574,7 @@ namespace RPGLegend.Game.Jogo
 
             private static Color Cor(Color cor, float alfa) => new Color(cor.r, cor.g, cor.b, Mathf.Clamp01(alfa));
 
-            /// <summary>A faixa da investida: do começo, na direção do rumo, com a largura do corpo que mergulha.</summary>
+            /// <summary>A faixa da investida: do começo, na direção do rumo, com a largura do corpo que investe.</summary>
             private static void Faixa(Painter2D p, Vector2 inicio, Vector2 rumo, float comprimento, float meia, Color cor)
             {
                 var lado = new Vector2(-rumo.y, rumo.x) * meia;
@@ -642,75 +603,6 @@ namespace RPGLegend.Game.Jogo
                 p.lineWidth = Mathf.Max(1f, espessura);
                 p.strokeColor = cor;
                 p.Stroke();
-            }
-        }
-
-        /// <summary>O coração do Undertale, em pixel, onde a arena diz; pisca quando apanha.</summary>
-        private sealed class CoracaoNaCaixa : VisualElement
-        {
-            private static readonly Color Vermelho = new Color32(0xff, 0x12, 0x12, 255);
-
-            // 9 × 8, como o coração do jogo.
-            private static readonly string[] Desenho =
-            {
-                ".XX...XX.",
-                "XXXX.XXXX",
-                "XXXXXXXXX",
-                "XXXXXXXXX",
-                ".XXXXXXX.",
-                "..XXXXX..",
-                "...XXX...",
-                "....X....",
-            };
-
-            private Arena _arena;
-            private float _apanhouEm = -10f;
-
-            public CoracaoNaCaixa()
-            {
-                pickingMode = PickingMode.Ignore;
-                AddToClassList("tinta-da-caixa");
-                generateVisualContent += Desenhar;
-            }
-
-            public void Mostrar(Arena arena)
-            {
-                _arena = arena;
-                MarkDirtyRepaint();
-            }
-
-            public void Apanhou() => _apanhouEm = Time.unscaledTime;
-
-            private void Desenhar(MeshGenerationContext contexto)
-            {
-                if (_arena == null) return;
-                float desde = Time.unscaledTime - _apanhouEm;
-                if (desde < TempoDoPiscar && Mathf.Repeat(desde * 12f, 1f) < 0.5f) return;
-                var r = contentRect;
-                float escala = r.width / (float)Arenas.LarguraDaCaixa;
-                if (escala <= 0) return;
-                float lado = Mathf.Max(9f, (float)Arenas.RaioDoCoracao * 2f * escala);
-                float pixel = lado / 9f;
-                float x0 = (float)_arena.Coracao.X * escala - lado / 2f;
-                float y0 = (float)_arena.Coracao.Y * escala - pixel * 4f;
-                var p = contexto.painter2D;
-                p.fillColor = Vermelho;
-                for (int linha = 0; linha < Desenho.Length; linha++)
-                {
-                    for (int coluna = 0; coluna < Desenho[linha].Length; coluna++)
-                    {
-                        if (Desenho[linha][coluna] != 'X') continue;
-                        float x = x0 + coluna * pixel;
-                        float y = y0 + linha * pixel;
-                        p.BeginPath();
-                        p.MoveTo(new Vector2(x, y));
-                        p.LineTo(new Vector2(x + pixel + 0.3f, y));
-                        p.LineTo(new Vector2(x + pixel + 0.3f, y + pixel + 0.3f));
-                        p.LineTo(new Vector2(x, y + pixel + 0.3f));
-                        p.ClosePath();
-                        p.Fill();
-                    }
-                }
             }
         }
     }

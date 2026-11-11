@@ -8,12 +8,12 @@ using UnityEngine.UIElements;
 namespace RPGLegend.Game.Jogo
 {
     /// <summary>
-    /// A luta em tempo real na tela (etapa 5), em primeira pessoa como no site (<see cref="PalcoDaLuta"/>): os monstros
-    /// de frente, a caixa com o coração que o joystick move, o botão de ataque (com a arte da arma) com os poderes e a
-    /// poção em volta dele, o desenho do evento da arma e os números que sobem. A cada quadro a luta anda em passos
+    /// A luta em tempo real na tela, na própria sala (<see cref="PalcoDaLuta"/>; a sala é a arena desde 2026-11-11): os
+    /// monstros nas casas deles, o herói que o joystick faz andar, o botão de ataque (com a arte da arma) com os poderes
+    /// e a poção em volta dele, o desenho do evento da arma e os números que sobem. A cada quadro a luta anda em passos
     /// fixos de 1/60 s (<see cref="Partida.PassoDaLuta"/>), com o joystick, o teclado e os toques do quadro.
     ///
-    /// No PC: as setas (ou WASD) movem o coração; espaço (ou J) é o botão de ataque — apertar abre o evento, apertar de
+    /// No PC: as setas (ou WASD) andam com o herói; espaço (ou J) é o botão de ataque — apertar abre o evento, apertar de
     /// novo toca, soltar solta a carga —, 1, 2 e 3 são os poderes, Q abre os itens, Tab troca o alvo, e a escolha do
     /// alvo também vai com o mouse. O cajado, no PC, pede letras em vez do desenho: U, I, O e P.
     /// </summary>
@@ -77,7 +77,7 @@ namespace RPGLegend.Game.Jogo
 
         private void CriarHudDaLuta(VisualElement palco)
         {
-            // A luta em primeira pessoa cobre a sala, por baixo do joystick, do pet e dos botões.
+            // O palco da luta fica por cima da sala, por baixo do joystick, do pet e dos botões.
             _palcoDaLuta = new PalcoDaLuta();
             _palcoDaLuta.AoMirar += indice => _mirar = indice;
             _palcoDaLuta.Esconder();
@@ -173,8 +173,8 @@ namespace RPGLegend.Game.Jogo
                 _palcoDaLuta.Esconder();
                 return;
             }
-            // O herói da sala dá um passo pra dentro da porta (o mesmo lugar a que a arena o devolve no fim).
-            _sala?.EntrarNaLuta(_partida.Luta.Arena.Chegada);
+            // A sala para de andar por conta própria: na luta, o herói dela vai onde a arena diz.
+            _sala?.EntrarNaLuta(_partida.Luta.Arena.Heroi);
 
             LerTecladoDaLuta(luta);
             bool pausada = _janela != null || _saindo;
@@ -189,6 +189,7 @@ namespace RPGLegend.Game.Jogo
                 _palcoDaLuta.Esconder();
                 return;
             }
+            _sala?.MoverNaLuta(_partida.Luta.Arena.Heroi);
             _palcoDaLuta.Mostrar(_partida.Luta, _partida.Geometria);
             EnquadrarASala();
             DesenharHud(_partida.Luta);
@@ -313,13 +314,11 @@ namespace RPGLegend.Game.Jogo
             _botaoItem.EnableInClassList("sem-mana", consumiveis == 0 || arena.RecargaDoItem > 0);
             if (!_menuDeItens.ClassListContains("escondido") && consumiveis == 0) _menuDeItens.AddToClassList("escondido");
 
-            // O evento da arma, se houver um aberto, no palco dos monstros (a caixa do coração fica livre).
+            // O evento da arma, se houver um aberto, na parte de cima da sala (o herói continua à vista embaixo).
             var aberto = arena.Evento;
             // No escuro do chefe da Caverna, a zona do evento some (a mira).
             _eventoNaTela.Escuro = luta.Estado is EstadoNaMasmorra && ChefeFinal.EscuroNaLuta(Estados.CelulaAtual(luta.Estado) as DungeonCell);
-            _eventoNaTela.Mostrar(aberto, _palcoDaLuta.AreaDoPalco);
-            float topoDaCaixa = _palcoDaLuta.TopoDaCaixa;
-            if (topoDaCaixa > 0) _avisosDaLuta.style.bottom = Mathf.Max(0f, _areaDaLuta.contentRect.height - topoDaCaixa + 6f);
+            _eventoNaTela.Mostrar(aberto, _palcoDaLuta.AreaDoEvento);
             _dicaDoEvento.text = aberto != null ? DicaDoEvento(aberto.Evento.Tipo) : "";
             _dicaDoEvento.EnableInClassList("escondido", aberto == null);
             if (aberto == null || aberto.Evento.Tipo != TiposDeEvento.Desenho) _dedoNoDesenho = null;
@@ -485,15 +484,15 @@ namespace RPGLegend.Game.Jogo
         }
 
         /// <summary>
-        /// O número que sobe em cima de quem levou (ou desviou, ou se curou): o monstro no palco, o coração na caixa ou o
-        /// companheiro do lado dela. Quem apanhou treme (o monstro) ou pisca (o coração).
+        /// O número que sobe em cima de quem levou (ou desviou, ou se curou): o monstro, o herói na sala ou o
+        /// companheiro ao lado dela. Quem apanhou treme (o monstro) ou leva um estalo em volta (o herói).
         /// </summary>
         private void Numero(Arena arena, Acontecimento a, int linha)
         {
             int indice = (int)(a.Indice ?? 0);
             Vector2 onde = a.Onde == "monstro" ? _palcoDaLuta.PosicaoDoMonstro(indice)
                 : a.Onde == "companheiro" ? _palcoDaLuta.PosicaoDoAliado(arena, indice)
-                : _palcoDaLuta.PosicaoDoCoracao(arena);
+                : _palcoDaLuta.PosicaoDoHeroi(arena);
             var rotulo = new Label(a.Texto) { pickingMode = PickingMode.Ignore };
             rotulo.AddToClassList("numero-da-luta");
             rotulo.AddToClassList("numero-" + (a.Tom ?? "dano"));
@@ -504,7 +503,7 @@ namespace RPGLegend.Game.Jogo
 
             bool doeu = a.Tom == "dano" || a.Tom == "critico";
             if (a.Onde == "monstro" && doeu) _palcoDaLuta.Apanhou(indice);
-            if (a.Onde == "heroi" && doeu) _palcoDaLuta.CoracaoApanhou();
+            if (a.Onde == "heroi" && doeu) _palcoDaLuta.HeroiApanhou(arena);
         }
 
         private void AvisoDaLuta(string texto, string classe)
@@ -550,7 +549,7 @@ namespace RPGLegend.Game.Jogo
             _sala.EnquadrarNaLuta(new Rect((canto.x - palco.x) / palco.width, (canto.y - palco.y) / palco.height, area.width / palco.width, area.height / palco.height));
         }
 
-        /// <summary>A luta acabou: a sala volta, com o herói na porta por onde entrou, e o que era da luta sai da tela.</summary>
+        /// <summary>A luta acabou: a sala volta, com o herói onde ele estava nela, e o que era da luta sai da tela.</summary>
         private void AoAcabarALuta(Walker heroi)
         {
             _sala?.SairDaLuta(heroi);
@@ -623,8 +622,8 @@ namespace RPGLegend.Game.Jogo
         }
 
         /// <summary>
-        /// Mostra o evento (ou some, sem evento), no tamanho que o tipo pede dentro de <paramref name="area"/>: o palco dos
-        /// monstros, em cima da caixa, que fica livre pro coração continuar desviando.
+        /// Mostra o evento (ou some, sem evento), no tamanho que o tipo pede dentro de <paramref name="area"/>: a parte de
+        /// cima da sala, pra o herói continuar à vista embaixo, desviando.
         /// </summary>
         public void Mostrar(EventoAberto aberto, Rect area)
         {
@@ -688,7 +687,7 @@ namespace RPGLegend.Game.Jogo
         private static Color CorDaLetra(LeituraDaMira leitura, Color semTecla) =>
             leitura == null ? semTecla : leitura.Critico ? Critico : leitura.Acerto ? Acertou : Errou;
 
-        /// <summary>Do ponto na caixa do desenho pra caixa da engine (0 a TAMANHO_DO_DESENHO, y pra baixo).</summary>
+        /// <summary>Do ponto no quadro do desenho pro quadro da engine (0 a TAMANHO_DO_DESENHO, y pra baixo).</summary>
         public DedoNoDesenho NoDesenho(Vector2 local)
         {
             var r = contentRect;

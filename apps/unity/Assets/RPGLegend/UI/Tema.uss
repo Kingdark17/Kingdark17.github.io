@@ -1023,9 +1023,9 @@
 }
 
 /* ---------- a luta em tempo real (TelaDeJogo.Luta.cs) ---------- */
-/* Por cima da luta em primeira pessoa: o botão de ataque no canto de baixo à direita (o polegar direito), os poderes
-   e a poção em arco em volta dele, o evento da arma no palco dos monstros e os números que sobem. O polegar esquerdo
-   continua no joystick do palco, que move o coração. */
+/* Por cima da luta: o botão de ataque no canto de baixo à direita (o polegar direito), os poderes
+   e a poção em arco em volta dele, o evento da arma na parte de cima da sala e os números que sobem. O polegar esquerdo
+   continua no joystick do palco, que anda com o herói. */
 
 .hud-da-luta {
     position: absolute;
@@ -1291,10 +1291,9 @@
     -unity-background-scale-mode: scale-to-fit;
 }
 
-/* ---------- a luta em primeira pessoa (PalcoDaLuta.cs) ---------- */
-/* Teste pedido pelo usuário em 2026-10-17: o palco do combate do site (o cenário do lugar, os monstros de frente com a
-   placa em cima) e embaixo a caixa preta do Undertale, com o coração. As cores do cenário vêm do tema do lugar, no
-   código; a posição e o tamanho da caixa também (a proporção é a da engine). */
+/* ---------- a luta na sala (PalcoDaLuta.cs) ---------- */
+/* A sala é a arena (2026-11-11): a sala de verdade por trás, os monstros nas casas deles, as placas ao lado e os
+   golpes desenhados no chão. A posição e o tamanho de cada coisa saem do código. */
 
 .palco-da-luta {
     position: absolute;
@@ -1491,27 +1490,10 @@
 }
 
 /* A caixa do Undertale: preta, de borda branca. O que vai dentro é desenhado no código. */
-.caixa-da-luta {
+/* O chão da sala na luta (a sala é a arena): os avisos e os golpes dos monstros, cortados na borda dela. */
+.tinta-da-sala {
     position: absolute;
-    background-color: #000000;
-    border-width: 3px;
-    border-color: #ffffff;
     overflow: hidden;
-}
-
-.tinta-da-caixa {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-}
-
-.mergulho-na-caixa {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    -unity-text-align: middle-center;
 }
 
 /* O chefe final chama 4 lacaios (ChefeFinal): até cinco monstros no palco, menores e com a placa enxuta. */

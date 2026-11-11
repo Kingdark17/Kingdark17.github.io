@@ -288,10 +288,9 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   teclado ou joystick). Grava na nuvem como o site (2,5 s, teto de 10 s,
   `baseSignature`). Desde a etapa 5.4, a sala de monstro abre a luta em tempo
   real (`luta/arena.ts`, no C# `Arenas`): a `Partida` troca o combate por
-  turnos pela arena, e só se sai vencendo ou caindo. O golpe nele se desvia
-  com o coração do Undertale numa caixa (`PalcoDaLuta`): **decisão do
-  usuário em 2026-10-17**. Desde 2026-10-30 a luta acontece na própria sala,
-  e não mais em primeira pessoa (ver "Salas emendadas e luta no mapa").
+  turnos pela arena, e só se sai vencendo ou caindo. De 2026-10-17 a
+  2026-11-11 o golpe se desviava com o coração do Undertale numa caixa;
+  hoje a sala é a arena (ver "A sala é a arena").
   No PC, o cajado pede letras (U, I, O e P, uma por vez, com um aro
   fechando) em vez do desenho, que fica no celular. As telas de sala
   são as do site, nos mesmos moldes (a carta seleciona, a ficha age):
@@ -376,8 +375,8 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   passo pra dentro da porta (`heroiNaLuta`), a câmera enquadrando a sala, e
   embaixo uma faixa própria. No site, as placas (tocar escolhe o alvo), a
   caixa e o menu, com a sala congelada (a derrota leva o estado pra cidade
-  antes do "Continuar"); no app, a caixa do coração e os botões, com as
-  placas numa coluna ao lado da sala. A sala secreta continua uma cena à
+  antes do "Continuar"); no app, os botões, com as placas numa coluna ao
+  lado da sala (a caixa do coração saiu em 2026-11-11). A sala secreta continua uma cena à
   parte, e a cidade não muda. Desde 2026-11-06 (doc novo do Breno, decidido
   com o usuário): a câmera tem zoom de 1,5× no herói, na cidade e na
   masmorra (`ZOOM` no site, `Zoom` no app), e só a luta enquadra a sala
@@ -385,6 +384,25 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   lugar, a cor da borda das paredes da arte (`fundo` do tema); e a luta do
   site fecha sozinha 1 s depois do último golpe, sem o "Continuar" (o
   resultado vira o aviso da sala), menos a tela de quem zera a masmorra.
+- A sala é a arena (2026-11-11, **só no app**, doc do Breno decidido com o
+  usuário; o site continua por turnos): na luta em tempo real o herói anda
+  pela sala (`arena.heroi`, com o `walkTick` de sempre, as portas fechadas
+  e cada monstro de pé tomando a casa dele) e desvia andando. Os monstros
+  **ficam na casa deles** (`lugaresNaLuta`), um golpeando por vez, e o
+  golpe é que atravessa a sala: o círculo cai onde o herói estava, a
+  investida sai da casa do monstro em linha reta até a parede, a bola do
+  mágico sai dele. **Arma de perto precisa alcançar** (`golpeDePerto`,
+  `ALCANCE_CORPO_A_CORPO` = uma casa e meia, do pé do herói ao meio da casa
+  do monstro): longe, o botão avisa "Chegue mais perto"; com o alvo
+  escolhido longe, vale o de pé mais perto ao alcance; e quem se afasta
+  durante o evento erra ("Longe"; há uma folga de meia casa). Arco, cajado
+  (`ARMAS_DE_LONGE`), magia e poderes acertam de qualquer lugar. No app, o
+  `PalcoDaLuta` desenha os avisos no chão da sala (`TintaDaSala`), a cena
+  move o herói (`SalaEmCena.MoverNaLuta`), o evento da arma fica na parte
+  de cima da sala, e no fim o herói fica onde estava (se for em cima do que
+  apareceu na sala, volta pro lugar em que a luta começou). Os números
+  (raio do herói, alcance, tamanhos) ainda não passaram por ajuste fino com
+  gente jogando.
 - O andar (2026-11-06, **site e app**, doc do Breno decidido com o
   usuário): não há mais sala de saída em todo andar. Só o andar em que se
   entra pelo portão (o 1 ou o de um totem, e o save sem mapa) sai pela sala

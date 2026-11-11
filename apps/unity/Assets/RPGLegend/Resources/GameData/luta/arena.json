@@ -4,10 +4,9 @@
   "RECARGA_DO_ATAQUE": 15,
   "RECARGA_DO_PODER": 180,
   "RECARGA_DO_ITEM": 60,
-  "LARGURA_DA_CAIXA": 7680,
-  "ALTURA_DA_CAIXA": 2880,
-  "RAIO_DO_CORACAO": 160,
-  "VELOCIDADE_DO_CORACAO": 80,
+  "RAIO_DO_HEROI": 160,
+  "ALCANCE_CORPO_A_CORPO": 1440,
+  "FOLGA_DO_ALCANCE": 480,
   "VIDA_DO_TIRO": 120,
   "TEMPO_ATORDOADO": 60,
   "TEMPO_HESITANDO": 40,
@@ -59,5 +58,9 @@
       "velocidade": 96,
       "descanso": 50
     }
-  }
+  },
+  "ARMAS_DE_LONGE": [
+    "arco",
+    "cajado"
+  ]
 }

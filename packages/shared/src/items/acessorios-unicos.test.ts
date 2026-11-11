@@ -124,7 +124,8 @@ describe('o efeito, só na arena do app', () => {
 
   it('a Presa do Morcego devolve em vida parte do dano do golpe', () => {
     const presa = acessorioUnico({ dungeon: 'caverna', difficulty: 'pesadelo' }, seededRng(1), () => 1);
-    const { luta } = abrirLuta(naSala(presa), roomArrival('S'));
+    // Uma casa abaixo do monstro: a arma de perto precisa alcançar.
+    const { luta } = abrirLuta(naSala(presa), { x: 4320, y: 5280, facing: 'N' });
     const quieta = { ...luta, arena: { ...luta.arena, intervalo: 9999 } };
     const aberto = passoDaLuta(quieta, { ...PARADO, atacar: true }, NUNCA).luta;
     const meio = DURACAO_DA_BARRA / 2;

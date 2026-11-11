@@ -361,7 +361,8 @@ namespace RPGLegend.Game.Jogo
                 aviso = new Aviso("🏆", "Vitória", "Você venceu a batalha!" + (final.Loot != null ? " Encontrou <b>" + Items.DisplayName(final.Loot) + "</b>." : "") +
                     (chefe ? " O guardião deixou a chave da escada, e o pilar do covil pode levar você de volta à cidade." : ""));
             }
-            LutaAcabou?.Invoke(final.Arena.Chegada);
+            // O herói fica onde estava na sala quando a luta acabou (a sala é a arena).
+            LutaAcabou?.Invoke(final.Arena.Heroi);
             RegistrarMudanca(final.Estado, aviso);
             if (final.Conquista != null) Zerou?.Invoke(final.Conquista);
         }

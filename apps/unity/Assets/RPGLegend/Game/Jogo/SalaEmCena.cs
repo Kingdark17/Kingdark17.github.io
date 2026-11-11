@@ -271,6 +271,7 @@ namespace RPGLegend.Game.Jogo
                 _emendada = false;
                 _assinaturaDoDesenho = null;
             }
+            if (chave == _salaDaCena) TirarDeCimaDoQueApareceu();
             if (chave != _salaDaCena)
             {
                 _salaDaCena = chave;
@@ -301,6 +302,7 @@ namespace RPGLegend.Game.Jogo
         public void MostrarMasmorra(string chave, List<SalaNaCena> salas, RoomLayout planta, TemaDaSala tema, Walker chegada, string masmorra, double origemX, double origemY)
         {
             _planta = planta;
+            if (chave == _salaDaCena) TirarDeCimaDoQueApareceu();
             if (chave != _salaDaCena)
             {
                 _salaDaCena = chave;

@@ -22,7 +22,7 @@ namespace RPGLegend.Engine
 
     /// <summary>
     /// TS: MonstroNaArena. Fase: "esperando", "avisando", "investindo", "descansando", "atordoado", "hesitando" ou
-    /// "caido". Alvo -1 é o herói (na caixa); senão o índice do companheiro na equipe.
+    /// "caido". Alvo -1 é o herói (no chão da sala); senão o índice do companheiro na equipe.
     /// </summary>
     public sealed class MonstroNaArena
     {
@@ -50,7 +50,7 @@ namespace RPGLegend.Engine
         public CompanheiroNaArena Clone() => (CompanheiroNaArena)MemberwiseClone();
     }
 
-    /// <summary>TS: Tiro — a bola do mágico, voando pela caixa.</summary>
+    /// <summary>TS: Tiro — a bola do mágico, voando pela sala.</summary>
     public sealed class Tiro
     {
         public double X;
@@ -65,13 +65,6 @@ namespace RPGLegend.Engine
         public Tiro Clone() => (Tiro)MemberwiseClone();
     }
 
-    /// <summary>TS: Coracao — onde o coração está, na caixa.</summary>
-    public sealed class Coracao
-    {
-        public double X;
-        public double Y;
-    }
-
     /// <summary>TS: EventoAberto — o evento da arma em curso.</summary>
     public sealed class EventoAberto
     {
@@ -82,13 +75,14 @@ namespace RPGLegend.Engine
         public string Estilo;
     }
 
-    /// <summary>TS: Arena — tudo o que a luta em tempo real tem: o palco, a caixa e os tempos.</summary>
+    /// <summary>TS: Arena — tudo o que a luta em tempo real tem: os monstros, o herói na sala e os tempos.</summary>
     public sealed class Arena
     {
         public double Passo;
         public double Lento;
         public Walker Chegada;
-        public Coracao Coracao;
+        /// <summary>Onde o herói está na sala, e pra onde olha: é ali que ele fica quando a luta acaba.</summary>
+        public Walker Heroi;
         public double Alvo;
         public List<MonstroNaArena> Monstros;
         public List<CompanheiroNaArena> Companheiros;
@@ -174,10 +168,10 @@ namespace RPGLegend.Engine
         [JsName("RECARGA_DO_ATAQUE")] public double RecargaDoAtaque;
         [JsName("RECARGA_DO_PODER")] public double RecargaDoPoder;
         [JsName("RECARGA_DO_ITEM")] public double RecargaDoItem;
-        [JsName("LARGURA_DA_CAIXA")] public double LarguraDaCaixa;
-        [JsName("ALTURA_DA_CAIXA")] public double AlturaDaCaixa;
-        [JsName("RAIO_DO_CORACAO")] public double RaioDoCoracao;
-        [JsName("VELOCIDADE_DO_CORACAO")] public double VelocidadeDoCoracao;
+        [JsName("RAIO_DO_HEROI")] public double RaioDoHeroi;
+        [JsName("ALCANCE_CORPO_A_CORPO")] public double AlcanceCorpoACorpo;
+        [JsName("FOLGA_DO_ALCANCE")] public double FolgaDoAlcance;
+        [JsName("ARMAS_DE_LONGE")] public List<string> ArmasDeLonge = new List<string>();
         [JsName("VIDA_DO_TIRO")] public double VidaDoTiro;
         [JsName("TEMPO_ATORDOADO")] public double TempoAtordoado;
         [JsName("TEMPO_HESITANDO")] public double TempoHesitando;
@@ -192,7 +186,7 @@ namespace RPGLegend.Engine
     {
         private static ArenaData _arenaTable;
 
-        /// <summary>luta/arena: os tempos, a caixa e os jeitos de lutar da luta em tempo real.</summary>
+        /// <summary>luta/arena: os tempos, o alcance e os jeitos de lutar da luta em tempo real.</summary>
         public static ArenaData ArenaTable
         {
             get => Require(_arenaTable, "luta/arena");
@@ -201,13 +195,14 @@ namespace RPGLegend.Engine
     }
 
     /// <summary>
-    /// Port de shared/src/luta/arena.ts: a luta em tempo real do app, em primeira pessoa como a do site, com o
-    /// coração na caixa como no Undertale (pedida pelo usuário como teste em 2026-10-17 e mantida por ele). Os
-    /// monstros ficam no palco; o joystick move o coração dentro da caixa; todo golpe de monstro no herói é um
-    /// desenho na caixa com aviso antes, e só pega se encostar no coração. O botão de ataque abre o evento da
-    /// arma no alvo, em câmera lenta. Um monstro golpeia por vez, revezando; o golpe pode ir num companheiro
-    /// pela regra do site. A recompensa é a do site (FimDaLuta). Tudo em passos e unidades inteiras; o sorteio
-    /// atravessa a luta inteira.
+    /// Port de shared/src/luta/arena.ts: a luta em tempo real do app, na própria sala — a sala é a arena (doc do
+    /// Breno de 2026-11-10, decidido com o usuário em 2026-11-11; antes o herói era um coração numa caixa). Os
+    /// monstros ficam cada um na casa dele; o herói anda pela sala (RoomWalk.Tick), com as portas fechadas e os
+    /// monstros de pé tomando a casa deles; todo golpe de monstro no herói é um desenho no chão com aviso antes, e
+    /// só pega se encostar nele. O botão de ataque abre o evento da arma no alvo, em câmera lenta, e a arma de
+    /// perto precisa alcançar (GolpeDePerto, AlcanceCorpoACorpo). Um monstro golpeia por vez, revezando; o golpe
+    /// pode ir num companheiro pela regra do site. A recompensa é a do site (FimDaLuta). Tudo em passos e unidades
+    /// inteiras; o sorteio atravessa a luta inteira.
     /// </summary>
     public static class Arenas
     {
@@ -215,9 +210,8 @@ namespace RPGLegend.Engine
 
         public static double Lentidao => D.Lentidao;
         public static double Rodada => D.Rodada;
-        public static double LarguraDaCaixa => D.LarguraDaCaixa;
-        public static double AlturaDaCaixa => D.AlturaDaCaixa;
-        public static double RaioDoCoracao => D.RaioDoCoracao;
+        public static double RaioDoHeroi => D.RaioDoHeroi;
+        public static double AlcanceCorpoACorpo => D.AlcanceCorpoACorpo;
 
         /// <summary>O jeito de lutar de um comportamento (o agressivo, se não houver), pra tela desenhar o golpe.</summary>
         public static JeitoDeLutar JeitoDoComportamento(string behavior) =>
@@ -242,7 +236,7 @@ namespace RPGLegend.Engine
 
         /// <summary>
         /// TS: abrirLuta — prepara os monstros e o herói (<see cref="FimDaLuta.PrepararLuta"/>), põe os monstros no
-        /// palco (os caídos ficam no lugar, apagados), o coração no meio da caixa e os companheiros vivos ao lado.
+        /// palco (os caídos ficam no lugar, apagados), o herói um passo pra dentro da porta e os companheiros vivos ao lado.
         /// O alvo começa no primeiro de pé. <paramref name="chegada"/> é por onde o herói entrou: a luta guarda
         /// pra ele voltar ali quando acabar. <paramref name="teclado"/>: jogada no PC, onde o cajado pede letras em
         /// vez do desenho.
@@ -283,7 +277,7 @@ namespace RPGLegend.Engine
                 Passo = 0,
                 Lento = 0,
                 Chegada = new Walker { X = chegada.X, Y = chegada.Y, Facing = chegada.Facing },
-                Coracao = new Coracao { X = D.LarguraDaCaixa / 2, Y = D.AlturaDaCaixa / 2 },
+                Heroi = CopiaDe(LutaNoMapa.HeroiNaLuta(chegada, ArteDaSala.GeometriaDaSala(((EstadoNaMasmorra)preparada.Estado).Masmorra.Dungeon))),
                 Alvo = dePe.Count > 0 ? dePe[0] : 0,
                 Monstros = monstros,
                 Companheiros = companheiros,
@@ -315,7 +309,7 @@ namespace RPGLegend.Engine
         // ---------- o passo ----------
 
         /// <summary>
-        /// TS: passoDaLuta — um passo da luta. O evento da arma corre em tempo de verdade; o mundo (coração,
+        /// TS: passoDaLuta — um passo da luta. O evento da arma corre em tempo de verdade; o mundo (herói,
         /// monstros, companheiros, tiros, rodada) anda um passo, ou, em câmera lenta, um a cada LENTIDAO.
         /// <paramref name="now"/> é o relógio do uid do item que cai ao vencer (e do andar novo, se foi chefe).
         /// </summary>
@@ -366,7 +360,7 @@ namespace RPGLegend.Engine
                 Passo = arena.Passo,
                 Lento = arena.Lento,
                 Chegada = new Walker { X = arena.Chegada.X, Y = arena.Chegada.Y, Facing = arena.Chegada.Facing },
-                Coracao = new Coracao { X = arena.Coracao.X, Y = arena.Coracao.Y },
+                Heroi = CopiaDe(arena.Heroi),
                 Alvo = arena.Alvo,
                 Monstros = new List<MonstroNaArena>(arena.Monstros.Count),
                 Companheiros = new List<CompanheiroNaArena>(arena.Companheiros.Count),
@@ -461,11 +455,56 @@ namespace RPGLegend.Engine
             return null;
         }
 
-        /// <summary>De onde, na largura da caixa, sai o golpe do monstro: embaixo do lugar dele no palco.</summary>
-        private static double ColunaDe(Luta l, double indice)
+        private static Walker CopiaDe(Walker w) => new Walker { X = w.X, Y = w.Y, Facing = w.Facing };
+
+        private static GeometriaDaSala Geometria(Luta l) => ArteDaSala.GeometriaDaSala(Masmorra(l).Masmorra.Dungeon);
+
+        /// <summary>TS: lugarDoMonstro — o meio da casa do monstro, em unidades da sala: de onde sai a investida e o tiro, e o que o alcance mede.</summary>
+        public static (double X, double Y) LugarDoMonstro(double quantos, double indice, GeometriaDaSala formato)
         {
-            double total = Math.Max(1, l.Arena.Monstros.Count);
-            return Math.Truncate(D.LarguraDaCaixa * (2 * indice + 1) / (2 * total));
+            var lugares = LutaNoMapa.LugaresNaLuta(quantos, formato);
+            var lugar = lugares[(int)Math.Min(indice, lugares.Count - 1)];
+            return (lugar.Col * RoomWalk.TileUnits + RoomWalk.TileUnits / 2, lugar.Row * RoomWalk.TileUnits + RoomWalk.TileUnits / 2);
+        }
+
+        private static (double X, double Y) LugarDe(Luta l, double indice) => LugarDoMonstro(l.Arena.Monstros.Count, indice, Geometria(l));
+
+        /// <summary>
+        /// TS: golpeDePerto — o golpe de perto é o que precisa alcançar: o ataque comum e o físico com arma de perto
+        /// (ou sem arma). Magia, tiro, arco e cajado acertam de longe.
+        /// </summary>
+        public static bool GolpeDePerto(Hero hero, string estilo) =>
+            estilo != "magic" && estilo != "ranged" && !D.ArmasDeLonge.Contains(hero.Equip.Get("arma")?.TemplateId ?? "");
+
+        /// <summary>O herói alcança o monstro com a arma de perto, com esta folga a mais?</summary>
+        private static bool Alcanca(Luta l, double indice, double folga = 0)
+        {
+            var lugar = LugarDe(l, indice);
+            double dx = l.Arena.Heroi.X - lugar.X;
+            double dy = l.Arena.Heroi.Y - lugar.Y;
+            double limite = D.AlcanceCorpoACorpo + folga;
+            return dx * dx + dy * dy <= limite * limite;
+        }
+
+        /// <summary>O monstro de pé mais perto do herói que a arma de perto alcança; null, nenhum. No empate, o primeiro.</summary>
+        private static double? MaisPertoAoAlcance(Luta l)
+        {
+            double? melhor = null;
+            double menor = 0;
+            foreach (var m in l.Arena.Monstros)
+            {
+                if (m.Fase == "caido" || !Alcanca(l, m.Indice)) continue;
+                var lugar = LugarDe(l, m.Indice);
+                double dx = l.Arena.Heroi.X - lugar.X;
+                double dy = l.Arena.Heroi.Y - lugar.Y;
+                double distancia = dx * dx + dy * dy;
+                if (melhor == null || distancia < menor)
+                {
+                    melhor = m.Indice;
+                    menor = distancia;
+                }
+            }
+            return melhor;
         }
 
         /// <summary>Um rumo de comprimento <paramref name="velocidade"/> de (0,0) até (dx, dy), em inteiros.</summary>
@@ -476,18 +515,22 @@ namespace RPGLegend.Engine
             return (Math.Truncate(dx * velocidade / comprimento), Math.Truncate(dy * velocidade / comprimento));
         }
 
-        /// <summary>O círculo de raio <paramref name="raio"/> em (x, y) encosta no coração?</summary>
-        private static bool Encosta(Coracao coracao, double x, double y, double raio)
+        /// <summary>O círculo de raio <paramref name="raio"/> em (x, y) encosta no herói?</summary>
+        private static bool Encosta(Walker heroi, double x, double y, double raio)
         {
-            double dx = coracao.X - x;
-            double dy = coracao.Y - y;
-            double limite = raio + D.RaioDoCoracao;
+            double dx = heroi.X - x;
+            double dy = heroi.Y - y;
+            double limite = raio + D.RaioDoHeroi;
             return dx * dx + dy * dy <= limite * limite;
         }
 
-        /// <summary>O círculo de raio <paramref name="raio"/> em (x, y) já saiu inteiro da caixa?</summary>
-        private static bool ForaDaCaixa(double x, double y, double raio) =>
-            x < -raio || x > D.LarguraDaCaixa + raio || y < -raio || y > D.AlturaDaCaixa + raio;
+        /// <summary>O ponto (x, y) chegou na parede em volta da sala? É onde a investida e o tiro acabam.</summary>
+        private static bool ForaDoChao(Luta l, double x, double y)
+        {
+            var g = Geometria(l);
+            double t = RoomWalk.TileUnits;
+            return x < t || x > (g.Cols - 1) * t || y < t || y > (g.Rows - 1) * t;
+        }
 
         private static void Contar(Luta l, Acontecimento acontecimento) => l.Acontecimentos.Add(acontecimento);
 
@@ -521,12 +564,27 @@ namespace RPGLegend.Engine
             return ataques[ataques.Count - 1].Estilo;
         }
 
+        /// <summary>
+        /// O botão de ataque abre o evento da arma no alvo. Com arma de perto, o alvo precisa estar ao alcance: se o
+        /// escolhido não está, vale o de pé mais perto que estiver (e ele vira o alvo); nenhum, o botão só avisa.
+        /// </summary>
         private static void AbrirEvento(Luta l)
         {
             var alvo = AlvoAtual(l);
             if (alvo == null) return;
             var hero = Masmorra(l).Hero;
             string estilo = EstiloDoBotao(hero);
+            if (GolpeDePerto(hero, estilo) && !Alcanca(l, alvo.Value))
+            {
+                var perto = MaisPertoAoAlcance(l);
+                if (perto == null)
+                {
+                    Contar(l, Aviso("Chegue mais perto"));
+                    return;
+                }
+                alvo = perto;
+                l.Arena.Alvo = perto.Value;
+            }
             var evento = EventosDeArma.EventoDoAtaque(hero, estilo, l.Rng, l.Teclado);
             l.Arena.Evento = new EventoAberto { Evento = evento, Passo = 0, Jogada = new JogadaDoEvento(), Alvo = alvo.Value, Estilo = estilo };
         }
@@ -609,7 +667,8 @@ namespace RPGLegend.Engine
 
         /// <summary>
         /// O evento terminou: lê, rola o d20 e o golpe cai no alvo do evento. Se ele caiu enquanto o evento corria
-        /// (um companheiro, o veneno), cai no alvo de agora.
+        /// (um companheiro, o veneno), cai no alvo de agora. Com arma de perto, quem se afastou do alvo durante o
+        /// evento erra (sem dado).
         /// </summary>
         private static void Golpear(Luta l)
         {
@@ -617,10 +676,16 @@ namespace RPGLegend.Engine
             l.Arena.Evento = null;
             l.Arena.Recarga = D.RecargaDoAtaque;
             var leitura = EventosDeArma.LerEvento(aberto.Evento, aberto.Jogada);
-            double dado = 1 + Rng.RandomInt(Attack.LadosDoDano, l.Rng);
             var doEvento = l.Arena.Monstros[(int)aberto.Alvo];
             double? indice = doEvento.Fase != "caido" ? doEvento.Indice : AlvoAtual(l);
             if (indice == null) return;
+            if (GolpeDePerto(Masmorra(l).Hero, aberto.Estilo) && !Alcanca(l, indice.Value, D.FolgaDoAlcance))
+            {
+                Contar(l, Numero("monstro", indice.Value, "Longe", "erro"));
+                Contar(l, Som("miss"));
+                return;
+            }
+            double dado = 1 + Rng.RandomInt(Attack.LadosDoDano, l.Rng);
             AcertarMonstro(l, l.Arena.Monstros[(int)indice.Value], dado, leitura, aberto.Estilo);
         }
 
@@ -825,32 +890,40 @@ namespace RPGLegend.Engine
 
         // ---------- o mundo ----------
 
-        /// <summary>O coração anda como o herói na sala: a diagonal não é mais rápida que o reto. A parede da caixa segura.</summary>
-        private static Coracao MoverCoracao(Coracao coracao, EntradaDaLuta entrada)
+        /// <summary>
+        /// TS: moverHeroi — o herói anda pela sala com a regra de sempre (RoomWalk.Tick): as portas fechadas (só se sai
+        /// vencendo ou caindo), as paredes de dentro da masmorra e cada monstro de pé tomando a casa dele. A casa de
+        /// monstro em que o herói já está pisando não conta: ele sai dela andando.
+        /// </summary>
+        private static Walker MoverHeroi(Luta l, EntradaDaLuta entrada)
         {
-            double ix = Math.Truncate(entrada.X);
-            double iy = Math.Truncate(entrada.Y);
-            double quadrado = ix * ix + iy * iy;
-            if (quadrado > RoomWalk.StickMax * RoomWalk.StickMax)
+            var heroi = l.Arena.Heroi;
+            if (Math.Truncate(entrada.X) == 0 && Math.Truncate(entrada.Y) == 0) return heroi;
+            var formato = Geometria(l);
+            var lugares = LutaNoMapa.LugaresNaLuta(l.Arena.Monstros.Count, formato);
+            var monstros = new List<RoomObject>();
+            double t = RoomWalk.TileUnits;
+            double meio = RoomWalk.HeroHalf;
+            foreach (var m in l.Arena.Monstros)
             {
-                double comprimento = Math.Sqrt(quadrado);
-                ix = Math.Truncate(ix * RoomWalk.StickMax / comprimento);
-                iy = Math.Truncate(iy * RoomWalk.StickMax / comprimento);
+                if (m.Fase == "caido") continue;
+                var lugar = lugares[(int)Math.Min(m.Indice, lugares.Count - 1)];
+                bool pisando =
+                    heroi.X + meio > lugar.Col * t &&
+                    heroi.X - meio < (lugar.Col + 1) * t &&
+                    heroi.Y + meio > lugar.Row * t &&
+                    heroi.Y - meio < (lugar.Row + 1) * t;
+                if (!pisando) monstros.Add(new RoomObject { Id = "monstro_" + Js.NumberToString(m.Indice), Col = lugar.Col, Row = lugar.Row });
             }
-            double x = coracao.X + Math.Truncate(ix * D.VelocidadeDoCoracao / RoomWalk.StickMax);
-            double y = coracao.Y + Math.Truncate(iy * D.VelocidadeDoCoracao / RoomWalk.StickMax);
-            return new Coracao
-            {
-                X = Js.Max(D.RaioDoCoracao, Js.Min(D.LarguraDaCaixa - D.RaioDoCoracao, x)),
-                Y = Js.Max(D.RaioDoCoracao, Js.Min(D.AlturaDaCaixa - D.RaioDoCoracao, y)),
-            };
+            var planta = RoomWalk.Layout(new DoorMap(), monstros, ArteDaSala.ParedesDaSala(Masmorra(l).Masmorra.Dungeon), formato);
+            return RoomWalk.Tick(planta, heroi, new WalkInput { X = entrada.X, Y = entrada.Y }).Walker;
         }
 
         private static void PassoDoMundo(Luta l, EntradaDaLuta entrada)
         {
             var arena = l.Arena;
             arena.Passo += 1;
-            arena.Coracao = MoverCoracao(arena.Coracao, entrada);
+            arena.Heroi = MoverHeroi(l, entrada);
             if (arena.Recarga > 0) arena.Recarga -= 1;
             if (arena.RecargaDoItem > 0) arena.RecargaDoItem -= 1;
             if (arena.Intervalo > 0) arena.Intervalo -= 1;
@@ -939,11 +1012,11 @@ namespace RPGLegend.Engine
 
         /// <summary>
         /// O monstro tenta golpear: atordoado ou lento demais, perde o golpe; senão sorteia em quem cai, como no
-        /// site, e o aviso começa. Golpe no herói trava o desenho na caixa (o círculo e a investida miram onde o
-        /// coração está agora). Perder a vez também é a vez: o respiro do próximo começa igual.
+        /// site, e o aviso começa. Golpe no herói trava o desenho no chão (o círculo e a investida miram onde o
+        /// herói está agora). Perder a vez também é a vez: o respiro do próximo começa igual.
         ///
         /// O chefe final, na vez de um poder (<see cref="ChefeFinal.PoderDaVez"/>), avisa o nome dele e mira sempre o
-        /// coração: o Golpe Devastador com o dobro da força, o Rugido com a de sempre, mas pegando também os
+        /// herói: o Golpe Devastador com o dobro da força, o Rugido com a de sempre, mas pegando também os
         /// companheiros quando o aviso acaba. O poder conta já no começo, pra o aviso do próximo sair certo.
         /// </summary>
         private static void ComecarGolpe(Luta l, MonstroNaArena m)
@@ -1002,24 +1075,25 @@ namespace RPGLegend.Engine
             m.RumoY = 0;
             if (m.Alvo >= 0)
             {
-                // No companheiro: fora da caixa, cai como no site quando o aviso acaba.
+                // No companheiro: fora do chão, cai como no site quando o aviso acaba.
                 m.X = 0;
                 m.Y = 0;
                 return;
             }
-            var coracao = l.Arena.Coracao;
+            var heroi = l.Arena.Heroi;
             if (jeito.Golpe == "perto")
             {
-                m.X = coracao.X;
-                m.Y = coracao.Y;
+                m.X = heroi.X;
+                m.Y = heroi.Y;
                 return;
             }
-            // A investida e o tiro saem de cima da caixa, embaixo do monstro, inteiros pra fora.
-            m.X = ColunaDe(l, m.Indice);
-            m.Y = -jeito.Tamanho;
+            // A investida e o tiro saem da casa do monstro.
+            var lugar = LugarDe(l, m.Indice);
+            m.X = lugar.X;
+            m.Y = lugar.Y;
             if (jeito.Golpe == "investida")
             {
-                var r = Rumo(coracao.X - m.X, coracao.Y - m.Y, jeito.Velocidade);
+                var r = Rumo(heroi.X - m.X, heroi.Y - m.Y, jeito.Velocidade);
                 m.RumoX = r.X;
                 m.RumoY = r.Y;
             }
@@ -1043,14 +1117,14 @@ namespace RPGLegend.Engine
             }
             if (jeito.Golpe == "tiro")
             {
-                // A bola mira onde o coração está agora, no fim do aviso.
-                var coracao = l.Arena.Coracao;
-                var v = Rumo(coracao.X - m.X, coracao.Y - m.Y, jeito.Velocidade);
+                // A bola mira onde o herói está agora, no fim do aviso.
+                var heroi = l.Arena.Heroi;
+                var v = Rumo(heroi.X - m.X, heroi.Y - m.Y, jeito.Velocidade);
                 l.Arena.Tiros.Add(new Tiro { X = m.X, Y = m.Y, Vx = v.X, Vy = v.Y, Raio = jeito.Tamanho, Vida = D.VidaDoTiro, Indice = m.Indice, Forca = m.Forca });
                 Descansar(l, m, jeito);
                 return;
             }
-            if (Encosta(l.Arena.Coracao, m.X, m.Y, jeito.Tamanho)) GolpeNoHeroi(l, m.Indice, m.Forca);
+            if (Encosta(l.Arena.Heroi, m.X, m.Y, jeito.Tamanho)) GolpeNoHeroi(l, m.Indice, m.Forca);
             else Contar(l, Numero("monstro", m.Indice, "Errou", "erro"));
             Descansar(l, m, jeito);
         }
@@ -1090,18 +1164,18 @@ namespace RPGLegend.Engine
             l.Arena.Intervalo = D.IntervaloEntreGolpes;
         }
 
-        /// <summary>A investida mergulha pelo rumo travado: encostou no coração, pega e para; saiu da caixa, acabou.</summary>
+        /// <summary>A investida segue pelo rumo travado: encostou no herói, pega e para; chegou na parede, acabou.</summary>
         private static void Investir(Luta l, MonstroNaArena m, JeitoDeLutar jeito)
         {
             m.X += m.RumoX;
             m.Y += m.RumoY;
-            if (Encosta(l.Arena.Coracao, m.X, m.Y, jeito.Tamanho))
+            if (Encosta(l.Arena.Heroi, m.X, m.Y, jeito.Tamanho))
             {
                 GolpeNoHeroi(l, m.Indice, m.Forca);
                 Descansar(l, m, jeito);
                 return;
             }
-            if (ForaDaCaixa(m.X, m.Y, jeito.Tamanho))
+            if (ForaDoChao(l, m.X, m.Y))
             {
                 Contar(l, Numero("monstro", m.Indice, "Errou", "erro"));
                 Descansar(l, m, jeito);
@@ -1109,7 +1183,7 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>
-        /// O golpe do monstro pegou no coração: a regra do site, com a esquiva de sempre, mais a armadura encantada (que só
+        /// O golpe do monstro pegou no herói: a regra do site, com a esquiva de sempre, mais a armadura encantada (que só
         /// a arena aplica) e o escudo do vigor, que apanha antes da vida.
         /// </summary>
         private static void GolpeNoHeroi(Luta l, double indice, double forca)
@@ -1218,7 +1292,7 @@ namespace RPGLegend.Engine
             }
         }
 
-        /// <summary>As bolas voam; a que encosta no coração pega, a que sai da caixa (ou acaba) errou.</summary>
+        /// <summary>As bolas voam; a que encosta no herói pega, a que chega na parede (ou acaba) errou.</summary>
         private static void MoverTiros(Luta l)
         {
             var ficam = new List<Tiro>();
@@ -1228,12 +1302,12 @@ namespace RPGLegend.Engine
                 t.X += t.Vx;
                 t.Y += t.Vy;
                 t.Vida -= 1;
-                if (t.Vida <= 0 || ForaDaCaixa(t.X, t.Y, t.Raio))
+                if (t.Vida <= 0 || ForaDoChao(l, t.X, t.Y))
                 {
                     Contar(l, Numero("monstro", t.Indice, "Errou", "erro"));
                     continue;
                 }
-                if (Encosta(l.Arena.Coracao, t.X, t.Y, t.Raio))
+                if (Encosta(l.Arena.Heroi, t.X, t.Y, t.Raio))
                 {
                     GolpeNoHeroi(l, t.Indice, t.Forca);
                     continue;

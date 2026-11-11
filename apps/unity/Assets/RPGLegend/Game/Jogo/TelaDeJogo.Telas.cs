@@ -350,7 +350,7 @@ namespace RPGLegend.Game.Jogo
         /// <summary>As teclas do app no PC, pro guia. Mudou uma tecla (Entrada, LerTeclasDaLuta) → mudar aqui.</summary>
         private const string TeclasDoGuia =
             "Andar: W, A, S, D ou as setas.\n" +
-            "Na luta: Espaço ou J ataca · 1, 2 e 3 usam os poderes · Q abre os itens · Tab troca o alvo · " +
+            "Na luta: ande para desviar dos golpes e chegue perto para bater com arma de perto · Espaço ou J ataca · 1, 2 e 3 usam os poderes · Q abre os itens · Tab troca o alvo · " +
             "com o cajado, as letras U, I, O e P quando o aro pedir.\n" +
             "Esc fecha a janela aberta ou abre o menu de sair.";
 

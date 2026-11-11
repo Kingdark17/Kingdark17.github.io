@@ -1,25 +1,29 @@
 /**
- * A luta em tempo real do app, em primeira pessoa como a do site, com o
- * coração na caixa como no Undertale (pedida pelo usuário como teste em
- * 2026-10-17, e mantida por ele no mesmo dia; a luta dentro da sala ficou
- * no histórico, no commit 82b03da).
+ * A luta em tempo real do app, na própria sala: **a sala é a arena** (doc do
+ * Breno de 2026-11-10, decidido com o usuário em 2026-11-11). Até então o
+ * herói era um coração numa caixa, como no Undertale (2026-10-17).
  *
- * - Os monstros ficam no palco, de frente, como no site: não andam. O
- *   jogador toca no monstro que quer atacar (`mirar`), e o alvo cai pro
- *   primeiro de pé quando o dele cai.
- * - **O herói é um coração dentro da caixa**, que o joystick move. Todo
- *   golpe de monstro no herói vira um desenho na caixa, com **aviso** antes:
- *   o círculo do golpe de perto, a faixa da investida, a bola do tiro. Só
- *   pega se encostar no coração, e aí é o golpe do site (`landHitOnHero`).
+ * - Os monstros ficam cada um na casa dele (`lugaresNaLuta`), como no site:
+ *   não andam atrás do herói. O jogador toca no monstro que quer atacar
+ *   (`mirar`), e o alvo cai pro primeiro de pé quando o dele cai.
+ * - **O herói anda pela sala** (`walkTick`, a regra de sempre), com as
+ *   portas fechadas e os monstros de pé tomando a casa deles. Todo golpe de
+ *   monstro no herói é um desenho no chão da sala, com **aviso** antes: o
+ *   círculo do golpe de perto, a faixa da investida, a bola do tiro. Só pega
+ *   se encostar no herói, e aí é o golpe do site (`landHitOnHero`).
  * - **Cada comportamento é um jeito de lutar** (`JEITOS_DE_LUTAR`): o
- *   agressivo e o ágil mergulham na caixa em linha reta, o mágico atira, o
- *   lento, o venenoso e o defensivo batem num círculo onde o coração estava.
+ *   agressivo e o ágil saem da casa deles e cruzam a sala em linha reta, o
+ *   mágico atira de onde está, o lento, o venenoso e o defensivo batem num
+ *   círculo onde o herói estava.
  * - Um monstro golpeia por vez, revezando entre os de pé como no site, com um
  *   respiro entre um golpe e o outro. O golpe pode ir num companheiro, pela
- *   regra do site (`pickMonsterTarget`): aí não passa pela caixa.
+ *   regra do site (`pickMonsterTarget`): aí não passa pelo chão.
  * - **Um botão de ataque**, que abre o evento da arma (`eventos-de-arma.ts`)
  *   no alvo; enquanto ele dura o mundo anda em **câmera lenta**, e no fim o
- *   golpe cai no alvo, de perto ou de longe.
+ *   golpe cai no alvo. **Arma de perto precisa alcançar** (`golpeDePerto`,
+ *   `ALCANCE_CORPO_A_CORPO`): fora do alcance o botão não abre o evento, e
+ *   quem se afasta antes do fim erra. Arco, magia e poderes acertam de
+ *   qualquer lugar.
  * - Poderes e itens são botões, com tempo de espera; o menu de itens aberto
  *   também deixa o mundo lento. Os companheiros batem no alvo, no tempo deles.
  * - **A recompensa é a do site**: o golpe é o mesmo `resolverGolpe`, o do
@@ -31,8 +35,8 @@
  * Batalha. O resto conta sozinho — o atordoado e o lento gastam turno quando
  * o monstro tenta atacar, os buffs do herói quando ele golpeia.
  *
- * **Tudo em passos e unidades inteiras**, como o andar: 60 passos por
- * segundo, a caixa medida nas unidades da sala. A única conta que não é de
+ * **Tudo em passos e unidades inteiras**, os mesmos do andar: 60 passos por
+ * segundo, casa de `TILE_UNITS`. A única conta que não é de
  * inteiros é o comprimento de um rumo (uma raiz e uma divisão), igual nos
  * dois lados. O sorteio vem de fora, um `rng` que atravessa a luta inteira:
  * com a mesma entrada, passo a passo, a luta sai igual.
@@ -46,8 +50,9 @@ import { tickHeroStatus } from '../combat/hero-status.js';
 import { tickMonsterDot } from '../combat/status-effects.js';
 import { castPower } from '../combat/use-power.js';
 import { anotarUso, atributoDoGolpe, textoDaHabilidade, treinarPoder } from '../hero/treino.js';
+import { geometriaDaSala, paredesDaSala } from '../dungeon/arte-da-sala.js';
 import type { DungeonCell } from '../dungeon/generate.js';
-import { STICK_MAX, type Walker } from '../dungeon/room-walk.js';
+import { HERO_HALF, roomLayout, TILE_UNITS, walkTick, type GeometriaDaSala, type RoomObject, type Walker } from '../dungeon/room-walk.js';
 import type { Behavior } from '../monsters/species.js';
 import { heroPowers, type Hero } from '../hero/hero.js';
 import type { Item } from '../items/item.js';
@@ -60,6 +65,7 @@ import type { Efeito } from '../jogo/efeitos.js';
 import { celulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from '../jogo/estado.js';
 import { enfurecer, FORCA_DO_DEVASTADOR, ferirMonstro, PODERES_DO_CHEFE, poderDaVez, textoDosLacaios, type Ferida, type PoderDoChefe } from '../jogo/chefe-final.js';
 import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta } from '../jogo/fim-da-luta.js';
+import { heroiNaLuta, lugaresNaLuta } from '../jogo/luta-no-mapa.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
@@ -83,17 +89,16 @@ export const RECARGA_DO_PODER = 180;
 /** Quanto o botão de item espera depois de usado. */
 export const RECARGA_DO_ITEM = 60;
 
-/** A caixa, nas unidades da sala: 8 quadrados de largura por 3 de altura. */
-export const LARGURA_DA_CAIXA = 7680;
-export const ALTURA_DA_CAIXA = 2880;
+/** O raio do herói pro golpe do monstro, em volta do pé dele: encostou, pegou. Menor que o corpo, pra dar pra desviar. */
+export const RAIO_DO_HEROI = 160;
 
-/** O raio do coração: encostou nele, pegou. */
-export const RAIO_DO_CORACAO = 160;
+/** Até onde (do pé do herói ao meio da casa do monstro) a arma de perto alcança: uma casa e meia. */
+export const ALCANCE_CORPO_A_CORPO = 1440;
 
-/** O coração anda isto por passo, com o joystick todo: atravessa a caixa em pouco mais de 1,5 s. */
-export const VELOCIDADE_DO_CORACAO = 80;
+/** No fim do evento o alcance tem esta folga: meio passo pra trás durante a mira ainda acerta. */
+export const FOLGA_DO_ALCANCE = 480;
 
-/** Passos até o tiro sumir, se não sair da caixa nem bater em nada. */
+/** Passos até o tiro sumir, se não sair do chão nem bater em nada. */
 export const VIDA_DO_TIRO = 120;
 
 /** Atordoado, o monstro fica parado este tanto e perde o golpe. */
@@ -125,10 +130,10 @@ export interface JeitoDeLutar {
   /** Quanto dura o aviso antes do golpe. */
   aviso: number;
   /**
-   * Perto: cai num círculo em volta de onde o coração estava quando o aviso
-   * começou. Investida: o monstro mergulha na caixa em linha reta, mirando
-   * onde o coração estava. Tiro: uma bola sai de cima, mirando onde o coração
-   * está quando o aviso acaba.
+   * Perto: cai num círculo em volta de onde o herói estava quando o aviso
+   * começou. Investida: o monstro sai da casa dele em linha reta, mirando
+   * onde o herói estava, até a parede. Tiro: uma bola sai do monstro, mirando
+   * onde o herói está quando o aviso acaba.
    */
   golpe: 'perto' | 'investida' | 'tiro';
   /** O raio do que pega: o círculo (perto), o corpo que mergulha (investida), a bola (tiro). */
@@ -169,9 +174,9 @@ export interface MonstroNaArena {
   tempo: number;
   /** A força do golpe em curso (`attackMult`). */
   forca: number;
-  /** Em quem o golpe em curso cai: -1 é o herói (na caixa); senão o índice do companheiro na equipe. */
+  /** Em quem o golpe em curso cai: -1 é o herói (no chão da sala); senão o índice do companheiro na equipe. */
   alvo: number;
-  /** O golpe na caixa: o centro do círculo (perto), o corpo que mergulha (investida) ou de onde a bola sai (tiro). */
+  /** O golpe na sala, em unidades dela: o centro do círculo (perto), o corpo que investe (investida) ou de onde a bola sai (tiro). */
   x: number;
   y: number;
   /** O rumo da investida, travado no começo do aviso, já na velocidade dela. */
@@ -188,7 +193,7 @@ export interface CompanheiroNaArena {
   tempo: number;
 }
 
-/** A bola do mágico, voando pela caixa. */
+/** A bola do mágico, voando pela sala. */
 export interface Tiro {
   x: number;
   y: number;
@@ -199,12 +204,6 @@ export interface Tiro {
   /** Quem atirou (o índice na sala) e a força. */
   indice: number;
   forca: number;
-}
-
-/** Onde o coração está, na caixa. */
-export interface Coracao {
-  x: number;
-  y: number;
 }
 
 export interface EventoAberto {
@@ -222,9 +221,10 @@ export interface Arena {
   passo: number;
   /** Conta os passos da câmera lenta. */
   lento: number;
-  /** Por onde o herói entrou na sala: é onde ele fica quando a luta acaba. */
+  /** Por onde o herói entrou na sala. */
   chegada: Walker;
-  coracao: Coracao;
+  /** Onde o herói está na sala, e pra onde olha: é ali que ele fica quando a luta acaba. */
+  heroi: Walker;
   /** O monstro que o jogador escolheu (índice na sala); sempre um de pé enquanto a luta dura. */
   alvo: number;
   monstros: MonstroNaArena[];
@@ -266,7 +266,7 @@ export interface LutaEmTempoReal {
 
 /** O que a pessoa fez neste passo. */
 export interface EntradaDaLuta {
-  /** O joystick (ou as teclas), inteiros de -STICK_MAX a STICK_MAX: move o coração. */
+  /** O joystick (ou as teclas), inteiros de -STICK_MAX a STICK_MAX: o herói anda pela sala. */
   x: number;
   y: number;
   /** Tocou num monstro: ele vira o alvo (índice na sala). */
@@ -311,11 +311,11 @@ export interface QuadroDaLuta {
 
 /**
  * Abre a luta na sala atual: prepara os monstros e o herói (`prepararLuta`),
- * põe os monstros no palco (os caídos ficam no lugar, apagados), o coração
- * no meio da caixa e os companheiros vivos ao lado. O alvo começa no
- * primeiro de pé, como no site. `chegada` é por onde o herói entrou: a luta
- * guarda pra ele voltar ali quando acabar. `teclado`: jogada no PC, onde o
- * cajado pede letras em vez do desenho.
+ * põe os monstros nas casas deles (os caídos ficam no lugar, apagados), o
+ * herói um passo pra dentro da porta por onde entrou (`heroiNaLuta`) e os
+ * companheiros vivos ao lado. O alvo começa no primeiro de pé, como no site.
+ * `chegada` é onde o herói estava quando a luta abriu. `teclado`: jogada
+ * no PC, onde o cajado pede letras em vez do desenho.
  */
 export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId | null = null, teclado = false): QuadroDaLuta {
   const preparada = prepararLuta(estado);
@@ -343,7 +343,7 @@ export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId 
     passo: 0,
     lento: 0,
     chegada: { ...chegada },
-    coracao: { x: LARGURA_DA_CAIXA / 2, y: ALTURA_DA_CAIXA / 2 },
+    heroi: { ...heroiNaLuta(chegada, geometriaDaSala(preparada.estado.masmorra.dungeon)) },
     alvo: dePe[0] ?? 0,
     monstros,
     companheiros,
@@ -370,7 +370,7 @@ export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId 
 
 /**
  * Um passo da luta. O evento da arma corre em tempo de verdade; o mundo
- * (coração, monstros, companheiros, tiros, rodada) anda um passo — ou, em
+ * (herói, monstros, companheiros, tiros, rodada) anda um passo — ou, em
  * câmera lenta, um a cada `LENTIDAO`.
  *
  * `now` é o relógio do `uid` do item que cai ao vencer (e do andar novo, se
@@ -425,7 +425,7 @@ function copiarArena(arena: Arena): Arena {
   return {
     ...arena,
     chegada: { ...arena.chegada },
-    coracao: { ...arena.coracao },
+    heroi: { ...arena.heroi },
     monstros: arena.monstros.map((m) => ({ ...m })),
     companheiros: arena.companheiros.map((c) => ({ ...c })),
     tiros: arena.tiros.map((t) => ({ ...t })),
@@ -480,10 +480,57 @@ function alvoAtual(l: Luta): number | null {
   return l.arena.monstros.find((m) => m.fase !== 'caido')?.indice ?? null;
 }
 
-/** De onde, na largura da caixa, sai o golpe do monstro: embaixo do lugar dele no palco. */
-function colunaDe(l: Luta, indice: number): number {
-  const total = Math.max(1, l.arena.monstros.length);
-  return Math.trunc((LARGURA_DA_CAIXA * (2 * indice + 1)) / (2 * total));
+function geometria(l: Luta): GeometriaDaSala {
+  return geometriaDaSala(masmorra(l).masmorra.dungeon);
+}
+
+/** O meio da casa do monstro `indice`, em unidades da sala: de onde sai a investida e o tiro, e o que o alcance mede. */
+export function lugarDoMonstro(quantos: number, indice: number, formato: GeometriaDaSala): { x: number; y: number } {
+  const lugares = lugaresNaLuta(quantos, formato);
+  const lugar = lugares[Math.min(indice, lugares.length - 1)] as { col: number; row: number };
+  return { x: lugar.col * TILE_UNITS + TILE_UNITS / 2, y: lugar.row * TILE_UNITS + TILE_UNITS / 2 };
+}
+
+function lugarDe(l: Luta, indice: number): { x: number; y: number } {
+  return lugarDoMonstro(l.arena.monstros.length, indice, geometria(l));
+}
+
+/** As armas que acertam de longe, seja qual for o ataque. */
+export const ARMAS_DE_LONGE: readonly string[] = ['arco', 'cajado'];
+
+/**
+ * O golpe de perto é o que precisa alcançar: o ataque comum e o físico com
+ * arma de perto (ou sem arma). Magia, tiro, arco e cajado acertam de longe.
+ */
+export function golpeDePerto(hero: Hero, estilo: AttackStyle): boolean {
+  return estilo !== 'magic' && estilo !== 'ranged' && !ARMAS_DE_LONGE.includes(hero.equip.arma?.templateId ?? '');
+}
+
+/** O herói alcança o monstro `indice` com a arma de perto, com esta folga a mais? */
+function alcanca(l: Luta, indice: number, folga = 0): boolean {
+  const lugar = lugarDe(l, indice);
+  const dx = l.arena.heroi.x - lugar.x;
+  const dy = l.arena.heroi.y - lugar.y;
+  const limite = ALCANCE_CORPO_A_CORPO + folga;
+  return dx * dx + dy * dy <= limite * limite;
+}
+
+/** O monstro de pé mais perto do herói que a arma de perto alcança; `null`, nenhum. No empate, o primeiro. */
+function maisPertoAoAlcance(l: Luta): number | null {
+  let melhor: number | null = null;
+  let menor = 0;
+  for (const m of l.arena.monstros) {
+    if (m.fase === 'caido' || !alcanca(l, m.indice)) continue;
+    const lugar = lugarDe(l, m.indice);
+    const dx = l.arena.heroi.x - lugar.x;
+    const dy = l.arena.heroi.y - lugar.y;
+    const distancia = dx * dx + dy * dy;
+    if (melhor === null || distancia < menor) {
+      melhor = m.indice;
+      menor = distancia;
+    }
+  }
+  return melhor;
 }
 
 /** Um rumo de comprimento `velocidade` de (0,0) até (dx, dy), em inteiros. */
@@ -493,17 +540,18 @@ function rumo(dx: number, dy: number, velocidade: number): { x: number; y: numbe
   return { x: Math.trunc((dx * velocidade) / comprimento), y: Math.trunc((dy * velocidade) / comprimento) };
 }
 
-/** O círculo de raio `raio` em (x, y) encosta no coração? */
-function encosta(coracao: Coracao, x: number, y: number, raio: number): boolean {
-  const dx = coracao.x - x;
-  const dy = coracao.y - y;
-  const limite = raio + RAIO_DO_CORACAO;
+/** O círculo de raio `raio` em (x, y) encosta no herói? */
+function encosta(heroi: Walker, x: number, y: number, raio: number): boolean {
+  const dx = heroi.x - x;
+  const dy = heroi.y - y;
+  const limite = raio + RAIO_DO_HEROI;
   return dx * dx + dy * dy <= limite * limite;
 }
 
-/** O círculo de raio `raio` em (x, y) já saiu inteiro da caixa? */
-function foraDaCaixa(x: number, y: number, raio: number): boolean {
-  return x < -raio || x > LARGURA_DA_CAIXA + raio || y < -raio || y > ALTURA_DA_CAIXA + raio;
+/** O ponto (x, y) chegou na parede em volta da sala? É onde a investida e o tiro acabam. */
+function foraDoChao(l: Luta, x: number, y: number): boolean {
+  const { cols, rows } = geometria(l);
+  return x < TILE_UNITS || x > (cols - 1) * TILE_UNITS || y < TILE_UNITS || y > (rows - 1) * TILE_UNITS;
 }
 
 function contar(l: Luta, acontecimento: Acontecimento): void {
@@ -529,11 +577,25 @@ function estiloDoBotao(hero: Hero): AttackStyle {
   return (primeiro as (typeof ataques)[number]).estilo;
 }
 
+/**
+ * O botão de ataque abre o evento da arma no alvo. Com arma de perto, o alvo
+ * precisa estar ao alcance: se o escolhido não está, vale o de pé mais perto
+ * que estiver (e ele vira o alvo); nenhum, o botão só avisa.
+ */
 function abrirEvento(l: Luta): void {
-  const alvo = alvoAtual(l);
+  let alvo = alvoAtual(l);
   if (alvo === null) return;
   const hero = masmorra(l).hero;
   const estilo = estiloDoBotao(hero);
+  if (golpeDePerto(hero, estilo) && !alcanca(l, alvo)) {
+    const perto = maisPertoAoAlcance(l);
+    if (perto === null) {
+      contar(l, { tipo: 'aviso', texto: 'Chegue mais perto' });
+      return;
+    }
+    alvo = perto;
+    l.arena.alvo = perto;
+  }
   const evento = eventoDoAtaque(hero, estilo, l.rng, l.teclado);
   l.arena.evento = { evento, passo: 0, jogada: {}, alvo, estilo };
 }
@@ -593,16 +655,22 @@ function seguirEvento(l: Luta, entrada: EntradaDaLuta): void {
 /**
  * O evento terminou: lê, rola o d20 e o golpe cai no alvo do evento. Se ele
  * caiu enquanto o evento corria (um companheiro, o veneno), cai no alvo de agora.
+ * Com arma de perto, quem se afastou do alvo durante o evento erra (sem dado).
  */
 function golpear(l: Luta): void {
   const aberto = l.arena.evento as EventoAberto;
   l.arena.evento = null;
   l.arena.recarga = RECARGA_DO_ATAQUE;
   const leitura = lerEvento(aberto.evento, aberto.jogada);
-  const dado = 1 + randomInt(LADOS_DO_DANO, l.rng);
   const doEvento = l.arena.monstros[aberto.alvo] as MonstroNaArena;
   const indice = doEvento.fase !== 'caido' ? doEvento.indice : alvoAtual(l);
   if (indice === null) return;
+  if (golpeDePerto(masmorra(l).hero, aberto.estilo) && !alcanca(l, indice, FOLGA_DO_ALCANCE)) {
+    contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: 'Longe', tom: 'erro' });
+    contar(l, { tipo: 'som', som: 'miss' });
+    return;
+  }
+  const dado = 1 + randomInt(LADOS_DO_DANO, l.rng);
   acertarMonstro(l, l.arena.monstros[indice] as MonstroNaArena, dado, leitura, aberto.estilo);
 }
 
@@ -757,30 +825,36 @@ function usarItem(l: Luta, uid: string): void {
 // ---------- o mundo ----------
 
 /**
- * O coração anda como o herói na sala: a diagonal não é mais rápida que o
- * reto. A parede da caixa segura.
+ * O herói anda pela sala com a regra de sempre (`walkTick`): as portas
+ * fechadas (só se sai vencendo ou caindo), as paredes de dentro da masmorra
+ * e cada monstro de pé tomando a casa dele. A casa de monstro em que o herói
+ * já está pisando não conta (os lacaios aparecem onde ele pode estar, e quem
+ * entra pelo lado numa sala cheia chega em cima de um): ele sai dela andando.
  */
-function moverCoracao(coracao: Coracao, entrada: EntradaDaLuta): Coracao {
-  let ix = Math.trunc(entrada.x);
-  let iy = Math.trunc(entrada.y);
-  const quadrado = ix * ix + iy * iy;
-  if (quadrado > STICK_MAX * STICK_MAX) {
-    const comprimento = Math.sqrt(quadrado);
-    ix = Math.trunc((ix * STICK_MAX) / comprimento);
-    iy = Math.trunc((iy * STICK_MAX) / comprimento);
+function moverHeroi(l: Luta, entrada: EntradaDaLuta): Walker {
+  const heroi = l.arena.heroi;
+  if (Math.trunc(entrada.x) === 0 && Math.trunc(entrada.y) === 0) return heroi;
+  const formato = geometria(l);
+  const lugares = lugaresNaLuta(l.arena.monstros.length, formato);
+  const monstros: RoomObject[] = [];
+  for (const m of l.arena.monstros) {
+    if (m.fase === 'caido') continue;
+    const lugar = lugares[Math.min(m.indice, lugares.length - 1)] as { col: number; row: number };
+    const pisando =
+      heroi.x + HERO_HALF > lugar.col * TILE_UNITS &&
+      heroi.x - HERO_HALF < (lugar.col + 1) * TILE_UNITS &&
+      heroi.y + HERO_HALF > lugar.row * TILE_UNITS &&
+      heroi.y - HERO_HALF < (lugar.row + 1) * TILE_UNITS;
+    if (!pisando) monstros.push({ id: `monstro_${m.indice}`, col: lugar.col, row: lugar.row });
   }
-  const x = coracao.x + Math.trunc((ix * VELOCIDADE_DO_CORACAO) / STICK_MAX);
-  const y = coracao.y + Math.trunc((iy * VELOCIDADE_DO_CORACAO) / STICK_MAX);
-  return {
-    x: Math.max(RAIO_DO_CORACAO, Math.min(LARGURA_DA_CAIXA - RAIO_DO_CORACAO, x)),
-    y: Math.max(RAIO_DO_CORACAO, Math.min(ALTURA_DA_CAIXA - RAIO_DO_CORACAO, y)),
-  };
+  const planta = roomLayout({}, monstros, paredesDaSala(masmorra(l).masmorra.dungeon), formato);
+  return walkTick(planta, heroi, { x: entrada.x, y: entrada.y }).walker;
 }
 
 function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
   const arena = l.arena;
   arena.passo += 1;
-  arena.coracao = moverCoracao(arena.coracao, entrada);
+  arena.heroi = moverHeroi(l, entrada);
   if (arena.recarga > 0) arena.recarga -= 1;
   if (arena.recargaDoItem > 0) arena.recargaDoItem -= 1;
   if (arena.intervalo > 0) arena.intervalo -= 1;
@@ -855,11 +929,11 @@ function proximoDaVez(l: Luta): MonstroNaArena | null {
 /**
  * O monstro tenta golpear: atordoado ou lento demais, perde o golpe; senão
  * sorteia em quem cai, como no site, e o aviso começa. Golpe no herói trava
- * o desenho na caixa (o círculo e a investida miram onde o coração está
+ * o desenho no chão (o círculo e a investida miram onde o herói está
  * agora). Perder a vez também é a vez: o respiro do próximo começa igual.
  *
  * O chefe final, na vez de um poder (`poderDaVez`), avisa o nome dele e mira
- * sempre o coração: o Golpe Devastador com o dobro da força, o Rugido com a
+ * sempre o herói: o Golpe Devastador com o dobro da força, o Rugido com a
  * de sempre, mas pegando também os companheiros quando o aviso acaba. O
  * poder conta já no começo, pra o aviso do próximo sair certo.
  */
@@ -903,22 +977,23 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
   m.rumoX = 0;
   m.rumoY = 0;
   if (m.alvo >= 0) {
-    // No companheiro: fora da caixa, cai como no site quando o aviso acaba.
+    // No companheiro: fora do chão, cai como no site quando o aviso acaba.
     m.x = 0;
     m.y = 0;
     return;
   }
-  const coracao = l.arena.coracao;
+  const heroi = l.arena.heroi;
   if (jeito.golpe === 'perto') {
-    m.x = coracao.x;
-    m.y = coracao.y;
+    m.x = heroi.x;
+    m.y = heroi.y;
     return;
   }
-  // A investida e o tiro saem de cima da caixa, embaixo do monstro, inteiros pra fora.
-  m.x = colunaDe(l, m.indice);
-  m.y = -jeito.tamanho;
+  // A investida e o tiro saem da casa do monstro.
+  const lugar = lugarDe(l, m.indice);
+  m.x = lugar.x;
+  m.y = lugar.y;
   if (jeito.golpe === 'investida') {
-    const r = rumo(coracao.x - m.x, coracao.y - m.y, jeito.velocidade);
+    const r = rumo(heroi.x - m.x, heroi.y - m.y, jeito.velocidade);
     m.rumoX = r.x;
     m.rumoY = r.y;
   }
@@ -938,14 +1013,14 @@ function soltarGolpe(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
     return;
   }
   if (jeito.golpe === 'tiro') {
-    // A bola mira onde o coração está agora, no fim do aviso.
-    const coracao = l.arena.coracao;
-    const v = rumo(coracao.x - m.x, coracao.y - m.y, jeito.velocidade);
+    // A bola mira onde o herói está agora, no fim do aviso.
+    const heroi = l.arena.heroi;
+    const v = rumo(heroi.x - m.x, heroi.y - m.y, jeito.velocidade);
     l.arena.tiros.push({ x: m.x, y: m.y, vx: v.x, vy: v.y, raio: jeito.tamanho, vida: VIDA_DO_TIRO, indice: m.indice, forca: m.forca });
     descansar(l, m, jeito);
     return;
   }
-  if (encosta(l.arena.coracao, m.x, m.y, jeito.tamanho)) golpeNoHeroi(l, m.indice, m.forca);
+  if (encosta(l.arena.heroi, m.x, m.y, jeito.tamanho)) golpeNoHeroi(l, m.indice, m.forca);
   else contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: 'Errou', tom: 'erro' });
   descansar(l, m, jeito);
 }
@@ -973,23 +1048,23 @@ function descansar(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   l.arena.intervalo = INTERVALO_ENTRE_GOLPES;
 }
 
-/** A investida mergulha pelo rumo travado: encostou no coração, pega e para; saiu da caixa, acabou. */
+/** A investida segue pelo rumo travado: encostou no herói, pega e para; chegou na parede, acabou (e o monstro volta pra casa dele). */
 function investir(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   m.x += m.rumoX;
   m.y += m.rumoY;
-  if (encosta(l.arena.coracao, m.x, m.y, jeito.tamanho)) {
+  if (encosta(l.arena.heroi, m.x, m.y, jeito.tamanho)) {
     golpeNoHeroi(l, m.indice, m.forca);
     descansar(l, m, jeito);
     return;
   }
-  if (foraDaCaixa(m.x, m.y, jeito.tamanho)) {
+  if (foraDoChao(l, m.x, m.y)) {
     contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: 'Errou', tom: 'erro' });
     descansar(l, m, jeito);
   }
 }
 
 /**
- * O golpe do monstro `indice` pegou no coração: a regra do site, com a esquiva de sempre, mais a armadura
+ * O golpe do monstro `indice` pegou no herói: a regra do site, com a esquiva de sempre, mais a armadura
  * encantada (que só a arena aplica) e o escudo do vigor, que apanha antes da vida.
  */
 function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
@@ -1070,7 +1145,7 @@ function agirCompanheiro(l: Luta, c: CompanheiroNaArena): void {
   }
 }
 
-/** As bolas voam; a que encosta no coração pega, a que sai da caixa (ou acaba) errou. */
+/** As bolas voam; a que encosta no herói pega, a que chega na parede (ou acaba) errou. */
 function moverTiros(l: Luta): void {
   const ficam: Tiro[] = [];
   for (const t of l.arena.tiros) {
@@ -1078,11 +1153,11 @@ function moverTiros(l: Luta): void {
     t.x += t.vx;
     t.y += t.vy;
     t.vida -= 1;
-    if (t.vida <= 0 || foraDaCaixa(t.x, t.y, t.raio)) {
+    if (t.vida <= 0 || foraDoChao(l, t.x, t.y)) {
       contar(l, { tipo: 'numero', onde: 'monstro', indice: t.indice, texto: 'Errou', tom: 'erro' });
       continue;
     }
-    if (encosta(l.arena.coracao, t.x, t.y, t.raio)) {
+    if (encosta(l.arena.heroi, t.x, t.y, t.raio)) {
       golpeNoHeroi(l, t.indice, t.forca);
       continue;
     }

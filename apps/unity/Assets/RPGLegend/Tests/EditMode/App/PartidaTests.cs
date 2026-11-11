@@ -143,6 +143,8 @@ namespace RPGLegend.Tests
             var chegada = RoomWalk.Arrival(direcao);
             Assert.AreEqual(chegada.X, partida.Luta.Arena.Chegada.X, "a luta guarda a porta por onde o herói entrou");
             Assert.AreEqual(chegada.Y, partida.Luta.Arena.Chegada.Y);
+            Assert.AreEqual(chegada.X, partida.Luta.Arena.Heroi.X, "e o herói começa a luta ali, na sala");
+            Assert.AreEqual(chegada.Y, partida.Luta.Arena.Heroi.Y);
             Assert.IsTrue(partida.TemMudancaPorGravar);
             Assert.IsFalse(partida.Mover(Directions.Opposite.Get(direcao)), "a porta fica trancada durante a luta");
         }
