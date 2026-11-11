@@ -230,6 +230,12 @@
             <ui:Label name="carregando-jogo" text="Carregando progresso…" class="carregando-jogo" picking-mode="Ignore" />
         </ui:VisualElement>
 
+        <!-- Só no PC: aparece na porta e no menu quando há versão mais nova publicada (Game/App/Atualizacao.cs). -->
+        <ui:VisualElement name="atualizacao" class="painel atualizacao escondida">
+            <ui:Label name="texto-da-atualizacao" class="texto-da-atualizacao" />
+            <ui:Button name="botao-atualizar" text="ATUALIZAR" class="botao botao-pequeno" />
+        </ui:VisualElement>
+
         <ui:Label name="aviso" class="aviso escondido" picking-mode="Ignore" />
         <ui:VisualElement name="veu" class="veu" picking-mode="Ignore" />
     </ui:VisualElement>

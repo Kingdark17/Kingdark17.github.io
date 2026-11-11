@@ -243,6 +243,18 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   gera de `UI/Imagens/logo.png` o padrão (o do executável), o adaptável do
   Android (o brasão no círculo seguro, sobre o fundo `--ink` das telas) e o
   `Instalador/icone.ico`, e os põe nas configurações. Logo nova → rodar de novo.
+  O app de PC se atualiza sozinho (desde 2026-11-11, `Game/App/Atualizacao.cs`):
+  ao abrir, ele lê o `versao-pc.txt` do release mais novo do repositório no
+  GitHub (`releases/latest/download/`) e, se a versão for mais nova que a
+  dele (`Application.version`, que o build grava igual à do instalador: a
+  data e a hora), mostra na porta e no menu o ATUALIZAR, que baixa o
+  instalador, roda ele em silêncio e fecha; o instalador reabre o jogo
+  (`Check: WizardSilent` no `.iss`). **Publicar uma versão do PC**: o build do
+  Windows e depois `node apps/unity/Instalador/publicar.mjs` (`--conferir` só
+  mostra; usa a credencial do git). O release vale na hora pra todo mundo:
+  só publicar com o que já está no `main` e conferido. Com a Unity fechada,
+  o build sai por `-executeMethod RPGLegend.EditorTools.WindowsAppBuild.PelaLinhaDeComando`.
+  O celular não tem isso (a loja dele é que atualiza; hoje é APK na mão).
 - Atributos e habilidades pelo uso (2026-11-10, **site e app**, doc do Breno
   decidido com o usuário; substitui os 2 pontos por nível): cada ação anota um
   uso no atributo dela (`hero/treino.ts`, `anotarUso`: Força no golpe corpo a

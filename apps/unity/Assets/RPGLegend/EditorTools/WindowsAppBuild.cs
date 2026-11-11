@@ -19,7 +19,10 @@ namespace RPGLegend.EditorTools
     /// pasta Builds/AppWindows/RPG Legend é o jogo inteiro. Depois do build, abre o executável numa janela de
     /// 1280 × 720 e confere se ele não jogou exceção ao abrir; e o Inno Setup junta a pasta no instalador
     /// (Builds/AppWindows/RPG Legend - Instalação.exe), que é o que se manda. O resultado vai para o Console e para
-    /// Builds/AppWindows/build-report.txt (fora da pasta do jogo, junto com o log da conferência).
+    /// Builds/AppWindows/build-report.txt (fora da pasta do jogo, junto com o log da conferência). A versão (a data
+    /// e a hora do build) vai no executável (Application.version), no instalador e no versao-pc.txt ao lado dele:
+    /// é por ela que o jogo sabe que saiu uma mais nova (Game/App/Atualizacao.cs). Publicar o instalador pra quem
+    /// já tem o jogo se atualizar: node apps/unity/Instalador/publicar.mjs.
     /// </summary>
     public static class WindowsAppBuild
     {
@@ -33,6 +36,15 @@ namespace RPGLegend.EditorTools
 
         [MenuItem("RPG Legend/Build do app (Windows)", priority = 310)]
         private static void BuildMenu() => BuildAndCheck();
+
+        /// <summary>
+        /// Com a Unity fechada, pela linha de comando:
+        /// Unity.exe -batchmode -projectPath apps/unity -executeMethod RPGLegend.EditorTools.WindowsAppBuild.PelaLinhaDeComando -quit
+        /// </summary>
+        public static void PelaLinhaDeComando()
+        {
+            if (!BuildAndCheck()) EditorApplication.Exit(1);
+        }
 
         /// <summary>Builda e abre. Devolve true quando o executável abriu sem exceção no log.</summary>
         public static bool BuildAndCheck()
@@ -84,11 +96,15 @@ namespace RPGLegend.EditorTools
             // 1. Build numa pasta limpa, com o nome do jogo (o da janela e o do executável) só durante o build.
             if (Directory.Exists(jogo)) Directory.Delete(jogo, true);
             var nomeAntes = PlayerSettings.productName;
+            var versaoAntes = PlayerSettings.bundleVersion;
             var inicio = DateTime.Now;
+            var versao = inicio.ToString("yyyy.M.d.Hmm");
+            relatorio.AppendLine("versão: " + versao);
             BuildReport build;
             try
             {
                 PlayerSettings.productName = ProductName;
+                PlayerSettings.bundleVersion = versao;
                 build = BuildPipeline.BuildPlayer(new BuildPlayerOptions
                 {
                     scenes = new[] { AppSceneBuilder.ScenePath },
@@ -101,7 +117,8 @@ namespace RPGLegend.EditorTools
             finally
             {
                 PlayerSettings.productName = nomeAntes;
-                // O build grava o ProjectSettings.asset com o nome do jogo; salvar de novo deixa no disco o de repouso.
+                PlayerSettings.bundleVersion = versaoAntes;
+                // O build grava o ProjectSettings.asset com o nome e a versão do jogo; salvar de novo deixa no disco os de repouso.
                 AssetDatabase.SaveAssets();
             }
             var resumo = build.summary;
@@ -124,7 +141,7 @@ namespace RPGLegend.EditorTools
             if (existia && Reg("export \"" + chave + "\" \"" + copia + "\" /y") != 0)
             {
                 relatorio.AppendLine("Não consegui guardar as preferências do jogo (" + chave + ") para a conferência: abra o executável à mão.");
-                return Instalador(projeto, pasta, jogo, relatorio);
+                return Instalador(projeto, pasta, jogo, versao, relatorio);
             }
             try
             {
@@ -174,14 +191,15 @@ namespace RPGLegend.EditorTools
                 return false;
             }
             relatorio.AppendLine("executável: abriu, sem exceção no log nos primeiros " + LogWaitMs / 1000 + " s. Log: " + log);
-            return Instalador(projeto, pasta, jogo, relatorio);
+            return Instalador(projeto, pasta, jogo, versao, relatorio);
         }
 
         /// <summary>
         /// 4. O instalador, um .exe só para mandar: o Inno Setup compila Instalador/RPGLegend.iss com a pasta do jogo e a
-        /// versão (a data e a hora do build). Sem o Inno Setup no computador, o build vale e só o instalador fica de fora.
+        /// versão (a do executável). Sem o Inno Setup no computador, o build vale e só o instalador fica de fora. Ao lado
+        /// dele sai o versao-pc.txt (a versão e o tamanho do instalador), que vai junto na publicação.
         /// </summary>
-        private static bool Instalador(string projeto, string pasta, string jogo, StringBuilder relatorio)
+        private static bool Instalador(string projeto, string pasta, string jogo, string versao, StringBuilder relatorio)
         {
             var iscc = new[]
             {
@@ -196,8 +214,9 @@ namespace RPGLegend.EditorTools
             }
 
             var instalador = Path.Combine(pasta, InstallerName + ".exe");
+            var arquivoDaVersao = Path.Combine(pasta, Atualizacao.ArquivoDaVersao);
             if (File.Exists(instalador)) File.Delete(instalador);
-            var versao = DateTime.Now.ToString("yyyy.M.d.Hmm");
+            if (File.Exists(arquivoDaVersao)) File.Delete(arquivoDaVersao);
             var roteiro = Path.Combine(projeto, "Instalador", "RPGLegend.iss");
             string saida;
             int codigo;
@@ -226,6 +245,7 @@ namespace RPGLegend.EditorTools
                 relatorio.AppendLine(saida.Trim());
                 return false;
             }
+            File.WriteAllText(arquivoDaVersao, versao + "\n" + new FileInfo(instalador).Length + "\n");
             relatorio.AppendLine("instalador: versão " + versao + ", " + new FileInfo(instalador).Length / (1024 * 1024) + " MB -> " + instalador);
             return true;
         }

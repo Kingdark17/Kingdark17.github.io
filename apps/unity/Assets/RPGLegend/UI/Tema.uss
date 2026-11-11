@@ -297,6 +297,23 @@
     right: 32px;
 }
 
+/* O aviso de versão nova do app de PC: no canto de cima à esquerda, em frente ao "Sair da conta". */
+.atualizacao {
+    position: absolute;
+    top: 20px;
+    left: 32px;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 10px 8px 14px;
+    border-color: var(--gold-bright);
+}
+
+.texto-da-atualizacao {
+    margin-right: 12px;
+    font-size: 18px;
+    color: var(--parchment);
+}
+
 .credito {
     position: absolute;
     left: 0;

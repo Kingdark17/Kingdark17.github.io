@@ -53,3 +53,5 @@ Name: "{autodesktop}\RPG Legend"; Filename: "{app}\RPG Legend.exe"; Tasks: atalh
 
 [Run]
 Filename: "{app}\RPG Legend.exe"; Description: "{cm:LaunchProgram,RPG Legend}"; Flags: nowait postinstall skipifsilent
+; A atualização pelo próprio jogo roda o instalador em silêncio (/SILENT) e fecha: aqui o jogo abre de novo.
+Filename: "{app}\RPG Legend.exe"; Flags: nowait; Check: WizardSilent

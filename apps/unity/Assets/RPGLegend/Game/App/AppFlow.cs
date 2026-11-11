@@ -69,6 +69,9 @@ namespace RPGLegend.Game.App
                 _jogo = gameObject.AddComponent<TelaDeJogo>();
                 _jogo.AoSair += SairDoJogo;
 
+                // O app de PC procura versão nova enquanto a porta abre; se houver, o menu oferece ATUALIZAR.
+                if (Atualizacao.Vale) _ = new AvisoDeAtualizacao(documento.rootVisualElement, Atualizacao.Origem).Procurar(Application.version);
+
 #if UNITY_EDITOR
                 int direto = UnityEditor.EditorPrefs.GetInt(ChaveJogarDireto, 0);
                 if (direto > 0 && Session.Tem)
