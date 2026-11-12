@@ -35,6 +35,12 @@ namespace RPGLegend.Engine
         public double Y;
         public double RumoX;
         public double RumoY;
+        /// <summary>
+        /// Onde o monstro está de pé, em unidades da sala: começa no meio da casa dele e, depois de uma investida, fica
+        /// onde ela acabou (2026-11-12). É dali que o alcance mede e que saem a investida e o tiro.
+        /// </summary>
+        public double CorpoX;
+        public double CorpoY;
         /// <summary>O chefe final: o poder do golpe em curso (<see cref="ChefeFinal"/>). Ausente (null) no golpe comum.</summary>
         public string Poder;
 
@@ -249,8 +255,10 @@ namespace RPGLegend.Engine
 
             var monstros = new List<MonstroNaArena>();
             int total = sala.Monsters?.Count ?? 0;
+            var formato = ArteDaSala.GeometriaDaSala(((EstadoNaMasmorra)preparada.Estado).Masmorra.Dungeon);
             for (int indice = 0; indice < total; indice++)
             {
+                var lugar = LugarDoMonstro(total, indice, formato);
                 monstros.Add(new MonstroNaArena
                 {
                     Indice = indice,
@@ -262,6 +270,8 @@ namespace RPGLegend.Engine
                     Y = 0,
                     RumoX = 0,
                     RumoY = 0,
+                    CorpoX = lugar.X,
+                    CorpoY = lugar.Y,
                 });
             }
 
@@ -277,7 +287,7 @@ namespace RPGLegend.Engine
                 Passo = 0,
                 Lento = 0,
                 Chegada = new Walker { X = chegada.X, Y = chegada.Y, Facing = chegada.Facing },
-                Heroi = CopiaDe(LutaNoMapa.HeroiNaLuta(chegada, ArteDaSala.GeometriaDaSala(((EstadoNaMasmorra)preparada.Estado).Masmorra.Dungeon))),
+                Heroi = CopiaDe(LutaNoMapa.HeroiNaLuta(chegada, formato)),
                 Alvo = dePe.Count > 0 ? dePe[0] : 0,
                 Monstros = monstros,
                 Companheiros = companheiros,
@@ -459,7 +469,7 @@ namespace RPGLegend.Engine
 
         private static GeometriaDaSala Geometria(Luta l) => ArteDaSala.GeometriaDaSala(Masmorra(l).Masmorra.Dungeon);
 
-        /// <summary>TS: lugarDoMonstro — o meio da casa do monstro, em unidades da sala: de onde sai a investida e o tiro, e o que o alcance mede.</summary>
+        /// <summary>TS: lugarDoMonstro — o meio da casa em que o monstro começa a luta, em unidades da sala.</summary>
         public static (double X, double Y) LugarDoMonstro(double quantos, double indice, GeometriaDaSala formato)
         {
             var lugares = LutaNoMapa.LugaresNaLuta(quantos, formato);
@@ -467,7 +477,57 @@ namespace RPGLegend.Engine
             return (lugar.Col * RoomWalk.TileUnits + RoomWalk.TileUnits / 2, lugar.Row * RoomWalk.TileUnits + RoomWalk.TileUnits / 2);
         }
 
-        private static (double X, double Y) LugarDe(Luta l, double indice) => LugarDoMonstro(l.Arena.Monstros.Count, indice, Geometria(l));
+        /// <summary>TS: lugarDe — onde o monstro está de pé agora: de onde sai a investida e o tiro, e o que o alcance mede.</summary>
+        private static (double X, double Y) LugarDe(Luta l, double indice)
+        {
+            foreach (var m in l.Arena.Monstros)
+                if (m.Indice == indice) return (m.CorpoX, m.CorpoY);
+            return LugarDoMonstro(l.Arena.Monstros.Count, indice, Geometria(l));
+        }
+
+        /// <summary>TS: arrumarASala — os lacaios entraram: cada um de pé na casa dele pro novo tamanho do grupo.</summary>
+        private static void ArrumarASala(Luta l)
+        {
+            var formato = Geometria(l);
+            foreach (var m in l.Arena.Monstros)
+            {
+                var lugar = LugarDoMonstro(l.Arena.Monstros.Count, m.Indice, formato);
+                m.CorpoX = lugar.X;
+                m.CorpoY = lugar.Y;
+            }
+        }
+
+        /// <summary>
+        /// TS: pousar — a investida acabou em (m.X, m.Y): o monstro fica ali, puxado pra dentro do chão se passou da
+        /// parede. A que pegou no herói (<paramref name="raio"/> é o do corpo que investe) para encostada nele, e não em cima.
+        /// </summary>
+        private static void Pousar(Luta l, MonstroNaArena m, double? raio = null)
+        {
+            double x = m.X;
+            double y = m.Y;
+            if (raio.HasValue)
+            {
+                var heroi = l.Arena.Heroi;
+                double limite = raio.Value + D.RaioDoHeroi;
+                double dx = x - heroi.X;
+                double dy = y - heroi.Y;
+                if (dx == 0 && dy == 0)
+                {
+                    dx = -m.RumoX;
+                    dy = -m.RumoY;
+                }
+                double distancia = Math.Sqrt(dx * dx + dy * dy);
+                if (distancia > 0 && distancia < limite)
+                {
+                    x = heroi.X + Math.Truncate(dx * limite / distancia);
+                    y = heroi.Y + Math.Truncate(dy * limite / distancia);
+                }
+            }
+            var formato = Geometria(l);
+            double meia = RoomWalk.TileUnits / 2;
+            m.CorpoX = Math.Min(Math.Max(x, RoomWalk.TileUnits + meia), (formato.Cols - 1) * RoomWalk.TileUnits - meia);
+            m.CorpoY = Math.Min(Math.Max(y, RoomWalk.TileUnits + meia), (formato.Rows - 1) * RoomWalk.TileUnits - meia);
+        }
 
         /// <summary>
         /// TS: golpeDePerto — o golpe de perto é o que precisa alcançar: o ataque comum e o físico com arma de perto
@@ -741,7 +801,8 @@ namespace RPGLegend.Engine
             if (ferida.Lacaios.Count > 0)
             {
                 foreach (var novo in ferida.Lacaios)
-                    l.Arena.Monstros.Add(new MonstroNaArena { Indice = novo, Fase = "esperando", Tempo = 0, Forca = 1, Alvo = -1, X = 0, Y = 0, RumoX = 0, RumoY = 0 });
+                    l.Arena.Monstros.Add(new MonstroNaArena { Indice = novo, Fase = "esperando", Tempo = 0, Forca = 1, Alvo = -1, X = 0, Y = 0, RumoX = 0, RumoY = 0, CorpoX = 0, CorpoY = 0 });
+                ArrumarASala(l);
                 l.Arena.Alvo = ferida.Lacaios[0];
             }
             // O chefe final que chamou os lacaios tem o texto dele; o de andar 5 diz o que as mecânicas fizeram.
@@ -892,7 +953,7 @@ namespace RPGLegend.Engine
 
         /// <summary>
         /// TS: moverHeroi — o herói anda pela sala com a regra de sempre (RoomWalk.Tick): as portas fechadas (só se sai
-        /// vencendo ou caindo), as paredes de dentro da masmorra e cada monstro de pé tomando a casa dele. A casa de
+        /// vencendo ou caindo), as paredes de dentro da masmorra e cada monstro de pé tomando a casa em que está (o que voa na investida não). A casa de
         /// monstro em que o herói já está pisando não conta: ele sai dela andando.
         /// </summary>
         private static Walker MoverHeroi(Luta l, EntradaDaLuta entrada)
@@ -900,14 +961,13 @@ namespace RPGLegend.Engine
             var heroi = l.Arena.Heroi;
             if (Math.Truncate(entrada.X) == 0 && Math.Truncate(entrada.Y) == 0) return heroi;
             var formato = Geometria(l);
-            var lugares = LutaNoMapa.LugaresNaLuta(l.Arena.Monstros.Count, formato);
             var monstros = new List<RoomObject>();
             double t = RoomWalk.TileUnits;
             double meio = RoomWalk.HeroHalf;
             foreach (var m in l.Arena.Monstros)
             {
-                if (m.Fase == "caido") continue;
-                var lugar = lugares[(int)Math.Min(m.Indice, lugares.Count - 1)];
+                if (m.Fase == "caido" || m.Fase == "investindo") continue;
+                var lugar = (Col: Math.Floor(m.CorpoX / t), Row: Math.Floor(m.CorpoY / t));
                 bool pisando =
                     heroi.X + meio > lugar.Col * t &&
                     heroi.X - meio < (lugar.Col + 1) * t &&
@@ -1164,19 +1224,21 @@ namespace RPGLegend.Engine
             l.Arena.Intervalo = D.IntervaloEntreGolpes;
         }
 
-        /// <summary>A investida segue pelo rumo travado: encostou no herói, pega e para; chegou na parede, acabou.</summary>
+        /// <summary>A investida segue pelo rumo travado: encostou no herói, pega e para; chegou na parede, acabou. O monstro fica onde ela acabou.</summary>
         private static void Investir(Luta l, MonstroNaArena m, JeitoDeLutar jeito)
         {
             m.X += m.RumoX;
             m.Y += m.RumoY;
             if (Encosta(l.Arena.Heroi, m.X, m.Y, jeito.Tamanho))
             {
+                Pousar(l, m, jeito.Tamanho);
                 GolpeNoHeroi(l, m.Indice, m.Forca);
                 Descansar(l, m, jeito);
                 return;
             }
             if (ForaDoChao(l, m.X, m.Y))
             {
+                Pousar(l, m);
                 Contar(l, Numero("monstro", m.Indice, "Errou", "erro"));
                 Descansar(l, m, jeito);
             }

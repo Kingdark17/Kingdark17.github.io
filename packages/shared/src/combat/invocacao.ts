@@ -12,8 +12,10 @@
  * - até 3 de pé ao mesmo tempo; com 3, o poder avisa e não gasta mana. Um que
  *   caiu pode ser trocado por outro na mesma luta;
  * - é do necromante, à parte dos recrutas: não ocupa vaga na equipe;
- * - vida 20 + 4 × nível + 2 × Inteligência, ataque 3 + nível + Inteligência ÷ 2,
- *   na postura agressiva.
+ * - vida 10 + 2 × nível + Inteligência, ataque (3 + nível + Inteligência ÷ 2) ÷ 2,
+ *   na postura agressiva. É a metade do que era até 2026-11-12 (pedido do
+ *   usuário: o esqueleto estava forte demais); quem já estava de pé fica como
+ *   estava até cair.
  *
  * Os esqueletos moram em `party`, marcados com `invocado`. Os caídos ficam na
  * lista até a luta acabar (`semInvocadosCaidos` os tira aí): a arena do app
@@ -57,7 +59,7 @@ export function semInvocadosCaidos(party: readonly Companion[]): Companion[] {
  */
 export function criarEsqueleto(hero: Pick<Hero, 'level' | 'attrs'>, party: readonly Companion[]): Companion {
   const inteligencia = hero.attrs.intelecto ?? 0;
-  const maxHp = 20 + 4 * hero.level + 2 * inteligencia;
+  const maxHp = Math.max(1, Math.floor((20 + 4 * hero.level + 2 * inteligencia) / 2));
   const nomeDoNumero = (n: number): string => (n > 1 ? `Esqueleto ${n}` : 'Esqueleto');
   const usados = new Set(party.filter((membro) => membro.invocado).map((membro) => membro.name));
   let numero = 1;
@@ -70,7 +72,7 @@ export function criarEsqueleto(hero: Pick<Hero, 'level' | 'attrs'>, party: reado
     classIcon: '💀',
     hp: maxHp,
     maxHp,
-    attack: 3 + hero.level + Math.floor(inteligencia / 2),
+    attack: Math.max(1, Math.floor((3 + hero.level + Math.floor(inteligencia / 2)) / 2)),
     attrs: emptyAttributes(),
     stance: 'agressiva',
     ability: 'Ossos Erguidos',

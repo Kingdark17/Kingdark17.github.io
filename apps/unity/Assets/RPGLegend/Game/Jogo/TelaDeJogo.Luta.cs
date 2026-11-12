@@ -189,6 +189,7 @@ namespace RPGLegend.Game.Jogo
                 _palcoDaLuta.Esconder();
                 return;
             }
+            _sala?.DefinirSeguidores((int)Invocacao.EsqueletosDePe((_partida.Luta.Estado as EstadoNaMasmorra)?.Party ?? new List<Companion>()));
             _sala?.MoverNaLuta(_partida.Luta.Arena.Heroi);
             _palcoDaLuta.Mostrar(_partida.Luta, _partida.Geometria);
             EnquadrarASala();

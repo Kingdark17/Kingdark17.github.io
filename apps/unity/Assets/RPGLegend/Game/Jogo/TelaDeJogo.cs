@@ -641,6 +641,7 @@ namespace RPGLegend.Game.Jogo
                 }
                 var quem = estado.Hero;
                 _sala.DefinirHeroi(quem);
+                _sala.DefinirSeguidores(0);
                 _sala.MostrarCidade(salaAgora, Cidades.PlantaDaCidadeAgora(cidade), Cidades.TroncosNoCaminho(cidade), _chegada);
                 return;
             }
@@ -695,6 +696,8 @@ namespace RPGLegend.Game.Jogo
 
             var heroi = estado.Hero;
             _sala.DefinirHeroi(heroi);
+            // Os esqueletos de pé do necromante andam atrás dele.
+            _sala.DefinirSeguidores((int)Invocacao.EsqueletosDePe(estado.Party ?? new List<Companion>()));
             // A sala secreta fica fora do mapa e é desenhada sozinha; as outras, emendadas com as em volta.
             if (secreta != null || masmorra == null) _sala.Mostrar(chave, planta, TemaDaSala.Do(estado), figuras, chegada, masmorra);
             else _sala.MostrarMasmorra(chave, SalasDaCena(estado, planta, figuras, visual, masmorra), planta, TemaDaSala.Do(estado), chegada, masmorra, estado.Pos.X, estado.Pos.Y);

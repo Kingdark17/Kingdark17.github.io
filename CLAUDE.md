@@ -174,7 +174,11 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   fora da vaga dos recrutas; desde 2026-11-10 (doc do Breno) o esqueleto de
   pé segue o herói de sala em sala com a vida que tiver, e some ao cair, na
   volta à cidade (`entrarNaCidade`) ou na derrota; o site mostra a equipe num
-  cartão na tela da luta. O atributo no teto de 99 não gasta mais o ponto
+  cartão na tela da luta. Desde 2026-11-12 (pedido do usuário) o esqueleto
+  tem a metade da vida e do ataque de antes, o poder custa 18 de mana (era
+  14), e no app os de pé andam em fila atrás do herói
+  (`SalaEmCena.Seguidores.cs`: só desenho, o 💀 até haver arte; o site
+  continua só com o cartão). O atributo no teto de 99 não gasta mais o ponto
   (`ATRIBUTO_MAXIMO`), e o Guia do app no PC abre com as teclas.
 
 - `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
@@ -387,11 +391,15 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
 - A sala é a arena (2026-11-11, **só no app**, doc do Breno decidido com o
   usuário; o site continua por turnos): na luta em tempo real o herói anda
   pela sala (`arena.heroi`, com o `walkTick` de sempre, as portas fechadas
-  e cada monstro de pé tomando a casa dele) e desvia andando. Os monstros
-  **ficam na casa deles** (`lugaresNaLuta`), um golpeando por vez, e o
-  golpe é que atravessa a sala: o círculo cai onde o herói estava, a
-  investida sai da casa do monstro em linha reta até a parede, a bola do
-  mágico sai dele. **Arma de perto precisa alcançar** (`golpeDePerto`,
+  e cada monstro de pé tomando a casa em que está) e desvia andando. Os
+  monstros **não andam atrás do herói**: começam na casa deles
+  (`lugaresNaLuta`), um golpeando por vez, e o golpe é que atravessa a
+  sala: o círculo cai onde o herói estava, a investida sai de onde o
+  monstro está em linha reta até a parede, a bola do mágico sai dele.
+  Desde 2026-11-12 (pedido do usuário) **quem investe fica onde a
+  investida acabou** (`corpoX`/`corpoY` do monstro na arena: na parede,
+  ou encostado no herói que levou o golpe), e o alcance, a colisão e o
+  próximo golpe dele contam dali; os lacaios que entram rearrumam a sala. **Arma de perto precisa alcançar** (`golpeDePerto`,
   `ALCANCE_CORPO_A_CORPO` = uma casa e meia, do pé do herói ao meio da casa
   do monstro): longe, o botão avisa "Chegue mais perto"; com o alvo
   escolhido longe, vale o de pé mais perto ao alcance; e quem se afasta

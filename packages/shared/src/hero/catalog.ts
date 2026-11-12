@@ -139,9 +139,10 @@ export const POWERS: readonly Power[] = [
   // e vale pra golpe mágico também.
   { id: 'cancao_de_batalha', name: 'Canção de Batalha', icon: '🎼', desc: 'Inspira você e os companheiros: +25% de dano por 3 rodadas.', cost: 10, type: 'buff_grupo', turns: 3, amount: 0.25, soDaClasse: 'bardo' },
   // O esqueleto do necromante (pedido do usuário, 2026-10-17; os números são
-  // de 2026-10-23): até 3 de pé, à parte dos recrutas, e todos somem no fim
-  // da luta. A regra está em `combat/invocacao.ts`.
-  { id: 'levantar_esqueleto', name: 'Levantar Esqueleto', icon: '💀', desc: 'Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.', cost: 14, type: 'invocar', soDaClasse: 'necromante' },
+  // de 2026-10-23): até 3 de pé, à parte dos recrutas; desde 2026-11-10 os de pé
+  // seguem o herói, e desde 2026-11-12 custa 18 (era 14: 30% mais caro, pedido
+  // do usuário). A regra está em `combat/invocacao.ts`.
+  { id: 'levantar_esqueleto', name: 'Levantar Esqueleto', icon: '💀', desc: 'Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.', cost: 18, type: 'invocar', soDaClasse: 'necromante' },
 ];
 
 export type DebuffEffect =

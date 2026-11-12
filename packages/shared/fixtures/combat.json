@@ -118995,15 +118995,15 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         }
       }
     },
     "expected": {
-      "result": 14
+      "result": 18
     }
   },
   {
@@ -119086,15 +119086,15 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         }
       }
     },
     "expected": {
-      "result": 17
+      "result": 22
     }
   },
   {
@@ -119177,8 +119177,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -119186,7 +119186,7 @@
       }
     },
     "expected": {
-      "result": 16
+      "result": 20
     }
   },
   {
@@ -119269,8 +119269,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -119278,7 +119278,7 @@
       }
     },
     "expected": {
-      "result": 15
+      "result": 19
     }
   },
   {
@@ -119361,8 +119361,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -119370,7 +119370,7 @@
       }
     },
     "expected": {
-      "result": 14
+      "result": 18
     }
   },
   {
@@ -133308,8 +133308,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -133390,7 +133390,7 @@
           "maxHp": 125,
           "hp": 30,
           "maxMp": 70,
-          "mp": 56,
+          "mp": 52,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -133469,9 +133469,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 44,
-            "maxHp": 44,
-            "attack": 9,
+            "hp": 22,
+            "maxHp": 22,
+            "attack": 4,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -133530,7 +133530,7 @@
           "enemyClassLabel": "Brutamontes"
         },
         "outcome": "summon",
-        "manaCost": 14,
+        "manaCost": 18,
         "savedMana": false,
         "summoned": {
           "name": "Esqueleto",
@@ -133538,9 +133538,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 44,
-          "maxHp": 44,
-          "attack": 9,
+          "hp": 22,
+          "maxHp": 22,
+          "attack": 4,
           "attrs": {
             "forca": 0,
             "destreza": 0,
@@ -133751,8 +133751,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -133833,7 +133833,7 @@
           "maxHp": 125,
           "hp": 30,
           "maxMp": 105,
-          "mp": 91,
+          "mp": 87,
           "buffs": {}
         },
         "party": [
@@ -133909,9 +133909,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 58,
-            "maxHp": 58,
-            "attack": 12,
+            "hp": 29,
+            "maxHp": 29,
+            "attack": 6,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -133972,7 +133972,7 @@
           "enemyClassLabel": "Brutamontes"
         },
         "outcome": "summon",
-        "manaCost": 14,
+        "manaCost": 18,
         "savedMana": false,
         "summoned": {
           "name": "Esqueleto",
@@ -133980,9 +133980,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 58,
-          "maxHp": 58,
-          "attack": 12,
+          "hp": 29,
+          "maxHp": 29,
+          "attack": 6,
           "attrs": {
             "forca": 0,
             "destreza": 0,
@@ -134893,9 +134893,9 @@
         "race": "Morto-vivo",
         "className": "Esqueleto",
         "classIcon": "💀",
-        "hp": 52,
-        "maxHp": 52,
-        "attack": 11,
+        "hp": 26,
+        "maxHp": 26,
+        "attack": 5,
         "attrs": {
           "forca": 0,
           "destreza": 0,
@@ -134993,9 +134993,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135015,9 +135015,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135041,9 +135041,9 @@
         "race": "Morto-vivo",
         "className": "Esqueleto",
         "classIcon": "💀",
-        "hp": 82,
-        "maxHp": 82,
-        "attack": 18,
+        "hp": 41,
+        "maxHp": 41,
+        "attack": 9,
         "attrs": {
           "forca": 0,
           "destreza": 0,
@@ -135141,9 +135141,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135167,9 +135167,9 @@
         "race": "Morto-vivo",
         "className": "Esqueleto",
         "classIcon": "💀",
-        "hp": 82,
-        "maxHp": 82,
-        "attack": 18,
+        "hp": 41,
+        "maxHp": 41,
+        "attack": 9,
         "attrs": {
           "forca": 0,
           "destreza": 0,
@@ -135315,9 +135315,9 @@
         "race": "Morto-vivo",
         "className": "Esqueleto",
         "classIcon": "💀",
-        "hp": 82,
-        "maxHp": 82,
-        "attack": 18,
+        "hp": 41,
+        "maxHp": 41,
+        "attack": 9,
         "attrs": {
           "forca": 0,
           "destreza": 0,
@@ -135711,9 +135711,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135733,9 +135733,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135755,9 +135755,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135790,9 +135790,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135812,9 +135812,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135834,9 +135834,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135869,9 +135869,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135891,9 +135891,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135913,9 +135913,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -135940,9 +135940,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 82,
-          "maxHp": 82,
-          "attack": 18,
+          "hp": 41,
+          "maxHp": 41,
+          "attack": 9,
           "attrs": {
             "forca": 0,
             "destreza": 0,
@@ -135962,9 +135962,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 82,
-          "maxHp": 82,
-          "attack": 18,
+          "hp": 41,
+          "maxHp": 41,
+          "attack": 9,
           "attrs": {
             "forca": 0,
             "destreza": 0,
@@ -135984,9 +135984,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 82,
-          "maxHp": 82,
-          "attack": 18,
+          "hp": 41,
+          "maxHp": 41,
+          "attack": 9,
           "attrs": {
             "forca": 0,
             "destreza": 0,
@@ -136015,9 +136015,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136037,9 +136037,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136059,9 +136059,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136095,8 +136095,8 @@
             "className": "Esqueleto",
             "classIcon": "💀",
             "hp": 0,
-            "maxHp": 82,
-            "attack": 18,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136116,9 +136116,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136138,9 +136138,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136174,8 +136174,8 @@
             "className": "Esqueleto",
             "classIcon": "💀",
             "hp": 0,
-            "maxHp": 82,
-            "attack": 18,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136195,9 +136195,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136217,9 +136217,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136253,8 +136253,8 @@
             "className": "Esqueleto",
             "classIcon": "💀",
             "hp": 0,
-            "maxHp": 82,
-            "attack": 18,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136274,9 +136274,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136296,9 +136296,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136323,9 +136323,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 82,
-          "maxHp": 82,
-          "attack": 18,
+          "hp": 41,
+          "maxHp": 41,
+          "attack": 9,
           "attrs": {
             "forca": 0,
             "destreza": 0,
@@ -136345,9 +136345,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 82,
-          "maxHp": 82,
-          "attack": 18,
+          "hp": 41,
+          "maxHp": 41,
+          "attack": 9,
           "attrs": {
             "forca": 0,
             "destreza": 0,
@@ -136377,8 +136377,8 @@
             "className": "Esqueleto",
             "classIcon": "💀",
             "hp": 0,
-            "maxHp": 82,
-            "attack": 18,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136398,9 +136398,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136420,9 +136420,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136547,9 +136547,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136569,9 +136569,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136591,9 +136591,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136655,8 +136655,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -136767,9 +136767,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136789,9 +136789,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136811,9 +136811,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -136872,7 +136872,7 @@
           "enemyClassLabel": "Brutamontes"
         },
         "outcome": "summon_full",
-        "manaCost": 14,
+        "manaCost": 18,
         "savedMana": false,
         "monsterDefeated": false
       },
@@ -136984,8 +136984,8 @@
             "className": "Esqueleto",
             "classIcon": "💀",
             "hp": 0,
-            "maxHp": 82,
-            "attack": 18,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -137005,9 +137005,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -137027,9 +137027,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -137091,8 +137091,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -137171,7 +137171,7 @@
           "maxHp": 155,
           "hp": 155,
           "maxMp": 117,
-          "mp": 103,
+          "mp": 99,
           "buffs": {}
         },
         "party": [
@@ -137204,8 +137204,8 @@
             "className": "Esqueleto",
             "classIcon": "💀",
             "hp": 0,
-            "maxHp": 82,
-            "attack": 18,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -137225,9 +137225,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -137247,9 +137247,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -137269,9 +137269,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -137330,7 +137330,7 @@
           "enemyClassLabel": "Brutamontes"
         },
         "outcome": "summon",
-        "manaCost": 14,
+        "manaCost": 18,
         "savedMana": false,
         "summoned": {
           "name": "Esqueleto 4",
@@ -137338,9 +137338,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 82,
-          "maxHp": 82,
-          "attack": 18,
+          "hp": 41,
+          "maxHp": 41,
+          "attack": 9,
           "attrs": {
             "forca": 0,
             "destreza": 0,
@@ -137482,8 +137482,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -137610,7 +137610,7 @@
           "enemyClassLabel": "Brutamontes"
         },
         "outcome": "no_mana",
-        "manaCost": 14,
+        "manaCost": 18,
         "savedMana": false,
         "monsterDefeated": false
       },
@@ -137740,8 +137740,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -137834,9 +137834,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 82,
-            "maxHp": 82,
-            "attack": 18,
+            "hp": 41,
+            "maxHp": 41,
+            "attack": 9,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -137895,7 +137895,7 @@
           "enemyClassLabel": "Brutamontes"
         },
         "outcome": "summon",
-        "manaCost": 14,
+        "manaCost": 18,
         "savedMana": true,
         "summoned": {
           "name": "Esqueleto",
@@ -137903,9 +137903,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 82,
-          "maxHp": 82,
-          "attack": 18,
+          "hp": 41,
+          "maxHp": 41,
+          "attack": 9,
           "attrs": {
             "forca": 0,
             "destreza": 0,
@@ -143956,8 +143956,8 @@
           "id": "levantar_esqueleto",
           "name": "Levantar Esqueleto",
           "icon": "💀",
-          "desc": "Ergue um esqueleto que luta ao seu lado até o fim da batalha. Até 3 de pé.",
-          "cost": 14,
+          "desc": "Ergue um esqueleto que luta ao seu lado e segue você até cair. Até 3 de pé.",
+          "cost": 18,
           "type": "invocar",
           "soDaClasse": "necromante"
         },
@@ -144037,7 +144037,7 @@
           "maxHp": 275,
           "hp": 184,
           "maxMp": 154,
-          "mp": 54,
+          "mp": 50,
           "buffs": {
             "precisaoTurns": 2,
             "precisaoAmount": 7
@@ -144094,9 +144094,9 @@
             "race": "Morto-vivo",
             "className": "Esqueleto",
             "classIcon": "💀",
-            "hp": 164,
-            "maxHp": 164,
-            "attack": 39,
+            "hp": 82,
+            "maxHp": 82,
+            "attack": 19,
             "attrs": {
               "forca": 0,
               "destreza": 0,
@@ -144162,7 +144162,7 @@
           "enemyClassLabel": "Assassino"
         },
         "outcome": "summon",
-        "manaCost": 14,
+        "manaCost": 18,
         "savedMana": false,
         "summoned": {
           "name": "Esqueleto",
@@ -144170,9 +144170,9 @@
           "race": "Morto-vivo",
           "className": "Esqueleto",
           "classIcon": "💀",
-          "hp": 164,
-          "maxHp": 164,
-          "attack": 39,
+          "hp": 82,
+          "maxHp": 82,
+          "attack": 19,
           "attrs": {
             "forca": 0,
             "destreza": 0,

@@ -76,13 +76,13 @@ namespace RPGLegend.Engine
         private static string NomeDoNumero(double n) => n > 1 ? "Esqueleto " + Js.NumberToString(n) : "Esqueleto";
 
         /// <summary>
-        /// TS: criarEsqueleto — um esqueleto novo, na força do necromante: vida 20 + 4 × nível + 2 × Inteligência,
-        /// ataque 3 + nível + Inteligência ÷ 2, agressivo. O nome leva o primeiro número livre entre os esqueletos.
+        /// TS: criarEsqueleto — um esqueleto novo, na força do necromante: vida (20 + 4 × nível + 2 × Inteligência) ÷ 2
+        /// e ataque (3 + nível + Inteligência ÷ 2) ÷ 2 (a metade do que era até 2026-11-12), agressivo. O nome leva o primeiro número livre entre os esqueletos.
         /// </summary>
         public static Companion CriarEsqueleto(Hero hero, IReadOnlyList<Companion> party)
         {
             double inteligencia = hero.Attrs?.Intelecto ?? 0;
-            double maxHp = 20 + 4 * hero.Level + 2 * inteligencia;
+            double maxHp = Math.Max(1, Math.Floor((20 + 4 * hero.Level + 2 * inteligencia) / 2));
             var usados = new HashSet<string>();
             foreach (var membro in party)
                 if (membro.Invocado == true) usados.Add(membro.Name);
@@ -97,7 +97,7 @@ namespace RPGLegend.Engine
                 ClassIcon = "💀",
                 Hp = maxHp,
                 MaxHp = maxHp,
-                Attack = 3 + hero.Level + Math.Floor(inteligencia / 2),
+                Attack = Math.Max(1, Math.Floor((3 + hero.Level + Math.Floor(inteligencia / 2)) / 2)),
                 Attrs = Attributes.Empty(),
                 Stance = CompanionStances.Agressiva,
                 Ability = "Ossos Erguidos",

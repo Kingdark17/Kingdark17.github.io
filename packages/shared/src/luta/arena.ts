@@ -3,11 +3,13 @@
  * Breno de 2026-11-10, decidido com o usuário em 2026-11-11). Até então o
  * herói era um coração numa caixa, como no Undertale (2026-10-17).
  *
- * - Os monstros ficam cada um na casa dele (`lugaresNaLuta`), como no site:
- *   não andam atrás do herói. O jogador toca no monstro que quer atacar
+ * - Os monstros começam cada um na casa dele (`lugaresNaLuta`), como no
+ *   site, e não andam atrás do herói; mas quem investe **fica onde a
+ *   investida acabou** (`corpoX`, `corpoY`; pedido do usuário, 2026-11-12),
+ *   e é dali que sai o próximo golpe dele. O jogador toca no monstro que quer atacar
  *   (`mirar`), e o alvo cai pro primeiro de pé quando o dele cai.
  * - **O herói anda pela sala** (`walkTick`, a regra de sempre), com as
- *   portas fechadas e os monstros de pé tomando a casa deles. Todo golpe de
+ *   portas fechadas e cada monstro de pé tomando a casa em que está. Todo golpe de
  *   monstro no herói é um desenho no chão da sala, com **aviso** antes: o
  *   círculo do golpe de perto, a faixa da investida, a bola do tiro. Só pega
  *   se encostar no herói, e aí é o golpe do site (`landHitOnHero`).
@@ -182,6 +184,13 @@ export interface MonstroNaArena {
   /** O rumo da investida, travado no começo do aviso, já na velocidade dela. */
   rumoX: number;
   rumoY: number;
+  /**
+   * Onde o monstro está de pé, em unidades da sala: começa no meio da casa
+   * dele e, depois de uma investida, fica onde ela acabou (pedido do usuário,
+   * 2026-11-12). É dali que o alcance mede e que saem a investida e o tiro.
+   */
+  corpoX: number;
+  corpoY: number;
   /** O chefe final: o poder do golpe em curso (`jogo/chefe-final.ts`). Ausente no golpe comum. */
   poder?: PoderDoChefe;
 }
@@ -322,17 +331,24 @@ export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId 
   const sala = celulaAtual(preparada.estado) as DungeonCell;
   const dePe = indicesDePe(sala);
 
-  const monstros: MonstroNaArena[] = (sala.monsters ?? []).map((_, indice) => ({
-    indice,
-    fase: dePe.includes(indice) ? 'esperando' : 'caido',
-    tempo: 0,
-    forca: 1,
-    alvo: -1,
-    x: 0,
-    y: 0,
-    rumoX: 0,
-    rumoY: 0,
-  }));
+  const formato = geometriaDaSala(preparada.estado.masmorra.dungeon);
+  const quantos = (sala.monsters ?? []).length;
+  const monstros: MonstroNaArena[] = (sala.monsters ?? []).map((_, indice) => {
+    const lugar = lugarDoMonstro(quantos, indice, formato);
+    return {
+      indice,
+      fase: dePe.includes(indice) ? 'esperando' : 'caido',
+      tempo: 0,
+      forca: 1,
+      alvo: -1,
+      x: 0,
+      y: 0,
+      rumoX: 0,
+      rumoY: 0,
+      corpoX: lugar.x,
+      corpoY: lugar.y,
+    };
+  });
 
   const companheiros: CompanheiroNaArena[] = [];
   preparada.estado.party.forEach((membro, indice) => {
@@ -343,7 +359,7 @@ export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId 
     passo: 0,
     lento: 0,
     chegada: { ...chegada },
-    heroi: { ...heroiNaLuta(chegada, geometriaDaSala(preparada.estado.masmorra.dungeon)) },
+    heroi: { ...heroiNaLuta(chegada, formato) },
     alvo: dePe[0] ?? 0,
     monstros,
     companheiros,
@@ -484,15 +500,63 @@ function geometria(l: Luta): GeometriaDaSala {
   return geometriaDaSala(masmorra(l).masmorra.dungeon);
 }
 
-/** O meio da casa do monstro `indice`, em unidades da sala: de onde sai a investida e o tiro, e o que o alcance mede. */
+/** O meio da casa em que o monstro `indice` começa a luta, em unidades da sala. */
 export function lugarDoMonstro(quantos: number, indice: number, formato: GeometriaDaSala): { x: number; y: number } {
   const lugares = lugaresNaLuta(quantos, formato);
   const lugar = lugares[Math.min(indice, lugares.length - 1)] as { col: number; row: number };
   return { x: lugar.col * TILE_UNITS + TILE_UNITS / 2, y: lugar.row * TILE_UNITS + TILE_UNITS / 2 };
 }
 
+/** Onde o monstro `indice` está de pé agora: de onde sai a investida e o tiro, e o que o alcance mede. */
 function lugarDe(l: Luta, indice: number): { x: number; y: number } {
-  return lugarDoMonstro(l.arena.monstros.length, indice, geometria(l));
+  const m = l.arena.monstros.find((monstro) => monstro.indice === indice);
+  if (!m) return lugarDoMonstro(l.arena.monstros.length, indice, geometria(l));
+  return { x: m.corpoX, y: m.corpoY };
+}
+
+/**
+ * Os lacaios entraram: a sala se arruma de novo, cada um de pé na casa dele
+ * pro novo tamanho do grupo (quem está no meio de uma investida pousa onde
+ * ela acabar).
+ */
+function arrumarASala(l: Luta): void {
+  const formato = geometria(l);
+  for (const m of l.arena.monstros) {
+    const lugar = lugarDoMonstro(l.arena.monstros.length, m.indice, formato);
+    m.corpoX = lugar.x;
+    m.corpoY = lugar.y;
+  }
+}
+
+/**
+ * A investida acabou em (m.x, m.y): o monstro fica ali, puxado pra dentro do
+ * chão se passou da parede. A que pegou no herói (`raio` é o do corpo que
+ * investe) para encostada nele, e não em cima: sem isso, quem investe de novo
+ * de perto ia chegando mais perto a cada golpe, até ficar no mesmo ponto.
+ */
+function pousar(l: Luta, m: MonstroNaArena, raio?: number): void {
+  let x = m.x;
+  let y = m.y;
+  if (raio !== undefined) {
+    const heroi = l.arena.heroi;
+    const limite = raio + RAIO_DO_HEROI;
+    let dx = x - heroi.x;
+    let dy = y - heroi.y;
+    if (dx === 0 && dy === 0) {
+      // Bem em cima: volta por onde veio.
+      dx = -m.rumoX;
+      dy = -m.rumoY;
+    }
+    const distancia = Math.sqrt(dx * dx + dy * dy);
+    if (distancia > 0 && distancia < limite) {
+      x = heroi.x + Math.trunc((dx * limite) / distancia);
+      y = heroi.y + Math.trunc((dy * limite) / distancia);
+    }
+  }
+  const { cols, rows } = geometria(l);
+  const meia = TILE_UNITS / 2;
+  m.corpoX = Math.min(Math.max(x, TILE_UNITS + meia), (cols - 1) * TILE_UNITS - meia);
+  m.corpoY = Math.min(Math.max(y, TILE_UNITS + meia), (rows - 1) * TILE_UNITS - meia);
 }
 
 /** As armas que acertam de longe, seja qual for o ataque. */
@@ -716,7 +780,8 @@ function ferirNaArena(l: Luta, estado: EstadoNaMasmorra, indice: number, depois:
   const ferida = ferirMonstro(estado, indice, depois, l.rng);
   l.estado = ferida.estado;
   if (ferida.lacaios.length > 0) {
-    for (const novo of ferida.lacaios) l.arena.monstros.push({ indice: novo, fase: 'esperando', tempo: 0, forca: 1, alvo: -1, x: 0, y: 0, rumoX: 0, rumoY: 0 });
+    for (const novo of ferida.lacaios) l.arena.monstros.push({ indice: novo, fase: 'esperando', tempo: 0, forca: 1, alvo: -1, x: 0, y: 0, rumoX: 0, rumoY: 0, corpoX: 0, corpoY: 0 });
+    arrumarASala(l);
     l.arena.alvo = ferida.lacaios[0] as number;
   }
   // O chefe final que chamou os lacaios tem o texto dele; o de andar 5 diz o que as mecânicas fizeram.
@@ -835,11 +900,11 @@ function moverHeroi(l: Luta, entrada: EntradaDaLuta): Walker {
   const heroi = l.arena.heroi;
   if (Math.trunc(entrada.x) === 0 && Math.trunc(entrada.y) === 0) return heroi;
   const formato = geometria(l);
-  const lugares = lugaresNaLuta(l.arena.monstros.length, formato);
   const monstros: RoomObject[] = [];
   for (const m of l.arena.monstros) {
-    if (m.fase === 'caido') continue;
-    const lugar = lugares[Math.min(m.indice, lugares.length - 1)] as { col: number; row: number };
+    // O caído não segura ninguém, nem o que está voando na investida (esse pega pelo golpe).
+    if (m.fase === 'caido' || m.fase === 'investindo') continue;
+    const lugar = { col: Math.floor(m.corpoX / TILE_UNITS), row: Math.floor(m.corpoY / TILE_UNITS) };
     const pisando =
       heroi.x + HERO_HALF > lugar.col * TILE_UNITS &&
       heroi.x - HERO_HALF < (lugar.col + 1) * TILE_UNITS &&
@@ -988,7 +1053,7 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
     m.y = heroi.y;
     return;
   }
-  // A investida e o tiro saem da casa do monstro.
+  // A investida e o tiro saem de onde o monstro está.
   const lugar = lugarDe(l, m.indice);
   m.x = lugar.x;
   m.y = lugar.y;
@@ -1048,16 +1113,18 @@ function descansar(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   l.arena.intervalo = INTERVALO_ENTRE_GOLPES;
 }
 
-/** A investida segue pelo rumo travado: encostou no herói, pega e para; chegou na parede, acabou (e o monstro volta pra casa dele). */
+/** A investida segue pelo rumo travado: encostou no herói, pega e para; chegou na parede, acabou. O monstro fica onde ela acabou. */
 function investir(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   m.x += m.rumoX;
   m.y += m.rumoY;
   if (encosta(l.arena.heroi, m.x, m.y, jeito.tamanho)) {
+    pousar(l, m, jeito.tamanho);
     golpeNoHeroi(l, m.indice, m.forca);
     descansar(l, m, jeito);
     return;
   }
   if (foraDoChao(l, m.x, m.y)) {
+    pousar(l, m);
     contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: 'Errou', tom: 'erro' });
     descansar(l, m, jeito);
   }

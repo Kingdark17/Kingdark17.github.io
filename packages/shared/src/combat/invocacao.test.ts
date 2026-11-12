@@ -53,9 +53,9 @@ describe('o esqueleto', () => {
   it('nasce na força do necromante e conta os irmãos no nome', () => {
     const hero = naSala().hero;
     const primeiro = criarEsqueleto(hero, []);
-    expect(primeiro).toMatchObject({ name: 'Esqueleto', hp: 52, maxHp: 52, attack: 11, stance: 'agressiva', invocado: true, classIcon: '💀' });
+    expect(primeiro).toMatchObject({ name: 'Esqueleto', hp: 26, maxHp: 26, attack: 5, stance: 'agressiva', invocado: true, classIcon: '💀' });
     expect(criarEsqueleto({ ...hero, level: 20, attrs: { ...hero.attrs, intelecto: 30 } }, [primeiro]).name).toBe('Esqueleto 2');
-    expect(criarEsqueleto({ ...hero, level: 20, attrs: { ...hero.attrs, intelecto: 30 } }, [primeiro])).toMatchObject({ maxHp: 160, attack: 38 });
+    expect(criarEsqueleto({ ...hero, level: 20, attrs: { ...hero.attrs, intelecto: 30 } }, [primeiro])).toMatchObject({ maxHp: 80, attack: 19 });
   });
 
   it('é poder do necromante, e só dele', () => {
@@ -68,7 +68,7 @@ describe('o esqueleto', () => {
     const hero = naSala().hero;
     const uso = castPower(hero, [recruta], alvo(), levantar, { rng: NUNCA });
     expect(uso.outcome).toBe('summon');
-    expect(uso.hero.mp).toBe(hero.mp - 14);
+    expect(uso.hero.mp).toBe(hero.mp - 18);
     expect(uso.party.map((m) => m.name)).toEqual([recruta.name, 'Esqueleto']);
     expect(uso.summoned).toEqual(uso.party[1]);
 

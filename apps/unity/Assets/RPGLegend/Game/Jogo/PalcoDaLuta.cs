@@ -132,8 +132,8 @@ namespace RPGLegend.Game.Jogo
         // ---------- a cada quadro ----------
 
         /// <summary>
-        /// Desenha a luta como ela está agora, na sala do formato <paramref name="geometria"/>: cada monstro em pé na casa
-        /// dele (<see cref="LutaNoMapa.LugaresNaLuta"/>).
+        /// Desenha a luta como ela está agora, na sala do formato <paramref name="geometria"/>: cada monstro em pé onde a arena
+        /// diz (<see cref="MonstroNaArena.CorpoX"/>: a casa dele, ou onde a investida dele acabou).
         /// </summary>
         public void Mostrar(LutaEmTempoReal luta, GeometriaDaSala geometria)
         {
@@ -152,7 +152,7 @@ namespace RPGLegend.Game.Jogo
             var arena = luta.Arena;
             var sala = Estados.CelulaAtual(luta.Estado) as DungeonCell;
             var instancias = sala?.Monsters ?? new List<MonsterInstance>();
-            MostrarGrupo(arena, instancias, LutaNoMapa.LugaresNaLuta(arena.Monstros.Count, geometria));
+            MostrarGrupo(arena, instancias);
             MostrarAliados(arena, (luta.Estado as EstadoNaMasmorra)?.Party ?? new List<Companion>());
             _tinta.Mostrar(arena, instancias, _colunas);
         }
@@ -165,7 +165,7 @@ namespace RPGLegend.Game.Jogo
             _tinta.Esquecer();
         }
 
-        private void MostrarGrupo(Arena arena, List<MonsterInstance> instancias, List<LugarNaLuta> lugares)
+        private void MostrarGrupo(Arena arena, List<MonsterInstance> instancias)
         {
             int total = arena.Monstros.Count;
             while (_lutadores.Count < total) _lutadores.Add(NovoLutador(_lutadores.Count));
@@ -209,25 +209,17 @@ namespace RPGLegend.Game.Jogo
                 l.Raiz.EnableInClassList("lutador-alvo", !caido && total > 1 && arena.Alvo == m.Indice);
                 l.Mira.style.display = !caido && total > 1 && arena.Alvo == m.Indice ? DisplayStyle.Flex : DisplayStyle.None;
 
-                // O corpo em pé na casa dele, com o pé no fundo dela.
-                var lugar = lugares[Math.Min(i, lugares.Count - 1)];
+                // O corpo em pé onde ele está, com o pé meia casa abaixo do meio dele (na casa dele, o fundo dela).
                 float altura = casa * (visao.IsBoss ? 1.35f : 0.95f);
                 l.Figura.style.fontSize = altura;
                 l.Mira.style.fontSize = Mathf.Max(14f, casa * 0.4f);
                 l.Mira.style.height = Mathf.Max(16f, casa * 0.45f);
                 l.Sombra.style.width = casa * 0.7f;
-                // Quem investe no herói sai da casa dele e cruza a sala: o corpo vai onde a arena diz (o meio dele).
-                if (m.Fase == "investindo" && m.Alvo < 0)
-                {
-                    float unidade = casa / (float)RoomWalk.TileUnits;
-                    l.Corpo.style.left = area.x + (float)m.X * unidade;
-                    l.Corpo.style.top = area.y + (float)m.Y * unidade + casa * 0.5f;
-                }
-                else
-                {
-                    l.Corpo.style.left = area.x + ((float)lugar.Col + 0.5f) * casa;
-                    l.Corpo.style.top = area.y + ((float)lugar.Row + 1f) * casa;
-                }
+                // Quem investe no herói cruza a sala, e fica onde a investida acabar.
+                bool voando = m.Fase == "investindo" && m.Alvo < 0;
+                float unidade = casa / (float)RoomWalk.TileUnits;
+                l.Corpo.style.left = area.x + (float)(voando ? m.X : m.CorpoX) * unidade;
+                l.Corpo.style.top = area.y + (float)(voando ? m.Y : m.CorpoY) * unidade + casa * 0.5f;
 
                 // Quem vai golpear avisa.
                 bool avisando = m.Fase == "avisando";

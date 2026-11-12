@@ -17,6 +17,7 @@ import {
   JEITOS_DE_LUTAR,
   LENTIDAO,
   lugarDoMonstro,
+  RAIO_DO_HEROI,
   passoDaLuta,
   RECARGA_DO_PODER,
   RODADA,
@@ -194,6 +195,30 @@ describe('o golpe do monstro', () => {
     const deLado = rodar(avisando, 120, NUNCA, () => ({ x: 127, y: 0 }));
     expect(vidaDoHeroi(deLado.luta)).toBe(vidaDoHeroi(avisando));
     expect(deLado.acontecimentos.some((a) => a.tipo === 'numero' && a.texto === 'Errou')).toBe(true);
+  });
+
+  it('quem investe fica onde a investida acabou, e o próximo golpe sai dali', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'goblin' })] }), roomArrival(null));
+    expect(luta.arena.monstros[0]).toMatchObject({ corpoX: MEIO.x, corpoY: MEIO.y });
+    const avisando = ateOAviso(luta, NUNCA);
+
+    // Errou: foi até a parede de baixo e ficou encostado nela, dentro do chão.
+    const errou = rodar(avisando, 120, NUNCA, () => ({ x: 127, y: 0 })).luta;
+    expect(errou.arena.monstros[0]).toMatchObject({ corpoX: MEIO.x, corpoY: 8 * T - T / 2 });
+    // A casa do meio ficou livre: o herói passa por ela.
+    const noMeio = { ...errou, arena: { ...errou.arena, heroi: { x: MEIO.x, y: MEIO.y + T, facing: 'N' as const } } };
+    expect(rodar(noMeio, 30, NUNCA, () => ({ x: 0, y: -127 })).luta.arena.heroi.y).toBeLessThan(MEIO.y);
+    // E a investida seguinte sai de onde ele parou.
+    const deNovo = errou.arena.monstros[0]!.fase === 'avisando' ? errou : ateOAviso(errou, NUNCA);
+    expect(deNovo.arena.monstros[0]).toMatchObject({ x: MEIO.x, y: 8 * T - T / 2 });
+
+    // Acertou: parou encostado no herói, e não em cima dele, por mais que invista de novo.
+    const encostado = JEITOS_DE_LUTAR.agressivo.tamanho + RAIO_DO_HEROI;
+    const acertou = rodar(avisando, 120, NUNCA).luta;
+    expect(acertou.arena.monstros[0]!.corpoY).toBeGreaterThan(MEIO.y);
+    expect(acertou.arena.monstros[0]!.corpoY).toBe(acertou.arena.heroi.y - encostado);
+    const muitas = rodar(avisando, 1500, NUNCA).luta;
+    expect(muitas.arena.monstros[0]!.corpoY).toBe(muitas.arena.heroi.y - encostado);
   });
 
   it('o mágico atira uma bola de onde está, na direção do herói', () => {

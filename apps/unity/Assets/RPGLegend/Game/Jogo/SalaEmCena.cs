@@ -647,6 +647,7 @@ namespace RPGLegend.Game.Jogo
             if (andando) _fase++;
             float pulo = andando ? Mathf.Abs(Mathf.Sin(_fase * 0.35f)) * 3f : 0f;
             _boneco.position = Mundo(x, y - pulo);
+            ColocarSeguidores(x, y);
             foreach (var camada in _camadasDoHeroi) camada.sortingOrder = (int)y;
             // De costas ao subir; de frente ao descer e pros lados (não há arte de lado: espelha-se a de frente pro lado
             // que anda). A arte fica na escala do chão: uma casa de altura.
