@@ -176,9 +176,10 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   volta à cidade (`entrarNaCidade`) ou na derrota; o site mostra a equipe num
   cartão na tela da luta. Desde 2026-11-12 (pedido do usuário) o esqueleto
   tem a metade da vida e do ataque de antes, o poder custa 18 de mana (era
-  14), e no app os de pé andam em fila atrás do herói
-  (`SalaEmCena.Seguidores.cs`: só desenho, o 💀 até haver arte; o site
-  continua só com o cartão). O atributo no teto de 99 não gasta mais o ponto
+  14), e no app a equipe de pé (os recrutas e os esqueletos) anda em fila
+  atrás do herói (`SalaEmCena.Seguidores.cs`: só desenho, com o mini
+  boneco; o recruta com a raça dele e a roupa de baixo, o esqueleto com o
+  corpo do Morto-vivo, sem roupa; o site continua só com o cartão). O atributo no teto de 99 não gasta mais o ponto
   (`ATRIBUTO_MAXIMO`), e o Guia do app no PC abre com as teclas.
 
 - `Assets/RPGLegend/Engine/` é um **port de `packages/shared` para C#**, com
