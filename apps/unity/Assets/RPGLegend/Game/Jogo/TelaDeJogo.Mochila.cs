@@ -38,6 +38,7 @@ namespace RPGLegend.Game.Jogo
                     var peca = hero.Equip?.Get(slot);
                     if (peca != null && peca.Uid == _selecionado) aberta = peca;
                 }
+            _abertaNaMochila = aberta;
 
             JanelaLarga("🎒 Mochila", Ouro(hero), Ultima(mochila.Log), colunas =>
             {
@@ -76,18 +77,19 @@ namespace RPGLegend.Game.Jogo
                 }
                 guardado.Add(abas);
 
-                var guardados = estado.Inventory.FindAll(item => !item.Equipped && (_aba == "todos" || Items.CategoryOf(item) == _aba));
-                if (guardados.Count == 0)
+                // As peças iguais numa carta só, "×5" (doc do Breno, 2026-11-13): só na tela, o save não muda.
+                var pilhas = Inventory.Empilhar(estado.Inventory.FindAll(item => !item.Equipped && (_aba == "todos" || Items.CategoryOf(item) == _aba)));
+                if (pilhas.Count == 0)
                 {
                     guardado.Add(PecasDaTela.Texto("Nada aqui.", "vazio"));
                 }
                 else
                 {
                     var grade = PecasDaTela.Grade();
-                    foreach (var item in guardados)
+                    foreach (var pilha in pilhas)
                     {
-                        var uid = item.Uid;
-                        grade.Add(PecasDaTela.CartaDeItem(item, null, uid == _selecionado, () => EscolherPeca(uid)));
+                        var uid = pilha.Item.Uid;
+                        grade.Add(PecasDaTela.CartaDeItem(pilha.Item, null, pilha.Uids.Contains(_selecionado), () => EscolherPeca(uid), pilha.Uids.Count));
                     }
                     guardado.Add(grade);
                 }
@@ -95,7 +97,21 @@ namespace RPGLegend.Game.Jogo
             }, ("FECHAR", _sairDaTela));
         }
 
-        private void SeguirMochila(Mochila proxima) => _partida.Seguir(new TelaAberta { Tipo = "mochila", Mochila = proxima }, proxima.Estado);
+        /// <summary>A peça aberta no último desenho da mochila: se ela sumir (usada, descartada), a ficha passa pra próxima igual.</summary>
+        private Item _abertaNaMochila;
+
+        private void SeguirMochila(Mochila proxima)
+        {
+            if (_selecionado != null && proxima.Estado.Inventory.Find(item => item.Uid == _selecionado) == null)
+            {
+                bool vestida = false;
+                foreach (var slot in StatKeys.EquipSlots)
+                    if (proxima.Estado.Hero.Equip?.Get(slot)?.Uid == _selecionado) vestida = true;
+                if (!vestida)
+                    _selecionado = _abertaNaMochila == null ? null : proxima.Estado.Inventory.Find(item => Inventory.MesmaPeca(item, _abertaNaMochila))?.Uid;
+            }
+            _partida.Seguir(new TelaAberta { Tipo = "mochila", Mochila = proxima }, proxima.Estado);
+        }
 
         /// <summary>TS: Equipamento — cada espaço ao lado da parte do corpo que veste; o espaço ocupado seleciona.</summary>
         private VisualElement Equipamento(Hero hero)
@@ -149,7 +165,8 @@ namespace RPGLegend.Game.Jogo
         /// <summary>
         /// TS: AcoesDaPeca — os botões da peça aberta. Com uma arma de duas mãos na principal, a secundária está
         /// fechada: no lugar de um "Equipar" que só responderia com recusa vem o aviso dizendo qual arma ocupa, e um
-        /// botão que diz o que vai acontecer. Descartar limpa a seleção porque a peça deixa de existir.
+        /// botão que diz o que vai acontecer. Usar e descartar fazem a peça deixar de existir: a ficha passa pra
+        /// próxima igual da pilha, ou esvazia (SeguirMochila).
         /// </summary>
         private void AcoesDaPeca(Mochila mochila, Item item, VisualElement botoes)
         {
@@ -179,11 +196,7 @@ namespace RPGLegend.Game.Jogo
             AcoesDeRuna(mochila, item, botoes);
             EncantamentoNaFicha(item, botoes);
 
-            botoes.Add(PecasDaTela.Discreto("Descartar", () =>
-            {
-                _selecionado = null;
-                SeguirMochila(Mochilas.Descartar(mochila, item));
-            }));
+            botoes.Add(PecasDaTela.Discreto("Descartar", () => SeguirMochila(Mochilas.Descartar(mochila, item))));
         }
 
         /// <summary>

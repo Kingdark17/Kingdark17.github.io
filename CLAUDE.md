@@ -285,7 +285,8 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   com os nomes do paperdoll grande: arte nova → rodar
   `packages/shared/scripts/copia-mini-boneco.mjs <pasta do Drive>` (a roupa
   de baixo de costas é a de frente, emprestada). Raça sem mini (o anão)
-  fica com o emoji.
+  fica com o emoji. De costas o escudo vai atrás de tudo (doc do Breno de
+  2026-11-13); de frente, por cima.
 - Jogar pelo app (etapa 4, desde 2026-10-16): o JOGAR do cartão abre a
   partida (`Game/Jogo`): `Partida` é o espelho sem desenho da tela-jogo.tsx
   (estado, avisos, diário, sala secreta, quando gravar), `TelaDeJogo` liga
@@ -442,6 +443,21 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   apanhando vai pro palco (`PalcoDaLuta.TocarEfeito`); o resto, e o que vai
   num monstro que caiu (a luta pode acabar com ele), vai pra sala
   (`SalaEmCena.TocarEfeito`, em unidades da sala, na escala da arte).
+- Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
+  **empilhamento só na tela**, no site e no app: as peças iguais da mochila
+  (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em
+  `inventory/inventory.ts`, portados com os casos de teste; igual é igual em
+  tudo menos `uid`, `foundFloor` e `equipped`, e o vestido nunca empilha);
+  no save cada peça continua a dela, usar, vender ou descartar gasta a
+  primeira, e a ficha passa pra próxima igual. **As configurações dentro do
+  jogo, só no app**: o CONFIG dos botões de cima abre a tela do menu
+  (`TelaDeConfiguracoes.Abrir(doJogo)`) por cima da partida, com a janela
+  "config" (o herói não anda e a luta pausa). **Créditos no menu, no site e
+  no app**, "o mais discreto possível": um "créditos" miúdo no canto de
+  baixo (no site à esquerda, longe do gato; no app à direita), que abre uma
+  janelinha com a arte (Breno), o jogo (Kingdark17), as fontes e a pixelfx.
+  O texto mora em dois lugares, `app/menu/creditos.tsx` e `App.uxml`
+  (`janela-de-creditos`): mudou um, mudar o outro.
 - O andar (2026-11-06, **site e app**, doc do Breno decidido com o
   usuário): não há mais sala de saída em todo andar. Só o andar em que se
   entra pelo portão (o 1 ou o de um totem, e o save sem mapa) sai pela sala

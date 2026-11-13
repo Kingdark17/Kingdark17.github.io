@@ -23,6 +23,8 @@ interface Props {
   item: Item;
   /** Linha de baixo: "12 ouro · comprar", "selecionar", etc. */
   rodape?: string;
+  /** Quantas peças iguais a carta junta (`empilhar`); acima de 1 vira o "×N" no canto. */
+  quantos?: number;
   selecionado?: boolean;
   onClick?: () => void;
 }
@@ -35,7 +37,7 @@ interface Props {
  * carta carregava os próprios botões, o que enchia a grade de "Equipar /
  * Descartar" repetidos e espalhava a mesma ação por dezenas de lugares.
  */
-export function CartaItem({ item, rodape, selecionado, onClick }: Readonly<Props>) {
+export function CartaItem({ item, rodape, quantos = 1, selecionado, onClick }: Readonly<Props>) {
   const visao = itemView(item);
   const tier = tierFor(item);
   const meta = [visao.rarityLabel, tier ? `Tier ${tier}` : ''].filter(Boolean).join(' · ');
@@ -43,6 +45,7 @@ export function CartaItem({ item, rodape, selecionado, onClick }: Readonly<Props
 
   const conteudo = (
     <>
+      {quantos > 1 && <span className={styles.quantosItem} aria-label={`${quantos} iguais`}>×{quantos}</span>}
       <Image
         className={styles.spriteItem}
         src={spriteDoItem(item)}

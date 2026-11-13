@@ -38,6 +38,65 @@ export function findByUid(inventory: readonly Item[], uid: string): Item | null 
   return inventory.find((it) => it.uid === uid) ?? null;
 }
 
+/**
+ * As peças iguais da mochila numa carta só, "Poção de Vida ×5" (doc do
+ * Breno, 2026-11-13). Decisão do usuário: o empilhamento é **só da tela**,
+ * no site e no app; no save cada peça continua a dela, com o `uid` dela, e
+ * usar, vender ou descartar gasta uma (a primeira da pilha).
+ *
+ * Igual é igual em tudo o que a peça é: modelo, raridade, atributos, valor,
+ * degrau, runas, encantamento, o que a forja mexeu. Só o `uid`, o andar em
+ * que caiu (`foundFloor`, que não muda nada) e o `equipped` ficam de fora;
+ * e o que está vestido nunca empilha.
+ */
+export interface Pilha {
+  /** A primeira peça da pilha, na ordem da mochila: a que a carta mostra e a ficha abre. */
+  item: Item;
+  /** Os `uid` das peças da pilha, na ordem da mochila. */
+  uids: string[];
+}
+
+/** As duas peças empilham: iguais em tudo menos `uid`, `foundFloor` e `equipped`, e nenhuma vestida. */
+export function mesmaPeca(a: Item, b: Item): boolean {
+  if (a.equipped || b.equipped) return false;
+  return (
+    a.templateId === b.templateId &&
+    a.rarity === b.rarity &&
+    a.value === b.value &&
+    a.procChance === b.procChance &&
+    (a.tierAdjustment ?? 0) === (b.tierAdjustment ?? 0) &&
+    (a.reforgeCount ?? 0) === (b.reforgeCount ?? 0) &&
+    (a.reforgeFails ?? 0) === (b.reforgeFails ?? 0) &&
+    (a.degrau ?? 1) === (b.degrau ?? 1) &&
+    (a.tierDaRuna ?? 1) === (b.tierDaRuna ?? 1) &&
+    (a.nivelDoUnico ?? 1) === (b.nivelDoUnico ?? 1) &&
+    a.encantamento?.tipo === b.encantamento?.tipo &&
+    a.encantamento?.nivel === b.encantamento?.nivel &&
+    mesmasRunas(a.runas ?? [], b.runas ?? []) &&
+    mesmosAtributos(a.stats ?? {}, b.stats ?? {})
+  );
+}
+
+function mesmasRunas(a: readonly { runa: string; tier: number }[], b: readonly { runa: string; tier: number }[]): boolean {
+  return a.length === b.length && a.every((r, i) => r.runa === b[i]?.runa && r.tier === b[i]?.tier);
+}
+
+function mesmosAtributos(a: Item['stats'], b: Item['stats']): boolean {
+  const chaves = Object.keys(a) as (keyof Item['stats'])[];
+  return chaves.length === Object.keys(b).length && chaves.every((chave) => chave in b && a[chave] === b[chave]);
+}
+
+/** As pilhas da lista, na ordem em que a primeira peça de cada uma aparece. */
+export function empilhar(items: readonly Item[]): Pilha[] {
+  const pilhas: Pilha[] = [];
+  for (const item of items) {
+    const pilha = pilhas.find((p) => mesmaPeca(p.item, item));
+    if (pilha) pilha.uids.push(item.uid);
+    else pilhas.push({ item, uids: [item.uid] });
+  }
+  return pilhas;
+}
+
 export type ConsumeItemOutcome =
   | { kind: 'no_effect' }
   | { kind: 'used'; hpGained: number; mpGained: number };

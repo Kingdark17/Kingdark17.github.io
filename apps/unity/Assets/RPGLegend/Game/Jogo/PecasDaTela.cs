@@ -129,12 +129,14 @@ namespace RPGLegend.Game.Jogo
         public static VisualElement Grade() => Bloco("grade-de-cartas");
 
         /// <summary>TS: CartaItem — sprite, nome na cor da raridade, raridade e tier, atributos e o rodapé.</summary>
-        public static VisualElement CartaDeItem(Item item, string rodape, bool selecionada, Action aoEscolher)
+        public static VisualElement CartaDeItem(Item item, string rodape, bool selecionada, Action aoEscolher, int quantos = 1)
         {
             var visao = Items.View(item);
             var cor = CorDaRaridade(visao.RarityColorVar);
             var carta = Bloco("carta");
             carta.style.borderLeftColor = cor;
+            // as peças iguais numa carta só (Inventory.Empilhar): o "×5" no canto de cima
+            if (quantos > 1) carta.Add(Texto("×" + quantos, "quantos-da-carta"));
             carta.Add(Imagem(SpriteDoArquivo(visao.Sprite), 40));
             var nome = Texto(visao.Name, "nome-da-carta");
             nome.style.color = cor;

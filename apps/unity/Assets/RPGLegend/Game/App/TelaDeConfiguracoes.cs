@@ -16,7 +16,7 @@ namespace RPGLegend.Game.App
         private const string Licenca = "https://creativecommons.org/licenses/by/4.0/deed.pt-br";
 
         private readonly VisualElement _tela;
-        private readonly Button _som, _testar;
+        private readonly Button _som, _testar, _voltar;
         private readonly SliderInt _volume, _efeitos;
         private readonly Label _valorDoVolume, _valorDosEfeitos;
 
@@ -52,12 +52,19 @@ namespace RPGLegend.Game.App
             _testar.clicked += () => Sons.Tocar("gold");
             raiz.Q<Button>("link-da-fonte").clicked += () => Application.OpenURL(PaginaDaFonte);
             raiz.Q<Button>("link-da-licenca").clicked += () => Application.OpenURL(Licenca);
-            raiz.Q<Button>("botao-voltar-config").clicked += () => AoVoltar?.Invoke();
+            _voltar = raiz.Q<Button>("botao-voltar-config");
+            _voltar.clicked += () => AoVoltar?.Invoke();
         }
 
-        public void Abrir()
+        /// <summary>
+        /// Abre as configurações. Do jogo (o CONFIG dos botões de cima, doc do Breno de 2026-11-13), elas vêm por cima
+        /// da partida e o botão volta pra ela.
+        /// </summary>
+        public void Abrir(bool doJogo = false)
         {
             Desenhar();
+            _voltar.text = doJogo ? "VOLTAR AO JOGO" : "VOLTAR AO MENU";
+            if (doJogo) _tela.BringToFront();
             _tela.RemoveFromClassList("oculto");
         }
 

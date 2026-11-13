@@ -173,6 +173,16 @@
     -unity-text-align: upper-center;
 }
 
+.quantos-da-carta {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
+    -unity-font-definition: initial;
+    font-size: 19px;
+    color: var(--gold-bright);
+}
+
 .rodape-da-carta {
     -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/VT323-Regular.ttf");
     -unity-font-definition: initial;

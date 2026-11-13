@@ -276,3 +276,83 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* ---------- créditos ---------- */
+
+/* "O mais discreto possível": texto miúdo, apagado, no canto de baixo à
+   esquerda (o gato mora no da direita). Sem sublinhado até passar o mouse. */
+.botaoDosCreditos {
+  position: absolute;
+  left: clamp(1rem, 4vw, 2.5rem);
+  bottom: clamp(0.75rem, 3vw, 1.5rem);
+  padding: 0.25rem;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--parchment-dim);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.botaoDosCreditos:hover,
+.botaoDosCreditos:focus-visible {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.creditos {
+  composes: painel from '../acabamento.module.css';
+  /* O popover fica no meio da janela, por cima de tudo: o `relative` do
+     painel não vale aqui. */
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  width: min(26rem, calc(100vw - 2rem));
+  padding: 1.25rem 1.5rem 1rem;
+  color: var(--parchment);
+}
+
+.creditos::backdrop {
+  background: rgba(8, 9, 14, 0.72);
+}
+
+.tituloDosCreditos {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: normal;
+  font-size: 1.6rem;
+  color: var(--gold-bright);
+}
+
+.linhaDosCreditos {
+  margin: 0.1rem 0;
+  font-size: 1.1rem;
+}
+
+.secaoDosCreditos {
+  margin: 0.9rem 0 0.15rem;
+  font-family: var(--font-mono), monospace;
+  font-weight: normal;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+
+.notaDosCreditos {
+  margin: 0.1rem 0;
+  font-size: 0.9rem;
+  color: var(--parchment-dim);
+}
+
+.notaDosCreditos a {
+  color: inherit;
+}
+
+.fecharCreditos {
+  composes: botao from '../acabamento.module.css';
+  display: block;
+  margin: 1rem 0 0 auto;
+}

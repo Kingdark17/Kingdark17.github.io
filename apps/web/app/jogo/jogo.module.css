@@ -531,6 +531,7 @@
    própria engine devolve — aqui fica só a espessura, e um cinza de reserva
    pro caso de a carta não passar cor nenhuma. */
 .cartaItem {
+  position: relative;
   display: grid;
   gap: 0.15rem;
   justify-items: center;
@@ -671,6 +672,17 @@
 .statsItem {
   font-size: 0.8rem;
   color: var(--parchment);
+}
+
+/* As peças iguais numa carta só (`empilhar`): o "×5" no canto de cima. */
+.quantosItem {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.4rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: var(--gold-bright);
 }
 
 .rodapeItem {

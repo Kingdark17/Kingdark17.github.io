@@ -17,6 +17,8 @@ namespace RPGLegend.Tests
             Fn(M, "addItem", (a, c) => W(Inventory.AddItem(R<List<Item>>(a["inventory"]), R<Item>(a["item"]))));
             Fn(M, "removeByUid", (a, c) => W(Inventory.RemoveByUid(R<List<Item>>(a["inventory"]), Str(a["uid"]))));
             Fn(M, "findByUid", (a, c) => W(Inventory.FindByUid(R<List<Item>>(a["inventory"]), Str(a["uid"]))));
+            Fn(M, "empilhar", (a, c) => W(Inventory.Empilhar(R<List<Item>>(a["items"]))));
+            Fn(M, "mesmaPeca", (a, c) => W(Inventory.MesmaPeca(R<Item>(a["a"]), R<Item>(a["b"]))));
             Fn(M, "consumeItem", (a, c) =>
                 W(Inventory.ConsumeItem(R<Hero>(a["hero"]), R<List<Item>>(a["inventory"]), R<Item>(a["item"]))));
         }

@@ -2823,6 +2823,25 @@ modulo('inventory');
   caso('findByUid: achou', 'findByUid', { inventory: mochila, uid: mana.uid }, (a) => E.findByUid(a.inventory, a.uid));
   caso('findByUid: não achou', 'findByUid', { inventory: mochila, uid: 'nada' }, (a) => E.findByUid(a.inventory, a.uid));
 
+  // empilhar / mesmaPeca: as cartas da mochila (o save não muda).
+  const pocao2 = item('pot_vida', 'comum', 11);
+  const pocao3 = { ...item('pot_vida', 'comum', 12), foundFloor: 7 };
+  const pocaoRara = item('pot_vida', 'raro', 13);
+  const espada2 = item('espada', 'comum', 14);
+  const espadaVestida = { ...item('espada', 'comum', 15), equipped: true };
+  const espadaForjada = { ...item('espada', 'comum', 16), reforgeCount: 1 };
+  const espadaDegrau = { ...item('espada', 'comum', 17), degrau: 2 };
+  const comRuna = (semente: number, tier: number) => ({ ...item('espada', 'comum', semente), runas: [{ runa: 'eletrica' as const, tier }] });
+  const encantada = (semente: number, nivel: number) => ({ ...item('couro', 'comum', semente), encantamento: { tipo: 'robustez' as const, nivel } });
+  caso('empilhar: mochila vazia', 'empilhar', { items: [] }, (a) => E.empilhar(a.items));
+  caso('empilhar: iguais juntam na ordem da primeira', 'empilhar', { items: [pocao, espada, pocao2, mana, pocao3, espada2, minerio] }, (a) => E.empilhar(a.items));
+  caso('empilhar: o que muda a peça separa', 'empilhar', {
+    items: [espada, espadaVestida, espadaForjada, espadaDegrau, comRuna(18, 1), comRuna(19, 1), comRuna(20, 2), pocaoRara, pocao, encantada(21, 1), encantada(22, 1), encantada(23, 2)],
+  }, (a) => E.empilhar(a.items));
+  caso('mesmaPeca: atributo diferente', 'mesmaPeca', { a: pocao, b: { ...pocao2, stats: { ...pocao2.stats, cura: 999 } } }, (a) => E.mesmaPeca(a.a, a.b));
+  caso('mesmaPeca: atributo a mais', 'mesmaPeca', { a: pocao, b: { ...pocao2, stats: { ...pocao2.stats, forca: 0 } } }, (a) => E.mesmaPeca(a.a, a.b));
+  caso('mesmaPeca: degrau 1 escrito é o ausente', 'mesmaPeca', { a: espada, b: { ...espada2, degrau: 1 } }, (a) => E.mesmaPeca(a.a, a.b));
+
   const ferido = heroi({ extra: { hp: 50, mp: 20 } });
   const quaseCheio = heroi({ extra: { hp: 105, mp: 60 } });
   const ci = (nome: string, hero: Hero, inventory: Item[], it: Item) => caso(`consumeItem: ${nome}`, 'consumeItem', { hero, inventory, item: it }, (a) => E.consumeItem(a.hero, a.inventory, a.item));

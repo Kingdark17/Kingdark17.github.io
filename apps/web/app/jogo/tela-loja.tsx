@@ -24,6 +24,7 @@ import {
   TIER_ORDER,
   comprar,
   concordar,
+  empilhar,
   estoque,
   itemView,
   pechinchar,
@@ -169,12 +170,14 @@ export function TelaLoja({ loja, onLoja, onFechar, onBram }: Props) {
             <p className={styles.vazio}>Nada para vender.</p>
           ) : (
             <div className={styles.gradeDeItens}>
-              {paraVender.map((item) => (
+              {/* As iguais numa carta só, como na mochila; vender vende uma. */}
+              {empilhar(paraVender).map(({ item, uids }) => (
                 <CartaItem
                   key={item.uid}
                   item={item}
+                  quantos={uids.length}
                   rodape={`vende por ${precoDeVenda(item)} ouro`}
-                  selecionado={item.uid === selecionado}
+                  selecionado={selecionado !== null && uids.includes(selecionado)}
                   onClick={() => setSelecionado(item.uid)}
                 />
               ))}

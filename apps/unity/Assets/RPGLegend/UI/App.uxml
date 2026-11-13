@@ -35,6 +35,22 @@
             <ui:Button name="botao-sair" text="Sair da conta" class="link canto" />
             <!-- Obrigatório: a licença CC BY 4.0 da fonte dos títulos pede crédito visível (ver UI/Fontes). -->
             <ui:Label name="credito" text="Fonte dos títulos: Alkhemikal, de jeti, sob a licença CC BY 4.0." class="credito" />
+            <!-- Os créditos (doc do Breno, 2026-11-13: "o mais discreto possível"): um texto miúdo no canto de baixo, que
+                 abre a janelinha. O mesmo texto do site (app/menu/creditos.tsx). -->
+            <ui:Button name="botao-creditos" text="créditos" class="link creditos-do-menu" />
+            <ui:VisualElement name="janela-de-creditos" class="fundo-dos-creditos oculto">
+                <ui:VisualElement name="caixa-dos-creditos" class="caixa-dos-creditos">
+                    <ui:Label text="Créditos" class="titulo-dos-creditos" />
+                    <ui:Label text="Arte: Breno" class="linha-dos-creditos" />
+                    <ui:Label text="Jogo: Kingdark17" class="linha-dos-creditos" />
+                    <ui:Label text="Fontes" class="secao-dos-creditos" />
+                    <ui:Label text="Alkhemikal, de jeti (CC BY 4.0)" class="nota-dos-creditos" />
+                    <ui:Label text="Pixelify Sans e VT323 (SIL Open Font License 1.1)" class="nota-dos-creditos" />
+                    <ui:Label text="Efeitos da luta" class="secao-dos-creditos" />
+                    <ui:Label text="Feitos com a pixelfx, de Patch e Hugo Duprez (MIT)" class="nota-dos-creditos" />
+                    <ui:Button name="fechar-creditos" text="FECHAR" class="botao botao-pequeno fechar-creditos" />
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
 
         <!-- Personagens: os até 4 slots da conta, lidos da nuvem. -->
@@ -156,6 +172,8 @@
                     <ui:Button name="botao-mochila" text="MOCHILA" class="botao botao-pequeno" />
                     <ui:Button name="botao-diario" text="DIÁRIO" class="botao botao-pequeno" />
                     <ui:Button name="botao-guia" text="GUIA" class="botao botao-pequeno" />
+                    <!-- As configurações do menu, por cima do jogo (doc do Breno, 2026-11-13; só no app). -->
+                    <ui:Button name="botao-config-do-jogo" text="CONFIG" class="botao botao-pequeno" />
                     <ui:Button name="botao-sair-do-jogo" text="SAIR" class="botao botao-pequeno" />
                     <ui:Label name="estado-do-salvamento" class="estado-do-salvamento" picking-mode="Ignore" />
                 </ui:VisualElement>

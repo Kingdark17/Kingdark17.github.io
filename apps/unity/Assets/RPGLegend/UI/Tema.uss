@@ -324,6 +324,71 @@
     -unity-text-align: middle-center;
 }
 
+/* Os créditos: o texto miúdo no canto de baixo à direita, e a janelinha por cima do menu. */
+.unity-button.link.creditos-do-menu {
+    position: absolute;
+    right: 32px;
+    bottom: 12px;
+    font-size: 15px;
+    border-bottom-width: 0;
+    color: var(--parchment-dim);
+    opacity: 0.7;
+}
+
+.fundo-dos-creditos {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(8, 9, 14, 0.72);
+}
+
+.caixa-dos-creditos {
+    width: 460px;
+    max-width: 90%;
+    padding: 22px 28px 20px 28px;
+    background-color: var(--panel);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 6px;
+}
+
+.titulo-dos-creditos {
+    -unity-font: url("project://database/Assets/RPGLegend/UI/Fontes/Alkhemikal.ttf");
+    -unity-font-definition: initial;
+    font-size: 30px;
+    color: var(--gold-bright);
+    margin-bottom: 10px;
+}
+
+.linha-dos-creditos {
+    font-size: 20px;
+    color: var(--parchment);
+    margin-bottom: 2px;
+}
+
+.secao-dos-creditos {
+    font-size: 15px;
+    color: var(--gold-bright);
+    letter-spacing: 1px;
+    margin-top: 14px;
+    margin-bottom: 2px;
+}
+
+.nota-dos-creditos {
+    font-size: 16px;
+    color: var(--parchment-dim);
+    white-space: normal;
+}
+
+.fechar-creditos {
+    align-self: flex-end;
+    margin-top: 18px;
+}
+
 /* ---------- personagens ---------- */
 
 .personagens {

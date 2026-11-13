@@ -7,7 +7,7 @@ import type { Attributes } from '../hero/stats.js';
 import { instantiate, type Item } from '../items/item.js';
 import { RARITIES } from '../items/rarity.js';
 import { templateById } from '../items/templates.js';
-import { addItem, findByUid, removeByUid, consumeItem } from './inventory.js';
+import { addItem, empilhar, findByUid, mesmaPeca, removeByUid, consumeItem } from './inventory.js';
 
 function itemFixture(templateId = 'minerio'): Item {
   return instantiate(templateById(templateId)!, RARITIES[0]!);
@@ -136,5 +136,28 @@ describe('consumeItem', () => {
 
     expect(hero.hp).toBe(1);
     expect(mochila).toHaveLength(1);
+  });
+});
+
+describe('empilhar (só na tela: o save não muda)', () => {
+  const pocao = (uid: string, extra: Partial<Item> = {}): Item => ({ ...itemFixture('pot_vida'), uid, ...extra });
+
+  it('junta as peças iguais na ordem em que a primeira aparece, cada uma com o uid dela', () => {
+    const espada = itemFixture('espada');
+    const pilhas = empilhar([pocao('a'), espada, pocao('b', { foundFloor: 12 }), pocao('c')]);
+    expect(pilhas.map((p) => p.uids)).toEqual([['a', 'b', 'c'], [espada.uid]]);
+    expect(pilhas[0]!.item.uid).toBe('a');
+  });
+
+  it('o que muda a peça separa a pilha; o vestido nunca empilha', () => {
+    const base = pocao('a');
+    expect(mesmaPeca(base, pocao('b', { rarity: 'raro' }))).toBe(false);
+    expect(mesmaPeca(base, pocao('b', { stats: { ...base.stats, cura: 999 } }))).toBe(false);
+    expect(mesmaPeca(base, pocao('b', { degrau: 2 }))).toBe(false);
+    expect(mesmaPeca(base, pocao('b', { degrau: 1 }))).toBe(true);
+    expect(mesmaPeca(base, pocao('b', { equipped: true }))).toBe(false);
+    const runa = (tier: number): Partial<Item> => ({ runas: [{ runa: 'eletrica', tier }] });
+    expect(mesmaPeca(pocao('a', runa(1)), pocao('b', runa(1)))).toBe(true);
+    expect(mesmaPeca(pocao('a', runa(1)), pocao('b', runa(2)))).toBe(false);
   });
 });

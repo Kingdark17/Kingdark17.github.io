@@ -71,11 +71,12 @@ namespace RPGLegend.Game.Jogo
                 else
                 {
                     var grade = PecasDaTela.Grade();
-                    foreach (var item in paraVender)
+                    // as iguais numa carta só, como na mochila; vender vende uma
+                    foreach (var pilha in Inventory.Empilhar(paraVender))
                     {
-                        var uid = item.Uid;
-                        grade.Add(PecasDaTela.CartaDeItem(item, "vende por " + PecasDaTela.Inteiro(Lojas.PrecoDeVenda(item)) + " ouro", uid == _selecionado,
-                            () => Escolher(() => _selecionado = uid)));
+                        var uid = pilha.Item.Uid;
+                        grade.Add(PecasDaTela.CartaDeItem(pilha.Item, "vende por " + PecasDaTela.Inteiro(Lojas.PrecoDeVenda(pilha.Item)) + " ouro",
+                            pilha.Uids.Contains(_selecionado), () => Escolher(() => _selecionado = uid), pilha.Uids.Count));
                     }
                     lista.Add(grade);
                 }

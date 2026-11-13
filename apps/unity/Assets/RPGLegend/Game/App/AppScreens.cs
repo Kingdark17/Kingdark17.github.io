@@ -16,6 +16,12 @@ namespace RPGLegend.Game.App
         private readonly Label _tituloEntrada, _erro, _toque, _ola, _estado, _aviso;
         private readonly TextField _usuario, _email, _senha;
         private readonly Button _entrar, _alternar, _esqueci;
+        private readonly VisualElement _creditos;
+
+        /// <summary>A janelinha dos créditos do menu está aberta (o Esc e o "voltar" do Android a fecham).</summary>
+        public bool CreditosAbertos => !_creditos.ClassListContains("oculto");
+
+        public void FecharCreditos() => _creditos.AddToClassList("oculto");
         private bool _modoCadastro, _ocupado;
         private int _avisoAtual;
         private TextField _campoComFoco;
@@ -96,6 +102,14 @@ namespace RPGLegend.Game.App
             fechar.style.display = Application.isMobilePlatform ? DisplayStyle.None : DisplayStyle.Flex;
             fechar.clicked += Application.Quit;
             raiz.Q<Button>("botao-sair").clicked += () => AoSair?.Invoke();
+            // Os créditos: o "créditos" miúdo do canto abre a janelinha; o FECHAR e o toque fora dela fecham.
+            _creditos = raiz.Q("janela-de-creditos");
+            raiz.Q<Button>("botao-creditos").clicked += () => _creditos.RemoveFromClassList("oculto");
+            raiz.Q<Button>("fechar-creditos").clicked += FecharCreditos;
+            _creditos.RegisterCallback<PointerDownEvent>(e =>
+            {
+                if (e.target == _creditos) FecharCreditos();
+            });
             raiz.Q<Button>("botao-voltar").clicked += () => AoVoltar?.Invoke();
 
             // O "Toque para entrar" pulsa devagar enquanto aparece, para chamar o toque.

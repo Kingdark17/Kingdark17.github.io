@@ -3,6 +3,7 @@
 import Link from 'next/link';
 
 import { AtalhosEMascote } from './atalhos-e-mascote';
+import { Creditos } from './creditos';
 import styles from './menu.module.css';
 
 /**
@@ -35,6 +36,7 @@ export default function Page() {
   return (
     <main className={styles.tela}>
       <AtalhosEMascote />
+      <Creditos />
 
       <div className={styles.coluna}>
         {/* `<img>` cru, e não `next/image`: o brasão é pixel art, e o

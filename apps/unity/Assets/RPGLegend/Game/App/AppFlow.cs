@@ -68,6 +68,7 @@ namespace RPGLegend.Game.App
 
                 _jogo = gameObject.AddComponent<TelaDeJogo>();
                 _jogo.AoSair += SairDoJogo;
+                _jogo.UsarConfiguracoes(_configuracoes);
 
                 // O app de PC procura versão nova enquanto a porta abre; se houver, o menu oferece ATUALIZAR.
                 if (Atualizacao.Vale) _ = new AvisoDeAtualizacao(documento.rootVisualElement, Atualizacao.Origem).Procurar(Application.version);
@@ -100,7 +101,8 @@ namespace RPGLegend.Game.App
         {
             // Botão "voltar" do Android (no Input System ele chega como Esc).
             if (Keyboard.current == null || !Keyboard.current.escapeKey.wasPressedThisFrame) return;
-            if (_estado == Estado.Personagens) Voltar();
+            if (_estado == Estado.Menu && _telas.CreditosAbertos) _telas.FecharCreditos();
+            else if (_estado == Estado.Personagens) Voltar();
             else if (_estado == Estado.Criando) VoltarDaCriacao();
             else if (_estado == Estado.Configuracoes) VoltarDaConfiguracoes();
             else if (_estado == Estado.Loja) VoltarDaLoja();

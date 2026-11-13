@@ -31,6 +31,16 @@ namespace RPGLegend.Engine
             new ConsumeItemOutcome { Kind = KindUsed, HpGained = hpGained, MpGained = mpGained };
     }
 
+    /// <summary>
+    /// TS: Pilha — as peças iguais da mochila numa carta só (só na tela; no save cada uma é a dela). Item é a
+    /// primeira peça da pilha, na ordem da mochila; Uids, os uid de todas, na mesma ordem.
+    /// </summary>
+    public sealed class Pilha
+    {
+        public Item Item;
+        public List<string> Uids;
+    }
+
     /// <summary>TS: ConsumeItemResult.</summary>
     public sealed class ConsumeItemResult
     {
@@ -81,6 +91,66 @@ namespace RPGLegend.Engine
         {
             int idx = FindIndexByUid(inventory, uid);
             return idx < 0 ? null : inventory[idx];
+        }
+
+        /// <summary>
+        /// TS: mesmaPeca — as duas peças empilham: iguais em tudo menos uid, foundFloor e equipped, e nenhuma vestida.
+        /// Ausente vale o padrão (tierAdjustment, reforgeCount e reforgeFails 0; degrau, tierDaRuna e nivelDoUnico 1).
+        /// </summary>
+        public static bool MesmaPeca(Item a, Item b)
+        {
+            if (a.Equipped || b.Equipped) return false;
+            return a.TemplateId == b.TemplateId
+                && a.Rarity == b.Rarity
+                && a.Value == b.Value
+                && a.ProcChance == b.ProcChance
+                && (a.TierAdjustment ?? 0) == (b.TierAdjustment ?? 0)
+                && (a.ReforgeCount ?? 0) == (b.ReforgeCount ?? 0)
+                && (a.ReforgeFails ?? 0) == (b.ReforgeFails ?? 0)
+                && (a.Degrau ?? 1) == (b.Degrau ?? 1)
+                && (a.TierDaRuna ?? 1) == (b.TierDaRuna ?? 1)
+                && (a.NivelDoUnico ?? 1) == (b.NivelDoUnico ?? 1)
+                && a.Encantamento?.Tipo == b.Encantamento?.Tipo
+                && a.Encantamento?.Nivel == b.Encantamento?.Nivel
+                && MesmasRunas(a.Runas, b.Runas)
+                && MesmosAtributos(a.Stats, b.Stats);
+        }
+
+        /// <summary>TS: empilhar — as pilhas da lista, na ordem em que a primeira peça de cada uma aparece.</summary>
+        public static List<Pilha> Empilhar(IReadOnlyList<Item> items)
+        {
+            var pilhas = new List<Pilha>();
+            foreach (var item in items)
+            {
+                var pilha = pilhas.Find(p => MesmaPeca(p.Item, item));
+                if (pilha != null) pilha.Uids.Add(item.Uid);
+                else pilhas.Add(new Pilha { Item = item, Uids = new List<string> { item.Uid } });
+            }
+            return pilhas;
+        }
+
+        private static bool MesmasRunas(List<RunaNaArma> a, List<RunaNaArma> b)
+        {
+            int na = a?.Count ?? 0, nb = b?.Count ?? 0;
+            if (na != nb) return false;
+            for (int i = 0; i < na; i++)
+                if (a[i].Runa != b[i].Runa || a[i].Tier != b[i].Tier) return false;
+            return true;
+        }
+
+        private static bool MesmosAtributos(ItemStats a, ItemStats b)
+        {
+            int na = a?.Count ?? 0, nb = b?.Count ?? 0;
+            if (na != nb) return false;
+            if (na == 0) return true;
+            foreach (var chave in a.Keys)
+            {
+                // o === do JS: null só é igual a null, e NaN não é igual a nada
+                if (!b.TryGet(chave, out var vb)) return false;
+                var va = a.Get(chave);
+                if (va.HasValue != vb.HasValue || (va.HasValue && va.Value != vb.Value)) return false;
+            }
+            return true;
         }
 
         /// <summary>

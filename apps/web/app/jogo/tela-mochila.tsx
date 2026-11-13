@@ -30,9 +30,11 @@ import {
   descartar,
   desequipar,
   displayName,
+  empilhar,
   equipar,
   equiparNoLugarDaArma,
   itemCategory,
+  mesmaPeca,
   podeEquipar,
   podeUsar,
   slotDoItem,
@@ -77,11 +79,23 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
   const ficha = useFichaAVista(selecionado, { sempre: true });
 
   const { hero, inventory } = mochila.estado;
-  const guardados = inventory.filter((item) => !item.equipped && (aba === 'todos' || itemCategory(item) === aba));
+  // As peças iguais numa carta só, "×5" (doc do Breno, 2026-11-13): só na tela, o save não muda.
+  const pilhas = empilhar(inventory.filter((item) => !item.equipped && (aba === 'todos' || itemCategory(item) === aba)));
   const resposta = mochila.log[mochila.log.length - 1];
 
   const vestidos = EQUIP_SLOTS.map((slot) => hero.equip[slot] as Item | null);
   const aberta = inventory.find((item) => item.uid === selecionado) ?? vestidos.find((peca) => peca?.uid === selecionado) ?? null;
+
+  /**
+   * Depois de cada ação: a peça aberta que sumiu (usada, descartada) passa
+   * pra próxima igual da mochila, e a pilha continua aberta até acabar.
+   */
+  function agir(proxima: Mochila) {
+    const ainda = proxima.estado.inventory.some((item) => item.uid === selecionado)
+      || EQUIP_SLOTS.some((slot) => (proxima.estado.hero.equip[slot] as Item | null)?.uid === selecionado);
+    if (!ainda) setSelecionado((aberta && proxima.estado.inventory.find((item) => mesmaPeca(item, aberta))?.uid) ?? null);
+    onMochila(proxima);
+  }
 
   return (
     <section className={styles.loja}>
@@ -108,7 +122,7 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
             <FichaItem
               item={aberta}
               hero={hero}
-              acoes={aberta && <AcoesDaPeca mochila={mochila} item={aberta} onAgir={onMochila} onSumir={() => setSelecionado(null)} />}
+              acoes={aberta && <AcoesDaPeca mochila={mochila} item={aberta} onAgir={agir} />}
             />
           </aside>
         </div>
@@ -133,15 +147,16 @@ export function TelaMochila({ mochila, onMochila, onFechar }: Props) {
             ))}
           </div>
 
-          {guardados.length === 0 ? (
+          {pilhas.length === 0 ? (
             <p className={styles.vazio}>Nada aqui.</p>
           ) : (
             <div className={styles.gradeDeItens}>
-              {guardados.map((item) => (
+              {pilhas.map(({ item, uids }) => (
                 <CartaItem
                   key={item.uid}
                   item={item}
-                  selecionado={item.uid === selecionado}
+                  quantos={uids.length}
+                  selecionado={selecionado !== null && uids.includes(selecionado)}
                   onClick={() => setSelecionado(item.uid)}
                 />
               ))}
@@ -157,15 +172,15 @@ interface AcoesProps {
   mochila: Mochila;
   item: Item;
   onAgir: (proxima: Mochila) => void;
-  onSumir: () => void;
 }
 
 /**
  * Os botões da peça aberta. Ficam num lugar só — antes eram repetidos em
  * cada carta da grade.
  *
- * Descartar limpa a seleção porque a peça deixa de existir; as outras
- * ações a mantêm, e a ficha se reescreve sozinha ao redor da mesma peça.
+ * Usar e descartar fazem a peça deixar de existir: a ficha passa pra
+ * próxima igual da pilha, ou esvazia (`agir`); as outras ações a mantêm, e
+ * a ficha se reescreve sozinha ao redor da mesma peça.
  *
  * **Duas mãos ocupadas não vira botão morto.** Com uma arma de duas mãos na
  * mão principal, a mão secundária está fechada — e um "Equipar" que só
@@ -173,7 +188,7 @@ interface AcoesProps {
  * dizendo qual arma ocupa, e um botão que diz o que vai acontecer se for
  * clicado. Não clicar é a resposta "não": nada acontece sozinho.
  */
-function AcoesDaPeca({ mochila, item, onAgir, onSumir }: Readonly<AcoesProps>) {
+function AcoesDaPeca({ mochila, item, onAgir }: Readonly<AcoesProps>) {
   const slot = slotDoItem(mochila.estado, item);
   const armaOcupando = armaQueOcupaAsMaos(mochila.estado, item);
   // Arma leve ainda tem pra onde ir com as mãos ocupadas: a mão principal,
@@ -226,10 +241,7 @@ function AcoesDaPeca({ mochila, item, onAgir, onSumir }: Readonly<AcoesProps>) {
       <button
         type="button"
         className={styles.botaoDiscreto}
-        onClick={() => {
-          onAgir(descartar(mochila, item));
-          onSumir();
-        }}
+        onClick={() => onAgir(descartar(mochila, item))}
       >
         Descartar
       </button>

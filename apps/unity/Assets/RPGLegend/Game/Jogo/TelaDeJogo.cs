@@ -261,6 +261,7 @@ namespace RPGLegend.Game.Jogo
             _mochila.clicked += () => _partida?.AbrirMochila();
             _diario.clicked += AbrirDiario;
             raiz.Q<Button>("botao-guia").clicked += AbrirGuia;
+            raiz.Q<Button>("botao-config-do-jogo").clicked += AbrirConfiguracoes;
             _bicho = new BichoDeEstimacao(raiz.Q<Button>("bichinho"));
             raiz.Q<Button>("botao-ficha").clicked += AbrirFicha;
             _sairDoJogo.clicked += PerguntarSaida;
@@ -320,7 +321,8 @@ namespace RPGLegend.Game.Jogo
             var teclado = Keyboard.current;
             if (teclado != null && teclado.escapeKey.wasPressedThisFrame)
             {
-                if (JanelaSemTela) FecharJanela();
+                if (_janela == "config") FecharConfiguracoes();
+                else if (JanelaSemTela) FecharJanela();
                 else if (_janela == "sala") _sairDaTela?.Invoke();
                 else if (_janela == null) PerguntarSaida();
             }
@@ -771,6 +773,7 @@ namespace RPGLegend.Game.Jogo
                 }
                 return;
             }
+            if (_janela == "config") _configuracoes.Fechar();
             if (_janela != null && _janela != "sala") FecharJanela();
             _janela = "sala";
             if (tela.Tipo != _tipoDaTela) EsquecerEscolhas();
@@ -867,6 +870,37 @@ namespace RPGLegend.Game.Jogo
                 foreach (var nota in _partida.Diario)
                     conteudo.Add(Paragrafo(((nota.Icone ?? "") + " <b>" + (nota.Titulo ?? "") + "</b> " + (nota.Texto ?? "")).Trim()));
             }, ("FECHAR", FecharJanela));
+        }
+
+        // ---------- as configurações por cima do jogo ----------
+
+        /// <summary>A tela de configurações do menu (som), que o CONFIG abre por cima da partida.</summary>
+        private TelaDeConfiguracoes _configuracoes;
+
+        /// <summary>Quem monta o app entrega a tela de configurações do menu, que o jogo abre por cima dele.</summary>
+        public void UsarConfiguracoes(TelaDeConfiguracoes configuracoes)
+        {
+            _configuracoes = configuracoes;
+            _configuracoes.AoVoltar += FecharConfiguracoes;
+        }
+
+        /// <summary>
+        /// O CONFIG dos botões de cima (doc do Breno, 2026-11-13; só no app): as mesmas configurações do menu, por
+        /// cima da partida. Enquanto estão abertas a janela é "config": o herói não anda e a luta pausa.
+        /// </summary>
+        private void AbrirConfiguracoes()
+        {
+            if (_partida == null || _janela != null || _saindo || _configuracoes == null) return;
+            _janela = "config";
+            _configuracoes.Abrir(doJogo: true);
+        }
+
+        private void FecharConfiguracoes()
+        {
+            if (_janela != "config") return;
+            _configuracoes.Fechar();
+            _janela = null;
+            Redesenhar();
         }
 
         private void PerguntarSaida()

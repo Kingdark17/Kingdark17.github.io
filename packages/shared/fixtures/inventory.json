@@ -534,6 +534,620 @@
     }
   },
   {
+    "name": "empilhar: mochila vazia",
+    "input": {
+      "fn": "empilhar",
+      "args": {
+        "items": []
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "empilhar: iguais juntam na ordem da primeira",
+    "input": {
+      "fn": "empilhar",
+      "args": {
+        "items": [
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "pot_vida_1700000000000_51158",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          {
+            "uid": "pot_vida_1700000000000_28814",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false,
+            "foundFloor": 7
+          },
+          {
+            "uid": "espada_1700000000000_44795",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "item": {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          "uids": [
+            "pot_vida_1700000000000_62706",
+            "pot_vida_1700000000000_51158",
+            "pot_vida_1700000000000_28814"
+          ]
+        },
+        {
+          "item": {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          "uids": [
+            "espada_1700000000000_92362",
+            "espada_1700000000000_44795"
+          ]
+        },
+        {
+          "item": {
+            "uid": "pot_mana_1700000000000_73424",
+            "templateId": "pot_mana",
+            "rarity": "incomum",
+            "stats": {
+              "curaMana": 21
+            },
+            "value": 18,
+            "equipped": false
+          },
+          "uids": [
+            "pot_mana_1700000000000_73424"
+          ]
+        },
+        {
+          "item": {
+            "uid": "minerio_1700000000000_68976",
+            "templateId": "minerio",
+            "rarity": "comum",
+            "stats": {},
+            "value": 10,
+            "equipped": false
+          },
+          "uids": [
+            "minerio_1700000000000_68976"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "empilhar: o que muda a peça separa",
+    "input": {
+      "fn": "empilhar",
+      "args": {
+        "items": [
+          {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          {
+            "uid": "espada_1700000000000_23783",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": true,
+            "procChance": 0.15
+          },
+          {
+            "uid": "espada_1700000000000_63138",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15,
+            "reforgeCount": 1
+          },
+          {
+            "uid": "espada_1700000000000_67714",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15,
+            "degrau": 2
+          },
+          {
+            "uid": "espada_1700000000000_39815",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15,
+            "runas": [
+              {
+                "runa": "eletrica",
+                "tier": 1
+              }
+            ]
+          },
+          {
+            "uid": "espada_1700000000000_5854",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15,
+            "runas": [
+              {
+                "runa": "eletrica",
+                "tier": 1
+              }
+            ]
+          },
+          {
+            "uid": "espada_1700000000000_75260",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15,
+            "runas": [
+              {
+                "runa": "eletrica",
+                "tier": 2
+              }
+            ]
+          },
+          {
+            "uid": "pot_vida_1700000000000_56631",
+            "templateId": "pot_vida",
+            "rarity": "raro",
+            "stats": {
+              "cura": 37
+            },
+            "value": 24,
+            "equipped": false
+          },
+          {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          {
+            "uid": "couro_1700000000000_43228",
+            "templateId": "couro",
+            "rarity": "comum",
+            "stats": {
+              "defesa": 3,
+              "velocidade": 1
+            },
+            "value": 22,
+            "equipped": false,
+            "encantamento": {
+              "tipo": "robustez",
+              "nivel": 1
+            }
+          },
+          {
+            "uid": "couro_1700000000000_62186",
+            "templateId": "couro",
+            "rarity": "comum",
+            "stats": {
+              "defesa": 3,
+              "velocidade": 1
+            },
+            "value": 22,
+            "equipped": false,
+            "encantamento": {
+              "tipo": "robustez",
+              "nivel": 1
+            }
+          },
+          {
+            "uid": "couro_1700000000000_9272",
+            "templateId": "couro",
+            "rarity": "comum",
+            "stats": {
+              "defesa": 3,
+              "velocidade": 1
+            },
+            "value": 22,
+            "equipped": false,
+            "encantamento": {
+              "tipo": "robustez",
+              "nivel": 2
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "item": {
+            "uid": "espada_1700000000000_92362",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15
+          },
+          "uids": [
+            "espada_1700000000000_92362"
+          ]
+        },
+        {
+          "item": {
+            "uid": "espada_1700000000000_23783",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": true,
+            "procChance": 0.15
+          },
+          "uids": [
+            "espada_1700000000000_23783"
+          ]
+        },
+        {
+          "item": {
+            "uid": "espada_1700000000000_63138",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15,
+            "reforgeCount": 1
+          },
+          "uids": [
+            "espada_1700000000000_63138"
+          ]
+        },
+        {
+          "item": {
+            "uid": "espada_1700000000000_67714",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15,
+            "degrau": 2
+          },
+          "uids": [
+            "espada_1700000000000_67714"
+          ]
+        },
+        {
+          "item": {
+            "uid": "espada_1700000000000_39815",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15,
+            "runas": [
+              {
+                "runa": "eletrica",
+                "tier": 1
+              }
+            ]
+          },
+          "uids": [
+            "espada_1700000000000_39815",
+            "espada_1700000000000_5854"
+          ]
+        },
+        {
+          "item": {
+            "uid": "espada_1700000000000_75260",
+            "templateId": "espada",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 4
+            },
+            "value": 22,
+            "equipped": false,
+            "procChance": 0.15,
+            "runas": [
+              {
+                "runa": "eletrica",
+                "tier": 2
+              }
+            ]
+          },
+          "uids": [
+            "espada_1700000000000_75260"
+          ]
+        },
+        {
+          "item": {
+            "uid": "pot_vida_1700000000000_56631",
+            "templateId": "pot_vida",
+            "rarity": "raro",
+            "stats": {
+              "cura": 37
+            },
+            "value": 24,
+            "equipped": false
+          },
+          "uids": [
+            "pot_vida_1700000000000_56631"
+          ]
+        },
+        {
+          "item": {
+            "uid": "pot_vida_1700000000000_62706",
+            "templateId": "pot_vida",
+            "rarity": "comum",
+            "stats": {
+              "cura": 22
+            },
+            "value": 14,
+            "equipped": false
+          },
+          "uids": [
+            "pot_vida_1700000000000_62706"
+          ]
+        },
+        {
+          "item": {
+            "uid": "couro_1700000000000_43228",
+            "templateId": "couro",
+            "rarity": "comum",
+            "stats": {
+              "defesa": 3,
+              "velocidade": 1
+            },
+            "value": 22,
+            "equipped": false,
+            "encantamento": {
+              "tipo": "robustez",
+              "nivel": 1
+            }
+          },
+          "uids": [
+            "couro_1700000000000_43228",
+            "couro_1700000000000_62186"
+          ]
+        },
+        {
+          "item": {
+            "uid": "couro_1700000000000_9272",
+            "templateId": "couro",
+            "rarity": "comum",
+            "stats": {
+              "defesa": 3,
+              "velocidade": 1
+            },
+            "value": 22,
+            "equipped": false,
+            "encantamento": {
+              "tipo": "robustez",
+              "nivel": 2
+            }
+          },
+          "uids": [
+            "couro_1700000000000_9272"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "mesmaPeca: atributo diferente",
+    "input": {
+      "fn": "mesmaPeca",
+      "args": {
+        "a": {
+          "uid": "pot_vida_1700000000000_62706",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        },
+        "b": {
+          "uid": "pot_vida_1700000000000_51158",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 999
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "mesmaPeca: atributo a mais",
+    "input": {
+      "fn": "mesmaPeca",
+      "args": {
+        "a": {
+          "uid": "pot_vida_1700000000000_62706",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22
+          },
+          "value": 14,
+          "equipped": false
+        },
+        "b": {
+          "uid": "pot_vida_1700000000000_51158",
+          "templateId": "pot_vida",
+          "rarity": "comum",
+          "stats": {
+            "cura": 22,
+            "forca": 0
+          },
+          "value": 14,
+          "equipped": false
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "mesmaPeca: degrau 1 escrito é o ausente",
+    "input": {
+      "fn": "mesmaPeca",
+      "args": {
+        "a": {
+          "uid": "espada_1700000000000_92362",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15
+        },
+        "b": {
+          "uid": "espada_1700000000000_44795",
+          "templateId": "espada",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4
+          },
+          "value": 22,
+          "equipped": false,
+          "procChance": 0.15,
+          "degrau": 1
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
     "name": "consumeItem: poção de vida cura e some",
     "input": {
       "fn": "consumeItem",
