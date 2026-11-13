@@ -58,21 +58,25 @@ export const SECUNDARIAS_DO_MINI: ReadonlySet<string> = new Set(['escudo']);
  *
  * A ordem é a do grande, sem o que não tem arte: corpo, roupa de baixo,
  * perneira, peitoral, cabelo, elmo, o extra da raça e o escudo. De costas o
- * extra (asas, cauda) também vai por cima: é o que está nas costas.
+ * extra (asas, cauda) também vai por cima: é o que está nas costas; e o
+ * escudo vai atrás de tudo, porque está na frente do herói (doc do Breno,
+ * 2026-11-13).
  */
 export function montarMini({ raca, armadura, elmo, calca, secundaria, cabelo }: Vestimenta, lado: LadoDoMini): string[] {
   if (!raca || !CORPOS_DO_MINI.has(raca)) return [];
   const base = `${RAIZ}/${lado}`;
-  const camadas = [`${base}/corpo/${raca}.png`, `${base}/base/calca.png`, `${base}/base/roupa.png`];
+  const camadas: string[] = [];
   const vestir = (pasta: string, id: string | null | undefined, disponivel: ReadonlySet<string>) => {
     if (id && disponivel.has(id)) camadas.push(`${base}/${pasta}/${id}.png`);
   };
+  if (lado === 'costas') vestir('secundaria', secundaria, SECUNDARIAS_DO_MINI);
+  camadas.push(`${base}/corpo/${raca}.png`, `${base}/base/calca.png`, `${base}/base/roupa.png`);
   vestir('calca', calca, CALCAS_DO_MINI);
   vestir('armadura', armadura, ARMADURAS_DO_MINI);
   const penteado = cabeloDe(raca, cabelo);
   if (penteado && CABELOS_DO_MINI.has(penteado)) camadas.push(`${base}/cabelo/${penteado}.png`);
   vestir('elmo', elmo, ELMOS_DO_MINI);
   if (EXTRAS_DO_MINI[lado].has(raca)) camadas.push(`${base}/extra/${raca}.png`);
-  vestir('secundaria', secundaria, SECUNDARIAS_DO_MINI);
+  if (lado === 'frente') vestir('secundaria', secundaria, SECUNDARIAS_DO_MINI);
   return camadas;
 }

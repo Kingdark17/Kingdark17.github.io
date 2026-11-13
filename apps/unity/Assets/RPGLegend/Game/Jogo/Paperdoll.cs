@@ -126,7 +126,8 @@ namespace RPGLegend.Game.Jogo
         /// <summary>
         /// TS: montarMini (lib/paperdoll/mini.ts) — as camadas do mini boneco do Breno, de trás pra frente: corpo, roupa
         /// de baixo, perneira, peitoral, cabelo, elmo, o extra da raça (de frente, auréola, chifres, orelhas e presas; de
-        /// costas, asas e cauda) e o escudo. A peça sem arte mini não aparece. Vazia: sem raça ou sem mini corpo.
+        /// costas, asas e cauda) e o escudo; de costas o escudo vai atrás de tudo, porque está na frente do herói. A
+        /// peça sem arte mini não aparece. Vazia: sem raça ou sem mini corpo.
         /// </summary>
         public static List<string> Mini(Hero hero, bool costas)
         {
@@ -144,6 +145,7 @@ namespace RPGLegend.Game.Jogo
                 if (!string.IsNullOrEmpty(id)) Por(pasta + "/" + id);
             }
 
+            if (costas) VestirMini("secundaria", "secundaria");
             camadas.Add(lado + "corpo/" + raca);
             Por("base/calca");
             Por("base/roupa");
@@ -153,7 +155,7 @@ namespace RPGLegend.Game.Jogo
             if (penteado != null) Por("cabelo/" + penteado);
             VestirMini("elmo", "elmo");
             Por("extra/" + raca);
-            VestirMini("secundaria", "secundaria");
+            if (!costas) VestirMini("secundaria", "secundaria");
             return camadas;
         }
 

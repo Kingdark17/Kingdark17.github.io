@@ -53,7 +53,9 @@ describe('o mini boneco', () => {
 
   it('veste o que tem arte, na ordem, e ignora o que não tem', () => {
     const vestido = { raca: 'celestial', armadura: 'placas', elmo: 'robe_chapeu', calca: 'placas_calca', secundaria: 'escudo', botas: 'botas', arma: 'espada', cabelo: 'longo' };
+    // De costas o escudo fica atrás do herói; de frente, por cima.
     expect(montarMini(vestido, 'costas').map((c) => c.replace('/img/mini/costas/', ''))).toEqual([
+      'secundaria/escudo.png',
       'corpo/celestial.png',
       'base/calca.png',
       'base/roupa.png',
@@ -62,8 +64,8 @@ describe('o mini boneco', () => {
       'cabelo/longo.png',
       'elmo/robe_chapeu.png',
       'extra/celestial.png',
-      'secundaria/escudo.png',
     ]);
+    expect(montarMini(vestido, 'frente').at(-1)).toBe('/img/mini/frente/secundaria/escudo.png');
     // Couro não tem arte mini: fica a roupa de baixo.
     expect(montarMini({ raca: 'humano', armadura: 'couro' }, 'frente')).not.toContain('/img/mini/frente/armadura/couro.png');
   });
