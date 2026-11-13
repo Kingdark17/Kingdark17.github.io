@@ -412,6 +412,36 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   apareceu na sala, volta pro lugar em que a luta começou). Os números
   (raio do herói, alcance, tamanhos) ainda não passaram por ajuste fino com
   gente jogando.
+- Efeitos da luta (2026-11-13, **só no app**, pedido do usuário): folhas de
+  quadros em `Art/Jogo/Resources/Efeitos` (com o `efeitos.json`), lidas por
+  `Game/Jogo/Efeitos.cs`. Cada efeito é código no formato da pixelfx
+  (github.com/patch-gg/pixelfx, MIT; a skill `pixelfx` está instalada) em
+  `apps/unity/Efeitos~/fx`, desenhado **no estilo do Breno** (formas
+  gordas, poucos tons chapados, as cores dele) — decisão do usuário: nada do
+  estilo próprio da biblioteca. `node apps/unity/Efeitos~/exporta.mjs`
+  desenha com a pixelfx (um checkout fora do repo, ao lado dele:
+  `Documents/projetos/pixelfx`, no commit da tag `versao-rpglegend`), põe o
+  contorno escuro (#1a0b09) em volta do que é sólido e grava as folhas;
+  `--ver` só gera as folhas de conferência. A lista e as cores ficam em
+  `Efeitos~/efeitos.mjs`, e as formas em comum (chama em gota, bola de
+  fumaça, estilhaço, nota, seta, caveirinha, caracol) em `fx/_comum.js`.
+  São 32 folhas: o golpe, o crítico e o golpe no herói; um efeito por
+  elemento (fogo, gelo, luz, sombra, veneno, raio, som, sangue, e o fogo e o
+  gelo pequenos das runas); o poder físico; a queda; o esqueleto surgindo;
+  a cura e o roubo de vida; os reforços (força, precisão, esquiva, escudo,
+  crítico, canção); atordoado e lento; o desvio e o escudo do vigor
+  apanhando; e dos monstros, a poeira do golpe que cai (a grande do
+  Devastador), a onda do Rugido e o estouro da bola. Onde tocam
+  (`TelaDeJogo.Luta.cs`): cada número da luta pelo ícone no começo dele
+  (o poder usa "ícone -dano"; as runas, ⚡ 🔥 ❄️ 🩸; os estados, 💫 e 🐌;
+  `EfeitosDoDano`), os reforços pelo aviso do poder (`EfeitosDosReforcos`),
+  o esqueleto pela equipe (`EfeitosDaEquipe`), e o fim dos golpes dos
+  monstros pela tinta do chão (`TintaDaSala.AoGolpe`: o círculo que cai, a
+  investida que para, a bola que some). O corpo do monstro é peça da tela
+  por cima da sala, então o que vai em cima de um monstro de pé e no herói
+  apanhando vai pro palco (`PalcoDaLuta.TocarEfeito`); o resto, e o que vai
+  num monstro que caiu (a luta pode acabar com ele), vai pra sala
+  (`SalaEmCena.TocarEfeito`, em unidades da sala, na escala da arte).
 - O andar (2026-11-06, **site e app**, doc do Breno decidido com o
   usuário): não há mais sala de saída em todo andar. Só o andar em que se
   entra pelo portão (o 1 ou o de um totem, e o save sem mapa) sai pela sala

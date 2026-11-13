@@ -1,0 +1,2995 @@
+fileFormatVersion: 2
+guid: 960828df2c1333e4da6170480e09a55c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4075870440690225162
+    second: gelo-pequeno_0
+  - first:
+      213: -861161870641712482
+    second: gelo-pequeno_1
+  - first:
+      213: 3744437650303432332
+    second: gelo-pequeno_2
+  - first:
+      213: 7994101861459079879
+    second: gelo-pequeno_3
+  - first:
+      213: -2779996743340136674
+    second: gelo-pequeno_4
+  - first:
+      213: 6524877186429013726
+    second: gelo-pequeno_5
+  - first:
+      213: -577312829356394059
+    second: gelo-pequeno_6
+  - first:
+      213: 2020119284513168046
+    second: gelo-pequeno_7
+  - first:
+      213: 660481522606021709
+    second: gelo-pequeno_8
+  - first:
+      213: -8906602524905485257
+    second: gelo-pequeno_9
+  - first:
+      213: 7421861830023659025
+    second: gelo-pequeno_10
+  - first:
+      213: -3813866419207397706
+    second: gelo-pequeno_11
+  - first:
+      213: 4262537524533722909
+    second: gelo-pequeno_12
+  - first:
+      213: -8921686579696228899
+    second: gelo-pequeno_13
+  - first:
+      213: 1536927993746251672
+    second: gelo-pequeno_14
+  - first:
+      213: 6085823607427373535
+    second: gelo-pequeno_15
+  - first:
+      213: -3387105435716878309
+    second: gelo-pequeno_16
+  - first:
+      213: 3278157445170996824
+    second: gelo-pequeno_17
+  - first:
+      213: -5174328450564546419
+    second: gelo-pequeno_18
+  - first:
+      213: 7778049237097487430
+    second: gelo-pequeno_19
+  - first:
+      213: 2066113148310019517
+    second: gelo-pequeno_20
+  - first:
+      213: -2139825647308205114
+    second: gelo-pequeno_21
+  - first:
+      213: 8807800700947292231
+    second: gelo-pequeno_22
+  - first:
+      213: 8819779631184053320
+    second: gelo-pequeno_23
+  - first:
+      213: 2797505916283352358
+    second: gelo-pequeno_24
+  - first:
+      213: 6721090847527367766
+    second: gelo-pequeno_25
+  - first:
+      213: -5874285551827200417
+    second: gelo-pequeno_26
+  - first:
+      213: -9109353634733017529
+    second: gelo-pequeno_27
+  - first:
+      213: -7098082106066373609
+    second: gelo-pequeno_28
+  - first:
+      213: 5582891390383634101
+    second: gelo-pequeno_29
+  - first:
+      213: -1904068775023593559
+    second: gelo-pequeno_30
+  - first:
+      213: -8236860297933729738
+    second: gelo-pequeno_31
+  - first:
+      213: -6442083589048053399
+    second: gelo-pequeno_32
+  - first:
+      213: -3786603663726503568
+    second: gelo-pequeno_33
+  - first:
+      213: -1617382949361633861
+    second: gelo-pequeno_34
+  - first:
+      213: -9169021044674939170
+    second: gelo-pequeno_35
+  - first:
+      213: -4092557223757558249
+    second: gelo-pequeno_36
+  - first:
+      213: 2985592463751716535
+    second: gelo-pequeno_37
+  - first:
+      213: 1637484850325363586
+    second: gelo-pequeno_38
+  - first:
+      213: 1949596374791883758
+    second: gelo-pequeno_39
+  - first:
+      213: -9143612945154260506
+    second: gelo-pequeno_40
+  - first:
+      213: -8240671568699853503
+    second: gelo-pequeno_41
+  - first:
+      213: 4207211269809778682
+    second: gelo-pequeno_42
+  - first:
+      213: -7409958434330620101
+    second: gelo-pequeno_43
+  - first:
+      213: 3085336872261442769
+    second: gelo-pequeno_44
+  - first:
+      213: 3171117107504891599
+    second: gelo-pequeno_45
+  - first:
+      213: -6021585379368105173
+    second: gelo-pequeno_46
+  - first:
+      213: 5902137424158515081
+    second: gelo-pequeno_47
+  - first:
+      213: 7754508004240074497
+    second: gelo-pequeno_48
+  - first:
+      213: -4129691964967217797
+    second: gelo-pequeno_49
+  - first:
+      213: -3230699443459110121
+    second: gelo-pequeno_50
+  - first:
+      213: 461330790455087898
+    second: gelo-pequeno_51
+  - first:
+      213: -3208880976824015408
+    second: gelo-pequeno_52
+  - first:
+      213: 5420535819941267132
+    second: gelo-pequeno_53
+  - first:
+      213: 3980313908330851017
+    second: gelo-pequeno_54
+  - first:
+      213: -8467102578798589074
+    second: gelo-pequeno_55
+  - first:
+      213: 9213299635118250666
+    second: gelo-pequeno_56
+  - first:
+      213: 6087715025025132575
+    second: gelo-pequeno_57
+  - first:
+      213: -8973772219020962231
+    second: gelo-pequeno_58
+  - first:
+      213: -7732982502646200594
+    second: gelo-pequeno_59
+  - first:
+      213: 696510923479077971
+    second: gelo-pequeno_60
+  - first:
+      213: -16181850532292019
+    second: gelo-pequeno_61
+  - first:
+      213: 4703600663678476461
+    second: gelo-pequeno_62
+  - first:
+      213: -6514284423643584387
+    second: gelo-pequeno_63
+  - first:
+      213: -1990157705570111131
+    second: gelo-pequeno_64
+  - first:
+      213: -7854303149178083777
+    second: gelo-pequeno_65
+  - first:
+      213: 3569479867576168699
+    second: gelo-pequeno_66
+  - first:
+      213: -5378777037130315239
+    second: gelo-pequeno_67
+  - first:
+      213: 1854004049809464084
+    second: gelo-pequeno_68
+  - first:
+      213: 8945828379794435549
+    second: gelo-pequeno_69
+  - first:
+      213: -4087818352663505404
+    second: gelo-pequeno_70
+  - first:
+      213: 2531742341351190072
+    second: gelo-pequeno_71
+  - first:
+      213: -261268547959837353
+    second: gelo-pequeno_72
+  - first:
+      213: -3672229016660001252
+    second: gelo-pequeno_73
+  - first:
+      213: -3236522222175056281
+    second: gelo-pequeno_74
+  - first:
+      213: -511966914990627372
+    second: gelo-pequeno_75
+  - first:
+      213: -8080693001711880054
+    second: gelo-pequeno_76
+  - first:
+      213: -7579926117804359654
+    second: gelo-pequeno_77
+  - first:
+      213: 7759421449550992989
+    second: gelo-pequeno_78
+  - first:
+      213: 386641304915098618
+    second: gelo-pequeno_79
+  - first:
+      213: -6440197797069197966
+    second: gelo-pequeno_80
+  - first:
+      213: 4037111641760529559
+    second: gelo-pequeno_81
+  - first:
+      213: 2012712467119816976
+    second: gelo-pequeno_82
+  - first:
+      213: -4477290192085903383
+    second: gelo-pequeno_83
+  - first:
+      213: -2338984385466514776
+    second: gelo-pequeno_84
+  - first:
+      213: 8157695523099044731
+    second: gelo-pequeno_85
+  - first:
+      213: 5215964446532849903
+    second: gelo-pequeno_86
+  - first:
+      213: 4019743048310598974
+    second: gelo-pequeno_87
+  - first:
+      213: 8710021396887807052
+    second: gelo-pequeno_88
+  - first:
+      213: -220294489489261064
+    second: gelo-pequeno_89
+  - first:
+      213: 5080749515413887509
+    second: gelo-pequeno_90
+  - first:
+      213: -7183735345402118960
+    second: gelo-pequeno_91
+  - first:
+      213: 8140643760088401644
+    second: gelo-pequeno_92
+  - first:
+      213: 2526712597599353332
+    second: gelo-pequeno_93
+  - first:
+      213: 7658834160599404394
+    second: gelo-pequeno_94
+  - first:
+      213: -7050226767743700408
+    second: gelo-pequeno_95
+  - first:
+      213: 6609118916696127548
+    second: gelo-pequeno_96
+  - first:
+      213: 8486277224312446112
+    second: gelo-pequeno_97
+  - first:
+      213: 1628503672744271141
+    second: gelo-pequeno_98
+  - first:
+      213: -8910831993222252639
+    second: gelo-pequeno_99
+  - first:
+      213: 8407789705720789803
+    second: gelo-pequeno_100
+  - first:
+      213: 2094618296284516922
+    second: gelo-pequeno_101
+  - first:
+      213: 7526534264909764808
+    second: gelo-pequeno_102
+  - first:
+      213: -8859225773949137586
+    second: gelo-pequeno_103
+  - first:
+      213: 8727616088841984933
+    second: gelo-pequeno_104
+  - first:
+      213: -3320232714981742183
+    second: gelo-pequeno_105
+  - first:
+      213: -2604676101654992945
+    second: gelo-pequeno_106
+  - first:
+      213: 6837048399057848939
+    second: gelo-pequeno_107
+  - first:
+      213: 2445321813863131394
+    second: gelo-pequeno_108
+  - first:
+      213: 8162710804683071851
+    second: gelo-pequeno_109
+  - first:
+      213: -4646031762406661515
+    second: gelo-pequeno_110
+  - first:
+      213: 4916572291520979385
+    second: gelo-pequeno_111
+  - first:
+      213: -5970882180174515451
+    second: gelo-pequeno_112
+  - first:
+      213: 9223023117088141432
+    second: gelo-pequeno_113
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: gelo-pequeno_0
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 455
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ffe428dd699f67c0800000000000000
+      internalID: -4075870440690225162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_1
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 455
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e923a4e57d98c04f0800000000000000
+      internalID: -861161870641712482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_2
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 455
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c863fed343ae6f330800000000000000
+      internalID: 3744437650303432332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_3
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 455
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c2be86d941c0fe60800000000000000
+      internalID: 7994101861459079879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_4
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 455
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e17e774e0b77b69d0800000000000000
+      internalID: -2779996743340136674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_5
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 454
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edec6241b350d8a50800000000000000
+      internalID: 6524877186429013726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_6
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 350
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b9bfe95a09fcf7f0800000000000000
+      internalID: -577312829356394059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_7
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 351
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaad25549c7e80c10800000000000000
+      internalID: 2020119284513168046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_8
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 351
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4c14a702708a2900800000000000000
+      internalID: 660481522606021709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_9
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 375
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73c496b5134656480800000000000000
+      internalID: -8906602524905485257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_10
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 352
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11e379ef200cff660800000000000000
+      internalID: 7421861830023659025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_11
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 373
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6be1a5ec2bc621bc0800000000000000
+      internalID: -3813866419207397706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_12
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 374
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1ffa9f6b43972b30800000000000000
+      internalID: 4262537524533722909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_13
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 352
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd526db235dcf2480800000000000000
+      internalID: -8921686579696228899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_14
+      rect:
+        serializedVersion: 2
+        x: 478
+        y: 369
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89f59980ed3445510800000000000000
+      internalID: 1536927993746251672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_15
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 372
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd9156ea350357450800000000000000
+      internalID: 6085823607427373535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_16
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 353
+        width: 26
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b100d474d859ef0d0800000000000000
+      internalID: -3387105435716878309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_17
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 368
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8562835f3da5e7d20800000000000000
+      internalID: 3278157445170996824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_18
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 366
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8027e060b71138b0800000000000000
+      internalID: -5174328450564546419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_19
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 365
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64c91be329e21fb60800000000000000
+      internalID: 7778049237097487430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_20
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 363
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbd58ce26fe4cac10800000000000000
+      internalID: 2066113148310019517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_21
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 267
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c39cea39efcd42e0800000000000000
+      internalID: -2139825647308205114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_22
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 273
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 740666062189b3a70800000000000000
+      internalID: 8807800700947292231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_23
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 266
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84483f968d6266a70800000000000000
+      internalID: 8819779631184053320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_24
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 272
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6257f1d1fccb2d620800000000000000
+      internalID: 2797505916283352358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_25
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 272
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6547ff5148c164d50800000000000000
+      internalID: 6721090847527367766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_26
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 270
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f565126f9685a7ea0800000000000000
+      internalID: -5874285551827200417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_27
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 271
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7463354f123159180800000000000000
+      internalID: -9109353634733017529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_28
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 269
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7147b598eeb8e7d90800000000000000
+      internalID: -7098082106066373609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_29
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 269
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b6376fd32a6a7d40800000000000000
+      internalID: 5582891390383634101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_30
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 268
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a73ecc89836395e0800000000000000
+      internalID: -1904068775023593559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_31
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 268
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6305425233bc0bd80800000000000000
+      internalID: -8236860297933729738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_32
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 266
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 961da6d7b1f1996a0800000000000000
+      internalID: -6442083589048053399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_33
+      rect:
+        serializedVersion: 2
+        x: 573
+        y: 267
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0799366b708437bc0800000000000000
+      internalID: -3786603663726503568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_34
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 247
+        width: 30
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb5b68dd6c6ed89e0800000000000000
+      internalID: -1617382949361633861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_35
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 246
+        width: 30
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed6b11e70f711c080800000000000000
+      internalID: -9169021044674939170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_36
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 264
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71ec8f663e05437c0800000000000000
+      internalID: -4092557223757558249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_37
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 244
+        width: 31
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7be11060784fe6920800000000000000
+      internalID: 2985592463751716535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_38
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 263
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28b1abcabc389b610800000000000000
+      internalID: 1637484850325363586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_39
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 241
+        width: 32
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eeb0cdec29b5e0b10800000000000000
+      internalID: 1949596374791883758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_40
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 262
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e1ca68a87c5b1180800000000000000
+      internalID: -9143612945154260506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_41
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 257
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 145fbf48ed043ad80800000000000000
+      internalID: -8240671568699853503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_42
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 253
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aff2800fb54036a30800000000000000
+      internalID: 4207211269809778682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_43
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 249
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3f4059401a8a2990800000000000000
+      internalID: -7409958434330620101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_44
+      rect:
+        serializedVersion: 2
+        x: 553
+        y: 260
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1dcde8bd98151da20800000000000000
+      internalID: 3085336872261442769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_45
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 256
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc64efd3532120c20800000000000000
+      internalID: 3171117107504891599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_46
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 251
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2b041e40080f6ca0800000000000000
+      internalID: -6021585379368105173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_47
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 256
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98fd18667ba98e150800000000000000
+      internalID: 5902137424158515081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_48
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 249
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10727a8d1fb8d9b60800000000000000
+      internalID: 7754508004240074497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_49
+      rect:
+        serializedVersion: 2
+        x: 581
+        y: 247
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b751854b90360b6c0800000000000000
+      internalID: -4129691964967217797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_50
+      rect:
+        serializedVersion: 2
+        x: 585
+        y: 256
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71b419029ff3a23d0800000000000000
+      internalID: -3230699443459110121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_51
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 242
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a139601e8e9f66600800000000000000
+      internalID: 461330790455087898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_52
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 239
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d565e1c0c3c773d0800000000000000
+      internalID: -3208880976824015408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_53
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 247
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb641e7eb9c993b40800000000000000
+      internalID: 5420535819941267132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_54
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 240
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ca6b98396aec3730800000000000000
+      internalID: 3980313908330851017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_55
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 237
+        width: 17
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6b8ae1b01fce7a80800000000000000
+      internalID: -8467102578798589074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_56
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 155
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aaa957834373cdf70800000000000000
+      internalID: 9213299635118250666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_57
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 161
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f186e68af88eb7450800000000000000
+      internalID: 6087715025025132575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_58
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 161
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9469cfd36b1c67380800000000000000
+      internalID: -8973772219020962231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_59
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 154
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee6467b826deea490800000000000000
+      internalID: -7732982502646200594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_60
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 160
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3545620aef08aa900800000000000000
+      internalID: 696510923479077971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_61
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 160
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4ad63351b286cff0800000000000000
+      internalID: -16181850532292019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_62
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 158
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da0e8d302eb864140800000000000000
+      internalID: 4703600663678476461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_63
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 159
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d782dd2b4dc9895a0800000000000000
+      internalID: -6514284423643584387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_64
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 157
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 561bc707c1a8164e0800000000000000
+      internalID: -1990157705570111131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_65
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 157
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f36220356e8eff290800000000000000
+      internalID: -7854303149178083777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_66
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 156
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf039c31707598130800000000000000
+      internalID: 3569479867576168699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_67
+      rect:
+        serializedVersion: 2
+        x: 467
+        y: 156
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91ac1df58ceba55b0800000000000000
+      internalID: -5378777037130315239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_68
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 154
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41b57014cdebab910800000000000000
+      internalID: 1854004049809464084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_69
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 142
+        width: 11
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddd614fa387f52c70800000000000000
+      internalID: 8945828379794435549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_70
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 151
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4065b2fcdd62547c0800000000000000
+      internalID: -4087818352663505404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_71
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 146
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83ead07ee3e822320800000000000000
+      internalID: 2531742341351190072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_72
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 150
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75d2fdfc3a9cf5cf0800000000000000
+      internalID: -261268547959837353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_73
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 141
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1e39186a2f990dc0800000000000000
+      internalID: -3672229016660001252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_74
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 151
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76e099fcf209513d0800000000000000
+      internalID: -3236522222175056281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_75
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 149
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d52b37adc025e8f0800000000000000
+      internalID: -511966914990627372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_76
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 145
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a887afd378c9bdf80800000000000000
+      internalID: -8080693001711880054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_77
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 149
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a10c0942b51bec690800000000000000
+      internalID: -7579926117804359654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_78
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 152
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d56980b72b00fab60800000000000000
+      internalID: 7759421449550992989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_79
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 145
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afb35f2e730ad5500800000000000000
+      internalID: 386641304915098618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_80
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 149
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27def66a932df96a0800000000000000
+      internalID: -6440197797069197966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_81
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 152
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79cfabd06a3b60830800000000000000
+      internalID: 4037111641760529559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_82
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 147
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0114da533579eeb10800000000000000
+      internalID: 2012712467119816976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_83
+      rect:
+        serializedVersion: 2
+        x: 254
+        y: 147
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e71160ca487dd1c0800000000000000
+      internalID: -4477290192085903383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_84
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 150
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a2451908124a8fd0800000000000000
+      internalID: -2338984385466514776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_85
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 148
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7bec106bd4f53170800000000000000
+      internalID: 8157695523099044731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_86
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 151
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe058ac5704d26840800000000000000
+      internalID: 5215964446532849903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_87
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 146
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3d26e2410ff8c730800000000000000
+      internalID: 4019743048310598974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_88
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 149
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c44ac83105630e870800000000000000
+      internalID: 8710021396887807052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_89
+      rect:
+        serializedVersion: 2
+        x: 378
+        y: 147
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fd3408345b51fcf0800000000000000
+      internalID: -220294489489261064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_90
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 148
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51a9bfae3c2728640800000000000000
+      internalID: 5080749515413887509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_91
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 141
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dc73e0b3ce3e4c90800000000000000
+      internalID: -7183735345402118960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_92
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 139
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce6c11b6e5069f070800000000000000
+      internalID: 8140643760088401644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_93
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 140
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f9f96d68bfa01320800000000000000
+      internalID: 2526712597599353332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_94
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 143
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6f87204715a94a60800000000000000
+      internalID: 7658834160599404394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_95
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 143
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 842bfa2cb10982e90800000000000000
+      internalID: -7050226767743700408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_96
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 145
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c38bcfb53ae48bb50800000000000000
+      internalID: 6609118916696127548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_97
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 143
+        width: 15
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ac91ac5c2055c570800000000000000
+      internalID: 8486277224312446112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_98
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 134
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52d5751567b999610800000000000000
+      internalID: 1628503672744271141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_99
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 131
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a73dc6838d565480800000000000000
+      internalID: -8910831993222252639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_100
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 129
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2b7ca3e0387ea470800000000000000
+      internalID: 8407789705720789803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_101
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 137
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3292122e34911d10800000000000000
+      internalID: 2094618296284516922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_102
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 126
+        width: 16
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c890c1690f937860800000000000000
+      internalID: 7526534264909764808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_103
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 135
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4dc6c6c815bd0580800000000000000
+      internalID: -8859225773949137586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_104
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 130
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ab19678798be1970800000000000000
+      internalID: 8727616088841984933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_105
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 125
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 999e1e3efe92ce1d0800000000000000
+      internalID: -3320232714981742183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_106
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 123
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc7a7edb2e45adbd0800000000000000
+      internalID: -2604676101654992945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_107
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 129
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6a0ff17b4312ee50800000000000000
+      internalID: 6837048399057848939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_108
+      rect:
+        serializedVersion: 2
+        x: 471
+        y: 121
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20963dcdb378fe120800000000000000
+      internalID: 2445321813863131394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_109
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 118
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b61a06d9a36c74170800000000000000
+      internalID: 8162710804683071851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_110
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 49
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 572a1925abaf58fb0800000000000000
+      internalID: -4646031762406661515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_111
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 49
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b1e2a4337c2b3440800000000000000
+      internalID: 4916572291520979385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_112
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 48
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 503fcfeca4a232da0800000000000000
+      internalID: -5970882180174515451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gelo-pequeno_113
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 46
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8703149c8a2ceff70800000000000000
+      internalID: 9223023117088141432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

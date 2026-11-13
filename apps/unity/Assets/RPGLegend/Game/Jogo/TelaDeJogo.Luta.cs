@@ -79,6 +79,8 @@ namespace RPGLegend.Game.Jogo
         {
             // O palco da luta fica por cima da sala, por baixo do joystick, do pet e dos botões.
             _palcoDaLuta = new PalcoDaLuta();
+            // a poeira dos golpes dos monstros no chão e o estouro das bolas vão pra sala, por baixo dos corpos
+            _palcoDaLuta.EfeitoNaSala = (nome, x, y) => _sala?.TocarEfeito(nome, x, y);
             _palcoDaLuta.AoMirar += indice => _mirar = indice;
             _palcoDaLuta.Esconder();
             palco.Insert(0, _palcoDaLuta);
@@ -171,6 +173,7 @@ namespace RPGLegend.Game.Jogo
             if (luta == null)
             {
                 _palcoDaLuta.Esconder();
+                EsquecerEfeitosDaLuta();
                 return;
             }
             // A sala para de andar por conta própria: na luta, o herói dela vai onde a arena diz.
@@ -187,8 +190,10 @@ namespace RPGLegend.Game.Jogo
             if (_partida?.Luta == null)
             {
                 _palcoDaLuta.Esconder();
+                EsquecerEfeitosDaLuta();
                 return;
             }
+            EfeitosDaEquipe(_partida.Luta);
             // Na luta a equipe segue o herói pela sala: quem cai some da fila, e o esqueleto novo entra no fim dela.
             _sala?.DefinirSeguidores(_partida.Luta.Estado?.Party);
             _sala?.MoverNaLuta(_partida.Luta.Arena.Heroi);
@@ -477,6 +482,7 @@ namespace RPGLegend.Game.Jogo
                         break;
                     case "aviso":
                         AvisoDaLuta(a.Texto, "aviso-da-luta");
+                        EfeitoDoAviso(a.Texto);
                         break;
                     case "diario":
                         AvisoDaLuta(a.Texto, "diario-da-luta");
@@ -506,6 +512,122 @@ namespace RPGLegend.Game.Jogo
             bool doeu = a.Tom == "dano" || a.Tom == "critico";
             if (a.Onde == "monstro" && doeu) _palcoDaLuta.Apanhou(indice);
             if (a.Onde == "heroi" && doeu) _palcoDaLuta.HeroiApanhou(arena);
+            EfeitoDoNumero(arena, a, indice, doeu);
+        }
+
+        /// <summary>Os monstros que já ganharam o efeito da queda nesta luta (um golpe pode dar dois números).</summary>
+        private readonly HashSet<int> _quedasTocadas = new HashSet<int>();
+        /// <summary>Os esqueletos de pé no quadro anterior da luta; -1 fora dela.</summary>
+        private int _esqueletosNaLuta = -1;
+
+        /// <summary>
+        /// O dano no monstro pelo ícone no começo do número: o poder ("ícone -dano") ou a runa elétrica ("⚡-dano").
+        /// Sem ícone conhecido, é o golpe comum (ou o crítico).
+        /// </summary>
+        private static readonly (string Icone, string Efeito)[] EfeitosDoDano =
+        {
+            ("💥", "poder-fisico"), ("💫", "poder-fisico"), ("🔥", "fogo"), ("❄️", "gelo"), ("🌟", "luz"),
+            ("☠️", "sombra"), ("☣️", "veneno"), ("🎶", "som"), ("🩸", "sangue"), ("⚡", "raio"),
+        };
+
+        /// <summary>Os reforços no herói pelo ícone do aviso do poder ("ícone nome").</summary>
+        private static readonly (string Icone, string Efeito)[] EfeitosDosReforcos =
+        {
+            ("📯", "reforco-forca"), ("🎯", "reforco-precisao"), ("💨", "reforco-esquiva"),
+            ("🔷", "reforco-escudo"), ("🌑", "reforco-critico"), ("🎼", "reforco-grupo"),
+        };
+
+        private static bool Comeca(string texto, string icone) => texto != null && texto.StartsWith(icone, StringComparison.Ordinal);
+
+        /// <summary>
+        /// O efeito na sala de cada número da luta (2026-11-13). No monstro: o golpe (maior no crítico) ou o do
+        /// elemento do poder ou da runa, o atordoado e o lento, a marca da runa de fogo e de gelo, e a queda quando
+        /// ele cai. No herói: o golpe, o escudo do vigor apanhando, a cura (vermelha no roubo de vida) e o desvio.
+        /// </summary>
+        private void EfeitoDoNumero(Arena arena, Acontecimento a, int indice, bool doeu)
+        {
+            if (_sala == null) return;
+            double casa = GameData.RoomWalkTable.TileUnits, meio = GameData.RoomWalkTable.HeroHalf;
+            string texto = a.Texto ?? "";
+            if (a.Onde == "monstro")
+            {
+                var m = arena.Monstros.Find(x => (int)x.Indice == indice);
+                if (m == null) return;
+                bool voando = m.Fase == "investindo" && m.Alvo < 0, caiu = m.Fase == "caido";
+                double mx = voando ? m.X : m.CorpoX, my = voando ? m.Y : m.CorpoY;
+                if (doeu)
+                {
+                    string efeito = a.Tom == "critico" ? "golpe-critico" : "golpe";
+                    foreach (var (icone, nome) in EfeitosDoDano)
+                        if (Comeca(texto, icone)) { efeito = nome; break; }
+                    NoMonstro(efeito, mx, my - casa * 0.1, caiu);
+                    if (Comeca(texto, "💫") && !caiu) NoMonstro("atordoado", mx, my - casa * 0.6, false);
+                    if (caiu && _quedasTocadas.Add(indice)) _sala.TocarEfeito("queda", mx, my);
+                }
+                else if (a.Tom == "erro")
+                {
+                    // os marcadores: atordoado, lento, e a runa de fogo ou de gelo que pegou
+                    if (texto == "💫") NoMonstro("atordoado", mx, my - casa * 0.6, caiu);
+                    else if (texto == "🐌") NoMonstro("lento", mx, my - casa * 0.6, caiu);
+                    else if (Comeca(texto, "🔥")) NoMonstro("fogo-pequeno", mx, my - casa * 0.1, caiu);
+                    else if (Comeca(texto, "❄️")) NoMonstro("gelo-pequeno", mx, my - casa * 0.1, caiu);
+                }
+                return;
+            }
+            if (a.Onde != "heroi") return;
+            var h = arena.Heroi;
+            double pe = h.Y + meio, corpo = pe - casa * 0.5;
+            // o golpe e o escudo no herói vão pro palco: o aviso do golpe (a tinta) é desenhado por cima da sala
+            if (doeu) _palcoDaLuta.TocarEfeito("golpe-no-heroi", h.X, corpo);
+            else if (a.Tom == "escudo") _palcoDaLuta.TocarEfeito("escudo", h.X, corpo);
+            else if (a.Tom == "cura") _sala.TocarEfeito(Comeca(texto, "🩸") || Comeca(texto, "🦇") ? "vampiro" : "cura", h.X, pe);
+            else if (a.Tom == "erro" && texto == "Desviou") _sala.TocarEfeito("desvio", h.X, pe);
+        }
+
+        /// <summary>
+        /// O efeito em cima de um monstro: o corpo dele é desenhado por cima da sala, então o de um de pé vai pro
+        /// palco, na frente dele; o do que caiu vai pra sala (a luta pode acabar com ele e o palco sumir na hora).
+        /// </summary>
+        private void NoMonstro(string efeito, double x, double y, bool caiu)
+        {
+            if (caiu) _sala.TocarEfeito(efeito, x, y);
+            else _palcoDaLuta.TocarEfeito(efeito, x, y);
+        }
+
+        /// <summary>O reforço que o herói acabou de usar, pelo aviso do poder: o brilho dele em volta do herói.</summary>
+        private void EfeitoDoAviso(string texto)
+        {
+            var luta = _partida?.Luta;
+            if (_sala == null || luta == null || string.IsNullOrEmpty(texto)) return;
+            foreach (var (icone, nome) in EfeitosDosReforcos)
+            {
+                if (!Comeca(texto, icone + " ")) continue;
+                var h = luta.Arena.Heroi;
+                double pe = h.Y + GameData.RoomWalkTable.HeroHalf;
+                // a canção sai do meio do corpo; os outros sobem do pé
+                _sala.TocarEfeito(nome, h.X, nome == "reforco-grupo" ? pe - GameData.RoomWalkTable.TileUnits * 0.5 : pe);
+                return;
+            }
+        }
+
+        /// <summary>A cada quadro da luta: o esqueleto que acabou de se erguer sobe do chão ao lado do herói.</summary>
+        private void EfeitosDaEquipe(LutaEmTempoReal luta)
+        {
+            int agora = (int)Invocacao.EsqueletosDePe(luta.Estado?.Party ?? new List<Companion>());
+            if (_esqueletosNaLuta >= 0 && agora > _esqueletosNaLuta && _sala != null)
+            {
+                var h = luta.Arena.Heroi;
+                double casa = GameData.RoomWalkTable.TileUnits;
+                _sala.TocarEfeito("esqueleto", h.X - casa * 0.7, h.Y + GameData.RoomWalkTable.HeroHalf);
+            }
+            _esqueletosNaLuta = agora;
+        }
+
+        /// <summary>Fora da luta: a próxima começa do zero.</summary>
+        private void EsquecerEfeitosDaLuta()
+        {
+            _esqueletosNaLuta = -1;
+            _quedasTocadas.Clear();
         }
 
         private void AvisoDaLuta(string texto, string classe)

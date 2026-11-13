@@ -1,0 +1,1820 @@
+fileFormatVersion: 2
+guid: 7efa0e685ee4d1a47bf2ec54638baacb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7571911973499026902
+    second: reforco-grupo_0
+  - first:
+      213: 7859584731033683138
+    second: reforco-grupo_1
+  - first:
+      213: 3832280368221928820
+    second: reforco-grupo_2
+  - first:
+      213: 462846133225421896
+    second: reforco-grupo_3
+  - first:
+      213: -7228211430904504576
+    second: reforco-grupo_4
+  - first:
+      213: 9189609510603471079
+    second: reforco-grupo_5
+  - first:
+      213: -7809863573442027918
+    second: reforco-grupo_6
+  - first:
+      213: 705470005160213124
+    second: reforco-grupo_7
+  - first:
+      213: 2672115901589533262
+    second: reforco-grupo_8
+  - first:
+      213: 70514492510561907
+    second: reforco-grupo_9
+  - first:
+      213: -628261173280961328
+    second: reforco-grupo_10
+  - first:
+      213: -783054698865155742
+    second: reforco-grupo_11
+  - first:
+      213: -8686072605198755358
+    second: reforco-grupo_12
+  - first:
+      213: 1920098592731488199
+    second: reforco-grupo_13
+  - first:
+      213: 5244918396808869387
+    second: reforco-grupo_14
+  - first:
+      213: -6764993836988464560
+    second: reforco-grupo_15
+  - first:
+      213: 533971796481482150
+    second: reforco-grupo_16
+  - first:
+      213: 4529280988330185106
+    second: reforco-grupo_17
+  - first:
+      213: 1658540928779337009
+    second: reforco-grupo_18
+  - first:
+      213: 2434718349786644093
+    second: reforco-grupo_19
+  - first:
+      213: 1679779013523431189
+    second: reforco-grupo_20
+  - first:
+      213: -8034763403616964652
+    second: reforco-grupo_21
+  - first:
+      213: -2751727343157297375
+    second: reforco-grupo_22
+  - first:
+      213: 5740550509667215437
+    second: reforco-grupo_23
+  - first:
+      213: -2987467022916508736
+    second: reforco-grupo_24
+  - first:
+      213: -3911415864361012571
+    second: reforco-grupo_25
+  - first:
+      213: -533014594062297243
+    second: reforco-grupo_26
+  - first:
+      213: 5169526692338321144
+    second: reforco-grupo_27
+  - first:
+      213: 648957956049109940
+    second: reforco-grupo_28
+  - first:
+      213: 9214279828689746710
+    second: reforco-grupo_29
+  - first:
+      213: -5013984350820237854
+    second: reforco-grupo_30
+  - first:
+      213: -4500620607845666249
+    second: reforco-grupo_31
+  - first:
+      213: 6958371367426605494
+    second: reforco-grupo_32
+  - first:
+      213: -4080477650999677584
+    second: reforco-grupo_33
+  - first:
+      213: -2921932186040961163
+    second: reforco-grupo_34
+  - first:
+      213: 4268898023980112009
+    second: reforco-grupo_35
+  - first:
+      213: 5812429494461933074
+    second: reforco-grupo_36
+  - first:
+      213: -7144297225703887197
+    second: reforco-grupo_37
+  - first:
+      213: 6479164903594393374
+    second: reforco-grupo_38
+  - first:
+      213: 4881810012817734802
+    second: reforco-grupo_39
+  - first:
+      213: -6573390710754772615
+    second: reforco-grupo_40
+  - first:
+      213: 4672676514124388098
+    second: reforco-grupo_41
+  - first:
+      213: -602503517150978329
+    second: reforco-grupo_42
+  - first:
+      213: 8720090611711828485
+    second: reforco-grupo_43
+  - first:
+      213: -2307256653980754986
+    second: reforco-grupo_44
+  - first:
+      213: 20761548792512621
+    second: reforco-grupo_45
+  - first:
+      213: -8394268188082174816
+    second: reforco-grupo_46
+  - first:
+      213: -858684137927450824
+    second: reforco-grupo_47
+  - first:
+      213: 6785993734665266572
+    second: reforco-grupo_48
+  - first:
+      213: 1075229320146079086
+    second: reforco-grupo_49
+  - first:
+      213: -546231596747525840
+    second: reforco-grupo_50
+  - first:
+      213: -7032201520684374953
+    second: reforco-grupo_51
+  - first:
+      213: 4898213787015971339
+    second: reforco-grupo_52
+  - first:
+      213: -3386314652356132568
+    second: reforco-grupo_53
+  - first:
+      213: 8989887966361995595
+    second: reforco-grupo_54
+  - first:
+      213: -3483041218593648557
+    second: reforco-grupo_55
+  - first:
+      213: 136423331758444945
+    second: reforco-grupo_56
+  - first:
+      213: -5670562070821543118
+    second: reforco-grupo_57
+  - first:
+      213: 1354884473656205080
+    second: reforco-grupo_58
+  - first:
+      213: 2032575429745104050
+    second: reforco-grupo_59
+  - first:
+      213: -8240361904861814287
+    second: reforco-grupo_60
+  - first:
+      213: 2806397897736281683
+    second: reforco-grupo_61
+  - first:
+      213: -3835250724450714396
+    second: reforco-grupo_62
+  - first:
+      213: -4912261211317406474
+    second: reforco-grupo_63
+  - first:
+      213: -7112788007778766795
+    second: reforco-grupo_64
+  - first:
+      213: -1688688721024148932
+    second: reforco-grupo_65
+  - first:
+      213: -2616815440277068624
+    second: reforco-grupo_66
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: reforco-grupo_0
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 413
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ddbfea72d5d41960800000000000000
+      internalID: 7571911973499026902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_1
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 411
+        width: 36
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c4c857cbaad21d60800000000000000
+      internalID: 7859584731033683138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_2
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 411
+        width: 44
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47d329bc0befe2530800000000000000
+      internalID: 3832280368221928820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_3
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 413
+        width: 10
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84c709c1b1c5c6600800000000000000
+      internalID: 462846133225421896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_4
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 410
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00fd483100c30bb90800000000000000
+      internalID: -7228211430904504576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_5
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 413
+        width: 10
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e83218492d088f70800000000000000
+      internalID: 9189609510603471079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_6
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 412
+        width: 10
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27e99b8557acd9390800000000000000
+      internalID: -7809863573442027918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_7
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 410
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48a74416b355ac900800000000000000
+      internalID: 705470005160213124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_8
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 412
+        width: 10
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e42bae84143451520800000000000000
+      internalID: 2672115901589533262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_9
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 315
+        width: 9
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 376eb9dae848af000800000000000000
+      internalID: 70514492510561907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_10
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 314
+        width: 40
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dc0b64aac7f747f0800000000000000
+      internalID: -628261173280961328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_11
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 315
+        width: 9
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 261217276e70225f0800000000000000
+      internalID: -783054698865155742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_12
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 315
+        width: 9
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e950e18cfed47780800000000000000
+      internalID: -8686072605198755358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_13
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 314
+        width: 52
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cfdc793f7f85aa10800000000000000
+      internalID: 1920098592731488199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_14
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 315
+        width: 14
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0634bd3e71b9c840800000000000000
+      internalID: 5244918396808869387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_15
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 314
+        width: 48
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 052889e92f9ed12a0800000000000000
+      internalID: -6764993836988464560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_16
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 315
+        width: 12
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ad1b51158c096700800000000000000
+      internalID: 533971796481482150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_17
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 314
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 291d95dcf0d3bde30800000000000000
+      internalID: 4529280988330185106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_18
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 315
+        width: 14
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13db659ff22540710800000000000000
+      internalID: 1658540928779337009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_19
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 315
+        width: 11
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7e782f707bd9c120800000000000000
+      internalID: 2434718349786644093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_20
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 314
+        width: 51
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51f583aec16cf4710800000000000000
+      internalID: 1679779013523431189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_21
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 218
+        width: 36
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4df2a112149ce7090800000000000000
+      internalID: -8034763403616964652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_22
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 252
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12f31688f86efc9d0800000000000000
+      internalID: -2751727343157297375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_23
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 255
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d48e6e716488aaf40800000000000000
+      internalID: 5740550509667215437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_24
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 257
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c32ed822926a86d0800000000000000
+      internalID: -2987467022916508736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_25
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 258
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a23fe3befbd7b9c0800000000000000
+      internalID: -3911415864361012571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_26
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 219
+        width: 9
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56751dcfc0a5a98f0800000000000000
+      internalID: -533014594062297243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_27
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 221
+        width: 9
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f6c9b92329ddb740800000000000000
+      internalID: 5169526692338321144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_28
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 219
+        width: 14
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b3887c92df810900800000000000000
+      internalID: 648957956049109940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_29
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 219
+        width: 13
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61b79125fa2bfdf70800000000000000
+      internalID: 9214279828689746710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_30
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 218
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2edfdf35ccfba6ab0800000000000000
+      internalID: -5013984350820237854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_31
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 219
+        width: 13
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7327e8807659a81c0800000000000000
+      internalID: -4500620607845666249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_32
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 219
+        width: 11
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b146b244e9119060800000000000000
+      internalID: 6958371367426605494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_33
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 218
+        width: 37
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07d6e3a123b3f57c0800000000000000
+      internalID: -4080477650999677584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_34
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 219
+        width: 12
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5777f3968263377d0800000000000000
+      internalID: -2921932186040961163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_35
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 219
+        width: 10
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98893bd922c2e3b30800000000000000
+      internalID: 4268898023980112009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_36
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 218
+        width: 52
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 216286364d5e9a050800000000000000
+      internalID: 5812429494461933074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_37
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 219
+        width: 10
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ae6c1c768b5adc90800000000000000
+      internalID: -7144297225703887197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_38
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 219
+        width: 48
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1ffbe7d62e9ae950800000000000000
+      internalID: 6479164903594393374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_39
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 219
+        width: 10
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29c32fa775cafb340800000000000000
+      internalID: 4881810012817734802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_40
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 163
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 979fb93d9ff96c4a0800000000000000
+      internalID: -6573390710754772615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_41
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 164
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 207d1be588ea8d040800000000000000
+      internalID: 4672676514124388098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_42
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 155
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7eeda4c4e3a73a7f0800000000000000
+      internalID: -602503517150978329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_43
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 123
+        width: 9
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5026d48d53cf30970800000000000000
+      internalID: 8720090611711828485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_44
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 143
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6db12dd2c4afaffd0800000000000000
+      internalID: -2307256653980754986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_45
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 123
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d60c3c4c482c94000800000000000000
+      internalID: 20761548792512621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_46
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 123
+        width: 9
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a40004ce81918b80800000000000000
+      internalID: -8394268188082174816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_47
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 123
+        width: 14
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83f529873575514f0800000000000000
+      internalID: -858684137927450824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_48
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 125
+        width: 35
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c85efb21951bc2e50800000000000000
+      internalID: 6785993734665266572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_49
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 123
+        width: 9
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6d446fae5bfbee00800000000000000
+      internalID: 1075229320146079086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_50
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 149
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 031f4ceb1456b68f0800000000000000
+      internalID: -546231596747525840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_51
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 152
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75465a2a9f9986e90800000000000000
+      internalID: -7032201520684374953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_52
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 128
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b020209cc73f9f340800000000000000
+      internalID: 4898213787015971339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_53
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 127
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 821cc90e3c46101d0800000000000000
+      internalID: -3386314652356132568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_54
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 134
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b49c095997f72cc70800000000000000
+      internalID: 8989887966361995595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_55
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 130
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3509ea33770c9afc0800000000000000
+      internalID: -3483041218593648557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_56
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 127
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19199842c4ca4e100800000000000000
+      internalID: 136423331758444945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_57
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 131
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 233e0eb27dd1e41b0800000000000000
+      internalID: -5670562070821543118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_58
+      rect:
+        serializedVersion: 2
+        x: 457
+        y: 128
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81f58f310448dc210800000000000000
+      internalID: 1354884473656205080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_59
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 62
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b4d4259598253c10800000000000000
+      internalID: 2032575429745104050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_60
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 65
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f1ec00c18a54ad80800000000000000
+      internalID: -8240361904861814287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_61
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 69
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35e59f0e40452f620800000000000000
+      internalID: 2806397897736281683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_62
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 33
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ec3e8049c376cac0800000000000000
+      internalID: -3835250724450714396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_63
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 40
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f4fe7f547424dbb0800000000000000
+      internalID: -4912261211317406474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_64
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 43
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53030b9fdfc4a4d90800000000000000
+      internalID: -7112788007778766795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_65
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 38
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3a95272e829098e0800000000000000
+      internalID: -1688688721024148932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: reforco-grupo_66
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 41
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b42787b8343fabd0800000000000000
+      internalID: -2616815440277068624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

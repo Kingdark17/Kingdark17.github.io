@@ -1,0 +1,1470 @@
+fileFormatVersion: 2
+guid: c8c55dd6502196c4a92763f75486a436
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5821526857512406599
+    second: poder-fisico_0
+  - first:
+      213: -8272219737670201852
+    second: poder-fisico_1
+  - first:
+      213: 3571364669253368046
+    second: poder-fisico_2
+  - first:
+      213: -5524170183369462810
+    second: poder-fisico_3
+  - first:
+      213: -8416601481549842301
+    second: poder-fisico_4
+  - first:
+      213: 5685091585892621929
+    second: poder-fisico_5
+  - first:
+      213: 7532322998356221336
+    second: poder-fisico_6
+  - first:
+      213: 7413543975759322178
+    second: poder-fisico_7
+  - first:
+      213: -8079190983976705672
+    second: poder-fisico_8
+  - first:
+      213: 942505303884504990
+    second: poder-fisico_9
+  - first:
+      213: -5454490841198308510
+    second: poder-fisico_10
+  - first:
+      213: -5558710183607769393
+    second: poder-fisico_11
+  - first:
+      213: 6763766859097179607
+    second: poder-fisico_12
+  - first:
+      213: 257646398607412612
+    second: poder-fisico_13
+  - first:
+      213: -7424103715044083456
+    second: poder-fisico_14
+  - first:
+      213: 4964124995304340583
+    second: poder-fisico_15
+  - first:
+      213: -7961420444273351237
+    second: poder-fisico_16
+  - first:
+      213: -1803375492388790807
+    second: poder-fisico_17
+  - first:
+      213: -4595414500746125152
+    second: poder-fisico_18
+  - first:
+      213: 6849117869091016290
+    second: poder-fisico_19
+  - first:
+      213: -5376464062161383367
+    second: poder-fisico_20
+  - first:
+      213: 5645847609093345691
+    second: poder-fisico_21
+  - first:
+      213: 1782325547159408314
+    second: poder-fisico_22
+  - first:
+      213: 1396843979926070208
+    second: poder-fisico_23
+  - first:
+      213: -7325970292727199786
+    second: poder-fisico_24
+  - first:
+      213: -5166489374893538088
+    second: poder-fisico_25
+  - first:
+      213: -778160075159335994
+    second: poder-fisico_26
+  - first:
+      213: 4159384696093039483
+    second: poder-fisico_27
+  - first:
+      213: 951626891334501865
+    second: poder-fisico_28
+  - first:
+      213: -4113798640379698712
+    second: poder-fisico_29
+  - first:
+      213: -4822154406256781768
+    second: poder-fisico_30
+  - first:
+      213: -3196270026457204995
+    second: poder-fisico_31
+  - first:
+      213: -8023948957741850126
+    second: poder-fisico_32
+  - first:
+      213: 3581935333277923897
+    second: poder-fisico_33
+  - first:
+      213: -4967237862348425681
+    second: poder-fisico_34
+  - first:
+      213: -7533099194165546547
+    second: poder-fisico_35
+  - first:
+      213: 1429379120664212409
+    second: poder-fisico_36
+  - first:
+      213: -6895503933877657350
+    second: poder-fisico_37
+  - first:
+      213: 4524579763212696483
+    second: poder-fisico_38
+  - first:
+      213: 1811817462218411593
+    second: poder-fisico_39
+  - first:
+      213: -7285976216021631831
+    second: poder-fisico_40
+  - first:
+      213: 1093657262376429002
+    second: poder-fisico_41
+  - first:
+      213: -4846364311971641951
+    second: poder-fisico_42
+  - first:
+      213: 8266976889731439241
+    second: poder-fisico_43
+  - first:
+      213: 6921572764293164120
+    second: poder-fisico_44
+  - first:
+      213: 14510289830114299
+    second: poder-fisico_45
+  - first:
+      213: -5859933145472469088
+    second: poder-fisico_46
+  - first:
+      213: -937677491667247909
+    second: poder-fisico_47
+  - first:
+      213: -6054753643739240213
+    second: poder-fisico_48
+  - first:
+      213: -4174352027372970341
+    second: poder-fisico_49
+  - first:
+      213: 5446065642484350105
+    second: poder-fisico_50
+  - first:
+      213: 1478233276963680329
+    second: poder-fisico_51
+  - first:
+      213: 161581469159932701
+    second: poder-fisico_52
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: poder-fisico_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 265
+        width: 56
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74e4c6845d73ac050800000000000000
+      internalID: 5821526857512406599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_1
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 251
+        width: 82
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40e41380afb233d80800000000000000
+      internalID: -8272219737670201852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_2
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 313
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee83a3aae39009130800000000000000
+      internalID: 3571364669253368046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_3
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 323
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6eb657d8c743653b0800000000000000
+      internalID: -5524170183369462810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_4
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 269
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 388f13cab89323b80800000000000000
+      internalID: -8416601481549842301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_5
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 305
+        width: 18
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96e11bc2da085ee40800000000000000
+      internalID: 5685091585892621929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_6
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 272
+        width: 17
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89d178aebdf288860800000000000000
+      internalID: 7532322998356221336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_7
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 264
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24c1fd1a7f232e660800000000000000
+      internalID: 7413543975759322178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_8
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 244
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 871a78ffa92f0ef80800000000000000
+      internalID: -8079190983976705672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_9
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 246
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9f15fc8493741d00800000000000000
+      internalID: 942505303884504990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_10
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 251
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 263d0c3aa71cd44b0800000000000000
+      internalID: -5454490841198308510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_11
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 233
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc666b01a8e7bd2b0800000000000000
+      internalID: -5558710183607769393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_12
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 234
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d50c045f1abddd50800000000000000
+      internalID: 6763766859097179607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_13
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 232
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48d47a2d808539300800000000000000
+      internalID: 257646398607412612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_14
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 237
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 009b329710948f890800000000000000
+      internalID: -7424103715044083456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_15
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 188
+        width: 50
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76cb0c5d16d14e440800000000000000
+      internalID: 4964124995304340583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_16
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 223
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb5ed8f894a538190800000000000000
+      internalID: -7961420444273351237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_17
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 161
+        width: 39
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ed558b5b8f19f6e0800000000000000
+      internalID: -1803375492388790807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_18
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 221
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a0295febdec930c0800000000000000
+      internalID: -4595414500746125152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_19
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 220
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26e43fbe964fc0f50800000000000000
+      internalID: 6849117869091016290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_20
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 223
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9309733db66f265b0800000000000000
+      internalID: -5376464062161383367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_21
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 224
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b915ffbcc741a5e40800000000000000
+      internalID: 5645847609093345691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_22
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 222
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abe4a8854a71cb810800000000000000
+      internalID: 1782325547159408314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_23
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 209
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c3e22ee236926310800000000000000
+      internalID: 1396843979926070208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_24
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 215
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d74eea55dce45a90800000000000000
+      internalID: -7325970292727199786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_25
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 209
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d404a96941fc48b0800000000000000
+      internalID: -5166489374893538088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_26
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 200
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cb8cb5d88b6335f0800000000000000
+      internalID: -778160075159335994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_27
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 215
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7b52def75a19b930800000000000000
+      internalID: 4159384696093039483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_28
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 204
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e5c3b0ad9bd43d00800000000000000
+      internalID: 951626891334501865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_29
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 202
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e1eea2bee9d8e6c0800000000000000
+      internalID: -4113798640379698712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_30
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 206
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 836dafacd14441db0800000000000000
+      internalID: -4822154406256781768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_31
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 202
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df63ac2785194a3d0800000000000000
+      internalID: -3196270026457204995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_32
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 203
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f16ee58fe435a090800000000000000
+      internalID: -8023948957741850126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_33
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 200
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93a737c253795b130800000000000000
+      internalID: 3581935333277923897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_34
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 205
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f26f9d35b73d01bb0800000000000000
+      internalID: -4967237862348425681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_35
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 108
+        width: 26
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc13bf9e13e057790800000000000000
+      internalID: -7533099194165546547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_36
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 201
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b3fc80bcbc26d310800000000000000
+      internalID: 1429379120664212409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_37
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 188
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af0e9e1c4bf3e40a0800000000000000
+      internalID: -6895503933877657350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_38
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 180
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3abb63882598ace30800000000000000
+      internalID: 4524579763212696483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_39
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 188
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94ec069e16ed42910800000000000000
+      internalID: 1811817462218411593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_40
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 180
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9acf51afb3303ea90800000000000000
+      internalID: -7285976216021631831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_41
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 167
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac529f55c737d2f00800000000000000
+      internalID: 1093657262376429002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_42
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 141
+        width: 14
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a5ccccd5514ebcb0800000000000000
+      internalID: -4846364311971641951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_43
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 139
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98a5ece4ea33ab270800000000000000
+      internalID: 8266976889731439241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_44
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 111
+        width: 37
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85c66bec1cd5e0060800000000000000
+      internalID: 6921572764293164120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_45
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 133
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf379ee180d833000800000000000000
+      internalID: 14510289830114299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_46
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 124
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a77398f9d55daea0800000000000000
+      internalID: -5859933145472469088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_47
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 115
+        width: 21
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdc5b431a43bcf2f0800000000000000
+      internalID: -937677491667247909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_48
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 29
+        width: 11
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be8ab66f3a139fba0800000000000000
+      internalID: -6054753643739240213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_49
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 119
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9e9001a2f8b116c0800000000000000
+      internalID: -4174352027372970341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_50
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 113
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99c3dbbe8df449b40800000000000000
+      internalID: 5446065642484350105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_51
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 113
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 940f498555db38410800000000000000
+      internalID: 1478233276963680329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poder-fisico_52
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 117
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1340977d7d0e3200800000000000000
+      internalID: 161581469159932701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -41,7 +41,13 @@ namespace RPGLegend.Game.Jogo
         private const float PlacasNoMinimo = 170f;
         private const float PlacasNoMaximo = 260f;
 
-        private readonly VisualElement _placas, _figuras, _aliados;
+        private readonly VisualElement _placas, _figuras, _aliados, _efeitos;
+
+        /// <summary>
+        /// Os efeitos que vão no chão da sala de verdade (a poeira do golpe do monstro, o estouro da bola, a onda do
+        /// Rugido), em unidades da sala: quem monta o palco liga na cena.
+        /// </summary>
+        public Action<string, double, double> EfeitoNaSala;
         private readonly TintaDaSala _tinta;
         private readonly List<Lutador> _lutadores = new List<Lutador>();
         private readonly List<Aliado> _listaDeAliados = new List<Aliado>();
@@ -81,11 +87,19 @@ namespace RPGLegend.Game.Jogo
 
             // Sem cenário pintado: por trás do palco está a sala de verdade, que a cena enquadra em AreaDaSala. Os
             // golpes se desenham no chão dela, por baixo dos monstros.
-            _tinta = new TintaDaSala();
+            _tinta = new TintaDaSala { AoGolpe = (nome, x, y) => EfeitoNaSala?.Invoke(nome, x, y) };
             Add(_tinta);
             _figuras = new VisualElement { pickingMode = PickingMode.Ignore };
             _figuras.AddToClassList("figuras-da-luta");
             Add(_figuras);
+            // Os efeitos em cima dos monstros (o golpe que acerta um de pé), por cima dos corpos.
+            _efeitos = new VisualElement { pickingMode = PickingMode.Ignore };
+            _efeitos.style.position = Position.Absolute;
+            _efeitos.style.left = 0;
+            _efeitos.style.top = 0;
+            _efeitos.style.right = 0;
+            _efeitos.style.bottom = 0;
+            Add(_efeitos);
 
             _placas = new VisualElement { pickingMode = PickingMode.Ignore };
             _placas.AddToClassList("placas-da-luta");
@@ -155,6 +169,60 @@ namespace RPGLegend.Game.Jogo
             MostrarGrupo(arena, instancias);
             MostrarAliados(arena, (luta.Estado as EstadoNaMasmorra)?.Party ?? new List<Companion>());
             _tinta.Mostrar(arena, instancias, _colunas);
+            AnimarEfeitos();
+        }
+
+        // ---------- os efeitos em cima dos monstros ----------
+
+        private sealed class EfeitoNoPalco
+        {
+            public VisualElement Desenho;
+            public Efeitos.Folha Folha;
+            public float Desde;
+        }
+
+        private readonly List<EfeitoNoPalco> _tocando = new List<EfeitoNoPalco>();
+
+        /// <summary>
+        /// Toca um efeito por cima dos monstros, com o apoio dele em (<paramref name="x"/>, <paramref name="y"/>) em
+        /// unidades da sala, na escala da arte (a casa da sala tem a altura do mini boneco). Os da sala de verdade
+        /// (o herói, a cura, a queda) vão pela <see cref="SalaEmCena"/>; aqui fica o que tem de ficar na frente do
+        /// corpo de um monstro, que é desenhado por cima da sala.
+        /// </summary>
+        public void TocarEfeito(string nome, double x, double y)
+        {
+            var folha = Efeitos.Pegar(nome);
+            if (folha == null || folha.Quadros.Length == 0) return;
+            var area = AreaDaSala;
+            float casa = area.width / (float)_colunas, unidade = casa / (float)RoomWalk.TileUnits;
+            float k = casa / Paperdoll.AlturaDoMini;
+            var d = folha.Dados;
+            var desenho = new VisualElement { pickingMode = PickingMode.Ignore };
+            desenho.style.position = Position.Absolute;
+            desenho.style.width = d.largura * k;
+            desenho.style.height = d.altura * k;
+            desenho.style.left = area.x + (float)x * unidade - d.origemX * k;
+            desenho.style.top = area.y + (float)y * unidade - d.origemY * k;
+            desenho.style.backgroundImage = new StyleBackground(folha.Quadros[0]);
+            _efeitos.Add(desenho);
+            _tocando.Add(new EfeitoNoPalco { Desenho = desenho, Folha = folha, Desde = Time.unscaledTime });
+        }
+
+        private void AnimarEfeitos()
+        {
+            float agora = Time.unscaledTime;
+            for (int i = _tocando.Count - 1; i >= 0; i--)
+            {
+                var e = _tocando[i];
+                int quadro = (int)((agora - e.Desde) * e.Folha.Dados.fps);
+                if (quadro >= e.Folha.Quadros.Length)
+                {
+                    e.Desenho.RemoveFromHierarchy();
+                    _tocando.RemoveAt(i);
+                    continue;
+                }
+                e.Desenho.style.backgroundImage = new StyleBackground(e.Folha.Quadros[quadro]);
+            }
         }
 
         public void Esconder()
@@ -163,6 +231,8 @@ namespace RPGLegend.Game.Jogo
             _visivel = false;
             style.display = DisplayStyle.None;
             _tinta.Esquecer();
+            foreach (var e in _tocando) e.Desenho.RemoveFromHierarchy();
+            _tocando.Clear();
         }
 
         private void MostrarGrupo(Arena arena, List<MonsterInstance> instancias)
@@ -460,6 +530,11 @@ namespace RPGLegend.Game.Jogo
             private readonly List<string> _fasesAntes = new List<string>();
             private readonly List<string> _poderesAntes = new List<string>();
             private readonly List<(float x, float y, float raio, float desde)> _impactos = new List<(float, float, float, float)>();
+            /// <summary>As bolas do quadro anterior (de quem, onde): a que sumiu estourou ali.</summary>
+            private readonly List<(double indice, double x, double y)> _tirosAntes = new List<(double, double, double)>();
+
+            /// <summary>O fim de um golpe de monstro (o efeito, x, y em unidades da sala): a poeira, a onda, o estouro.</summary>
+            public Action<string, double, double> AoGolpe;
 
             public TintaDaSala()
             {
@@ -479,13 +554,28 @@ namespace RPGLegend.Game.Jogo
                     {
                         // O poder já saiu do monstro quando o golpe caiu: o estalo usa o do aviso.
                         var jeito = Arenas.JeitoDoGolpe(Monsters.View(instancias[i]), i < _poderesAntes.Count ? _poderesAntes[i] : null);
-                        if (jeito.Golpe == "perto") _impactos.Add(((float)m.X, (float)m.Y, (float)jeito.Tamanho, Time.unscaledTime));
+                        string poder = i < _poderesAntes.Count ? _poderesAntes[i] : null;
+                        if (jeito.Golpe == "perto")
+                        {
+                            _impactos.Add(((float)m.X, (float)m.Y, (float)jeito.Tamanho, Time.unscaledTime));
+                            // o golpe cai no chão: a poeira no pé de onde o herói estava (a do Devastador, maior)
+                            AoGolpe?.Invoke(poder == "devastador" ? "poeira-grande" : "poeira", m.X, m.Y + RoomWalk.HeroHalf);
+                        }
+                        if (poder == "rugido") AoGolpe?.Invoke("onda", m.CorpoX, m.CorpoY + RoomWalk.TileUnits * 0.5);
                     }
+                    // a investida acabou (na parede ou no herói): a poeira no pé de onde o monstro parou
+                    if (antes == "investindo" && m.Fase != "investindo" && m.Fase != "caido")
+                        AoGolpe?.Invoke("poeira", m.CorpoX, m.CorpoY + RoomWalk.TileUnits * 0.5);
                     if (i < _fasesAntes.Count) _fasesAntes[i] = m.Fase;
                     else _fasesAntes.Add(m.Fase);
                     if (i < _poderesAntes.Count) _poderesAntes[i] = m.Poder;
                     else _poderesAntes.Add(m.Poder);
                 }
+                // a bola que sumiu desde o quadro anterior estourou (no herói ou na parede)
+                foreach (var tiroAntes in _tirosAntes)
+                    if (!arena.Tiros.Exists(t => t.Indice == tiroAntes.indice)) AoGolpe?.Invoke("estouro", tiroAntes.x, tiroAntes.y);
+                _tirosAntes.Clear();
+                foreach (var t in arena.Tiros) _tirosAntes.Add((t.Indice, t.X, t.Y));
                 _impactos.RemoveAll(x => Time.unscaledTime - x.desde > TempoDoImpacto);
                 _arena = arena;
                 _instancias = instancias;
@@ -501,6 +591,7 @@ namespace RPGLegend.Game.Jogo
                 _fasesAntes.Clear();
                 _poderesAntes.Clear();
                 _impactos.Clear();
+                _tirosAntes.Clear();
                 _arena = null;
             }
 

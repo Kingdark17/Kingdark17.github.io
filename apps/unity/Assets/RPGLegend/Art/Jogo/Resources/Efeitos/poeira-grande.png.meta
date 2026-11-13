@@ -1,0 +1,1720 @@
+fileFormatVersion: 2
+guid: 27fd3d3c6e2075048b22255f777c3337
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5456956176203363044
+    second: poeira-grande_0
+  - first:
+      213: 1189781095803763512
+    second: poeira-grande_1
+  - first:
+      213: 3466746839937010716
+    second: poeira-grande_2
+  - first:
+      213: 4510028937285891022
+    second: poeira-grande_3
+  - first:
+      213: -8887490006921698651
+    second: poeira-grande_4
+  - first:
+      213: -8932402938141465226
+    second: poeira-grande_5
+  - first:
+      213: -8700467311544986028
+    second: poeira-grande_6
+  - first:
+      213: -662927415476334475
+    second: poeira-grande_7
+  - first:
+      213: 4739444060341637578
+    second: poeira-grande_8
+  - first:
+      213: 4805112973035612062
+    second: poeira-grande_9
+  - first:
+      213: 4484026030537060100
+    second: poeira-grande_10
+  - first:
+      213: -8571640257016002055
+    second: poeira-grande_11
+  - first:
+      213: -3099387214958978997
+    second: poeira-grande_12
+  - first:
+      213: 2284370880074600566
+    second: poeira-grande_13
+  - first:
+      213: 4745932578387227334
+    second: poeira-grande_14
+  - first:
+      213: 8616462814810875501
+    second: poeira-grande_15
+  - first:
+      213: -967015311113654873
+    second: poeira-grande_16
+  - first:
+      213: -3368793196272505357
+    second: poeira-grande_17
+  - first:
+      213: -1663443810579312560
+    second: poeira-grande_18
+  - first:
+      213: 7610126224378202542
+    second: poeira-grande_19
+  - first:
+      213: -6085544959759404884
+    second: poeira-grande_20
+  - first:
+      213: 1856816997050419774
+    second: poeira-grande_21
+  - first:
+      213: 4137361038436462891
+    second: poeira-grande_22
+  - first:
+      213: 8043743978710954981
+    second: poeira-grande_23
+  - first:
+      213: -6131864943520198441
+    second: poeira-grande_24
+  - first:
+      213: -2034652417406616770
+    second: poeira-grande_25
+  - first:
+      213: -7484375504510415097
+    second: poeira-grande_26
+  - first:
+      213: -4468223460412408509
+    second: poeira-grande_27
+  - first:
+      213: -5204782361391788243
+    second: poeira-grande_28
+  - first:
+      213: 2122901939964915170
+    second: poeira-grande_29
+  - first:
+      213: -3194309564015946110
+    second: poeira-grande_30
+  - first:
+      213: 8547665747331594756
+    second: poeira-grande_31
+  - first:
+      213: 984676856968570999
+    second: poeira-grande_32
+  - first:
+      213: -8246653722893265661
+    second: poeira-grande_33
+  - first:
+      213: -4907220858662916317
+    second: poeira-grande_34
+  - first:
+      213: 7516673771337781716
+    second: poeira-grande_35
+  - first:
+      213: -7298672928156430317
+    second: poeira-grande_36
+  - first:
+      213: 8955163478995208938
+    second: poeira-grande_37
+  - first:
+      213: -7034221126220870197
+    second: poeira-grande_38
+  - first:
+      213: 1200058526544682592
+    second: poeira-grande_39
+  - first:
+      213: 7903648360165998845
+    second: poeira-grande_40
+  - first:
+      213: 3651176271366953456
+    second: poeira-grande_41
+  - first:
+      213: 6186167657859287276
+    second: poeira-grande_42
+  - first:
+      213: 2348565885213469865
+    second: poeira-grande_43
+  - first:
+      213: 8056698142404563270
+    second: poeira-grande_44
+  - first:
+      213: 5144452917573127362
+    second: poeira-grande_45
+  - first:
+      213: 8230103308133547429
+    second: poeira-grande_46
+  - first:
+      213: 8944475492274857856
+    second: poeira-grande_47
+  - first:
+      213: 7506104413534538913
+    second: poeira-grande_48
+  - first:
+      213: 2988939119924715760
+    second: poeira-grande_49
+  - first:
+      213: -38359721367556923
+    second: poeira-grande_50
+  - first:
+      213: -8227095822660403867
+    second: poeira-grande_51
+  - first:
+      213: -1488116459968961067
+    second: poeira-grande_52
+  - first:
+      213: -4600787838061627677
+    second: poeira-grande_53
+  - first:
+      213: -8297962211601328276
+    second: poeira-grande_54
+  - first:
+      213: -8870424106340024377
+    second: poeira-grande_55
+  - first:
+      213: 272057891482543375
+    second: poeira-grande_56
+  - first:
+      213: -3385133350117037843
+    second: poeira-grande_57
+  - first:
+      213: -3602209063637530692
+    second: poeira-grande_58
+  - first:
+      213: 5804831560016109495
+    second: poeira-grande_59
+  - first:
+      213: -799032209409968103
+    second: poeira-grande_60
+  - first:
+      213: -8665685954800307335
+    second: poeira-grande_61
+  - first:
+      213: 4515644499513128470
+    second: poeira-grande_62
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: poeira-grande_0
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 299
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1d468a154ff444b0800000000000000
+      internalID: -5456956176203363044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_1
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 298
+        width: 25
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83bbbd75a93f28010800000000000000
+      internalID: 1189781095803763512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_2
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 296
+        width: 32
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1c47a022eb5c1030800000000000000
+      internalID: 3466746839937010716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_3
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 222
+        width: 38
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec378ad5c67d69e30800000000000000
+      internalID: 4510028937285891022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_4
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 221
+        width: 43
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a229983dea49a480800000000000000
+      internalID: -8887490006921698651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_5
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 221
+        width: 46
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6752c698adab90480800000000000000
+      internalID: -8932402938141465226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_6
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 245
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4569673c31bb14780800000000000000
+      internalID: -8700467311544986028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_7
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 220
+        width: 50
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5705aa8270fccc6f0800000000000000
+      internalID: -662927415476334475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_8
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 246
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac19f712343e5c140800000000000000
+      internalID: 4739444060341637578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_9
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 148
+        width: 53
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e97a8675ac03fa240800000000000000
+      internalID: 4805112973035612062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_10
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 174
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40f24c9dae57a3e30800000000000000
+      internalID: 4484026030537060100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_11
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 147
+        width: 23
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f98f1ac99a6b0980800000000000000
+      internalID: -8571640257016002055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_12
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 173
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b489bfecfb3ccf4d0800000000000000
+      internalID: -3099387214958978997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_13
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 150
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 670d71a5637b3bf10800000000000000
+      internalID: 2284370880074600566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_14
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 147
+        width: 25
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c279b6f880fcd140800000000000000
+      internalID: 4745932578387227334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_15
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 150
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d662a213743d39770800000000000000
+      internalID: 8616462814810875501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_16
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 147
+        width: 21
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ade4b0b2b87492f0800000000000000
+      internalID: -967015311113654873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_17
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 151
+        width: 29
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fdac66cf64af31d0800000000000000
+      internalID: -3368793196272505357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_18
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 157
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0501996eaa24ae8e0800000000000000
+      internalID: -1663443810579312560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_19
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 157
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea982fb1b799c9960800000000000000
+      internalID: 7610126224378202542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_20
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 148
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca03fd80a1dcb8ba0800000000000000
+      internalID: -6085544959759404884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_21
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 157
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3a0912983db4c910800000000000000
+      internalID: 1856816997050419774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_22
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 147
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b21fb8b91fbda6930800000000000000
+      internalID: 4137361038436462891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_23
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 157
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e3f043f78e11af60800000000000000
+      internalID: 8043743978710954981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_24
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 157
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d0dec6625d37eaa0800000000000000
+      internalID: -6131864943520198441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_25
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 161
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3bb61b086673c3e0800000000000000
+      internalID: -2034652417406616770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_26
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 148
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70f8500f128222890800000000000000
+      internalID: -7484375504510415097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_27
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 157
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34d3d09bf6eadf1c0800000000000000
+      internalID: -4468223460412408509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_28
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 75
+        width: 21
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2f0608b406e4c7b0800000000000000
+      internalID: -5204782361391788243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_29
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 79
+        width: 27
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2eda8981110167d10800000000000000
+      internalID: 2122901939964915170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_30
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 76
+        width: 17
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 286523e20688ba3d0800000000000000
+      internalID: -3194309564015946110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_31
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 91
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40a3970b5b86f9670800000000000000
+      internalID: 8547665747331594756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_32
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 92
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 778e82662664aad00800000000000000
+      internalID: 984676856968570999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_33
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 80
+        width: 15
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3055b45b1200e8d80800000000000000
+      internalID: -8246653722893265661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_34
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 76
+        width: 17
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32f620de0ac06ebb0800000000000000
+      internalID: -4907220858662916317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_35
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 93
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d1951158f6905860800000000000000
+      internalID: 7516673771337781716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_36
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 92
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 310d97154a7e5ba90800000000000000
+      internalID: -7298672928156430317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_37
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 93
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aea8f07dcb1274c70800000000000000
+      internalID: 8955163478995208938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_38
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 80
+        width: 13
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcd8e04972d616e90800000000000000
+      internalID: -7034221126220870197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_39
+      rect:
+        serializedVersion: 2
+        x: 378
+        y: 93
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06edf582fd677a010800000000000000
+      internalID: 1200058526544682592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_40
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 81
+        width: 12
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df00b49ee466fad60800000000000000
+      internalID: 7903648360165998845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_41
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f9992b59759ba230800000000000000
+      internalID: 3651176271366953456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_42
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce886b785bea9d550800000000000000
+      internalID: 6186167657859287276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_43
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 76
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9acefb7ba38c79020800000000000000
+      internalID: 2348565885213469865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_44
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 641d29836442fcf60800000000000000
+      internalID: 8056698142404563270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_45
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cc0bab0ca4c46740800000000000000
+      internalID: 5144452917573127362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_46
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ad31129a53373270800000000000000
+      internalID: 8230103308133547429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_47
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 76
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 087ea330219212c70800000000000000
+      internalID: 8944475492274857856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_48
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1acc7bfe13a0b2860800000000000000
+      internalID: 7506104413534538913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_49
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f0a1622b48da7920800000000000000
+      internalID: 2988939119924715760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_50
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5cc24326908b77ff0800000000000000
+      internalID: -38359721367556923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_51
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 77
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56df93530fb73dd80800000000000000
+      internalID: -8227095822660403867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_52
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d5632bc6f5295be0800000000000000
+      internalID: -1488116459968961067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_53
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 77
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e6366956d7b620c0800000000000000
+      internalID: -4600787838061627677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_54
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 77
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6753e14557b7dc80800000000000000
+      internalID: -8297962211601328276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_55
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 85
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cf7a86d54ce5e480800000000000000
+      internalID: -8870424106340024377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_56
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 22
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f05a82cf53b86c300800000000000000
+      internalID: 272057891482543375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_57
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 15
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de822fc37279501d0800000000000000
+      internalID: -3385133350117037843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_58
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 19
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb7413321f1620ec0800000000000000
+      internalID: -3602209063637530692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_59
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 5
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bf9cbb6c87ee8050800000000000000
+      internalID: 5804831560016109495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_60
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 6
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 918f502607449e4f0800000000000000
+      internalID: -799032209409968103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_61
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 6
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9733901798c4db780800000000000000
+      internalID: -8665685954800307335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: poeira-grande_62
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 7
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6163d655fbacaae30800000000000000
+      internalID: 4515644499513128470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
