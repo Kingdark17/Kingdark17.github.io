@@ -393,20 +393,16 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
 - A sala é a arena (2026-11-11, **só no app**, doc do Breno decidido com o
   usuário; o site continua por turnos): na luta em tempo real o herói anda
   pela sala (`arena.heroi`, com o `walkTick` de sempre, as portas fechadas
-  e cada monstro de pé tomando a casa em que está) e desvia andando. Os
-  monstros **não andam atrás do herói**: começam na casa deles
-  (`lugaresNaLuta`), um golpeando por vez, e o golpe é que atravessa a
-  sala: o círculo cai onde o herói estava, a investida sai de onde o
-  monstro está em linha reta até a parede, a bola do mágico sai dele.
-  Desde 2026-11-12 (pedido do usuário) **quem investe fica onde a
-  investida acabou** (`corpoX`/`corpoY` do monstro na arena: na parede,
-  ou encostado no herói que levou o golpe), e o alcance, a colisão e o
-  próximo golpe dele contam dali; os lacaios que entram rearrumam a sala. **Arma de perto precisa alcançar** (`golpeDePerto`,
-  `ALCANCE_CORPO_A_CORPO` = uma casa e meia, do pé do herói ao meio da casa
-  do monstro): longe, o botão avisa "Chegue mais perto"; com o alvo
-  escolhido longe, vale o de pé mais perto ao alcance; e quem se afasta
-  durante o evento erra ("Longe"; há uma folga de meia casa). Arco, cajado
-  (`ARMAS_DE_LONGE`), magia e poderes acertam de qualquer lugar. No app, o
+  e cada monstro de pé tomando a casa em que está) e desvia andando. O
+  golpe do monstro atravessa a sala: o círculo cai onde o herói estava, a
+  investida sai de onde o monstro está em linha reta até a parede, a bola
+  do mágico sai dele. Desde 2026-11-12 (pedido do usuário) **quem investe
+  fica onde a investida acabou** (`corpoX`/`corpoY` do monstro na arena: na
+  parede, ou encostado no herói que levou o golpe), e o alcance, a colisão
+  e o próximo golpe dele contam dali. Os monstros **andam atrás do herói**
+  e o alcance é o da classe: ver o doc de 2026-11-15 logo abaixo, que
+  desfez o "ficam parados, um por vez" e o `ALCANCE_CORPO_A_CORPO` daqui.
+  No app, o
   `PalcoDaLuta` desenha os avisos no chão da sala (`TintaDaSala`), a cena
   move o herói (`SalaEmCena.MoverNaLuta`), o evento da arma fica na parte
   de cima da sala, e no fim o herói fica onde estava (se for em cima do que
@@ -443,6 +439,44 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   apanhando vai pro palco (`PalcoDaLuta.TocarEfeito`); o resto, e o que vai
   num monstro que caiu (a luta pode acabar com ele), vai pra sala
   (`SalaEmCena.TocarEfeito`, em unidades da sala, na escala da arte).
+- Doc do Breno de 2026-11-15 (combate e classes), decidido com o usuário.
+  **O site é o TCC do usuário e fica na versão básica, por turnos; o
+  combate e as classes novas são só da luta em tempo real do app.** O que
+  já entrou (rodada 1, a base):
+  - **Tabela das classes** (`hero/classes-de-luta.ts` ↔
+    `Engine/Hero/ClassesDeLuta.cs`): alcance em blocos, e vida, dano e
+    velocidade em % (baixo: vida −20%, dano −15%, velocidade −20%, Paladino
+    −40%; "padrão/baixo" −8%; alto: vida +30%, dano +10%). **A vida da
+    classe vale em todo lugar** (`vidaComAClasse` no `derived`, site, app e
+    API); o dano (`danoDaClasse` em `resolve-attack`/`use-power`) e a
+    velocidade (`velocidadeNaArena`) só na arena.
+  - **Alcance por classe** (`alcanceNaArena`): do pé do herói ao meio da
+    casa do monstro; o Bárbaro muda com a arma (`ALCANCE_DO_BARBARO`), e
+    arco/cajado sem classe valem 7. Os poderes acertam de qualquer lugar.
+  - **Mira**: no PC, no cursor do mouse, numa área de 3 casas de largura
+    (`AREA_DA_MIRA`, `EntradaDaLuta.cursor`, `PalcoDaLuta.CursorNaSala`);
+    sem monstro ali, o golpe cai no chão (`golpeNoChao`). No celular, o
+    monstro mais perto (ou o escolhido na placa).
+  - **Barra de vida em cima de cada monstro**, só no app.
+  - **Monstros andam atrás do herói** (`aproximar`, `JeitoDeLutar.passo` e
+    `.distancia`, todos mais lentos que o herói), até a distância do golpe
+    deles; **até três golpeiam juntos** (`ATACANDO_DE_UMA_VEZ`), cada um
+    com o respiro dele (`RESPIRO_DO_MONSTRO`); os lacaios aparecem na casa
+    deles sem rearrumar a sala. Números por afinar.
+  - **Membro quebrado pesa na luta**: perna quebrada anda mais devagar na
+    arena, e o Brutamontes e os chefes têm 15% de quebrar um membro.
+  - **A maça é do Paladino e o Monge luta com as mãos**
+    (`weaponTemplate: null`, afinidade `maos`, `ataqueDasMaos`: 3 + 1 a
+    cada 2 níveis). Quem já era Paladino de espada ou Monge de maça fica
+    sem a maestria até trocar.
+  - **Poder mágico pede o evento** (`pedirPoder`, `eventoDoPoder`): dano
+    mágico e cura (`TIPOS_DE_PODER_MAGICO`) abrem as letras no PC e o
+    desenho com o dedo no celular; a força do acerto multiplica o efeito, e
+    errando sai com metade (`FORCA_DO_PODER_ERRADO`). A mana só sai no fim.
+  Falta, nesta ordem: chat e co-op em tempo real no app; as classes em
+  grupos (o Necromante do Breno **substitui** o ajuste de 2026-11-12);
+  estilos e mestres; mercadores secretos e itens novos (a arte das armas
+  novas é o Claude que desenha, no estilo do Breno); o Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em
