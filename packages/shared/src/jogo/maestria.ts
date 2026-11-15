@@ -16,7 +16,7 @@ import { templateById } from '../items/templates.js';
 export function armasDaMaestria(hero: Pick<Hero, 'classId' | 'className'>): string {
   const classe = classById(idDaClasse(hero) ?? '');
   if (!classe) return '';
-  const nomes = masteryWeapons(classe).map((id) => (templateById(id)?.name ?? id).split(' ')[0].toLowerCase());
+  const nomes = masteryWeapons(classe).map((id) => (id === 'maos' ? 'as mãos' : (templateById(id)?.name ?? id).split(' ')[0].toLowerCase()));
   return nomes.join(' ou ');
 }
 

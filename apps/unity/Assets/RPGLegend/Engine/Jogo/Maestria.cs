@@ -27,7 +27,8 @@ namespace RPGLegend.Engine
             var classe = Catalog.ClassById(Catalog.IdDaClasse(classId, className) ?? "");
             if (classe == null) return "";
             var nomes = new List<string>();
-            foreach (var id in Mastery.Weapons(classe)) nomes.Add((ItemTemplates.ById(id)?.Name ?? id).Split(' ')[0].ToLowerInvariant());
+            foreach (var id in Mastery.Weapons(classe))
+                nomes.Add(id == "maos" ? "as mãos" : (ItemTemplates.ById(id)?.Name ?? id).Split(' ')[0].ToLowerInvariant());
             return string.Join(" ou ", nomes);
         }
 

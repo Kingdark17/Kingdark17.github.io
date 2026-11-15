@@ -1,3 +1,4 @@
+import { ataqueDasMaos } from '../hero/classes-de-luta.js';
 import { classById, idDaClasse } from '../hero/catalog.js';
 import { hasDebuffEffect, type Hero } from '../hero/hero.js';
 import { escudoDoChefe, PASSA_PELO_ESCUDO } from '../monsters/mecanicas-do-chefe.js';
@@ -12,10 +13,13 @@ export function fleeBonus(hero: Hero, monster: Pick<CombatMonster, 'speed'>): nu
   return bonus;
 }
 
-/** Quanto do ataque da arma equipada entra no dano, escalado pela afinidade da classe. */
-export function weaponAtkContribution(hero: Pick<Hero, 'equip'>, affinityPct: number): number {
+/**
+ * Quanto do ataque da arma equipada entra no dano, escalado pela afinidade da
+ * classe. Sem arma, o Monge bate com as mãos (`ataqueDasMaos`); os outros, 0.
+ */
+export function weaponAtkContribution(hero: Pick<Hero, 'equip'> & Partial<Pick<Hero, 'classId' | 'className' | 'level'>>, affinityPct: number): number {
   const weapon = hero.equip.arma;
-  return weapon ? Math.round(((weapon.stats.ataque ?? 0) * affinityPct) / 100) : 0;
+  return weapon ? Math.round(((weapon.stats.ataque ?? 0) * affinityPct) / 100) : ataqueDasMaos(hero);
 }
 
 /**

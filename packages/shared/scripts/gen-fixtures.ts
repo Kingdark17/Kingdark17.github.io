@@ -337,7 +337,7 @@ interface HeroiDeTeste {
 function heroi(o: HeroiDeTeste = {}): Hero {
   const cls = o.classe === null ? null : E.classById(o.classe ?? 'barbaro');
   const attrs = atributos(o.attrs);
-  const arma = o.arma === undefined ? (cls ? item(cls.weaponTemplate) : null) : typeof o.arma === 'string' ? item(o.arma) : o.arma;
+  const arma = o.arma === undefined ? (cls?.weaponTemplate ? item(cls.weaponTemplate) : null) : typeof o.arma === 'string' ? item(o.arma) : o.arma;
   const equip: HeroEquipment = { ...SLOTS_VAZIOS, arma, ...o.equip };
   const level = o.level ?? 1;
   const debuff = E.debuffById(o.debuff ?? 'orgulhoso');
@@ -1663,6 +1663,17 @@ for (const ataque of [5, 3, 1, 7]) {
   );
 }
 caso('weaponAtkContribution: sem arma', 'weaponAtkContribution', { hero: { equip: {} }, affinityPct: 100 }, (a) => E.weaponAtkContribution(a.hero, a.affinityPct));
+// As mãos do Monge (doc do Breno de 2026-11-15): sem arma, o ataque das mãos; as outras classes, 0.
+for (const [classId, level, arma] of [['monge', 1, null], ['monge', 10, null], ['monge', 99, null], ['monge', 10, 'maca'], ['guerreiro', 10, null], [undefined, 10, null]] as const) {
+  const hero = { ...(classId ? { classId } : {}), level, equip: { arma: arma ? item(arma) : null } };
+  caso(`weaponAtkContribution: ${classId ?? 'sem classe'} nível ${level}, ${arma ?? 'mãos'}`, 'weaponAtkContribution', { hero, affinityPct: 85 }, (a) => E.weaponAtkContribution(a.hero, a.affinityPct));
+  caso(`ataqueDasMaos: ${classId ?? 'sem classe'} nível ${level}, ${arma ?? 'mãos'}`, 'ataqueDasMaos', { quem: hero }, (a) => E.ataqueDasMaos(a.quem));
+}
+caso('ataqueDasMaos: monge sem nível nem equip', 'ataqueDasMaos', { quem: { className: 'Monge' } }, (a) => E.ataqueDasMaos(a.quem));
+caso('wieldsMasteryWeapon: monge de mãos vazias', 'wieldsMasteryWeapon', { hero: heroi({ classe: 'monge', arma: null }) }, (a) => E.wieldsMasteryWeapon(a.hero));
+caso('wieldsMasteryWeapon: monge de maça', 'wieldsMasteryWeapon', { hero: heroi({ classe: 'monge', arma: 'maca' }) }, (a) => E.wieldsMasteryWeapon(a.hero));
+caso('wieldsMasteryWeapon: paladino de maça', 'wieldsMasteryWeapon', { hero: heroi({ classe: 'paladino' }) }, (a) => E.wieldsMasteryWeapon(a.hero));
+caso('wieldsMasteryWeapon: guerreiro de mãos vazias', 'wieldsMasteryWeapon', { hero: heroi({ classe: 'guerreiro', arma: null }) }, (a) => E.wieldsMasteryWeapon(a.hero));
 
 for (const [nome, hero] of [
   ['guerreiro com adaga na secundária (55%)', heroi({ classe: 'guerreiro', equip: { secundaria: item('adaga', 'raro') } })],

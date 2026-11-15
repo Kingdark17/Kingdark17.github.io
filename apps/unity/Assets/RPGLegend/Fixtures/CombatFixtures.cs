@@ -24,6 +24,12 @@ namespace RPGLegend.Tests
             // ---------- damage ----------
             Fn(M, "fleeBonus", (a, c) => N(Damage.FleeBonus(R<Hero>(a["hero"]), R<MonsterInstance>(a["monster"]))));
             Fn(M, "weaponAtkContribution", (a, c) => N(Damage.WeaponAtkContribution(R<Hero>(a["hero"]), Num(a["affinityPct"]))));
+            Fn(M, "ataqueDasMaos", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.AtaqueDasMaos(quem.ClassId, quem.ClassName, quem.Level, quem.Equip?.Get("arma") != null));
+            });
+            Fn(M, "wieldsMasteryWeapon", (a, c) => W(Mastery.WieldsMasteryWeapon(R<Hero>(a["hero"]))));
             Fn(M, "otherEquipAtk", (a, c) => N(Damage.OtherEquipAtk(R<Hero>(a["hero"]))));
             Fn(M, "modifyDamageByAffinity", (a, c) => W(Damage.ModifyDamageByAffinity(
                 Monstro(a["monster"]), Str(a["weakness"]), Str(a["resistance"]), Num(a["dmg"]), Str(a["type"]), JsJson.Truthy(a["halfResist"]))));

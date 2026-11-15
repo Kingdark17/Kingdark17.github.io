@@ -112,7 +112,8 @@ export function TelaGuilda({ guilda, onGuilda, onFechar }: Readonly<Props>) {
 }
 
 function FichaDaClasse({ classe, onTreinar }: Readonly<{ classe: ClassDef; onTreinar: () => void }>) {
-  const arma = templateById(classe.weaponTemplate);
+  // O Monge não tem arma inicial: luta com as mãos.
+  const arma = classe.weaponTemplate ? templateById(classe.weaponTemplate) : null;
 
   return (
     <>
@@ -136,6 +137,12 @@ function FichaDaClasse({ classe, onTreinar }: Readonly<{ classe: ClassDef; onTre
                 <Image className={styles.spriteItem} src={`/img/${arma.sprite}`} alt="" width={32} height={32} unoptimized />
                 {arma.name}
               </span>
+            </li>
+          )}
+          {!arma && (
+            <li className={styles.linhaDaGuilda}>
+              <span className={styles.rotuloDaGuilda}>Arma</span>
+              <span>Nenhuma: luta com as mãos</span>
             </li>
           )}
           {poderesDaClasse(classe).map((poder) => (

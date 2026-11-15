@@ -180,9 +180,10 @@ export interface HeroCreation {
  */
 export function buildHero(creation: HeroCreation, rng: Rng = defaultRng, armaInicial: InstantiateOptions = {}): Hero {
   const attrs = creation.attrs ?? rollAttrs(creation.race, creation.cls, creation.debuff, rng);
-  const weaponTemplate = templateById(creation.cls.weaponTemplate);
-  if (!weaponTemplate) throw new Error(`Arma inicial desconhecida: ${creation.cls.weaponTemplate}`);
-  const startWeapon: Item = { ...instantiate(weaponTemplate, RARITIES[0] as (typeof RARITIES)[number], armaInicial), equipped: true };
+  // O Monge começa de mãos vazias (`weaponTemplate: null`).
+  const weaponTemplate = creation.cls.weaponTemplate === null ? null : templateById(creation.cls.weaponTemplate);
+  if (weaponTemplate === undefined) throw new Error(`Arma inicial desconhecida: ${creation.cls.weaponTemplate}`);
+  const startWeapon: Item | null = weaponTemplate ? { ...instantiate(weaponTemplate, RARITIES[0] as (typeof RARITIES)[number], armaInicial), equipped: true } : null;
 
   // poder de assinatura da classe (automático) + os escolhidos na criação, sem duplicar
   const powerIds = [creation.cls.signatureId];
@@ -332,17 +333,18 @@ export function trainAtGuild(hero: Hero, cls: ClassDef, armaInicial: Instantiate
   const attrs = { ...hero.attrs };
   for (const key of Object.keys(cls.bias) as AttrKey[]) attrs[key] = clamp(attrs[key] + (cls.bias[key] ?? 0), 1, 99);
 
-  const template = templateById(cls.weaponTemplate);
-  if (!template) throw new Error(`Arma inicial desconhecida: ${cls.weaponTemplate}`);
-  const arma: Item = instantiate(template, RARITIES[0] as (typeof RARITIES)[number], armaInicial);
+  // O Monge não ganha arma: luta com as mãos (`weaponTemplate: null`).
+  const template = cls.weaponTemplate === null ? null : templateById(cls.weaponTemplate);
+  if (template === undefined) throw new Error(`Arma inicial desconhecida: ${cls.weaponTemplate}`);
+  const arma: Item | null = template ? instantiate(template, RARITIES[0] as (typeof RARITIES)[number], armaInicial) : null;
   // Mão principal livre, e sem escudo no caminho de uma arma de duas mãos
   // (o grimório deixa o cajado entrar: `cabeNaMaoLivre`).
-  const cabe = !hero.equip.arma && cabeNaMaoLivre(arma, hero.equip.secundaria);
+  const cabe = !!arma && !hero.equip.arma && cabeNaMaoLivre(arma, hero.equip.secundaria);
 
   const treinado: Hero = {
     ...hero,
     attrs,
-    equip: cabe ? { ...hero.equip, arma: { ...arma, equipped: true } } : hero.equip,
+    equip: cabe && arma ? { ...hero.equip, arma: { ...arma, equipped: true } } : hero.equip,
     className: cls.name,
     classIcon: cls.icon,
     classId: cls.id,

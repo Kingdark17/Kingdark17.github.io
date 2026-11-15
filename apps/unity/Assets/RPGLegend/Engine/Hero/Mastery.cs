@@ -89,7 +89,8 @@ namespace RPGLegend.Engine
         {
             var cls = Catalog.ClassById(Catalog.IdDaClasse(hero.ClassId, hero.ClassName) ?? "");
             var arma = hero.Equip.Get("arma");
-            return cls != null && arma != null && cls.Affinity.TryGet(arma.TemplateId, out var pct) && pct == 100;
+            // A mão vazia é a arma do Monge: a chave "maos" da afinidade dele.
+            return cls != null && cls.Affinity.TryGet(arma != null ? arma.TemplateId : "maos", out var pct) && pct == 100;
         }
 
         /// <summary>TS: masteryDamageMult — multiplicador do golpe e dos poderes; 1 sem a arma da classe.</summary>

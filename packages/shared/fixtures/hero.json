@@ -349,7 +349,7 @@
           "id": "paladino",
           "name": "Paladino",
           "icon": "🛡️",
-          "weaponTemplate": "espada",
+          "weaponTemplate": "maca",
           "bias": {
             "forca": 2,
             "sabedoria": 2,
@@ -358,8 +358,8 @@
           "desc": "Defensor sagrado que combina resistência e cura.",
           "signatureId": "julgamento_sagrado",
           "affinity": {
-            "espada": 100,
-            "maca": 90,
+            "maca": 100,
+            "espada": 90,
             "machado": 65,
             "cajado": 60,
             "adaga": 40,
@@ -416,15 +416,16 @@
           "id": "monge",
           "name": "Monge",
           "icon": "🥋",
-          "weaponTemplate": "maca",
+          "weaponTemplate": null,
           "bias": {
             "destreza": 2,
             "sabedoria": 2
           },
-          "desc": "Lutador disciplinado que domina corpo e espírito.",
+          "desc": "Lutador disciplinado que domina corpo e espírito e luta com as mãos.",
           "signatureId": "golpe_atordoante",
           "affinity": {
-            "maca": 100,
+            "maos": 100,
+            "maca": 85,
             "adaga": 85,
             "cajado": 70,
             "espada": 55,
@@ -5367,7 +5368,7 @@
           "id": "paladino",
           "name": "Paladino",
           "icon": "🛡️",
-          "weaponTemplate": "espada",
+          "weaponTemplate": "maca",
           "bias": {
             "forca": 2,
             "sabedoria": 2,
@@ -5376,8 +5377,8 @@
           "desc": "Defensor sagrado que combina resistência e cura.",
           "signatureId": "julgamento_sagrado",
           "affinity": {
-            "espada": 100,
-            "maca": 90,
+            "maca": 100,
+            "espada": 90,
             "machado": 65,
             "cajado": 60,
             "adaga": 40,
@@ -5390,7 +5391,7 @@
     },
     "expected": {
       "result": [
-        "espada"
+        "maca"
       ]
     }
   },
@@ -5473,15 +5474,16 @@
           "id": "monge",
           "name": "Monge",
           "icon": "🥋",
-          "weaponTemplate": "maca",
+          "weaponTemplate": null,
           "bias": {
             "destreza": 2,
             "sabedoria": 2
           },
-          "desc": "Lutador disciplinado que domina corpo e espírito.",
+          "desc": "Lutador disciplinado que domina corpo e espírito e luta com as mãos.",
           "signatureId": "golpe_atordoante",
           "affinity": {
-            "maca": 100,
+            "maos": 100,
+            "maca": 85,
             "adaga": 85,
             "cajado": 70,
             "espada": 55,
@@ -5495,7 +5497,7 @@
     },
     "expected": {
       "result": [
-        "maca"
+        "maos"
       ]
     }
   },
@@ -22935,18 +22937,7 @@
             "carisma": 10
           },
           "equip": {
-            "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
-              "rarity": "comum",
-              "stats": {
-                "ataque": 3,
-                "vida": 6
-              },
-              "value": 22,
-              "equipped": false,
-              "procChance": 0.1
-            },
+            "arma": null,
             "secundaria": null,
             "elmo": null,
             "armadura": null,
@@ -22977,7 +22968,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 125,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -22988,8 +22979,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 125,
+          "hp": 125,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -23008,18 +22999,7 @@
           "carisma": 10
         },
         "equip": {
-          "arma": {
-            "uid": "maca_1700000000000_62706",
-            "templateId": "maca",
-            "rarity": "comum",
-            "stats": {
-              "ataque": 3,
-              "vida": 6
-            },
-            "value": 22,
-            "equipped": false,
-            "procChance": 0.1
-          },
+          "arma": null,
           "secundaria": null,
           "elmo": null,
           "armadura": null,
@@ -23054,7 +23034,7 @@
         "killCount": 0,
         "masteryBattles": 0,
         "derived": {
-          "maxHp": 131,
+          "maxHp": 125,
           "maxMp": 62,
           "dmgFisico": 20,
           "dmgMagico": 30,
@@ -23065,8 +23045,8 @@
           "resistMagica": 10,
           "descontoLoja": 5
         },
-        "maxHp": 131,
-        "hp": 131,
+        "maxHp": 125,
+        "hp": 125,
         "maxMp": 62,
         "mp": 62,
         "buffs": {}
@@ -23089,18 +23069,7 @@
             "carisma": 10
           },
           "equip": {
-            "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
-              "rarity": "comum",
-              "stats": {
-                "ataque": 3,
-                "vida": 6
-              },
-              "value": 22,
-              "equipped": false,
-              "procChance": 0.1
-            },
+            "arma": null,
             "secundaria": null,
             "elmo": null,
             "armadura": null,
@@ -23131,7 +23100,7 @@
           "killCount": 400,
           "masteryBattles": 12.7,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 125,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -23142,8 +23111,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 125,
+          "hp": 125,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -23162,18 +23131,7 @@
           "carisma": 10
         },
         "equip": {
-          "arma": {
-            "uid": "maca_1700000000000_62706",
-            "templateId": "maca",
-            "rarity": "comum",
-            "stats": {
-              "ataque": 3,
-              "vida": 6
-            },
-            "value": 22,
-            "equipped": false,
-            "procChance": 0.1
-          },
+          "arma": null,
           "secundaria": null,
           "elmo": null,
           "armadura": null,
@@ -23208,7 +23166,7 @@
         "killCount": 400,
         "masteryBattles": 12,
         "derived": {
-          "maxHp": 131,
+          "maxHp": 125,
           "maxMp": 62,
           "dmgFisico": 20,
           "dmgMagico": 30,
@@ -23219,8 +23177,8 @@
           "resistMagica": 10,
           "descontoLoja": 5
         },
-        "maxHp": 131,
-        "hp": 131,
+        "maxHp": 125,
+        "hp": 125,
         "maxMp": 62,
         "mp": 62,
         "buffs": {}

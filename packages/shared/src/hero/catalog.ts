@@ -41,7 +41,12 @@ export interface ClassDef {
   id: string;
   name: string;
   icon: string;
-  weaponTemplate: string;
+  /**
+   * A arma com que a classe começa. `null`: o Monge, que luta com as mãos
+   * (doc do Breno de 2026-11-15) — a mão vazia é a "arma" dele, a chave
+   * `maos` da afinidade.
+   */
+  weaponTemplate: string | null;
   bias: Partial<Record<AttrKey, number>>;
   desc: string;
   /** Id do poder de assinatura — resolvido via {@link powerById}. */
@@ -70,10 +75,10 @@ export const CLASSES: readonly ClassDef[] = [
   { id: 'clerigo', name: 'Clérigo', icon: '✝️', weaponTemplate: 'maca', bias: { sabedoria: 3, constituicao: 1 }, desc: 'Cura aliados e resiste a corrupção.', signatureId: 'cura_menor', affinity: { maca: 100, cajado: 70, espada: 50, adaga: 40, arco: 35, machado: 30, marreta: 30, violao: 35 } },
   { id: 'barbaro', name: 'Bárbaro', icon: '🪓', weaponTemplate: 'machado', bias: { forca: 4 }, desc: 'Fúria bruta, dano massivo corpo a corpo.', signatureId: 'grito_de_guerra', affinity: { machado: 100, espada: 85, maca: 55, adaga: 45, arco: 35, cajado: 15, marreta: 100, violao: 15 } },
   { id: 'arqueiro', name: 'Arqueiro', icon: '🏹', weaponTemplate: 'arco', bias: { destreza: 3, sabedoria: 1 }, desc: 'Precisão a distância e mobilidade.', signatureId: 'tiro_certeiro', affinity: { arco: 100, adaga: 70, espada: 50, maca: 40, machado: 35, cajado: 25, marreta: 35, violao: 35 }, ataquePrincipal: 'distancia' },
-  { id: 'paladino', name: 'Paladino', icon: '🛡️', weaponTemplate: 'espada', bias: { forca: 2, sabedoria: 2, constituicao: 1 }, desc: 'Defensor sagrado que combina resistência e cura.', signatureId: 'julgamento_sagrado', affinity: { espada: 100, maca: 90, machado: 65, cajado: 60, adaga: 40, arco: 35, marreta: 65, violao: 35 } },
+  { id: 'paladino', name: 'Paladino', icon: '🛡️', weaponTemplate: 'maca', bias: { forca: 2, sabedoria: 2, constituicao: 1 }, desc: 'Defensor sagrado que combina resistência e cura.', signatureId: 'julgamento_sagrado', affinity: { maca: 100, espada: 90, machado: 65, cajado: 60, adaga: 40, arco: 35, marreta: 65, violao: 35 } },
   { id: 'necromante', name: 'Necromante', icon: '☠️', weaponTemplate: 'cajado', bias: { intelecto: 3, constituicao: 1 }, desc: 'Conjura maldições e drena a força dos inimigos.', signatureId: 'maldicao_sombria', affinity: { cajado: 100, adaga: 75, maca: 55, espada: 40, arco: 35, machado: 25, marreta: 25, violao: 40 } },
   { id: 'druida', name: 'Druida', icon: '🌿', weaponTemplate: 'cajado', bias: { sabedoria: 3, constituicao: 1 }, desc: 'Controla a natureza, venenos e magia de cura.', signatureId: 'esporos_venenosos', affinity: { cajado: 100, maca: 75, arco: 65, adaga: 50, espada: 35, machado: 35, marreta: 35, violao: 55 } },
-  { id: 'monge', name: 'Monge', icon: '🥋', weaponTemplate: 'maca', bias: { destreza: 2, sabedoria: 2 }, desc: 'Lutador disciplinado que domina corpo e espírito.', signatureId: 'golpe_atordoante', affinity: { maca: 100, adaga: 85, cajado: 70, espada: 55, machado: 40, arco: 40, marreta: 40, violao: 45 } },
+  { id: 'monge', name: 'Monge', icon: '🥋', weaponTemplate: null, bias: { destreza: 2, sabedoria: 2 }, desc: 'Lutador disciplinado que domina corpo e espírito e luta com as mãos.', signatureId: 'golpe_atordoante', affinity: { maos: 100, maca: 85, adaga: 85, cajado: 70, espada: 55, machado: 40, arco: 40, marreta: 40, violao: 45 } },
   { id: 'bardo', name: 'Bardo', icon: '🎵', weaponTemplate: 'violao', bias: { carisma: 3, destreza: 1 }, desc: 'Usa música para fortalecer aliados e enfraquecer inimigos.', signatureId: 'cancao_debilitante', affinity: { adaga: 100, arco: 80, espada: 65, cajado: 65, maca: 50, machado: 30, marreta: 30, violao: 100 } },
   { id: 'cacador', name: 'Caçador', icon: '🐺', weaponTemplate: 'arco', bias: { destreza: 2, sabedoria: 2 }, desc: 'Especialista em rastrear e sangrar criaturas.', signatureId: 'flecha_serrilhada', affinity: { arco: 100, adaga: 85, espada: 60, machado: 50, maca: 35, cajado: 25, marreta: 50, violao: 40 }, ataquePrincipal: 'distancia' },
 ];

@@ -41,6 +41,11 @@ namespace RPGLegend.Tests
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
                 return N(ClassesDeLuta.AlcanceDoHeroi(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId));
             });
+            Fn(M, "ataqueDasMaos", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.AtaqueDasMaos(quem.ClassId, quem.ClassName, quem.Level, quem.Equip?.Get("arma") != null));
+            });
             Fn(M, "vidaComAClasse", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
@@ -73,6 +78,7 @@ namespace RPGLegend.Tests
     {
         public string ClassId;
         public string ClassName;
+        public double? Level;
         public Equipment Equip;
     }
 }

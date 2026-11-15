@@ -85,7 +85,8 @@ export function masteryWeapons(cls: Pick<ClassDef, 'affinity'>): string[] {
 export function wieldsMasteryWeapon(hero: Pick<Hero, 'classId' | 'className' | 'equip'>): boolean {
   const cls = classById(idDaClasse(hero) ?? '');
   const arma = hero.equip.arma;
-  return !!cls && !!arma && cls.affinity[arma.templateId] === 100;
+  // A mão vazia é a arma do Monge: a chave `maos` da afinidade dele.
+  return !!cls && cls.affinity[arma ? arma.templateId : 'maos'] === 100;
 }
 
 /** Multiplicador do golpe e do dano dos poderes. 1 quando a arma na mão não é da classe. */

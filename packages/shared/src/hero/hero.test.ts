@@ -51,7 +51,7 @@ describe('catálogo', () => {
 
   it('toda classe tem afinidade 100% com a própria arma inicial', () => {
     for (const c of CLASSES) {
-      expect(c.affinity[c.weaponTemplate]).toBe(100);
+      expect(c.affinity[c.weaponTemplate ?? 'maos']).toBe(100);
     }
   });
 

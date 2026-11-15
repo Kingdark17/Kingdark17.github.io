@@ -303,7 +303,15 @@ namespace RPGLegend.Game.Jogo
 
             var ensina = PecasDaTela.Bloco("impacto");
             ensina.Add(PecasDaTela.Texto("O que a guilda ensina", "titulo-do-impacto"));
-            var arma = ItemTemplates.ById(classe.WeaponTemplate);
+            // O Monge não tem arma inicial: luta com as mãos.
+            var arma = classe.WeaponTemplate != null ? ItemTemplates.ById(classe.WeaponTemplate) : null;
+            if (arma == null)
+            {
+                var semArma = PecasDaTela.Bloco("linha-da-guilda");
+                semArma.Add(PecasDaTela.Texto("Arma", "rotulo-da-guilda"));
+                semArma.Add(PecasDaTela.Texto("Nenhuma: luta com as mãos", "texto-da-guilda"));
+                ensina.Add(semArma);
+            }
             if (arma != null)
             {
                 var linha = PecasDaTela.Bloco("linha-da-guilda");

@@ -40,7 +40,8 @@ namespace RPGLegend.Engine
         public static double WeaponAtkContribution(Hero hero, double affinityPct)
         {
             var weapon = hero.Equip.Get("arma");
-            return weapon != null ? Js.Round((weapon.Stats.OrZero("ataque") * affinityPct) / 100) : 0;
+            // Sem arma, o Monge bate com as mãos (ClassesDeLuta.AtaqueDasMaos); os outros, 0.
+            return weapon != null ? Js.Round((weapon.Stats.OrZero("ataque") * affinityPct) / 100) : ClassesDeLuta.AtaqueDasMaos(hero.ClassId, hero.ClassName, hero.Level, false);
         }
 
         /// <summary>

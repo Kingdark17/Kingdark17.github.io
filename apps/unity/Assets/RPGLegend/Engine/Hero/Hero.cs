@@ -143,10 +143,15 @@ namespace RPGLegend.Engine
         {
             rng = rng ?? Rng.Default;
             var attrs = creation.Attrs ?? RollAttrs(creation.Race, creation.Cls, creation.Debuff, rng);
-            var weaponTemplate = ItemTemplates.ById(creation.Cls.WeaponTemplate);
-            if (weaponTemplate == null) throw new EngineError("Arma inicial desconhecida: " + Js.Str(creation.Cls.WeaponTemplate));
-            var startWeapon = Espalhar(Items.Instantiate(weaponTemplate, Rarities.All[0], armaRng, armaNow));
-            startWeapon.Equipped = true;
+            // O Monge começa de mãos vazias (weaponTemplate null).
+            Item startWeapon = null;
+            if (creation.Cls.WeaponTemplate != null)
+            {
+                var weaponTemplate = ItemTemplates.ById(creation.Cls.WeaponTemplate);
+                if (weaponTemplate == null) throw new EngineError("Arma inicial desconhecida: " + Js.Str(creation.Cls.WeaponTemplate));
+                startWeapon = Espalhar(Items.Instantiate(weaponTemplate, Rarities.All[0], armaRng, armaNow));
+                startWeapon.Equipped = true;
+            }
 
             // Poder de assinatura da classe (automático) + os escolhidos, sem duplicar a assinatura.
             var powerIds = new List<string> { creation.Cls.SignatureId };
@@ -263,11 +268,16 @@ namespace RPGLegend.Engine
             var attrs = hero.Attrs.Clone();
             foreach (var kv in cls.Bias) attrs[kv.Key] = Clamp(attrs[kv.Key] + kv.Value, 1, 99);
 
-            var template = ItemTemplates.ById(cls.WeaponTemplate);
-            if (template == null) throw new EngineError("Arma inicial desconhecida: " + Js.Str(cls.WeaponTemplate));
-            var arma = Items.Instantiate(template, Rarities.All[0], armaRng, armaNow);
+            // O Monge não ganha arma: luta com as mãos (weaponTemplate null).
+            Item arma = null;
+            if (cls.WeaponTemplate != null)
+            {
+                var template = ItemTemplates.ById(cls.WeaponTemplate);
+                if (template == null) throw new EngineError("Arma inicial desconhecida: " + Js.Str(cls.WeaponTemplate));
+                arma = Items.Instantiate(template, Rarities.All[0], armaRng, armaNow);
+            }
             // Mão principal livre, e sem escudo no caminho de uma arma de duas mãos (o grimório deixa o cajado entrar).
-            bool cabe = hero.Equip.Get("arma") == null && CabeNaMaoLivre(arma, hero.Equip.Get("secundaria"));
+            bool cabe = arma != null && hero.Equip.Get("arma") == null && CabeNaMaoLivre(arma, hero.Equip.Get("secundaria"));
 
             var treinado = hero.Clone();
             treinado.Attrs = attrs;

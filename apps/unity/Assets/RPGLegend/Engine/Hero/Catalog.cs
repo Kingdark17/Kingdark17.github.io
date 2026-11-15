@@ -21,7 +21,8 @@ namespace RPGLegend.Engine
         public string Id;
         public string Name;
         public string Icon;
-        public string WeaponTemplate;
+        /// <summary>null: o Monge, que luta com as mãos.</summary>
+        [KeepNull] public string WeaponTemplate;
         public OrderedMap<double> Bias;
         public string Desc;
         public string SignatureId;

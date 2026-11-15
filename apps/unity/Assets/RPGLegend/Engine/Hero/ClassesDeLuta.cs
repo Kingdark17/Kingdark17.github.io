@@ -16,6 +16,14 @@ namespace RPGLegend.Engine
         [JsName("CLASSES_DE_LUTA")] public OrderedMap<ClasseDeLuta> Classes;
         [JsName("ALCANCE_DO_BARBARO")] public OrderedMap<double> AlcanceDoBarbaro;
         [JsName("ALCANCE_SEM_CLASSE")] public OrderedMap<double> AlcanceSemClasse;
+        [JsName("MAOS_DO_MONGE")] public MaosDoMonge MaosDoMonge;
+    }
+
+    /// <summary>TS: MAOS_DO_MONGE — o ataque das mãos do Monge: a base e mais 1 a cada tantos níveis.</summary>
+    public sealed class MaosDoMonge
+    {
+        public double Base;
+        public double ACadaNiveis;
     }
 
     public static partial class GameData
@@ -62,6 +70,16 @@ namespace RPGLegend.Engine
         }
 
         public static double AlcanceDoHeroi(Hero hero) => AlcanceDoHeroi(hero.ClassId, hero.ClassName, hero.Equip?.Get("arma")?.TemplateId);
+
+        /// <summary>
+        /// TS: ataqueDasMaos — o ataque das mãos: só o Monge sem arma na mão principal; os outros, 0. Nível ausente
+        /// (null) conta como 1.
+        /// </summary>
+        public static double AtaqueDasMaos(string classId, string className, double? level, bool temArma)
+        {
+            if (Catalog.IdDaClasse(classId, className) != "monge" || temArma) return 0;
+            return D.MaosDoMonge.Base + System.Math.Floor(Js.Max(1, level ?? 1) / D.MaosDoMonge.ACadaNiveis);
+        }
 
         /// <summary>TS: vidaComAClasse — a vida de sempre vezes a % da classe, arredondada.</summary>
         public static double VidaComAClasse(double vida, string classId, string className)

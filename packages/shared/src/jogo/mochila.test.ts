@@ -218,8 +218,15 @@ describe('desequipar', () => {
     expect(desequipar(antes, 'acessorio')).toBe(antes);
   });
 
+  /** O herói sorteado pode ser o Monge, que nasce de mãos vazias: aqui a arma inicial é posta só no slot, como `buildHero` faz. */
+  const comArmaInicial = (): Mochila => {
+    const mochila = comItens();
+    const hero = mochila.estado.hero;
+    return { ...mochila, estado: { ...mochila.estado, hero: { ...hero, equip: { ...hero.equip, arma: { ...item('maca'), equipped: true } } } } };
+  };
+
   it('a arma inicial, que só existia no slot, vai parar na mochila', () => {
-    const antes = comItens();
+    const antes = comArmaInicial();
     const inicial = antes.estado.hero.equip.arma as Item;
     expect(antes.estado.inventory.some((it) => it.uid === inicial.uid)).toBe(false);
 
@@ -229,7 +236,7 @@ describe('desequipar', () => {
   });
 
   it('trocar por outra arma também recolhe a inicial em vez de apagá-la', () => {
-    const antes = comItens();
+    const antes = comArmaInicial();
     const inicial = antes.estado.hero.equip.arma as Item;
     const machado = item('machado');
 

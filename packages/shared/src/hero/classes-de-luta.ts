@@ -57,6 +57,19 @@ export const ALCANCE_DO_BARBARO: Readonly<Record<string, number>> = { machado: 4
 /** Sem classe (o Aprendiz): o arco e o cajado vão longe; o resto é corpo a corpo. */
 export const ALCANCE_SEM_CLASSE: Readonly<Record<string, number>> = { arco: 7, cajado: 7 };
 
+/**
+ * As mãos do Monge (doc do Breno de 2026-11-15: "monge usa as mãos"): sem
+ * arma na mão principal, o golpe dele leva este ataque no lugar do da arma —
+ * `base` e mais 1 a cada `aCadaNiveis` níveis. Número ainda por afinar.
+ */
+export const MAOS_DO_MONGE = { base: 3, aCadaNiveis: 2 } as const;
+
+/** O ataque das mãos: só o Monge sem arma na mão principal; os outros, 0. */
+export function ataqueDasMaos(quem: QuemLuta & { level?: number }): number {
+  if (idDaClasse(quem) !== 'monge' || quem.equip?.arma) return 0;
+  return MAOS_DO_MONGE.base + Math.floor(Math.max(1, quem.level ?? 1) / MAOS_DO_MONGE.aCadaNiveis);
+}
+
 export interface QuemLuta extends IdentidadeDeClasse {
   equip?: { arma?: { templateId: string } | null } | null;
 }

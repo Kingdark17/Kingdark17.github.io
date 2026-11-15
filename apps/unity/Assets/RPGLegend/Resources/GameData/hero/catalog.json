@@ -276,7 +276,7 @@
       "id": "paladino",
       "name": "Paladino",
       "icon": "🛡️",
-      "weaponTemplate": "espada",
+      "weaponTemplate": "maca",
       "bias": {
         "forca": 2,
         "sabedoria": 2,
@@ -285,8 +285,8 @@
       "desc": "Defensor sagrado que combina resistência e cura.",
       "signatureId": "julgamento_sagrado",
       "affinity": {
-        "espada": 100,
-        "maca": 90,
+        "maca": 100,
+        "espada": 90,
         "machado": 65,
         "cajado": 60,
         "adaga": 40,
@@ -343,15 +343,16 @@
       "id": "monge",
       "name": "Monge",
       "icon": "🥋",
-      "weaponTemplate": "maca",
+      "weaponTemplate": null,
       "bias": {
         "destreza": 2,
         "sabedoria": 2
       },
-      "desc": "Lutador disciplinado que domina corpo e espírito.",
+      "desc": "Lutador disciplinado que domina corpo e espírito e luta com as mãos.",
       "signatureId": "golpe_atordoante",
       "affinity": {
-        "maca": 100,
+        "maos": 100,
+        "maca": 85,
         "adaga": 85,
         "cajado": 70,
         "espada": 55,
