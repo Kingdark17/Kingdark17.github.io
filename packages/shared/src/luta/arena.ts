@@ -4,9 +4,11 @@
  * herói era um coração numa caixa, como no Undertale (2026-10-17).
  *
  * - Os monstros começam cada um na casa dele (`lugaresNaLuta`), como no
- *   site, e não andam atrás do herói; mas quem investe **fica onde a
- *   investida acabou** (`corpoX`, `corpoY`; pedido do usuário, 2026-11-12),
- *   e é dali que sai o próximo golpe dele. No PC **o alvo é o cursor**
+ *   site, e **andam atrás do herói** (doc do Breno de 2026-11-15, que desfaz
+ *   o "ficam parados" de 2026-11-11): cada um chega até a distância do golpe
+ *   dele (`JeitoDeLutar.distancia`), no passo dele, e é dali que golpeia.
+ *   Quem investe **fica onde a investida acabou** (`corpoX`, `corpoY`;
+ *   pedido do usuário, 2026-11-12). No PC **o alvo é o cursor**
  *   (doc do Breno de 2026-11-15): o monstro numa área de 3 casas em volta
  *   dele (`AREA_DA_MIRA`), e sem nenhum o golpe vai no chão; no celular, o
  *   monstro que o jogador tocou na placa (`mirar`), ou o de pé mais perto.
@@ -19,9 +21,11 @@
  *   agressivo e o ágil saem da casa deles e cruzam a sala em linha reta, o
  *   mágico atira de onde está, o lento, o venenoso e o defensivo batem num
  *   círculo onde o herói estava.
- * - Um monstro golpeia por vez, revezando entre os de pé como no site, com um
- *   respiro entre um golpe e o outro. O golpe pode ir num companheiro, pela
- *   regra do site (`pickMonsterTarget`): aí não passa pelo chão.
+ * - **Vários golpeiam juntos** (doc do Breno de 2026-11-15; até
+ *   `ATACANDO_DE_UMA_VEZ`), cada um com o respiro dele entre um golpe e o
+ *   outro (`RESPIRO_DO_MONSTRO`), e um golpe não começa no mesmo instante do
+ *   outro. O golpe pode ir num companheiro, pela regra do site
+ *   (`pickMonsterTarget`): aí não passa pelo chão.
  * - **Um botão de ataque**, que abre o evento da arma (`eventos-de-arma.ts`)
  *   no alvo; enquanto ele dura o mundo anda em **câmera lenta**, e no fim o
  *   golpe cai no alvo. **O ataque tem o alcance da classe** (doc do Breno de
@@ -123,15 +127,21 @@ export const ESPERA_INICIAL = 60;
 
 /**
  * Quantos monstros podem estar golpeando (no aviso ou na investida) ao mesmo
- * tempo, e o respiro depois que um golpe acaba antes do próximo começar.
+ * tempo, e o tanto entre o começo de um golpe e o do próximo.
  *
- * Um por vez é a regra do site levada pro tempo real: lá, um monstro do
- * grupo ataca por rodada, revezando (decisão do usuário, 2026-10-16). Sem
- * isso, um grupo de três bateria quase três vezes mais por golpe do herói
- * do que no site — e a recompensa é a mesma.
+ * Até 2026-11-15 era um por vez, a regra do site levada pro tempo real; o
+ * doc do Breno pediu vários atacando juntos (decisão do usuário). Pra o
+ * grupo não bater o triplo do site, cada monstro tem o respiro dele depois
+ * de golpear (`RESPIRO_DO_MONSTRO`). Números ainda por afinar.
  */
-export const ATACANDO_DE_UMA_VEZ = 1;
+export const ATACANDO_DE_UMA_VEZ = 3;
 export const INTERVALO_ENTRE_GOLPES = 30;
+
+/** Depois de descansar do golpe, o monstro ainda espera este tanto antes do próximo (andando atrás do herói). */
+export const RESPIRO_DO_MONSTRO = 70;
+
+/** Andando, um monstro não chega mais perto que isto do corpo de outro de pé. */
+export const ESPACO_ENTRE_MONSTROS = 700;
 
 /** Um companheiro golpeia a cada este tanto. */
 export const CADENCIA_DO_COMPANHEIRO = 100;
@@ -155,6 +165,10 @@ export interface JeitoDeLutar {
   descanso: number;
   /** Descansando, ele se protege: o golpe do herói chega com metade da força. */
   guarda?: boolean;
+  /** Andando atrás do herói, quanto anda por passo (o herói anda 64). */
+  passo: number;
+  /** Até que distância do herói ele chega, e de onde o golpe pode começar. */
+  distancia: number;
 }
 
 /**
@@ -165,12 +179,12 @@ export interface JeitoDeLutar {
  * defensivo se protege depois de bater.
  */
 export const JEITOS_DE_LUTAR: Readonly<Record<Behavior, JeitoDeLutar>> = {
-  agressivo: { aviso: 30, golpe: 'investida', tamanho: 560, velocidade: 160, descanso: 40 },
-  agil: { aviso: 18, golpe: 'investida', tamanho: 400, velocidade: 224, descanso: 25 },
-  defensivo: { aviso: 36, golpe: 'perto', tamanho: 1100, velocidade: 0, descanso: 60, guarda: true },
-  venenoso: { aviso: 30, golpe: 'perto', tamanho: 1000, velocidade: 0, descanso: 40 },
-  lento: { aviso: 54, golpe: 'perto', tamanho: 1300, velocidade: 0, descanso: 50 },
-  magico: { aviso: 36, golpe: 'tiro', tamanho: 360, velocidade: 96, descanso: 50 },
+  agressivo: { aviso: 30, golpe: 'investida', tamanho: 560, velocidade: 160, descanso: 40, passo: 40, distancia: 3360 },
+  agil: { aviso: 18, golpe: 'investida', tamanho: 400, velocidade: 224, descanso: 25, passo: 48, distancia: 3360 },
+  defensivo: { aviso: 36, golpe: 'perto', tamanho: 1100, velocidade: 0, descanso: 60, guarda: true, passo: 28, distancia: 1440 },
+  venenoso: { aviso: 30, golpe: 'perto', tamanho: 1000, velocidade: 0, descanso: 40, passo: 34, distancia: 1440 },
+  lento: { aviso: 54, golpe: 'perto', tamanho: 1300, velocidade: 0, descanso: 50, passo: 20, distancia: 1440 },
+  magico: { aviso: 36, golpe: 'tiro', tamanho: 360, velocidade: 96, descanso: 50, passo: 28, distancia: 4800 },
 };
 
 // ---------- formas ----------
@@ -539,13 +553,14 @@ function lugarDe(l: Luta, indice: number): { x: number; y: number } {
 }
 
 /**
- * Os lacaios entraram: a sala se arruma de novo, cada um de pé na casa dele
- * pro novo tamanho do grupo (quem está no meio de uma investida pousa onde
- * ela acabar).
+ * Os lacaios entraram: cada novo aparece na casa dele pro novo tamanho do
+ * grupo. Quem já estava na sala fica onde está (desde 2026-11-15 os monstros
+ * andam; antes a sala toda se arrumava de novo).
  */
-function arrumarASala(l: Luta): void {
+function porOsLacaios(l: Luta, novos: readonly number[]): void {
   const formato = geometria(l);
   for (const m of l.arena.monstros) {
+    if (!novos.includes(m.indice)) continue;
     const lugar = lugarDoMonstro(l.arena.monstros.length, m.indice, formato);
     m.corpoX = lugar.x;
     m.corpoY = lugar.y;
@@ -864,7 +879,7 @@ function ferirNaArena(l: Luta, estado: EstadoNaMasmorra, indice: number, depois:
   l.estado = ferida.estado;
   if (ferida.lacaios.length > 0) {
     for (const novo of ferida.lacaios) l.arena.monstros.push({ indice: novo, fase: 'esperando', tempo: 0, forca: 1, alvo: -1, x: 0, y: 0, rumoX: 0, rumoY: 0, corpoX: 0, corpoY: 0 });
-    arrumarASala(l);
+    porOsLacaios(l, ferida.lacaios);
     l.arena.alvo = ferida.lacaios[0] as number;
   }
   // O chefe final que chamou os lacaios tem o texto dele; o de andar 5 diz o que as mecânicas fizeram.
@@ -1040,6 +1055,9 @@ function agirMonstro(l: Luta, m: MonstroNaArena): void {
   const jeito = jeitoDoGolpe(monstroNo(l, m.indice), m.poder);
   switch (m.fase) {
     case 'esperando':
+      // O respiro dele corre enquanto anda atrás do herói.
+      if (m.tempo > 0) m.tempo -= 1;
+      aproximar(l, m, jeito);
       return;
     case 'avisando':
       m.tempo -= 1;
@@ -1049,13 +1067,55 @@ function agirMonstro(l: Luta, m: MonstroNaArena): void {
       investir(l, m, jeito);
       return;
     default:
-      // Descansando, atordoado, hesitando: parado até o tempo acabar.
+      // Descansando, atordoado, hesitando: parado até o tempo acabar; aí volta a andar, no respiro dele.
       m.tempo -= 1;
       if (m.tempo <= 0) {
         m.fase = 'esperando';
-        m.tempo = 0;
+        m.tempo = RESPIRO_DO_MONSTRO;
       }
   }
+}
+
+/** A distância (ao quadrado) do corpo do monstro ao herói. */
+function distanciaDoHeroi(l: Luta, m: MonstroNaArena): number {
+  const dx = l.arena.heroi.x - m.corpoX;
+  const dy = l.arena.heroi.y - m.corpoY;
+  return dx * dx + dy * dy;
+}
+
+/** O monstro está perto o bastante do herói pro golpe dele começar? */
+function aDistanciaDoGolpe(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): boolean {
+  return distanciaDoHeroi(l, m) <= jeito.distancia * jeito.distancia;
+}
+
+/**
+ * O monstro esperando anda em linha reta pro herói, no passo dele, até a
+ * distância do golpe. Não sai do chão da sala, não entra em casa de parede
+ * (os cantos da Caverna) e não encosta em outro monstro de pé: barrado,
+ * fica onde está neste passo.
+ */
+function aproximar(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
+  if (aDistanciaDoGolpe(l, m, jeito)) return;
+  const heroi = l.arena.heroi;
+  const r = rumo(heroi.x - m.corpoX, heroi.y - m.corpoY, jeito.passo);
+  const { cols, rows } = geometria(l);
+  const meia = TILE_UNITS / 2;
+  const x = Math.min(Math.max(m.corpoX + r.x, TILE_UNITS + meia), (cols - 1) * TILE_UNITS - meia);
+  const y = Math.min(Math.max(m.corpoY + r.y, TILE_UNITS + meia), (rows - 1) * TILE_UNITS - meia);
+  const col = Math.floor(x / TILE_UNITS);
+  const row = Math.floor(y / TILE_UNITS);
+  if (paredesDaSala(masmorra(l).masmorra.dungeon).some((casa) => casa.col === col && casa.row === row)) return;
+  for (const outro of l.arena.monstros) {
+    if (outro === m || outro.fase === 'caido') continue;
+    const dx = outro.corpoX - x;
+    const dy = outro.corpoY - y;
+    const antesX = outro.corpoX - m.corpoX;
+    const antesY = outro.corpoY - m.corpoY;
+    // Só barra quem chegaria mais perto do outro: afastar-se sempre pode.
+    if (dx * dx + dy * dy < ESPACO_ENTRE_MONSTROS * ESPACO_ENTRE_MONSTROS && dx * dx + dy * dy < antesX * antesX + antesY * antesY) return;
+  }
+  m.corpoX = x;
+  m.corpoY = y;
 }
 
 /** Há vaga pra mais um golpe começar: menos de `ATACANDO_DE_UMA_VEZ` golpeando e o respiro passado. */
@@ -1065,12 +1125,16 @@ function podeGolpear(l: Luta): boolean {
   return golpeando < ATACANDO_DE_UMA_VEZ;
 }
 
-/** O próximo da vez: depois de quem golpeou por último, o primeiro esperando, dando a volta. */
+/**
+ * O próximo da vez: depois de quem golpeou por último, dando a volta, o
+ * primeiro esperando com o respiro passado e já à distância do golpe dele.
+ */
 function proximoDaVez(l: Luta): MonstroNaArena | null {
   const monstros = l.arena.monstros;
   for (let k = 1; k <= monstros.length; k++) {
     const m = monstros[(l.arena.vez + k + monstros.length) % monstros.length] as MonstroNaArena;
-    if (m.fase === 'esperando') return m;
+    if (m.fase !== 'esperando' || m.tempo > 0) continue;
+    if (aDistanciaDoGolpe(l, m, jeitoDe(monstroNo(l, m.indice)))) return m;
   }
   return null;
 }

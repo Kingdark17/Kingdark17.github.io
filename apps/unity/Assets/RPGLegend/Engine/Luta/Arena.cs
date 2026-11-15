@@ -18,6 +18,10 @@ namespace RPGLegend.Engine
         public double Descanso;
         /// <summary>Descansando, ele se protege: o golpe do herói chega com metade da força.</summary>
         public bool? Guarda;
+        /// <summary>Andando atrás do herói, quanto anda por passo (o herói anda 64).</summary>
+        public double Passo;
+        /// <summary>Até que distância do herói ele chega, e de onde o golpe pode começar.</summary>
+        public double Distancia;
     }
 
     /// <summary>
@@ -200,6 +204,8 @@ namespace RPGLegend.Engine
         [JsName("ESPERA_INICIAL")] public double EsperaInicial;
         [JsName("ATACANDO_DE_UMA_VEZ")] public double AtacandoDeUmaVez;
         [JsName("INTERVALO_ENTRE_GOLPES")] public double IntervaloEntreGolpes;
+        [JsName("RESPIRO_DO_MONSTRO")] public double RespiroDoMonstro;
+        [JsName("ESPACO_ENTRE_MONSTROS")] public double EspacoEntreMonstros;
         [JsName("CADENCIA_DO_COMPANHEIRO")] public double CadenciaDoCompanheiro;
         [JsName("JEITOS_DE_LUTAR")] public OrderedMap<JeitoDeLutar> JeitosDeLutar = new OrderedMap<JeitoDeLutar>();
     }
@@ -464,6 +470,8 @@ namespace RPGLegend.Engine
             Velocidade = jeito.Velocidade,
             Descanso = descanso ?? jeito.Descanso,
             Guarda = jeito.Guarda,
+            Passo = jeito.Passo,
+            Distancia = jeito.Distancia,
         };
 
         /// <summary>O monstro da arena no índice, se o índice for um inteiro dentro da lista (o <c>monstros[i]</c> do TS).</summary>
@@ -503,12 +511,16 @@ namespace RPGLegend.Engine
             return LugarDoMonstro(l.Arena.Monstros.Count, indice, Geometria(l));
         }
 
-        /// <summary>TS: arrumarASala — os lacaios entraram: cada um de pé na casa dele pro novo tamanho do grupo.</summary>
-        private static void ArrumarASala(Luta l)
+        /// <summary>
+        /// TS: porOsLacaios — os lacaios entraram: cada novo aparece na casa dele pro novo tamanho do grupo; quem já
+        /// estava na sala fica onde está (desde 2026-11-15 os monstros andam).
+        /// </summary>
+        private static void PorOsLacaios(Luta l, List<double> novos)
         {
             var formato = Geometria(l);
             foreach (var m in l.Arena.Monstros)
             {
+                if (!novos.Contains(m.Indice)) continue;
                 var lugar = LugarDoMonstro(l.Arena.Monstros.Count, m.Indice, formato);
                 m.CorpoX = lugar.X;
                 m.CorpoY = lugar.Y;
@@ -883,7 +895,7 @@ namespace RPGLegend.Engine
             {
                 foreach (var novo in ferida.Lacaios)
                     l.Arena.Monstros.Add(new MonstroNaArena { Indice = novo, Fase = "esperando", Tempo = 0, Forca = 1, Alvo = -1, X = 0, Y = 0, RumoX = 0, RumoY = 0, CorpoX = 0, CorpoY = 0 });
-                ArrumarASala(l);
+                PorOsLacaios(l, ferida.Lacaios);
                 l.Arena.Alvo = ferida.Lacaios[0];
             }
             // O chefe final que chamou os lacaios tem o texto dele; o de andar 5 diz o que as mecânicas fizeram.
@@ -1109,6 +1121,9 @@ namespace RPGLegend.Engine
             switch (m.Fase)
             {
                 case "esperando":
+                    // O respiro dele corre enquanto anda atrás do herói.
+                    if (m.Tempo > 0) m.Tempo -= 1;
+                    Aproximar(l, m, jeito);
                     return;
                 case "avisando":
                     m.Tempo -= 1;
@@ -1118,15 +1133,59 @@ namespace RPGLegend.Engine
                     Investir(l, m, jeito);
                     return;
                 default:
-                    // Descansando, atordoado, hesitando: parado até o tempo acabar.
+                    // Descansando, atordoado, hesitando: parado até o tempo acabar; aí volta a andar, no respiro dele.
                     m.Tempo -= 1;
                     if (m.Tempo <= 0)
                     {
                         m.Fase = "esperando";
-                        m.Tempo = 0;
+                        m.Tempo = D.RespiroDoMonstro;
                     }
                     return;
             }
+        }
+
+        /// <summary>A distância (ao quadrado) do corpo do monstro ao herói.</summary>
+        private static double DistanciaDoHeroi(Luta l, MonstroNaArena m)
+        {
+            double dx = l.Arena.Heroi.X - m.CorpoX;
+            double dy = l.Arena.Heroi.Y - m.CorpoY;
+            return dx * dx + dy * dy;
+        }
+
+        /// <summary>O monstro está perto o bastante do herói pro golpe dele começar?</summary>
+        private static bool ADistanciaDoGolpe(Luta l, MonstroNaArena m, JeitoDeLutar jeito) =>
+            DistanciaDoHeroi(l, m) <= jeito.Distancia * jeito.Distancia;
+
+        /// <summary>
+        /// TS: aproximar — o monstro esperando anda em linha reta pro herói, no passo dele, até a distância do golpe.
+        /// Não sai do chão da sala, não entra em casa de parede e não encosta em outro monstro de pé: barrado, fica
+        /// onde está neste passo.
+        /// </summary>
+        private static void Aproximar(Luta l, MonstroNaArena m, JeitoDeLutar jeito)
+        {
+            if (ADistanciaDoGolpe(l, m, jeito)) return;
+            var heroi = l.Arena.Heroi;
+            var r = Rumo(heroi.X - m.CorpoX, heroi.Y - m.CorpoY, jeito.Passo);
+            var formato = Geometria(l);
+            double meia = RoomWalk.TileUnits / 2;
+            double x = Math.Min(Math.Max(m.CorpoX + r.X, RoomWalk.TileUnits + meia), (formato.Cols - 1) * RoomWalk.TileUnits - meia);
+            double y = Math.Min(Math.Max(m.CorpoY + r.Y, RoomWalk.TileUnits + meia), (formato.Rows - 1) * RoomWalk.TileUnits - meia);
+            double col = Math.Floor(x / RoomWalk.TileUnits);
+            double row = Math.Floor(y / RoomWalk.TileUnits);
+            foreach (var casa in ArteDaSala.ParedesDaSala(Masmorra(l).Masmorra.Dungeon))
+                if (casa.Col == col && casa.Row == row) return;
+            foreach (var outro in l.Arena.Monstros)
+            {
+                if (outro == m || outro.Fase == "caido") continue;
+                double dx = outro.CorpoX - x;
+                double dy = outro.CorpoY - y;
+                double antesX = outro.CorpoX - m.CorpoX;
+                double antesY = outro.CorpoY - m.CorpoY;
+                // Só barra quem chegaria mais perto do outro: afastar-se sempre pode.
+                if (dx * dx + dy * dy < D.EspacoEntreMonstros * D.EspacoEntreMonstros && dx * dx + dy * dy < antesX * antesX + antesY * antesY) return;
+            }
+            m.CorpoX = x;
+            m.CorpoY = y;
         }
 
         /// <summary>Há vaga pra mais um golpe começar: menos de ATACANDO_DE_UMA_VEZ golpeando e o respiro passado.</summary>
@@ -1147,7 +1206,8 @@ namespace RPGLegend.Engine
             for (int k = 1; k <= n; k++)
             {
                 var m = monstros[(int)((l.Arena.Vez + k + n) % n)];
-                if (m.Fase == "esperando") return m;
+                if (m.Fase != "esperando" || m.Tempo > 0) continue;
+                if (ADistanciaDoGolpe(l, m, JeitoDe(MonstroNo(l, m.Indice)))) return m;
             }
             return null;
         }

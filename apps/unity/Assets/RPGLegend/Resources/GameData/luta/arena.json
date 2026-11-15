@@ -11,8 +11,10 @@
   "TEMPO_ATORDOADO": 60,
   "TEMPO_HESITANDO": 40,
   "ESPERA_INICIAL": 60,
-  "ATACANDO_DE_UMA_VEZ": 1,
+  "ATACANDO_DE_UMA_VEZ": 3,
   "INTERVALO_ENTRE_GOLPES": 30,
+  "RESPIRO_DO_MONSTRO": 70,
+  "ESPACO_ENTRE_MONSTROS": 700,
   "CADENCIA_DO_COMPANHEIRO": 100,
   "JEITOS_DE_LUTAR": {
     "agressivo": {
@@ -20,14 +22,18 @@
       "golpe": "investida",
       "tamanho": 560,
       "velocidade": 160,
-      "descanso": 40
+      "descanso": 40,
+      "passo": 40,
+      "distancia": 3360
     },
     "agil": {
       "aviso": 18,
       "golpe": "investida",
       "tamanho": 400,
       "velocidade": 224,
-      "descanso": 25
+      "descanso": 25,
+      "passo": 48,
+      "distancia": 3360
     },
     "defensivo": {
       "aviso": 36,
@@ -35,28 +41,36 @@
       "tamanho": 1100,
       "velocidade": 0,
       "descanso": 60,
-      "guarda": true
+      "guarda": true,
+      "passo": 28,
+      "distancia": 1440
     },
     "venenoso": {
       "aviso": 30,
       "golpe": "perto",
       "tamanho": 1000,
       "velocidade": 0,
-      "descanso": 40
+      "descanso": 40,
+      "passo": 34,
+      "distancia": 1440
     },
     "lento": {
       "aviso": 54,
       "golpe": "perto",
       "tamanho": 1300,
       "velocidade": 0,
-      "descanso": 50
+      "descanso": 50,
+      "passo": 20,
+      "distancia": 1440
     },
     "magico": {
       "aviso": 36,
       "golpe": "tiro",
       "tamanho": 360,
       "velocidade": 96,
-      "descanso": 50
+      "descanso": 50,
+      "passo": 28,
+      "distancia": 4800
     }
   }
 }

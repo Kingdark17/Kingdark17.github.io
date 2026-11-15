@@ -13,6 +13,8 @@ import { saveSorteado } from '../jogo/heroi-sorteado.js';
 import {
   abrirLuta,
   alcanceNaArena,
+  ATACANDO_DE_UMA_VEZ,
+  ESPACO_ENTRE_MONSTROS,
   AREA_DA_MIRA,
   velocidadeNaArena,
   JEITOS_DE_LUTAR,
@@ -156,8 +158,35 @@ describe('o herói na sala', () => {
     const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi' })] }), { ...MEIO, facing: 'S' });
     const saiu = rodar(luta, 40, NUNCA, () => ({ x: 0, y: 127 }));
     expect(saiu.luta.arena.heroi.y).toBe(MEIO.y + 40 * HERO_SPEED);
+    // O zumbi veio atrás; voltando, o herói para na casa em que ele está agora, sem atravessar.
     const voltando = rodar(saiu.luta, 100, NUNCA, () => ({ x: 0, y: -127 }));
-    expect(voltando.luta.arena.heroi.y).toBe(5 * T + HERO_HALF);
+    const zumbi = voltando.luta.arena.monstros[0]!;
+    expect(voltando.luta.arena.heroi.y).toBe((Math.floor(zumbi.corpoY / T) + 1) * T + HERO_HALF);
+  });
+
+  it('o monstro anda atrás do herói, no passo dele, até a distância do golpe', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi' })] }), { x: 4.5 * T, y: 7.5 * T, facing: 'N' });
+    const jeito = JEITOS_DE_LUTAR.lento;
+    const umPasso = passoDaLuta(luta, PARADO, NUNCA).luta.arena.monstros[0]!;
+    expect(umPasso.corpoY).toBe(MEIO.y + jeito.passo);
+    expect(umPasso.corpoX).toBe(MEIO.x);
+    // Chega até a distância do golpe e para ali (o golpe é que cai no herói).
+    let atual = luta;
+    for (let i = 0; i < 200 && atual.arena.monstros[0]!.fase === 'esperando'; i++) atual = passoDaLuta(atual, PARADO, NUNCA).luta;
+    const chegou = atual.arena.monstros[0]!;
+    expect(chegou.fase).toBe('avisando');
+    expect(7.5 * T - chegou.corpoY).toBeLessThanOrEqual(jeito.distancia);
+    expect(7.5 * T - chegou.corpoY).toBeGreaterThan(jeito.distancia - jeito.passo);
+  });
+
+  it('andando, um monstro não entra em cima do outro', () => {
+    const dupla = [monstro({ speciesId: 'zumbi', hp: 900 }), monstro({ speciesId: 'zumbi', hp: 900 })];
+    const { luta } = abrirLuta(naSala({ monsters: dupla }), { x: 4.5 * T, y: 7.5 * T, facing: 'N' });
+    rodar(luta, 400, NUNCA, (_i, l) => {
+      const [a, b] = l.arena.monstros;
+      expect(Math.hypot(a!.corpoX - b!.corpoX, a!.corpoY - b!.corpoY)).toBeGreaterThanOrEqual(ESPACO_ENTRE_MONSTROS - JEITOS_DE_LUTAR.lento.passo);
+      return PARADO;
+    });
   });
 });
 
@@ -246,17 +275,24 @@ describe('o golpe do monstro', () => {
     expect(vidaDoHeroi(fim.luta)).toBe(vidaDoHeroi(avisando));
   });
 
-  it('um golpe por vez, revezando entre os de pé', () => {
+  it('vários golpeiam juntos, mas um golpe não começa no mesmo passo do outro', () => {
     const grupo = [monstro({ speciesId: 'goblin', hp: 900 }), monstro({ speciesId: 'aranha', hp: 900 }), monstro({ speciesId: 'zumbi', hp: 900 })];
     const { luta } = abrirLuta(naSala({ monsters: grupo }), roomArrival(null));
-    const ordem: number[] = [];
+    let juntos = 0;
+    const golpearam = new Set<number>();
+    let antes: string[] = luta.arena.monstros.map((m) => m.fase);
     rodar(luta, 900, NUNCA, (_i, l) => {
       const golpeando = l.arena.monstros.filter((m) => m.fase === 'avisando' || m.fase === 'investindo');
-      expect(golpeando.length).toBeLessThanOrEqual(1);
-      if (golpeando[0] && ordem[ordem.length - 1] !== golpeando[0].indice) ordem.push(golpeando[0].indice);
-      return { x: 0, y: 127 };
+      expect(golpeando.length).toBeLessThanOrEqual(ATACANDO_DE_UMA_VEZ);
+      juntos = Math.max(juntos, golpeando.length);
+      const comecaram = l.arena.monstros.filter((m, i) => m.fase === 'avisando' && antes[i] !== 'avisando');
+      expect(comecaram.length).toBeLessThanOrEqual(1);
+      for (const m of golpeando) golpearam.add(m.indice);
+      antes = l.arena.monstros.map((m) => m.fase);
+      return PARADO;
     });
-    expect(ordem.slice(0, 4)).toEqual([0, 1, 2, 0]);
+    expect(juntos).toBeGreaterThanOrEqual(2);
+    expect([...golpearam].sort()).toEqual([0, 1, 2]);
   });
 
   it('o herói que cai perde a luta e volta pra cidade', () => {
