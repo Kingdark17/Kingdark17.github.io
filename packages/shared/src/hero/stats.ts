@@ -58,11 +58,17 @@ export interface EquippableItem {
 
 export type Equipment = Partial<Record<EquipSlot, EquippableItem | null>>;
 
-/** Subconjunto do herói do qual os atributos derivados dependem. */
+/**
+ * Subconjunto do herói do qual os atributos derivados dependem. A classe é
+ * opcional: com ela, a vida máxima leva a % da classe (`classes-de-luta.ts`,
+ * desde 2026-11-15); sem ela, a de sempre.
+ */
 export interface HeroCore {
   level: number;
   attrs: Attributes;
   equip: Equipment;
+  classId?: string;
+  className?: string;
 }
 
 export interface DerivedStats {

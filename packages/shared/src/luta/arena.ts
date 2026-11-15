@@ -6,8 +6,10 @@
  * - Os monstros começam cada um na casa dele (`lugaresNaLuta`), como no
  *   site, e não andam atrás do herói; mas quem investe **fica onde a
  *   investida acabou** (`corpoX`, `corpoY`; pedido do usuário, 2026-11-12),
- *   e é dali que sai o próximo golpe dele. O jogador toca no monstro que quer atacar
- *   (`mirar`), e o alvo cai pro primeiro de pé quando o dele cai.
+ *   e é dali que sai o próximo golpe dele. No PC **o alvo é o cursor**
+ *   (doc do Breno de 2026-11-15): o monstro numa área de 3 casas em volta
+ *   dele (`AREA_DA_MIRA`), e sem nenhum o golpe vai no chão; no celular, o
+ *   monstro que o jogador tocou na placa (`mirar`), ou o de pé mais perto.
  * - **O herói anda pela sala** (`walkTick`, a regra de sempre), com as
  *   portas fechadas e cada monstro de pé tomando a casa em que está. Todo golpe de
  *   monstro no herói é um desenho no chão da sala, com **aviso** antes: o
@@ -22,10 +24,11 @@
  *   regra do site (`pickMonsterTarget`): aí não passa pelo chão.
  * - **Um botão de ataque**, que abre o evento da arma (`eventos-de-arma.ts`)
  *   no alvo; enquanto ele dura o mundo anda em **câmera lenta**, e no fim o
- *   golpe cai no alvo. **Arma de perto precisa alcançar** (`golpeDePerto`,
- *   `ALCANCE_CORPO_A_CORPO`): fora do alcance o botão não abre o evento, e
- *   quem se afasta antes do fim erra. Arco, magia e poderes acertam de
- *   qualquer lugar.
+ *   golpe cai no alvo. **O ataque tem o alcance da classe** (doc do Breno de
+ *   2026-11-15, `alcanceNaArena`: 12 blocos o Arqueiro, 1 o Ladino…): fora
+ *   dele o botão não abre o evento, e quem se afasta antes do fim erra. Os
+ *   poderes acertam de qualquer lugar. O dano e a velocidade de andar da
+ *   classe (`classes-de-luta.ts`) só valem aqui.
  * - Poderes e itens são botões, com tempo de espera; o menu de itens aberto
  *   também deixa o mundo lento. Os companheiros batem no alvo, no tempo deles.
  * - **A recompensa é a do site**: o golpe é o mesmo `resolverGolpe`, o do
@@ -54,7 +57,7 @@ import { castPower } from '../combat/use-power.js';
 import { anotarUso, atributoDoGolpe, textoDaHabilidade, treinarPoder } from '../hero/treino.js';
 import { geometriaDaSala, paredesDaSala } from '../dungeon/arte-da-sala.js';
 import type { DungeonCell } from '../dungeon/generate.js';
-import { HERO_HALF, roomLayout, TILE_UNITS, walkTick, type GeometriaDaSala, type RoomObject, type Walker } from '../dungeon/room-walk.js';
+import { HERO_HALF, HERO_SPEED, roomLayout, TILE_UNITS, walkTick, type GeometriaDaSala, type RoomObject, type Walker } from '../dungeon/room-walk.js';
 import type { Behavior } from '../monsters/species.js';
 import { heroPowers, type Hero } from '../hero/hero.js';
 import type { Item } from '../items/item.js';
@@ -72,6 +75,8 @@ import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
 import { MAX_ESQUELETOS } from '../combat/invocacao.js';
+import { alcanceDoHeroi, classeDeLuta } from '../hero/classes-de-luta.js';
+import { CHANCE_DE_QUEBRAR_NO_CHEFE, nomeDoMembro, PASSO_COM_PERNA_QUEBRADA, quebrarMembro, type Membro } from '../hero/ferimentos.js';
 import { eventoDaArma, eventoDoAtaque, lerEvento, TAMANHO_DO_DESENHO, type EventoDeArma, type JogadaDoEvento, type TipoDeEvento } from './eventos-de-arma.js';
 
 // ---------- números ----------
@@ -94,8 +99,12 @@ export const RECARGA_DO_ITEM = 60;
 /** O raio do herói pro golpe do monstro, em volta do pé dele: encostou, pegou. Menor que o corpo, pra dar pra desviar. */
 export const RAIO_DO_HEROI = 160;
 
-/** Até onde (do pé do herói ao meio da casa do monstro) a arma de perto alcança: uma casa e meia. */
-export const ALCANCE_CORPO_A_CORPO = 1440;
+/**
+ * A mira do cursor (doc do Breno de 2026-11-15, "uma área de 3"): o monstro
+ * de pé até este tanto do cursor, do meio da casa dele, vira o alvo — um
+ * círculo de 3 casas de largura (decisão do usuário).
+ */
+export const AREA_DA_MIRA = 1440;
 
 /** No fim do evento o alcance tem esta folga: meio passo pra trás durante a mira ainda acerta. */
 export const FOLGA_DO_ALCANCE = 480;
@@ -236,6 +245,12 @@ export interface Arena {
   heroi: Walker;
   /** O monstro que o jogador escolheu (índice na sala); sempre um de pé enquanto a luta dura. */
   alvo: number;
+  /**
+   * O jogador tocou na placa desse alvo (`mirar`): no celular, o ataque vai
+   * nele enquanto ele estiver ao alcance. Sem escolha (ou depois que ele
+   * cai), vai no de pé mais perto.
+   */
+  escolhido?: boolean;
   monstros: MonstroNaArena[];
   companheiros: CompanheiroNaArena[];
   tiros: Tiro[];
@@ -280,6 +295,12 @@ export interface EntradaDaLuta {
   y: number;
   /** Tocou num monstro: ele vira o alvo (índice na sala). */
   mirar?: number;
+  /**
+   * No PC, onde o cursor está na sala, em unidades dela (doc do Breno de
+   * 2026-11-15): o ataque vai no monstro da área em volta dele, ou no chão.
+   * Ausente (o celular, ou o cursor fora da sala), vale o alvo da placa ou o mais perto.
+   */
+  cursor?: { x: number; y: number };
   /** Apertou o botão de ataque neste passo. Com evento aberto, conta como toque. */
   atacar?: boolean;
   /** Soltou o botão de ataque neste passo (a carga). */
@@ -303,8 +324,11 @@ export interface Acontecimento {
   tipo: 'numero' | 'som' | 'diario' | 'aviso';
   /** Número: o texto ("-12", "Errou"…). Diário e aviso: a frase. */
   texto?: string;
-  /** Número: sobre quem. */
-  onde?: 'monstro' | 'heroi' | 'companheiro';
+  /** Número: sobre quem. `chao`: o golpe que foi no chão, em (`x`, `y`). */
+  onde?: 'monstro' | 'heroi' | 'companheiro' | 'chao';
+  /** Número no chão: onde, em unidades da sala. */
+  x?: number;
+  y?: number;
   /** Número sobre monstro ou companheiro: qual (índice na sala, ou na equipe). */
   indice?: number;
   tom?: 'dano' | 'critico' | 'cura' | 'erro' | 'escudo';
@@ -398,7 +422,7 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
 
   if (entrada.mirar !== undefined) mirar(l, entrada.mirar);
   if (l.arena.evento) seguirEvento(l, entrada);
-  else if (entrada.atacar && l.arena.recarga <= 0) abrirEvento(l);
+  else if (entrada.atacar && l.arena.recarga <= 0) abrirEvento(l, entrada);
   else if (entrada.poder) usarPoder(l, entrada.poder);
   else if (entrada.item) usarItem(l, entrada.item);
 
@@ -559,27 +583,55 @@ function pousar(l: Luta, m: MonstroNaArena, raio?: number): void {
   m.corpoY = Math.min(Math.max(y, TILE_UNITS + meia), (rows - 1) * TILE_UNITS - meia);
 }
 
-/** As armas que acertam de longe, seja qual for o ataque. */
-export const ARMAS_DE_LONGE: readonly string[] = ['arco', 'cajado'];
-
 /**
- * O golpe de perto é o que precisa alcançar: o ataque comum e o físico com
- * arma de perto (ou sem arma). Magia, tiro, arco e cajado acertam de longe.
+ * Até onde o ataque comum do herói alcança, em unidades da sala, do pé dele
+ * ao meio da casa do monstro: o alcance da classe em blocos
+ * (`alcanceDoHeroi`) e mais meia casa — com 1 bloco, a casa do lado.
  */
-export function golpeDePerto(hero: Hero, estilo: AttackStyle): boolean {
-  return estilo !== 'magic' && estilo !== 'ranged' && !ARMAS_DE_LONGE.includes(hero.equip.arma?.templateId ?? '');
+export function alcanceNaArena(hero: Hero): number {
+  return alcanceDoHeroi(hero) * TILE_UNITS + TILE_UNITS / 2;
 }
 
-/** O herói alcança o monstro `indice` com a arma de perto, com esta folga a mais? */
+/**
+ * A velocidade de andar do herói na luta: a de sempre, na % da classe; com a
+ * perna quebrada, o passo do mapa (`PASSO_COM_PERNA_QUEBRADA`) vale aqui
+ * também (doc do Breno de 2026-11-15: membro quebrado afeta a batalha).
+ */
+export function velocidadeNaArena(hero: Hero): number {
+  const pct = classeDeLuta(hero).velocidade;
+  const daClasse = pct === 100 ? HERO_SPEED : Math.trunc((HERO_SPEED * pct) / 100);
+  return hero.ferimentos?.perna ? Math.trunc(daClasse * PASSO_COM_PERNA_QUEBRADA) : daClasse;
+}
+
+/** O herói alcança o monstro `indice` com o ataque comum, com esta folga a mais? */
 function alcanca(l: Luta, indice: number, folga = 0): boolean {
   const lugar = lugarDe(l, indice);
   const dx = l.arena.heroi.x - lugar.x;
   const dy = l.arena.heroi.y - lugar.y;
-  const limite = ALCANCE_CORPO_A_CORPO + folga;
+  const limite = alcanceNaArena(masmorra(l).hero) + folga;
   return dx * dx + dy * dy <= limite * limite;
 }
 
-/** O monstro de pé mais perto do herói que a arma de perto alcança; `null`, nenhum. No empate, o primeiro. */
+/** O monstro de pé na área da mira em volta de (x, y): o mais perto do cursor; `null`, nenhum. No empate, o primeiro. */
+function monstroNaMira(l: Luta, x: number, y: number): number | null {
+  let melhor: number | null = null;
+  let menor = 0;
+  for (const m of l.arena.monstros) {
+    if (m.fase === 'caido') continue;
+    const lugar = lugarDe(l, m.indice);
+    const dx = x - lugar.x;
+    const dy = y - lugar.y;
+    const distancia = dx * dx + dy * dy;
+    if (distancia > AREA_DA_MIRA * AREA_DA_MIRA) continue;
+    if (melhor === null || distancia < menor) {
+      melhor = m.indice;
+      menor = distancia;
+    }
+  }
+  return melhor;
+}
+
+/** O monstro de pé mais perto do herói que o ataque alcança; `null`, nenhum. No empate, o primeiro. */
 function maisPertoAoAlcance(l: Luta): number | null {
   let melhor: number | null = null;
   let menor = 0;
@@ -631,7 +683,10 @@ function diario(l: Luta, linhas: readonly string[]): void {
 /** Tocar num monstro de pé faz dele o alvo. Caído, ou um índice que não existe, não muda nada. */
 function mirar(l: Luta, indice: number): void {
   const m = l.arena.monstros[indice];
-  if (m && m.fase !== 'caido') l.arena.alvo = m.indice;
+  if (m && m.fase !== 'caido') {
+    l.arena.alvo = m.indice;
+    l.arena.escolhido = true;
+  }
 }
 
 /** O ataque do botão: o da classe primeiro; o mágico sem mana pro golpe de magia cai pro físico. */
@@ -642,26 +697,50 @@ function estiloDoBotao(hero: Hero): AttackStyle {
 }
 
 /**
- * O botão de ataque abre o evento da arma no alvo. Com arma de perto, o alvo
- * precisa estar ao alcance: se o escolhido não está, vale o de pé mais perto
- * que estiver (e ele vira o alvo); nenhum, o botão só avisa.
+ * O botão de ataque abre o evento da arma no alvo, que precisa estar ao
+ * alcance da classe. No PC o alvo é o monstro na área do cursor; sem
+ * nenhum, o golpe vai no chão, ali (doc do Breno de 2026-11-15). Sem cursor
+ * (o celular), é o da placa, se o jogador escolheu e ele está ao alcance,
+ * ou o de pé mais perto que estiver (e ele vira o alvo). Fora do alcance, o
+ * botão só avisa.
  */
-function abrirEvento(l: Luta): void {
-  let alvo = alvoAtual(l);
-  if (alvo === null) return;
-  const hero = masmorra(l).hero;
-  const estilo = estiloDoBotao(hero);
-  if (golpeDePerto(hero, estilo) && !alcanca(l, alvo)) {
-    const perto = maisPertoAoAlcance(l);
-    if (perto === null) {
+function abrirEvento(l: Luta, entrada: EntradaDaLuta): void {
+  let alvo: number | null;
+  if (entrada.cursor) {
+    alvo = monstroNaMira(l, entrada.cursor.x, entrada.cursor.y);
+    if (alvo === null) {
+      golpeNoChao(l, entrada.cursor.x, entrada.cursor.y);
+      return;
+    }
+    l.arena.alvo = alvo;
+    if (!alcanca(l, alvo)) {
       contar(l, { tipo: 'aviso', texto: 'Chegue mais perto' });
       return;
     }
-    alvo = perto;
-    l.arena.alvo = perto;
+  } else {
+    alvo = alvoAtual(l);
+    if (alvo === null) return;
+    if (!l.arena.escolhido || !alcanca(l, alvo)) {
+      const perto = maisPertoAoAlcance(l);
+      if (perto === null) {
+        contar(l, { tipo: 'aviso', texto: 'Chegue mais perto' });
+        return;
+      }
+      alvo = perto;
+      l.arena.alvo = perto;
+    }
   }
+  const hero = masmorra(l).hero;
+  const estilo = estiloDoBotao(hero);
   const evento = eventoDoAtaque(hero, estilo, l.rng, l.teclado);
   l.arena.evento = { evento, passo: 0, jogada: {}, alvo, estilo };
+}
+
+/** Sem monstro na área do cursor: o golpe vai no chão, sem evento, e o botão espera a recarga como depois de um golpe. */
+function golpeNoChao(l: Luta, x: number, y: number): void {
+  l.arena.recarga = RECARGA_DO_ATAQUE;
+  contar(l, { tipo: 'numero', onde: 'chao', x: Math.trunc(x), y: Math.trunc(y), texto: 'Errou', tom: 'erro' });
+  contar(l, { tipo: 'som', som: 'miss' });
 }
 
 /** O evento aberto anda um passo de verdade e lê o que a pessoa fez nele; terminado, o golpe sai. */
@@ -719,7 +798,7 @@ function seguirEvento(l: Luta, entrada: EntradaDaLuta): void {
 /**
  * O evento terminou: lê, rola o d20 e o golpe cai no alvo do evento. Se ele
  * caiu enquanto o evento corria (um companheiro, o veneno), cai no alvo de agora.
- * Com arma de perto, quem se afastou do alvo durante o evento erra (sem dado).
+ * Quem se afastou do alvo além do alcance durante o evento erra (sem dado).
  */
 function golpear(l: Luta): void {
   const aberto = l.arena.evento as EventoAberto;
@@ -729,7 +808,7 @@ function golpear(l: Luta): void {
   const doEvento = l.arena.monstros[aberto.alvo] as MonstroNaArena;
   const indice = doEvento.fase !== 'caido' ? doEvento.indice : alvoAtual(l);
   if (indice === null) return;
-  if (golpeDePerto(masmorra(l).hero, aberto.estilo) && !alcanca(l, indice, FOLGA_DO_ALCANCE)) {
+  if (!alcanca(l, indice, FOLGA_DO_ALCANCE)) {
     contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: 'Longe', tom: 'erro' });
     contar(l, { tipo: 'som', som: 'miss' });
     return;
@@ -747,7 +826,11 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     contar(l, { tipo: 'aviso', texto: `${monstro.name} se protege!` });
   }
   const estado = masmorra(l);
-  const golpe = resolverGolpe(estado.hero, monstro, dado, lida, estilo, { rng: l.rng, petCriticoBonus: petBonus(l.pet).critico ?? 0 });
+  const golpe = resolverGolpe(estado.hero, monstro, dado, lida, estilo, {
+    rng: l.rng,
+    petCriticoBonus: petBonus(l.pet).critico ?? 0,
+    danoDaClasse: classeDeLuta(estado.hero).dano,
+  });
   // O golpe que acerta treina o atributo dele (`treino.ts`).
   const treinado = golpe.outcome === 'hit' ? anotarUso(golpe.hero, atributoDoGolpe(golpe.hero, estilo)) : golpe.hero;
   const ferida = ferirNaArena(l, { ...estado, hero: treinado }, alvo.indice, golpe.monster);
@@ -838,6 +921,7 @@ function usarPoder(l: Luta, id: string): void {
     petCuraBonus: bonus.healing ?? 0,
     petManaSaveChance: bonus.manaSave ?? 0,
     ...(desconto > 0 ? { descontoDeMana: desconto } : {}),
+    danoDaClasse: classeDeLuta(estado.hero).dano,
   });
   if (uso.outcome === 'no_mana') {
     contar(l, { tipo: 'aviso', texto: `Mana insuficiente para ${poder.name}` });
@@ -913,7 +997,7 @@ function moverHeroi(l: Luta, entrada: EntradaDaLuta): Walker {
     if (!pisando) monstros.push({ id: `monstro_${m.indice}`, col: lugar.col, row: lugar.row });
   }
   const planta = roomLayout({}, monstros, paredesDaSala(masmorra(l).masmorra.dungeon), formato);
-  return walkTick(planta, heroi, { x: entrada.x, y: entrada.y }).walker;
+  return walkTick(planta, heroi, { x: entrada.x, y: entrada.y }, velocidadeNaArena(masmorra(l).hero)).walker;
 }
 
 function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
@@ -1145,9 +1229,21 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
     contar(l, { tipo: 'som', som: 'miss' });
     return;
   }
-  const hero = noEscudo(l, estado.hero.hp, golpe.hero, golpe.damage);
+  let hero = noEscudo(l, estado.hero.hp, golpe.hero, golpe.damage);
+  // Os pesados (os Brutamontes) também quebram osso, como o chefe já quebra (doc do Breno de 2026-11-15; só aqui).
+  let quebrou: Membro | undefined = golpe.quebrou;
+  if (!quebrou && !monstro.isBoss && monstro.enemyClassId === 'brutamontes' && l.rng() < CHANCE_DE_QUEBRAR_NO_CHEFE) {
+    const quebra = quebrarMembro(hero, l.rng);
+    hero = quebra.hero;
+    quebrou = quebra.membro;
+  }
   l.estado = gravarMonstro({ ...estado, hero }, indice, golpe.monster);
   contar(l, { tipo: 'som', som: 'hit' });
+  if (quebrou) {
+    const texto = `🦴 ${monstro.name} quebrou ${nomeDoMembro(quebrou)}!`;
+    contar(l, { tipo: 'aviso', texto });
+    diario(l, [texto]);
+  }
   if (golpe.manaDrained > 0) contar(l, { tipo: 'aviso', texto: `${monstro.name} drena ${golpe.manaDrained} de mana` });
   if (golpe.drainResisted) contar(l, { tipo: 'aviso', texto: 'Sua armadura segura o dreno de mana' });
   if (golpe.poisonApplied) contar(l, { tipo: 'aviso', texto: 'Você foi envenenado' });
@@ -1293,6 +1389,8 @@ function regenerar(l: Luta): void {
 function abater(l: Luta, indice: number, abatido: CombatMonsterView): void {
   const m = l.arena.monstros[indice];
   if (m) m.fase = 'caido';
+  // O escolhido caiu: o ataque volta a ir no mais perto.
+  if (indice === l.arena.alvo) delete l.arena.escolhido;
   const pago = pagarAbate(masmorra(l), abatido);
   // Caiu o último lacaio: o chefe final fica furioso.
   const furia = enfurecer(pago.estado);

@@ -1,0 +1,91 @@
+{
+  "CLASSE_PADRAO": {
+    "alcance": 1,
+    "vida": 100,
+    "dano": 100,
+    "velocidade": 100
+  },
+  "CLASSES_DE_LUTA": {
+    "arqueiro": {
+      "alcance": 12,
+      "vida": 100,
+      "dano": 92,
+      "velocidade": 110
+    },
+    "bardo": {
+      "alcance": 5,
+      "vida": 80,
+      "dano": 85,
+      "velocidade": 120
+    },
+    "necromante": {
+      "alcance": 7,
+      "vida": 80,
+      "dano": 85,
+      "velocidade": 100
+    },
+    "monge": {
+      "alcance": 1,
+      "vida": 100,
+      "dano": 100,
+      "velocidade": 100
+    },
+    "guerreiro": {
+      "alcance": 2,
+      "vida": 100,
+      "dano": 92,
+      "velocidade": 100
+    },
+    "ladino": {
+      "alcance": 1,
+      "vida": 100,
+      "dano": 110,
+      "velocidade": 130
+    },
+    "barbaro": {
+      "alcance": 1,
+      "vida": 100,
+      "dano": 100,
+      "velocidade": 80
+    },
+    "druida": {
+      "alcance": 2,
+      "vida": 100,
+      "dano": 100,
+      "velocidade": 100
+    },
+    "cacador": {
+      "alcance": 4,
+      "vida": 100,
+      "dano": 100,
+      "velocidade": 100
+    },
+    "clerigo": {
+      "alcance": 5,
+      "vida": 80,
+      "dano": 92,
+      "velocidade": 120
+    },
+    "paladino": {
+      "alcance": 2,
+      "vida": 130,
+      "dano": 85,
+      "velocidade": 60
+    },
+    "mago": {
+      "alcance": 7,
+      "vida": 80,
+      "dano": 100,
+      "velocidade": 100
+    }
+  },
+  "ALCANCE_DO_BARBARO": {
+    "machado": 4,
+    "marreta": 2,
+    "maca": 6
+  },
+  "ALCANCE_SEM_CLASSE": {
+    "arco": 7,
+    "cajado": 7
+  }
+}

@@ -27,6 +27,8 @@ namespace RPGLegend.Engine
         public double? PetManaSaveChance;
         /// <summary>A fração que a Coroa do Arquimago tira do custo (<see cref="AcessoriosUnicos"/>); só a arena passa.</summary>
         public double? DescontoDeMana;
+        /// <summary>O dano da classe na luta do app, em % (<see cref="ClassesDeLuta"/>); ausente, 100. Só a arena passa.</summary>
+        public double? DanoDaClasse;
     }
 
     /// <summary>TS: UsePowerResult. Campo opcional do TS é anulável aqui (null = ausente).</summary>
@@ -142,9 +144,11 @@ namespace RPGLegend.Engine
                 double baseDoPoder = power.Type == "dano_fisico" ? d.DmgFisico : d.DmgMagico;
                 // Maestria: +2% por nível com a arma da classe na mão, como no golpe. Fica no golpe do poder;
                 // o dano contínuo que ele deixa não muda.
-                double bruto = Js.Round(
+                double semClasse = Js.Round(
                     Js.Round((Js.Round(baseDoPoder * (power.PowerValue ?? 1) * efeito) + Rng.RandomInt(6, rng)) * Mastery.DamageMult(heroAfterCost)) *
                     FerimentosDoHeroi.ForcaDoBraco(heroAfterCost));
+                double pct = options.DanoDaClasse ?? 100;
+                double bruto = pct == 100 ? semClasse : Js.Round(semClasse * pct / 100);
                 var mod = Damage.ModifyDamageByAffinity(
                     monster,
                     monster.Species.Weakness,

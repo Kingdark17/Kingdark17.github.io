@@ -68,7 +68,7 @@ namespace RPGLegend.Game.Jogo
         /// <summary>Um monstro: a placa (`Raiz`, na coluna ao lado da sala) e o corpo (em pé na casa dele, na sala).</summary>
         private sealed class Lutador
         {
-            public VisualElement Raiz, Placa, Preenchimento, Marcadores, Corpo, Sombra;
+            public VisualElement Raiz, Placa, Preenchimento, Marcadores, Corpo, Sombra, Barra, VidaNaBarra;
             public Label Nome, Subtitulo, Vida, Vez, Mira, Figura;
             public string Chips;
             public float ApanhouEm = -10f;
@@ -285,6 +285,10 @@ namespace RPGLegend.Game.Jogo
                 l.Mira.style.fontSize = Mathf.Max(14f, casa * 0.4f);
                 l.Mira.style.height = Mathf.Max(16f, casa * 0.45f);
                 l.Sombra.style.width = casa * 0.7f;
+                l.Barra.style.width = casa * (visao.IsBoss ? 1.1f : 0.8f);
+                l.Barra.style.height = Mathf.Max(5f, casa * 0.09f);
+                l.Barra.style.display = caido ? DisplayStyle.None : DisplayStyle.Flex;
+                l.VidaNaBarra.style.width = Length.Percent((float)Math.Min(100.0, vida / maximo * 100.0));
                 // Quem investe no herói cruza a sala, e fica onde a investida acabar.
                 bool voando = m.Fase == "investindo" && m.Alvo < 0;
                 float unidade = casa / (float)RoomWalk.TileUnits;
@@ -418,6 +422,13 @@ namespace RPGLegend.Game.Jogo
             });
             l.Mira = Rotulo(l.Corpo, "mira-do-lutador");
             l.Mira.text = "🎯";
+            // A barra de vida em cima do monstro, na sala (doc do Breno de 2026-11-15); a placa ao lado continua.
+            l.Barra = new VisualElement { pickingMode = PickingMode.Ignore };
+            l.Barra.AddToClassList("barra-do-lutador");
+            l.VidaNaBarra = new VisualElement { pickingMode = PickingMode.Ignore };
+            l.VidaNaBarra.AddToClassList("vida-na-barra-do-lutador");
+            l.Barra.Add(l.VidaNaBarra);
+            l.Corpo.Add(l.Barra);
             l.Figura = Rotulo(l.Corpo, "figura-do-lutador");
             l.Sombra = new VisualElement { pickingMode = PickingMode.Ignore };
             l.Sombra.AddToClassList("sombra-do-lutador");
@@ -482,6 +493,32 @@ namespace RPGLegend.Game.Jogo
         }
 
         /// <summary>Em cima da cabeça do herói, na sala.</summary>
+        /// <summary>Um ponto do chão da sala (em unidades dela) no palco: onde vai o número do golpe que foi no chão.</summary>
+        public Vector2 PosicaoNaSala(double x, double y)
+        {
+            var area = AreaDaSala;
+            float unidade = area.width / (float)_colunas / (float)RoomWalk.TileUnits;
+            return new Vector2(area.x + (float)x * unidade, area.y + (float)y * unidade);
+        }
+
+        /// <summary>
+        /// Onde o cursor do mouse está na sala, em unidades dela (o alvo do ataque no PC, doc do Breno de 2026-11-15);
+        /// null fora do chão da sala, sem mouse ou no celular.
+        /// </summary>
+        public PontoNaSala CursorNaSala()
+        {
+            var mouse = UnityEngine.InputSystem.Mouse.current;
+            var area = AreaDaSala;
+            if (Application.isMobilePlatform || mouse == null || panel == null || area.width <= 0 || _colunas <= 0) return null;
+            var naTela = mouse.position.ReadValue();
+            var noPainel = RuntimePanelUtils.ScreenToPanel(panel, new Vector2(naTela.x, Screen.height - naTela.y));
+            var aqui = this.WorldToLocal(noPainel);
+            float unidade = area.width / (float)_colunas / (float)RoomWalk.TileUnits;
+            double x = Math.Truncate((aqui.x - area.x) / unidade), y = Math.Truncate((aqui.y - area.y) / unidade);
+            if (x < 0 || y < 0 || x > _colunas * RoomWalk.TileUnits || aqui.y > area.yMax) return null;
+            return new PontoNaSala { X = x, Y = y };
+        }
+
         public Vector2 PosicaoDoHeroi(Arena arena)
         {
             var area = AreaDaSala;

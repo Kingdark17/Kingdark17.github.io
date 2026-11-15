@@ -157,7 +157,7 @@ namespace RPGLegend.Engine
 
             var equip = SlotsVazios();
             equip.Set("arma", startWeapon);
-            var derived = Derived.Compute(new HeroCore { Level = 1, Attrs = attrs, Equip = equip });
+            var derived = Derived.Compute(new HeroCore { Level = 1, Attrs = attrs, Equip = equip, ClassId = creation.Cls.Id });
 
             return new Hero
             {

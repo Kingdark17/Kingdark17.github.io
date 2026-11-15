@@ -5,7 +5,7 @@
   "RECARGA_DO_PODER": 180,
   "RECARGA_DO_ITEM": 60,
   "RAIO_DO_HEROI": 160,
-  "ALCANCE_CORPO_A_CORPO": 1440,
+  "AREA_DA_MIRA": 1440,
   "FOLGA_DO_ALCANCE": 480,
   "VIDA_DO_TIRO": 120,
   "TEMPO_ATORDOADO": 60,
@@ -58,9 +58,5 @@
       "velocidade": 96,
       "descanso": 50
     }
-  },
-  "ARMAS_DE_LONGE": [
-    "arco",
-    "cajado"
-  ]
+  }
 }

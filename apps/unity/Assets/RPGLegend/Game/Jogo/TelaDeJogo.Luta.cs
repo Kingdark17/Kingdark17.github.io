@@ -220,6 +220,8 @@ namespace RPGLegend.Game.Jogo
                 Dedo = _dedoNoDesenho,
                 Tecla = _tecla,
                 Mirar = _mirar,
+                // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
+                Cursor = _palcoDaLuta.CursorNaSala(),
             };
             _apertou = _soltou = _tocou = false;
             _poderApertado = null;
@@ -498,7 +500,8 @@ namespace RPGLegend.Game.Jogo
         private void Numero(Arena arena, Acontecimento a, int linha)
         {
             int indice = (int)(a.Indice ?? 0);
-            Vector2 onde = a.Onde == "monstro" ? _palcoDaLuta.PosicaoDoMonstro(indice)
+            Vector2 onde = a.Onde == "chao" ? _palcoDaLuta.PosicaoNaSala(a.X ?? 0, a.Y ?? 0)
+                : a.Onde == "monstro" ? _palcoDaLuta.PosicaoDoMonstro(indice)
                 : a.Onde == "companheiro" ? _palcoDaLuta.PosicaoDoAliado(arena, indice)
                 : _palcoDaLuta.PosicaoDoHeroi(arena);
             var rotulo = new Label(a.Texto) { pickingMode = PickingMode.Ignore };
@@ -549,6 +552,12 @@ namespace RPGLegend.Game.Jogo
             if (_sala == null) return;
             double casa = GameData.RoomWalkTable.TileUnits, meio = GameData.RoomWalkTable.HeroHalf;
             string texto = a.Texto ?? "";
+            // o golpe que foi no chão (sem monstro na mira do cursor): a poeira ali
+            if (a.Onde == "chao")
+            {
+                _sala.TocarEfeito("poeira", a.X ?? 0, a.Y ?? 0);
+                return;
+            }
             if (a.Onde == "monstro")
             {
                 var m = arena.Monstros.Find(x => (int)x.Indice == indice);

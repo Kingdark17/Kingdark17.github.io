@@ -85,6 +85,8 @@ namespace RPGLegend.Engine
         double IHeroCore.Level => Level;
         Attributes IHeroCore.Attrs => Attrs;
         Equipment IHeroCore.Equip => Equip;
+        string IHeroCore.ClassId => ClassId;
+        string IHeroCore.ClassName => ClassName;
 
         /// <summary>O <c>{ ...hero }</c> do TS: cópia rasa (os objetos de dentro são os mesmos).</summary>
         public Hero Clone()

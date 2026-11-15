@@ -56,6 +56,7 @@ export * from './dungeon/armadilhas.js';
 export * from './dungeon/arte-da-sala.js';
 
 export * from './inventory/inventory.js';
+export * from './hero/classes-de-luta.js';
 export * from './npc/npc-services.js';
 export * from './quests/quests.js';
 export * from './city/city.js';

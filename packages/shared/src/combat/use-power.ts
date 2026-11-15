@@ -36,6 +36,8 @@ export interface UsePowerOptions {
   petManaSaveChance?: number;
   /** A fração que a Coroa do Arquimago tira do custo (`items/acessorios-unicos.ts`); só a arena do app passa. */
   descontoDeMana?: number;
+  /** O dano da classe na luta do app, em % (`hero/classes-de-luta.ts`); ausente, 100. Só a arena passa. */
+  danoDaClasse?: number;
 }
 
 export interface UsePowerResult {
@@ -101,9 +103,11 @@ export function castPower(
     const base = power.type === 'dano_fisico' ? d.dmgFisico : d.dmgMagico;
     // Maestria: +2% por nível com a arma da classe na mão, como no golpe.
     // Fica no golpe do poder; o dano contínuo que ele deixa não muda.
-    const bruto = Math.round(
+    const semClasse = Math.round(
       Math.round((Math.round(base * (power.power ?? 1) * efeito) + randomInt(6, rng)) * masteryDamageMult(heroAfterCost)) * forcaDoBraco(heroAfterCost),
     );
+    const pct = options.danoDaClasse ?? 100;
+    const bruto = pct === 100 ? semClasse : Math.round((semClasse * pct) / 100);
     const mod = modifyDamageByAffinity(
       monster,
       monster.species.weakness,

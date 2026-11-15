@@ -12,8 +12,9 @@ import { celulaAtual, retomarSave, substituirCelulaAtual, type EstadoNaMasmorra 
 import { saveSorteado } from '../jogo/heroi-sorteado.js';
 import {
   abrirLuta,
-  ALCANCE_CORPO_A_CORPO,
-  golpeDePerto,
+  alcanceNaArena,
+  AREA_DA_MIRA,
+  velocidadeNaArena,
   JEITOS_DE_LUTAR,
   LENTIDAO,
   lugarDoMonstro,
@@ -35,13 +36,13 @@ function arma(id: string) {
   return { ...instantiate(templateById(id)!, RARITIES[0]!), equipped: true };
 }
 
-/** Uma sala de monstro montada à mão, com um herói robusto (pra não morrer em teste que não é sobre morrer). */
+/** Uma sala de monstro montada à mão, com um herói robusto (pra não morrer em teste que não é sobre morrer). Monge: a classe com tudo no padrão e 1 bloco de alcance. */
 function naSala(sala: Partial<DungeonCell> = {}, hero: Partial<Hero> = {}): EstadoNaMasmorra {
   const save = saveSorteado('Aria', seededRng(11), seededRng(11));
   const base = retomarSave({ ...save, floor: 2, mapMode: 'dungeon' }, seededRng(11));
   if (base.mapMode !== 'dungeon') throw new Error('esperava a masmorra');
   const celula = base.map.flat().find((c) => c.type === 'monster')!;
-  const posicionado: EstadoNaMasmorra = { ...base, pos: { x: celula.x, y: celula.y }, party: [], hero: { ...base.hero, hp: 999, maxHp: 999, level: 1, gold: 100, buffs: {}, ...hero } };
+  const posicionado: EstadoNaMasmorra = { ...base, pos: { x: celula.x, y: celula.y }, party: [], hero: { ...base.hero, className: 'Monge', classId: 'monge', hp: 999, maxHp: 999, level: 1, gold: 100, buffs: {}, ...hero } };
   return substituirCelulaAtual(posicionado, { ...celula, monsters: [monstro()], monsterIndex: 0, beaten: false, bonusTreasure: undefined, ...sala });
 }
 
@@ -332,21 +333,37 @@ describe('o ataque do herói', () => {
   });
 });
 
-describe('o alcance da arma de perto', () => {
-  const comArma = (id: string, hero: Partial<Hero> = {}) => ({ equip: { ...naSala().hero.equip, arma: arma(id) }, ...hero });
+describe('o alcance do ataque, pela classe', () => {
+  /** O Ladino é o de 1 bloco: a casa do lado. */
+  const LADINO = { className: 'Ladino', classId: 'ladino' };
+  const ALCANCE_DE_UM_BLOCO = 1.5 * T;
+  const comArma = (id: string, hero: Partial<Hero> = {}) => ({ equip: { ...naSala().hero.equip, arma: arma(id) }, ...LADINO, ...hero });
   const zumbi = (hp = 200) => monstro({ speciesId: 'zumbi', hp, maxHp: 200 });
   const toqueNoMeio = (i: number): EntradaDaLuta => (i === 41 ? { ...PARADO, tocar: true } : PARADO);
 
-  it('espada, machado e mão vazia são de perto; arco, cajado e magia, de longe', () => {
+  it('o alcance vem da classe, em blocos e mais meia casa; o Bárbaro, da arma pesada; sem classe, da arma', () => {
     const hero = naSala().hero;
-    const com = (id: string | null) => ({ ...hero, equip: { ...hero.equip, arma: id ? arma(id) : null } });
-    expect(golpeDePerto(com('espada'), 'normal')).toBe(true);
-    expect(golpeDePerto(com('machado'), 'physical')).toBe(true);
-    expect(golpeDePerto(com(null), 'normal')).toBe(true);
-    expect(golpeDePerto(com('arco'), 'normal')).toBe(false);
-    expect(golpeDePerto(com('arco'), 'ranged')).toBe(false);
-    expect(golpeDePerto(com('cajado'), 'physical')).toBe(false);
-    expect(golpeDePerto(com('espada'), 'magic')).toBe(false);
+    const de = (classId: string | undefined, id: string | null) =>
+      alcanceNaArena({ ...hero, classId, className: classId ? 'x' : 'Aprendiz', equip: { ...hero.equip, arma: id ? arma(id) : null } }) / T;
+    expect(de('ladino', 'arco')).toBe(1.5);
+    expect(de('guerreiro', 'espada')).toBe(2.5);
+    expect(de('arqueiro', 'adaga')).toBe(12.5);
+    expect(de('mago', 'cajado')).toBe(7.5);
+    expect(de('barbaro', 'machado')).toBe(4.5);
+    expect(de('barbaro', 'marreta')).toBe(2.5);
+    expect(de('barbaro', 'maca')).toBe(6.5);
+    expect(de('barbaro', 'espada')).toBe(1.5);
+    expect(de(undefined, 'arco')).toBe(7.5);
+    expect(de(undefined, null)).toBe(1.5);
+  });
+
+  it('a velocidade de andar é a da classe', () => {
+    const hero = naSala().hero;
+    expect(velocidadeNaArena({ ...hero, classId: 'guerreiro' })).toBe(HERO_SPEED);
+    expect(velocidadeNaArena({ ...hero, classId: 'paladino' })).toBe(Math.trunc(HERO_SPEED * 0.6));
+    expect(velocidadeNaArena({ ...hero, classId: 'ladino' })).toBe(Math.trunc(HERO_SPEED * 1.3));
+    // A perna quebrada pesa na luta também.
+    expect(velocidadeNaArena({ ...hero, classId: 'guerreiro', ferimentos: { perna: true } })).toBe(Math.trunc(HERO_SPEED * 0.6));
   });
 
   it('longe do alvo, o botão não abre o evento e avisa', () => {
@@ -357,18 +374,53 @@ describe('o alcance da arma de perto', () => {
   });
 
   it('o alcance é uma casa e meia, do pé do herói ao meio da casa do monstro', () => {
-    const noLimite = { x: MEIO.x, y: MEIO.y + ALCANCE_CORPO_A_CORPO, facing: 'N' as const };
+    const noLimite = { x: MEIO.x, y: MEIO.y + ALCANCE_DE_UM_BLOCO, facing: 'N' as const };
     const abre = (heroi: Walker) => passoDaLuta(abrirLuta(naSala({ monsters: [zumbi()] }, comArma('espada')), heroi).luta, { ...PARADO, atacar: true }, NUNCA).luta.arena.evento;
     expect(abre(noLimite)).not.toBeNull();
     expect(abre({ ...noLimite, y: noLimite.y + 1 })).toBeNull();
     expect(lugarDoMonstro(1, 0, { cols: 9, rows: 9, conteudo: { col: 4, row: 4 }, portas: {} as never })).toEqual(MEIO);
   });
 
-  it('o arco e o cajado abrem de qualquer lugar', () => {
-    for (const id of ['arco', 'cajado']) {
-      const { luta } = abrirLuta(naSala({ monsters: [zumbi()] }, comArma(id)), roomArrival('N'));
+  it('o Arqueiro e o Mago abrem da porta; o Ladino com arco, não', () => {
+    for (const classId of ['arqueiro', 'mago']) {
+      const { luta } = abrirLuta(naSala({ monsters: [zumbi()] }, comArma('arco', { classId, className: classId, mp: 99 })), roomArrival('N'));
       expect(passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta.arena.evento).not.toBeNull();
     }
+    const { luta } = abrirLuta(naSala({ monsters: [zumbi()] }, comArma('arco')), roomArrival('N'));
+    expect(passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta.arena.evento).toBeNull();
+  });
+
+  it('no PC o alvo é o monstro na área do cursor, e ele vira o alvo', () => {
+    const tres = [zumbi(), zumbi(), zumbi()];
+    const { luta } = abrirLuta(naSala({ monsters: tres }, comArma('arco', { classId: 'arqueiro', className: 'Arqueiro' })), roomArrival('N'));
+    const doMeio = lugarDoMonstro(3, 1, { cols: 9, rows: 9, conteudo: { col: 4, row: 4 }, portas: {} as never });
+    const aberto = passoDaLuta(luta, { ...PARADO, atacar: true, cursor: { x: doMeio.x + 100, y: doMeio.y - AREA_DA_MIRA + 200 } }, NUNCA).luta;
+    expect(aberto.arena.evento?.alvo).toBe(1);
+    expect(aberto.arena.alvo).toBe(1);
+  });
+
+  it('sem monstro na área do cursor o golpe vai no chão, sem evento nem dado', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [zumbi()] }, comArma('arco', { classId: 'arqueiro', className: 'Arqueiro' })), roomArrival('N'));
+    const quadro = passoDaLuta(luta, { ...PARADO, atacar: true, cursor: { x: 1.5 * T, y: 7.5 * T } }, NUNCA);
+    expect(quadro.luta.arena.evento).toBeNull();
+    expect(quadro.luta.arena.recarga).toBeGreaterThan(0);
+    expect(quadro.acontecimentos).toContainEqual({ tipo: 'numero', onde: 'chao', x: 1.5 * T, y: 7.5 * T, texto: 'Errou', tom: 'erro' });
+  });
+
+  it('o monstro na área do cursor mas fora do alcance: o botão avisa', () => {
+    const { luta } = abrirLuta(naSala({ monsters: [zumbi()] }, comArma('espada')), roomArrival('N'));
+    const quadro = passoDaLuta(luta, { ...PARADO, atacar: true, cursor: MEIO }, NUNCA);
+    expect(quadro.luta.arena.evento).toBeNull();
+    expect(quadro.acontecimentos).toContainEqual({ tipo: 'aviso', texto: 'Chegue mais perto' });
+  });
+
+  it('sem cursor, o ataque vai no de pé mais perto, a não ser que o jogador tenha tocado na placa de um ao alcance', () => {
+    const tres = [zumbi(), zumbi(), zumbi()];
+    const arqueiro = comArma('arco', { classId: 'arqueiro', className: 'Arqueiro' });
+    // Ao lado do da direita: é ele o mais perto, e o alvo de começo é o primeiro.
+    const { luta } = abrirLuta(naSala({ monsters: tres }, arqueiro), { x: 6.5 * T, y: 5.5 * T, facing: 'N' });
+    expect(passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta.arena.evento?.alvo).toBe(2);
+    expect(passoDaLuta(luta, { ...PARADO, atacar: true, mirar: 0 }, NUNCA).luta.arena.evento?.alvo).toBe(0);
   });
 
   it('com o alvo escolhido longe, o golpe vai no de pé mais perto que a arma alcança, e ele vira o alvo', () => {
@@ -398,7 +450,7 @@ describe('o alcance da arma de perto', () => {
   });
 
   it('meio passo pra trás durante o evento ainda acerta (a folga)', () => {
-    const noLimite = { x: MEIO.x, y: MEIO.y + ALCANCE_CORPO_A_CORPO, facing: 'N' as const };
+    const noLimite = { x: MEIO.x, y: MEIO.y + ALCANCE_DE_UM_BLOCO, facing: 'N' as const };
     const { luta } = abrirLuta(naSala({ monsters: [zumbi()] }, comArma('espada')), noLimite);
     const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta;
     const fim = rodar(aberto, 42, NUNCA, (i) => (i < 8 ? { x: 0, y: 127 } : toqueNoMeio(i)));
@@ -437,7 +489,7 @@ describe('os outros eventos dentro da arena', () => {
   });
 
   it('o cajado no PC: uma letra por vez, a tecla quando o aro encosta; a da última fecha o evento', () => {
-    const estado = naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 300, maxHp: 300 })] }, { equip: { ...naSala().hero.equip, arma: arma('cajado') } });
+    const estado = naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 300, maxHp: 300 })] }, { equip: { ...naSala().hero.equip, arma: arma('cajado') }, className: 'Necromante', classId: 'necromante' });
     const luta = abrirLuta(estado, roomArrival(null), null, true).luta;
     expect(luta.teclado).toBe(true);
     const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, NUNCA).luta;
@@ -452,7 +504,8 @@ describe('os outros eventos dentro da arena', () => {
 
   it('a runa da arma dispara no acerto: o choque tira mais e aparece no número', () => {
     const espada = { ...arma('espada'), runas: [{ runa: 'eletrica' as const, tier: 3 }] };
-    const luta = contraOZumbi({ equip: { ...naSala().hero.equip, arma: espada } });
+    // Paladino: o Monge do herói de teste atordoa por conta própria, e somaria com o choque.
+    const luta = contraOZumbi({ equip: { ...naSala().hero.equip, arma: espada }, className: 'Paladino', classId: 'paladino' });
     const sempreDispara: Rng = () => 0;
     const aberto = passoDaLuta(luta, { ...PARADO, atacar: true }, sempreDispara).luta;
     const fim = rodar(aberto, 42, sempreDispara, (i) => (i === 41 ? { ...PARADO, tocar: true } : PARADO));

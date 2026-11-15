@@ -197,7 +197,7 @@ export function buildHero(creation: HeroCreation, rng: Rng = defaultRng, armaIni
   // o tipo para EquippableItem (o mínimo que derivedStats() exige) e perder
   // uid/templateId/equipped do Item de verdade antes do spread abaixo.
   const equip: HeroEquipment = { arma: startWeapon, secundaria: null, elmo: null, armadura: null, calca: null, botas: null, acessorio: null };
-  const derived = derivedStats({ level: 1, attrs, equip });
+  const derived = derivedStats({ level: 1, attrs, equip, classId: creation.cls.id });
 
   return {
     level: 1,

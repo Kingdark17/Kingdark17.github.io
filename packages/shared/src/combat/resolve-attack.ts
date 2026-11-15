@@ -155,6 +155,8 @@ export interface ResolveAttackOptions {
   rng?: Rng;
   /** Bônus de crítico vindo do sistema de pets (ainda não portado) — 0 se ausente. */
   petCriticoBonus?: number;
+  /** O dano da classe na luta do app, em % (`hero/classes-de-luta.ts`); ausente, 100. Só a arena passa. */
+  danoDaClasse?: number;
 }
 
 export interface ResolveAttackResult {
@@ -331,6 +333,7 @@ export function resolverGolpe(
   const isCrit = guaranteedCrit || rng() < critChance || leitura.critico;
   if (isCrit) dmg = Math.round(dmg * 1.6);
   dmg = Math.round(dmg * forcaDoBraco(heroAfterCost));
+  if (options.danoDaClasse !== undefined && options.danoDaClasse !== 100) dmg = Math.round((dmg * options.danoDaClasse) / 100);
 
   nextMonster = { ...nextMonster, hp: nextMonster.hp - dmg };
 

@@ -262,7 +262,7 @@ export function roomArrival(movedTowards: Direction | null, geometria: Geometria
 }
 
 /** Um passo de simulação. */
-export function walkTick(layout: RoomLayout, walker: Walker, input: WalkInput): WalkStep {
+export function walkTick(layout: RoomLayout, walker: Walker, input: WalkInput, velocidade: number = HERO_SPEED): WalkStep {
   let ix = Math.trunc(input.x);
   let iy = Math.trunc(input.y);
   // Teclas na diagonal (ou joystick no canto) não andam mais rápido que reto.
@@ -272,8 +272,8 @@ export function walkTick(layout: RoomLayout, walker: Walker, input: WalkInput): 
     ix = Math.trunc((ix * STICK_MAX) / comprimento);
     iy = Math.trunc((iy * STICK_MAX) / comprimento);
   }
-  const dx = Math.trunc((ix * HERO_SPEED) / STICK_MAX);
-  const dy = Math.trunc((iy * HERO_SPEED) / STICK_MAX);
+  const dx = Math.trunc((ix * velocidade) / STICK_MAX);
+  const dy = Math.trunc((iy * velocidade) / STICK_MAX);
 
   let x = walker.x;
   let y = walker.y;

@@ -30,6 +30,23 @@ namespace RPGLegend.Tests
             Fn(M, "derivedStats", (a, c) =>
                 W(Derived.Compute(R<HeroCore>(a["hero"]), JsJson.Truthy(JsJson.Prop(a["options"], "critPenalty")))));
 
+            // ---------- classes-de-luta ----------
+            Fn(M, "classeDeLuta", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.De(quem.ClassId, quem.ClassName));
+            });
+            Fn(M, "alcanceDoHeroi", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.AlcanceDoHeroi(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId));
+            });
+            Fn(M, "vidaComAClasse", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.VidaComAClasse(Num(a["vida"]), quem.ClassId, quem.ClassName));
+            });
+
             // ---------- catalog ----------
             Const(M, "RACES", () => W(Catalog.Races));
             Const(M, "CLASSES", () => W(Catalog.Classes));
@@ -49,5 +66,13 @@ namespace RPGLegend.Tests
             Fn(M, "idDaRaca", (a, c) =>
                 W(Catalog.IdDaRaca(Str(JsJson.Prop(a["quem"], "raceId")), Str(JsJson.Prop(a["quem"], "race")))));
         }
+    }
+
+    /// <summary>O `quem` dos casos de classes-de-luta: a classe e a arma na mão.</summary>
+    internal sealed class QuemLutaDoCaso
+    {
+        public string ClassId;
+        public string ClassName;
+        public Equipment Equip;
     }
 }

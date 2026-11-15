@@ -66,6 +66,8 @@ namespace RPGLegend.Engine
         public RngFn Rng;
         /// <summary>Bônus de crítico vindo do sistema de pets — 0 se ausente.</summary>
         public double? PetCriticoBonus;
+        /// <summary>O dano da classe na luta do app, em % (<see cref="ClassesDeLuta"/>); ausente, 100. Só a arena passa.</summary>
+        public double? DanoDaClasse;
     }
 
     /// <summary>
@@ -351,6 +353,7 @@ namespace RPGLegend.Engine
             if (isCrit) dmg = Js.Round(dmg * 1.6);
             // O braço quebrado bate mais fraco (FerimentosDoHeroi).
             dmg = Js.Round(dmg * FerimentosDoHeroi.ForcaDoBraco(heroAfterCost));
+            if (options.DanoDaClasse != null && options.DanoDaClasse != 100) dmg = Js.Round(dmg * options.DanoDaClasse.Value / 100);
 
             var golpeado = nextMonster.Clone();
             golpeado.Hp = nextMonster.Hp - dmg;

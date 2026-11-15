@@ -186,8 +186,10 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: walkTick — um passo de simulação.</summary>
-        public static WalkStep Tick(RoomLayout layout, Walker walker, WalkInput input)
+        public static WalkStep Tick(RoomLayout layout, Walker walker, WalkInput input, double? velocidade = null)
         {
+            // TS: velocidade = HERO_SPEED quando ausente (a arena passa a da classe).
+            double passo = velocidade ?? HeroSpeed;
             double ix = Math.Truncate(input.X);
             double iy = Math.Truncate(input.Y);
             double quadrado = ix * ix + iy * iy;
@@ -197,8 +199,8 @@ namespace RPGLegend.Engine
                 ix = Math.Truncate(ix * StickMax / comprimento);
                 iy = Math.Truncate(iy * StickMax / comprimento);
             }
-            double dx = Math.Truncate(ix * HeroSpeed / StickMax);
-            double dy = Math.Truncate(iy * HeroSpeed / StickMax);
+            double dx = Math.Truncate(ix * passo / StickMax);
+            double dy = Math.Truncate(iy * passo / StickMax);
 
             double x = walker.X;
             double y = walker.Y;

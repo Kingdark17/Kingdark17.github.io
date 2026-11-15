@@ -57,7 +57,8 @@ namespace RPGLegend.Engine
             var eq = EquipmentBonus(hero.Equip);
             return new DerivedStats
             {
-                MaxHp = 20 + hero.Level * 5 + a.Constituicao * 10 + EquipmentStat(hero.Equip, "vida", cap),
+                // A vida da classe (doc do Breno de 2026-11-15) vale no site e no app.
+                MaxHp = ClassesDeLuta.VidaComAClasse(20 + hero.Level * 5 + a.Constituicao * 10 + EquipmentStat(hero.Equip, "vida", cap), hero.ClassId, hero.ClassName),
                 MaxMp = 10 + hero.Level * 2 + a.Intelecto * 5 + EquipmentStat(hero.Equip, "mana", cap),
                 DmgFisico = a.Forca * 2,
                 DmgMagico = a.Intelecto * 3,

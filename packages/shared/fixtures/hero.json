@@ -2090,6 +2090,2571 @@
     }
   },
   {
+    "name": "derivedStats: a vida da classe guerreiro",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 185,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: guerreiro",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 2,
+        "vida": 100,
+        "dano": 92,
+        "velocidade": 100
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: guerreiro com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: guerreiro com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: guerreiro com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: guerreiro com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: guerreiro com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: guerreiro com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: guerreiro com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe mago",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 148,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: mago",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 7,
+        "vida": 80,
+        "dano": 100,
+        "velocidade": 100
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: mago com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: mago com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: mago com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: mago com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: mago com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: mago com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: mago com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe ladino",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 185,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: ladino",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 1,
+        "vida": 100,
+        "dano": 110,
+        "velocidade": 130
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: ladino com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "ladino",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: ladino com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "ladino",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: ladino com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "ladino",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: ladino com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "ladino",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: ladino com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "ladino",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: ladino com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "ladino",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: ladino com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "ladino",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe clerigo",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 148,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: clerigo",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 5,
+        "vida": 80,
+        "dano": 92,
+        "velocidade": 120
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: clerigo com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: clerigo com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: clerigo com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: clerigo com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: clerigo com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: clerigo com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: clerigo com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe barbaro",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 185,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: barbaro",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 1,
+        "vida": 100,
+        "dano": 100,
+        "velocidade": 80
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: barbaro com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "barbaro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: barbaro com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "barbaro",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: barbaro com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "barbaro",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: barbaro com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "barbaro",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: barbaro com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "barbaro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: barbaro com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "barbaro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: barbaro com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "barbaro",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe arqueiro",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 185,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: arqueiro",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 12,
+        "vida": 100,
+        "dano": 92,
+        "velocidade": 110
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: arqueiro com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: arqueiro com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: arqueiro com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: arqueiro com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: arqueiro com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: arqueiro com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: arqueiro com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe paladino",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 241,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: paladino",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 2,
+        "vida": 130,
+        "dano": 85,
+        "velocidade": 60
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: paladino com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "paladino",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: paladino com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "paladino",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: paladino com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "paladino",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: paladino com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "paladino",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: paladino com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "paladino",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: paladino com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "paladino",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: paladino com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "paladino",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe necromante",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 148,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: necromante",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 7,
+        "vida": 80,
+        "dano": 85,
+        "velocidade": 100
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: necromante com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: necromante com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: necromante com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: necromante com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: necromante com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: necromante com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: necromante com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe druida",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 185,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: druida",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 2,
+        "vida": 100,
+        "dano": 100,
+        "velocidade": 100
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: druida com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: druida com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: druida com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: druida com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: druida com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: druida com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: druida com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe monge",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 185,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: monge",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 1,
+        "vida": 100,
+        "dano": 100,
+        "velocidade": 100
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: monge com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: monge com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: monge com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: monge com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: monge com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: monge com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: monge com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe bardo",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 148,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: bardo",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 5,
+        "vida": 80,
+        "dano": 85,
+        "velocidade": 120
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: bardo com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: bardo com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: bardo com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: bardo com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: bardo com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: bardo com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: bardo com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe cacador",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 185,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: cacador",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 4,
+        "vida": 100,
+        "dano": 100,
+        "velocidade": 100
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: cacador com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "cacador",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: cacador com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "cacador",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: cacador com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "cacador",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: cacador com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "cacador",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: cacador com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "cacador",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: cacador com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "cacador",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: cacador com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "cacador",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "derivedStats: a vida da classe nenhuma",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 185,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: nenhuma",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 1,
+        "vida": 100,
+        "dano": 100,
+        "velocidade": 100
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: nenhuma com espada",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "nenhuma",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: nenhuma com machado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "nenhuma",
+          "equip": {
+            "arma": {
+              "templateId": "machado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: nenhuma com marreta",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "nenhuma",
+          "equip": {
+            "arma": {
+              "templateId": "marreta"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: nenhuma com maca",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "nenhuma",
+          "equip": {
+            "arma": {
+              "templateId": "maca"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: nenhuma com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "nenhuma",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: nenhuma com cajado",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "nenhuma",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: nenhuma com null",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "nenhuma",
+          "equip": {
+            "arma": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "derivedStats: a classe pelo nome (save antigo)",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "className": "Paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 241,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
+    "name": "classeDeLuta: sem classe",
+    "input": {
+      "fn": "classeDeLuta",
+      "args": {
+        "quem": {
+          "className": "Aprendiz"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "alcance": 1,
+        "vida": 100,
+        "dano": 100,
+        "velocidade": 100
+      }
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: sem classe, com arco",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "className": "Aprendiz",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: sem classe, sem equip",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {}
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "vidaComAClasse: 205 de bardo",
+    "input": {
+      "fn": "vidaComAClasse",
+      "args": {
+        "vida": 205,
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": 164
+    }
+  },
+  {
+    "name": "vidaComAClasse: 205 de paladino",
+    "input": {
+      "fn": "vidaComAClasse",
+      "args": {
+        "vida": 205,
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 267
+    }
+  },
+  {
+    "name": "vidaComAClasse: 205 de guerreiro",
+    "input": {
+      "fn": "vidaComAClasse",
+      "args": {
+        "vida": 205,
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 205
+    }
+  },
+  {
+    "name": "vidaComAClasse: 1 de mago",
+    "input": {
+      "fn": "vidaComAClasse",
+      "args": {
+        "vida": 1,
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "vidaComAClasse: 3 de paladino",
+    "input": {
+      "fn": "vidaComAClasse",
+      "args": {
+        "vida": 3,
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
     "name": "masteryBattlesFor: nível 0",
     "input": {
       "fn": "masteryBattlesFor",
@@ -4126,7 +6691,7 @@
           "killCount": 0,
           "masteryBattles": 9,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -4137,8 +6702,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -4200,7 +6765,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -4211,8 +6776,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -4280,7 +6845,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -4291,8 +6856,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -4354,7 +6919,7 @@
           "killCount": 0,
           "masteryBattles": 551,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -4365,8 +6930,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -5397,7 +7962,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -5408,8 +7973,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -5479,7 +8044,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -5490,8 +8055,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -5638,7 +8203,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -5649,8 +8214,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -16733,7 +19298,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16744,8 +19309,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -16826,7 +19391,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16837,8 +19402,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 84,
           "mp": 84,
           "buffs": {}
@@ -17077,7 +19642,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 76,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -17088,8 +19653,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 76,
           "mp": 76,
           "buffs": {}
@@ -17172,7 +19737,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -17183,8 +19748,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 84,
           "mp": 84,
           "buffs": {}
@@ -17259,7 +19824,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 76,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -17270,8 +19835,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 76,
           "mp": 76,
           "buffs": {}
@@ -17345,7 +19910,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -17356,8 +19921,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -18908,7 +21473,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -18919,8 +21484,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -19013,7 +21578,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19024,8 +21589,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -19114,7 +21679,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19125,8 +21690,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -19235,7 +21800,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19246,8 +21811,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -19344,7 +21909,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19355,8 +21920,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -19744,7 +22309,7 @@
           },
           "killCount": 17,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 67,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19755,8 +22320,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 67,
           "mp": 67,
           "buffs": {
@@ -19828,7 +22393,7 @@
         },
         "killCount": 17,
         "derived": {
-          "maxHp": 131,
+          "maxHp": 105,
           "maxMp": 67,
           "dmgFisico": 20,
           "dmgMagico": 30,
@@ -19839,8 +22404,8 @@
           "resistMagica": 10,
           "descontoLoja": 5
         },
-        "maxHp": 131,
-        "hp": 131,
+        "maxHp": 105,
+        "hp": 105,
         "maxMp": 67,
         "mp": 67,
         "buffs": {},
@@ -20086,7 +22651,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 78,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -20097,8 +22662,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 78,
           "mp": 78,
           "buffs": {}
@@ -20172,7 +22737,7 @@
         "killCount": 0,
         "masteryBattles": 0,
         "derived": {
-          "maxHp": 125,
+          "maxHp": 100,
           "maxMp": 78,
           "dmgFisico": 20,
           "dmgMagico": 30,
@@ -20183,8 +22748,8 @@
           "resistMagica": 10,
           "descontoLoja": 5
         },
-        "maxHp": 125,
-        "hp": 125,
+        "maxHp": 100,
+        "hp": 100,
         "maxMp": 78,
         "mp": 78,
         "buffs": {}
@@ -21050,7 +23615,7 @@
         "killCount": 0,
         "masteryBattles": 0,
         "derived": {
-          "maxHp": 105,
+          "maxHp": 84,
           "maxMp": 85,
           "dmgFisico": 22,
           "dmgMagico": 39,
@@ -21061,8 +23626,8 @@
           "resistMagica": 13,
           "descontoLoja": 4.5
         },
-        "maxHp": 105,
-        "hp": 105,
+        "maxHp": 84,
+        "hp": 84,
         "maxMp": 85,
         "mp": 85
       },
@@ -21193,7 +23758,7 @@
         "killCount": 0,
         "masteryBattles": 0,
         "derived": {
-          "maxHp": 115,
+          "maxHp": 92,
           "maxMp": 47,
           "dmgFisico": 22,
           "dmgMagico": 21,
@@ -21204,8 +23769,8 @@
           "resistMagica": 11,
           "descontoLoja": 5.5
         },
-        "maxHp": 115,
-        "hp": 115,
+        "maxHp": 92,
+        "hp": 92,
         "maxMp": 47,
         "mp": 47
       },
@@ -21364,7 +23929,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 115,
+            "maxHp": 92,
             "maxMp": 80,
             "dmgFisico": 18,
             "dmgMagico": 36,
@@ -21375,8 +23940,8 @@
             "resistMagica": 10,
             "descontoLoja": 4
           },
-          "maxHp": 115,
-          "hp": 115,
+          "maxHp": 92,
+          "hp": 92,
           "maxMp": 80,
           "mp": 80,
           "classId": "mago"
@@ -21547,7 +24112,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 115,
+            "maxHp": 92,
             "maxMp": 72,
             "dmgFisico": 18,
             "dmgMagico": 36,
@@ -21558,8 +24123,8 @@
             "resistMagica": 10,
             "descontoLoja": 4
           },
-          "maxHp": 115,
-          "hp": 115,
+          "maxHp": 92,
+          "hp": 92,
           "maxMp": 72,
           "mp": 72,
           "classId": "mago"
@@ -21942,7 +24507,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 115,
+            "maxHp": 92,
             "maxMp": 88,
             "dmgFisico": 18,
             "dmgMagico": 36,
@@ -21953,8 +24518,8 @@
             "resistMagica": 10,
             "descontoLoja": 4
           },
-          "maxHp": 115,
-          "hp": 115,
+          "maxHp": 92,
+          "hp": 92,
           "maxMp": 88,
           "mp": 88,
           "classId": "mago"
@@ -28002,7 +30567,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28013,8 +30578,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28091,7 +30656,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28102,8 +30667,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28176,7 +30741,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28187,8 +30752,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28261,7 +30826,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28272,8 +30837,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28347,7 +30912,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28358,8 +30923,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28441,7 +31006,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28452,8 +31017,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28535,7 +31100,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28546,8 +31111,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28621,7 +31186,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28632,8 +31197,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28707,7 +31272,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28718,8 +31283,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28793,7 +31358,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28804,8 +31369,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},
@@ -28879,7 +31444,7 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -28890,8 +31455,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {},

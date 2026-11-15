@@ -1482,6 +1482,20 @@
     font-size: 12px;
 }
 
+/* A barra de vida em cima do monstro, na sala. */
+.barra-do-lutador {
+    align-self: center;
+    margin-bottom: 2px;
+    background-color: rgba(10, 8, 12, 0.85);
+    border-width: 1px;
+    border-color: rgb(26, 11, 9);
+}
+
+.vida-na-barra-do-lutador {
+    height: 100%;
+    background-color: rgb(196, 82, 58);
+}
+
 .mira-do-lutador {
     height: 26px;
     font-size: 22px;

@@ -116,6 +116,9 @@ namespace RPGLegend.Engine
         double Level { get; }
         Attributes Attrs { get; }
         Equipment Equip { get; }
+        /// <summary>A classe, opcional: com ela a vida máxima leva a % da classe (<see cref="ClassesDeLuta"/>).</summary>
+        string ClassId { get; }
+        string ClassName { get; }
     }
 
     public sealed class HeroCore : IHeroCore
@@ -123,6 +126,8 @@ namespace RPGLegend.Engine
         public double Level { get; set; }
         public Attributes Attrs { get; set; } = new Attributes();
         public Equipment Equip { get; set; } = new Equipment();
+        public string ClassId { get; set; }
+        public string ClassName { get; set; }
     }
 
     /// <summary>TS: DerivedStats.</summary>

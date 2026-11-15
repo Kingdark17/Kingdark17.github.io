@@ -1524,7 +1524,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 143,
+            "maxHp": 114,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -1535,8 +1535,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 143,
-          "hp": 143,
+          "maxHp": 114,
+          "hp": 114,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -7548,7 +7548,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -7559,8 +7559,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -7670,7 +7670,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -7681,8 +7681,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -7798,7 +7798,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -7809,8 +7809,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -7920,7 +7920,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -7931,8 +7931,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -10309,7 +10309,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -10320,7 +10320,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -10434,7 +10434,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -10445,7 +10445,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -10559,7 +10559,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -10570,7 +10570,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -10684,7 +10684,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -10695,7 +10695,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -10809,7 +10809,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -10820,7 +10820,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -10934,7 +10934,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -10945,7 +10945,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -11059,7 +11059,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -11070,7 +11070,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -11184,7 +11184,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -11195,7 +11195,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -12315,7 +12315,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -12326,7 +12326,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -12440,7 +12440,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -12451,7 +12451,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 42,
           "maxMp": 62,
           "mp": 62,
@@ -12568,7 +12568,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -12579,7 +12579,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -12693,7 +12693,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -12704,7 +12704,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -12818,7 +12818,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -12829,7 +12829,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -12943,7 +12943,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -12954,7 +12954,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 42,
           "maxMp": 62,
           "mp": 62,
@@ -13071,7 +13071,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -13082,7 +13082,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -13196,7 +13196,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -13207,7 +13207,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -15320,7 +15320,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -15331,7 +15331,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -15444,7 +15444,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -15455,7 +15455,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 43,
           "maxMp": 62,
           "mp": 62,
@@ -15571,7 +15571,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -15582,7 +15582,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -15695,7 +15695,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -15706,7 +15706,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -15819,7 +15819,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -15830,7 +15830,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -15943,7 +15943,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -15954,7 +15954,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 43,
           "maxMp": 62,
           "mp": 62,
@@ -16070,7 +16070,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16081,7 +16081,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -16194,7 +16194,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16205,7 +16205,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -16319,7 +16319,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16330,7 +16330,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -16444,7 +16444,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16455,7 +16455,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -16576,7 +16576,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16587,7 +16587,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -16701,7 +16701,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16712,7 +16712,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -16826,7 +16826,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16837,7 +16837,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -16951,7 +16951,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -16962,7 +16962,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -17083,7 +17083,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -17094,7 +17094,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -17208,7 +17208,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -17219,7 +17219,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 70,
           "mp": 70,
@@ -19354,7 +19354,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19365,7 +19365,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -19480,7 +19480,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19491,7 +19491,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -19613,7 +19613,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19624,7 +19624,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -19739,7 +19739,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19750,7 +19750,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -19865,7 +19865,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -19876,7 +19876,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -19991,7 +19991,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -20002,7 +20002,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -20124,7 +20124,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -20135,7 +20135,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -20250,7 +20250,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -20261,7 +20261,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -21869,7 +21869,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -21880,7 +21880,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -21993,7 +21993,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -22004,7 +22004,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 40,
           "maxMp": 62,
           "mp": 62,
@@ -26936,7 +26936,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -26947,7 +26947,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -27061,7 +27061,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -27072,7 +27072,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -35317,7 +35317,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -35328,7 +35328,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -35468,7 +35468,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -35479,7 +35479,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -37670,7 +37670,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 322,
+            "maxHp": 419,
             "maxMp": 68,
             "dmgFisico": 26,
             "dmgMagico": 18,
@@ -37681,8 +37681,8 @@
             "resistMagica": 22,
             "descontoLoja": 11.5
           },
-          "maxHp": 322,
-          "hp": 207,
+          "maxHp": 419,
+          "hp": 269,
           "maxMp": 68,
           "mp": 1,
           "buffs": {
@@ -37836,7 +37836,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 322,
+            "maxHp": 419,
             "maxMp": 68,
             "dmgFisico": 26,
             "dmgMagico": 18,
@@ -37847,8 +37847,8 @@
             "resistMagica": 22,
             "descontoLoja": 11.5
           },
-          "maxHp": 322,
-          "hp": 213,
+          "maxHp": 419,
+          "hp": 275,
           "maxMp": 68,
           "mp": 1,
           "buffs": {
@@ -37999,7 +37999,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 275,
+            "maxHp": 358,
             "maxMp": 162,
             "dmgFisico": 36,
             "dmgMagico": 54,
@@ -38010,8 +38010,8 @@
             "resistMagica": 15,
             "descontoLoja": 2
           },
-          "maxHp": 275,
-          "hp": 73,
+          "maxHp": 358,
+          "hp": 95,
           "maxMp": 162,
           "mp": 57,
           "buffs": {
@@ -38194,7 +38194,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 275,
+            "maxHp": 358,
             "maxMp": 162,
             "dmgFisico": 36,
             "dmgMagico": 54,
@@ -38205,8 +38205,8 @@
             "resistMagica": 15,
             "descontoLoja": 2
           },
-          "maxHp": 275,
-          "hp": 73,
+          "maxHp": 358,
+          "hp": 95,
           "maxMp": 162,
           "mp": 57,
           "buffs": {
@@ -38791,7 +38791,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 250,
+            "maxHp": 200,
             "maxMp": 63,
             "dmgFisico": 12,
             "dmgMagico": 21,
@@ -38802,8 +38802,8 @@
             "resistMagica": 3,
             "descontoLoja": 5
           },
-          "maxHp": 250,
-          "hp": 123,
+          "maxHp": 200,
+          "hp": 98,
           "maxMp": 63,
           "mp": 20,
           "buffs": {
@@ -38994,7 +38994,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 250,
+            "maxHp": 200,
             "maxMp": 63,
             "dmgFisico": 12,
             "dmgMagico": 21,
@@ -39005,8 +39005,8 @@
             "resistMagica": 3,
             "descontoLoja": 5
           },
-          "maxHp": 250,
-          "hp": 123,
+          "maxHp": 200,
+          "hp": 98,
           "maxMp": 63,
           "mp": 20,
           "buffs": {
@@ -40355,7 +40355,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 165,
+            "maxHp": 132,
             "maxMp": 119,
             "dmgFisico": 22,
             "dmgMagico": 51,
@@ -40366,8 +40366,8 @@
             "resistMagica": 14,
             "descontoLoja": 9
           },
-          "maxHp": 165,
-          "hp": 130,
+          "maxHp": 132,
+          "hp": 104,
           "maxMp": 119,
           "mp": 100,
           "buffs": {
@@ -40487,7 +40487,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 165,
+            "maxHp": 132,
             "maxMp": 119,
             "dmgFisico": 22,
             "dmgMagico": 51,
@@ -40498,8 +40498,8 @@
             "resistMagica": 14,
             "descontoLoja": 9
           },
-          "maxHp": 165,
-          "hp": 130,
+          "maxHp": 132,
+          "hp": 104,
           "maxMp": 119,
           "mp": 100,
           "buffs": {
@@ -41702,7 +41702,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 355,
+            "maxHp": 284,
             "maxMp": 194,
             "dmgFisico": 48,
             "dmgMagico": 72,
@@ -41713,8 +41713,8 @@
             "resistMagica": 17,
             "descontoLoja": 6
           },
-          "maxHp": 355,
-          "hp": 107,
+          "maxHp": 284,
+          "hp": 86,
           "maxMp": 194,
           "mp": 79,
           "buffs": {}
@@ -41845,7 +41845,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 355,
+            "maxHp": 284,
             "maxMp": 194,
             "dmgFisico": 48,
             "dmgMagico": 72,
@@ -41856,8 +41856,8 @@
             "resistMagica": 17,
             "descontoLoja": 6
           },
-          "maxHp": 355,
-          "hp": 107,
+          "maxHp": 284,
+          "hp": 86,
           "maxMp": 194,
           "mp": 79,
           "buffs": {}
@@ -46820,7 +46820,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -46831,7 +46831,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -46969,7 +46969,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -46980,7 +46980,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -47709,7 +47709,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -47720,8 +47720,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -47852,7 +47852,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -47863,8 +47863,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -48001,7 +48001,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -48012,8 +48012,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -48144,7 +48144,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -48155,8 +48155,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -48293,7 +48293,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -48304,8 +48304,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -48436,7 +48436,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -48447,8 +48447,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -48585,7 +48585,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -48596,8 +48596,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -48728,7 +48728,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -48739,8 +48739,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -48877,7 +48877,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -48888,8 +48888,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -49020,7 +49020,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -49031,8 +49031,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -49169,7 +49169,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -49180,7 +49180,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -49246,7 +49246,7 @@
         "killCount": 0,
         "masteryBattles": 0,
         "derived": {
-          "maxHp": 125,
+          "maxHp": 100,
           "maxMp": 62,
           "dmgFisico": 20,
           "dmgMagico": 30,
@@ -49257,7 +49257,7 @@
           "resistMagica": 10,
           "descontoLoja": 5
         },
-        "maxHp": 125,
+        "maxHp": 100,
         "hp": 30,
         "maxMp": 62,
         "mp": 62,
@@ -49800,7 +49800,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -49811,8 +49811,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -49882,7 +49882,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -49893,8 +49893,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -49964,7 +49964,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -49975,8 +49975,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -50046,7 +50046,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -50057,8 +50057,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -50456,7 +50456,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -50467,8 +50467,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -50538,7 +50538,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -50549,8 +50549,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -50620,7 +50620,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -50631,8 +50631,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -50702,7 +50702,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -50713,8 +50713,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -51439,7 +51439,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -51450,8 +51450,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 163,
+          "hp": 163,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -51520,7 +51520,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -51531,8 +51531,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 163,
+          "hp": 163,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -51601,7 +51601,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -51612,8 +51612,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 163,
+          "hp": 163,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -51682,7 +51682,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -51693,8 +51693,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 163,
+          "hp": 163,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -51764,7 +51764,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -51775,8 +51775,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -51846,7 +51846,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -51857,8 +51857,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -51928,7 +51928,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -51939,8 +51939,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -52010,7 +52010,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -52021,8 +52021,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -52749,7 +52749,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -52760,8 +52760,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -52832,7 +52832,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -52843,8 +52843,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -52915,7 +52915,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -52926,8 +52926,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -52998,7 +52998,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -53009,8 +53009,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -54603,7 +54603,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -54614,8 +54614,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -54771,7 +54771,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -54782,8 +54782,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -55315,7 +55315,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -55326,8 +55326,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -57279,7 +57279,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -57290,8 +57290,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -57408,7 +57408,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -57419,8 +57419,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 65,
           "buffs": {
@@ -57546,7 +57546,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -57557,8 +57557,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 2,
           "buffs": {}
@@ -57675,7 +57675,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -57686,8 +57686,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 2,
           "buffs": {}
@@ -57806,7 +57806,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -57817,8 +57817,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 20,
           "buffs": {}
@@ -57935,7 +57935,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -57946,8 +57946,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 15,
           "buffs": {
@@ -61001,7 +61001,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -61012,8 +61012,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {
@@ -61133,7 +61133,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -61144,8 +61144,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 65,
           "buffs": {
@@ -61273,7 +61273,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -61284,8 +61284,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -61402,7 +61402,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -61413,8 +61413,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 65,
           "buffs": {
@@ -61540,7 +61540,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -61551,8 +61551,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -61669,7 +61669,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -61680,8 +61680,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {
@@ -64483,7 +64483,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -64494,8 +64494,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {
@@ -64616,7 +64616,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -64627,8 +64627,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 62,
           "mp": 62,
           "buffs": {
@@ -64756,7 +64756,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -64767,8 +64767,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {
@@ -64888,7 +64888,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -64899,8 +64899,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 65,
           "buffs": {
@@ -65294,7 +65294,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -65305,8 +65305,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -65423,7 +65423,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -65434,8 +65434,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 65,
           "buffs": {
@@ -66374,7 +66374,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 552,
+            "maxHp": 718,
             "maxMp": 220,
             "dmgFisico": 120,
             "dmgMagico": 30,
@@ -66385,8 +66385,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 552,
-          "hp": 552,
+          "maxHp": 718,
+          "hp": 718,
           "maxMp": 220,
           "mp": 220,
           "buffs": {}
@@ -66523,7 +66523,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 552,
+            "maxHp": 718,
             "maxMp": 220,
             "dmgFisico": 120,
             "dmgMagico": 30,
@@ -66534,8 +66534,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 552,
-          "hp": 552,
+          "maxHp": 718,
+          "hp": 718,
           "maxMp": 220,
           "mp": 220,
           "buffs": {
@@ -67788,7 +67788,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 315,
+            "maxHp": 252,
             "maxMp": 141,
             "dmgFisico": 28,
             "dmgMagico": 39,
@@ -67799,8 +67799,8 @@
             "resistMagica": 23,
             "descontoLoja": 3.5
           },
-          "maxHp": 315,
-          "hp": 63,
+          "maxHp": 252,
+          "hp": 50,
           "maxMp": 141,
           "mp": 123,
           "buffs": {
@@ -67921,7 +67921,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 315,
+            "maxHp": 252,
             "maxMp": 141,
             "dmgFisico": 28,
             "dmgMagico": 39,
@@ -67932,8 +67932,8 @@
             "resistMagica": 23,
             "descontoLoja": 3.5
           },
-          "maxHp": 315,
-          "hp": 63,
+          "maxHp": 252,
+          "hp": 50,
           "maxMp": 141,
           "mp": 123,
           "buffs": {
@@ -68402,7 +68402,7 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 205,
+            "maxHp": 164,
             "maxMp": 169,
             "dmgFisico": 32,
             "dmgMagico": 75,
@@ -68413,8 +68413,8 @@
             "resistMagica": 6,
             "descontoLoja": 2.5
           },
-          "maxHp": 205,
-          "hp": 69,
+          "maxHp": 164,
+          "hp": 55,
           "maxMp": 169,
           "mp": 31,
           "buffs": {
@@ -68536,7 +68536,7 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 205,
+            "maxHp": 164,
             "maxMp": 169,
             "dmgFisico": 32,
             "dmgMagico": 75,
@@ -68547,8 +68547,8 @@
             "resistMagica": 6,
             "descontoLoja": 2.5
           },
-          "maxHp": 205,
-          "hp": 69,
+          "maxHp": 164,
+          "hp": 55,
           "maxMp": 169,
           "mp": 31,
           "buffs": {
@@ -69246,7 +69246,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 190,
+            "maxHp": 152,
             "maxMp": 61,
             "dmgFisico": 48,
             "dmgMagico": 9,
@@ -69257,8 +69257,8 @@
             "resistMagica": 23,
             "descontoLoja": 3
           },
-          "maxHp": 190,
-          "hp": 5,
+          "maxHp": 152,
+          "hp": 4,
           "maxMp": 61,
           "mp": 37,
           "buffs": {}
@@ -69391,7 +69391,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 190,
+            "maxHp": 152,
             "maxMp": 61,
             "dmgFisico": 48,
             "dmgMagico": 9,
@@ -69402,8 +69402,8 @@
             "resistMagica": 23,
             "descontoLoja": 3
           },
-          "maxHp": 190,
-          "hp": 5,
+          "maxHp": 152,
+          "hp": 4,
           "maxMp": 61,
           "mp": 37,
           "buffs": {
@@ -69525,7 +69525,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 290,
+            "maxHp": 232,
             "maxMp": 122,
             "dmgFisico": 42,
             "dmgMagico": 36,
@@ -69536,8 +69536,8 @@
             "resistMagica": 18,
             "descontoLoja": 10.5
           },
-          "maxHp": 290,
-          "hp": 274,
+          "maxHp": 232,
+          "hp": 219,
           "maxMp": 122,
           "mp": 41,
           "buffs": {
@@ -69656,7 +69656,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 290,
+            "maxHp": 232,
             "maxMp": 122,
             "dmgFisico": 42,
             "dmgMagico": 36,
@@ -69667,8 +69667,8 @@
             "resistMagica": 18,
             "descontoLoja": 10.5
           },
-          "maxHp": 290,
-          "hp": 274,
+          "maxHp": 232,
+          "hp": 219,
           "maxMp": 122,
           "mp": 41,
           "buffs": {
@@ -69813,7 +69813,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 305,
+            "maxHp": 244,
             "maxMp": 68,
             "dmgFisico": 40,
             "dmgMagico": 12,
@@ -69824,8 +69824,8 @@
             "resistMagica": 16,
             "descontoLoja": 1.5
           },
-          "maxHp": 305,
-          "hp": 53,
+          "maxHp": 244,
+          "hp": 42,
           "maxMp": 68,
           "mp": 19,
           "buffs": {}
@@ -69959,7 +69959,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 305,
+            "maxHp": 244,
             "maxMp": 68,
             "dmgFisico": 40,
             "dmgMagico": 12,
@@ -69970,8 +69970,8 @@
             "resistMagica": 16,
             "descontoLoja": 1.5
           },
-          "maxHp": 305,
-          "hp": 53,
+          "maxHp": 244,
+          "hp": 42,
           "maxMp": 68,
           "mp": 19,
           "buffs": {}
@@ -70119,7 +70119,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 204,
+            "maxHp": 163,
             "maxMp": 176,
             "dmgFisico": 24,
             "dmgMagico": 69,
@@ -70130,8 +70130,8 @@
             "resistMagica": 10,
             "descontoLoja": 9
           },
-          "maxHp": 204,
-          "hp": 8,
+          "maxHp": 163,
+          "hp": 7,
           "maxMp": 176,
           "mp": 129,
           "buffs": {
@@ -70275,7 +70275,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 204,
+            "maxHp": 163,
             "maxMp": 176,
             "dmgFisico": 24,
             "dmgMagico": 69,
@@ -70286,8 +70286,8 @@
             "resistMagica": 10,
             "descontoLoja": 9
           },
-          "maxHp": 204,
-          "hp": 8,
+          "maxHp": 163,
+          "hp": 7,
           "maxMp": 176,
           "mp": 129,
           "buffs": {
@@ -72274,7 +72274,7 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 365,
+            "maxHp": 292,
             "maxMp": 163,
             "dmgFisico": 12,
             "dmgMagico": 51,
@@ -72285,8 +72285,8 @@
             "resistMagica": 15,
             "descontoLoja": 6.5
           },
-          "maxHp": 365,
-          "hp": 159,
+          "maxHp": 292,
+          "hp": 127,
           "maxMp": 163,
           "mp": 25,
           "buffs": {
@@ -72426,7 +72426,7 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 365,
+            "maxHp": 292,
             "maxMp": 163,
             "dmgFisico": 12,
             "dmgMagico": 51,
@@ -72437,8 +72437,8 @@
             "resistMagica": 15,
             "descontoLoja": 6.5
           },
-          "maxHp": 365,
-          "hp": 159,
+          "maxHp": 292,
+          "hp": 127,
           "maxMp": 163,
           "mp": 25,
           "buffs": {
@@ -72573,7 +72573,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 133,
+            "maxHp": 106,
             "maxMp": 105,
             "dmgFisico": 10,
             "dmgMagico": 36,
@@ -72584,8 +72584,8 @@
             "resistMagica": 19,
             "descontoLoja": 7
           },
-          "maxHp": 133,
-          "hp": 16,
+          "maxHp": 106,
+          "hp": 13,
           "maxMp": 105,
           "mp": 98,
           "buffs": {
@@ -72720,7 +72720,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 133,
+            "maxHp": 106,
             "maxMp": 105,
             "dmgFisico": 10,
             "dmgMagico": 36,
@@ -72731,8 +72731,8 @@
             "resistMagica": 19,
             "descontoLoja": 7
           },
-          "maxHp": 133,
-          "hp": 30,
+          "maxHp": 106,
+          "hp": 27,
           "maxMp": 105,
           "mp": 98,
           "buffs": {
@@ -74041,7 +74041,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 212,
+            "maxHp": 170,
             "maxMp": 164,
             "dmgFisico": 50,
             "dmgMagico": 48,
@@ -74052,8 +74052,8 @@
             "resistMagica": 22,
             "descontoLoja": 1.5
           },
-          "maxHp": 212,
-          "hp": 13,
+          "maxHp": 170,
+          "hp": 10,
           "maxMp": 164,
           "mp": 126,
           "buffs": {
@@ -74187,7 +74187,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 212,
+            "maxHp": 170,
             "maxMp": 164,
             "dmgFisico": 50,
             "dmgMagico": 48,
@@ -74198,8 +74198,8 @@
             "resistMagica": 22,
             "descontoLoja": 1.5
           },
-          "maxHp": 212,
-          "hp": 13,
+          "maxHp": 170,
+          "hp": 10,
           "maxMp": 164,
           "mp": 126,
           "buffs": {
@@ -74644,7 +74644,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 400,
+            "maxHp": 320,
             "maxMp": 195,
             "dmgFisico": 44,
             "dmgMagico": 63,
@@ -74655,8 +74655,8 @@
             "resistMagica": 22,
             "descontoLoja": 6
           },
-          "maxHp": 400,
-          "hp": 158,
+          "maxHp": 320,
+          "hp": 126,
           "maxMp": 195,
           "mp": 48,
           "buffs": {
@@ -74796,7 +74796,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 400,
+            "maxHp": 320,
             "maxMp": 195,
             "dmgFisico": 44,
             "dmgMagico": 63,
@@ -74807,8 +74807,8 @@
             "resistMagica": 22,
             "descontoLoja": 6
           },
-          "maxHp": 400,
-          "hp": 158,
+          "maxHp": 320,
+          "hp": 126,
           "maxMp": 195,
           "mp": 43,
           "buffs": {
@@ -74947,7 +74947,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 270,
+            "maxHp": 351,
             "maxMp": 85,
             "dmgFisico": 26,
             "dmgMagico": 21,
@@ -74958,8 +74958,8 @@
             "resistMagica": 7,
             "descontoLoja": 5.5
           },
-          "maxHp": 270,
-          "hp": 232,
+          "maxHp": 351,
+          "hp": 302,
           "maxMp": 85,
           "mp": 83,
           "buffs": {
@@ -75085,7 +75085,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 270,
+            "maxHp": 351,
             "maxMp": 85,
             "dmgFisico": 26,
             "dmgMagico": 21,
@@ -75096,8 +75096,8 @@
             "resistMagica": 7,
             "descontoLoja": 5.5
           },
-          "maxHp": 270,
-          "hp": 232,
+          "maxHp": 351,
+          "hp": 302,
           "maxMp": 85,
           "mp": 83,
           "buffs": {
@@ -75832,7 +75832,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 234,
+            "maxHp": 187,
             "maxMp": 129,
             "dmgFisico": 36,
             "dmgMagico": 69,
@@ -75843,8 +75843,8 @@
             "resistMagica": 19,
             "descontoLoja": 12.5
           },
-          "maxHp": 234,
-          "hp": 127,
+          "maxHp": 187,
+          "hp": 101,
           "maxMp": 129,
           "mp": 58,
           "buffs": {}
@@ -75973,7 +75973,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 234,
+            "maxHp": 187,
             "maxMp": 129,
             "dmgFisico": 36,
             "dmgMagico": 69,
@@ -75984,8 +75984,8 @@
             "resistMagica": 19,
             "descontoLoja": 12.5
           },
-          "maxHp": 234,
-          "hp": 127,
+          "maxHp": 187,
+          "hp": 101,
           "maxMp": 129,
           "mp": 58,
           "buffs": {
@@ -76482,7 +76482,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 255,
+            "maxHp": 204,
             "maxMp": 104,
             "dmgFisico": 36,
             "dmgMagico": 54,
@@ -76493,8 +76493,8 @@
             "resistMagica": 5,
             "descontoLoja": 3
           },
-          "maxHp": 255,
-          "hp": 22,
+          "maxHp": 204,
+          "hp": 17,
           "maxMp": 104,
           "mp": 82,
           "buffs": {
@@ -76640,7 +76640,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 255,
+            "maxHp": 204,
             "maxMp": 104,
             "dmgFisico": 36,
             "dmgMagico": 54,
@@ -76651,8 +76651,8 @@
             "resistMagica": 5,
             "descontoLoja": 3
           },
-          "maxHp": 255,
-          "hp": 22,
+          "maxHp": 204,
+          "hp": 17,
           "maxMp": 104,
           "mp": 82,
           "buffs": {
@@ -78627,7 +78627,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 239,
+            "maxHp": 191,
             "maxMp": 137,
             "dmgFisico": 14,
             "dmgMagico": 45,
@@ -78638,8 +78638,8 @@
             "resistMagica": 14,
             "descontoLoja": 5.5
           },
-          "maxHp": 239,
-          "hp": 64,
+          "maxHp": 191,
+          "hp": 52,
           "maxMp": 137,
           "mp": 43,
           "buffs": {}
@@ -78766,7 +78766,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 239,
+            "maxHp": 191,
             "maxMp": 137,
             "dmgFisico": 14,
             "dmgMagico": 45,
@@ -78777,8 +78777,8 @@
             "resistMagica": 14,
             "descontoLoja": 5.5
           },
-          "maxHp": 239,
-          "hp": 64,
+          "maxHp": 191,
+          "hp": 52,
           "maxMp": 137,
           "mp": 43,
           "buffs": {
@@ -78895,7 +78895,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 300,
+            "maxHp": 240,
             "maxMp": 166,
             "dmgFisico": 30,
             "dmgMagico": 60,
@@ -78906,8 +78906,8 @@
             "resistMagica": 19,
             "descontoLoja": 11
           },
-          "maxHp": 300,
-          "hp": 152,
+          "maxHp": 240,
+          "hp": 122,
           "maxMp": 166,
           "mp": 118,
           "buffs": {
@@ -79016,7 +79016,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 300,
+            "maxHp": 240,
             "maxMp": 166,
             "dmgFisico": 30,
             "dmgMagico": 60,
@@ -79027,8 +79027,8 @@
             "resistMagica": 19,
             "descontoLoja": 11
           },
-          "maxHp": 300,
-          "hp": 152,
+          "maxHp": 240,
+          "hp": 122,
           "maxMp": 166,
           "mp": 118,
           "buffs": {
@@ -79152,7 +79152,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 305,
+            "maxHp": 397,
             "maxMp": 116,
             "dmgFisico": 30,
             "dmgMagico": 24,
@@ -79163,8 +79163,8 @@
             "resistMagica": 6,
             "descontoLoja": 12
           },
-          "maxHp": 305,
-          "hp": 149,
+          "maxHp": 397,
+          "hp": 194,
           "maxMp": 116,
           "mp": 35,
           "buffs": {}
@@ -79295,7 +79295,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 305,
+            "maxHp": 397,
             "maxMp": 116,
             "dmgFisico": 30,
             "dmgMagico": 24,
@@ -79306,8 +79306,8 @@
             "resistMagica": 6,
             "descontoLoja": 12
           },
-          "maxHp": 305,
-          "hp": 149,
+          "maxHp": 397,
+          "hp": 194,
           "maxMp": 116,
           "mp": 35,
           "buffs": {}
@@ -88833,7 +88833,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 345,
+            "maxHp": 276,
             "maxMp": 144,
             "dmgFisico": 14,
             "dmgMagico": 30,
@@ -88844,8 +88844,8 @@
             "resistMagica": 15,
             "descontoLoja": 12
           },
-          "maxHp": 345,
-          "hp": 252,
+          "maxHp": 276,
+          "hp": 202,
           "maxMp": 144,
           "mp": 70,
           "buffs": {
@@ -89103,7 +89103,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 345,
+            "maxHp": 276,
             "maxMp": 144,
             "dmgFisico": 14,
             "dmgMagico": 30,
@@ -89114,8 +89114,8 @@
             "resistMagica": 15,
             "descontoLoja": 12
           },
-          "maxHp": 345,
-          "hp": 252,
+          "maxHp": 276,
+          "hp": 202,
           "maxMp": 144,
           "mp": 70,
           "buffs": {
@@ -89976,7 +89976,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 309,
+            "maxHp": 402,
             "maxMp": 159,
             "dmgFisico": 24,
             "dmgMagico": 63,
@@ -89987,8 +89987,8 @@
             "resistMagica": 5,
             "descontoLoja": 10
           },
-          "maxHp": 309,
-          "hp": 156,
+          "maxHp": 402,
+          "hp": 202,
           "maxMp": 159,
           "mp": 5,
           "buffs": {
@@ -90195,7 +90195,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 309,
+            "maxHp": 402,
             "maxMp": 159,
             "dmgFisico": 24,
             "dmgMagico": 63,
@@ -90206,8 +90206,8 @@
             "resistMagica": 5,
             "descontoLoja": 10
           },
-          "maxHp": 309,
-          "hp": 156,
+          "maxHp": 402,
+          "hp": 202,
           "maxMp": 159,
           "mp": 5,
           "buffs": {
@@ -90330,7 +90330,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 150,
+            "maxHp": 120,
             "maxMp": 60,
             "dmgFisico": 22,
             "dmgMagico": 15,
@@ -90341,8 +90341,8 @@
             "resistMagica": 25,
             "descontoLoja": 5
           },
-          "maxHp": 150,
-          "hp": 28,
+          "maxHp": 120,
+          "hp": 22,
           "maxMp": 60,
           "mp": 8,
           "buffs": {
@@ -90613,7 +90613,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 150,
+            "maxHp": 120,
             "maxMp": 60,
             "dmgFisico": 22,
             "dmgMagico": 15,
@@ -90624,8 +90624,8 @@
             "resistMagica": 25,
             "descontoLoja": 5
           },
-          "maxHp": 150,
-          "hp": 27,
+          "maxHp": 120,
+          "hp": 21,
           "maxMp": 60,
           "mp": 8,
           "buffs": {
@@ -91222,7 +91222,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 290,
+            "maxHp": 232,
             "maxMp": 138,
             "dmgFisico": 14,
             "dmgMagico": 30,
@@ -91233,8 +91233,8 @@
             "resistMagica": 3,
             "descontoLoja": 10
           },
-          "maxHp": 290,
-          "hp": 73,
+          "maxHp": 232,
+          "hp": 59,
           "maxMp": 138,
           "mp": 110,
           "buffs": {
@@ -91410,7 +91410,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 290,
+            "maxHp": 232,
             "maxMp": 138,
             "dmgFisico": 14,
             "dmgMagico": 30,
@@ -91421,8 +91421,8 @@
             "resistMagica": 3,
             "descontoLoja": 10
           },
-          "maxHp": 290,
-          "hp": 73,
+          "maxHp": 232,
+          "hp": 59,
           "maxMp": 138,
           "mp": 110,
           "buffs": {
@@ -93328,7 +93328,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 295,
+            "maxHp": 236,
             "maxMp": 99,
             "dmgFisico": 46,
             "dmgMagico": 45,
@@ -93339,8 +93339,8 @@
             "resistMagica": 19,
             "descontoLoja": 9.5
           },
-          "maxHp": 295,
-          "hp": 264,
+          "maxHp": 236,
+          "hp": 211,
           "maxMp": 99,
           "mp": 60,
           "buffs": {}
@@ -93521,7 +93521,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 295,
+            "maxHp": 236,
             "maxMp": 99,
             "dmgFisico": 46,
             "dmgMagico": 45,
@@ -93532,8 +93532,8 @@
             "resistMagica": 19,
             "descontoLoja": 9.5
           },
-          "maxHp": 295,
-          "hp": 264,
+          "maxHp": 236,
+          "hp": 211,
           "maxMp": 99,
           "mp": 60,
           "buffs": {}
@@ -93652,7 +93652,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 114,
+            "maxHp": 91,
             "maxMp": 111,
             "dmgFisico": 20,
             "dmgMagico": 36,
@@ -93663,7 +93663,7 @@
             "resistMagica": 16,
             "descontoLoja": 9
           },
-          "maxHp": 114,
+          "maxHp": 91,
           "hp": 3,
           "maxMp": 111,
           "mp": 42,
@@ -93870,7 +93870,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 114,
+            "maxHp": 91,
             "maxMp": 111,
             "dmgFisico": 20,
             "dmgMagico": 36,
@@ -93881,7 +93881,7 @@
             "resistMagica": 16,
             "descontoLoja": 9
           },
-          "maxHp": 114,
+          "maxHp": 91,
           "hp": 0,
           "maxMp": 111,
           "mp": 42,
@@ -95491,7 +95491,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 338,
+            "maxHp": 270,
             "maxMp": 181,
             "dmgFisico": 36,
             "dmgMagico": 57,
@@ -95502,8 +95502,8 @@
             "resistMagica": 16,
             "descontoLoja": 1.5
           },
-          "maxHp": 338,
-          "hp": 246,
+          "maxHp": 270,
+          "hp": 196,
           "maxMp": 181,
           "mp": 147,
           "buffs": {
@@ -95749,7 +95749,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 338,
+            "maxHp": 270,
             "maxMp": 181,
             "dmgFisico": 36,
             "dmgMagico": 57,
@@ -95760,8 +95760,8 @@
             "resistMagica": 16,
             "descontoLoja": 1.5
           },
-          "maxHp": 338,
-          "hp": 239,
+          "maxHp": 270,
+          "hp": 189,
           "maxMp": 181,
           "mp": 147,
           "buffs": {
@@ -96271,7 +96271,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 258,
+            "maxHp": 206,
             "maxMp": 88,
             "dmgFisico": 38,
             "dmgMagico": 24,
@@ -96282,8 +96282,8 @@
             "resistMagica": 18,
             "descontoLoja": 4.5
           },
-          "maxHp": 258,
-          "hp": 226,
+          "maxHp": 206,
+          "hp": 181,
           "maxMp": 88,
           "mp": 10,
           "buffs": {
@@ -96512,7 +96512,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 258,
+            "maxHp": 206,
             "maxMp": 88,
             "dmgFisico": 38,
             "dmgMagico": 24,
@@ -96523,8 +96523,8 @@
             "resistMagica": 18,
             "descontoLoja": 4.5
           },
-          "maxHp": 258,
-          "hp": 226,
+          "maxHp": 206,
+          "hp": 181,
           "maxMp": 88,
           "mp": 10,
           "buffs": {
@@ -96621,7 +96621,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 365,
+            "maxHp": 475,
             "maxMp": 168,
             "dmgFisico": 50,
             "dmgMagico": 72,
@@ -96632,8 +96632,8 @@
             "resistMagica": 7,
             "descontoLoja": 10
           },
-          "maxHp": 365,
-          "hp": 344,
+          "maxHp": 475,
+          "hp": 448,
           "maxMp": 168,
           "mp": 87,
           "buffs": {}
@@ -96814,7 +96814,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 365,
+            "maxHp": 475,
             "maxMp": 168,
             "dmgFisico": 50,
             "dmgMagico": 72,
@@ -96825,8 +96825,8 @@
             "resistMagica": 7,
             "descontoLoja": 10
           },
-          "maxHp": 365,
-          "hp": 344,
+          "maxHp": 475,
+          "hp": 448,
           "maxMp": 168,
           "mp": 87,
           "buffs": {}
@@ -98873,7 +98873,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 285,
+            "maxHp": 228,
             "maxMp": 201,
             "dmgFisico": 20,
             "dmgMagico": 69,
@@ -98884,8 +98884,8 @@
             "resistMagica": 13,
             "descontoLoja": 4
           },
-          "maxHp": 285,
-          "hp": 23,
+          "maxHp": 228,
+          "hp": 18,
           "maxMp": 201,
           "mp": 125,
           "buffs": {
@@ -99079,7 +99079,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 285,
+            "maxHp": 228,
             "maxMp": 201,
             "dmgFisico": 20,
             "dmgMagico": 69,
@@ -99090,8 +99090,8 @@
             "resistMagica": 13,
             "descontoLoja": 4
           },
-          "maxHp": 285,
-          "hp": 3,
+          "maxHp": 228,
+          "hp": 0,
           "maxMp": 201,
           "mp": 125,
           "buffs": {
@@ -99126,7 +99126,7 @@
         ],
         "outcome": "hit_hero",
         "damage": 20,
-        "heroDefeated": false,
+        "heroDefeated": true,
         "enemyClassPowerTriggered": "xama",
         "rageTriggered": false,
         "poisonApplied": false,
@@ -99501,7 +99501,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 255,
+            "maxHp": 204,
             "maxMp": 112,
             "dmgFisico": 50,
             "dmgMagico": 48,
@@ -99512,8 +99512,8 @@
             "resistMagica": 13,
             "descontoLoja": 12.5
           },
-          "maxHp": 255,
-          "hp": 41,
+          "maxHp": 204,
+          "hp": 33,
           "maxMp": 112,
           "mp": 39,
           "buffs": {
@@ -99725,7 +99725,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 255,
+            "maxHp": 204,
             "maxMp": 112,
             "dmgFisico": 50,
             "dmgMagico": 48,
@@ -99736,8 +99736,8 @@
             "resistMagica": 13,
             "descontoLoja": 12.5
           },
-          "maxHp": 255,
-          "hp": 22,
+          "maxHp": 204,
+          "hp": 14,
           "maxMp": 112,
           "mp": 39,
           "buffs": {
@@ -102487,7 +102487,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 235,
+            "maxHp": 188,
             "maxMp": 158,
             "dmgFisico": 44,
             "dmgMagico": 54,
@@ -102498,8 +102498,8 @@
             "resistMagica": 23,
             "descontoLoja": 10.5
           },
-          "maxHp": 235,
-          "hp": 117,
+          "maxHp": 188,
+          "hp": 94,
           "maxMp": 158,
           "mp": 111,
           "buffs": {}
@@ -102725,7 +102725,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 235,
+            "maxHp": 188,
             "maxMp": 158,
             "dmgFisico": 44,
             "dmgMagico": 54,
@@ -102736,8 +102736,8 @@
             "resistMagica": 23,
             "descontoLoja": 10.5
           },
-          "maxHp": 235,
-          "hp": 99,
+          "maxHp": 188,
+          "hp": 76,
           "maxMp": 158,
           "mp": 111,
           "buffs": {}
@@ -102868,7 +102868,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 230,
+            "maxHp": 184,
             "maxMp": 79,
             "dmgFisico": 6,
             "dmgMagico": 39,
@@ -102879,8 +102879,8 @@
             "resistMagica": 20,
             "descontoLoja": 7
           },
-          "maxHp": 230,
-          "hp": 196,
+          "maxHp": 184,
+          "hp": 157,
           "maxMp": 79,
           "mp": 27,
           "buffs": {}
@@ -103101,7 +103101,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 230,
+            "maxHp": 184,
             "maxMp": 79,
             "dmgFisico": 6,
             "dmgMagico": 39,
@@ -103112,8 +103112,8 @@
             "resistMagica": 20,
             "descontoLoja": 7
           },
-          "maxHp": 230,
-          "hp": 179,
+          "maxHp": 184,
+          "hp": 140,
           "maxMp": 79,
           "mp": 27,
           "buffs": {}
@@ -120229,7 +120229,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -120240,7 +120240,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 70,
@@ -120435,7 +120435,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -120446,7 +120446,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 56,
@@ -120639,7 +120639,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -120650,7 +120650,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 105,
@@ -120844,7 +120844,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -120855,7 +120855,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 91,
@@ -121046,7 +121046,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -121057,7 +121057,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -121249,7 +121249,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -121260,7 +121260,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 50,
           "maxMp": 62,
           "mp": 52,
@@ -121448,7 +121448,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 97,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -121459,7 +121459,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 30,
           "maxMp": 97,
           "mp": 97,
@@ -121650,7 +121650,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 97,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -121661,7 +121661,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 55,
           "maxMp": 97,
           "mp": 87,
@@ -124257,7 +124257,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -124268,7 +124268,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 70,
@@ -124460,7 +124460,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -124471,7 +124471,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 60,
@@ -124658,7 +124658,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -124669,7 +124669,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 105,
@@ -124860,7 +124860,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -124871,7 +124871,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 95,
@@ -125058,7 +125058,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -125069,7 +125069,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 70,
@@ -125262,7 +125262,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -125273,7 +125273,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 64,
@@ -125459,7 +125459,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -125470,7 +125470,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 105,
@@ -125662,7 +125662,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -125673,7 +125673,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 99,
@@ -125860,7 +125860,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -125871,7 +125871,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -126063,7 +126063,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -126074,7 +126074,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 45,
           "maxMp": 62,
           "mp": 50,
@@ -126262,7 +126262,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 97,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -126273,7 +126273,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 30,
           "maxMp": 97,
           "mp": 97,
@@ -126464,7 +126464,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 97,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -126475,7 +126475,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 58,
           "maxMp": 97,
           "mp": 85,
@@ -126663,7 +126663,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -126674,7 +126674,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 70,
@@ -126869,7 +126869,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -126880,7 +126880,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 58,
@@ -127073,7 +127073,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -127084,7 +127084,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 105,
@@ -127278,7 +127278,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -127289,7 +127289,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 93,
@@ -129106,7 +129106,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -129117,7 +129117,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -129313,7 +129313,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -129324,7 +129324,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 52,
@@ -129518,7 +129518,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 97,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -129529,7 +129529,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 97,
           "mp": 97,
@@ -129724,7 +129724,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 97,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -129735,7 +129735,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 97,
           "mp": 87,
@@ -130743,7 +130743,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -130754,7 +130754,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 70,
@@ -130949,7 +130949,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -130960,7 +130960,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 58,
@@ -131153,7 +131153,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -131164,7 +131164,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 105,
@@ -131358,7 +131358,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -131369,7 +131369,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 93,
@@ -131560,7 +131560,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -131571,7 +131571,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 70,
@@ -131763,7 +131763,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -131774,7 +131774,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 58,
           "maxMp": 70,
           "mp": 55,
@@ -131962,7 +131962,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -131973,7 +131973,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 105,
@@ -132164,7 +132164,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -132175,7 +132175,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 63,
           "maxMp": 105,
           "mp": 90,
@@ -132363,7 +132363,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -132374,7 +132374,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -132569,7 +132569,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -132580,7 +132580,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 62,
           "mp": 52,
@@ -132769,7 +132769,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 97,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -132780,7 +132780,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 97,
           "mp": 97,
@@ -132974,7 +132974,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 97,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -132985,7 +132985,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 97,
           "mp": 87,
@@ -133173,7 +133173,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -133184,7 +133184,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 70,
@@ -133376,7 +133376,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -133387,7 +133387,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 70,
           "mp": 52,
@@ -133617,7 +133617,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -133628,7 +133628,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 105,
@@ -133819,7 +133819,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
@@ -133830,7 +133830,7 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 100,
           "hp": 30,
           "maxMp": 105,
           "mp": 87,
@@ -134866,7 +134866,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 90,
             "dmgFisico": 20,
             "dmgMagico": 42,
@@ -134877,8 +134877,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 90,
           "mp": 90,
           "buffs": {}
@@ -134969,7 +134969,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 155,
+            "maxHp": 124,
             "maxMp": 117,
             "dmgFisico": 20,
             "dmgMagico": 51,
@@ -134980,8 +134980,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 155,
-          "hp": 155,
+          "maxHp": 124,
+          "hp": 124,
           "maxMp": 117,
           "mp": 117,
           "buffs": {}
@@ -135117,7 +135117,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 155,
+            "maxHp": 124,
             "maxMp": 117,
             "dmgFisico": 20,
             "dmgMagico": 51,
@@ -135128,8 +135128,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 155,
-          "hp": 155,
+          "maxHp": 124,
+          "hp": 124,
           "maxMp": 117,
           "mp": 117,
           "buffs": {}
@@ -135243,7 +135243,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 155,
+            "maxHp": 124,
             "maxMp": 117,
             "dmgFisico": 20,
             "dmgMagico": 51,
@@ -135254,8 +135254,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 155,
-          "hp": 155,
+          "maxHp": 124,
+          "hp": 124,
           "maxMp": 117,
           "mp": 117,
           "buffs": {}
@@ -136501,7 +136501,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 155,
+            "maxHp": 124,
             "maxMp": 117,
             "dmgFisico": 20,
             "dmgMagico": 51,
@@ -136512,8 +136512,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 155,
-          "hp": 155,
+          "maxHp": 124,
+          "hp": 124,
           "maxMp": 117,
           "mp": 117,
           "buffs": {}
@@ -136721,7 +136721,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 155,
+            "maxHp": 124,
             "maxMp": 117,
             "dmgFisico": 20,
             "dmgMagico": 51,
@@ -136732,8 +136732,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 155,
-          "hp": 155,
+          "maxHp": 124,
+          "hp": 124,
           "maxMp": 117,
           "mp": 117,
           "buffs": {}
@@ -136937,7 +136937,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 155,
+            "maxHp": 124,
             "maxMp": 117,
             "dmgFisico": 20,
             "dmgMagico": 51,
@@ -136948,8 +136948,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 155,
-          "hp": 155,
+          "maxHp": 124,
+          "hp": 124,
           "maxMp": 117,
           "mp": 117,
           "buffs": {}
@@ -137157,7 +137157,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 155,
+            "maxHp": 124,
             "maxMp": 117,
             "dmgFisico": 20,
             "dmgMagico": 51,
@@ -137168,8 +137168,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 155,
-          "hp": 155,
+          "maxHp": 124,
+          "hp": 124,
           "maxMp": 117,
           "mp": 99,
           "buffs": {}
@@ -137417,7 +137417,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -137428,8 +137428,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 5,
           "buffs": {}
@@ -137548,7 +137548,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -137559,8 +137559,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 5,
           "buffs": {}
@@ -137675,7 +137675,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 155,
+            "maxHp": 124,
             "maxMp": 117,
             "dmgFisico": 20,
             "dmgMagico": 51,
@@ -137686,8 +137686,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 155,
-          "hp": 155,
+          "maxHp": 124,
+          "hp": 124,
           "maxMp": 117,
           "mp": 117,
           "buffs": {}
@@ -137810,7 +137810,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 155,
+            "maxHp": 124,
             "maxMp": 117,
             "dmgFisico": 20,
             "dmgMagico": 51,
@@ -137821,8 +137821,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 155,
-          "hp": 155,
+          "maxHp": 124,
+          "hp": 124,
           "maxMp": 117,
           "mp": 117,
           "buffs": {}
@@ -137983,7 +137983,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -137994,8 +137994,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 17,
           "buffs": {}
@@ -138120,7 +138120,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -138131,8 +138131,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 0,
           "buffs": {}
@@ -138255,7 +138255,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -138266,8 +138266,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 16,
           "buffs": {}
@@ -138392,7 +138392,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -138403,8 +138403,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 16,
           "buffs": {}
@@ -139040,7 +139040,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -139051,7 +139051,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
+          "maxHp": 163,
           "hp": 109,
           "maxMp": 62,
           "mp": 62,
@@ -139173,7 +139173,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 163,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -139184,8 +139184,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 163,
+          "hp": 126,
           "maxMp": 62,
           "mp": 50,
           "buffs": {}
@@ -139304,7 +139304,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -139315,7 +139315,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -139503,7 +139503,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -139514,7 +139514,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 45,
           "maxMp": 62,
           "mp": 52,
@@ -139699,7 +139699,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -139710,7 +139710,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -139899,7 +139899,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -139910,7 +139910,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 54,
           "maxMp": 62,
           "mp": 52,
@@ -140095,7 +140095,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -140106,8 +140106,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 62,
           "buffs": {}
@@ -140249,7 +140249,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -140260,8 +140260,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
-          "hp": 131,
+          "maxHp": 105,
+          "hp": 105,
           "maxMp": 62,
           "mp": 52,
           "buffs": {}
@@ -140401,7 +140401,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -140412,7 +140412,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -140536,7 +140536,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -140547,7 +140547,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 50,
           "maxMp": 62,
           "mp": 62,
@@ -140665,7 +140665,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -140676,7 +140676,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 30,
           "maxMp": 62,
           "mp": 62,
@@ -140800,7 +140800,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 131,
+            "maxHp": 105,
             "maxMp": 62,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -140811,7 +140811,7 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 131,
+          "maxHp": 105,
           "hp": 50,
           "maxMp": 62,
           "mp": 52,
@@ -141198,7 +141198,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -141209,8 +141209,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 70,
           "buffs": {}
@@ -141334,7 +141334,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 125,
+            "maxHp": 100,
             "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
@@ -141345,8 +141345,8 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 125,
-          "hp": 125,
+          "maxHp": 100,
+          "hp": 100,
           "maxMp": 70,
           "mp": 56,
           "buffs": {}
@@ -141730,7 +141730,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 405,
+            "maxHp": 324,
             "maxMp": 107,
             "dmgFisico": 46,
             "dmgMagico": 21,
@@ -141741,8 +141741,8 @@
             "resistMagica": 6,
             "descontoLoja": 4.5
           },
-          "maxHp": 405,
-          "hp": 400,
+          "maxHp": 324,
+          "hp": 320,
           "maxMp": 107,
           "mp": 41,
           "buffs": {
@@ -141892,7 +141892,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 405,
+            "maxHp": 324,
             "maxMp": 107,
             "dmgFisico": 46,
             "dmgMagico": 21,
@@ -141903,8 +141903,8 @@
             "resistMagica": 6,
             "descontoLoja": 4.5
           },
-          "maxHp": 405,
-          "hp": 400,
+          "maxHp": 324,
+          "hp": 320,
           "maxMp": 107,
           "mp": 29,
           "buffs": {
@@ -142048,7 +142048,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 250,
+            "maxHp": 325,
             "maxMp": 179,
             "dmgFisico": 6,
             "dmgMagico": 75,
@@ -142059,8 +142059,8 @@
             "resistMagica": 12,
             "descontoLoja": 4
           },
-          "maxHp": 250,
-          "hp": 197,
+          "maxHp": 325,
+          "hp": 256,
           "maxMp": 179,
           "mp": 11,
           "buffs": {}
@@ -142217,7 +142217,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 250,
+            "maxHp": 325,
             "maxMp": 179,
             "dmgFisico": 6,
             "dmgMagico": 75,
@@ -142228,8 +142228,8 @@
             "resistMagica": 12,
             "descontoLoja": 4
           },
-          "maxHp": 250,
-          "hp": 197,
+          "maxHp": 325,
+          "hp": 256,
           "maxMp": 179,
           "mp": 11,
           "buffs": {}
@@ -142411,7 +142411,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 195,
+            "maxHp": 156,
             "maxMp": 133,
             "dmgFisico": 30,
             "dmgMagico": 18,
@@ -142422,8 +142422,8 @@
             "resistMagica": 21,
             "descontoLoja": 6.5
           },
-          "maxHp": 195,
-          "hp": 170,
+          "maxHp": 156,
+          "hp": 136,
           "maxMp": 133,
           "mp": 2,
           "buffs": {
@@ -142652,7 +142652,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 195,
+            "maxHp": 156,
             "maxMp": 133,
             "dmgFisico": 30,
             "dmgMagico": 18,
@@ -142663,8 +142663,8 @@
             "resistMagica": 21,
             "descontoLoja": 6.5
           },
-          "maxHp": 195,
-          "hp": 170,
+          "maxHp": 156,
+          "hp": 136,
           "maxMp": 133,
           "mp": 2,
           "buffs": {
@@ -146899,7 +146899,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 215,
+            "maxHp": 280,
             "maxMp": 164,
             "dmgFisico": 28,
             "dmgMagico": 72,
@@ -146910,8 +146910,8 @@
             "resistMagica": 3,
             "descontoLoja": 12.5
           },
-          "maxHp": 215,
-          "hp": 58,
+          "maxHp": 280,
+          "hp": 75,
           "maxMp": 164,
           "mp": 155,
           "buffs": {}
@@ -147080,7 +147080,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 215,
+            "maxHp": 280,
             "maxMp": 164,
             "dmgFisico": 28,
             "dmgMagico": 72,
@@ -147091,8 +147091,8 @@
             "resistMagica": 3,
             "descontoLoja": 12.5
           },
-          "maxHp": 215,
-          "hp": 58,
+          "maxHp": 280,
+          "hp": 75,
           "maxMp": 164,
           "mp": 146,
           "buffs": {}
@@ -147706,7 +147706,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 255,
+            "maxHp": 204,
             "maxMp": 68,
             "dmgFisico": 20,
             "dmgMagico": 12,
@@ -147717,8 +147717,8 @@
             "resistMagica": 4,
             "descontoLoja": 11.5
           },
-          "maxHp": 255,
-          "hp": 250,
+          "maxHp": 204,
+          "hp": 200,
           "maxMp": 68,
           "mp": 36,
           "buffs": {
@@ -147914,7 +147914,7 @@
           "killCount": 0,
           "masteryBattles": 10,
           "derived": {
-            "maxHp": 255,
+            "maxHp": 204,
             "maxMp": 68,
             "dmgFisico": 20,
             "dmgMagico": 12,
@@ -147925,8 +147925,8 @@
             "resistMagica": 4,
             "descontoLoja": 11.5
           },
-          "maxHp": 255,
-          "hp": 250,
+          "maxHp": 204,
+          "hp": 200,
           "maxMp": 68,
           "mp": 26,
           "buffs": {
@@ -148711,7 +148711,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 276,
+            "maxHp": 221,
             "maxMp": 130,
             "dmgFisico": 34,
             "dmgMagico": 36,
@@ -148722,8 +148722,8 @@
             "resistMagica": 22,
             "descontoLoja": 11
           },
-          "maxHp": 276,
-          "hp": 134,
+          "maxHp": 221,
+          "hp": 107,
           "maxMp": 130,
           "mp": 52,
           "buffs": {
@@ -148880,7 +148880,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 276,
+            "maxHp": 221,
             "maxMp": 130,
             "dmgFisico": 34,
             "dmgMagico": 36,
@@ -148891,8 +148891,8 @@
             "resistMagica": 22,
             "descontoLoja": 11
           },
-          "maxHp": 276,
-          "hp": 134,
+          "maxHp": 221,
+          "hp": 107,
           "maxMp": 130,
           "mp": 42,
           "buffs": {
@@ -149056,7 +149056,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 153,
+            "maxHp": 122,
             "maxMp": 119,
             "dmgFisico": 44,
             "dmgMagico": 51,
@@ -149067,8 +149067,8 @@
             "resistMagica": 6,
             "descontoLoja": 12.5
           },
-          "maxHp": 153,
-          "hp": 144,
+          "maxHp": 122,
+          "hp": 115,
           "maxMp": 119,
           "mp": 105,
           "buffs": {
@@ -149209,7 +149209,7 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 153,
+            "maxHp": 122,
             "maxMp": 119,
             "dmgFisico": 44,
             "dmgMagico": 51,
@@ -149220,8 +149220,8 @@
             "resistMagica": 6,
             "descontoLoja": 12.5
           },
-          "maxHp": 153,
-          "hp": 144,
+          "maxHp": 122,
+          "hp": 115,
           "maxMp": 119,
           "mp": 99,
           "buffs": {
@@ -149817,7 +149817,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 449,
+            "maxHp": 359,
             "maxMp": 220,
             "dmgFisico": 26,
             "dmgMagico": 69,
@@ -149828,8 +149828,8 @@
             "resistMagica": 13,
             "descontoLoja": 2.5
           },
-          "maxHp": 449,
-          "hp": 251,
+          "maxHp": 359,
+          "hp": 201,
           "maxMp": 220,
           "mp": 35,
           "buffs": {
@@ -150063,7 +150063,7 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 449,
+            "maxHp": 359,
             "maxMp": 220,
             "dmgFisico": 26,
             "dmgMagico": 69,
@@ -150074,8 +150074,8 @@
             "resistMagica": 13,
             "descontoLoja": 2.5
           },
-          "maxHp": 449,
-          "hp": 251,
+          "maxHp": 359,
+          "hp": 201,
           "maxMp": 220,
           "mp": 27,
           "buffs": {
@@ -150289,7 +150289,7 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 218,
+            "maxHp": 174,
             "maxMp": 154,
             "dmgFisico": 12,
             "dmgMagico": 63,
@@ -150300,8 +150300,8 @@
             "resistMagica": 3,
             "descontoLoja": 10
           },
-          "maxHp": 218,
-          "hp": 30,
+          "maxHp": 174,
+          "hp": 24,
           "maxMp": 154,
           "mp": 135,
           "buffs": {
@@ -150463,7 +150463,7 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 218,
+            "maxHp": 174,
             "maxMp": 154,
             "dmgFisico": 12,
             "dmgMagico": 63,
@@ -150474,8 +150474,8 @@
             "resistMagica": 3,
             "descontoLoja": 10
           },
-          "maxHp": 218,
-          "hp": 30,
+          "maxHp": 174,
+          "hp": 24,
           "maxMp": 154,
           "mp": 127,
           "buffs": {
@@ -150635,7 +150635,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 334,
+            "maxHp": 267,
             "maxMp": 134,
             "dmgFisico": 38,
             "dmgMagico": 54,
@@ -150646,8 +150646,8 @@
             "resistMagica": 13,
             "descontoLoja": 8.5
           },
-          "maxHp": 334,
-          "hp": 207,
+          "maxHp": 267,
+          "hp": 165,
           "maxMp": 134,
           "mp": 43,
           "buffs": {}
@@ -150812,7 +150812,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 334,
+            "maxHp": 267,
             "maxMp": 134,
             "dmgFisico": 38,
             "dmgMagico": 54,
@@ -150823,8 +150823,8 @@
             "resistMagica": 13,
             "descontoLoja": 8.5
           },
-          "maxHp": 334,
-          "hp": 207,
+          "maxHp": 267,
+          "hp": 165,
           "maxMp": 134,
           "mp": 31,
           "buffs": {}
@@ -151315,7 +151315,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 130,
+            "maxHp": 104,
             "maxMp": 104,
             "dmgFisico": 10,
             "dmgMagico": 42,
@@ -151326,8 +151326,8 @@
             "resistMagica": 4,
             "descontoLoja": 12
           },
-          "maxHp": 130,
-          "hp": 8,
+          "maxHp": 104,
+          "hp": 6,
           "maxMp": 104,
           "mp": 93,
           "buffs": {}
@@ -151519,7 +151519,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 130,
+            "maxHp": 104,
             "maxMp": 104,
             "dmgFisico": 10,
             "dmgMagico": 42,
@@ -151530,8 +151530,8 @@
             "resistMagica": 4,
             "descontoLoja": 12
           },
-          "maxHp": 130,
-          "hp": 8,
+          "maxHp": 104,
+          "hp": 6,
           "maxMp": 104,
           "mp": 84,
           "buffs": {}
@@ -152102,7 +152102,7 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 288,
+            "maxHp": 230,
             "maxMp": 119,
             "dmgFisico": 24,
             "dmgMagico": 27,
@@ -152113,8 +152113,8 @@
             "resistMagica": 18,
             "descontoLoja": 12
           },
-          "maxHp": 288,
-          "hp": 247,
+          "maxHp": 230,
+          "hp": 197,
           "maxMp": 119,
           "mp": 14,
           "buffs": {
@@ -152293,7 +152293,7 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 288,
+            "maxHp": 230,
             "maxMp": 119,
             "dmgFisico": 24,
             "dmgMagico": 27,
@@ -152304,8 +152304,8 @@
             "resistMagica": 18,
             "descontoLoja": 12
           },
-          "maxHp": 288,
-          "hp": 247,
+          "maxHp": 230,
+          "hp": 197,
           "maxMp": 119,
           "mp": 6,
           "buffs": {
@@ -152501,7 +152501,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 160,
+            "maxHp": 128,
             "maxMp": 107,
             "dmgFisico": 40,
             "dmgMagico": 21,
@@ -152512,8 +152512,8 @@
             "resistMagica": 14,
             "descontoLoja": 11.5
           },
-          "maxHp": 160,
-          "hp": 55,
+          "maxHp": 128,
+          "hp": 44,
           "maxMp": 107,
           "mp": 28,
           "buffs": {
@@ -152673,7 +152673,7 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 160,
+            "maxHp": 128,
             "maxMp": 107,
             "dmgFisico": 40,
             "dmgMagico": 21,
@@ -152684,8 +152684,8 @@
             "resistMagica": 14,
             "descontoLoja": 11.5
           },
-          "maxHp": 160,
-          "hp": 64,
+          "maxHp": 128,
+          "hp": 53,
           "maxMp": 107,
           "mp": 16,
           "buffs": {

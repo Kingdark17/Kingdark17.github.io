@@ -342,7 +342,7 @@ function heroi(o: HeroiDeTeste = {}): Hero {
   const level = o.level ?? 1;
   const debuff = E.debuffById(o.debuff ?? 'orgulhoso');
   if (!debuff) throw new Error(`debuff de teste desconhecido: ${o.debuff}`);
-  const derived = E.derivedStats({ level, attrs, equip });
+  const derived = E.derivedStats({ level, attrs, equip, ...(cls && !o.nomeDaClasse ? { classId: cls.id } : { className: o.nomeDaClasse ?? E.APPRENTICE.name }) });
   return {
     level,
     attrs,
@@ -707,6 +707,23 @@ const DERIVADOS: Array<[string, { level: number; attrs: Attributes; equip: Recor
 ];
 for (const [nome, hero, options] of DERIVADOS) {
   caso(`derivedStats: ${nome}`, 'derivedStats', { hero, ...(options ? { options } : {}) }, (a) => E.derivedStats(a.hero as never, (a as { options?: { critPenalty?: boolean } }).options));
+}
+
+// --- as classes na luta (`classes-de-luta.ts`): a vida vale em todo lugar; o alcance, o dano e a velocidade, na arena ---
+
+for (const cls of [...E.CLASSES.map((c) => c.id), 'nenhuma']) {
+  caso(`derivedStats: a vida da classe ${cls}`, 'derivedStats', { hero: { level: 7, attrs: atributos({ constituicao: 13 }), equip: {}, classId: cls } }, (a) => E.derivedStats(a.hero as never));
+  caso(`classeDeLuta: ${cls}`, 'classeDeLuta', { quem: { classId: cls } }, (a) => E.classeDeLuta(a.quem));
+  for (const arma of ['espada', 'machado', 'marreta', 'maca', 'arco', 'cajado', null]) {
+    caso(`alcanceDoHeroi: ${cls} com ${arma}`, 'alcanceDoHeroi', { quem: { classId: cls, equip: { arma: arma ? { templateId: arma } : null } } }, (a) => E.alcanceDoHeroi(a.quem));
+  }
+}
+caso('derivedStats: a classe pelo nome (save antigo)', 'derivedStats', { hero: { level: 7, attrs: atributos({ constituicao: 13 }), equip: {}, className: 'Paladino' } }, (a) => E.derivedStats(a.hero as never));
+caso('classeDeLuta: sem classe', 'classeDeLuta', { quem: { className: 'Aprendiz' } }, (a) => E.classeDeLuta(a.quem));
+caso('alcanceDoHeroi: sem classe, com arco', 'alcanceDoHeroi', { quem: { className: 'Aprendiz', equip: { arma: { templateId: 'arco' } } } }, (a) => E.alcanceDoHeroi(a.quem));
+caso('alcanceDoHeroi: sem classe, sem equip', 'alcanceDoHeroi', { quem: {} }, (a) => E.alcanceDoHeroi(a.quem));
+for (const [vida, cls] of [[205, 'bardo'], [205, 'paladino'], [205, 'guerreiro'], [1, 'mago'], [3, 'paladino']] as const) {
+  caso(`vidaComAClasse: ${vida} de ${cls}`, 'vidaComAClasse', { vida, quem: { classId: cls } }, (a) => E.vidaComAClasse(a.vida, a.quem));
 }
 
 // --- maestria ---
@@ -5348,6 +5365,19 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     simula('arena: o alvo longe, o golpe vai no mais perto ao alcance', E.abrirLuta(trio, { x: 6.5 * E.TILE_UNITS, y: 5.5 * E.TILE_UNITS, facing: 'N' }).luta, toque(50), { seed: 1009 });
     simula('arena: começa em cima do monstro e sai andando', E.abrirLuta({ ...zumbi(), hero: espada }, { x: 4.5 * E.TILE_UNITS, y: 4.5 * E.TILE_UNITS, facing: 'S' }).luta, [...andando(40, 0, 127), ...andando(60, 0, -127)], { seed: 1010 });
     simula('arena: abre no vão da porta e dá um passo pra dentro', E.abrirLuta({ ...zumbi(), hero: espada }, { x: 10, y: 4.5 * E.TILE_UNITS, facing: 'E' }).luta, andando(30, 127, 0), { seed: 1011 });
+    // A mira no cursor (o PC), o alcance e a velocidade de cada classe, e a perna quebrada.
+    const U = E.TILE_UNITS;
+    const noCursor = (n: number, x: number, y: number): EntradaDaLuta[] => toque(n).map((e) => ({ ...e, cursor: { x, y } }));
+    const arqueiro = comArma('arqueiro', 'arco');
+    simula('mira: o cursor em cima do monstro do meio do trio', E.abrirLuta({ ...trio, hero: arqueiro }, E.roomArrival('N')).luta, noCursor(60, 4.5 * U + 300, 4.5 * U - 900), { seed: 1101 });
+    simula('mira: o cursor entre dois, vale o mais perto dele', E.abrirLuta({ ...trio, hero: arqueiro }, E.roomArrival('N')).luta, noCursor(60, 5.6 * U, 4.5 * U), { seed: 1102 });
+    simula('mira: sem monstro na área, o golpe vai no chão', E.abrirLuta({ ...trio, hero: arqueiro }, E.roomArrival('N')).luta, noCursor(60, 1.5 * U, 7.5 * U), { seed: 1103 });
+    simula('mira: o monstro no cursor fora do alcance da espada', abrir({ ...zumbi(), hero: espada }, 'N'), noCursor(50, 4.5 * U, 4.5 * U), { seed: 1104 });
+    simula('mira: sem cursor e com a placa tocada, vale o da placa', E.abrirLuta({ ...trio, hero: arqueiro }, { x: 6.5 * U, y: 5.5 * U, facing: 'N' }).luta, toque(60).map((e, i) => (i === 0 ? { ...e, mirar: 0 } : e)), { seed: 1105 });
+    for (const [classe, armaDaClasse, semente] of [['paladino', 'espada', 1106], ['ladino', 'adaga', 1107], ['bardo', 'violao', 1108], ['mago', 'cajado', 1109], ['barbaro', 'maca', 1110], ['guerreiro', 'espada', 1111]] as const) {
+      simula(`classe: o ${classe} anda até o zumbi e bate`, abrir({ ...zumbi(), hero: comArma(classe, armaDaClasse) }, 'N'), [...andando(70, 0, -127), ...toque(50)], { seed: semente });
+    }
+    simula('classe: a perna quebrada deixa o passo curto', abrir({ ...zumbi(), hero: { ...espada, ferimentos: { perna: true } } }, 'N'), andando(80, 90, -127), { seed: 1112 });
     // As outras masmorras: os cantos fechados da Caverna e a sala 11 × 12 da Torre.
     for (const [dungeon, semente] of [['caverna', 1012], ['torre', 1013]] as const) {
       const la = (monsters: MonsterInstance[]) => salaCom(monsters, espada, { masmorra: { dungeon, difficulty: 'normal' } });
