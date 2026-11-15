@@ -140,7 +140,9 @@ describe('o efeito, só na arena do app', () => {
     const estado = naSala(coroa);
     const poder = heroPowers(estado.hero).find((p) => p.cost > 0)!;
     const { luta } = abrirLuta(estado, roomArrival('S'));
-    const depois = passoDaLuta({ ...luta, arena: { ...luta.arena, intervalo: 9999 } }, { ...PARADO, poder: poder.id }, NUNCA).luta;
+    let depois = passoDaLuta({ ...luta, arena: { ...luta.arena, intervalo: 9999 } }, { ...PARADO, poder: poder.id }, NUNCA).luta;
+    // O poder mágico abre o evento dele: a mana só sai quando o evento acaba.
+    for (let i = 0; i < 300 && depois.arena.evento; i++) depois = passoDaLuta(depois, PARADO, NUNCA).luta;
     const gasto = 200 - (depois.estado as EstadoNaMasmorra).hero.mp;
     expect(gasto).toBe(powerManaCost(estado.hero, poder, 0.2));
     expect(gasto).toBeLessThan(powerManaCost(estado.hero, poder));

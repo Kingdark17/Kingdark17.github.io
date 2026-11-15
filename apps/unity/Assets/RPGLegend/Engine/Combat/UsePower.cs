@@ -29,6 +29,8 @@ namespace RPGLegend.Engine
         public double? DescontoDeMana;
         /// <summary>O dano da classe na luta do app, em % (<see cref="ClassesDeLuta"/>); ausente, 100. Só a arena passa.</summary>
         public double? DanoDaClasse;
+        /// <summary>A força do evento do poder mágico na luta do app: o dano e a cura saem nesta proporção. Ausente, 1.</summary>
+        public double? ForcaDoEvento;
     }
 
     /// <summary>TS: UsePowerResult. Campo opcional do TS é anulável aqui (null = ausente).</summary>
@@ -120,7 +122,7 @@ namespace RPGLegend.Engine
             }
             var d = heroAfterCost.Derived;
             // O nível da habilidade: +4% no dano e na cura por nível acima do primeiro.
-            double efeito = Treino.EfeitoDaHabilidade(hero, power.Id);
+            double efeito = Treino.EfeitoDaHabilidade(hero, power.Id) * (options.ForcaDoEvento ?? 1);
 
             if (power.Type == "invocar")
             {

@@ -500,6 +500,46 @@ describe('o alcance do ataque, pela classe', () => {
   });
 });
 
+describe('o poder mágico pede o evento (doc do Breno de 2026-11-15)', () => {
+  const mago = { className: 'Mago', classId: 'mago', powerIds: ['bola_de_fogo'], mp: 99 };
+  const zumbi = () => monstro({ speciesId: 'zumbi', hp: 900, maxHp: 900 });
+
+  it('no celular abre o desenho, no PC as letras; a mana e o dano só saem no fim', () => {
+    const noCelular = passoDaLuta(abrirLuta(naSala({ monsters: [zumbi()] }, mago), roomArrival(null)).luta, { ...PARADO, poder: 'bola_de_fogo' }, NUNCA).luta;
+    expect(noCelular.arena.evento?.evento.tipo).toBe('desenho');
+    expect(noCelular.arena.evento?.poder).toBe('bola_de_fogo');
+    expect(vidaDoMonstro(noCelular)).toBe(900);
+    expect((noCelular.estado as EstadoNaMasmorra).hero.mp).toBe(99);
+    const noPc = passoDaLuta(abrirLuta(naSala({ monsters: [zumbi()] }, mago), roomArrival(null), null, true).luta, { ...PARADO, poder: 'bola_de_fogo' }, NUNCA).luta;
+    expect(noPc.arena.evento?.evento.tipo).toBe('letras');
+  });
+
+  it('acertando as letras o poder sai forte; errando, sai mais fraco, mas sai', () => {
+    const aberto = () => passoDaLuta(abrirLuta(naSala({ monsters: [zumbi()] }, mago), roomArrival(null), null, true).luta, { ...PARADO, poder: 'bola_de_fogo' }, NUNCA).luta;
+    const certo = aberto();
+    const evento = certo.arena.evento!.evento;
+    const naBatida = new Map(evento.notas!.map((batida, k) => [batida, evento.letras![k]!]));
+    const acertou = rodar(certo, evento.duracao + 2, NUNCA, (i) => ({ ...PARADO, tecla: naBatida.get(i + 1) }));
+    const errou = rodar(aberto(), evento.duracao + 2, NUNCA);
+    expect(acertou.luta.arena.evento).toBeNull();
+    expect(errou.luta.arena.evento).toBeNull();
+    const danoCerto = 900 - vidaDoMonstro(acertou.luta);
+    const danoErrado = 900 - vidaDoMonstro(errou.luta);
+    expect(danoErrado).toBeGreaterThan(0);
+    expect(danoCerto).toBeGreaterThan(danoErrado);
+    expect((errou.luta.estado as EstadoNaMasmorra).hero.mp).toBeLessThan(99);
+  });
+
+  it('sem mana avisa sem abrir o evento; o poder físico continua saindo na hora', () => {
+    const semMana = passoDaLuta(abrirLuta(naSala({ monsters: [zumbi()] }, { ...mago, mp: 0 }), roomArrival(null)).luta, { ...PARADO, poder: 'bola_de_fogo' }, NUNCA);
+    expect(semMana.luta.arena.evento).toBeNull();
+    expect(semMana.acontecimentos.some((a) => a.tipo === 'aviso' && a.texto?.startsWith('Mana insuficiente'))).toBe(true);
+    const fisico = passoDaLuta(abrirLuta(naSala({ monsters: [zumbi()] }, { className: 'Guerreiro', classId: 'guerreiro', powerIds: ['golpe_poderoso'], mp: 50 }), roomArrival(null)).luta, { ...PARADO, poder: 'golpe_poderoso' }, NUNCA).luta;
+    expect(fisico.arena.evento).toBeNull();
+    expect(vidaDoMonstro(fisico)).toBeLessThan(900);
+  });
+});
+
 describe('os outros eventos dentro da arena', () => {
   function contraOZumbi(hero: Partial<Hero>) {
     return abrirLuta(naSala({ monsters: [monstro({ speciesId: 'zumbi', hp: 300, maxHp: 300 })] }, hero), PERTO).luta;

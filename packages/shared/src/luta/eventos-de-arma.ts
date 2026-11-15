@@ -271,6 +271,21 @@ export function eventoDoAtaque(hero: Hero, estilo: AttackStyle, rng: Rng = defau
   }
 }
 
+/** O quanto o evento de um poder mágico perdoa: a zona comum, a metade da régua. */
+export const ZONA_DO_PODER = 0.5;
+
+/**
+ * O evento de um poder mágico (doc do Breno de 2026-11-15: "poderes mágicos
+ * também precisam de uma sequência de teclas"): no PC, as letras do cajado;
+ * no celular, o desenho com o dedo (decisão do usuário). Sorteia como o
+ * cajado: uma letra por nota, ou o símbolo.
+ */
+export function eventoDoPoder(rng: Rng = defaultRng, teclado = false): EventoDeArma {
+  if (teclado) return { ...notas('letras', ZONA_DO_PODER, NOTAS_DAS_LETRAS, JANELA_DAS_LETRAS), letras: sortearLetras(NOTAS_DAS_LETRAS.length, rng) };
+  const nomes = Object.keys(SIMBOLOS);
+  return { tipo: 'desenho', zona: ZONA_DO_PODER, duracao: DURACAO_DO_DESENHO, simbolo: nomes[randomInt(nomes.length, rng)] as string };
+}
+
 function notas(tipo: TipoDeEvento, zona: number, batidas: readonly number[], janela: number): EventoDeArma {
   return { tipo, zona, duracao: (batidas[batidas.length - 1] as number) + janela, notas: [...batidas], janela };
 }

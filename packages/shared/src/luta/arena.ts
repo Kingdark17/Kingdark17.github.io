@@ -57,7 +57,7 @@ import { partyMemberAct, passarRodadaDaCancao } from '../combat/party.js';
 import { ataquesDisponiveis, LADOS_DO_DANO, resolverGolpe, type AttackStyle, type LeituraDaMira } from '../combat/resolve-attack.js';
 import { tickHeroStatus } from '../combat/hero-status.js';
 import { tickMonsterDot } from '../combat/status-effects.js';
-import { castPower } from '../combat/use-power.js';
+import { castPower, powerManaCost } from '../combat/use-power.js';
 import { anotarUso, atributoDoGolpe, textoDaHabilidade, treinarPoder } from '../hero/treino.js';
 import { geometriaDaSala, paredesDaSala } from '../dungeon/arte-da-sala.js';
 import type { DungeonCell } from '../dungeon/generate.js';
@@ -81,7 +81,7 @@ import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
 import { MAX_ESQUELETOS } from '../combat/invocacao.js';
 import { alcanceDoHeroi, classeDeLuta } from '../hero/classes-de-luta.js';
 import { CHANCE_DE_QUEBRAR_NO_CHEFE, nomeDoMembro, PASSO_COM_PERNA_QUEBRADA, quebrarMembro, type Membro } from '../hero/ferimentos.js';
-import { eventoDaArma, eventoDoAtaque, lerEvento, TAMANHO_DO_DESENHO, type EventoDeArma, type JogadaDoEvento, type TipoDeEvento } from './eventos-de-arma.js';
+import { eventoDaArma, eventoDoAtaque, eventoDoPoder, lerEvento, TAMANHO_DO_DESENHO, type EventoDeArma, type JogadaDoEvento, type TipoDeEvento } from './eventos-de-arma.js';
 
 // ---------- números ----------
 
@@ -96,6 +96,16 @@ export const RECARGA_DO_ATAQUE = 15;
 
 /** Quanto um poder espera depois de usado: 3 s. */
 export const RECARGA_DO_PODER = 180;
+
+/**
+ * Os poderes mágicos pedem o evento antes de sair (doc do Breno de
+ * 2026-11-15): os de dano mágico e os de cura. Os outros (o golpe físico, os
+ * reforços, o esqueleto) saem direto no botão.
+ */
+export const TIPOS_DE_PODER_MAGICO: readonly string[] = ['dano_magico', 'cura'];
+
+/** Quem erra o evento do poder mágico: ele sai nesta força (decisão do usuário: "sai mais fraco"). */
+export const FORCA_DO_PODER_ERRADO = 0.5;
 
 /** Quanto o botão de item espera depois de usado. */
 export const RECARGA_DO_ITEM = 60;
@@ -246,6 +256,8 @@ export interface EventoAberto {
   /** O monstro mirado (índice na sala). */
   alvo: number;
   estilo: AttackStyle;
+  /** O evento é de um poder mágico (o id dele), e não do ataque: no fim, é o poder que sai, na força do evento. */
+  poder?: string;
 }
 
 export interface Arena {
@@ -437,7 +449,7 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
   if (entrada.mirar !== undefined) mirar(l, entrada.mirar);
   if (l.arena.evento) seguirEvento(l, entrada);
   else if (entrada.atacar && l.arena.recarga <= 0) abrirEvento(l, entrada);
-  else if (entrada.poder) usarPoder(l, entrada.poder);
+  else if (entrada.poder) pedirPoder(l, entrada.poder);
   else if (entrada.item) usarItem(l, entrada.item);
 
   if (!l.fim) {
@@ -820,6 +832,11 @@ function golpear(l: Luta): void {
   l.arena.evento = null;
   l.arena.recarga = RECARGA_DO_ATAQUE;
   const leitura = lerEvento(aberto.evento, aberto.jogada);
+  if (aberto.poder) {
+    // O poder mágico sai na força do evento; errado, mais fraco.
+    usarPoder(l, aberto.poder, leitura.acerto ? leitura.forca : FORCA_DO_PODER_ERRADO);
+    return;
+  }
   const doEvento = l.arena.monstros[aberto.alvo] as MonstroNaArena;
   const indice = doEvento.fase !== 'caido' ? doEvento.indice : alvoAtual(l);
   if (indice === null) return;
@@ -920,7 +937,29 @@ function aplicarRunasDoGolpe(l: Luta, indice: number, monstro: CombatMonsterView
 
 // ---------- poderes e itens ----------
 
-function usarPoder(l: Luta, id: string): void {
+/**
+ * O botão de um poder: o mágico (`TIPOS_DE_PODER_MAGICO`) abre o evento dele
+ * (as letras no PC, o desenho no celular) e só sai quando o evento acaba; os
+ * outros saem na hora. Sem mana, o mágico avisa antes de abrir o evento.
+ */
+function pedirPoder(l: Luta, id: string): void {
+  const estado = masmorra(l);
+  const poder = heroPowers(estado.hero).find((p) => p.id === id);
+  if (!poder || (l.arena.recargaDosPoderes[id] ?? 0) > 0) return;
+  if (!TIPOS_DE_PODER_MAGICO.includes(poder.type)) {
+    usarPoder(l, id);
+    return;
+  }
+  const alvo = alvoAtual(l);
+  if (alvo === null) return;
+  if (estado.hero.mp < powerManaCost(estado.hero, poder, descontoDeMana(estado.hero))) {
+    contar(l, { tipo: 'aviso', texto: `Mana insuficiente para ${poder.name}` });
+    return;
+  }
+  l.arena.evento = { evento: eventoDoPoder(l.rng, l.teclado), passo: 0, jogada: {}, alvo, estilo: 'magic', poder: id };
+}
+
+function usarPoder(l: Luta, id: string, forcaDoEvento = 1): void {
   const estado = masmorra(l);
   const poder = heroPowers(estado.hero).find((p) => p.id === id);
   if (!poder || (l.arena.recargaDosPoderes[id] ?? 0) > 0) return;
@@ -937,6 +976,7 @@ function usarPoder(l: Luta, id: string): void {
     petManaSaveChance: bonus.manaSave ?? 0,
     ...(desconto > 0 ? { descontoDeMana: desconto } : {}),
     danoDaClasse: classeDeLuta(estado.hero).dano,
+    ...(forcaDoEvento !== 1 ? { forcaDoEvento } : {}),
   });
   if (uso.outcome === 'no_mana') {
     contar(l, { tipo: 'aviso', texto: `Mana insuficiente para ${poder.name}` });

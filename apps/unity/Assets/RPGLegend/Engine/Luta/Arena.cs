@@ -83,6 +83,8 @@ namespace RPGLegend.Engine
         public JogadaDoEvento Jogada;
         public double Alvo;
         public string Estilo;
+        /// <summary>O evento é de um poder mágico (o id dele), e não do ataque: no fim, é o poder que sai, na força do evento.</summary>
+        public string Poder;
     }
 
     /// <summary>TS: Arena — tudo o que a luta em tempo real tem: os monstros, o herói na sala e os tempos.</summary>
@@ -195,6 +197,8 @@ namespace RPGLegend.Engine
         [JsName("RECARGA_DO_ATAQUE")] public double RecargaDoAtaque;
         [JsName("RECARGA_DO_PODER")] public double RecargaDoPoder;
         [JsName("RECARGA_DO_ITEM")] public double RecargaDoItem;
+        [JsName("TIPOS_DE_PODER_MAGICO")] public List<string> TiposDePoderMagico = new List<string>();
+        [JsName("FORCA_DO_PODER_ERRADO")] public double ForcaDoPoderErrado;
         [JsName("RAIO_DO_HEROI")] public double RaioDoHeroi;
         [JsName("AREA_DA_MIRA")] public double AreaDaMira;
         [JsName("FOLGA_DO_ALCANCE")] public double FolgaDoAlcance;
@@ -354,7 +358,7 @@ namespace RPGLegend.Engine
             if (entrada.Mirar != null) Mirar(l, entrada.Mirar.Value);
             if (l.Arena.Evento != null) SeguirEvento(l, entrada);
             else if (entrada.Atacar == true && l.Arena.Recarga <= 0) AbrirEvento(l, entrada);
-            else if (Js.Truthy(entrada.Poder)) UsarPoder(l, entrada.Poder);
+            else if (Js.Truthy(entrada.Poder)) PedirPoder(l, entrada.Poder);
             else if (Js.Truthy(entrada.Item)) UsarItem(l, entrada.Item);
 
             if (l.Fim == null)
@@ -418,6 +422,7 @@ namespace RPGLegend.Engine
                 copia.Evento = new EventoAberto
                 {
                     Evento = arena.Evento.Evento,
+                    Poder = arena.Evento.Poder,
                     Passo = arena.Evento.Passo,
                     Jogada = new JogadaDoEvento
                     {
@@ -829,6 +834,12 @@ namespace RPGLegend.Engine
             l.Arena.Evento = null;
             l.Arena.Recarga = D.RecargaDoAtaque;
             var leitura = EventosDeArma.LerEvento(aberto.Evento, aberto.Jogada);
+            if (aberto.Poder != null)
+            {
+                // O poder mágico sai na força do evento; errado, mais fraco.
+                UsarPoder(l, aberto.Poder, leitura.Acerto ? leitura.Forca : D.ForcaDoPoderErrado);
+                return;
+            }
             var doEvento = l.Arena.Monstros[(int)aberto.Alvo];
             double? indice = doEvento.Fase != "caido" ? doEvento.Indice : AlvoAtual(l);
             if (indice == null) return;
@@ -945,7 +956,39 @@ namespace RPGLegend.Engine
 
         // ---------- poderes e itens ----------
 
-        private static void UsarPoder(Luta l, string id)
+        /// <summary>
+        /// TS: pedirPoder — o botão de um poder: o mágico (TiposDePoderMagico) abre o evento dele (as letras no PC, o
+        /// desenho no celular) e só sai quando o evento acaba; os outros saem na hora. Sem mana, o mágico avisa antes.
+        /// </summary>
+        private static void PedirPoder(Luta l, string id)
+        {
+            var estado = Masmorra(l);
+            PowerDef poder = null;
+            foreach (var p in Heroes.HeroPowers(estado.Hero))
+            {
+                if (p.Id == id)
+                {
+                    poder = p;
+                    break;
+                }
+            }
+            if (poder == null || (l.Arena.RecargaDosPoderes.TryGet(id, out var falta) ? falta : 0) > 0) return;
+            if (!D.TiposDePoderMagico.Contains(poder.Type))
+            {
+                UsarPoder(l, id);
+                return;
+            }
+            var alvo = AlvoAtual(l);
+            if (alvo == null) return;
+            if (estado.Hero.Mp < UsePower.PowerManaCost(estado.Hero, poder, AcessoriosUnicos.DescontoDeMana(estado.Hero)))
+            {
+                Contar(l, Aviso("Mana insuficiente para " + poder.Name));
+                return;
+            }
+            l.Arena.Evento = new EventoAberto { Evento = EventosDeArma.EventoDoPoder(l.Rng, l.Teclado), Passo = 0, Jogada = new JogadaDoEvento(), Alvo = alvo.Value, Estilo = "magic", Poder = id };
+        }
+
+        private static void UsarPoder(Luta l, string id, double forcaDoEvento = 1)
         {
             var estado = Masmorra(l);
             PowerDef poder = null;
@@ -972,6 +1015,7 @@ namespace RPGLegend.Engine
                     // A Coroa do Arquimago tira parte do custo: só aqui, na arena.
                     DescontoDeMana = AcessoriosUnicos.DescontoDeMana(estado.Hero) > 0 ? AcessoriosUnicos.DescontoDeMana(estado.Hero) : (double?)null,
                     DanoDaClasse = ClassesDeLuta.De(estado.Hero).Dano,
+                    ForcaDoEvento = forcaDoEvento != 1 ? forcaDoEvento : (double?)null,
                 });
             if (uso.Outcome == UsePowerOutcomes.NoMana)
             {

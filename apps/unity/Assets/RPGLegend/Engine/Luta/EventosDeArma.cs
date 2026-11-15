@@ -74,6 +74,7 @@ namespace RPGLegend.Engine
         [JsName("EVENTO_SEM_ARMA")] public string EventoSemArma;
         /// <summary>No teclado (o PC), o evento que troca: o desenho do cajado vira as letras.</summary>
         [JsName("EVENTO_NO_TECLADO")] public OrderedMap<string> EventoNoTeclado = new OrderedMap<string>();
+        [JsName("ZONA_DO_PODER")] public double ZonaDoPoder;
         [JsName("DURACAO_DA_BARRA")] public double DuracaoDaBarra;
         [JsName("DURACAO_DO_CIRCULO")] public double DuracaoDoCirculo;
         [JsName("DURACAO_DA_CARGA")] public double DuracaoDaCarga;
@@ -163,6 +164,23 @@ namespace RPGLegend.Engine
                 default:
                     return new EventoDeArma { Tipo = tipo, Zona = zona, Duracao = D.DuracaoDaBarra };
             }
+        }
+
+        /// <summary>
+        /// TS: eventoDoPoder — o evento de um poder mágico: no PC, as letras do cajado; no celular, o desenho com o
+        /// dedo. Sorteia como o cajado: uma letra por nota, ou o símbolo.
+        /// </summary>
+        public static EventoDeArma EventoDoPoder(RngFn rng = null, bool teclado = false)
+        {
+            rng = rng ?? Rng.Default;
+            if (teclado)
+            {
+                var evento = Notas(TiposDeEvento.Letras, D.ZonaDoPoder, D.NotasDasLetras, D.JanelaDasLetras);
+                evento.Letras = SortearLetras(D.NotasDasLetras.Count, rng);
+                return evento;
+            }
+            var nomes = D.Simbolos.Keys;
+            return new EventoDeArma { Tipo = TiposDeEvento.Desenho, Zona = D.ZonaDoPoder, Duracao = D.DuracaoDoDesenho, Simbolo = nomes[(int)Rng.RandomInt(nomes.Count, rng)] };
         }
 
         private static EventoDeArma Notas(string tipo, double zona, List<double> batidas, double janela) =>

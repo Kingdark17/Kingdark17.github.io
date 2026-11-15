@@ -4967,6 +4967,12 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
   noTeclado('bárbaro de espada', heroi({ arma: 'espada' }), 'normal', SEM_SORTEIO);
   noTeclado('bardo de violão', heroi({ classe: 'bardo', arma: 'violao' }), 'normal', SEM_SORTEIO);
   noTeclado('mão vazia', heroi({ arma: null }), 'normal', SEM_SORTEIO);
+
+  // O evento do poder mágico: o desenho no celular, as letras no PC.
+  for (const sorteios of [[0], [0.99], [0.3, 0.5, 0.8], [0.6, 0.1, 0.9]]) {
+    caso(`eventoDoPoder: desenho, sorteios ${sorteios.join(' ')}`, 'eventoDoPoder', {}, (_a, ctx) => E.eventoDoPoder(ctx.rng), { rng: { sequence: sorteios } });
+    caso(`eventoDoPoder: letras, sorteios ${sorteios.join(' ')}`, 'eventoDoPoder', { teclado: true }, (a, ctx) => E.eventoDoPoder(ctx.rng, a.teclado), { rng: { sequence: sorteios } });
+  }
 }
 
 // ---------- a leitura ----------
@@ -5388,6 +5394,17 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     for (const [classe, armaDaClasse, semente] of [['paladino', 'espada', 1106], ['ladino', 'adaga', 1107], ['bardo', 'violao', 1108], ['mago', 'cajado', 1109], ['barbaro', 'maca', 1110], ['guerreiro', 'espada', 1111]] as const) {
       simula(`classe: o ${classe} anda até o zumbi e bate`, abrir({ ...zumbi(), hero: comArma(classe, armaDaClasse) }, 'N'), [...andando(70, 0, -127), ...toque(50)], { seed: semente });
     }
+    // O poder mágico pede o evento: no PC as letras (certas, erradas), no celular o desenho largado; sem mana, só avisa.
+    const magoDeFogo = { ...comArma('mago', 'cajado'), mp: 90, powerIds: ['bola_de_fogo', 'cura_menor'] };
+    const pedindo = (n: number, poder: string, extra: Record<number, EntradaDaLuta> = {}): EntradaDaLuta[] => parado(n).map((e, i) => (i === 1 ? { ...e, poder } : (extra[i] ?? e)));
+    const noPcDoMago = () => E.abrirLuta({ ...zumbi(), hero: magoDeFogo }, PERTO, null, true).luta;
+    const letrasDoPoder = (semente: number) => E.passoDaLuta(E.passoDaLuta(noPcDoMago(), { x: 0, y: 0 }, E.seededRng(semente)).luta, { x: 0, y: 0, poder: 'bola_de_fogo' }, E.seededRng(semente)).luta.arena.evento?.evento.letras ?? [];
+    simula('poder mágico no PC: sem apertar nada, sai fraco', noPcDoMago(), pedindo(260, 'bola_de_fogo'), { seed: 1201 });
+    simula('poder mágico no PC: teclas fora de hora', noPcDoMago(), pedindo(260, 'bola_de_fogo', { 20: { x: 0, y: 0, tecla: 'U' }, 60: { x: 0, y: 0, tecla: 'P' }, 150: { x: 0, y: 0, tecla: 'I' } }), { seed: 1202 });
+    simula('poder mágico no celular: o desenho largado no meio', abrir({ ...zumbi(), hero: magoDeFogo }), pedindo(200, 'bola_de_fogo', { 10: { x: 0, y: 0, dedo: { x: 300, y: 300 } }, 11: { x: 0, y: 0, dedo: { x: 500, y: 500 } } }), { seed: 1203 });
+    simula('poder mágico: a cura também pede o evento', abrir({ ...zumbi(), hero: { ...magoDeFogo, hp: 20 } }), pedindo(200, 'cura_menor'), { seed: 1204 });
+    simula('poder mágico: sem mana, só avisa', abrir({ ...zumbi(), hero: { ...magoDeFogo, mp: 1 } }), pedindo(30, 'bola_de_fogo'), { seed: 1205 });
+    void letrasDoPoder;
     simula('classe: a perna quebrada deixa o passo curto', abrir({ ...zumbi(), hero: { ...espada, ferimentos: { perna: true } } }, 'N'), andando(80, 90, -127), { seed: 1112 });
     // As outras masmorras: os cantos fechados da Caverna e a sala 11 × 12 da Torre.
     for (const [dungeon, semente] of [['caverna', 1012], ['torre', 1013]] as const) {

@@ -38,6 +38,11 @@ export interface UsePowerOptions {
   descontoDeMana?: number;
   /** O dano da classe na luta do app, em % (`hero/classes-de-luta.ts`); ausente, 100. Só a arena passa. */
   danoDaClasse?: number;
+  /**
+   * A força do evento do poder mágico na luta do app (`luta/arena.ts`): o
+   * dano e a cura saem nesta proporção. Ausente, 1. Só a arena passa.
+   */
+  forcaDoEvento?: number;
 }
 
 export interface UsePowerResult {
@@ -92,7 +97,7 @@ export function castPower(
   const heroAfterCost: Hero = savedMana ? hero : { ...hero, mp: hero.mp - manaCost };
   const d = heroAfterCost.derived;
   // O nível da habilidade: +4% no dano e na cura por nível acima do primeiro.
-  const efeito = efeitoDaHabilidade(hero, power.id);
+  const efeito = efeitoDaHabilidade(hero, power.id) * (options.forcaDoEvento ?? 1);
 
   if (power.type === 'invocar') {
     const esqueleto = criarEsqueleto(heroAfterCost, party);

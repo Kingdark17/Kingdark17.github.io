@@ -2724,6 +2724,230 @@
     }
   },
   {
+    "name": "eventoDoPoder: desenho, sorteios 0",
+    "input": {
+      "fn": "eventoDoPoder",
+      "args": {},
+      "rng": {
+        "sequence": [
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "tipo": "desenho",
+        "zona": 0.5,
+        "duracao": 120,
+        "simbolo": "circulo"
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "eventoDoPoder: letras, sorteios 0",
+    "input": {
+      "fn": "eventoDoPoder",
+      "args": {
+        "teclado": true
+      },
+      "rng": {
+        "sequence": [
+          0
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "tipo": "letras",
+        "zona": 0.5,
+        "duracao": 216,
+        "notas": [
+          36,
+          108,
+          180
+        ],
+        "janela": 36,
+        "letras": [
+          "U",
+          "I",
+          "U"
+        ]
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "eventoDoPoder: desenho, sorteios 0.99",
+    "input": {
+      "fn": "eventoDoPoder",
+      "args": {},
+      "rng": {
+        "sequence": [
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "tipo": "desenho",
+        "zona": 0.5,
+        "duracao": 120,
+        "simbolo": "onda"
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "eventoDoPoder: letras, sorteios 0.99",
+    "input": {
+      "fn": "eventoDoPoder",
+      "args": {
+        "teclado": true
+      },
+      "rng": {
+        "sequence": [
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "tipo": "letras",
+        "zona": 0.5,
+        "duracao": 216,
+        "notas": [
+          36,
+          108,
+          180
+        ],
+        "janela": 36,
+        "letras": [
+          "P",
+          "O",
+          "P"
+        ]
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "eventoDoPoder: desenho, sorteios 0.3 0.5 0.8",
+    "input": {
+      "fn": "eventoDoPoder",
+      "args": {},
+      "rng": {
+        "sequence": [
+          0.3,
+          0.5,
+          0.8
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "tipo": "desenho",
+        "zona": 0.5,
+        "duracao": 120,
+        "simbolo": "triangulo"
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "eventoDoPoder: letras, sorteios 0.3 0.5 0.8",
+    "input": {
+      "fn": "eventoDoPoder",
+      "args": {
+        "teclado": true
+      },
+      "rng": {
+        "sequence": [
+          0.3,
+          0.5,
+          0.8
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "tipo": "letras",
+        "zona": 0.5,
+        "duracao": 216,
+        "notas": [
+          36,
+          108,
+          180
+        ],
+        "janela": 36,
+        "letras": [
+          "I",
+          "O",
+          "P"
+        ]
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "eventoDoPoder: desenho, sorteios 0.6 0.1 0.9",
+    "input": {
+      "fn": "eventoDoPoder",
+      "args": {},
+      "rng": {
+        "sequence": [
+          0.6,
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "tipo": "desenho",
+        "zona": 0.5,
+        "duracao": 120,
+        "simbolo": "espiral"
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "eventoDoPoder: letras, sorteios 0.6 0.1 0.9",
+    "input": {
+      "fn": "eventoDoPoder",
+      "args": {
+        "teclado": true
+      },
+      "rng": {
+        "sequence": [
+          0.6,
+          0.1,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "tipo": "letras",
+        "zona": 0.5,
+        "duracao": 216,
+        "notas": [
+          36,
+          108,
+          180
+        ],
+        "janela": 36,
+        "letras": [
+          "O",
+          "U",
+          "P"
+        ]
+      },
+      "rngCalls": 3
+    }
+  },
+  {
     "name": "lerEvento: barra, zona 0.5, toque 0",
     "input": {
       "fn": "lerEvento",
@@ -89578,16 +89802,10 @@
                 "descontoLoja": 5
               },
               "maxHp": 400,
-              "hp": 120,
+              "hp": 100,
               "maxMp": 72,
-              "mp": 50,
-              "buffs": {},
-              "usosDeAtributo": {
-                "sabedoria": 1
-              },
-              "usosDePoder": {
-                "cura_menor": 1
-              }
+              "mp": 60,
+              "buffs": {}
             },
             "party": [],
             "inventory": [],
@@ -89660,8 +89878,8 @@
             }
           },
           "arena": {
-            "passo": 30,
-            "lento": 0,
+            "passo": 16,
+            "lento": 27,
             "chegada": {
               "x": 4320,
               "y": 5280,
@@ -89690,14 +89908,24 @@
             ],
             "companheiros": [],
             "tiros": [],
-            "evento": null,
-            "recarga": 0,
-            "recargaDosPoderes": {
-              "cura_menor": 153
+            "evento": {
+              "evento": {
+                "tipo": "desenho",
+                "zona": 0.5,
+                "duracao": 120,
+                "simbolo": "triangulo"
+              },
+              "passo": 26,
+              "jogada": {},
+              "alvo": 0,
+              "estilo": "magic",
+              "poder": "cura_menor"
             },
+            "recarga": 0,
+            "recargaDosPoderes": {},
             "recargaDoItem": 0,
-            "rodada": 60,
-            "intervalo": 30,
+            "rodada": 74,
+            "intervalo": 44,
             "vez": -1
           },
           "pet": null,
@@ -89705,21 +89933,9 @@
           "fim": null,
           "loot": null
         },
-        "acontecimentos": [
-          {
-            "tipo": "numero",
-            "onde": "heroi",
-            "indice": 0,
-            "texto": "+20",
-            "tom": "cura"
-          },
-          {
-            "tipo": "som",
-            "som": "heal"
-          }
-        ]
+        "acontecimentos": []
       },
-      "rngCalls": 0
+      "rngCalls": 1
     }
   },
   {
@@ -154844,6 +155060,5985 @@
     }
   },
   {
+    "name": "simularLuta: poder mágico no PC: sem apertar nada, sai fraco",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 80,
+              "mp": 90,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": true,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "poder": "bola_de_fogo"
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      "rng": {
+        "seed": 1201
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 395,
+              "maxMp": 80,
+              "mp": 76,
+              "buffs": {},
+              "usosDeAtributo": {
+                "intelecto": 1
+              },
+              "usosDePoder": {
+                "bola_de_fogo": 1
+              }
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 570,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {
+                        "queimadura": {
+                          "turns": 3,
+                          "dmg": 5
+                        }
+                      },
+                      "attackCount": 1,
+                      "guardHits": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 152,
+            "lento": 216,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "descansando",
+                "tempo": 12,
+                "forca": 1,
+                "alvo": -1,
+                "x": 4320,
+                "y": 5280,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {
+              "bola_de_fogo": 137
+            },
+            "recargaDoItem": 0,
+            "rodada": 28,
+            "intervalo": 0,
+            "vez": 0
+          },
+          "pet": null,
+          "teclado": true,
+          "fim": null,
+          "loot": null
+        },
+        "acontecimentos": [
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "🔥 -30",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-5",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          }
+        ]
+      },
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "simularLuta: poder mágico no PC: teclas fora de hora",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 80,
+              "mp": 90,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": true,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "poder": "bola_de_fogo"
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tecla": "U"
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tecla": "P"
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "tecla": "I"
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      "rng": {
+        "seed": 1202
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 392,
+              "maxMp": 80,
+              "mp": 76,
+              "buffs": {},
+              "usosDeAtributo": {
+                "intelecto": 1
+              },
+              "usosDePoder": {
+                "bola_de_fogo": 1
+              }
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 557,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {
+                        "queimadura": {
+                          "turns": 1,
+                          "dmg": 5
+                        }
+                      },
+                      "attackCount": 1,
+                      "guardHits": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 185,
+            "lento": 149,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 49,
+                "forca": 1,
+                "alvo": -1,
+                "x": 4320,
+                "y": 5280,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {
+              "bola_de_fogo": 70
+            },
+            "recargaDoItem": 0,
+            "rodada": 85,
+            "intervalo": 0,
+            "vez": 0
+          },
+          "pet": null,
+          "teclado": true,
+          "fim": null,
+          "loot": null
+        },
+        "acontecimentos": [
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "🔥 -33",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-5",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-8",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-5",
+            "tom": "dano"
+          }
+        ]
+      },
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "simularLuta: poder mágico no celular: o desenho largado no meio",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 80,
+              "mp": 90,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "poder": "bola_de_fogo"
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "dedo": {
+              "x": 300,
+              "y": 300
+            }
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "dedo": {
+              "x": 500,
+              "y": 500
+            }
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      "rng": {
+        "seed": 1203
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 396,
+              "maxMp": 80,
+              "mp": 76,
+              "buffs": {},
+              "usosDeAtributo": {
+                "intelecto": 1
+              },
+              "usosDePoder": {
+                "bola_de_fogo": 1
+              }
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 561,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {
+                        "queimadura": {
+                          "turns": 1,
+                          "dmg": 5
+                        }
+                      },
+                      "attackCount": 1,
+                      "guardHits": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 194,
+            "lento": 11,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 40,
+                "forca": 1,
+                "alvo": -1,
+                "x": 4320,
+                "y": 5280,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 76,
+            "intervalo": 0,
+            "vez": 0
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "acontecimentos": [
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "🔥 -29",
+            "tom": "critico"
+          },
+          {
+            "tipo": "som",
+            "som": "crit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-5",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-4",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-5",
+            "tom": "dano"
+          }
+        ]
+      },
+      "rngCalls": 4
+    }
+  },
+  {
+    "name": "simularLuta: poder mágico: a cura também pede o evento",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 20,
+              "maxMp": 80,
+              "mp": 90,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "poder": "cura_menor"
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      "rng": {
+        "seed": 1204
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 26,
+              "maxMp": 80,
+              "mp": 80,
+              "buffs": {},
+              "usosDeAtributo": {
+                "sabedoria": 1
+              },
+              "usosDePoder": {
+                "cura_menor": 1
+              }
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 1
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 140,
+            "lento": 120,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "descansando",
+                "tempo": 24,
+                "forca": 1,
+                "alvo": -1,
+                "x": 4320,
+                "y": 5280,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {
+              "cura_menor": 101
+            },
+            "recargaDoItem": 0,
+            "rodada": 40,
+            "intervalo": 4,
+            "vez": 0
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "acontecimentos": [
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "+10",
+            "tom": "cura"
+          },
+          {
+            "tipo": "som",
+            "som": "heal"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-4",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          }
+        ]
+      },
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "simularLuta: poder mágico: sem mana, só avisa",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 80,
+              "mp": 1,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "poder": "bola_de_fogo"
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      "rng": {
+        "seed": 1205
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "cajado_1700000000000_62706",
+                  "templateId": "cajado",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 3,
+                    "mana": 8
+                  },
+                  "value": 24,
+                  "equipped": false,
+                  "procChance": 0.1
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [
+                "bola_de_fogo",
+                "cura_menor"
+              ],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 120,
+                "maxMp": 80,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 80,
+              "mp": 1,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 30,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 5280,
+              "facing": "N"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 60,
+            "intervalo": 30,
+            "vez": -1
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "acontecimentos": [
+          {
+            "tipo": "aviso",
+            "texto": "Mana insuficiente para Bola de Fogo"
+          }
+        ]
+      },
+      "rngCalls": 0
+    }
+  },
+  {
     "name": "simularLuta: classe: a perna quebrada deixa o passo curto",
     "input": {
       "fn": "simularLuta",
@@ -181252,7 +187447,7 @@
                 "descontoLoja": 5
               },
               "maxHp": 400,
-              "hp": 392,
+              "hp": 394,
               "maxMp": 72,
               "mp": 70,
               "buffs": {},
@@ -181273,7 +187468,7 @@
                 "className": "Monge",
                 "classIcon": "🥋",
                 "classId": "monge",
-                "hp": 13,
+                "hp": 14,
                 "maxHp": 20,
                 "attack": 5,
                 "attrs": {
@@ -181301,16 +187496,15 @@
                 "equipped": false
               },
               {
-                "uid": "marreta_1700000000000_77437",
-                "templateId": "marreta",
-                "rarity": "comum",
+                "uid": "colar_forca_1700000000000_6197",
+                "templateId": "colar_forca",
+                "rarity": "incomum",
                 "stats": {
-                  "ataque": 7,
-                  "velocidade": -2
+                  "ataque": 3,
+                  "vida": 10
                 },
-                "value": 27,
-                "equipped": false,
-                "procChance": 0.12
+                "value": 29,
+                "equipped": false
               }
             ],
             "quests": [],
@@ -181360,7 +187554,7 @@
                       "speciesId": "orc",
                       "enemyClassId": "xama",
                       "floor": 3,
-                      "hp": -10,
+                      "hp": -1,
                       "maxHp": 22,
                       "dmg": 5,
                       "speed": 9,
@@ -181368,7 +187562,7 @@
                       "gold": 14,
                       "isBoss": false,
                       "status": {
-                        "atordoado": 0,
+                        "atordoado": 1,
                         "vulneravel": {
                           "turns": 2,
                           "amount": 0.15
@@ -181381,14 +187575,16 @@
                       "speciesId": "morcego",
                       "enemyClassId": "xama",
                       "floor": 3,
-                      "hp": -7,
+                      "hp": -1,
                       "maxHp": 22,
                       "dmg": 5,
                       "speed": 9,
                       "xp": 17,
                       "gold": 14,
                       "isBoss": false,
-                      "status": {},
+                      "status": {
+                        "atordoado": 1
+                      },
                       "attackCount": 3,
                       "guardHits": 0
                     }
@@ -181404,37 +187600,37 @@
             }
           },
           "arena": {
-            "passo": 423,
-            "lento": 570,
+            "passo": 450,
+            "lento": 588,
             "chegada": {
               "x": 1440,
               "y": 4320,
               "facing": "E"
             },
             "heroi": {
-              "x": 3761,
-              "y": 1509,
-              "facing": "W"
+              "x": 3153,
+              "y": 1505,
+              "facing": "N"
             },
             "alvo": 1,
             "monstros": [
               {
                 "indice": 0,
                 "fase": "caido",
-                "tempo": 29,
+                "tempo": 30,
                 "forca": 1,
                 "alvo": -1,
                 "x": 1867,
                 "y": 1632,
                 "rumoX": 159,
-                "rumoY": -17,
+                "rumoY": -16,
                 "corpoX": 1867,
                 "corpoY": 1632
               },
               {
                 "indice": 1,
                 "fase": "caido",
-                "tempo": 41,
+                "tempo": 14,
                 "forca": 1,
                 "alvo": -1,
                 "x": 5112,
@@ -181448,15 +187644,15 @@
             "companheiros": [
               {
                 "indice": 0,
-                "tempo": 27
+                "tempo": 100
               }
             ],
             "tiros": [],
             "evento": null,
-            "recarga": 15,
+            "recarga": 0,
             "recargaDosPoderes": {},
             "recargaDoItem": 0,
-            "rodada": 27,
+            "rodada": 1,
             "intervalo": 0,
             "vez": 0
           },
@@ -181464,16 +187660,15 @@
           "teclado": false,
           "fim": "vitoria",
           "loot": {
-            "uid": "marreta_1700000000000_77437",
-            "templateId": "marreta",
-            "rarity": "comum",
+            "uid": "colar_forca_1700000000000_6197",
+            "templateId": "colar_forca",
+            "rarity": "incomum",
             "stats": {
-              "ataque": 7,
-              "velocidade": -2
+              "ataque": 3,
+              "vida": 10
             },
-            "value": 27,
-            "equipped": false,
-            "procChance": 0.12
+            "value": 29,
+            "equipped": false
           }
         },
         "acontecimentos": [
@@ -181542,7 +187737,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "🎶 -24",
+            "texto": "🎶 -13",
             "tom": "critico"
           },
           {
@@ -181553,7 +187748,7 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-8",
+            "texto": "-6",
             "tom": "dano"
           },
           {
@@ -181564,7 +187759,7 @@
             "tipo": "numero",
             "onde": "companheiro",
             "indice": 0,
-            "texto": "-7",
+            "texto": "-6",
             "tom": "dano"
           },
           {
@@ -181582,7 +187777,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "-19",
+            "texto": "-21",
             "tom": "dano"
           },
           {
@@ -181597,8 +187792,8 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 1,
-            "texto": "-9",
-            "tom": "dano"
+            "texto": "Errou",
+            "tom": "erro"
           },
           {
             "tipo": "numero",
@@ -181611,7 +187806,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 1,
-            "texto": "-20",
+            "texto": "-18",
             "tom": "dano"
           },
           {
@@ -181619,12 +187814,19 @@
             "som": "hit"
           },
           {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 1,
+            "texto": "-5",
+            "tom": "dano"
+          },
+          {
             "tipo": "diario",
             "texto": "Você derrotou Morcego Vampírico! +17 XP e +14 ouro."
           },
           {
             "tipo": "diario",
-            "texto": "Encontrou Marreta de Guerra após a batalha."
+            "texto": "Encontrou Colar da Força Ancestral Incomum após a batalha."
           },
           {
             "tipo": "som",
@@ -181632,7 +187834,7 @@
           }
         ]
       },
-      "rngCalls": 48
+      "rngCalls": 49
     }
   },
   {
@@ -191356,7 +197558,7 @@
                 "descontoLoja": 5
               },
               "maxHp": 400,
-              "hp": 362,
+              "hp": 393,
               "maxMp": 72,
               "mp": 70,
               "buffs": {
@@ -191420,7 +197622,7 @@
                       "speciesId": "aranha",
                       "enemyClassId": "xama",
                       "floor": 3,
-                      "hp": 36,
+                      "hp": 38,
                       "maxHp": 22,
                       "dmg": 5,
                       "speed": 9,
@@ -191428,7 +197630,7 @@
                       "gold": 14,
                       "isBoss": false,
                       "status": {
-                        "atordoado": 1
+                        "atordoado": 0
                       },
                       "attackCount": 1,
                       "guardHits": 0
@@ -191461,7 +197663,7 @@
                       "status": {
                         "vulneravel": {
                           "turns": 2,
-                          "amount": 0.2
+                          "amount": 0.15
                         }
                       },
                       "attackCount": 4,
@@ -191479,8 +197681,8 @@
             }
           },
           "arena": {
-            "passo": 563,
-            "lento": 674,
+            "passo": 560,
+            "lento": 679,
             "chegada": {
               "x": 4320,
               "y": 7200,
@@ -191488,7 +197690,7 @@
             },
             "heroi": {
               "x": 7392,
-              "y": 4332,
+              "y": 5395,
               "facing": "S"
             },
             "alvo": 2,
@@ -191503,34 +197705,34 @@
                 "y": 6664,
                 "rumoX": 0,
                 "rumoY": 0,
-                "corpoX": 5850,
-                "corpoY": 5533
+                "corpoX": 5694,
+                "corpoY": 5836
               },
               {
                 "indice": 1,
                 "fase": "descansando",
-                "tempo": 28,
+                "tempo": 20,
                 "forca": 1.7,
                 "alvo": -1,
-                "x": 7392,
-                "y": 4119,
+                "x": 6307,
+                "y": 3796,
                 "rumoX": 0,
                 "rumoY": 0,
-                "corpoX": 6218,
-                "corpoY": 4928
+                "corpoX": 5780,
+                "corpoY": 5136
               },
               {
                 "indice": 2,
-                "fase": "descansando",
-                "tempo": 35,
-                "forca": 1.45,
+                "fase": "avisando",
+                "tempo": 30,
+                "forca": 1,
                 "alvo": -1,
-                "x": 7206,
-                "y": 4663,
-                "rumoX": 1,
-                "rumoY": -159,
-                "corpoX": 7190,
-                "corpoY": 4762
+                "x": 7019,
+                "y": 2142,
+                "rumoX": 18,
+                "rumoY": 158,
+                "corpoX": 7019,
+                "corpoY": 2142
               }
             ],
             "companheiros": [],
@@ -191568,8 +197770,8 @@
             "recarga": 0,
             "recargaDosPoderes": {},
             "recargaDoItem": 0,
-            "rodada": 67,
-            "intervalo": 25,
+            "rodada": 70,
+            "intervalo": 0,
             "vez": 2,
             "escolhido": true
           },
@@ -191653,7 +197855,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 2,
-            "texto": "🎶 -25",
+            "texto": "🎶 -13",
             "tom": "critico"
           },
           {
@@ -191671,7 +197873,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 2,
-            "texto": "-17",
+            "texto": "-20",
             "tom": "dano"
           },
           {
@@ -191682,7 +197884,7 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-9",
+            "texto": "-7",
             "tom": "dano"
           },
           {
@@ -191702,9 +197904,23 @@
           },
           {
             "tipo": "numero",
-            "onde": "heroi",
+            "onde": "monstro",
             "indice": 0,
-            "texto": "-4",
+            "texto": "💫",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 2,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-14",
             "tom": "dano"
           },
           {
@@ -191714,39 +197930,13 @@
           {
             "tipo": "numero",
             "onde": "monstro",
-            "indice": 0,
-            "texto": "-16",
-            "tom": "dano"
-          },
-          {
-            "tipo": "som",
-            "som": "hit"
-          },
-          {
-            "tipo": "numero",
-            "onde": "heroi",
-            "indice": 0,
-            "texto": "-12",
-            "tom": "dano"
-          },
-          {
-            "tipo": "som",
-            "som": "hit"
-          },
-          {
-            "tipo": "numero",
-            "onde": "heroi",
-            "indice": 0,
-            "texto": "-13",
-            "tom": "dano"
-          },
-          {
-            "tipo": "som",
-            "som": "hit"
+            "indice": 1,
+            "texto": "Errou",
+            "tom": "erro"
           }
         ]
       },
-      "rngCalls": 37
+      "rngCalls": 32
     }
   },
   {
@@ -201348,7 +207538,7 @@
                 "descontoLoja": 5
               },
               "maxHp": 400,
-              "hp": 372,
+              "hp": 368,
               "maxMp": 72,
               "mp": 68,
               "buffs": {
@@ -201373,7 +207563,7 @@
                 "className": "Monge",
                 "classIcon": "🥋",
                 "classId": "monge",
-                "hp": 11,
+                "hp": 14,
                 "maxHp": 20,
                 "attack": 5,
                 "attrs": {
@@ -201437,7 +207627,7 @@
                       "speciesId": "slime",
                       "enemyClassId": "xama",
                       "floor": 3,
-                      "hp": -6,
+                      "hp": -2,
                       "maxHp": 22,
                       "dmg": 5,
                       "speed": 9,
@@ -201454,7 +207644,7 @@
                       "speciesId": "orc",
                       "enemyClassId": "xama",
                       "floor": 3,
-                      "hp": 19,
+                      "hp": 22,
                       "maxHp": 22,
                       "dmg": 5,
                       "speed": 9,
@@ -201464,14 +207654,14 @@
                       "status": {
                         "atordoado": 0
                       },
-                      "attackCount": 4,
+                      "attackCount": 5,
                       "guardHits": 0
                     },
                     {
                       "speciesId": "esqueleto",
                       "enemyClassId": "xama",
                       "floor": 3,
-                      "hp": 0,
+                      "hp": -16,
                       "maxHp": 22,
                       "dmg": 5,
                       "speed": 9,
@@ -201496,16 +207686,16 @@
             }
           },
           "arena": {
-            "passo": 792,
-            "lento": 215,
+            "passo": 799,
+            "lento": 201,
             "chegada": {
               "x": 1440,
               "y": 4320,
               "facing": "E"
             },
             "heroi": {
-              "x": 2382,
-              "y": 5026,
+              "x": 1296,
+              "y": 2328,
               "facing": "N"
             },
             "alvo": 1,
@@ -201513,47 +207703,47 @@
               {
                 "indice": 0,
                 "fase": "caido",
-                "tempo": 27,
+                "tempo": 49,
                 "forca": 1,
                 "alvo": -1,
-                "x": 1424,
-                "y": 4507,
+                "x": 1541,
+                "y": 3488,
                 "rumoX": 0,
                 "rumoY": 0,
-                "corpoX": 2225,
-                "corpoY": 4661
+                "corpoX": 2400,
+                "corpoY": 4320
               },
               {
                 "indice": 1,
-                "fase": "esperando",
-                "tempo": 0,
+                "fase": "avisando",
+                "tempo": 12,
                 "forca": 1,
-                "alvo": -1,
-                "x": 1586,
-                "y": 4294,
-                "rumoX": -135,
-                "rumoY": 84,
-                "corpoX": 1617,
-                "corpoY": 4242
+                "alvo": 0,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 1716,
+                "corpoY": 4068
               },
               {
                 "indice": 2,
                 "fase": "caido",
-                "tempo": 48,
+                "tempo": 70,
                 "forca": 1,
                 "alvo": -1,
-                "x": 1876,
-                "y": 5704,
+                "x": 1248,
+                "y": 3552,
                 "rumoX": 0,
                 "rumoY": 0,
-                "corpoX": 2425,
-                "corpoY": 4473
+                "corpoX": 2606,
+                "corpoY": 3668
               }
             ],
             "companheiros": [
               {
                 "indice": 0,
-                "tempo": 58
+                "tempo": 51
               }
             ],
             "tiros": [],
@@ -201561,9 +207751,9 @@
             "recarga": 13,
             "recargaDosPoderes": {},
             "recargaDoItem": 0,
-            "rodada": 18,
-            "intervalo": 16,
-            "vez": 2
+            "rodada": 11,
+            "intervalo": 0,
+            "vez": 1
           },
           "pet": null,
           "teclado": false,
@@ -201670,7 +207860,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 1,
-            "texto": "🌟 -46",
+            "texto": "🌟 -21",
             "tom": "critico"
           },
           {
@@ -201681,19 +207871,8 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "+14",
+            "texto": "+6",
             "tom": "cura"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 1,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
           },
           {
             "tipo": "numero",
@@ -201715,108 +207894,6 @@
           },
           {
             "tipo": "numero",
-            "onde": "monstro",
-            "indice": 1,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 1,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 1,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
-          },
-          {
-            "tipo": "numero",
-            "onde": "heroi",
-            "indice": 0,
-            "texto": "-5",
-            "tom": "dano"
-          },
-          {
-            "tipo": "som",
-            "som": "hit"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "-6",
-            "tom": "dano"
-          },
-          {
-            "tipo": "numero",
-            "onde": "companheiro",
-            "indice": 0,
-            "texto": "-9",
-            "tom": "dano"
-          },
-          {
-            "tipo": "som",
-            "som": "hit"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 2,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 2,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 2,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
-          },
-          {
-            "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
             "texto": "-9",
@@ -201825,6 +207902,35 @@
           {
             "tipo": "som",
             "som": "hit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 1,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 1,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "som",
+            "som": "miss"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 1,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "som",
+            "som": "miss"
           },
           {
             "tipo": "numero",
@@ -201840,9 +207946,31 @@
           {
             "tipo": "numero",
             "onde": "monstro",
-            "indice": 2,
-            "texto": "-5",
+            "indice": 0,
+            "texto": "-6",
             "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "som",
+            "som": "miss"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-12",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
           },
           {
             "tipo": "numero",
@@ -201856,6 +207984,57 @@
             "som": "miss"
           },
           {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 2,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "som",
+            "som": "miss"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 2,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "som",
+            "som": "miss"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 2,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 2,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "som",
+            "som": "miss"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-4",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          },
+          {
             "tipo": "aviso",
             "texto": "Slime Corrosivo se protege!"
           },
@@ -201863,7 +208042,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "-9",
+            "texto": "-5",
             "tom": "dano"
           },
           {
@@ -201883,14 +208062,14 @@
           },
           {
             "tipo": "numero",
-            "onde": "monstro",
+            "onde": "heroi",
             "indice": 0,
-            "texto": "Errou",
-            "tom": "erro"
+            "texto": "-4",
+            "tom": "dano"
           },
           {
             "tipo": "som",
-            "som": "miss"
+            "som": "hit"
           },
           {
             "tipo": "numero",
@@ -201916,25 +208095,25 @@
           },
           {
             "tipo": "numero",
-            "onde": "heroi",
-            "indice": 0,
-            "texto": "-4",
-            "tom": "dano"
+            "onde": "monstro",
+            "indice": 2,
+            "texto": "Errou",
+            "tom": "erro"
           },
           {
             "tipo": "som",
-            "som": "hit"
+            "som": "miss"
           },
           {
             "tipo": "numero",
             "onde": "monstro",
             "indice": 2,
-            "texto": "-7",
-            "tom": "dano"
+            "texto": "Errou",
+            "tom": "erro"
           },
           {
             "tipo": "numero",
-            "onde": "heroi",
+            "onde": "companheiro",
             "indice": 0,
             "texto": "-6",
             "tom": "dano"
@@ -201956,16 +208135,9 @@
           },
           {
             "tipo": "numero",
-            "onde": "monstro",
-            "indice": 2,
-            "texto": "-7",
-            "tom": "dano"
-          },
-          {
-            "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-7",
+            "texto": "-6",
             "tom": "dano"
           },
           {
@@ -201973,14 +208145,17 @@
             "som": "hit"
           },
           {
-            "tipo": "aviso",
-            "texto": "Esqueleto Errante se protege!"
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 2,
+            "texto": "-9",
+            "tom": "dano"
           },
           {
             "tipo": "numero",
             "onde": "monstro",
             "indice": 2,
-            "texto": "-15",
+            "texto": "-29",
             "tom": "dano"
           },
           {
@@ -201993,7 +208168,7 @@
           }
         ]
       },
-      "rngCalls": 83
+      "rngCalls": 82
     }
   },
   {
@@ -211782,7 +217957,7 @@
                 "descontoLoja": 5
               },
               "maxHp": 400,
-              "hp": 382,
+              "hp": 370,
               "maxMp": 80,
               "mp": 58,
               "buffs": {},
@@ -211802,7 +217977,7 @@
                 "className": "Mago",
                 "classIcon": "🧙",
                 "classId": "mago",
-                "hp": 8,
+                "hp": 13,
                 "maxHp": 20,
                 "attack": 5,
                 "attrs": {
@@ -211827,16 +218002,6 @@
                   "cura": 22
                 },
                 "value": 14,
-                "equipped": false
-              },
-              {
-                "uid": "tala_1700000000000_83249",
-                "templateId": "tala",
-                "rarity": "incomum",
-                "stats": {
-                  "tala": 1
-                },
-                "value": 26,
                 "equipped": false
               }
             ],
@@ -211887,7 +218052,7 @@
                       "speciesId": "aranha",
                       "enemyClassId": "xama",
                       "floor": 3,
-                      "hp": -5,
+                      "hp": -6,
                       "maxHp": 22,
                       "dmg": 5,
                       "speed": 9,
@@ -211907,7 +218072,7 @@
                       "speciesId": "lobo_sombras",
                       "enemyClassId": "xama",
                       "floor": 3,
-                      "hp": -18,
+                      "hp": -3,
                       "maxHp": 22,
                       "dmg": 5,
                       "speed": 9,
@@ -211916,7 +218081,7 @@
                       "isBoss": false,
                       "status": {
                         "veneno": {
-                          "turns": 4,
+                          "turns": 3,
                           "dmg": 7
                         }
                       },
@@ -211924,7 +218089,7 @@
                       "guardHits": 0
                     }
                   ],
-                  "monsterIndex": 0,
+                  "monsterIndex": 1,
                   "beaten": true
                 }
               ]
@@ -211936,44 +218101,44 @@
           },
           "arena": {
             "passo": 540,
-            "lento": 100,
+            "lento": 106,
             "chegada": {
               "x": 4320,
               "y": 7200,
               "facing": "N"
             },
             "heroi": {
-              "x": 7304,
-              "y": 2848,
+              "x": 7318,
+              "y": 2751,
               "facing": "N"
             },
-            "alvo": 0,
+            "alvo": 1,
             "monstros": [
               {
                 "indice": 0,
                 "fase": "caido",
                 "tempo": 28,
                 "forca": 1,
-                "alvo": 0,
-                "x": 0,
-                "y": 0,
+                "alvo": -1,
+                "x": 7352,
+                "y": 4109,
                 "rumoX": 0,
                 "rumoY": 0,
-                "corpoX": 6467,
-                "corpoY": 5273
+                "corpoX": 6488,
+                "corpoY": 5248
               },
               {
                 "indice": 1,
                 "fase": "caido",
-                "tempo": 34,
+                "tempo": 2,
                 "forca": 1,
                 "alvo": -1,
-                "x": 7336,
-                "y": 4937,
-                "rumoX": 62,
-                "rumoY": -215,
+                "x": 7301,
+                "y": 4930,
+                "rumoX": 57,
+                "rumoY": -216,
                 "corpoX": 7200,
-                "corpoY": 4999
+                "corpoY": 5018
               }
             ],
             "companheiros": [
@@ -211984,7 +218149,7 @@
             ],
             "tiros": [],
             "evento": null,
-            "recarga": 6,
+            "recarga": 3,
             "recargaDosPoderes": {
               "esporos_venenosos": 148
             },
@@ -211996,16 +218161,7 @@
           "pet": null,
           "teclado": false,
           "fim": "vitoria",
-          "loot": {
-            "uid": "tala_1700000000000_83249",
-            "templateId": "tala",
-            "rarity": "incomum",
-            "stats": {
-              "tala": 1
-            },
-            "value": 26,
-            "equipped": false
-          }
+          "loot": null
         },
         "acontecimentos": [
           {
@@ -212157,59 +218313,12 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "☣️ -28",
+            "texto": "☣️ -16",
             "tom": "critico"
           },
           {
             "tipo": "som",
             "som": "crit"
-          },
-          {
-            "tipo": "numero",
-            "onde": "heroi",
-            "indice": 0,
-            "texto": "-5",
-            "tom": "dano"
-          },
-          {
-            "tipo": "som",
-            "som": "hit"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "-7",
-            "tom": "dano"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "-7",
-            "tom": "dano"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
           },
           {
             "tipo": "numero",
@@ -212237,6 +218346,20 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
+            "texto": "-8",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-7",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
             "texto": "Errou",
             "tom": "erro"
           },
@@ -212248,7 +218371,7 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-4",
+            "texto": "-8",
             "tom": "dano"
           },
           {
@@ -212259,7 +218382,40 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "-6",
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "som",
+            "som": "miss"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "som",
+            "som": "miss"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-8",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "-7",
             "tom": "dano"
           },
           {
@@ -212295,7 +218451,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 1,
-            "texto": "☣️ -40",
+            "texto": "☣️ -18",
             "tom": "critico"
           },
           {
@@ -212303,12 +218459,8 @@
             "som": "crit"
           },
           {
-            "tipo": "diario",
-            "texto": "Você derrotou Lobo das Sombras! +17 XP e +14 ouro."
-          },
-          {
             "tipo": "numero",
-            "onde": "companheiro",
+            "onde": "heroi",
             "indice": 0,
             "texto": "-5",
             "tom": "dano"
@@ -212320,7 +218472,7 @@
           {
             "tipo": "numero",
             "onde": "monstro",
-            "indice": 0,
+            "indice": 1,
             "texto": "Errou",
             "tom": "erro"
           },
@@ -212340,8 +218492,15 @@
             "texto": "Você derrotou Aranha Gigante! +17 XP e +14 ouro."
           },
           {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 1,
+            "texto": "-7",
+            "tom": "dano"
+          },
+          {
             "tipo": "diario",
-            "texto": "Encontrou Tala Incomum após a batalha."
+            "texto": "Você derrotou Lobo das Sombras! +17 XP e +14 ouro."
           },
           {
             "tipo": "som",
@@ -217106,20 +223265,20 @@
                 "descontoLoja": 5
               },
               "maxHp": 400,
-              "hp": 384,
+              "hp": 360,
               "maxMp": 80,
-              "mp": 60,
+              "mp": 62,
               "buffs": {
-                "critNext": false,
-                "poisonTurns": 2,
-                "poisonDmg": 2
+                "poisonTurns": 1,
+                "poisonDmg": 2,
+                "critNext": false
               },
               "usosDeAtributo": {
-                "intelecto": 2,
+                "intelecto": 1,
                 "forca": 1
               },
               "usosDePoder": {
-                "cancao_debilitante": 2
+                "cancao_debilitante": 1
               }
             },
             "party": [],
@@ -217182,21 +223341,15 @@
                       "speciesId": "goblin",
                       "enemyClassId": "xama",
                       "floor": 3,
-                      "hp": 93,
+                      "hp": 22,
                       "maxHp": 22,
                       "dmg": 5,
                       "speed": 9,
                       "xp": 17,
                       "gold": 14,
                       "isBoss": false,
-                      "status": {
-                        "vulneravel": {
-                          "turns": 3,
-                          "amount": 0.2
-                        }
-                      },
-                      "attackCount": 2,
-                      "guardHits": 0
+                      "status": {},
+                      "attackCount": 3
                     },
                     {
                       "speciesId": "elemental_fogo",
@@ -217209,14 +223362,8 @@
                       "xp": 17,
                       "gold": 14,
                       "isBoss": false,
-                      "status": {
-                        "vulneravel": {
-                          "turns": 3,
-                          "amount": 0.2
-                        }
-                      },
-                      "attackCount": 4,
-                      "guardHits": 0
+                      "status": {},
+                      "attackCount": 3
                     },
                     {
                       "speciesId": "aranha",
@@ -217229,8 +223376,14 @@
                       "xp": 17,
                       "gold": 14,
                       "isBoss": false,
-                      "status": {},
-                      "attackCount": 3
+                      "status": {
+                        "vulneravel": {
+                          "turns": 2,
+                          "amount": 0.15
+                        }
+                      },
+                      "attackCount": 3,
+                      "guardHits": 0
                     }
                   ],
                   "monsterIndex": 0,
@@ -217244,8 +223397,8 @@
             }
           },
           "arena": {
-            "passo": 559,
-            "lento": 681,
+            "passo": 514,
+            "lento": 771,
             "chegada": {
               "x": 4320,
               "y": 1440,
@@ -217261,20 +223414,20 @@
               {
                 "indice": 0,
                 "fase": "esperando",
-                "tempo": 0,
-                "forca": 1,
+                "tempo": 43,
+                "forca": 1.45,
                 "alvo": -1,
-                "x": 1968,
-                "y": 7800,
-                "rumoX": 5,
-                "rumoY": 159,
-                "corpoX": 4458,
-                "corpoY": 5015
+                "x": 7326,
+                "y": 2553,
+                "rumoX": 9,
+                "rumoY": -159,
+                "corpoX": 7200,
+                "corpoY": 2691
               },
               {
                 "indice": 1,
-                "fase": "avisando",
-                "tempo": 11,
+                "fase": "esperando",
+                "tempo": 25,
                 "forca": 1,
                 "alvo": -1,
                 "x": 4320,
@@ -217286,63 +223439,27 @@
               },
               {
                 "indice": 2,
-                "fase": "esperando",
-                "tempo": 55,
+                "fase": "descansando",
+                "tempo": 33,
                 "forca": 1,
                 "alvo": -1,
-                "x": 7392,
-                "y": 1881,
+                "x": 7005,
+                "y": 1268,
                 "rumoX": 0,
                 "rumoY": 0,
-                "corpoX": 6465,
-                "corpoY": 2327
+                "corpoX": 6152,
+                "corpoY": 1951
               }
             ],
             "companheiros": [],
             "tiros": [],
-            "evento": {
-              "evento": {
-                "tipo": "letras",
-                "zona": 0.5,
-                "duracao": 216,
-                "notas": [
-                  36,
-                  108,
-                  180
-                ],
-                "janela": 36,
-                "letras": [
-                  "I",
-                  "P",
-                  "I"
-                ]
-              },
-              "passo": 55,
-              "jogada": {
-                "teclas": [
-                  {
-                    "letra": "O",
-                    "t": 33
-                  },
-                  {
-                    "letra": "O",
-                    "t": 43
-                  },
-                  {
-                    "letra": "O",
-                    "t": 52
-                  }
-                ]
-              },
-              "alvo": 1,
-              "estilo": "normal"
-            },
-            "recarga": 0,
+            "evento": null,
+            "recarga": 2,
             "recargaDosPoderes": {},
             "recargaDoItem": 0,
-            "rodada": 71,
-            "intervalo": 0,
-            "vez": 1,
+            "rodada": 26,
+            "intervalo": 23,
+            "vez": 2,
             "escolhido": true
           },
           "pet": null,
@@ -217354,8 +223471,8 @@
           {
             "tipo": "numero",
             "onde": "monstro",
-            "indice": 0,
-            "texto": "🎶 -25",
+            "indice": 2,
+            "texto": "🎶 -9",
             "tom": "critico"
           },
           {
@@ -217368,46 +223485,6 @@
             "indice": 0,
             "texto": "Errou",
             "tom": "erro"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "som",
-            "som": "miss"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 1,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "numero",
-            "onde": "heroi",
-            "indice": 0,
-            "texto": "-4",
-            "tom": "dano"
-          },
-          {
-            "tipo": "som",
-            "som": "hit"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 1,
-            "texto": "-14",
-            "tom": "dano"
-          },
-          {
-            "tipo": "som",
-            "som": "hit"
           },
           {
             "tipo": "numero",
@@ -217421,22 +223498,8 @@
             "som": "hit"
           },
           {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "Errou",
-            "tom": "erro"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 1,
-            "texto": "🎶 -17",
-            "tom": "critico"
-          },
-          {
-            "tipo": "som",
-            "som": "crit"
+            "tipo": "aviso",
+            "texto": "Elemental de Fogo drena 4 de mana"
           },
           {
             "tipo": "numero",
@@ -217448,7 +223511,7 @@
           {
             "tipo": "numero",
             "onde": "monstro",
-            "indice": 1,
+            "indice": 2,
             "texto": "Errou",
             "tom": "erro"
           },
@@ -217464,10 +223527,28 @@
             "tom": "erro"
           },
           {
+            "tipo": "som",
+            "som": "miss"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 0,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 1,
+            "texto": "Errou",
+            "tom": "erro"
+          },
+          {
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-4",
+            "texto": "-6",
             "tom": "dano"
           },
           {
@@ -217480,6 +223561,57 @@
           },
           {
             "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-2",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "monstro",
+            "indice": 2,
+            "texto": "-29",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-9",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-2",
+            "tom": "dano"
+          },
+          {
+            "tipo": "numero",
+            "onde": "heroi",
+            "indice": 0,
+            "texto": "-6",
+            "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
+          },
+          {
+            "tipo": "aviso",
+            "texto": "Elemental de Fogo drena 4 de mana"
+          },
+          {
+            "tipo": "numero",
             "onde": "monstro",
             "indice": 2,
             "texto": "Errou",
@@ -217493,12 +223625,16 @@
             "tipo": "numero",
             "onde": "heroi",
             "indice": 0,
-            "texto": "-2",
+            "texto": "-9",
             "tom": "dano"
+          },
+          {
+            "tipo": "som",
+            "som": "hit"
           }
         ]
       },
-      "rngCalls": 35
+      "rngCalls": 40
     }
   },
   {
@@ -246396,13 +252532,13 @@
               "maxHp": 5000,
               "hp": 2000,
               "maxMp": 300,
-              "mp": 276,
+              "mp": 288,
               "buffs": {},
               "usosDeAtributo": {
-                "intelecto": 2
+                "intelecto": 1
               },
               "usosDePoder": {
-                "bola_de_fogo": 2
+                "bola_de_fogo": 1
               }
             },
             "party": [],
@@ -246449,7 +252585,7 @@
                       "speciesId": "goblin",
                       "enemyClassId": "feiticeiro",
                       "floor": 100,
-                      "hp": 2857,
+                      "hp": 2950,
                       "maxHp": 3000,
                       "dmg": 187,
                       "speed": 64,
@@ -246458,12 +252594,7 @@
                       "isBoss": true,
                       "isMainBoss": false,
                       "bossTitle": "o Devorador",
-                      "status": {
-                        "queimadura": {
-                          "turns": 1,
-                          "dmg": 5
-                        }
-                      },
+                      "status": {},
                       "attackCount": 2,
                       "guardHits": 0
                     }
@@ -246479,16 +252610,16 @@
             }
           },
           "arena": {
-            "passo": 400,
-            "lento": 0,
+            "passo": 340,
+            "lento": 120,
             "chegada": {
               "x": 4320,
               "y": 5280,
               "facing": "N"
             },
             "heroi": {
-              "x": 4320,
-              "y": 5472,
+              "x": 5088,
+              "y": 6368,
               "facing": "N"
             },
             "alvo": 0,
@@ -246496,15 +252627,15 @@
               {
                 "indice": 0,
                 "fase": "esperando",
-                "tempo": 13,
+                "tempo": 61,
                 "forca": 1,
                 "alvo": -1,
-                "x": 929,
-                "y": 4640,
-                "rumoX": -146,
-                "rumoY": -64,
-                "corpoX": 2362,
-                "corpoY": 4983
+                "x": 6325,
+                "y": 886,
+                "rumoX": 43,
+                "rumoY": -154,
+                "corpoX": 6246,
+                "corpoY": 1783
               }
             ],
             "companheiros": [],
@@ -246513,7 +252644,7 @@
             "recarga": 0,
             "recargaDosPoderes": {},
             "recargaDoItem": 0,
-            "rodada": 50,
+            "rodada": 20,
             "intervalo": 0,
             "vez": 0
           },
@@ -246527,7 +252658,7 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "🔥 -60",
+            "texto": "🔥 -35",
             "tom": "critico"
           },
           {
@@ -246559,17 +252690,6 @@
             "tipo": "numero",
             "onde": "monstro",
             "indice": 0,
-            "texto": "🔥 -63",
-            "tom": "critico"
-          },
-          {
-            "tipo": "som",
-            "som": "crit"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
             "texto": "-5",
             "tom": "dano"
           },
@@ -246579,13 +252699,6 @@
             "indice": 0,
             "texto": "Errou",
             "tom": "erro"
-          },
-          {
-            "tipo": "numero",
-            "onde": "monstro",
-            "indice": 0,
-            "texto": "-5",
-            "tom": "dano"
           }
         ]
       },

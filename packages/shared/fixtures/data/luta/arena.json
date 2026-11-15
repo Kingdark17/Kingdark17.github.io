@@ -3,6 +3,11 @@
   "RODADA": 90,
   "RECARGA_DO_ATAQUE": 15,
   "RECARGA_DO_PODER": 180,
+  "TIPOS_DE_PODER_MAGICO": [
+    "dano_magico",
+    "cura"
+  ],
+  "FORCA_DO_PODER_ERRADO": 0.5,
   "RECARGA_DO_ITEM": 60,
   "RAIO_DO_HEROI": 160,
   "AREA_DA_MIRA": 1440,
