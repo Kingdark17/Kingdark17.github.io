@@ -47,8 +47,78 @@ namespace RPGLegend.Engine
         public double CorpoY;
         /// <summary>O chefe final: o poder do golpe em curso (<see cref="ChefeFinal"/>). Ausente (null) no golpe comum.</summary>
         public string Poder;
+        /// <summary>Na luta em dupla: ele anda atrás do parceiro, e o golpe em curso mira nele (<see cref="Dupla"/>).</summary>
+        public bool? NoParceiro;
+        /// <summary>No espelho de quem acompanha: este golpe já acertou o meu herói (a investida não acerta duas vezes).</summary>
+        public bool? Acertou;
 
         public MonstroNaArena Clone() => (MonstroNaArena)MemberwiseClone();
+    }
+
+    /// <summary>
+    /// TS: Dupla — a luta em dupla (o co-op do app, 2026-11-16): cada app cuida do próprio herói, e o de quem criou a
+    /// sala cuida dos monstros. Papel "anfitriao": a luta de sempre, com o parceiro na sala (os monstros escolhem
+    /// entre os dois, e o dano dele chega pela entrada). Papel "convidado": um espelho — o estado dos monstros chega
+    /// pela entrada, o que mira o herói daqui é testado aqui, e o dano que ele causa sai em
+    /// <see cref="QuadroDaLuta.Danos"/>. Quem cai vira fantasma, e a luta segue com o outro.
+    /// </summary>
+    public sealed class Dupla
+    {
+        public string Papel;
+        public PontoNaSala Parceiro;
+        public bool? ParceiroCaido;
+        public bool? Fantasma;
+
+        public Dupla Clone() => new Dupla
+        {
+            Papel = Papel,
+            Parceiro = Parceiro != null ? new PontoNaSala { X = Parceiro.X, Y = Parceiro.Y } : null,
+            ParceiroCaido = ParceiroCaido,
+            Fantasma = Fantasma,
+        };
+    }
+
+    /// <summary>TS: MonstroNoEspelho — um monstro como o anfitrião o manda pro espelho.</summary>
+    public sealed class MonstroNoEspelho
+    {
+        public double Indice;
+        public string Fase;
+        public double Tempo;
+        public double Forca;
+        public double Alvo;
+        public double X;
+        public double Y;
+        public double RumoX;
+        public double RumoY;
+        public double CorpoX;
+        public double CorpoY;
+        public string Poder;
+        public bool? NoParceiro;
+        public double Hp;
+        /// <summary>O monstro inteiro: quando o espelho ainda não o tem (os lacaios) ou quando ele mudou além da vida.</summary>
+        public CombatMonster Monstro;
+    }
+
+    /// <summary>TS: Espelho — o que o anfitrião manda dos monstros e das bolas, umas dez vezes por segundo.</summary>
+    public sealed class Espelho
+    {
+        public List<MonstroNoEspelho> Monstros = new List<MonstroNoEspelho>();
+        public List<Tiro> Tiros = new List<Tiro>();
+    }
+
+    /// <summary>TS: o parceiro na entrada — onde ele está agora, e se caiu.</summary>
+    public sealed class ParceiroNaEntrada
+    {
+        public double X;
+        public double Y;
+        public bool? Caido;
+    }
+
+    /// <summary>TS: um dano de fora, ou um dano pra mandar: em qual monstro (índice na sala) e quanto.</summary>
+    public sealed class DanoNoMonstro
+    {
+        public double Indice;
+        public double Dano;
     }
 
     /// <summary>TS: CompanheiroNaArena.</summary>
@@ -116,6 +186,8 @@ namespace RPGLegend.Engine
         /// luta. Ausente (null) quando o herói não tem vigor.
         /// </summary>
         public double? Escudo;
+        /// <summary>A luta em dupla; ausente (null) na luta de um só.</summary>
+        public Dupla Dupla;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -163,6 +235,14 @@ namespace RPGLegend.Engine
         public string Poder;
         public string Item;
         public bool? Menu;
+        /// <summary>Em dupla: onde o parceiro está agora, e se caiu.</summary>
+        public ParceiroNaEntrada Parceiro;
+        /// <summary>Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo.</summary>
+        public List<DanoNoMonstro> DanoDeFora;
+        /// <summary>Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo.</summary>
+        public Espelho Espelho;
+        /// <summary>Em dupla: o parceiro saiu da sala. Quem ficou segue sozinho; se estava caído, perde.</summary>
+        public bool? SemParceiro;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -187,6 +267,8 @@ namespace RPGLegend.Engine
     {
         public LutaEmTempoReal Luta;
         public List<Acontecimento> Acontecimentos;
+        /// <summary>Em dupla, no convidado: o dano que o herói daqui (e a equipe dele) causou, pra mandar ao anfitrião. Ausente (null) sem dano.</summary>
+        public List<DanoNoMonstro> Danos;
     }
 
     /// <summary>As tabelas de luta/arena.ts (fixtures/data/luta/arena.json).</summary>
@@ -263,6 +345,8 @@ namespace RPGLegend.Engine
             public RngFn Rng;
             public Func<double> Now;
             public List<Acontecimento> Acontecimentos = new List<Acontecimento>();
+            /// <summary>O dano causado neste passo no espelho (<see cref="QuadroDaLuta.Danos"/>).</summary>
+            public List<DanoNoMonstro> Danos = new List<DanoNoMonstro>();
         }
 
         // ---------- abrir ----------
@@ -274,7 +358,7 @@ namespace RPGLegend.Engine
         /// pra ele voltar ali quando acabar. <paramref name="teclado"/>: jogada no PC, onde o cajado pede letras em
         /// vez do desenho.
         /// </summary>
-        public static QuadroDaLuta AbrirLuta(EstadoNaMasmorra estado, Walker chegada, string pet = null, bool teclado = false)
+        public static QuadroDaLuta AbrirLuta(EstadoNaMasmorra estado, Walker chegada, string pet = null, bool teclado = false, string dupla = null)
         {
             var preparada = FimDaLuta.PrepararLuta(estado);
             var sala = (DungeonCell)Estados.CelulaAtual(preparada.Estado);
@@ -336,6 +420,12 @@ namespace RPGLegend.Engine
                 arena.Escudo = escudo;
                 acontecimentos.Add(Aviso("💪 Vigor: escudo de " + Js.NumberToString(escudo)));
             }
+            if (dupla != null)
+            {
+                arena.Dupla = new Dupla { Papel = dupla };
+                // Quem já chega caído (o fantasma que ninguém reviveu) só acompanha.
+                if (preparada.Estado.Hero.Hp <= 0) arena.Dupla.Fantasma = true;
+            }
             return new QuadroDaLuta
             {
                 Luta = new LutaEmTempoReal { Estado = preparada.Estado, Arena = arena, Pet = pet, Teclado = teclado, Fim = null, Loot = null },
@@ -355,8 +445,12 @@ namespace RPGLegend.Engine
             if (luta.Fim != null) return new QuadroDaLuta { Luta = luta, Acontecimentos = new List<Acontecimento>() };
             var l = new Luta { Estado = luta.Estado, Arena = CopiarArena(luta.Arena), Pet = luta.Pet, Teclado = luta.Teclado, Fim = luta.Fim, Loot = luta.Loot, Conquista = luta.Conquista, Rng = rng, Now = now };
 
+            if (l.Arena.Dupla != null) ReceberDoParceiro(l, entrada);
+            if (l.Fim != null) return FecharPasso(l);
             if (entrada.Mirar != null) Mirar(l, entrada.Mirar.Value);
-            if (l.Arena.Evento != null) SeguirEvento(l, entrada);
+            // O fantasma anda, mas não age.
+            if (l.Arena.Dupla?.Fantasma == true) l.Arena.Evento = null;
+            else if (l.Arena.Evento != null) SeguirEvento(l, entrada);
             else if (entrada.Atacar == true && l.Arena.Recarga <= 0) AbrirEvento(l, entrada);
             else if (Js.Truthy(entrada.Poder)) PedirPoder(l, entrada.Poder);
             else if (Js.Truthy(entrada.Item)) UsarItem(l, entrada.Item);
@@ -368,26 +462,31 @@ namespace RPGLegend.Engine
                 if (!lento || l.Arena.Lento % D.Lentidao == 0) PassoDoMundo(l, entrada);
             }
 
-            return new QuadroDaLuta
-            {
-                Luta = new LutaEmTempoReal { Estado = l.Estado, Arena = l.Arena, Pet = l.Pet, Teclado = l.Teclado, Fim = l.Fim, Loot = l.Loot, Conquista = l.Conquista },
-                Acontecimentos = l.Acontecimentos,
-            };
+            return FecharPasso(l);
         }
+
+        private static QuadroDaLuta FecharPasso(Luta l) => new QuadroDaLuta
+        {
+            Luta = new LutaEmTempoReal { Estado = l.Estado, Arena = l.Arena, Pet = l.Pet, Teclado = l.Teclado, Fim = l.Fim, Loot = l.Loot, Conquista = l.Conquista },
+            Acontecimentos = l.Acontecimentos,
+            Danos = l.Danos.Count > 0 ? l.Danos : null,
+        };
 
         /// <summary>TS: simularLuta — vários passos de uma vez, cada um com a sua entrada; para no fim da luta.</summary>
         public static QuadroDaLuta SimularLuta(LutaEmTempoReal luta, IReadOnlyList<EntradaDaLuta> entradas, RngFn rng, Func<double> now = null)
         {
             var atual = luta;
             var acontecimentos = new List<Acontecimento>();
+            var danos = new List<DanoNoMonstro>();
             foreach (var entrada in entradas)
             {
                 if (atual.Fim != null) break;
                 var quadro = PassoDaLuta(atual, entrada, rng, now);
                 atual = quadro.Luta;
                 acontecimentos.AddRange(quadro.Acontecimentos);
+                if (quadro.Danos != null) danos.AddRange(quadro.Danos);
             }
-            return new QuadroDaLuta { Luta = atual, Acontecimentos = acontecimentos };
+            return new QuadroDaLuta { Luta = atual, Acontecimentos = acontecimentos, Danos = danos.Count > 0 ? danos : null };
         }
 
         private static Arena CopiarArena(Arena arena)
@@ -411,6 +510,7 @@ namespace RPGLegend.Engine
                 Intervalo = arena.Intervalo,
                 Vez = arena.Vez,
                 Escudo = arena.Escudo,
+                Dupla = arena.Dupla?.Clone(),
             };
             foreach (var m in arena.Monstros) copia.Monstros.Add(m.Clone());
             foreach (var c in arena.Companheiros) copia.Companheiros.Add(c.Clone());
@@ -900,6 +1000,7 @@ namespace RPGLegend.Engine
         /// </summary>
         private static Ferida FerirNaArena(Luta l, EstadoNaMasmorra estado, double indice, CombatMonster depois)
         {
+            if (NoEspelho(l)) return FerirNoEspelho(l, estado, indice, depois);
             var ferida = ChefeFinal.FerirMonstro(estado, indice, depois, l.Rng);
             l.Estado = ferida.Estado;
             if (ferida.Lacaios.Count > 0)
@@ -1132,23 +1233,34 @@ namespace RPGLegend.Engine
                 else arena.RecargaDosPoderes.Remove(id);
             }
 
-            foreach (var m in arena.Monstros)
+            if (NoEspelho(l))
             {
+                PassoDoEspelho(l);
+            }
+            else
+            {
+                foreach (var m in arena.Monstros)
+                {
+                    if (l.Fim != null) return;
+                    if (m.Fase != "caido") AgirMonstro(l, m);
+                }
                 if (l.Fim != null) return;
-                if (m.Fase != "caido") AgirMonstro(l, m);
+                if (PodeGolpear(l))
+                {
+                    var proximo = ProximoDaVez(l);
+                    if (proximo != null) ComecarGolpe(l, proximo);
+                }
             }
             if (l.Fim != null) return;
-            if (PodeGolpear(l))
+            if (arena.Dupla?.Fantasma != true)
             {
-                var proximo = ProximoDaVez(l);
-                if (proximo != null) ComecarGolpe(l, proximo);
+                foreach (var c in arena.Companheiros)
+                {
+                    if (l.Fim != null) return;
+                    AgirCompanheiro(l, c);
+                }
             }
-            foreach (var c in arena.Companheiros)
-            {
-                if (l.Fim != null) return;
-                AgirCompanheiro(l, c);
-            }
-            MoverTiros(l);
+            if (!NoEspelho(l)) MoverTiros(l);
             if (l.Fim != null) return;
 
             arena.Rodada -= 1;
@@ -1191,8 +1303,9 @@ namespace RPGLegend.Engine
         /// <summary>A distância (ao quadrado) do corpo do monstro ao herói.</summary>
         private static double DistanciaDoHeroi(Luta l, MonstroNaArena m)
         {
-            double dx = l.Arena.Heroi.X - m.CorpoX;
-            double dy = l.Arena.Heroi.Y - m.CorpoY;
+            var quem = PresaDe(l, m);
+            double dx = quem.X - m.CorpoX;
+            double dy = quem.Y - m.CorpoY;
             return dx * dx + dy * dy;
         }
 
@@ -1207,8 +1320,9 @@ namespace RPGLegend.Engine
         /// </summary>
         private static void Aproximar(Luta l, MonstroNaArena m, JeitoDeLutar jeito)
         {
+            EscolherPresa(l, m);
             if (ADistanciaDoGolpe(l, m, jeito)) return;
-            var heroi = l.Arena.Heroi;
+            var heroi = PresaDe(l, m);
             var r = Rumo(heroi.X - m.CorpoX, heroi.Y - m.CorpoY, jeito.Passo);
             var formato = Geometria(l);
             double meia = RoomWalk.TileUnits / 2;
@@ -1326,7 +1440,7 @@ namespace RPGLegend.Engine
                 m.Y = 0;
                 return;
             }
-            var heroi = l.Arena.Heroi;
+            var heroi = PresaDe(l, m);
             if (jeito.Golpe == "perto")
             {
                 m.X = heroi.X;
@@ -1364,14 +1478,15 @@ namespace RPGLegend.Engine
             if (jeito.Golpe == "tiro")
             {
                 // A bola mira onde o herói está agora, no fim do aviso.
-                var heroi = l.Arena.Heroi;
+                var heroi = PresaDe(l, m);
                 var v = Rumo(heroi.X - m.X, heroi.Y - m.Y, jeito.Velocidade);
                 l.Arena.Tiros.Add(new Tiro { X = m.X, Y = m.Y, Vx = v.X, Vy = v.Y, Raio = jeito.Tamanho, Vida = D.VidaDoTiro, Indice = m.Indice, Forca = m.Forca });
                 Descansar(l, m, jeito);
                 return;
             }
-            if (Encosta(l.Arena.Heroi, m.X, m.Y, jeito.Tamanho)) GolpeNoHeroi(l, m.Indice, m.Forca);
-            else Contar(l, Numero("monstro", m.Indice, "Errou", "erro"));
+            if (Pega(l, m.X, m.Y, jeito.Tamanho)) GolpeNoHeroi(l, m.Indice, m.Forca);
+            // O golpe no parceiro quem julga é o app dele: daqui não dá pra dizer que errou.
+            else if (m.NoParceiro != true) Contar(l, Numero("monstro", m.Indice, "Errou", "erro"));
             Descansar(l, m, jeito);
         }
 
@@ -1415,10 +1530,17 @@ namespace RPGLegend.Engine
         {
             m.X += m.RumoX;
             m.Y += m.RumoY;
-            if (Encosta(l.Arena.Heroi, m.X, m.Y, jeito.Tamanho))
+            if (Pega(l, m.X, m.Y, jeito.Tamanho))
             {
                 Pousar(l, m, jeito.Tamanho);
                 GolpeNoHeroi(l, m.Indice, m.Forca);
+                Descansar(l, m, jeito);
+                return;
+            }
+            // Bateu no parceiro: para ali (o golpe quem julga é o app dele).
+            if (PegaOParceiro(l, m.X, m.Y, jeito.Tamanho))
+            {
+                Pousar(l, m);
                 Descansar(l, m, jeito);
                 return;
             }
@@ -1472,7 +1594,7 @@ namespace RPGLegend.Engine
             if (golpe.DrainResisted == true) Contar(l, Aviso("Sua armadura segura o dreno de mana"));
             if (golpe.PoisonApplied) Contar(l, Aviso("Você foi envenenado"));
             if (golpe.PoisonResisted == true) Contar(l, Aviso("Sua armadura segura o veneno"));
-            if (hero.Hp <= 0) Perder(l);
+            if (hero.Hp <= 0) Cair(l);
         }
 
         /// <summary>
@@ -1569,11 +1691,13 @@ namespace RPGLegend.Engine
                     Contar(l, Numero("monstro", t.Indice, "Errou", "erro"));
                     continue;
                 }
-                if (Encosta(l.Arena.Heroi, t.X, t.Y, t.Raio))
+                if (Pega(l, t.X, t.Y, t.Raio))
                 {
                     GolpeNoHeroi(l, t.Indice, t.Forca);
                     continue;
                 }
+                // A bola some no parceiro (o golpe quem julga é o app dele).
+                if (PegaOParceiro(l, t.X, t.Y, t.Raio)) continue;
                 ficam.Add(t);
             }
             l.Arena.Tiros = ficam;
@@ -1589,15 +1713,16 @@ namespace RPGLegend.Engine
             var comVeneno = Masmorra(l).Clone();
             comVeneno.Hero = heroi;
             l.Estado = comVeneno;
-            if (heroi.Hp <= 0)
+            if (heroi.Hp <= 0 && l.Arena.Dupla?.Fantasma != true)
             {
                 Diario(l, new[] { "O veneno foi mais forte." });
-                Perder(l);
-                return;
+                Cair(l);
+                if (l.Fim != null) return;
             }
             Regenerar(l);
 
-            foreach (var indice in FimDaLuta.IndicesDePe(Sala(l)))
+            // No espelho, o veneno e o fogo dos monstros correm no app do anfitrião.
+            foreach (var indice in NoEspelho(l) ? new List<double>() : FimDaLuta.IndicesDePe(Sala(l)))
             {
                 var monstro = MonstroNo(l, indice);
                 var dot = StatusEffects.TickMonsterDot(monstro);
@@ -1699,6 +1824,283 @@ namespace RPGLegend.Engine
         // ---------- pra tela ----------
 
         /// <summary>TS: eventoDoBotao — o evento que o botão de ataque abriria agora, sem sortear nada.</summary>
+        // ---------- a luta em dupla ----------
+
+        private static bool NoEspelho(Luta l) => l.Arena.Dupla?.Papel == "convidado";
+
+        /// <summary>O parceiro está de pé na sala, e eu sei onde.</summary>
+        private static PontoNaSala ParceiroDePe(Luta l)
+        {
+            var dupla = l.Arena.Dupla;
+            if (dupla == null || dupla.Parceiro == null || dupla.ParceiroCaido == true) return null;
+            return dupla.Parceiro;
+        }
+
+        /// <summary>Atrás de quem o monstro vai: o parceiro, se foi quem ele escolheu e ainda está de pé; senão o herói daqui.</summary>
+        private static (double X, double Y) PresaDe(Luta l, MonstroNaArena m)
+        {
+            var parceiro = m.NoParceiro == true ? ParceiroDePe(l) : null;
+            return parceiro != null ? (parceiro.X, parceiro.Y) : (l.Arena.Heroi.X, l.Arena.Heroi.Y);
+        }
+
+        /// <summary>TS: escolherPresa — em dupla, o monstro que espera escolhe o herói de pé mais perto do corpo dele. Sem sorteio.</summary>
+        private static void EscolherPresa(Luta l, MonstroNaArena m)
+        {
+            var parceiro = ParceiroDePe(l);
+            if (parceiro == null)
+            {
+                m.NoParceiro = null;
+                return;
+            }
+            if (l.Arena.Dupla?.Fantasma == true)
+            {
+                m.NoParceiro = true;
+                return;
+            }
+            var heroi = l.Arena.Heroi;
+            double daqui = (heroi.X - m.CorpoX) * (heroi.X - m.CorpoX) + (heroi.Y - m.CorpoY) * (heroi.Y - m.CorpoY);
+            double dele = (parceiro.X - m.CorpoX) * (parceiro.X - m.CorpoX) + (parceiro.Y - m.CorpoY) * (parceiro.Y - m.CorpoY);
+            if (dele < daqui) m.NoParceiro = true;
+            else m.NoParceiro = null;
+        }
+
+        /// <summary>O golpe pega o herói daqui (o fantasma não apanha).</summary>
+        private static bool Pega(Luta l, double x, double y, double raio) =>
+            l.Arena.Dupla?.Fantasma != true && Encosta(l.Arena.Heroi, x, y, raio);
+
+        private static bool PegaOParceiro(Luta l, double x, double y, double raio)
+        {
+            var parceiro = ParceiroDePe(l);
+            if (parceiro == null) return false;
+            double dx = parceiro.X - x;
+            double dy = parceiro.Y - y;
+            double limite = raio + D.RaioDoHeroi;
+            return dx * dx + dy * dy <= limite * limite;
+        }
+
+        /// <summary>TS: receberDoParceiro — onde ele está, o dano que causou (no anfitrião) e o espelho (no convidado).</summary>
+        private static void ReceberDoParceiro(Luta l, EntradaDaLuta entrada)
+        {
+            var dupla = l.Arena.Dupla;
+            if (entrada.SemParceiro == true)
+            {
+                // Sozinho de novo: quem estava caído não tem mais quem o levante.
+                l.Arena.Dupla = null;
+                foreach (var m in l.Arena.Monstros) m.NoParceiro = null;
+                if (dupla.Fantasma == true) Perder(l);
+                return;
+            }
+            if (entrada.Parceiro != null)
+            {
+                dupla.Parceiro = new PontoNaSala { X = Math.Truncate(entrada.Parceiro.X), Y = Math.Truncate(entrada.Parceiro.Y) };
+                dupla.ParceiroCaido = entrada.Parceiro.Caido == true ? true : (bool?)null;
+            }
+            if (dupla.Fantasma == true && dupla.ParceiroCaido == true)
+            {
+                Perder(l);
+                return;
+            }
+            if (dupla.Papel == "anfitriao")
+            {
+                if (entrada.DanoDeFora == null) return;
+                foreach (var golpe in entrada.DanoDeFora)
+                {
+                    if (l.Fim != null) return;
+                    DanoDoParceiro(l, Math.Truncate(golpe.Indice), Math.Truncate(golpe.Dano));
+                }
+            }
+            else if (entrada.Espelho != null)
+            {
+                AplicarEspelho(l, entrada.Espelho);
+            }
+        }
+
+        /// <summary>TS: danoDoParceiro — no anfitrião, o parceiro feriu um monstro. Passa por ferirMonstro, como todo dano.</summary>
+        private static void DanoDoParceiro(Luta l, double indice, double dano)
+        {
+            int i = (int)indice;
+            if (i < 0 || i >= l.Arena.Monstros.Count) return;
+            var m = l.Arena.Monstros[i];
+            if (m.Fase == "caido" || !(dano > 0)) return;
+            var depois = CombatMonster.From(Sala(l).Monsters[i]);
+            depois.Hp = Math.Max(0, depois.Hp - dano);
+            var ferida = FerirNaArena(l, Masmorra(l), indice, depois);
+            Contar(l, NumeroNoMonstro(ferida, indice, "-" + Js.NumberToString(dano), "dano"));
+            if (ferida.Caiu) Abater(l, indice, Monsters.View(depois));
+        }
+
+        /// <summary>
+        /// TS: ferirNoEspelho — no espelho o golpe do herói daqui não derruba ninguém: a vida do monstro desce na tela
+        /// (até 1), o dano vai pro anfitrião e a queda volta dele.
+        /// </summary>
+        private static Ferida FerirNoEspelho(Luta l, EstadoNaMasmorra estado, double indice, CombatMonster depois)
+        {
+            var antes = ((DungeonCell)Estados.CelulaAtual(estado)).Monsters[(int)indice];
+            double dano = Math.Max(0, antes.Hp - depois.Hp);
+            if (dano > 0) l.Danos.Add(new DanoNoMonstro { Indice = indice, Dano = dano });
+            var monstro = CombatMonster.From(depois);
+            monstro.Hp = Math.Max(1, Math.Min(antes.Hp, depois.Hp));
+            var gravado = FimDaLuta.GravarMonstro(estado, indice, monstro);
+            l.Estado = gravado;
+            return new Ferida { Estado = gravado, Monstro = monstro, Caiu = false, Protegido = false };
+        }
+
+        /// <summary>TS: aplicarEspelho — o estado dos monstros do anfitrião por cima do daqui; quem caiu lá cai aqui, e paga o abate.</summary>
+        private static void AplicarEspelho(Luta l, Espelho espelho)
+        {
+            var arena = l.Arena;
+            foreach (var de in espelho.Monstros)
+            {
+                if (l.Fim != null) return;
+                double indice = Math.Truncate(de.Indice);
+                var lista = Sala(l).Monsters ?? new List<MonsterInstance>();
+                if (indice < 0 || indice > lista.Count) continue;
+                // Um lacaio que o espelho ainda não tinha: entra com o monstro inteiro.
+                if (indice == lista.Count)
+                {
+                    if (de.Monstro == null) continue;
+                    var estado = Masmorra(l);
+                    var celula = ((DungeonCell)Estados.CelulaAtual(estado)).Clone();
+                    celula.Monsters = new List<MonsterInstance>(lista) { de.Monstro };
+                    l.Estado = Estados.SubstituirCelulaAtual(estado, celula);
+                    arena.Monstros.Add(new MonstroNaArena { Indice = indice, Fase = "esperando", Tempo = 0, Forca = 1, Alvo = -1, X = 0, Y = 0, RumoX = 0, RumoY = 0, CorpoX = de.CorpoX, CorpoY = de.CorpoY });
+                }
+                int i = (int)indice;
+                if (i >= arena.Monstros.Count) continue;
+                var m = arena.Monstros[i];
+                bool jaCaido = m.Fase == "caido";
+                var agora = CombatMonster.From(de.Monstro ?? Sala(l).Monsters[i]);
+                agora.Hp = Math.Max(0, Math.Truncate(de.Hp));
+                l.Estado = FimDaLuta.GravarMonstro(Masmorra(l), indice, agora);
+                if (jaCaido) continue;
+                if (agora.Hp <= 0 || de.Fase == "caido")
+                {
+                    Abater(l, indice, Monsters.View(agora));
+                    continue;
+                }
+                // O golpe é o mesmo de antes (mesma fase, ainda correndo): o que já me acertou continua contado.
+                bool mesmoGolpe = m.Acertou == true && (de.Fase == "investindo" || de.Fase == "avisando") && (m.Fase == "investindo" || m.Fase == "avisando");
+                bool caiuOCirculo = m.Fase == "avisando" && de.Fase != "avisando" && de.Fase != "investindo";
+                if (caiuOCirculo) GolpeQueCaiu(l, m);
+                m.Fase = de.Fase;
+                m.Tempo = de.Tempo;
+                m.Forca = de.Forca;
+                m.Alvo = de.Alvo;
+                m.X = de.X;
+                m.Y = de.Y;
+                m.RumoX = de.RumoX;
+                m.RumoY = de.RumoY;
+                m.CorpoX = de.CorpoX;
+                m.CorpoY = de.CorpoY;
+                m.Poder = Js.Truthy(de.Poder) ? de.Poder : null;
+                // Lá ele mira o parceiro do anfitrião, que sou eu: aqui é o herói daqui. E o contrário.
+                m.NoParceiro = de.NoParceiro == true ? (bool?)null : true;
+                m.Acertou = mesmoGolpe ? true : (bool?)null;
+            }
+            if (l.Fim != null) return;
+            // As bolas: as do anfitrião no lugar das daqui (a que já me acertou não volta).
+            var tiros = new List<Tiro>(espelho.Tiros.Count);
+            foreach (var t in espelho.Tiros) tiros.Add(t.Clone());
+            arena.Tiros = tiros;
+        }
+
+        /// <summary>TS: golpeQueCaiu — no espelho, o aviso de um golpe de perto acabou no anfitrião: se o herói daqui está dentro, apanha.</summary>
+        private static void GolpeQueCaiu(Luta l, MonstroNaArena m)
+        {
+            if (m.Alvo >= 0 || m.Acertou == true) return;
+            var jeito = JeitoDoGolpe(MonstroNo(l, m.Indice), m.Poder);
+            if (jeito.Golpe != "perto") return;
+            if (Pega(l, m.X, m.Y, jeito.Tamanho)) GolpeNoHeroi(l, m.Indice, m.Forca);
+        }
+
+        /// <summary>
+        /// TS: passoDoEspelho — os monstros não pensam: entre um estado e outro do anfitrião, a investida e as bolas
+        /// seguem o rumo que tinham, e o que encostar no herói daqui acerta (uma vez por golpe).
+        /// </summary>
+        private static void PassoDoEspelho(Luta l)
+        {
+            foreach (var m in l.Arena.Monstros)
+            {
+                if (l.Fim != null) return;
+                if (m.Fase == "avisando")
+                {
+                    if (m.Tempo > 0) m.Tempo -= 1;
+                    continue;
+                }
+                if (m.Fase != "investindo" || m.Acertou == true) continue;
+                m.X += m.RumoX;
+                m.Y += m.RumoY;
+                if (Pega(l, m.X, m.Y, JeitoDoGolpe(MonstroNo(l, m.Indice), m.Poder).Tamanho))
+                {
+                    m.Acertou = true;
+                    GolpeNoHeroi(l, m.Indice, m.Forca);
+                }
+            }
+            if (l.Fim != null) return;
+            var ficam = new List<Tiro>();
+            foreach (var t in l.Arena.Tiros)
+            {
+                if (l.Fim != null) break;
+                t.X += t.Vx;
+                t.Y += t.Vy;
+                if (Pega(l, t.X, t.Y, t.Raio))
+                {
+                    GolpeNoHeroi(l, t.Indice, t.Forca);
+                    continue;
+                }
+                ficam.Add(t);
+            }
+            l.Arena.Tiros = ficam;
+        }
+
+        /// <summary>
+        /// TS: espelhoDaLuta — o que o anfitrião manda pro espelho: os monstros como estão, com a vida.
+        /// <paramref name="inteiros"/>: os índices que vão com o monstro inteiro.
+        /// </summary>
+        public static Espelho EspelhoDaLuta(LutaEmTempoReal luta, IReadOnlyList<double> inteiros = null)
+        {
+            var espelho = new Espelho();
+            if (!(luta.Estado is EstadoNaMasmorra masmorra)) return espelho;
+            var lista = ((DungeonCell)Estados.CelulaAtual(masmorra)).Monsters ?? new List<MonsterInstance>();
+            foreach (var m in luta.Arena.Monstros)
+            {
+                var monstro = lista[(int)m.Indice];
+                bool inteiro = false;
+                if (inteiros != null)
+                    foreach (var i in inteiros)
+                        if (i == m.Indice) inteiro = true;
+                espelho.Monstros.Add(new MonstroNoEspelho
+                {
+                    Indice = m.Indice, Fase = m.Fase, Tempo = m.Tempo, Forca = m.Forca, Alvo = m.Alvo, X = m.X, Y = m.Y, RumoX = m.RumoX, RumoY = m.RumoY,
+                    CorpoX = m.CorpoX, CorpoY = m.CorpoY, Poder = m.Poder, NoParceiro = m.NoParceiro, Hp = monstro.Hp,
+                    Monstro = inteiro ? CombatMonster.From(monstro) : null,
+                });
+            }
+            foreach (var t in luta.Arena.Tiros) espelho.Tiros.Add(t.Clone());
+            return espelho;
+        }
+
+        /// <summary>
+        /// TS: cair — o herói daqui ficou sem vida. Na luta de um só (ou sem parceiro de pé), é a derrota de sempre. Em
+        /// dupla ele vira fantasma e a luta segue com o outro.
+        /// </summary>
+        private static void Cair(Luta l)
+        {
+            var dupla = l.Arena.Dupla;
+            if (dupla == null || ParceiroDePe(l) == null)
+            {
+                Perder(l);
+                return;
+            }
+            if (dupla.Fantasma == true) return;
+            dupla.Fantasma = true;
+            l.Arena.Evento = null;
+            const string texto = "👻 Você caiu! Seu parceiro pode reviver você.";
+            Contar(l, Aviso(texto));
+            Diario(l, new[] { texto });
+            Contar(l, Som("defeat"));
+        }
+
         public static string EventoDoBotao(Hero hero, bool teclado = false) => EventosDeArma.EventoDaArma(hero.Equip.Get("arma")?.TemplateId, teclado);
     }
 }

@@ -71,7 +71,7 @@ import { randomInt, type Rng } from '../rng.js';
 import { descontoDeMana, efeitoDoUnico } from '../items/acessorios-unicos.js';
 import type { Conquista } from '../jogo/conquista.js';
 import type { Efeito } from '../jogo/efeitos.js';
-import { celulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from '../jogo/estado.js';
+import { celulaAtual, substituirCelulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from '../jogo/estado.js';
 import { enfurecer, FORCA_DO_DEVASTADOR, ferirMonstro, PODERES_DO_CHEFE, poderDaVez, textoDosLacaios, type Ferida, type PoderDoChefe } from '../jogo/chefe-final.js';
 import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta } from '../jogo/fim-da-luta.js';
 import { heroiNaLuta, lugaresNaLuta } from '../jogo/luta-no-mapa.js';
@@ -226,6 +226,64 @@ export interface MonstroNaArena {
   corpoY: number;
   /** O chefe final: o poder do golpe em curso (`jogo/chefe-final.ts`). Ausente no golpe comum. */
   poder?: PoderDoChefe;
+  /** Na luta em dupla: ele anda atrás do parceiro, e o golpe em curso mira nele (`Dupla`). */
+  noParceiro?: boolean;
+  /** No espelho de quem acompanha: este golpe já acertou o meu herói (a investida não acerta duas vezes). */
+  acertou?: boolean;
+}
+
+/**
+ * A luta em dupla (o co-op do app, 2026-11-16; decisões do usuário): cada
+ * app cuida do próprio herói — anda, desvia e ataca nele, sem esperar a
+ * rede —, e o de quem criou a sala cuida dos monstros.
+ *
+ * - `anfitriao`: a luta de sempre, com mais um corpo na sala: os monstros
+ *   escolhem entre o herói daqui e o parceiro (o mais perto de pé), e o dano
+ *   que o parceiro causa chega pela entrada (`danoDeFora`).
+ * - `convidado`: um **espelho**. Os monstros não pensam aqui: o estado deles
+ *   chega pela entrada (`espelho`), o que mira o meu herói é testado contra
+ *   ele aqui mesmo, e o dano que eu causo sai em `QuadroDaLuta.danos` em vez
+ *   de derrubar alguém (quem derruba é o anfitrião; a queda volta no espelho,
+ *   e é ela que paga o abate e vence a sala).
+ *
+ * Quem cai **vira fantasma** (anda, não age, e os monstros o ignoram) e a
+ * luta segue com o outro; com os dois caídos, é derrota pros dois.
+ */
+export interface Dupla {
+  papel: 'anfitriao' | 'convidado';
+  /** Onde o parceiro está na sala. Ausente até ele dizer. */
+  parceiro?: { x: number; y: number };
+  /** O parceiro caiu: os monstros não vão atrás dele. */
+  parceiroCaido?: boolean;
+  /** O herói daqui caiu. */
+  fantasma?: boolean;
+}
+
+/** Um monstro como o anfitrião o manda pro espelho. */
+export interface MonstroNoEspelho {
+  indice: number;
+  fase: FaseDoMonstro;
+  tempo: number;
+  forca: number;
+  alvo: number;
+  x: number;
+  y: number;
+  rumoX: number;
+  rumoY: number;
+  corpoX: number;
+  corpoY: number;
+  poder?: PoderDoChefe;
+  /** Mira o parceiro do anfitrião, que é o herói de quem recebe. */
+  noParceiro?: boolean;
+  hp: number;
+  /** O monstro inteiro: quando o espelho ainda não o tem (os lacaios) ou quando ele mudou além da vida. */
+  monstro?: CombatMonster;
+}
+
+/** O que o anfitrião manda dos monstros e das bolas, umas dez vezes por segundo. */
+export interface Espelho {
+  monstros: MonstroNoEspelho[];
+  tiros: Tiro[];
 }
 
 export interface CompanheiroNaArena {
@@ -296,6 +354,8 @@ export interface Arena {
    * luta. Ausente quando o herói não tem vigor.
    */
   escudo?: number;
+  /** A luta em dupla; ausente na luta de um só. */
+  dupla?: Dupla;
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -343,6 +403,14 @@ export interface EntradaDaLuta {
   item?: string;
   /** O menu de itens está aberto: o mundo anda em câmera lenta. */
   menu?: boolean;
+  /** Em dupla: onde o parceiro está agora, e se caiu. */
+  parceiro?: { x: number; y: number; caido?: boolean };
+  /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
+  danoDeFora?: readonly { indice: number; dano: number }[];
+  /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
+  espelho?: Espelho;
+  /** Em dupla: o parceiro saiu da sala. Quem ficou segue sozinho; se estava caído, perde. */
+  semParceiro?: boolean;
 }
 
 /** Algo que a tela mostra ou toca. */
@@ -364,6 +432,8 @@ export interface Acontecimento {
 export interface QuadroDaLuta {
   luta: LutaEmTempoReal;
   acontecimentos: Acontecimento[];
+  /** Em dupla, no convidado: o dano que o herói daqui (e a equipe dele) causou neste passo, pra mandar ao anfitrião. */
+  danos?: { indice: number; dano: number }[];
 }
 
 // ---------- abrir ----------
@@ -376,7 +446,13 @@ export interface QuadroDaLuta {
  * `chegada` é onde o herói estava quando a luta abriu. `teclado`: jogada
  * no PC, onde o cajado pede letras em vez do desenho.
  */
-export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId | null = null, teclado = false): QuadroDaLuta {
+export function abrirLuta(
+  estado: EstadoNaMasmorra,
+  chegada: Walker,
+  pet: PetId | null = null,
+  teclado = false,
+  dupla: Dupla['papel'] | null = null,
+): QuadroDaLuta {
   const preparada = prepararLuta(estado);
   const sala = celulaAtual(preparada.estado) as DungeonCell;
   const dePe = indicesDePe(sala);
@@ -429,6 +505,11 @@ export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId 
     arena.escudo = escudo;
     acontecimentos.push({ tipo: 'aviso', texto: `💪 Vigor: escudo de ${escudo}` });
   }
+  if (dupla) {
+    arena.dupla = { papel: dupla };
+    // Quem já chega caído (o fantasma que ninguém reviveu) só acompanha.
+    if (preparada.estado.hero.hp <= 0) arena.dupla.fantasma = true;
+  }
   return { luta: { estado: preparada.estado, arena, pet, teclado, fim: null, loot: null }, acontecimentos };
 }
 
@@ -444,10 +525,14 @@ export function abrirLuta(estado: EstadoNaMasmorra, chegada: Walker, pet: PetId 
  */
 export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: Rng, now?: () => number): QuadroDaLuta {
   if (luta.fim) return { luta, acontecimentos: [] };
-  const l: Luta = { ...luta, arena: copiarArena(luta.arena), rng, now, acontecimentos: [] };
+  const l: Luta = { ...luta, arena: copiarArena(luta.arena), rng, now, acontecimentos: [], danos: [] };
+  if (l.arena.dupla) receberDoParceiro(l, entrada);
+  if (l.fim) return fecharPasso(l);
 
   if (entrada.mirar !== undefined) mirar(l, entrada.mirar);
-  if (l.arena.evento) seguirEvento(l, entrada);
+  // O fantasma anda, mas não age.
+  if (l.arena.dupla?.fantasma) l.arena.evento = null;
+  else if (l.arena.evento) seguirEvento(l, entrada);
   else if (entrada.atacar && l.arena.recarga <= 0) abrirEvento(l, entrada);
   else if (entrada.poder) pedirPoder(l, entrada.poder);
   else if (entrada.item) usarItem(l, entrada.item);
@@ -458,8 +543,14 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
     if (!lento || l.arena.lento % LENTIDAO === 0) passoDoMundo(l, entrada);
   }
 
+  return fecharPasso(l);
+}
+
+function fecharPasso(l: Luta): QuadroDaLuta {
   const fora: LutaEmTempoReal = { estado: l.estado, arena: l.arena, pet: l.pet, teclado: l.teclado, fim: l.fim, loot: l.loot };
-  return { luta: l.conquista ? { ...fora, conquista: l.conquista } : fora, acontecimentos: l.acontecimentos };
+  const quadro: QuadroDaLuta = { luta: l.conquista ? { ...fora, conquista: l.conquista } : fora, acontecimentos: l.acontecimentos };
+  if (l.danos.length > 0) quadro.danos = l.danos;
+  return quadro;
 }
 
 /**
@@ -471,13 +562,15 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
 export function simularLuta(luta: LutaEmTempoReal, entradas: readonly EntradaDaLuta[], rng: Rng, now?: () => number): QuadroDaLuta {
   let atual = luta;
   const acontecimentos: Acontecimento[] = [];
+  const danos: { indice: number; dano: number }[] = [];
   for (const entrada of entradas) {
     if (atual.fim) break;
     const quadro = passoDaLuta(atual, entrada, rng, now);
     atual = quadro.luta;
     acontecimentos.push(...quadro.acontecimentos);
+    if (quadro.danos) danos.push(...quadro.danos);
   }
-  return { luta: atual, acontecimentos };
+  return danos.length > 0 ? { luta: atual, acontecimentos, danos } : { luta: atual, acontecimentos };
 }
 
 /** A luta enquanto o passo corre: a mesma, mais o sorteio, o relógio e o que vai pra tela. */
@@ -485,6 +578,8 @@ interface Luta extends LutaEmTempoReal {
   rng: Rng;
   now: (() => number) | undefined;
   acontecimentos: Acontecimento[];
+  /** O dano causado neste passo no espelho (`QuadroDaLuta.danos`). */
+  danos: { indice: number; dano: number }[];
 }
 
 function copiarArena(arena: Arena): Arena {
@@ -507,6 +602,7 @@ function copiarArena(arena: Arena): Arena {
         }
       : null,
     recargaDosPoderes: { ...arena.recargaDosPoderes },
+    ...(arena.dupla ? { dupla: { ...arena.dupla, ...(arena.dupla.parceiro ? { parceiro: { ...arena.dupla.parceiro } } : {}) } } : {}),
   };
 }
 
@@ -892,6 +988,7 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
  * entram no palco esperando a vez, e o alvo passa pro primeiro deles.
  */
 function ferirNaArena(l: Luta, estado: EstadoNaMasmorra, indice: number, depois: CombatMonster): Ferida {
+  if (noEspelho(l)) return ferirNoEspelho(l, estado, indice, depois);
   const ferida = ferirMonstro(estado, indice, depois, l.rng);
   l.estado = ferida.estado;
   if (ferida.lacaios.length > 0) {
@@ -1068,20 +1165,27 @@ function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
     else delete arena.recargaDosPoderes[id];
   }
 
-  for (const m of arena.monstros) {
+  if (noEspelho(l)) {
+    passoDoEspelho(l);
+  } else {
+    for (const m of arena.monstros) {
+      if (l.fim) return;
+      if (m.fase !== 'caido') agirMonstro(l, m);
+    }
     if (l.fim) return;
-    if (m.fase !== 'caido') agirMonstro(l, m);
+    if (podeGolpear(l)) {
+      const proximo = proximoDaVez(l);
+      if (proximo) comecarGolpe(l, proximo);
+    }
   }
   if (l.fim) return;
-  if (podeGolpear(l)) {
-    const proximo = proximoDaVez(l);
-    if (proximo) comecarGolpe(l, proximo);
+  if (!arena.dupla?.fantasma) {
+    for (const c of arena.companheiros) {
+      if (l.fim) return;
+      agirCompanheiro(l, c);
+    }
   }
-  for (const c of arena.companheiros) {
-    if (l.fim) return;
-    agirCompanheiro(l, c);
-  }
-  moverTiros(l);
+  if (!noEspelho(l)) moverTiros(l);
   if (l.fim) return;
 
   arena.rodada -= 1;
@@ -1118,8 +1222,9 @@ function agirMonstro(l: Luta, m: MonstroNaArena): void {
 
 /** A distância (ao quadrado) do corpo do monstro ao herói. */
 function distanciaDoHeroi(l: Luta, m: MonstroNaArena): number {
-  const dx = l.arena.heroi.x - m.corpoX;
-  const dy = l.arena.heroi.y - m.corpoY;
+  const quem = presaDe(l, m);
+  const dx = quem.x - m.corpoX;
+  const dy = quem.y - m.corpoY;
   return dx * dx + dy * dy;
 }
 
@@ -1135,8 +1240,9 @@ function aDistanciaDoGolpe(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): boo
  * fica onde está neste passo.
  */
 function aproximar(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
+  escolherPresa(l, m);
   if (aDistanciaDoGolpe(l, m, jeito)) return;
-  const heroi = l.arena.heroi;
+  const heroi = presaDe(l, m);
   const r = rumo(heroi.x - m.corpoX, heroi.y - m.corpoY, jeito.passo);
   const { cols, rows } = geometria(l);
   const meia = TILE_UNITS / 2;
@@ -1235,7 +1341,7 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
     m.y = 0;
     return;
   }
-  const heroi = l.arena.heroi;
+  const heroi = presaDe(l, m);
   if (jeito.golpe === 'perto') {
     m.x = heroi.x;
     m.y = heroi.y;
@@ -1267,14 +1373,15 @@ function soltarGolpe(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   }
   if (jeito.golpe === 'tiro') {
     // A bola mira onde o herói está agora, no fim do aviso.
-    const heroi = l.arena.heroi;
+    const heroi = presaDe(l, m);
     const v = rumo(heroi.x - m.x, heroi.y - m.y, jeito.velocidade);
     l.arena.tiros.push({ x: m.x, y: m.y, vx: v.x, vy: v.y, raio: jeito.tamanho, vida: VIDA_DO_TIRO, indice: m.indice, forca: m.forca });
     descansar(l, m, jeito);
     return;
   }
-  if (encosta(l.arena.heroi, m.x, m.y, jeito.tamanho)) golpeNoHeroi(l, m.indice, m.forca);
-  else contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: 'Errou', tom: 'erro' });
+  if (pega(l, m.x, m.y, jeito.tamanho)) golpeNoHeroi(l, m.indice, m.forca);
+  // O golpe no parceiro quem julga é o app dele: daqui não dá pra dizer que errou.
+  else if (!m.noParceiro) contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: 'Errou', tom: 'erro' });
   descansar(l, m, jeito);
 }
 
@@ -1305,9 +1412,15 @@ function descansar(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
 function investir(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   m.x += m.rumoX;
   m.y += m.rumoY;
-  if (encosta(l.arena.heroi, m.x, m.y, jeito.tamanho)) {
+  if (pega(l, m.x, m.y, jeito.tamanho)) {
     pousar(l, m, jeito.tamanho);
     golpeNoHeroi(l, m.indice, m.forca);
+    descansar(l, m, jeito);
+    return;
+  }
+  // Bateu no parceiro: para ali (o golpe quem julga é o app dele).
+  if (pegaOParceiro(l, m.x, m.y, jeito.tamanho)) {
+    pousar(l, m);
     descansar(l, m, jeito);
     return;
   }
@@ -1352,7 +1465,7 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   if (golpe.drainResisted) contar(l, { tipo: 'aviso', texto: 'Sua armadura segura o dreno de mana' });
   if (golpe.poisonApplied) contar(l, { tipo: 'aviso', texto: 'Você foi envenenado' });
   if (golpe.poisonResisted) contar(l, { tipo: 'aviso', texto: 'Sua armadura segura o veneno' });
-  if (hero.hp <= 0) perder(l);
+  if (hero.hp <= 0) cair(l);
 }
 
 /**
@@ -1424,10 +1537,12 @@ function moverTiros(l: Luta): void {
       contar(l, { tipo: 'numero', onde: 'monstro', indice: t.indice, texto: 'Errou', tom: 'erro' });
       continue;
     }
-    if (encosta(l.arena.heroi, t.x, t.y, t.raio)) {
+    if (pega(l, t.x, t.y, t.raio)) {
       golpeNoHeroi(l, t.indice, t.forca);
       continue;
     }
+    // A bola some no parceiro (o golpe quem julga é o app dele).
+    if (pegaOParceiro(l, t.x, t.y, t.raio)) continue;
     ficam.push(t);
   }
   l.arena.tiros = ficam;
@@ -1440,14 +1555,15 @@ function rodada(l: Luta): void {
   // O veneno também passa primeiro pelo escudo do vigor.
   const hero = veneno.damage > 0 ? noEscudo(l, antes.hp, veneno.hero, veneno.damage) : veneno.hero;
   l.estado = { ...masmorra(l), hero };
-  if (hero.hp <= 0) {
+  if (hero.hp <= 0 && !l.arena.dupla?.fantasma) {
     diario(l, ['O veneno foi mais forte.']);
-    perder(l);
-    return;
+    cair(l);
+    if (l.fim) return;
   }
   regenerar(l);
 
-  for (const indice of indicesDePe(sala(l))) {
+  // No espelho, o veneno e o fogo dos monstros correm no app do anfitrião.
+  for (const indice of noEspelho(l) ? [] : indicesDePe(sala(l))) {
     const monstro = monstroNo(l, indice);
     const dot = tickMonsterDot(monstro);
     const ferida = ferirNaArena(l, masmorra(l), indice, dot.monster as CombatMonster);
@@ -1517,6 +1633,246 @@ function abater(l: Luta, indice: number, abatido: CombatMonsterView): void {
   l.arena.tiros = [];
   diario(l, limpa.log);
   contar(l, { tipo: 'som', som: 'victory' });
+}
+
+// ---------- a luta em dupla ----------
+
+function noEspelho(l: Luta): boolean {
+  return l.arena.dupla?.papel === 'convidado';
+}
+
+/** O parceiro está de pé na sala, e eu sei onde. */
+function parceiroDePe(l: Luta): { x: number; y: number } | null {
+  const dupla = l.arena.dupla;
+  if (!dupla || !dupla.parceiro || dupla.parceiroCaido) return null;
+  return dupla.parceiro;
+}
+
+/** Atrás de quem o monstro vai: o parceiro, se foi quem ele escolheu e ainda está de pé; senão o herói daqui. */
+function presaDe(l: Luta, m: MonstroNaArena): { x: number; y: number } {
+  return (m.noParceiro ? parceiroDePe(l) : null) ?? l.arena.heroi;
+}
+
+/**
+ * Em dupla, o monstro que espera escolhe o herói de pé mais perto do corpo
+ * dele (o fantasma não conta). Sem sorteio: na luta de um só, nada muda.
+ */
+function escolherPresa(l: Luta, m: MonstroNaArena): void {
+  const parceiro = parceiroDePe(l);
+  if (!parceiro) {
+    delete m.noParceiro;
+    return;
+  }
+  if (l.arena.dupla?.fantasma) {
+    m.noParceiro = true;
+    return;
+  }
+  const heroi = l.arena.heroi;
+  const daqui = (heroi.x - m.corpoX) ** 2 + (heroi.y - m.corpoY) ** 2;
+  const dele = (parceiro.x - m.corpoX) ** 2 + (parceiro.y - m.corpoY) ** 2;
+  if (dele < daqui) m.noParceiro = true;
+  else delete m.noParceiro;
+}
+
+/** O golpe pega o herói daqui (o fantasma não apanha). */
+function pega(l: Luta, x: number, y: number, raio: number): boolean {
+  return !l.arena.dupla?.fantasma && encosta(l.arena.heroi, x, y, raio);
+}
+
+function pegaOParceiro(l: Luta, x: number, y: number, raio: number): boolean {
+  const parceiro = parceiroDePe(l);
+  if (!parceiro) return false;
+  const dx = parceiro.x - x;
+  const dy = parceiro.y - y;
+  const limite = raio + RAIO_DO_HEROI;
+  return dx * dx + dy * dy <= limite * limite;
+}
+
+/** O que chegou do parceiro neste passo: onde ele está, o dano que causou (no anfitrião) e o espelho (no convidado). */
+function receberDoParceiro(l: Luta, entrada: EntradaDaLuta): void {
+  const dupla = l.arena.dupla as Dupla;
+  if (entrada.semParceiro) {
+    // Sozinho de novo: quem estava caído não tem mais quem o levante.
+    delete l.arena.dupla;
+    for (const m of l.arena.monstros) delete m.noParceiro;
+    if (dupla.fantasma) perder(l);
+    return;
+  }
+  if (entrada.parceiro) {
+    dupla.parceiro = { x: Math.trunc(entrada.parceiro.x), y: Math.trunc(entrada.parceiro.y) };
+    if (entrada.parceiro.caido) dupla.parceiroCaido = true;
+    else delete dupla.parceiroCaido;
+  }
+  if (dupla.fantasma && dupla.parceiroCaido) {
+    perder(l);
+    return;
+  }
+  if (dupla.papel === 'anfitriao') {
+    for (const golpe of entrada.danoDeFora ?? []) {
+      if (l.fim) return;
+      danoDoParceiro(l, Math.trunc(golpe.indice), Math.trunc(golpe.dano));
+    }
+  } else if (entrada.espelho) {
+    aplicarEspelho(l, entrada.espelho);
+  }
+}
+
+/** No anfitrião: o parceiro feriu um monstro. Passa por `ferirMonstro`, como todo dano (a barreira, a metade da vida…). */
+function danoDoParceiro(l: Luta, indice: number, dano: number): void {
+  const m = l.arena.monstros[indice];
+  if (!m || m.fase === 'caido' || !(dano > 0)) return;
+  const antes = (sala(l).monsters ?? [])[indice] as CombatMonster;
+  const depois: CombatMonster = { ...antes, hp: Math.max(0, antes.hp - dano) };
+  const ferida = ferirNaArena(l, masmorra(l), indice, depois);
+  contar(l, numeroNoMonstro(ferida, indice, `-${dano}`, 'dano'));
+  if (ferida.caiu) abater(l, indice, monsterView(depois));
+}
+
+/**
+ * No espelho o golpe do herói daqui não derruba ninguém: a vida do monstro
+ * desce na tela (até 1), o dano vai pro anfitrião (`danos`) e a queda volta
+ * dele. As mecânicas de chefe (`ferirMonstro`) também correm só lá.
+ */
+function ferirNoEspelho(l: Luta, estado: EstadoNaMasmorra, indice: number, depois: CombatMonster): Ferida {
+  const antes = (celulaAtual(estado) as DungeonCell).monsters?.[indice] as CombatMonster;
+  const dano = Math.max(0, antes.hp - depois.hp);
+  if (dano > 0) l.danos.push({ indice, dano });
+  const monstro: CombatMonster = { ...depois, hp: Math.max(1, Math.min(antes.hp, depois.hp)) };
+  l.estado = gravarMonstro(estado, indice, monstro);
+  return { estado: l.estado as EstadoNaMasmorra, monstro, caiu: false, protegido: false, lacaios: [], textos: [] };
+}
+
+/** O estado dos monstros que chegou do anfitrião por cima do daqui; quem caiu lá cai aqui, e paga o abate. */
+function aplicarEspelho(l: Luta, espelho: Espelho): void {
+  const arena = l.arena;
+  for (const de of espelho.monstros) {
+    if (l.fim) return;
+    const indice = Math.trunc(de.indice);
+    const lista = sala(l).monsters ?? [];
+    if (indice < 0 || indice > lista.length) continue;
+    // Um lacaio que o espelho ainda não tinha: entra com o monstro inteiro.
+    if (indice === lista.length) {
+      if (!de.monstro) continue;
+      const estado = masmorra(l);
+      const celula = celulaAtual(estado) as DungeonCell;
+      l.estado = substituirCelulaAtual(estado, { ...celula, monsters: [...lista, de.monstro] });
+      arena.monstros.push({ indice, fase: 'esperando', tempo: 0, forca: 1, alvo: -1, x: 0, y: 0, rumoX: 0, rumoY: 0, corpoX: de.corpoX, corpoY: de.corpoY });
+    }
+    const m = arena.monstros[indice] as MonstroNaArena;
+    const jaCaido = m.fase === 'caido';
+    const antes = (sala(l).monsters ?? [])[indice] as CombatMonster;
+    const agora: CombatMonster = { ...(de.monstro ?? antes), hp: Math.max(0, Math.trunc(de.hp)) };
+    l.estado = gravarMonstro(masmorra(l), indice, agora);
+    if (jaCaido) continue;
+    if (agora.hp <= 0 || de.fase === 'caido') {
+      abater(l, indice, monsterView(agora));
+      continue;
+    }
+    // O golpe é o mesmo de antes (mesma fase, ainda correndo): o que já me acertou continua contado.
+    const mesmoGolpe = m.acertou && (de.fase === 'investindo' || de.fase === 'avisando') && (m.fase === 'investindo' || m.fase === 'avisando');
+    const caiuOCirculo = m.fase === 'avisando' && de.fase !== 'avisando' && de.fase !== 'investindo';
+    if (caiuOCirculo) golpeQueCaiu(l, m);
+    m.fase = de.fase;
+    m.tempo = de.tempo;
+    m.forca = de.forca;
+    m.alvo = de.alvo;
+    m.x = de.x;
+    m.y = de.y;
+    m.rumoX = de.rumoX;
+    m.rumoY = de.rumoY;
+    m.corpoX = de.corpoX;
+    m.corpoY = de.corpoY;
+    if (de.poder) m.poder = de.poder;
+    else delete m.poder;
+    // Lá ele mira o parceiro do anfitrião, que sou eu: aqui é o herói daqui. E o contrário.
+    if (de.noParceiro) delete m.noParceiro;
+    else m.noParceiro = true;
+    if (mesmoGolpe) m.acertou = true;
+    else delete m.acertou;
+  }
+  if (l.fim) return;
+  // As bolas: as do anfitrião no lugar das daqui (a que já me acertou não volta).
+  arena.tiros = espelho.tiros.map((t) => ({ ...t }));
+}
+
+/**
+ * No espelho: o aviso de um golpe de perto acabou no anfitrião, e o círculo
+ * cai onde estava. Se o herói daqui está dentro, apanha — com a esquiva e as
+ * defesas dele, sorteadas aqui.
+ */
+function golpeQueCaiu(l: Luta, m: MonstroNaArena): void {
+  if (m.alvo >= 0 || m.acertou) return;
+  const jeito = jeitoDoGolpe(monstroNo(l, m.indice), m.poder);
+  if (jeito.golpe !== 'perto') return;
+  if (pega(l, m.x, m.y, jeito.tamanho)) golpeNoHeroi(l, m.indice, m.forca);
+}
+
+/**
+ * O passo dos monstros no espelho: nada de pensar. Entre um estado e outro
+ * do anfitrião, a investida e as bolas seguem o rumo que tinham, e o que
+ * encostar no herói daqui acerta (uma vez por golpe).
+ */
+function passoDoEspelho(l: Luta): void {
+  for (const m of l.arena.monstros) {
+    if (l.fim) return;
+    if (m.fase === 'avisando') {
+      if (m.tempo > 0) m.tempo -= 1;
+      continue;
+    }
+    if (m.fase !== 'investindo' || m.acertou) continue;
+    m.x += m.rumoX;
+    m.y += m.rumoY;
+    if (pega(l, m.x, m.y, jeitoDoGolpe(monstroNo(l, m.indice), m.poder).tamanho)) {
+      m.acertou = true;
+      golpeNoHeroi(l, m.indice, m.forca);
+    }
+  }
+  if (l.fim) return;
+  const ficam: Tiro[] = [];
+  for (const t of l.arena.tiros) {
+    if (l.fim) break;
+    t.x += t.vx;
+    t.y += t.vy;
+    if (pega(l, t.x, t.y, t.raio)) {
+      golpeNoHeroi(l, t.indice, t.forca);
+      continue;
+    }
+    ficam.push(t);
+  }
+  l.arena.tiros = ficam;
+}
+
+/** O que o anfitrião manda pro espelho: os monstros como estão, com a vida. */
+export function espelhoDaLuta(luta: LutaEmTempoReal, inteiros: readonly number[] = []): Espelho {
+  if (luta.estado.mapMode !== 'dungeon') return { monstros: [], tiros: [] };
+  const lista = (celulaAtual(luta.estado) as DungeonCell).monsters ?? [];
+  return {
+    monstros: luta.arena.monstros.map((m) => {
+      const monstro = lista[m.indice] as CombatMonster;
+      const { acertou: _acertou, ...resto } = m;
+      return { ...resto, hp: monstro.hp, ...(inteiros.includes(m.indice) ? { monstro } : {}) };
+    }),
+    tiros: luta.arena.tiros.map((t) => ({ ...t })),
+  };
+}
+
+/**
+ * O herói daqui ficou sem vida. Na luta de um só (ou sem parceiro de pé), é
+ * a derrota de sempre. Em dupla ele vira fantasma e a luta segue com o outro.
+ */
+function cair(l: Luta): void {
+  const dupla = l.arena.dupla;
+  if (!dupla || !parceiroDePe(l)) {
+    perder(l);
+    return;
+  }
+  if (dupla.fantasma) return;
+  dupla.fantasma = true;
+  l.arena.evento = null;
+  const texto = '👻 Você caiu! Seu parceiro pode reviver você.';
+  contar(l, { tipo: 'aviso', texto });
+  diario(l, [texto]);
+  contar(l, { tipo: 'som', som: 'defeat' });
 }
 
 function perder(l: Luta): void {

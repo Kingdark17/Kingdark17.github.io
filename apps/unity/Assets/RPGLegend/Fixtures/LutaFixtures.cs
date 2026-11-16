@@ -15,7 +15,8 @@ namespace RPGLegend.Tests
             Fn(M, "eventoDoPoder", (a, c) => W(EventosDeArma.EventoDoPoder(c.RngFn, JsJson.Truthy(a["teclado"]))));
             Fn(M, "eventoDoAtaque", (a, c) => W(EventosDeArma.EventoDoAtaque(R<Hero>(a["hero"]), Str(a["estilo"]), c.RngFn, JsJson.Truthy(a["teclado"]))));
             Fn(M, "lerEvento", (a, c) => W(EventosDeArma.LerEvento(R<EventoDeArma>(a["evento"]), R<JogadaDoEvento>(a["jogada"]))));
-            Fn(M, "abrirLuta", (a, c) => W(Arenas.AbrirLuta(R<EstadoNaMasmorra>(a["estado"]), R<Walker>(a["chegada"]), Str(a["pet"]), JsJson.Truthy(a["teclado"]))));
+            Fn(M, "abrirLuta", (a, c) => W(Arenas.AbrirLuta(R<EstadoNaMasmorra>(a["estado"]), R<Walker>(a["chegada"]), Str(a["pet"]), JsJson.Truthy(a["teclado"]), Str(a["dupla"]))));
+            Fn(M, "espelhoDaLuta", (a, c) => W(Arenas.EspelhoDaLuta(R<LutaEmTempoReal>(a["luta"]), R<System.Collections.Generic.List<double>>(a["inteiros"]))));
             Fn(M, "simularLuta", (a, c) => W(Arenas.SimularLuta(R<LutaEmTempoReal>(a["luta"]), R<System.Collections.Generic.List<EntradaDaLuta>>(a["entradas"]), c.RngFn, c.NowOrFail)));
             // O gerador chama resolverGolpe(hero, monster, dado, leitura, attackStyle, { ...args.options, rng }).
             Fn(M, "resolverGolpe", (a, c) =>

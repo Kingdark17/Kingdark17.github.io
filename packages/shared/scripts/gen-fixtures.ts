@@ -5391,6 +5391,50 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     simula('mira: sem monstro na área, o golpe vai no chão', E.abrirLuta({ ...trio, hero: arqueiro }, E.roomArrival('N')).luta, noCursor(60, 1.5 * U, 7.5 * U), { seed: 1103 });
     simula('mira: o monstro no cursor fora do alcance da espada', abrir({ ...zumbi(), hero: espada }, 'N'), noCursor(50, 4.5 * U, 4.5 * U), { seed: 1104 });
     simula('mira: sem cursor e com a placa tocada, vale o da placa', E.abrirLuta({ ...trio, hero: arqueiro }, { x: 6.5 * U, y: 5.5 * U, facing: 'N' }).luta, toque(60).map((e, i) => (i === 0 ? { ...e, mirar: 0 } : e)), { seed: 1105 });
+    // A luta em dupla (o co-op do app): o anfitrião com o parceiro na sala, o espelho do convidado e o fantasma.
+    {
+      const naPorta = { x: 4.5 * U, y: 7.5 * U, facing: 'N' as const };
+      const emCima = { x: 4.5 * U, y: 3.5 * U, facing: 'S' as const };
+      const sala = () => ({ ...zumbi(), hero: espada });
+      const dupla = (papel: 'anfitriao' | 'convidado', estado: EstadoNaMasmorra = sala(), onde = naPorta) => E.abrirLuta(estado, onde, null, false, papel).luta;
+      for (const papel of ['anfitriao', 'convidado'] as const) {
+        caso(`abrirLuta: em dupla, ${papel}`, 'abrirLuta', { estado: sala(), chegada: naPorta, pet: null, teclado: false, dupla: papel }, (a) =>
+          E.abrirLuta(a.estado, a.chegada, a.pet, a.teclado, a.dupla));
+      }
+      caso('abrirLuta: em dupla, quem chega caído é fantasma', 'abrirLuta', { estado: { ...sala(), hero: { ...espada, hp: 0 } }, chegada: naPorta, pet: null, teclado: false, dupla: 'convidado' as const }, (a) =>
+        E.abrirLuta(a.estado, a.chegada, a.pet, a.teclado, a.dupla));
+      const comParceiro = (entradas: EntradaDaLuta[], x: number, y: number, caido = false): EntradaDaLuta[] => entradas.map((e) => ({ ...e, parceiro: caido ? { x, y, caido } : { x, y } }));
+      simula('dupla: o monstro vai no parceiro, que está mais perto', dupla('anfitriao'), comParceiro(parado(420), 4.5 * U, 3.5 * U), { seed: 1201 });
+      simula('dupla: o parceiro longe, o monstro vem no herói daqui', dupla('anfitriao'), comParceiro(parado(420), 1.5 * U, 1.5 * U), { seed: 1202 });
+      simula('dupla: o parceiro caído não é presa', dupla('anfitriao'), comParceiro(parado(300), 4.5 * U, 3.5 * U, true), { seed: 1203 });
+      simula('dupla: o dano de fora fere e derruba', dupla('anfitriao'), parado(8).map((e, i) => (i === 1 ? { ...e, danoDeFora: [{ indice: 0, dano: 25 }, { indice: 3, dano: 9 }] } : i === 5 ? { ...e, danoDeFora: [{ indice: 0, dano: 900 }] } : e)), { seed: 1204 });
+      simula('dupla: o parceiro sai e o anfitrião segue sozinho', dupla('anfitriao'), comParceiro(parado(200), 4.5 * U, 3.5 * U).map((e, i) => (i === 60 ? { x: 0, y: 0, semParceiro: true } : i > 60 ? { x: 0, y: 0 } : e)), { seed: 1205 });
+      // O espelho: o anfitrião roda a luta, e o que ele mandaria a cada 6 passos vira a entrada do convidado.
+      const espelhado = (convidado: LutaEmTempoReal, passos: number, semente: number, doConvidado: (i: number) => EntradaDaLuta = () => ({ x: 0, y: 0 })): EntradaDaLuta[] => {
+        let a = dupla('anfitriao');
+        const rng = E.seededRng(semente);
+        const entradas: EntradaDaLuta[] = [];
+        for (let i = 0; i < passos; i++) {
+          a = E.passoDaLuta(a, { x: 0, y: 0, parceiro: { x: convidado.arena.heroi.x, y: convidado.arena.heroi.y } }, rng, () => AGORA).luta;
+          entradas.push({ ...doConvidado(i), parceiro: { x: a.arena.heroi.x, y: a.arena.heroi.y }, ...(i % 6 === 0 ? { espelho: E.espelhoDaLuta(a, i === 0 ? [0] : []) } : {}) });
+        }
+        return entradas;
+      };
+      const convidado = dupla('convidado', sala(), emCima);
+      simula('dupla: o espelho apanha do golpe que cai nele', convidado, espelhado(convidado, 500, 31), { seed: 1206 });
+      simula('dupla: o espelho bate e manda o dano', convidado, espelhado(convidado, 200, 32, (i) => (i === 0 ? { x: 0, y: 0, atacar: true } : i === 42 ? { x: 0, y: 0, tocar: true } : { x: 0, y: 0 })), { seed: 1207 });
+      const fraco = dupla('convidado', comGradeInteira({ ...sala(), hero: { ...espada, hp: 1 } }), emCima);
+      simula('dupla: o convidado cai e vira fantasma', fraco, espelhado(fraco, 600, 33), { seed: 1208 });
+      const fantasma: LutaEmTempoReal = { ...fraco, estado: { ...fraco.estado, hero: { ...fraco.estado.hero, hp: 0 } }, arena: { ...fraco.arena, dupla: { papel: 'convidado', fantasma: true } } };
+      simula('dupla: os dois caídos, derrota', fantasma, comParceiro(parado(3), 4.5 * U, 7.5 * U, true), { seed: 1209 });
+      simula('dupla: o fantasma sem parceiro perde', fantasma, [{ x: 0, y: 0, semParceiro: true }], { seed: 1210 });
+      const caindo = E.espelhoDaLuta(dupla('anfitriao'));
+      simula('dupla: a queda que chega no espelho vence a sala', convidado, [{ x: 0, y: 0, espelho: { ...caindo, monstros: caindo.monstros.map((m) => ({ ...m, hp: 0 })) } }], { seed: 1211 });
+      const lacaio = bicho('slime', { hp: 20, maxHp: 20 });
+      simula('dupla: o lacaio entra no espelho com o monstro inteiro', convidado, [{ x: 0, y: 0, espelho: { ...caindo, monstros: [...caindo.monstros, { ...caindo.monstros[0]!, indice: 1, corpoX: 2.5 * U, corpoY: 2.5 * U, hp: 20, monstro: lacaio as never }] } }, { x: 0, y: 0 }], { seed: 1212 });
+      caso('espelhoDaLuta: com o monstro inteiro', 'espelhoDaLuta', { luta: dupla('anfitriao'), inteiros: [0] }, (a) => E.espelhoDaLuta(a.luta, a.inteiros));
+      caso('espelhoDaLuta: só o estado', 'espelhoDaLuta', { luta: dupla('anfitriao'), inteiros: [] as number[] }, (a) => E.espelhoDaLuta(a.luta, a.inteiros));
+    }
     for (const [classe, armaDaClasse, semente] of [['paladino', 'espada', 1106], ['ladino', 'adaga', 1107], ['bardo', 'violao', 1108], ['mago', 'cajado', 1109], ['barbaro', 'maca', 1110], ['guerreiro', 'espada', 1111]] as const) {
       simula(`classe: o ${classe} anda até o zumbi e bate`, abrir({ ...zumbi(), hero: comArma(classe, armaDaClasse) }, 'N'), [...andando(70, 0, -127), ...toque(50)], { seed: semente });
     }
