@@ -66,6 +66,33 @@ namespace RPGLegend.Game.App
         public string Signature;
     }
 
+    /// <summary>Uma pessoa das listas de amizade (GET /api/friends). A foto e a moldura o app ainda não desenha.</summary>
+    public sealed class Amigo
+    {
+        public string Username;
+        /// <summary>A cor do nome comprada na loja ("" = a padrão).</summary>
+        public string CorDoNome;
+        public bool Online;
+    }
+
+    /// <summary>Os amigos, os pedidos que chegaram e os que a conta mandou.</summary>
+    public sealed class Relacoes
+    {
+        public List<Amigo> Amigos = new List<Amigo>();
+        public List<Amigo> Recebidos = new List<Amigo>();
+        public List<Amigo> Enviados = new List<Amigo>();
+    }
+
+    /// <summary>Uma mensagem da conversa com um amigo (GET /api/messages/:usuario).</summary>
+    public sealed class MensagemDaConversa
+    {
+        public string Id;
+        public bool Minha;
+        public string Corpo;
+        /// <summary>No horário do aparelho; null se o servidor não mandou.</summary>
+        public DateTime? Quando;
+    }
+
     /// <summary>Um item da loja de cosméticos (GET /api/account/profile/catalog).</summary>
     public sealed class ItemDeCosmetico
     {
@@ -172,7 +199,70 @@ namespace RPGLegend.Game.App
             await Enviar("POST", "/api/account/profile/purchase", new JObject { ["id"] = id, ["slot"] = slot }, token);
         }
 
+        // ---------- amigos e conversa (as mesmas rotas do site, lib/api/amigos.ts) ----------
+
+        public static async Awaitable<Relacoes> Amigos(string token) => LerRelacoes(await Enviar("GET", "/api/friends", null, token));
+
+        /// <summary>Pede amizade. Verdadeiro quando a outra pessoa já tinha pedido, e os dois viraram amigos na hora.</summary>
+        public static async Awaitable<bool> PedirAmizade(string token, string usuario)
+        {
+            var json = await Enviar("POST", "/api/friends/request", new JObject { ["username"] = usuario }, token);
+            return json["accepted"]?.Type == JTokenType.Boolean && (bool)json["accepted"];
+        }
+
+        public static async Awaitable AceitarAmizade(string token, string usuario) =>
+            await Enviar("POST", "/api/friends/accept", new JObject { ["username"] = usuario }, token);
+
+        public static async Awaitable RecusarAmizade(string token, string usuario) =>
+            await Enviar("POST", "/api/friends/decline", new JObject { ["username"] = usuario }, token);
+
+        public static async Awaitable DesfazerAmizade(string token, string usuario) =>
+            await Enviar("POST", "/api/friends/remove", new JObject { ["username"] = usuario }, token);
+
+        /// <summary>As mensagens mais recentes da conversa com um amigo, da mais antiga pra mais nova.</summary>
+        public static async Awaitable<List<MensagemDaConversa>> Conversa(string token, string usuario) =>
+            LerConversa(await Enviar("GET", "/api/messages/" + UnityWebRequest.EscapeURL(usuario), null, token));
+
+        public static async Awaitable EnviarMensagem(string token, string usuario, string texto) =>
+            await Enviar("POST", "/api/messages/" + UnityWebRequest.EscapeURL(usuario), new JObject { ["body"] = texto }, token);
+
         // ---------- leitura das respostas (sem Unity: dá para testar com JSON de exemplo) ----------
+
+        public static Relacoes LerRelacoes(JObject json)
+        {
+            var relacoes = new Relacoes();
+            LerPessoas(json["friends"], relacoes.Amigos);
+            LerPessoas(json["incoming"], relacoes.Recebidos);
+            LerPessoas(json["outgoing"], relacoes.Enviados);
+            return relacoes;
+        }
+
+        private static void LerPessoas(JToken lista, List<Amigo> destino)
+        {
+            if (!(lista is JArray pessoas)) return;
+            foreach (var p in pessoas)
+            {
+                var nome = Texto(p["username"]);
+                if (nome.Length == 0) continue;
+                destino.Add(new Amigo { Username = nome, CorDoNome = Texto(p["nameColor"]), Online = p["online"]?.Type == JTokenType.Boolean && (bool)p["online"] });
+            }
+        }
+
+        public static List<MensagemDaConversa> LerConversa(JObject json)
+        {
+            var conversa = new List<MensagemDaConversa>();
+            if (json["messages"] is JArray mensagens)
+                foreach (var m in mensagens)
+                    conversa.Add(new MensagemDaConversa
+                    {
+                        Id = m["id"] == null ? "" : m["id"].ToString(),
+                        Minha = m["fromMe"]?.Type == JTokenType.Boolean && (bool)m["fromMe"],
+                        Corpo = Texto(m["body"]),
+                        // O JObject.Parse já leu a data ISO como data.
+                        Quando = m["createdAt"]?.Type == JTokenType.Date ? ((DateTime)m["createdAt"]).ToLocalTime() : (DateTime?)null,
+                    });
+            return conversa;
+        }
 
         public static ApiSession LerSessao(JObject json)
         {

@@ -28,6 +28,7 @@
             <ui:VisualElement class="coluna-menu">
                 <ui:Label name="ola" class="ola" />
                 <ui:Button name="botao-jogar" text="JOGAR" class="botao botao-menu botao-forte" />
+                <ui:Button name="botao-amigos" text="AMIGOS" class="botao botao-menu" />
                 <ui:Button name="botao-config" text="CONFIGURAÇÕES" class="botao botao-menu" />
                 <ui:Button name="botao-loja" text="LOJA" class="botao botao-menu" />
                 <ui:Button name="botao-fechar" text="SAIR" class="botao botao-menu" />
@@ -107,6 +108,38 @@
                     <ui:Button name="link-da-licenca" text="Licença CC BY 4.0" class="link" />
                 </ui:VisualElement>
             </ui:ScrollView>
+        </ui:VisualElement>
+
+        <!-- Amigos (painel-amigos.tsx): as listas à esquerda, a conversa com o amigo escolhido à direita. -->
+        <ui:VisualElement name="amigos" class="tela amigos oculto">
+            <ui:VisualElement class="cabecalho">
+                <ui:VisualElement class="cabecalho-textos">
+                    <ui:Label text="Amigos" class="titulo-tela" />
+                    <ui:Label text="Os mesmos amigos e as mesmas conversas do site." class="subtitulo" />
+                </ui:VisualElement>
+                <ui:Button name="botao-voltar-amigos" text="VOLTAR AO MENU" class="botao" />
+            </ui:VisualElement>
+            <ui:Label name="estado-dos-amigos" class="estado" />
+            <ui:VisualElement class="colunas-dos-amigos">
+                <ui:VisualElement class="painel-dos-amigos painel-da-lista">
+                    <ui:VisualElement class="linha-de-envio">
+                        <ui:TextField name="campo-novo-amigo" placeholder-text="nome do jogador" max-length="40" class="campo campo-de-envio" />
+                        <ui:Button name="botao-adicionar-amigo" text="Adicionar" class="botao botao-pequeno" />
+                    </ui:VisualElement>
+                    <ui:ScrollView name="lista-de-amigos" class="lista-de-amigos rolagem-fina" horizontal-scroller-visibility="Hidden" />
+                </ui:VisualElement>
+                <ui:VisualElement name="conversa" class="painel-dos-amigos sem-conversa">
+                    <ui:VisualElement class="cabecalho-da-conversa">
+                        <ui:Label name="titulo-da-conversa" class="titulo-da-conversa" />
+                        <ui:Button name="botao-atualizar-conversa" text="Atualizar" class="link" />
+                    </ui:VisualElement>
+                    <ui:ScrollView name="mensagens" class="mensagens rolagem-fina" horizontal-scroller-visibility="Hidden" />
+                    <ui:VisualElement class="linha-de-envio">
+                        <ui:TextField name="campo-mensagem" placeholder-text="escreva uma mensagem" max-length="2000" class="campo campo-de-envio" />
+                        <ui:Button name="botao-enviar-mensagem" text="Enviar" class="botao botao-pequeno" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
 
         <!-- Loja (painel-loja.tsx): pets, molduras e cores de nome, pagos com o ouro de um personagem. -->

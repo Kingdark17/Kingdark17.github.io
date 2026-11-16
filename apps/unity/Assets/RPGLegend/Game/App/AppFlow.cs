@@ -25,7 +25,7 @@ namespace RPGLegend.Game.App
         private static readonly Color Preto = Color.black;
         private static readonly Color Ouro = new Color(1f, 0.93f, 0.7f);
 
-        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Jogando, Criando, Configuracoes, Loja, Trocando }
+        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Jogando, Criando, Configuracoes, Loja, Amigos, Trocando }
 
         /// <summary>Só no Editor: o slot que o menu "RPG Legend > Jogar direto" abre sem passar pela porta (0 = nenhum).</summary>
         public const string ChaveJogarDireto = "RPGLegend.JogarDireto";
@@ -34,6 +34,7 @@ namespace RPGLegend.Game.App
         private TelaDeCriacao _criacao;
         private TelaDeConfiguracoes _configuracoes;
         private TelaDaLoja _loja;
+        private TelaDeAmigos _amigos;
         private TelaDeJogo _jogo;
         private Estado _estado = Estado.Chegando;
         private bool _tocou;
@@ -50,6 +51,7 @@ namespace RPGLegend.Game.App
                 _telas.AoJogar += Jogar;
                 _telas.AoConfiguracoes += AbrirConfiguracoes;
                 _telas.AoLoja += AbrirLoja;
+                _telas.AoAmigos += AbrirAmigos;
                 _telas.AoVoltar += Voltar;
                 _telas.AoSair += Sair;
                 _telas.AoJogarSlot += JogarSlot;
@@ -65,6 +67,9 @@ namespace RPGLegend.Game.App
                 _loja = new TelaDaLoja(documento.rootVisualElement);
                 _loja.AoVoltar += VoltarDaLoja;
                 _loja.AoSessaoExpirada += SessaoExpiradaNaLoja;
+                _amigos = new TelaDeAmigos(documento.rootVisualElement);
+                _amigos.AoVoltar += VoltarDosAmigos;
+                _amigos.AoSessaoExpirada += SessaoExpiradaNaLoja;
 
                 _jogo = gameObject.AddComponent<TelaDeJogo>();
                 _jogo.AoSair += SairDoJogo;
@@ -106,6 +111,7 @@ namespace RPGLegend.Game.App
             else if (_estado == Estado.Criando) VoltarDaCriacao();
             else if (_estado == Estado.Configuracoes) VoltarDaConfiguracoes();
             else if (_estado == Estado.Loja) VoltarDaLoja();
+            else if (_estado == Estado.Amigos) VoltarDosAmigos();
         }
 
         // ---------- porta ----------
@@ -206,6 +212,7 @@ namespace RPGLegend.Game.App
 
             _telas.Ola(Session.Username);
             _telas.MostrarMenu(true);
+            Rede.Ligar();
             cena.Mostrar(false);
             await Tween.Durante(0.6f, t => _telas.Veu(Ouro, 1f - t), destroyCancellationToken);
             _estado = Estado.Menu;
@@ -322,6 +329,38 @@ namespace RPGLegend.Game.App
                 await Trocar(() =>
                 {
                     _loja.Fechar();
+                    _telas.MostrarMenu(true);
+                });
+                _estado = Estado.Menu;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        private async void AbrirAmigos()
+        {
+            if (_estado != Estado.Menu) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _telas.MostrarMenu(false);
+                    _amigos.Abrir();
+                });
+                _estado = Estado.Amigos;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        private async void VoltarDosAmigos()
+        {
+            if (_estado != Estado.Amigos) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _amigos.Fechar();
                     _telas.MostrarMenu(true);
                 });
                 _estado = Estado.Menu;
@@ -493,12 +532,14 @@ namespace RPGLegend.Game.App
 
         private async Awaitable VoltarParaAPorta(string erro)
         {
+            Rede.Desligar();
             await Trocar(() =>
             {
                 _telas.MostrarMenu(false);
                 _telas.MostrarPersonagens(false);
                 _configuracoes.Fechar();
                 _loja.Fechar();
+                _amigos.Fechar();
                 cena.Mostrar(true);
                 cena.Resetar();
             });

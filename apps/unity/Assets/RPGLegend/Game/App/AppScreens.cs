@@ -38,7 +38,7 @@ namespace RPGLegend.Game.App
 
         /// <summary>usuário, e-mail, senha, é cadastro.</summary>
         public event Action<string, string, string, bool> AoEnviar;
-        public event Action AoEsqueci, AoTocar, AoJogar, AoConfiguracoes, AoLoja, AoSair, AoVoltar;
+        public event Action AoEsqueci, AoTocar, AoJogar, AoConfiguracoes, AoLoja, AoAmigos, AoSair, AoVoltar;
         /// <summary>O JOGAR do cartão de um personagem: o número do slot.</summary>
         public event Action<int> AoJogarSlot;
         /// <summary>O CRIAR PERSONAGEM de um slot vazio.</summary>
@@ -97,6 +97,7 @@ namespace RPGLegend.Game.App
             raiz.Q<Button>("botao-jogar").clicked += () => AoJogar?.Invoke();
             raiz.Q<Button>("botao-config").clicked += () => AoConfiguracoes?.Invoke();
             raiz.Q<Button>("botao-loja").clicked += () => AoLoja?.Invoke();
+            raiz.Q<Button>("botao-amigos").clicked += () => AoAmigos?.Invoke();
             // No celular o jogo fecha pelo próprio aparelho; no PC, pelo SAIR (a partida já gravou ao voltar pro menu).
             var fechar = raiz.Q<Button>("botao-fechar");
             fechar.style.display = Application.isMobilePlatform ? DisplayStyle.None : DisplayStyle.Flex;
