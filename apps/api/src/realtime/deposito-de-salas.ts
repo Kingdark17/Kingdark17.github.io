@@ -51,6 +51,8 @@ export interface InstantaneoDeSala {
   code: string;
   isPublic: boolean;
   hostName: string;
+  /** Sala do app. Ausente no que foi guardado antes de 2026-11-16: do site. */
+  app?: boolean;
   state: RoomState | null;
 }
 
@@ -73,6 +75,7 @@ export function paraInstantaneo(room: Room): InstantaneoDeSala {
     code: room.code,
     isPublic: room.isPublic,
     hostName: room.hostName,
+    ...(room.app ? { app: true } : {}),
     state: estadoSemPerfis(room.state),
   };
 }
@@ -101,6 +104,7 @@ export function deInstantaneo(instantaneo: InstantaneoDeSala): Room {
     adminRoles: {},
     isPublic: instantaneo.isPublic,
     hostName: instantaneo.hostName,
+    app: instantaneo.app === true,
   };
 }
 
@@ -172,6 +176,7 @@ function conferir(cru: unknown, code: string): InstantaneoDeSala | null {
     code,
     isPublic: bruto.isPublic === true,
     hostName: typeof bruto.hostName === 'string' ? bruto.hostName : 'Aventureiro',
+    ...(bruto.app === true ? { app: true } : {}),
     // Raspa de novo na volta: se uma versão futura guardar perfis por
     // engano, eles morrem aqui em vez de chegarem na tela de alguém.
     state: bruto.state && typeof bruto.state === 'object' ? estadoSemPerfis(bruto.state) : null,

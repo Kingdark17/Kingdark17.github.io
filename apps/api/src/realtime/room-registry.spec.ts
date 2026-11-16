@@ -75,6 +75,18 @@ describe('RoomRegistry — ciclo de vida', () => {
     expect(registry.join('ABC123', fakeConnection('terceiro'), { admin: false })).toEqual({ kind: 'full' });
   });
 
+  it('sala do app só recebe gente do app, e sala do site só gente do site', () => {
+    const registry = new RoomRegistry();
+    registry.create('DOAPP1', fakeConnection('a'), { admin: false, isPublic: true, hostName: 'Aria', app: true });
+    registry.create('SITE01', fakeConnection('b'), { admin: false, isPublic: true, hostName: 'Bree' });
+
+    expect(registry.join('DOAPP1', fakeConnection('c'), { admin: false })).toEqual({ kind: 'outro-cliente', app: true });
+    expect(registry.join('SITE01', fakeConnection('d'), { admin: false, app: true })).toEqual({ kind: 'outro-cliente', app: false });
+    expect(registry.join('DOAPP1', fakeConnection('e'), { admin: false, app: true }).kind).toBe('joined');
+    // A vitrine diz de quem é cada sala (a do app encheu e saiu dela).
+    expect(registry.listPublic()).toEqual([{ code: 'SITE01', hostName: 'Bree', app: false }]);
+  });
+
   it('saída do convidado avisa quem sobrou; saída do último descarta a sala', () => {
     const { registry, host } = createdRegistry();
     const guest = fakeConnection('guest');
@@ -155,7 +167,7 @@ describe('RoomRegistry — ciclo de vida', () => {
     registry.create('PUB333', fakeConnection('c'), { admin: false, isPublic: true, hostName: 'Caio' });
     registry.join('PUB333', fakeConnection('d'), { admin: false });
 
-    expect(registry.listPublic()).toEqual([{ code: 'PUB111', hostName: 'Aria' }]);
+    expect(registry.listPublic()).toEqual([{ code: 'PUB111', hostName: 'Aria', app: false }]);
   });
 });
 

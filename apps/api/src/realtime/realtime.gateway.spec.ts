@@ -467,6 +467,54 @@ describe('RealtimeGateway (socket.io de verdade)', () => {
     expect((await eco).role).toBe(1);
   });
 
+  it('tempo-real: repassa pro parceiro só em sala do app, e recusa o que não é objeto ou é grande demais', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'TREAL1', name: 'Aria', app: true });
+    await waitFor(host, 'created');
+
+    // Quem vem do site não entra numa sala do app.
+    const doSite = connect();
+    await waitFor(doSite, 'connect');
+    doSite.emit('join', { room: 'TREAL1', name: 'Site' });
+    expect(await waitFor<{ message: string }>(doSite, 'error')).toEqual({ room: 'TREAL1', message: 'Esta sala foi aberta no app do jogo. Entre por ele.' });
+
+    const guest = connect();
+    await waitFor(guest, 'connect');
+    guest.emit('join', { room: 'TREAL1', name: 'Bree', app: true });
+    await waitFor(guest, 'hello');
+
+    const recebidos: unknown[] = [];
+    host.on('tempo-real', (pacote: unknown) => recebidos.push(pacote));
+    guest.emit('tempo-real', { room: 'TREAL1', d: 'texto' });
+    guest.emit('tempo-real', { room: 'TREAL1', d: [1, 2] });
+    guest.emit('tempo-real', { room: 'TREAL1', d: { lixo: 'x'.repeat(7000) } });
+    const chegou = waitFor(host, 'tempo-real');
+    guest.emit('tempo-real', { room: 'TREAL1', d: { t: 'p', x: 1200, y: 3400 } });
+    expect(await chegou).toEqual({ room: 'TREAL1', role: 2, d: { t: 'p', x: 1200, y: 3400 } });
+    expect(recebidos).toHaveLength(1);
+  });
+
+  it('tempo-real: sala do site não repassa', async () => {
+    const host = connect();
+    await waitFor(host, 'connect');
+    host.emit('create', { room: 'TREAL2', name: 'Aria' });
+    await waitFor(host, 'created');
+    const guest = connect();
+    await waitFor(guest, 'connect');
+    guest.emit('join', { room: 'TREAL2', name: 'Bree' });
+    await waitFor(guest, 'hello');
+
+    const recebidos: unknown[] = [];
+    host.on('tempo-real', (pacote: unknown) => recebidos.push(pacote));
+    guest.emit('tempo-real', { room: 'TREAL2', d: { t: 'p', x: 1, y: 2 } });
+    // Um evento que passa serve de relógio: quando ele chega, o de cima já teria chegado.
+    const perfil = waitFor(host, 'profile');
+    guest.emit('profile', { room: 'TREAL2', profile: { name: 'Bree', hero: {} } });
+    await perfil;
+    expect(recebidos).toHaveLength(0);
+  });
+
   it('convidado não conduz exploração: move-lock dele não chega no criador', async () => {
     const host = connect();
     await waitFor(host, 'connect');

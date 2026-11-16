@@ -10,9 +10,11 @@ import { chamarApi } from './client';
 export interface SalaPublica {
   code: string;
   hostName: string;
+  /** Sala aberta no app: o co-op de lá é outro, e o site não a mostra. */
+  app?: boolean;
 }
 
 export async function salasPublicas(): Promise<SalaPublica[]> {
   const resposta = await chamarApi<{ rooms: SalaPublica[] }>('/api/rooms');
-  return resposta.rooms;
+  return resposta.rooms.filter((sala) => !sala.app);
 }

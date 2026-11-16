@@ -67,6 +67,13 @@ const SOCKET_WINDOW_MS = 1000;
 const MAX_TURN = 1_000_000;
 const MAX_HEAL = 500;
 const MAX_BOSS_NAME = 80;
+/** O maior pacote de `tempo-real` (em caracteres de JSON): a luta inteira de uma sala cabe com folga. */
+const MAX_TEMPO_REAL = 6000;
+
+/** O recado de quem tenta entrar numa sala do outro cliente. `app` é o da sala. */
+function salaDoOutroCliente(app: boolean): string {
+  return app ? 'Esta sala foi aberta no app do jogo. Entre por ele.' : 'Esta sala foi aberta no site. Entre por ele.';
+}
 const BOSS_FLOOR_INTERVAL = 5;
 
 interface SocketState {
@@ -369,6 +376,7 @@ export class RealtimeGateway implements OnGatewayDisconnect {
         admin,
         isPublic: !!body?.public,
         hostName: normalizePlayerName(body?.name),
+        app: (body as { app?: unknown })?.app === true,
       });
       if (result.kind === 'already-exists') {
         socket.emit('error', { room: code, message: 'Sala já existe.' });
@@ -394,13 +402,17 @@ export class RealtimeGateway implements OnGatewayDisconnect {
       // um reinício ouve "Sala não encontrada" e teria que esperar o
       // parceiro recriar — uma corrida que ninguém sabe que está correndo.
       await this.rooms.hidratar(code);
-      const result = this.rooms.join(code, socket, { admin });
+      const result = this.rooms.join(code, socket, { admin, app: (body as { app?: unknown })?.app === true });
       if (result.kind === 'not-found') {
         socket.emit('error', { room: code, message: 'Sala não encontrada.' });
         return;
       }
       if (result.kind === 'full') {
         socket.emit('error', { room: code, message: 'Sala cheia.' });
+        return;
+      }
+      if (result.kind === 'outro-cliente') {
+        socket.emit('error', { room: code, message: salaDoOutroCliente(result.app) });
         return;
       }
       const name = normalizePlayerName(body?.name);
@@ -450,11 +462,15 @@ export class RealtimeGateway implements OnGatewayDisconnect {
       await this.rooms.hidratar(code);
 
       const resultado = this.rooms.get(code)
-        ? this.rooms.join(code, socket, { admin })
-        : this.rooms.create(code, socket, { admin, isPublic: !!body?.public, hostName: name });
+        ? this.rooms.join(code, socket, { admin, app: (body as { app?: unknown })?.app === true })
+        : this.rooms.create(code, socket, { admin, isPublic: !!body?.public, hostName: name, app: (body as { app?: unknown })?.app === true });
 
       if (resultado.kind === 'full') {
         socket.emit('error', { room: code, message: 'Sala cheia.' });
+        return;
+      }
+      if (resultado.kind === 'outro-cliente') {
+        socket.emit('error', { room: code, message: salaDoOutroCliente(resultado.app) });
         return;
       }
       if (resultado.kind !== 'joined' && resultado.kind !== 'created') {
@@ -551,6 +567,24 @@ export class RealtimeGateway implements OnGatewayDisconnect {
       action: body.action,
       payload: sanitizeUiActionPayload(body.action, body?.payload),
     });
+  }
+
+  /**
+   * O tempo real do co-op do app (2026-11-16): onde cada herói está na
+   * sala e, na luta, o que o anfitrião decidiu. O servidor **só repassa**
+   * pro parceiro, e só em sala do app: nada disto entra no estado da sala
+   * nem é gravado, e quem recebe trata como dado de outro jogador (o app
+   * lê campo a campo, com limites). O teto de tamanho e o de 30 mensagens
+   * por segundo da conexão é o que segura o abuso.
+   */
+  @SubscribeMessage('tempo-real')
+  handleTempoReal(@ConnectedSocket() socket: Socket, @MessageBody() body: { room?: unknown; d?: unknown }): void {
+    const seat = this.seatOf(socket, body?.room);
+    if (!seat || !seat.room.app) return;
+    const dados = body?.d;
+    if (!dados || typeof dados !== 'object' || Array.isArray(dados)) return;
+    if (JSON.stringify(dados).length > MAX_TEMPO_REAL) return;
+    this.relay(seat.room, socket, 'tempo-real', { room: seat.room.code, role: seat.role, d: dados });
   }
 
   @SubscribeMessage('team-heal')

@@ -90,6 +90,13 @@ export interface Room {
   adminRoles: Partial<Record<RoomRole, boolean>>;
   isPublic: boolean;
   hostName: string;
+  /**
+   * Sala aberta pelo app (o cliente Unity). O co-op do app é em tempo real
+   * e o do site é por turnos, então os dois não se misturam (decisão do
+   * usuário, 2026-11-15): quem entra tem que ser do mesmo cliente de quem
+   * criou. Sala de antes disto é do site.
+   */
+  app: boolean;
 }
 
 export interface RoomMembership {
@@ -100,13 +107,20 @@ export interface RoomMembership {
 export interface PublicRoomSummary {
   code: string;
   hostName: string;
+  /** Sala do app: o site a esconde da vitrine, e o app só mostra estas. */
+  app: boolean;
 }
 
 export type CreateRoomResult =
   /** `resumida` quando o mundo veio do depósito — o anfitrião voltando depois de um reinício. */
   { kind: 'created'; room: Room; resumida: boolean } | { kind: 'already-exists' };
 
-export type JoinRoomResult = { kind: 'joined'; room: Room; role: RoomRole; peers: RoomConnection[] } | { kind: 'not-found' } | { kind: 'full' };
+export type JoinRoomResult =
+  | { kind: 'joined'; room: Room; role: RoomRole; peers: RoomConnection[] }
+  | { kind: 'not-found' }
+  | { kind: 'full' }
+  /** A sala é do outro cliente (do app, e quem chega é do site, ou o contrário). `app` é o da sala. */
+  | { kind: 'outro-cliente'; app: boolean };
 
 export interface LeaveRoomResult {
   code: string;
@@ -180,13 +194,13 @@ export class RoomRegistry {
     const list: PublicRoomSummary[] = [];
     for (const room of this.rooms.values()) {
       if (room.isPublic && room.members.length === 1) {
-        list.push({ code: room.code, hostName: room.hostName });
+        list.push({ code: room.code, hostName: room.hostName, app: room.app });
       }
     }
     return list;
   }
 
-  create(code: string, connection: RoomConnection, options: { admin: boolean; isPublic: boolean; hostName: string }): CreateRoomResult {
+  create(code: string, connection: RoomConnection, options: { admin: boolean; isPublic: boolean; hostName: string; app?: boolean }): CreateRoomResult {
     const existing = this.rooms.get(code);
     if (existing && existing.members.length) return { kind: 'already-exists' };
 
@@ -219,6 +233,8 @@ export class RoomRegistry {
       // nem ser a mesma pessoa. Só o mundo atravessa.
       isPublic: options.isPublic,
       hostName: options.hostName,
+      // Também de quem cria agora: o mundo retomado do site não vira sala do app, nem o contrário.
+      app: options.app === true,
     };
     this.rooms.set(code, room);
     this.membership.set(connection.id, { code, role: HOST_ROLE });
@@ -226,10 +242,11 @@ export class RoomRegistry {
     return { kind: 'created', room, resumida: !!existing };
   }
 
-  join(code: string, connection: RoomConnection, options: { admin: boolean }): JoinRoomResult {
+  join(code: string, connection: RoomConnection, options: { admin: boolean; app?: boolean }): JoinRoomResult {
     const room = this.rooms.get(code);
     if (!room) return { kind: 'not-found' };
     if (room.members.length >= MAX_ROOM_SIZE) return { kind: 'full' };
+    if (room.app !== (options.app === true)) return { kind: 'outro-cliente', app: room.app };
 
     this.forget(connection.id);
 
