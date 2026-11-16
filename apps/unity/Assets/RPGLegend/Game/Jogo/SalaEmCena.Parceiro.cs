@@ -16,6 +16,9 @@ namespace RPGLegend.Game.Jogo
         private Seguidor _parceiro;
         private bool _temParceiro, _parceiroTemLugar;
         private Vector2 _alvoDoParceiro;
+        /// <summary>O parceiro caiu: o boneco dele fica meio transparente e azulado, como um fantasma.</summary>
+        private bool _parceiroFantasma;
+        private static readonly Color CorDoFantasma = new Color(0.7f, 0.85f, 1f, 0.45f);
 
         /// <summary>Quem é o parceiro (pra vestir o boneco); null tira ele da sala.</summary>
         public void DefinirParceiro(Hero hero)
@@ -38,8 +41,9 @@ namespace RPGLegend.Game.Jogo
         }
 
         /// <summary>Onde o parceiro está, nas unidades da sala atual (as do <see cref="Walker"/>), e pra onde olha.</summary>
-        public void MoverParceiro(double x, double y, string facing)
+        public void MoverParceiro(double x, double y, string facing, bool fantasma = false)
         {
+            _parceiroFantasma = fantasma;
             if (!_temParceiro || _parceiro == null) return;
             float cx = (_emendada ? _origemX : 0f) + (float)x * _escala;
             float cy = (_emendada ? _origemY : 0f) + (float)(y + GameData.RoomWalkTable.HeroHalf) * _escala;
@@ -109,7 +113,12 @@ namespace RPGLegend.Game.Jogo
             float tamanho = s.DeEmoji ? 1f : _escala * (float)GameData.RoomWalkTable.TileUnits / Paperdoll.AlturaDoMini;
             s.DeFrente.localScale = new Vector3(s.Espelhado ? -tamanho : tamanho, tamanho, 1f);
             s.DeCostas.localScale = new Vector3(tamanho, tamanho, 1f);
-            foreach (var camada in s.Camadas) camada.sortingOrder = (int)s.Onde.y;
+            var cor = _parceiroFantasma ? CorDoFantasma : Color.white;
+            foreach (var camada in s.Camadas)
+            {
+                camada.sortingOrder = (int)s.Onde.y;
+                camada.color = cor;
+            }
         }
     }
 }

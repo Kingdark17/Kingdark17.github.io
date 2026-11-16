@@ -457,7 +457,8 @@ namespace RPGLegend.Engine
 
             if (l.Fim == null)
             {
-                bool lento = l.Arena.Evento != null || entrada.Menu == true;
+                // Em dupla não há câmera lenta (decisão do usuário, 2026-11-15): ninguém trava o outro.
+                bool lento = l.Arena.Dupla == null && (l.Arena.Evento != null || entrada.Menu == true);
                 if (lento) l.Arena.Lento += 1;
                 if (!lento || l.Arena.Lento % D.Lentidao == 0) PassoDoMundo(l, entrada);
             }

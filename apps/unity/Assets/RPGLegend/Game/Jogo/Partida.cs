@@ -114,6 +114,22 @@ namespace RPGLegend.Game.Jogo
             Mudou?.Invoke();
         }
 
+        /// <summary>Em dupla, quem acompanha: o dano que o herói daqui causou e ainda não foi mandado a quem conduz.</summary>
+        public readonly List<DanoNoMonstro> DanosPraMandar = new List<DanoNoMonstro>();
+        /// <summary>Como acabou a última luta ("vitoria" ou "derrota"); null enquanto uma corre.</summary>
+        public string UltimoFim { get; private set; }
+
+        /// <summary>
+        /// Quem acompanha não abre luta passando por porta: ela abre quando o estado de quem conduz o põe numa sala de
+        /// monstro. O herói fica onde está na sala.
+        /// </summary>
+        public void LutarSeQuemConduzLuta()
+        {
+            if (!Acompanho || Luta != null || Tela != null || Estado.MapMode != "dungeon" || !Salas.LutaAoEntrar(CelulaAtual)) return;
+            AbrirLuta(PosicaoDoHeroi?.Invoke() ?? RoomWalk.Arrival(null, Geometria));
+            Mudou?.Invoke();
+        }
+
         public Partida(int slot, EstadoDoJogo estado, string assinatura)
         {
             Slot = slot;
@@ -348,7 +364,9 @@ namespace RPGLegend.Game.Jogo
         private void AbrirLuta(Walker chegada)
         {
             if (!(Estado is EstadoNaMasmorra masmorra)) return;
-            var quadro = Arenas.AbrirLuta(masmorra, chegada, Pet, Teclado);
+            var quadro = Arenas.AbrirLuta(masmorra, chegada, Pet, Teclado, EmCoop ? (Conduzo ? "anfitriao" : "convidado") : null);
+            DanosPraMandar.Clear();
+            UltimoFim = null;
             Luta = quadro.Luta;
             Estado = Luta.Estado;
             MarcarParaSalvar();
@@ -362,6 +380,7 @@ namespace RPGLegend.Game.Jogo
             var antes = Luta.Estado;
             var quadro = Arenas.PassoDaLuta(Luta, entrada, Rng.Default);
             Luta = quadro.Luta;
+            if (quadro.Danos != null) DanosPraMandar.AddRange(quadro.Danos);
             if (quadro.Acontecimentos.Count > 0) NaLuta?.Invoke(quadro.Acontecimentos);
             if (Luta.Fim != null)
             {
@@ -381,6 +400,7 @@ namespace RPGLegend.Game.Jogo
         {
             var final = Luta;
             Luta = null;
+            UltimoFim = final.Fim;
             Aviso aviso;
             if (final.Fim == "derrota")
             {

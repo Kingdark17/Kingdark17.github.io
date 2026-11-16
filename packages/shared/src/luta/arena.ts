@@ -538,7 +538,8 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
   else if (entrada.item) usarItem(l, entrada.item);
 
   if (!l.fim) {
-    const lento = !!l.arena.evento || !!entrada.menu;
+    // Em dupla não há câmera lenta (decisão do usuário, 2026-11-15): ninguém trava o outro.
+    const lento = !l.arena.dupla && (!!l.arena.evento || !!entrada.menu);
     if (lento) l.arena.lento += 1;
     if (!lento || l.arena.lento % LENTIDAO === 0) passoDoMundo(l, entrada);
   }

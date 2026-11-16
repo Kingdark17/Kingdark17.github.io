@@ -223,6 +223,7 @@ namespace RPGLegend.Game.Jogo
                 // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
                 Cursor = _palcoDaLuta.CursorNaSala(),
             };
+            EntradaDaDupla(entrada);
             _apertou = _soltou = _tocou = false;
             _poderApertado = null;
             _itemUsado = null;

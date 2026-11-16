@@ -172107,8 +172107,8 @@
             }
           },
           "arena": {
-            "passo": 179,
-            "lento": 42,
+            "passo": 200,
+            "lento": 0,
             "chegada": {
               "x": 4320,
               "y": 3360,
@@ -172141,7 +172141,7 @@
             "recarga": 0,
             "recargaDosPoderes": {},
             "recargaDoItem": 0,
-            "rodada": 1,
+            "rodada": 70,
             "intervalo": 0,
             "vez": -1,
             "dupla": {
