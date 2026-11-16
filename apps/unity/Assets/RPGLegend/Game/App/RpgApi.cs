@@ -66,6 +66,12 @@ namespace RPGLegend.Game.App
         public string Signature;
     }
 
+    /// <summary>Uma sala pública do app esperando o segundo jogador.</summary>
+    public sealed class SalaPublica
+    {
+        public string Codigo, Dono;
+    }
+
     /// <summary>Uma pessoa das listas de amizade (GET /api/friends). A foto e a moldura o app ainda não desenha.</summary>
     public sealed class Amigo
     {
@@ -225,6 +231,22 @@ namespace RPGLegend.Game.App
 
         public static async Awaitable EnviarMensagem(string token, string usuario, string texto) =>
             await Enviar("POST", "/api/messages/" + UnityWebRequest.EscapeURL(usuario), new JObject { ["body"] = texto }, token);
+
+        /// <summary>As salas públicas do app esperando parceiro (GET /api/rooms; as do site ficam de fora).</summary>
+        public static async Awaitable<List<SalaPublica>> SalasPublicas() => LerSalas(await Enviar("GET", "/api/rooms", null, null));
+
+        public static List<SalaPublica> LerSalas(JObject json)
+        {
+            var salas = new List<SalaPublica>();
+            if (json["rooms"] is JArray lista)
+                foreach (var s in lista)
+                {
+                    var codigo = Texto(s["code"]);
+                    bool app = s["app"]?.Type == JTokenType.Boolean && (bool)s["app"];
+                    if (codigo.Length > 0 && app) salas.Add(new SalaPublica { Codigo = codigo, Dono = Texto(s["hostName"]) });
+                }
+            return salas;
+        }
 
         // ---------- leitura das respostas (sem Unity: dá para testar com JSON de exemplo) ----------
 

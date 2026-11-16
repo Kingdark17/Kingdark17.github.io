@@ -95,6 +95,10 @@ namespace RPGLegend.Game.App
         /// <summary>Estou numa sala (esperando ou jogando).</summary>
         public static bool NaSala => Fase == FaseDaSala.Esperando || Fase == FaseDaSala.Jogando;
         public static bool Conduzo => Papel == Anfitriao;
+        /// <summary>Tem mais alguém na sala comigo.</summary>
+        public static bool TemParceiro { get; private set; }
+        /// <summary>O último estado do jogo que o parceiro mandou nesta sala (null = nenhum ainda).</summary>
+        public static JObject EstadoDaSala { get; private set; }
         public static int PapelDoParceiro => Papel == Anfitriao ? Convidado : Anfitriao;
 
         private static SocketIo _socket;
@@ -183,6 +187,8 @@ namespace RPGLegend.Game.App
         {
             _voltarPara = null;
             _perfis.Clear();
+            TemParceiro = false;
+            EstadoDaSala = null;
             Fase = FaseDaSala.Fora;
             Codigo = "";
             Papel = 0;
@@ -297,6 +303,7 @@ namespace RPGLegend.Game.App
             if (_voltarPara != null && Fase != FaseDaSala.Fora)
             {
                 _perfis.Clear();
+                TemParceiro = false;
                 Papel = 0;
                 Fase = FaseDaSala.Entrando;
                 Recado = "Conexão caiu. Voltando para a sala…";
@@ -346,6 +353,7 @@ namespace RPGLegend.Game.App
                         var nome = Texto(corpo?["name"]);
                         Recado = (nome.Length > 0 ? nome : "Alguém") + " entrou na sala.";
                         Erro = "";
+                        TemParceiro = true;
                         AoSala?.Invoke();
                         AoParceiroEntrar?.Invoke(nome);
                     }
@@ -365,6 +373,7 @@ namespace RPGLegend.Game.App
                 case "peer-left":
                     if (!NaSala) break;
                     _perfis.Remove(PapelDoParceiro);
+                    TemParceiro = false;
                     Fase = FaseDaSala.Esperando;
                     Recado = "Seu parceiro saiu da sala.";
                     AoSala?.Invoke();
@@ -416,6 +425,8 @@ namespace RPGLegend.Game.App
         {
             if (codigo.Length > 0) Codigo = codigo;
             Papel = papel;
+            // Quem entra como convidado encontra o dono lá; quem cria (ou volta primeiro) está sozinho até o "hello" do outro.
+            TemParceiro = papel == Convidado;
             Fase = FaseDaSala.Esperando;
             Recado = recado;
             Erro = "";
@@ -447,6 +458,7 @@ namespace RPGLegend.Game.App
                 foreach (var p in perfis.Properties())
                     if (int.TryParse(p.Name, out var papel)) GuardarPerfil(papel, p.Value as JObject);
             // O eco não abre a aventura: quem abre é o estado do parceiro.
+            if (!eco) EstadoDaSala = estado;
             if (!eco && Fase != FaseDaSala.Jogando)
             {
                 Fase = FaseDaSala.Jogando;

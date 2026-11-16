@@ -25,7 +25,7 @@ namespace RPGLegend.Game.App
         private static readonly Color Preto = Color.black;
         private static readonly Color Ouro = new Color(1f, 0.93f, 0.7f);
 
-        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Jogando, Criando, Configuracoes, Loja, Amigos, Trocando }
+        private enum Estado { Chegando, Porta, Entrando, Menu, Personagens, Jogando, Criando, Configuracoes, Loja, Amigos, Multiplayer, Trocando }
 
         /// <summary>Só no Editor: o slot que o menu "RPG Legend > Jogar direto" abre sem passar pela porta (0 = nenhum).</summary>
         public const string ChaveJogarDireto = "RPGLegend.JogarDireto";
@@ -35,6 +35,7 @@ namespace RPGLegend.Game.App
         private TelaDeConfiguracoes _configuracoes;
         private TelaDaLoja _loja;
         private TelaDeAmigos _amigos;
+        private TelaDeMultiplayer _multiplayer;
         private TelaDeJogo _jogo;
         private Estado _estado = Estado.Chegando;
         private bool _tocou;
@@ -52,6 +53,7 @@ namespace RPGLegend.Game.App
                 _telas.AoConfiguracoes += AbrirConfiguracoes;
                 _telas.AoLoja += AbrirLoja;
                 _telas.AoAmigos += AbrirAmigos;
+                _telas.AoMultiplayer += AbrirMultiplayer;
                 _telas.AoVoltar += Voltar;
                 _telas.AoSair += Sair;
                 _telas.AoJogarSlot += JogarSlot;
@@ -70,6 +72,10 @@ namespace RPGLegend.Game.App
                 _amigos = new TelaDeAmigos(documento.rootVisualElement);
                 _amigos.AoVoltar += VoltarDosAmigos;
                 _amigos.AoSessaoExpirada += SessaoExpiradaNaLoja;
+                _multiplayer = new TelaDeMultiplayer(documento.rootVisualElement);
+                _multiplayer.AoVoltar += VoltarDoMultiplayer;
+                _multiplayer.AoSessaoExpirada += SessaoExpiradaNaLoja;
+                _multiplayer.AoJogar += JogarEmSala;
 
                 _jogo = gameObject.AddComponent<TelaDeJogo>();
                 _jogo.AoSair += SairDoJogo;
@@ -112,6 +118,7 @@ namespace RPGLegend.Game.App
             else if (_estado == Estado.Configuracoes) VoltarDaConfiguracoes();
             else if (_estado == Estado.Loja) VoltarDaLoja();
             else if (_estado == Estado.Amigos) VoltarDosAmigos();
+            else if (_estado == Estado.Multiplayer) VoltarDoMultiplayer();
         }
 
         // ---------- porta ----------
@@ -369,6 +376,58 @@ namespace RPGLegend.Game.App
             catch (Exception e) { Debug.LogException(e); }
         }
 
+        private async void AbrirMultiplayer()
+        {
+            if (_estado != Estado.Menu) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _telas.MostrarMenu(false);
+                    _multiplayer.Abrir();
+                });
+                _estado = Estado.Multiplayer;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        /// <summary>Voltar ao menu desfaz a sala: sem isso o parceiro ficaria esperando alguém que já foi embora.</summary>
+        private async void VoltarDoMultiplayer()
+        {
+            if (_estado != Estado.Multiplayer) return;
+            try
+            {
+                Rede.SairDaSala();
+                await Trocar(() =>
+                {
+                    _multiplayer.Fechar();
+                    _telas.MostrarMenu(true);
+                });
+                _estado = Estado.Menu;
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
+        /// <summary>O IR JOGAR da sala: a partida abre com o personagem escolhido, e sabe da sala pela <see cref="Rede"/>.</summary>
+        private async void JogarEmSala(int slot)
+        {
+            if (_estado != Estado.Multiplayer || !Rede.NaSala) return;
+            try
+            {
+                await Trocar(() =>
+                {
+                    _multiplayer.Fechar();
+                    _jogo.Preparar(documento.rootVisualElement);
+                });
+                _estado = Estado.Jogando;
+                if (!await _jogo.Carregar(slot)) await VoltarDoJogo();
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+
         private async void SessaoExpiradaNaLoja()
         {
             try
@@ -492,6 +551,8 @@ namespace RPGLegend.Game.App
         private async Awaitable VoltarDoJogo()
         {
             if (_estado != Estado.Jogando) return;
+            // Quem jogava em sala sai dela ao sair da partida.
+            Rede.SairDaSala();
             await Trocar(() =>
             {
                 _jogo.Fechar();
@@ -540,6 +601,7 @@ namespace RPGLegend.Game.App
                 _configuracoes.Fechar();
                 _loja.Fechar();
                 _amigos.Fechar();
+                _multiplayer.Fechar();
                 cena.Mostrar(true);
                 cena.Resetar();
             });

@@ -592,6 +592,7 @@ namespace RPGLegend.Game.Jogo
         private void Update()
         {
             AnimarEfeitos();
+            ColocarParceiro();
             // Em luta quem põe o herói no lugar é a arena (SalaEmCena.Luta.cs).
             if (EmLuta || _planta == null || _walker == null) return;
             if (!Ativo || _saiuDe == _salaDaCena)

@@ -66,6 +66,27 @@ namespace RPGLegend.Game.Jogo
         /// <summary>O chefe final caiu e a masmorra foi zerada: a tela de vitória (<see cref="Conquistas"/>).</summary>
         public event Action<Conquista> Zerou;
 
+        // ---------- em sala (o co-op do app) ----------
+
+        /// <summary>A partida está numa sala de co-op: não grava na nuvem, como no site.</summary>
+        public bool EmCoop;
+        /// <summary>Sou eu quem conduz (o papel 1). Fora de sala, sempre.</summary>
+        public bool Conduzo = true;
+        /// <summary>Em sala e sem conduzir: ando livre, mas não passo por porta nem encosto em nada.</summary>
+        public bool Acompanho => EmCoop && !Conduzo;
+        /// <summary>Sobe a cada mudança do estado: quem conduz manda o estado pra sala quando ela muda.</summary>
+        public long Versao => _versao;
+
+        /// <summary>O estado de quem conduz, já por cima do meu (<see cref="Coop.AplicarRemoto"/>).</summary>
+        public void AdotarRemoto(EstadoDoJogo proximo)
+        {
+            if (proximo == null || ReferenceEquals(proximo, Estado)) return;
+            // A sala secreta é de onde eu estava: a sala de quem conduz é outra.
+            if (proximo.MapMode != Estado.MapMode || proximo.Pos?.X != Estado.Pos?.X || proximo.Pos?.Y != Estado.Pos?.Y || proximo.Floor != Estado.Floor) _naSecreta = null;
+            Estado = proximo;
+            Mudou?.Invoke();
+        }
+
         public Partida(int slot, EstadoDoJogo estado, string assinatura)
         {
             Slot = slot;
@@ -101,7 +122,7 @@ namespace RPGLegend.Game.Jogo
         /// </summary>
         public bool Mover(string direcao)
         {
-            if (Luta != null) return false;
+            if (Luta != null || Acompanho) return false;
             var secreta = Secreta;
             if (secreta != null)
             {
@@ -167,7 +188,7 @@ namespace RPGLegend.Game.Jogo
         /// </summary>
         public void AoPassar(Walker walker)
         {
-            if (Tela != null || Luta != null || Secreta != null || !(Estado is EstadoNaMasmorra masmorra)) return;
+            if (Acompanho || Tela != null || Luta != null || Secreta != null || !(Estado is EstadoNaMasmorra masmorra)) return;
             var indice = Armadilhas.ArmadilhaSob(CelulaAtual as DungeonCell, walker);
             if (indice == null) return;
             var pisou = ArmadilhasDoJogo.PisarNaArmadilha(masmorra, (int)indice.Value, Rng.Default);
@@ -178,7 +199,7 @@ namespace RPGLegend.Game.Jogo
 
         public void AoEncostar(string id)
         {
-            if (Tela != null || Luta != null) return;
+            if (Acompanho || Tela != null || Luta != null) return;
             if (Estado is EstadoNaCidade cidade)
             {
                 EntrarPelaPorta(cidade, id);
@@ -470,14 +491,14 @@ namespace RPGLegend.Game.Jogo
         /// Há mudança ainda não gravada — inclusive a de uma gravação automática que falhou. É o que a saída confere:
         /// no site, uma automática que falhou não volta pra fila, e sair logo depois perde a jogada sem avisar.
         /// </summary>
-        public bool TemMudancaPorGravar => _versaoGravada != _versao;
+        public bool TemMudancaPorGravar => !EmCoop && _versaoGravada != _versao;
 
         /// <summary>
         /// Já é hora de gravar: 2,5 s sem mudança nova, ou 10 s desde a primeira mudança ainda não gravada (senão quem
         /// joga sem parar nunca grava).
         /// </summary>
         public bool HoraDeGravar(double agora) =>
-            _precisaSalvar && !_salvando && (agora - _ultimaMudanca >= EsperaAntesDeSalvarMs || agora - _esperandoDesde >= EsperaMaximaMs);
+            !EmCoop && _precisaSalvar && !_salvando && (agora - _ultimaMudanca >= EsperaAntesDeSalvarMs || agora - _esperandoDesde >= EsperaMaximaMs);
 
         /// <summary>Começa uma gravação: devolve o estado a mandar e esquece a fila (o que mudar daqui pra frente espera a próxima).</summary>
         public EstadoDoJogo ComecarAGravar()

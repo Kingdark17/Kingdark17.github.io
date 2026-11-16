@@ -167,9 +167,10 @@ namespace RPGLegend.Game.Jogo
             _sala.gameObject.SetActive(true);
 
             _carregando.AddToClassList("escondido");
+            ComecarCoop();
             Redesenhar();
-            // Quem fechou o app no meio de uma luta volta pra ela.
-            _partida.RetomarLutaSeHouver();
+            // Quem fechou o app no meio de uma luta volta pra ela (quem acompanha uma sala não luta sozinho).
+            if (!_partida.Acompanho) _partida.RetomarLutaSeHouver();
             CarregarPet();
             return true;
         }
@@ -203,6 +204,7 @@ namespace RPGLegend.Game.Jogo
         /// <summary>Esconde a tela e para a sala (a partida já foi gravada por quem chamou).</summary>
         public void Fechar()
         {
+            AcabarCoop();
             _partida = null;
             EsquecerLuta();
             if (_sala != null)
@@ -327,6 +329,7 @@ namespace RPGLegend.Game.Jogo
                 else if (_janela == null) PerguntarSaida();
             }
 
+            PassoDoCoop();
             if (_partida.HoraDeGravar(AgoraMs)) Gravar(false);
         }
 
@@ -403,6 +406,7 @@ namespace RPGLegend.Game.Jogo
             _diario.text = _partida.Diario.Count > 0 ? "DIÁRIO (" + _partida.Diario.Count + ")" : "DIÁRIO";
             DesenharTela();
             DesenharSala(estado, celula, secreta, visual);
+            SincronizarCoop();
         }
 
         private void DesenharHeroi(Hero hero)

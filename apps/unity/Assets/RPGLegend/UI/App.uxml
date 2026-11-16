@@ -28,6 +28,7 @@
             <ui:VisualElement class="coluna-menu">
                 <ui:Label name="ola" class="ola" />
                 <ui:Button name="botao-jogar" text="JOGAR" class="botao botao-menu botao-forte" />
+                <ui:Button name="botao-multiplayer" text="JOGAR JUNTO" class="botao botao-menu" />
                 <ui:Button name="botao-amigos" text="AMIGOS" class="botao botao-menu" />
                 <ui:Button name="botao-config" text="CONFIGURAÇÕES" class="botao botao-menu" />
                 <ui:Button name="botao-loja" text="LOJA" class="botao botao-menu" />
@@ -138,6 +139,26 @@
                         <ui:TextField name="campo-mensagem" placeholder-text="escreva uma mensagem" max-length="2000" class="campo campo-de-envio" />
                         <ui:Button name="botao-enviar-mensagem" text="Enviar" class="botao botao-pequeno" />
                     </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Jogar com alguém (painel-multiplayer.tsx): a sala à esquerda; ao lado, as públicas, o convite e os amigos. -->
+        <ui:VisualElement name="multiplayer" class="tela amigos oculto">
+            <ui:VisualElement class="cabecalho">
+                <ui:VisualElement class="cabecalho-textos">
+                    <ui:Label text="Jogar com alguém" class="titulo-tela" />
+                    <ui:Label text="Cada jogador leva o próprio herói. O mapa é o de quem cria a sala." class="subtitulo" />
+                </ui:VisualElement>
+                <ui:Button name="botao-voltar-multiplayer" text="VOLTAR AO MENU" class="botao" />
+            </ui:VisualElement>
+            <ui:Label name="estado-do-multiplayer" class="estado" />
+            <ui:VisualElement class="colunas-dos-amigos">
+                <ui:VisualElement class="painel-dos-amigos painel-da-lista">
+                    <ui:ScrollView name="corpo-do-multiplayer" class="corpo-do-multiplayer rolagem-fina" horizontal-scroller-visibility="Hidden" />
+                </ui:VisualElement>
+                <ui:VisualElement class="painel-dos-amigos">
+                    <ui:ScrollView name="lado-do-multiplayer" class="corpo-do-multiplayer rolagem-fina" horizontal-scroller-visibility="Hidden" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
