@@ -15,7 +15,7 @@ namespace RPGLegend.Game.Jogo
     ///   encosta nas coisas, e leva o outro junto. Cada um diz onde está umas dez vezes por segundo
     ///   (<c>tempo-real</c>, tipo "p"), e o outro o desenha (<see cref="SalaEmCena.MoverParceiro"/>).
     /// - Quem acompanha, ao abrir a partida, pede o estado ("oi"), e quem conduz responde abrindo a aventura de novo.
-    /// - Em sala a partida não grava na nuvem, como no site.
+    /// - Em sala cada um grava o próprio herói (<see cref="Partida.ParaGravar"/>).
     ///
     /// O que chega da rede é de outro jogador: cada campo é lido com o tipo conferido e os números com limite.
     /// </summary>
@@ -42,8 +42,7 @@ namespace RPGLegend.Game.Jogo
             _versaoEnviada = -1;
             _posicaoEnviada = null;
             _parceiroVestido = null;
-            _partida.EmCoop = true;
-            _partida.Conduzo = Rede.Conduzo;
+            _partida.EntrarEmSala(Rede.Conduzo);
 
             Rede.AoEstado += ChegouEstado;
             Rede.AoTempoReal += ChegouTempoReal;

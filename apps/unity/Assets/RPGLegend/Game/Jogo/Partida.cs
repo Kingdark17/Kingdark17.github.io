@@ -68,7 +68,7 @@ namespace RPGLegend.Game.Jogo
 
         // ---------- em sala (o co-op do app) ----------
 
-        /// <summary>A partida está numa sala de co-op: não grava na nuvem, como no site.</summary>
+        /// <summary>A partida está numa sala de co-op.</summary>
         public bool EmCoop;
         /// <summary>Sou eu quem conduz (o papel 1). Fora de sala, sempre.</summary>
         public bool Conduzo = true;
@@ -76,6 +76,33 @@ namespace RPGLegend.Game.Jogo
         public bool Acompanho => EmCoop && !Conduzo;
         /// <summary>Sobe a cada mudança do estado: quem conduz manda o estado pra sala quando ela muda.</summary>
         public long Versao => _versao;
+
+        /// <summary>O estado com que entrei na sala acompanhando: o meu mapa, o meu andar e as minhas missões.</summary>
+        private EstadoDoJogo _casa;
+
+        /// <summary>A partida entra numa sala de co-op (ou muda de papel nela).</summary>
+        public void EntrarEmSala(bool conduzo)
+        {
+            // Quem entra acompanhando guarda de onde veio, antes de adotar o mapa do outro.
+            if (!EmCoop && !conduzo) _casa = Estado;
+            EmCoop = true;
+            Conduzo = conduzo;
+        }
+
+        /// <summary>
+        /// O que vai pra nuvem. Em sala cada um grava o próprio herói (decisão do usuário, 2026-11-16): quem conduz
+        /// grava tudo, que o mapa é dele; quem entrou acompanhando grava o herói, a mochila e a equipe de agora por
+        /// cima do save com que entrou, sem levar o mapa, o andar nem as missões de quem criou a sala.
+        /// </summary>
+        public EstadoDoJogo ParaGravar()
+        {
+            if (_casa == null) return Estado;
+            var gravar = _casa.Clone();
+            gravar.Hero = Estado.Hero;
+            gravar.Inventory = Estado.Inventory;
+            gravar.Party = Estado.Party;
+            return gravar;
+        }
 
         /// <summary>O estado de quem conduz, já por cima do meu (<see cref="Coop.AplicarRemoto"/>).</summary>
         public void AdotarRemoto(EstadoDoJogo proximo)
@@ -491,14 +518,14 @@ namespace RPGLegend.Game.Jogo
         /// Há mudança ainda não gravada — inclusive a de uma gravação automática que falhou. É o que a saída confere:
         /// no site, uma automática que falhou não volta pra fila, e sair logo depois perde a jogada sem avisar.
         /// </summary>
-        public bool TemMudancaPorGravar => !EmCoop && _versaoGravada != _versao;
+        public bool TemMudancaPorGravar => _versaoGravada != _versao;
 
         /// <summary>
         /// Já é hora de gravar: 2,5 s sem mudança nova, ou 10 s desde a primeira mudança ainda não gravada (senão quem
         /// joga sem parar nunca grava).
         /// </summary>
         public bool HoraDeGravar(double agora) =>
-            !EmCoop && _precisaSalvar && !_salvando && (agora - _ultimaMudanca >= EsperaAntesDeSalvarMs || agora - _esperandoDesde >= EsperaMaximaMs);
+            _precisaSalvar && !_salvando && (agora - _ultimaMudanca >= EsperaAntesDeSalvarMs || agora - _esperandoDesde >= EsperaMaximaMs);
 
         /// <summary>Começa uma gravação: devolve o estado a mandar e esquece a fila (o que mudar daqui pra frente espera a próxima).</summary>
         public EstadoDoJogo ComecarAGravar()
@@ -507,7 +534,7 @@ namespace RPGLegend.Game.Jogo
             _precisaSalvar = false;
             _esperandoDesde = 0;
             _versaoGravando = _versao;
-            return Estado;
+            return ParaGravar();
         }
 
         public bool Gravando => _salvando;

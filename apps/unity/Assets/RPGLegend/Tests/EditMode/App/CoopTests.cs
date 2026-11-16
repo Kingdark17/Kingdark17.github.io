@@ -104,5 +104,30 @@ namespace RPGLegend.Tests
             Assert.IsInstanceOf<JArray>(perfil["inventory"]);
             Assert.IsInstanceOf<JArray>(perfil["party"]);
         }
+
+        [Test]
+        public void QuemAcompanhaGravaOHeroiDeAgoraNoMapaComQueEntrou()
+        {
+            var anfitriao = Estados.EntrarNaMasmorra(Cidade("Aria", 1), Rng.SeededRng(5));
+            var casa = Cidade("Bree", 9);
+            var partida = new Partida(1, casa, "a");
+            partida.EntrarEmSala(false);
+            partida.AdotarRemoto(Coop.AplicarRemoto(partida.Estado, Coop.Instantaneo(anfitriao, 1)));
+            Assert.IsInstanceOf<EstadoNaMasmorra>(partida.Estado);
+            Assert.IsFalse(partida.Mover("N"), "quem acompanha nao passa por porta");
+
+            var gravar = partida.ParaGravar();
+            Assert.IsInstanceOf<EstadoNaCidade>(gravar, "o mapa gravado e o meu, nao o de quem conduz");
+            Assert.AreSame(partida.Estado.Hero, gravar.Hero);
+            Assert.AreSame(partida.Estado.Inventory, gravar.Inventory);
+        }
+
+        [Test]
+        public void QuemConduzGravaTudo()
+        {
+            var partida = new Partida(1, Cidade("Aria", 1), "a");
+            partida.EntrarEmSala(true);
+            Assert.AreSame(partida.Estado, partida.ParaGravar());
+        }
     }
 }
