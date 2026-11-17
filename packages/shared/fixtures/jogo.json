@@ -87287,14 +87287,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -87330,8 +87330,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -87341,10 +87341,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         }
       }
@@ -87425,7 +87425,7 @@
       }
     },
     "expected": {
-      "result": "maça"
+      "result": "cajado"
     }
   },
   {
@@ -178423,7 +178423,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1794866082937_55026",
+                  "uid": "pot_mana_1794929127406_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -178553,7 +178553,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1794866082937_90893",
+                  "uid": "anel_som_1794929127406_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -178842,7 +178842,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1794866082938_87912",
+                  "uid": "pot_mana_1794929127408_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -179059,7 +179059,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794866082938_18536",
+                  "uid": "pot_vida_1794929127408_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -179261,7 +179261,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1794866082938_69928",
+                  "uid": "bota_vento_1794929127408_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -179337,7 +179337,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1794866082938_12429",
+                "uid": "tala_1794929127408_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -179511,7 +179511,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1794866082939_23232",
+              "uid": "placas_elmo_1794929127410_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -179593,7 +179593,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794866082939_3788",
+                  "uid": "pot_vida_1794929127410_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -179710,7 +179710,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1794866082939_56339",
+                  "uid": "amuleto_sab_1794929127410_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -179876,7 +179876,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1794866082939_93474",
+              "uid": "anel_som_1794929127410_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {

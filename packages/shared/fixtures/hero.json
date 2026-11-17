@@ -283,7 +283,7 @@
           "id": "clerigo",
           "name": "Clérigo",
           "icon": "✝️",
-          "weaponTemplate": "maca",
+          "weaponTemplate": "cajado",
           "bias": {
             "sabedoria": 3,
             "constituicao": 1
@@ -291,15 +291,16 @@
           "desc": "Cura aliados e resiste a corrupção.",
           "signatureId": "cura_menor",
           "affinity": {
-            "maca": 100,
-            "cajado": 70,
+            "cajado": 100,
             "espada": 50,
             "adaga": 40,
             "arco": 35,
+            "maca": 30,
             "machado": 30,
             "marreta": 30,
             "violao": 35
-          }
+          },
+          "ataquePrincipal": "magico"
         },
         {
           "id": "barbaro",
@@ -4792,7 +4793,7 @@
       }
     },
     "expected": {
-      "result": false
+      "result": true
     }
   },
   {
@@ -4876,7 +4877,7 @@
       }
     },
     "expected": {
-      "result": false
+      "result": true
     }
   },
   {
@@ -5002,7 +5003,7 @@
       }
     },
     "expected": {
-      "result": false
+      "result": true
     }
   },
   {
@@ -5086,7 +5087,7 @@
       }
     },
     "expected": {
-      "result": false
+      "result": true
     }
   },
   {
@@ -20783,6 +20784,2497 @@
     }
   },
   {
+    "name": "apoiaAliado: guerreiro",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: guerreiro",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: mago",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: mago",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: ladino",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: ladino",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: clerigo",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "miraDaClasse: clerigo",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: barbaro",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: barbaro",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: arqueiro",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: arqueiro",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 230
+    }
+  },
+  {
+    "name": "apoiaAliado: paladino",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: paladino",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: necromante",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: necromante",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: druida",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "miraDaClasse: druida",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: monge",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: monge",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: bardo",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "miraDaClasse: bardo",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: cacador",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: cacador",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "apoiaAliado: nenhuma",
+    "input": {
+      "fn": "apoiaAliado",
+      "args": {
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "miraDaClasse: nenhuma",
+    "input": {
+      "fn": "miraDaClasse",
+      "args": {
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "mortoVivo: esqueleto",
+    "input": {
+      "fn": "mortoVivo",
+      "args": {
+        "especie": "esqueleto"
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "mortoVivo: zumbi",
+    "input": {
+      "fn": "mortoVivo",
+      "args": {
+        "especie": "zumbi"
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "mortoVivo: espectro_gelado",
+    "input": {
+      "fn": "mortoVivo",
+      "args": {
+        "especie": "espectro_gelado"
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "mortoVivo: slime",
+    "input": {
+      "fn": "mortoVivo",
+      "args": {
+        "especie": "slime"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "mortoVivo: goblin",
+    "input": {
+      "fn": "mortoVivo",
+      "args": {
+        "especie": "goblin"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "mortoVivo: vazio",
+    "input": {
+      "fn": "mortoVivo",
+      "args": {
+        "especie": ""
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "danoDaDistancia: 0 blocos, parado 0",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 0,
+        "parado": 0
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 0 blocos, parado 179",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 0,
+        "parado": 179
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 0 blocos, parado 180",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 0,
+        "parado": 180
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 0 blocos, parado 500",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 0,
+        "parado": 500
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 1 blocos, parado 0",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 1,
+        "parado": 0
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 1 blocos, parado 179",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 1,
+        "parado": 179
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 1 blocos, parado 180",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 1,
+        "parado": 180
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 1 blocos, parado 500",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 1,
+        "parado": 500
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 2 blocos, parado 0",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 2,
+        "parado": 0
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 2 blocos, parado 179",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 2,
+        "parado": 179
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 2 blocos, parado 180",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 2,
+        "parado": 180
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 2 blocos, parado 500",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 2,
+        "parado": 500
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "danoDaDistancia: 3 blocos, parado 0",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 3,
+        "parado": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 3 blocos, parado 179",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 3,
+        "parado": 179
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 3 blocos, parado 180",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 3,
+        "parado": 180
+      }
+    },
+    "expected": {
+      "result": 36
+    }
+  },
+  {
+    "name": "danoDaDistancia: 3 blocos, parado 500",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 3,
+        "parado": 500
+      }
+    },
+    "expected": {
+      "result": 36
+    }
+  },
+  {
+    "name": "danoDaDistancia: 5 blocos, parado 0",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 5,
+        "parado": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 5 blocos, parado 179",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 5,
+        "parado": 179
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 5 blocos, parado 180",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 5,
+        "parado": 180
+      }
+    },
+    "expected": {
+      "result": 60
+    }
+  },
+  {
+    "name": "danoDaDistancia: 5 blocos, parado 500",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 5,
+        "parado": 500
+      }
+    },
+    "expected": {
+      "result": 60
+    }
+  },
+  {
+    "name": "danoDaDistancia: 9 blocos, parado 0",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 9,
+        "parado": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 9 blocos, parado 179",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 9,
+        "parado": 179
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 9 blocos, parado 180",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 9,
+        "parado": 180
+      }
+    },
+    "expected": {
+      "result": 108
+    }
+  },
+  {
+    "name": "danoDaDistancia: 9 blocos, parado 500",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 9,
+        "parado": 500
+      }
+    },
+    "expected": {
+      "result": 108
+    }
+  },
+  {
+    "name": "danoDaDistancia: 10 blocos, parado 0",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 10,
+        "parado": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 10 blocos, parado 179",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 10,
+        "parado": 179
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 10 blocos, parado 180",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 10,
+        "parado": 180
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "danoDaDistancia: 10 blocos, parado 500",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 10,
+        "parado": 500
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "danoDaDistancia: 11 blocos, parado 0",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 11,
+        "parado": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 11 blocos, parado 179",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 11,
+        "parado": 179
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 11 blocos, parado 180",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 11,
+        "parado": 180
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "danoDaDistancia: 11 blocos, parado 500",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 11,
+        "parado": 500
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "danoDaDistancia: 12 blocos, parado 0",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 12,
+        "parado": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 12 blocos, parado 179",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 12,
+        "parado": 179
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "danoDaDistancia: 12 blocos, parado 180",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 12,
+        "parado": 180
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "danoDaDistancia: 12 blocos, parado 500",
+    "input": {
+      "fn": "danoDaDistancia",
+      "args": {
+        "blocos": 12,
+        "parado": 500
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "bonusDoAtaque: arqueiro a 1 blocos, parado 0",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {
+          "parado": 0
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false,
+          "blocos": 1
+        }
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "bonusDoAtaque: arqueiro a 4 blocos, parado 0",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {
+          "parado": 0
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false,
+          "blocos": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: arqueiro a 1 blocos, parado 180",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {
+          "parado": 180
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false,
+          "blocos": 1
+        }
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "bonusDoAtaque: arqueiro a 4 blocos, parado 180",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {
+          "parado": 180
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false,
+          "blocos": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 48
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 0",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 0
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 0,
+        "dano": 0,
+        "resistencia": 0,
+        "semQuebrar": false,
+        "critico": 0,
+        "faixaCritica": 0
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 1",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 10,
+        "resistencia": 0,
+        "semQuebrar": false,
+        "critico": 0,
+        "faixaCritica": 0
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 2",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 10,
+        "resistencia": 0,
+        "semQuebrar": false,
+        "critico": 0,
+        "faixaCritica": 0
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 3",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 3
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 20,
+        "resistencia": 30,
+        "semQuebrar": false,
+        "critico": 0,
+        "faixaCritica": 0
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 4",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 4
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 20,
+        "resistencia": 30,
+        "semQuebrar": false,
+        "critico": 0,
+        "faixaCritica": 0
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 5",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 5
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 20,
+        "resistencia": 30,
+        "semQuebrar": true,
+        "critico": 0,
+        "faixaCritica": 0
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 7",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 7
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 20,
+        "resistencia": 30,
+        "semQuebrar": true,
+        "critico": 0,
+        "faixaCritica": 0
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 8",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 8
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 25,
+        "resistencia": 30,
+        "semQuebrar": true,
+        "critico": 50,
+        "faixaCritica": 0
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 11",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 11
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 25,
+        "resistencia": 30,
+        "semQuebrar": true,
+        "critico": 50,
+        "faixaCritica": 0
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 12",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 12
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 25,
+        "resistencia": 30,
+        "semQuebrar": true,
+        "critico": 50,
+        "faixaCritica": 50
+      }
+    }
+  },
+  {
+    "name": "efeitosDaMoral: nível 13",
+    "input": {
+      "fn": "efeitosDaMoral",
+      "args": {
+        "nivel": 13
+      }
+    },
+    "expected": {
+      "result": {
+        "velocidade": 30,
+        "dano": 25,
+        "resistencia": 30,
+        "semQuebrar": true,
+        "critico": 50,
+        "faixaCritica": 50
+      }
+    }
+  },
+  {
+    "name": "contarCriticoNoAliado: vazia",
+    "input": {
+      "fn": "contarCriticoNoAliado",
+      "args": {
+        "moral": {}
+      }
+    },
+    "expected": {
+      "result": {
+        "moral": {
+          "criticos": 1
+        }
+      }
+    }
+  },
+  {
+    "name": "contarCriticoNoAliado: quase subindo",
+    "input": {
+      "fn": "contarCriticoNoAliado",
+      "args": {
+        "moral": {
+          "nivel": 2,
+          "criticos": 4
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "moral": {
+          "nivel": 3,
+          "criticos": 0
+        },
+        "subiu": 3
+      }
+    }
+  },
+  {
+    "name": "contarCriticoNoAliado: no meio",
+    "input": {
+      "fn": "contarCriticoNoAliado",
+      "args": {
+        "moral": {
+          "nivel": 5,
+          "criticos": 1
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "moral": {
+          "nivel": 5,
+          "criticos": 2
+        }
+      }
+    }
+  },
+  {
+    "name": "contarCriticoNoAliado: no teto",
+    "input": {
+      "fn": "contarCriticoNoAliado",
+      "args": {
+        "moral": {
+          "nivel": 12,
+          "criticos": 3
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "moral": {
+          "nivel": 12,
+          "criticos": 3
+        }
+      }
+    }
+  },
+  {
+    "name": "curaDoApoio: bardo, vida 50/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "bardo",
+        "vida": {
+          "hp": 50,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "curaDoApoio: bardo, vida 149/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "bardo",
+        "vida": {
+          "hp": 149,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "curaDoApoio: bardo, vida 150/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "bardo",
+        "vida": {
+          "hp": 150,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "curaDoApoio: bardo, vida 0/999",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "bardo",
+        "vida": {
+          "hp": 0,
+          "maxHp": 999
+        }
+      }
+    },
+    "expected": {
+      "result": 299
+    }
+  },
+  {
+    "name": "curaDoApoio: bardo, vida 3/7",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "bardo",
+        "vida": {
+          "hp": 3,
+          "maxHp": 7
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "curaDoApoio: clerigo, vida 50/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "clerigo",
+        "vida": {
+          "hp": 50,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 22
+    }
+  },
+  {
+    "name": "curaDoApoio: clerigo, vida 149/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "clerigo",
+        "vida": {
+          "hp": 149,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "curaDoApoio: clerigo, vida 150/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "clerigo",
+        "vida": {
+          "hp": 150,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "curaDoApoio: clerigo, vida 0/999",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "clerigo",
+        "vida": {
+          "hp": 0,
+          "maxHp": 999
+        }
+      }
+    },
+    "expected": {
+      "result": 149
+    }
+  },
+  {
+    "name": "curaDoApoio: clerigo, vida 3/7",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "clerigo",
+        "vida": {
+          "hp": 3,
+          "maxHp": 7
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "curaDoApoio: purificar, vida 50/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "purificar",
+        "vida": {
+          "hp": 50,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "curaDoApoio: purificar, vida 149/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "purificar",
+        "vida": {
+          "hp": 149,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "curaDoApoio: purificar, vida 150/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "purificar",
+        "vida": {
+          "hp": 150,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "curaDoApoio: purificar, vida 0/999",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "purificar",
+        "vida": {
+          "hp": 0,
+          "maxHp": 999
+        }
+      }
+    },
+    "expected": {
+      "result": 99
+    }
+  },
+  {
+    "name": "curaDoApoio: purificar, vida 3/7",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "purificar",
+        "vida": {
+          "hp": 3,
+          "maxHp": 7
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "curaDoApoio: comunhao, vida 50/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "comunhao",
+        "vida": {
+          "hp": 50,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 60
+    }
+  },
+  {
+    "name": "curaDoApoio: comunhao, vida 149/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "comunhao",
+        "vida": {
+          "hp": 149,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "curaDoApoio: comunhao, vida 150/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "comunhao",
+        "vida": {
+          "hp": 150,
+          "maxHp": 150
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "curaDoApoio: comunhao, vida 0/999",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "comunhao",
+        "vida": {
+          "hp": 0,
+          "maxHp": 999
+        }
+      }
+    },
+    "expected": {
+      "result": 399
+    }
+  },
+  {
+    "name": "curaDoApoio: comunhao, vida 3/7",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "comunhao",
+        "vida": {
+          "hp": 3,
+          "maxHp": 7
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "duracaoDaFe: comunhão, dano 0",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": true,
+        "dano": 0,
+        "quantos": 2
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "duracaoDaFe: comunhão, dano 7",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": true,
+        "dano": 7,
+        "quantos": 2
+      }
+    },
+    "expected": {
+      "result": 105
+    }
+  },
+  {
+    "name": "duracaoDaFe: comunhão, dano 30",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": true,
+        "dano": 30,
+        "quantos": 2
+      }
+    },
+    "expected": {
+      "result": 450
+    }
+  },
+  {
+    "name": "duracaoDaFe: comunhão, dano 120",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": true,
+        "dano": 120,
+        "quantos": 2
+      }
+    },
+    "expected": {
+      "result": 1800
+    }
+  },
+  {
+    "name": "duracaoDaFe: comunhão, dano 9999",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": true,
+        "dano": 9999,
+        "quantos": 2
+      }
+    },
+    "expected": {
+      "result": 3000
+    }
+  },
+  {
+    "name": "duracaoDaFe: egoísta, dano 0",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": false,
+        "dano": 0,
+        "quantos": 1
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "duracaoDaFe: egoísta, dano 7",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": false,
+        "dano": 7,
+        "quantos": 1
+      }
+    },
+    "expected": {
+      "result": 140
+    }
+  },
+  {
+    "name": "duracaoDaFe: egoísta, dano 30",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": false,
+        "dano": 30,
+        "quantos": 1
+      }
+    },
+    "expected": {
+      "result": 600
+    }
+  },
+  {
+    "name": "duracaoDaFe: egoísta, dano 120",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": false,
+        "dano": 120,
+        "quantos": 1
+      }
+    },
+    "expected": {
+      "result": 2400
+    }
+  },
+  {
+    "name": "duracaoDaFe: egoísta, dano 9999",
+    "input": {
+      "fn": "duracaoDaFe",
+      "args": {
+        "comunhao": false,
+        "dano": 9999,
+        "quantos": 1
+      }
+    },
+    "expected": {
+      "result": 2400
+    }
+  },
+  {
+    "name": "contarParado: arqueiro, zerado",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {},
+        "andou": false
+      }
+    },
+    "expected": {
+      "result": {
+        "parado": 1
+      }
+    }
+  },
+  {
+    "name": "contarParado: arqueiro, zerado, andou",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {},
+        "andou": true
+      }
+    },
+    "expected": {
+      "result": {
+        "parado": 0
+      }
+    }
+  },
+  {
+    "name": "contarParado: arqueiro, contando",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {
+          "parado": 90
+        },
+        "andou": false
+      }
+    },
+    "expected": {
+      "result": {
+        "parado": 91
+      }
+    }
+  },
+  {
+    "name": "contarParado: arqueiro, contando, andou",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {
+          "parado": 90
+        },
+        "andou": true
+      }
+    },
+    "expected": {
+      "result": {
+        "parado": 0
+      }
+    }
+  },
+  {
+    "name": "contarParado: arqueiro, no ponto",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {
+          "parado": 180
+        },
+        "andou": false
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "contarParado: arqueiro, no ponto, andou",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        },
+        "c": {
+          "parado": 180
+        },
+        "andou": true
+      }
+    },
+    "expected": {
+      "result": {
+        "parado": 0
+      }
+    }
+  },
+  {
+    "name": "contarParado: guerreiro, zerado",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        },
+        "c": {},
+        "andou": false
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "contarParado: guerreiro, zerado, andou",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        },
+        "c": {},
+        "andou": true
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "contarParado: guerreiro, contando",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        },
+        "c": {
+          "parado": 90
+        },
+        "andou": false
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "contarParado: guerreiro, contando, andou",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        },
+        "c": {
+          "parado": 90
+        },
+        "andou": true
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "contarParado: guerreiro, no ponto",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        },
+        "c": {
+          "parado": 180
+        },
+        "andou": false
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "contarParado: guerreiro, no ponto, andou",
+    "input": {
+      "fn": "contarParado",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        },
+        "c": {
+          "parado": 180
+        },
+        "andou": true
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "textosDaClasse: arqueiro, nada",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: arqueiro, parado no ponto e com moral",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "parado": 180
+        },
+        "extras": {
+          "moral": 4
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme",
+        "🎵 Moral 4"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: arqueiro, fé voltando",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "recargaDaFe": 7321
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: arqueiro, fé de pé",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "fe": 125,
+          "recargaDaFe": 25000
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: arqueiro, sem atacar",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "semAtacar": 1799
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: bardo, nada",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: bardo, parado no ponto e com moral",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "parado": 180
+        },
+        "extras": {
+          "moral": 4
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🎵 Moral 4"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: bardo, fé voltando",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "recargaDaFe": 7321
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: bardo, fé de pé",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "fe": 125,
+          "recargaDaFe": 25000
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: bardo, sem atacar",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "bardo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "semAtacar": 1799
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: clerigo, nada",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✝️ Fé pronta"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: clerigo, parado no ponto e com moral",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "parado": 180
+        },
+        "extras": {
+          "moral": 4
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "✝️ Fé pronta",
+        "🎵 Moral 4"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: clerigo, fé voltando",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "recargaDaFe": 7321
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "✝️ Fé em 2:03"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: clerigo, fé de pé",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "fe": 125,
+          "recargaDaFe": 25000
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "✝️ Fé 3 s"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: clerigo, sem atacar",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "clerigo",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "semAtacar": 1799
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "✝️ Fé pronta"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: druida, nada",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: druida, parado no ponto e com moral",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "parado": 180
+        },
+        "extras": {
+          "moral": 4
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🎵 Moral 4"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: druida, fé voltando",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "recargaDaFe": 7321
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: druida, fé de pé",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "fe": 125,
+          "recargaDaFe": 25000
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: druida, sem atacar",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "semAtacar": 1799
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌿 Ataque em 30 s"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: mago, nada",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: mago, parado no ponto e com moral",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "parado": 180
+        },
+        "extras": {
+          "moral": 4
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🎵 Moral 4"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: mago, fé voltando",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "recargaDaFe": 7321
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: mago, fé de pé",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "fe": 125,
+          "recargaDaFe": 25000
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: mago, sem atacar",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "semAtacar": 1799
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
     "name": "masteryBattlesFor: nível 0",
     "input": {
       "fn": "masteryBattlesFor",
@@ -21389,7 +23881,7 @@
           "id": "clerigo",
           "name": "Clérigo",
           "icon": "✝️",
-          "weaponTemplate": "maca",
+          "weaponTemplate": "cajado",
           "bias": {
             "sabedoria": 3,
             "constituicao": 1
@@ -21397,21 +23889,22 @@
           "desc": "Cura aliados e resiste a corrupção.",
           "signatureId": "cura_menor",
           "affinity": {
-            "maca": 100,
-            "cajado": 70,
+            "cajado": 100,
             "espada": 50,
             "adaga": 40,
             "arco": 35,
+            "maca": 30,
             "machado": 30,
             "marreta": 30,
             "violao": 35
-          }
+          },
+          "ataquePrincipal": "magico"
         }
       }
     },
     "expected": {
       "result": [
-        "maca"
+        "cajado"
       ]
     }
   },
@@ -23293,7 +25786,7 @@
         "id": "clerigo",
         "name": "Clérigo",
         "icon": "✝️",
-        "weaponTemplate": "maca",
+        "weaponTemplate": "cajado",
         "bias": {
           "sabedoria": 3,
           "constituicao": 1
@@ -23301,15 +25794,16 @@
         "desc": "Cura aliados e resiste a corrupção.",
         "signatureId": "cura_menor",
         "affinity": {
-          "maca": 100,
-          "cajado": 70,
+          "cajado": 100,
           "espada": 50,
           "adaga": 40,
           "arco": 35,
+          "maca": 30,
           "machado": 30,
           "marreta": 30,
           "violao": 35
-        }
+        },
+        "ataquePrincipal": "magico"
       }
     }
   },
@@ -23326,7 +25820,7 @@
         "id": "clerigo",
         "name": "Clérigo",
         "icon": "✝️",
-        "weaponTemplate": "maca",
+        "weaponTemplate": "cajado",
         "bias": {
           "sabedoria": 3,
           "constituicao": 1
@@ -23334,15 +25828,16 @@
         "desc": "Cura aliados e resiste a corrupção.",
         "signatureId": "cura_menor",
         "affinity": {
-          "maca": 100,
-          "cajado": 70,
+          "cajado": 100,
           "espada": 50,
           "adaga": 40,
           "arco": 35,
+          "maca": 30,
           "machado": 30,
           "marreta": 30,
           "violao": 35
-        }
+        },
+        "ataquePrincipal": "magico"
       }
     }
   },
@@ -24352,7 +26847,7 @@
       }
     },
     "expected": {
-      "result": 100
+      "result": 30
     }
   },
   {
@@ -37362,7 +39857,7 @@
           "id": "clerigo",
           "name": "Clérigo",
           "icon": "✝️",
-          "weaponTemplate": "maca",
+          "weaponTemplate": "cajado",
           "bias": {
             "sabedoria": 3,
             "constituicao": 1
@@ -37370,15 +39865,16 @@
           "desc": "Cura aliados e resiste a corrupção.",
           "signatureId": "cura_menor",
           "affinity": {
-            "maca": 100,
-            "cajado": 70,
+            "cajado": 100,
             "espada": 50,
             "adaga": 40,
             "arco": 35,
+            "maca": 30,
             "machado": 30,
             "marreta": 30,
             "violao": 35
-          }
+          },
+          "ataquePrincipal": "magico"
         },
         "debuff": {
           "id": "desajeitado",
@@ -38394,14 +40890,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -38438,8 +40934,8 @@
           },
           "killCount": 17,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 67,
+            "maxHp": 100,
+            "maxMp": 75,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -38449,10 +40945,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 67,
-          "mp": 67,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 75,
+          "mp": 75,
           "buffs": {
             "shield": 0.5,
             "poisonTurns": 2
@@ -38473,14 +40969,14 @@
         },
         "equip": {
           "arma": {
-            "uid": "maca_1700000000000_62706",
-            "templateId": "maca",
+            "uid": "cajado_1700000000000_62706",
+            "templateId": "cajado",
             "rarity": "comum",
             "stats": {
               "ataque": 3,
-              "vida": 6
+              "mana": 8
             },
-            "value": 22,
+            "value": 24,
             "equipped": false,
             "procChance": 0.1
           },
@@ -38522,8 +41018,8 @@
         },
         "killCount": 17,
         "derived": {
-          "maxHp": 105,
-          "maxMp": 67,
+          "maxHp": 100,
+          "maxMp": 75,
           "dmgFisico": 20,
           "dmgMagico": 30,
           "esquiva": 5,
@@ -38533,10 +41029,10 @@
           "resistMagica": 10,
           "descontoLoja": 5
         },
-        "maxHp": 105,
-        "hp": 105,
-        "maxMp": 67,
-        "mp": 67,
+        "maxHp": 100,
+        "hp": 100,
+        "maxMp": 75,
+        "mp": 75,
         "buffs": {},
         "attrPoints": 0,
         "classId": "clerigo",
@@ -46608,14 +49104,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -46652,8 +49148,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -46663,10 +49159,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         }
@@ -46697,14 +49193,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -46741,8 +49237,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -46752,10 +49248,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         }
@@ -46782,14 +49278,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -46826,8 +49322,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -46837,10 +49333,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         }
@@ -46867,14 +49363,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -46911,8 +49407,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -46922,10 +49418,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         },
@@ -46953,14 +49449,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -46997,8 +49493,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -47008,10 +49504,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         },
@@ -47047,14 +49543,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -47091,8 +49587,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -47102,10 +49598,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         },
@@ -47141,14 +49637,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -47185,8 +49681,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -47196,10 +49692,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         },
@@ -47227,14 +49723,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -47271,8 +49767,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -47282,10 +49778,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         },
@@ -47313,14 +49809,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -47357,8 +49853,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -47368,10 +49864,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         },
@@ -47399,14 +49895,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -47443,8 +49939,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -47454,10 +49950,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         },
@@ -47485,14 +49981,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -47529,8 +50025,8 @@
           "killCount": 0,
           "masteryBattles": 100,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -47540,10 +50036,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {},
           "teachersMet": 0
         },

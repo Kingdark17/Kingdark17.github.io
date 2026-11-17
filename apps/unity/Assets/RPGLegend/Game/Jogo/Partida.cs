@@ -160,11 +160,43 @@ namespace RPGLegend.Game.Jogo
             // A sala secreta é de onde eu estava: a sala de quem conduz é outra.
             if (proximo.MapMode != Estado.MapMode || proximo.Pos?.X != Estado.Pos?.X || proximo.Pos?.Y != Estado.Pos?.Y || proximo.Floor != Estado.Floor) _naSecreta = null;
             Estado = proximo;
+            EsquecerMoralForaDaMasmorra();
             Mudou?.Invoke();
         }
 
         /// <summary>Em dupla, quem acompanha: o dano que o herói daqui causou e ainda não foi mandado a quem conduz.</summary>
         public readonly List<DanoNoMonstro> DanosPraMandar = new List<DanoNoMonstro>();
+
+        // ---------- o que a luta leva pra próxima (rodada 3b; decisão do usuário: só na memória, fora do save) ----------
+
+        /// <summary>A moral do grupo (o Bardo): vai de luta em luta e some na volta pra cidade (ou ao fechar o app).</summary>
+        public Moral MoralDoGrupo { get; private set; }
+        /// <summary>Quando o Poder da fé do Clérigo volta, no relógio da partida (<see cref="Agora"/>, ms); 0 = pronto.</summary>
+        private double _feVoltaEm;
+        /// <summary>Em dupla: o apoio que o herói daqui soltou no parceiro e a moral que o Bardo daqui subiu, por mandar.</summary>
+        public readonly List<ApoioDoParceiro> ApoiosPraMandar = new List<ApoioDoParceiro>();
+        public double? MoralPraMandar;
+
+        /// <summary>A moral que o Bardo do parceiro subiu, fora da luta: fica a maior.</summary>
+        public void ReceberMoral(double nivel)
+        {
+            if (Estado.MapMode != "dungeon" || nivel <= (MoralDoGrupo?.Nivel ?? 0)) return;
+            var nova = MoralDoGrupo?.Clone() ?? new Moral();
+            nova.Nivel = nivel;
+            MoralDoGrupo = nova;
+        }
+
+        private void EsquecerMoralForaDaMasmorra()
+        {
+            if (Estado?.MapMode != "dungeon") MoralDoGrupo = null;
+        }
+
+        /// <summary>O que vai pra próxima luta: a moral e quanto falta (em passos) pro Poder da fé voltar.</summary>
+        private MemoriaDaLuta MemoriaPraLuta()
+        {
+            double falta = _feVoltaEm > Agora ? Math.Ceiling((_feVoltaEm - Agora) * 60 / 1000) : 0;
+            return new MemoriaDaLuta { Moral = MoralDoGrupo?.Clone(), RecargaDaFe = falta > 0 ? falta : (double?)null };
+        }
         /// <summary>Como acabou a última luta ("vitoria" ou "derrota"); null enquanto uma corre.</summary>
         public string UltimoFim { get; private set; }
 
@@ -413,8 +445,10 @@ namespace RPGLegend.Game.Jogo
         private void AbrirLuta(Walker chegada)
         {
             if (!(Estado is EstadoNaMasmorra masmorra)) return;
-            var quadro = Arenas.AbrirLuta(masmorra, chegada, Pet, Teclado, EmCoop ? (Conduzo ? "anfitriao" : "convidado") : null);
+            var quadro = Arenas.AbrirLuta(masmorra, chegada, Pet, Teclado, EmCoop ? (Conduzo ? "anfitriao" : "convidado") : null, MemoriaPraLuta());
             DanosPraMandar.Clear();
+            ApoiosPraMandar.Clear();
+            MoralPraMandar = null;
             UltimoFim = null;
             Luta = quadro.Luta;
             Estado = Luta.Estado;
@@ -430,6 +464,8 @@ namespace RPGLegend.Game.Jogo
             var quadro = Arenas.PassoDaLuta(Luta, entrada, Rng.Default);
             Luta = quadro.Luta;
             if (quadro.Danos != null) DanosPraMandar.AddRange(quadro.Danos);
+            if (quadro.Apoios != null) ApoiosPraMandar.AddRange(quadro.Apoios);
+            if (quadro.Moral != null) MoralPraMandar = quadro.Moral;
             if (quadro.Acontecimentos.Count > 0) NaLuta?.Invoke(quadro.Acontecimentos);
             if (Luta.Fim != null)
             {
@@ -450,6 +486,10 @@ namespace RPGLegend.Game.Jogo
             var final = Luta;
             Luta = null;
             UltimoFim = final.Fim;
+            // A moral e a recarga da fé seguem pra próxima luta (na memória; a moral some fora da masmorra).
+            var memoria = Arenas.MemoriaDaLuta(final);
+            MoralDoGrupo = memoria.Moral;
+            _feVoltaEm = (memoria.RecargaDaFe ?? 0) > 0 ? Agora + memoria.RecargaDaFe.Value * 1000 / 60 : 0;
             Aviso aviso;
             if (final.Fim == "derrota")
             {
@@ -559,6 +599,7 @@ namespace RPGLegend.Game.Jogo
         private void RegistrarMudanca(EstadoDoJogo proximo, Aviso aviso)
         {
             Estado = proximo;
+            EsquecerMoralForaDaMasmorra();
             Avisar(aviso);
             Confirmando = false;
             MarcarParaSalvar();

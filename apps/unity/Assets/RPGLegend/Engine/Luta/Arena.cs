@@ -69,6 +69,8 @@ namespace RPGLegend.Engine
         public bool? ParceiroCaido;
         /// <summary>O parceiro é Paladino: os monstros o escolhem como se ele estivesse mais perto.</summary>
         public bool? ParceiroPuxa;
+        /// <summary>O dano que o parceiro levou nos últimos 30 s (ele diz): a duração da Comunhão sagrada conta com ele.</summary>
+        public double? ParceiroDano;
         public bool? Fantasma;
 
         public Dupla Clone() => new Dupla
@@ -77,8 +79,34 @@ namespace RPGLegend.Engine
             Parceiro = Parceiro != null ? new PontoNaSala { X = Parceiro.X, Y = Parceiro.Y } : null,
             ParceiroCaido = ParceiroCaido,
             ParceiroPuxa = ParceiroPuxa,
+            ParceiroDano = ParceiroDano,
             Fantasma = Fantasma,
         };
+    }
+
+    /// <summary>
+    /// TS: ApoioDoParceiro — o apoio que um herói solta no parceiro (rodada 3b): "bardo", "clerigo", "purificar" ou
+    /// "comunhao" (com a duração, em passos). Sai em <see cref="QuadroDaLuta.Apoios"/> de um lado e chega em
+    /// <see cref="EntradaDaLuta.Apoios"/> do outro, que faz a conta com o herói dele.
+    /// </summary>
+    public sealed class ApoioDoParceiro
+    {
+        public string Tipo;
+        public double? Passos;
+    }
+
+    /// <summary>TS: MemoriaDaLuta — o que a luta leva de uma pra outra, na memória do app (fora do save): a moral e a recarga da fé.</summary>
+    public sealed class MemoriaDaLuta
+    {
+        public Moral Moral;
+        public double? RecargaDaFe;
+    }
+
+    /// <summary>Um dano levado pelo herói daqui, com o passo do mundo (a janela de 30 s do Poder da fé).</summary>
+    public sealed class DanoLevado
+    {
+        public double Passo;
+        public double Dano;
     }
 
     /// <summary>TS: MonstroNoEspelho — um monstro como o anfitrião o manda pro espelho.</summary>
@@ -116,6 +144,8 @@ namespace RPGLegend.Engine
         public double Y;
         public bool? Caido;
         public bool? Puxa;
+        /// <summary>O dano que ele levou nos últimos 30 s (a Comunhão sagrada conta com ele).</summary>
+        public double? Dano;
     }
 
     /// <summary>TS: um dano de fora, ou um dano pra mandar: em qual monstro (índice na sala) e quanto.</summary>
@@ -159,6 +189,8 @@ namespace RPGLegend.Engine
         public string Estilo;
         /// <summary>O evento é de um poder mágico (o id dele), e não do ataque: no fim, é o poder que sai, na força do evento.</summary>
         public string Poder;
+        /// <summary>O ataque do Bardo, do Clérigo ou do Druida mirado num aliado ("eu" ou "parceiro"): no fim, sai o apoio.</summary>
+        public string Aliado;
     }
 
     /// <summary>TS: Arena — tudo o que a luta em tempo real tem: os monstros, o herói na sala e os tempos.</summary>
@@ -194,6 +226,17 @@ namespace RPGLegend.Engine
         public Dupla Dupla;
         /// <summary>O que a classe do herói junta nesta luta (a fúria, o combo…; <see cref="ClassesDeLuta"/>). Ausente até juntar algo.</summary>
         public ContadoresDaClasse Classe;
+        /// <summary>No celular: o jogador tocou na placa de um aliado ("eu" ou "parceiro"), e o apoio vai nele.</summary>
+        public string AlvoAliado;
+        /// <summary>A moral do grupo (o Bardo): chega da memória do app na abertura e volta no fim.</summary>
+        public Moral Moral;
+        /// <summary>O reforço do Bardo: os passos que ainda faltam do dano a mais.</summary>
+        public double? Reforco;
+        /// <summary>O Poder da fé: os passos até ele voltar, e os que ainda faltam do que está de pé.</summary>
+        public double? RecargaDaFe;
+        public double? Fe;
+        /// <summary>O dano que o herói daqui levou, com o passo do mundo (só o Clérigo e a dupla contam).</summary>
+        public List<DanoLevado> DanosLevados;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -251,6 +294,14 @@ namespace RPGLegend.Engine
         public bool? SemParceiro;
         /// <summary>Em dupla: o parceiro gastou uma Poção de Reviver em mim — com quantos % da vida máxima eu levanto.</summary>
         public double? Reviver;
+        /// <summary>Tocou na placa de um aliado (o celular): "eu" ou "parceiro".</summary>
+        public string MirarAliado;
+        /// <summary>Apertou o botão do Poder da fé (o Clérigo).</summary>
+        public bool? Fe;
+        /// <summary>Em dupla: o apoio que o parceiro soltou em mim desde o último passo.</summary>
+        public List<ApoioDoParceiro> Apoios;
+        /// <summary>Em dupla: a moral do grupo, que o Bardo do parceiro subiu.</summary>
+        public double? Moral;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -277,6 +328,10 @@ namespace RPGLegend.Engine
         public List<Acontecimento> Acontecimentos;
         /// <summary>Em dupla, no convidado: o dano que o herói daqui (e a equipe dele) causou, pra mandar ao anfitrião. Ausente (null) sem dano.</summary>
         public List<DanoNoMonstro> Danos;
+        /// <summary>Em dupla: o apoio que o herói daqui soltou no parceiro, pra mandar a ele. Ausente (null) sem nenhum.</summary>
+        public List<ApoioDoParceiro> Apoios;
+        /// <summary>O Bardo daqui subiu a moral do grupo: o nível novo, pra mandar ao parceiro.</summary>
+        public double? Moral;
     }
 
     /// <summary>As tabelas de luta/arena.ts (fixtures/data/luta/arena.json).</summary>
@@ -355,6 +410,10 @@ namespace RPGLegend.Engine
             public List<Acontecimento> Acontecimentos = new List<Acontecimento>();
             /// <summary>O dano causado neste passo no espelho (<see cref="QuadroDaLuta.Danos"/>).</summary>
             public List<DanoNoMonstro> Danos = new List<DanoNoMonstro>();
+            /// <summary>O apoio solto no parceiro neste passo (<see cref="QuadroDaLuta.Apoios"/>).</summary>
+            public List<ApoioDoParceiro> Apoios = new List<ApoioDoParceiro>();
+            /// <summary>A moral que o Bardo daqui subiu neste passo.</summary>
+            public double? MoralSubiu;
         }
 
         // ---------- abrir ----------
@@ -366,7 +425,7 @@ namespace RPGLegend.Engine
         /// pra ele voltar ali quando acabar. <paramref name="teclado"/>: jogada no PC, onde o cajado pede letras em
         /// vez do desenho.
         /// </summary>
-        public static QuadroDaLuta AbrirLuta(EstadoNaMasmorra estado, Walker chegada, string pet = null, bool teclado = false, string dupla = null)
+        public static QuadroDaLuta AbrirLuta(EstadoNaMasmorra estado, Walker chegada, string pet = null, bool teclado = false, string dupla = null, MemoriaDaLuta memoria = null)
         {
             var preparada = FimDaLuta.PrepararLuta(estado);
             var sala = (DungeonCell)Estados.CelulaAtual(preparada.Estado);
@@ -434,6 +493,11 @@ namespace RPGLegend.Engine
                 // Quem já chega caído (o fantasma que ninguém reviveu) só acompanha.
                 if (preparada.Estado.Hero.Hp <= 0) arena.Dupla.Fantasma = true;
             }
+            if (memoria != null)
+            {
+                if ((memoria.Moral?.Nivel ?? 0) > 0 || (memoria.Moral?.Criticos ?? 0) > 0) arena.Moral = memoria.Moral.Clone();
+                if ((memoria.RecargaDaFe ?? 0) > 0) arena.RecargaDaFe = Math.Truncate(memoria.RecargaDaFe.Value);
+            }
             return new QuadroDaLuta
             {
                 Luta = new LutaEmTempoReal { Estado = preparada.Estado, Arena = arena, Pet = pet, Teclado = teclado, Fim = null, Loot = null },
@@ -452,15 +516,23 @@ namespace RPGLegend.Engine
         {
             if (luta.Fim != null) return new QuadroDaLuta { Luta = luta, Acontecimentos = new List<Acontecimento>() };
             var l = new Luta { Estado = luta.Estado, Arena = CopiarArena(luta.Arena), Pet = luta.Pet, Teclado = luta.Teclado, Fim = luta.Fim, Loot = luta.Loot, Conquista = luta.Conquista, Rng = rng, Now = now };
+            // A recarga do Poder da fé corre no tempo de verdade, mesmo na câmera lenta.
+            if (l.Arena.RecargaDaFe != null)
+            {
+                if (l.Arena.RecargaDaFe.Value > 1) l.Arena.RecargaDaFe -= 1;
+                else l.Arena.RecargaDaFe = null;
+            }
 
             if (l.Arena.Dupla != null) ReceberDoParceiro(l, entrada);
             if (l.Fim != null) return FecharPasso(l);
             if (entrada.Mirar != null) Mirar(l, entrada.Mirar.Value);
+            if (Js.Truthy(entrada.MirarAliado)) MirarAliado(l, entrada.MirarAliado);
             // O fantasma anda, mas não age.
             if (l.Arena.Dupla?.Fantasma == true) l.Arena.Evento = null;
             else if (l.Arena.Evento != null) SeguirEvento(l, entrada);
             else if (entrada.Atacar == true && l.Arena.Recarga <= 0) AbrirEvento(l, entrada);
             else if (Js.Truthy(entrada.Poder)) PedirPoder(l, entrada.Poder);
+            else if (entrada.Fe == true) UsarFe(l);
             else if (Js.Truthy(entrada.Item)) UsarItem(l, entrada.Item);
 
             if (l.Fim == null)
@@ -479,6 +551,8 @@ namespace RPGLegend.Engine
             Luta = new LutaEmTempoReal { Estado = l.Estado, Arena = l.Arena, Pet = l.Pet, Teclado = l.Teclado, Fim = l.Fim, Loot = l.Loot, Conquista = l.Conquista },
             Acontecimentos = l.Acontecimentos,
             Danos = l.Danos.Count > 0 ? l.Danos : null,
+            Apoios = l.Apoios.Count > 0 ? l.Apoios : null,
+            Moral = l.MoralSubiu,
         };
 
         /// <summary>TS: simularLuta — vários passos de uma vez, cada um com a sua entrada; para no fim da luta.</summary>
@@ -487,6 +561,8 @@ namespace RPGLegend.Engine
             var atual = luta;
             var acontecimentos = new List<Acontecimento>();
             var danos = new List<DanoNoMonstro>();
+            var apoios = new List<ApoioDoParceiro>();
+            double? moral = null;
             foreach (var entrada in entradas)
             {
                 if (atual.Fim != null) break;
@@ -494,8 +570,10 @@ namespace RPGLegend.Engine
                 atual = quadro.Luta;
                 acontecimentos.AddRange(quadro.Acontecimentos);
                 if (quadro.Danos != null) danos.AddRange(quadro.Danos);
+                if (quadro.Apoios != null) apoios.AddRange(quadro.Apoios);
+                if (quadro.Moral != null) moral = quadro.Moral;
             }
-            return new QuadroDaLuta { Luta = atual, Acontecimentos = acontecimentos, Danos = danos.Count > 0 ? danos : null };
+            return new QuadroDaLuta { Luta = atual, Acontecimentos = acontecimentos, Danos = danos.Count > 0 ? danos : null, Apoios = apoios.Count > 0 ? apoios : null, Moral = moral };
         }
 
         private static Arena CopiarArena(Arena arena)
@@ -521,7 +599,17 @@ namespace RPGLegend.Engine
                 Escudo = arena.Escudo,
                 Dupla = arena.Dupla?.Clone(),
                 Classe = arena.Classe?.Clone(),
+                AlvoAliado = arena.AlvoAliado,
+                Moral = arena.Moral?.Clone(),
+                Reforco = arena.Reforco,
+                RecargaDaFe = arena.RecargaDaFe,
+                Fe = arena.Fe,
             };
+            if (arena.DanosLevados != null)
+            {
+                copia.DanosLevados = new List<DanoLevado>(arena.DanosLevados.Count);
+                foreach (var d in arena.DanosLevados) copia.DanosLevados.Add(new DanoLevado { Passo = d.Passo, Dano = d.Dano });
+            }
             foreach (var m in arena.Monstros) copia.Monstros.Add(m.Clone());
             foreach (var c in arena.Companheiros) copia.Companheiros.Add(c.Clone());
             foreach (var t in arena.Tiros) copia.Tiros.Add(t.Clone());
@@ -544,6 +632,7 @@ namespace RPGLegend.Engine
                     },
                     Alvo = arena.Evento.Alvo,
                     Estilo = arena.Evento.Estilo,
+                    Aliado = arena.Evento.Aliado,
                 };
             }
             return copia;
@@ -693,17 +782,51 @@ namespace RPGLegend.Engine
         private static bool Alcanca(Luta l, double indice, double folga = 0)
         {
             var lugar = LugarDe(l, indice);
+            var quem = Masmorra(l).Hero;
+            if (Catalog.IdDaClasse(quem.ClassId, quem.ClassName) == "druida") return NasVinhas(l, lugar.X, lugar.Y, folga);
             double dx = l.Arena.Heroi.X - lugar.X;
             double dy = l.Arena.Heroi.Y - lugar.Y;
             double limite = AlcanceNaArena(Masmorra(l).Hero) + folga;
             return dx * dx + dy * dy <= limite * limite;
         }
 
-        /// <summary>O monstro de pé na área da mira em volta de (x, y): o mais perto do cursor; null, nenhum. No empate, o primeiro.</summary>
-        private static double? MonstroNaMira(Luta l, double x, double y)
+        /// <summary>TS: nasVinhas — as vinhas do Druida pegam o monstro a até VINHAS blocos de uma parede ou de um herói de pé.</summary>
+        private static bool NasVinhas(Luta l, double x, double y, double folga)
         {
+            double t = RoomWalk.TileUnits;
+            double alcance = CD.Druida.Vinhas * t + folga;
+            var g = Geometria(l);
+            double daParede = Math.Min(Math.Min(x - t, (g.Cols - 1) * t - x), Math.Min(y - t, (g.Rows - 1) * t - y));
+            if (daParede <= alcance) return true;
+            foreach (var casa in ArteDaSala.ParedesDaSala(Masmorra(l).Masmorra.Dungeon))
+            {
+                double dx = Math.Max(Math.Max(casa.Col * t - x, 0), x - (casa.Col + 1) * t);
+                double dy = Math.Max(Math.Max(casa.Row * t - y, 0), y - (casa.Row + 1) * t);
+                if (dx * dx + dy * dy <= alcance * alcance) return true;
+            }
+            double doHeroi = alcance + t / 2;
+            var heroi = l.Arena.Heroi;
+            if ((heroi.X - x) * (heroi.X - x) + (heroi.Y - y) * (heroi.Y - y) <= doHeroi * doHeroi) return true;
+            var parceiro = ParceiroDePe(l);
+            return parceiro != null && (parceiro.X - x) * (parceiro.X - x) + (parceiro.Y - y) * (parceiro.Y - y) <= doHeroi * doHeroi;
+        }
+
+        /// <summary>TS: areaDaMira — a área da mira do herói daqui: a de todo mundo, e a do Arqueiro maior.</summary>
+        private static double AreaDaMiraDe(Luta l)
+        {
+            double pct = ClassesDeLuta.MiraDaClasse(Masmorra(l).Hero);
+            return pct == 100 ? D.AreaDaMira : Math.Truncate(D.AreaDaMira * pct / 100);
+        }
+
+        /// <summary>O monstro de pé na área da mira em volta de (x, y): o mais perto do cursor; null, nenhum. No empate, o primeiro.</summary>
+        private static double? MonstroNaMira(Luta l, double x, double y) => MaisPertoNaMira(l, x, y, out _);
+
+        /// <summary>TS: maisPertoNaMira — o monstro de pé na área da mira em volta de (x, y), e a distância dele (ao quadrado).</summary>
+        private static double? MaisPertoNaMira(Luta l, double x, double y, out double menor)
+        {
+            double area = AreaDaMiraDe(l);
             double? melhor = null;
-            double menor = 0;
+            menor = 0;
             foreach (var m in l.Arena.Monstros)
             {
                 if (m.Fase == "caido") continue;
@@ -711,7 +834,7 @@ namespace RPGLegend.Engine
                 double dx = x - lugar.X;
                 double dy = y - lugar.Y;
                 double distancia = dx * dx + dy * dy;
-                if (distancia > D.AreaDaMira * D.AreaDaMira) continue;
+                if (distancia > area * area) continue;
                 if (melhor == null || distancia < menor)
                 {
                     melhor = m.Indice;
@@ -791,7 +914,89 @@ namespace RPGLegend.Engine
             {
                 l.Arena.Alvo = m.Indice;
                 l.Arena.Escolhido = true;
+                l.Arena.AlvoAliado = null;
             }
+        }
+
+        /// <summary>TS: mirarAliado — tocar na placa de um aliado (o celular) faz dele o alvo do Bardo, do Clérigo e do Druida.</summary>
+        private static void MirarAliado(Luta l, string aliado)
+        {
+            if (!ClassesDeLuta.ApoiaAliado(Masmorra(l).Hero)) return;
+            if (aliado != "eu" && aliado != "parceiro") return;
+            if (aliado == "parceiro" && ParceiroDePe(l) == null) return;
+            l.Arena.AlvoAliado = aliado;
+        }
+
+        /// <summary>Onde o aliado está na sala; null, o parceiro que não está de pé.</summary>
+        private static PontoNaSala LugarDoAliado(Luta l, string aliado) =>
+            aliado == "eu" ? new PontoNaSala { X = l.Arena.Heroi.X, Y = l.Arena.Heroi.Y } : ParceiroDePe(l);
+
+        /// <summary>TS: aliadoNaMira — o aliado em que o ataque vai: no PC, o herói na área do cursor (mais perto que o monstro); no celular, o da placa.</summary>
+        private static string AliadoNaMira(Luta l, EntradaDaLuta entrada)
+        {
+            if (!ClassesDeLuta.ApoiaAliado(Masmorra(l).Hero)) return null;
+            if (entrada.Cursor == null)
+            {
+                var escolhido = l.Arena.AlvoAliado;
+                if (escolhido != null && LugarDoAliado(l, escolhido) != null) return escolhido;
+                l.Arena.AlvoAliado = null;
+                return null;
+            }
+            double x = entrada.Cursor.X;
+            double y = entrada.Cursor.Y;
+            double area = AreaDaMiraDe(l);
+            string melhor = null;
+            double menor = 0;
+            foreach (var aliado in new[] { "eu", "parceiro" })
+            {
+                var lugar = LugarDoAliado(l, aliado);
+                if (lugar == null) continue;
+                double distancia = (x - lugar.X) * (x - lugar.X) + (y - lugar.Y) * (y - lugar.Y);
+                if (distancia > area * area) continue;
+                if (melhor == null || distancia < menor)
+                {
+                    melhor = aliado;
+                    menor = distancia;
+                }
+            }
+            if (melhor == null) return null;
+            var monstro = MaisPertoNaMira(l, x, y, out double doMonstro);
+            return monstro != null && doMonstro < menor ? null : melhor;
+        }
+
+        /// <summary>TS: alcancaOAliado — ele mesmo sempre; o parceiro, no alcance da classe (o Druida, sempre).</summary>
+        private static bool AlcancaOAliado(Luta l, string aliado)
+        {
+            if (aliado == "eu") return true;
+            var lugar = ParceiroDePe(l);
+            if (lugar == null) return false;
+            var hero = Masmorra(l).Hero;
+            if (Catalog.IdDaClasse(hero.ClassId, hero.ClassName) == "druida") return true;
+            double dx = l.Arena.Heroi.X - lugar.X;
+            double dy = l.Arena.Heroi.Y - lugar.Y;
+            double limite = AlcanceNaArena(hero);
+            return dx * dx + dy * dy <= limite * limite;
+        }
+
+        /// <summary>O que a moral do grupo dá agora.</summary>
+        private static EfeitosDaMoral MoralAqui(Luta l) => ClassesDeLuta.EfeitosDaMoral(l.Arena.Moral?.Nivel ?? 0);
+
+        /// <summary>TS: eventoComAMoral — o evento do ataque, com a faixa do crítico da moral (o degrau 12 a alarga).</summary>
+        private static EventoDeArma EventoComAMoral(Luta l, EventoDeArma evento)
+        {
+            double faixa = MoralAqui(l).FaixaCritica;
+            if (!(faixa > 0)) return evento;
+            return new EventoDeArma
+            {
+                Tipo = evento.Tipo,
+                Zona = evento.Zona,
+                Duracao = evento.Duracao,
+                Notas = evento.Notas,
+                Janela = evento.Janela,
+                Simbolo = evento.Simbolo,
+                Letras = evento.Letras,
+                Faixa = Attack.FaixaCritica * (100 + faixa) / 100,
+            };
         }
 
         /// <summary>Sem monstro na área do cursor: o golpe vai no chão, sem evento, e o botão espera a recarga como depois de um golpe.</summary>
@@ -819,6 +1024,21 @@ namespace RPGLegend.Engine
         /// </summary>
         private static void AbrirEvento(Luta l, EntradaDaLuta entrada)
         {
+            // O Bardo, o Clérigo e o Druida podem mirar num aliado: o evento é o mesmo, e no fim sai o apoio.
+            string aliado = AliadoNaMira(l, entrada);
+            if (aliado != null)
+            {
+                if (!AlcancaOAliado(l, aliado))
+                {
+                    Contar(l, Aviso("Chegue mais perto"));
+                    return;
+                }
+                var quem = Masmorra(l).Hero;
+                string estiloDoApoio = EstiloDoBotao(quem);
+                var doApoio = EventoComAMoral(l, EventosDeArma.EventoDoAtaque(quem, estiloDoApoio, l.Rng, l.Teclado));
+                l.Arena.Evento = new EventoAberto { Evento = doApoio, Passo = 0, Jogada = new JogadaDoEvento(), Alvo = l.Arena.Alvo, Estilo = estiloDoApoio, Aliado = aliado };
+                return;
+            }
             double? alvo;
             if (entrada.Cursor != null)
             {
@@ -853,7 +1073,7 @@ namespace RPGLegend.Engine
             }
             var hero = Masmorra(l).Hero;
             string estilo = EstiloDoBotao(hero);
-            var evento = EventosDeArma.EventoDoAtaque(hero, estilo, l.Rng, l.Teclado);
+            var evento = EventoComAMoral(l, EventosDeArma.EventoDoAtaque(hero, estilo, l.Rng, l.Teclado));
             l.Arena.Evento = new EventoAberto { Evento = evento, Passo = 0, Jogada = new JogadaDoEvento(), Alvo = alvo.Value, Estilo = estilo };
         }
 
@@ -950,6 +1170,11 @@ namespace RPGLegend.Engine
                 UsarPoder(l, aberto.Poder, leitura.Acerto ? leitura.Forca : D.ForcaDoPoderErrado);
                 return;
             }
+            if (aberto.Aliado != null)
+            {
+                Apoiar(l, aberto.Aliado, leitura);
+                return;
+            }
             var doEvento = l.Arena.Monstros[(int)aberto.Alvo];
             double? indice = doEvento.Fase != "caido" ? doEvento.Indice : AlvoAtual(l);
             if (indice == null) return;
@@ -964,6 +1189,9 @@ namespace RPGLegend.Engine
             double dado = 1 + Rng.RandomInt(Attack.LadosDoDano, l.Rng);
             double? dano = AcertarMonstro(l, l.Arena.Monstros[(int)indice.Value], dado, leitura, aberto.Estilo);
             if (dano == null || l.Fim != null) return;
+            // O Bardo e o Clérigo também se curam batendo; as vinhas do Druida deixam o monstro lento e envenenado.
+            ApoiarAqui(l);
+            VinhasNoMonstro(l, indice.Value);
             GolpeEmArea(l, indice.Value, dano.Value);
             // O avanço do Paladino empurra o alvo que ficou de pé.
             var alvo = l.Arena.Monstros[(int)indice.Value];
@@ -988,15 +1216,25 @@ namespace RPGLegend.Engine
             }
             var estado = Masmorra(l);
             var h = estado.Hero;
-            double bonus = ClassesDeLuta.BonusDoAtaque(h.ClassId, h.ClassName, h.Equip?.Get("arma")?.TemplateId, Contadores(l), Colado(l, alvo.Indice), monstro.IsBoss);
+            var moral = MoralAqui(l);
+            // O dano a mais: o da classe, o da moral do grupo e o reforço do Bardo.
+            double bonus =
+                ClassesDeLuta.BonusDoAtaque(h.ClassId, h.ClassName, h.Equip?.Get("arma")?.TemplateId, Contadores(l), Colado(l, alvo.Indice), monstro.IsBoss, BlocosAte(l, alvo.Indice)) +
+                moral.Dano +
+                ((l.Arena.Reforco ?? 0) > 0 ? CD.Bardo.Forca : 0);
+            double? daClasse = ClassesDeLuta.CriticoDaClasse(h.ClassId, h.ClassName);
+            double? critico = moral.Critico > 0 ? (daClasse ?? 1.6) + moral.Critico / 100 : daClasse;
+            // O golpe sagrado do Clérigo num morto-vivo.
+            bool sagrado = Catalog.IdDaClasse(h.ClassId, h.ClassName) == "clerigo" && estilo == AttackStyles.Magic && ClassesDeLuta.MortoVivo(monstro.SpeciesId);
             var opcoes = new ResolveAttackOptions
             {
                 Rng = l.Rng,
                 PetCriticoBonus = Pets.Bonus(l.Pet).Critico ?? 0,
                 DanoDaClasse = ClassesDeLuta.De(h).Dano,
                 BonusDeDano = bonus != 0 ? bonus : (double?)null,
-                MultiplicadorDoCritico = ClassesDeLuta.CriticoDaClasse(h.ClassId, h.ClassName),
+                MultiplicadorDoCritico = critico,
                 SemPassivaDaClasse = ClassesDeLuta.ClasseRefeita(h),
+                MultiplicadorDoDano = sagrado ? CD.Clerigo.MortoVivo : (double?)null,
             };
             var golpe = Attack.ResolverGolpe(estado.Hero, monstro, dado, lida, estilo, opcoes);
             var comHeroi = estado.Clone();
@@ -1032,6 +1270,15 @@ namespace RPGLegend.Engine
         // ---------- a classe na arena (rodada 3a: Guerreiro, Ladino, Bárbaro e Paladino) ----------
 
         private static ContadoresDaClasse Contadores(Luta l) => l.Arena.Classe ?? new ContadoresDaClasse();
+
+        /// <summary>TS: blocosAte — quantos blocos inteiros do pé do herói ao meio da casa do monstro (o dano do Arqueiro).</summary>
+        private static double BlocosAte(Luta l, double indice)
+        {
+            var lugar = LugarDe(l, indice);
+            double dx = l.Arena.Heroi.X - lugar.X;
+            double dy = l.Arena.Heroi.Y - lugar.Y;
+            return Math.Floor(Math.Sqrt(dx * dx + dy * dy) / RoomWalk.TileUnits);
+        }
 
         /// <summary>TS: colado — o herói está a 1 bloco do monstro: o Guerreiro colado no alvo bate mais forte.</summary>
         private static bool Colado(Luta l, double indice)
@@ -1414,14 +1661,29 @@ namespace RPGLegend.Engine
                 if (!pisando) monstros.Add(new RoomObject { Id = "monstro_" + Js.NumberToString(m.Indice), Col = lugar.Col, Row = lugar.Row });
             }
             var planta = RoomWalk.Layout(new DoorMap(), monstros, ArteDaSala.ParedesDaSala(Masmorra(l).Masmorra.Dungeon), formato);
-            return RoomWalk.Tick(planta, heroi, new WalkInput { X = entrada.X, Y = entrada.Y }, VelocidadeNaArena(Masmorra(l).Hero)).Walker;
+            // A moral do grupo (o degrau 1) também deixa o passo mais ligeiro.
+            double daMoral = MoralAqui(l).Velocidade;
+            double base_ = VelocidadeNaArena(Masmorra(l).Hero);
+            double velocidade = daMoral > 0 ? Math.Truncate(base_ * (100 + daMoral) / 100) : base_;
+            return RoomWalk.Tick(planta, heroi, new WalkInput { X = entrada.X, Y = entrada.Y }, velocidade).Walker;
         }
 
         private static void PassoDoMundo(Luta l, EntradaDaLuta entrada)
         {
             var arena = l.Arena;
             arena.Passo += 1;
+            var antes = arena.Heroi;
             arena.Heroi = MoverHeroi(l, entrada);
+            // O Arqueiro conta o tempo parado.
+            var quemAnda = Masmorra(l).Hero;
+            var parado = ClassesDeLuta.ContarParado(quemAnda.ClassId, quemAnda.ClassName, Contadores(l), arena.Heroi.X != antes.X || arena.Heroi.Y != antes.Y);
+            if (parado != null) arena.Classe = parado;
+            if (arena.Reforco != null)
+            {
+                if (arena.Reforco.Value > 1) arena.Reforco -= 1;
+                else arena.Reforco = null;
+            }
+            PassarAFe(l);
             if (arena.Recarga > 0) arena.Recarga -= 1;
             if (arena.RecargaDoItem > 0) arena.RecargaDoItem -= 1;
             if (arena.Intervalo > 0) arena.Intervalo -= 1;
@@ -1526,7 +1788,10 @@ namespace RPGLegend.Engine
             EscolherPresa(l, m);
             if (ADistanciaDoGolpe(l, m, jeito)) return;
             var heroi = PresaDe(l, m);
-            var r = Rumo(heroi.X - m.CorpoX, heroi.Y - m.CorpoY, jeito.Passo);
+            // Lento (as vinhas do Druida, as canções…), anda menos.
+            var lento = (Sala(l).Monsters[(int)m.Indice] as CombatMonster)?.Status?.Lento;
+            double passo = lento != null && lento.Turns > 0 ? Math.Truncate(jeito.Passo * (1 - ((lento.Amount ?? 0) != 0 ? lento.Amount.Value : 0.2))) : jeito.Passo;
+            var r = Rumo(heroi.X - m.CorpoX, heroi.Y - m.CorpoY, passo);
             var formato = Geometria(l);
             double meia = RoomWalk.TileUnits / 2;
             double x = Math.Min(Math.Max(m.CorpoX + r.X, RoomWalk.TileUnits + meia), (formato.Cols - 1) * RoomWalk.TileUnits - meia);
@@ -1780,8 +2045,9 @@ namespace RPGLegend.Engine
                 Contar(l, Som("miss"));
                 return;
             }
-            // A resistência da classe (a vida que falta no Guerreiro, a fúria, a absorção) tira parte do dano.
-            double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c);
+            // A resistência da classe (a vida que falta no Guerreiro, a fúria, a absorção) e a da moral tiram parte do dano.
+            var moral = MoralAqui(l);
+            double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c) + moral.Resistencia;
             double dano = resistencia > 0 ? Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * resistencia / 100)) : golpe.Damage;
             var ferido = golpe.Hero;
             if (resistencia > 0)
@@ -1798,6 +2064,16 @@ namespace RPGLegend.Engine
                 hero = quebra.Hero;
                 quebrou = quebra.Membro;
             }
+            // A moral 5 do grupo segura os ossos: o sorteio corre igual, mas nada quebra.
+            if (Js.Truthy(quebrou) && moral.SemQuebrar)
+            {
+                hero = hero.Clone();
+                hero.Ferimentos = estado.Hero.Ferimentos;
+                quebrou = null;
+            }
+            // O Poder da fé segura a vida no piso; e o dano levado entra na janela dele.
+            hero = PisoDaFe(l, estado.Hero.Hp, hero);
+            AnotarDanoLevado(l, dano);
             var comHeroi = estado.Clone();
             comHeroi.Hero = hero;
             l.Estado = FimDaLuta.GravarMonstro(comHeroi, indice, golpe.Monster);
@@ -1928,8 +2204,9 @@ namespace RPGLegend.Engine
         {
             var antes = Masmorra(l).Hero;
             var veneno = HeroStatus.TickHeroStatus(antes);
-            // O veneno também passa primeiro pelo escudo do vigor.
-            var heroi = veneno.Damage > 0 ? NoEscudo(l, antes.Hp, veneno.Hero, veneno.Damage) : veneno.Hero;
+            // O veneno também passa primeiro pelo escudo do vigor (e pelo piso do Poder da fé).
+            var heroi = veneno.Damage > 0 ? PisoDaFe(l, antes.Hp, NoEscudo(l, antes.Hp, veneno.Hero, veneno.Damage)) : veneno.Hero;
+            AnotarDanoLevado(l, veneno.Damage);
             var comVeneno = Masmorra(l).Clone();
             comVeneno.Hero = heroi;
             l.Estado = comVeneno;
@@ -2041,6 +2318,249 @@ namespace RPGLegend.Engine
             Contar(l, Som("defeat"));
         }
 
+        // ---------- o apoio (rodada 3b: Bardo, Clérigo e Druida) ----------
+
+        private static readonly string[] TiposDeApoio = { "bardo", "clerigo", "purificar", "comunhao" };
+
+        /// <summary>TS: ICONE_DO_APOIO — o ícone do número da cura de cada apoio.</summary>
+        private static string IconeDoApoio(string tipo) => tipo == "bardo" ? "🎵" : tipo == "purificar" ? "🌿" : "✝️";
+
+        /// <summary>TS: apoiar — o ataque mirado num aliado terminou: o Druida purifica; o Bardo e o Clérigo curam (e o Bardo conta a moral).</summary>
+        private static void Apoiar(Luta l, string aliado, LeituraDaMira leitura)
+        {
+            if (!leitura.Acerto)
+            {
+                Contar(l, Numero("heroi", 0, "Errou", "erro"));
+                Contar(l, Som("miss"));
+                return;
+            }
+            var estado = Masmorra(l).Clone();
+            estado.Hero = Treino.AnotarUso(estado.Hero, "sabedoria");
+            l.Estado = estado;
+            string id = Catalog.IdDaClasse(estado.Hero.ClassId, estado.Hero.ClassName);
+            if (id == "druida")
+            {
+                if (aliado == "eu") PurificarAqui(l);
+                else l.Apoios.Add(new ApoioDoParceiro { Tipo = "purificar" });
+                l.Arena.Recarga = CD.Druida.SemAtacar;
+                Contar(l, Aviso(aliado == "eu" ? "🌿 Purificação Ancestral" : "🌿 Purificação Ancestral no parceiro"));
+                return;
+            }
+            string tipo = id == "bardo" ? "bardo" : "clerigo";
+            // Ele mesmo recebe sempre; o parceiro, quando é o mirado.
+            ApoiarAqui(l);
+            if (aliado == "parceiro") l.Apoios.Add(new ApoioDoParceiro { Tipo = tipo });
+            if (tipo == "bardo" && leitura.Critico) ContarMoral(l);
+        }
+
+        /// <summary>TS: apoiarAqui — o Bardo e o Clérigo recebem o próprio apoio a cada golpe que acerta (e a cada apoio).</summary>
+        private static void ApoiarAqui(Luta l)
+        {
+            var h = Masmorra(l).Hero;
+            string id = Catalog.IdDaClasse(h.ClassId, h.ClassName);
+            if (id == "bardo") ReceberApoio(l, new ApoioDoParceiro { Tipo = "bardo" });
+            else if (id == "clerigo") ReceberApoio(l, new ApoioDoParceiro { Tipo = "clerigo" });
+        }
+
+        /// <summary>TS: receberApoio — o apoio cai no herói daqui: a cura, o reforço do Bardo, a Purificação, a Comunhão.</summary>
+        private static void ReceberApoio(Luta l, ApoioDoParceiro apoio)
+        {
+            if (apoio.Tipo == "purificar")
+            {
+                PurificarAqui(l);
+                return;
+            }
+            if (apoio.Tipo == "comunhao")
+            {
+                TocarAFe(l, apoio.Passos ?? 0, true);
+                return;
+            }
+            CurarAqui(l, apoio.Tipo);
+            // O Poder da fé de pé apaga os efeitos até acabar: o reforço não pega.
+            if (apoio.Tipo == "bardo" && !((l.Arena.Fe ?? 0) > 0)) l.Arena.Reforco = CD.Bardo.TempoDaForca;
+        }
+
+        /// <summary>TS: curarAqui — a cura do apoio no herói daqui, com o número em cima dele.</summary>
+        private static void CurarAqui(Luta l, string tipo)
+        {
+            var estado = Masmorra(l);
+            double cura = ClassesDeLuta.CuraDoApoio(tipo, estado.Hero.Hp, estado.Hero.MaxHp);
+            if (cura <= 0) return;
+            var curado = estado.Clone();
+            curado.Hero = estado.Hero.Clone();
+            curado.Hero.Hp = estado.Hero.Hp + cura;
+            l.Estado = curado;
+            Contar(l, Numero("heroi", 0, IconeDoApoio(tipo) + "+" + Js.NumberToString(cura), "cura"));
+            Contar(l, Som("heal"));
+        }
+
+        /// <summary>TS: purificarAqui — a Purificação Ancestral no herói daqui: o veneno e os ferimentos somem, e a cura.</summary>
+        private static void PurificarAqui(Luta l)
+        {
+            var estado = Masmorra(l);
+            var buffs = estado.Hero.Buffs?.Clone() ?? new HeroBuffs();
+            buffs.PoisonTurns = null;
+            buffs.PoisonDmg = null;
+            var limpo = estado.Clone();
+            limpo.Hero = estado.Hero.Clone();
+            limpo.Hero.Buffs = buffs;
+            limpo.Hero.Ferimentos = null;
+            l.Estado = limpo;
+            CurarAqui(l, "purificar");
+            Contar(l, Aviso("🌿 Purificado"));
+        }
+
+        /// <summary>TS: contarMoral — um crítico do Bardo num aliado: a moral do grupo conta, e avisa quando sobe.</summary>
+        private static void ContarMoral(Luta l)
+        {
+            var conta = ClassesDeLuta.ContarCriticoNoAliado(l.Arena.Moral ?? new Moral());
+            l.Arena.Moral = conta.Moral;
+            if (conta.Subiu == null) return;
+            l.MoralSubiu = conta.Subiu;
+            string texto = "🎵 Moral " + Js.NumberToString(conta.Subiu.Value) + "!";
+            Contar(l, Aviso(texto));
+            Diario(l, new[] { texto });
+        }
+
+        /// <summary>TS: vinhasNoMonstro — as vinhas do Druida deixam o monstro de pé lento e envenenado. No espelho, não.</summary>
+        private static void VinhasNoMonstro(Luta l, double indice)
+        {
+            var h = Masmorra(l).Hero;
+            if (Catalog.IdDaClasse(h.ClassId, h.ClassName) != "druida" || NoEspelho(l)) return;
+            var m = MonstroDaArena(l, indice);
+            if (m == null || m.Fase == "caido") return;
+            var r = CD.Druida;
+            var monstro = CombatMonster.From(Sala(l).Monsters[(int)indice]);
+            double veneno = Js.Max(1, Math.Truncate(monstro.MaxHp * r.Veneno / 100));
+            var status = monstro.Status?.Clone() ?? new MonsterStatus();
+            status.Lento = new AmountStatus { Turns = r.Turnos, Amount = r.Lento / 100 };
+            status.Veneno = new DotStatus { Turns = r.Turnos, Dmg = veneno };
+            monstro.Status = status;
+            l.Estado = FimDaLuta.GravarMonstro(Masmorra(l), indice, monstro);
+            Contar(l, Numero("monstro", indice, "🌿", "erro"));
+        }
+
+        /// <summary>TS: usarFe — o botão do Poder da fé (o Clérigo): em dupla, a Comunhão; sozinho, o Santo Egoísta (com a mana cheia).</summary>
+        private static void UsarFe(Luta l)
+        {
+            var hero = Masmorra(l).Hero;
+            if (Catalog.IdDaClasse(hero.ClassId, hero.ClassName) != "clerigo" || (l.Arena.RecargaDaFe ?? 0) > 0 || (l.Arena.Fe ?? 0) > 0) return;
+            bool comunhao = ParceiroDePe(l) != null;
+            if (!comunhao && hero.Mp < hero.MaxMp)
+            {
+                Contar(l, Aviso("O Santo Egoísta pede a mana cheia"));
+                return;
+            }
+            double levado = DanoLevadoNaJanela(l.Arena) + (comunhao ? (l.Arena.Dupla?.ParceiroDano ?? 0) : 0);
+            double passos = ClassesDeLuta.DuracaoDaFe(comunhao, levado, comunhao ? 2 : 1);
+            l.Arena.RecargaDaFe = CD.Clerigo.RecargaDaFe;
+            if (comunhao) l.Apoios.Add(new ApoioDoParceiro { Tipo = "comunhao", Passos = passos });
+            string texto = comunhao ? "✝️ Comunhão sagrada!" : "✝️ Santo Egoísta!";
+            Contar(l, Aviso(texto));
+            Diario(l, new[] { texto });
+            TocarAFe(l, passos, false);
+        }
+
+        /// <summary>TS: tocarAFe — o Poder da fé cai no herói daqui: a cura, a mana vai embora, os efeitos somem, e o piso.</summary>
+        private static void TocarAFe(Luta l, double passos, bool doParceiro)
+        {
+            var estado = Masmorra(l).Clone();
+            estado.Hero = estado.Hero.Clone();
+            estado.Hero.Mp = 0;
+            estado.Hero.Buffs = new HeroBuffs();
+            l.Estado = estado;
+            l.Arena.Reforco = null;
+            CurarAqui(l, "comunhao");
+            if (passos > (l.Arena.Fe ?? 0)) l.Arena.Fe = passos;
+            if (doParceiro) Contar(l, Aviso("✝️ Comunhão sagrada do parceiro!"));
+        }
+
+        /// <summary>TS: pisoDaFe — com o Poder da fé de pé, a vida não desce do piso (e não sobe quem já estava abaixo).</summary>
+        private static Hero PisoDaFe(Luta l, double antes, Hero hero)
+        {
+            if (!((l.Arena.Fe ?? 0) > 0)) return hero;
+            double piso = Js.Min(antes, Math.Ceiling(hero.MaxHp * CD.Clerigo.PisoDaVida / 100));
+            if (!(hero.Hp < piso)) return hero;
+            var segurado = hero.Clone();
+            segurado.Hp = piso;
+            return segurado;
+        }
+
+        /// <summary>TS: passarAFe — um passo do mundo com o Poder da fé de pé: ele vai acabando, e nenhum efeito pega.</summary>
+        private static void PassarAFe(Luta l)
+        {
+            if (l.Arena.Fe == null) return;
+            if (l.Arena.Fe.Value > 1) l.Arena.Fe -= 1;
+            else
+            {
+                l.Arena.Fe = null;
+                return;
+            }
+            l.Arena.Reforco = null;
+            var estado = Masmorra(l);
+            if (TemEfeito(estado.Hero.Buffs))
+            {
+                var limpo = estado.Clone();
+                limpo.Hero = estado.Hero.Clone();
+                limpo.Hero.Buffs = new HeroBuffs();
+                l.Estado = limpo;
+            }
+        }
+
+        /// <summary>O herói tem algum efeito (um campo dos buffs com valor).</summary>
+        private static bool TemEfeito(HeroBuffs b) =>
+            b != null && (b.CritNext != null || b.PrecisaoTurns != null || b.PrecisaoAmount != null || b.ForcaTurns != null || b.ForcaAmount != null ||
+                b.EsquivaTurns != null || b.EsquivaAmount != null || b.Shield != null || b.PoisonTurns != null || b.PoisonDmg != null ||
+                b.InspiracaoTurns != null || b.InspiracaoAmount != null || (b.Extra != null && b.Extra.Count > 0));
+
+        /// <summary>TS: anotarDanoLevado — anota o dano que o herói daqui levou (só o Clérigo e a dupla precisam).</summary>
+        private static void AnotarDanoLevado(Luta l, double dano)
+        {
+            var h = Masmorra(l).Hero;
+            if (dano <= 0 || (Catalog.IdDaClasse(h.ClassId, h.ClassName) != "clerigo" && l.Arena.Dupla == null)) return;
+            double janela = l.Arena.Passo - CD.Clerigo.Janela;
+            var lista = new List<DanoLevado>();
+            if (l.Arena.DanosLevados != null)
+                foreach (var d in l.Arena.DanosLevados)
+                    if (d.Passo > janela) lista.Add(d);
+            lista.Add(new DanoLevado { Passo = l.Arena.Passo, Dano = dano });
+            l.Arena.DanosLevados = lista;
+        }
+
+        private static double DanoLevadoNaJanela(Arena arena)
+        {
+            double janela = arena.Passo - CD.Clerigo.Janela;
+            double soma = 0;
+            if (arena.DanosLevados != null)
+                foreach (var d in arena.DanosLevados)
+                    if (d.Passo > janela) soma += d.Dano;
+            return soma;
+        }
+
+        /// <summary>TS: danoLevadoNaJanela — o dano que o herói levou nos últimos 30 s da luta (o app manda pro parceiro).</summary>
+        public static double DanoLevadoNaJanela(LutaEmTempoReal luta) => DanoLevadoNaJanela(luta.Arena);
+
+        /// <summary>TS: extrasDaLuta — o que a linha da classe mostra além dos contadores.</summary>
+        public static ExtrasDaClasse ExtrasDaLuta(LutaEmTempoReal luta)
+        {
+            var a = luta.Arena;
+            var extras = new ExtrasDaClasse();
+            if ((a.Moral?.Nivel ?? 0) > 0) extras.Moral = a.Moral.Nivel;
+            if ((a.RecargaDaFe ?? 0) > 0) extras.RecargaDaFe = a.RecargaDaFe;
+            if ((a.Fe ?? 0) > 0) extras.Fe = a.Fe;
+            if (a.Recarga > D.RecargaDoAtaque) extras.SemAtacar = a.Recarga;
+            return extras;
+        }
+
+        /// <summary>TS: memoriaDaLuta — o que a luta deixa pra próxima, na memória do app.</summary>
+        public static MemoriaDaLuta MemoriaDaLuta(LutaEmTempoReal luta)
+        {
+            var memoria = new MemoriaDaLuta();
+            if (luta.Arena.Moral != null) memoria.Moral = luta.Arena.Moral.Clone();
+            if ((luta.Arena.RecargaDaFe ?? 0) > 0) memoria.RecargaDaFe = luta.Arena.RecargaDaFe;
+            return memoria;
+        }
+
         // ---------- pra tela ----------
 
         /// <summary>TS: eventoDoBotao — o evento que o botão de ataque abriria agora, sem sortear nada.</summary>
@@ -2119,6 +2639,23 @@ namespace RPGLegend.Engine
                 dupla.Parceiro = new PontoNaSala { X = Math.Truncate(entrada.Parceiro.X), Y = Math.Truncate(entrada.Parceiro.Y) };
                 dupla.ParceiroCaido = entrada.Parceiro.Caido == true ? true : (bool?)null;
                 dupla.ParceiroPuxa = entrada.Parceiro.Puxa == true ? true : (bool?)null;
+                dupla.ParceiroDano = (entrada.Parceiro.Dano ?? 0) > 0 ? Math.Truncate(entrada.Parceiro.Dano.Value) : (double?)null;
+            }
+            // A moral do grupo que o Bardo do parceiro subiu (fica a maior).
+            if (entrada.Moral != null && Math.Truncate(entrada.Moral.Value) > (l.Arena.Moral?.Nivel ?? 0))
+            {
+                var nova = l.Arena.Moral?.Clone() ?? new Moral();
+                nova.Nivel = Math.Truncate(entrada.Moral.Value);
+                l.Arena.Moral = nova;
+            }
+            // O apoio do parceiro em mim (o fantasma não recebe nada).
+            if (dupla.Fantasma != true && entrada.Apoios != null)
+            {
+                foreach (var apoio in entrada.Apoios)
+                {
+                    if (apoio == null || Array.IndexOf(TiposDeApoio, apoio.Tipo) < 0) continue;
+                    ReceberApoio(l, new ApoioDoParceiro { Tipo = apoio.Tipo, Passos = apoio.Passos != null ? Js.Max(0, Math.Truncate(apoio.Passos.Value)) : (double?)null });
+                }
             }
             if (dupla.Fantasma == true && Js.Truthy(entrada.Reviver))
             {

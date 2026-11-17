@@ -541,8 +541,42 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   classe junta aparece numa linha embaixo das barras, só na luta
   (`textosDaClasse`). No espelho da dupla, o empurrão e o atordoar do
   convidado não passam pro anfitrião (o dano passa).
-  Falta, nesta ordem: as classes de longe e de apoio (Arqueiro, Bardo,
-  Clérigo e Druida); as que seguram "K" (Necromante, Monge e Mago; o
+  Rodada 3b, **as classes de longe e de apoio** (2026-11-17, decidido com o
+  usuário; regras em `classes-de-luta.ts`, o que junta na luta em
+  `luta/arena.ts`): **o Bardo, o Clérigo e o Druida miram num aliado**
+  (`aliadoNaMira`: no PC, o cursor em cima do parceiro ou do próprio herói;
+  no celular, as placas "Você" e "Parceiro" no topo da coluna; sozinho,
+  mirar em si conta; recrutas e esqueletos ficam de fora). O **Arqueiro**
+  bate 30% menos até 2 blocos, sempre, e de 3 em diante, parado há 3 s,
+  ganha 12% por bloco até +120% (`danoDaDistancia`, `ContadoresDaClasse.parado`);
+  a mira do cursor dele é 2,3× maior (`miraDaClasse`). O **Bardo**, a cada
+  golpe que acerta (e a cada apoio), cura 30% da vida que falta e ganha +20%
+  de dano por 6 s, nele e no aliado mirado; 5 críticos num aliado sobem a
+  **moral do grupo** (até 12; os degraus 1, 3, 5, 8 e 12 se somam:
+  velocidade, dano, resistência, osso que não quebra, crítico +0,5 e faixa
+  do crítico 50% maior, `efeitosDaMoral`). O **Clérigo é do cajado e ataca
+  com a magia do Mago, no site e no app** (catálogo: cajado 100, maça 30;
+  `ataquePrincipal: 'magico'`, e `resolverGolpe` olha o ataque principal, não
+  o nome da classe); no app, cada golpe cura 15% da vida máxima (nele e no
+  aliado mirado), o golpe mágico bate 5× nos mortos-vivos (`MORTOS_VIVOS`:
+  esqueleto, zumbi, espectro gelado) e o botão **FÉ** (tecla F) solta o
+  Poder da fé uma vez a cada 7 min: em dupla a Comunhão sagrada, sozinho o
+  Santo Egoísta (pede a mana cheia); cura 40%, zera a mana (a do parceiro
+  também, na Comunhão), apaga os efeitos até acabar e segura a vida em 20%,
+  pela duração que sai do dano levado nos últimos 30 s (`duracaoDaFe`). O
+  **Druida** acerta com as vinhas o monstro a até 2 blocos de uma parede ou
+  de um herói (`nasVinhas`; as salas não têm arbusto), e todo golpe deixa
+  lento e envenenado (5% da vida máxima) por 2 turnos; o ataque dele mirado
+  num aliado é a **Purificação** (tira o veneno e os ferimentos, cura 10%) e
+  deixa o ataque esperando 30 s. **A moral e a recarga da fé ficam só na
+  memória do app** (`MemoriaDaLuta`, guardada na `Partida`; a moral some
+  fora da masmorra), nunca no save. Em dupla, o apoio vai pela rede
+  (`QuadroDaLuta.apoios` → pacote `"a"` → `EntradaDaLuta.apoios`, e o outro
+  faz a conta com o herói dele), a moral pelo `"mo"`, e o `"p"` leva o dano
+  dos últimos 30 s (`"d"`, pra Comunhão). Desde então todo monstro lento
+  também anda mais devagar na arena. No espelho, o lento e o veneno das
+  vinhas do convidado não passam pro anfitrião (o dano passa).
+  Falta, nesta ordem: as que seguram "K" (Necromante, Monge e Mago; o
   Necromante do Breno **substitui** o ajuste de 2026-11-12, e a
   habilidade dele revive os aliados);
   estilos e mestres; mercadores secretos e itens novos (a arte das armas

@@ -106,7 +106,7 @@ export function vidaComAClasse(vida: number, quem: IdentidadeDeClasse): number {
 // "Resistência" é a % de dano a menos no golpe que o herói leva.
 
 /** As classes que o doc do Breno já refez na luta do app: lá elas ficam sem a passiva antiga do site. */
-export const CLASSES_REFEITAS: readonly string[] = ['guerreiro', 'ladino', 'barbaro', 'paladino'];
+export const CLASSES_REFEITAS: readonly string[] = ['guerreiro', 'ladino', 'barbaro', 'paladino', 'arqueiro', 'bardo', 'clerigo', 'druida'];
 
 export const REGRAS_DO_GUERREIRO = {
   /** O dano a mais (%) com o alvo a 1 bloco. */
@@ -169,6 +169,194 @@ export const REGRAS_DO_PALADINO = {
   foco: 30,
 } as const;
 
+// ---------- rodada 3b (2026-11-17): Arqueiro, Bardo, Clérigo e Druida ----------
+//
+// Decisões do usuário: o aliado se escolhe com o cursor (ou a placa, no
+// celular), e sozinho o herói mira nele mesmo; o Arqueiro bate 30% menos até
+// 2 blocos e, parado há 3 s, ganha 12% por bloco dali pra frente; a mira dele
+// é 2,3× maior; a cura do Bardo e a do Clérigo vão no aliado mirado e nele
+// mesmo, sempre; a moral e a recarga do Poder da fé ficam só na memória do
+// app (não vão pro save); o Poder da fé é um botão (em dupla, a Comunhão;
+// sozinho, o Santo Egoísta); a Purificação é o ataque do Druida mirado num
+// aliado.
+
+export const REGRAS_DO_ARQUEIRO = {
+  /** Até este tanto de blocos o alvo está perto, e o golpe sai com este tanto (%) a menos. */
+  perto: 2,
+  danoDePerto: 30,
+  /** Mais longe, parado há `parado` passos (3 s): este tanto (%) por bloco, até o teto. */
+  porBloco: 12,
+  teto: 120,
+  parado: 180,
+  /** A área da mira do cursor dele, em % da de todo mundo. */
+  mira: 230,
+} as const;
+
+export const REGRAS_DO_BARDO = {
+  /** A cada golpe: cura este tanto (%) da vida que falta e dá este dano (%) a mais por `tempoDaForca` passos (6 s). */
+  cura: 30,
+  forca: 20,
+  tempoDaForca: 360,
+  /** Críticos no aliado (não precisam ser seguidos) que dão +1 de moral ao grupo, e o teto. */
+  criticosDaMoral: 5,
+  tetoDaMoral: 12,
+} as const;
+
+/**
+ * A moral do grupo (o Bardo): cada degrau vale a partir do nível dele e se
+ * soma aos de baixo (o doc: "acumulativo, não um por nível").
+ */
+export const REGRAS_DA_MORAL = {
+  nivelDaVelocidade: 1,
+  velocidade: 30,
+  danoNaVelocidade: 10,
+  nivelDaResistencia: 3,
+  resistencia: 30,
+  danoNaResistencia: 10,
+  nivelSemQuebrar: 5,
+  nivelDoCritico: 8,
+  /** Soma ao multiplicador do crítico, em pontos de % (50: o 1,6 vira 2,1). */
+  critico: 50,
+  danoNoCritico: 5,
+  nivelDaFaixa: 12,
+  /** A faixa do crítico no evento da arma fica este tanto (%) maior. */
+  faixaCritica: 50,
+} as const;
+
+export const REGRAS_DO_CLERIGO = {
+  /** A cada golpe, cura este tanto (%) da vida máxima. */
+  cura: 15,
+  /** O golpe mágico dele num morto-vivo vale este tanto de vezes. */
+  mortoVivo: 5,
+  /** O Poder da fé: uma vez a cada `recargaDaFe` passos (7 min). */
+  recargaDaFe: 25200,
+  /** Cura este tanto (%) da vida máxima, e a vida não desce de `pisoDaVida` (%) enquanto dura. */
+  curaDaFe: 40,
+  pisoDaVida: 20,
+  /** O dano levado nos últimos `janela` passos (30 s) dá a duração, em segundos, até o teto. */
+  janela: 1800,
+  tetoDaComunhao: 50,
+  tetoDoEgoista: 40,
+  /** O Santo Egoísta: a duração é o dano levado dividido por este tanto. */
+  divisorDoEgoista: 3,
+} as const;
+
+/** As espécies que levam o golpe sagrado do Clérigo cheio (`REGRAS_DO_CLERIGO.mortoVivo`), com os chefes delas. */
+export const MORTOS_VIVOS: readonly string[] = ['esqueleto', 'zumbi', 'espectro_gelado'];
+
+export const REGRAS_DO_DRUIDA = {
+  /** As vinhas pegam o monstro a até este tanto de blocos de uma parede ou de um herói. */
+  vinhas: 2,
+  /** Todo golpe deixa o monstro lento (% de passo a menos e de chance de hesitar) e envenenado (% da vida máxima por rodada). */
+  lento: 10,
+  veneno: 5,
+  turnos: 2,
+  /** A Purificação: cura este tanto (%) da vida máxima, e o ataque espera `semAtacar` passos (30 s). */
+  purificacao: 10,
+  semAtacar: 1800,
+} as const;
+
+/** A classe mira nos aliados (o Bardo, o Clérigo e o Druida). */
+export function apoiaAliado(quem: IdentidadeDeClasse): boolean {
+  const id = idDaClasse(quem);
+  return id === 'bardo' || id === 'clerigo' || id === 'druida';
+}
+
+/** A espécie conta como morto-vivo. */
+export function mortoVivo(speciesId: string): boolean {
+  return MORTOS_VIVOS.includes(speciesId);
+}
+
+/** A área da mira do herói, em % da de todo mundo: a do Arqueiro é maior. */
+export function miraDaClasse(quem: IdentidadeDeClasse): number {
+  return idDaClasse(quem) === 'arqueiro' ? REGRAS_DO_ARQUEIRO.mira : 100;
+}
+
+/**
+ * O dano a mais (%) do Arqueiro pela distância: até `perto` blocos, o de
+ * perto (negativo) sempre; mais longe, parado há 3 s, `porBloco` por bloco
+ * até o teto; andando, nada.
+ */
+export function danoDaDistancia(blocos: number, parado: number): number {
+  const r = REGRAS_DO_ARQUEIRO;
+  if (blocos <= r.perto) return -r.danoDePerto;
+  if (parado < r.parado) return 0;
+  return Math.min(r.teto, blocos * r.porBloco);
+}
+
+/** O que a moral `nivel` dá ao grupo, somando os degraus. */
+export interface EfeitosDaMoral {
+  /** Velocidade de andar (%), dano (%), resistência (%), o crítico (pontos de %) e a faixa do crítico (%) a mais. */
+  velocidade: number;
+  dano: number;
+  resistencia: number;
+  semQuebrar: boolean;
+  critico: number;
+  faixaCritica: number;
+}
+
+export function efeitosDaMoral(nivel: number): EfeitosDaMoral {
+  const r = REGRAS_DA_MORAL;
+  const efeitos: EfeitosDaMoral = { velocidade: 0, dano: 0, resistencia: 0, semQuebrar: false, critico: 0, faixaCritica: 0 };
+  if (nivel >= r.nivelDaVelocidade) {
+    efeitos.velocidade += r.velocidade;
+    efeitos.dano += r.danoNaVelocidade;
+  }
+  if (nivel >= r.nivelDaResistencia) {
+    efeitos.resistencia += r.resistencia;
+    efeitos.dano += r.danoNaResistencia;
+  }
+  if (nivel >= r.nivelSemQuebrar) efeitos.semQuebrar = true;
+  if (nivel >= r.nivelDoCritico) {
+    efeitos.critico += r.critico;
+    efeitos.dano += r.danoNoCritico;
+  }
+  if (nivel >= r.nivelDaFaixa) efeitos.faixaCritica += r.faixaCritica;
+  return efeitos;
+}
+
+/** A moral do grupo: o nível e os críticos no aliado desde o último. Mora na memória do app, de luta em luta, até a volta pra cidade. */
+export interface Moral {
+  nivel?: number;
+  criticos?: number;
+}
+
+/** Um crítico do Bardo num aliado: conta, e a cada `criticosDaMoral` o grupo sobe um nível (até o teto). `subiu`: o nível novo. */
+export function contarCriticoNoAliado(moral: Moral): { moral: Moral; subiu?: number } {
+  const r = REGRAS_DO_BARDO;
+  const nivel = moral.nivel ?? 0;
+  if (nivel >= r.tetoDaMoral) return { moral };
+  const criticos = (moral.criticos ?? 0) + 1;
+  if (criticos < r.criticosDaMoral) return { moral: { ...moral, criticos } };
+  return { moral: { nivel: nivel + 1, criticos: 0 }, subiu: nivel + 1 };
+}
+
+/**
+ * A cura do apoio num herói com esta vida: o Bardo, uma parte da vida que
+ * falta; o Clérigo, uma parte da vida máxima; o Druida (a Purificação), uma
+ * parte da vida máxima. Pelo menos 1 se falta vida; nunca passa do máximo.
+ */
+export function curaDoApoio(tipo: 'bardo' | 'clerigo' | 'purificar' | 'comunhao', vida: { hp: number; maxHp: number }): number {
+  const falta = Math.max(0, vida.maxHp - vida.hp);
+  if (falta <= 0) return 0;
+  const pct =
+    tipo === 'bardo' ? REGRAS_DO_BARDO.cura : tipo === 'clerigo' ? REGRAS_DO_CLERIGO.cura : tipo === 'purificar' ? REGRAS_DO_DRUIDA.purificacao : REGRAS_DO_CLERIGO.curaDaFe;
+  const base = tipo === 'bardo' ? falta : vida.maxHp;
+  return Math.min(falta, Math.max(1, Math.trunc((base * pct) / 100)));
+}
+
+/**
+ * A duração do Poder da fé, em passos, pelo dano levado nos últimos 30 s:
+ * a Comunhão divide pelo dobro de quantos são, até 50 s; o Santo Egoísta,
+ * por 3, até 40 s.
+ */
+export function duracaoDaFe(comunhao: boolean, danoLevado: number, quantos: number): number {
+  const r = REGRAS_DO_CLERIGO;
+  const dano = Math.max(0, Math.trunc(danoLevado));
+  if (comunhao) return Math.min(r.tetoDaComunhao * 60, Math.trunc((dano * 60) / (2 * Math.max(1, quantos))));
+  return Math.min(r.tetoDoEgoista * 60, Math.trunc((dano * 60) / r.divisorDoEgoista));
+}
+
 /** O que a classe junta durante uma luta do app; some quando ela acaba. Ausente é zero. */
 export interface ContadoresDaClasse {
   /** Guerreiro: os críticos seguidos agora, e o dano (%) que os combos já somaram. */
@@ -182,6 +370,8 @@ export interface ContadoresDaClasse {
   calmo?: number;
   /** Paladino: a absorção. */
   absorcao?: number;
+  /** Arqueiro: os passos parado (sem andar), até `REGRAS_DO_ARQUEIRO.parado`. */
+  parado?: number;
 }
 
 /** A classe já foi refeita pelo doc do Breno: na arena ela fica sem a passiva antiga do site. */
@@ -212,8 +402,10 @@ function contraOChefe(valor: number, chefe: boolean): number {
  * o Guerreiro colado no alvo e os combos dele, a furtividade do Ladino (a
  * metade contra o chefe), a fúria do Bárbaro e a marreta.
  */
-export function bonusDoAtaque(quem: QuemLuta, c: ContadoresDaClasse, alvo: { colado: boolean; chefe: boolean }): number {
+export function bonusDoAtaque(quem: QuemLuta, c: ContadoresDaClasse, alvo: { colado: boolean; chefe: boolean; blocos?: number }): number {
   switch (idDaClasse(quem)) {
+    case 'arqueiro':
+      return danoDaDistancia(alvo.blocos ?? 0, c.parado ?? 0);
     case 'guerreiro':
       return (alvo.colado ? REGRAS_DO_GUERREIRO.colado : 0) + (c.combo ?? 0);
     case 'ladino':
@@ -305,6 +497,14 @@ export function esfriar(quem: IdentidadeDeClasse, c: ContadoresDaClasse): Contad
   return { ...c, furia: Math.max(0, (c.furia ?? 0) - REGRAS_DO_BARBARO.perdeNaCalma), calmo: 0 };
 }
 
+/** Um passo da luta: o Arqueiro conta o tempo parado (andou, zera; até o necessário pro bônus). `null`: nada muda. */
+export function contarParado(quem: IdentidadeDeClasse, c: ContadoresDaClasse, andou: boolean): ContadoresDaClasse | null {
+  if (idDaClasse(quem) !== 'arqueiro') return null;
+  const antes = c.parado ?? 0;
+  const parado = andou ? 0 : Math.min(REGRAS_DO_ARQUEIRO.parado, antes + 1);
+  return parado === antes && c.parado !== undefined ? null : { ...c, parado };
+}
+
 /** O dano (%) que a classe devolve a quem bateu: o Paladino, mais com a absorção no teto; os outros, 0. */
 export function devolucaoDaClasse(quem: IdentidadeDeClasse, c: ContadoresDaClasse): number {
   if (idDaClasse(quem) !== 'paladino') return 0;
@@ -316,9 +516,42 @@ export function puxaOsMonstros(quem: IdentidadeDeClasse): boolean {
   return idDaClasse(quem) === 'paladino';
 }
 
-/** A linha da classe embaixo das barras, só na luta: o combo, a furtividade, a fúria ou a absorção. Sem nada a mostrar, vazia. */
-export function textosDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number }, c: ContadoresDaClasse): string[] {
+/** O que a linha da classe mostra além dos contadores: a moral do grupo e, no Clérigo e no Druida, o tempo das coisas deles (em passos). */
+export interface ExtrasDaClasse {
+  moral?: number;
+  /** Clérigo: quanto falta pro Poder da fé voltar, e quanto ainda dura o que está de pé. */
+  recargaDaFe?: number;
+  fe?: number;
+  /** Druida: quanto o ataque ainda espera depois da Purificação. */
+  semAtacar?: number;
+}
+
+/** Passos em segundos, arredondando pra cima; e em "m:ss" a partir de um minuto. */
+function tempo(passos: number): string {
+  const s = Math.ceil(passos / 60);
+  return s >= 60 ? `${Math.trunc(s / 60)}:${String(s % 60).padStart(2, '0')}` : `${s} s`;
+}
+
+/**
+ * A linha da classe embaixo das barras, só na luta: o combo, a furtividade,
+ * a fúria, a absorção, a mira firme do Arqueiro, o Poder da fé, a espera do
+ * Druida — e a moral do grupo, de quem tiver. Sem nada a mostrar, vazia.
+ */
+export function textosDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number }, c: ContadoresDaClasse, extras: ExtrasDaClasse = {}): string[] {
+  const textos = textosSoDaClasse(quem, c, extras);
+  if ((extras.moral ?? 0) > 0) textos.push(`🎵 Moral ${extras.moral}`);
+  return textos;
+}
+
+function textosSoDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number }, c: ContadoresDaClasse, extras: ExtrasDaClasse): string[] {
   switch (idDaClasse(quem)) {
+    case 'arqueiro':
+      return [(c.parado ?? 0) >= REGRAS_DO_ARQUEIRO.parado ? '🏹 Mira firme' : '🏹 Fique parado pra mirar'];
+    case 'clerigo':
+      if ((extras.fe ?? 0) > 0) return [`✝️ Fé ${tempo(extras.fe as number)}`];
+      return [(extras.recargaDaFe ?? 0) > 0 ? `✝️ Fé em ${tempo(extras.recargaDaFe as number)}` : '✝️ Fé pronta'];
+    case 'druida':
+      return (extras.semAtacar ?? 0) > 0 ? [`🌿 Ataque em ${tempo(extras.semAtacar as number)}`] : [];
     case 'guerreiro': {
       const resistencia = resistenciaDaClasse(quem, c);
       const combo = `⚔️ Combo +${c.combo ?? 0}% · ${c.seguidos ?? 0}/${REGRAS_DO_GUERREIRO.criticosDoCombo}`;

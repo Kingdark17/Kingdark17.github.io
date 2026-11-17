@@ -70,7 +70,8 @@ namespace RPGLegend.Tests
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
                 return N(ClassesDeLuta.BonusDoAtaque(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId, R<ContadoresDaClasse>(a["c"]),
-                    JsJson.Truthy(JsJson.Prop(a["alvo"], "colado")), JsJson.Truthy(JsJson.Prop(a["alvo"], "chefe"))));
+                    JsJson.Truthy(JsJson.Prop(a["alvo"], "colado")), JsJson.Truthy(JsJson.Prop(a["alvo"], "chefe")),
+                    JsJson.ToOptionalNumber(JsJson.Prop(a["alvo"], "blocos")) ?? 0));
             });
             Fn(M, "esquivaDaClasse", (a, c) =>
             {
@@ -85,7 +86,30 @@ namespace RPGLegend.Tests
             Fn(M, "textosDaClasse", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
-                return W(ClassesDeLuta.TextosDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"])));
+                var extras = a["extras"] != null && a["extras"].Type != JTokenType.Null ? R<ExtrasDaClasse>(a["extras"]) : null;
+                return W(ClassesDeLuta.TextosDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"]), extras));
+            });
+            Fn(M, "apoiaAliado", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.ApoiaAliado(quem.ClassId, quem.ClassName));
+            });
+            Fn(M, "miraDaClasse", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.MiraDaClasse(quem.ClassId, quem.ClassName));
+            });
+            Fn(M, "mortoVivo", (a, c) => W(ClassesDeLuta.MortoVivo(Str(a["especie"]))));
+            Fn(M, "danoDaDistancia", (a, c) => N(ClassesDeLuta.DanoDaDistancia(Num(a["blocos"]), Num(a["parado"]))));
+            Fn(M, "efeitosDaMoral", (a, c) => W(ClassesDeLuta.EfeitosDaMoral(Num(a["nivel"]))));
+            Fn(M, "contarCriticoNoAliado", (a, c) => W(ClassesDeLuta.ContarCriticoNoAliado(R<Moral>(a["moral"]))));
+            Fn(M, "curaDoApoio", (a, c) =>
+                N(ClassesDeLuta.CuraDoApoio(Str(a["tipo"]), Num(JsJson.Prop(a["vida"], "hp")), Num(JsJson.Prop(a["vida"], "maxHp")))));
+            Fn(M, "duracaoDaFe", (a, c) => N(ClassesDeLuta.DuracaoDaFe(JsJson.Truthy(a["comunhao"]), Num(a["dano"]), Num(a["quantos"]))));
+            Fn(M, "contarParado", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.ContarParado(quem.ClassId, quem.ClassName, R<ContadoresDaClasse>(a["c"]), JsJson.Truthy(a["andou"])));
             });
             Fn(M, "contarAcerto", (a, c) =>
             {

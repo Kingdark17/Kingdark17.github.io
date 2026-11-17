@@ -59,6 +59,15 @@ namespace RPGLegend.Game.Jogo
         /// <summary>Tocou num monstro de pé: o índice dele na sala.</summary>
         public event Action<int> AoMirar;
 
+        /// <summary>Tocou na placa de um aliado ("eu" ou "parceiro"): o apoio do Bardo, do Clérigo e do Druida vai nele.</summary>
+        public event Action<string> AoMirarAliado;
+
+        /// <summary>O herói apoia aliados (o Bardo, o Clérigo, o Druida): as placas dele e do parceiro aparecem no topo da coluna.</summary>
+        public bool ApoiaAliados;
+
+        private VisualElement _linhaDeAliados;
+        private Button _placaDoHeroi, _placaDoParceiro;
+
         /// <summary>Onde o evento da arma se desenha: a parte de cima da sala (o palco inteiro, antes do primeiro desenho).</summary>
         public Rect AreaDoEvento => AreaDaSala.width > 0 ? new Rect(AreaDaSala.x, AreaDaSala.y, AreaDaSala.width, AreaDaSala.height * ParteDoEvento) : contentRect;
 
@@ -104,6 +113,14 @@ namespace RPGLegend.Game.Jogo
             _placas = new VisualElement { pickingMode = PickingMode.Ignore };
             _placas.AddToClassList("placas-da-luta");
             Add(_placas);
+
+            // As placas do aliado (rodada 3b): tocar mira o apoio nele (no PC, o cursor em cima do herói faz o mesmo).
+            _linhaDeAliados = new VisualElement { pickingMode = PickingMode.Ignore };
+            _linhaDeAliados.AddToClassList("aliados-do-apoio");
+            _linhaDeAliados.style.display = DisplayStyle.None;
+            _placaDoHeroi = PlacaDeAliado("🙋 Você", "eu");
+            _placaDoParceiro = PlacaDeAliado("🤝 Parceiro", "parceiro");
+            _placas.Insert(0, _linhaDeAliados);
 
             _aliados = new VisualElement { pickingMode = PickingMode.Ignore };
             _aliados.AddToClassList("aliados-da-luta");
@@ -168,6 +185,7 @@ namespace RPGLegend.Game.Jogo
             var instancias = sala?.Monsters ?? new List<MonsterInstance>();
             MostrarGrupo(arena, instancias);
             MostrarAliados(arena, (luta.Estado as EstadoNaMasmorra)?.Party ?? new List<Companion>());
+            MostrarPlacasDeAliado(arena);
             _tinta.Mostrar(arena, instancias, _colunas);
             AnimarEfeitos();
         }
@@ -434,6 +452,27 @@ namespace RPGLegend.Game.Jogo
             l.Sombra.AddToClassList("sombra-do-lutador");
             l.Corpo.Add(l.Sombra);
             return l;
+        }
+
+        private Button PlacaDeAliado(string texto, string aliado)
+        {
+            var placa = new Button { text = texto };
+            placa.AddToClassList("placa-de-aliado");
+            placa.RegisterCallback<PointerDownEvent>(e => e.StopPropagation());
+            placa.clicked += () => AoMirarAliado?.Invoke(aliado);
+            _linhaDeAliados.Add(placa);
+            return placa;
+        }
+
+        /// <summary>As placas do aliado: só pra quem apoia, a do parceiro só com ele de pé, e a escolhida acesa.</summary>
+        private void MostrarPlacasDeAliado(Arena arena)
+        {
+            _linhaDeAliados.style.display = ApoiaAliados ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!ApoiaAliados) return;
+            bool parceiro = arena.Dupla?.Parceiro != null && arena.Dupla.ParceiroCaido != true;
+            _placaDoParceiro.style.display = parceiro ? DisplayStyle.Flex : DisplayStyle.None;
+            _placaDoHeroi.EnableInClassList("placa-de-aliado-escolhida", arena.AlvoAliado == "eu");
+            _placaDoParceiro.EnableInClassList("placa-de-aliado-escolhida", arena.AlvoAliado == "parceiro");
         }
 
         private static Label Rotulo(VisualElement pai, string classe)

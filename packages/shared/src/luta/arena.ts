@@ -54,7 +54,7 @@
 import { landHitOnHero, hitPartyMember, pickMonsterTarget, startMonsterAttack } from '../combat/monster-hit.js';
 import type { CombatMonster, CombatMonsterView } from '../combat/monster-state.js';
 import { partyMemberAct, passarRodadaDaCancao } from '../combat/party.js';
-import { ataquesDisponiveis, LADOS_DO_DANO, resolverGolpe, type AttackStyle, type LeituraDaMira } from '../combat/resolve-attack.js';
+import { ataquesDisponiveis, FAIXA_CRITICA, LADOS_DO_DANO, resolverGolpe, type AttackStyle, type LeituraDaMira } from '../combat/resolve-attack.js';
 import { tickHeroStatus } from '../combat/hero-status.js';
 import { tickMonsterDot } from '../combat/status-effects.js';
 import { castPower, powerManaCost } from '../combat/use-power.js';
@@ -82,20 +82,34 @@ import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
 import { MAX_ESQUELETOS } from '../combat/invocacao.js';
 import {
   alcanceDoHeroi,
+  apoiaAliado,
   bonusDoAtaque,
   classeDeLuta,
   classeRefeita,
   contarAcerto,
+  contarCriticoNoAliado,
   contarGolpeLevado,
+  contarParado,
   criticoDaClasse,
+  curaDoApoio,
   devolucaoDaClasse,
+  duracaoDaFe,
+  efeitosDaMoral,
   esfriar,
   esquivaDaClasse,
+  miraDaClasse,
+  mortoVivo,
   puxaOsMonstros,
   REGRAS_DO_BARBARO,
+  REGRAS_DO_BARDO,
+  REGRAS_DO_CLERIGO,
+  REGRAS_DO_DRUIDA,
   REGRAS_DO_PALADINO,
   resistenciaDaClasse,
   type ContadoresDaClasse,
+  type EfeitosDaMoral,
+  type ExtrasDaClasse,
+  type Moral,
 } from '../hero/classes-de-luta.js';
 import { idDaClasse } from '../hero/catalog.js';
 import { CHANCE_DE_QUEBRAR_NO_CHEFE, nomeDoMembro, PASSO_COM_PERNA_QUEBRADA, quebrarMembro, type Membro } from '../hero/ferimentos.js';
@@ -275,8 +289,34 @@ export interface Dupla {
   parceiroCaido?: boolean;
   /** O parceiro é Paladino: os monstros o escolhem como se ele estivesse mais perto (`REGRAS_DO_PALADINO.foco`). */
   parceiroPuxa?: boolean;
+  /** O dano que o parceiro levou nos últimos 30 s (ele diz): a duração da Comunhão sagrada conta com ele. */
+  parceiroDano?: number;
   /** O herói daqui caiu. */
   fantasma?: boolean;
+}
+
+/** Em quem o apoio do Bardo, do Clérigo e do Druida cai: o herói daqui ou o parceiro. */
+export type Aliado = 'eu' | 'parceiro';
+
+/**
+ * O apoio que um herói solta no parceiro (rodada 3b, 2026-11-17): a cura e o
+ * reforço do Bardo, a cura do Clérigo, a Purificação do Druida e a Comunhão
+ * sagrada (com a duração, em passos). Sai em `QuadroDaLuta.apoios` de um
+ * lado e chega em `EntradaDaLuta.apoios` do outro, que faz a conta com o
+ * herói dele.
+ */
+export interface ApoioDoParceiro {
+  tipo: 'bardo' | 'clerigo' | 'purificar' | 'comunhao';
+  passos?: number;
+}
+
+/**
+ * O que a luta leva de uma pra outra, guardado na memória do app (decisão do
+ * usuário: fora do save): a moral do grupo e a recarga do Poder da fé.
+ */
+export interface MemoriaDaLuta {
+  moral?: Moral;
+  recargaDaFe?: number;
 }
 
 /** Um monstro como o anfitrião o manda pro espelho. */
@@ -336,6 +376,8 @@ export interface EventoAberto {
   estilo: AttackStyle;
   /** O evento é de um poder mágico (o id dele), e não do ataque: no fim, é o poder que sai, na força do evento. */
   poder?: string;
+  /** O ataque do Bardo, do Clérigo ou do Druida mirado num aliado: no fim, sai o apoio, e não o golpe. */
+  aliado?: Aliado;
 }
 
 export interface Arena {
@@ -378,6 +420,17 @@ export interface Arena {
   dupla?: Dupla;
   /** O que a classe do herói junta nesta luta (a fúria, o combo…; `hero/classes-de-luta.ts`). Ausente até juntar algo. */
   classe?: ContadoresDaClasse;
+  /** No celular: o jogador tocou na placa de um aliado, e o ataque do Bardo, do Clérigo ou do Druida vai nele. */
+  alvoAliado?: Aliado;
+  /** A moral do grupo (o Bardo): chega da memória do app na abertura (`MemoriaDaLuta`) e volta no fim. */
+  moral?: Moral;
+  /** O reforço do Bardo: os passos que ainda faltam do dano a mais (`REGRAS_DO_BARDO.forca`). */
+  reforco?: number;
+  /** O Poder da fé: os passos até ele voltar (chega da memória do app) e os que ainda faltam do que está de pé. */
+  recargaDaFe?: number;
+  fe?: number;
+  /** O dano que o herói daqui levou, com o passo do mundo: a janela de 30 s do Poder da fé (só o Clérigo e a dupla contam). */
+  danosLevados?: { passo: number; dano: number }[];
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -425,8 +478,16 @@ export interface EntradaDaLuta {
   item?: string;
   /** O menu de itens está aberto: o mundo anda em câmera lenta. */
   menu?: boolean;
-  /** Em dupla: onde o parceiro está agora, se caiu, e se é Paladino (`puxa`: os monstros o preferem). */
-  parceiro?: { x: number; y: number; caido?: boolean; puxa?: boolean };
+  /** Em dupla: onde o parceiro está agora, se caiu, se é Paladino (`puxa`: os monstros o preferem) e o dano que ele levou nos últimos 30 s. */
+  parceiro?: { x: number; y: number; caido?: boolean; puxa?: boolean; dano?: number };
+  /** Tocou na placa de um aliado (o celular): o ataque do Bardo, do Clérigo ou do Druida vai nele. */
+  mirarAliado?: Aliado;
+  /** Apertou o botão do Poder da fé (o Clérigo). */
+  fe?: boolean;
+  /** Em dupla: o apoio que o parceiro soltou em mim desde o último passo. */
+  apoios?: readonly ApoioDoParceiro[];
+  /** Em dupla: a moral do grupo, que o Bardo do parceiro subiu. */
+  moral?: number;
   /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
   danoDeFora?: readonly { indice: number; dano: number }[];
   /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
@@ -458,6 +519,10 @@ export interface QuadroDaLuta {
   acontecimentos: Acontecimento[];
   /** Em dupla, no convidado: o dano que o herói daqui (e a equipe dele) causou neste passo, pra mandar ao anfitrião. */
   danos?: { indice: number; dano: number }[];
+  /** Em dupla: o apoio que o herói daqui soltou no parceiro neste passo, pra mandar a ele. */
+  apoios?: ApoioDoParceiro[];
+  /** O Bardo daqui subiu a moral do grupo neste passo: o nível novo, pra mandar ao parceiro. */
+  moral?: number;
 }
 
 // ---------- abrir ----------
@@ -468,7 +533,8 @@ export interface QuadroDaLuta {
  * herói um passo pra dentro da porta por onde entrou (`heroiNaLuta`) e os
  * companheiros vivos ao lado. O alvo começa no primeiro de pé, como no site.
  * `chegada` é onde o herói estava quando a luta abriu. `teclado`: jogada
- * no PC, onde o cajado pede letras em vez do desenho.
+ * no PC, onde o cajado pede letras em vez do desenho. `memoria`: o que veio
+ * da luta anterior (a moral do grupo, a recarga do Poder da fé).
  */
 export function abrirLuta(
   estado: EstadoNaMasmorra,
@@ -476,6 +542,7 @@ export function abrirLuta(
   pet: PetId | null = null,
   teclado = false,
   dupla: Dupla['papel'] | null = null,
+  memoria: MemoriaDaLuta = {},
 ): QuadroDaLuta {
   const preparada = prepararLuta(estado);
   const sala = celulaAtual(preparada.estado) as DungeonCell;
@@ -534,6 +601,8 @@ export function abrirLuta(
     // Quem já chega caído (o fantasma que ninguém reviveu) só acompanha.
     if (preparada.estado.hero.hp <= 0) arena.dupla.fantasma = true;
   }
+  if ((memoria.moral?.nivel ?? 0) > 0 || (memoria.moral?.criticos ?? 0) > 0) arena.moral = { ...memoria.moral };
+  if ((memoria.recargaDaFe ?? 0) > 0) arena.recargaDaFe = Math.trunc(memoria.recargaDaFe as number);
   return { luta: { estado: preparada.estado, arena, pet, teclado, fim: null, loot: null }, acontecimentos };
 }
 
@@ -549,16 +618,23 @@ export function abrirLuta(
  */
 export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: Rng, now?: () => number): QuadroDaLuta {
   if (luta.fim) return { luta, acontecimentos: [] };
-  const l: Luta = { ...luta, arena: copiarArena(luta.arena), rng, now, acontecimentos: [], danos: [] };
+  const l: Luta = { ...luta, arena: copiarArena(luta.arena), rng, now, acontecimentos: [], danos: [], apoios: [] };
+  // A recarga do Poder da fé corre no tempo de verdade, mesmo na câmera lenta.
+  if (l.arena.recargaDaFe !== undefined) {
+    if (l.arena.recargaDaFe > 1) l.arena.recargaDaFe -= 1;
+    else delete l.arena.recargaDaFe;
+  }
   if (l.arena.dupla) receberDoParceiro(l, entrada);
   if (l.fim) return fecharPasso(l);
 
   if (entrada.mirar !== undefined) mirar(l, entrada.mirar);
+  if (entrada.mirarAliado) mirarAliado(l, entrada.mirarAliado);
   // O fantasma anda, mas não age.
   if (l.arena.dupla?.fantasma) l.arena.evento = null;
   else if (l.arena.evento) seguirEvento(l, entrada);
   else if (entrada.atacar && l.arena.recarga <= 0) abrirEvento(l, entrada);
   else if (entrada.poder) pedirPoder(l, entrada.poder);
+  else if (entrada.fe) usarFe(l);
   else if (entrada.item) usarItem(l, entrada.item);
 
   if (!l.fim) {
@@ -575,6 +651,8 @@ function fecharPasso(l: Luta): QuadroDaLuta {
   const fora: LutaEmTempoReal = { estado: l.estado, arena: l.arena, pet: l.pet, teclado: l.teclado, fim: l.fim, loot: l.loot };
   const quadro: QuadroDaLuta = { luta: l.conquista ? { ...fora, conquista: l.conquista } : fora, acontecimentos: l.acontecimentos };
   if (l.danos.length > 0) quadro.danos = l.danos;
+  if (l.apoios.length > 0) quadro.apoios = l.apoios;
+  if (l.moralSubiu !== undefined) quadro.moral = l.moralSubiu;
   return quadro;
 }
 
@@ -588,14 +666,22 @@ export function simularLuta(luta: LutaEmTempoReal, entradas: readonly EntradaDaL
   let atual = luta;
   const acontecimentos: Acontecimento[] = [];
   const danos: { indice: number; dano: number }[] = [];
+  const apoios: ApoioDoParceiro[] = [];
+  let moral: number | undefined;
   for (const entrada of entradas) {
     if (atual.fim) break;
     const quadro = passoDaLuta(atual, entrada, rng, now);
     atual = quadro.luta;
     acontecimentos.push(...quadro.acontecimentos);
     if (quadro.danos) danos.push(...quadro.danos);
+    if (quadro.apoios) apoios.push(...quadro.apoios);
+    if (quadro.moral !== undefined) moral = quadro.moral;
   }
-  return danos.length > 0 ? { luta: atual, acontecimentos, danos } : { luta: atual, acontecimentos };
+  const quadro: QuadroDaLuta = { luta: atual, acontecimentos };
+  if (danos.length > 0) quadro.danos = danos;
+  if (apoios.length > 0) quadro.apoios = apoios;
+  if (moral !== undefined) quadro.moral = moral;
+  return quadro;
 }
 
 /** A luta enquanto o passo corre: a mesma, mais o sorteio, o relógio e o que vai pra tela. */
@@ -605,6 +691,10 @@ interface Luta extends LutaEmTempoReal {
   acontecimentos: Acontecimento[];
   /** O dano causado neste passo no espelho (`QuadroDaLuta.danos`). */
   danos: { indice: number; dano: number }[];
+  /** O apoio solto no parceiro neste passo (`QuadroDaLuta.apoios`). */
+  apoios: ApoioDoParceiro[];
+  /** A moral que o Bardo daqui subiu neste passo (`QuadroDaLuta.moral`). */
+  moralSubiu?: number;
 }
 
 function copiarArena(arena: Arena): Arena {
@@ -629,6 +719,8 @@ function copiarArena(arena: Arena): Arena {
     recargaDosPoderes: { ...arena.recargaDosPoderes },
     ...(arena.dupla ? { dupla: { ...arena.dupla, ...(arena.dupla.parceiro ? { parceiro: { ...arena.dupla.parceiro } } : {}) } } : {}),
     ...(arena.classe ? { classe: { ...arena.classe } } : {}),
+    ...(arena.moral ? { moral: { ...arena.moral } } : {}),
+    ...(arena.danosLevados ? { danosLevados: arena.danosLevados.map((d) => ({ ...d })) } : {}),
   };
 }
 
@@ -752,30 +844,61 @@ export function velocidadeNaArena(hero: Hero): number {
   return hero.ferimentos?.perna ? Math.trunc(daClasse * PASSO_COM_PERNA_QUEBRADA) : daClasse;
 }
 
-/** O herói alcança o monstro `indice` com o ataque comum, com esta folga a mais? */
+/** O herói alcança o monstro `indice` com o ataque comum, com esta folga a mais? As vinhas do Druida têm a regra delas. */
 function alcanca(l: Luta, indice: number, folga = 0): boolean {
   const lugar = lugarDe(l, indice);
+  if (idDaClasse(masmorra(l).hero) === 'druida') return nasVinhas(l, lugar, folga);
   const dx = l.arena.heroi.x - lugar.x;
   const dy = l.arena.heroi.y - lugar.y;
   const limite = alcanceNaArena(masmorra(l).hero) + folga;
   return dx * dx + dy * dy <= limite * limite;
 }
 
+/**
+ * As vinhas do Druida (doc do Breno de 2026-11-15) vêm dos cantos: pegam o
+ * monstro a até `REGRAS_DO_DRUIDA.vinhas` blocos de uma parede (a de volta
+ * da sala ou uma de dentro) ou de um herói de pé (ele e o parceiro). O doc
+ * também fala de arbusto, mas as salas não têm.
+ */
+function nasVinhas(l: Luta, lugar: { x: number; y: number }, folga: number): boolean {
+  const alcance = REGRAS_DO_DRUIDA.vinhas * TILE_UNITS + folga;
+  const { cols, rows } = geometria(l);
+  const daParede = Math.min(lugar.x - TILE_UNITS, (cols - 1) * TILE_UNITS - lugar.x, lugar.y - TILE_UNITS, (rows - 1) * TILE_UNITS - lugar.y);
+  if (daParede <= alcance) return true;
+  for (const casa of paredesDaSala(masmorra(l).masmorra.dungeon)) {
+    const dx = Math.max(casa.col * TILE_UNITS - lugar.x, 0, lugar.x - (casa.col + 1) * TILE_UNITS);
+    const dy = Math.max(casa.row * TILE_UNITS - lugar.y, 0, lugar.y - (casa.row + 1) * TILE_UNITS);
+    if (dx * dx + dy * dy <= alcance * alcance) return true;
+  }
+  // Do herói, como o alcance de todo mundo: do pé dele ao meio da casa do monstro, com meia casa a mais.
+  const doHeroi = alcance + TILE_UNITS / 2;
+  const herois = [l.arena.heroi, parceiroDePe(l)];
+  return herois.some((h) => !!h && (h.x - lugar.x) * (h.x - lugar.x) + (h.y - lugar.y) * (h.y - lugar.y) <= doHeroi * doHeroi);
+}
+
+/** A área da mira do herói daqui, em unidades da sala: a de todo mundo, e a do Arqueiro 2,3× maior. */
+function areaDaMira(l: Luta): number {
+  const pct = miraDaClasse(masmorra(l).hero);
+  return pct === 100 ? AREA_DA_MIRA : Math.trunc((AREA_DA_MIRA * pct) / 100);
+}
+
 /** O monstro de pé na área da mira em volta de (x, y): o mais perto do cursor; `null`, nenhum. No empate, o primeiro. */
 function monstroNaMira(l: Luta, x: number, y: number): number | null {
-  let melhor: number | null = null;
-  let menor = 0;
+  return maisPertoNaMira(l, x, y)?.indice ?? null;
+}
+
+/** O monstro de pé na área da mira em volta de (x, y), e a distância dele ao cursor (ao quadrado). */
+function maisPertoNaMira(l: Luta, x: number, y: number): { indice: number; distancia: number } | null {
+  const area = areaDaMira(l);
+  let melhor: { indice: number; distancia: number } | null = null;
   for (const m of l.arena.monstros) {
     if (m.fase === 'caido') continue;
     const lugar = lugarDe(l, m.indice);
     const dx = x - lugar.x;
     const dy = y - lugar.y;
     const distancia = dx * dx + dy * dy;
-    if (distancia > AREA_DA_MIRA * AREA_DA_MIRA) continue;
-    if (melhor === null || distancia < menor) {
-      melhor = m.indice;
-      menor = distancia;
-    }
+    if (distancia > area * area) continue;
+    if (melhor === null || distancia < melhor.distancia) melhor = { indice: m.indice, distancia };
   }
   return melhor;
 }
@@ -835,7 +958,77 @@ function mirar(l: Luta, indice: number): void {
   if (m && m.fase !== 'caido') {
     l.arena.alvo = m.indice;
     l.arena.escolhido = true;
+    delete l.arena.alvoAliado;
   }
+}
+
+/** Tocar na placa de um aliado (o celular) faz dele o alvo do Bardo, do Clérigo e do Druida. Quem não apoia, ou o parceiro que não está, não muda nada. */
+function mirarAliado(l: Luta, aliado: Aliado): void {
+  if (!apoiaAliado(masmorra(l).hero)) return;
+  if (aliado === 'parceiro' && !parceiroDePe(l)) return;
+  l.arena.alvoAliado = aliado;
+}
+
+/** Onde o aliado está na sala; `null`, o parceiro que não está de pé. */
+function lugarDoAliado(l: Luta, aliado: Aliado): { x: number; y: number } | null {
+  return aliado === 'eu' ? l.arena.heroi : parceiroDePe(l);
+}
+
+/**
+ * O aliado em que o ataque vai (o Bardo, o Clérigo, o Druida): no PC, o
+ * herói (ele mesmo ou o parceiro) na área do cursor, se estiver mais perto
+ * dele que o monstro mais perto; no celular, o da placa. `null`: o ataque vai
+ * num monstro.
+ */
+function aliadoNaMira(l: Luta, entrada: EntradaDaLuta): Aliado | null {
+  if (!apoiaAliado(masmorra(l).hero)) return null;
+  if (!entrada.cursor) {
+    const escolhido = l.arena.alvoAliado;
+    if (escolhido && lugarDoAliado(l, escolhido)) return escolhido;
+    delete l.arena.alvoAliado;
+    return null;
+  }
+  const { x, y } = entrada.cursor;
+  const area = areaDaMira(l);
+  let melhor: Aliado | null = null;
+  let menor = 0;
+  for (const aliado of ['eu', 'parceiro'] as const) {
+    const lugar = lugarDoAliado(l, aliado);
+    if (!lugar) continue;
+    const distancia = (x - lugar.x) * (x - lugar.x) + (y - lugar.y) * (y - lugar.y);
+    if (distancia > area * area) continue;
+    if (melhor === null || distancia < menor) {
+      melhor = aliado;
+      menor = distancia;
+    }
+  }
+  if (melhor === null) return null;
+  const monstro = maisPertoNaMira(l, x, y);
+  return monstro && monstro.distancia < menor ? null : melhor;
+}
+
+/** O aliado está ao alcance do apoio: ele mesmo sempre; o parceiro, no alcance da classe (o Druida, sempre: as vinhas saem de quem está de pé). */
+function alcancaOAliado(l: Luta, aliado: Aliado): boolean {
+  if (aliado === 'eu') return true;
+  const lugar = parceiroDePe(l);
+  if (!lugar) return false;
+  const hero = masmorra(l).hero;
+  if (idDaClasse(hero) === 'druida') return true;
+  const dx = l.arena.heroi.x - lugar.x;
+  const dy = l.arena.heroi.y - lugar.y;
+  const limite = alcanceNaArena(hero);
+  return dx * dx + dy * dy <= limite * limite;
+}
+
+/** O evento do ataque, com a faixa do crítico da moral (o degrau 12 a alarga). */
+function eventoComAMoral(l: Luta, evento: EventoDeArma): EventoDeArma {
+  const faixa = moralAqui(l).faixaCritica;
+  return faixa > 0 ? { ...evento, faixa: (FAIXA_CRITICA * (100 + faixa)) / 100 } : evento;
+}
+
+/** O que a moral do grupo dá agora. */
+function moralAqui(l: Luta): EfeitosDaMoral {
+  return efeitosDaMoral(l.arena.moral?.nivel ?? 0);
 }
 
 /** O ataque do botão: o da classe primeiro; o mágico sem mana pro golpe de magia cai pro físico. */
@@ -854,6 +1047,18 @@ function estiloDoBotao(hero: Hero): AttackStyle {
  * botão só avisa.
  */
 function abrirEvento(l: Luta, entrada: EntradaDaLuta): void {
+  // O Bardo, o Clérigo e o Druida podem mirar num aliado: o evento é o mesmo, e no fim sai o apoio.
+  const aliado = aliadoNaMira(l, entrada);
+  if (aliado) {
+    if (!alcancaOAliado(l, aliado)) {
+      contar(l, { tipo: 'aviso', texto: 'Chegue mais perto' });
+      return;
+    }
+    const hero = masmorra(l).hero;
+    const estilo = estiloDoBotao(hero);
+    l.arena.evento = { evento: eventoComAMoral(l, eventoDoAtaque(hero, estilo, l.rng, l.teclado)), passo: 0, jogada: {}, alvo: l.arena.alvo, estilo, aliado };
+    return;
+  }
   let alvo: number | null;
   if (entrada.cursor) {
     alvo = monstroNaMira(l, entrada.cursor.x, entrada.cursor.y);
@@ -881,7 +1086,7 @@ function abrirEvento(l: Luta, entrada: EntradaDaLuta): void {
   }
   const hero = masmorra(l).hero;
   const estilo = estiloDoBotao(hero);
-  const evento = eventoDoAtaque(hero, estilo, l.rng, l.teclado);
+  const evento = eventoComAMoral(l, eventoDoAtaque(hero, estilo, l.rng, l.teclado));
   l.arena.evento = { evento, passo: 0, jogada: {}, alvo, estilo };
 }
 
@@ -959,6 +1164,10 @@ function golpear(l: Luta): void {
     usarPoder(l, aberto.poder, leitura.acerto ? leitura.forca : FORCA_DO_PODER_ERRADO);
     return;
   }
+  if (aberto.aliado) {
+    apoiar(l, aberto.aliado, leitura);
+    return;
+  }
   const doEvento = l.arena.monstros[aberto.alvo] as MonstroNaArena;
   const indice = doEvento.fase !== 'caido' ? doEvento.indice : alvoAtual(l);
   if (indice === null) return;
@@ -972,6 +1181,9 @@ function golpear(l: Luta): void {
   const dado = 1 + randomInt(LADOS_DO_DANO, l.rng);
   const acerto = acertarMonstro(l, l.arena.monstros[indice] as MonstroNaArena, dado, leitura, aberto.estilo);
   if (!acerto || l.fim) return;
+  // O Bardo e o Clérigo também se curam batendo; as vinhas do Druida deixam o monstro lento e envenenado.
+  apoiarAqui(l);
+  vinhasNoMonstro(l, indice);
   golpeEmArea(l, indice, acerto.dano);
   // O avanço do Paladino empurra o alvo que ficou de pé.
   const alvo = l.arena.monstros[indice] as MonstroNaArena;
@@ -992,8 +1204,16 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     contar(l, { tipo: 'aviso', texto: `${monstro.name} se protege!` });
   }
   const estado = masmorra(l);
-  const bonus = bonusDoAtaque(estado.hero, contadores(l), { colado: colado(l, alvo.indice), chefe: !!monstro.isBoss });
-  const critico = criticoDaClasse(estado.hero);
+  const moral = moralAqui(l);
+  // O dano a mais: o da classe, o da moral do grupo e o reforço do Bardo.
+  const bonus =
+    bonusDoAtaque(estado.hero, contadores(l), { colado: colado(l, alvo.indice), chefe: !!monstro.isBoss, blocos: blocosAte(l, alvo.indice) }) +
+    moral.dano +
+    ((l.arena.reforco ?? 0) > 0 ? REGRAS_DO_BARDO.forca : 0);
+  const daClasse = criticoDaClasse(estado.hero);
+  const critico = moral.critico > 0 ? (daClasse ?? 1.6) + moral.critico / 100 : daClasse;
+  // O golpe sagrado do Clérigo num morto-vivo.
+  const sagrado = idDaClasse(estado.hero) === 'clerigo' && estilo === 'magic' && mortoVivo(monstro.speciesId);
   const golpe = resolverGolpe(estado.hero, monstro, dado, lida, estilo, {
     rng: l.rng,
     petCriticoBonus: petBonus(l.pet).critico ?? 0,
@@ -1001,6 +1221,7 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     ...(bonus !== 0 ? { bonusDeDano: bonus } : {}),
     ...(critico !== undefined ? { multiplicadorDoCritico: critico } : {}),
     ...(classeRefeita(estado.hero) ? { semPassivaDaClasse: true } : {}),
+    ...(sagrado ? { multiplicadorDoDano: REGRAS_DO_CLERIGO.mortoVivo } : {}),
   });
   // O golpe que acerta treina o atributo dele (`treino.ts`).
   const treinado = golpe.outcome === 'hit' ? anotarUso(golpe.hero, atributoDoGolpe(golpe.hero, estilo)) : golpe.hero;
@@ -1032,6 +1253,14 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
 
 function contadores(l: Luta): ContadoresDaClasse {
   return l.arena.classe ?? {};
+}
+
+/** Quantos blocos inteiros do pé do herói ao meio da casa do monstro: o dano do Arqueiro conta com eles. */
+function blocosAte(l: Luta, indice: number): number {
+  const lugar = lugarDe(l, indice);
+  const dx = l.arena.heroi.x - lugar.x;
+  const dy = l.arena.heroi.y - lugar.y;
+  return Math.floor(Math.sqrt(dx * dx + dy * dy) / TILE_UNITS);
 }
 
 /** O herói está a 1 bloco do monstro: o Guerreiro colado no alvo bate mais forte. */
@@ -1178,6 +1407,205 @@ function apanhou(l: Luta, indice: number, dano: number, vivo: boolean): void {
   if (!vivo || pct <= 0 || dano <= 0 || !m || m.fase === 'caido') return;
   const devolvido = Math.max(1, Math.trunc((dano * pct) / 100));
   ferirComDano(l, indice, devolvido, `↩️-${devolvido}`);
+}
+
+// ---------- o apoio (rodada 3b: Bardo, Clérigo e Druida) e o Arqueiro ----------
+
+/** O ícone do número da cura de cada apoio. */
+const ICONE_DO_APOIO: Readonly<Record<ApoioDoParceiro['tipo'], string>> = { bardo: '🎵', clerigo: '✝️', purificar: '🌿', comunhao: '✝️' };
+
+/**
+ * O ataque mirado num aliado terminou. Errou o evento, nada sai. O Druida
+ * purifica e fica sem atacar por um tempo; o Bardo e o Clérigo curam o
+ * aliado e a si mesmos (no parceiro, o apoio vai pela rede), e o crítico do
+ * Bardo num aliado conta pra moral. Apoiar treina a Sabedoria.
+ */
+function apoiar(l: Luta, aliado: Aliado, leitura: LeituraDaMira): void {
+  if (!leitura.acerto) {
+    contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: 'Errou', tom: 'erro' });
+    contar(l, { tipo: 'som', som: 'miss' });
+    return;
+  }
+  const estado = masmorra(l);
+  l.estado = { ...estado, hero: anotarUso(estado.hero, 'sabedoria') };
+  const id = idDaClasse(estado.hero);
+  if (id === 'druida') {
+    if (aliado === 'eu') purificarAqui(l);
+    else l.apoios.push({ tipo: 'purificar' });
+    l.arena.recarga = REGRAS_DO_DRUIDA.semAtacar;
+    contar(l, { tipo: 'aviso', texto: aliado === 'eu' ? '🌿 Purificação Ancestral' : '🌿 Purificação Ancestral no parceiro' });
+    return;
+  }
+  const tipo = id === 'bardo' ? 'bardo' : 'clerigo';
+  // Ele mesmo recebe sempre; o parceiro, quando é o mirado.
+  apoiarAqui(l);
+  if (aliado === 'parceiro') l.apoios.push({ tipo });
+  if (tipo === 'bardo' && leitura.critico) contarMoral(l);
+}
+
+/**
+ * O Bardo e o Clérigo recebem o próprio apoio a cada golpe que acerta (e a
+ * cada apoio num aliado): o Bardo, a cura da vida que falta e o reforço; o
+ * Clérigo, a cura da vida máxima.
+ */
+function apoiarAqui(l: Luta): void {
+  const id = idDaClasse(masmorra(l).hero);
+  if (id === 'bardo') receberApoio(l, { tipo: 'bardo' });
+  else if (id === 'clerigo') receberApoio(l, { tipo: 'clerigo' });
+}
+
+/** O apoio cai no herói daqui (dele mesmo ou do parceiro): a cura, o reforço do Bardo, a Purificação, a Comunhão. */
+function receberApoio(l: Luta, apoio: ApoioDoParceiro): void {
+  if (apoio.tipo === 'purificar') {
+    purificarAqui(l);
+    return;
+  }
+  if (apoio.tipo === 'comunhao') {
+    tocarAFe(l, apoio.passos ?? 0, true);
+    return;
+  }
+  curarAqui(l, apoio.tipo);
+  // O Poder da fé de pé apaga os efeitos até acabar: o reforço não pega.
+  if (apoio.tipo === 'bardo' && !((l.arena.fe ?? 0) > 0)) l.arena.reforco = REGRAS_DO_BARDO.tempoDaForca;
+}
+
+/** A cura do apoio no herói daqui, com o número em cima dele. */
+function curarAqui(l: Luta, tipo: ApoioDoParceiro['tipo']): void {
+  const estado = masmorra(l);
+  const cura = curaDoApoio(tipo, estado.hero);
+  if (cura <= 0) return;
+  l.estado = { ...estado, hero: { ...estado.hero, hp: estado.hero.hp + cura } };
+  contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `${ICONE_DO_APOIO[tipo]}+${cura}`, tom: 'cura' });
+  contar(l, { tipo: 'som', som: 'heal' });
+}
+
+/** A Purificação Ancestral no herói daqui: o veneno e os ferimentos somem, e a cura. */
+function purificarAqui(l: Luta): void {
+  const estado = masmorra(l);
+  const { poisonTurns: _turnos, poisonDmg: _dano, ...buffs } = estado.hero.buffs ?? {};
+  const { ferimentos: _ferimentos, ...semFerimentos } = estado.hero;
+  l.estado = { ...estado, hero: { ...semFerimentos, buffs } };
+  curarAqui(l, 'purificar');
+  contar(l, { tipo: 'aviso', texto: '🌿 Purificado' });
+}
+
+/** Um crítico do Bardo num aliado: a moral do grupo conta, e avisa quando sobe. */
+function contarMoral(l: Luta): void {
+  const conta = contarCriticoNoAliado(l.arena.moral ?? {});
+  l.arena.moral = conta.moral;
+  if (conta.subiu === undefined) return;
+  l.moralSubiu = conta.subiu;
+  const texto = `🎵 Moral ${conta.subiu}!`;
+  contar(l, { tipo: 'aviso', texto });
+  diario(l, [texto]);
+}
+
+/** As vinhas do Druida no monstro que ficou de pé: lento e envenenado por `REGRAS_DO_DRUIDA.turnos` turnos. No espelho, não (é do anfitrião). */
+function vinhasNoMonstro(l: Luta, indice: number): void {
+  if (idDaClasse(masmorra(l).hero) !== 'druida' || noEspelho(l)) return;
+  const m = l.arena.monstros[indice];
+  if (!m || m.fase === 'caido') return;
+  const r = REGRAS_DO_DRUIDA;
+  const monstro = (sala(l).monsters ?? [])[indice] as CombatMonster;
+  const veneno = Math.max(1, Math.trunc((monstro.maxHp * r.veneno) / 100));
+  const status = { ...monstro.status, lento: { turns: r.turnos, amount: r.lento / 100 }, veneno: { turns: r.turnos, dmg: veneno } };
+  l.estado = gravarMonstro(masmorra(l), indice, { ...monstro, status });
+  contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: '🌿', tom: 'erro' });
+}
+
+/**
+ * O botão do Poder da fé (o Clérigo; uma vez a cada 7 min): em dupla, a
+ * Comunhão sagrada (ele e o parceiro); sozinho, o Santo Egoísta, que pede a
+ * mana cheia. A duração vem do dano levado nos últimos 30 s.
+ */
+function usarFe(l: Luta): void {
+  const hero = masmorra(l).hero;
+  if (idDaClasse(hero) !== 'clerigo' || (l.arena.recargaDaFe ?? 0) > 0 || (l.arena.fe ?? 0) > 0) return;
+  const comunhao = !!parceiroDePe(l);
+  if (!comunhao && hero.mp < hero.maxMp) {
+    contar(l, { tipo: 'aviso', texto: 'O Santo Egoísta pede a mana cheia' });
+    return;
+  }
+  const levado = danoLevado(l) + (comunhao ? (l.arena.dupla?.parceiroDano ?? 0) : 0);
+  const passos = duracaoDaFe(comunhao, levado, comunhao ? 2 : 1);
+  l.arena.recargaDaFe = REGRAS_DO_CLERIGO.recargaDaFe;
+  if (comunhao) l.apoios.push({ tipo: 'comunhao', passos });
+  const texto = comunhao ? '✝️ Comunhão sagrada!' : '✝️ Santo Egoísta!';
+  contar(l, { tipo: 'aviso', texto });
+  diario(l, [texto]);
+  tocarAFe(l, passos, false);
+}
+
+/**
+ * O Poder da fé cai no herói daqui: a cura, a mana toda vai embora, os
+ * efeitos (bons e ruins) somem até ele acabar, e a vida não desce do piso
+ * enquanto dura. Não revive e não tira ferimento.
+ */
+function tocarAFe(l: Luta, passos: number, doParceiro: boolean): void {
+  const estado = masmorra(l);
+  l.estado = { ...estado, hero: { ...estado.hero, mp: 0, buffs: {} } };
+  delete l.arena.reforco;
+  curarAqui(l, 'comunhao');
+  if (passos > (l.arena.fe ?? 0)) l.arena.fe = passos;
+  if (doParceiro) contar(l, { tipo: 'aviso', texto: '✝️ Comunhão sagrada do parceiro!' });
+}
+
+/** A vida que o Poder da fé segura: não desce de `REGRAS_DO_CLERIGO.pisoDaVida` (%) da máxima (e não sobe quem já estava abaixo). */
+function pisoDaFe(l: Luta, antes: number, hero: Hero): Hero {
+  if (!((l.arena.fe ?? 0) > 0)) return hero;
+  const piso = Math.min(antes, Math.ceil((hero.maxHp * REGRAS_DO_CLERIGO.pisoDaVida) / 100));
+  return hero.hp < piso ? { ...hero, hp: piso } : hero;
+}
+
+/** Anota o dano que o herói daqui levou (só o Clérigo e a dupla precisam: a janela do Poder da fé). */
+function anotarDanoLevado(l: Luta, dano: number): void {
+  if (dano <= 0 || (idDaClasse(masmorra(l).hero) !== 'clerigo' && !l.arena.dupla)) return;
+  const janela = l.arena.passo - REGRAS_DO_CLERIGO.janela;
+  l.arena.danosLevados = [...(l.arena.danosLevados ?? []).filter((d) => d.passo > janela), { passo: l.arena.passo, dano }];
+}
+
+/** Um passo do mundo com o Poder da fé de pé: ele vai acabando, e nenhum efeito pega no herói enquanto dura. */
+function passarAFe(l: Luta): void {
+  if (l.arena.fe === undefined) return;
+  if (l.arena.fe > 1) l.arena.fe -= 1;
+  else {
+    delete l.arena.fe;
+    return;
+  }
+  delete l.arena.reforco;
+  const estado = masmorra(l);
+  // Conta só o campo com valor (o `undefined` que o golpe deixa não é efeito).
+  if (Object.values(estado.hero.buffs ?? {}).some((v) => v !== undefined)) l.estado = { ...estado, hero: { ...estado.hero, buffs: {} } };
+}
+
+/** O dano que o herói daqui levou nos últimos 30 s. */
+function danoLevado(l: LutaEmTempoReal): number {
+  const janela = l.arena.passo - REGRAS_DO_CLERIGO.janela;
+  return (l.arena.danosLevados ?? []).reduce((soma, d) => (d.passo > janela ? soma + d.dano : soma), 0);
+}
+
+/** O dano que o herói levou nos últimos 30 s da luta: o app manda pro parceiro (a Comunhão sagrada conta com ele). */
+export function danoLevadoNaJanela(luta: LutaEmTempoReal): number {
+  return danoLevado(luta);
+}
+
+/** O que a linha da classe mostra além dos contadores: a moral, o Poder da fé e a espera do Druida depois da Purificação. */
+export function extrasDaLuta(luta: LutaEmTempoReal): ExtrasDaClasse {
+  const a = luta.arena;
+  const extras: ExtrasDaClasse = {};
+  if ((a.moral?.nivel ?? 0) > 0) extras.moral = a.moral?.nivel as number;
+  if ((a.recargaDaFe ?? 0) > 0) extras.recargaDaFe = a.recargaDaFe as number;
+  if ((a.fe ?? 0) > 0) extras.fe = a.fe as number;
+  if (a.recarga > RECARGA_DO_ATAQUE) extras.semAtacar = a.recarga;
+  return extras;
+}
+
+/** O que a luta deixa pra próxima, na memória do app: a moral do grupo e a recarga do Poder da fé. */
+export function memoriaDaLuta(luta: LutaEmTempoReal): MemoriaDaLuta {
+  const memoria: MemoriaDaLuta = {};
+  if (luta.arena.moral) memoria.moral = { ...luta.arena.moral };
+  if ((luta.arena.recargaDaFe ?? 0) > 0) memoria.recargaDaFe = luta.arena.recargaDaFe as number;
+  return memoria;
 }
 
 /**
@@ -1347,13 +1775,26 @@ function moverHeroi(l: Luta, entrada: EntradaDaLuta): Walker {
     if (!pisando) monstros.push({ id: `monstro_${m.indice}`, col: lugar.col, row: lugar.row });
   }
   const planta = roomLayout({}, monstros, paredesDaSala(masmorra(l).masmorra.dungeon), formato);
-  return walkTick(planta, heroi, { x: entrada.x, y: entrada.y }, velocidadeNaArena(masmorra(l).hero)).walker;
+  // A moral do grupo (o degrau 1) também deixa o passo mais ligeiro.
+  const daMoral = moralAqui(l).velocidade;
+  const base = velocidadeNaArena(masmorra(l).hero);
+  const velocidade = daMoral > 0 ? Math.trunc((base * (100 + daMoral)) / 100) : base;
+  return walkTick(planta, heroi, { x: entrada.x, y: entrada.y }, velocidade).walker;
 }
 
 function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
   const arena = l.arena;
   arena.passo += 1;
+  const antes = arena.heroi;
   arena.heroi = moverHeroi(l, entrada);
+  // O Arqueiro conta o tempo parado.
+  const parado = contarParado(masmorra(l).hero, contadores(l), arena.heroi.x !== antes.x || arena.heroi.y !== antes.y);
+  if (parado) arena.classe = parado;
+  if (arena.reforco !== undefined) {
+    if (arena.reforco > 1) arena.reforco -= 1;
+    else delete arena.reforco;
+  }
+  passarAFe(l);
   if (arena.recarga > 0) arena.recarga -= 1;
   if (arena.recargaDoItem > 0) arena.recargaDoItem -= 1;
   if (arena.intervalo > 0) arena.intervalo -= 1;
@@ -1444,7 +1885,11 @@ function aproximar(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   escolherPresa(l, m);
   if (aDistanciaDoGolpe(l, m, jeito)) return;
   const heroi = presaDe(l, m);
-  const r = rumo(heroi.x - m.corpoX, heroi.y - m.corpoY, jeito.passo);
+  // Lento (as vinhas do Druida, as canções…), anda menos.
+  const lento = ((sala(l).monsters ?? [])[m.indice] as CombatMonster | undefined)?.status?.lento;
+  // Sem `amount` (save antigo), os 20% do site (`startMonsterAttack`).
+  const passo = lento && lento.turns > 0 ? Math.trunc(jeito.passo * (1 - (lento.amount || 0.2))) : jeito.passo;
+  const r = rumo(heroi.x - m.corpoX, heroi.y - m.corpoY, passo);
   const { cols, rows } = geometria(l);
   const meia = TILE_UNITS / 2;
   const x = Math.min(Math.max(m.corpoX + r.x, TILE_UNITS + meia), (cols - 1) * TILE_UNITS - meia);
@@ -1652,8 +2097,9 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
     contar(l, { tipo: 'som', som: 'miss' });
     return;
   }
-  // A resistência da classe (a vida que falta no Guerreiro, a fúria, a absorção) tira parte do dano.
-  const resistencia = resistenciaDaClasse(estado.hero, c);
+  // A resistência da classe (a vida que falta no Guerreiro, a fúria, a absorção) e a da moral tiram parte do dano.
+  const moral = moralAqui(l);
+  const resistencia = resistenciaDaClasse(estado.hero, c) + moral.resistencia;
   const dano = resistencia > 0 ? Math.max(1, golpe.damage - Math.floor((golpe.damage * resistencia) / 100)) : golpe.damage;
   const ferido = resistencia > 0 ? { ...golpe.hero, hp: Math.max(0, estado.hero.hp - dano) } : golpe.hero;
   let hero = noEscudo(l, estado.hero.hp, ferido, dano);
@@ -1664,6 +2110,14 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
     hero = quebra.hero;
     quebrou = quebra.membro;
   }
+  // A moral 5 do grupo segura os ossos: o sorteio corre igual, mas nada quebra.
+  if (quebrou && moral.semQuebrar) {
+    hero = comOsFerimentos(hero, estado.hero.ferimentos);
+    quebrou = undefined;
+  }
+  // O Poder da fé segura a vida no piso; e o dano levado entra na janela dele.
+  hero = pisoDaFe(l, estado.hero.hp, hero);
+  anotarDanoLevado(l, dano);
   l.estado = gravarMonstro({ ...estado, hero }, indice, golpe.monster);
   contar(l, { tipo: 'som', som: 'hit' });
   if (quebrou) {
@@ -1678,6 +2132,12 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   apanhou(l, indice, dano, hero.hp > 0);
   if (l.fim) return;
   if (hero.hp <= 0) cair(l);
+}
+
+/** O herói com estes ferimentos (os de antes do golpe); sem nenhum, sem o campo. */
+function comOsFerimentos(hero: Hero, ferimentos: Hero['ferimentos']): Hero {
+  const { ferimentos: _agora, ...resto } = hero;
+  return ferimentos ? { ...resto, ferimentos } : resto;
 }
 
 /**
@@ -1764,8 +2224,9 @@ function moverTiros(l: Luta): void {
 function rodada(l: Luta): void {
   const antes = masmorra(l).hero;
   const veneno = tickHeroStatus(antes);
-  // O veneno também passa primeiro pelo escudo do vigor.
-  const hero = veneno.damage > 0 ? noEscudo(l, antes.hp, veneno.hero, veneno.damage) : veneno.hero;
+  // O veneno também passa primeiro pelo escudo do vigor (e pelo piso do Poder da fé).
+  const hero = veneno.damage > 0 ? pisoDaFe(l, antes.hp, noEscudo(l, antes.hp, veneno.hero, veneno.damage)) : veneno.hero;
+  anotarDanoLevado(l, veneno.damage);
   l.estado = { ...masmorra(l), hero };
   if (hero.hp <= 0 && !l.arena.dupla?.fantasma) {
     diario(l, ['O veneno foi mais forte.']);
@@ -1922,6 +2383,17 @@ function receberDoParceiro(l: Luta, entrada: EntradaDaLuta): void {
     else delete dupla.parceiroCaido;
     if (entrada.parceiro.puxa) dupla.parceiroPuxa = true;
     else delete dupla.parceiroPuxa;
+    if ((entrada.parceiro.dano ?? 0) > 0) dupla.parceiroDano = Math.trunc(entrada.parceiro.dano as number);
+    else delete dupla.parceiroDano;
+  }
+  // A moral do grupo que o Bardo do parceiro subiu (fica a maior).
+  if (entrada.moral !== undefined && Math.trunc(entrada.moral) > (l.arena.moral?.nivel ?? 0)) l.arena.moral = { ...l.arena.moral, nivel: Math.trunc(entrada.moral) };
+  // O apoio do parceiro em mim (o fantasma não recebe nada).
+  if (!dupla.fantasma) {
+    for (const apoio of entrada.apoios ?? []) {
+      if (!Object.prototype.hasOwnProperty.call(ICONE_DO_APOIO, apoio.tipo)) continue;
+      receberApoio(l, apoio.passos !== undefined ? { tipo: apoio.tipo, passos: Math.max(0, Math.trunc(apoio.passos)) } : { tipo: apoio.tipo });
+    }
   }
   if (dupla.fantasma && entrada.reviver) {
     l.estado = { ...masmorra(l), hero: reviver(masmorra(l).hero, entrada.reviver) };

@@ -8315,14 +8315,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -8356,8 +8356,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -8367,10 +8367,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -8437,14 +8437,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -8478,8 +8478,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -8489,10 +8489,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -8540,9 +8540,9 @@
         },
         "triggered": {
           "chance": 0.1,
-          "effect": "cura_no_acerto",
-          "label": "Toque Curativo",
-          "icon": "✨"
+          "effect": "mana_gratis",
+          "label": "Poupança Arcana",
+          "icon": "🔷"
         }
       },
       "rngCalls": 1
@@ -12832,14 +12832,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -12873,8 +12873,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -12884,10 +12884,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 40,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -12957,14 +12957,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -12998,8 +12998,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -13009,10 +13009,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 42,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -13085,14 +13085,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -13126,8 +13126,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -13137,10 +13137,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 40,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -13210,14 +13210,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -13251,8 +13251,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -13262,10 +13262,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 40,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -13335,14 +13335,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -13376,8 +13376,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -13387,10 +13387,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 40,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -13460,14 +13460,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -13501,8 +13501,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -13512,10 +13512,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 42,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -13588,14 +13588,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -13629,8 +13629,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -13640,10 +13640,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 40,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -13713,14 +13713,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -13754,8 +13754,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -13765,10 +13765,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 40,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -22307,14 +22307,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -22347,8 +22347,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -22358,10 +22358,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 40,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -22431,14 +22431,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -22471,8 +22471,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -22482,10 +22482,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 40,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "monster": {
@@ -50893,14 +50893,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -50934,8 +50934,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -50945,10 +50945,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "estilo": "normal"
@@ -50975,14 +50975,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -51016,8 +51016,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -51027,17 +51027,17 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "estilo": "magic"
       }
     },
     "expected": {
-      "result": false
+      "result": true
     }
   },
   {
@@ -51057,14 +51057,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -51098,8 +51098,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -51109,10 +51109,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "estilo": "physical"
@@ -51139,14 +51139,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -51180,8 +51180,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -51191,10 +51191,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "estilo": "ranged"
@@ -55712,14 +55712,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -55753,8 +55753,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -55764,10 +55764,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         }
       }
@@ -55775,7 +55775,13 @@
     "expected": {
       "result": [
         {
-          "estilo": "normal",
+          "estilo": "magic",
+          "daClasse": true,
+          "zona": 0.6666666666666666,
+          "custo": 5
+        },
+        {
+          "estilo": "physical",
           "daClasse": false,
           "zona": 0.5,
           "custo": 0
@@ -68911,7 +68917,7 @@
           "dado": 3,
           "mira": 0.6970632115844637
         },
-        "attackStyle": "normal",
+        "attackStyle": "physical",
         "options": {}
       },
       "rng": {
@@ -68999,7 +69005,7 @@
           "speciesId": "esqueleto",
           "enemyClassId": "xama",
           "floor": 36,
-          "hp": -2,
+          "hp": 8,
           "maxHp": 67,
           "dmg": 21,
           "speed": 16,
@@ -69050,11 +69056,11 @@
           "forca": 0.71,
           "critico": false
         },
-        "damage": 25,
+        "damage": 15,
         "isCrit": false,
         "procTriggered": null,
         "classPassiveTriggered": null,
-        "monsterDefeated": true
+        "monsterDefeated": false
       },
       "rngCalls": 3
     }
@@ -70298,7 +70304,7 @@
           "dado": 8,
           "mira": 0.16346649965271354
         },
-        "attackStyle": "normal",
+        "attackStyle": "magic",
         "options": {
           "petCriticoBonus": 5
         }
@@ -70387,7 +70393,7 @@
           "maxHp": 244,
           "hp": 42,
           "maxMp": 68,
-          "mp": 19,
+          "mp": 14,
           "buffs": {}
         },
         "monster": {
@@ -70441,8 +70447,8 @@
           "enemyClassLabel": "Guardião"
         },
         "outcome": "miss",
-        "magical": false,
-        "affinityPct": 70,
+        "magical": true,
+        "affinityPct": 100,
         "mira": {
           "acerto": false,
           "forca": 0,
@@ -72928,14 +72934,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_92362",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_92362",
+              "templateId": "cajado",
               "rarity": "incomum",
               "stats": {
                 "ataque": 4,
-                "vida": 8
+                "mana": 10
               },
-              "value": 29,
+              "value": 31,
               "equipped": false,
               "procChance": 0.115
             },
@@ -72980,8 +72986,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 106,
-            "maxMp": 105,
+            "maxHp": 100,
+            "maxMp": 115,
             "dmgFisico": 10,
             "dmgMagico": 36,
             "esquiva": 8,
@@ -72991,10 +72997,10 @@
             "resistMagica": 19,
             "descontoLoja": 7
           },
-          "maxHp": 106,
-          "hp": 13,
-          "maxMp": 105,
-          "mp": 98,
+          "maxHp": 100,
+          "hp": 12,
+          "maxMp": 115,
+          "mp": 108,
           "buffs": {
             "forcaTurns": 2,
             "forcaAmount": 0.3
@@ -73054,7 +73060,7 @@
           "dado": 18,
           "mira": 0.5
         },
-        "attackStyle": "normal",
+        "attackStyle": "physical",
         "options": {}
       },
       "rng": {
@@ -73075,14 +73081,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_92362",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_92362",
+              "templateId": "cajado",
               "rarity": "incomum",
               "stats": {
                 "ataque": 4,
-                "vida": 8
+                "mana": 10
               },
-              "value": 29,
+              "value": 31,
               "equipped": false,
               "procChance": 0.115
             },
@@ -73127,8 +73133,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 106,
-            "maxMp": 105,
+            "maxHp": 100,
+            "maxMp": 115,
             "dmgFisico": 10,
             "dmgMagico": 36,
             "esquiva": 8,
@@ -73138,10 +73144,10 @@
             "resistMagica": 19,
             "descontoLoja": 7
           },
-          "maxHp": 106,
-          "hp": 27,
-          "maxMp": 105,
-          "mp": 98,
+          "maxHp": 100,
+          "hp": 12,
+          "maxMp": 115,
+          "mp": 114,
           "buffs": {
             "forcaTurns": 1,
             "forcaAmount": 0.3,
@@ -73152,7 +73158,7 @@
           "speciesId": "lobo_sombras",
           "enemyClassId": "brutamontes",
           "floor": 36,
-          "hp": 9,
+          "hp": 20,
           "maxHp": 240,
           "dmg": 3,
           "speed": 7,
@@ -73206,13 +73212,13 @@
           "forca": 1.5,
           "critico": true
         },
-        "damage": 85,
+        "damage": 74,
         "isCrit": true,
         "procTriggered": {
           "chance": 0.115,
-          "effect": "cura_no_acerto",
-          "label": "Toque Curativo",
-          "icon": "✨"
+          "effect": "mana_gratis",
+          "label": "Poupança Arcana",
+          "icon": "🔷"
         },
         "classPassiveTriggered": null,
         "monsterDefeated": false
@@ -76458,14 +76464,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_68976",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_68976",
+              "templateId": "cajado",
               "rarity": "epico",
               "stats": {
                 "ataque": 7,
-                "vida": 13
+                "mana": 18
               },
-              "value": 48,
+              "value": 53,
               "equipped": false,
               "procChance": 0.16000000000000003
             },
@@ -76510,8 +76516,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 90,
-            "maxMp": 41,
+            "maxHp": 80,
+            "maxMp": 59,
             "dmgFisico": 24,
             "dmgMagico": 9,
             "esquiva": 2,
@@ -76521,10 +76527,10 @@
             "resistMagica": 3,
             "descontoLoja": 12.5
           },
-          "maxHp": 90,
-          "hp": 3,
-          "maxMp": 41,
-          "mp": 10,
+          "maxHp": 80,
+          "hp": 2,
+          "maxMp": 59,
+          "mp": 15,
           "buffs": {}
         },
         "monster": {
@@ -76578,7 +76584,7 @@
           "dado": 16,
           "mira": 0.1047257324680686
         },
-        "attackStyle": "normal",
+        "attackStyle": "magic",
         "options": {}
       },
       "rng": {
@@ -76599,14 +76605,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_68976",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_68976",
+              "templateId": "cajado",
               "rarity": "epico",
               "stats": {
                 "ataque": 7,
-                "vida": 13
+                "mana": 18
               },
-              "value": 48,
+              "value": 53,
               "equipped": false,
               "procChance": 0.16000000000000003
             },
@@ -76651,8 +76657,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 90,
-            "maxMp": 41,
+            "maxHp": 80,
+            "maxMp": 59,
             "dmgFisico": 24,
             "dmgMagico": 9,
             "esquiva": 2,
@@ -76662,9 +76668,9 @@
             "resistMagica": 3,
             "descontoLoja": 12.5
           },
-          "maxHp": 90,
-          "hp": 3,
-          "maxMp": 41,
+          "maxHp": 80,
+          "hp": 2,
+          "maxMp": 59,
           "mp": 10,
           "buffs": {}
         },
@@ -76716,7 +76722,7 @@
           "enemyClassLabel": "Chefe Feiticeiro"
         },
         "outcome": "miss",
-        "magical": false,
+        "magical": true,
         "affinityPct": 100,
         "mira": {
           "acerto": false,
@@ -89383,14 +89389,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_68976",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_68976",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -89425,8 +89431,8 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 361,
-            "maxMp": 179,
+            "maxHp": 356,
+            "maxMp": 187,
             "dmgFisico": 26,
             "dmgMagico": 57,
             "esquiva": 5,
@@ -89436,10 +89442,10 @@
             "resistMagica": 5,
             "descontoLoja": 11.5
           },
-          "maxHp": 361,
+          "maxHp": 356,
           "hp": 25,
-          "maxMp": 179,
-          "mp": 23,
+          "maxMp": 187,
+          "mp": 24,
           "buffs": {
             "inspiracaoTurns": 2,
             "inspiracaoAmount": 0.25
@@ -89618,14 +89624,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_68976",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_68976",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -89660,8 +89666,8 @@
           "killCount": 0,
           "masteryBattles": 60,
           "derived": {
-            "maxHp": 361,
-            "maxMp": 179,
+            "maxHp": 356,
+            "maxMp": 187,
             "dmgFisico": 26,
             "dmgMagico": 57,
             "esquiva": 5,
@@ -89671,10 +89677,10 @@
             "resistMagica": 5,
             "descontoLoja": 11.5
           },
-          "maxHp": 361,
+          "maxHp": 356,
           "hp": 4,
-          "maxMp": 179,
-          "mp": 23,
+          "maxMp": 187,
+          "mp": 24,
           "buffs": {
             "inspiracaoTurns": 2,
             "inspiracaoAmount": 0.25
@@ -91971,14 +91977,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_73424",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_73424",
+              "templateId": "cajado",
               "rarity": "epico",
               "stats": {
                 "ataque": 7,
-                "vida": 13
+                "mana": 18
               },
-              "value": 48,
+              "value": 53,
               "equipped": false,
               "procChance": 0.16000000000000003
             },
@@ -92022,8 +92028,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 310,
-            "maxMp": 138,
+            "maxHp": 300,
+            "maxMp": 156,
             "dmgFisico": 18,
             "dmgMagico": 42,
             "esquiva": 4.5,
@@ -92033,10 +92039,10 @@
             "resistMagica": 10,
             "descontoLoja": 10.5
           },
-          "maxHp": 310,
-          "hp": 215,
-          "maxMp": 138,
-          "mp": 57,
+          "maxHp": 300,
+          "hp": 208,
+          "maxMp": 156,
+          "mp": 65,
           "buffs": {}
         },
         "party": [
@@ -92217,14 +92223,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_73424",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_73424",
+              "templateId": "cajado",
               "rarity": "epico",
               "stats": {
                 "ataque": 7,
-                "vida": 13
+                "mana": 18
               },
-              "value": 48,
+              "value": 53,
               "equipped": false,
               "procChance": 0.16000000000000003
             },
@@ -92268,8 +92274,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 310,
-            "maxMp": 138,
+            "maxHp": 300,
+            "maxMp": 156,
             "dmgFisico": 18,
             "dmgMagico": 42,
             "esquiva": 4.5,
@@ -92279,10 +92285,10 @@
             "resistMagica": 10,
             "descontoLoja": 10.5
           },
-          "maxHp": 310,
-          "hp": 215,
-          "maxMp": 138,
-          "mp": 57,
+          "maxHp": 300,
+          "hp": 208,
+          "maxMp": 156,
+          "mp": 65,
           "buffs": {}
         },
         "party": [
@@ -121896,14 +121902,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -121937,8 +121943,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -121948,10 +121954,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 30,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -122099,14 +122105,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -122140,8 +122146,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -122151,10 +122157,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 50,
-          "maxMp": 62,
-          "mp": 52,
+          "maxMp": 70,
+          "mp": 60,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -122298,14 +122304,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -122339,8 +122345,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 97,
+            "maxHp": 100,
+            "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -122350,10 +122356,10 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 30,
-          "maxMp": 97,
-          "mp": 97,
+          "maxMp": 105,
+          "mp": 105,
           "buffs": {}
         },
         "party": [
@@ -122500,14 +122506,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -122541,8 +122547,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 97,
+            "maxHp": 100,
+            "maxMp": 105,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -122552,10 +122558,10 @@
             "resistMagica": 15,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 55,
-          "maxMp": 97,
-          "mp": 87,
+          "maxMp": 105,
+          "mp": 95,
           "buffs": {}
         },
         "party": [
@@ -140115,14 +140121,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -140157,8 +140163,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -140168,10 +140174,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 30,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "party": [
@@ -140314,14 +140320,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -140356,8 +140362,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -140367,10 +140373,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 45,
-          "maxMp": 62,
-          "mp": 52,
+          "maxMp": 70,
+          "mp": 60,
           "buffs": {}
         },
         "party": [
@@ -140511,14 +140517,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -140552,8 +140558,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -140563,10 +140569,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 30,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "party": [
@@ -140711,14 +140717,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -140752,8 +140758,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -140763,10 +140769,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 54,
-          "maxMp": 62,
-          "mp": 52,
+          "maxMp": 70,
+          "mp": 60,
           "buffs": {}
         },
         "party": [
@@ -140907,14 +140913,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -140948,8 +140954,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -140959,10 +140965,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 62,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "party": [
@@ -141061,14 +141067,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -141102,8 +141108,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -141113,10 +141119,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
-          "hp": 105,
-          "maxMp": 62,
-          "mp": 52,
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 60,
           "buffs": {}
         },
         "party": [
@@ -141213,14 +141219,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -141254,8 +141260,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -141265,10 +141271,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 30,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "party": [],
@@ -141348,14 +141354,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -141389,8 +141395,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -141400,10 +141406,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 50,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "party": [],
@@ -141477,14 +141483,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -141518,8 +141524,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -141529,10 +141535,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 30,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 70,
+          "mp": 70,
           "buffs": {}
         },
         "party": [],
@@ -141612,14 +141618,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_62706",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -141653,8 +141659,8 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 105,
-            "maxMp": 62,
+            "maxHp": 100,
+            "maxMp": 70,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -141664,10 +141670,10 @@
             "resistMagica": 10,
             "descontoLoja": 5
           },
-          "maxHp": 105,
+          "maxHp": 100,
           "hp": 50,
-          "maxMp": 62,
-          "mp": 52,
+          "maxMp": 70,
+          "mp": 60,
           "buffs": {}
         },
         "party": [],
@@ -149170,14 +149176,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_1170",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_1170",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -149211,8 +149217,8 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 221,
-            "maxMp": 130,
+            "maxHp": 216,
+            "maxMp": 138,
             "dmgFisico": 34,
             "dmgMagico": 36,
             "esquiva": 9.5,
@@ -149222,10 +149228,10 @@
             "resistMagica": 22,
             "descontoLoja": 11
           },
-          "maxHp": 221,
-          "hp": 107,
-          "maxMp": 130,
-          "mp": 52,
+          "maxHp": 216,
+          "hp": 105,
+          "maxMp": 138,
+          "mp": 56,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 20
@@ -149339,14 +149345,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_1170",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_1170",
+              "templateId": "cajado",
               "rarity": "comum",
               "stats": {
                 "ataque": 3,
-                "vida": 6
+                "mana": 8
               },
-              "value": 22,
+              "value": 24,
               "equipped": false,
               "procChance": 0.1
             },
@@ -149380,8 +149386,8 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 221,
-            "maxMp": 130,
+            "maxHp": 216,
+            "maxMp": 138,
             "dmgFisico": 34,
             "dmgMagico": 36,
             "esquiva": 9.5,
@@ -149391,10 +149397,10 @@
             "resistMagica": 22,
             "descontoLoja": 11
           },
-          "maxHp": 221,
-          "hp": 107,
-          "maxMp": 130,
-          "mp": 42,
+          "maxHp": 216,
+          "hp": 105,
+          "maxMp": 138,
+          "mp": 46,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 20
@@ -149504,14 +149510,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_72021",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_72021",
+              "templateId": "cajado",
               "rarity": "epico",
               "stats": {
                 "ataque": 7,
-                "vida": 13
+                "mana": 18
               },
-              "value": 48,
+              "value": 53,
               "equipped": false,
               "procChance": 0.16000000000000003
             },
@@ -149556,8 +149562,8 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 122,
-            "maxMp": 119,
+            "maxHp": 112,
+            "maxMp": 137,
             "dmgFisico": 44,
             "dmgMagico": 51,
             "esquiva": 5.5,
@@ -149567,10 +149573,10 @@
             "resistMagica": 6,
             "descontoLoja": 12.5
           },
-          "maxHp": 122,
-          "hp": 115,
-          "maxMp": 119,
-          "mp": 105,
+          "maxHp": 112,
+          "hp": 105,
+          "maxMp": 137,
+          "mp": 121,
           "buffs": {
             "esquivaTurns": 3,
             "esquivaAmount": 20
@@ -149657,14 +149663,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_72021",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_72021",
+              "templateId": "cajado",
               "rarity": "epico",
               "stats": {
                 "ataque": 7,
-                "vida": 13
+                "mana": 18
               },
-              "value": 48,
+              "value": 53,
               "equipped": false,
               "procChance": 0.16000000000000003
             },
@@ -149709,8 +149715,8 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 122,
-            "maxMp": 119,
+            "maxHp": 112,
+            "maxMp": 137,
             "dmgFisico": 44,
             "dmgMagico": 51,
             "esquiva": 5.5,
@@ -149720,10 +149726,10 @@
             "resistMagica": 6,
             "descontoLoja": 12.5
           },
-          "maxHp": 122,
-          "hp": 115,
-          "maxMp": 119,
-          "mp": 99,
+          "maxHp": 112,
+          "hp": 105,
+          "maxMp": 137,
+          "mp": 115,
           "buffs": {
             "esquivaTurns": 3,
             "esquivaAmount": 20
@@ -152561,14 +152567,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_19872",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_19872",
+              "templateId": "cajado",
               "rarity": "incomum",
               "stats": {
                 "ataque": 4,
-                "vida": 8
+                "mana": 10
               },
-              "value": 29,
+              "value": 31,
               "equipped": false,
               "procChance": 0.115
             },
@@ -152602,8 +152608,8 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 230,
-            "maxMp": 119,
+            "maxHp": 224,
+            "maxMp": 129,
             "dmgFisico": 24,
             "dmgMagico": 27,
             "esquiva": 8,
@@ -152613,10 +152619,10 @@
             "resistMagica": 18,
             "descontoLoja": 12
           },
-          "maxHp": 230,
-          "hp": 197,
-          "maxMp": 119,
-          "mp": 14,
+          "maxHp": 224,
+          "hp": 192,
+          "maxMp": 129,
+          "mp": 15,
           "buffs": {
             "inspiracaoTurns": 2,
             "inspiracaoAmount": 0.25
@@ -152752,14 +152758,14 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_19872",
-              "templateId": "maca",
+              "uid": "cajado_1700000000000_19872",
+              "templateId": "cajado",
               "rarity": "incomum",
               "stats": {
                 "ataque": 4,
-                "vida": 8
+                "mana": 10
               },
-              "value": 29,
+              "value": 31,
               "equipped": false,
               "procChance": 0.115
             },
@@ -152793,8 +152799,8 @@
           "killCount": 0,
           "masteryBattles": 200,
           "derived": {
-            "maxHp": 230,
-            "maxMp": 119,
+            "maxHp": 224,
+            "maxMp": 129,
             "dmgFisico": 24,
             "dmgMagico": 27,
             "esquiva": 8,
@@ -152804,10 +152810,10 @@
             "resistMagica": 18,
             "descontoLoja": 12
           },
-          "maxHp": 230,
-          "hp": 197,
-          "maxMp": 119,
-          "mp": 14,
+          "maxHp": 224,
+          "hp": 192,
+          "maxMp": 129,
+          "mp": 15,
           "buffs": {
             "inspiracaoTurns": 2,
             "inspiracaoAmount": 0.25,

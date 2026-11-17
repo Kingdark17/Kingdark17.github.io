@@ -426,7 +426,8 @@ describe('a barra de mira', () => {
     expect(botoes('Arqueiro', 'espada')).toEqual(['normal:0.50']);
     expect(botoes('Guerreiro', 'espada')).toEqual(['normal:0.67:classe']);
     expect(botoes('Ladino', 'adaga')).toEqual(['normal:0.67:classe']);
-    expect(botoes('Clérigo', 'maca')).toEqual(['normal:0.50']);
+    // Desde 2026-11-17 o Clérigo ataca com magia, como o Mago.
+    expect(botoes('Clérigo', 'cajado')).toEqual(['magic:0.67:classe:5MP', 'physical:0.50']);
   });
 
   it('a zona da classe acerta onde a comum erra', () => {

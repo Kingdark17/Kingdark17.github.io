@@ -77,5 +77,14 @@
       "passo": 28,
       "distancia": 4800
     }
-  }
+  },
+  "ICONE_DO_APOIO": {
+    "bardo": "🎵",
+    "clerigo": "✝️",
+    "purificar": "🌿",
+    "comunhao": "✝️"
+  },
+  "$privadas": [
+    "ICONE_DO_APOIO"
+  ]
 }

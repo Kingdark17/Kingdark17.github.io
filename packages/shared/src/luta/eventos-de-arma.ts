@@ -198,6 +198,8 @@ export interface EventoDeArma {
   simbolo?: string;
   /** Letras: a letra de cada nota, em ordem. */
   letras?: string[];
+  /** A largura da faixa do crítico, em fração da régua; ausente, `FAIXA_CRITICA` (a moral 12 do Bardo a alarga). */
+  faixa?: number;
 }
 
 /** Um ponto do traço do dedo: onde, na caixa do desenho, e em que passo. */
@@ -312,9 +314,9 @@ export function lerEvento(evento: EventoDeArma, jogada: JogadaDoEvento): Leitura
   switch (tipo) {
     case 'barra':
     case 'circulo':
-      return lerNoTempo(zona, duracao, jogada.toque, 'toque', tipo);
+      return lerNoTempo(zona, duracao, jogada.toque, 'toque', tipo, evento.faixa);
     case 'carga':
-      return lerNoTempo(zona, duracao, jogada.soltou, 'soltou', tipo);
+      return lerNoTempo(zona, duracao, jogada.soltou, 'soltou', tipo, evento.faixa);
     case 'ritmo':
     case 'toque_duplo':
       return lerNotas(evento, jogada.toques ?? []);
@@ -340,10 +342,10 @@ function conferirPasso(valor: number, duracao: number, oQue: string, tipo: TipoD
  * gesto no último passo, ou nenhum, é erro: a barra acabou, a bolinha
  * sumiu, a carga estourou.
  */
-function lerNoTempo(zona: number, duracao: number, passo: number | undefined, oQue: string, tipo: TipoDeEvento): LeituraDaMira {
+function lerNoTempo(zona: number, duracao: number, passo: number | undefined, oQue: string, tipo: TipoDeEvento, faixa?: number): LeituraDaMira {
   if (passo === undefined) return lerMira(zona, null);
   conferirPasso(passo, duracao, oQue, tipo);
-  return lerMira(zona, passo >= duracao ? null : passo / duracao);
+  return lerMira(zona, passo >= duracao ? null : passo / duracao, faixa);
 }
 
 /**
@@ -370,7 +372,7 @@ function lerNotas(evento: EventoDeArma, toques: readonly number[]): LeituraDaMir
     const i = toques.findIndex((t, k) => !usados[k] && t >= batida - janela && t <= batida + janela);
     if (i < 0) return lerMira(zona, null);
     usados[i] = true;
-    return lerMira(zona, 0.5 + ((toques[i] as number) - batida) / (2 * janela));
+    return lerMira(zona, 0.5 + ((toques[i] as number) - batida) / (2 * janela), evento.faixa);
   });
   return juntarNotas(zona, leituras);
 }
@@ -397,7 +399,7 @@ function lerLetras(evento: EventoDeArma, teclas: readonly TeclaDoEvento[]): Leit
   const leituras = batidas.map((batida, i) => {
     const tecla = teclas.find((k) => k.t >= batida - janela && k.t < batida + janela);
     if (!tecla || tecla.letra !== letras[i]) return lerMira(zona, null);
-    return lerMira(zona, 0.5 + (tecla.t - batida) / (2 * janela));
+    return lerMira(zona, 0.5 + (tecla.t - batida) / (2 * janela), evento.faixa);
   });
   return juntarNotas(zona, leituras);
 }
@@ -449,7 +451,7 @@ function lerDesenho(evento: EventoDeArma, traco: readonly PontoDoTraco[]): Leitu
   const erro = Math.max(distanciaMedia(simbolo, linha), distanciaMedia(densificar(traco), simbolo));
   const tempo = (traco[traco.length - 1] as PontoDoTraco).t - (traco[0] as PontoDoTraco).t;
   const total = erro + Math.max(0, tempo - TEMPO_LIVRE_DO_DESENHO) * ERRO_POR_PASSO;
-  return lerMira(zona, Math.min(1, 0.5 + total / (2 * ERRO_NA_PONTA)));
+  return lerMira(zona, Math.min(1, 0.5 + total / (2 * ERRO_NA_PONTA)), evento.faixa);
 }
 
 /**

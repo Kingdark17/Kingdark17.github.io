@@ -761,6 +761,65 @@ for (const cls of [...E.CLASSES.map((c) => c.id), 'nenhuma']) {
   }
 }
 
+// --- as classes de longe e de apoio na luta do app (rodada 3b): o Arqueiro, a moral do Bardo, a cura, a fé ---
+
+for (const cls of [...E.CLASSES.map((c) => c.id), 'nenhuma']) {
+  caso(`apoiaAliado: ${cls}`, 'apoiaAliado', { quem: { classId: cls } }, (a) => E.apoiaAliado(a.quem));
+  caso(`miraDaClasse: ${cls}`, 'miraDaClasse', { quem: { classId: cls } }, (a) => E.miraDaClasse(a.quem));
+}
+for (const especie of ['esqueleto', 'zumbi', 'espectro_gelado', 'slime', 'goblin', '']) {
+  caso(`mortoVivo: ${especie || 'vazio'}`, 'mortoVivo', { especie }, (a) => E.mortoVivo(a.especie));
+}
+for (const blocos of [0, 1, 2, 3, 5, 9, 10, 11, 12]) {
+  for (const parado of [0, 179, 180, 500]) {
+    caso(`danoDaDistancia: ${blocos} blocos, parado ${parado}`, 'danoDaDistancia', { blocos, parado }, (a) => E.danoDaDistancia(a.blocos, a.parado));
+  }
+}
+for (const parado of [0, 180]) {
+  for (const blocos of [1, 4]) {
+    caso(`bonusDoAtaque: arqueiro a ${blocos} blocos, parado ${parado}`, 'bonusDoAtaque', { quem: { classId: 'arqueiro' }, c: { parado }, alvo: { colado: false, chefe: false, blocos } }, (a) => E.bonusDoAtaque(a.quem, a.c, a.alvo));
+  }
+}
+for (const nivel of [0, 1, 2, 3, 4, 5, 7, 8, 11, 12, 13]) {
+  caso(`efeitosDaMoral: nível ${nivel}`, 'efeitosDaMoral', { nivel }, (a) => E.efeitosDaMoral(a.nivel));
+}
+for (const [nome, moral] of [
+  ['vazia', {}],
+  ['quase subindo', { nivel: 2, criticos: 4 }],
+  ['no meio', { nivel: 5, criticos: 1 }],
+  ['no teto', { nivel: 12, criticos: 3 }],
+] as const) {
+  caso(`contarCriticoNoAliado: ${nome}`, 'contarCriticoNoAliado', { moral }, (a) => E.contarCriticoNoAliado(a.moral));
+}
+for (const tipo of ['bardo', 'clerigo', 'purificar', 'comunhao'] as const) {
+  for (const [hp, maxHp] of [[50, 150], [149, 150], [150, 150], [0, 999], [3, 7]]) {
+    caso(`curaDoApoio: ${tipo}, vida ${hp}/${maxHp}`, 'curaDoApoio', { tipo, vida: { hp, maxHp } }, (a) => E.curaDoApoio(a.tipo, a.vida));
+  }
+}
+for (const comunhao of [true, false]) {
+  for (const dano of [0, 7, 30, 120, 9999]) {
+    caso(`duracaoDaFe: ${comunhao ? 'comunhão' : 'egoísta'}, dano ${dano}`, 'duracaoDaFe', { comunhao, dano, quantos: comunhao ? 2 : 1 }, (a) => E.duracaoDaFe(a.comunhao, a.dano, a.quantos));
+  }
+}
+for (const cls of ['arqueiro', 'guerreiro']) {
+  for (const [nome, c] of [['zerado', {}], ['contando', { parado: 90 }], ['no ponto', { parado: 180 }]] as const) {
+    for (const andou of [false, true]) {
+      caso(`contarParado: ${cls}, ${nome}${andou ? ', andou' : ''}`, 'contarParado', { quem: { classId: cls }, c, andou }, (a) => E.contarParado(a.quem, a.c, a.andou));
+    }
+  }
+}
+for (const cls of ['arqueiro', 'bardo', 'clerigo', 'druida', 'mago']) {
+  for (const [nome, c, extras] of [
+    ['nada', {}, {}],
+    ['parado no ponto e com moral', { parado: 180 }, { moral: 4 }],
+    ['fé voltando', {}, { recargaDaFe: 7321 }],
+    ['fé de pé', {}, { fe: 125, recargaDaFe: 25000 }],
+    ['sem atacar', {}, { semAtacar: 1799 }],
+  ] as const) {
+    caso(`textosDaClasse: ${cls}, ${nome}`, 'textosDaClasse', { quem: { classId: cls, hp: 10, maxHp: 10 }, c, extras }, (a) => E.textosDaClasse(a.quem, a.c, a.extras));
+  }
+}
+
 // --- maestria ---
 
 for (const level of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1, 2.5, Number.NaN]) {
@@ -5351,6 +5410,120 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       const perto = { ...dupla, arena: { ...dupla.arena, heroi: { x: m.corpoX, y: m.corpoY + Math.trunc(2.4 * E.TILE_UNITS), facing: 'N' as const } } };
       const parceiro = { x: m.corpoX, y: m.corpoY - 2 * E.TILE_UNITS, ...(puxa ? { puxa: true } : {}) };
       simula(`em dupla, ${classe} contra parceiro ${puxa ? 'paladino' : 'comum'}`, perto, parado(200).map((e) => ({ ...e, parceiro })), { seed: semente });
+    }
+  }
+
+  // As classes de longe e de apoio (rodada 3b): o Arqueiro, o Bardo, o Clérigo, o Druida e o apoio pela rede.
+  {
+    const T = E.TILE_UNITS;
+    const MEIO = { x: 4.5 * T, y: 4.5 * T };
+    const CANTO: Walker = { x: 1.5 * T, y: 7.5 * T, facing: 'N' };
+    const noCanto = (estado: EstadoNaMasmorra, papel: 'anfitriao' | 'convidado' | null = null, memoria: E.MemoriaDaLuta = {}) =>
+      E.abrirLuta(estado, CANTO, null, false, papel, memoria).luta;
+    /** `n` golpes, um a cada `ciclo` passos, apertando com o cursor em `cursor` e tocando no passo `toque` de cada um. */
+    const golpesNo = (n: number, cursor: { x: number; y: number }, toque = 42, ciclo = 60, extra: Partial<EntradaDaLuta> = {}): EntradaDaLuta[] =>
+      parado(n * ciclo).map((e, i) =>
+        i % ciclo === 0 ? { ...e, ...extra, atacar: true, cursor } : i % ciclo === toque ? { ...e, ...extra, tocar: true } : { ...e, ...extra },
+      );
+    const ferido = (classe: string, o: Partial<Hero> = {}) => ({ ...comArma(classe, 'espada'), hp: 150, ...o });
+
+    // O Arqueiro: parado de longe (a mira firme), andando entre um tiro e outro, e colado no monstro.
+    const arqueiro = () => noCanto({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: comArma('arqueiro', 'arco') });
+    {
+      // Já parado há 3 s (esperar ali deixaria o goblin investir até o herói, longe do cursor).
+      const firme = arqueiro();
+      simula('arqueiro parado de longe, com a mira firme', { ...firme, arena: { ...firme.arena, classe: { parado: 180 } } }, golpesNo(3, MEIO, 40, 90), { seed: 840 });
+    }
+    simula(
+      'arqueiro andando entre um tiro e outro',
+      arqueiro(),
+      golpesNo(3, MEIO, 40, 90).map((e, i) => (i % 90 >= 50 ? { ...e, x: (Math.floor(i / 90) % 2 === 0 ? 1 : -1) * 127 } : e)),
+      { seed: 841 },
+    );
+    simula('arqueiro colado no monstro', abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: comArma('arqueiro', 'arco') }), golpesNo(3, MEIO, 40, 90), { seed: 842 });
+    {
+      // O cursor a 2,5 casas do monstro: a mira do Arqueiro pega, a do Guerreiro vai no chão.
+      const longeDoMonstro = { x: MEIO.x + 2.5 * T, y: MEIO.y };
+      simula('a mira 2,3× do arqueiro', arqueiro(), golpesNo(1, longeDoMonstro, 40, 90), { seed: 843 });
+      simula('a mira de todo mundo, no mesmo lugar', abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: comArma('guerreiro', 'espada') }), golpesNo(1, longeDoMonstro), { seed: 843 });
+    }
+
+    // O Bardo: batendo se cura e ganha o reforço; mirando em si (sozinho) sobe a moral; a moral 12 alarga a faixa do crítico.
+    simula('bardo batendo se cura e ganha o reforço', abrir({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: ferido('bardo') }), golpesNo(4, MEIO), { seed: 844 });
+    simula('bardo mirando em si sobe a moral do grupo', noCanto({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: ferido('bardo') }), golpesNo(6, CANTO), { seed: 845 });
+    for (const [semente, nivel] of [
+      [846, 0],
+      [847, 12],
+    ] as const) {
+      simula(`toque fora do meio, com moral ${nivel}`, E.abrirLuta({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: comArma('guerreiro', 'espada') }, PERTO, null, false, null, { moral: { nivel } }).luta, golpesNo(3, MEIO, 45), { seed: semente });
+    }
+    {
+      const parceiro = { x: 2.5 * T, y: 7.5 * T };
+      simula('bardo em dupla mirando no parceiro', noCanto({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: ferido('bardo') }, 'anfitriao'), golpesNo(3, parceiro, 42, 60, { parceiro }), { seed: 848 });
+    }
+
+    // O Clérigo: o golpe sagrado no morto-vivo (e no que não é), a cura batendo, o Poder da fé sozinho e em dupla.
+    for (const [semente, especie] of [
+      [849, 'zumbi'],
+      [850, 'slime'],
+    ] as const) {
+      simula(`clérigo bate no ${especie}`, abrir({ ...salaCom([bicho(especie, { hp: 3000, maxHp: 3000 })]), hero: ferido('clerigo') }), golpesNo(3, MEIO), { seed: semente });
+    }
+    {
+      const clerigo = (o: Partial<Hero> = {}) => ({ ...comArma('clerigo', 'espada'), ...o });
+      const apanhando = abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 25 })]), hero: clerigo() });
+      simula('clérigo: Santo Egoísta depois de apanhar', apanhando, parado(700).map((e, i) => (i === 300 ? { ...e, fe: true } : e)), { seed: 851 });
+      simula('clérigo: o Santo Egoísta sem a mana cheia', abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: clerigo({ mp: 1 }) }), parado(20).map((e, i) => (i === 3 ? { ...e, fe: true } : e)), { seed: 852 });
+      const forteDemais = abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 400 })]), hero: clerigo() });
+      simula('clérigo: a fé segura a vida no piso', { ...forteDemais, arena: { ...forteDemais.arena, fe: 3000, danosLevados: [{ passo: 0, dano: 50 }] } }, parado(500), { seed: 853 });
+      const parceiro = { x: 2.5 * T, y: 7.5 * T, dano: 80 };
+      const emDupla = noCanto({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 25 })]), hero: clerigo() }, 'anfitriao');
+      simula('clérigo em dupla: a Comunhão sagrada', emDupla, parado(400).map((e, i) => ({ ...e, parceiro, ...(i === 250 ? { fe: true } : {}) })), { seed: 854 });
+    }
+
+    // O Druida: as vinhas (perto da parede e longe dela), o lento e o veneno, a Purificação nele mesmo.
+    {
+      const druida = (o: Partial<Hero> = {}) => ({ ...comArma('druida', 'espada'), ...o });
+      const noMeio = noCanto({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: druida() });
+      simula('druida longe das vinhas', noMeio, golpesNo(1, MEIO), { seed: 855 });
+      const naParede = { ...noMeio, arena: { ...noMeio.arena, monstros: noMeio.arena.monstros.map((m) => ({ ...m, corpoX: 1.5 * T, corpoY: 2.5 * T })) } };
+      simula('druida: as vinhas pegam perto da parede', naParede, [...golpesNo(2, { x: 1.5 * T, y: 2.5 * T }), ...parado(300)], { seed: 856 });
+      simula(
+        'druida purifica a si mesmo',
+        noCanto({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: druida({ hp: 90, ferimentos: { braco: true, perna: true, veneno: 2 }, buffs: { poisonTurns: 4, poisonDmg: 3 } }) }),
+        golpesNo(2, CANTO),
+        { seed: 857 },
+      );
+    }
+
+    // O apoio que chega do parceiro, a moral do grupo pela entrada, e a moral 5 segurando os ossos.
+    {
+      const recebe = noCanto({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: ferido('guerreiro', { mp: 9, ferimentos: { perna: true } }) }, 'convidado');
+      const apoios: Record<number, Partial<EntradaDaLuta>> = {
+        1: { apoios: [{ tipo: 'bardo' }] },
+        2: { apoios: [{ tipo: 'clerigo' }, { tipo: 'purificar' }] },
+        3: { apoios: [{ tipo: 'comunhao', passos: 120.7 }] },
+        4: { moral: 3 },
+        5: { moral: 1 },
+      };
+      simula('o apoio que chega do parceiro', recebe, parado(200).map((e, i) => ({ ...e, ...(apoios[i] ?? {}) })), { seed: 858 });
+      const ossos = E.abrirLuta(
+        { ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000, dmg: 40, enemyClassId: 'brutamontes' })]), hero: { ...comArma('guerreiro', 'espada'), hp: 3000, maxHp: 3000 } },
+        PERTO,
+        null,
+        false,
+        null,
+        { moral: { nivel: 5, criticos: 2 }, recargaDaFe: 900 },
+      ).luta;
+      simula('moral 5: os brutamontes não quebram nada', ossos, parado(1500), { seed: 859 });
+      caso('abrirLuta: com a memória do app', 'abrirLuta', { estado: salaCom([bicho('zumbi')]), chegada: PERTO, memoria: { moral: { nivel: 4, criticos: 1 }, recargaDaFe: 1234 } }, (a) =>
+        E.abrirLuta(a.estado, a.chegada, null, false, null, a.memoria));
+      const contada = { ...ossos, arena: { ...ossos.arena, passo: 2000, danosLevados: [{ passo: 100, dano: 9 }, { passo: 1500, dano: 30 }, { passo: 1999, dano: 4 }], fe: 61, recarga: 400 } };
+      caso('memoriaDaLuta, extrasDaLuta e danoLevadoNaJanela', 'extrasDaLuta', { luta: contada }, (a) => ({
+        memoria: E.memoriaDaLuta(a.luta),
+        extras: E.extrasDaLuta(a.luta),
+        dano: E.danoLevadoNaJanela(a.luta),
+      }));
     }
   }
 

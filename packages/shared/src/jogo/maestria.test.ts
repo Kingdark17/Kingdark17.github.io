@@ -20,7 +20,8 @@ function heroi(classe: string, masteryBattles: number, arma?: string): Hero {
 describe('armasDaMaestria', () => {
   it('diz a arma pela primeira palavra do nome, em minúscula', () => {
     expect(armasDaMaestria(heroi('guerreiro', 0))).toBe('espada');
-    expect(armasDaMaestria(heroi('clerigo', 0))).toBe('maça');
+    // O Clérigo é do cajado, como o Mago, desde 2026-11-17.
+    expect(armasDaMaestria(heroi('clerigo', 0))).toBe('cajado');
   });
 
   it('junta as duas de quem domina duas', () => {

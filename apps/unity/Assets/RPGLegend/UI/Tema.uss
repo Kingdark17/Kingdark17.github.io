@@ -1433,6 +1433,32 @@
     border-color: var(--gold-bright);
 }
 
+/* As placas do aliado (rodada 3b): o Bardo, o Clérigo e o Druida miram o apoio nelas. */
+.aliados-do-apoio {
+    flex-direction: row;
+    flex-shrink: 0;
+    margin-bottom: 6px;
+}
+
+.placa-de-aliado {
+    flex-grow: 1;
+    flex-basis: 0;
+    margin: 0 3px 0 0;
+    padding: 4px 6px;
+    font-size: 18px;
+    color: var(--parchment);
+    background-color: rgba(16, 18, 26, 0.78);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 4px;
+}
+
+.placa-de-aliado-escolhida {
+    border-width: 2px;
+    border-color: var(--gold-bright);
+    color: var(--gold-bright);
+}
+
 .nome-do-lutador {
     font-size: 20px;
     color: var(--gold-bright);

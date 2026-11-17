@@ -435,13 +435,14 @@ namespace RPGLegend.Game.Jogo
         }
 
         /// <summary>
-        /// A linha da classe embaixo das barras (rodada 3a do doc do Breno, só no app): o combo do Guerreiro, a
-        /// furtividade do Ladino, a fúria do Bárbaro ou a absorção do Paladino. Fora da luta, some.
+        /// A linha da classe embaixo das barras (rodadas 3a e 3b do doc do Breno, só no app): o combo do Guerreiro, a
+        /// furtividade do Ladino, a fúria do Bárbaro, a absorção do Paladino, a mira firme do Arqueiro, o Poder da fé
+        /// do Clérigo, a espera do Druida e a moral do grupo. Fora da luta, some.
         /// </summary>
         private void DesenharClasse(LutaEmTempoReal luta)
         {
             if (_classeNaLuta == null) return;
-            var textos = luta != null && luta.Fim == null ? ClassesDeLuta.TextosDaClasse(luta.Estado.Hero, luta.Arena.Classe) : null;
+            var textos = luta != null && luta.Fim == null ? ClassesDeLuta.TextosDaClasse(luta.Estado.Hero, luta.Arena.Classe, Arenas.ExtrasDaLuta(luta)) : null;
             string texto = textos != null && textos.Count > 0 ? string.Join(" · ", textos) : "";
             if (texto == _classeMostrada) return;
             _classeMostrada = texto;

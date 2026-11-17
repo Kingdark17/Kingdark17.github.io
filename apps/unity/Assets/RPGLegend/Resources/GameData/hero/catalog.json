@@ -210,7 +210,7 @@
       "id": "clerigo",
       "name": "Clérigo",
       "icon": "✝️",
-      "weaponTemplate": "maca",
+      "weaponTemplate": "cajado",
       "bias": {
         "sabedoria": 3,
         "constituicao": 1
@@ -218,15 +218,16 @@
       "desc": "Cura aliados e resiste a corrupção.",
       "signatureId": "cura_menor",
       "affinity": {
-        "maca": 100,
-        "cajado": 70,
+        "cajado": 100,
         "espada": 50,
         "adaga": 40,
         "arco": 35,
+        "maca": 30,
         "machado": 30,
         "marreta": 30,
         "violao": 35
-      }
+      },
+      "ataquePrincipal": "magico"
     },
     {
       "id": "barbaro",

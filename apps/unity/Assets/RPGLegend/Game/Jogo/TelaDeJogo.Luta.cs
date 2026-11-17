@@ -14,8 +14,9 @@ namespace RPGLegend.Game.Jogo
     /// fixos de 1/60 s (<see cref="Partida.PassoDaLuta"/>), com o joystick, o teclado e os toques do quadro.
     ///
     /// No PC: as setas (ou WASD) andam com o herói; espaço (ou J) é o botão de ataque — apertar abre o evento, apertar de
-    /// novo toca, soltar solta a carga —, 1, 2 e 3 são os poderes, Q abre os itens, Tab troca o alvo, e a escolha do
-    /// alvo também vai com o mouse. O cajado, no PC, pede letras em vez do desenho: U, I, O e P.
+    /// novo toca, soltar solta a carga —, 1, 2 e 3 são os poderes, F é o Poder da fé do Clérigo, Q abre os itens, Tab
+    /// troca o alvo, e a escolha do alvo também vai com o mouse (no Bardo, no Clérigo e no Druida, o cursor em cima de
+    /// um herói mira nele). O cajado, no PC, pede letras em vez do desenho: U, I, O e P.
     /// </summary>
     public sealed partial class TelaDeJogo
     {
@@ -39,6 +40,10 @@ namespace RPGLegend.Game.Jogo
         private VisualElement _hud, _botaoAtaque, _iconeDoAtaque, _poderes, _menuDeItens, _numeros, _avisosDaLuta;
         private Label _emojiDoAtaque, _dicaDoEvento;
         private Button _botaoItem;
+        /// <summary>O Poder da fé do Clérigo (rodada 3b): um botão no arco, com a espera de 7 min.</summary>
+        private Button _botaoFe;
+        private VisualElement _esperaDaFe;
+        private bool _feNoArco;
         private EventoNaTela _eventoNaTela;
         private PalcoDaLuta _palcoDaLuta;
         private Button _botaoDoBicho;
@@ -47,7 +52,8 @@ namespace RPGLegend.Game.Jogo
 
         // O que a pessoa fez desde o último passo: entra no primeiro passo do quadro.
         private bool _apertou, _soltou, _tocou;
-        private string _poderApertado, _itemUsado, _tecla;
+        private string _poderApertado, _itemUsado, _tecla, _mirarAliado;
+        private bool _apertouFe;
         private int? _mirar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
@@ -82,6 +88,7 @@ namespace RPGLegend.Game.Jogo
             // a poeira dos golpes dos monstros no chão e o estouro das bolas vão pra sala, por baixo dos corpos
             _palcoDaLuta.EfeitoNaSala = (nome, x, y) => _sala?.TocarEfeito(nome, x, y);
             _palcoDaLuta.AoMirar += indice => _mirar = indice;
+            _palcoDaLuta.AoMirarAliado += aliado => _mirarAliado = aliado;
             _palcoDaLuta.Esconder();
             palco.Insert(0, _palcoDaLuta);
             // O pet fica de fora da luta: o bônus dele vale, mas o canto da sala é o palco dos monstros.
@@ -125,6 +132,24 @@ namespace RPGLegend.Game.Jogo
             ParaNaoAndar(_botaoItem);
             _botaoItem.clicked += AlternarMenuDeItens;
             _poderes.Add(_botaoItem);
+
+            _botaoFe = new Button { text = "" };
+            _botaoFe.AddToClassList("botao-da-luta");
+            _botaoFe.AddToClassList("botao-em-volta");
+            _botaoFe.AddToClassList("botao-de-poder");
+            _botaoFe.style.display = DisplayStyle.None;
+            var iconeDaFe = new Label("✝️") { pickingMode = PickingMode.Ignore };
+            iconeDaFe.AddToClassList("icone-do-poder");
+            _botaoFe.Add(iconeDaFe);
+            var nomeDaFe = new Label("FÉ") { pickingMode = PickingMode.Ignore };
+            nomeDaFe.AddToClassList("custo-do-poder");
+            _botaoFe.Add(nomeDaFe);
+            _esperaDaFe = new VisualElement { pickingMode = PickingMode.Ignore };
+            _esperaDaFe.AddToClassList("espera-do-poder");
+            _botaoFe.Add(_esperaDaFe);
+            _botaoFe.clicked += () => _apertouFe = true;
+            ParaNaoAndar(_botaoFe);
+            _poderes.Insert(_poderes.IndexOf(_botaoItem), _botaoFe);
 
             _botaoAtaque = new VisualElement();
             _botaoAtaque.AddToClassList("botao-de-ataque");
@@ -220,15 +245,18 @@ namespace RPGLegend.Game.Jogo
                 Dedo = _dedoNoDesenho,
                 Tecla = _tecla,
                 Mirar = _mirar,
+                MirarAliado = _mirarAliado,
+                Fe = _apertouFe ? true : (bool?)null,
                 // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
                 Cursor = _palcoDaLuta.CursorNaSala(),
             };
             EntradaDaDupla(entrada);
-            _apertou = _soltou = _tocou = false;
+            _apertou = _soltou = _tocou = _apertouFe = false;
             _poderApertado = null;
             _itemUsado = null;
             _tecla = null;
             _mirar = null;
+            _mirarAliado = null;
             return entrada;
         }
 
@@ -239,6 +267,7 @@ namespace RPGLegend.Game.Jogo
             if (teclado.spaceKey.wasPressedThisFrame || teclado.jKey.wasPressedThisFrame) _apertou = true;
             if (teclado.spaceKey.wasReleasedThisFrame || teclado.jKey.wasReleasedThisFrame) _soltou = true;
             if (teclado.qKey.wasPressedThisFrame) AlternarMenuDeItens();
+            if (teclado.fKey.wasPressedThisFrame && _feNoArco) _apertouFe = true;
             if (teclado.tabKey.wasPressedThisFrame) _mirar = ProximoAlvo(luta.Arena);
             var digitos = new[] { teclado.digit1Key, teclado.digit2Key, teclado.digit3Key };
             for (int i = 0; i < digitos.Length && i < _botoesDePoder.Count; i++)
@@ -312,6 +341,25 @@ namespace RPGLegend.Game.Jogo
                 b.Botao.EnableInClassList("sem-mana", hero.Mp < custo);
             }
 
+            // O Poder da fé: só o Clérigo, com a espera de 7 min em cima do botão.
+            bool fe = Catalog.IdDaClasse(hero.ClassId, hero.ClassName) == "clerigo";
+            if (fe != _feNoArco)
+            {
+                _feNoArco = fe;
+                _botaoFe.style.display = fe ? DisplayStyle.Flex : DisplayStyle.None;
+                PosicionarEmVolta();
+            }
+            if (fe)
+            {
+                double totalDaFe = GameData.ClassesDeLutaTable.Clerigo.RecargaDaFe;
+                double faltaDaFe = arena.RecargaDaFe ?? 0;
+                _esperaDaFe.style.height = Length.Percent((float)(faltaDaFe / totalDaFe * 100.0));
+                // Sozinho, o Santo Egoísta pede a mana cheia; de pé (a fé correndo), também espera.
+                bool sozinho = arena.Dupla?.Parceiro == null || arena.Dupla.ParceiroCaido == true;
+                _botaoFe.EnableInClassList("sem-mana", faltaDaFe > 0 || (arena.Fe ?? 0) > 0 || (sozinho && hero.Mp < hero.MaxMp));
+            }
+            _palcoDaLuta.ApoiaAliados = ClassesDeLuta.ApoiaAliado(hero);
+
             DesenharClasse(luta);
 
             // O escudo do vigor (a Encantadora) aparece ao lado da vida enquanto durar.
@@ -355,6 +403,7 @@ namespace RPGLegend.Game.Jogo
         {
             var botoes = new List<VisualElement>();
             foreach (var b in _botoesDePoder) botoes.Add(b.Botao);
+            if (_feNoArco) botoes.Add(_botaoFe);
             botoes.Add(_botaoItem);
             // O centro do botão de ataque fica a 54 px do canto de baixo à direita; cada botão em volta tem 62 px.
             bool largo = botoes.Count > AngulosDosBotoes.Length;

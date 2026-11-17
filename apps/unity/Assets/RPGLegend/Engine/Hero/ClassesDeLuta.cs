@@ -22,6 +22,111 @@ namespace RPGLegend.Engine
         [JsName("REGRAS_DO_LADINO")] public RegrasDoLadino Ladino;
         [JsName("REGRAS_DO_BARBARO")] public RegrasDoBarbaro Barbaro;
         [JsName("REGRAS_DO_PALADINO")] public RegrasDoPaladino Paladino;
+        [JsName("REGRAS_DO_ARQUEIRO")] public RegrasDoArqueiro Arqueiro;
+        [JsName("REGRAS_DO_BARDO")] public RegrasDoBardo Bardo;
+        [JsName("REGRAS_DA_MORAL")] public RegrasDaMoral Moral;
+        [JsName("REGRAS_DO_CLERIGO")] public RegrasDoClerigo Clerigo;
+        [JsName("MORTOS_VIVOS")] public System.Collections.Generic.List<string> MortosVivos = new System.Collections.Generic.List<string>();
+        [JsName("REGRAS_DO_DRUIDA")] public RegrasDoDruida Druida;
+    }
+
+    /// <summary>TS: REGRAS_DO_ARQUEIRO — o dano de perto, o de longe parado e a mira maior.</summary>
+    public sealed class RegrasDoArqueiro
+    {
+        public double Perto;
+        public double DanoDePerto;
+        public double PorBloco;
+        public double Teto;
+        public double Parado;
+        public double Mira;
+    }
+
+    /// <summary>TS: REGRAS_DO_BARDO — a cura, o reforço e a moral.</summary>
+    public sealed class RegrasDoBardo
+    {
+        public double Cura;
+        public double Forca;
+        public double TempoDaForca;
+        public double CriticosDaMoral;
+        public double TetoDaMoral;
+    }
+
+    /// <summary>TS: REGRAS_DA_MORAL — os degraus da moral do grupo.</summary>
+    public sealed class RegrasDaMoral
+    {
+        public double NivelDaVelocidade;
+        public double Velocidade;
+        public double DanoNaVelocidade;
+        public double NivelDaResistencia;
+        public double Resistencia;
+        public double DanoNaResistencia;
+        public double NivelSemQuebrar;
+        public double NivelDoCritico;
+        public double Critico;
+        public double DanoNoCritico;
+        public double NivelDaFaixa;
+        public double FaixaCritica;
+    }
+
+    /// <summary>TS: REGRAS_DO_CLERIGO — a cura, o golpe sagrado e o Poder da fé.</summary>
+    public sealed class RegrasDoClerigo
+    {
+        public double Cura;
+        public double MortoVivo;
+        public double RecargaDaFe;
+        public double CuraDaFe;
+        public double PisoDaVida;
+        public double Janela;
+        public double TetoDaComunhao;
+        public double TetoDoEgoista;
+        public double DivisorDoEgoista;
+    }
+
+    /// <summary>TS: REGRAS_DO_DRUIDA — as vinhas, o lento e o veneno, a Purificação.</summary>
+    public sealed class RegrasDoDruida
+    {
+        public double Vinhas;
+        public double Lento;
+        public double Veneno;
+        public double Turnos;
+        public double Purificacao;
+        public double SemAtacar;
+    }
+
+    /// <summary>TS: EfeitosDaMoral — o que a moral dá ao grupo, somando os degraus.</summary>
+    public sealed class EfeitosDaMoral
+    {
+        public double Velocidade;
+        public double Dano;
+        public double Resistencia;
+        public bool SemQuebrar;
+        public double Critico;
+        public double FaixaCritica;
+    }
+
+    /// <summary>TS: Moral — a moral do grupo (o nível e os críticos no aliado desde o último). Ausente (null) é zero.</summary>
+    public sealed class Moral
+    {
+        public double? Nivel;
+        public double? Criticos;
+
+        public Moral Clone() => (Moral)MemberwiseClone();
+    }
+
+    /// <summary>TS: o retorno de contarCriticoNoAliado — a moral nova e, se subiu, o nível novo.</summary>
+    public sealed class CriticoNoAliado
+    {
+        public Moral Moral;
+        public double? Subiu;
+    }
+
+    /// <summary>TS: ExtrasDaClasse — o que a linha da classe mostra além dos contadores (em passos).</summary>
+    public sealed class ExtrasDaClasse
+    {
+        public double? Moral;
+        public double? RecargaDaFe;
+        public double? Fe;
+        public double? SemAtacar;
     }
 
     /// <summary>TS: REGRAS_DO_GUERREIRO — colado no alvo, o combo e a resistência pela vida que falta.</summary>
@@ -86,6 +191,7 @@ namespace RPGLegend.Engine
         public double? Furia;
         public double? Calmo;
         public double? Absorcao;
+        public double? Parado;
 
         public ContadoresDaClasse Clone() => (ContadoresDaClasse)MemberwiseClone();
     }
@@ -196,10 +302,12 @@ namespace RPGLegend.Engine
         private static double ContraOChefe(double valor, bool chefe) => chefe ? System.Math.Truncate(valor * D.Ladino.ContraOChefe / 100) : valor;
 
         /// <summary>TS: bonusDoAtaque — o dano a mais (%) do ataque comum na arena, somado ao da classe.</summary>
-        public static double BonusDoAtaque(string classId, string className, string arma, ContadoresDaClasse c, bool colado, bool chefe)
+        public static double BonusDoAtaque(string classId, string className, string arma, ContadoresDaClasse c, bool colado, bool chefe, double blocos = 0)
         {
             switch (Catalog.IdDaClasse(classId, className))
             {
+                case "arqueiro":
+                    return DanoDaDistancia(blocos, Z(c.Parado));
                 case "guerreiro":
                     return (colado ? D.Guerreiro.Colado : 0) + Z(c.Combo);
                 case "ladino":
@@ -335,12 +443,34 @@ namespace RPGLegend.Engine
 
         public static bool PuxaOsMonstros(Hero hero) => PuxaOsMonstros(hero.ClassId, hero.ClassName);
 
-        /// <summary>TS: textosDaClasse — a linha da classe embaixo das barras, só na luta. Sem nada a mostrar, vazia.</summary>
-        public static System.Collections.Generic.List<string> TextosDaClasse(string classId, string className, double hp, double maxHp, ContadoresDaClasse c)
+        /// <summary>TS: tempo — passos em segundos, arredondando pra cima; e em "m:ss" a partir de um minuto.</summary>
+        private static string Tempo(double passos)
         {
+            double s = System.Math.Ceiling(passos / 60);
+            if (s >= 60) return Js.NumberToString(System.Math.Truncate(s / 60)) + ":" + Js.NumberToString(s % 60).PadLeft(2, '0');
+            return Js.NumberToString(s) + " s";
+        }
+
+        /// <summary>
+        /// TS: textosDaClasse — a linha da classe embaixo das barras, só na luta: os contadores, a mira firme do
+        /// Arqueiro, o Poder da fé, a espera do Druida, e a moral do grupo de quem tiver. Sem nada a mostrar, vazia.
+        /// </summary>
+        public static System.Collections.Generic.List<string> TextosDaClasse(string classId, string className, double hp, double maxHp, ContadoresDaClasse c, ExtrasDaClasse extras = null)
+        {
+            extras = extras ?? new ExtrasDaClasse();
             var textos = new System.Collections.Generic.List<string>();
             switch (Catalog.IdDaClasse(classId, className))
             {
+                case "arqueiro":
+                    textos.Add(Z(c.Parado) >= D.Arqueiro.Parado ? "🏹 Mira firme" : "🏹 Fique parado pra mirar");
+                    break;
+                case "clerigo":
+                    if (Z(extras.Fe) > 0) textos.Add("✝️ Fé " + Tempo(extras.Fe.Value));
+                    else textos.Add(Z(extras.RecargaDaFe) > 0 ? "✝️ Fé em " + Tempo(extras.RecargaDaFe.Value) : "✝️ Fé pronta");
+                    break;
+                case "druida":
+                    if (Z(extras.SemAtacar) > 0) textos.Add("🌿 Ataque em " + Tempo(extras.SemAtacar.Value));
+                    break;
                 case "guerreiro":
                 {
                     double resistencia = ResistenciaDaClasse(classId, className, hp, maxHp, c);
@@ -358,10 +488,112 @@ namespace RPGLegend.Engine
                     textos.Add("🛡️ Absorção " + Js.NumberToString(Z(c.Absorcao)) + "/" + Js.NumberToString(D.Paladino.TetoDaAbsorcao));
                     break;
             }
+            if (Z(extras.Moral) > 0) textos.Add("🎵 Moral " + Js.NumberToString(extras.Moral.Value));
             return textos;
         }
 
-        public static System.Collections.Generic.List<string> TextosDaClasse(Hero hero, ContadoresDaClasse c) =>
-            TextosDaClasse(hero.ClassId, hero.ClassName, hero.Hp, hero.MaxHp, c ?? new ContadoresDaClasse());
+        public static System.Collections.Generic.List<string> TextosDaClasse(Hero hero, ContadoresDaClasse c, ExtrasDaClasse extras = null) =>
+            TextosDaClasse(hero.ClassId, hero.ClassName, hero.Hp, hero.MaxHp, c ?? new ContadoresDaClasse(), extras);
+
+        // ---------- rodada 3b (2026-11-17): Arqueiro, Bardo, Clérigo e Druida ----------
+
+        /// <summary>TS: apoiaAliado — a classe mira nos aliados (o Bardo, o Clérigo e o Druida).</summary>
+        public static bool ApoiaAliado(string classId, string className)
+        {
+            var id = Catalog.IdDaClasse(classId, className);
+            return id == "bardo" || id == "clerigo" || id == "druida";
+        }
+
+        public static bool ApoiaAliado(Hero hero) => ApoiaAliado(hero.ClassId, hero.ClassName);
+
+        /// <summary>TS: mortoVivo — a espécie conta como morto-vivo.</summary>
+        public static bool MortoVivo(string speciesId) => speciesId != null && D.MortosVivos.Contains(speciesId);
+
+        /// <summary>TS: miraDaClasse — a área da mira do herói, em % da de todo mundo: a do Arqueiro é maior.</summary>
+        public static double MiraDaClasse(string classId, string className) =>
+            Catalog.IdDaClasse(classId, className) == "arqueiro" ? D.Arqueiro.Mira : 100;
+
+        public static double MiraDaClasse(Hero hero) => MiraDaClasse(hero.ClassId, hero.ClassName);
+
+        /// <summary>TS: danoDaDistancia — o dano a mais (%) do Arqueiro pela distância.</summary>
+        public static double DanoDaDistancia(double blocos, double parado)
+        {
+            var r = D.Arqueiro;
+            if (blocos <= r.Perto) return -r.DanoDePerto;
+            if (parado < r.Parado) return 0;
+            return Js.Min(r.Teto, blocos * r.PorBloco);
+        }
+
+        /// <summary>TS: efeitosDaMoral — o que a moral dá ao grupo, somando os degraus.</summary>
+        public static EfeitosDaMoral EfeitosDaMoral(double nivel)
+        {
+            var r = D.Moral;
+            var e = new EfeitosDaMoral();
+            if (nivel >= r.NivelDaVelocidade)
+            {
+                e.Velocidade += r.Velocidade;
+                e.Dano += r.DanoNaVelocidade;
+            }
+            if (nivel >= r.NivelDaResistencia)
+            {
+                e.Resistencia += r.Resistencia;
+                e.Dano += r.DanoNaResistencia;
+            }
+            if (nivel >= r.NivelSemQuebrar) e.SemQuebrar = true;
+            if (nivel >= r.NivelDoCritico)
+            {
+                e.Critico += r.Critico;
+                e.Dano += r.DanoNoCritico;
+            }
+            if (nivel >= r.NivelDaFaixa) e.FaixaCritica += r.FaixaCritica;
+            return e;
+        }
+
+        /// <summary>TS: contarCriticoNoAliado — um crítico do Bardo num aliado conta pra moral.</summary>
+        public static CriticoNoAliado ContarCriticoNoAliado(Moral moral)
+        {
+            var r = D.Bardo;
+            double nivel = Z(moral.Nivel);
+            if (nivel >= r.TetoDaMoral) return new CriticoNoAliado { Moral = moral };
+            double criticos = Z(moral.Criticos) + 1;
+            if (criticos < r.CriticosDaMoral)
+            {
+                var novos = moral.Clone();
+                novos.Criticos = criticos;
+                return new CriticoNoAliado { Moral = novos };
+            }
+            return new CriticoNoAliado { Moral = new Moral { Nivel = nivel + 1, Criticos = 0 }, Subiu = nivel + 1 };
+        }
+
+        /// <summary>TS: curaDoApoio — a cura do apoio num herói com esta vida.</summary>
+        public static double CuraDoApoio(string tipo, double hp, double maxHp)
+        {
+            double falta = Js.Max(0, maxHp - hp);
+            if (falta <= 0) return 0;
+            double pct = tipo == "bardo" ? D.Bardo.Cura : tipo == "clerigo" ? D.Clerigo.Cura : tipo == "purificar" ? D.Druida.Purificacao : D.Clerigo.CuraDaFe;
+            double sobre = tipo == "bardo" ? falta : maxHp;
+            return Js.Min(falta, Js.Max(1, System.Math.Truncate(sobre * pct / 100)));
+        }
+
+        /// <summary>TS: duracaoDaFe — a duração do Poder da fé, em passos, pelo dano levado nos últimos 30 s.</summary>
+        public static double DuracaoDaFe(bool comunhao, double danoLevado, double quantos)
+        {
+            var r = D.Clerigo;
+            double dano = Js.Max(0, System.Math.Truncate(danoLevado));
+            if (comunhao) return Js.Min(r.TetoDaComunhao * 60, System.Math.Truncate(dano * 60 / (2 * Js.Max(1, quantos))));
+            return Js.Min(r.TetoDoEgoista * 60, System.Math.Truncate(dano * 60 / r.DivisorDoEgoista));
+        }
+
+        /// <summary>TS: contarParado — o Arqueiro conta o tempo parado. null: nada muda.</summary>
+        public static ContadoresDaClasse ContarParado(string classId, string className, ContadoresDaClasse c, bool andou)
+        {
+            if (Catalog.IdDaClasse(classId, className) != "arqueiro") return null;
+            double antes = Z(c.Parado);
+            double parado = andou ? 0 : Js.Min(D.Arqueiro.Parado, antes + 1);
+            if (parado == antes && c.Parado != null) return null;
+            var novos = c.Clone();
+            novos.Parado = parado;
+            return novos;
+        }
     }
 }

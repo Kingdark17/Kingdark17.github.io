@@ -96,7 +96,11 @@
     "guerreiro",
     "ladino",
     "barbaro",
-    "paladino"
+    "paladino",
+    "arqueiro",
+    "bardo",
+    "clerigo",
+    "druida"
   ],
   "REGRAS_DO_GUERREIRO": {
     "colado": 25,
@@ -137,5 +141,58 @@
     "absorcaoQueResiste": 100,
     "resistencia": 20,
     "foco": 30
+  },
+  "REGRAS_DO_ARQUEIRO": {
+    "perto": 2,
+    "danoDePerto": 30,
+    "porBloco": 12,
+    "teto": 120,
+    "parado": 180,
+    "mira": 230
+  },
+  "REGRAS_DO_BARDO": {
+    "cura": 30,
+    "forca": 20,
+    "tempoDaForca": 360,
+    "criticosDaMoral": 5,
+    "tetoDaMoral": 12
+  },
+  "REGRAS_DA_MORAL": {
+    "nivelDaVelocidade": 1,
+    "velocidade": 30,
+    "danoNaVelocidade": 10,
+    "nivelDaResistencia": 3,
+    "resistencia": 30,
+    "danoNaResistencia": 10,
+    "nivelSemQuebrar": 5,
+    "nivelDoCritico": 8,
+    "critico": 50,
+    "danoNoCritico": 5,
+    "nivelDaFaixa": 12,
+    "faixaCritica": 50
+  },
+  "REGRAS_DO_CLERIGO": {
+    "cura": 15,
+    "mortoVivo": 5,
+    "recargaDaFe": 25200,
+    "curaDaFe": 40,
+    "pisoDaVida": 20,
+    "janela": 1800,
+    "tetoDaComunhao": 50,
+    "tetoDoEgoista": 40,
+    "divisorDoEgoista": 3
+  },
+  "MORTOS_VIVOS": [
+    "esqueleto",
+    "zumbi",
+    "espectro_gelado"
+  ],
+  "REGRAS_DO_DRUIDA": {
+    "vinhas": 2,
+    "lento": 10,
+    "veneno": 5,
+    "turnos": 2,
+    "purificacao": 10,
+    "semAtacar": 1800
   }
 }

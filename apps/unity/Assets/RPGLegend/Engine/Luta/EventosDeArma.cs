@@ -32,6 +32,8 @@ namespace RPGLegend.Engine
         public string Simbolo;
         /// <summary>Letras: a letra de cada nota, em ordem.</summary>
         public List<string> Letras;
+        /// <summary>A largura da faixa do crítico, em fração da régua; ausente (null), FAIXA_CRITICA (a moral 12 do Bardo a alarga).</summary>
+        public double? Faixa;
     }
 
     /// <summary>TS: TeclaDoEvento — uma tecla de letra apertada no evento: qual, e em que passo.</summary>
@@ -210,9 +212,9 @@ namespace RPGLegend.Engine
             {
                 case TiposDeEvento.Barra:
                 case TiposDeEvento.Circulo:
-                    return LerNoTempo(evento.Zona, evento.Duracao, jogada.Toque, "toque", evento.Tipo);
+                    return LerNoTempo(evento.Zona, evento.Duracao, jogada.Toque, "toque", evento.Tipo, evento.Faixa);
                 case TiposDeEvento.Carga:
-                    return LerNoTempo(evento.Zona, evento.Duracao, jogada.Soltou, "soltou", evento.Tipo);
+                    return LerNoTempo(evento.Zona, evento.Duracao, jogada.Soltou, "soltou", evento.Tipo, evento.Faixa);
                 case TiposDeEvento.Ritmo:
                 case TiposDeEvento.ToqueDuplo:
                     return LerNotas(evento, jogada.Toques ?? new List<double>());
@@ -240,11 +242,11 @@ namespace RPGLegend.Engine
         /// Barra, bolinha e carga: o passo do gesto dividido pela duração é onde o cursor parou. Nenhum gesto, ou
         /// o gesto no último passo, é erro.
         /// </summary>
-        private static LeituraDaMira LerNoTempo(double zona, double duracao, double? passo, string oQue, string tipo)
+        private static LeituraDaMira LerNoTempo(double zona, double duracao, double? passo, string oQue, string tipo, double? faixa = null)
         {
             if (passo == null) return Attack.LerMira(zona, null);
             ConferirPasso(passo.Value, duracao, oQue, tipo);
-            return Attack.LerMira(zona, passo.Value >= duracao ? (double?)null : passo.Value / duracao);
+            return Attack.LerMira(zona, passo.Value >= duracao ? (double?)null : passo.Value / duracao, faixa);
         }
 
         /// <summary>
@@ -285,7 +287,7 @@ namespace RPGLegend.Engine
                     continue;
                 }
                 usados[achou] = true;
-                leituras.Add(Attack.LerMira(zona, 0.5 + (toques[achou] - batida) / (2 * janela)));
+                leituras.Add(Attack.LerMira(zona, 0.5 + (toques[achou] - batida) / (2 * janela), evento.Faixa));
             }
             return JuntarNotas(zona, leituras);
         }
@@ -329,7 +331,7 @@ namespace RPGLegend.Engine
                     leituras.Add(Attack.LerMira(zona, null));
                     continue;
                 }
-                leituras.Add(Attack.LerMira(zona, 0.5 + (achou.T - batida) / (2 * janela)));
+                leituras.Add(Attack.LerMira(zona, 0.5 + (achou.T - batida) / (2 * janela), evento.Faixa));
             }
             return JuntarNotas(zona, leituras);
         }
@@ -394,7 +396,7 @@ namespace RPGLegend.Engine
             double erro = Js.Max(DistanciaMedia(simbolo, linha), DistanciaMedia(Densificar(traco), simbolo));
             double tempo = traco[traco.Count - 1].T - traco[0].T;
             double total = erro + Js.Max(0, tempo - D.TempoLivreDoDesenho) * D.ErroPorPasso;
-            return Attack.LerMira(zona, Js.Min(1, 0.5 + total / (2 * D.ErroNaPonta)));
+            return Attack.LerMira(zona, Js.Min(1, 0.5 + total / (2 * D.ErroNaPonta)), evento.Faixa);
         }
 
         /// <summary>O traço com os buracos preenchidos: entre dois pontos, um a cada PASSO_DO_TRACO.</summary>

@@ -55,6 +55,11 @@ namespace RPGLegend.Game.Jogo
         private bool _lutando;
         /// <summary>O parceiro me reviveu no meio da luta: com quantos % eu levanto no próximo passo (0 = nada).</summary>
         private double _reviverPendente;
+        /// <summary>O apoio que o parceiro soltou em mim (o Bardo, o Clérigo, o Druida; rodada 3b) e a moral que o Bardo dele subiu.</summary>
+        private readonly List<ApoioDoParceiro> _apoiosRecebidos = new List<ApoioDoParceiro>();
+        private double? _moralRecebida;
+        /// <summary>O dano que o parceiro levou nos últimos 30 s, que ele diz no "p" (a Comunhão sagrada conta com ele).</summary>
+        private const double LimiteDoDanoLevado = 1000000;
         /// <summary>O REVIVER dos botões de cima (null até a partida em sala abrir).</summary>
         private UnityEngine.UIElements.Button _botaoReviver;
         private bool _botaoReviverVisivel;
@@ -130,6 +135,8 @@ namespace RPGLegend.Game.Jogo
             _semParceiro = false;
             _inteiroDaVez = 0;
             _reviverPendente = 0;
+            _apoiosRecebidos.Clear();
+            _moralRecebida = null;
         }
 
         /// <summary>Entrei (ou voltei depois de uma queda): o servidor não tem mais o meu perfil nem, talvez, o mapa.</summary>
@@ -241,8 +248,26 @@ namespace RPGLegend.Game.Jogo
                     if (!Numero(dados["x"], LimiteDaPosicao, out var x) || !Numero(dados["y"], LimiteDaPosicao, out var y)) break;
                     var olha = Texto(dados["f"]);
                     bool caido = dados["c"]?.Type == JTokenType.Boolean && (bool)dados["c"];
-                    _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null, Puxa = _parceiroPuxa ? true : (bool?)null };
+                    double? levado = Numero(dados["d"], LimiteDoDanoLevado, out var dano30) && dano30 > 0 ? Math.Truncate(dano30) : (double?)null;
+                    _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null, Puxa = _parceiroPuxa ? true : (bool?)null, Dano = levado };
                     _sala?.MoverParceiro(x, y, olha == "N" || olha == "E" || olha == "W" ? olha : "S", caido);
+                    break;
+                case "a":
+                    // O apoio do parceiro em mim (a cura, o reforço, a Purificação, a Comunhão): só na luta.
+                    if (_partida.Luta == null || !(dados["a"] is JArray apoios)) break;
+                    foreach (var a in apoios)
+                    {
+                        if (_apoiosRecebidos.Count >= 16) break;
+                        var tipo = Texto(a["k"]);
+                        if (tipo != "bardo" && tipo != "clerigo" && tipo != "purificar" && tipo != "comunhao") continue;
+                        _apoiosRecebidos.Add(new ApoioDoParceiro { Tipo = tipo, Passos = Numero(a["n"], 100000, out var passos) && passos >= 0 ? Math.Truncate(passos) : (double?)null });
+                    }
+                    break;
+                case "mo":
+                    // A moral do grupo que o Bardo do parceiro subiu.
+                    if (!Numero(dados["n"], 100, out var moral) || moral < 1) break;
+                    if (_partida.Luta != null) _moralRecebida = Math.Max(_moralRecebida ?? 0, Math.Truncate(moral));
+                    else _partida.ReceberMoral(Math.Truncate(moral));
                     break;
                 case "m":
                     // Uma mensagem do chat da sala.
@@ -331,6 +356,16 @@ namespace RPGLegend.Game.Jogo
                 entrada.Espelho = _espelhoRecebido;
                 _espelhoRecebido = null;
             }
+            if (_apoiosRecebidos.Count > 0)
+            {
+                entrada.Apoios = new List<ApoioDoParceiro>(_apoiosRecebidos);
+                _apoiosRecebidos.Clear();
+            }
+            if (_moralRecebida != null)
+            {
+                entrada.Moral = _moralRecebida;
+                _moralRecebida = null;
+            }
         }
 
         /// <summary>Chamado a cada quadro: diz onde o meu herói está e, na luta, manda o que é do meu papel.</summary>
@@ -375,6 +410,24 @@ namespace RPGLegend.Game.Jogo
                     _partida.DanosPraMandar.Clear();
                     Rede.MandarTempoReal(new JObject { ["t"] = "d", ["d"] = golpes });
                 }
+                // Os dois: o apoio que soltei no parceiro e a moral que o meu Bardo subiu.
+                if (_partida.ApoiosPraMandar.Count > 0)
+                {
+                    var apoios = new JArray();
+                    foreach (var a in _partida.ApoiosPraMandar)
+                    {
+                        var um = new JObject { ["k"] = a.Tipo };
+                        if (a.Passos != null) um["n"] = a.Passos.Value;
+                        apoios.Add(um);
+                    }
+                    _partida.ApoiosPraMandar.Clear();
+                    Rede.MandarTempoReal(new JObject { ["t"] = "a", ["a"] = apoios });
+                }
+                if (_partida.MoralPraMandar != null)
+                {
+                    Rede.MandarTempoReal(new JObject { ["t"] = "mo", ["n"] = _partida.MoralPraMandar.Value });
+                    _partida.MoralPraMandar = null;
+                }
                 // Quem conduz: o espelho dos monstros, com um deles inteiro por vez (é como a fúria e o escudo chegam).
                 if (Rede.Conduzo && luta.Arena.Dupla != null && Time.unscaledTime >= _proximoEspelho)
                 {
@@ -392,7 +445,9 @@ namespace RPGLegend.Game.Jogo
             if (walker == null) return;
             var sala = ChaveDaSalaNaRede();
             bool caido = EstouCaido;
-            var agora = sala + "|" + Math.Round(walker.X) + "|" + Math.Round(walker.Y) + "|" + walker.Facing + "|" + caido;
+            // Na luta, o dano que levei nos últimos 30 s vai junto (a Comunhão sagrada do Clérigo parceiro conta com ele).
+            double levado = luta != null ? Arenas.DanoLevadoNaJanela(luta) : 0;
+            var agora = sala + "|" + Math.Round(walker.X) + "|" + Math.Round(walker.Y) + "|" + walker.Facing + "|" + caido + "|" + levado;
             // Parado, repete de vez em quando: é o que mostra o herói a quem acabou de chegar.
             bool parado = agora == _posicaoEnviada;
             if (parado && Time.unscaledTime < _proximaPosicao + 1f) return;
@@ -400,6 +455,7 @@ namespace RPGLegend.Game.Jogo
             _posicaoEnviada = agora;
             var pacote = new JObject { ["t"] = "p", ["s"] = sala, ["x"] = Math.Round(walker.X), ["y"] = Math.Round(walker.Y), ["f"] = walker.Facing ?? "S" };
             if (caido) pacote["c"] = true;
+            if (levado > 0) pacote["d"] = levado;
             Rede.MandarTempoReal(pacote);
         }
 

@@ -142,13 +142,13 @@ const ERROU: LeituraDaMira = { acerto: false, forca: 0, critico: false };
  * em linha reta da borda (0,5×) até o centro (1,5×), arredondada a duas
  * casas pra tela e regra mostrarem o mesmo número.
  */
-export function lerMira(zona: number, mira: number | null): LeituraDaMira {
+export function lerMira(zona: number, mira: number | null, faixa: number = FAIXA_CRITICA): LeituraDaMira {
   if (mira === null) return ERROU;
   const distancia = Math.abs(mira - 0.5);
   const meia = zona / 2;
   if (distancia > meia) return ERROU;
   const forca = FORCA_NO_CENTRO - (FORCA_NO_CENTRO - FORCA_NA_BORDA) * (distancia / meia);
-  return { acerto: true, forca: Math.round(forca * 100) / 100, critico: distancia <= FAIXA_CRITICA / 2 };
+  return { acerto: true, forca: Math.round(forca * 100) / 100, critico: distancia <= faixa / 2 };
 }
 
 export interface ResolveAttackOptions {
@@ -163,6 +163,8 @@ export interface ResolveAttackOptions {
   multiplicadorDoCritico?: number;
   /** A classe que o doc do Breno refez fica, na arena, sem a passiva antiga do site (decisão do usuário, 2026-11-17). */
   semPassivaDaClasse?: boolean;
+  /** Multiplica o dano no fim (o golpe sagrado do Clérigo num morto-vivo); ausente, 1. Só a arena passa. */
+  multiplicadorDoDano?: number;
 }
 
 export interface ResolveAttackResult {
@@ -256,7 +258,9 @@ export function resolverGolpe(
     throw new RangeError(`força ${leitura.forca} fora da régua (ataque ${attackStyle})`);
   }
 
-  const isMage = idDaClasse(hero) === 'mago';
+  // O golpe mágico é de quem tem a magia como ataque principal: o Mago e,
+  // desde 2026-11-17, o Clérigo (de cajado, "igual ao mago", decisão do usuário).
+  const isMage = classById(idDaClasse(hero) ?? '')?.ataquePrincipal === 'magico';
   const magicalAttack = isMage && attackStyle === 'magic';
 
   if (magicalAttack && hero.mp < MAGIC_ATTACK_COST) {
@@ -341,6 +345,7 @@ export function resolverGolpe(
   dmg = Math.round(dmg * forcaDoBraco(heroAfterCost));
   const pctDaClasse = (options.danoDaClasse ?? 100) + (options.bonusDeDano ?? 0);
   if (pctDaClasse !== 100) dmg = Math.round((dmg * pctDaClasse) / 100);
+  if (options.multiplicadorDoDano !== undefined && options.multiplicadorDoDano !== 1) dmg = Math.round(dmg * options.multiplicadorDoDano);
 
   nextMonster = { ...nextMonster, hp: nextMonster.hp - dmg };
 

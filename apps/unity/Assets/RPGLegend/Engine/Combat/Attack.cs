@@ -74,6 +74,8 @@ namespace RPGLegend.Engine
         public double? MultiplicadorDoCritico;
         /// <summary>A classe refeita pelo doc do Breno fica, na arena, sem a passiva antiga do site.</summary>
         public bool SemPassivaDaClasse;
+        /// <summary>Multiplica o dano no fim (o golpe sagrado do Clérigo num morto-vivo); ausente, 1. Só a arena passa.</summary>
+        public double? MultiplicadorDoDano;
     }
 
     /// <summary>
@@ -204,14 +206,14 @@ namespace RPGLegend.Engine
         /// (|0,525 − 0,5| sai um pouco acima de 0,025). O erro devolve sempre o mesmo objeto ERROU da tabela,
         /// como o TS — não o altere.
         /// </summary>
-        public static LeituraDaMira LerMira(double zona, double? mira)
+        public static LeituraDaMira LerMira(double zona, double? mira, double? faixa = null)
         {
             if (mira == null) return D.Errou;
             double distancia = Math.Abs(mira.Value - 0.5);
             double meia = zona / 2;
             if (distancia > meia) return D.Errou;
             double forca = D.ForcaNoCentro - (D.ForcaNoCentro - D.ForcaNaBorda) * (distancia / meia);
-            return new LeituraDaMira { Acerto = true, Forca = Js.Round(forca * 100) / 100, Critico = distancia <= D.FaixaCritica / 2 };
+            return new LeituraDaMira { Acerto = true, Forca = Js.Round(forca * 100) / 100, Critico = distancia <= (faixa ?? D.FaixaCritica) / 2 };
         }
 
         /// <summary>
@@ -258,7 +260,8 @@ namespace RPGLegend.Engine
                 throw new EngineError("força " + Js.NumberToString(leitura.Forca) + " fora da régua (ataque " + Js.Str(attackStyle) + ")", "RangeError");
             }
 
-            bool isMage = IdDaClasse(hero) == "mago";
+            // O golpe mágico é de quem tem a magia como ataque principal: o Mago e, desde 2026-11-17, o Clérigo.
+            bool isMage = Catalog.ClassById(IdDaClasse(hero) ?? "")?.AtaquePrincipal == "magico";
             bool magicalAttack = isMage && attackStyle == AttackStyles.Magic;
 
             if (magicalAttack && hero.Mp < D.MagicAttackCost)
@@ -361,6 +364,7 @@ namespace RPGLegend.Engine
             dmg = Js.Round(dmg * FerimentosDoHeroi.ForcaDoBraco(heroAfterCost));
             double pctDaClasse = (options.DanoDaClasse ?? 100) + (options.BonusDeDano ?? 0);
             if (pctDaClasse != 100) dmg = Js.Round(dmg * pctDaClasse / 100);
+            if (options.MultiplicadorDoDano != null && options.MultiplicadorDoDano.Value != 1) dmg = Js.Round(dmg * options.MultiplicadorDoDano.Value);
 
             var golpeado = nextMonster.Clone();
             golpeado.Hp = nextMonster.Hp - dmg;
