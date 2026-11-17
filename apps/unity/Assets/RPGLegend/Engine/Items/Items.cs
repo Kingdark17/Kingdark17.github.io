@@ -227,7 +227,7 @@ namespace RPGLegend.Engine
 
         /// <summary>TS: SORTEAVEIS — o que o sorteio sem categoria escolhe: o catálogo sem as runas.</summary>
         /// <summary>Tudo menos as runas (só caem de baú e chefe no app) e os acessórios únicos (só de quem zera).</summary>
-        private static List<ItemTemplate> Sorteaveis => ItemTemplates.All.FindAll(t => t.Category != "runa" && t.Unico == null);
+        private static List<ItemTemplate> Sorteaveis => ItemTemplates.All.FindAll(t => t.Category != "runa" && t.Unico == null && t.ForaDoSorteio != true);
 
         /// <summary>TS: RandomItemOptions.</summary>
         public sealed class RandomItemOptions
@@ -256,7 +256,7 @@ namespace RPGLegend.Engine
             var rng = o.Rng ?? Rng.Default;
 
             // Sem categoria, tudo menos as runas: elas só caem de baú e de chefe no app.
-            var pool = Js.Truthy(o.Category) ? ItemTemplates.ByCategory(o.Category).FindAll(t => t.Unico == null) : Sorteaveis;
+            var pool = Js.Truthy(o.Category) ? ItemTemplates.ByCategory(o.Category).FindAll(t => t.Unico == null && t.ForaDoSorteio != true) : Sorteaveis;
             var template = Rng.Pick(pool, rng);
             // Uma raridade forçada e desconhecida cai para comum, igual ao original.
             var rarity = (Js.Truthy(o.Rarity) ? Rarities.ById(o.Rarity) : Rarities.Pick(floor, rng)) ?? Rarities.All[0];

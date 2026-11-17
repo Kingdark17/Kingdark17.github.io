@@ -104,6 +104,8 @@ namespace RPGLegend.Game.Jogo
         public Action<Walker> AoPassar;
         /// <summary>O ritmo do andar: a perna quebrada anda mais devagar (<see cref="FerimentosDoHeroi.RitmoDoAndar"/>).</summary>
         public double Ritmo = 1;
+        /// <summary>O herói daqui caiu na partida em dupla: é desenhado como fantasma.</summary>
+        public bool Fantasma;
 
         /// <summary>Onde o herói está, pra quem quiser saber (ex.: o diário de testes).</summary>
         public Walker Walker => _walker;
@@ -650,7 +652,13 @@ namespace RPGLegend.Game.Jogo
             float pulo = andando ? Mathf.Abs(Mathf.Sin(_fase * 0.35f)) * 3f : 0f;
             _boneco.position = Mundo(x, y - pulo);
             ColocarSeguidores(x, y);
-            foreach (var camada in _camadasDoHeroi) camada.sortingOrder = (int)y;
+            // O herói caído na partida em dupla é um fantasma: meio transparente e azulado, como o parceiro caído.
+            var corDoHeroi = Fantasma ? CorDoFantasma : Color.white;
+            foreach (var camada in _camadasDoHeroi)
+            {
+                camada.sortingOrder = (int)y;
+                camada.color = corDoHeroi;
+            }
             // De costas ao subir; de frente ao descer e pros lados (não há arte de lado: espelha-se a de frente pro lado
             // que anda). A arte fica na escala do chão: uma casa de altura.
             if (_walker.Facing == "W") _espelhado = true;

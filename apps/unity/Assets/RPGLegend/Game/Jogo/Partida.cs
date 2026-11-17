@@ -96,12 +96,61 @@ namespace RPGLegend.Game.Jogo
         /// </summary>
         public EstadoDoJogo ParaGravar()
         {
-            if (_casa == null) return Estado;
-            var gravar = _casa.Clone();
-            gravar.Hero = Estado.Hero;
-            gravar.Inventory = Estado.Inventory;
-            gravar.Party = Estado.Party;
+            EstadoDoJogo gravar;
+            if (_casa == null) gravar = Estado;
+            else
+            {
+                gravar = _casa.Clone();
+                gravar.Hero = Estado.Hero;
+                gravar.Inventory = Estado.Inventory;
+                gravar.Party = Estado.Party;
+            }
+            // O fantasma não vai pro save: quem sai da sala caído volta a jogar sozinho por um fio de vida.
+            if (gravar.Hero != null && Duplas.EhFantasma(gravar.Hero))
+            {
+                if (ReferenceEquals(gravar, Estado)) gravar = Estado.Clone();
+                gravar.Hero = Duplas.LevantarSozinho(gravar.Hero);
+            }
             return gravar;
+        }
+
+        /// <summary>
+        /// Em sala e sem vida: um fantasma (2026-11-16, decisão do usuário). Ele só segue o parceiro: não passa por porta,
+        /// não pisa em armadilha, não encosta em nada e não mexe na mochila, até o parceiro o reviver.
+        /// </summary>
+        public bool Fantasma => EmCoop && Estado?.Hero != null && Duplas.EhFantasma(Estado.Hero);
+
+        /// <summary>
+        /// Gasta uma Poção de Reviver da mochila (no meio da luta, da mochila da luta). Devolve com quantos % da vida o
+        /// parceiro levanta, ou 0 sem poção.
+        /// </summary>
+        public double GastarPocaoDeReviver()
+        {
+            var gasto = Duplas.GastarPocaoDeReviver(Estado);
+            if (gasto == null) return 0;
+            if (Luta != null) Luta.Estado = gasto.Estado;
+            Estado = gasto.Estado;
+            MarcarParaSalvar();
+            Mudou?.Invoke();
+            return gasto.Porcento;
+        }
+
+        /// <summary>Fora da luta, o parceiro me reviveu: levanto com <paramref name="porcento"/> da vida máxima.</summary>
+        public void Reviver(double porcento)
+        {
+            if (!Fantasma || Luta != null) return;
+            var levantado = Estado.Clone();
+            levantado.Hero = Duplas.Reviver(Estado.Hero, porcento);
+            RegistrarMudanca(levantado, new Aviso("✨", "Revivido", "Seu parceiro reviveu você com a Poção de Reviver."));
+        }
+
+        /// <summary>O parceiro foi embora com o fantasma fora da luta: ele se levanta com 1 de vida, pra não ficar preso.</summary>
+        public void LevantarSozinho()
+        {
+            if (!Fantasma || Luta != null) return;
+            var levantado = Estado.Clone();
+            levantado.Hero = Duplas.LevantarSozinho(Estado.Hero);
+            RegistrarMudanca(levantado, new Aviso("👻", "De pé de novo", "Seu parceiro saiu da sala, e você se levantou com 1 de Vida."));
         }
 
         /// <summary>O estado de quem conduz, já por cima do meu (<see cref="Coop.AplicarRemoto"/>).</summary>
@@ -165,7 +214,7 @@ namespace RPGLegend.Game.Jogo
         /// </summary>
         public bool Mover(string direcao)
         {
-            if (Luta != null || Acompanho) return false;
+            if (Luta != null || Acompanho || Fantasma) return false;
             var secreta = Secreta;
             if (secreta != null)
             {
@@ -231,7 +280,7 @@ namespace RPGLegend.Game.Jogo
         /// </summary>
         public void AoPassar(Walker walker)
         {
-            if (Acompanho || Tela != null || Luta != null || Secreta != null || !(Estado is EstadoNaMasmorra masmorra)) return;
+            if (Acompanho || Fantasma || Tela != null || Luta != null || Secreta != null || !(Estado is EstadoNaMasmorra masmorra)) return;
             var indice = Armadilhas.ArmadilhaSob(CelulaAtual as DungeonCell, walker);
             if (indice == null) return;
             var pisou = ArmadilhasDoJogo.PisarNaArmadilha(masmorra, (int)indice.Value, Rng.Default);
@@ -242,7 +291,7 @@ namespace RPGLegend.Game.Jogo
 
         public void AoEncostar(string id)
         {
-            if (Acompanho || Tela != null || Luta != null) return;
+            if (Acompanho || Fantasma || Tela != null || Luta != null) return;
             if (Estado is EstadoNaCidade cidade)
             {
                 EntrarPelaPorta(cidade, id);
@@ -440,7 +489,7 @@ namespace RPGLegend.Game.Jogo
         /// <summary>TS: abrirTelaDaMochila — abrir a mochila fecha a etapa "Abra a mochila".</summary>
         public void AbrirMochila()
         {
-            if (Tela != null || Luta != null) return;
+            if (Tela != null || Luta != null || Fantasma) return;
             var passo = Tutoriais.Marcar(Estado, "inventory");
             if (passo.Recado != null)
             {

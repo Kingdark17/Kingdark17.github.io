@@ -149,7 +149,8 @@
         "esquiva": "Esquiva",
         "cura": "Cura",
         "curaMana": "Restaura Mana",
-        "tala": "Conserta Braço e Perna"
+        "tala": "Conserta Braço e Perna",
+        "reviver": "Revive com % da Vida"
       }
     }
   },
@@ -567,6 +568,19 @@
             "tala": 1
           },
           "value": 20
+        },
+        {
+          "id": "pot_reviver",
+          "name": "Poção de Reviver",
+          "genero": "f",
+          "category": "consumivel",
+          "desc": "Levanta um parceiro caído com metade da vida. Não serve em quem a carrega.",
+          "sprite": "potions/reviver.png",
+          "base": {
+            "reviver": 50
+          },
+          "value": 250,
+          "foraDoSorteio": true
         },
         {
           "id": "pergaminho",
@@ -2028,6 +2042,19 @@
             "tala": 1
           },
           "value": 20
+        },
+        {
+          "id": "pot_reviver",
+          "name": "Poção de Reviver",
+          "genero": "f",
+          "category": "consumivel",
+          "desc": "Levanta um parceiro caído com metade da vida. Não serve em quem a carrega.",
+          "sprite": "potions/reviver.png",
+          "base": {
+            "reviver": 50
+          },
+          "value": 250,
+          "foraDoSorteio": true
         },
         {
           "id": "pergaminho",
@@ -7524,6 +7551,179 @@
     }
   },
   {
+    "name": "instantiate: pot_reviver em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "pot_reviver",
+          "name": "Poção de Reviver",
+          "genero": "f",
+          "category": "consumivel",
+          "desc": "Levanta um parceiro caído com metade da vida. Não serve em quem a carrega.",
+          "sprite": "potions/reviver.png",
+          "base": {
+            "reviver": 50
+          },
+          "value": 250,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "pot_reviver_1700000000000_62706",
+          "templateId": "pot_reviver",
+          "rarity": "comum",
+          "stats": {
+            "reviver": 50
+          },
+          "value": 250,
+          "equipped": false
+        },
+        {
+          "uid": "pot_reviver_1700000000000_273",
+          "templateId": "pot_reviver",
+          "rarity": "incomum",
+          "stats": {
+            "reviver": 65
+          },
+          "value": 325,
+          "equipped": false
+        },
+        {
+          "uid": "pot_reviver_1700000000000_52744",
+          "templateId": "pot_reviver",
+          "rarity": "raro",
+          "stats": {
+            "reviver": 85
+          },
+          "value": 425,
+          "equipped": false
+        },
+        {
+          "uid": "pot_reviver_1700000000000_98104",
+          "templateId": "pot_reviver",
+          "rarity": "epico",
+          "stats": {
+            "reviver": 110
+          },
+          "value": 550,
+          "equipped": false
+        },
+        {
+          "uid": "pot_reviver_1700000000000_96836",
+          "templateId": "pot_reviver",
+          "rarity": "lendario",
+          "stats": {
+            "reviver": 150
+          },
+          "value": 750,
+          "equipped": false
+        },
+        {
+          "uid": "pot_reviver_1700000000000_28110",
+          "templateId": "pot_reviver",
+          "rarity": "mitico",
+          "stats": {
+            "reviver": 200
+          },
+          "value": 1000,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
     "name": "instantiate: pergaminho em cada raridade",
     "input": {
       "fn": "instantiate",
@@ -12715,6 +12915,45 @@
         "Tala",
         "Tala",
         "Tala"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: pot_reviver",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "pot_reviver",
+          "name": "Poção de Reviver",
+          "genero": "f",
+          "category": "consumivel",
+          "desc": "Levanta um parceiro caído com metade da vida. Não serve em quem a carrega.",
+          "sprite": "potions/reviver.png",
+          "base": {
+            "reviver": 50
+          },
+          "value": 250,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Poção de Reviver",
+        "Poção de Reviver",
+        "Poção de Reviver",
+        "Poção de Reviver",
+        "Poção de Reviver",
+        "Poção de Reviver"
       ]
     }
   },

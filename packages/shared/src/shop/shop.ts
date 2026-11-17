@@ -13,8 +13,9 @@
 
 import type { Hero } from '../hero/hero.js';
 import { addItem, removeByUid } from '../inventory/inventory.js';
-import { randomItem, type Item } from '../items/item.js';
-import type { ItemCategory } from '../items/templates.js';
+import { instantiate, randomItem, type Item } from '../items/item.js';
+import { RARITIES, type Rarity } from '../items/rarity.js';
+import { templateById, type ItemCategory, type ItemTemplate } from '../items/templates.js';
 import { aposMudarDeTier } from '../items/runas.js';
 import { reforge, tierRank, type Tier } from '../items/tiers.js';
 import { defaultRng, pick, type Rng } from '../rng.js';
@@ -41,8 +42,16 @@ export function rollStock(kind: ShopKind, floor: number, options: RollStockOptio
     const category: ItemCategory = kind === 'blacksmith' ? pick(BLACKSMITH_CATEGORIES, rng) : 'consumivel';
     stock.push(randomItem({ category, floor, rng, now: options.now, ...(options.app ? { app: true, tetoDoDegrau: DEGRAU_DA_LOJA } : {}) }));
   }
+  // A Poção de Reviver: só o vendedor do app, e só de vez em quando (um sorteio a mais, que o site não faz).
+  if (options.app && kind !== 'blacksmith' && rng() < CHANCE_DA_POCAO_DE_REVIVER) {
+    stock.push(instantiate(templateById(POCAO_DE_REVIVER) as ItemTemplate, RARITIES[0] as Rarity, options.now ? { rng, now: options.now } : { rng }));
+  }
   return stock;
 }
+
+/** O id da Poção de Reviver, e a chance de o vendedor do app ter uma (bem rara: decisão do usuário, 2026-11-16). */
+export const POCAO_DE_REVIVER = 'pot_reviver';
+export const CHANCE_DA_POCAO_DE_REVIVER = 0.12;
 
 /**
  * As poções custam 50% a mais pra comprar (doc do Breno de 2026-11-06, "deixar mais difícil", o Moderado). A venda

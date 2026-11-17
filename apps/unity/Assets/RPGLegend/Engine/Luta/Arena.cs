@@ -243,6 +243,8 @@ namespace RPGLegend.Engine
         public Espelho Espelho;
         /// <summary>Em dupla: o parceiro saiu da sala. Quem ficou segue sozinho; se estava caído, perde.</summary>
         public bool? SemParceiro;
+        /// <summary>Em dupla: o parceiro gastou uma Poção de Reviver em mim — com quantos % da vida máxima eu levanto.</summary>
+        public double? Reviver;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -1895,6 +1897,17 @@ namespace RPGLegend.Engine
             {
                 dupla.Parceiro = new PontoNaSala { X = Math.Truncate(entrada.Parceiro.X), Y = Math.Truncate(entrada.Parceiro.Y) };
                 dupla.ParceiroCaido = entrada.Parceiro.Caido == true ? true : (bool?)null;
+            }
+            if (dupla.Fantasma == true && Js.Truthy(entrada.Reviver))
+            {
+                var levantado = Masmorra(l).Clone();
+                levantado.Hero = Duplas.Reviver(levantado.Hero, entrada.Reviver.Value);
+                l.Estado = levantado;
+                dupla.Fantasma = null;
+                const string texto = "✨ Seu parceiro reviveu você!";
+                Contar(l, Aviso(texto));
+                Diario(l, new[] { texto });
+                Contar(l, Som("heal"));
             }
             if (dupla.Fantasma == true && dupla.ParceiroCaido == true)
             {

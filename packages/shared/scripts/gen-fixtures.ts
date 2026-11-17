@@ -3760,6 +3760,25 @@ caso(
 );
 caso('abrirMochila: tudo em dia', 'abrirMochila', { estado: enxuto(guerreiro, [pocaoDeVida]) }, (a) => E.abrirMochila(a.estado));
 
+// A dupla do co-op do app: o fantasma, a Poção de Reviver e quem se levanta sozinho.
+{
+  const pocaoDeReviver = item('pot_reviver', 'comum', 1);
+  const caido = { ...guerreiro, hp: 0 };
+  caso('podeUsar: a Poção de Reviver não serve em quem a carrega', 'podeUsar', { item: pocaoDeReviver }, (a) => E.podeUsar(a.item));
+  caso('abrirMochila: com a Poção de Reviver', 'abrirMochila', { estado: enxuto(guerreiro, [pocaoDeVida, pocaoDeReviver]) }, (a) => E.abrirMochila(a.estado));
+  for (const [nome, hero] of [['de pe', guerreiro], ['caido', caido]] as const) {
+    caso(`ehFantasma: ${nome}`, 'ehFantasma', { hero }, (a) => E.ehFantasma(a.hero));
+    caso(`levantarSozinho: ${nome}`, 'levantarSozinho', { hero }, (a) => E.levantarSozinho(a.hero));
+    for (const porcento of [50, 0, 250, 33.9]) caso(`reviver: ${nome}, ${porcento}%`, 'reviver', { hero, porcento }, (a) => E.reviver(a.hero, a.porcento));
+  }
+  caso('reviver: vida maxima impar', 'reviver', { hero: { ...caido, maxHp: 77 }, porcento: 50 }, (a) => E.reviver(a.hero, a.porcento));
+  for (const [nome, mochila] of [['sem pocao', [pocaoDeVida]], ['com uma', [pocaoDeVida, pocaoDeReviver]], ['com duas', [pocaoDeReviver, { ...pocaoDeReviver, uid: 'outra' }]]] as const) {
+    caso(`pocaoDeReviver: ${nome}`, 'pocaoDeReviver', { inventory: [...mochila] }, (a) => E.pocaoDeReviver(a.inventory));
+    caso(`gastarPocaoDeReviver: ${nome}`, 'gastarPocaoDeReviver', { estado: enxuto(guerreiro, [...mochila]) }, (a) => E.gastarPocaoDeReviver(a.estado));
+  }
+  caso('forcaDaPocao', 'forcaDaPocao', { item: pocaoDeReviver }, (a) => E.forcaDaPocao(a.item));
+}
+
 for (const peca of [espadaNova, escudo, anel, elmo, pocaoDeVida, pocaoDeMana, pergaminho, minerio]) {
   caso(`podeEquipar: ${peca.templateId}`, 'podeEquipar', { item: peca }, (a) => E.podeEquipar(a.item));
   caso(`podeUsar: ${peca.templateId}`, 'podeUsar', { item: peca }, (a) => E.podeUsar(a.item));
@@ -5426,6 +5445,8 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       const fraco = dupla('convidado', comGradeInteira({ ...sala(), hero: { ...espada, hp: 1 } }), emCima);
       simula('dupla: o convidado cai e vira fantasma', fraco, espelhado(fraco, 600, 33), { seed: 1208 });
       const fantasma: LutaEmTempoReal = { ...fraco, estado: { ...fraco.estado, hero: { ...fraco.estado.hero, hp: 0 } }, arena: { ...fraco.arena, dupla: { papel: 'convidado', fantasma: true } } };
+      simula('dupla: o parceiro revive o fantasma', fantasma, [{ x: 0, y: 0, parceiro: { x: 4.5 * U, y: 7.5 * U }, reviver: 50 }, { x: 0, y: 0, atacar: true }, { x: 0, y: 0 }], { seed: 1213 });
+      simula('dupla: reviver quem está de pé não faz nada', convidado, [{ x: 0, y: 0, reviver: 50 }], { seed: 1214 });
       simula('dupla: os dois caídos, derrota', fantasma, comParceiro(parado(3), 4.5 * U, 7.5 * U, true), { seed: 1209 });
       simula('dupla: o fantasma sem parceiro perde', fantasma, [{ x: 0, y: 0, semParceiro: true }], { seed: 1210 });
       const caindo = E.espelhoDaLuta(dupla('anfitriao'));

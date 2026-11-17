@@ -25,7 +25,8 @@
   "CONSUMABLE_STAT_KEYS": [
     "cura",
     "curaMana",
-    "tala"
+    "tala",
+    "reviver"
   ],
   "STAT_LABELS": {
     "ataque": "Ataque",
@@ -37,7 +38,8 @@
     "esquiva": "Esquiva",
     "cura": "Cura",
     "curaMana": "Restaura Mana",
-    "tala": "Conserta Braço e Perna"
+    "tala": "Conserta Braço e Perna",
+    "reviver": "Revive com % da Vida"
   },
   "PROC_EFFECTS": [
     "queimadura",
@@ -456,6 +458,19 @@
         "tala": 1
       },
       "value": 20
+    },
+    {
+      "id": "pot_reviver",
+      "name": "Poção de Reviver",
+      "genero": "f",
+      "category": "consumivel",
+      "desc": "Levanta um parceiro caído com metade da vida. Não serve em quem a carrega.",
+      "sprite": "potions/reviver.png",
+      "base": {
+        "reviver": 50
+      },
+      "value": 250,
+      "foraDoSorteio": true
     },
     {
       "id": "pergaminho",

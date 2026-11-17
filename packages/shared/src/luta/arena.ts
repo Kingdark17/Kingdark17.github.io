@@ -73,6 +73,7 @@ import type { Conquista } from '../jogo/conquista.js';
 import type { Efeito } from '../jogo/efeitos.js';
 import { celulaAtual, substituirCelulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from '../jogo/estado.js';
 import { enfurecer, FORCA_DO_DEVASTADOR, ferirMonstro, PODERES_DO_CHEFE, poderDaVez, textoDosLacaios, type Ferida, type PoderDoChefe } from '../jogo/chefe-final.js';
+import { reviver } from '../jogo/dupla.js';
 import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepararLuta } from '../jogo/fim-da-luta.js';
 import { heroiNaLuta, lugaresNaLuta } from '../jogo/luta-no-mapa.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
@@ -411,6 +412,8 @@ export interface EntradaDaLuta {
   espelho?: Espelho;
   /** Em dupla: o parceiro saiu da sala. Quem ficou segue sozinho; se estava caído, perde. */
   semParceiro?: boolean;
+  /** Em dupla: o parceiro gastou uma Poção de Reviver em mim — com quantos % da vida máxima eu levanto. */
+  reviver?: number;
 }
 
 /** Algo que a tela mostra ou toca. */
@@ -1703,6 +1706,14 @@ function receberDoParceiro(l: Luta, entrada: EntradaDaLuta): void {
     dupla.parceiro = { x: Math.trunc(entrada.parceiro.x), y: Math.trunc(entrada.parceiro.y) };
     if (entrada.parceiro.caido) dupla.parceiroCaido = true;
     else delete dupla.parceiroCaido;
+  }
+  if (dupla.fantasma && entrada.reviver) {
+    l.estado = { ...masmorra(l), hero: reviver(masmorra(l).hero, entrada.reviver) };
+    delete dupla.fantasma;
+    const texto = '✨ Seu parceiro reviveu você!';
+    contar(l, { tipo: 'aviso', texto });
+    diario(l, [texto]);
+    contar(l, { tipo: 'som', som: 'heal' });
   }
   if (dupla.fantasma && dupla.parceiroCaido) {
     perder(l);

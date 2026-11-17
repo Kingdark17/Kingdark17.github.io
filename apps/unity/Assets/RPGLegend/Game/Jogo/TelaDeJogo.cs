@@ -336,6 +336,8 @@ namespace RPGLegend.Game.Jogo
         /// <summary>As teclas seguradas (duas juntas são diagonal) ou o joystick, que manda enquanto está sendo usado.</summary>
         private Vetor Entrada()
         {
+            // O fantasma não anda por conta própria: segue o parceiro (2026-11-16, decisão do usuário).
+            if (_partida != null && _partida.Fantasma) return RumoDoFantasma();
             var teclas = new List<string>(4);
             var teclado = Keyboard.current;
             if (teclado != null)

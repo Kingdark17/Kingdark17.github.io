@@ -41,6 +41,8 @@ namespace RPGLegend.Engine
         /// sorteios de loja, baú e loot.
         /// </summary>
         public EfeitoDoUnico Unico;
+        /// <summary>Fica fora de todo sorteio (loja, baú, loot), como o único: a Poção de Reviver é assim.</summary>
+        public bool? ForaDoSorteio;
     }
 
     /// <summary>TS: EfeitoDoUnico — "regeneracao", "roubo_de_vida" ou "desconto_de_mana", e uma fração por versão.</summary>

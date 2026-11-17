@@ -179431,6 +179431,849 @@
     }
   },
   {
+    "name": "simularLuta: dupla: o parceiro revive o fantasma",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 0,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 6,
+            "mapCols": 6,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 3360,
+              "facing": "S"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 3360,
+              "facing": "S"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1,
+            "dupla": {
+              "papel": "convidado",
+              "fantasma": true
+            }
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0,
+            "parceiro": {
+              "x": 4320,
+              "y": 7200
+            },
+            "reviver": 50
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "atacar": true
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      },
+      "rng": {
+        "seed": 1213
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 200,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 6,
+            "mapCols": 6,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 3,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 3360,
+              "facing": "S"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 3360,
+              "facing": "S"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": {
+              "evento": {
+                "tipo": "barra",
+                "zona": 0.6666666666666666,
+                "duracao": 84
+              },
+              "passo": 1,
+              "jogada": {},
+              "alvo": 0,
+              "estilo": "normal"
+            },
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 87,
+            "intervalo": 57,
+            "vez": -1,
+            "dupla": {
+              "papel": "convidado",
+              "parceiro": {
+                "x": 4320,
+                "y": 7200
+              }
+            }
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "acontecimentos": [
+          {
+            "tipo": "aviso",
+            "texto": "✨ Seu parceiro reviveu você!"
+          },
+          {
+            "tipo": "diario",
+            "texto": "✨ Seu parceiro reviveu você!"
+          },
+          {
+            "tipo": "som",
+            "som": "heal"
+          }
+        ]
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "simularLuta: dupla: reviver quem está de pé não faz nada",
+    "input": {
+      "fn": "simularLuta",
+      "args": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 0,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 3360,
+              "facing": "S"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 3360,
+              "facing": "S"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 90,
+            "intervalo": 60,
+            "vez": -1,
+            "dupla": {
+              "papel": "convidado"
+            }
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "entradas": [
+          {
+            "x": 0,
+            "y": 0,
+            "reviver": 50
+          }
+        ]
+      },
+      "rng": {
+        "seed": 1214
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "luta": {
+          "estado": {
+            "hero": {
+              "level": 6,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 215,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 150,
+                "maxMp": 72,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 400,
+              "hp": 400,
+              "maxMp": 72,
+              "mp": 72,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "dungeon",
+            "map": [
+              [
+                {
+                  "type": "monster",
+                  "x": 2,
+                  "y": 2,
+                  "doors": {
+                    "S": true,
+                    "W": true
+                  },
+                  "extras": [
+                    {
+                      "kind": "pot",
+                      "col": 1,
+                      "row": 6,
+                      "used": false
+                    },
+                    {
+                      "kind": "pot",
+                      "col": 2,
+                      "row": 6,
+                      "used": false
+                    }
+                  ],
+                  "visited": true,
+                  "revealed": true,
+                  "monsters": [
+                    {
+                      "speciesId": "zumbi",
+                      "enemyClassId": "xama",
+                      "floor": 3,
+                      "hp": 600,
+                      "maxHp": 600,
+                      "dmg": 5,
+                      "speed": 9,
+                      "xp": 17,
+                      "gold": 14,
+                      "isBoss": false,
+                      "status": {},
+                      "attackCount": 0
+                    }
+                  ],
+                  "monsterIndex": 0,
+                  "beaten": false
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "arena": {
+            "passo": 1,
+            "lento": 0,
+            "chegada": {
+              "x": 4320,
+              "y": 3360,
+              "facing": "S"
+            },
+            "heroi": {
+              "x": 4320,
+              "y": 3360,
+              "facing": "S"
+            },
+            "alvo": 0,
+            "monstros": [
+              {
+                "indice": 0,
+                "fase": "esperando",
+                "tempo": 0,
+                "forca": 1,
+                "alvo": -1,
+                "x": 0,
+                "y": 0,
+                "rumoX": 0,
+                "rumoY": 0,
+                "corpoX": 4320,
+                "corpoY": 4320
+              }
+            ],
+            "companheiros": [],
+            "tiros": [],
+            "evento": null,
+            "recarga": 0,
+            "recargaDosPoderes": {},
+            "recargaDoItem": 0,
+            "rodada": 89,
+            "intervalo": 59,
+            "vez": -1,
+            "dupla": {
+              "papel": "convidado"
+            }
+          },
+          "pet": null,
+          "teclado": false,
+          "fim": null,
+          "loot": null
+        },
+        "acontecimentos": []
+      },
+      "rngCalls": 0
+    }
+  },
+  {
     "name": "simularLuta: dupla: os dois caídos, derrota",
     "input": {
       "fn": "simularLuta",

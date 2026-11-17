@@ -51,6 +51,13 @@ namespace RPGLegend.Game.Jogo
         /// <summary>Qual monstro vai inteiro no próximo espelho (um por vez, em rodízio).</summary>
         private int _inteiroDaVez;
         private bool _lutando;
+        /// <summary>O parceiro me reviveu no meio da luta: com quantos % eu levanto no próximo passo (0 = nada).</summary>
+        private double _reviverPendente;
+        /// <summary>O REVIVER dos botões de cima (null até a partida em sala abrir).</summary>
+        private UnityEngine.UIElements.Button _botaoReviver;
+        private bool _botaoReviverVisivel;
+        /// <summary>O fantasma fica a esta distância do parceiro, em unidades da sala (uma casa).</summary>
+        private const double FolgaDoFantasma = 1200;
 
         /// <summary>Chamado quando a partida acabou de carregar: se há sala, a partida entra nela.</summary>
         private void ComecarCoop()
@@ -73,6 +80,11 @@ namespace RPGLegend.Game.Jogo
             Rede.AoParceiroSair += ParceiroSaiu;
             Rede.AoSala += MudouASala;
 
+            if (_botaoReviver == null && _tela != null)
+            {
+                _botaoReviver = UnityEngine.UIElements.UQueryExtensions.Q<UnityEngine.UIElements.Button>(_tela, "botao-reviver");
+                if (_botaoReviver != null) _botaoReviver.clicked += ReviverOParceiro;
+            }
             EntreiNaSala();
             // Quem acompanha e chegou depois: o estado que a sala já tinha, e o pedido de um novo.
             if (!Rede.Conduzo)
@@ -95,6 +107,8 @@ namespace RPGLegend.Game.Jogo
             Rede.AoParceiroSair -= ParceiroSaiu;
             Rede.AoSala -= MudouASala;
             _sala?.DefinirParceiro(null);
+            if (_sala != null) _sala.Fantasma = false;
+            MostrarBotaoReviver(false);
         }
 
         private void EsquecerADupla()
@@ -104,6 +118,7 @@ namespace RPGLegend.Game.Jogo
             _espelhoRecebido = null;
             _semParceiro = false;
             _inteiroDaVez = 0;
+            _reviverPendente = 0;
         }
 
         /// <summary>Entrei (ou voltei depois de uma queda): o servidor não tem mais o meu perfil nem, talvez, o mapa.</summary>
@@ -133,9 +148,10 @@ namespace RPGLegend.Game.Jogo
             if (!_emCoop) return;
             _parceiroVestido = null;
             _parceiroNaLuta = null;
-            // Quem luta em dupla segue sozinho (e o fantasma, sem quem o levante, perde).
+            // Quem luta em dupla segue sozinho (e o fantasma, sem quem o levante, perde); fora da luta, ele se levanta.
             _semParceiro = true;
             _sala?.DefinirParceiro(null);
+            _partida?.LevantarSozinho();
         }
 
         /// <summary>A sala mudou: o papel (quem conduz caiu e eu assumi) ou o perfil do parceiro.</summary>
@@ -212,6 +228,12 @@ namespace RPGLegend.Game.Jogo
                     _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null };
                     _sala?.MoverParceiro(x, y, olha == "N" || olha == "E" || olha == "W" ? olha : "S", caido);
                     break;
+                case "r":
+                    // O parceiro gastou uma Poção de Reviver em mim.
+                    if (!_partida.Fantasma || !Numero(dados["n"], 100, out var porcento) || porcento < 1) break;
+                    if (_partida.Luta != null) _reviverPendente = Math.Truncate(porcento);
+                    else _partida.Reviver(porcento);
+                    break;
                 case "d":
                     // O dano que o parceiro causou: só quem conduz o aplica.
                     if (!Rede.Conduzo || _partida.Luta == null || !(dados["d"] is JArray golpes)) break;
@@ -274,6 +296,11 @@ namespace RPGLegend.Game.Jogo
                 return;
             }
             if (_parceiroNaLuta != null) entrada.Parceiro = _parceiroNaLuta;
+            if (_reviverPendente > 0)
+            {
+                entrada.Reviver = _reviverPendente;
+                _reviverPendente = 0;
+            }
             if (_danosDeFora.Count > 0)
             {
                 entrada.DanoDeFora = new List<DanoNoMonstro>(_danosDeFora);
@@ -313,6 +340,8 @@ namespace RPGLegend.Game.Jogo
                 luta = _partida.Luta;
             }
             _lutando = luta != null;
+            _sala.Fantasma = _partida.Fantasma;
+            AtualizarBotaoReviver();
             if (!Rede.TemParceiro) return;
 
             if (luta != null)
@@ -351,6 +380,55 @@ namespace RPGLegend.Game.Jogo
             var pacote = new JObject { ["t"] = "p", ["s"] = sala, ["x"] = Math.Round(walker.X), ["y"] = Math.Round(walker.Y), ["f"] = walker.Facing ?? "S" };
             if (caido) pacote["c"] = true;
             Rede.MandarTempoReal(pacote);
+        }
+
+        // ---------- o fantasma e a Poção de Reviver ----------
+
+        /// <summary>Onde o parceiro está agora, se ele está na mesma sala (o "p" dele só vale na mesma sala).</summary>
+        private ParceiroNaEntrada ParceiroAqui => _emCoop && Rede.TemParceiro ? _parceiroNaLuta : null;
+
+        /// <summary>
+        /// O fantasma segue o parceiro: o rumo até ele, enquanto estiver a mais de uma casa (o andar e a luta usam a
+        /// mesma entrada). Sem o parceiro à vista, fica parado.
+        /// </summary>
+        private Vetor RumoDoFantasma()
+        {
+            var parceiro = ParceiroAqui;
+            var eu = _partida?.Luta != null ? _partida.Luta.Arena.Heroi : _sala?.Walker;
+            if (parceiro == null || eu == null) return new Vetor(0, 0);
+            double dx = parceiro.X - eu.X;
+            double dy = parceiro.Y - eu.Y;
+            double distancia = Math.Sqrt(dx * dx + dy * dy);
+            if (distancia <= FolgaDoFantasma) return new Vetor(0, 0);
+            return new Vetor(dx / distancia, dy / distancia);
+        }
+
+        /// <summary>O REVIVER aparece quando o parceiro caiu na mesma sala, eu estou de pé e tenho a poção.</summary>
+        private void AtualizarBotaoReviver()
+        {
+            var parceiro = ParceiroAqui;
+            bool pode = parceiro?.Caido == true && !_partida.Fantasma && Duplas.PocaoDeReviver(_partida.Estado.Inventory) != null;
+            MostrarBotaoReviver(pode);
+        }
+
+        private void MostrarBotaoReviver(bool mostrar)
+        {
+            if (_botaoReviver == null || mostrar == _botaoReviverVisivel) return;
+            _botaoReviverVisivel = mostrar;
+            _botaoReviver.style.display = mostrar ? UnityEngine.UIElements.DisplayStyle.Flex : UnityEngine.UIElements.DisplayStyle.None;
+        }
+
+        /// <summary>O REVIVER: gasta a poção daqui e manda a força dela pro parceiro, que se levanta no app dele.</summary>
+        private void ReviverOParceiro()
+        {
+            if (!_emCoop || _partida == null || _partida.Fantasma || ParceiroAqui?.Caido != true) return;
+            double porcento = _partida.GastarPocaoDeReviver();
+            if (porcento <= 0) return;
+            Rede.MandarTempoReal(new JObject { ["t"] = "r", ["n"] = porcento });
+            Sons.Tocar("heal");
+            // Até o "p" dele dizer que levantou, ele continua caído aqui: o botão some pra não gastar outra poção.
+            _parceiroNaLuta = new ParceiroNaEntrada { X = _parceiroNaLuta.X, Y = _parceiroNaLuta.Y };
+            MostrarBotaoReviver(false);
         }
 
         /// <summary>O último espelho que quem conduz mandou (pra fechar a luta do outro na vitória).</summary>

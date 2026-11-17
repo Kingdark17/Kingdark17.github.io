@@ -26,6 +26,9 @@ namespace RPGLegend.Engine
         [JsName("SOBREPRECO_DA_POCAO")] public double SobreprecoDaPocao;
         /// <summary>Privada no TS: os templates que são poção (o sobrepreço vale só pra elas).</summary>
         [JsName("POCOES")] public List<string> Pocoes = new List<string>();
+        /// <summary>A Poção de Reviver, e a chance de o vendedor do app ter uma (bem rara: 2026-11-16).</summary>
+        [JsName("POCAO_DE_REVIVER")] public string PocaoDeReviver;
+        [JsName("CHANCE_DA_POCAO_DE_REVIVER")] public double ChanceDaPocaoDeReviver;
     }
 
     public static partial class GameData

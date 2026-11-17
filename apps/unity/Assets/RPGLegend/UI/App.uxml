@@ -228,6 +228,8 @@
                     <ui:Button name="botao-guia" text="GUIA" class="botao botao-pequeno" />
                     <!-- As configurações do menu, por cima do jogo (doc do Breno, 2026-11-13; só no app). -->
                     <ui:Button name="botao-config-do-jogo" text="CONFIG" class="botao botao-pequeno" />
+                    <!-- O co-op do app: aparece quando o parceiro caiu e há Poção de Reviver na mochila. -->
+                    <ui:Button name="botao-reviver" text="REVIVER" class="botao botao-pequeno botao-principal" style="display: none;" />
                     <ui:Button name="botao-sair-do-jogo" text="SAIR" class="botao botao-pequeno" />
                     <ui:Label name="estado-do-salvamento" class="estado-do-salvamento" picking-mode="Ignore" />
                 </ui:VisualElement>

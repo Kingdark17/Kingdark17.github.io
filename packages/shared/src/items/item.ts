@@ -225,12 +225,12 @@ export interface RandomItemOptions extends InstantiateOptions {
  * caem de baú e de chefe no app, e os acessórios únicos, que só caem de quem
  * zera uma masmorra (`items/acessorios-unicos.ts`).
  */
-const SORTEAVEIS = TEMPLATES.filter((t) => t.category !== 'runa' && !t.unico);
+const SORTEAVEIS = TEMPLATES.filter((t) => t.category !== 'runa' && !t.unico && !t.foraDoSorteio);
 
 export function randomItem(options: RandomItemOptions = {}): Item {
   const { category, rarity: forcedRarity, floor = 1, rng = defaultRng, now } = options;
 
-  const pool = category ? templatesByCategory(category).filter((t) => !t.unico) : SORTEAVEIS;
+  const pool = category ? templatesByCategory(category).filter((t) => !t.unico && !t.foraDoSorteio) : SORTEAVEIS;
   const template = pick(pool, rng);
   // Uma raridade forçada e desconhecida cai para comum, igual ao original.
   const rarity =

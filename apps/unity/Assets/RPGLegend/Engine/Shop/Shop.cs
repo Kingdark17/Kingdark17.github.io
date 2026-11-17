@@ -177,6 +177,9 @@ namespace RPGLegend.Engine
                     TetoDoDegrau = app ? D.DegrauDaLoja : (double?)null,
                 }));
             }
+            // A Poção de Reviver: só o vendedor do app, e só de vez em quando (um sorteio a mais, que o site não faz).
+            if (app && kind != ShopKinds.Blacksmith && rng() < D.ChanceDaPocaoDeReviver)
+                stock.Add(Items.Instantiate(ItemTemplates.ById(D.PocaoDeReviver), Rarities.All[0], rng, now));
             return stock;
         }
 

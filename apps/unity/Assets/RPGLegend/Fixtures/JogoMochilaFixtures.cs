@@ -14,6 +14,12 @@ namespace RPGLegend.Tests
             Fn(M, "abrirMochila", (a, c) => W(Mochilas.AbrirMochila(JogoJson.LerEstado(a["estado"]))));
             Fn(M, "podeEquipar", (a, c) => W(Mochilas.PodeEquipar(R<Item>(a["item"]))));
             Fn(M, "podeUsar", (a, c) => W(Mochilas.PodeUsar(R<Item>(a["item"]))));
+            Fn(M, "ehFantasma", (a, c) => W(Duplas.EhFantasma(R<Hero>(a["hero"]))));
+            Fn(M, "levantarSozinho", (a, c) => W(Duplas.LevantarSozinho(R<Hero>(a["hero"]))));
+            Fn(M, "reviver", (a, c) => W(Duplas.Reviver(R<Hero>(a["hero"]), Num(a["porcento"]))));
+            Fn(M, "pocaoDeReviver", (a, c) => W(Duplas.PocaoDeReviver(R<System.Collections.Generic.List<Item>>(a["inventory"]))));
+            Fn(M, "gastarPocaoDeReviver", (a, c) => W(Duplas.GastarPocaoDeReviver(JogoJson.LerEstado(a["estado"]))));
+            Fn(M, "forcaDaPocao", (a, c) => W(Duplas.ForcaDaPocao(R<Item>(a["item"]))));
             Fn(M, "aceitaMaoSecundaria", (a, c) => W(Mochilas.AceitaMaoSecundaria(R<Item>(a["item"]))));
             Fn(M, "slotDoItem", (a, c) => W(Mochilas.SlotDoItem(JogoJson.LerEstado(a["estado"]), R<Item>(a["item"]))));
             Fn(M, "armaQueOcupaAsMaos", (a, c) => W(Mochilas.ArmaQueOcupaAsMaos(JogoJson.LerEstado(a["estado"]), R<Item>(a["item"]))));

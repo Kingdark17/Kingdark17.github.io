@@ -30,7 +30,7 @@ export function isEquippable(category: string): boolean {
 }
 
 /** Stats que só fazem sentido em consumível. */
-export const CONSUMABLE_STAT_KEYS = ['cura', 'curaMana', 'tala'] as const;
+export const CONSUMABLE_STAT_KEYS = ['cura', 'curaMana', 'tala', 'reviver'] as const;
 
 export type ConsumableStatKey = (typeof CONSUMABLE_STAT_KEYS)[number];
 
@@ -49,6 +49,7 @@ export const STAT_LABELS: Record<AnyStatKey, string> = {
   cura: 'Cura',
   curaMana: 'Restaura Mana',
   tala: 'Conserta Braço e Perna',
+  reviver: 'Revive com % da Vida',
 };
 
 export const PROC_EFFECTS = [
@@ -149,6 +150,11 @@ export interface ItemTemplate {
    * dos sorteios de loja, baú e loot: só cai de quem zera.
    */
   unico?: EfeitoDoUnico;
+  /**
+   * Fica fora de todo sorteio (loja, baú, loot), como o único: só aparece
+   * por onde a regra dele manda. A Poção de Reviver é assim (`jogo/dupla.ts`).
+   */
+  foraDoSorteio?: boolean;
 }
 
 /** O que o acessório único faz na arena do app. */
@@ -505,6 +511,20 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     sprite: 'potions/tala.png',
     base: { tala: 1 },
     value: 20,
+  },
+  // A Poção de Reviver (2026-11-16, só no app; decisão do usuário): levanta o parceiro caído na luta em dupla
+  // (e, quando houver, a montaria) com metade da vida. Bem rara e cara: só a loja do app a vende, de vez em
+  // quando (`shop/shop.ts`). Arte provisória até a do Breno.
+  {
+    id: 'pot_reviver',
+    name: 'Poção de Reviver',
+    genero: 'f',
+    category: 'consumivel',
+    desc: 'Levanta um parceiro caído com metade da vida. Não serve em quem a carrega.',
+    sprite: 'potions/reviver.png',
+    base: { reviver: 50 },
+    value: 250,
+    foraDoSorteio: true,
   },
   {
     id: 'pergaminho',

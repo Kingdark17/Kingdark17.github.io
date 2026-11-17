@@ -81,6 +81,7 @@ export * from './jogo/conquista.js';
 export * from './jogo/coop.js';
 export * from './jogo/criacao.js';
 export * from './jogo/cura-do-parceiro.js';
+export * from './jogo/dupla.js';
 export * from './jogo/dialogo.js';
 export * from './jogo/diario.js';
 export * from './jogo/efeitos.js';
