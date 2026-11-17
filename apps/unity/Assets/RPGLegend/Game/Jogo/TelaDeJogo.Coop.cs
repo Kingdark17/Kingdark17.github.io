@@ -140,6 +140,7 @@ namespace RPGLegend.Game.Jogo
         private void ParceiroEntrou(string nome)
         {
             if (!_emCoop || _partida == null) return;
+            _semParceiro = false;
             if (Rede.Conduzo) AbrirAventura();
         }
 
@@ -149,7 +150,8 @@ namespace RPGLegend.Game.Jogo
             _parceiroVestido = null;
             _parceiroNaLuta = null;
             // Quem luta em dupla segue sozinho (e o fantasma, sem quem o levante, perde); fora da luta, ele se levanta.
-            _semParceiro = true;
+            // Só vale pra luta que está correndo: guardado, desmancharia a dupla da próxima.
+            _semParceiro = _partida?.Luta?.Arena.Dupla != null;
             _sala?.DefinirParceiro(null);
             _partida?.LevantarSozinho();
         }
