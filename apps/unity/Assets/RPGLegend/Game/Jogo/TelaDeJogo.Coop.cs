@@ -63,6 +63,7 @@ namespace RPGLegend.Game.Jogo
         private void ComecarCoop()
         {
             _emCoop = false;
+            PrepararChat(Rede.NaSala && _partida != null);
             if (!Rede.NaSala || _partida == null) return;
             _emCoop = true;
             _versaoEnviada = -1;
@@ -109,6 +110,7 @@ namespace RPGLegend.Game.Jogo
             _sala?.DefinirParceiro(null);
             if (_sala != null) _sala.Fantasma = false;
             MostrarBotaoReviver(false);
+            PrepararChat(false);
         }
 
         private void EsquecerADupla()
@@ -229,6 +231,10 @@ namespace RPGLegend.Game.Jogo
                     bool caido = dados["c"]?.Type == JTokenType.Boolean && (bool)dados["c"];
                     _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null };
                     _sala?.MoverParceiro(x, y, olha == "N" || olha == "E" || olha == "W" ? olha : "S", caido);
+                    break;
+                case "m":
+                    // Uma mensagem do chat da sala.
+                    ChegouNoChat(Texto(dados["x"]));
                     break;
                 case "r":
                     // O parceiro gastou uma Poção de Reviver em mim.

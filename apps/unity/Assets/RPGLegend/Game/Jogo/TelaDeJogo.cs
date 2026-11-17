@@ -321,7 +321,8 @@ namespace RPGLegend.Game.Jogo
 
             // Esc no PC, e o "voltar" do Android, que chega como Esc.
             var teclado = Keyboard.current;
-            if (teclado != null && teclado.escapeKey.wasPressedThisFrame)
+            TeclaDoChat();
+            if (teclado != null && teclado.escapeKey.wasPressedThisFrame && !DigitandoNoChat)
             {
                 if (_janela == "config") FecharConfiguracoes();
                 else if (JanelaSemTela) FecharJanela();
@@ -340,7 +341,8 @@ namespace RPGLegend.Game.Jogo
             if (_partida != null && _partida.Fantasma) return RumoDoFantasma();
             var teclas = new List<string>(4);
             var teclado = Keyboard.current;
-            if (teclado != null)
+            // Digitando no chat da sala, as letras são do texto.
+            if (teclado != null && !DigitandoNoChat)
             {
                 if (teclado.wKey.isPressed || teclado.upArrowKey.isPressed) teclas.Add("N");
                 if (teclado.sKey.isPressed || teclado.downArrowKey.isPressed) teclas.Add("S");

@@ -230,6 +230,8 @@
                     <ui:Button name="botao-config-do-jogo" text="CONFIG" class="botao botao-pequeno" />
                     <!-- O co-op do app: aparece quando o parceiro caiu e há Poção de Reviver na mochila. -->
                     <ui:Button name="botao-reviver" text="REVIVER" class="botao botao-pequeno botao-principal" style="display: none;" />
+                    <!-- O chat da sala (co-op do app): só aparece em sala. -->
+                    <ui:Button name="botao-chat" text="CHAT" class="botao botao-pequeno" style="display: none;" />
                     <ui:Button name="botao-sair-do-jogo" text="SAIR" class="botao botao-pequeno" />
                     <ui:Label name="estado-do-salvamento" class="estado-do-salvamento" picking-mode="Ignore" />
                 </ui:VisualElement>

@@ -235,7 +235,7 @@ namespace RPGLegend.Game.Jogo
         private void LerTecladoDaLuta(LutaEmTempoReal luta)
         {
             var teclado = Keyboard.current;
-            if (teclado == null || _janela != null) return;
+            if (teclado == null || _janela != null || DigitandoNoChat) return;
             if (teclado.spaceKey.wasPressedThisFrame || teclado.jKey.wasPressedThisFrame) _apertou = true;
             if (teclado.spaceKey.wasReleasedThisFrame || teclado.jKey.wasReleasedThisFrame) _soltou = true;
             if (teclado.qKey.wasPressedThisFrame) AlternarMenuDeItens();

@@ -1465,3 +1465,17 @@
     padding-top: 20px;
     padding-bottom: 26px;
 }
+
+/* O chat da sala, dentro da partida em dupla: uma caixinha embaixo, entre o painel do herói e os botões de poder. */
+.chat-da-sala {
+    position: absolute;
+    left: 22%;
+    right: 36%;
+    bottom: 12px;
+    height: 230px;
+    padding: 10px 12px;
+    background-color: rgba(29, 34, 48, 0.92);
+    border-width: 1px;
+    border-color: var(--line);
+    border-radius: 6px;
+}
