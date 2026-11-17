@@ -51,6 +51,7 @@ import type { Mochila } from './mochila.js';
 import { abrirPortao, type Portao } from './portao.js';
 import { abrirProfessor, type Professor } from './professor.js';
 import { abrirMestreDeEstilo, type MestreDeEstiloNaSala } from './mestre-de-estilo.js';
+import { quemEnsina } from '../hero/estilos.js';
 import { tocarTotem, type Totem } from './totem.js';
 import { marcar, type PassoDoTutorial, type Recado, type ResultadoDoPasso } from './tutorial.js';
 
@@ -282,8 +283,9 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null, now: 
       // O mestre de estilo (rodada 5a): só o app o gera e só o app o ouve.
       const mestre = app ? abrirMestreDeEstilo(estado) : null;
       if (!mestre) {
-        const texto = celula.mestreDeEstilo?.ensinado ? 'O mestre já seguiu caminho.' : 'Um mestre medita aqui, de olhos fechados.';
-        return { estado, aviso: aviso('🥋', 'Mestre de estilo', texto), tela: null };
+        // Pros estilos do Druida, quem ensina é um espírito ancestral (rodada 5b).
+        const quem = quemEnsina(celula.mestreDeEstilo?.estilo);
+        return { estado, aviso: aviso(quem.icone, quem.nome, celula.mestreDeEstilo?.ensinado ? quem.foiEmbora : quem.naSala), tela: null };
       }
       return { estado, aviso: null, tela: { tipo: 'mestreDeEstilo', mestre } };
     }

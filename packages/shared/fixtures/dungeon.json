@@ -34782,6 +34782,442 @@
     }
   },
   {
+    "name": "iconFor: mestre de estilo",
+    "input": {
+      "fn": "iconFor",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "cavaleiro"
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "🥋"
+    }
+  },
+  {
+    "name": "shortLabel: mestre de estilo",
+    "input": {
+      "fn": "shortLabel",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "cavaleiro"
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "um mestre meditando"
+    }
+  },
+  {
+    "name": "roomDesc: mestre de estilo",
+    "input": {
+      "fn": "roomDesc",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "cavaleiro"
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "No meio da sala, um mestre de estilo medita de olhos fechados."
+    }
+  },
+  {
+    "name": "entryText: mestre de estilo",
+    "input": {
+      "fn": "entryText",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "cavaleiro"
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "Um mestre de estilo medita nesta sala. Deseja falar com ele?"
+    }
+  },
+  {
+    "name": "iconFor: espírito ancestral",
+    "input": {
+      "fn": "iconFor",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "raizes"
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "🌿"
+    }
+  },
+  {
+    "name": "shortLabel: espírito ancestral",
+    "input": {
+      "fn": "shortLabel",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "raizes"
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "um espírito ancestral"
+    }
+  },
+  {
+    "name": "roomDesc: espírito ancestral",
+    "input": {
+      "fn": "roomDesc",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "raizes"
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "Um espírito ancestral flutua no meio da sala, em silêncio."
+    }
+  },
+  {
+    "name": "entryText: espírito ancestral",
+    "input": {
+      "fn": "entryText",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "raizes"
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "Um espírito ancestral espera nesta sala. Deseja se aproximar?"
+    }
+  },
+  {
+    "name": "iconFor: espírito que já ensinou",
+    "input": {
+      "fn": "iconFor",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "raizes",
+            "ensinado": true
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": ""
+    }
+  },
+  {
+    "name": "shortLabel: espírito que já ensinou",
+    "input": {
+      "fn": "shortLabel",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "raizes",
+            "ensinado": true
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "uma sala onde alguém ensinou"
+    }
+  },
+  {
+    "name": "roomDesc: espírito que já ensinou",
+    "input": {
+      "fn": "roomDesc",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "raizes",
+            "ensinado": true
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "O mestre seguiu caminho. Ficaram as marcas do treino no chão."
+    }
+  },
+  {
+    "name": "entryText: espírito que já ensinou",
+    "input": {
+      "fn": "entryText",
+      "args": {
+        "cell": {
+          "type": "estilo",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "mestreDeEstilo": {
+            "estilo": "raizes",
+            "ensinado": true
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "Deseja entrar na sala?"
+    }
+  },
+  {
     "name": "ROOM_COLS (constante)",
     "input": {
       "const": "ROOM_COLS"

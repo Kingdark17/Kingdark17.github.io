@@ -21,7 +21,18 @@
  */
 
 import { idDaClasse, type IdentidadeDeClasse } from './catalog.js';
-import { idDoEstilo, REGRAS_DA_CONCENTRACAO, REGRAS_DO_CAVALEIRO, REGRAS_DO_CHUTE, REGRAS_DO_EMPURRAO, REGRAS_DO_ESPADACHIM, type QuemTemEstilo } from './estilos.js';
+import {
+  idDoEstilo,
+  REGRAS_DA_CONCENTRACAO,
+  REGRAS_DA_METAMORFOSE,
+  REGRAS_DAS_RAIZES,
+  REGRAS_DO_CAVALEIRO,
+  REGRAS_DO_CHUTE,
+  REGRAS_DO_EMPURRAO,
+  REGRAS_DO_ESPADACHIM,
+  REGRAS_DO_FLORESCIMENTO,
+  type QuemTemEstilo,
+} from './estilos.js';
 
 export interface ClasseDeLuta {
   /** O alcance do ataque comum, em blocos. */
@@ -93,6 +104,9 @@ export function alcanceDoHeroi(quem: QuemLuta): number {
   const estilo = idDoEstilo(quem);
   if (estilo === 'chute') return REGRAS_DO_CHUTE.alcance;
   if (estilo === 'concentracao') return (CLASSES_DE_LUTA[id] as ClasseDeLuta).alcance + REGRAS_DA_CONCENTRACAO.alcance;
+  // Os do Druida (rodada 5b): a garra e a flor shuriken saem do herói.
+  if (estilo === 'metamorfose') return REGRAS_DA_METAMORFOSE.alcance;
+  if (estilo === 'florescimento') return REGRAS_DO_FLORESCIMENTO.alcance;
   return (CLASSES_DE_LUTA[id] as ClasseDeLuta).alcance;
 }
 
@@ -422,11 +436,13 @@ export function contarCriticoNoAliado(moral: Moral): { moral: Moral; subiu?: num
  * falta; o Clérigo, uma parte da vida máxima; o Druida (a Purificação), uma
  * parte da vida máxima. Pelo menos 1 se falta vida; nunca passa do máximo.
  */
-export function curaDoApoio(tipo: 'bardo' | 'clerigo' | 'purificar' | 'comunhao', vida: { hp: number; maxHp: number }): number {
+export function curaDoApoio(tipo: 'bardo' | 'clerigo' | 'purificar' | 'comunhao', vida: { hp: number; maxHp: number }, mais = 0): number {
   const falta = Math.max(0, vida.maxHp - vida.hp);
   if (falta <= 0) return 0;
+  // `mais`: os pontos de % a mais (a Purificação da Metamorfose, rodada 5b).
   const pct =
-    tipo === 'bardo' ? REGRAS_DO_BARDO.cura : tipo === 'clerigo' ? REGRAS_DO_CLERIGO.cura : tipo === 'purificar' ? REGRAS_DO_DRUIDA.purificacao : REGRAS_DO_CLERIGO.curaDaFe;
+    (tipo === 'bardo' ? REGRAS_DO_BARDO.cura : tipo === 'clerigo' ? REGRAS_DO_CLERIGO.cura : tipo === 'purificar' ? REGRAS_DO_DRUIDA.purificacao : REGRAS_DO_CLERIGO.curaDaFe) +
+    mais;
   const base = tipo === 'bardo' ? falta : vida.maxHp;
   return Math.min(falta, Math.max(1, Math.trunc((base * pct) / 100)));
 }
@@ -463,6 +479,8 @@ export interface ContadoresDaClasse {
   imune?: number;
   cargas?: number;
   semGolpe?: number;
+  /** Os estilos do Druida (rodada 5b): quantos ataques ele já deu nesta luta (a aura da Metamorfose, as Raízes). */
+  golpes?: number;
 }
 
 /** A classe já foi refeita pelo doc do Breno: na arena ela fica sem a passiva antiga do site. */
@@ -499,6 +517,8 @@ export function bonusDoAtaque(quem: QuemLuta, c: ContadoresDaClasse, alvo: { col
       return danoDaDistancia(alvo.blocos ?? 0, c.parado ?? 0);
     case 'guerreiro':
       return (alvo.colado ? REGRAS_DO_GUERREIRO.colado : 0) + (c.combo ?? 0);
+    case 'druida':
+      return danoDoDruida(quem, c.golpes ?? 0);
     case 'monge': {
       // Os estilos do Monge: o Empurrão bate mais; a Concentração gasta as cargas no golpe.
       const estilo = idDoEstilo(quem);
@@ -515,6 +535,44 @@ export function bonusDoAtaque(quem: QuemLuta, c: ContadoresDaClasse, alvo: { col
   }
 }
 
+/**
+ * O dano a mais (%) do ataque do Druida com estilo, no golpe de número
+ * `golpe` da luta: a garra (e a aura de fera), a flor shuriken, e o golpe
+ * forte das Raízes (todo 3º).
+ */
+export function danoDoDruida(quem: QuemTemEstilo, golpe: number): number {
+  switch (idDoEstilo(quem)) {
+    case 'metamorfose':
+      return REGRAS_DA_METAMORFOSE.dano + (auraDeFera(golpe) ? REGRAS_DA_METAMORFOSE.aura : 0);
+    case 'florescimento':
+      return REGRAS_DO_FLORESCIMENTO.dano;
+    case 'raizes':
+      return golpeForte(golpe) ? REGRAS_DAS_RAIZES.dano : 0;
+    default:
+      return 0;
+  }
+}
+
+/** A aura de fera da Metamorfose está acesa (do golpe `golpesDaAura` da luta em diante). */
+export function auraDeFera(golpes: number): boolean {
+  return golpes >= REGRAS_DA_METAMORFOSE.golpesDaAura;
+}
+
+/** O golpe de número `golpe` das Raízes é o forte (todo 3º). */
+export function golpeForte(golpe: number): boolean {
+  return golpe > 0 && golpe % REGRAS_DAS_RAIZES.forteACada === 0;
+}
+
+/** O golpe de número `golpe` das Raízes prende o alvo (todo 9º). */
+export function golpeQuePrende(golpe: number): boolean {
+  return golpe > 0 && golpe % REGRAS_DAS_RAIZES.prendeACada === 0;
+}
+
+/** As Raízes já estão fundas (do golpe `golpesDoVeneno` da luta em diante): o veneno forte e o passo mais ligeiro. */
+export function raizesFundas(golpes: number): boolean {
+  return golpes >= REGRAS_DAS_RAIZES.golpesDoVeneno;
+}
+
 /** A esquiva a mais (%) contra o golpe de um monstro: a furtividade do Ladino (a metade contra o chefe) e o desvio do Cavaleiro. */
 export function esquivaDaClasse(quem: QuemTemEstilo, c: ContadoresDaClasse, chefe: boolean): number {
   if (idDoEstilo(quem) === 'cavaleiro') return REGRAS_DO_CAVALEIRO.desvio;
@@ -527,8 +585,11 @@ export function esquivaDaClasse(quem: QuemTemEstilo, c: ContadoresDaClasse, chef
  * Guerreiro pela vida que falta, o Bárbaro pela fúria, o Paladino pela
  * absorção.
  */
-export function resistenciaDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number }, c: ContadoresDaClasse): number {
+export function resistenciaDaClasse(quem: QuemTemEstilo & { hp: number; maxHp: number }, c: ContadoresDaClasse): number {
   switch (idDaClasse(quem)) {
+    case 'druida':
+      // A aura de fera da Metamorfose (rodada 5b).
+      return idDoEstilo(quem) === 'metamorfose' && auraDeFera(c.golpes ?? 0) ? REGRAS_DA_METAMORFOSE.resistencia : 0;
     case 'guerreiro': {
       if (!(quem.maxHp > 0)) return 0;
       const falta = Math.max(0, quem.maxHp - quem.hp);
@@ -621,8 +682,9 @@ export interface ExtrasDaClasse {
   /** Clérigo: quanto falta pro Poder da fé voltar, e quanto ainda dura o que está de pé. */
   recargaDaFe?: number;
   fe?: number;
-  /** Druida: quanto o ataque ainda espera depois da Purificação. */
+  /** Druida: quanto o ataque ainda espera depois da Purificação, e quantas flores do Florescimento estão no chão. */
   semAtacar?: number;
+  flores?: number;
   /** Monge: o ki, e se está revestido. */
   ki?: number;
   revestido?: boolean;
@@ -658,8 +720,17 @@ function textosSoDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number
     case 'clerigo':
       if ((extras.fe ?? 0) > 0) return [`✝️ Fé ${tempo(extras.fe as number)}`];
       return [(extras.recargaDaFe ?? 0) > 0 ? `✝️ Fé em ${tempo(extras.recargaDaFe as number)}` : '✝️ Fé pronta'];
-    case 'druida':
-      return (extras.semAtacar ?? 0) > 0 ? [`🌿 Ataque em ${tempo(extras.semAtacar as number)}`] : [];
+    case 'druida': {
+      const textos = (extras.semAtacar ?? 0) > 0 ? [`🌿 Ataque em ${tempo(extras.semAtacar as number)}`] : [];
+      // Os estilos (rodada 5b): a garra até a aura, as flores no chão, os golpes das Raízes.
+      const golpes = c.golpes ?? 0;
+      const estilo = idDoEstilo(quem as QuemTemEstilo);
+      if (estilo === 'metamorfose')
+        textos.push(auraDeFera(golpes) ? '🐾 Aura de fera' : `🐾 Garra ${golpes}/${REGRAS_DA_METAMORFOSE.golpesDaAura}`);
+      else if (estilo === 'florescimento') textos.push(`🌸 Flores ${extras.flores ?? 0}/${REGRAS_DO_FLORESCIMENTO.maximo}`);
+      else if (estilo === 'raizes') textos.push(`🌱 Raízes ${golpes}${raizesFundas(golpes) ? ' · veneno forte' : ''}`);
+      return textos;
+    }
     case 'monge': {
       const textos = [`☯️ Ki ${extras.ki ?? 0}/${REGRAS_DO_MONGE.tetoDoKi}${extras.revestido ? ' · Revestido' : ''}`];
       if (idDoEstilo(quem as QuemTemEstilo) === 'concentracao') textos.push(`🧘 Cargas ${c.cargas ?? 0}/${REGRAS_DA_CONCENTRACAO.tetoDeCargas}`);

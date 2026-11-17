@@ -57,6 +57,49 @@ namespace RPGLegend.Engine
         public double Alcance;
     }
 
+    public sealed class RegrasDaMetamorfose
+    {
+        public double Alcance;
+        public double Dano;
+        public double Purificacao;
+        public double GolpesDaAura;
+        public double Aura;
+        public double Resistencia;
+    }
+
+    public sealed class RegrasDoFlorescimento
+    {
+        public double Alcance;
+        public double Dano;
+        public double Plantio;
+        public double Lado;
+        public double Cura;
+        public double Maximo;
+    }
+
+    public sealed class RegrasDasRaizes
+    {
+        public double ForteACada;
+        public double Dano;
+        public double Lento;
+        public double PrendeACada;
+        public double Preso;
+        public double GolpesDoVeneno;
+        public double Veneno;
+        public double Velocidade;
+    }
+
+    /// <summary>TS: o retorno de quemEnsina — quem ensina o estilo na sala, com o ícone e as falas.</summary>
+    public sealed class QuemEnsinaEstilo
+    {
+        public string Nome;
+        public string Icone;
+        public string DeLonge;
+        public string NaSala;
+        public string FoiEmbora;
+        public string Pergunta;
+    }
+
     /// <summary>As tabelas de hero/estilos.ts (fixtures/data/hero/estilos.json).</summary>
     public sealed class EstilosData
     {
@@ -67,6 +110,9 @@ namespace RPGLegend.Engine
         [JsName("REGRAS_DO_EMPURRAO")] public RegrasDoEmpurrao Empurrao;
         [JsName("REGRAS_DO_CHUTE")] public RegrasDoChute Chute;
         [JsName("REGRAS_DA_CONCENTRACAO")] public RegrasDaConcentracao Concentracao;
+        [JsName("REGRAS_DA_METAMORFOSE")] public RegrasDaMetamorfose Metamorfose;
+        [JsName("REGRAS_DO_FLORESCIMENTO")] public RegrasDoFlorescimento Florescimento;
+        [JsName("REGRAS_DAS_RAIZES")] public RegrasDasRaizes Raizes;
     }
 
     public static partial class GameData
@@ -95,6 +141,35 @@ namespace RPGLegend.Engine
         public static RegrasDoEmpurrao Empurrao => D.Empurrao;
         public static RegrasDoChute Chute => D.Chute;
         public static RegrasDaConcentracao Concentracao => D.Concentracao;
+        public static RegrasDaMetamorfose Metamorfose => D.Metamorfose;
+        public static RegrasDoFlorescimento Florescimento => D.Florescimento;
+        public static RegrasDasRaizes Raizes => D.Raizes;
+
+        /// <summary>TS: quemEnsina — o mestre de estilo, ou, pros do Druida, um espírito ancestral (rodada 5b).</summary>
+        public static QuemEnsinaEstilo QuemEnsina(string estilo)
+        {
+            if (PorId(estilo)?.Classe == "druida")
+            {
+                return new QuemEnsinaEstilo
+                {
+                    Nome = "Espírito ancestral",
+                    Icone = "🌿",
+                    DeLonge = "um espírito ancestral",
+                    NaSala = "Um espírito ancestral flutua no meio da sala, em silêncio.",
+                    FoiEmbora = "O espírito ancestral voltou pra mata.",
+                    Pergunta = "Um espírito ancestral espera nesta sala. Deseja se aproximar?",
+                };
+            }
+            return new QuemEnsinaEstilo
+            {
+                Nome = "Mestre de estilo",
+                Icone = "🥋",
+                DeLonge = "um mestre meditando",
+                NaSala = "No meio da sala, um mestre de estilo medita de olhos fechados.",
+                FoiEmbora = "O mestre já seguiu caminho.",
+                Pergunta = "Um mestre de estilo medita nesta sala. Deseja falar com ele?",
+            };
+        }
 
         /// <summary>TS: estiloPorId.</summary>
         public static EstiloDef PorId(string id)

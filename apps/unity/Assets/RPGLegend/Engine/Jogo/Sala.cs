@@ -217,7 +217,11 @@ namespace RPGLegend.Engine
                     // O mestre de estilo (rodada 5a): só o app o gera e só o app o ouve.
                     var mestre = app ? MestresDeEstilo.Abrir(estado) : null;
                     if (mestre == null)
-                        return ComAviso(estado, "🥋", "Mestre de estilo", celula.MestreDeEstilo?.Ensinado == true ? "O mestre já seguiu caminho." : "Um mestre medita aqui, de olhos fechados.");
+                    {
+                        // Pros estilos do Druida, quem ensina é um espírito ancestral (rodada 5b).
+                        var quem = Estilos.QuemEnsina(celula.MestreDeEstilo?.Estilo);
+                        return ComAviso(estado, quem.Icone, quem.Nome, celula.MestreDeEstilo?.Ensinado == true ? quem.FoiEmbora : quem.NaSala);
+                    }
                     return ComTela(estado, new TelaAberta { Tipo = "mestreDeEstilo", Mestre = mestre });
                 }
                 case DungeonRoomTypes.Event:

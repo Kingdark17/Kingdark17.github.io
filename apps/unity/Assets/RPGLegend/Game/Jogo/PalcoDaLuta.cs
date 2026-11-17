@@ -599,6 +599,10 @@ namespace RPGLegend.Game.Jogo
             private static readonly Color Aviso = new Color(0.9f, 0.16f, 0.14f, 1f);
             private static readonly Color Bola = new Color(1f, 1f, 1f, 1f);
             private static readonly Color AuraDaBola = new Color(0.69f, 0.36f, 0.88f, 0.55f);
+            /// <summary>As flores do Florescimento (rodada 5b): o canteiro verde e as florzinhas rosadas, nas cores do Breno.</summary>
+            private static readonly Color Canteiro = new Color(0.36f, 0.66f, 0.30f, 1f);
+            private static readonly Color Petala = new Color(0.96f, 0.56f, 0.70f, 1f);
+            private static readonly Color MioloDaFlor = new Color(0.98f, 0.84f, 0.33f, 1f);
 
             private Arena _arena;
             private List<MonsterInstance> _instancias;
@@ -671,6 +675,41 @@ namespace RPGLegend.Game.Jogo
                 _arena = null;
             }
 
+            /// <summary>O canteiro de cada flor (4 × 4 casas, meio transparente, pulsando de leve) e quatro florzinhas dentro.</summary>
+            private static void DesenharFlores(Painter2D p, List<FlorNaSala> flores, float escala)
+            {
+                if (flores == null) return;
+                float meio = (float)(Estilos.Florescimento.Lado * RoomWalk.TileUnits / 2) * escala;
+                float pulso = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 2.4f);
+                foreach (var f in flores)
+                {
+                    var c = new Vector2((float)f.X * escala, (float)f.Y * escala);
+                    p.BeginPath();
+                    p.MoveTo(new Vector2(c.x - meio, c.y - meio));
+                    p.LineTo(new Vector2(c.x + meio, c.y - meio));
+                    p.LineTo(new Vector2(c.x + meio, c.y + meio));
+                    p.LineTo(new Vector2(c.x - meio, c.y + meio));
+                    p.ClosePath();
+                    p.fillColor = Cor(Canteiro, 0.14f + 0.08f * pulso);
+                    p.Fill();
+                    p.strokeColor = Cor(Canteiro, 0.55f);
+                    p.lineWidth = 2f;
+                    p.Stroke();
+                    float casa = (float)RoomWalk.TileUnits * escala;
+                    foreach (var (dx, dy) in new[] { (-0.9f, -0.9f), (0.9f, -0.6f), (-0.6f, 0.9f), (0.8f, 0.8f) })
+                    {
+                        var flor = new Vector2(c.x + dx * casa, c.y + dy * casa);
+                        float petala = casa * 0.13f;
+                        for (int k = 0; k < 5; k++)
+                        {
+                            float angulo = k * Mathf.PI * 2f / 5f + Time.unscaledTime * 0.3f;
+                            Circulo(p, flor + new Vector2(Mathf.Cos(angulo), Mathf.Sin(angulo)) * petala, petala, Cor(Petala, 0.85f), true, 0f);
+                        }
+                        Circulo(p, flor, petala * 0.8f, Cor(MioloDaFlor, 0.95f), true, 0f);
+                    }
+                }
+            }
+
             private void Desenhar(MeshGenerationContext contexto)
             {
                 if (_arena == null) return;
@@ -679,6 +718,10 @@ namespace RPGLegend.Game.Jogo
                 float escala = r.width / (float)(_colunas * RoomWalk.TileUnits);
                 if (escala <= 0) return;
                 var heroi = new Vector2((float)_arena.Heroi.X * escala, (float)_arena.Heroi.Y * escala);
+
+                // As flores do Florescimento, por baixo de tudo: as minhas e as do parceiro.
+                DesenharFlores(p, _arena.Flores, escala);
+                DesenharFlores(p, _arena.Dupla?.FloresDoParceiro, escala);
 
                 for (int i = 0; i < _arena.Monstros.Count && i < _instancias.Count; i++)
                 {

@@ -81,7 +81,7 @@ namespace RPGLegend.Tests
             Fn(M, "resistenciaDaClasse", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
-                return N(ClassesDeLuta.ResistenciaDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"])));
+                return N(ClassesDeLuta.ResistenciaDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"]), quem.Ativo));
             });
             Fn(M, "textosDaClasse", (a, c) =>
             {
@@ -104,7 +104,13 @@ namespace RPGLegend.Tests
             Fn(M, "efeitosDaMoral", (a, c) => W(ClassesDeLuta.EfeitosDaMoral(Num(a["nivel"]))));
             Fn(M, "contarCriticoNoAliado", (a, c) => W(ClassesDeLuta.ContarCriticoNoAliado(R<Moral>(a["moral"]))));
             Fn(M, "curaDoApoio", (a, c) =>
-                N(ClassesDeLuta.CuraDoApoio(Str(a["tipo"]), Num(JsJson.Prop(a["vida"], "hp")), Num(JsJson.Prop(a["vida"], "maxHp")))));
+                N(ClassesDeLuta.CuraDoApoio(Str(a["tipo"]), Num(JsJson.Prop(a["vida"], "hp")), Num(JsJson.Prop(a["vida"], "maxHp")), JsJson.ToOptionalNumber(a["mais"]) ?? 0)));
+            Fn(M, "danoDoDruida", (a, c) => N(ClassesDeLuta.DanoDoDruida(R<QuemLutaDoCaso>(a["quem"]).Ativo, Num(a["golpe"]))));
+            Fn(M, "auraDeFera", (a, c) => W(ClassesDeLuta.AuraDeFera(Num(a["golpes"]))));
+            Fn(M, "golpeForte", (a, c) => W(ClassesDeLuta.GolpeForte(Num(a["golpe"]))));
+            Fn(M, "golpeQuePrende", (a, c) => W(ClassesDeLuta.GolpeQuePrende(Num(a["golpe"]))));
+            Fn(M, "raizesFundas", (a, c) => W(ClassesDeLuta.RaizesFundas(Num(a["golpes"]))));
+            Fn(M, "quemEnsina", (a, c) => W(Estilos.QuemEnsina(a["estilo"] == null || a["estilo"].Type == JTokenType.Null ? null : Str(a["estilo"]))));
             Fn(M, "duracaoDaFe", (a, c) => N(ClassesDeLuta.DuracaoDaFe(JsJson.Truthy(a["comunhao"]), Num(a["dano"]), Num(a["quantos"]))));
             Fn(M, "oQueCanaliza", (a, c) =>
             {

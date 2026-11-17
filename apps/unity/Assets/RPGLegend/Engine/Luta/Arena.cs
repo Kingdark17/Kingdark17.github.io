@@ -53,6 +53,8 @@ namespace RPGLegend.Engine
         public bool? Acertou;
         /// <summary>Ele vai atrás de um lacaio do Necromante (o índice na equipe), e o golpe em curso cai nele (rodada 4b).</summary>
         public double? NoLacaio;
+        /// <summary>Preso pelas Raízes Ocultas (rodada 5b): os passos que faltam. Não anda nem investe; o golpe de onde está, sim.</summary>
+        public double? Preso;
 
         public MonstroNaArena Clone() => (MonstroNaArena)MemberwiseClone();
     }
@@ -73,10 +75,13 @@ namespace RPGLegend.Engine
         public bool? ParceiroPuxa;
         /// <summary>O dano que o parceiro levou nos últimos 30 s (ele diz): a duração da Comunhão sagrada conta com ele.</summary>
         public double? ParceiroDano;
+        /// <summary>As flores do Florescimento que o parceiro plantou (rodada 5b): curam o herói daqui também.</summary>
+        public List<FlorNaSala> FloresDoParceiro;
         public bool? Fantasma;
 
         public Dupla Clone() => new Dupla
         {
+            FloresDoParceiro = FloresDoParceiro != null ? FloresDoParceiro.ConvertAll(f => f.Clone()) : null,
             Papel = Papel,
             Parceiro = Parceiro != null ? new PontoNaSala { X = Parceiro.X, Y = Parceiro.Y } : null,
             ParceiroCaido = ParceiroCaido,
@@ -95,6 +100,17 @@ namespace RPGLegend.Engine
     {
         public string Tipo;
         public double? Passos;
+        /// <summary>Os pontos de % de cura a mais (a Purificação da Metamorfose, rodada 5b).</summary>
+        public double? Mais;
+    }
+
+    /// <summary>TS: FlorNaSala — uma flor do Florescimento (rodada 5b): o meio dela, em unidades da sala.</summary>
+    public sealed class FlorNaSala
+    {
+        public double X;
+        public double Y;
+
+        public FlorNaSala Clone() => new FlorNaSala { X = X, Y = Y };
     }
 
     /// <summary>TS: MemoriaDaLuta — o que a luta leva de uma pra outra, na memória do app (fora do save): a moral e a recarga da fé.</summary>
@@ -152,6 +168,8 @@ namespace RPGLegend.Engine
         public bool? Puxa;
         /// <summary>O dano que ele levou nos últimos 30 s (a Comunhão sagrada conta com ele).</summary>
         public double? Dano;
+        /// <summary>As flores do Florescimento que ele plantou (rodada 5b).</summary>
+        public List<FlorNaSala> Flores;
     }
 
     /// <summary>TS: um dano de fora, ou um dano pra mandar: em qual monstro (índice na sala) e quanto.</summary>
@@ -264,6 +282,9 @@ namespace RPGLegend.Engine
         /// <summary>O Necromante (rodada 4b): os cristais dos inimigos que caíram nesta luta, e a espera da Magia Proibida.</summary>
         public List<CristalNaSala> Cristais;
         public double? RecargaDaMagia;
+        /// <summary>O Florescimento (rodada 5b): as flores que o herói daqui plantou (a mais antiga primeiro), e os passos dentro de uma até a próxima cura.</summary>
+        public List<FlorNaSala> Flores;
+        public double? RelogioDaFlor;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -338,6 +359,8 @@ namespace RPGLegend.Engine
         public bool? Magia;
         /// <summary>O Espadachim: apertou o Corte Invernal.</summary>
         public bool? Corte;
+        /// <summary>O Florescimento no celular (rodada 5b): o botão 🌸 planta uma flor no pé do herói.</summary>
+        public bool? Florescer;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -596,6 +619,7 @@ namespace RPGLegend.Engine
             else if (entrada.Explodir == true) Explodir(l);
             else if (entrada.Magia == true) UsarMagia(l);
             else if (entrada.Corte == true) CorteInvernal(l);
+            else if (entrada.Florescer == true && l.Arena.Recarga <= 0) Plantar(l, l.Arena.Heroi.X, l.Arena.Heroi.Y);
             else if (Js.Truthy(entrada.Item)) UsarItem(l, entrada.Item);
 
             if (l.Fim == null)
@@ -675,6 +699,8 @@ namespace RPGLegend.Engine
                 Canal = arena.Canal,
                 Canalizando = arena.Canalizando,
                 RecargaDaMagia = arena.RecargaDaMagia,
+                Flores = arena.Flores != null ? arena.Flores.ConvertAll(f => f.Clone()) : null,
+                RelogioDaFlor = arena.RelogioDaFlor,
             };
             if (arena.Cristais != null)
             {
@@ -859,7 +885,13 @@ namespace RPGLegend.Engine
         {
             var lugar = LugarDe(l, indice);
             var quem = Masmorra(l).Hero;
-            if (Catalog.IdDaClasse(quem.ClassId, quem.ClassName) == "druida") return NasVinhas(l, lugar.X, lugar.Y, folga);
+            if (Catalog.IdDaClasse(quem.ClassId, quem.ClassName) == "druida")
+            {
+                // Os estilos (rodada 5b): as Raízes pegam qualquer um da sala; a garra e a flor shuriken saem do herói.
+                string estilo = Estilos.IdDoEstilo(quem);
+                if (estilo == "raizes") return true;
+                if (estilo != "metamorfose" && estilo != "florescimento") return NasVinhas(l, lugar.X, lugar.Y, folga);
+            }
             double dx = l.Arena.Heroi.X - lugar.X;
             double dy = l.Arena.Heroi.Y - lugar.Y;
             // O Espadachim com o avanço pronto alcança mais: ele vai até o alvo (rodada 5a).
@@ -1080,6 +1112,12 @@ namespace RPGLegend.Engine
         /// <summary>Sem monstro na área do cursor: o golpe vai no chão, sem evento, e o botão espera a recarga como depois de um golpe.</summary>
         private static void GolpeNoChao(Luta l, double x, double y)
         {
+            // O Florescimento (rodada 5b): o ataque no chão vazio planta uma flor.
+            if (Estilos.IdDoEstilo(Masmorra(l).Hero) == "florescimento")
+            {
+                Plantar(l, x, y);
+                return;
+            }
             l.Arena.Recarga = D.RecargaDoAtaque;
             Contar(l, new Acontecimento { Tipo = "numero", Onde = "chao", X = Math.Truncate(x), Y = Math.Truncate(y), Texto = "Errou", Tom = "erro" });
             Contar(l, Som("miss"));
@@ -1287,6 +1325,8 @@ namespace RPGLegend.Engine
                 recarga.RecargaDoEstilo = Estilos.Espadachim.Recarga;
                 l.Arena.Classe = recarga;
             }
+            // O Druida com estilo conta os ataques da luta (a aura da Metamorfose, as Raízes).
+            double golpeDoDruida = Catalog.IdDaClasse(heroDoGolpe.ClassId, heroDoGolpe.ClassName) == "druida" && estiloAtivo != null ? ContarGolpeDoDruida(l, estiloAtivo) : 0;
             // O chute erra 1 vez em 10.
             if (estiloAtivo == "chute" && l.Rng() * 100 < Estilos.Chute.Erro)
             {
@@ -1313,6 +1353,8 @@ namespace RPGLegend.Engine
             // O avanço do Paladino empurra o alvo que ficou de pé.
             var alvo = l.Arena.Monstros[(int)indice.Value];
             if (atordoarDepois && l.Fim == null && alvo.Fase != "caido") Atordoar(l, alvo, Estilos.Espadachim.Atordoa);
+            // Todo 9º golpe das Raízes prende o alvo (o chefe não).
+            if (estiloAtivo == "raizes" && ClassesDeLuta.GolpeQuePrende(golpeDoDruida) && l.Fim == null) Prender(l, alvo);
             if (paladino && l.Fim == null && alvo.Fase != "caido") Empurrar(l, alvo, l.Arena.Heroi.X, l.Arena.Heroi.Y, CD.Paladino.Empurrao);
         }
 
@@ -1796,7 +1838,10 @@ namespace RPGLegend.Engine
             // A moral do grupo (o degrau 1) também deixa o passo mais ligeiro.
             double daMoral = MoralAqui(l).Velocidade;
             double base_ = VelocidadeNaArena(Masmorra(l).Hero);
-            double velocidade = daMoral > 0 ? Math.Truncate(base_ * (100 + daMoral) / 100) : base_;
+            // As Raízes fundas (rodada 5b) também: o Druida anda 10% mais rápido.
+            double fundas = Estilos.IdDoEstilo(Masmorra(l).Hero) == "raizes" && ClassesDeLuta.RaizesFundas(Contadores(l).Golpes ?? 0) ? Estilos.Raizes.Velocidade : 0;
+            double daMais = daMoral + fundas;
+            double velocidade = daMais > 0 ? Math.Truncate(base_ * (100 + daMais) / 100) : base_;
             return RoomWalk.Tick(planta, heroi, new WalkInput { X = entrada.X, Y = entrada.Y }, velocidade).Walker;
         }
 
@@ -1817,6 +1862,7 @@ namespace RPGLegend.Engine
             }
             PassarAFe(l);
             PassarOsEstilos(l);
+            PassarAsFlores(l);
             Canalizar(l, entrada);
             if (arena.Recarga > 0) arena.Recarga -= 1;
             if (arena.RecargaDoItem > 0) arena.RecargaDoItem -= 1;
@@ -1872,6 +1918,8 @@ namespace RPGLegend.Engine
 
         private static void AgirMonstro(Luta l, MonstroNaArena m)
         {
+            // Preso pelas Raízes (rodada 5b): o tempo corre aqui.
+            if (m.Preso != null) m.Preso = m.Preso.Value > 1 ? m.Preso.Value - 1 : (double?)null;
             var jeito = JeitoDoGolpe(MonstroNo(l, m.Indice), m.Poder);
             switch (m.Fase)
             {
@@ -1921,6 +1969,8 @@ namespace RPGLegend.Engine
         {
             EscolherPresa(l, m);
             if (ADistanciaDoGolpe(l, m, jeito)) return;
+            // Preso pelas Raízes, não sai do lugar.
+            if ((m.Preso ?? 0) > 0) return;
             var heroi = PresaDe(l, m);
             // Lento (as vinhas do Druida, as canções…), anda menos.
             var lento = (Sala(l).Monsters[(int)m.Indice] as CombatMonster)?.Status?.Lento;
@@ -1967,7 +2017,10 @@ namespace RPGLegend.Engine
             {
                 var m = monstros[(int)((l.Arena.Vez + k + n) % n)];
                 if (m.Fase != "esperando" || m.Tempo > 0) continue;
-                if (ADistanciaDoGolpe(l, m, JeitoDe(MonstroNo(l, m.Indice)))) return m;
+                var jeito = JeitoDe(MonstroNo(l, m.Indice));
+                // Preso pelas Raízes, não investe (o golpe de onde está, sim).
+                if ((m.Preso ?? 0) > 0 && jeito.Golpe == "investida") continue;
+                if (ADistanciaDoGolpe(l, m, jeito)) return m;
             }
             return null;
         }
@@ -2200,7 +2253,7 @@ namespace RPGLegend.Engine
             var moral = MoralAqui(l);
             // O revestimento de ki do Monge segura parte deste golpe, e quebra.
             bool revestido = l.Arena.Revestido == true;
-            double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c) + moral.Resistencia + (revestido ? CD.Monge.EscudoRevestido : 0);
+            double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c, Estilos.IdDoEstilo(h)) + moral.Resistencia + (revestido ? CD.Monge.EscudoRevestido : 0);
             double dano = resistencia > 0 ? Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * resistencia / 100)) : golpe.Damage;
             var ferido = golpe.Hero;
             if (resistencia > 0)
@@ -2512,8 +2565,10 @@ namespace RPGLegend.Engine
             string id = Catalog.IdDaClasse(estado.Hero.ClassId, estado.Hero.ClassName);
             if (id == "druida")
             {
-                if (aliado == "eu") PurificarAqui(l);
-                else l.Apoios.Add(new ApoioDoParceiro { Tipo = "purificar" });
+                // A Purificação da Metamorfose cura mais (rodada 5b).
+                double mais = Estilos.IdDoEstilo(estado.Hero) == "metamorfose" ? Estilos.Metamorfose.Purificacao : 0;
+                if (aliado == "eu") PurificarAqui(l, mais);
+                else l.Apoios.Add(new ApoioDoParceiro { Tipo = "purificar", Mais = mais > 0 ? mais : (double?)null });
                 l.Arena.Recarga = CD.Druida.SemAtacar;
                 Contar(l, Aviso(aliado == "eu" ? "🌿 Purificação Ancestral" : "🌿 Purificação Ancestral no parceiro"));
                 return;
@@ -2539,7 +2594,7 @@ namespace RPGLegend.Engine
         {
             if (apoio.Tipo == "purificar")
             {
-                PurificarAqui(l);
+                PurificarAqui(l, apoio.Mais ?? 0);
                 return;
             }
             if (apoio.Tipo == "comunhao")
@@ -2553,10 +2608,10 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: curarAqui — a cura do apoio no herói daqui, com o número em cima dele.</summary>
-        private static void CurarAqui(Luta l, string tipo)
+        private static void CurarAqui(Luta l, string tipo, double mais = 0)
         {
             var estado = Masmorra(l);
-            double cura = ClassesDeLuta.CuraDoApoio(tipo, estado.Hero.Hp, estado.Hero.MaxHp);
+            double cura = ClassesDeLuta.CuraDoApoio(tipo, estado.Hero.Hp, estado.Hero.MaxHp, mais);
             if (cura <= 0) return;
             var curado = estado.Clone();
             curado.Hero = estado.Hero.Clone();
@@ -2567,7 +2622,7 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: purificarAqui — a Purificação Ancestral no herói daqui: o veneno e os ferimentos somem, e a cura.</summary>
-        private static void PurificarAqui(Luta l)
+        private static void PurificarAqui(Luta l, double mais = 0)
         {
             var estado = Masmorra(l);
             var buffs = estado.Hero.Buffs?.Clone() ?? new HeroBuffs();
@@ -2578,7 +2633,7 @@ namespace RPGLegend.Engine
             limpo.Hero.Buffs = buffs;
             limpo.Hero.Ferimentos = null;
             l.Estado = limpo;
-            CurarAqui(l, "purificar");
+            CurarAqui(l, "purificar", mais);
             Contar(l, Aviso("🌿 Purificado"));
         }
 
@@ -2603,13 +2658,20 @@ namespace RPGLegend.Engine
             if (m == null || m.Fase == "caido") return;
             var r = CD.Druida;
             var monstro = CombatMonster.From(Sala(l).Monsters[(int)indice]);
-            double veneno = Js.Max(1, Math.Truncate(monstro.MaxHp * r.Veneno / 100));
+            // Os estilos (rodada 5b): o golpe forte das Raízes deixa mais lento, e as Raízes fundas envenenam pela vida que resta.
+            string estilo = Estilos.IdDoEstilo(h);
+            double golpes = Contadores(l).Golpes ?? 0;
+            double lento = estilo == "raizes" && ClassesDeLuta.GolpeForte(golpes) ? Estilos.Raizes.Lento : r.Lento;
+            double veneno = estilo == "raizes" && ClassesDeLuta.RaizesFundas(golpes)
+                ? Js.Max(1, Math.Truncate(monstro.Hp * Estilos.Raizes.Veneno / 100))
+                : Js.Max(1, Math.Truncate(monstro.MaxHp * r.Veneno / 100));
             var status = monstro.Status?.Clone() ?? new MonsterStatus();
-            status.Lento = new AmountStatus { Turns = r.Turnos, Amount = r.Lento / 100 };
+            status.Lento = new AmountStatus { Turns = r.Turnos, Amount = lento / 100 };
             status.Veneno = new DotStatus { Turns = r.Turnos, Dmg = veneno };
             monstro.Status = status;
             l.Estado = FimDaLuta.GravarMonstro(Masmorra(l), indice, monstro);
-            Contar(l, Numero("monstro", indice, "🌿", "erro"));
+            string icone = estilo == "metamorfose" ? "🐾" : estilo == "florescimento" ? "🌸" : estilo == "raizes" ? "🌱" : "🌿";
+            Contar(l, Numero("monstro", indice, icone, "erro"));
         }
 
         /// <summary>TS: usarFe — o botão do Poder da fé (o Clérigo): em dupla, a Comunhão; sozinho, o Santo Egoísta (com a mana cheia).</summary>
@@ -2726,6 +2788,7 @@ namespace RPGLegend.Engine
             if (a.Canalizando == true) extras.Canalizando = true;
             if ((a.RecargaDaMagia ?? 0) > 0) extras.RecargaDaMagia = a.RecargaDaMagia;
             if (luta.Estado.Hero.BloqueioDaMagia != null) extras.MagiaSelada = true;
+            if ((a.Flores?.Count ?? 0) > 0) extras.Flores = a.Flores.Count;
             return extras;
         }
 
@@ -3154,6 +3217,118 @@ namespace RPGLegend.Engine
             }
         }
 
+        // ---------- os estilos do Druida (rodada 5b: Metamorfose, Florescimento, Raízes Ocultas) ----------
+
+        /// <summary>TS: contarGolpeDoDruida — o Druida com estilo deu mais um ataque nesta luta. O número deste.</summary>
+        private static double ContarGolpeDoDruida(Luta l, string estilo)
+        {
+            double golpes = (Contadores(l).Golpes ?? 0) + 1;
+            var c = Contadores(l).Clone();
+            c.Golpes = golpes;
+            l.Arena.Classe = c;
+            if (estilo == "metamorfose" && golpes == Estilos.Metamorfose.GolpesDaAura) Contar(l, Aviso("🐾 Aura de fera!"));
+            if (estilo == "raizes" && golpes == Estilos.Raizes.GolpesDoVeneno) Contar(l, Aviso("🌱 Raízes fundas!"));
+            return golpes;
+        }
+
+        /// <summary>TS: prender — as Raízes prendem o monstro de pé (o chefe não). No espelho, não.</summary>
+        private static void Prender(Luta l, MonstroNaArena m)
+        {
+            if (NoEspelho(l) || m.Fase == "caido" || MonstroNo(l, m.Indice).IsBoss) return;
+            m.Preso = Estilos.Raizes.Preso;
+            Contar(l, Numero("monstro", m.Indice, "🌱 Preso", "erro"));
+        }
+
+        /// <summary>TS: plantar — o Florescimento planta uma flor em (x, y), a até 4 blocos do herói; no máximo 2, e a nova tira a mais antiga.</summary>
+        private static void Plantar(Luta l, double x, double y)
+        {
+            var r = Estilos.Florescimento;
+            if (Estilos.IdDoEstilo(Masmorra(l).Hero) != "florescimento") return;
+            double dx = x - l.Arena.Heroi.X;
+            double dy = y - l.Arena.Heroi.Y;
+            double alcance = r.Plantio * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            if (dx * dx + dy * dy > alcance * alcance)
+            {
+                Contar(l, Aviso("Chegue mais perto"));
+                return;
+            }
+            var flor = new FlorNaSala { X = Math.Truncate(x), Y = Math.Truncate(y) };
+            var flores = l.Arena.Flores != null ? new List<FlorNaSala>(l.Arena.Flores) : new List<FlorNaSala>();
+            flores.Add(flor);
+            while (flores.Count > r.Maximo) flores.RemoveAt(0);
+            l.Arena.Flores = flores;
+            l.Arena.Recarga = D.RecargaDoAtaque;
+            Contar(l, new Acontecimento { Tipo = "numero", Onde = "chao", X = flor.X, Y = flor.Y, Texto = "🌸", Tom = "cura" });
+        }
+
+        /// <summary>TS: naFlor — o herói daqui está dentro de uma flor (a dele ou a do parceiro)?</summary>
+        private static bool NaFlor(Luta l)
+        {
+            double meio = Estilos.Florescimento.Lado * RoomWalk.TileUnits / 2;
+            double x = l.Arena.Heroi.X, y = l.Arena.Heroi.Y;
+            foreach (var lista in new[] { l.Arena.Flores, l.Arena.Dupla?.FloresDoParceiro })
+            {
+                if (lista == null) continue;
+                foreach (var f in lista)
+                    if (Math.Abs(x - f.X) <= meio && Math.Abs(y - f.Y) <= meio) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// TS: passarAsFlores — quem está dentro de uma flor fica sem o veneno e o sangramento (o osso quebrado não), e a
+        /// cada segundo dentro cura 3% da vida máxima. O fantasma não.
+        /// </summary>
+        private static void PassarAsFlores(Luta l)
+        {
+            if (l.Arena.Dupla?.Fantasma == true || !NaFlor(l))
+            {
+                l.Arena.RelogioDaFlor = null;
+                return;
+            }
+            var estado = Masmorra(l);
+            var hero = estado.Hero;
+            bool envenenado = (hero.Buffs?.PoisonTurns ?? 0) > 0;
+            bool ferido = (hero.Ferimentos?.Veneno ?? 0) != 0 || (hero.Ferimentos?.Sangramento ?? 0) != 0;
+            if (envenenado || ferido)
+            {
+                var limpo = estado.Clone();
+                limpo.Hero = hero.Clone();
+                if (hero.Ferimentos != null)
+                {
+                    var ferimentos = hero.Ferimentos.Clone();
+                    ferimentos.Veneno = null;
+                    ferimentos.Sangramento = null;
+                    limpo.Hero.Ferimentos = ferimentos.Braco == null && ferimentos.Perna == null ? null : ferimentos;
+                }
+                if (envenenado)
+                {
+                    var buffs = hero.Buffs.Clone();
+                    buffs.PoisonTurns = null;
+                    buffs.PoisonDmg = null;
+                    limpo.Hero.Buffs = buffs;
+                }
+                l.Estado = limpo;
+                Contar(l, Numero("heroi", 0, "🌸 Imune", "cura"));
+            }
+            double relogio = (l.Arena.RelogioDaFlor ?? 0) + 1;
+            if (relogio < 60)
+            {
+                l.Arena.RelogioDaFlor = relogio;
+                return;
+            }
+            l.Arena.RelogioDaFlor = 0;
+            var agora = Masmorra(l);
+            double falta = agora.Hero.MaxHp - agora.Hero.Hp;
+            if (falta <= 0) return;
+            double cura = Js.Min(falta, Js.Max(1, Math.Truncate(agora.Hero.MaxHp * Estilos.Florescimento.Cura / 100)));
+            var curado = agora.Clone();
+            curado.Hero = agora.Hero.Clone();
+            curado.Hero.Hp = agora.Hero.Hp + cura;
+            l.Estado = curado;
+            Contar(l, Numero("heroi", 0, "🌸+" + Js.NumberToString(cura), "cura"));
+        }
+
         /// <summary>TS: revestir — o Monge com o ki cheio se reveste: bate mais forte até o próximo golpe levado.</summary>
         private static void Revestir(Luta l)
         {
@@ -3297,6 +3472,11 @@ namespace RPGLegend.Engine
                 dupla.ParceiroCaido = entrada.Parceiro.Caido == true ? true : (bool?)null;
                 dupla.ParceiroPuxa = entrada.Parceiro.Puxa == true ? true : (bool?)null;
                 dupla.ParceiroDano = (entrada.Parceiro.Dano ?? 0) > 0 ? Math.Truncate(entrada.Parceiro.Dano.Value) : (double?)null;
+                var flores = new List<FlorNaSala>();
+                if (entrada.Parceiro.Flores != null)
+                    for (int i = 0; i < entrada.Parceiro.Flores.Count && i < Estilos.Florescimento.Maximo; i++)
+                        flores.Add(new FlorNaSala { X = Math.Truncate(entrada.Parceiro.Flores[i].X), Y = Math.Truncate(entrada.Parceiro.Flores[i].Y) });
+                dupla.FloresDoParceiro = flores.Count > 0 ? flores : null;
             }
             // A moral do grupo que o Bardo do parceiro subiu (fica a maior).
             if (entrada.Moral != null && Math.Truncate(entrada.Moral.Value) > (l.Arena.Moral?.Nivel ?? 0))

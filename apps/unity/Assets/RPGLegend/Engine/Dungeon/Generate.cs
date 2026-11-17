@@ -171,7 +171,7 @@ namespace RPGLegend.Engine
             if (cell.Type == DungeonRoomTypes.Boss) return cell.Beaten == true ? D.IconeDoPilar : "👑";
             if (cell.Type == DungeonRoomTypes.Event) return cell.Resolved == true ? "" : "❓";
             if (cell.Type == DungeonRoomTypes.Teacher) return cell.Teacher?.Taught == true ? "" : "🎓";
-            if (cell.Type == DungeonRoomTypes.Estilo) return cell.MestreDeEstilo?.Ensinado == true ? "" : "🥋";
+            if (cell.Type == DungeonRoomTypes.Estilo) return cell.MestreDeEstilo?.Ensinado == true ? "" : Estilos.QuemEnsina(cell.MestreDeEstilo?.Estilo).Icone;
             return D.IconesFixos.TryGet(cell.Type, out var icon) && icon != null ? icon : "";
         }
 
@@ -186,7 +186,7 @@ namespace RPGLegend.Engine
             if (cell.Type == DungeonRoomTypes.Boss) return cell.Beaten == true ? "o pilar de volta à cidade" : "uma presença poderosa e perigosa";
             if (cell.Type == DungeonRoomTypes.Event) return cell.Resolved == true ? "vestígios de um acontecimento" : "algo incomum";
             if (cell.Type == DungeonRoomTypes.Teacher) return cell.Teacher?.Taught == true ? "uma sala onde alguém ensinou" : NomeDoMestre(cell);
-            if (cell.Type == DungeonRoomTypes.Estilo) return cell.MestreDeEstilo?.Ensinado == true ? "uma sala onde alguém ensinou" : "um mestre meditando";
+            if (cell.Type == DungeonRoomTypes.Estilo) return cell.MestreDeEstilo?.Ensinado == true ? "uma sala onde alguém ensinou" : Estilos.QuemEnsina(cell.MestreDeEstilo?.Estilo).DeLonge;
             switch (cell.Type)
             {
                 case DungeonRoomTypes.Npc: return "alguém parado por perto";
@@ -229,7 +229,7 @@ namespace RPGLegend.Engine
             {
                 return cell.MestreDeEstilo?.Ensinado == true
                     ? "O mestre seguiu caminho. Ficaram as marcas do treino no chão."
-                    : "No meio da sala, um mestre de estilo medita de olhos fechados.";
+                    : Estilos.QuemEnsina(cell.MestreDeEstilo?.Estilo).NaSala;
             }
             switch (cell.Type)
             {
@@ -266,7 +266,7 @@ namespace RPGLegend.Engine
                 if (nome.StartsWith("um", StringComparison.Ordinal)) nome = "Um" + nome.Substring(2);
                 return nome + " espera nesta sala. Deseja falar com ele?";
             }
-            if (cell.Type == DungeonRoomTypes.Estilo && cell.MestreDeEstilo?.Ensinado != true) return "Um mestre de estilo medita nesta sala. Deseja falar com ele?";
+            if (cell.Type == DungeonRoomTypes.Estilo && cell.MestreDeEstilo?.Ensinado != true) return Estilos.QuemEnsina(cell.MestreDeEstilo?.Estilo).Pergunta;
             return "Deseja entrar na sala?";
         }
 

@@ -220,7 +220,7 @@ describe('o mestre de estilo', () => {
     const base = naSala('guerreiro', 'Guerreiro', [monstro()]);
     const celula = celulaAtual(base) as DungeonCell;
     const naSalaDoMestre = substituirCelulaAtual(base, { ...celula, type: 'estilo', monsters: [], mestreDeEstilo: { estilo: 'cavaleiro' } });
-    expect(interagir(naSalaDoMestre, NUNCA).aviso?.texto).toBe('Um mestre medita aqui, de olhos fechados.');
+    expect(interagir(naSalaDoMestre, NUNCA).aviso?.texto).toBe('No meio da sala, um mestre de estilo medita de olhos fechados.');
     const tela = interagir(naSalaDoMestre, NUNCA, null, undefined, true).tela;
     expect(tela?.tipo).toBe('mestreDeEstilo');
     const aprendeu = aprenderComMestre(naSalaDoMestre);
@@ -230,5 +230,93 @@ describe('o mestre de estilo', () => {
     expect(aprendeu.estado.hero.maxHp).toBe(Math.round((semEstilo * 140) / 100));
     expect((celulaAtual(aprendeu.estado) as DungeonCell).mestreDeEstilo?.ensinado).toBe(true);
     expect(abrirMestreDeEstilo(aprendeu.estado)).toBeNull();
+  });
+});
+
+// Os estilos do Druida (rodada 5b, 2026-11-17): Metamorfose, Florescimento, Raízes Ocultas.
+
+function statusDoMonstro(luta: LutaEmTempoReal, indice = 0): CombatMonster['status'] {
+  return (((celulaAtual(luta.estado) as DungeonCell).monsters ?? [])[indice] as CombatMonster).status;
+}
+
+function numeros(r: Rodada): string[] {
+  return r.acontecimentos.filter((a) => a.tipo === 'numero' && a.texto).map((a) => a.texto as string);
+}
+
+describe('os estilos do Druida', () => {
+  it('a garra da Metamorfose pega a até 2 blocos do herói e acende a aura de fera no 15º golpe da luta', () => {
+    const longe = abrirLuta(naSala('druida', 'Druida', [monstro()], COM('druida', 'metamorfose')), CANTO).luta;
+    expect(avisos(rodar(longe, 1, NUNCA, () => ({ ...PARADO, atacar: true, cursor: MEIO })))).toContain('Chegue mais perto');
+    const perto = abrirLuta(naSala('druida', 'Druida', [monstro()], COM('druida', 'metamorfose')), PERTO).luta;
+    const quase = { ...perto, arena: { ...perto.arena, classe: { golpes: 14 } } };
+    const r = golpeNoMeio(quase, { cursor: MEIO });
+    expect(avisos(r)).toContain('🐾 Aura de fera!');
+    expect(r.luta.arena.classe?.golpes).toBe(15);
+    expect(numeros(r)).toContain('🐾');
+  });
+
+  it('a Purificação da Metamorfose cura 20%', () => {
+    const cura = (estilo: Partial<Hero>) => {
+      const luta = abrirLuta(naSala('druida', 'Druida', [monstro()], { hp: 500, ...estilo }), PERTO).luta;
+      return heroi(golpeNoMeio(luta, { cursor: { x: PERTO.x, y: PERTO.y } }).luta).hp - 500;
+    };
+    expect(cura({})).toBe(99);
+    expect(cura(COM('druida', 'metamorfose'))).toBe(199);
+  });
+
+  it('o Florescimento planta no chão vazio (a até 4 blocos, no máximo 2) e o shuriken alcança 3 blocos', () => {
+    const luta = abrirLuta(naSala('druida', 'Druida', [monstro()], COM('druida', 'florescimento')), CANTO).luta;
+    // Longe do monstro e a 2 blocos do herói (perto dele, o cursor mira nele: é a Purificação): duas flores; a terceira tira a mais antiga.
+    const uma = rodar(luta, RECARGA_DO_ATAQUE + 1, NUNCA, (i) => (i === 0 ? { ...PARADO, atacar: true, cursor: { x: 3.5 * T, y: 7.5 * T } } : PARADO)).luta;
+    expect(uma.arena.flores).toEqual([{ x: 3.5 * T, y: 7.5 * T }]);
+    const tres = rodar(uma, 2 * (RECARGA_DO_ATAQUE + 1), NUNCA, (i) =>
+      i === 0 ? { ...PARADO, atacar: true, cursor: { x: 1.5 * T, y: 5.5 * T } } : i === RECARGA_DO_ATAQUE + 1 ? { ...PARADO, florescer: true } : PARADO,
+    ).luta;
+    expect(tres.arena.flores).toEqual([{ x: 1.5 * T, y: 5.5 * T }, { x: CANTO.x, y: CANTO.y }]);
+    // A 6 blocos do herói, não planta.
+    expect(avisos(rodar(luta, 1, NUNCA, () => ({ ...PARADO, atacar: true, cursor: { x: 7.5 * T, y: 7.5 * T } })))).toContain('Chegue mais perto');
+    // O monstro do meio está a mais de 3 blocos: o shuriken não alcança.
+    expect(avisos(rodar(luta, 1, NUNCA, () => ({ ...PARADO, atacar: true, cursor: MEIO })))).toContain('Chegue mais perto');
+  });
+
+  it('dentro da flor, o veneno e o sangramento saem (o osso não) e a cada segundo cura 3% da vida máxima', () => {
+    const sala = naSala('druida', 'Druida', [monstro()], { ...COM('druida', 'florescimento'), hp: 500, ferimentos: { veneno: 3, sangramento: 2, braco: true } });
+    const luta = abrirLuta(sala, CANTO).luta;
+    const r = rodar(luta, 62, NUNCA, (i) => (i === 0 ? { ...PARADO, florescer: true } : PARADO));
+    expect(heroi(r.luta).ferimentos).toEqual({ braco: true });
+    expect(numeros(r)).toContain('🌸 Imune');
+    expect(numeros(r)).toContain('🌸+29');
+  });
+
+  it('as Raízes pegam de qualquer lugar; o 3º golpe deixa mais lento, o 9º prende (o chefe não) e o 18º envenena forte', () => {
+    const comum = abrirLuta(naSala('druida', 'Druida', [monstro()]), CANTO).luta;
+    expect(avisos(rodar(comum, 1, NUNCA, () => ({ ...PARADO, atacar: true, cursor: MEIO })))).toContain('Chegue mais perto');
+    const raizes = (golpes: number, chefe = false) => {
+      const luta = abrirLuta(naSala('druida', 'Druida', [monstro({ isBoss: chefe })], COM('druida', 'raizes')), CANTO).luta;
+      return golpeNoMeio({ ...luta, arena: { ...luta.arena, classe: { golpes } } }, { cursor: MEIO });
+    };
+    const terceiro = raizes(2);
+    expect(vidaDoMonstro(terceiro.luta)).toBeLessThan(4000);
+    expect(statusDoMonstro(terceiro.luta)?.lento?.amount).toBe(0.2);
+    expect(statusDoMonstro(raizes(3).luta)?.lento?.amount).toBe(0.1);
+    const nono = raizes(8);
+    expect(nono.luta.arena.monstros[0]?.preso).toBeGreaterThan(0);
+    expect(numeros(nono)).toContain('🌱 Preso');
+    expect(raizes(8, true).luta.arena.monstros[0]?.preso).toBeUndefined();
+    const fundo = raizes(17);
+    expect(avisos(fundo)).toContain('🌱 Raízes fundas!');
+    const hp = vidaDoMonstro(fundo.luta);
+    expect(statusDoMonstro(fundo.luta)?.veneno?.dmg).toBeGreaterThan(Math.trunc((4000 * 5) / 100));
+    expect(statusDoMonstro(fundo.luta)?.veneno?.dmg).toBeLessThanOrEqual(Math.trunc((hp * 15) / 100) + Math.trunc((4000 * 15) / 100));
+  });
+
+  it('preso, o monstro não sai do lugar', () => {
+    const luta = abrirLuta(naSala('druida', 'Druida', [monstro()], COM('druida', 'raizes')), CANTO).luta;
+    const m = luta.arena.monstros[0]!;
+    const preso = { ...luta, arena: { ...luta.arena, monstros: [{ ...m, preso: 200 }] } };
+    const r = rodar(preso, 100, NUNCA);
+    expect(r.luta.arena.monstros[0]?.corpoX).toBe(m.corpoX);
+    expect(r.luta.arena.monstros[0]?.corpoY).toBe(m.corpoY);
+    expect(rodar(luta, 100, NUNCA).luta.arena.monstros[0]?.corpoY).not.toBe(m.corpoY);
   });
 });

@@ -643,7 +643,29 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   sem golpear (até 3, +50% cada no próximo golpe, que gasta todas) e dá +1
   de alcance. O que o estilo junta mora em `Arena.classe` e aparece na linha
   da classe.
-  Falta, nesta ordem: os estilos do Druida (5b) e os elementos do Mago (5c);
+  Rodada 5b, **os estilos do Druida** (2026-11-17, decidido com o usuário;
+  regras em `hero/estilos.ts`, o que junta na luta em `luta/arena.ts`): pro
+  Druida quem ensina é um **espírito ancestral** (`quemEnsina`: o ícone, os
+  textos da sala e a tela). Os três contam os ataques da luta
+  (`ContadoresDaClasse.golpes`). A **Metamorfose** ataca com a garra a até 2
+  blocos do herói (+20%, com o lento e o veneno das vinhas), a Purificação
+  cura 20% (`curaDoApoio` com `mais`, que o "a" leva ao parceiro como `m`) e
+  no 15º golpe acende a aura de fera (+20% de dano e 20% de resistência até o
+  fim da luta). O **Florescimento** planta flores (`Arena.flores`, até 2, a
+  nova tira a mais antiga, até o fim da luta): no PC, o ataque com o cursor
+  no chão vazio (perto do próprio herói o cursor mira nele, e sai a
+  Purificação), no celular o botão 🌸; cada flor tem 4 × 4 casas, cura 3% da
+  vida máxima por segundo e tira e segura o veneno e o sangramento de quem
+  está dentro (o osso quebrado não); em dupla curam o parceiro também (o "p"
+  leva `fl`, e a arena dele as recebe em `Dupla.floresDoParceiro`); o ataque
+  nos monstros vira a flor shuriken (+10%, 3 blocos, sai do herói). As
+  **Raízes Ocultas** pegam qualquer monstro da sala; todo 3º golpe bate +20% e
+  deixa o alvo 20% mais lento, todo 9º prende o alvo 4 s
+  (`MonstroNaArena.preso`: não anda nem investe, mas golpeia de onde está; o
+  chefe não), e do 18º em diante o veneno tira 15% da vida que resta e o
+  Druida anda 10% mais rápido. No espelho, o preso das Raízes do convidado
+  não passa pro anfitrião (o dano passa).
+  Falta, nesta ordem: os elementos do Mago (5c);
   mercadores secretos e itens novos (a arte das armas novas é o Claude que
   desenha, no estilo do Breno); o Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:

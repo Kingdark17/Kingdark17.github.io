@@ -251,7 +251,7 @@ namespace RPGLegend.Game.Jogo
                     var olha = Texto(dados["f"]);
                     bool caido = dados["c"]?.Type == JTokenType.Boolean && (bool)dados["c"];
                     double? levado = Numero(dados["d"], LimiteDoDanoLevado, out var dano30) && dano30 > 0 ? Math.Truncate(dano30) : (double?)null;
-                    _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null, Puxa = _parceiroPuxa ? true : (bool?)null, Dano = levado };
+                    _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null, Puxa = _parceiroPuxa ? true : (bool?)null, Dano = levado, Flores = FloresDoPacote(dados["fl"] as JArray) };
                     _sala?.MoverParceiro(x, y, olha == "N" || olha == "E" || olha == "W" ? olha : "S", caido);
                     // Os lacaios do Necromante parceiro, na luta (rodada 4b): só desenho.
                     _sala?.DefinirLacaiosDoParceiro(LacaiosDoPacote(dados["l"] as JArray));
@@ -264,7 +264,13 @@ namespace RPGLegend.Game.Jogo
                         if (_apoiosRecebidos.Count >= 16) break;
                         var tipo = Texto(a["k"]);
                         if (tipo != "bardo" && tipo != "clerigo" && tipo != "purificar" && tipo != "comunhao") continue;
-                        _apoiosRecebidos.Add(new ApoioDoParceiro { Tipo = tipo, Passos = Numero(a["n"], 100000, out var passos) && passos >= 0 ? Math.Truncate(passos) : (double?)null });
+                        _apoiosRecebidos.Add(new ApoioDoParceiro
+                        {
+                            Tipo = tipo,
+                            Passos = Numero(a["n"], 100000, out var passos) && passos >= 0 ? Math.Truncate(passos) : (double?)null,
+                            // A Purificação da Metamorfose cura mais (rodada 5b): no máximo os pontos dela.
+                            Mais = Numero(a["m"], GameData.EstilosTable.Metamorfose.Purificacao, out var mais) && mais > 0 ? Math.Truncate(mais) : (double?)null,
+                        });
                     }
                     break;
                 case "mo":
@@ -307,6 +313,20 @@ namespace RPGLegend.Game.Jogo
         }
 
         private static string Texto(JToken t) => t != null && t.Type == JTokenType.String ? (string)t : "";
+
+        /// <summary>As flores do Florescimento que o parceiro disse no "p" (rodada 5b): até 2, cada uma [x, y]. Nenhuma: null.</summary>
+        private static List<FlorNaSala> FloresDoPacote(JArray lista)
+        {
+            if (lista == null) return null;
+            var flores = new List<FlorNaSala>();
+            foreach (var item in lista)
+            {
+                if (flores.Count >= 2 || !(item is JArray f) || f.Count < 2) break;
+                if (!Numero(f[0], LimiteDaPosicao, out var x) || !Numero(f[1], LimiteDaPosicao, out var y)) continue;
+                flores.Add(new FlorNaSala { X = x, Y = y });
+            }
+            return flores.Count > 0 ? flores : null;
+        }
 
         /// <summary>Os lacaios que o parceiro disse no "p": até 3, cada um [x, y, ícone].</summary>
         private static List<(double X, double Y, string Icone)> LacaiosDoPacote(JArray lista)
@@ -437,6 +457,7 @@ namespace RPGLegend.Game.Jogo
                     {
                         var um = new JObject { ["k"] = a.Tipo };
                         if (a.Passos != null) um["n"] = a.Passos.Value;
+                        if (a.Mais != null) um["m"] = a.Mais.Value;
                         apoios.Add(um);
                     }
                     _partida.ApoiosPraMandar.Clear();
@@ -484,7 +505,11 @@ namespace RPGLegend.Game.Jogo
                     lacaios.Add(new JArray(Math.Round(c.X.Value), Math.Round(c.Y.Value), equipe[i].ClassIcon ?? "💀"));
                 }
             }
-            var agora = sala + "|" + Math.Round(walker.X) + "|" + Math.Round(walker.Y) + "|" + walker.Facing + "|" + caido + "|" + levado + "|" + lacaios.ToString(Newtonsoft.Json.Formatting.None);
+            // Na luta, as flores do Florescimento vão junto (rodada 5b): curam o parceiro também.
+            var flores = new JArray();
+            if (luta?.Arena.Flores != null)
+                foreach (var f in luta.Arena.Flores) flores.Add(new JArray(Math.Round(f.X), Math.Round(f.Y)));
+            var agora = sala + "|" + Math.Round(walker.X) + "|" + Math.Round(walker.Y) + "|" + walker.Facing + "|" + caido + "|" + levado + "|" + lacaios.ToString(Newtonsoft.Json.Formatting.None) + "|" + flores.ToString(Newtonsoft.Json.Formatting.None);
             // Parado, repete de vez em quando: é o que mostra o herói a quem acabou de chegar.
             bool parado = agora == _posicaoEnviada;
             if (parado && Time.unscaledTime < _proximaPosicao + 1f) return;
@@ -494,6 +519,7 @@ namespace RPGLegend.Game.Jogo
             if (caido) pacote["c"] = true;
             if (levado > 0) pacote["d"] = levado;
             if (lacaios.Count > 0) pacote["l"] = lacaios;
+            if (flores.Count > 0) pacote["fl"] = flores;
             Rede.MandarTempoReal(pacote);
         }
 

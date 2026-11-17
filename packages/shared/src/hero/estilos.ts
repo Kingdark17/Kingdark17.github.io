@@ -12,7 +12,9 @@
  *   (`Hero.estilo`).
  *
  * Rodada 5a: os do Guerreiro (Espadachim, Cavaleiro) e os do Monge
- * (Empurrão, Dash/chute, Concentração).
+ * (Empurrão, Dash/chute, Concentração). Rodada 5b: os do Druida
+ * (Metamorfose, Florescimento, Raízes Ocultas), que um espírito ancestral
+ * ensina.
  */
 
 import { idDaClasse, type IdentidadeDeClasse } from './catalog.js';
@@ -40,6 +42,27 @@ export const ESTILOS: readonly EstiloDef[] = [
   { id: 'empurrao', classe: 'monge', nome: 'Empurrão', icone: '👐', desc: '+25% de dano; o golpe pega também quem está a 1 bloco do alvo, e cada um pode ser empurrado e atordoado.' },
   { id: 'chute', classe: 'monge', nome: 'Dash/chute', icone: '🦶', desc: 'Avança num chute até o alvo, a até 5 blocos; erra 1 vez em 10, e o crítico dá +40% de dano.' },
   { id: 'concentracao', classe: 'monge', nome: 'Concentração', icone: '🧘', desc: 'A cada 3 s sem atacar junta uma carga (até 3); cada carga dá +50% no próximo golpe. +1 de alcance.' },
+  {
+    id: 'metamorfose',
+    classe: 'druida',
+    nome: 'Metamorfose',
+    icone: '🐾',
+    desc: 'Ataca com a garra do espírito, a até 2 blocos, com +20% de dano, e o apoio no aliado cura 20%. No 15º golpe da luta acende a aura de fera: +20% de dano e 20% de resistência.',
+  },
+  {
+    id: 'florescimento',
+    classe: 'druida',
+    nome: 'Florescimento',
+    icone: '🌸',
+    desc: 'O ataque no chão vazio planta flores (4 × 4, a até 4 blocos) que curam 3% da vida por segundo e seguram veneno e sangramento; até 2. Nos monstros, a flor shuriken: +10% de dano, a até 3 blocos.',
+  },
+  {
+    id: 'raizes',
+    classe: 'druida',
+    nome: 'Raízes Ocultas',
+    icone: '🌱',
+    desc: 'As vinhas pegam qualquer monstro da sala. Todo 3º golpe bate +20% e deixa o alvo mais lento; todo 9º prende o alvo 4 s (o chefe não). Do 18º golpe da luta em diante, o veneno tira 15% da vida que resta e você anda 10% mais rápido.',
+  },
 ];
 
 /** A chance (%) de um andar trazer o mestre, por classe (depois de zerar a Floresta). */
@@ -88,6 +111,67 @@ export const REGRAS_DA_CONCENTRACAO = {
   porCarga: 50,
   alcance: 1,
 } as const;
+
+export const REGRAS_DA_METAMORFOSE = {
+  /** A garra pega a até tantos blocos do herói, com tanto (%) de dano a mais; a Purificação cura tanto (pontos de %) a mais. */
+  alcance: 2,
+  dano: 20,
+  purificacao: 10,
+  /** A aura de fera acende no golpe de número `golpesDaAura` da luta: tanto (%) de dano e de resistência a mais. */
+  golpesDaAura: 15,
+  aura: 20,
+  resistencia: 20,
+} as const;
+
+export const REGRAS_DO_FLORESCIMENTO = {
+  /** A flor shuriken: a até tantos blocos do herói, com tanto (%) de dano a mais. */
+  alcance: 3,
+  dano: 10,
+  /** As flores: plantadas a até `plantio` blocos, com `lado` casas de lado; curam `cura` (%) da vida máxima por segundo; no máximo `maximo`. */
+  plantio: 4,
+  lado: 4,
+  cura: 3,
+  maximo: 2,
+} as const;
+
+export const REGRAS_DAS_RAIZES = {
+  /** Todo golpe de número múltiplo de `forteACada` bate `dano` (%) a mais e deixa o alvo `lento` (%) mais lento. */
+  forteACada: 3,
+  dano: 20,
+  lento: 20,
+  /** Todo golpe múltiplo de `prendeACada` prende o alvo por `preso` passos (o chefe não). */
+  prendeACada: 9,
+  preso: 240,
+  /** Do golpe `golpesDoVeneno` da luta em diante: o veneno tira `veneno` (%) da vida que resta, e o herói anda `velocidade` (%) mais rápido. */
+  golpesDoVeneno: 18,
+  veneno: 15,
+  velocidade: 10,
+} as const;
+
+/**
+ * Quem ensina o estilo na sala: o mestre de estilo, ou, pros do Druida, um
+ * espírito ancestral (o doc do Breno). O nome, o ícone da sala e as falas.
+ */
+export function quemEnsina(estilo: string | undefined): { nome: string; icone: string; deLonge: string; naSala: string; foiEmbora: string; pergunta: string } {
+  if (estiloPorId(estilo)?.classe === 'druida') {
+    return {
+      nome: 'Espírito ancestral',
+      icone: '🌿',
+      deLonge: 'um espírito ancestral',
+      naSala: 'Um espírito ancestral flutua no meio da sala, em silêncio.',
+      foiEmbora: 'O espírito ancestral voltou pra mata.',
+      pergunta: 'Um espírito ancestral espera nesta sala. Deseja se aproximar?',
+    };
+  }
+  return {
+    nome: 'Mestre de estilo',
+    icone: '🥋',
+    deLonge: 'um mestre meditando',
+    naSala: 'No meio da sala, um mestre de estilo medita de olhos fechados.',
+    foiEmbora: 'O mestre já seguiu caminho.',
+    pergunta: 'Um mestre de estilo medita nesta sala. Deseja falar com ele?',
+  };
+}
 
 /** O estilo pelo id. */
 export function estiloPorId(id: string | undefined): EstiloDef | null {

@@ -34449,6 +34449,6095 @@
     }
   },
   {
+    "name": "estiloAtivo: (5a) druida metamorfose",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "metamorfose",
+        "classe": "druida",
+        "nome": "Metamorfose",
+        "icone": "🐾",
+        "desc": "Ataca com a garra do espírito, a até 2 blocos, com +20% de dano, e o apoio no aliado cura 20%. No 15º golpe da luta acende a aura de fera: +20% de dano e 20% de resistência."
+      }
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) druida metamorfose",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "florescimento",
+          "classe": "druida",
+          "nome": "Florescimento",
+          "icone": "🌸",
+          "desc": "O ataque no chão vazio planta flores (4 × 4, a até 4 blocos) que curam 3% da vida por segundo e seguram veneno e sangramento; até 2. Nos monstros, a flor shuriken: +10% de dano, a até 3 blocos."
+        },
+        {
+          "id": "raizes",
+          "classe": "druida",
+          "nome": "Raízes Ocultas",
+          "icone": "🌱",
+          "desc": "As vinhas pegam qualquer monstro da sala. Todo 3º golpe bate +20% e deixa o alvo mais lento; todo 9º prende o alvo 4 s (o chefe não). Do 18º golpe da luta em diante, o veneno tira 15% da vida que resta e você anda 10% mais rápido."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) druida metamorfose",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) druida metamorfose, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) druida metamorfose, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) druida metamorfose",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) druida metamorfose",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) druida metamorfose",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) druida metamorfose",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) druida metamorfose",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) druida metamorfose, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) druida metamorfose, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Garra 0/15"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) druida metamorfose, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) druida metamorfose, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Garra 0/15"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) druida metamorfose, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "raizes",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) druida metamorfose, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "florescimento",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida metamorfose, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "metamorfose"
+        ],
+        "estilo": "metamorfose"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida metamorfose, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "metamorfose"
+        ],
+        "estilo": "metamorfose"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida metamorfose, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "metamorfose"
+        ],
+        "estilo": "metamorfose"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida metamorfose, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "metamorfose"
+        ],
+        "estilo": "metamorfose"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida metamorfose, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "metamorfose"
+        ],
+        "estilo": "metamorfose"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida metamorfose, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "metamorfose"
+        ],
+        "estilo": "metamorfose"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida metamorfose, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "metamorfose"
+        ],
+        "estilo": "metamorfose"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida metamorfose, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "metamorfose"
+        ],
+        "estilo": "metamorfose"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida metamorfose, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "metamorfose"
+        ]
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) druida florescimento",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "florescimento",
+        "classe": "druida",
+        "nome": "Florescimento",
+        "icone": "🌸",
+        "desc": "O ataque no chão vazio planta flores (4 × 4, a até 4 blocos) que curam 3% da vida por segundo e seguram veneno e sangramento; até 2. Nos monstros, a flor shuriken: +10% de dano, a até 3 blocos."
+      }
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) druida florescimento",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "metamorfose",
+          "classe": "druida",
+          "nome": "Metamorfose",
+          "icone": "🐾",
+          "desc": "Ataca com a garra do espírito, a até 2 blocos, com +20% de dano, e o apoio no aliado cura 20%. No 15º golpe da luta acende a aura de fera: +20% de dano e 20% de resistência."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) druida florescimento",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) druida florescimento, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) druida florescimento, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) druida florescimento",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) druida florescimento",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) druida florescimento",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) druida florescimento",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) druida florescimento",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) druida florescimento, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) druida florescimento, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 0/2"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) druida florescimento, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) druida florescimento, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 0/2"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) druida florescimento, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "metamorfose",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) druida florescimento, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "metamorfose",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida florescimento, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes",
+          "florescimento"
+        ],
+        "estilo": "florescimento"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida florescimento, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes",
+          "florescimento"
+        ],
+        "estilo": "florescimento"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida florescimento, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes",
+          "florescimento"
+        ],
+        "estilo": "florescimento"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida florescimento, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes",
+          "florescimento"
+        ],
+        "estilo": "florescimento"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida florescimento, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes",
+          "florescimento"
+        ],
+        "estilo": "florescimento"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida florescimento, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes",
+          "florescimento"
+        ],
+        "estilo": "florescimento"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida florescimento, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes",
+          "florescimento"
+        ],
+        "estilo": "florescimento"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida florescimento, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes",
+          "florescimento"
+        ],
+        "estilo": "florescimento"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida florescimento, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes",
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes",
+          "florescimento"
+        ]
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) druida raízes",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "raizes",
+        "classe": "druida",
+        "nome": "Raízes Ocultas",
+        "icone": "🌱",
+        "desc": "As vinhas pegam qualquer monstro da sala. Todo 3º golpe bate +20% e deixa o alvo mais lento; todo 9º prende o alvo 4 s (o chefe não). Do 18º golpe da luta em diante, o veneno tira 15% da vida que resta e você anda 10% mais rápido."
+      }
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) druida raízes",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "metamorfose",
+          "classe": "druida",
+          "nome": "Metamorfose",
+          "icone": "🐾",
+          "desc": "Ataca com a garra do espírito, a até 2 blocos, com +20% de dano, e o apoio no aliado cura 20%. No 15º golpe da luta acende a aura de fera: +20% de dano e 20% de resistência."
+        },
+        {
+          "id": "florescimento",
+          "classe": "druida",
+          "nome": "Florescimento",
+          "icone": "🌸",
+          "desc": "O ataque no chão vazio planta flores (4 × 4, a até 4 blocos) que curam 3% da vida por segundo e seguram veneno e sangramento; até 2. Nos monstros, a flor shuriken: +10% de dano, a até 3 blocos."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) druida raízes",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) druida raízes, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) druida raízes, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) druida raízes",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) druida raízes",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) druida raízes",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) druida raízes",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) druida raízes",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) druida raízes, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) druida raízes, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 0"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) druida raízes, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) druida raízes, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 0"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) druida raízes, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "florescimento",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) druida raízes, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "metamorfose",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida raízes, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes"
+        ],
+        "estilo": "raizes"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida raízes, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes"
+        ],
+        "estilo": "raizes"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida raízes, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes"
+        ],
+        "estilo": "raizes"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida raízes, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes"
+        ],
+        "estilo": "raizes"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida raízes, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes"
+        ],
+        "estilo": "raizes"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida raízes, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes"
+        ],
+        "estilo": "raizes"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida raízes, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes"
+        ],
+        "estilo": "raizes"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida raízes, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes"
+        ],
+        "estilo": "raizes"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida raízes, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": [
+          "raizes"
+        ]
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) druida sem estilo",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) druida sem estilo",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "metamorfose",
+          "classe": "druida",
+          "nome": "Metamorfose",
+          "icone": "🐾",
+          "desc": "Ataca com a garra do espírito, a até 2 blocos, com +20% de dano, e o apoio no aliado cura 20%. No 15º golpe da luta acende a aura de fera: +20% de dano e 20% de resistência."
+        },
+        {
+          "id": "florescimento",
+          "classe": "druida",
+          "nome": "Florescimento",
+          "icone": "🌸",
+          "desc": "O ataque no chão vazio planta flores (4 × 4, a até 4 blocos) que curam 3% da vida por segundo e seguram veneno e sangramento; até 2. Nos monstros, a flor shuriken: +10% de dano, a até 3 blocos."
+        },
+        {
+          "id": "raizes",
+          "classe": "druida",
+          "nome": "Raízes Ocultas",
+          "icone": "🌱",
+          "desc": "As vinhas pegam qualquer monstro da sala. Todo 3º golpe bate +20% e deixa o alvo mais lento; todo 9º prende o alvo 4 s (o chefe não). Do 18º golpe da luta em diante, o veneno tira 15% da vida que resta e você anda 10% mais rápido."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) druida sem estilo",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) druida sem estilo, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) druida sem estilo, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) druida sem estilo",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) druida sem estilo",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) druida sem estilo",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) druida sem estilo",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) druida sem estilo",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) druida sem estilo, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) druida sem estilo, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) druida sem estilo, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) druida sem estilo, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) druida sem estilo, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "florescimento",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) druida sem estilo, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "metamorfose",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida sem estilo, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida sem estilo, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida sem estilo, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida sem estilo, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida sem estilo, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida sem estilo, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) druida sem estilo, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida sem estilo, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) druida sem estilo, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "druida",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: metamorfose, golpe 0",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: metamorfose, golpe 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: metamorfose, golpe 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Garra 0/15"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: metamorfose, golpe 1",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: metamorfose, golpe 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: metamorfose, golpe 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        },
+        "extras": {
+          "flores": 1,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Garra 1/15"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: metamorfose, golpe 3",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 3
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: metamorfose, golpe 3",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: metamorfose, golpe 3",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 90
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌿 Ataque em 2 s",
+        "🐾 Garra 3/15"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: metamorfose, golpe 9",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: metamorfose, golpe 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: metamorfose, golpe 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Garra 9/15"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: metamorfose, golpe 14",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: metamorfose, golpe 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: metamorfose, golpe 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Garra 14/15"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: metamorfose, golpe 15",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 40
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: metamorfose, golpe 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: metamorfose, golpe 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Aura de fera"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: metamorfose, golpe 17",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 17
+      }
+    },
+    "expected": {
+      "result": 40
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: metamorfose, golpe 17",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: metamorfose, golpe 17",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Aura de fera"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: metamorfose, golpe 18",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 18
+      }
+    },
+    "expected": {
+      "result": 40
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: metamorfose, golpe 18",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: metamorfose, golpe 18",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Aura de fera"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: metamorfose, golpe 27",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 27
+      }
+    },
+    "expected": {
+      "result": 40
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: metamorfose, golpe 27",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: metamorfose, golpe 27",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🐾 Aura de fera"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: florescimento, golpe 0",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: florescimento, golpe 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: florescimento, golpe 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 0/2"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: florescimento, golpe 1",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: florescimento, golpe 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: florescimento, golpe 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        },
+        "extras": {
+          "flores": 1,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 1/2"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: florescimento, golpe 3",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "golpe": 3
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: florescimento, golpe 3",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: florescimento, golpe 3",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 90
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌿 Ataque em 2 s",
+        "🌸 Flores 0/2"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: florescimento, golpe 9",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: florescimento, golpe 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: florescimento, golpe 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 0/2"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: florescimento, golpe 14",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: florescimento, golpe 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: florescimento, golpe 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 2/2"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: florescimento, golpe 15",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: florescimento, golpe 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: florescimento, golpe 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 0/2"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: florescimento, golpe 17",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "golpe": 17
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: florescimento, golpe 17",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: florescimento, golpe 17",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 2/2"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: florescimento, golpe 18",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "golpe": 18
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: florescimento, golpe 18",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: florescimento, golpe 18",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 0/2"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: florescimento, golpe 27",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento"
+        },
+        "golpe": 27
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: florescimento, golpe 27",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: florescimento, golpe 27",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "florescimento"
+          ],
+          "estilo": "florescimento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌸 Flores 0/2"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: raízes, golpe 0",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: raízes, golpe 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: raízes, golpe 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 0"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: raízes, golpe 1",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: raízes, golpe 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: raízes, golpe 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        },
+        "extras": {
+          "flores": 1,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 1"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: raízes, golpe 3",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "golpe": 3
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: raízes, golpe 3",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: raízes, golpe 3",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 90
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌿 Ataque em 2 s",
+        "🌱 Raízes 3"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: raízes, golpe 9",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: raízes, golpe 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: raízes, golpe 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 9"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: raízes, golpe 14",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: raízes, golpe 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: raízes, golpe 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 14"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: raízes, golpe 15",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: raízes, golpe 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: raízes, golpe 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 15"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: raízes, golpe 17",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "golpe": 17
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: raízes, golpe 17",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: raízes, golpe 17",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 17"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: raízes, golpe 18",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "golpe": 18
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: raízes, golpe 18",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: raízes, golpe 18",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 18 · veneno forte"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: raízes, golpe 27",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes"
+        },
+        "golpe": 27
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: raízes, golpe 27",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: raízes, golpe 27",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [
+            "raizes"
+          ],
+          "estilo": "raizes",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌱 Raízes 27 · veneno forte"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: sem estilo, golpe 0",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: sem estilo, golpe 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: sem estilo, golpe 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: sem estilo, golpe 1",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: sem estilo, golpe 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: sem estilo, golpe 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        },
+        "extras": {
+          "flores": 1,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: sem estilo, golpe 3",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "golpe": 3
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: sem estilo, golpe 3",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: sem estilo, golpe 3",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 90
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌿 Ataque em 2 s"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: sem estilo, golpe 9",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: sem estilo, golpe 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: sem estilo, golpe 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: sem estilo, golpe 14",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: sem estilo, golpe 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: sem estilo, golpe 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: sem estilo, golpe 15",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: sem estilo, golpe 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: sem estilo, golpe 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: sem estilo, golpe 17",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "golpe": 17
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: sem estilo, golpe 17",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: sem estilo, golpe 17",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: sem estilo, golpe 18",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "golpe": 18
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: sem estilo, golpe 18",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: sem estilo, golpe 18",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: sem estilo, golpe 27",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": []
+        },
+        "golpe": 27
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: sem estilo, golpe 27",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: sem estilo, golpe 27",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "druida",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: guerreiro com metamorfose, golpe 0",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: guerreiro com metamorfose, golpe 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: guerreiro com metamorfose, golpe 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🛡️ Resistência 25%"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: guerreiro com metamorfose, golpe 1",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: guerreiro com metamorfose, golpe 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: guerreiro com metamorfose, golpe 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        },
+        "extras": {
+          "flores": 1,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🛡️ Resistência 25%"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: guerreiro com metamorfose, golpe 3",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 3
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: guerreiro com metamorfose, golpe 3",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: guerreiro com metamorfose, golpe 3",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 3
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 90
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🛡️ Resistência 25%"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: guerreiro com metamorfose, golpe 9",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: guerreiro com metamorfose, golpe 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: guerreiro com metamorfose, golpe 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🛡️ Resistência 25%"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: guerreiro com metamorfose, golpe 14",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: guerreiro com metamorfose, golpe 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: guerreiro com metamorfose, golpe 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🛡️ Resistência 25%"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: guerreiro com metamorfose, golpe 15",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: guerreiro com metamorfose, golpe 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: guerreiro com metamorfose, golpe 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🛡️ Resistência 25%"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: guerreiro com metamorfose, golpe 17",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 17
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: guerreiro com metamorfose, golpe 17",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: guerreiro com metamorfose, golpe 17",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 17
+        },
+        "extras": {
+          "flores": 2,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🛡️ Resistência 25%"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: guerreiro com metamorfose, golpe 18",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 18
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: guerreiro com metamorfose, golpe 18",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: guerreiro com metamorfose, golpe 18",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 18
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🛡️ Resistência 25%"
+      ]
+    }
+  },
+  {
+    "name": "(5b) danoDoDruida: guerreiro com metamorfose, golpe 27",
+    "input": {
+      "fn": "danoDoDruida",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose"
+        },
+        "golpe": 27
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5b) resistenciaDaClasse: guerreiro com metamorfose, golpe 27",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(5b) textosDaClasse: guerreiro com metamorfose, golpe 27",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "metamorfose"
+          ],
+          "estilo": "metamorfose",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 27
+        },
+        "extras": {
+          "flores": 0,
+          "semAtacar": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🛡️ Resistência 25%"
+      ]
+    }
+  },
+  {
+    "name": "auraDeFera: 0",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 0
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeForte: 0",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeQuePrende: 0",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "raizesFundas: 0",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 0
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 1",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 1
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeForte: 1",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeQuePrende: 1",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "raizesFundas: 1",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 1
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 2",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 2
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeForte: 2",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 2
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeQuePrende: 2",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 2
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "raizesFundas: 2",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 2
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 3",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 3
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeForte: 3",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 3
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeQuePrende: 3",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 3
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "raizesFundas: 3",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 3
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 6",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 6
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeForte: 6",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 6
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeQuePrende: 6",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 6
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "raizesFundas: 6",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 6
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 8",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 8
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeForte: 8",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 8
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeQuePrende: 8",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 8
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "raizesFundas: 8",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 8
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 9",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 9
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeForte: 9",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeQuePrende: 9",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "raizesFundas: 9",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 9
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 14",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 14
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeForte: 14",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeQuePrende: 14",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "raizesFundas: 14",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 14
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 15",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 15
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeForte: 15",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeQuePrende: 15",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "raizesFundas: 15",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 15
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 17",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 17
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeForte: 17",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 17
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "golpeQuePrende: 17",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 17
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "raizesFundas: 17",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 17
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "auraDeFera: 18",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 18
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeForte: 18",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 18
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeQuePrende: 18",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 18
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "raizesFundas: 18",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 18
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "auraDeFera: 36",
+    "input": {
+      "fn": "auraDeFera",
+      "args": {
+        "golpes": 36
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeForte: 36",
+    "input": {
+      "fn": "golpeForte",
+      "args": {
+        "golpe": 36
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "golpeQuePrende: 36",
+    "input": {
+      "fn": "golpeQuePrende",
+      "args": {
+        "golpe": 36
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "raizesFundas: 36",
+    "input": {
+      "fn": "raizesFundas",
+      "args": {
+        "golpes": 36
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "quemEnsina: metamorfose",
+    "input": {
+      "fn": "quemEnsina",
+      "args": {
+        "estilo": "metamorfose"
+      }
+    },
+    "expected": {
+      "result": {
+        "nome": "Espírito ancestral",
+        "icone": "🌿",
+        "deLonge": "um espírito ancestral",
+        "naSala": "Um espírito ancestral flutua no meio da sala, em silêncio.",
+        "foiEmbora": "O espírito ancestral voltou pra mata.",
+        "pergunta": "Um espírito ancestral espera nesta sala. Deseja se aproximar?"
+      }
+    }
+  },
+  {
+    "name": "quemEnsina: raizes",
+    "input": {
+      "fn": "quemEnsina",
+      "args": {
+        "estilo": "raizes"
+      }
+    },
+    "expected": {
+      "result": {
+        "nome": "Espírito ancestral",
+        "icone": "🌿",
+        "deLonge": "um espírito ancestral",
+        "naSala": "Um espírito ancestral flutua no meio da sala, em silêncio.",
+        "foiEmbora": "O espírito ancestral voltou pra mata.",
+        "pergunta": "Um espírito ancestral espera nesta sala. Deseja se aproximar?"
+      }
+    }
+  },
+  {
+    "name": "quemEnsina: espadachim",
+    "input": {
+      "fn": "quemEnsina",
+      "args": {
+        "estilo": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "nome": "Mestre de estilo",
+        "icone": "🥋",
+        "deLonge": "um mestre meditando",
+        "naSala": "No meio da sala, um mestre de estilo medita de olhos fechados.",
+        "foiEmbora": "O mestre já seguiu caminho.",
+        "pergunta": "Um mestre de estilo medita nesta sala. Deseja falar com ele?"
+      }
+    }
+  },
+  {
+    "name": "quemEnsina: inventado",
+    "input": {
+      "fn": "quemEnsina",
+      "args": {
+        "estilo": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "nome": "Mestre de estilo",
+        "icone": "🥋",
+        "deLonge": "um mestre meditando",
+        "naSala": "No meio da sala, um mestre de estilo medita de olhos fechados.",
+        "foiEmbora": "O mestre já seguiu caminho.",
+        "pergunta": "Um mestre de estilo medita nesta sala. Deseja falar com ele?"
+      }
+    }
+  },
+  {
+    "name": "quemEnsina: nenhum",
+    "input": {
+      "fn": "quemEnsina",
+      "args": {}
+    },
+    "expected": {
+      "result": {
+        "nome": "Mestre de estilo",
+        "icone": "🥋",
+        "deLonge": "um mestre meditando",
+        "naSala": "No meio da sala, um mestre de estilo medita de olhos fechados.",
+        "foiEmbora": "O mestre já seguiu caminho.",
+        "pergunta": "Um mestre de estilo medita nesta sala. Deseja falar com ele?"
+      }
+    }
+  },
+  {
+    "name": "(5b) curaDoApoio: purificar +10, vida 50/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "purificar",
+        "vida": {
+          "hp": 50,
+          "maxHp": 150
+        },
+        "mais": 10
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5b) curaDoApoio: purificar +10, vida 149/150",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "purificar",
+        "vida": {
+          "hp": 149,
+          "maxHp": 150
+        },
+        "mais": 10
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(5b) curaDoApoio: purificar +10, vida 0/999",
+    "input": {
+      "fn": "curaDoApoio",
+      "args": {
+        "tipo": "purificar",
+        "vida": {
+          "hp": 0,
+          "maxHp": 999
+        },
+        "mais": 10
+      }
+    },
+    "expected": {
+      "result": 199
+    }
+  },
+  {
     "name": "derivedStats: o Cavaleiro com 40% de vida",
     "input": {
       "fn": "derivedStats",

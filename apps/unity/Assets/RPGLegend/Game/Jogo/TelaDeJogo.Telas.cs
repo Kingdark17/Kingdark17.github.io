@@ -256,16 +256,20 @@ namespace RPGLegend.Game.Jogo
                 botoes.Add(("APRENDER " + estilo.Nome.ToUpperInvariant(), () =>
                 {
                     var aprendeu = MestresDeEstilo.Aprender(_partida.Estado);
-                    _partida.Fechar(aprendeu.Estado, new Aviso(estilo.Icone, "Mestre de estilo", aprendeu.Texto));
+                    _partida.Fechar(aprendeu.Estado, new Aviso(estilo.Icone, Estilos.QuemEnsina(estilo.Id).Nome, aprendeu.Texto));
                 }));
             }
             botoes.Add(("AGORA NÃO", _sairDaTela));
-            Janela("🥋 Mestre de estilo", conteudo =>
+            // Pros estilos do Druida, quem ensina é um espírito ancestral (rodada 5b).
+            var quem = Estilos.QuemEnsina(estilo.Id);
+            bool espirito = estilo.Classe == "druida";
+            Janela(quem.Icone + " " + quem.Nome, conteudo =>
             {
-                conteudo.Add(PecasDaTela.Texto(mestre.JaTem
-                    ? "O mestre abre os olhos e sorri. Você já luta do jeito dele."
-                    : "O mestre abre os olhos devagar. \"Posso ensinar o meu jeito de lutar. Quem aprende, leva pra sempre.\"", "fala-da-tela"));
-                conteudo.Add(PecasDaTela.Secao("O mestre ensina"));
+                string fala = espirito
+                    ? (mestre.JaTem ? "O espírito ancestral passa por você e some no ar. Você já conhece este caminho." : "O espírito ancestral se aproxima, em silêncio, e mostra um caminho da mata.")
+                    : (mestre.JaTem ? "O mestre abre os olhos e sorri. Você já luta do jeito dele." : "O mestre abre os olhos devagar. \"Posso ensinar o meu jeito de lutar. Quem aprende, leva pra sempre.\"");
+                conteudo.Add(PecasDaTela.Texto(fala, "fala-da-tela"));
+                conteudo.Add(PecasDaTela.Secao(espirito ? "O espírito ensina" : "O mestre ensina"));
                 var grade = PecasDaTela.Grade();
                 grade.Add(PecasDaTela.CartaDeEscolha(estilo.Icone, estilo.Nome, estilo.Desc, true, () => { }));
                 conteudo.Add(grade);

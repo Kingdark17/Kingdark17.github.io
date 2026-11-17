@@ -913,6 +913,10 @@ for (const cls of ['monge', 'mago', 'necromante']) {
     ['estilo de outra classe', COM('monge', 'cavaleiro')],
     ['estilo que não aprendeu', { classId: 'guerreiro', estilos: [], estilo: 'cavaleiro' }],
     ['mago', COM('mago')],
+    ['druida metamorfose', COM('druida', 'metamorfose')],
+    ['druida florescimento', COM('druida', 'florescimento', ['raizes', 'florescimento'])],
+    ['druida raízes', COM('druida', 'raizes')],
+    ['druida sem estilo', COM('druida')],
   ] as const) {
     caso(`estiloAtivo: (5a) ${nome}`, 'estiloAtivo', { quem }, (a) => E.estiloAtivo(a.quem));
     caso(`estilosQueFaltam: (5a) ${nome}`, 'estilosQueFaltam', { quem }, (a) => E.estilosQueFaltam(a.quem));
@@ -936,6 +940,34 @@ for (const cls of ['monge', 'mago', 'necromante']) {
       caso(`trocarEstilo: (5a) ${nome}, ${id}`, 'trocarEstilo', { quem, id }, (a) => E.trocarEstilo(a.quem, a.id));
     }
     caso(`trocarEstilo: (5a) ${nome}, nenhum`, 'trocarEstilo', { quem }, (a) => E.trocarEstilo(a.quem, undefined));
+  }
+  // Os do Druida (rodada 5b).
+  for (const [nome, quem] of [
+    ['metamorfose', COM('druida', 'metamorfose')],
+    ['florescimento', COM('druida', 'florescimento')],
+    ['raízes', COM('druida', 'raizes')],
+    ['sem estilo', COM('druida')],
+    ['guerreiro com metamorfose', { classId: 'guerreiro', estilos: ['metamorfose'], estilo: 'metamorfose' }],
+  ] as const) {
+    for (const golpe of [0, 1, 3, 9, 14, 15, 17, 18, 27]) {
+      caso(`(5b) danoDoDruida: ${nome}, golpe ${golpe}`, 'danoDoDruida', { quem, golpe }, (a) => E.danoDoDruida(a.quem, a.golpe));
+      caso(`(5b) resistenciaDaClasse: ${nome}, golpe ${golpe}`, 'resistenciaDaClasse', { quem: { ...quem, hp: 50, maxHp: 100 }, c: { golpes: golpe } }, (a) => E.resistenciaDaClasse(a.quem, a.c));
+      caso(`(5b) textosDaClasse: ${nome}, golpe ${golpe}`, 'textosDaClasse', { quem: { ...quem, hp: 50, maxHp: 100 }, c: { golpes: golpe }, extras: { flores: golpe % 3, semAtacar: golpe === 3 ? 90 : 0 } }, (a) =>
+        E.textosDaClasse(a.quem, a.c, a.extras));
+    }
+  }
+  for (const golpe of [0, 1, 2, 3, 6, 8, 9, 14, 15, 17, 18, 36]) {
+    caso(`auraDeFera: ${golpe}`, 'auraDeFera', { golpes: golpe }, (a) => E.auraDeFera(a.golpes));
+    caso(`golpeForte: ${golpe}`, 'golpeForte', { golpe }, (a) => E.golpeForte(a.golpe));
+    caso(`golpeQuePrende: ${golpe}`, 'golpeQuePrende', { golpe }, (a) => E.golpeQuePrende(a.golpe));
+    caso(`raizesFundas: ${golpe}`, 'raizesFundas', { golpes: golpe }, (a) => E.raizesFundas(a.golpes));
+  }
+  for (const estilo of ['metamorfose', 'raizes', 'espadachim', 'inventado']) {
+    caso(`quemEnsina: ${estilo}`, 'quemEnsina', { estilo }, (a) => E.quemEnsina(a.estilo));
+  }
+  caso('quemEnsina: nenhum', 'quemEnsina', {}, () => E.quemEnsina(undefined));
+  for (const [hp, maxHp] of [[50, 150], [149, 150], [0, 999]]) {
+    caso(`(5b) curaDoApoio: purificar +10, vida ${hp}/${maxHp}`, 'curaDoApoio', { tipo: 'purificar', vida: { hp, maxHp }, mais: 10 }, (a) => E.curaDoApoio(a.tipo, a.vida, a.mais));
   }
   caso('derivedStats: o Cavaleiro com 40% de vida', 'derivedStats', { hero: { level: 7, attrs: atributos({ constituicao: 13 }), equip: {}, classId: 'guerreiro', estilos: ['cavaleiro'], estilo: 'cavaleiro' } }, (a) => E.derivedStats(a.hero as never));
 }
@@ -2678,6 +2710,9 @@ for (const [floor, seed, run] of [
     ['evento resolvido', primeira('event') && { ...primeira('event')!, resolved: true }],
     ['chefe derrotado', primeira('boss') && { ...primeira('boss')!, beaten: true }],
     ['professor que já ensinou', primeira('teacher') && { ...primeira('teacher')!, teacher: { ...primeira('teacher')!.teacher!, taught: true } }],
+    ['mestre de estilo', { ...andar.rooms[0]!, type: 'estilo', mestreDeEstilo: { estilo: 'cavaleiro' } }],
+    ['espírito ancestral', { ...andar.rooms[0]!, type: 'estilo', mestreDeEstilo: { estilo: 'raizes' } }],
+    ['espírito que já ensinou', { ...andar.rooms[0]!, type: 'estilo', mestreDeEstilo: { estilo: 'raizes', ensinado: true } }],
   ];
   for (const [nome, cell] of [...celulas, ...variantes]) {
     if (!cell) continue;
@@ -5801,6 +5836,39 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     }
     simula('o chute avança de longe e às vezes erra', E.abrirLuta({ ...zumbiForte(), hero: comEstilo('monge', 'chute', null) }, CANTO).luta, golpesNo(6, MEIO), { seed: 885 });
     simula('a concentração junta cargas e gasta no golpe', abrir({ ...zumbiForte(), hero: comEstilo('monge', 'concentracao', null) }), [...parado(600), ...golpesNo(2, MEIO)], { seed: 886 });
+
+    // Os do Druida (rodada 5b).
+    const druida = (estilo: string, extra: Record<string, unknown> = {}) => ({ ...comEstilo('druida', estilo), ...extra });
+    const comGolpes = (luta: LutaEmTempoReal, golpes: number) => ({ ...luta, arena: { ...luta.arena, classe: { golpes } } });
+    simula('a garra da Metamorfose acende a aura de fera', comGolpes(abrir({ ...zumbiForte(), hero: druida('metamorfose') }), 13), [...golpesNo(3, MEIO), ...parado(200)], { seed: 887 });
+    simula('a garra não alcança de longe', E.abrirLuta({ ...zumbiForte(), hero: druida('metamorfose') }, CANTO).luta, golpesNo(2, MEIO), { seed: 888 });
+    simula('a Purificação da Metamorfose cura mais', abrir({ ...zumbiForte(), hero: druida('metamorfose', { hp: 40 }) }), golpesNo(1, { x: 4.5 * T, y: 5.5 * T }), { seed: 889 });
+    simula(
+      'o Florescimento planta (a terceira tira a mais antiga) e cura dentro da flor',
+      E.abrirLuta({ ...zumbiForte(), hero: druida('florescimento', { hp: 40, ferimentos: { veneno: 2, perna: true } }) }, CANTO).luta,
+      [
+        ...golpesNo(1, { x: 3.5 * T, y: 7.5 * T }),
+        ...golpesNo(1, { x: 1.5 * T, y: 5.5 * T }),
+        { x: 0, y: 0, florescer: true },
+        ...parado(150),
+        { x: 0, y: 0, atacar: true, cursor: { x: 8.5 * T, y: 1.5 * T } },
+        ...parado(10),
+      ],
+      { seed: 890 },
+    );
+    simula('a flor shuriken', abrir({ ...zumbiForte(), hero: druida('florescimento') }), golpesNo(3, MEIO), { seed: 891 });
+    simula('as Raízes pegam de longe, prendem no 9º e ficam fundas no 18º', comGolpes(E.abrirLuta({ ...zumbiForte(), hero: druida('raizes') }, CANTO).luta, 7), [...golpesNo(11, MEIO), ...parado(300)], { seed: 892 });
+    simula(
+      'as Raízes não prendem o chefe',
+      comGolpes(E.abrirLuta({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000, isBoss: true })]), hero: druida('raizes') }, CANTO).luta, 8),
+      [...golpesNo(1, MEIO), ...parado(100)],
+      { seed: 893 },
+    );
+    {
+      const aberta = E.abrirLuta({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: druida('raizes') }, CANTO).luta;
+      const preso = { ...aberta, arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m) => ({ ...m, preso: 150 })) } };
+      simula('o goblin preso não sai do lugar nem investe', preso, parado(300), { seed: 894 });
+    }
   }
 
   // O cajado no PC: as letras saem dos primeiros sorteios da luta, os do aperto; a tecla da última fecha o evento.
@@ -5975,6 +6043,12 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       simula('dupla: o monstro vai no parceiro, que está mais perto', dupla('anfitriao'), comParceiro(parado(420), 4.5 * U, 3.5 * U), { seed: 1201 });
       simula('dupla: o parceiro longe, o monstro vem no herói daqui', dupla('anfitriao'), comParceiro(parado(420), 1.5 * U, 1.5 * U), { seed: 1202 });
       simula('dupla: o parceiro caído não é presa', dupla('anfitriao'), comParceiro(parado(300), 4.5 * U, 3.5 * U, true), { seed: 1203 });
+      simula(
+        'dupla: a flor do parceiro cura o herói daqui (rodada 5b)',
+        dupla('anfitriao', { ...sala(), hero: { ...espada, hp: 30 } }),
+        parado(130).map((e) => ({ ...e, parceiro: { x: 1.5 * U, y: 1.5 * U, flores: [{ x: naPorta.x, y: naPorta.y }, { x: 9, y: 9 }, { x: 99, y: 99 }] } })),
+        { seed: 1210 },
+      );
       simula('dupla: o dano de fora fere e derruba', dupla('anfitriao'), parado(8).map((e, i) => (i === 1 ? { ...e, danoDeFora: [{ indice: 0, dano: 25 }, { indice: 3, dano: 9 }] } : i === 5 ? { ...e, danoDeFora: [{ indice: 0, dano: 900 }] } : e)), { seed: 1204 });
       simula('dupla: o parceiro sai e o anfitrião segue sozinho', dupla('anfitriao'), comParceiro(parado(200), 4.5 * U, 3.5 * U).map((e, i) => (i === 60 ? { x: 0, y: 0, semParceiro: true } : i > 60 ? { x: 0, y: 0 } : e)), { seed: 1205 });
       // O espelho: o anfitrião roda a luta, e o que ele mandaria a cada 6 passos vira a entrada do convidado.

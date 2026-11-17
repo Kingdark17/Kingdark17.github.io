@@ -12,6 +12,7 @@
 
 import { randomEventTemplate, type EventTemplateId } from '../events/events.js';
 import { classById } from '../hero/catalog.js';
+import { quemEnsina } from '../hero/estilos.js';
 import { generate as generateMonster, generateBoss, monsterView, type MonsterInstance } from '../monsters/generate.js';
 import { randomItem, type Item } from '../items/item.js';
 import { CHANCE_DA_RUNA_NO_BAU, sortearRuna } from '../items/runas.js';
@@ -437,7 +438,7 @@ export function iconFor(cell: DungeonCell): string {
   if (cell.type === 'boss') return cell.beaten ? ICONE_DO_PILAR : '👑';
   if (cell.type === 'event') return cell.resolved ? '' : '❓';
   if (cell.type === 'teacher') return cell.teacher?.taught ? '' : '🎓';
-  if (cell.type === 'estilo') return cell.mestreDeEstilo?.ensinado ? '' : '🥋';
+  if (cell.type === 'estilo') return cell.mestreDeEstilo?.ensinado ? '' : quemEnsina(cell.mestreDeEstilo?.estilo).icone;
   return ICONES_FIXOS[cell.type] ?? '';
 }
 
@@ -453,7 +454,7 @@ export function shortLabel(cell: DungeonCell): string {
   if (cell.type === 'boss') return cell.beaten ? 'o pilar de volta à cidade' : 'uma presença poderosa e perigosa';
   if (cell.type === 'event') return cell.resolved ? 'vestígios de um acontecimento' : 'algo incomum';
   if (cell.type === 'teacher') return cell.teacher?.taught ? 'uma sala onde alguém ensinou' : nomeDoMestre(cell);
-  if (cell.type === 'estilo') return cell.mestreDeEstilo?.ensinado ? 'uma sala onde alguém ensinou' : 'um mestre meditando';
+  if (cell.type === 'estilo') return cell.mestreDeEstilo?.ensinado ? 'uma sala onde alguém ensinou' : quemEnsina(cell.mestreDeEstilo?.estilo).deLonge;
   const labels: Partial<Record<DungeonRoomType, string>> = {
     npc: 'alguém parado por perto',
     treasure: cell.collected ? 'um baú já vazio' : 'um baú fechado',
@@ -488,7 +489,7 @@ export function roomDesc(cell: DungeonCell): string {
   if (cell.type === 'estilo') {
     return cell.mestreDeEstilo?.ensinado
       ? 'O mestre seguiu caminho. Ficaram as marcas do treino no chão.'
-      : 'No meio da sala, um mestre de estilo medita de olhos fechados.';
+      : quemEnsina(cell.mestreDeEstilo?.estilo).naSala;
   }
   const descs: Partial<Record<DungeonRoomType, string>> = {
     npc: 'Alguém está parado por aqui.',
@@ -512,6 +513,6 @@ export function entryText(cell: DungeonCell): string {
   if (cell.type === 'exit') return 'Um caminho leva de volta à cidade. Deseja sair da masmorra?';
   if (cell.type === 'totem') return 'Um totem antigo brilha nesta sala. Deseja tocá-lo?';
   if (cell.type === 'teacher') return `${nomeDoMestre(cell).replace(/^um/, 'Um')} espera nesta sala. Deseja falar com ele?`;
-  if (cell.type === 'estilo' && !cell.mestreDeEstilo?.ensinado) return 'Um mestre de estilo medita nesta sala. Deseja falar com ele?';
+  if (cell.type === 'estilo' && !cell.mestreDeEstilo?.ensinado) return quemEnsina(cell.mestreDeEstilo?.estilo).pergunta;
   return 'Deseja entrar na sala?';
 }

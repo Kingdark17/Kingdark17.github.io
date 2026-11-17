@@ -157,6 +157,8 @@ namespace RPGLegend.Engine
         public double? RecargaDaFe;
         public double? Fe;
         public double? SemAtacar;
+        /// <summary>Druida: quantas flores do Florescimento estão no chão (rodada 5b).</summary>
+        public double? Flores;
         /// <summary>Monge: o ki, e se está revestido.</summary>
         public double? Ki;
         public bool? Revestido;
@@ -235,6 +237,8 @@ namespace RPGLegend.Engine
         public double? Imune;
         public double? Cargas;
         public double? SemGolpe;
+        /// <summary>Os estilos do Druida (rodada 5b): quantos ataques ele já deu nesta luta.</summary>
+        public double? Golpes;
 
         public ContadoresDaClasse Clone() => (ContadoresDaClasse)MemberwiseClone();
     }
@@ -300,6 +304,9 @@ namespace RPGLegend.Engine
                 return D.AlcanceSemClasse.TryGet(arma, out var semClasse) ? semClasse : D.ClassePadrao.Alcance;
             if (estilo == "chute") return Estilos.Chute.Alcance;
             if (estilo == "concentracao") return classe.Alcance + Estilos.Concentracao.Alcance;
+            // Os do Druida (rodada 5b): a garra e a flor shuriken saem do herói.
+            if (estilo == "metamorfose") return Estilos.Metamorfose.Alcance;
+            if (estilo == "florescimento") return Estilos.Florescimento.Alcance;
             return classe.Alcance;
         }
 
@@ -367,6 +374,8 @@ namespace RPGLegend.Engine
                     return DanoDaDistancia(blocos, Z(c.Parado));
                 case "guerreiro":
                     return (colado ? D.Guerreiro.Colado : 0) + Z(c.Combo);
+                case "druida":
+                    return DanoDoDruida(estilo, Z(c.Golpes));
                 case "monge":
                     // Os estilos do Monge: o Empurrão bate mais; a Concentração gasta as cargas no golpe.
                     if (estilo == "empurrao") return Estilos.Empurrao.Dano;
@@ -392,10 +401,13 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: resistenciaDaClasse — a % de dano a menos no golpe que o herói leva.</summary>
-        public static double ResistenciaDaClasse(string classId, string className, double hp, double maxHp, ContadoresDaClasse c)
+        public static double ResistenciaDaClasse(string classId, string className, double hp, double maxHp, ContadoresDaClasse c, string estilo = null)
         {
             switch (Catalog.IdDaClasse(classId, className))
             {
+                case "druida":
+                    // A aura de fera da Metamorfose (rodada 5b).
+                    return estilo == "metamorfose" && AuraDeFera(Z(c.Golpes)) ? Estilos.Metamorfose.Resistencia : 0;
                 case "guerreiro":
                 {
                     if (!(maxHp > 0)) return 0;
@@ -532,8 +544,18 @@ namespace RPGLegend.Engine
                     else textos.Add(Z(extras.RecargaDaFe) > 0 ? "✝️ Fé em " + Tempo(extras.RecargaDaFe.Value) : "✝️ Fé pronta");
                     break;
                 case "druida":
+                {
                     if (Z(extras.SemAtacar) > 0) textos.Add("🌿 Ataque em " + Tempo(extras.SemAtacar.Value));
+                    // Os estilos (rodada 5b): a garra até a aura, as flores no chão, os golpes das Raízes.
+                    double golpes = Z(c.Golpes);
+                    if (estilo == "metamorfose")
+                        textos.Add(AuraDeFera(golpes) ? "🐾 Aura de fera" : "🐾 Garra " + Js.NumberToString(golpes) + "/" + Js.NumberToString(Estilos.Metamorfose.GolpesDaAura));
+                    else if (estilo == "florescimento")
+                        textos.Add("🌸 Flores " + Js.NumberToString(Z(extras.Flores)) + "/" + Js.NumberToString(Estilos.Florescimento.Maximo));
+                    else if (estilo == "raizes")
+                        textos.Add("🌱 Raízes " + Js.NumberToString(golpes) + (RaizesFundas(golpes) ? " · veneno forte" : ""));
                     break;
+                }
                 case "monge":
                     textos.Add("☯️ Ki " + Js.NumberToString(Z(extras.Ki)) + "/" + Js.NumberToString(D.Monge.TetoDoKi) + (extras.Revestido == true ? " · Revestido" : ""));
                     if (estilo == "concentracao") textos.Add("🧘 Cargas " + Js.NumberToString(Z(c.Cargas)) + "/" + Js.NumberToString(Estilos.Concentracao.TetoDeCargas));
@@ -544,7 +566,7 @@ namespace RPGLegend.Engine
                     break;
                 case "guerreiro":
                 {
-                    double resistencia = ResistenciaDaClasse(classId, className, hp, maxHp, c);
+                    double resistencia = ResistenciaDaClasse(classId, className, hp, maxHp, c, estilo);
                     textos.Add("⚔️ Combo +" + Js.NumberToString(Z(c.Combo)) + "% · " + Js.NumberToString(Z(c.Seguidos)) + "/" + Js.NumberToString(D.Guerreiro.CriticosDoCombo));
                     if (resistencia > 0) textos.Add("🛡️ Resistência " + Js.NumberToString(resistencia) + "%");
                     // O Espadachim: o avanço e o ki do Corte Invernal.
@@ -598,6 +620,36 @@ namespace RPGLegend.Engine
         }
 
         public static double PassosDoCanal(Hero hero) => PassosDoCanal(hero.ClassId, hero.ClassName, Estilos.IdDoEstilo(hero));
+
+        // ---------- os estilos do Druida (rodada 5b) ----------
+
+        /// <summary>TS: danoDoDruida — o dano a mais (%) do Druida com estilo no golpe de número <paramref name="golpe"/> da luta.</summary>
+        public static double DanoDoDruida(string estilo, double golpe)
+        {
+            switch (estilo)
+            {
+                case "metamorfose":
+                    return Estilos.Metamorfose.Dano + (AuraDeFera(golpe) ? Estilos.Metamorfose.Aura : 0);
+                case "florescimento":
+                    return Estilos.Florescimento.Dano;
+                case "raizes":
+                    return GolpeForte(golpe) ? Estilos.Raizes.Dano : 0;
+                default:
+                    return 0;
+            }
+        }
+
+        /// <summary>TS: auraDeFera — a aura da Metamorfose está acesa (do 15º golpe da luta em diante).</summary>
+        public static bool AuraDeFera(double golpes) => golpes >= Estilos.Metamorfose.GolpesDaAura;
+
+        /// <summary>TS: golpeForte — o golpe das Raízes é o forte (todo 3º).</summary>
+        public static bool GolpeForte(double golpe) => golpe > 0 && golpe % Estilos.Raizes.ForteACada == 0;
+
+        /// <summary>TS: golpeQuePrende — o golpe das Raízes prende o alvo (todo 9º).</summary>
+        public static bool GolpeQuePrende(double golpe) => golpe > 0 && golpe % Estilos.Raizes.PrendeACada == 0;
+
+        /// <summary>TS: raizesFundas — do 18º golpe da luta em diante: o veneno forte e o passo mais ligeiro.</summary>
+        public static bool RaizesFundas(double golpes) => golpes >= Estilos.Raizes.GolpesDoVeneno;
 
         /// <summary>TS: criticoDoEstilo — o crítico a mais do estilo, em pontos de % (o Cavaleiro +30, o chute +40); os outros, 0.</summary>
         public static double CriticoDoEstilo(string estilo)
@@ -696,11 +748,12 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: curaDoApoio — a cura do apoio num herói com esta vida.</summary>
-        public static double CuraDoApoio(string tipo, double hp, double maxHp)
+        public static double CuraDoApoio(string tipo, double hp, double maxHp, double mais = 0)
         {
             double falta = Js.Max(0, maxHp - hp);
             if (falta <= 0) return 0;
-            double pct = tipo == "bardo" ? D.Bardo.Cura : tipo == "clerigo" ? D.Clerigo.Cura : tipo == "purificar" ? D.Druida.Purificacao : D.Clerigo.CuraDaFe;
+            // mais: os pontos de % a mais (a Purificação da Metamorfose, rodada 5b).
+            double pct = (tipo == "bardo" ? D.Bardo.Cura : tipo == "clerigo" ? D.Clerigo.Cura : tipo == "purificar" ? D.Druida.Purificacao : D.Clerigo.CuraDaFe) + mais;
             double sobre = tipo == "bardo" ? falta : maxHp;
             return Js.Min(falta, Js.Max(1, System.Math.Truncate(sobre * pct / 100)));
         }

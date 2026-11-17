@@ -59,6 +59,9 @@ namespace RPGLegend.Game.Jogo
         /// <summary>O Corte Invernal do Espadachim (rodada 5a): com 300 de ki.</summary>
         private Button _botaoCorte;
         private bool _corteNoArco;
+        /// <summary>O Florescimento no celular (rodada 5b): o botão planta uma flor no pé do herói (no PC, o ataque no chão vazio).</summary>
+        private Button _botaoFlor;
+        private bool _florNoArco;
         private EventoNaTela _eventoNaTela;
         private PalcoDaLuta _palcoDaLuta;
         private Button _botaoDoBicho;
@@ -68,7 +71,7 @@ namespace RPGLegend.Game.Jogo
         // O que a pessoa fez desde o último passo: entra no primeiro passo do quadro.
         private bool _apertou, _soltou, _tocou;
         private string _poderApertado, _itemUsado, _tecla, _mirarAliado;
-        private bool _apertouFe, _apertouRevestir, _apertouExplodir, _apertouMagia, _apertouCorte;
+        private bool _apertouFe, _apertouRevestir, _apertouExplodir, _apertouMagia, _apertouCorte, _apertouFlor;
         private int? _mirar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
@@ -170,6 +173,7 @@ namespace RPGLegend.Game.Jogo
             _botaoExplodir = BotaoDaClasse("💥", "KI", () => _apertouExplodir = true);
             _botaoMagia = BotaoDaClasse("☠️", "MAGIA", () => _apertouMagia = true);
             _botaoCorte = BotaoDaClasse("❄️", "300", () => _apertouCorte = true);
+            _botaoFlor = BotaoDaClasse("🌸", "FLOR", () => _apertouFlor = true);
 
             // Segurar K: um botão que vale enquanto o dedo (ou o mouse) estiver nele.
             _botaoK = new VisualElement();
@@ -327,13 +331,14 @@ namespace RPGLegend.Game.Jogo
                 Explodir = _apertouExplodir ? true : (bool?)null,
                 Magia = _apertouMagia ? true : (bool?)null,
                 Corte = _apertouCorte ? true : (bool?)null,
+                Florescer = _apertouFlor ? true : (bool?)null,
                 // Segurar K: a tecla (no PC) ou o botão de segurar.
                 Canalizar = SegurandoK() ? true : (bool?)null,
                 // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
                 Cursor = _palcoDaLuta.CursorNaSala(),
             };
             EntradaDaDupla(entrada);
-            _apertou = _soltou = _tocou = _apertouFe = _apertouRevestir = _apertouExplodir = _apertouMagia = _apertouCorte = false;
+            _apertou = _soltou = _tocou = _apertouFe = _apertouRevestir = _apertouExplodir = _apertouMagia = _apertouCorte = _apertouFlor = false;
             _poderApertado = null;
             _itemUsado = null;
             _tecla = null;
@@ -483,6 +488,15 @@ namespace RPGLegend.Game.Jogo
                 PosicionarEmVolta();
             }
             if (corte) _botaoCorte.EnableInClassList("sem-mana", (arena.Ki ?? 0) < Estilos.Espadachim.Corte);
+            // A flor do Florescimento: só no celular (no PC planta o ataque no chão vazio).
+            bool flor = Estilos.IdDoEstilo(hero) == "florescimento" && !_partida.Teclado;
+            if (flor != _florNoArco)
+            {
+                _florNoArco = flor;
+                _botaoFlor.style.display = flor ? DisplayStyle.Flex : DisplayStyle.None;
+                PosicionarEmVolta();
+            }
+            if (flor) _botaoFlor.EnableInClassList("sem-mana", arena.Recarga > 0 || arena.Evento != null);
             if (ki)
             {
                 var monge = GameData.ClassesDeLutaTable.Monge;
@@ -542,6 +556,7 @@ namespace RPGLegend.Game.Jogo
             }
             if (_magiaNoArco) botoes.Add(_botaoMagia);
             if (_corteNoArco) botoes.Add(_botaoCorte);
+            if (_florNoArco) botoes.Add(_botaoFlor);
             botoes.Add(_botaoItem);
             // O centro do botão de ataque fica a 54 px do canto de baixo à direita; cada botão em volta tem 62 px.
             bool seis = botoes.Count > AngulosDosBotoesLargo.Length;

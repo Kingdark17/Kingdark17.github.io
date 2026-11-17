@@ -100,6 +100,10 @@ import {
   contarCriticoNoAliado,
   contarGolpeLevado,
   contarParado,
+  auraDeFera,
+  golpeQuePrende,
+  raizesFundas,
+  golpeForte,
   criticoDaClasse,
   criticoDoEstilo,
   curaDoApoio,
@@ -128,7 +132,16 @@ import {
   type Moral,
 } from '../hero/classes-de-luta.js';
 import { idDaClasse } from '../hero/catalog.js';
-import { idDoEstilo, REGRAS_DA_CONCENTRACAO, REGRAS_DO_CHUTE, REGRAS_DO_EMPURRAO, REGRAS_DO_ESPADACHIM } from '../hero/estilos.js';
+import {
+  idDoEstilo,
+  REGRAS_DA_CONCENTRACAO,
+  REGRAS_DA_METAMORFOSE,
+  REGRAS_DAS_RAIZES,
+  REGRAS_DO_CHUTE,
+  REGRAS_DO_EMPURRAO,
+  REGRAS_DO_ESPADACHIM,
+  REGRAS_DO_FLORESCIMENTO,
+} from '../hero/estilos.js';
 import { CHANCE_DE_QUEBRAR_NO_CHEFE, nomeDoMembro, PASSO_COM_PERNA_QUEBRADA, quebrarMembro, type Membro } from '../hero/ferimentos.js';
 import { eventoDaArma, eventoDoAtaque, eventoDoPoder, lerEvento, TAMANHO_DO_DESENHO, type EventoDeArma, type JogadaDoEvento, type TipoDeEvento } from './eventos-de-arma.js';
 
@@ -281,6 +294,8 @@ export interface MonstroNaArena {
   acertou?: boolean;
   /** Ele vai atrás de um lacaio do Necromante (o índice na equipe), e o golpe em curso cai nele (rodada 4b). */
   noLacaio?: number;
+  /** Preso pelas Raízes Ocultas (rodada 5b): os passos que faltam. Não anda nem investe; o golpe de onde está, sim. */
+  preso?: number;
 }
 
 /**
@@ -310,6 +325,8 @@ export interface Dupla {
   parceiroPuxa?: boolean;
   /** O dano que o parceiro levou nos últimos 30 s (ele diz): a duração da Comunhão sagrada conta com ele. */
   parceiroDano?: number;
+  /** As flores do Florescimento que o parceiro plantou (rodada 5b): curam o herói daqui também. */
+  floresDoParceiro?: FlorNaSala[];
   /** O herói daqui caiu. */
   fantasma?: boolean;
 }
@@ -327,6 +344,14 @@ export type Aliado = 'eu' | 'parceiro';
 export interface ApoioDoParceiro {
   tipo: 'bardo' | 'clerigo' | 'purificar' | 'comunhao';
   passos?: number;
+  /** Os pontos de % de cura a mais (a Purificação da Metamorfose, rodada 5b). */
+  mais?: number;
+}
+
+/** Uma flor do Florescimento (rodada 5b): o meio dela, em unidades da sala. */
+export interface FlorNaSala {
+  x: number;
+  y: number;
 }
 
 /**
@@ -476,6 +501,9 @@ export interface Arena {
   /** O Necromante (rodada 4b): os cristais dos inimigos que caíram nesta luta, e a espera da Magia Proibida. */
   cristais?: CristalNaSala[];
   recargaDaMagia?: number;
+  /** O Florescimento (rodada 5b): as flores que o herói daqui plantou (a mais antiga primeiro), e os passos dentro de uma até a próxima cura. */
+  flores?: FlorNaSala[];
+  relogioDaFlor?: number;
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -524,7 +552,7 @@ export interface EntradaDaLuta {
   /** O menu de itens está aberto: o mundo anda em câmera lenta. */
   menu?: boolean;
   /** Em dupla: onde o parceiro está agora, se caiu, se é Paladino (`puxa`: os monstros o preferem) e o dano que ele levou nos últimos 30 s. */
-  parceiro?: { x: number; y: number; caido?: boolean; puxa?: boolean; dano?: number };
+  parceiro?: { x: number; y: number; caido?: boolean; puxa?: boolean; dano?: number; flores?: readonly FlorNaSala[] };
   /** Tocou na placa de um aliado (o celular): o ataque do Bardo, do Clérigo ou do Druida vai nele. */
   mirarAliado?: Aliado;
   /** Apertou o botão do Poder da fé (o Clérigo). */
@@ -542,6 +570,8 @@ export interface EntradaDaLuta {
   magia?: boolean;
   /** O Espadachim: apertou o Corte Invernal. */
   corte?: boolean;
+  /** O Florescimento no celular (rodada 5b): o botão 🌸 planta uma flor no pé do herói. */
+  florescer?: boolean;
   /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
   danoDeFora?: readonly { indice: number; dano: number }[];
   /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
@@ -708,6 +738,7 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
   else if (entrada.explodir) explodir(l);
   else if (entrada.magia) usarMagia(l);
   else if (entrada.corte) corteInvernal(l);
+  else if (entrada.florescer && l.arena.recarga <= 0) plantar(l, l.arena.heroi.x, l.arena.heroi.y);
   else if (entrada.item) usarItem(l, entrada.item);
 
   if (!l.fim) {
@@ -927,7 +958,12 @@ export function velocidadeNaArena(hero: Hero): number {
 /** O herói alcança o monstro `indice` com o ataque comum, com esta folga a mais? As vinhas do Druida têm a regra delas. */
 function alcanca(l: Luta, indice: number, folga = 0): boolean {
   const lugar = lugarDe(l, indice);
-  if (idDaClasse(masmorra(l).hero) === 'druida') return nasVinhas(l, lugar, folga);
+  if (idDaClasse(masmorra(l).hero) === 'druida') {
+    // Os estilos (rodada 5b): as Raízes pegam qualquer um da sala; a garra e a flor shuriken saem do herói, no alcance de todo mundo.
+    const estilo = idDoEstilo(masmorra(l).hero);
+    if (estilo === 'raizes') return true;
+    if (estilo !== 'metamorfose' && estilo !== 'florescimento') return nasVinhas(l, lugar, folga);
+  }
   const dx = l.arena.heroi.x - lugar.x;
   const dy = l.arena.heroi.y - lugar.y;
   // O Espadachim com o avanço pronto alcança mais: ele vai até o alvo (rodada 5a).
@@ -1176,6 +1212,11 @@ function abrirEvento(l: Luta, entrada: EntradaDaLuta): void {
 
 /** Sem monstro na área do cursor: o golpe vai no chão, sem evento, e o botão espera a recarga como depois de um golpe. */
 function golpeNoChao(l: Luta, x: number, y: number): void {
+  // O Florescimento (rodada 5b): o ataque no chão vazio planta uma flor.
+  if (idDoEstilo(masmorra(l).hero) === 'florescimento') {
+    plantar(l, x, y);
+    return;
+  }
   l.arena.recarga = RECARGA_DO_ATAQUE;
   contar(l, { tipo: 'numero', onde: 'chao', x: Math.trunc(x), y: Math.trunc(y), texto: 'Errou', tom: 'erro' });
   contar(l, { tipo: 'som', som: 'miss' });
@@ -1274,6 +1315,8 @@ function golpear(l: Luta): void {
     }
     l.arena.classe = { ...contadores(l), recargaDoEstilo: REGRAS_DO_ESPADACHIM.recarga };
   }
+  // O Druida com estilo conta os ataques da luta (a aura da Metamorfose, as Raízes).
+  const golpeDoDruida = idDaClasse(heroDoGolpe) === 'druida' && estilo ? contarGolpeDoDruida(l, estilo) : 0;
   // O chute erra 1 vez em 10.
   if (estilo === 'chute' && l.rng() * 100 < REGRAS_DO_CHUTE.erro) {
     contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: 'Errou', tom: 'erro' });
@@ -1293,6 +1336,8 @@ function golpear(l: Luta): void {
   // O avanço do Paladino empurra o alvo que ficou de pé.
   const alvo = l.arena.monstros[indice] as MonstroNaArena;
   if (atordoarDepois && !l.fim && alvo.fase !== 'caido') atordoar(l, alvo, REGRAS_DO_ESPADACHIM.atordoa);
+  // Todo 9º golpe das Raízes prende o alvo (o chefe não).
+  if (estilo === 'raizes' && golpeQuePrende(golpeDoDruida) && !l.fim) prender(l, alvo);
   if (paladino && !l.fim && alvo.fase !== 'caido') empurrar(l, alvo, l.arena.heroi, REGRAS_DO_PALADINO.empurrao);
 }
 
@@ -1544,8 +1589,10 @@ function apoiar(l: Luta, aliado: Aliado, leitura: LeituraDaMira): void {
   l.estado = { ...estado, hero: anotarUso(estado.hero, 'sabedoria') };
   const id = idDaClasse(estado.hero);
   if (id === 'druida') {
-    if (aliado === 'eu') purificarAqui(l);
-    else l.apoios.push({ tipo: 'purificar' });
+    // A Purificação da Metamorfose cura mais (rodada 5b).
+    const mais = idDoEstilo(estado.hero) === 'metamorfose' ? REGRAS_DA_METAMORFOSE.purificacao : 0;
+    if (aliado === 'eu') purificarAqui(l, mais);
+    else l.apoios.push(mais > 0 ? { tipo: 'purificar', mais } : { tipo: 'purificar' });
     l.arena.recarga = REGRAS_DO_DRUIDA.semAtacar;
     contar(l, { tipo: 'aviso', texto: aliado === 'eu' ? '🌿 Purificação Ancestral' : '🌿 Purificação Ancestral no parceiro' });
     return;
@@ -1571,7 +1618,7 @@ function apoiarAqui(l: Luta): void {
 /** O apoio cai no herói daqui (dele mesmo ou do parceiro): a cura, o reforço do Bardo, a Purificação, a Comunhão. */
 function receberApoio(l: Luta, apoio: ApoioDoParceiro): void {
   if (apoio.tipo === 'purificar') {
-    purificarAqui(l);
+    purificarAqui(l, apoio.mais ?? 0);
     return;
   }
   if (apoio.tipo === 'comunhao') {
@@ -1584,9 +1631,9 @@ function receberApoio(l: Luta, apoio: ApoioDoParceiro): void {
 }
 
 /** A cura do apoio no herói daqui, com o número em cima dele. */
-function curarAqui(l: Luta, tipo: ApoioDoParceiro['tipo']): void {
+function curarAqui(l: Luta, tipo: ApoioDoParceiro['tipo'], mais = 0): void {
   const estado = masmorra(l);
-  const cura = curaDoApoio(tipo, estado.hero);
+  const cura = curaDoApoio(tipo, estado.hero, mais);
   if (cura <= 0) return;
   l.estado = { ...estado, hero: { ...estado.hero, hp: estado.hero.hp + cura } };
   contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `${ICONE_DO_APOIO[tipo]}+${cura}`, tom: 'cura' });
@@ -1594,12 +1641,12 @@ function curarAqui(l: Luta, tipo: ApoioDoParceiro['tipo']): void {
 }
 
 /** A Purificação Ancestral no herói daqui: o veneno e os ferimentos somem, e a cura. */
-function purificarAqui(l: Luta): void {
+function purificarAqui(l: Luta, mais = 0): void {
   const estado = masmorra(l);
   const { poisonTurns: _turnos, poisonDmg: _dano, ...buffs } = estado.hero.buffs ?? {};
   const { ferimentos: _ferimentos, ...semFerimentos } = estado.hero;
   l.estado = { ...estado, hero: { ...semFerimentos, buffs } };
-  curarAqui(l, 'purificar');
+  curarAqui(l, 'purificar', mais);
   contar(l, { tipo: 'aviso', texto: '🌿 Purificado' });
 }
 
@@ -1621,10 +1668,18 @@ function vinhasNoMonstro(l: Luta, indice: number): void {
   if (!m || m.fase === 'caido') return;
   const r = REGRAS_DO_DRUIDA;
   const monstro = (sala(l).monsters ?? [])[indice] as CombatMonster;
-  const veneno = Math.max(1, Math.trunc((monstro.maxHp * r.veneno) / 100));
-  const status = { ...monstro.status, lento: { turns: r.turnos, amount: r.lento / 100 }, veneno: { turns: r.turnos, dmg: veneno } };
+  // Os estilos (rodada 5b): o golpe forte das Raízes deixa mais lento, e as Raízes fundas envenenam pela vida que resta.
+  const estilo = idDoEstilo(masmorra(l).hero);
+  const golpes = contadores(l).golpes ?? 0;
+  const lento = estilo === 'raizes' && golpeForte(golpes) ? REGRAS_DAS_RAIZES.lento : r.lento;
+  const veneno =
+    estilo === 'raizes' && raizesFundas(golpes)
+      ? Math.max(1, Math.trunc((monstro.hp * REGRAS_DAS_RAIZES.veneno) / 100))
+      : Math.max(1, Math.trunc((monstro.maxHp * r.veneno) / 100));
+  const status = { ...monstro.status, lento: { turns: r.turnos, amount: lento / 100 }, veneno: { turns: r.turnos, dmg: veneno } };
   l.estado = gravarMonstro(masmorra(l), indice, { ...monstro, status });
-  contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: '🌿', tom: 'erro' });
+  const icone = estilo === 'metamorfose' ? '🐾' : estilo === 'florescimento' ? '🌸' : estilo === 'raizes' ? '🌱' : '🌿';
+  contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: icone, tom: 'erro' });
 }
 
 /**
@@ -1716,6 +1771,7 @@ export function extrasDaLuta(luta: LutaEmTempoReal): ExtrasDaClasse {
   if (a.canalizando) extras.canalizando = true;
   if ((a.recargaDaMagia ?? 0) > 0) extras.recargaDaMagia = a.recargaDaMagia as number;
   if (luta.estado.hero.bloqueioDaMagia) extras.magiaSelada = true;
+  if ((a.flores?.length ?? 0) > 0) extras.flores = a.flores?.length as number;
   return extras;
 }
 
@@ -2096,6 +2152,89 @@ function corteInvernal(l: Luta): void {
   }
 }
 
+// ---------- os estilos do Druida (rodada 5b: Metamorfose, Florescimento, Raízes Ocultas) ----------
+
+/** O Druida com estilo deu mais um ataque nesta luta: conta, e avisa a aura de fera e as Raízes fundas quando chegam. O número deste. */
+function contarGolpeDoDruida(l: Luta, estilo: string): number {
+  const golpes = (contadores(l).golpes ?? 0) + 1;
+  l.arena.classe = { ...contadores(l), golpes };
+  if (estilo === 'metamorfose' && golpes === REGRAS_DA_METAMORFOSE.golpesDaAura) contar(l, { tipo: 'aviso', texto: '🐾 Aura de fera!' });
+  if (estilo === 'raizes' && golpes === REGRAS_DAS_RAIZES.golpesDoVeneno) contar(l, { tipo: 'aviso', texto: '🌱 Raízes fundas!' });
+  return golpes;
+}
+
+/** As Raízes prendem o monstro de pé (o chefe não). No espelho, não (é do anfitrião). */
+function prender(l: Luta, m: MonstroNaArena): void {
+  if (noEspelho(l) || m.fase === 'caido' || monstroNo(l, m.indice).isBoss) return;
+  m.preso = REGRAS_DAS_RAIZES.preso;
+  contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: '🌱 Preso', tom: 'erro' });
+}
+
+/**
+ * O Florescimento planta uma flor em (x, y), a até `plantio` blocos do herói:
+ * no máximo `maximo` no chão, e a nova tira a mais antiga. O botão espera a
+ * recarga, como depois de um golpe.
+ */
+function plantar(l: Luta, x: number, y: number): void {
+  const r = REGRAS_DO_FLORESCIMENTO;
+  if (idDoEstilo(masmorra(l).hero) !== 'florescimento') return;
+  const dx = x - l.arena.heroi.x;
+  const dy = y - l.arena.heroi.y;
+  const alcance = r.plantio * TILE_UNITS + TILE_UNITS / 2;
+  if (dx * dx + dy * dy > alcance * alcance) {
+    contar(l, { tipo: 'aviso', texto: 'Chegue mais perto' });
+    return;
+  }
+  const flor = { x: Math.trunc(x), y: Math.trunc(y) };
+  l.arena.flores = [...(l.arena.flores ?? []), flor].slice(-r.maximo);
+  l.arena.recarga = RECARGA_DO_ATAQUE;
+  contar(l, { tipo: 'numero', onde: 'chao', x: flor.x, y: flor.y, texto: '🌸', tom: 'cura' });
+}
+
+/** O herói daqui está dentro de uma flor (a dele ou a do parceiro)? */
+function naFlor(l: Luta): boolean {
+  const meio = (REGRAS_DO_FLORESCIMENTO.lado * TILE_UNITS) / 2;
+  const { x, y } = l.arena.heroi;
+  const flores = [...(l.arena.flores ?? []), ...(l.arena.dupla?.floresDoParceiro ?? [])];
+  return flores.some((f) => Math.abs(x - f.x) <= meio && Math.abs(y - f.y) <= meio);
+}
+
+/**
+ * Um passo do mundo nas flores: quem está dentro fica sem o veneno e o
+ * sangramento (a imunidade tira e segura; o osso quebrado não), e a cada
+ * segundo dentro cura `cura` (%) da vida máxima. O fantasma não.
+ */
+function passarAsFlores(l: Luta): void {
+  if (l.arena.dupla?.fantasma || !naFlor(l)) {
+    delete l.arena.relogioDaFlor;
+    return;
+  }
+  const estado = masmorra(l);
+  const hero = estado.hero;
+  const envenenado = (hero.buffs?.poisonTurns ?? 0) > 0;
+  const ferido = !!hero.ferimentos?.veneno || !!hero.ferimentos?.sangramento;
+  if (envenenado || ferido) {
+    const { poisonTurns: _turnos, poisonDmg: _dano, ...buffs } = hero.buffs ?? {};
+    const { veneno: _veneno, sangramento: _sangramento, ...ferimentos } = hero.ferimentos ?? {};
+    const { ferimentos: _antes, ...semFerimentos } = hero;
+    const limpo = Object.keys(ferimentos).length > 0 ? { ...semFerimentos, ferimentos } : semFerimentos;
+    l.estado = { ...estado, hero: envenenado ? { ...limpo, buffs } : limpo };
+    contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: '🌸 Imune', tom: 'cura' });
+  }
+  const relogio = (l.arena.relogioDaFlor ?? 0) + 1;
+  if (relogio < 60) {
+    l.arena.relogioDaFlor = relogio;
+    return;
+  }
+  l.arena.relogioDaFlor = 0;
+  const agora = masmorra(l);
+  const falta = agora.hero.maxHp - agora.hero.hp;
+  if (falta <= 0) return;
+  const cura = Math.min(falta, Math.max(1, Math.trunc((agora.hero.maxHp * REGRAS_DO_FLORESCIMENTO.cura) / 100)));
+  l.estado = { ...agora, hero: { ...agora.hero, hp: agora.hero.hp + cura } };
+  contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `🌸+${cura}`, tom: 'cura' });
+}
+
 /** O Monge com o ki cheio se reveste: bate mais forte até o próximo golpe levado. */
 function revestir(l: Luta): void {
   const r = REGRAS_DO_MONGE;
@@ -2321,7 +2460,10 @@ function moverHeroi(l: Luta, entrada: EntradaDaLuta): Walker {
   // A moral do grupo (o degrau 1) também deixa o passo mais ligeiro.
   const daMoral = moralAqui(l).velocidade;
   const base = velocidadeNaArena(masmorra(l).hero);
-  const velocidade = daMoral > 0 ? Math.trunc((base * (100 + daMoral)) / 100) : base;
+  // As Raízes fundas (rodada 5b) também: o Druida anda 10% mais rápido.
+  const fundas = idDoEstilo(masmorra(l).hero) === 'raizes' && raizesFundas(contadores(l).golpes ?? 0) ? REGRAS_DAS_RAIZES.velocidade : 0;
+  const daMais = daMoral + fundas;
+  const velocidade = daMais > 0 ? Math.trunc((base * (100 + daMais)) / 100) : base;
   return walkTick(planta, heroi, { x: entrada.x, y: entrada.y }, velocidade).walker;
 }
 
@@ -2339,6 +2481,7 @@ function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
   }
   passarAFe(l);
   passarOsEstilos(l);
+  passarAsFlores(l);
   canalizar(l, entrada);
   if (arena.recarga > 0) arena.recarga -= 1;
   if (arena.recargaDoItem > 0) arena.recargaDoItem -= 1;
@@ -2383,6 +2526,11 @@ function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
 }
 
 function agirMonstro(l: Luta, m: MonstroNaArena): void {
+  // Preso pelas Raízes (rodada 5b): o tempo corre aqui.
+  if (m.preso !== undefined) {
+    if (m.preso > 1) m.preso -= 1;
+    else delete m.preso;
+  }
   const jeito = jeitoDoGolpe(monstroNo(l, m.indice), m.poder);
   switch (m.fase) {
     case 'esperando':
@@ -2429,6 +2577,8 @@ function aDistanciaDoGolpe(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): boo
 function aproximar(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   escolherPresa(l, m);
   if (aDistanciaDoGolpe(l, m, jeito)) return;
+  // Preso pelas Raízes, não sai do lugar.
+  if ((m.preso ?? 0) > 0) return;
   const heroi = presaDe(l, m);
   // Lento (as vinhas do Druida, as canções…), anda menos.
   const lento = ((sala(l).monsters ?? [])[m.indice] as CombatMonster | undefined)?.status?.lento;
@@ -2471,7 +2621,10 @@ function proximoDaVez(l: Luta): MonstroNaArena | null {
   for (let k = 1; k <= monstros.length; k++) {
     const m = monstros[(l.arena.vez + k + monstros.length) % monstros.length] as MonstroNaArena;
     if (m.fase !== 'esperando' || m.tempo > 0) continue;
-    if (aDistanciaDoGolpe(l, m, jeitoDe(monstroNo(l, m.indice)))) return m;
+    const jeito = jeitoDe(monstroNo(l, m.indice));
+    // Preso pelas Raízes, não investe (o golpe de onde está, sim).
+    if ((m.preso ?? 0) > 0 && jeito.golpe === 'investida') continue;
+    if (aDistanciaDoGolpe(l, m, jeito)) return m;
   }
   return null;
 }
@@ -2968,6 +3121,9 @@ function receberDoParceiro(l: Luta, entrada: EntradaDaLuta): void {
     else delete dupla.parceiroPuxa;
     if ((entrada.parceiro.dano ?? 0) > 0) dupla.parceiroDano = Math.trunc(entrada.parceiro.dano as number);
     else delete dupla.parceiroDano;
+    const flores = (entrada.parceiro.flores ?? []).slice(0, REGRAS_DO_FLORESCIMENTO.maximo).map((f) => ({ x: Math.trunc(f.x), y: Math.trunc(f.y) }));
+    if (flores.length > 0) dupla.floresDoParceiro = flores;
+    else delete dupla.floresDoParceiro;
   }
   // A moral do grupo que o Bardo do parceiro subiu (fica a maior).
   if (entrada.moral !== undefined && Math.trunc(entrada.moral) > (l.arena.moral?.nivel ?? 0)) l.arena.moral = { ...l.arena.moral, nivel: Math.trunc(entrada.moral) };

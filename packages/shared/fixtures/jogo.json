@@ -41481,7 +41481,7 @@
         "aviso": {
           "icone": "🥋",
           "titulo": "Mestre de estilo",
-          "texto": "Um mestre medita aqui, de olhos fechados."
+          "texto": "No meio da sala, um mestre de estilo medita de olhos fechados."
         },
         "tela": null,
         "recado": null
@@ -202866,7 +202866,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1794954633509_55026",
+                  "uid": "pot_mana_1794959314454_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -202996,7 +202996,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1794954633509_90893",
+                  "uid": "anel_som_1794959314454_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -203285,7 +203285,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1794954633510_87912",
+                  "uid": "pot_mana_1794959314457_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -203502,7 +203502,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794954633510_18536",
+                  "uid": "pot_vida_1794959314457_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -203704,7 +203704,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1794954633510_69928",
+                  "uid": "bota_vento_1794959314457_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -203780,7 +203780,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1794954633510_12429",
+                "uid": "tala_1794959314457_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -203954,7 +203954,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1794954633511_23232",
+              "uid": "placas_elmo_1794959314460_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -204036,7 +204036,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794954633511_3788",
+                  "uid": "pot_vida_1794959314460_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -204153,7 +204153,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1794954633511_56339",
+                  "uid": "amuleto_sab_1794959314460_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -204319,7 +204319,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1794954633511_93474",
+              "uid": "anel_som_1794959314460_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {

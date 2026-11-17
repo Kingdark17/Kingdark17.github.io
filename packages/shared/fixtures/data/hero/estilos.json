@@ -34,6 +34,27 @@
       "nome": "Concentração",
       "icone": "🧘",
       "desc": "A cada 3 s sem atacar junta uma carga (até 3); cada carga dá +50% no próximo golpe. +1 de alcance."
+    },
+    {
+      "id": "metamorfose",
+      "classe": "druida",
+      "nome": "Metamorfose",
+      "icone": "🐾",
+      "desc": "Ataca com a garra do espírito, a até 2 blocos, com +20% de dano, e o apoio no aliado cura 20%. No 15º golpe da luta acende a aura de fera: +20% de dano e 20% de resistência."
+    },
+    {
+      "id": "florescimento",
+      "classe": "druida",
+      "nome": "Florescimento",
+      "icone": "🌸",
+      "desc": "O ataque no chão vazio planta flores (4 × 4, a até 4 blocos) que curam 3% da vida por segundo e seguram veneno e sangramento; até 2. Nos monstros, a flor shuriken: +10% de dano, a até 3 blocos."
+    },
+    {
+      "id": "raizes",
+      "classe": "druida",
+      "nome": "Raízes Ocultas",
+      "icone": "🌱",
+      "desc": "As vinhas pegam qualquer monstro da sala. Todo 3º golpe bate +20% e deixa o alvo mais lento; todo 9º prende o alvo 4 s (o chefe não). Do 18º golpe da luta em diante, o veneno tira 15% da vida que resta e você anda 10% mais rápido."
     }
   ],
   "CHANCE_DO_MESTRE": {
@@ -73,5 +94,31 @@
     "tetoDeCargas": 3,
     "porCarga": 50,
     "alcance": 1
+  },
+  "REGRAS_DA_METAMORFOSE": {
+    "alcance": 2,
+    "dano": 20,
+    "purificacao": 10,
+    "golpesDaAura": 15,
+    "aura": 20,
+    "resistencia": 20
+  },
+  "REGRAS_DO_FLORESCIMENTO": {
+    "alcance": 3,
+    "dano": 10,
+    "plantio": 4,
+    "lado": 4,
+    "cura": 3,
+    "maximo": 2
+  },
+  "REGRAS_DAS_RAIZES": {
+    "forteACada": 3,
+    "dano": 20,
+    "lento": 20,
+    "prendeACada": 9,
+    "preso": 240,
+    "golpesDoVeneno": 18,
+    "veneno": 15,
+    "velocidade": 10
   }
 }
