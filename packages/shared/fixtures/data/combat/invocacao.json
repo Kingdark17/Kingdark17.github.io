@@ -1,4 +1,18 @@
 {
   "MAX_ESQUELETOS": 3,
-  "FIM_DOS_ESQUELETOS": "Os esqueletos caídos voltam ao pó."
+  "FIM_DOS_ESQUELETOS": "Os esqueletos caídos voltam ao pó.",
+  "REGRAS_DO_NECROMANTE": {
+    "danoPorInteligencia": 2,
+    "vidaDoHeroi": 2,
+    "custo": 65,
+    "retaguarda": 3,
+    "danoNaRetaguarda": 10,
+    "resistenciaNoOfensivo": 10,
+    "passo": 48,
+    "recargaDaMagia": 50400,
+    "requisitoDaMagia": 90,
+    "levantaCom": 50,
+    "falhaNoChefe": 65
+  },
+  "ESPECIE_DO_LACAIO": "esqueleto"
 }

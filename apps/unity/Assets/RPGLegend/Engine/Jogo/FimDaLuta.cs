@@ -279,6 +279,10 @@ namespace RPGLegend.Engine
                 log.Add("O caminho de volta se abre, e o grupo retorna à cidade.");
                 var comProgresso = premiado.Clone();
                 comProgresso.Progresso = progresso;
+                // O Necromante que devia esta masmorra tem a Magia Proibida de volta (rodada 4b).
+                var liberado = Invocacao.LiberarMagia(premiado.Hero, limpo.Masmorra.Dungeon);
+                if (!ReferenceEquals(liberado, premiado.Hero)) log.Add("A Magia Proibida desperta de novo.");
+                comProgresso.Hero = liberado;
                 return new SalaLimpa { Estado = Estados.VoltarParaCidade(comProgresso), Log = log, Loot = loot, Conquista = conquista };
             }
 

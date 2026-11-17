@@ -121,6 +121,7 @@ namespace RPGLegend.Game.Jogo
             Rede.AoParceiroSair -= ParceiroSaiu;
             Rede.AoSala -= MudouASala;
             _sala?.DefinirParceiro(null);
+            _sala?.DefinirLacaiosDoParceiro(null);
             if (_sala != null) _sala.Fantasma = false;
             MostrarBotaoReviver(false);
             MostrarMorto(false);
@@ -172,6 +173,7 @@ namespace RPGLegend.Game.Jogo
             // Só vale pra luta que está correndo: guardado, desmancharia a dupla da próxima.
             _semParceiro = _partida?.Luta?.Arena.Dupla != null;
             _sala?.DefinirParceiro(null);
+            _sala?.DefinirLacaiosDoParceiro(null);
             _partida?.LevantarSozinho();
         }
 
@@ -251,6 +253,8 @@ namespace RPGLegend.Game.Jogo
                     double? levado = Numero(dados["d"], LimiteDoDanoLevado, out var dano30) && dano30 > 0 ? Math.Truncate(dano30) : (double?)null;
                     _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null, Puxa = _parceiroPuxa ? true : (bool?)null, Dano = levado };
                     _sala?.MoverParceiro(x, y, olha == "N" || olha == "E" || olha == "W" ? olha : "S", caido);
+                    // Os lacaios do Necromante parceiro, na luta (rodada 4b): só desenho.
+                    _sala?.DefinirLacaiosDoParceiro(LacaiosDoPacote(dados["l"] as JArray));
                     break;
                 case "a":
                     // O apoio do parceiro em mim (a cura, o reforço, a Purificação, a Comunhão): só na luta.
@@ -303,6 +307,21 @@ namespace RPGLegend.Game.Jogo
         }
 
         private static string Texto(JToken t) => t != null && t.Type == JTokenType.String ? (string)t : "";
+
+        /// <summary>Os lacaios que o parceiro disse no "p": até 3, cada um [x, y, ícone].</summary>
+        private static List<(double X, double Y, string Icone)> LacaiosDoPacote(JArray lista)
+        {
+            var lacaios = new List<(double, double, string)>();
+            if (lista == null) return lacaios;
+            foreach (var item in lista)
+            {
+                if (lacaios.Count >= 3 || !(item is JArray l) || l.Count < 3) break;
+                if (!Numero(l[0], LimiteDaPosicao, out var x) || !Numero(l[1], LimiteDaPosicao, out var y)) continue;
+                var icone = Texto(l[2]);
+                lacaios.Add((x, y, icone.Length <= 8 ? icone : ""));
+            }
+            return lacaios;
+        }
 
         private static bool Numero(JToken t, double limite, out double valor)
         {
@@ -428,6 +447,12 @@ namespace RPGLegend.Game.Jogo
                     Rede.MandarTempoReal(new JObject { ["t"] = "mo", ["n"] = _partida.MoralPraMandar.Value });
                     _partida.MoralPraMandar = null;
                 }
+                // A Magia Proibida levantou o parceiro: vai como a Poção de Reviver.
+                if (_partida.ReviverPraMandar != null)
+                {
+                    Rede.MandarTempoReal(new JObject { ["t"] = "r", ["n"] = _partida.ReviverPraMandar.Value });
+                    _partida.ReviverPraMandar = null;
+                }
                 // Quem conduz: o espelho dos monstros, com um deles inteiro por vez (é como a fúria e o escudo chegam).
                 if (Rede.Conduzo && luta.Arena.Dupla != null && Time.unscaledTime >= _proximoEspelho)
                 {
@@ -447,7 +472,19 @@ namespace RPGLegend.Game.Jogo
             bool caido = EstouCaido;
             // Na luta, o dano que levei nos últimos 30 s vai junto (a Comunhão sagrada do Clérigo parceiro conta com ele).
             double levado = luta != null ? Arenas.DanoLevadoNaJanela(luta) : 0;
-            var agora = sala + "|" + Math.Round(walker.X) + "|" + Math.Round(walker.Y) + "|" + walker.Facing + "|" + caido + "|" + levado;
+            // Na luta, os lacaios com corpo vão junto (o parceiro os desenha).
+            var lacaios = new JArray();
+            if (luta != null)
+            {
+                var equipe = luta.Estado.Party ?? new List<Companion>();
+                foreach (var c in luta.Arena.Companheiros)
+                {
+                    int i = (int)c.Indice;
+                    if (c.X == null || c.Y == null || i >= equipe.Count || equipe[i].Hp <= 0 || lacaios.Count >= 3) continue;
+                    lacaios.Add(new JArray(Math.Round(c.X.Value), Math.Round(c.Y.Value), equipe[i].ClassIcon ?? "💀"));
+                }
+            }
+            var agora = sala + "|" + Math.Round(walker.X) + "|" + Math.Round(walker.Y) + "|" + walker.Facing + "|" + caido + "|" + levado + "|" + lacaios.ToString(Newtonsoft.Json.Formatting.None);
             // Parado, repete de vez em quando: é o que mostra o herói a quem acabou de chegar.
             bool parado = agora == _posicaoEnviada;
             if (parado && Time.unscaledTime < _proximaPosicao + 1f) return;
@@ -456,6 +493,7 @@ namespace RPGLegend.Game.Jogo
             var pacote = new JObject { ["t"] = "p", ["s"] = sala, ["x"] = Math.Round(walker.X), ["y"] = Math.Round(walker.Y), ["f"] = walker.Facing ?? "S" };
             if (caido) pacote["c"] = true;
             if (levado > 0) pacote["d"] = levado;
+            if (lacaios.Count > 0) pacote["l"] = lacaios;
             Rede.MandarTempoReal(pacote);
         }
 

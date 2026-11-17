@@ -14,7 +14,7 @@
  * caiu.
  */
 
-import { FIM_DOS_ESQUELETOS, semInvocados, semInvocadosCaidos, temInvocadoCaido } from '../combat/invocacao.js';
+import { FIM_DOS_ESQUELETOS, liberarMagia, semInvocados, semInvocadosCaidos, temInvocadoCaido } from '../combat/invocacao.js';
 import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from '../combat/monster-state.js';
 import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, isCleared, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
 import type { DungeonCell } from '../dungeon/generate.js';
@@ -228,7 +228,10 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
       ...abertos,
       'O caminho de volta se abre, e o grupo retorna à cidade.',
     );
-    return { estado: voltarParaCidade({ ...premiado, progresso }), log, loot, conquista };
+    // O Necromante que devia esta masmorra (a Magia Proibida o levantou nela) tem a magia de volta.
+    const liberado = liberarMagia(premiado.hero, limpo.masmorra.dungeon);
+    if (liberado !== premiado.hero) log.push('A Magia Proibida desperta de novo.');
+    return { estado: voltarParaCidade({ ...premiado, hero: liberado, progresso }), log, loot, conquista };
   }
 
   if (sala.type === 'boss') {

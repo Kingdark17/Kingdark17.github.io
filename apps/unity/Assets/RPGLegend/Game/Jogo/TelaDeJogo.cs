@@ -320,6 +320,7 @@ namespace RPGLegend.Game.Jogo
             AtualizarLuta();
             if (_partida == null) return;
             AtualizarLugar();
+            AtualizarNecromante();
             // Na luta os nomes dos monstros ficam no alto da sala: os botões descem em coluna pelo escuro da esquerda.
             _tela.EnableInClassList("em-luta", _partida.Luta != null);
 
@@ -941,7 +942,7 @@ namespace RPGLegend.Game.Jogo
         }
 
         /// <summary>A janela aberta não é tela de sala: o diário, o guia, a ficha, a pergunta de saída ou a vitória de quem zera.</summary>
-        private bool JanelaSemTela => _janela == "diario" || _janela == "guia" || _janela == "ficha" || _janela == "saida" || _janela == "vitoria";
+        private bool JanelaSemTela => _janela == "diario" || _janela == "guia" || _janela == "ficha" || _janela == "saida" || _janela == "vitoria" || _janela == "cristal" || _janela == "lacaios";
 
         private void FecharJanela()
         {

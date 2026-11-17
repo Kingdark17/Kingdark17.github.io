@@ -119,11 +119,12 @@ describe('o esqueleto', () => {
     expect(semInvocados(estado.party)).toEqual([recruta]);
   });
 
-  it('no app: entra na arena como companheiro e bate no monstro', () => {
+  it('no app: entra na arena como lacaio com corpo, ao lado do herói, e bate no monstro', () => {
     const { luta } = abrirLuta(naSala(), roomArrival(null));
     expect(luta.arena.companheiros).toEqual([]);
     const levantou = passoDaLuta(luta, { x: 0, y: 0, poder: 'levantar_esqueleto' }, NUNCA);
-    expect(levantou.luta.arena.companheiros).toEqual([{ indice: 0, tempo: expect.any(Number) }]);
+    // Desde a rodada 4b o lacaio do app tem corpo na arena (x, y).
+    expect(levantou.luta.arena.companheiros).toEqual([{ indice: 0, tempo: expect.any(Number), x: expect.any(Number), y: expect.any(Number) }]);
     expect(levantou.acontecimentos).toContainEqual({ tipo: 'aviso', texto: '💀 Esqueleto se ergue' });
 
     // O herói não ataca: quem tira vida do zumbi é o esqueleto (o sorteio fixo de cima erraria sempre).

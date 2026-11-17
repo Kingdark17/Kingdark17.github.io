@@ -24906,7 +24906,9 @@
       }
     },
     "expected": {
-      "result": []
+      "result": [
+        "☠️ Magia pronta"
+      ]
     }
   },
   {
@@ -24928,6 +24930,7 @@
     },
     "expected": {
       "result": [
+        "☠️ Magia pronta",
         "🌀 Puxando mana"
       ]
     }
@@ -24951,7 +24954,4463 @@
     },
     "expected": {
       "result": [
+        "☠️ Magia pronta",
         "🎵 Moral 2"
+      ]
+    }
+  },
+  {
+    "name": "criarLacaio: nível baixo, esqueleto",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 120,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": [],
+        "especie": "esqueleto"
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 240,
+        "maxHp": 240,
+        "attack": 26,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "esqueleto",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: nível baixo, goblin",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 120,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": [],
+        "especie": "goblin"
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Goblin",
+        "raceIcon": "👹",
+        "race": "Morto-vivo",
+        "className": "Goblin",
+        "classIcon": "👹",
+        "hp": 240,
+        "maxHp": 240,
+        "attack": 26,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "goblin",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: nível baixo, elemental_fogo",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 120,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": [],
+        "especie": "elemental_fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Elemental de Fogo",
+        "raceIcon": "🔥",
+        "race": "Morto-vivo",
+        "className": "Elemental de Fogo",
+        "classIcon": "🔥",
+        "hp": 240,
+        "maxHp": 240,
+        "attack": 26,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "elemental_fogo",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: nível baixo, nao_existe",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 120,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": [],
+        "especie": "nao_existe"
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 240,
+        "maxHp": 240,
+        "attack": 26,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "esqueleto",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: nível baixo, sem espécie",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 120,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": []
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 240,
+        "maxHp": 240,
+        "attack": 26,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "esqueleto",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: vida quebrada, esqueleto",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 77.5,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 0,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": [],
+        "especie": "esqueleto"
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 155,
+        "maxHp": 155,
+        "attack": 1,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "esqueleto",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: vida quebrada, goblin",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 77.5,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 0,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": [],
+        "especie": "goblin"
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Goblin",
+        "raceIcon": "👹",
+        "race": "Morto-vivo",
+        "className": "Goblin",
+        "classIcon": "👹",
+        "hp": 155,
+        "maxHp": 155,
+        "attack": 1,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "goblin",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: vida quebrada, elemental_fogo",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 77.5,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 0,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": [],
+        "especie": "elemental_fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Elemental de Fogo",
+        "raceIcon": "🔥",
+        "race": "Morto-vivo",
+        "className": "Elemental de Fogo",
+        "classIcon": "🔥",
+        "hp": 155,
+        "maxHp": 155,
+        "attack": 1,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "elemental_fogo",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: vida quebrada, nao_existe",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 77.5,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 0,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": [],
+        "especie": "nao_existe"
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 155,
+        "maxHp": 155,
+        "attack": 1,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "esqueleto",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: vida quebrada, sem espécie",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 77.5,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 0,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": []
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 155,
+        "maxHp": 155,
+        "attack": 1,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "esqueleto",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "criarLacaio: o terceiro numerado",
+    "input": {
+      "fn": "criarLacaio",
+      "args": {
+        "hero": {
+          "maxHp": 100,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 13,
+            "sabedoria": 10,
+            "carisma": 10
+          }
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "name": "Esqueleto 3",
+        "raceIcon": "💀",
+        "race": "Morto-vivo",
+        "className": "Esqueleto",
+        "classIcon": "💀",
+        "hp": 200,
+        "maxHp": 200,
+        "attack": 26,
+        "attrs": {
+          "forca": 0,
+          "destreza": 0,
+          "constituicao": 0,
+          "intelecto": 0,
+          "sabedoria": 0,
+          "carisma": 0
+        },
+        "stance": "agressiva",
+        "ability": "Lacaio",
+        "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+        "invocado": true,
+        "especie": "esqueleto",
+        "estadoDoLacaio": "retaguarda"
+      }
+    }
+  },
+  {
+    "name": "custoDoLacaio: 0 de mana",
+    "input": {
+      "fn": "custoDoLacaio",
+      "args": {
+        "hero": {
+          "maxMp": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "custoDoLacaio: 1 de mana",
+    "input": {
+      "fn": "custoDoLacaio",
+      "args": {
+        "hero": {
+          "maxMp": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "custoDoLacaio: 99 de mana",
+    "input": {
+      "fn": "custoDoLacaio",
+      "args": {
+        "hero": {
+          "maxMp": 99
+        }
+      }
+    },
+    "expected": {
+      "result": 64
+    }
+  },
+  {
+    "name": "custoDoLacaio: 100 de mana",
+    "input": {
+      "fn": "custoDoLacaio",
+      "args": {
+        "hero": {
+          "maxMp": 100
+        }
+      }
+    },
+    "expected": {
+      "result": 65
+    }
+  },
+  {
+    "name": "custoDoLacaio: 157 de mana",
+    "input": {
+      "fn": "custoDoLacaio",
+      "args": {
+        "hero": {
+          "maxMp": 157
+        }
+      }
+    },
+    "expected": {
+      "result": 102
+    }
+  },
+  {
+    "name": "trocarPeloCristal: comum",
+    "input": {
+      "fn": "trocarPeloCristal",
+      "args": {
+        "hero": {
+          "level": 5
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 1,
+        "cristal": {
+          "especie": "goblin",
+          "nivel": 3
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Goblin",
+            "raceIcon": "👹",
+            "race": "Morto-vivo",
+            "className": "Goblin",
+            "classIcon": "👹",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "goblin",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "texto": "Esqueleto 2 agora é Goblin.",
+        "trocou": true,
+        "gasto": true
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "trocarPeloCristal: comum no primeiro",
+    "input": {
+      "fn": "trocarPeloCristal",
+      "args": {
+        "hero": {
+          "level": 5
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 0,
+        "cristal": {
+          "especie": "aranha",
+          "nivel": 3
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Morto-vivo",
+            "className": "Aranha Gigante",
+            "classIcon": "🕷️",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "aranha",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "texto": "Esqueleto agora é Aranha Gigante.",
+        "trocou": true,
+        "gasto": true
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "trocarPeloCristal: no recruta",
+    "input": {
+      "fn": "trocarPeloCristal",
+      "args": {
+        "hero": {
+          "level": 5
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 2,
+        "cristal": {
+          "especie": "goblin",
+          "nivel": 3
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "texto": "Escolha um lacaio de pé.",
+        "trocou": false,
+        "gasto": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "trocarPeloCristal: no caído",
+    "input": {
+      "fn": "trocarPeloCristal",
+      "args": {
+        "hero": {
+          "level": 5
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 3,
+        "cristal": {
+          "especie": "goblin",
+          "nivel": 3
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "texto": "Escolha um lacaio de pé.",
+        "trocou": false,
+        "gasto": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "trocarPeloCristal: espécie que não existe",
+    "input": {
+      "fn": "trocarPeloCristal",
+      "args": {
+        "hero": {
+          "level": 5
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 0,
+        "cristal": {
+          "especie": "nada",
+          "nivel": 3
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "texto": "Este cristal não guarda alma nenhuma.",
+        "trocou": false,
+        "gasto": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "trocarPeloCristal: chefe acima do nível, falha",
+    "input": {
+      "fn": "trocarPeloCristal",
+      "args": {
+        "hero": {
+          "level": 11
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 0,
+        "cristal": {
+          "especie": "orc",
+          "nivel": 10,
+          "chefe": true
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "texto": "O cristal se parte: a alma do chefe resiste.",
+        "trocou": false,
+        "gasto": true
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "trocarPeloCristal: chefe acima do nível, dá",
+    "input": {
+      "fn": "trocarPeloCristal",
+      "args": {
+        "hero": {
+          "level": 11
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 0,
+        "cristal": {
+          "especie": "orc",
+          "nivel": 10,
+          "chefe": true
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Orc Selvagem",
+            "raceIcon": "👹",
+            "race": "Morto-vivo",
+            "className": "Orc Selvagem",
+            "classIcon": "👹",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "orc",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "texto": "Esqueleto agora é Orc Selvagem.",
+        "trocou": true,
+        "gasto": true
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "trocarPeloCristal: chefe no mesmo nível",
+    "input": {
+      "fn": "trocarPeloCristal",
+      "args": {
+        "hero": {
+          "level": 10
+        },
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 0,
+        "cristal": {
+          "especie": "orc",
+          "nivel": 10,
+          "chefe": true
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99,
+          0.99
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "texto": "A alma do chefe é forte demais: só acima do nível 10.",
+        "trocou": false,
+        "gasto": false
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "mudarEstadoDoLacaio: 0 pro ofensivo",
+    "input": {
+      "fn": "mudarEstadoDoLacaio",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 0,
+        "estado": "ofensivo"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "name": "Esqueleto",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "ofensivo"
+        },
+        {
+          "name": "Esqueleto 2",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Recruta",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Caído",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 0,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mudarEstadoDoLacaio: 1 pro retaguarda",
+    "input": {
+      "fn": "mudarEstadoDoLacaio",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 1,
+        "estado": "retaguarda"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "name": "Esqueleto",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Esqueleto 2",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Recruta",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Caído",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 0,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mudarEstadoDoLacaio: 2 pro ofensivo",
+    "input": {
+      "fn": "mudarEstadoDoLacaio",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 2,
+        "estado": "ofensivo"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "name": "Esqueleto",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Esqueleto 2",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Recruta",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Caído",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 0,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mudarEstadoDoLacaio: 9 pro ofensivo",
+    "input": {
+      "fn": "mudarEstadoDoLacaio",
+      "args": {
+        "party": [
+          {
+            "name": "Esqueleto",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Esqueleto 2",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Recruta",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 200,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          },
+          {
+            "name": "Caído",
+            "raceIcon": "💀",
+            "race": "Morto-vivo",
+            "className": "Esqueleto",
+            "classIcon": "💀",
+            "hp": 0,
+            "maxHp": 200,
+            "attack": 26,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Lacaio",
+            "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+            "invocado": true,
+            "especie": "esqueleto",
+            "estadoDoLacaio": "retaguarda"
+          }
+        ],
+        "indice": 9,
+        "estado": "ofensivo"
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "name": "Esqueleto",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Esqueleto 2",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Recruta",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 200,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        },
+        {
+          "name": "Caído",
+          "raceIcon": "💀",
+          "race": "Morto-vivo",
+          "className": "Esqueleto",
+          "classIcon": "💀",
+          "hp": 0,
+          "maxHp": 200,
+          "attack": 26,
+          "attrs": {
+            "forca": 0,
+            "destreza": 0,
+            "constituicao": 0,
+            "intelecto": 0,
+            "sabedoria": 0,
+            "carisma": 0
+          },
+          "stance": "agressiva",
+          "ability": "Lacaio",
+          "abilityDesc": "Luta ao lado do Necromante até cair ou até a volta à cidade.",
+          "invocado": true,
+          "especie": "esqueleto",
+          "estadoDoLacaio": "retaguarda"
+        }
+      ]
+    }
+  },
+  {
+    "name": "liberarMagia: a que ele devia",
+    "input": {
+      "fn": "liberarMagia",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 100,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
+          "buffs": {},
+          "bloqueioDaMagia": "caverna"
+        },
+        "masmorra": "caverna"
+      }
+    },
+    "expected": {
+      "result": {
+        "level": 1,
+        "attrs": {
+          "forca": 10,
+          "destreza": 10,
+          "constituicao": 10,
+          "intelecto": 10,
+          "sabedoria": 10,
+          "carisma": 10
+        },
+        "equip": {
+          "arma": {
+            "uid": "cajado_1700000000000_62706",
+            "templateId": "cajado",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 3,
+              "mana": 8
+            },
+            "value": 24,
+            "equipped": false,
+            "procChance": 0.1
+          },
+          "secundaria": null,
+          "elmo": null,
+          "armadura": null,
+          "calca": null,
+          "botas": null,
+          "acessorio": null
+        },
+        "name": "Teste",
+        "race": "Humano",
+        "raceIcon": "🧑",
+        "className": "Necromante",
+        "classIcon": "☠️",
+        "classId": "necromante",
+        "raceId": "humano",
+        "xp": 0,
+        "xpNext": 40,
+        "attrPoints": 0,
+        "gold": 100,
+        "powerNames": [],
+        "powerIds": [],
+        "debuff": {
+          "id": "orgulhoso",
+          "name": "Orgulhoso",
+          "icon": "👑",
+          "desc": "-1 Carisma em negociações com autoridades.",
+          "attr": "carisma"
+        },
+        "killCount": 0,
+        "masteryBattles": 0,
+        "derived": {
+          "maxHp": 100,
+          "maxMp": 70,
+          "dmgFisico": 20,
+          "dmgMagico": 30,
+          "esquiva": 5,
+          "critico": 10,
+          "velocidade": 10,
+          "curaBonus": 10,
+          "resistMagica": 10,
+          "descontoLoja": 5
+        },
+        "maxHp": 100,
+        "hp": 100,
+        "maxMp": 70,
+        "mp": 70,
+        "buffs": {}
+      }
+    }
+  },
+  {
+    "name": "liberarMagia: outra",
+    "input": {
+      "fn": "liberarMagia",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 100,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
+          "buffs": {},
+          "bloqueioDaMagia": "caverna"
+        },
+        "masmorra": "floresta"
+      }
+    },
+    "expected": {
+      "result": {
+        "level": 1,
+        "attrs": {
+          "forca": 10,
+          "destreza": 10,
+          "constituicao": 10,
+          "intelecto": 10,
+          "sabedoria": 10,
+          "carisma": 10
+        },
+        "equip": {
+          "arma": {
+            "uid": "cajado_1700000000000_62706",
+            "templateId": "cajado",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 3,
+              "mana": 8
+            },
+            "value": 24,
+            "equipped": false,
+            "procChance": 0.1
+          },
+          "secundaria": null,
+          "elmo": null,
+          "armadura": null,
+          "calca": null,
+          "botas": null,
+          "acessorio": null
+        },
+        "name": "Teste",
+        "race": "Humano",
+        "raceIcon": "🧑",
+        "className": "Necromante",
+        "classIcon": "☠️",
+        "classId": "necromante",
+        "raceId": "humano",
+        "xp": 0,
+        "xpNext": 40,
+        "attrPoints": 0,
+        "gold": 100,
+        "powerNames": [],
+        "powerIds": [],
+        "debuff": {
+          "id": "orgulhoso",
+          "name": "Orgulhoso",
+          "icon": "👑",
+          "desc": "-1 Carisma em negociações com autoridades.",
+          "attr": "carisma"
+        },
+        "killCount": 0,
+        "masteryBattles": 0,
+        "derived": {
+          "maxHp": 100,
+          "maxMp": 70,
+          "dmgFisico": 20,
+          "dmgMagico": 30,
+          "esquiva": 5,
+          "critico": 10,
+          "velocidade": 10,
+          "curaBonus": 10,
+          "resistMagica": 10,
+          "descontoLoja": 5
+        },
+        "maxHp": 100,
+        "hp": 100,
+        "maxMp": 70,
+        "mp": 70,
+        "buffs": {},
+        "bloqueioDaMagia": "caverna"
+      }
+    }
+  },
+  {
+    "name": "liberarMagia: sem bloqueio",
+    "input": {
+      "fn": "liberarMagia",
+      "args": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "cajado_1700000000000_62706",
+              "templateId": "cajado",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 3,
+                "mana": 8
+              },
+              "value": 24,
+              "equipped": false,
+              "procChance": 0.1
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Necromante",
+          "classIcon": "☠️",
+          "classId": "necromante",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 100,
+            "maxMp": 70,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 5,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 100,
+          "hp": 100,
+          "maxMp": 70,
+          "mp": 70,
+          "buffs": {}
+        },
+        "masmorra": "floresta"
+      }
+    },
+    "expected": {
+      "result": {
+        "level": 1,
+        "attrs": {
+          "forca": 10,
+          "destreza": 10,
+          "constituicao": 10,
+          "intelecto": 10,
+          "sabedoria": 10,
+          "carisma": 10
+        },
+        "equip": {
+          "arma": {
+            "uid": "cajado_1700000000000_62706",
+            "templateId": "cajado",
+            "rarity": "comum",
+            "stats": {
+              "ataque": 3,
+              "mana": 8
+            },
+            "value": 24,
+            "equipped": false,
+            "procChance": 0.1
+          },
+          "secundaria": null,
+          "elmo": null,
+          "armadura": null,
+          "calca": null,
+          "botas": null,
+          "acessorio": null
+        },
+        "name": "Teste",
+        "race": "Humano",
+        "raceIcon": "🧑",
+        "className": "Necromante",
+        "classIcon": "☠️",
+        "classId": "necromante",
+        "raceId": "humano",
+        "xp": 0,
+        "xpNext": 40,
+        "attrPoints": 0,
+        "gold": 100,
+        "powerNames": [],
+        "powerIds": [],
+        "debuff": {
+          "id": "orgulhoso",
+          "name": "Orgulhoso",
+          "icon": "👑",
+          "desc": "-1 Carisma em negociações com autoridades.",
+          "attr": "carisma"
+        },
+        "killCount": 0,
+        "masteryBattles": 0,
+        "derived": {
+          "maxHp": 100,
+          "maxMp": 70,
+          "dmgFisico": 20,
+          "dmgMagico": 30,
+          "esquiva": 5,
+          "critico": 10,
+          "velocidade": 10,
+          "curaBonus": 10,
+          "resistMagica": 10,
+          "descontoLoja": 5
+        },
+        "maxHp": 100,
+        "hp": 100,
+        "maxMp": 70,
+        "mp": 70,
+        "buffs": {}
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: no meio, 0",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 4320,
+          "y": 4320
+        },
+        "k": 0,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": []
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 3360,
+        "y": 4320
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: no meio, 1",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 4320,
+          "y": 4320
+        },
+        "k": 1,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": []
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 5280,
+        "y": 4320
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: no meio, 2",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 4320,
+          "y": 4320
+        },
+        "k": 2,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": []
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 4320,
+        "y": 5280
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: no meio, 5",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 4320,
+          "y": 4320
+        },
+        "k": 5,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": []
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 4320,
+        "y": 3360
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: no canto, 0",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 1440,
+          "y": 1440
+        },
+        "k": 0,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": []
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 1440,
+        "y": 1440
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: no canto, 1",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 1440,
+          "y": 1440
+        },
+        "k": 1,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": []
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 2400,
+        "y": 1440
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: no canto, 2",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 1440,
+          "y": 1440
+        },
+        "k": 2,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": []
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 1440,
+        "y": 2400
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: no canto, 5",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 1440,
+          "y": 1440
+        },
+        "k": 5,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": []
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 1440,
+        "y": 1440
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: com parede do lado, 0",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 2400,
+          "y": 2400
+        },
+        "k": 0,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": [
+          {
+            "col": 1,
+            "row": 2
+          },
+          {
+            "col": 3,
+            "row": 2
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 2400,
+        "y": 3360
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: com parede do lado, 1",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 2400,
+          "y": 2400
+        },
+        "k": 1,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": [
+          {
+            "col": 1,
+            "row": 2
+          },
+          {
+            "col": 3,
+            "row": 2
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 2400,
+        "y": 3360
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: com parede do lado, 2",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 2400,
+          "y": 2400
+        },
+        "k": 2,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": [
+          {
+            "col": 1,
+            "row": 2
+          },
+          {
+            "col": 3,
+            "row": 2
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 2400,
+        "y": 3360
+      }
+    }
+  },
+  {
+    "name": "lugarAoLado: com parede do lado, 5",
+    "input": {
+      "fn": "lugarAoLado",
+      "args": {
+        "centro": {
+          "x": 2400,
+          "y": 2400
+        },
+        "k": 5,
+        "geometria": {
+          "cols": 9,
+          "rows": 9,
+          "conteudo": {
+            "col": 4,
+            "row": 4
+          },
+          "portas": {
+            "N": {
+              "col": 4,
+              "row": 0,
+              "largura": 1,
+              "fundo": 1
+            },
+            "S": {
+              "col": 4,
+              "row": 8,
+              "largura": 1,
+              "fundo": 1
+            },
+            "W": {
+              "col": 0,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            },
+            "E": {
+              "col": 8,
+              "row": 4,
+              "largura": 1,
+              "fundo": 1
+            }
+          }
+        },
+        "paredes": [
+          {
+            "col": 1,
+            "row": 2
+          },
+          {
+            "col": 3,
+            "row": 2
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "x": 2400,
+        "y": 1440
+      }
+    }
+  },
+  {
+    "name": "textosDaClasse: necromante, magia pronta",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☠️ Magia pronta"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: necromante, magia voltando",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "recargaDaMagia": 50400
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☠️ Magia em 14:00"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: necromante, magia selada",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "magiaSelada": true,
+          "recargaDaMagia": 100
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☠️ Magia selada"
       ]
     }
   },

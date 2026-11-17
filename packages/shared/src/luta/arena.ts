@@ -63,9 +63,9 @@ import { geometriaDaSala, paredesDaSala } from '../dungeon/arte-da-sala.js';
 import type { DungeonCell } from '../dungeon/generate.js';
 import { HERO_HALF, HERO_SPEED, roomLayout, TILE_UNITS, walkTick, type GeometriaDaSala, type RoomObject, type Walker } from '../dungeon/room-walk.js';
 import type { Behavior } from '../monsters/species.js';
-import { heroPowers, type Hero } from '../hero/hero.js';
+import { heroPowers, type Companion, type Hero } from '../hero/hero.js';
 import type { Item } from '../items/item.js';
-import { monsterView } from '../monsters/generate.js';
+import { monsterLevel, monsterView } from '../monsters/generate.js';
 import { petBonus, type PetId } from '../pets/pets.js';
 import { randomInt, type Rng } from '../rng.js';
 import { descontoDeMana, efeitoDoUnico } from '../items/acessorios-unicos.js';
@@ -79,7 +79,17 @@ import { heroiNaLuta, lugaresNaLuta } from '../jogo/luta-no-mapa.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
-import { MAX_ESQUELETOS } from '../combat/invocacao.js';
+import {
+  criarLacaio,
+  custoDoLacaio,
+  esqueletosDePe,
+  especieDoLacaio,
+  estadoDoLacaio,
+  MAX_ESQUELETOS,
+  REGRAS_DO_NECROMANTE,
+  type CristalDoInimigo,
+} from '../combat/invocacao.js';
+import { speciesById } from '../monsters/species.js';
 import {
   alcanceDoHeroi,
   apoiaAliado,
@@ -267,6 +277,8 @@ export interface MonstroNaArena {
   noParceiro?: boolean;
   /** No espelho de quem acompanha: este golpe já acertou o meu herói (a investida não acerta duas vezes). */
   acertou?: boolean;
+  /** Ele vai atrás de um lacaio do Necromante (o índice na equipe), e o golpe em curso cai nele (rodada 4b). */
+  noLacaio?: number;
 }
 
 /**
@@ -322,6 +334,8 @@ export interface ApoioDoParceiro {
 export interface MemoriaDaLuta {
   moral?: Moral;
   recargaDaFe?: number;
+  /** A espera da Magia Proibida do Necromante (rodada 4b), em passos. */
+  recargaDaMagia?: number;
   /** O ki do Monge que sobrou (rodada 4a: "o ki é preservado após a batalha se não for utilizado"). */
   ki?: number;
 }
@@ -358,6 +372,19 @@ export interface CompanheiroNaArena {
   indice: number;
   /** Passos até o próximo golpe. */
   tempo: number;
+  /**
+   * O lacaio do Necromante tem corpo na arena (rodada 4b, decisão do usuário):
+   * onde ele está, em unidades da sala. Ausente, o companheiro fica de fora do
+   * chão, como no site (os recrutas).
+   */
+  x?: number;
+  y?: number;
+}
+
+/** O cristal que ficou onde o inimigo caiu, na luta do Necromante (rodada 4b): fica na sala até o herói sair dela. */
+export interface CristalNaSala extends CristalDoInimigo {
+  x: number;
+  y: number;
 }
 
 /** A bola do mágico, voando pela sala. */
@@ -444,6 +471,9 @@ export interface Arena {
   /** Segurando K: os passos desde o último ponto de mana ou de ki, e se segurou neste passo. */
   canal?: number;
   canalizando?: boolean;
+  /** O Necromante (rodada 4b): os cristais dos inimigos que caíram nesta luta, e a espera da Magia Proibida. */
+  cristais?: CristalNaSala[];
+  recargaDaMagia?: number;
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -506,6 +536,8 @@ export interface EntradaDaLuta {
   /** O Monge: apertou o revestimento de ki, ou a explosão de ki. */
   revestir?: boolean;
   explodir?: boolean;
+  /** O Necromante: apertou a Magia Proibida (levanta o parceiro caído). */
+  magia?: boolean;
   /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
   danoDeFora?: readonly { indice: number; dano: number }[];
   /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
@@ -541,6 +573,8 @@ export interface QuadroDaLuta {
   apoios?: ApoioDoParceiro[];
   /** O Bardo daqui subiu a moral do grupo neste passo: o nível novo, pra mandar ao parceiro. */
   moral?: number;
+  /** A Magia Proibida levantou o parceiro: com quantos % da vida máxima (vai pela rede como a Poção de Reviver). */
+  reviver?: number;
 }
 
 // ---------- abrir ----------
@@ -586,8 +620,15 @@ export function abrirLuta(
   });
 
   const companheiros: CompanheiroNaArena[] = [];
+  const heroiNaSala = heroiNaLuta(chegada, formato);
+  const paredes = paredesDaSala(preparada.estado.masmorra.dungeon);
+  let comCorpo = 0;
   preparada.estado.party.forEach((membro, indice) => {
-    if (membro.hp > 0) companheiros.push({ indice, tempo: CADENCIA_DO_COMPANHEIRO / 2 + indice * 10 });
+    if (membro.hp <= 0) return;
+    const c: CompanheiroNaArena = { indice, tempo: CADENCIA_DO_COMPANHEIRO / 2 + indice * 10 };
+    // O lacaio do Necromante entra ao lado do herói (rodada 4b).
+    if (membro.invocado) Object.assign(c, lugarAoLado(heroiNaSala, comCorpo++, formato, paredes));
+    companheiros.push(c);
   });
 
   const arena: Arena = {
@@ -622,6 +663,7 @@ export function abrirLuta(
   if ((memoria.moral?.nivel ?? 0) > 0 || (memoria.moral?.criticos ?? 0) > 0) arena.moral = { ...memoria.moral };
   if ((memoria.recargaDaFe ?? 0) > 0) arena.recargaDaFe = Math.trunc(memoria.recargaDaFe as number);
   if ((memoria.ki ?? 0) > 0) arena.ki = Math.min(REGRAS_DO_MONGE.tetoDoKi, Math.trunc(memoria.ki as number));
+  if ((memoria.recargaDaMagia ?? 0) > 0) arena.recargaDaMagia = Math.trunc(memoria.recargaDaMagia as number);
   return { luta: { estado: preparada.estado, arena, pet, teclado, fim: null, loot: null }, acontecimentos };
 }
 
@@ -643,6 +685,10 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
     if (l.arena.recargaDaFe > 1) l.arena.recargaDaFe -= 1;
     else delete l.arena.recargaDaFe;
   }
+  if (l.arena.recargaDaMagia !== undefined) {
+    if (l.arena.recargaDaMagia > 1) l.arena.recargaDaMagia -= 1;
+    else delete l.arena.recargaDaMagia;
+  }
   if (l.arena.dupla) receberDoParceiro(l, entrada);
   if (l.fim) return fecharPasso(l);
 
@@ -656,6 +702,7 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
   else if (entrada.fe) usarFe(l);
   else if (entrada.revestir) revestir(l);
   else if (entrada.explodir) explodir(l);
+  else if (entrada.magia) usarMagia(l);
   else if (entrada.item) usarItem(l, entrada.item);
 
   if (!l.fim) {
@@ -674,6 +721,7 @@ function fecharPasso(l: Luta): QuadroDaLuta {
   if (l.danos.length > 0) quadro.danos = l.danos;
   if (l.apoios.length > 0) quadro.apoios = l.apoios;
   if (l.moralSubiu !== undefined) quadro.moral = l.moralSubiu;
+  if (l.reviverParceiro !== undefined) quadro.reviver = l.reviverParceiro;
   return quadro;
 }
 
@@ -689,6 +737,7 @@ export function simularLuta(luta: LutaEmTempoReal, entradas: readonly EntradaDaL
   const danos: { indice: number; dano: number }[] = [];
   const apoios: ApoioDoParceiro[] = [];
   let moral: number | undefined;
+  let reviver: number | undefined;
   for (const entrada of entradas) {
     if (atual.fim) break;
     const quadro = passoDaLuta(atual, entrada, rng, now);
@@ -697,11 +746,13 @@ export function simularLuta(luta: LutaEmTempoReal, entradas: readonly EntradaDaL
     if (quadro.danos) danos.push(...quadro.danos);
     if (quadro.apoios) apoios.push(...quadro.apoios);
     if (quadro.moral !== undefined) moral = quadro.moral;
+    if (quadro.reviver !== undefined) reviver = quadro.reviver;
   }
   const quadro: QuadroDaLuta = { luta: atual, acontecimentos };
   if (danos.length > 0) quadro.danos = danos;
   if (apoios.length > 0) quadro.apoios = apoios;
   if (moral !== undefined) quadro.moral = moral;
+  if (reviver !== undefined) quadro.reviver = reviver;
   return quadro;
 }
 
@@ -716,6 +767,8 @@ interface Luta extends LutaEmTempoReal {
   apoios: ApoioDoParceiro[];
   /** A moral que o Bardo daqui subiu neste passo (`QuadroDaLuta.moral`). */
   moralSubiu?: number;
+  /** A Magia Proibida levantou o parceiro neste passo (`QuadroDaLuta.reviver`). */
+  reviverParceiro?: number;
 }
 
 function copiarArena(arena: Arena): Arena {
@@ -742,6 +795,7 @@ function copiarArena(arena: Arena): Arena {
     ...(arena.classe ? { classe: { ...arena.classe } } : {}),
     ...(arena.moral ? { moral: { ...arena.moral } } : {}),
     ...(arena.danosLevados ? { danosLevados: arena.danosLevados.map((d) => ({ ...d })) } : {}),
+    ...(arena.cristais ? { cristais: arena.cristais.map((c) => ({ ...c })) } : {}),
   };
 }
 
@@ -1626,6 +1680,8 @@ export function extrasDaLuta(luta: LutaEmTempoReal): ExtrasDaClasse {
   if ((a.ki ?? 0) > 0) extras.ki = a.ki as number;
   if (a.revestido) extras.revestido = true;
   if (a.canalizando) extras.canalizando = true;
+  if ((a.recargaDaMagia ?? 0) > 0) extras.recargaDaMagia = a.recargaDaMagia as number;
+  if (luta.estado.hero.bloqueioDaMagia) extras.magiaSelada = true;
   return extras;
 }
 
@@ -1635,7 +1691,244 @@ export function memoriaDaLuta(luta: LutaEmTempoReal): MemoriaDaLuta {
   if (luta.arena.moral) memoria.moral = { ...luta.arena.moral };
   if ((luta.arena.recargaDaFe ?? 0) > 0) memoria.recargaDaFe = luta.arena.recargaDaFe as number;
   if ((luta.arena.ki ?? 0) > 0) memoria.ki = luta.arena.ki as number;
+  if ((luta.arena.recargaDaMagia ?? 0) > 0) memoria.recargaDaMagia = luta.arena.recargaDaMagia as number;
   return memoria;
+}
+
+// ---------- o Necromante: os lacaios com corpo e a Magia Proibida (rodada 4b) ----------
+
+/**
+ * Um lugar ao lado de (x, y) pro lacaio número `k` (à esquerda, à direita,
+ * atrás e na diagonal, de volta ao começo), dentro do chão e fora das paredes
+ * de dentro; sem lugar livre, o próprio ponto.
+ */
+export function lugarAoLado(
+  centro: { x: number; y: number },
+  k: number,
+  formato: GeometriaDaSala,
+  paredes: readonly { col: number; row: number }[],
+): { x: number; y: number } {
+  const meia = TILE_UNITS / 2;
+  const passos: readonly (readonly [number, number])[] = [[-1, 0], [1, 0], [0, 1], [-1, 1], [1, 1], [0, -1]];
+  for (let tentativa = 0; tentativa < passos.length; tentativa++) {
+    const [dx, dy] = passos[(k + tentativa) % passos.length] as readonly [number, number];
+    const x = Math.min(Math.max(centro.x + dx * TILE_UNITS, TILE_UNITS + meia), (formato.cols - 1) * TILE_UNITS - meia);
+    const y = Math.min(Math.max(centro.y + dy * TILE_UNITS, TILE_UNITS + meia), (formato.rows - 1) * TILE_UNITS - meia);
+    const col = Math.floor(x / TILE_UNITS);
+    const row = Math.floor(y / TILE_UNITS);
+    if (!paredes.some((casa) => casa.col === col && casa.row === row)) return { x, y };
+  }
+  return { x: centro.x, y: centro.y };
+}
+
+/** O companheiro tem corpo na arena (o lacaio do Necromante). */
+function temCorpo(l: Luta, indice: number): boolean {
+  const c = l.arena.companheiros.find((comp) => comp.indice === indice);
+  return !!c && c.x !== undefined;
+}
+
+/** O lacaio com corpo de pé, pelo índice na equipe; `null`, caído ou sem corpo. */
+function lacaioDePe(l: Luta, indice: number): CompanheiroNaArena | null {
+  const c = l.arena.companheiros.find((comp) => comp.indice === indice);
+  if (!c || c.x === undefined) return null;
+  const membro = masmorra(l).party[indice];
+  return membro && membro.hp > 0 ? c : null;
+}
+
+/** Os lacaios com corpo de pé, na ordem da equipe. */
+function lacaiosComCorpo(l: Luta): CompanheiroNaArena[] {
+  const party = masmorra(l).party;
+  return l.arena.companheiros.filter((c) => c.x !== undefined && (party[c.indice]?.hp ?? 0) > 0);
+}
+
+/**
+ * Com lacaios na sala, o monstro vai atrás de quem estiver mais perto: o
+ * herói (o fantasma não conta), o parceiro de pé ou um lacaio. O Paladino
+ * conta mais perto (`REGRAS_DO_PALADINO.foco`). No empate, o herói, o
+ * parceiro e os lacaios, nessa ordem.
+ */
+function escolherComLacaios(l: Luta, m: MonstroNaArena, parceiro: { x: number; y: number } | null, lacaios: readonly CompanheiroNaArena[]): void {
+  const perto = (100 - REGRAS_DO_PALADINO.foco) * (100 - REGRAS_DO_PALADINO.foco);
+  const distancia = (x: number, y: number): number => (x - m.corpoX) * (x - m.corpoX) + (y - m.corpoY) * (y - m.corpoY);
+  let melhor: 'heroi' | 'parceiro' | number | null = null;
+  let menor = 0;
+  const pesar = (quem: 'heroi' | 'parceiro' | number, valor: number): void => {
+    if (melhor === null || valor < menor) {
+      melhor = quem;
+      menor = valor;
+    }
+  };
+  if (!l.arena.dupla?.fantasma) pesar('heroi', distancia(l.arena.heroi.x, l.arena.heroi.y) * (puxaOsMonstros(masmorra(l).hero) ? perto : 10000));
+  if (parceiro) pesar('parceiro', distancia(parceiro.x, parceiro.y) * (l.arena.dupla?.parceiroPuxa ? perto : 10000));
+  for (const c of lacaios) pesar(c.indice, distancia(c.x as number, c.y as number) * 10000);
+  delete m.noParceiro;
+  delete m.noLacaio;
+  if (melhor === 'parceiro') m.noParceiro = true;
+  else if (typeof melhor === 'number') m.noLacaio = melhor;
+}
+
+/** O golpe do monstro num membro da equipe, como no site; o lacaio no ofensivo leva 10% a menos. */
+function golpeNoMembro(membro: Companion, monstro: CombatMonsterView, forca: number, rng: Rng): { member: Companion; damage: number; defeated: boolean } {
+  const golpe = hitPartyMember(membro, monstro, forca, rng);
+  if (!membro.invocado || estadoDoLacaio(membro) !== 'ofensivo') return golpe;
+  const dano = Math.max(1, golpe.damage - Math.floor((golpe.damage * REGRAS_DO_NECROMANTE.resistenciaNoOfensivo) / 100));
+  const member: Companion = { ...membro, hp: Math.max(0, membro.hp - dano) };
+  return { member, damage: dano, defeated: member.hp <= 0 };
+}
+
+/** O jeito de lutar do lacaio: o da espécie dele. */
+function jeitoDoLacaio(membro: Companion): JeitoDeLutar {
+  const especie = speciesById(especieDoLacaio(membro));
+  return (especie && JEITOS_DE_LUTAR[especie.behavior]) || JEITOS_DE_LUTAR.defensivo;
+}
+
+/** Até onde o lacaio alcança o monstro: quem atira, de longe (a distância do tiro); os outros, colados (uma casa e meia). */
+function alcanceDoLacaio(membro: Companion): number {
+  const jeito = jeitoDoLacaio(membro);
+  return jeito.golpe === 'tiro' ? jeito.distancia : TILE_UNITS + TILE_UNITS / 2;
+}
+
+/**
+ * Em quem o lacaio vai: na retaguarda, o monstro de pé mais perto dele entre
+ * os que estão a até `retaguarda` blocos do dono; no ofensivo, o de pé mais
+ * perto dele em toda a sala. `null`, nenhum.
+ */
+function alvoDoLacaio(l: Luta, c: CompanheiroNaArena, membro: Companion): number | null {
+  const retaguarda = estadoDoLacaio(membro) === 'retaguarda';
+  const doDono = REGRAS_DO_NECROMANTE.retaguarda * TILE_UNITS + TILE_UNITS / 2;
+  const heroi = l.arena.heroi;
+  let melhor: number | null = null;
+  let menor = 0;
+  for (const m of l.arena.monstros) {
+    if (m.fase === 'caido') continue;
+    const lugar = lugarDe(l, m.indice);
+    if (retaguarda && (lugar.x - heroi.x) * (lugar.x - heroi.x) + (lugar.y - heroi.y) * (lugar.y - heroi.y) > doDono * doDono) continue;
+    const distancia = (lugar.x - (c.x as number)) * (lugar.x - (c.x as number)) + (lugar.y - (c.y as number)) * (lugar.y - (c.y as number));
+    if (melhor === null || distancia < menor) {
+      melhor = m.indice;
+      menor = distancia;
+    }
+  }
+  return melhor;
+}
+
+/** O lacaio anda rumo a (x, y), no passo dele, sem sair do chão nem entrar em parede de dentro. */
+function andarLacaio(l: Luta, c: CompanheiroNaArena, x: number, y: number): void {
+  const r = rumo(x - (c.x as number), y - (c.y as number), REGRAS_DO_NECROMANTE.passo);
+  const { cols, rows } = geometria(l);
+  const meia = TILE_UNITS / 2;
+  const nx = Math.min(Math.max((c.x as number) + r.x, TILE_UNITS + meia), (cols - 1) * TILE_UNITS - meia);
+  const ny = Math.min(Math.max((c.y as number) + r.y, TILE_UNITS + meia), (rows - 1) * TILE_UNITS - meia);
+  if (naParede(l, nx, ny)) return;
+  c.x = nx;
+  c.y = ny;
+}
+
+/**
+ * O lacaio com corpo: vai atrás do alvo dele (`alvoDoLacaio`) até o alcance e
+ * bate no tempo dele, como o companheiro do site (na retaguarda, +10%); sem
+ * alvo, volta pra perto do dono.
+ */
+function agirLacaio(l: Luta, c: CompanheiroNaArena, membro: Companion): void {
+  if (c.tempo > 0) c.tempo -= 1;
+  const alvo = alvoDoLacaio(l, c, membro);
+  if (alvo === null) {
+    const heroi = l.arena.heroi;
+    const perto = TILE_UNITS + TILE_UNITS / 2;
+    const dx = heroi.x - (c.x as number);
+    const dy = heroi.y - (c.y as number);
+    if (dx * dx + dy * dy > perto * perto) andarLacaio(l, c, heroi.x, heroi.y);
+    return;
+  }
+  const lugar = lugarDe(l, alvo);
+  const alcance = alcanceDoLacaio(membro);
+  const dx = lugar.x - (c.x as number);
+  const dy = lugar.y - (c.y as number);
+  if (dx * dx + dy * dy > alcance * alcance) {
+    andarLacaio(l, c, lugar.x, lugar.y);
+    return;
+  }
+  if (c.tempo > 0) return;
+  c.tempo = CADENCIA_DO_COMPANHEIRO;
+  const estado = masmorra(l);
+  const acao = partyMemberAct(estado.hero, membro, monstroNo(l, alvo), l.rng);
+  const resultado = acao.outcome;
+  let depois = acao.monster;
+  let dano = resultado.kind === 'miss' ? 0 : resultado.amount;
+  if (resultado.kind !== 'miss' && resultado.kind !== 'healed_hero' && estadoDoLacaio(membro) === 'retaguarda') {
+    const extra = Math.trunc((dano * REGRAS_DO_NECROMANTE.danoNaRetaguarda) / 100);
+    dano += extra;
+    depois = { ...depois, hp: depois.hp - extra };
+  }
+  const ferida = ferirNaArena(l, { ...estado, hero: acao.hero }, alvo, depois as CombatMonster);
+  if (resultado.kind === 'miss') {
+    contar(l, { tipo: 'numero', onde: 'monstro', indice: alvo, texto: 'Errou', tom: 'erro' });
+    return;
+  }
+  if (resultado.kind === 'healed_hero') return;
+  contar(l, numeroNoMonstro(ferida, alvo, `-${dano}`, 'dano'));
+  if (ferida.caiu) abater(l, alvo, monsterView(depois as CombatMonster));
+}
+
+/**
+ * O Necromante invoca um lacaio (o poder Levantar Esqueleto, na luta do
+ * app): 65% da mana máxima, até 3 de pé, com os números do Breno, ao lado
+ * dele. Usar treina o poder, como os outros.
+ */
+function invocarLacaio(l: Luta, poder: { id: string; name: string; icon: string }): void {
+  const estado = masmorra(l);
+  if (esqueletosDePe(estado.party) >= MAX_ESQUELETOS) {
+    contar(l, { tipo: 'aviso', texto: `Seus ${MAX_ESQUELETOS} lacaios já estão de pé` });
+    return;
+  }
+  const custo = custoDoLacaio(estado.hero);
+  if (estado.hero.mp < custo) {
+    contar(l, { tipo: 'aviso', texto: `Mana insuficiente para ${poder.name}` });
+    return;
+  }
+  const lacaio = criarLacaio(estado.hero, estado.party);
+  const heroiPago = { ...estado.hero, mp: estado.hero.mp - custo };
+  const treino = treinarPoder(heroiPago, heroPowers(heroiPago).find((p) => p.id === poder.id) as Parameters<typeof treinarPoder>[1]);
+  if (treino.subiu) {
+    diario(l, [textoDaHabilidade(poder.name, treino.subiu)]);
+    contar(l, { tipo: 'aviso', texto: `⭐ ${poder.name} nível ${treino.subiu}` });
+  }
+  const party = [...estado.party, lacaio];
+  l.estado = { ...estado, hero: treino.hero, party };
+  l.arena.recargaDosPoderes[poder.id] = RECARGA_DO_PODER;
+  const comCorpo = l.arena.companheiros.filter((c) => c.x !== undefined).length;
+  const lugar = lugarAoLado(l.arena.heroi, comCorpo, geometria(l), paredesDaSala(estado.masmorra.dungeon));
+  l.arena.companheiros.push({ indice: party.length - 1, tempo: CADENCIA_DO_COMPANHEIRO / 2, x: lugar.x, y: lugar.y });
+  contar(l, { tipo: 'aviso', texto: `${poder.icon} ${lacaio.name} se ergue` });
+}
+
+/**
+ * A Magia Proibida (o Necromante, uma vez a cada 14 min): com 90% de vida e
+ * de mana, levanta o parceiro caído com 50% (decisões do usuário: só o
+ * parceiro; os 90% são só o requisito). Selada (o Necromante já se levantou
+ * com ela nesta masmorra), não sai.
+ */
+function usarMagia(l: Luta): void {
+  const r = REGRAS_DO_NECROMANTE;
+  const hero = masmorra(l).hero;
+  if (idDaClasse(hero) !== 'necromante' || (l.arena.recargaDaMagia ?? 0) > 0) return;
+  if (hero.bloqueioDaMagia) {
+    contar(l, { tipo: 'aviso', texto: 'A Magia Proibida está selada até zerar a masmorra' });
+    return;
+  }
+  if (!l.arena.dupla?.parceiroCaido) {
+    contar(l, { tipo: 'aviso', texto: 'Ninguém caído pra levantar' });
+    return;
+  }
+  if (hero.hp * 100 < hero.maxHp * r.requisitoDaMagia || hero.mp * 100 < hero.maxMp * r.requisitoDaMagia) {
+    contar(l, { tipo: 'aviso', texto: 'A Magia Proibida pede 90% de vida e de mana' });
+    return;
+  }
+  l.arena.recargaDaMagia = r.recargaDaMagia;
+  l.reviverParceiro = r.levantaCom;
+  const texto = '☠️ Magia Proibida: seu parceiro se levanta!';
+  contar(l, { tipo: 'aviso', texto });
+  diario(l, [texto]);
 }
 
 // ---------- segurar K, o revestimento e a explosão de ki (rodada 4a) ----------
@@ -1795,6 +2088,11 @@ function usarPoder(l: Luta, id: string, forcaDoEvento = 1): void {
   const estado = masmorra(l);
   const poder = heroPowers(estado.hero).find((p) => p.id === id);
   if (!poder || (l.arena.recargaDosPoderes[id] ?? 0) > 0) return;
+  // O Necromante invoca o lacaio do Breno (rodada 4b; só aqui, o site continua com o esqueleto de antes).
+  if (poder.type === 'invocar' && idDaClasse(estado.hero) === 'necromante') {
+    invocarLacaio(l, poder);
+    return;
+  }
   const alvo = alvoAtual(l);
   if (alvo === null) return;
 
@@ -2087,7 +2385,14 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
     const { nome, icone } = PODERES_DO_CHEFE[poder];
     contar(l, { tipo: 'aviso', texto: `${icone} ${monstro.name}: ${nome}!` });
   } else {
-    m.alvo = pickMonsterTarget(masmorra(l).party, l.rng) ?? -1;
+    if (m.noLacaio !== undefined && lacaioDePe(l, m.noLacaio)) {
+      // Foi atrás de um lacaio: o golpe cai nele.
+      m.alvo = m.noLacaio;
+    } else {
+      const escolhido = pickMonsterTarget(masmorra(l).party, l.rng) ?? -1;
+      // O lacaio com corpo só leva o golpe de quem foi atrás dele.
+      m.alvo = escolhido >= 0 && temCorpo(l, escolhido) ? -1 : escolhido;
+    }
     // O Paladino puxa os monstros: parte dos golpes que iam num companheiro vem nele.
     if (m.alvo >= 0 && puxaOsMonstros(masmorra(l).hero) && l.rng() * 100 < REGRAS_DO_PALADINO.foco) m.alvo = -1;
   }
@@ -2149,7 +2454,7 @@ function rugirNaEquipe(l: Luta, m: MonstroNaArena): void {
   const monstro = monstroNo(l, m.indice);
   const party = estado.party.map((membro, indice) => {
     if (membro.hp <= 0) return membro;
-    const golpe = hitPartyMember(membro, monstro, m.forca, l.rng);
+    const golpe = golpeNoMembro(membro, monstro, m.forca, l.rng);
     contar(l, { tipo: 'numero', onde: 'companheiro', indice, texto: `-${golpe.damage}`, tom: 'dano' });
     if (golpe.defeated) diario(l, [`${membro.name} caiu!`]);
     return golpe.member;
@@ -2282,18 +2587,22 @@ function golpeNoCompanheiro(l: Luta, m: MonstroNaArena, alvo: number): void {
     contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: 'Errou', tom: 'erro' });
     return;
   }
-  const golpe = hitPartyMember(membro, monstroNo(l, m.indice), m.forca, l.rng);
+  const golpe = golpeNoMembro(membro, monstroNo(l, m.indice), m.forca, l.rng);
   l.estado = { ...estado, party: estado.party.map((atual, i) => (i === alvo ? golpe.member : atual)) };
   contar(l, { tipo: 'numero', onde: 'companheiro', indice: alvo, texto: `-${golpe.damage}`, tom: 'dano' });
   contar(l, { tipo: 'som', som: 'hit' });
   if (golpe.defeated) diario(l, [`${membro.name} caiu!`]);
 }
 
-/** O companheiro bate no alvo do jogador, no tempo dele. */
+/** O companheiro bate no alvo do jogador, no tempo dele. O lacaio com corpo tem o jeito dele (`agirLacaio`). */
 function agirCompanheiro(l: Luta, c: CompanheiroNaArena): void {
   const estado = masmorra(l);
   const membro = estado.party[c.indice];
   if (!membro || membro.hp <= 0) return;
+  if (c.x !== undefined && c.y !== undefined) {
+    agirLacaio(l, c, membro);
+    return;
+  }
   if (c.tempo > 0) c.tempo -= 1;
   if (c.tempo > 0) return;
   const alvo = alvoAtual(l);
@@ -2398,6 +2707,11 @@ function regenerar(l: Luta): void {
 function abater(l: Luta, indice: number, abatido: CombatMonsterView): void {
   const m = l.arena.monstros[indice];
   if (m) m.fase = 'caido';
+  // Na luta do Necromante, quem cai deixa um cristal no chão (rodada 4b).
+  if (m && idDaClasse(masmorra(l).hero) === 'necromante') {
+    const cristal: CristalNaSala = { x: m.corpoX, y: m.corpoY, especie: abatido.speciesId, nivel: monsterLevel(abatido.floor), ...(abatido.isBoss ? { chefe: true } : {}) };
+    l.arena.cristais = [...(l.arena.cristais ?? []), cristal];
+  }
   // O escolhido caiu: o ataque volta a ir no mais perto.
   if (indice === l.arena.alvo) delete l.arena.escolhido;
   const pago = pagarAbate(masmorra(l), abatido);
@@ -2437,8 +2751,12 @@ function parceiroDePe(l: Luta): { x: number; y: number } | null {
   return dupla.parceiro;
 }
 
-/** Atrás de quem o monstro vai: o parceiro, se foi quem ele escolheu e ainda está de pé; senão o herói daqui. */
+/** Atrás de quem o monstro vai: o lacaio ou o parceiro, se foi quem ele escolheu e ainda está de pé; senão o herói daqui. */
 function presaDe(l: Luta, m: MonstroNaArena): { x: number; y: number } {
+  if (m.noLacaio !== undefined) {
+    const lacaio = lacaioDePe(l, m.noLacaio);
+    if (lacaio) return { x: lacaio.x as number, y: lacaio.y as number };
+  }
   return (m.noParceiro ? parceiroDePe(l) : null) ?? l.arena.heroi;
 }
 
@@ -2450,6 +2768,12 @@ function presaDe(l: Luta, m: MonstroNaArena): { x: number; y: number } {
  */
 function escolherPresa(l: Luta, m: MonstroNaArena): void {
   const parceiro = parceiroDePe(l);
+  const lacaios = lacaiosComCorpo(l);
+  if (lacaios.length > 0) {
+    escolherComLacaios(l, m, parceiro, lacaios);
+    return;
+  }
+  delete m.noLacaio;
   if (!parceiro) {
     delete m.noParceiro;
     return;
@@ -2673,6 +2997,17 @@ export function espelhoDaLuta(luta: LutaEmTempoReal, inteiros: readonly number[]
  * a derrota de sempre. Em dupla ele vira fantasma e a luta segue com o outro.
  */
 function cair(l: Luta): void {
+  // O Necromante com a Magia Proibida liberada se levanta, e ela fica selada até zerar a masmorra (rodada 4b).
+  const quem = masmorra(l).hero;
+  if (idDaClasse(quem) === 'necromante' && !quem.bloqueioDaMagia) {
+    const vida = Math.max(1, Math.trunc((quem.maxHp * REGRAS_DO_NECROMANTE.levantaCom) / 100));
+    l.estado = { ...masmorra(l), hero: { ...quem, hp: vida, bloqueioDaMagia: masmorra(l).masmorra.dungeon } };
+    const texto = '☠️ A Magia Proibida levanta o Necromante! Ela fica selada até zerar a masmorra.';
+    contar(l, { tipo: 'aviso', texto });
+    diario(l, [texto]);
+    contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: `☠️+${vida}`, tom: 'cura' });
+    return;
+  }
   const dupla = l.arena.dupla;
   if (!dupla || !parceiroDePe(l)) {
     perder(l);

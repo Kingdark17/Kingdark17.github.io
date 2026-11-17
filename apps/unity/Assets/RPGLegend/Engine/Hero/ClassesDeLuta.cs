@@ -162,6 +162,9 @@ namespace RPGLegend.Engine
         public bool? Revestido;
         /// <summary>Segurando K neste passo.</summary>
         public bool? Canalizando;
+        /// <summary>Necromante: quanto falta pra Magia Proibida voltar, e se ela está selada.</summary>
+        public double? RecargaDaMagia;
+        public bool? MagiaSelada;
     }
 
     /// <summary>TS: REGRAS_DO_GUERREIRO — colado no alvo, o combo e a resistência pela vida que falta.</summary>
@@ -515,6 +518,10 @@ namespace RPGLegend.Engine
                     break;
                 case "monge":
                     textos.Add("☯️ Ki " + Js.NumberToString(Z(extras.Ki)) + "/" + Js.NumberToString(D.Monge.TetoDoKi) + (extras.Revestido == true ? " · Revestido" : ""));
+                    break;
+                case "necromante":
+                    if (extras.MagiaSelada == true) textos.Add("☠️ Magia selada");
+                    else textos.Add(Z(extras.RecargaDaMagia) > 0 ? "☠️ Magia em " + Tempo(extras.RecargaDaMagia.Value) : "☠️ Magia pronta");
                     break;
                 case "guerreiro":
                 {

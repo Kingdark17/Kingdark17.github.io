@@ -79,6 +79,8 @@ namespace RPGLegend.Game.Jogo
         {
             if (membro.Invocado == true)
             {
+                // O lacaio que o cristal trocou por outra espécie (rodada 4b) fica com o emoji dela.
+                if (membro.Especie != null && membro.Especie != "esqueleto") return new List<string>();
                 var corpo = (costas ? "costas/" : "frente/") + CorpoDoEsqueleto;
                 return Paperdoll.ArteDoMini(corpo) != null ? new List<string> { corpo } : new List<string>();
             }
@@ -126,10 +128,27 @@ namespace RPGLegend.Game.Jogo
             for (int i = 0; i < _quantosSeguem && i < _seguidores.Count; i++)
             {
                 var s = _seguidores[i];
-                var ate = frente - s.Onde;
+                // Na luta, o lacaio com corpo vai onde a arena diz (rodada 4b), e não na fila.
+                bool naArena = _lugarNaLuta.TryGetValue(i, out var naLuta);
+                var ate = (naArena ? naLuta : frente) - s.Onde;
                 float distancia = ate.magnitude;
                 bool andou = false;
-                if (!s.Posto || distancia > SaltoDoSeguidor)
+                if (naArena)
+                {
+                    andou = s.Posto && distancia > 0.5f;
+                    if (andou)
+                    {
+                        if (Mathf.Abs(ate.x) >= Mathf.Abs(ate.y))
+                        {
+                            s.Espelhado = ate.x < 0f;
+                            s.Subindo = false;
+                        }
+                        else s.Subindo = ate.y < 0f;
+                    }
+                    s.Onde = naLuta;
+                    s.Posto = true;
+                }
+                else if (!s.Posto || distancia > SaltoDoSeguidor)
                 {
                     s.Onde = frente;
                     s.Posto = true;

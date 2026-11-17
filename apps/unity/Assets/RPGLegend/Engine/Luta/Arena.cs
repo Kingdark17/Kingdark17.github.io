@@ -51,6 +51,8 @@ namespace RPGLegend.Engine
         public bool? NoParceiro;
         /// <summary>No espelho de quem acompanha: este golpe já acertou o meu herói (a investida não acerta duas vezes).</summary>
         public bool? Acertou;
+        /// <summary>Ele vai atrás de um lacaio do Necromante (o índice na equipe), e o golpe em curso cai nele (rodada 4b).</summary>
+        public double? NoLacaio;
 
         public MonstroNaArena Clone() => (MonstroNaArena)MemberwiseClone();
     }
@@ -100,6 +102,8 @@ namespace RPGLegend.Engine
     {
         public Moral Moral;
         public double? RecargaDaFe;
+        /// <summary>A espera da Magia Proibida do Necromante, em passos.</summary>
+        public double? RecargaDaMagia;
         /// <summary>O ki do Monge que sobrou.</summary>
         public double? Ki;
     }
@@ -162,8 +166,20 @@ namespace RPGLegend.Engine
     {
         public double Indice;
         public double Tempo;
+        /// <summary>O lacaio do Necromante tem corpo na arena (rodada 4b): onde ele está. Null, fora do chão (os recrutas).</summary>
+        public double? X;
+        public double? Y;
 
         public CompanheiroNaArena Clone() => (CompanheiroNaArena)MemberwiseClone();
+    }
+
+    /// <summary>TS: CristalNaSala — o cristal que ficou onde o inimigo caiu, na luta do Necromante: fica até o herói sair da sala.</summary>
+    public sealed class CristalNaSala : CristalDoInimigo
+    {
+        public double X;
+        public double Y;
+
+        public CristalNaSala Clone() => (CristalNaSala)MemberwiseClone();
     }
 
     /// <summary>TS: Tiro — a bola do mágico, voando pela sala.</summary>
@@ -245,6 +261,9 @@ namespace RPGLegend.Engine
         /// <summary>Segurando K: os passos desde o último ponto de mana ou de ki, e se segurou neste passo.</summary>
         public double? Canal;
         public bool? Canalizando;
+        /// <summary>O Necromante (rodada 4b): os cristais dos inimigos que caíram nesta luta, e a espera da Magia Proibida.</summary>
+        public List<CristalNaSala> Cristais;
+        public double? RecargaDaMagia;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -315,6 +334,8 @@ namespace RPGLegend.Engine
         /// <summary>O Monge: apertou o revestimento de ki, ou a explosão de ki.</summary>
         public bool? Revestir;
         public bool? Explodir;
+        /// <summary>O Necromante: apertou a Magia Proibida.</summary>
+        public bool? Magia;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -345,6 +366,8 @@ namespace RPGLegend.Engine
         public List<ApoioDoParceiro> Apoios;
         /// <summary>O Bardo daqui subiu a moral do grupo: o nível novo, pra mandar ao parceiro.</summary>
         public double? Moral;
+        /// <summary>A Magia Proibida levantou o parceiro: com quantos % (vai pela rede como a Poção de Reviver).</summary>
+        public double? Reviver;
     }
 
     /// <summary>As tabelas de luta/arena.ts (fixtures/data/luta/arena.json).</summary>
@@ -427,6 +450,8 @@ namespace RPGLegend.Engine
             public List<ApoioDoParceiro> Apoios = new List<ApoioDoParceiro>();
             /// <summary>A moral que o Bardo daqui subiu neste passo.</summary>
             public double? MoralSubiu;
+            /// <summary>A Magia Proibida levantou o parceiro neste passo.</summary>
+            public double? ReviverParceiro;
         }
 
         // ---------- abrir ----------
@@ -468,9 +493,21 @@ namespace RPGLegend.Engine
 
             var companheiros = new List<CompanheiroNaArena>();
             var equipe = ((EstadoNaMasmorra)preparada.Estado).Party ?? new List<Companion>();
+            var heroiNaSala = LutaNoMapa.HeroiNaLuta(chegada, formato);
+            var paredes = ArteDaSala.ParedesDaSala(((EstadoNaMasmorra)preparada.Estado).Masmorra.Dungeon);
+            int comCorpo = 0;
             for (int indice = 0; indice < equipe.Count; indice++)
             {
-                if (equipe[indice].Hp > 0) companheiros.Add(new CompanheiroNaArena { Indice = indice, Tempo = D.CadenciaDoCompanheiro / 2 + indice * 10 });
+                if (equipe[indice].Hp <= 0) continue;
+                var c = new CompanheiroNaArena { Indice = indice, Tempo = D.CadenciaDoCompanheiro / 2 + indice * 10 };
+                // O lacaio do Necromante entra ao lado do herói (rodada 4b).
+                if (equipe[indice].Invocado == true)
+                {
+                    var lugar = LugarAoLado(heroiNaSala.X, heroiNaSala.Y, comCorpo++, formato, paredes);
+                    c.X = lugar.X;
+                    c.Y = lugar.Y;
+                }
+                companheiros.Add(c);
             }
 
             var arena = new Arena
@@ -511,6 +548,7 @@ namespace RPGLegend.Engine
                 if ((memoria.Moral?.Nivel ?? 0) > 0 || (memoria.Moral?.Criticos ?? 0) > 0) arena.Moral = memoria.Moral.Clone();
                 if ((memoria.RecargaDaFe ?? 0) > 0) arena.RecargaDaFe = Math.Truncate(memoria.RecargaDaFe.Value);
                 if ((memoria.Ki ?? 0) > 0) arena.Ki = Math.Min(CD.Monge.TetoDoKi, Math.Truncate(memoria.Ki.Value));
+                if ((memoria.RecargaDaMagia ?? 0) > 0) arena.RecargaDaMagia = Math.Truncate(memoria.RecargaDaMagia.Value);
             }
             return new QuadroDaLuta
             {
@@ -536,6 +574,11 @@ namespace RPGLegend.Engine
                 if (l.Arena.RecargaDaFe.Value > 1) l.Arena.RecargaDaFe -= 1;
                 else l.Arena.RecargaDaFe = null;
             }
+            if (l.Arena.RecargaDaMagia != null)
+            {
+                if (l.Arena.RecargaDaMagia.Value > 1) l.Arena.RecargaDaMagia -= 1;
+                else l.Arena.RecargaDaMagia = null;
+            }
 
             if (l.Arena.Dupla != null) ReceberDoParceiro(l, entrada);
             if (l.Fim != null) return FecharPasso(l);
@@ -549,6 +592,7 @@ namespace RPGLegend.Engine
             else if (entrada.Fe == true) UsarFe(l);
             else if (entrada.Revestir == true) Revestir(l);
             else if (entrada.Explodir == true) Explodir(l);
+            else if (entrada.Magia == true) UsarMagia(l);
             else if (Js.Truthy(entrada.Item)) UsarItem(l, entrada.Item);
 
             if (l.Fim == null)
@@ -569,6 +613,7 @@ namespace RPGLegend.Engine
             Danos = l.Danos.Count > 0 ? l.Danos : null,
             Apoios = l.Apoios.Count > 0 ? l.Apoios : null,
             Moral = l.MoralSubiu,
+            Reviver = l.ReviverParceiro,
         };
 
         /// <summary>TS: simularLuta — vários passos de uma vez, cada um com a sua entrada; para no fim da luta.</summary>
@@ -579,6 +624,7 @@ namespace RPGLegend.Engine
             var danos = new List<DanoNoMonstro>();
             var apoios = new List<ApoioDoParceiro>();
             double? moral = null;
+            double? reviver = null;
             foreach (var entrada in entradas)
             {
                 if (atual.Fim != null) break;
@@ -588,8 +634,9 @@ namespace RPGLegend.Engine
                 if (quadro.Danos != null) danos.AddRange(quadro.Danos);
                 if (quadro.Apoios != null) apoios.AddRange(quadro.Apoios);
                 if (quadro.Moral != null) moral = quadro.Moral;
+                if (quadro.Reviver != null) reviver = quadro.Reviver;
             }
-            return new QuadroDaLuta { Luta = atual, Acontecimentos = acontecimentos, Danos = danos.Count > 0 ? danos : null, Apoios = apoios.Count > 0 ? apoios : null, Moral = moral };
+            return new QuadroDaLuta { Luta = atual, Acontecimentos = acontecimentos, Danos = danos.Count > 0 ? danos : null, Apoios = apoios.Count > 0 ? apoios : null, Moral = moral, Reviver = reviver };
         }
 
         private static Arena CopiarArena(Arena arena)
@@ -624,7 +671,13 @@ namespace RPGLegend.Engine
                 Revestido = arena.Revestido,
                 Canal = arena.Canal,
                 Canalizando = arena.Canalizando,
+                RecargaDaMagia = arena.RecargaDaMagia,
             };
+            if (arena.Cristais != null)
+            {
+                copia.Cristais = new List<CristalNaSala>(arena.Cristais.Count);
+                foreach (var cristal in arena.Cristais) copia.Cristais.Add(cristal.Clone());
+            }
             if (arena.DanosLevados != null)
             {
                 copia.DanosLevados = new List<DanoLevado>(arena.DanosLevados.Count);
@@ -1575,6 +1628,12 @@ namespace RPGLegend.Engine
                 }
             }
             if (poder == null || (l.Arena.RecargaDosPoderes.TryGet(id, out var falta) ? falta : 0) > 0) return;
+            // O Necromante invoca o lacaio do Breno (rodada 4b; só aqui, o site continua com o esqueleto de antes).
+            if (poder.Type == "invocar" && Catalog.IdDaClasse(estado.Hero.ClassId, estado.Hero.ClassName) == "necromante")
+            {
+                InvocarLacaio(l, poder);
+                return;
+            }
             var alvo = AlvoAtual(l);
             if (alvo == null) return;
 
@@ -1925,7 +1984,17 @@ namespace RPGLegend.Engine
             }
             else
             {
-                m.Alvo = MonsterHit.PickMonsterTarget(Masmorra(l).Party ?? new List<Companion>(), l.Rng) ?? -1;
+                if (m.NoLacaio != null && LacaioDePe(l, m.NoLacaio.Value) != null)
+                {
+                    // Foi atrás de um lacaio: o golpe cai nele.
+                    m.Alvo = m.NoLacaio.Value;
+                }
+                else
+                {
+                    double escolhido = MonsterHit.PickMonsterTarget(Masmorra(l).Party ?? new List<Companion>(), l.Rng) ?? -1;
+                    // O lacaio com corpo só leva o golpe de quem foi atrás dele.
+                    m.Alvo = escolhido >= 0 && TemCorpo(l, escolhido) ? -1 : escolhido;
+                }
                 // O Paladino puxa os monstros: parte dos golpes que iam num companheiro vem nele.
                 if (m.Alvo >= 0 && ClassesDeLuta.PuxaOsMonstros(Masmorra(l).Hero) && l.Rng() * 100 < CD.Paladino.Foco) m.Alvo = -1;
             }
@@ -2003,7 +2072,7 @@ namespace RPGLegend.Engine
                     novaEquipe.Add(membro);
                     continue;
                 }
-                var acerto = MonsterHit.HitPartyMember(membro, monstro, m.Forca, l.Rng);
+                var acerto = GolpeNoMembro(membro, monstro, m.Forca, l.Rng);
                 Contar(l, Numero("companheiro", i, "-" + Js.NumberToString(acerto.Damage), "dano"));
                 if (acerto.Defeated) Diario(l, new[] { Js.Str(membro.Name) + " caiu!" });
                 novaEquipe.Add(acerto.Member);
@@ -2162,7 +2231,7 @@ namespace RPGLegend.Engine
                 Contar(l, Numero("monstro", m.Indice, "Errou", "erro"));
                 return;
             }
-            var acerto = MonsterHit.HitPartyMember(membro, MonstroNo(l, m.Indice), m.Forca, l.Rng);
+            var acerto = GolpeNoMembro(membro, MonstroNo(l, m.Indice), m.Forca, l.Rng);
             var novaEquipe = new List<Companion>(equipe.Count);
             for (int i = 0; i < equipe.Count; i++) novaEquipe.Add(i == indice ? acerto.Member : equipe[i]);
             var comEquipe = estado.Clone();
@@ -2181,6 +2250,11 @@ namespace RPGLegend.Engine
             int i = (int)c.Indice;
             if (i >= equipe.Count || equipe[i].Hp <= 0) return;
             var membro = equipe[i];
+            if (c.X != null && c.Y != null)
+            {
+                AgirLacaio(l, c, membro);
+                return;
+            }
             if (c.Tempo > 0) c.Tempo -= 1;
             if (c.Tempo > 0) return;
             var alvo = AlvoAtual(l);
@@ -2314,6 +2388,15 @@ namespace RPGLegend.Engine
         {
             int i = (int)indice;
             if (i >= 0 && i < l.Arena.Monstros.Count) l.Arena.Monstros[i].Fase = "caido";
+            // Na luta do Necromante, quem cai deixa um cristal no chão (rodada 4b).
+            var quemMatou = Masmorra(l).Hero;
+            if (i >= 0 && i < l.Arena.Monstros.Count && Catalog.IdDaClasse(quemMatou.ClassId, quemMatou.ClassName) == "necromante")
+            {
+                var caido = l.Arena.Monstros[i];
+                var cristais = l.Arena.Cristais != null ? new List<CristalNaSala>(l.Arena.Cristais) : new List<CristalNaSala>();
+                cristais.Add(new CristalNaSala { X = caido.CorpoX, Y = caido.CorpoY, Especie = abatido.SpeciesId, Nivel = Monsters.MonsterLevel(abatido.Floor), Chefe = abatido.IsBoss ? true : (bool?)null });
+                l.Arena.Cristais = cristais;
+            }
             // O escolhido caiu: o ataque volta a ir no mais perto.
             if (indice == l.Arena.Alvo) l.Arena.Escolhido = null;
             var pago = FimDaLuta.PagarAbate(Masmorra(l), abatido);
@@ -2587,6 +2670,8 @@ namespace RPGLegend.Engine
             if ((a.Ki ?? 0) > 0) extras.Ki = a.Ki;
             if (a.Revestido == true) extras.Revestido = true;
             if (a.Canalizando == true) extras.Canalizando = true;
+            if ((a.RecargaDaMagia ?? 0) > 0) extras.RecargaDaMagia = a.RecargaDaMagia;
+            if (luta.Estado.Hero.BloqueioDaMagia != null) extras.MagiaSelada = true;
             return extras;
         }
 
@@ -2597,7 +2682,265 @@ namespace RPGLegend.Engine
             if (luta.Arena.Moral != null) memoria.Moral = luta.Arena.Moral.Clone();
             if ((luta.Arena.RecargaDaFe ?? 0) > 0) memoria.RecargaDaFe = luta.Arena.RecargaDaFe;
             if ((luta.Arena.Ki ?? 0) > 0) memoria.Ki = luta.Arena.Ki;
+            if ((luta.Arena.RecargaDaMagia ?? 0) > 0) memoria.RecargaDaMagia = luta.Arena.RecargaDaMagia;
             return memoria;
+        }
+
+        // ---------- o Necromante: os lacaios com corpo e a Magia Proibida (rodada 4b) ----------
+
+        private static readonly double[][] PassosAoLado =
+        {
+            new double[] { -1, 0 }, new double[] { 1, 0 }, new double[] { 0, 1 }, new double[] { -1, 1 }, new double[] { 1, 1 }, new double[] { 0, -1 },
+        };
+
+        /// <summary>TS: lugarAoLado — um lugar ao lado de (x, y) pro lacaio número k, no chão e fora das paredes de dentro.</summary>
+        public static (double X, double Y) LugarAoLado(double cx, double cy, int k, GeometriaDaSala formato, IReadOnlyList<TileRef> paredes)
+        {
+            double t = RoomWalk.TileUnits;
+            double meia = t / 2;
+            for (int tentativa = 0; tentativa < PassosAoLado.Length; tentativa++)
+            {
+                var passo = PassosAoLado[(k + tentativa) % PassosAoLado.Length];
+                double x = Math.Min(Math.Max(cx + passo[0] * t, t + meia), (formato.Cols - 1) * t - meia);
+                double y = Math.Min(Math.Max(cy + passo[1] * t, t + meia), (formato.Rows - 1) * t - meia);
+                double col = Math.Floor(x / t);
+                double row = Math.Floor(y / t);
+                bool naParede = false;
+                foreach (var casa in paredes)
+                    if (casa.Col == col && casa.Row == row) naParede = true;
+                if (!naParede) return (x, y);
+            }
+            return (cx, cy);
+        }
+
+        private static CompanheiroNaArena CompanheiroDe(Luta l, double indice)
+        {
+            foreach (var comp in l.Arena.Companheiros)
+                if (comp.Indice == indice) return comp;
+            return null;
+        }
+
+        private static bool TemCorpo(Luta l, double indice) => CompanheiroDe(l, indice)?.X != null;
+
+        private static CompanheiroNaArena LacaioDePe(Luta l, double indice)
+        {
+            var c = CompanheiroDe(l, indice);
+            if (c == null || c.X == null) return null;
+            var party = Masmorra(l).Party ?? new List<Companion>();
+            int i = (int)indice;
+            return i >= 0 && i < party.Count && party[i].Hp > 0 ? c : null;
+        }
+
+        private static List<CompanheiroNaArena> LacaiosComCorpo(Luta l)
+        {
+            var party = Masmorra(l).Party ?? new List<Companion>();
+            var lista = new List<CompanheiroNaArena>();
+            foreach (var c in l.Arena.Companheiros)
+            {
+                int i = (int)c.Indice;
+                if (c.X != null && i < party.Count && party[i].Hp > 0) lista.Add(c);
+            }
+            return lista;
+        }
+
+        /// <summary>TS: escolherComLacaios — com lacaios na sala, o monstro vai atrás de quem estiver mais perto.</summary>
+        private static void EscolherComLacaios(Luta l, MonstroNaArena m, PontoNaSala parceiro, List<CompanheiroNaArena> lacaios)
+        {
+            double perto = (100 - CD.Paladino.Foco) * (100 - CD.Paladino.Foco);
+            double Distancia(double x, double y) => (x - m.CorpoX) * (x - m.CorpoX) + (y - m.CorpoY) * (y - m.CorpoY);
+            string melhor = null;
+            double melhorLacaio = -1;
+            double menor = 0;
+            void Pesar(string quem, double lacaio, double valor)
+            {
+                if (melhor == null || valor < menor)
+                {
+                    melhor = quem;
+                    melhorLacaio = lacaio;
+                    menor = valor;
+                }
+            }
+            if (l.Arena.Dupla?.Fantasma != true) Pesar("heroi", -1, Distancia(l.Arena.Heroi.X, l.Arena.Heroi.Y) * (ClassesDeLuta.PuxaOsMonstros(Masmorra(l).Hero) ? perto : 10000));
+            if (parceiro != null) Pesar("parceiro", -1, Distancia(parceiro.X, parceiro.Y) * (l.Arena.Dupla?.ParceiroPuxa == true ? perto : 10000));
+            foreach (var c in lacaios) Pesar("lacaio", c.Indice, Distancia(c.X.Value, c.Y.Value) * 10000);
+            m.NoParceiro = null;
+            m.NoLacaio = null;
+            if (melhor == "parceiro") m.NoParceiro = true;
+            else if (melhor == "lacaio") m.NoLacaio = melhorLacaio;
+        }
+
+        /// <summary>TS: golpeNoMembro — o golpe do monstro num membro da equipe; o lacaio no ofensivo leva 10% a menos.</summary>
+        private static PartyMemberHit GolpeNoMembro(Companion membro, CombatMonsterView monstro, double forca, RngFn rng)
+        {
+            var golpe = MonsterHit.HitPartyMember(membro, monstro, forca, rng);
+            if (membro.Invocado != true || Invocacao.EstadoDoLacaio(membro) != "ofensivo") return golpe;
+            double dano = Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * Invocacao.Necromante.ResistenciaNoOfensivo / 100));
+            var ferido = membro.Clone();
+            ferido.Hp = Js.Max(0, membro.Hp - dano);
+            return new PartyMemberHit { Member = ferido, Damage = dano, Defeated = ferido.Hp <= 0 };
+        }
+
+        private static JeitoDeLutar JeitoDoLacaio(Companion membro)
+        {
+            var especie = MonsterCatalog.SpeciesById(Invocacao.EspecieDoLacaio(membro));
+            return especie != null && D.JeitosDeLutar.TryGet(especie.Behavior, out var jeito) ? jeito : D.JeitosDeLutar.Get("defensivo");
+        }
+
+        private static double AlcanceDoLacaio(Companion membro)
+        {
+            var jeito = JeitoDoLacaio(membro);
+            return jeito.Golpe == "tiro" ? jeito.Distancia : RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+        }
+
+        /// <summary>TS: alvoDoLacaio — na retaguarda, o mais perto entre os que estão perto do dono; no ofensivo, o mais perto na sala.</summary>
+        private static double? AlvoDoLacaio(Luta l, CompanheiroNaArena c, Companion membro)
+        {
+            bool retaguarda = Invocacao.EstadoDoLacaio(membro) == "retaguarda";
+            double doDono = Invocacao.Necromante.Retaguarda * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            var heroi = l.Arena.Heroi;
+            double? melhor = null;
+            double menor = 0;
+            foreach (var m in l.Arena.Monstros)
+            {
+                if (m.Fase == "caido") continue;
+                var lugar = LugarDe(l, m.Indice);
+                if (retaguarda && (lugar.X - heroi.X) * (lugar.X - heroi.X) + (lugar.Y - heroi.Y) * (lugar.Y - heroi.Y) > doDono * doDono) continue;
+                double distancia = (lugar.X - c.X.Value) * (lugar.X - c.X.Value) + (lugar.Y - c.Y.Value) * (lugar.Y - c.Y.Value);
+                if (melhor == null || distancia < menor)
+                {
+                    melhor = m.Indice;
+                    menor = distancia;
+                }
+            }
+            return melhor;
+        }
+
+        private static void AndarLacaio(Luta l, CompanheiroNaArena c, double x, double y)
+        {
+            var r = Rumo(x - c.X.Value, y - c.Y.Value, Invocacao.Necromante.Passo);
+            var g = Geometria(l);
+            double t = RoomWalk.TileUnits;
+            double meia = t / 2;
+            double nx = Math.Min(Math.Max(c.X.Value + r.X, t + meia), (g.Cols - 1) * t - meia);
+            double ny = Math.Min(Math.Max(c.Y.Value + r.Y, t + meia), (g.Rows - 1) * t - meia);
+            if (NaParede(l, nx, ny)) return;
+            c.X = nx;
+            c.Y = ny;
+        }
+
+        /// <summary>TS: agirLacaio — vai atrás do alvo até o alcance e bate no tempo dele (na retaguarda, +10%); sem alvo, volta pro dono.</summary>
+        private static void AgirLacaio(Luta l, CompanheiroNaArena c, Companion membro)
+        {
+            if (c.Tempo > 0) c.Tempo -= 1;
+            var alvo = AlvoDoLacaio(l, c, membro);
+            if (alvo == null)
+            {
+                var heroi = l.Arena.Heroi;
+                double perto = RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+                double hx = heroi.X - c.X.Value, hy = heroi.Y - c.Y.Value;
+                if (hx * hx + hy * hy > perto * perto) AndarLacaio(l, c, heroi.X, heroi.Y);
+                return;
+            }
+            var lugar = LugarDe(l, alvo.Value);
+            double alcance = AlcanceDoLacaio(membro);
+            double dx = lugar.X - c.X.Value, dy = lugar.Y - c.Y.Value;
+            if (dx * dx + dy * dy > alcance * alcance)
+            {
+                AndarLacaio(l, c, lugar.X, lugar.Y);
+                return;
+            }
+            if (c.Tempo > 0) return;
+            c.Tempo = D.CadenciaDoCompanheiro;
+            var estado = Masmorra(l);
+            var acao = Party.PartyMemberAct(estado.Hero, membro, MonstroNo(l, alvo.Value), l.Rng);
+            var resultado = acao.Outcome;
+            var depois = acao.Monster;
+            double dano = resultado.Kind == PartyOutcomeKinds.Miss ? 0 : (resultado.Amount ?? 0);
+            if (resultado.Kind != PartyOutcomeKinds.Miss && resultado.Kind != PartyOutcomeKinds.HealedHero && Invocacao.EstadoDoLacaio(membro) == "retaguarda")
+            {
+                double extra = Math.Truncate(dano * Invocacao.Necromante.DanoNaRetaguarda / 100);
+                dano += extra;
+                depois = depois.Clone();
+                depois.Hp = acao.Monster.Hp - extra;
+            }
+            var comHeroi = estado.Clone();
+            comHeroi.Hero = acao.Hero;
+            var ferida = FerirNaArena(l, comHeroi, alvo.Value, depois);
+            if (resultado.Kind == PartyOutcomeKinds.Miss)
+            {
+                Contar(l, Numero("monstro", alvo.Value, "Errou", "erro"));
+                return;
+            }
+            if (resultado.Kind == PartyOutcomeKinds.HealedHero) return;
+            Contar(l, NumeroNoMonstro(ferida, alvo.Value, "-" + Js.NumberToString(dano), "dano"));
+            if (ferida.Caiu) Abater(l, alvo.Value, Monsters.View(depois));
+        }
+
+        /// <summary>TS: invocarLacaio — o Necromante invoca um lacaio: 65% da mana máxima, até 3 de pé, ao lado dele.</summary>
+        private static void InvocarLacaio(Luta l, PowerDef poder)
+        {
+            var estado = Masmorra(l);
+            var party = estado.Party ?? new List<Companion>();
+            if (Invocacao.EsqueletosDePe(party) >= Invocacao.MaxEsqueletos)
+            {
+                Contar(l, Aviso("Seus " + Js.NumberToString(Invocacao.MaxEsqueletos) + " lacaios já estão de pé"));
+                return;
+            }
+            double custo = Invocacao.CustoDoLacaio(estado.Hero);
+            if (estado.Hero.Mp < custo)
+            {
+                Contar(l, Aviso("Mana insuficiente para " + poder.Name));
+                return;
+            }
+            var lacaio = Invocacao.CriarLacaio(estado.Hero, party);
+            var pago = estado.Hero.Clone();
+            pago.Mp = estado.Hero.Mp - custo;
+            var treino = Treino.TreinarPoder(pago, poder.Id, poder.Type);
+            if (treino.Subiu.HasValue)
+            {
+                Diario(l, new[] { Treino.TextoDaHabilidade(poder.Name, treino.Subiu.Value) });
+                Contar(l, Aviso("⭐ " + poder.Name + " nível " + Js.NumberToString(treino.Subiu.Value)));
+            }
+            var novaEquipe = new List<Companion>(party) { lacaio };
+            var comLacaio = estado.Clone();
+            comLacaio.Hero = treino.Hero;
+            comLacaio.Party = novaEquipe;
+            l.Estado = comLacaio;
+            l.Arena.RecargaDosPoderes.Set(poder.Id, D.RecargaDoPoder);
+            int comCorpo = 0;
+            foreach (var c in l.Arena.Companheiros)
+                if (c.X != null) comCorpo++;
+            var lugar = LugarAoLado(l.Arena.Heroi.X, l.Arena.Heroi.Y, comCorpo, Geometria(l), ArteDaSala.ParedesDaSala(estado.Masmorra.Dungeon));
+            l.Arena.Companheiros.Add(new CompanheiroNaArena { Indice = novaEquipe.Count - 1, Tempo = D.CadenciaDoCompanheiro / 2, X = lugar.X, Y = lugar.Y });
+            Contar(l, Aviso(poder.Icon + " " + lacaio.Name + " se ergue"));
+        }
+
+        /// <summary>TS: usarMagia — a Magia Proibida: com 90% de vida e de mana, levanta o parceiro caído com 50%.</summary>
+        private static void UsarMagia(Luta l)
+        {
+            var r = Invocacao.Necromante;
+            var hero = Masmorra(l).Hero;
+            if (Catalog.IdDaClasse(hero.ClassId, hero.ClassName) != "necromante" || (l.Arena.RecargaDaMagia ?? 0) > 0) return;
+            if (hero.BloqueioDaMagia != null)
+            {
+                Contar(l, Aviso("A Magia Proibida está selada até zerar a masmorra"));
+                return;
+            }
+            if (l.Arena.Dupla?.ParceiroCaido != true)
+            {
+                Contar(l, Aviso("Ninguém caído pra levantar"));
+                return;
+            }
+            if (hero.Hp * 100 < hero.MaxHp * r.RequisitoDaMagia || hero.Mp * 100 < hero.MaxMp * r.RequisitoDaMagia)
+            {
+                Contar(l, Aviso("A Magia Proibida pede 90% de vida e de mana"));
+                return;
+            }
+            l.Arena.RecargaDaMagia = r.RecargaDaMagia;
+            l.ReviverParceiro = r.LevantaCom;
+            const string texto = "☠️ Magia Proibida: seu parceiro se levanta!";
+            Contar(l, Aviso(texto));
+            Diario(l, new[] { texto });
         }
 
         // ---------- segurar K, o revestimento e a explosão de ki (rodada 4a) ----------
@@ -2704,6 +3047,11 @@ namespace RPGLegend.Engine
         /// <summary>Atrás de quem o monstro vai: o parceiro, se foi quem ele escolheu e ainda está de pé; senão o herói daqui.</summary>
         private static (double X, double Y) PresaDe(Luta l, MonstroNaArena m)
         {
+            if (m.NoLacaio != null)
+            {
+                var lacaio = LacaioDePe(l, m.NoLacaio.Value);
+                if (lacaio != null) return (lacaio.X.Value, lacaio.Y.Value);
+            }
             var parceiro = m.NoParceiro == true ? ParceiroDePe(l) : null;
             return parceiro != null ? (parceiro.X, parceiro.Y) : (l.Arena.Heroi.X, l.Arena.Heroi.Y);
         }
@@ -2712,6 +3060,13 @@ namespace RPGLegend.Engine
         private static void EscolherPresa(Luta l, MonstroNaArena m)
         {
             var parceiro = ParceiroDePe(l);
+            var lacaios = LacaiosComCorpo(l);
+            if (lacaios.Count > 0)
+            {
+                EscolherComLacaios(l, m, parceiro, lacaios);
+                return;
+            }
+            m.NoLacaio = null;
             if (parceiro == null)
             {
                 m.NoParceiro = null;
@@ -2980,6 +3335,22 @@ namespace RPGLegend.Engine
         /// </summary>
         private static void Cair(Luta l)
         {
+            // O Necromante com a Magia Proibida liberada se levanta, e ela fica selada até zerar a masmorra (rodada 4b).
+            var quem = Masmorra(l).Hero;
+            if (Catalog.IdDaClasse(quem.ClassId, quem.ClassName) == "necromante" && quem.BloqueioDaMagia == null)
+            {
+                double vida = Math.Max(1, Math.Truncate(quem.MaxHp * Invocacao.Necromante.LevantaCom / 100));
+                var levantado = Masmorra(l).Clone();
+                levantado.Hero = quem.Clone();
+                levantado.Hero.Hp = vida;
+                levantado.Hero.BloqueioDaMagia = levantado.Masmorra.Dungeon;
+                l.Estado = levantado;
+                const string levantou = "☠️ A Magia Proibida levanta o Necromante! Ela fica selada até zerar a masmorra.";
+                Contar(l, Aviso(levantou));
+                Diario(l, new[] { levantou });
+                Contar(l, Numero("heroi", 0, "☠️+" + Js.NumberToString(vida), "cura"));
+                return;
+            }
             var dupla = l.Arena.Dupla;
             if (dupla == null || ParceiroDePe(l) == null)
             {

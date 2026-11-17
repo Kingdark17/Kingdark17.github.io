@@ -839,6 +839,66 @@ for (const cls of ['monge', 'mago', 'necromante']) {
   }
 }
 
+// --- o Necromante na luta do app (rodada 4b) ---
+
+{
+  const LISO: RngSpec = { sequence: [0.99, 0.99] };
+  const atributosDoNecro = atributos({ intelecto: 13 });
+  for (const [nome, hero] of [
+    ['nível baixo', { maxHp: 120, attrs: atributosDoNecro }],
+    ['vida quebrada', { maxHp: 77.5, attrs: atributos({ intelecto: 0 }) }],
+  ] as const) {
+    for (const especie of ['esqueleto', 'goblin', 'elemental_fogo', 'nao_existe', undefined]) {
+      caso(`criarLacaio: ${nome}, ${especie ?? 'sem espécie'}`, 'criarLacaio', { hero, party: [], ...(especie ? { especie } : {}) }, (a) =>
+        E.criarLacaio(a.hero as never, a.party as never, (a as { especie?: string }).especie));
+    }
+  }
+  const dois = [E.criarLacaio({ maxHp: 100, attrs: atributosDoNecro }, []), { ...E.criarLacaio({ maxHp: 100, attrs: atributosDoNecro }, []), name: 'Esqueleto 2' }];
+  caso('criarLacaio: o terceiro numerado', 'criarLacaio', { hero: { maxHp: 100, attrs: atributosDoNecro }, party: dois }, (a) => E.criarLacaio(a.hero as never, a.party as never));
+  for (const maxMp of [0, 1, 99, 100, 157]) caso(`custoDoLacaio: ${maxMp} de mana`, 'custoDoLacaio', { hero: { maxMp } }, (a) => E.custoDoLacaio(a.hero));
+  const comRecruta = [...dois, { ...dois[0], invocado: undefined, name: 'Recruta' }, { ...dois[0], hp: 0, name: 'Caído' }];
+  for (const [nome, indice, cristal, rngSpec, level] of [
+    ['comum', 1, { especie: 'goblin', nivel: 3 }, LISO, 5],
+    ['comum no primeiro', 0, { especie: 'aranha', nivel: 3 }, LISO, 5],
+    ['no recruta', 2, { especie: 'goblin', nivel: 3 }, LISO, 5],
+    ['no caído', 3, { especie: 'goblin', nivel: 3 }, LISO, 5],
+    ['espécie que não existe', 0, { especie: 'nada', nivel: 3 }, LISO, 5],
+    ['chefe acima do nível, falha', 0, { especie: 'orc', nivel: 10, chefe: true }, { sequence: [0.1] }, 11],
+    ['chefe acima do nível, dá', 0, { especie: 'orc', nivel: 10, chefe: true }, { sequence: [0.9] }, 11],
+    ['chefe no mesmo nível', 0, { especie: 'orc', nivel: 10, chefe: true }, LISO, 10],
+  ] as const) {
+    caso(`trocarPeloCristal: ${nome}`, 'trocarPeloCristal', { hero: { level }, party: comRecruta, indice, cristal }, (a, ctx) =>
+      E.trocarPeloCristal(a.hero, a.party as never, a.indice, a.cristal, ctx.rng), { rng: rngSpec });
+  }
+  for (const [indice, estado] of [[0, 'ofensivo'], [1, 'retaguarda'], [2, 'ofensivo'], [9, 'ofensivo']] as const) {
+    caso(`mudarEstadoDoLacaio: ${indice} pro ${estado}`, 'mudarEstadoDoLacaio', { party: comRecruta, indice, estado }, (a) => E.mudarEstadoDoLacaio(a.party as never, a.indice, a.estado));
+  }
+  for (const [nome, hero, masmorra] of [
+    ['a que ele devia', { ...heroi({ classe: 'necromante' }), bloqueioDaMagia: 'caverna' }, 'caverna'],
+    ['outra', { ...heroi({ classe: 'necromante' }), bloqueioDaMagia: 'caverna' }, 'floresta'],
+    ['sem bloqueio', heroi({ classe: 'necromante' }), 'floresta'],
+  ] as const) {
+    caso(`liberarMagia: ${nome}`, 'liberarMagia', { hero, masmorra }, (a) => E.liberarMagia(a.hero as never, a.masmorra));
+  }
+  const geometria = E.geometriaDaSala('floresta');
+  for (const [nome, centro, paredes] of [
+    ['no meio', { x: 4.5 * E.TILE_UNITS, y: 4.5 * E.TILE_UNITS }, []],
+    ['no canto', { x: 1.5 * E.TILE_UNITS, y: 1.5 * E.TILE_UNITS }, []],
+    ['com parede do lado', { x: 2.5 * E.TILE_UNITS, y: 2.5 * E.TILE_UNITS }, [{ col: 1, row: 2 }, { col: 3, row: 2 }]],
+  ] as const) {
+    for (const k of [0, 1, 2, 5]) {
+      caso(`lugarAoLado: ${nome}, ${k}`, 'lugarAoLado', { centro, k, geometria, paredes }, (a) => E.lugarAoLado(a.centro, a.k, a.geometria, a.paredes));
+    }
+  }
+  for (const [nome, extras] of [
+    ['pronta', {}],
+    ['voltando', { recargaDaMagia: 50400 }],
+    ['selada', { magiaSelada: true, recargaDaMagia: 100 }],
+  ] as const) {
+    caso(`textosDaClasse: necromante, magia ${nome}`, 'textosDaClasse', { quem: { classId: 'necromante', hp: 10, maxHp: 10 }, c: {}, extras }, (a) => E.textosDaClasse(a.quem, a.c, a.extras));
+  }
+}
+
 // --- maestria ---
 
 for (const level of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1, 2.5, Number.NaN]) {
@@ -5579,6 +5639,62 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     }
     caso('abrirLuta: com o ki na memória do app', 'abrirLuta', { estado: salaCom([bicho('zumbi')], comArma('monge', null)), chegada: PERTO, memoria: { ki: 450 } }, (a) =>
       E.abrirLuta(a.estado, a.chegada, null, false, null, a.memoria));
+  }
+
+  // O Necromante (rodada 4b): os lacaios com corpo, os cristais e a Magia Proibida.
+  {
+    const T = E.TILE_UNITS;
+    const MEIO = { x: 4.5 * T, y: 4.5 * T };
+    const CANTO: Walker = { x: 1.5 * T, y: 7.5 * T, facing: 'N' };
+    const golpesNo = (n: number, cursor: { x: number; y: number }, toque = 42, ciclo = 60): EntradaDaLuta[] =>
+      parado(n * ciclo).map((e, i) => (i % ciclo === 0 ? { ...e, atacar: true, cursor } : i % ciclo === toque ? { ...e, tocar: true } : e));
+    const necro = (o: Partial<Hero> = {}) => ({ ...comArma('necromante', 'espada'), powerIds: ['levantar_esqueleto'], ...o });
+    const lacaioDe = (hero: Hero, especie?: string, estado: 'retaguarda' | 'ofensivo' = 'retaguarda', nome?: string) => ({
+      ...E.criarLacaio(hero, [], especie),
+      estadoDoLacaio: estado,
+      ...(nome ? { name: nome } : {}),
+    });
+    {
+      const h = necro();
+      simula('necromante invoca o lacaio e luta', abrir({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: h }, 'N'), [{ x: 0, y: 0, poder: 'levantar_esqueleto' }, ...parado(500)], { seed: 870 });
+    }
+    {
+      const h = necro();
+      const longe = abrir({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })], h, { party: [lacaioDe(h, undefined, 'ofensivo')] }) });
+      const parado2 = { ...longe, arena: { ...longe.arena, heroi: CANTO, monstros: longe.arena.monstros.map((m) => ({ ...m, corpoX: 7.5 * T, corpoY: 1.5 * T })) } };
+      simula('lacaio no ofensivo vai atrás do monstro longe', parado2, parado(500), { seed: 871 });
+      const naRetaguarda = { ...parado2, estado: { ...parado2.estado, party: [lacaioDe(h)] } };
+      simula('lacaio na retaguarda fica perto do dono', naRetaguarda, parado(300), { seed: 872 });
+    }
+    {
+      const h = necro();
+      const aberta = E.abrirLuta({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 30 })]), hero: h, party: [lacaioDe(h)] }, CANTO).luta;
+      const colado = { ...aberta, arena: { ...aberta.arena, companheiros: aberta.arena.companheiros.map((c) => ({ ...c, x: MEIO.x, y: MEIO.y + T })) } };
+      simula('o monstro vai atrás do lacaio colado nele', colado, parado(400), { seed: 873 });
+    }
+    {
+      const h = necro();
+      const trio = salaCom([bicho('zumbi', { hp: 2000, maxHp: 2000 }), bicho('goblin', { hp: 2000, maxHp: 2000 }), bicho('aranha', { hp: 2000, maxHp: 2000 })], h, {
+        party: [lacaioDe(h, 'goblin', 'ofensivo', 'Goblin'), lacaioDe(h, 'elemental_fogo', 'ofensivo', 'Elemental de Fogo'), lacaioDe(h, undefined, 'retaguarda', 'Esqueleto')],
+      });
+      simula('três lacaios de espécies diferentes contra o trio', abrir(trio), parado(900), { seed: 874 });
+    }
+    simula('os cristais dos inimigos que caem', abrir({ ...salaCom([bicho('goblin', { hp: 1, maxHp: 1 }), bicho('aranha', { hp: 1, maxHp: 1 })]), hero: necro() }), golpesNo(3, MEIO), { seed: 875 });
+    {
+      const h = necro({ hp: 400, maxHp: 400, mp: 100, maxMp: 100 });
+      const dupla = E.abrirLuta({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: h }, CANTO, null, false, 'anfitriao').luta;
+      const parceiro = { x: 2.5 * T, y: 7.5 * T, caido: true };
+      simula('a Magia Proibida levanta o parceiro', dupla, parado(30).map((e, i) => ({ ...e, parceiro, ...(i === 2 || i === 9 ? { magia: true } : {}) })), { seed: 876 });
+    }
+    simula('o Necromante cai, se levanta com a magia, e cai de novo', abrir(comGradeInteira({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 900 })]), hero: necro({ hp: 30 }) })), parado(900), { seed: 877 });
+    {
+      const h = necro();
+      caso('abrirLuta: com lacaios (o corpo ao lado do herói) e a magia na memória', 'abrirLuta', {
+        estado: salaCom([bicho('zumbi')], h, { party: [lacaioDe(h), { ...lacaioDe(h), hp: 0, name: 'Caído' }, companheiro('guerreiro'), lacaioDe(h, 'goblin')] }),
+        chegada: E.roomArrival('S'),
+        memoria: { recargaDaMagia: 4000 },
+      }, (a) => E.abrirLuta(a.estado, a.chegada, null, false, null, a.memoria));
+    }
   }
 
   // O cajado no PC: as letras saem dos primeiros sorteios da luta, os do aperto; a tecla da última fecha o evento.

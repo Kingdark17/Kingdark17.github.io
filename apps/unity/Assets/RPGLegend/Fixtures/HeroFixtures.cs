@@ -123,6 +123,19 @@ namespace RPGLegend.Tests
             });
             Fn(M, "passosPorPonto", (a, c) => N(ClassesDeLuta.PassosPorPonto(Str(a["tipo"]))));
             Fn(M, "forcaDaExplosao", (a, c) => N(ClassesDeLuta.ForcaDaExplosao(Num(a["ki"]))));
+            Fn(M, "criarLacaio", (a, c) =>
+                W(Invocacao.CriarLacaio(R<Hero>(a["hero"]), R<System.Collections.Generic.List<Companion>>(a["party"]), a["especie"] != null && a["especie"].Type != JTokenType.Null ? Str(a["especie"]) : null)));
+            Fn(M, "custoDoLacaio", (a, c) => N(Invocacao.CustoDoLacaio(R<Hero>(a["hero"]))));
+            Fn(M, "trocarPeloCristal", (a, c) =>
+                W(Invocacao.TrocarPeloCristal(R<Hero>(a["hero"]), R<System.Collections.Generic.List<Companion>>(a["party"]), (int)Num(a["indice"]), R<CristalDoInimigo>(a["cristal"]), c.RngFn)));
+            Fn(M, "mudarEstadoDoLacaio", (a, c) =>
+                W(Invocacao.MudarEstadoDoLacaio(R<System.Collections.Generic.List<Companion>>(a["party"]), (int)Num(a["indice"]), Str(a["estado"]))));
+            Fn(M, "liberarMagia", (a, c) => W(Invocacao.LiberarMagia(R<Hero>(a["hero"]), Str(a["masmorra"]))));
+            Fn(M, "lugarAoLado", (a, c) =>
+            {
+                var lugar = Arenas.LugarAoLado(Num(JsJson.Prop(a["centro"], "x")), Num(JsJson.Prop(a["centro"], "y")), (int)Num(a["k"]), R<GeometriaDaSala>(a["geometria"]), R<System.Collections.Generic.List<TileRef>>(a["paredes"]));
+                return W(new PontoNaSala { X = lugar.X, Y = lugar.Y });
+            });
             Fn(M, "contarParado", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);

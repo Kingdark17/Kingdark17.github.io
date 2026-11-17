@@ -53,6 +53,9 @@ namespace RPGLegend.Game.Jogo
         private VisualElement _botaoK;
         private bool _kNaTela, _segurandoKNaTela, _kiNoArco;
         private Button _botaoRevestir, _botaoExplodir;
+        /// <summary>A Magia Proibida do Necromante (rodada 4b): levanta o parceiro caído.</summary>
+        private Button _botaoMagia;
+        private bool _magiaNoArco;
         private EventoNaTela _eventoNaTela;
         private PalcoDaLuta _palcoDaLuta;
         private Button _botaoDoBicho;
@@ -62,7 +65,7 @@ namespace RPGLegend.Game.Jogo
         // O que a pessoa fez desde o último passo: entra no primeiro passo do quadro.
         private bool _apertou, _soltou, _tocou;
         private string _poderApertado, _itemUsado, _tecla, _mirarAliado;
-        private bool _apertouFe, _apertouRevestir, _apertouExplodir;
+        private bool _apertouFe, _apertouRevestir, _apertouExplodir, _apertouMagia;
         private int? _mirar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
@@ -162,6 +165,7 @@ namespace RPGLegend.Game.Jogo
 
             _botaoRevestir = BotaoDaClasse("☯️", "300", () => _apertouRevestir = true);
             _botaoExplodir = BotaoDaClasse("💥", "KI", () => _apertouExplodir = true);
+            _botaoMagia = BotaoDaClasse("☠️", "MAGIA", () => _apertouMagia = true);
 
             // Segurar K: um botão que vale enquanto o dedo (ou o mouse) estiver nele.
             _botaoK = new VisualElement();
@@ -263,6 +267,7 @@ namespace RPGLegend.Game.Jogo
             {
                 _palcoDaLuta.Esconder();
                 EsquecerEfeitosDaLuta();
+                _sala?.EsquecerLacaiosNaLuta();
                 return;
             }
             // A sala para de andar por conta própria: na luta, o herói dela vai onde a arena diz.
@@ -280,11 +285,14 @@ namespace RPGLegend.Game.Jogo
             {
                 _palcoDaLuta.Esconder();
                 EsquecerEfeitosDaLuta();
+                _sala?.EsquecerLacaiosNaLuta();
                 return;
             }
             EfeitosDaEquipe(_partida.Luta);
             // Na luta a equipe segue o herói pela sala: quem cai some da fila, e o esqueleto novo entra no fim dela.
             _sala?.DefinirSeguidores(_partida.Luta.Estado?.Party);
+            // O lacaio do Necromante tem corpo na arena (rodada 4b): vai onde ela diz.
+            _sala?.PorLacaiosNaLuta(_partida.Luta.Estado?.Party, _partida.Luta.Arena.Companheiros);
             _sala?.MoverNaLuta(_partida.Luta.Arena.Heroi);
             _palcoDaLuta.Mostrar(_partida.Luta, _partida.Geometria);
             EnquadrarASala();
@@ -313,13 +321,14 @@ namespace RPGLegend.Game.Jogo
                 Fe = _apertouFe ? true : (bool?)null,
                 Revestir = _apertouRevestir ? true : (bool?)null,
                 Explodir = _apertouExplodir ? true : (bool?)null,
+                Magia = _apertouMagia ? true : (bool?)null,
                 // Segurar K: a tecla (no PC) ou o botão de segurar.
                 Canalizar = SegurandoK() ? true : (bool?)null,
                 // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
                 Cursor = _palcoDaLuta.CursorNaSala(),
             };
             EntradaDaDupla(entrada);
-            _apertou = _soltou = _tocou = _apertouFe = _apertouRevestir = _apertouExplodir = false;
+            _apertou = _soltou = _tocou = _apertouFe = _apertouRevestir = _apertouExplodir = _apertouMagia = false;
             _poderApertado = null;
             _itemUsado = null;
             _tecla = null;
@@ -338,6 +347,7 @@ namespace RPGLegend.Game.Jogo
             if (teclado.fKey.wasPressedThisFrame && _feNoArco) _apertouFe = true;
             if (teclado.fKey.wasPressedThisFrame && _kiNoArco) _apertouRevestir = true;
             if (teclado.gKey.wasPressedThisFrame && _kiNoArco) _apertouExplodir = true;
+            if (teclado.fKey.wasPressedThisFrame && _magiaNoArco) _apertouMagia = true;
             if (teclado.tabKey.wasPressedThisFrame) _mirar = ProximoAlvo(luta.Arena);
             var digitos = new[] { teclado.digit1Key, teclado.digit2Key, teclado.digit3Key };
             for (int i = 0; i < digitos.Length && i < _botoesDePoder.Count; i++)
@@ -448,6 +458,16 @@ namespace RPGLegend.Game.Jogo
                 _botaoExplodir.style.display = ki ? DisplayStyle.Flex : DisplayStyle.None;
                 PosicionarEmVolta();
             }
+            // A Magia Proibida (o Necromante): apagada se selada, esperando ou sem parceiro caído.
+            bool magia = Catalog.IdDaClasse(hero.ClassId, hero.ClassName) == "necromante";
+            if (magia != _magiaNoArco)
+            {
+                _magiaNoArco = magia;
+                _botaoMagia.style.display = magia ? DisplayStyle.Flex : DisplayStyle.None;
+                PosicionarEmVolta();
+            }
+            if (magia)
+                _botaoMagia.EnableInClassList("sem-mana", hero.BloqueioDaMagia != null || (arena.RecargaDaMagia ?? 0) > 0 || arena.Dupla?.ParceiroCaido != true);
             if (ki)
             {
                 var monge = GameData.ClassesDeLutaTable.Monge;
@@ -505,6 +525,7 @@ namespace RPGLegend.Game.Jogo
                 botoes.Add(_botaoRevestir);
                 botoes.Add(_botaoExplodir);
             }
+            if (_magiaNoArco) botoes.Add(_botaoMagia);
             botoes.Add(_botaoItem);
             // O centro do botão de ataque fica a 54 px do canto de baixo à direita; cada botão em volta tem 62 px.
             bool seis = botoes.Count > AngulosDosBotoesLargo.Length;

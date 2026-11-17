@@ -193,12 +193,59 @@ namespace RPGLegend.Game.Jogo
 
         /// <summary>O ki do Monge que sobrou da última luta (rodada 4a; na memória, como a moral).</summary>
         public double KiGuardado { get; private set; }
+        /// <summary>Quando a Magia Proibida do Necromante volta, no relógio da partida (ms); 0 = pronta (rodada 4b).</summary>
+        private double _magiaVoltaEm;
+        /// <summary>Em dupla: a Magia Proibida levantou o parceiro, com quantos % (vai pelo "r", como a poção).</summary>
+        public double? ReviverPraMandar;
 
-        /// <summary>O que vai pra próxima luta: a moral, quanto falta (em passos) pro Poder da fé voltar e o ki.</summary>
+        /// <summary>O que vai pra próxima luta: a moral, quanto falta (em passos) pro Poder da fé e pra Magia Proibida voltarem, e o ki.</summary>
         private MemoriaDaLuta MemoriaPraLuta()
         {
             double falta = _feVoltaEm > Agora ? Math.Ceiling((_feVoltaEm - Agora) * 60 / 1000) : 0;
-            return new MemoriaDaLuta { Moral = MoralDoGrupo?.Clone(), RecargaDaFe = falta > 0 ? falta : (double?)null, Ki = KiGuardado > 0 ? KiGuardado : (double?)null };
+            double faltaDaMagia = _magiaVoltaEm > Agora ? Math.Ceiling((_magiaVoltaEm - Agora) * 60 / 1000) : 0;
+            return new MemoriaDaLuta
+            {
+                Moral = MoralDoGrupo?.Clone(),
+                RecargaDaFe = falta > 0 ? falta : (double?)null,
+                Ki = KiGuardado > 0 ? KiGuardado : (double?)null,
+                RecargaDaMagia = faltaDaMagia > 0 ? faltaDaMagia : (double?)null,
+            };
+        }
+
+        // ---------- o Necromante fora da luta (rodada 4b) ----------
+
+        private readonly List<CristalNaSala> _cristais = new List<CristalNaSala>();
+        private string _salaDosCristais;
+
+        /// <summary>Os cristais dos inimigos que caíram na última luta, enquanto o herói está na sala dela (fora do save).</summary>
+        public IReadOnlyList<CristalNaSala> CristaisAqui
+        {
+            get
+            {
+                if (_cristais.Count > 0 && (Luta != null || ChaveDaSala != _salaDosCristais)) _cristais.Clear();
+                return _cristais;
+            }
+        }
+
+        /// <summary>Encostou no cristal e escolheu um lacaio (<see cref="Invocacao.TrocarPeloCristal"/>): o texto do que houve.</summary>
+        public string UsarCristal(int cristal, int lacaio)
+        {
+            var cristais = CristaisAqui;
+            if (cristal < 0 || cristal >= cristais.Count) return null;
+            var uso = Invocacao.TrocarPeloCristal(Estado.Hero, Estado.Party ?? new List<Companion>(), lacaio, cristais[cristal], Rng.Default);
+            if (uso.Gasto) _cristais.RemoveAt(cristal);
+            var trocado = Estado.Clone();
+            if (uso.Trocou) trocado.Party = uso.Party;
+            RegistrarMudanca(uso.Trocou ? trocado : Estado, new Aviso("💠", "Cristal", uso.Texto));
+            return uso.Texto;
+        }
+
+        /// <summary>A janela LACAIOS: muda o estado de um lacaio (a retaguarda ou o ofensivo).</summary>
+        public void MudarEstadoDoLacaio(int indice, string estado)
+        {
+            var mudado = Estado.Clone();
+            mudado.Party = Invocacao.MudarEstadoDoLacaio(Estado.Party ?? new List<Companion>(), indice, estado);
+            RegistrarMudanca(mudado, null);
         }
         /// <summary>Como acabou a última luta ("vitoria" ou "derrota"); null enquanto uma corre.</summary>
         public string UltimoFim { get; private set; }
@@ -469,6 +516,7 @@ namespace RPGLegend.Game.Jogo
             if (quadro.Danos != null) DanosPraMandar.AddRange(quadro.Danos);
             if (quadro.Apoios != null) ApoiosPraMandar.AddRange(quadro.Apoios);
             if (quadro.Moral != null) MoralPraMandar = quadro.Moral;
+            if (quadro.Reviver != null) ReviverPraMandar = quadro.Reviver;
             if (quadro.Acontecimentos.Count > 0) NaLuta?.Invoke(quadro.Acontecimentos);
             if (Luta.Fim != null)
             {
@@ -493,6 +541,14 @@ namespace RPGLegend.Game.Jogo
             var memoria = Arenas.MemoriaDaLuta(final);
             MoralDoGrupo = memoria.Moral;
             KiGuardado = memoria.Ki ?? 0;
+            _magiaVoltaEm = (memoria.RecargaDaMagia ?? 0) > 0 ? Agora + memoria.RecargaDaMagia.Value * 1000 / 60 : 0;
+            // Os cristais da luta do Necromante ficam na sala até o herói sair dela.
+            _cristais.Clear();
+            if (final.Arena.Cristais != null && final.Fim == "vitoria")
+            {
+                _cristais.AddRange(final.Arena.Cristais);
+                _salaDosCristais = ChaveDoMapa + ":" + Js.NumberToString(final.Estado.Pos.X) + "," + Js.NumberToString(final.Estado.Pos.Y);
+            }
             _feVoltaEm = (memoria.RecargaDaFe ?? 0) > 0 ? Agora + memoria.RecargaDaFe.Value * 1000 / 60 : 0;
             Aviso aviso;
             if (final.Fim == "derrota")

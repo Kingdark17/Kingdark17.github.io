@@ -72,6 +72,8 @@ namespace RPGLegend.Engine
         public NpcBlessing NpcBlessing;
         /// <summary>Braço ou perna quebrados, veneno e sangramento de sala em sala (<see cref="FerimentosDoHeroi"/>). Ausente: inteiro.</summary>
         public Ferimentos Ferimentos;
+        /// <summary>O Necromante que a Magia Proibida levantou (rodada 4b): a masmorra a zerar pra ter a magia de volta. Null, liberada.</summary>
+        public string BloqueioDaMagia;
         /// <summary>O progresso de cada atributo rumo ao próximo ponto, em XP de treino (<see cref="RPGLegend.Engine.Treino"/>).</summary>
         public OrderedMap<double> Treino;
         /// <summary>Os usos de cada atributo desde o último abate: o XP do próximo se reparte por eles.</summary>
@@ -180,6 +182,9 @@ namespace RPGLegend.Engine
         public double? CombatsLeft;
         /// <summary>O esqueleto do necromante (<see cref="Invocacao"/>): é da luta, não ocupa vaga e some no fim dela.</summary>
         public bool? Invocado;
+        /// <summary>O lacaio do Necromante na luta do app (rodada 4b): a espécie (o cristal troca; null, o esqueleto) e o estado (null, a retaguarda).</summary>
+        public string Especie;
+        public string EstadoDoLacaio;
 
         [JsExtra] public JsExtras Extra;
 

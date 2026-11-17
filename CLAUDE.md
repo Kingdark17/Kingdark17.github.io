@@ -591,11 +591,33 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   ki, 300 = 1,5×, e os outros o mesmo dano) e empurra 1 bloco. **O ki que
   sobra fica na memória do app** (`MemoriaDaLuta.ki`, como a moral). Com
   três poderes, o arco do Monge abre pra seis botões.
-  Falta, nesta ordem: o Necromante (rodada 4b: lacaios, cristal, estados e
-  Magia Proibida; o
-  Necromante do Breno **substitui** o ajuste de 2026-11-12, e a
-  habilidade dele revive os aliados);
-  estilos e mestres; mercadores secretos e itens novos (a arte das armas
+  Rodada 4b, **o Necromante** (2026-11-17, decidido com o usuário; regras em
+  `combat/invocacao.ts`, `REGRAS_DO_NECROMANTE`): **os números do Breno só
+  no app** — na luta do app o Levantar Esqueleto faz o lacaio com 2× a
+  Inteligência de dano e 2× a vida do herói, por 65% da mana máxima, até 3
+  (`criarLacaio`, `invocarLacaio` na arena); o site continua com o esqueleto
+  de 2026-11-12, e o que já está de pé fica como foi feito. **O lacaio tem
+  corpo na arena** (`CompanheiroNaArena.x/y`; os recrutas continuam fora do
+  chão): na retaguarda (o estado novo) fica perto do dono e ataca quem chega
+  a 3 blocos dele (+10% de dano); no ofensivo vai atrás de qualquer um (+10%
+  de resistência); bate pelo jeito da espécie (quem atira, de longe). Os
+  monstros vão atrás do lacaio que estiver mais perto (`noLacaio`), e o
+  golpe cai nele. A janela LACAIOS (tecla K fora da luta, ou o botão de
+  cima) troca o estado (`estadoDoLacaio` no `Companion`). Na luta do
+  Necromante, quem cai deixa um **cristal** 💠 no chão (`Arena.cristais`),
+  que fica na sala até o herói sair (na `Partida`, fora do save); encostar
+  abre a troca de um lacaio por aquele inimigo, com a mesma vida e o mesmo
+  dano (`trocarPeloCristal`; o do chefe só acima do nível dele e falha 65%).
+  O botão ☠️ **Magia Proibida** (tecla F) levanta o parceiro caído com 50%,
+  pelo "r" da Poção de Reviver, com 90% de vida e de mana (só requisito), uma
+  vez a cada 14 min (memória do app). O Necromante que cai se levanta sozinho
+  com 50% e a magia fica selada até zerar aquela masmorra:
+  **`Hero.bloqueioDaMagia`, no save** (o site só guarda; `liberarMagia` em
+  `limparSala` a devolve). Em dupla, os lacaios de quem acompanha aparecem
+  pro outro (o "p" leva `l`, só desenho), mas os monstros só vão atrás dos
+  de quem conduz. O texto da janela evita "fi" minúsculo: nessa fonte vira
+  outra letra.
+  Falta, nesta ordem: estilos e mestres; mercadores secretos e itens novos (a arte das armas
   novas é o Claude que desenha, no estilo do Breno); o Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila

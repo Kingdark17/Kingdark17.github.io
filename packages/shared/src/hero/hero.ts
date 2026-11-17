@@ -129,6 +129,12 @@ export interface Hero extends HeroCore {
   buffs?: HeroBuffs;
   /** Braço ou perna quebrados, veneno e sangramento de sala em sala (`ferimentos.ts`). Ausente: inteiro. */
   ferimentos?: Ferimentos;
+  /**
+   * O Necromante que caiu e se levantou com a Magia Proibida (rodada 4b, só a
+   * luta do app): a masmorra que ele precisa zerar pra ter a magia de volta.
+   * Ausente, a magia está liberada. O site só guarda.
+   */
+  bloqueioDaMagia?: string;
   /** Bênção de um NPC do mapa: bônus de esquiva que dura N combates inteiros (não turnos) — distinto de `HeroBuffs`, que zera a cada combate. Concedida por `npc-services.js`'s `blessing()`, consumida no início de cada combate. */
   npcBlessing?: { combats: number; dodge: number };
 }
@@ -648,6 +654,13 @@ export interface Companion {
    * equipe — não ocupa vaga de recruta e some quando a luta acaba.
    */
   invocado?: boolean;
+  /**
+   * O lacaio do Necromante na luta do app (rodada 4b, `combat/invocacao.ts`):
+   * a espécie que ele é (o cristal troca; ausente, o esqueleto) e o estado
+   * (ausente, a retaguarda). O site só guarda.
+   */
+  especie?: string;
+  estadoDoLacaio?: 'retaguarda' | 'ofensivo';
 }
 
 /** Por id da classe, não pelo nome — ver a nota em `catalog.ts`. */

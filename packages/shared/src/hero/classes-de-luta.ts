@@ -593,6 +593,9 @@ export interface ExtrasDaClasse {
   revestido?: boolean;
   /** Segurando K neste passo (puxando mana ou juntando ki). */
   canalizando?: boolean;
+  /** Necromante: quanto falta pra Magia Proibida voltar, e se ela está selada até zerar a masmorra. */
+  recargaDaMagia?: number;
+  magiaSelada?: boolean;
 }
 
 /** Passos em segundos, arredondando pra cima; e em "m:ss" a partir de um minuto. */
@@ -624,6 +627,9 @@ function textosSoDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number
       return (extras.semAtacar ?? 0) > 0 ? [`🌿 Ataque em ${tempo(extras.semAtacar as number)}`] : [];
     case 'monge':
       return [`☯️ Ki ${extras.ki ?? 0}/${REGRAS_DO_MONGE.tetoDoKi}${extras.revestido ? ' · Revestido' : ''}`];
+    case 'necromante':
+      if (extras.magiaSelada) return ['☠️ Magia selada'];
+      return [(extras.recargaDaMagia ?? 0) > 0 ? `☠️ Magia em ${tempo(extras.recargaDaMagia as number)}` : '☠️ Magia pronta'];
     case 'guerreiro': {
       const resistencia = resistenciaDaClasse(quem, c);
       const combo = `⚔️ Combo +${c.combo ?? 0}% · ${c.seguidos ?? 0}/${REGRAS_DO_GUERREIRO.criticosDoCombo}`;
