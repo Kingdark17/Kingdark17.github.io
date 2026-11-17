@@ -2141,7 +2141,8 @@
         "alcance": 2,
         "vida": 100,
         "dano": 92,
-        "velocidade": 100
+        "velocidade": 100,
+        "mana": 100
       }
     }
   },
@@ -2299,7 +2300,7 @@
     "expected": {
       "result": {
         "maxHp": 148,
-        "maxMp": 74,
+        "maxMp": 89,
         "dmgFisico": 20,
         "dmgMagico": 30,
         "esquiva": 5,
@@ -2326,7 +2327,8 @@
         "alcance": 7,
         "vida": 80,
         "dano": 100,
-        "velocidade": 100
+        "velocidade": 100,
+        "mana": 120
       }
     }
   },
@@ -2511,7 +2513,8 @@
         "alcance": 1,
         "vida": 100,
         "dano": 110,
-        "velocidade": 130
+        "velocidade": 130,
+        "mana": 100
       }
     }
   },
@@ -2696,7 +2699,8 @@
         "alcance": 5,
         "vida": 80,
         "dano": 92,
-        "velocidade": 120
+        "velocidade": 120,
+        "mana": 100
       }
     }
   },
@@ -2881,7 +2885,8 @@
         "alcance": 1,
         "vida": 100,
         "dano": 100,
-        "velocidade": 80
+        "velocidade": 80,
+        "mana": 100
       }
     }
   },
@@ -3066,7 +3071,8 @@
         "alcance": 12,
         "vida": 100,
         "dano": 92,
-        "velocidade": 110
+        "velocidade": 110,
+        "mana": 100
       }
     }
   },
@@ -3251,7 +3257,8 @@
         "alcance": 2,
         "vida": 130,
         "dano": 85,
-        "velocidade": 60
+        "velocidade": 60,
+        "mana": 100
       }
     }
   },
@@ -3436,7 +3443,8 @@
         "alcance": 7,
         "vida": 80,
         "dano": 85,
-        "velocidade": 100
+        "velocidade": 100,
+        "mana": 100
       }
     }
   },
@@ -3621,7 +3629,8 @@
         "alcance": 2,
         "vida": 100,
         "dano": 100,
-        "velocidade": 100
+        "velocidade": 100,
+        "mana": 100
       }
     }
   },
@@ -3806,7 +3815,8 @@
         "alcance": 1,
         "vida": 100,
         "dano": 100,
-        "velocidade": 100
+        "velocidade": 100,
+        "mana": 100
       }
     }
   },
@@ -3991,7 +4001,8 @@
         "alcance": 5,
         "vida": 80,
         "dano": 85,
-        "velocidade": 120
+        "velocidade": 120,
+        "mana": 100
       }
     }
   },
@@ -4176,7 +4187,8 @@
         "alcance": 4,
         "vida": 100,
         "dano": 100,
-        "velocidade": 100
+        "velocidade": 100,
+        "mana": 100
       }
     }
   },
@@ -4361,7 +4373,8 @@
         "alcance": 1,
         "vida": 100,
         "dano": 100,
-        "velocidade": 100
+        "velocidade": 100,
+        "mana": 100
       }
     }
   },
@@ -4546,7 +4559,8 @@
         "alcance": 1,
         "vida": 100,
         "dano": 100,
-        "velocidade": 100
+        "velocidade": 100,
+        "mana": 100
       }
     }
   },
@@ -23275,6 +23289,1673 @@
     }
   },
   {
+    "name": "oQueCanaliza: guerreiro",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: guerreiro",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de guerreiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de guerreiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de guerreiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de guerreiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de guerreiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "guerreiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: mago",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": "mana"
+    }
+  },
+  {
+    "name": "custoDaMagia: mago",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": 40
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de mago",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de mago",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de mago",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": 92
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de mago",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de mago",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "mago"
+        }
+      }
+    },
+    "expected": {
+      "result": 400
+    }
+  },
+  {
+    "name": "oQueCanaliza: ladino",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: ladino",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de ladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de ladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de ladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de ladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de ladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "ladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: clerigo",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: clerigo",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de clerigo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de clerigo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de clerigo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de clerigo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de clerigo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "clerigo"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: barbaro",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: barbaro",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de barbaro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de barbaro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de barbaro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de barbaro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de barbaro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "barbaro"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: arqueiro",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: arqueiro",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de arqueiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de arqueiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de arqueiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de arqueiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de arqueiro",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "arqueiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: paladino",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: paladino",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de paladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de paladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de paladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de paladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de paladino",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "paladino"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: necromante",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": "mana"
+    }
+  },
+  {
+    "name": "custoDaMagia: necromante",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de necromante",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de necromante",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de necromante",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de necromante",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de necromante",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "necromante"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: druida",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: druida",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de druida",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de druida",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de druida",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de druida",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de druida",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "druida"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: monge",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": "ki"
+    }
+  },
+  {
+    "name": "custoDaMagia: monge",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de monge",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de monge",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de monge",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de monge",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de monge",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "monge"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: bardo",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: bardo",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de bardo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de bardo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de bardo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de bardo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de bardo",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "bardo"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: cacador",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: cacador",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de cacador",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de cacador",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de cacador",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de cacador",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de cacador",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "cacador"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "oQueCanaliza: nenhuma",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "custoDaMagia: nenhuma",
+    "input": {
+      "fn": "custoDaMagia",
+      "args": {
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "manaComAClasse: 0 de nenhuma",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 0,
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "manaComAClasse: 1 de nenhuma",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 1,
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "manaComAClasse: 77 de nenhuma",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 77,
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "manaComAClasse: 100 de nenhuma",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 100,
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "manaComAClasse: 333 de nenhuma",
+    "input": {
+      "fn": "manaComAClasse",
+      "args": {
+        "mana": 333,
+        "quem": {
+          "classId": "nenhuma"
+        }
+      }
+    },
+    "expected": {
+      "result": 333
+    }
+  },
+  {
+    "name": "passosPorPonto: mana",
+    "input": {
+      "fn": "passosPorPonto",
+      "args": {
+        "tipo": "mana"
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "passosPorPonto: ki",
+    "input": {
+      "fn": "passosPorPonto",
+      "args": {
+        "tipo": "ki"
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "forcaDaExplosao: 0 de ki",
+    "input": {
+      "fn": "forcaDaExplosao",
+      "args": {
+        "ki": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "forcaDaExplosao: 1 de ki",
+    "input": {
+      "fn": "forcaDaExplosao",
+      "args": {
+        "ki": 1
+      }
+    },
+    "expected": {
+      "result": 0.01
+    }
+  },
+  {
+    "name": "forcaDaExplosao: 7 de ki",
+    "input": {
+      "fn": "forcaDaExplosao",
+      "args": {
+        "ki": 7
+      }
+    },
+    "expected": {
+      "result": 0.04
+    }
+  },
+  {
+    "name": "forcaDaExplosao: 150 de ki",
+    "input": {
+      "fn": "forcaDaExplosao",
+      "args": {
+        "ki": 150
+      }
+    },
+    "expected": {
+      "result": 0.75
+    }
+  },
+  {
+    "name": "forcaDaExplosao: 299 de ki",
+    "input": {
+      "fn": "forcaDaExplosao",
+      "args": {
+        "ki": 299
+      }
+    },
+    "expected": {
+      "result": 1.5
+    }
+  },
+  {
+    "name": "forcaDaExplosao: 300 de ki",
+    "input": {
+      "fn": "forcaDaExplosao",
+      "args": {
+        "ki": 300
+      }
+    },
+    "expected": {
+      "result": 1.5
+    }
+  },
+  {
+    "name": "forcaDaExplosao: 450 de ki",
+    "input": {
+      "fn": "forcaDaExplosao",
+      "args": {
+        "ki": 450
+      }
+    },
+    "expected": {
+      "result": 1.5
+    }
+  },
+  {
+    "name": "forcaDaExplosao: -5 de ki",
+    "input": {
+      "fn": "forcaDaExplosao",
+      "args": {
+        "ki": -5
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "forcaDaExplosao: 12.7 de ki",
+    "input": {
+      "fn": "forcaDaExplosao",
+      "args": {
+        "ki": 12.7
+      }
+    },
+    "expected": {
+      "result": 0.06
+    }
+  },
+  {
+    "name": "textosDaClasse: monge, nada (4a)",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: monge, juntando (4a)",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 42,
+          "canalizando": true
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 42/300",
+        "🌀 Juntando ki"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: monge, revestido (4a)",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "revestido": true,
+          "moral": 2
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300 · Revestido",
+        "🎵 Moral 2"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: mago, nada (4a)",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: mago, juntando (4a)",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 42,
+          "canalizando": true
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Puxando mana"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: mago, revestido (4a)",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "revestido": true,
+          "moral": 2
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🎵 Moral 2"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: necromante, nada (4a)",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "textosDaClasse: necromante, juntando (4a)",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 42,
+          "canalizando": true
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Puxando mana"
+      ]
+    }
+  },
+  {
+    "name": "textosDaClasse: necromante, revestido (4a)",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "necromante",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "revestido": true,
+          "moral": 2
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🎵 Moral 2"
+      ]
+    }
+  },
+  {
     "name": "masteryBattlesFor: nível 0",
     "input": {
       "fn": "masteryBattlesFor",
@@ -25314,7 +26995,7 @@
           "masteryBattles": 9,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -25326,8 +27007,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         }
       }
@@ -25388,7 +27069,7 @@
           "masteryBattles": 10,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -25400,8 +27081,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "leveledUp": true,
@@ -25468,7 +27149,7 @@
           "masteryBattles": 550,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -25480,8 +27161,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         }
       }
@@ -25542,7 +27223,7 @@
           "masteryBattles": 551,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -25554,8 +27235,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "leveledUp": false,
@@ -26587,7 +28268,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 62,
+            "maxMp": 74,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -26599,8 +28280,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 74,
+          "mp": 74,
           "buffs": {}
         }
       }
@@ -37923,7 +39604,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -37935,8 +39616,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "item": {
@@ -38016,7 +39697,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 84,
+            "maxMp": 101,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -38028,8 +39709,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 84,
-          "mp": 84,
+          "maxMp": 101,
+          "mp": 101,
           "buffs": {}
         },
         "equipped": true
@@ -38267,7 +39948,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 76,
+            "maxMp": 91,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -38279,8 +39960,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 76,
-          "mp": 76,
+          "maxMp": 91,
+          "mp": 91,
           "buffs": {}
         },
         "item": {
@@ -38362,7 +40043,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 84,
+            "maxMp": 101,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -38374,8 +40055,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 84,
-          "mp": 84,
+          "maxMp": 101,
+          "mp": 101,
           "buffs": {}
         },
         "equipped": true
@@ -38449,7 +40130,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 76,
+            "maxMp": 91,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -38461,8 +40142,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 76,
-          "mp": 76,
+          "maxMp": 91,
+          "mp": 91,
           "buffs": {}
         },
         "item": {
@@ -38535,7 +40216,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 62,
+            "maxMp": 74,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -38547,8 +40228,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 62,
-          "mp": 62,
+          "maxMp": 74,
+          "mp": 74,
           "buffs": {}
         },
         "equipped": true
@@ -40099,7 +41780,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -40111,8 +41792,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         }
       }
@@ -40204,7 +41885,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -40216,8 +41897,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         }
       }
@@ -42197,7 +43878,7 @@
         "masteryBattles": 0,
         "derived": {
           "maxHp": 84,
-          "maxMp": 85,
+          "maxMp": 102,
           "dmgFisico": 22,
           "dmgMagico": 39,
           "esquiva": 4,
@@ -42209,8 +43890,8 @@
         },
         "maxHp": 84,
         "hp": 84,
-        "maxMp": 85,
-        "mp": 85
+        "maxMp": 102,
+        "mp": 102
       },
       "rngCalls": 8
     }
@@ -42511,7 +44192,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 92,
-            "maxMp": 80,
+            "maxMp": 96,
             "dmgFisico": 18,
             "dmgMagico": 36,
             "esquiva": 4.5,
@@ -42523,8 +44204,8 @@
           },
           "maxHp": 92,
           "hp": 92,
-          "maxMp": 80,
-          "mp": 80,
+          "maxMp": 96,
+          "mp": 96,
           "classId": "mago"
         },
         "toInventory": null
@@ -42694,7 +44375,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 92,
-            "maxMp": 72,
+            "maxMp": 86,
             "dmgFisico": 18,
             "dmgMagico": 36,
             "esquiva": 4.5,
@@ -42706,8 +44387,8 @@
           },
           "maxHp": 92,
           "hp": 92,
-          "maxMp": 72,
-          "mp": 72,
+          "maxMp": 86,
+          "mp": 86,
           "classId": "mago"
         },
         "toInventory": {
@@ -43089,7 +44770,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 92,
-            "maxMp": 88,
+            "maxMp": 106,
             "dmgFisico": 18,
             "dmgMagico": 36,
             "esquiva": 4.5,
@@ -43101,8 +44782,8 @@
           },
           "maxHp": 92,
           "hp": 92,
-          "maxMp": 88,
-          "mp": 88,
+          "maxMp": 106,
+          "mp": 106,
           "classId": "mago"
         },
         "toInventory": null

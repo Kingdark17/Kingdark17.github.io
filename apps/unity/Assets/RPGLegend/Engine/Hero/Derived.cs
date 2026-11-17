@@ -59,7 +59,7 @@ namespace RPGLegend.Engine
             {
                 // A vida da classe (doc do Breno de 2026-11-15) vale no site e no app.
                 MaxHp = ClassesDeLuta.VidaComAClasse(20 + hero.Level * 5 + a.Constituicao * 10 + EquipmentStat(hero.Equip, "vida", cap), hero.ClassId, hero.ClassName),
-                MaxMp = 10 + hero.Level * 2 + a.Intelecto * 5 + EquipmentStat(hero.Equip, "mana", cap),
+                MaxMp = ClassesDeLuta.ManaComAClasse(10 + hero.Level * 2 + a.Intelecto * 5 + EquipmentStat(hero.Equip, "mana", cap), hero.ClassId, hero.ClassName),
                 DmgFisico = a.Forca * 2,
                 DmgMagico = a.Intelecto * 3,
                 Esquiva = Js.Max(0.0, a.Destreza * 0.5 + eq["esquiva"]),

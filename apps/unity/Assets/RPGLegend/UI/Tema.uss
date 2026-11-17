@@ -1275,6 +1275,24 @@
     opacity: 0.45;
 }
 
+/* Segurar K (rodada 4a): por cima do arco, vale enquanto o dedo estiver nele. */
+.botao-de-segurar {
+    position: absolute;
+    right: 23px;
+    bottom: 275px;
+    width: 62px;
+    height: 62px;
+    border-radius: 31px;
+    border-width: 2px;
+    border-color: rgba(201, 162, 39, 0.75);
+    background-color: rgba(29, 34, 48, 0.9);
+}
+
+.botao-de-segurar.apertado {
+    border-color: var(--gold-bright);
+    background-color: rgba(70, 58, 24, 0.95);
+}
+
 .icone-do-poder {
     position: absolute;
     left: 0;

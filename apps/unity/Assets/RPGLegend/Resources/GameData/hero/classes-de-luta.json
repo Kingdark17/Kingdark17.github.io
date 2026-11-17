@@ -3,80 +3,93 @@
     "alcance": 1,
     "vida": 100,
     "dano": 100,
-    "velocidade": 100
+    "velocidade": 100,
+    "mana": 100
   },
   "CLASSES_DE_LUTA": {
     "arqueiro": {
       "alcance": 12,
       "vida": 100,
       "dano": 92,
-      "velocidade": 110
+      "velocidade": 110,
+      "mana": 100
     },
     "bardo": {
       "alcance": 5,
       "vida": 80,
       "dano": 85,
-      "velocidade": 120
+      "velocidade": 120,
+      "mana": 100
     },
     "necromante": {
       "alcance": 7,
       "vida": 80,
       "dano": 85,
-      "velocidade": 100
+      "velocidade": 100,
+      "mana": 100
     },
     "monge": {
       "alcance": 1,
       "vida": 100,
       "dano": 100,
-      "velocidade": 100
+      "velocidade": 100,
+      "mana": 100
     },
     "guerreiro": {
       "alcance": 2,
       "vida": 100,
       "dano": 92,
-      "velocidade": 100
+      "velocidade": 100,
+      "mana": 100
     },
     "ladino": {
       "alcance": 1,
       "vida": 100,
       "dano": 110,
-      "velocidade": 130
+      "velocidade": 130,
+      "mana": 100
     },
     "barbaro": {
       "alcance": 1,
       "vida": 100,
       "dano": 100,
-      "velocidade": 80
+      "velocidade": 80,
+      "mana": 100
     },
     "druida": {
       "alcance": 2,
       "vida": 100,
       "dano": 100,
-      "velocidade": 100
+      "velocidade": 100,
+      "mana": 100
     },
     "cacador": {
       "alcance": 4,
       "vida": 100,
       "dano": 100,
-      "velocidade": 100
+      "velocidade": 100,
+      "mana": 100
     },
     "clerigo": {
       "alcance": 5,
       "vida": 80,
       "dano": 92,
-      "velocidade": 120
+      "velocidade": 120,
+      "mana": 100
     },
     "paladino": {
       "alcance": 2,
       "vida": 130,
       "dano": 85,
-      "velocidade": 60
+      "velocidade": 60,
+      "mana": 100
     },
     "mago": {
       "alcance": 7,
       "vida": 80,
       "dano": 100,
-      "velocidade": 100
+      "velocidade": 100,
+      "mana": 120
     }
   },
   "ALCANCE_DO_BARBARO": {
@@ -194,5 +207,21 @@
     "turnos": 2,
     "purificacao": 10,
     "semAtacar": 1800
+  },
+  "REGRAS_DE_CANALIZAR": {
+    "manaPorSegundo": 5,
+    "kiPorSegundo": 10
+  },
+  "REGRAS_DO_MONGE": {
+    "tetoDoKi": 300,
+    "revestir": 300,
+    "danoRevestido": 40,
+    "escudoRevestido": 30,
+    "raioDaExplosao": 2,
+    "forcaDaExplosao": 150,
+    "empurraNaExplosao": 1
+  },
+  "REGRAS_DO_MAGO": {
+    "custoDoDisparo": 40
   }
 }

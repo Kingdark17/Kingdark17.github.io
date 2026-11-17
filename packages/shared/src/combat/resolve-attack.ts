@@ -165,6 +165,8 @@ export interface ResolveAttackOptions {
   semPassivaDaClasse?: boolean;
   /** Multiplica o dano no fim (o golpe sagrado do Clérigo num morto-vivo); ausente, 1. Só a arena passa. */
   multiplicadorDoDano?: number;
+  /** O custo do golpe mágico; ausente, o de sempre. O disparo do Mago na arena custa mais (`custoDaMagia`). */
+  custoDaMagia?: number;
 }
 
 export interface ResolveAttackResult {
@@ -263,10 +265,11 @@ export function resolverGolpe(
   const isMage = classById(idDaClasse(hero) ?? '')?.ataquePrincipal === 'magico';
   const magicalAttack = isMage && attackStyle === 'magic';
 
-  if (magicalAttack && hero.mp < MAGIC_ATTACK_COST) {
+  const custo = options.custoDaMagia ?? MAGIC_ATTACK_COST;
+  if (magicalAttack && hero.mp < custo) {
     return { hero, monster, outcome: 'no_mana', magical: true, affinityPct: weaponAffinityPct(hero), mira: leitura, monsterDefeated: false };
   }
-  const heroAfterCost = magicalAttack ? { ...hero, mp: hero.mp - MAGIC_ATTACK_COST } : hero;
+  const heroAfterCost = magicalAttack ? { ...hero, mp: hero.mp - custo } : hero;
 
   const d = heroAfterCost.derived;
   const bonus = equipmentBonus(heroAfterCost.equip);

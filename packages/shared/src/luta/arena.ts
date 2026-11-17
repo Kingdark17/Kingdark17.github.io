@@ -92,18 +92,23 @@ import {
   contarParado,
   criticoDaClasse,
   curaDoApoio,
+  custoDaMagia,
   devolucaoDaClasse,
   duracaoDaFe,
   efeitosDaMoral,
   esfriar,
   esquivaDaClasse,
+  forcaDaExplosao,
   miraDaClasse,
   mortoVivo,
+  oQueCanaliza,
+  passosPorPonto,
   puxaOsMonstros,
   REGRAS_DO_BARBARO,
   REGRAS_DO_BARDO,
   REGRAS_DO_CLERIGO,
   REGRAS_DO_DRUIDA,
+  REGRAS_DO_MONGE,
   REGRAS_DO_PALADINO,
   resistenciaDaClasse,
   type ContadoresDaClasse,
@@ -317,6 +322,8 @@ export interface ApoioDoParceiro {
 export interface MemoriaDaLuta {
   moral?: Moral;
   recargaDaFe?: number;
+  /** O ki do Monge que sobrou (rodada 4a: "o ki é preservado após a batalha se não for utilizado"). */
+  ki?: number;
 }
 
 /** Um monstro como o anfitrião o manda pro espelho. */
@@ -431,6 +438,12 @@ export interface Arena {
   fe?: number;
   /** O dano que o herói daqui levou, com o passo do mundo: a janela de 30 s do Poder da fé (só o Clérigo e a dupla contam). */
   danosLevados?: { passo: number; dano: number }[];
+  /** O ki do Monge (rodada 4a), e se ele está revestido (até o próximo golpe levado). */
+  ki?: number;
+  revestido?: boolean;
+  /** Segurando K: os passos desde o último ponto de mana ou de ki, e se segurou neste passo. */
+  canal?: number;
+  canalizando?: boolean;
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -488,6 +501,11 @@ export interface EntradaDaLuta {
   apoios?: readonly ApoioDoParceiro[];
   /** Em dupla: a moral do grupo, que o Bardo do parceiro subiu. */
   moral?: number;
+  /** Segurando K neste passo: o Mago e o Necromante puxam mana, o Monge junta ki (parado e sem atacar). */
+  canalizar?: boolean;
+  /** O Monge: apertou o revestimento de ki, ou a explosão de ki. */
+  revestir?: boolean;
+  explodir?: boolean;
   /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
   danoDeFora?: readonly { indice: number; dano: number }[];
   /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
@@ -603,6 +621,7 @@ export function abrirLuta(
   }
   if ((memoria.moral?.nivel ?? 0) > 0 || (memoria.moral?.criticos ?? 0) > 0) arena.moral = { ...memoria.moral };
   if ((memoria.recargaDaFe ?? 0) > 0) arena.recargaDaFe = Math.trunc(memoria.recargaDaFe as number);
+  if ((memoria.ki ?? 0) > 0) arena.ki = Math.min(REGRAS_DO_MONGE.tetoDoKi, Math.trunc(memoria.ki as number));
   return { luta: { estado: preparada.estado, arena, pet, teclado, fim: null, loot: null }, acontecimentos };
 }
 
@@ -635,6 +654,8 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
   else if (entrada.atacar && l.arena.recarga <= 0) abrirEvento(l, entrada);
   else if (entrada.poder) pedirPoder(l, entrada.poder);
   else if (entrada.fe) usarFe(l);
+  else if (entrada.revestir) revestir(l);
+  else if (entrada.explodir) explodir(l);
   else if (entrada.item) usarItem(l, entrada.item);
 
   if (!l.fim) {
@@ -1031,10 +1052,12 @@ function moralAqui(l: Luta): EfeitosDaMoral {
   return efeitosDaMoral(l.arena.moral?.nivel ?? 0);
 }
 
-/** O ataque do botão: o da classe primeiro; o mágico sem mana pro golpe de magia cai pro físico. */
+/** O ataque do botão: o da classe primeiro; o mágico sem mana pro golpe de magia cai pro físico (o disparo do Mago custa o da arena). */
 function estiloDoBotao(hero: Hero): AttackStyle {
   const ataques = ataquesDisponiveis(hero);
-  const primeiro = ataques.find((a) => hero.mp >= a.custo) ?? ataques[ataques.length - 1];
+  const daArena = custoDaMagia(hero);
+  const custo = (a: (typeof ataques)[number]): number => (a.estilo === 'magic' && daArena !== undefined ? daArena : a.custo);
+  const primeiro = ataques.find((a) => hero.mp >= custo(a)) ?? ataques[ataques.length - 1];
   return (primeiro as (typeof ataques)[number]).estilo;
 }
 
@@ -1209,11 +1232,13 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
   const bonus =
     bonusDoAtaque(estado.hero, contadores(l), { colado: colado(l, alvo.indice), chefe: !!monstro.isBoss, blocos: blocosAte(l, alvo.indice) }) +
     moral.dano +
-    ((l.arena.reforco ?? 0) > 0 ? REGRAS_DO_BARDO.forca : 0);
+    ((l.arena.reforco ?? 0) > 0 ? REGRAS_DO_BARDO.forca : 0) +
+    (l.arena.revestido ? REGRAS_DO_MONGE.danoRevestido : 0);
   const daClasse = criticoDaClasse(estado.hero);
   const critico = moral.critico > 0 ? (daClasse ?? 1.6) + moral.critico / 100 : daClasse;
   // O golpe sagrado do Clérigo num morto-vivo.
   const sagrado = idDaClasse(estado.hero) === 'clerigo' && estilo === 'magic' && mortoVivo(monstro.speciesId);
+  const custoMagico = custoDaMagia(estado.hero);
   const golpe = resolverGolpe(estado.hero, monstro, dado, lida, estilo, {
     rng: l.rng,
     petCriticoBonus: petBonus(l.pet).critico ?? 0,
@@ -1222,6 +1247,7 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     ...(critico !== undefined ? { multiplicadorDoCritico: critico } : {}),
     ...(classeRefeita(estado.hero) ? { semPassivaDaClasse: true } : {}),
     ...(sagrado ? { multiplicadorDoDano: REGRAS_DO_CLERIGO.mortoVivo } : {}),
+    ...(custoMagico !== undefined ? { custoDaMagia: custoMagico } : {}),
   });
   // O golpe que acerta treina o atributo dele (`treino.ts`).
   const treinado = golpe.outcome === 'hit' ? anotarUso(golpe.hero, atributoDoGolpe(golpe.hero, estilo)) : golpe.hero;
@@ -1597,15 +1623,98 @@ export function extrasDaLuta(luta: LutaEmTempoReal): ExtrasDaClasse {
   if ((a.recargaDaFe ?? 0) > 0) extras.recargaDaFe = a.recargaDaFe as number;
   if ((a.fe ?? 0) > 0) extras.fe = a.fe as number;
   if (a.recarga > RECARGA_DO_ATAQUE) extras.semAtacar = a.recarga;
+  if ((a.ki ?? 0) > 0) extras.ki = a.ki as number;
+  if (a.revestido) extras.revestido = true;
+  if (a.canalizando) extras.canalizando = true;
   return extras;
 }
 
-/** O que a luta deixa pra próxima, na memória do app: a moral do grupo e a recarga do Poder da fé. */
+/** O que a luta deixa pra próxima, na memória do app: a moral do grupo, a recarga do Poder da fé e o ki. */
 export function memoriaDaLuta(luta: LutaEmTempoReal): MemoriaDaLuta {
   const memoria: MemoriaDaLuta = {};
   if (luta.arena.moral) memoria.moral = { ...luta.arena.moral };
   if ((luta.arena.recargaDaFe ?? 0) > 0) memoria.recargaDaFe = luta.arena.recargaDaFe as number;
+  if ((luta.arena.ki ?? 0) > 0) memoria.ki = luta.arena.ki as number;
   return memoria;
+}
+
+// ---------- segurar K, o revestimento e a explosão de ki (rodada 4a) ----------
+
+/**
+ * Segurando K, parado e sem atacar (decisão do usuário: andar ou atacar
+ * solta), o Mago e o Necromante puxam mana e o Monge junta ki, um ponto a
+ * cada `passosPorPonto`. Soltou, o que estava contando zera.
+ */
+function canalizar(l: Luta, entrada: EntradaDaLuta): void {
+  const arena = l.arena;
+  const hero = masmorra(l).hero;
+  const tipo = oQueCanaliza(hero);
+  const parado = Math.trunc(entrada.x) === 0 && Math.trunc(entrada.y) === 0;
+  const agiu = !!(entrada.atacar || entrada.poder || entrada.item || entrada.fe || entrada.revestir || entrada.explodir);
+  if (!tipo || !entrada.canalizar || !parado || agiu || arena.evento || arena.dupla?.fantasma) {
+    delete arena.canal;
+    delete arena.canalizando;
+    return;
+  }
+  arena.canalizando = true;
+  const canal = (arena.canal ?? 0) + 1;
+  if (canal < passosPorPonto(tipo)) {
+    arena.canal = canal;
+    return;
+  }
+  delete arena.canal;
+  if (tipo === 'ki') arena.ki = Math.min(REGRAS_DO_MONGE.tetoDoKi, (arena.ki ?? 0) + 1);
+  else if (hero.mp < hero.maxMp) l.estado = { ...masmorra(l), hero: { ...hero, mp: hero.mp + 1 } };
+}
+
+/** O Monge com o ki cheio se reveste: bate mais forte até o próximo golpe levado. */
+function revestir(l: Luta): void {
+  const r = REGRAS_DO_MONGE;
+  if (idDaClasse(masmorra(l).hero) !== 'monge' || l.arena.revestido || (l.arena.ki ?? 0) < r.revestir) return;
+  const sobra = (l.arena.ki ?? 0) - r.revestir;
+  if (sobra > 0) l.arena.ki = sobra;
+  else delete l.arena.ki;
+  l.arena.revestido = true;
+  contar(l, { tipo: 'aviso', texto: '☯️ Revestido de ki' });
+}
+
+/**
+ * A explosão de ki: gasta todo o ki e bate em quem está a até
+ * `raioDaExplosao` blocos — o mais perto leva o golpe (na força do ki gasto),
+ * os outros o mesmo dano — e empurra todos pra longe dele.
+ */
+function explodir(l: Luta): void {
+  const r = REGRAS_DO_MONGE;
+  const ki = l.arena.ki ?? 0;
+  const hero = masmorra(l).hero;
+  if (idDaClasse(hero) !== 'monge' || ki <= 0) return;
+  delete l.arena.ki;
+  l.arena.recarga = RECARGA_DO_ATAQUE;
+  contar(l, { tipo: 'aviso', texto: '💥 Explosão de ki' });
+  const heroi = { x: l.arena.heroi.x, y: l.arena.heroi.y };
+  const raio = r.raioDaExplosao * TILE_UNITS + TILE_UNITS / 2;
+  const naArea: { m: MonstroNaArena; distancia: number }[] = [];
+  for (const m of l.arena.monstros) {
+    if (m.fase === 'caido') continue;
+    const lugar = lugarDe(l, m.indice);
+    const distancia = (heroi.x - lugar.x) * (heroi.x - lugar.x) + (heroi.y - lugar.y) * (heroi.y - lugar.y);
+    if (distancia <= raio * raio) naArea.push({ m, distancia });
+  }
+  if (naArea.length === 0) return;
+  // O mais perto primeiro; no empate, a ordem da sala.
+  naArea.sort((a, b) => a.distancia - b.distancia || a.m.indice - b.m.indice);
+  const dado = 1 + randomInt(LADOS_DO_DANO, l.rng);
+  const acerto = acertarMonstro(l, (naArea[0] as { m: MonstroNaArena }).m, dado, { acerto: true, forca: forcaDaExplosao(ki), critico: false }, estiloDoBotao(hero));
+  if (!acerto || l.fim) return;
+  for (let k = 1; k < naArea.length; k++) {
+    if (l.fim) return;
+    const m = (naArea[k] as { m: MonstroNaArena }).m;
+    if (m.fase !== 'caido') ferirComDano(l, m.indice, acerto.dano, `💥-${acerto.dano}`);
+  }
+  for (const { m } of naArea) {
+    if (l.fim) return;
+    if (m.fase !== 'caido') empurrar(l, m, heroi, r.empurraNaExplosao);
+  }
 }
 
 /**
@@ -1795,6 +1904,7 @@ function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
     else delete arena.reforco;
   }
   passarAFe(l);
+  canalizar(l, entrada);
   if (arena.recarga > 0) arena.recarga -= 1;
   if (arena.recargaDoItem > 0) arena.recargaDoItem -= 1;
   if (arena.intervalo > 0) arena.intervalo -= 1;
@@ -2099,7 +2209,9 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   }
   // A resistência da classe (a vida que falta no Guerreiro, a fúria, a absorção) e a da moral tiram parte do dano.
   const moral = moralAqui(l);
-  const resistencia = resistenciaDaClasse(estado.hero, c) + moral.resistencia;
+  // O revestimento de ki do Monge segura parte deste golpe, e quebra.
+  const revestido = !!l.arena.revestido;
+  const resistencia = resistenciaDaClasse(estado.hero, c) + moral.resistencia + (revestido ? REGRAS_DO_MONGE.escudoRevestido : 0);
   const dano = resistencia > 0 ? Math.max(1, golpe.damage - Math.floor((golpe.damage * resistencia) / 100)) : golpe.damage;
   const ferido = resistencia > 0 ? { ...golpe.hero, hp: Math.max(0, estado.hero.hp - dano) } : golpe.hero;
   let hero = noEscudo(l, estado.hero.hp, ferido, dano);
@@ -2120,6 +2232,10 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   anotarDanoLevado(l, dano);
   l.estado = gravarMonstro({ ...estado, hero }, indice, golpe.monster);
   contar(l, { tipo: 'som', som: 'hit' });
+  if (revestido) {
+    delete l.arena.revestido;
+    contar(l, { tipo: 'aviso', texto: '☯️ O revestimento se quebra' });
+  }
   if (quebrou) {
     const texto = `🦴 ${monstro.name} quebrou ${nomeDoMembro(quebrou)}!`;
     contar(l, { tipo: 'aviso', texto });

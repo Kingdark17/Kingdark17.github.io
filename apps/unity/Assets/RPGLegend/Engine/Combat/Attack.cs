@@ -76,6 +76,8 @@ namespace RPGLegend.Engine
         public bool SemPassivaDaClasse;
         /// <summary>Multiplica o dano no fim (o golpe sagrado do Clérigo num morto-vivo); ausente, 1. Só a arena passa.</summary>
         public double? MultiplicadorDoDano;
+        /// <summary>O custo do golpe mágico; ausente, o de sempre. O disparo do Mago na arena custa mais.</summary>
+        public double? CustoDaMagia;
     }
 
     /// <summary>
@@ -264,7 +266,8 @@ namespace RPGLegend.Engine
             bool isMage = Catalog.ClassById(IdDaClasse(hero) ?? "")?.AtaquePrincipal == "magico";
             bool magicalAttack = isMage && attackStyle == AttackStyles.Magic;
 
-            if (magicalAttack && hero.Mp < D.MagicAttackCost)
+            double custo = options.CustoDaMagia ?? D.MagicAttackCost;
+            if (magicalAttack && hero.Mp < custo)
             {
                 return new ResolveAttackResult
                 {
@@ -281,7 +284,7 @@ namespace RPGLegend.Engine
             if (magicalAttack)
             {
                 heroAfterCost = hero.Clone();
-                heroAfterCost.Mp = hero.Mp - D.MagicAttackCost;
+                heroAfterCost.Mp = hero.Mp - custo;
             }
 
             var d = heroAfterCost.Derived;

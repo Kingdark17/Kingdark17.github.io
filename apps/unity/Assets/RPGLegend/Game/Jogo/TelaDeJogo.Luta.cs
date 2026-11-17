@@ -14,7 +14,8 @@ namespace RPGLegend.Game.Jogo
     /// fixos de 1/60 s (<see cref="Partida.PassoDaLuta"/>), com o joystick, o teclado e os toques do quadro.
     ///
     /// No PC: as setas (ou WASD) andam com o herói; espaço (ou J) é o botão de ataque — apertar abre o evento, apertar de
-    /// novo toca, soltar solta a carga —, 1, 2 e 3 são os poderes, F é o Poder da fé do Clérigo, Q abre os itens, Tab
+    /// novo toca, soltar solta a carga —, 1, 2 e 3 são os poderes, F é o Poder da fé do Clérigo (no Monge, o
+    /// revestimento de ki; G, a explosão), segurar K puxa mana ou junta ki (parado), Q abre os itens, Tab
     /// troca o alvo, e a escolha do alvo também vai com o mouse (no Bardo, no Clérigo e no Druida, o cursor em cima de
     /// um herói mira nele). O cajado, no PC, pede letras em vez do desenho: U, I, O e P.
     /// </summary>
@@ -34,6 +35,10 @@ namespace RPGLegend.Game.Jogo
         private const float RaioDosBotoesLargo = 150f;
         private static readonly float[] AngulosDosBotoesLargo = { 180f, 156f, 132f, 108f, 84f };
 
+        /// <summary>Com seis (o Monge: três poderes, o revestimento, a explosão e a poção), o arco abre mais.</summary>
+        private const float RaioDosBotoesSeis = 180f;
+        private static readonly float[] AngulosDosBotoesSeis = { 186f, 166f, 146f, 126f, 106f, 86f };
+
         /// <summary>Quantos botões de poder cabem em volta do ataque.</summary>
         private const int PoderesNoArco = 4;
 
@@ -44,6 +49,10 @@ namespace RPGLegend.Game.Jogo
         private Button _botaoFe;
         private VisualElement _esperaDaFe;
         private bool _feNoArco;
+        /// <summary>Segurar K (rodada 4a): o botão de segurar (no celular; no PC também, além da tecla) e os do Monge.</summary>
+        private VisualElement _botaoK;
+        private bool _kNaTela, _segurandoKNaTela, _kiNoArco;
+        private Button _botaoRevestir, _botaoExplodir;
         private EventoNaTela _eventoNaTela;
         private PalcoDaLuta _palcoDaLuta;
         private Button _botaoDoBicho;
@@ -53,7 +62,7 @@ namespace RPGLegend.Game.Jogo
         // O que a pessoa fez desde o último passo: entra no primeiro passo do quadro.
         private bool _apertou, _soltou, _tocou;
         private string _poderApertado, _itemUsado, _tecla, _mirarAliado;
-        private bool _apertouFe;
+        private bool _apertouFe, _apertouRevestir, _apertouExplodir;
         private int? _mirar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
@@ -151,6 +160,41 @@ namespace RPGLegend.Game.Jogo
             ParaNaoAndar(_botaoFe);
             _poderes.Insert(_poderes.IndexOf(_botaoItem), _botaoFe);
 
+            _botaoRevestir = BotaoDaClasse("☯️", "300", () => _apertouRevestir = true);
+            _botaoExplodir = BotaoDaClasse("💥", "KI", () => _apertouExplodir = true);
+
+            // Segurar K: um botão que vale enquanto o dedo (ou o mouse) estiver nele.
+            _botaoK = new VisualElement();
+            _botaoK.AddToClassList("botao-da-luta");
+            _botaoK.AddToClassList("botao-de-segurar");
+            _botaoK.style.display = DisplayStyle.None;
+            var rotuloK = new Label("🌀") { pickingMode = PickingMode.Ignore };
+            rotuloK.AddToClassList("icone-do-poder");
+            _botaoK.Add(rotuloK);
+            var teclaK = new Label("K") { pickingMode = PickingMode.Ignore };
+            teclaK.AddToClassList("custo-do-poder");
+            _botaoK.Add(teclaK);
+            _botaoK.RegisterCallback<PointerDownEvent>(e =>
+            {
+                e.StopPropagation();
+                _botaoK.CapturePointer(e.pointerId);
+                _segurandoKNaTela = true;
+                _botaoK.AddToClassList("apertado");
+            });
+            _botaoK.RegisterCallback<PointerUpEvent>(e =>
+            {
+                e.StopPropagation();
+                if (_botaoK.HasPointerCapture(e.pointerId)) _botaoK.ReleasePointer(e.pointerId);
+                _segurandoKNaTela = false;
+                _botaoK.RemoveFromClassList("apertado");
+            });
+            _botaoK.RegisterCallback<PointerCancelEvent>(_ =>
+            {
+                _segurandoKNaTela = false;
+                _botaoK.RemoveFromClassList("apertado");
+            });
+            cantoDosBotoes.Add(_botaoK);
+
             _botaoAtaque = new VisualElement();
             _botaoAtaque.AddToClassList("botao-de-ataque");
             _iconeDoAtaque = new VisualElement { pickingMode = PickingMode.Ignore };
@@ -181,6 +225,26 @@ namespace RPGLegend.Game.Jogo
             _menuDeItens.AddToClassList("escondido");
             ParaNaoAndar(_menuDeItens);
             _hud.Add(_menuDeItens);
+        }
+
+        /// <summary>Um botão da classe no arco (o revestimento e a explosão do Monge), escondido até a classe pedir.</summary>
+        private Button BotaoDaClasse(string icone, string legenda, Action aoApertar)
+        {
+            var botao = new Button { text = "" };
+            botao.AddToClassList("botao-da-luta");
+            botao.AddToClassList("botao-em-volta");
+            botao.AddToClassList("botao-de-poder");
+            botao.style.display = DisplayStyle.None;
+            var desenho = new Label(icone) { pickingMode = PickingMode.Ignore };
+            desenho.AddToClassList("icone-do-poder");
+            botao.Add(desenho);
+            var texto = new Label(legenda) { pickingMode = PickingMode.Ignore };
+            texto.AddToClassList("custo-do-poder");
+            botao.Add(texto);
+            botao.clicked += aoApertar;
+            ParaNaoAndar(botao);
+            _poderes.Insert(_poderes.IndexOf(_botaoItem), botao);
+            return botao;
         }
 
         /// <summary>Toque num botão da luta não pode virar o joystick do palco.</summary>
@@ -247,11 +311,15 @@ namespace RPGLegend.Game.Jogo
                 Mirar = _mirar,
                 MirarAliado = _mirarAliado,
                 Fe = _apertouFe ? true : (bool?)null,
+                Revestir = _apertouRevestir ? true : (bool?)null,
+                Explodir = _apertouExplodir ? true : (bool?)null,
+                // Segurar K: a tecla (no PC) ou o botão de segurar.
+                Canalizar = SegurandoK() ? true : (bool?)null,
                 // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
                 Cursor = _palcoDaLuta.CursorNaSala(),
             };
             EntradaDaDupla(entrada);
-            _apertou = _soltou = _tocou = _apertouFe = false;
+            _apertou = _soltou = _tocou = _apertouFe = _apertouRevestir = _apertouExplodir = false;
             _poderApertado = null;
             _itemUsado = null;
             _tecla = null;
@@ -268,6 +336,8 @@ namespace RPGLegend.Game.Jogo
             if (teclado.spaceKey.wasReleasedThisFrame || teclado.jKey.wasReleasedThisFrame) _soltou = true;
             if (teclado.qKey.wasPressedThisFrame) AlternarMenuDeItens();
             if (teclado.fKey.wasPressedThisFrame && _feNoArco) _apertouFe = true;
+            if (teclado.fKey.wasPressedThisFrame && _kiNoArco) _apertouRevestir = true;
+            if (teclado.gKey.wasPressedThisFrame && _kiNoArco) _apertouExplodir = true;
             if (teclado.tabKey.wasPressedThisFrame) _mirar = ProximoAlvo(luta.Arena);
             var digitos = new[] { teclado.digit1Key, teclado.digit2Key, teclado.digit3Key };
             for (int i = 0; i < digitos.Length && i < _botoesDePoder.Count; i++)
@@ -360,6 +430,32 @@ namespace RPGLegend.Game.Jogo
             }
             _palcoDaLuta.ApoiaAliados = ClassesDeLuta.ApoiaAliado(hero);
 
+            // Segurar K (o Mago, o Necromante, o Monge) e os botões do ki (o Monge).
+            string canaliza = ClassesDeLuta.OQueCanaliza(hero);
+            bool k = canaliza != null;
+            if (k != _kNaTela)
+            {
+                _kNaTela = k;
+                _botaoK.style.display = k ? DisplayStyle.Flex : DisplayStyle.None;
+                if (!k) _segurandoKNaTela = false;
+            }
+            _botaoK.EnableInClassList("apertado", arena.Canalizando == true);
+            bool ki = canaliza == "ki";
+            if (ki != _kiNoArco)
+            {
+                _kiNoArco = ki;
+                _botaoRevestir.style.display = ki ? DisplayStyle.Flex : DisplayStyle.None;
+                _botaoExplodir.style.display = ki ? DisplayStyle.Flex : DisplayStyle.None;
+                PosicionarEmVolta();
+            }
+            if (ki)
+            {
+                var monge = GameData.ClassesDeLutaTable.Monge;
+                double kiAgora = arena.Ki ?? 0;
+                _botaoRevestir.EnableInClassList("sem-mana", arena.Revestido == true || kiAgora < monge.Revestir);
+                _botaoExplodir.EnableInClassList("sem-mana", kiAgora <= 0);
+            }
+
             DesenharClasse(luta);
 
             // O escudo do vigor (a Encantadora) aparece ao lado da vida enquanto durar.
@@ -404,17 +500,32 @@ namespace RPGLegend.Game.Jogo
             var botoes = new List<VisualElement>();
             foreach (var b in _botoesDePoder) botoes.Add(b.Botao);
             if (_feNoArco) botoes.Add(_botaoFe);
+            if (_kiNoArco)
+            {
+                botoes.Add(_botaoRevestir);
+                botoes.Add(_botaoExplodir);
+            }
             botoes.Add(_botaoItem);
             // O centro do botão de ataque fica a 54 px do canto de baixo à direita; cada botão em volta tem 62 px.
+            bool seis = botoes.Count > AngulosDosBotoesLargo.Length;
             bool largo = botoes.Count > AngulosDosBotoes.Length;
-            var angulos = largo ? AngulosDosBotoesLargo : AngulosDosBotoes;
-            float raio = largo ? RaioDosBotoesLargo : RaioDosBotoes;
+            var angulos = seis ? AngulosDosBotoesSeis : largo ? AngulosDosBotoesLargo : AngulosDosBotoes;
+            float raio = seis ? RaioDosBotoesSeis : largo ? RaioDosBotoesLargo : RaioDosBotoes;
             for (int i = 0; i < botoes.Count && i < angulos.Length; i++)
             {
                 float angulo = angulos[i] * Mathf.Deg2Rad;
                 botoes[i].style.right = 54f - Mathf.Cos(angulo) * raio - 31f;
                 botoes[i].style.bottom = 54f + Mathf.Sin(angulo) * raio - 31f;
             }
+        }
+
+        /// <summary>Segurando K agora: a tecla K (no PC, fora do chat e das janelas) ou o botão de segurar.</summary>
+        private bool SegurandoK()
+        {
+            if (!_kNaTela) return false;
+            if (_segurandoKNaTela) return true;
+            var teclado = Keyboard.current;
+            return teclado != null && _janela == null && !DigitandoNoChat && teclado.kKey.isPressed;
         }
 
         /// <summary>O próximo monstro de pé depois do alvo de agora, dando a volta (o Tab do PC).</summary>

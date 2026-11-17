@@ -100,6 +100,8 @@ namespace RPGLegend.Engine
     {
         public Moral Moral;
         public double? RecargaDaFe;
+        /// <summary>O ki do Monge que sobrou.</summary>
+        public double? Ki;
     }
 
     /// <summary>Um dano levado pelo herói daqui, com o passo do mundo (a janela de 30 s do Poder da fé).</summary>
@@ -237,6 +239,12 @@ namespace RPGLegend.Engine
         public double? Fe;
         /// <summary>O dano que o herói daqui levou, com o passo do mundo (só o Clérigo e a dupla contam).</summary>
         public List<DanoLevado> DanosLevados;
+        /// <summary>O ki do Monge (rodada 4a), e se ele está revestido (até o próximo golpe levado).</summary>
+        public double? Ki;
+        public bool? Revestido;
+        /// <summary>Segurando K: os passos desde o último ponto de mana ou de ki, e se segurou neste passo.</summary>
+        public double? Canal;
+        public bool? Canalizando;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -302,6 +310,11 @@ namespace RPGLegend.Engine
         public List<ApoioDoParceiro> Apoios;
         /// <summary>Em dupla: a moral do grupo, que o Bardo do parceiro subiu.</summary>
         public double? Moral;
+        /// <summary>Segurando K neste passo (parado e sem atacar).</summary>
+        public bool? Canalizar;
+        /// <summary>O Monge: apertou o revestimento de ki, ou a explosão de ki.</summary>
+        public bool? Revestir;
+        public bool? Explodir;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -497,6 +510,7 @@ namespace RPGLegend.Engine
             {
                 if ((memoria.Moral?.Nivel ?? 0) > 0 || (memoria.Moral?.Criticos ?? 0) > 0) arena.Moral = memoria.Moral.Clone();
                 if ((memoria.RecargaDaFe ?? 0) > 0) arena.RecargaDaFe = Math.Truncate(memoria.RecargaDaFe.Value);
+                if ((memoria.Ki ?? 0) > 0) arena.Ki = Math.Min(CD.Monge.TetoDoKi, Math.Truncate(memoria.Ki.Value));
             }
             return new QuadroDaLuta
             {
@@ -533,6 +547,8 @@ namespace RPGLegend.Engine
             else if (entrada.Atacar == true && l.Arena.Recarga <= 0) AbrirEvento(l, entrada);
             else if (Js.Truthy(entrada.Poder)) PedirPoder(l, entrada.Poder);
             else if (entrada.Fe == true) UsarFe(l);
+            else if (entrada.Revestir == true) Revestir(l);
+            else if (entrada.Explodir == true) Explodir(l);
             else if (Js.Truthy(entrada.Item)) UsarItem(l, entrada.Item);
 
             if (l.Fim == null)
@@ -604,6 +620,10 @@ namespace RPGLegend.Engine
                 Reforco = arena.Reforco,
                 RecargaDaFe = arena.RecargaDaFe,
                 Fe = arena.Fe,
+                Ki = arena.Ki,
+                Revestido = arena.Revestido,
+                Canal = arena.Canal,
+                Canalizando = arena.Canalizando,
             };
             if (arena.DanosLevados != null)
             {
@@ -1011,8 +1031,13 @@ namespace RPGLegend.Engine
         private static string EstiloDoBotao(Hero hero)
         {
             var ataques = Attack.AtaquesDisponiveis(hero);
+            // O disparo do Mago custa o da arena.
+            double? daArena = ClassesDeLuta.CustoDaMagia(hero);
             foreach (var a in ataques)
-                if (hero.Mp >= a.Custo) return a.Estilo;
+            {
+                double custo = a.Estilo == AttackStyles.Magic && daArena != null ? daArena.Value : a.Custo;
+                if (hero.Mp >= custo) return a.Estilo;
+            }
             return ataques[ataques.Count - 1].Estilo;
         }
 
@@ -1221,7 +1246,8 @@ namespace RPGLegend.Engine
             double bonus =
                 ClassesDeLuta.BonusDoAtaque(h.ClassId, h.ClassName, h.Equip?.Get("arma")?.TemplateId, Contadores(l), Colado(l, alvo.Indice), monstro.IsBoss, BlocosAte(l, alvo.Indice)) +
                 moral.Dano +
-                ((l.Arena.Reforco ?? 0) > 0 ? CD.Bardo.Forca : 0);
+                ((l.Arena.Reforco ?? 0) > 0 ? CD.Bardo.Forca : 0) +
+                (l.Arena.Revestido == true ? CD.Monge.DanoRevestido : 0);
             double? daClasse = ClassesDeLuta.CriticoDaClasse(h.ClassId, h.ClassName);
             double? critico = moral.Critico > 0 ? (daClasse ?? 1.6) + moral.Critico / 100 : daClasse;
             // O golpe sagrado do Clérigo num morto-vivo.
@@ -1235,6 +1261,7 @@ namespace RPGLegend.Engine
                 MultiplicadorDoCritico = critico,
                 SemPassivaDaClasse = ClassesDeLuta.ClasseRefeita(h),
                 MultiplicadorDoDano = sagrado ? CD.Clerigo.MortoVivo : (double?)null,
+                CustoDaMagia = ClassesDeLuta.CustoDaMagia(h),
             };
             var golpe = Attack.ResolverGolpe(estado.Hero, monstro, dado, lida, estilo, opcoes);
             var comHeroi = estado.Clone();
@@ -1684,6 +1711,7 @@ namespace RPGLegend.Engine
                 else arena.Reforco = null;
             }
             PassarAFe(l);
+            Canalizar(l, entrada);
             if (arena.Recarga > 0) arena.Recarga -= 1;
             if (arena.RecargaDoItem > 0) arena.RecargaDoItem -= 1;
             if (arena.Intervalo > 0) arena.Intervalo -= 1;
@@ -2047,7 +2075,9 @@ namespace RPGLegend.Engine
             }
             // A resistência da classe (a vida que falta no Guerreiro, a fúria, a absorção) e a da moral tiram parte do dano.
             var moral = MoralAqui(l);
-            double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c) + moral.Resistencia;
+            // O revestimento de ki do Monge segura parte deste golpe, e quebra.
+            bool revestido = l.Arena.Revestido == true;
+            double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c) + moral.Resistencia + (revestido ? CD.Monge.EscudoRevestido : 0);
             double dano = resistencia > 0 ? Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * resistencia / 100)) : golpe.Damage;
             var ferido = golpe.Hero;
             if (resistencia > 0)
@@ -2078,6 +2108,11 @@ namespace RPGLegend.Engine
             comHeroi.Hero = hero;
             l.Estado = FimDaLuta.GravarMonstro(comHeroi, indice, golpe.Monster);
             Contar(l, Som("hit"));
+            if (revestido)
+            {
+                l.Arena.Revestido = null;
+                Contar(l, Aviso("☯️ O revestimento se quebra"));
+            }
             if (Js.Truthy(quebrou))
             {
                 string texto = "🦴 " + Js.Str(monstro.Name) + " quebrou " + FerimentosDoHeroi.NomeDoMembro(quebrou) + "!";
@@ -2549,6 +2584,9 @@ namespace RPGLegend.Engine
             if ((a.RecargaDaFe ?? 0) > 0) extras.RecargaDaFe = a.RecargaDaFe;
             if ((a.Fe ?? 0) > 0) extras.Fe = a.Fe;
             if (a.Recarga > D.RecargaDoAtaque) extras.SemAtacar = a.Recarga;
+            if ((a.Ki ?? 0) > 0) extras.Ki = a.Ki;
+            if (a.Revestido == true) extras.Revestido = true;
+            if (a.Canalizando == true) extras.Canalizando = true;
             return extras;
         }
 
@@ -2558,7 +2596,94 @@ namespace RPGLegend.Engine
             var memoria = new MemoriaDaLuta();
             if (luta.Arena.Moral != null) memoria.Moral = luta.Arena.Moral.Clone();
             if ((luta.Arena.RecargaDaFe ?? 0) > 0) memoria.RecargaDaFe = luta.Arena.RecargaDaFe;
+            if ((luta.Arena.Ki ?? 0) > 0) memoria.Ki = luta.Arena.Ki;
             return memoria;
+        }
+
+        // ---------- segurar K, o revestimento e a explosão de ki (rodada 4a) ----------
+
+        /// <summary>TS: canalizar — segurando K, parado e sem atacar: o Mago e o Necromante puxam mana, o Monge junta ki.</summary>
+        private static void Canalizar(Luta l, EntradaDaLuta entrada)
+        {
+            var arena = l.Arena;
+            var hero = Masmorra(l).Hero;
+            string tipo = ClassesDeLuta.OQueCanaliza(hero);
+            bool parado = Math.Truncate(entrada.X) == 0 && Math.Truncate(entrada.Y) == 0;
+            bool agiu = entrada.Atacar == true || Js.Truthy(entrada.Poder) || Js.Truthy(entrada.Item) || entrada.Fe == true || entrada.Revestir == true || entrada.Explodir == true;
+            if (tipo == null || entrada.Canalizar != true || !parado || agiu || arena.Evento != null || arena.Dupla?.Fantasma == true)
+            {
+                arena.Canal = null;
+                arena.Canalizando = null;
+                return;
+            }
+            arena.Canalizando = true;
+            double canal = (arena.Canal ?? 0) + 1;
+            if (canal < ClassesDeLuta.PassosPorPonto(tipo))
+            {
+                arena.Canal = canal;
+                return;
+            }
+            arena.Canal = null;
+            if (tipo == "ki") arena.Ki = Js.Min(CD.Monge.TetoDoKi, (arena.Ki ?? 0) + 1);
+            else if (hero.Mp < hero.MaxMp)
+            {
+                var comMana = Masmorra(l).Clone();
+                comMana.Hero = hero.Clone();
+                comMana.Hero.Mp = hero.Mp + 1;
+                l.Estado = comMana;
+            }
+        }
+
+        /// <summary>TS: revestir — o Monge com o ki cheio se reveste: bate mais forte até o próximo golpe levado.</summary>
+        private static void Revestir(Luta l)
+        {
+            var r = CD.Monge;
+            var h = Masmorra(l).Hero;
+            if (Catalog.IdDaClasse(h.ClassId, h.ClassName) != "monge" || l.Arena.Revestido == true || (l.Arena.Ki ?? 0) < r.Revestir) return;
+            double sobra = (l.Arena.Ki ?? 0) - r.Revestir;
+            l.Arena.Ki = sobra > 0 ? sobra : (double?)null;
+            l.Arena.Revestido = true;
+            Contar(l, Aviso("☯️ Revestido de ki"));
+        }
+
+        /// <summary>TS: explodir — a explosão de ki: gasta todo o ki, bate em quem está perto (o mesmo dano em todos) e empurra.</summary>
+        private static void Explodir(Luta l)
+        {
+            var r = CD.Monge;
+            double ki = l.Arena.Ki ?? 0;
+            var hero = Masmorra(l).Hero;
+            if (Catalog.IdDaClasse(hero.ClassId, hero.ClassName) != "monge" || ki <= 0) return;
+            l.Arena.Ki = null;
+            l.Arena.Recarga = D.RecargaDoAtaque;
+            Contar(l, Aviso("💥 Explosão de ki"));
+            double hx = l.Arena.Heroi.X, hy = l.Arena.Heroi.Y;
+            double raio = r.RaioDaExplosao * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            var naArea = new List<(MonstroNaArena M, double Distancia)>();
+            foreach (var m in l.Arena.Monstros)
+            {
+                if (m.Fase == "caido") continue;
+                var lugar = LugarDe(l, m.Indice);
+                double distancia = (hx - lugar.X) * (hx - lugar.X) + (hy - lugar.Y) * (hy - lugar.Y);
+                if (distancia <= raio * raio) naArea.Add((m, distancia));
+            }
+            if (naArea.Count == 0) return;
+            // O mais perto primeiro; no empate, a ordem da sala.
+            naArea.Sort((a, b) => a.Distancia != b.Distancia ? a.Distancia.CompareTo(b.Distancia) : a.M.Indice.CompareTo(b.M.Indice));
+            double dado = 1 + Rng.RandomInt(Attack.LadosDoDano, l.Rng);
+            var leitura = new LeituraDaMira { Acerto = true, Forca = ClassesDeLuta.ForcaDaExplosao(ki), Critico = false };
+            var acerto = AcertarMonstro(l, naArea[0].M, dado, leitura, EstiloDoBotao(hero));
+            if (acerto == null || l.Fim != null) return;
+            for (int k = 1; k < naArea.Count; k++)
+            {
+                if (l.Fim != null) return;
+                var m = naArea[k].M;
+                if (m.Fase != "caido") FerirComDano(l, m.Indice, acerto.Value, "💥-" + Js.NumberToString(acerto.Value));
+            }
+            foreach (var item in naArea)
+            {
+                if (l.Fim != null) return;
+                if (item.M.Fase != "caido") Empurrar(l, item.M, hx, hy, r.EmpurraNaExplosao);
+            }
         }
 
         // ---------- pra tela ----------

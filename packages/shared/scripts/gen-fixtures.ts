@@ -820,6 +820,25 @@ for (const cls of ['arqueiro', 'bardo', 'clerigo', 'druida', 'mago']) {
   }
 }
 
+// --- segurar K, o Mago e o Monge (rodada 4a) ---
+
+for (const cls of [...E.CLASSES.map((c) => c.id), 'nenhuma']) {
+  caso(`oQueCanaliza: ${cls}`, 'oQueCanaliza', { quem: { classId: cls } }, (a) => E.oQueCanaliza(a.quem));
+  caso(`custoDaMagia: ${cls}`, 'custoDaMagia', { quem: { classId: cls } }, (a) => E.custoDaMagia(a.quem) ?? null);
+  for (const mana of [0, 1, 77, 100, 333]) caso(`manaComAClasse: ${mana} de ${cls}`, 'manaComAClasse', { mana, quem: { classId: cls } }, (a) => E.manaComAClasse(a.mana, a.quem));
+}
+for (const tipo of ['mana', 'ki'] as const) caso(`passosPorPonto: ${tipo}`, 'passosPorPonto', { tipo }, (a) => E.passosPorPonto(a.tipo));
+for (const ki of [0, 1, 7, 150, 299, 300, 450, -5, 12.7]) caso(`forcaDaExplosao: ${ki} de ki`, 'forcaDaExplosao', { ki }, (a) => E.forcaDaExplosao(a.ki));
+for (const cls of ['monge', 'mago', 'necromante']) {
+  for (const [nome, extras] of [
+    ['nada', {}],
+    ['juntando', { ki: 42, canalizando: true }],
+    ['revestido', { revestido: true, moral: 2 }],
+  ] as const) {
+    caso(`textosDaClasse: ${cls}, ${nome} (4a)`, 'textosDaClasse', { quem: { classId: cls, hp: 10, maxHp: 10 }, c: {}, extras }, (a) => E.textosDaClasse(a.quem, a.c, a.extras));
+  }
+}
+
 // --- maestria ---
 
 for (const level of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1, 2.5, Number.NaN]) {
@@ -5525,6 +5544,41 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
         dano: E.danoLevadoNaJanela(a.luta),
       }));
     }
+  }
+
+  // Segurar K, o Mago e o Monge (rodada 4a).
+  {
+    const T = E.TILE_UNITS;
+    const MEIO = { x: 4.5 * T, y: 4.5 * T };
+    const K: EntradaDaLuta = { x: 0, y: 0, canalizar: true };
+    const golpesNo = (n: number, cursor: { x: number; y: number }, toque = 42, ciclo = 60): EntradaDaLuta[] =>
+      parado(n * ciclo).map((e, i) => (i % ciclo === 0 ? { ...e, atacar: true, cursor } : i % ciclo === toque ? { ...e, tocar: true } : e));
+    const mago = (mp: number) => ({ ...comArma('mago', 'espada'), mp });
+    simula('mago segurando K e depois disparando', abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: mago(10) }), [...parado(400).map(() => K), ...golpesNo(2, MEIO)], { seed: 860 });
+    simula('mago sem os 40 de mana bate com o golpe físico', abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: mago(39) }), golpesNo(2, MEIO), { seed: 861 });
+    simula('segurar K andando não puxa nada', abrir({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: mago(10) }, 'N'), rodando(300).map((e) => ({ ...e, canalizar: true })), { seed: 862 });
+    {
+      const monge = abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 })]), hero: comArma('monge', null) });
+      const quase = { ...monge, arena: { ...monge.arena, ki: 290 } };
+      const entradas = [...parado(70).map(() => K), { x: 0, y: 0, revestir: true }, ...golpesNo(2, MEIO), ...parado(400)];
+      simula('monge junta o ki, se reveste, bate e apanha', quase, entradas, { seed: 863 });
+    }
+    {
+      const aberta = abrir({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 }), bicho('goblin', { hp: 3000, maxHp: 3000 }), bicho('aranha', { hp: 3000, maxHp: 3000 })]), hero: comArma('monge', null) });
+      const montada = {
+        ...aberta,
+        arena: {
+          ...aberta.arena,
+          ki: 300,
+          heroi: { x: 4.5 * T, y: 5.5 * T, facing: 'N' as const },
+          monstros: aberta.arena.monstros.map((m, i) => ({ ...m, corpoX: ([3.5, 5.5, 1.5][i] as number) * T, corpoY: ([5.5, 5.5, 1.5][i] as number) * T })),
+        },
+      };
+      simula('monge: a explosão de ki', montada, [{ x: 0, y: 0, explodir: true }, ...parado(60)], { seed: 864 });
+      simula('monge: a explosão com pouco ki', { ...montada, arena: { ...montada.arena, ki: 37 } }, [{ x: 0, y: 0, explodir: true }, ...parado(10)], { seed: 865 });
+    }
+    caso('abrirLuta: com o ki na memória do app', 'abrirLuta', { estado: salaCom([bicho('zumbi')], comArma('monge', null)), chegada: PERTO, memoria: { ki: 450 } }, (a) =>
+      E.abrirLuta(a.estado, a.chegada, null, false, null, a.memoria));
   }
 
   // O cajado no PC: as letras saem dos primeiros sorteios da luta, os do aperto; a tecla da última fecha o evento.

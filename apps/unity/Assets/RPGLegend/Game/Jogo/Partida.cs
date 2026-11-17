@@ -191,11 +191,14 @@ namespace RPGLegend.Game.Jogo
             if (Estado?.MapMode != "dungeon") MoralDoGrupo = null;
         }
 
-        /// <summary>O que vai pra próxima luta: a moral e quanto falta (em passos) pro Poder da fé voltar.</summary>
+        /// <summary>O ki do Monge que sobrou da última luta (rodada 4a; na memória, como a moral).</summary>
+        public double KiGuardado { get; private set; }
+
+        /// <summary>O que vai pra próxima luta: a moral, quanto falta (em passos) pro Poder da fé voltar e o ki.</summary>
         private MemoriaDaLuta MemoriaPraLuta()
         {
             double falta = _feVoltaEm > Agora ? Math.Ceiling((_feVoltaEm - Agora) * 60 / 1000) : 0;
-            return new MemoriaDaLuta { Moral = MoralDoGrupo?.Clone(), RecargaDaFe = falta > 0 ? falta : (double?)null };
+            return new MemoriaDaLuta { Moral = MoralDoGrupo?.Clone(), RecargaDaFe = falta > 0 ? falta : (double?)null, Ki = KiGuardado > 0 ? KiGuardado : (double?)null };
         }
         /// <summary>Como acabou a última luta ("vitoria" ou "derrota"); null enquanto uma corre.</summary>
         public string UltimoFim { get; private set; }
@@ -489,6 +492,7 @@ namespace RPGLegend.Game.Jogo
             // A moral e a recarga da fé seguem pra próxima luta (na memória; a moral some fora da masmorra).
             var memoria = Arenas.MemoriaDaLuta(final);
             MoralDoGrupo = memoria.Moral;
+            KiGuardado = memoria.Ki ?? 0;
             _feVoltaEm = (memoria.RecargaDaFe ?? 0) > 0 ? Agora + memoria.RecargaDaFe.Value * 1000 / 60 : 0;
             Aviso aviso;
             if (final.Fim == "derrota")

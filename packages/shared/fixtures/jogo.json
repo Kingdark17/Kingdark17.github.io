@@ -12132,7 +12132,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 100,
-              "maxMp": 70,
+              "maxMp": 84,
               "dmgFisico": 20,
               "dmgMagico": 30,
               "esquiva": 5,
@@ -12144,8 +12144,8 @@
             },
             "maxHp": 100,
             "hp": 100,
-            "maxMp": 70,
-            "mp": 70,
+            "maxMp": 84,
+            "mp": 84,
             "buffs": {}
           },
           "floor": 23,
@@ -12705,7 +12705,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -12717,8 +12717,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {},
           "classId": "mago"
         },
@@ -87157,7 +87157,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -87169,8 +87169,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         }
       }
@@ -88376,7 +88376,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -88388,8 +88388,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "nivel": 2
@@ -120616,7 +120616,7 @@
               "masteryBattles": 0,
               "derived": {
                 "maxHp": 100,
-                "maxMp": 70,
+                "maxMp": 84,
                 "dmgFisico": 20,
                 "dmgMagico": 30,
                 "esquiva": 5,
@@ -120628,8 +120628,8 @@
               },
               "maxHp": 100,
               "hp": 100,
-              "maxMp": 70,
-              "mp": 70,
+              "maxMp": 84,
+              "mp": 84,
               "buffs": {}
             },
             "party": [],
@@ -120774,7 +120774,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 100,
-              "maxMp": 80,
+              "maxMp": 96,
               "dmgFisico": 20,
               "dmgMagico": 30,
               "esquiva": 5,
@@ -120786,8 +120786,8 @@
             },
             "maxHp": 100,
             "hp": 100,
-            "maxMp": 80,
-            "mp": 80,
+            "maxMp": 96,
+            "mp": 96,
             "buffs": {}
           },
           "party": [],
@@ -120919,7 +120919,7 @@
               "masteryBattles": 0,
               "derived": {
                 "maxHp": 100,
-                "maxMp": 70,
+                "maxMp": 84,
                 "dmgFisico": 20,
                 "dmgMagico": 30,
                 "esquiva": 5,
@@ -120931,8 +120931,8 @@
               },
               "maxHp": 100,
               "hp": 100,
-              "maxMp": 70,
-              "mp": 70,
+              "maxMp": 84,
+              "mp": 84,
               "buffs": {}
             },
             "party": [],
@@ -121069,7 +121069,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 100,
-              "maxMp": 70,
+              "maxMp": 84,
               "dmgFisico": 20,
               "dmgMagico": 30,
               "esquiva": 5,
@@ -121081,8 +121081,8 @@
             },
             "maxHp": 100,
             "hp": 100,
-            "maxMp": 70,
-            "mp": 70,
+            "maxMp": 84,
+            "mp": 84,
             "buffs": {}
           },
           "party": [],
@@ -124792,7 +124792,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 100,
-              "maxMp": 70,
+              "maxMp": 84,
               "dmgFisico": 20,
               "dmgMagico": 30,
               "esquiva": 5,
@@ -124804,8 +124804,8 @@
             },
             "maxHp": 100,
             "hp": 100,
-            "maxMp": 70,
-            "mp": 70,
+            "maxMp": 84,
+            "mp": 84,
             "buffs": {}
           },
           "party": [],
@@ -132369,7 +132369,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -132381,8 +132381,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "item": {
@@ -132404,8 +132404,8 @@
         "linhas": [
           {
             "rotulo": "Mana máxima",
-            "antes": 70,
-            "depois": 62
+            "antes": 84,
+            "depois": 74
           },
           {
             "rotulo": "Ataque",
@@ -160582,7 +160582,7 @@
               "masteryBattles": 0,
               "derived": {
                 "maxHp": 100,
-                "maxMp": 145,
+                "maxMp": 174,
                 "dmgFisico": 20,
                 "dmgMagico": 75,
                 "esquiva": 5,
@@ -160594,8 +160594,8 @@
               },
               "maxHp": 100,
               "hp": 100,
-              "maxMp": 145,
-              "mp": 145,
+              "maxMp": 174,
+              "mp": 174,
               "buffs": {}
             },
             "party": [],
@@ -160727,7 +160727,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 100,
-              "maxMp": 145,
+              "maxMp": 174,
               "dmgFisico": 20,
               "dmgMagico": 75,
               "esquiva": 5,
@@ -160739,8 +160739,8 @@
             },
             "maxHp": 100,
             "hp": 100,
-            "maxMp": 145,
-            "mp": 145,
+            "maxMp": 174,
+            "mp": 174,
             "buffs": {}
           },
           "party": [],
@@ -162317,7 +162317,7 @@
               "masteryBattles": 0,
               "derived": {
                 "maxHp": 100,
-                "maxMp": 145,
+                "maxMp": 174,
                 "dmgFisico": 20,
                 "dmgMagico": 75,
                 "esquiva": 5,
@@ -162329,8 +162329,8 @@
               },
               "maxHp": 100,
               "hp": 100,
-              "maxMp": 145,
-              "mp": 145,
+              "maxMp": 174,
+              "mp": 174,
               "buffs": {}
             },
             "party": [],
@@ -162462,7 +162462,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 100,
-              "maxMp": 145,
+              "maxMp": 174,
               "dmgFisico": 20,
               "dmgMagico": 75,
               "esquiva": 5,
@@ -162474,8 +162474,8 @@
             },
             "maxHp": 100,
             "hp": 100,
-            "maxMp": 145,
-            "mp": 145,
+            "maxMp": 174,
+            "mp": 174,
             "buffs": {}
           },
           "party": [],
@@ -163347,7 +163347,7 @@
               "masteryBattles": 0,
               "derived": {
                 "maxHp": 100,
-                "maxMp": 145,
+                "maxMp": 174,
                 "dmgFisico": 20,
                 "dmgMagico": 75,
                 "esquiva": 5,
@@ -163359,8 +163359,8 @@
               },
               "maxHp": 100,
               "hp": 100,
-              "maxMp": 145,
-              "mp": 145,
+              "maxMp": 174,
+              "mp": 174,
               "buffs": {}
             },
             "party": [],
@@ -163493,7 +163493,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 136,
-              "maxMp": 151,
+              "maxMp": 181,
               "dmgFisico": 20,
               "dmgMagico": 75,
               "esquiva": 5,
@@ -163505,8 +163505,8 @@
             },
             "maxHp": 136,
             "hp": 136,
-            "maxMp": 151,
-            "mp": 151,
+            "maxMp": 181,
+            "mp": 181,
             "buffs": {}
           },
           "party": [],
@@ -163640,7 +163640,7 @@
               "masteryBattles": 0,
               "derived": {
                 "maxHp": 100,
-                "maxMp": 145,
+                "maxMp": 174,
                 "dmgFisico": 20,
                 "dmgMagico": 75,
                 "esquiva": 5,
@@ -163652,8 +163652,8 @@
               },
               "maxHp": 100,
               "hp": 100,
-              "maxMp": 145,
-              "mp": 145,
+              "maxMp": 174,
+              "mp": 174,
               "buffs": {}
             },
             "party": [],
@@ -163786,7 +163786,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 136,
-              "maxMp": 151,
+              "maxMp": 181,
               "dmgFisico": 20,
               "dmgMagico": 75,
               "esquiva": 5,
@@ -163798,8 +163798,8 @@
             },
             "maxHp": 136,
             "hp": 136,
-            "maxMp": 151,
-            "mp": 151,
+            "maxMp": 181,
+            "mp": 181,
             "buffs": {}
           },
           "party": [],
@@ -163933,7 +163933,7 @@
               "masteryBattles": 0,
               "derived": {
                 "maxHp": 100,
-                "maxMp": 145,
+                "maxMp": 174,
                 "dmgFisico": 20,
                 "dmgMagico": 75,
                 "esquiva": 5,
@@ -163945,8 +163945,8 @@
               },
               "maxHp": 100,
               "hp": 100,
-              "maxMp": 145,
-              "mp": 145,
+              "maxMp": 174,
+              "mp": 174,
               "buffs": {}
             },
             "party": [],
@@ -164079,7 +164079,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 136,
-              "maxMp": 151,
+              "maxMp": 181,
               "dmgFisico": 20,
               "dmgMagico": 75,
               "esquiva": 5,
@@ -164091,8 +164091,8 @@
             },
             "maxHp": 136,
             "hp": 136,
-            "maxMp": 151,
-            "mp": 151,
+            "maxMp": 181,
+            "mp": 181,
             "buffs": {}
           },
           "party": [],
@@ -178423,7 +178423,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1794929127406_55026",
+                  "uid": "pot_mana_1794932669352_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -178553,7 +178553,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1794929127406_90893",
+                  "uid": "anel_som_1794932669352_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -178842,7 +178842,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1794929127408_87912",
+                  "uid": "pot_mana_1794932669353_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -179059,7 +179059,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794929127408_18536",
+                  "uid": "pot_vida_1794932669353_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -179261,7 +179261,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1794929127408_69928",
+                  "uid": "bota_vento_1794932669353_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -179337,7 +179337,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1794929127408_12429",
+                "uid": "tala_1794932669353_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -179511,7 +179511,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1794929127410_23232",
+              "uid": "placas_elmo_1794932669354_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -179593,7 +179593,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1794929127410_3788",
+                  "uid": "pot_vida_1794932669354_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -179710,7 +179710,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1794929127410_56339",
+                  "uid": "amuleto_sab_1794932669354_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -179876,7 +179876,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1794929127410_93474",
+              "uid": "anel_som_1794932669354_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {
@@ -222116,7 +222116,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 92,
-              "maxMp": 80,
+              "maxMp": 96,
               "dmgFisico": 18,
               "dmgMagico": 36,
               "esquiva": 4.5,
@@ -222128,8 +222128,8 @@
             },
             "maxHp": 92,
             "hp": 92,
-            "maxMp": 80,
-            "mp": 80,
+            "maxMp": 96,
+            "mp": 96,
             "classId": "mago"
           },
           "party": [],
@@ -222397,7 +222397,7 @@
             "masteryBattles": 0,
             "derived": {
               "maxHp": 92,
-              "maxMp": 72,
+              "maxMp": 86,
               "dmgFisico": 18,
               "dmgMagico": 36,
               "esquiva": 4.5,
@@ -222409,8 +222409,8 @@
             },
             "maxHp": 92,
             "hp": 92,
-            "maxMp": 72,
-            "mp": 72,
+            "maxMp": 86,
+            "mp": 86,
             "classId": "mago"
           },
           "party": [],

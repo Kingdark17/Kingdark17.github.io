@@ -7,6 +7,8 @@ namespace RPGLegend.Engine
         public double Vida;
         public double Dano;
         public double Velocidade;
+        /// <summary>A mana máxima, em % da de sempre: vale em todo lugar, como a vida (o Mago guarda +20%).</summary>
+        public double Mana;
     }
 
     /// <summary>As tabelas de hero/classes-de-luta.ts (fixtures/data/hero/classes-de-luta.json).</summary>
@@ -28,6 +30,34 @@ namespace RPGLegend.Engine
         [JsName("REGRAS_DO_CLERIGO")] public RegrasDoClerigo Clerigo;
         [JsName("MORTOS_VIVOS")] public System.Collections.Generic.List<string> MortosVivos = new System.Collections.Generic.List<string>();
         [JsName("REGRAS_DO_DRUIDA")] public RegrasDoDruida Druida;
+        [JsName("REGRAS_DE_CANALIZAR")] public RegrasDeCanalizar Canalizar;
+        [JsName("REGRAS_DO_MONGE")] public RegrasDoMonge Monge;
+        [JsName("REGRAS_DO_MAGO")] public RegrasDoMago Mago;
+    }
+
+    /// <summary>TS: REGRAS_DE_CANALIZAR — segurando K, a mana e o ki que entram por segundo.</summary>
+    public sealed class RegrasDeCanalizar
+    {
+        public double ManaPorSegundo;
+        public double KiPorSegundo;
+    }
+
+    /// <summary>TS: REGRAS_DO_MONGE — o ki, o revestimento e a explosão.</summary>
+    public sealed class RegrasDoMonge
+    {
+        public double TetoDoKi;
+        public double Revestir;
+        public double DanoRevestido;
+        public double EscudoRevestido;
+        public double RaioDaExplosao;
+        public double ForcaDaExplosao;
+        public double EmpurraNaExplosao;
+    }
+
+    /// <summary>TS: REGRAS_DO_MAGO — o disparo mágico na luta do app.</summary>
+    public sealed class RegrasDoMago
+    {
+        public double CustoDoDisparo;
     }
 
     /// <summary>TS: REGRAS_DO_ARQUEIRO — o dano de perto, o de longe parado e a mira maior.</summary>
@@ -127,6 +157,11 @@ namespace RPGLegend.Engine
         public double? RecargaDaFe;
         public double? Fe;
         public double? SemAtacar;
+        /// <summary>Monge: o ki, e se está revestido.</summary>
+        public double? Ki;
+        public bool? Revestido;
+        /// <summary>Segurando K neste passo.</summary>
+        public bool? Canalizando;
     }
 
     /// <summary>TS: REGRAS_DO_GUERREIRO — colado no alvo, o combo e a resistência pela vida que falta.</summary>
@@ -264,6 +299,13 @@ namespace RPGLegend.Engine
         {
             if (Catalog.IdDaClasse(classId, className) != "monge" || temArma) return 0;
             return D.MaosDoMonge.Base + System.Math.Floor(Js.Max(1, level ?? 1) / D.MaosDoMonge.ACadaNiveis);
+        }
+
+        /// <summary>TS: manaComAClasse — a mana de sempre vezes a % da classe, arredondada (o Mago guarda +20%).</summary>
+        public static double ManaComAClasse(double mana, string classId, string className)
+        {
+            double pct = De(classId, className).Mana;
+            return pct == 100 ? mana : Js.Round(mana * pct / 100);
         }
 
         /// <summary>TS: vidaComAClasse — a vida de sempre vezes a % da classe, arredondada.</summary>
@@ -471,6 +513,9 @@ namespace RPGLegend.Engine
                 case "druida":
                     if (Z(extras.SemAtacar) > 0) textos.Add("🌿 Ataque em " + Tempo(extras.SemAtacar.Value));
                     break;
+                case "monge":
+                    textos.Add("☯️ Ki " + Js.NumberToString(Z(extras.Ki)) + "/" + Js.NumberToString(D.Monge.TetoDoKi) + (extras.Revestido == true ? " · Revestido" : ""));
+                    break;
                 case "guerreiro":
                 {
                     double resistencia = ResistenciaDaClasse(classId, className, hp, maxHp, c);
@@ -488,6 +533,7 @@ namespace RPGLegend.Engine
                     textos.Add("🛡️ Absorção " + Js.NumberToString(Z(c.Absorcao)) + "/" + Js.NumberToString(D.Paladino.TetoDaAbsorcao));
                     break;
             }
+            if (extras.Canalizando == true) textos.Add(OQueCanaliza(classId, className) == "ki" ? "🌀 Juntando ki" : "🌀 Puxando mana");
             if (Z(extras.Moral) > 0) textos.Add("🎵 Moral " + Js.NumberToString(extras.Moral.Value));
             return textos;
         }
@@ -496,6 +542,36 @@ namespace RPGLegend.Engine
             TextosDaClasse(hero.ClassId, hero.ClassName, hero.Hp, hero.MaxHp, c ?? new ContadoresDaClasse(), extras);
 
         // ---------- rodada 3b (2026-11-17): Arqueiro, Bardo, Clérigo e Druida ----------
+
+        // ---------- rodada 4a (2026-11-17): segurar K, o Mago e o Monge ----------
+
+        /// <summary>TS: oQueCanaliza — segurando K: "mana" (o Mago e o Necromante), "ki" (o Monge); null, nada.</summary>
+        public static string OQueCanaliza(string classId, string className)
+        {
+            var id = Catalog.IdDaClasse(classId, className);
+            if (id == "mago" || id == "necromante") return "mana";
+            return id == "monge" ? "ki" : null;
+        }
+
+        public static string OQueCanaliza(Hero hero) => OQueCanaliza(hero.ClassId, hero.ClassName);
+
+        /// <summary>TS: passosPorPonto — quantos passos segurando K valem um ponto (de mana ou de ki).</summary>
+        public static double PassosPorPonto(string tipo) =>
+            System.Math.Truncate(60 / (tipo == "mana" ? D.Canalizar.ManaPorSegundo : D.Canalizar.KiPorSegundo));
+
+        /// <summary>TS: custoDaMagia — o custo do disparo mágico na arena: o do Mago; nos outros, null.</summary>
+        public static double? CustoDaMagia(string classId, string className) =>
+            Catalog.IdDaClasse(classId, className) == "mago" ? D.Mago.CustoDoDisparo : (double?)null;
+
+        public static double? CustoDaMagia(Hero hero) => CustoDaMagia(hero.ClassId, hero.ClassName);
+
+        /// <summary>TS: forcaDaExplosao — a força da explosão de ki (de 0 a 1,5), pelo ki gasto.</summary>
+        public static double ForcaDaExplosao(double ki)
+        {
+            var r = D.Monge;
+            double ate = Js.Max(0, Js.Min(r.TetoDoKi, System.Math.Truncate(ki)));
+            return Js.Round(ate * r.ForcaDaExplosao / r.TetoDoKi) / 100;
+        }
 
         /// <summary>TS: apoiaAliado — a classe mira nos aliados (o Bardo, o Clérigo e o Druida).</summary>
         public static bool ApoiaAliado(string classId, string className)

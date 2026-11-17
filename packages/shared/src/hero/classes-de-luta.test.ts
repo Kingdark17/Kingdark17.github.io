@@ -17,10 +17,15 @@ import {
   contarParado,
   criticoDaClasse,
   curaDoApoio,
+  custoDaMagia,
   danoDaDistancia,
   devolucaoDaClasse,
   duracaoDaFe,
   efeitosDaMoral,
+  forcaDaExplosao,
+  manaComAClasse,
+  oQueCanaliza,
+  passosPorPonto,
   esfriar,
   esquivaDaClasse,
   miraDaClasse,
@@ -255,5 +260,40 @@ describe('as classes de longe e de apoio na luta do app (rodada 3b)', () => {
     expect(textosDaClasse({ classId: 'druida', ...vida }, {}, { semAtacar: 1800 })).toEqual(['🌿 Ataque em 30 s']);
     expect(textosDaClasse({ classId: 'druida', ...vida }, {})).toEqual([]);
     expect(textosDaClasse({ classId: 'mago', ...vida }, {}, { moral: 3 })).toEqual(['🎵 Moral 3']);
+  });
+});
+
+describe('segurar K, o Mago e o Monge (rodada 4a)', () => {
+  it('quem canaliza o quê, e o ritmo', () => {
+    expect(oQueCanaliza({ classId: 'mago' })).toBe('mana');
+    expect(oQueCanaliza({ classId: 'necromante' })).toBe('mana');
+    expect(oQueCanaliza({ classId: 'monge' })).toBe('ki');
+    expect(oQueCanaliza({ classId: 'guerreiro' })).toBeNull();
+    expect(passosPorPonto('mana')).toBe(12);
+    expect(passosPorPonto('ki')).toBe(6);
+  });
+
+  it('o disparo do Mago na arena custa 40; a mana dele +20% vale em todo lugar', () => {
+    expect(custoDaMagia({ classId: 'mago' })).toBe(40);
+    expect(custoDaMagia({ classId: 'clerigo' })).toBeUndefined();
+    expect(manaComAClasse(100, { classId: 'mago' })).toBe(120);
+    expect(manaComAClasse(77, { classId: 'mago' })).toBe(92);
+    expect(manaComAClasse(100, { classId: 'clerigo' })).toBe(100);
+    const base = { level: 5, attrs: { forca: 5, destreza: 5, constituicao: 5, intelecto: 10, sabedoria: 5, carisma: 5 }, equip: {} };
+    expect(derivedStats({ ...base, classId: 'mago' } as never).maxMp).toBe(Math.round(derivedStats(base as never).maxMp * 1.2));
+  });
+
+  it('a força da explosão pelo ki: 300 = 1,5; metade, 0,75', () => {
+    expect(forcaDaExplosao(300)).toBe(1.5);
+    expect(forcaDaExplosao(150)).toBe(0.75);
+    expect(forcaDaExplosao(999)).toBe(1.5);
+    expect(forcaDaExplosao(0)).toBe(0);
+  });
+
+  it('a linha embaixo das barras: o ki do Monge, o revestido e o segurar K', () => {
+    const vida = { hp: 1, maxHp: 1 };
+    expect(textosDaClasse({ classId: 'monge', ...vida }, {}, { ki: 120 })).toEqual(['☯️ Ki 120/300']);
+    expect(textosDaClasse({ classId: 'monge', ...vida }, {}, { revestido: true, canalizando: true })).toEqual(['☯️ Ki 0/300 · Revestido', '🌀 Juntando ki']);
+    expect(textosDaClasse({ classId: 'mago', ...vida }, {}, { canalizando: true })).toEqual(['🌀 Puxando mana']);
   });
 });

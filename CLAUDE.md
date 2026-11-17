@@ -576,7 +576,23 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   dos últimos 30 s (`"d"`, pra Comunhão). Desde então todo monstro lento
   também anda mais devagar na arena. No espelho, o lento e o veneno das
   vinhas do convidado não passam pro anfitrião (o dano passa).
-  Falta, nesta ordem: as que seguram "K" (Necromante, Monge e Mago; o
+  Rodada 4a, **segurar K, o Mago e o Monge** (2026-11-17, decidido com o
+  usuário): **segurando K** (a tecla no PC; no celular, o botão 🌀 por cima
+  do arco) o herói fica parado e sem atacar — andar ou atacar solta — e o
+  Mago e o Necromante puxam 5 de mana por segundo, o Monge junta 10 de ki
+  (`canalizar` na arena, `oQueCanaliza`, `passosPorPonto`). O **Mago** paga
+  40 de mana pelo disparo na luta do app (`custoDaMagia`; o Clérigo continua
+  5, e sem os 40 ele bate com o golpe físico) e guarda **+20% de mana em
+  todo lugar** (`ClasseDeLuta.mana`, `manaComAClasse` no `derived`, como a
+  vida da classe). O **Monge** junta até 300 de ki; o botão ☯️ (tecla F)
+  gasta 300 e o reveste: +40% de dano até o próximo golpe levado, que chega
+  30% mais fraco e quebra o revestimento; o 💥 (tecla G) gasta todo o ki e
+  bate em quem está a até 2 blocos (o mais perto leva o golpe na força do
+  ki, 300 = 1,5×, e os outros o mesmo dano) e empurra 1 bloco. **O ki que
+  sobra fica na memória do app** (`MemoriaDaLuta.ki`, como a moral). Com
+  três poderes, o arco do Monge abre pra seis botões.
+  Falta, nesta ordem: o Necromante (rodada 4b: lacaios, cristal, estados e
+  Magia Proibida; o
   Necromante do Breno **substitui** o ajuste de 2026-11-12, e a
   habilidade dele revive os aliados);
   estilos e mestres; mercadores secretos e itens novos (a arte das armas

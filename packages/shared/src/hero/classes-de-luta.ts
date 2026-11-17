@@ -31,24 +31,26 @@ export interface ClasseDeLuta {
   dano: number;
   /** A velocidade de andar na luta do app, em %. */
   velocidade: number;
+  /** A mana máxima, em % da de sempre: vale em todo lugar, como a vida (o Mago guarda +20%; rodada 4a). */
+  mana: number;
 }
 
 /** A classe que o texto não muda: tudo no padrão, corpo a corpo. */
-export const CLASSE_PADRAO: ClasseDeLuta = { alcance: 1, vida: 100, dano: 100, velocidade: 100 };
+export const CLASSE_PADRAO: ClasseDeLuta = { alcance: 1, vida: 100, dano: 100, velocidade: 100, mana: 100 };
 
 export const CLASSES_DE_LUTA: Readonly<Record<string, ClasseDeLuta>> = {
-  arqueiro: { alcance: 12, vida: 100, dano: 92, velocidade: 110 },
-  bardo: { alcance: 5, vida: 80, dano: 85, velocidade: 120 },
-  necromante: { alcance: 7, vida: 80, dano: 85, velocidade: 100 },
-  monge: { alcance: 1, vida: 100, dano: 100, velocidade: 100 },
-  guerreiro: { alcance: 2, vida: 100, dano: 92, velocidade: 100 },
-  ladino: { alcance: 1, vida: 100, dano: 110, velocidade: 130 },
-  barbaro: { alcance: 1, vida: 100, dano: 100, velocidade: 80 },
-  druida: { alcance: 2, vida: 100, dano: 100, velocidade: 100 },
-  cacador: { alcance: 4, vida: 100, dano: 100, velocidade: 100 },
-  clerigo: { alcance: 5, vida: 80, dano: 92, velocidade: 120 },
-  paladino: { alcance: 2, vida: 130, dano: 85, velocidade: 60 },
-  mago: { alcance: 7, vida: 80, dano: 100, velocidade: 100 },
+  arqueiro: { alcance: 12, vida: 100, dano: 92, velocidade: 110, mana: 100 },
+  bardo: { alcance: 5, vida: 80, dano: 85, velocidade: 120, mana: 100 },
+  necromante: { alcance: 7, vida: 80, dano: 85, velocidade: 100, mana: 100 },
+  monge: { alcance: 1, vida: 100, dano: 100, velocidade: 100, mana: 100 },
+  guerreiro: { alcance: 2, vida: 100, dano: 92, velocidade: 100, mana: 100 },
+  ladino: { alcance: 1, vida: 100, dano: 110, velocidade: 130, mana: 100 },
+  barbaro: { alcance: 1, vida: 100, dano: 100, velocidade: 80, mana: 100 },
+  druida: { alcance: 2, vida: 100, dano: 100, velocidade: 100, mana: 100 },
+  cacador: { alcance: 4, vida: 100, dano: 100, velocidade: 100, mana: 100 },
+  clerigo: { alcance: 5, vida: 80, dano: 92, velocidade: 120, mana: 100 },
+  paladino: { alcance: 2, vida: 130, dano: 85, velocidade: 60, mana: 100 },
+  mago: { alcance: 7, vida: 80, dano: 100, velocidade: 100, mana: 120 },
 };
 
 /** O alcance do Bárbaro pela arma pesada: o machadão (corte de 4), a marreta (o tremor 5 × 5 em volta dele) e a maça (a bola de ferro, 6). */
@@ -87,6 +89,12 @@ export function alcanceDoHeroi(quem: QuemLuta): number {
   if (id === 'barbaro') return ALCANCE_DO_BARBARO[arma] ?? (CLASSES_DE_LUTA.barbaro as ClasseDeLuta).alcance;
   if (!id || !CLASSES_DE_LUTA[id]) return ALCANCE_SEM_CLASSE[arma] ?? CLASSE_PADRAO.alcance;
   return (CLASSES_DE_LUTA[id] as ClasseDeLuta).alcance;
+}
+
+/** A mana máxima com a classe: a de sempre vezes a % dela, arredondada (o Mago guarda +20%). */
+export function manaComAClasse(mana: number, quem: IdentidadeDeClasse): number {
+  const pct = classeDeLuta(quem).mana;
+  return pct === 100 ? mana : Math.round((mana * pct) / 100);
 }
 
 /** A vida máxima com a classe: a de sempre vezes a % dela, arredondada. */
@@ -255,6 +263,62 @@ export const REGRAS_DO_DRUIDA = {
   purificacao: 10,
   semAtacar: 1800,
 } as const;
+
+// ---------- rodada 4a (2026-11-17): segurar K, o Mago e o Monge ----------
+//
+// Decisões do usuário: segurando K o herói fica parado e sem atacar (andar
+// ou atacar solta); o disparo do Mago custa 40 de mana só na luta do app e a
+// mana dele +20% vale em todo lugar (`manaComAClasse`); o revestimento de ki
+// dura até o próximo golpe levado; a explosão de ki bate em volta, pela força
+// do ki gasto. O ki que sobra fica na memória do app, como a moral.
+
+export const REGRAS_DE_CANALIZAR = {
+  /** Segurando K: a mana (o Mago, o Necromante) e o ki (o Monge) que entram por segundo. */
+  manaPorSegundo: 5,
+  kiPorSegundo: 10,
+} as const;
+
+export const REGRAS_DO_MONGE = {
+  /** O ki: o teto, e quanto o revestimento gasta. */
+  tetoDoKi: 300,
+  revestir: 300,
+  /** Revestido: o dano a mais (%), e o tanto (%) que o próximo golpe levado perde (e quebra o revestimento). */
+  danoRevestido: 40,
+  escudoRevestido: 30,
+  /** A explosão: pega quem está a até tantos blocos, na força (%) do golpe com o ki cheio, e empurra tantos blocos. */
+  raioDaExplosao: 2,
+  forcaDaExplosao: 150,
+  empurraNaExplosao: 1,
+} as const;
+
+export const REGRAS_DO_MAGO = {
+  /** O disparo mágico na luta do app (no site continua o de sempre). */
+  custoDoDisparo: 40,
+} as const;
+
+/** O que a classe junta segurando K: a mana (o Mago e o Necromante), o ki (o Monge); `null`, nada. */
+export function oQueCanaliza(quem: IdentidadeDeClasse): 'mana' | 'ki' | null {
+  const id = idDaClasse(quem);
+  if (id === 'mago' || id === 'necromante') return 'mana';
+  return id === 'monge' ? 'ki' : null;
+}
+
+/** Quantos passos segurando K valem um ponto (de mana ou de ki). */
+export function passosPorPonto(tipo: 'mana' | 'ki'): number {
+  return Math.trunc(60 / (tipo === 'mana' ? REGRAS_DE_CANALIZAR.manaPorSegundo : REGRAS_DE_CANALIZAR.kiPorSegundo));
+}
+
+/** O custo do disparo mágico na arena: o do Mago; nos outros, `undefined` (o de sempre). */
+export function custoDaMagia(quem: IdentidadeDeClasse): number | undefined {
+  return idDaClasse(quem) === 'mago' ? REGRAS_DO_MAGO.custoDoDisparo : undefined;
+}
+
+/** A força da explosão de ki (como a da mira, de 0 a 1,5), pelo ki gasto. */
+export function forcaDaExplosao(ki: number): number {
+  const r = REGRAS_DO_MONGE;
+  const ate = Math.max(0, Math.min(r.tetoDoKi, Math.trunc(ki)));
+  return Math.round((ate * r.forcaDaExplosao) / r.tetoDoKi) / 100;
+}
 
 /** A classe mira nos aliados (o Bardo, o Clérigo e o Druida). */
 export function apoiaAliado(quem: IdentidadeDeClasse): boolean {
@@ -524,6 +588,11 @@ export interface ExtrasDaClasse {
   fe?: number;
   /** Druida: quanto o ataque ainda espera depois da Purificação. */
   semAtacar?: number;
+  /** Monge: o ki, e se está revestido. */
+  ki?: number;
+  revestido?: boolean;
+  /** Segurando K neste passo (puxando mana ou juntando ki). */
+  canalizando?: boolean;
 }
 
 /** Passos em segundos, arredondando pra cima; e em "m:ss" a partir de um minuto. */
@@ -539,6 +608,7 @@ function tempo(passos: number): string {
  */
 export function textosDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number }, c: ContadoresDaClasse, extras: ExtrasDaClasse = {}): string[] {
   const textos = textosSoDaClasse(quem, c, extras);
+  if (extras.canalizando) textos.push(oQueCanaliza(quem) === 'ki' ? '🌀 Juntando ki' : '🌀 Puxando mana');
   if ((extras.moral ?? 0) > 0) textos.push(`🎵 Moral ${extras.moral}`);
   return textos;
 }
@@ -552,6 +622,8 @@ function textosSoDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number
       return [(extras.recargaDaFe ?? 0) > 0 ? `✝️ Fé em ${tempo(extras.recargaDaFe as number)}` : '✝️ Fé pronta'];
     case 'druida':
       return (extras.semAtacar ?? 0) > 0 ? [`🌿 Ataque em ${tempo(extras.semAtacar as number)}`] : [];
+    case 'monge':
+      return [`☯️ Ki ${extras.ki ?? 0}/${REGRAS_DO_MONGE.tetoDoKi}${extras.revestido ? ' · Revestido' : ''}`];
     case 'guerreiro': {
       const resistencia = resistenciaDaClasse(quem, c);
       const combo = `⚔️ Combo +${c.combo ?? 0}% · ${c.seguidos ?? 0}/${REGRAS_DO_GUERREIRO.criticosDoCombo}`;

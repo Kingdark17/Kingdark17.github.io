@@ -2083,7 +2083,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 114,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -2095,8 +2095,8 @@
           },
           "maxHp": 114,
           "hp": 114,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         }
       }
@@ -8107,7 +8107,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -8119,8 +8119,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -8229,7 +8229,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -8241,8 +8241,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -10868,7 +10868,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -10880,8 +10880,8 @@
           },
           "maxHp": 100,
           "hp": 40,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -10993,7 +10993,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -11005,8 +11005,8 @@
           },
           "maxHp": 100,
           "hp": 40,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -11118,7 +11118,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -11130,8 +11130,8 @@
           },
           "maxHp": 100,
           "hp": 40,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -11243,7 +11243,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -11255,8 +11255,8 @@
           },
           "maxHp": 100,
           "hp": 40,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -11368,7 +11368,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -11380,8 +11380,8 @@
           },
           "maxHp": 100,
           "hp": 40,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -11493,7 +11493,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -11505,8 +11505,8 @@
           },
           "maxHp": 100,
           "hp": 40,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -11618,7 +11618,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -11630,8 +11630,8 @@
           },
           "maxHp": 100,
           "hp": 40,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -11743,7 +11743,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -11755,8 +11755,8 @@
           },
           "maxHp": 100,
           "hp": 40,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -39270,7 +39270,7 @@
           "masteryBattles": 550,
           "derived": {
             "maxHp": 200,
-            "maxMp": 63,
+            "maxMp": 76,
             "dmgFisico": 12,
             "dmgMagico": 21,
             "esquiva": 7.5,
@@ -39282,8 +39282,8 @@
           },
           "maxHp": 200,
           "hp": 98,
-          "maxMp": 63,
-          "mp": 20,
+          "maxMp": 76,
+          "mp": 24,
           "buffs": {
             "critNext": true,
             "shield": 0.5
@@ -39473,7 +39473,7 @@
           "masteryBattles": 550,
           "derived": {
             "maxHp": 200,
-            "maxMp": 63,
+            "maxMp": 76,
             "dmgFisico": 12,
             "dmgMagico": 21,
             "esquiva": 7.5,
@@ -39485,8 +39485,8 @@
           },
           "maxHp": 200,
           "hp": 98,
-          "maxMp": 63,
-          "mp": 20,
+          "maxMp": 76,
+          "mp": 24,
           "buffs": {
             "critNext": true,
             "shield": 0.5
@@ -40834,7 +40834,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 132,
-            "maxMp": 119,
+            "maxMp": 143,
             "dmgFisico": 22,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -40846,8 +40846,8 @@
           },
           "maxHp": 132,
           "hp": 104,
-          "maxMp": 119,
-          "mp": 100,
+          "maxMp": 143,
+          "mp": 120,
           "buffs": {
             "precisaoTurns": 1,
             "precisaoAmount": 5
@@ -40966,7 +40966,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 132,
-            "maxMp": 119,
+            "maxMp": 143,
             "dmgFisico": 22,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -40978,8 +40978,8 @@
           },
           "maxHp": 132,
           "hp": 104,
-          "maxMp": 119,
-          "mp": 100,
+          "maxMp": 143,
+          "mp": 120,
           "buffs": {
             "precisaoTurns": 1,
             "precisaoAmount": 5
@@ -50279,7 +50279,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -50291,8 +50291,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "estilo": "normal"
@@ -50361,7 +50361,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -50373,8 +50373,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "estilo": "magic"
@@ -50443,7 +50443,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -50455,8 +50455,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "estilo": "physical"
@@ -50525,7 +50525,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -50537,8 +50537,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "estilo": "ranged"
@@ -55042,7 +55042,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -55054,8 +55054,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "estilo": "magic"
@@ -55210,7 +55210,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -55222,8 +55222,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         }
       }
@@ -57724,7 +57724,7 @@
           "masteryBattles": 550,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -57736,8 +57736,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -57853,7 +57853,7 @@
           "masteryBattles": 550,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -57865,8 +57865,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 65,
+          "maxMp": 84,
+          "mp": 79,
           "buffs": {
             "critNext": false
           }
@@ -57991,7 +57991,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -58003,7 +58003,7 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
+          "maxMp": 84,
           "mp": 2,
           "buffs": {}
         },
@@ -58120,7 +58120,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -58132,7 +58132,7 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
+          "maxMp": 84,
           "mp": 2,
           "buffs": {}
         },
@@ -58251,7 +58251,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -58263,7 +58263,7 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
+          "maxMp": 84,
           "mp": 20,
           "buffs": {}
         },
@@ -58380,7 +58380,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -58392,7 +58392,7 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
+          "maxMp": 84,
           "mp": 15,
           "buffs": {
             "critNext": false
@@ -61446,7 +61446,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -61458,8 +61458,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {
             "forcaTurns": 3,
             "forcaAmount": 1
@@ -61578,7 +61578,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -61590,8 +61590,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 65,
+          "maxMp": 84,
+          "mp": 79,
           "buffs": {
             "forcaTurns": 2,
             "forcaAmount": 1,
@@ -61718,7 +61718,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -61730,8 +61730,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -61847,7 +61847,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -61859,8 +61859,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 65,
+          "maxMp": 84,
+          "mp": 79,
           "buffs": {
             "critNext": false
           }
@@ -61985,7 +61985,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -61997,8 +61997,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -62114,7 +62114,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -62126,8 +62126,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {
             "critNext": false
           }
@@ -65201,7 +65201,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -65213,8 +65213,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {
             "inspiracaoTurns": 2,
             "inspiracaoAmount": 0.25
@@ -65333,7 +65333,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -65345,8 +65345,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 65,
+          "maxMp": 84,
+          "mp": 79,
           "buffs": {
             "inspiracaoTurns": 2,
             "inspiracaoAmount": 0.25,
@@ -65739,7 +65739,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -65751,8 +65751,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "monster": {
@@ -65868,7 +65868,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -65880,8 +65880,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 65,
+          "maxMp": 84,
+          "mp": 79,
           "buffs": {
             "critNext": false
           }
@@ -75058,7 +75058,7 @@
           "masteryBattles": 10,
           "derived": {
             "maxHp": 320,
-            "maxMp": 195,
+            "maxMp": 234,
             "dmgFisico": 44,
             "dmgMagico": 63,
             "esquiva": 4,
@@ -75070,8 +75070,8 @@
           },
           "maxHp": 320,
           "hp": 126,
-          "maxMp": 195,
-          "mp": 48,
+          "maxMp": 234,
+          "mp": 57,
           "buffs": {
             "critNext": true
           }
@@ -75210,7 +75210,7 @@
           "masteryBattles": 10,
           "derived": {
             "maxHp": 320,
-            "maxMp": 195,
+            "maxMp": 234,
             "dmgFisico": 44,
             "dmgMagico": 63,
             "esquiva": 4,
@@ -75222,8 +75222,8 @@
           },
           "maxHp": 320,
           "hp": 126,
-          "maxMp": 195,
-          "mp": 43,
+          "maxMp": 234,
+          "mp": 52,
           "buffs": {
             "critNext": false
           }
@@ -79412,7 +79412,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 156,
-            "maxMp": 113,
+            "maxMp": 136,
             "dmgFisico": 22,
             "dmgMagico": 33,
             "esquiva": 2.5,
@@ -79424,8 +79424,8 @@
           },
           "maxHp": 156,
           "hp": 20,
-          "maxMp": 113,
-          "mp": 48,
+          "maxMp": 136,
+          "mp": 58,
           "buffs": {
             "inspiracaoTurns": 2,
             "inspiracaoAmount": 0.25
@@ -79554,7 +79554,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 156,
-            "maxMp": 113,
+            "maxMp": 136,
             "dmgFisico": 22,
             "dmgMagico": 33,
             "esquiva": 2.5,
@@ -79566,8 +79566,8 @@
           },
           "maxHp": 156,
           "hp": 20,
-          "maxMp": 113,
-          "mp": 43,
+          "maxMp": 136,
+          "mp": 53,
           "buffs": {
             "inspiracaoTurns": 2,
             "inspiracaoAmount": 0.25,
@@ -90549,7 +90549,7 @@
           "masteryBattles": 60,
           "derived": {
             "maxHp": 100,
-            "maxMp": 85,
+            "maxMp": 102,
             "dmgFisico": 40,
             "dmgMagico": 24,
             "esquiva": 12.5,
@@ -90561,8 +90561,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 85,
-          "mp": 13,
+          "maxMp": 102,
+          "mp": 15,
           "buffs": {}
         },
         "party": [
@@ -90783,7 +90783,7 @@
           "masteryBattles": 60,
           "derived": {
             "maxHp": 100,
-            "maxMp": 85,
+            "maxMp": 102,
             "dmgFisico": 40,
             "dmgMagico": 24,
             "esquiva": 12.5,
@@ -90795,8 +90795,8 @@
           },
           "maxHp": 100,
           "hp": 4,
-          "maxMp": 85,
-          "mp": 13,
+          "maxMp": 102,
+          "mp": 15,
           "buffs": {}
         },
         "party": [
@@ -91305,7 +91305,7 @@
           "masteryBattles": 200,
           "derived": {
             "maxHp": 270,
-            "maxMp": 204,
+            "maxMp": 245,
             "dmgFisico": 6,
             "dmgMagico": 66,
             "esquiva": 9.5,
@@ -91317,8 +91317,8 @@
           },
           "maxHp": 270,
           "hp": 13,
-          "maxMp": 204,
-          "mp": 27,
+          "maxMp": 245,
+          "mp": 33,
           "buffs": {
             "precisaoTurns": 0,
             "precisaoAmount": 25,
@@ -91567,7 +91567,7 @@
           "masteryBattles": 200,
           "derived": {
             "maxHp": 270,
-            "maxMp": 204,
+            "maxMp": 245,
             "dmgFisico": 6,
             "dmgMagico": 66,
             "esquiva": 9.5,
@@ -91579,8 +91579,8 @@
           },
           "maxHp": 270,
           "hp": 13,
-          "maxMp": 204,
-          "mp": 27,
+          "maxMp": 245,
+          "mp": 33,
           "buffs": {
             "precisaoTurns": 0,
             "precisaoAmount": 25,
@@ -93217,7 +93217,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 200,
-            "maxMp": 141,
+            "maxMp": 169,
             "dmgFisico": 24,
             "dmgMagico": 54,
             "esquiva": 13.5,
@@ -93229,8 +93229,8 @@
           },
           "maxHp": 200,
           "hp": 137,
-          "maxMp": 141,
-          "mp": 25,
+          "maxMp": 169,
+          "mp": 30,
           "buffs": {
             "precisaoTurns": 2,
             "precisaoAmount": 7,
@@ -93444,7 +93444,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 200,
-            "maxMp": 141,
+            "maxMp": 169,
             "dmgFisico": 24,
             "dmgMagico": 54,
             "esquiva": 13.5,
@@ -93456,8 +93456,8 @@
           },
           "maxHp": 200,
           "hp": 137,
-          "maxMp": 141,
-          "mp": 25,
+          "maxMp": 169,
+          "mp": 30,
           "buffs": {
             "precisaoTurns": 2,
             "precisaoAmount": 7,
@@ -100416,7 +100416,7 @@
           "masteryBattles": 550,
           "derived": {
             "maxHp": 240,
-            "maxMp": 140,
+            "maxMp": 168,
             "dmgFisico": 36,
             "dmgMagico": 66,
             "esquiva": 18.5,
@@ -100428,8 +100428,8 @@
           },
           "maxHp": 240,
           "hp": 66,
-          "maxMp": 140,
-          "mp": 84,
+          "maxMp": 168,
+          "mp": 101,
           "buffs": {
             "critNext": true,
             "esquivaTurns": 2,
@@ -100614,7 +100614,7 @@
           "masteryBattles": 550,
           "derived": {
             "maxHp": 240,
-            "maxMp": 140,
+            "maxMp": 168,
             "dmgFisico": 36,
             "dmgMagico": 66,
             "esquiva": 18.5,
@@ -100626,8 +100626,8 @@
           },
           "maxHp": 240,
           "hp": 63,
-          "maxMp": 140,
-          "mp": 84,
+          "maxMp": 168,
+          "mp": 101,
           "buffs": {
             "critNext": true,
             "esquivaTurns": 1,
@@ -121127,7 +121127,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -121139,8 +121139,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -121333,7 +121333,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -121345,8 +121345,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 70,
-          "mp": 56,
+          "maxMp": 84,
+          "mp": 70,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -121537,7 +121537,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -121549,8 +121549,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 105,
-          "mp": 105,
+          "maxMp": 126,
+          "mp": 126,
           "buffs": {}
         },
         "party": [
@@ -121742,7 +121742,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -121754,8 +121754,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 105,
-          "mp": 91,
+          "maxMp": 126,
+          "mp": 112,
           "buffs": {}
         },
         "party": [
@@ -125155,7 +125155,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -125167,8 +125167,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -125358,7 +125358,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -125370,8 +125370,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 70,
-          "mp": 60,
+          "maxMp": 84,
+          "mp": 74,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5,
@@ -125556,7 +125556,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -125568,8 +125568,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 105,
-          "mp": 105,
+          "maxMp": 126,
+          "mp": 126,
           "buffs": {}
         },
         "party": [
@@ -125758,7 +125758,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -125770,8 +125770,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 105,
-          "mp": 95,
+          "maxMp": 126,
+          "mp": 116,
           "buffs": {
             "shield": 0.5
           }
@@ -125956,7 +125956,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -125968,8 +125968,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -126160,7 +126160,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -126172,8 +126172,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 70,
-          "mp": 64,
+          "maxMp": 84,
+          "mp": 78,
           "buffs": {
             "esquivaTurns": 3,
             "esquivaAmount": 20
@@ -126357,7 +126357,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -126369,8 +126369,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 105,
-          "mp": 105,
+          "maxMp": 126,
+          "mp": 126,
           "buffs": {}
         },
         "party": [
@@ -126560,7 +126560,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -126572,8 +126572,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 105,
-          "mp": 99,
+          "maxMp": 126,
+          "mp": 120,
           "buffs": {
             "esquivaTurns": 3,
             "esquivaAmount": 20
@@ -131601,7 +131601,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -131613,8 +131613,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -131807,7 +131807,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -131819,8 +131819,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 70,
-          "mp": 58,
+          "maxMp": 84,
+          "mp": 72,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -132011,7 +132011,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -132023,8 +132023,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 105,
-          "mp": 105,
+          "maxMp": 126,
+          "mp": 126,
           "buffs": {}
         },
         "party": [
@@ -132216,7 +132216,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -132228,8 +132228,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 105,
-          "mp": 93,
+          "maxMp": 126,
+          "mp": 114,
           "buffs": {}
         },
         "party": [
@@ -132418,7 +132418,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -132430,8 +132430,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -132621,7 +132621,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -132633,8 +132633,8 @@
           },
           "maxHp": 100,
           "hp": 58,
-          "maxMp": 70,
-          "mp": 55,
+          "maxMp": 84,
+          "mp": 69,
           "buffs": {
             "esquivaTurns": 1,
             "esquivaAmount": 5
@@ -132820,7 +132820,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -132832,8 +132832,8 @@
           },
           "maxHp": 100,
           "hp": 30,
-          "maxMp": 105,
-          "mp": 105,
+          "maxMp": 126,
+          "mp": 126,
           "buffs": {}
         },
         "party": [
@@ -133022,7 +133022,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 105,
+            "maxMp": 126,
             "dmgFisico": 36,
             "dmgMagico": 51,
             "esquiva": 5,
@@ -133034,8 +133034,8 @@
           },
           "maxHp": 100,
           "hp": 63,
-          "maxMp": 105,
-          "mp": 90,
+          "maxMp": 126,
+          "mp": 111,
           "buffs": {}
         },
         "party": [
@@ -138841,7 +138841,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -138853,7 +138853,7 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
+          "maxMp": 84,
           "mp": 17,
           "buffs": {}
         },
@@ -138978,7 +138978,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -138990,7 +138990,7 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
+          "maxMp": 84,
           "mp": 0,
           "buffs": {}
         },
@@ -139113,7 +139113,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -139125,7 +139125,7 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
+          "maxMp": 84,
           "mp": 16,
           "buffs": {}
         },
@@ -139250,7 +139250,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -139262,7 +139262,7 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
+          "maxMp": 84,
           "mp": 16,
           "buffs": {}
         },
@@ -142058,7 +142058,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -142070,8 +142070,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 70,
+          "maxMp": 84,
+          "mp": 84,
           "buffs": {}
         },
         "party": [],
@@ -142194,7 +142194,7 @@
           "masteryBattles": 0,
           "derived": {
             "maxHp": 100,
-            "maxMp": 70,
+            "maxMp": 84,
             "dmgFisico": 20,
             "dmgMagico": 30,
             "esquiva": 5,
@@ -142206,8 +142206,8 @@
           },
           "maxHp": 100,
           "hp": 100,
-          "maxMp": 70,
-          "mp": 56,
+          "maxMp": 84,
+          "mp": 70,
           "buffs": {}
         },
         "party": [],

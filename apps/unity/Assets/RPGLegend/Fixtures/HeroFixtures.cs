@@ -106,6 +106,23 @@ namespace RPGLegend.Tests
             Fn(M, "curaDoApoio", (a, c) =>
                 N(ClassesDeLuta.CuraDoApoio(Str(a["tipo"]), Num(JsJson.Prop(a["vida"], "hp")), Num(JsJson.Prop(a["vida"], "maxHp")))));
             Fn(M, "duracaoDaFe", (a, c) => N(ClassesDeLuta.DuracaoDaFe(JsJson.Truthy(a["comunhao"]), Num(a["dano"]), Num(a["quantos"]))));
+            Fn(M, "oQueCanaliza", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.OQueCanaliza(quem.ClassId, quem.ClassName));
+            });
+            Fn(M, "custoDaMagia", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.CustoDaMagia(quem.ClassId, quem.ClassName));
+            });
+            Fn(M, "manaComAClasse", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.ManaComAClasse(Num(a["mana"]), quem.ClassId, quem.ClassName));
+            });
+            Fn(M, "passosPorPonto", (a, c) => N(ClassesDeLuta.PassosPorPonto(Str(a["tipo"]))));
+            Fn(M, "forcaDaExplosao", (a, c) => N(ClassesDeLuta.ForcaDaExplosao(Num(a["ki"]))));
             Fn(M, "contarParado", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
