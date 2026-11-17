@@ -14,7 +14,7 @@
  * — quem chama (`RoomRegistry`) é responsável por guardar o resultado.
  */
 
-import { ATTR_KEYS, equipmentCap, equipmentStat, vidaComAClasse, xpForLevel, type Equipment } from '@rpg-legend/shared';
+import { ATTR_KEYS, equipmentCap, equipmentStat, manaComAClasse, vidaComAClasse, vidaComOEstilo, xpForLevel, type Equipment } from '@rpg-legend/shared';
 
 import { PROFILE_COLORS, PROFILE_FRAMES, PROFILE_PETS } from '../auth/cosmetics';
 import { publicAvatarUrl, resumoDoAvatar } from '../social/avatar';
@@ -89,12 +89,17 @@ export function sanitizeHero(candidate: unknown, previousRecord: SanitizedHeroRe
 
   const cap = equipmentCap(hero.level as number);
   const equip = (hero.equip ?? {}) as Equipment;
-  // A vida da classe (doc do Breno de 2026-11-15) entra aqui também, como em `derivedStats`.
-  const calculatedHp = vidaComAClasse(20 + (hero.level as number) * 5 + attrs.constituicao * 10 + equipmentStat(equip, 'vida', cap), {
-    classId: typeof hero.classId === 'string' ? hero.classId : undefined,
-    className: typeof hero.className === 'string' ? hero.className : undefined,
-  });
-  const calculatedMp = 10 + (hero.level as number) * 2 + attrs.intelecto * 5 + equipmentStat(equip, 'mana', cap);
+  // A vida e a mana da classe (doc do Breno de 2026-11-15) e a vida do Cavaleiro (rodada 5a) entram aqui também,
+  // como em `derivedStats`: sem elas a sala cortava a vida do Cavaleiro e a mana do Mago.
+  const texto = (valor: unknown) => (typeof valor === 'string' ? valor : undefined);
+  const quem = {
+    classId: texto(hero.classId),
+    className: texto(hero.className),
+    estilos: Array.isArray(hero.estilos) ? hero.estilos.filter((e): e is string => typeof e === 'string') : undefined,
+    estilo: texto(hero.estilo),
+  };
+  const calculatedHp = vidaComOEstilo(vidaComAClasse(20 + (hero.level as number) * 5 + attrs.constituicao * 10 + equipmentStat(equip, 'vida', cap), quem), quem);
+  const calculatedMp = manaComAClasse(10 + (hero.level as number) * 2 + attrs.intelecto * 5 + equipmentStat(equip, 'mana', cap), quem);
   hero.maxHp = calculatedHp;
   hero.maxMp = calculatedMp;
   hero.hp = clampInt(hero.hp, 0, calculatedHp);

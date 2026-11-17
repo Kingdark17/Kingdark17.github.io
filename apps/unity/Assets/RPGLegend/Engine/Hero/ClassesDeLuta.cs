@@ -230,6 +230,11 @@ namespace RPGLegend.Engine
         public double? Calmo;
         public double? Absorcao;
         public double? Parado;
+        /// <summary>Os estilos (rodada 5a): a espera do avanço do Espadachim e a imunidade dele; as cargas da Concentração e os passos sem golpear.</summary>
+        public double? RecargaDoEstilo;
+        public double? Imune;
+        public double? Cargas;
+        public double? SemGolpe;
 
         public ContadoresDaClasse Clone() => (ContadoresDaClasse)MemberwiseClone();
     }
@@ -280,8 +285,12 @@ namespace RPGLegend.Engine
 
         public static ClasseDeLuta De(Hero hero) => De(hero.ClassId, hero.ClassName);
 
-        /// <summary>TS: alcanceDoHeroi — em blocos: o da classe, o da arma pesada no Bárbaro, o da arma sem classe.</summary>
-        public static double AlcanceDoHeroi(string classId, string className, string arma)
+        /// <summary>
+        /// TS: alcanceDoHeroi — em blocos: o da classe, o da arma pesada no Bárbaro, o da arma sem classe; e os
+        /// estilos do Monge (o chute vai longe, a concentração dá +1). <paramref name="estilo"/> é o estilo ativo
+        /// (<see cref="Estilos.IdDoEstilo(Hero)"/>).
+        /// </summary>
+        public static double AlcanceDoHeroi(string classId, string className, string arma, string estilo = null)
         {
             var id = Catalog.IdDaClasse(classId, className);
             arma = arma ?? "";
@@ -289,10 +298,13 @@ namespace RPGLegend.Engine
                 return D.AlcanceDoBarbaro.TryGet(arma, out var pesada) ? pesada : D.Classes.Get("barbaro").Alcance;
             if (!Js.Truthy(id) || !D.Classes.TryGet(id, out var classe) || classe == null)
                 return D.AlcanceSemClasse.TryGet(arma, out var semClasse) ? semClasse : D.ClassePadrao.Alcance;
+            if (estilo == "chute") return Estilos.Chute.Alcance;
+            if (estilo == "concentracao") return classe.Alcance + Estilos.Concentracao.Alcance;
             return classe.Alcance;
         }
 
-        public static double AlcanceDoHeroi(Hero hero) => AlcanceDoHeroi(hero.ClassId, hero.ClassName, hero.Equip?.Get("arma")?.TemplateId);
+        public static double AlcanceDoHeroi(Hero hero) =>
+            AlcanceDoHeroi(hero.ClassId, hero.ClassName, hero.Equip?.Get("arma")?.TemplateId, Estilos.IdDoEstilo(hero));
 
         /// <summary>
         /// TS: ataqueDasMaos — o ataque das mãos: só o Monge sem arma na mão principal; os outros, 0. Nível ausente
@@ -347,7 +359,7 @@ namespace RPGLegend.Engine
         private static double ContraOChefe(double valor, bool chefe) => chefe ? System.Math.Truncate(valor * D.Ladino.ContraOChefe / 100) : valor;
 
         /// <summary>TS: bonusDoAtaque — o dano a mais (%) do ataque comum na arena, somado ao da classe.</summary>
-        public static double BonusDoAtaque(string classId, string className, string arma, ContadoresDaClasse c, bool colado, bool chefe, double blocos = 0)
+        public static double BonusDoAtaque(string classId, string className, string arma, ContadoresDaClasse c, bool colado, bool chefe, double blocos = 0, string estilo = null)
         {
             switch (Catalog.IdDaClasse(classId, className))
             {
@@ -355,6 +367,11 @@ namespace RPGLegend.Engine
                     return DanoDaDistancia(blocos, Z(c.Parado));
                 case "guerreiro":
                     return (colado ? D.Guerreiro.Colado : 0) + Z(c.Combo);
+                case "monge":
+                    // Os estilos do Monge: o Empurrão bate mais; a Concentração gasta as cargas no golpe.
+                    if (estilo == "empurrao") return Estilos.Empurrao.Dano;
+                    if (estilo == "concentracao") return Z(c.Cargas) * Estilos.Concentracao.PorCarga;
+                    return 0;
                 case "ladino":
                     FurtividadeEm(Z(c.Furtividade), out _, out var ataque);
                     return ContraOChefe(ataque, chefe);
@@ -365,9 +382,10 @@ namespace RPGLegend.Engine
             }
         }
 
-        /// <summary>TS: esquivaDaClasse — a esquiva a mais (%) contra o golpe de um monstro: a furtividade do Ladino.</summary>
-        public static double EsquivaDaClasse(string classId, string className, ContadoresDaClasse c, bool chefe)
+        /// <summary>TS: esquivaDaClasse — a esquiva a mais (%) contra o golpe de um monstro: a furtividade do Ladino e o desvio do Cavaleiro.</summary>
+        public static double EsquivaDaClasse(string classId, string className, ContadoresDaClasse c, bool chefe, string estilo = null)
         {
+            if (estilo == "cavaleiro") return Estilos.Cavaleiro.Desvio;
             if (Catalog.IdDaClasse(classId, className) != "ladino") return 0;
             FurtividadeEm(Z(c.Furtividade), out var esquiva, out _);
             return ContraOChefe(esquiva, chefe);
@@ -500,7 +518,7 @@ namespace RPGLegend.Engine
         /// TS: textosDaClasse — a linha da classe embaixo das barras, só na luta: os contadores, a mira firme do
         /// Arqueiro, o Poder da fé, a espera do Druida, e a moral do grupo de quem tiver. Sem nada a mostrar, vazia.
         /// </summary>
-        public static System.Collections.Generic.List<string> TextosDaClasse(string classId, string className, double hp, double maxHp, ContadoresDaClasse c, ExtrasDaClasse extras = null)
+        public static System.Collections.Generic.List<string> TextosDaClasse(string classId, string className, double hp, double maxHp, ContadoresDaClasse c, ExtrasDaClasse extras = null, string estilo = null)
         {
             extras = extras ?? new ExtrasDaClasse();
             var textos = new System.Collections.Generic.List<string>();
@@ -518,6 +536,7 @@ namespace RPGLegend.Engine
                     break;
                 case "monge":
                     textos.Add("☯️ Ki " + Js.NumberToString(Z(extras.Ki)) + "/" + Js.NumberToString(D.Monge.TetoDoKi) + (extras.Revestido == true ? " · Revestido" : ""));
+                    if (estilo == "concentracao") textos.Add("🧘 Cargas " + Js.NumberToString(Z(c.Cargas)) + "/" + Js.NumberToString(Estilos.Concentracao.TetoDeCargas));
                     break;
                 case "necromante":
                     if (extras.MagiaSelada == true) textos.Add("☠️ Magia selada");
@@ -528,6 +547,12 @@ namespace RPGLegend.Engine
                     double resistencia = ResistenciaDaClasse(classId, className, hp, maxHp, c);
                     textos.Add("⚔️ Combo +" + Js.NumberToString(Z(c.Combo)) + "% · " + Js.NumberToString(Z(c.Seguidos)) + "/" + Js.NumberToString(D.Guerreiro.CriticosDoCombo));
                     if (resistencia > 0) textos.Add("🛡️ Resistência " + Js.NumberToString(resistencia) + "%");
+                    // O Espadachim: o avanço e o ki do Corte Invernal.
+                    if (estilo == "espadachim")
+                    {
+                        textos.Add(Z(c.RecargaDoEstilo) > 0 ? "🗡️ Avanço em " + Tempo(c.RecargaDoEstilo.Value) : "🗡️ Avanço pronto");
+                        textos.Add("☯️ Ki " + Js.NumberToString(Z(extras.Ki)) + "/" + Js.NumberToString(Estilos.Espadachim.Corte));
+                    }
                     break;
                 }
                 case "ladino":
@@ -540,27 +565,49 @@ namespace RPGLegend.Engine
                     textos.Add("🛡️ Absorção " + Js.NumberToString(Z(c.Absorcao)) + "/" + Js.NumberToString(D.Paladino.TetoDaAbsorcao));
                     break;
             }
-            if (extras.Canalizando == true) textos.Add(OQueCanaliza(classId, className) == "ki" ? "🌀 Juntando ki" : "🌀 Puxando mana");
+            if (extras.Canalizando == true) textos.Add(OQueCanaliza(classId, className, estilo) == "ki" ? "🌀 Juntando ki" : "🌀 Puxando mana");
             if (Z(extras.Moral) > 0) textos.Add("🎵 Moral " + Js.NumberToString(extras.Moral.Value));
             return textos;
         }
 
         public static System.Collections.Generic.List<string> TextosDaClasse(Hero hero, ContadoresDaClasse c, ExtrasDaClasse extras = null) =>
-            TextosDaClasse(hero.ClassId, hero.ClassName, hero.Hp, hero.MaxHp, c ?? new ContadoresDaClasse(), extras);
+            TextosDaClasse(hero.ClassId, hero.ClassName, hero.Hp, hero.MaxHp, c ?? new ContadoresDaClasse(), extras, Estilos.IdDoEstilo(hero));
 
         // ---------- rodada 3b (2026-11-17): Arqueiro, Bardo, Clérigo e Druida ----------
 
         // ---------- rodada 4a (2026-11-17): segurar K, o Mago e o Monge ----------
 
-        /// <summary>TS: oQueCanaliza — segurando K: "mana" (o Mago e o Necromante), "ki" (o Monge); null, nada.</summary>
-        public static string OQueCanaliza(string classId, string className)
+        /// <summary>TS: oQueCanaliza — segurando K: "mana" (o Mago e o Necromante), "ki" (o Monge e o Espadachim); null, nada.</summary>
+        public static string OQueCanaliza(string classId, string className, string estilo = null)
         {
             var id = Catalog.IdDaClasse(classId, className);
             if (id == "mago" || id == "necromante") return "mana";
+            if (id == "guerreiro" && estilo == "espadachim") return "ki";
             return id == "monge" ? "ki" : null;
         }
 
-        public static string OQueCanaliza(Hero hero) => OQueCanaliza(hero.ClassId, hero.ClassName);
+        public static string OQueCanaliza(Hero hero) => OQueCanaliza(hero.ClassId, hero.ClassName, Estilos.IdDoEstilo(hero));
+
+        /// <summary>TS: passosDoCanal — quantos passos segurando K valem um ponto pra este herói: o Espadachim junta ki mais devagar (3/s).</summary>
+        public static double PassosDoCanal(string classId, string className, string estilo = null)
+        {
+            string tipo = OQueCanaliza(classId, className, estilo);
+            if (tipo == null) return 0;
+            if (Catalog.IdDaClasse(classId, className) == "guerreiro") return System.Math.Truncate(60 / Estilos.Espadachim.KiPorSegundo);
+            return PassosPorPonto(tipo);
+        }
+
+        public static double PassosDoCanal(Hero hero) => PassosDoCanal(hero.ClassId, hero.ClassName, Estilos.IdDoEstilo(hero));
+
+        /// <summary>TS: criticoDoEstilo — o crítico a mais do estilo, em pontos de % (o Cavaleiro +30, o chute +40); os outros, 0.</summary>
+        public static double CriticoDoEstilo(string estilo)
+        {
+            if (estilo == "cavaleiro") return Estilos.Cavaleiro.Critico;
+            if (estilo == "chute") return Estilos.Chute.Critico;
+            return 0;
+        }
+
+        public static double CriticoDoEstilo(Hero hero) => CriticoDoEstilo(Estilos.IdDoEstilo(hero));
 
         /// <summary>TS: passosPorPonto — quantos passos segurando K valem um ponto (de mana ou de ki).</summary>
         public static double PassosPorPonto(string tipo) =>

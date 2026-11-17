@@ -21,6 +21,7 @@ import { semInvocados } from '../combat/invocacao.js';
 import {
   DUNGEON_FLOORS,
   effectiveFloor,
+  isCleared,
   legacyProgress,
   normalizeDifficulty,
   normalizeProgress,
@@ -35,6 +36,7 @@ import { idDaClasse } from '../hero/catalog.js';
 import { passarDeSala } from '../hero/ferimentos.js';
 import { hydrateSavedHero, type Companion, type Hero } from '../hero/hero.js';
 import { teacherAppears, teacherFor } from '../hero/teachers.js';
+import { chanceDoMestre, sortearEstilo } from '../hero/estilos.js';
 import type { Item } from '../items/item.js';
 import { onFloorReached, type Quest } from '../quests/quests.js';
 import { defaultRng, type Rng } from '../rng.js';
@@ -277,12 +279,28 @@ function professorDoAndar(hero: Hero, floor: number, rng: Rng): { classId: strin
  * e os itens do andar podem vir com material. `entrada`: o andar em que se
  * entra pelo portão, com a saída na sala de início.
  */
+/**
+ * O mestre de estilo (rodada 5a, só o app): depois de zerar a Floresta, a
+ * chance da classe a cada andar novo, se o herói ainda tem estilo pra
+ * aprender; ele ensina um sorteado. O `rng` só é gasto quando ele pode
+ * aparecer.
+ */
+function mestreDoAndar(base: Omit<EstadoBase, 'pos'>, rng: Rng): { estilo: string } | undefined {
+  const chance = chanceDoMestre(base.hero);
+  if (chance <= 0 || !isCleared(base.progresso, { dungeon: 'floresta', difficulty: base.masmorra.difficulty })) return undefined;
+  if (rng() * 100 >= chance) return undefined;
+  const estilo = sortearEstilo(base.hero, rng);
+  return estilo ? { estilo } : undefined;
+}
+
 function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng, now?: () => number, app = false, entrada = false): EstadoNaMasmorra {
   const teacher = professorDoAndar(base.hero, floor, rng);
+  const mestreDeEstilo = app ? mestreDoAndar(base, rng) : undefined;
   const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, {
     rng,
     run: base.masmorra,
     teacher,
+    ...(mestreDeEstilo ? { mestreDeEstilo } : {}),
     now,
     ...(app ? { app } : {}),
     ...(entrada ? { entrada } : {}),

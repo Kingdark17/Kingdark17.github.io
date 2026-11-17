@@ -378,17 +378,33 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>
+        /// TS: mestreDoAndar — o mestre de estilo (rodada 5a, só o app): depois de zerar a Floresta, a chance da classe
+        /// a cada andar novo, se o herói ainda tem estilo pra aprender; ele ensina um sorteado. O rng só é gasto quando
+        /// ele pode aparecer.
+        /// </summary>
+        private static string MestreDoAndar(EstadoDoJogo baseDoAndar, RngFn rng)
+        {
+            var hero = baseDoAndar.Hero;
+            double chance = Estilos.ChanceDoMestre(hero.ClassId, hero.ClassName, hero.Estilos);
+            if (chance <= 0 || !Dungeons.IsCleared(baseDoAndar.Progresso, new DungeonRun { Dungeon = "floresta", Difficulty = baseDoAndar.Masmorra.Difficulty })) return null;
+            if (rng() * 100 >= chance) return null;
+            return Estilos.Sortear(hero.ClassId, hero.ClassName, hero.Estilos, rng);
+        }
+
+        /// <summary>
         /// TS: gerarAndar. <paramref name="now"/> é o relógio do uid dos itens que o andar sorteia; ausente,
         /// o relógio de verdade. <paramref name="app"/>: quem desce é o app, e os itens do andar podem vir com material.
         /// </summary>
         private static EstadoNaMasmorra GerarAndar(EstadoDoJogo baseDoAndar, double floor, RngFn rng, Func<double> now, bool app = false, bool entrada = false)
         {
             var teacher = ProfessorDoAndar(baseDoAndar.Hero, floor, rng);
+            string mestreDeEstilo = app ? MestreDoAndar(baseDoAndar, rng) : null;
             var andar = DungeonFloors.Generate(floor, baseDoAndar.MapRows, baseDoAndar.MapCols, new DungeonGenerateOptions
             {
                 Rng = rng,
                 Run = baseDoAndar.Masmorra,
                 Teacher = teacher,
+                MestreDeEstilo = mestreDeEstilo,
                 Now = now,
                 App = app,
                 Entrada = entrada,

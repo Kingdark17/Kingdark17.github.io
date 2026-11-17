@@ -13,11 +13,12 @@
  */
 
 import { powerById, type ClassDef } from '../hero/catalog.js';
-import { hasClass, trainAtGuild } from '../hero/hero.js';
+import { hasClass, recomputeDerived, trainAtGuild } from '../hero/hero.js';
 import { addItem } from '../inventory/inventory.js';
 import { displayName } from '../items/item.js';
 import { defaultRng, type Rng } from '../rng.js';
 import type { EstadoDoJogo } from './estado.js';
+import { estiloPorId, trocarEstilo } from '../hero/estilos.js';
 import { marcar, type Recado } from './tutorial.js';
 
 export interface Guilda {
@@ -29,6 +30,16 @@ export interface Guilda {
 
 export function abrirGuilda(estado: EstadoDoJogo): Guilda {
   return { estado, log: [], recado: null };
+}
+
+/** Troca o estilo de luta ativo (rodada 5a, só o app oferece): entre os que o herói aprendeu; `undefined`, sem estilo. */
+export function trocarEstiloNaGuilda(guilda: Guilda, estilo: string | undefined): Guilda {
+  const trocado = trocarEstilo(guilda.estado.hero, estilo);
+  if (trocado === guilda.estado.hero) return guilda;
+  // A vida máxima acompanha o estilo (o Cavaleiro tem 40% a mais).
+  const hero = recomputeDerived(trocado);
+  const nome = estilo ? (estiloPorId(estilo)?.nome ?? estilo) : null;
+  return { ...guilda, estado: { ...guilda.estado, hero }, log: [nome ? `Estilo ativo: ${nome}.` : 'Você luta sem estilo.'], recado: null };
 }
 
 /**

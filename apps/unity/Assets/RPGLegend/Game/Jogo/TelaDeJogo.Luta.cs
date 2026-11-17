@@ -56,6 +56,9 @@ namespace RPGLegend.Game.Jogo
         /// <summary>A Magia Proibida do Necromante (rodada 4b): levanta o parceiro caído.</summary>
         private Button _botaoMagia;
         private bool _magiaNoArco;
+        /// <summary>O Corte Invernal do Espadachim (rodada 5a): com 300 de ki.</summary>
+        private Button _botaoCorte;
+        private bool _corteNoArco;
         private EventoNaTela _eventoNaTela;
         private PalcoDaLuta _palcoDaLuta;
         private Button _botaoDoBicho;
@@ -65,7 +68,7 @@ namespace RPGLegend.Game.Jogo
         // O que a pessoa fez desde o último passo: entra no primeiro passo do quadro.
         private bool _apertou, _soltou, _tocou;
         private string _poderApertado, _itemUsado, _tecla, _mirarAliado;
-        private bool _apertouFe, _apertouRevestir, _apertouExplodir, _apertouMagia;
+        private bool _apertouFe, _apertouRevestir, _apertouExplodir, _apertouMagia, _apertouCorte;
         private int? _mirar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
@@ -166,6 +169,7 @@ namespace RPGLegend.Game.Jogo
             _botaoRevestir = BotaoDaClasse("☯️", "300", () => _apertouRevestir = true);
             _botaoExplodir = BotaoDaClasse("💥", "KI", () => _apertouExplodir = true);
             _botaoMagia = BotaoDaClasse("☠️", "MAGIA", () => _apertouMagia = true);
+            _botaoCorte = BotaoDaClasse("❄️", "300", () => _apertouCorte = true);
 
             // Segurar K: um botão que vale enquanto o dedo (ou o mouse) estiver nele.
             _botaoK = new VisualElement();
@@ -322,13 +326,14 @@ namespace RPGLegend.Game.Jogo
                 Revestir = _apertouRevestir ? true : (bool?)null,
                 Explodir = _apertouExplodir ? true : (bool?)null,
                 Magia = _apertouMagia ? true : (bool?)null,
+                Corte = _apertouCorte ? true : (bool?)null,
                 // Segurar K: a tecla (no PC) ou o botão de segurar.
                 Canalizar = SegurandoK() ? true : (bool?)null,
                 // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
                 Cursor = _palcoDaLuta.CursorNaSala(),
             };
             EntradaDaDupla(entrada);
-            _apertou = _soltou = _tocou = _apertouFe = _apertouRevestir = _apertouExplodir = _apertouMagia = false;
+            _apertou = _soltou = _tocou = _apertouFe = _apertouRevestir = _apertouExplodir = _apertouMagia = _apertouCorte = false;
             _poderApertado = null;
             _itemUsado = null;
             _tecla = null;
@@ -348,6 +353,7 @@ namespace RPGLegend.Game.Jogo
             if (teclado.fKey.wasPressedThisFrame && _kiNoArco) _apertouRevestir = true;
             if (teclado.gKey.wasPressedThisFrame && _kiNoArco) _apertouExplodir = true;
             if (teclado.fKey.wasPressedThisFrame && _magiaNoArco) _apertouMagia = true;
+            if (teclado.fKey.wasPressedThisFrame && _corteNoArco) _apertouCorte = true;
             if (teclado.tabKey.wasPressedThisFrame) _mirar = ProximoAlvo(luta.Arena);
             var digitos = new[] { teclado.digit1Key, teclado.digit2Key, teclado.digit3Key };
             for (int i = 0; i < digitos.Length && i < _botoesDePoder.Count; i++)
@@ -440,7 +446,7 @@ namespace RPGLegend.Game.Jogo
             }
             _palcoDaLuta.ApoiaAliados = ClassesDeLuta.ApoiaAliado(hero);
 
-            // Segurar K (o Mago, o Necromante, o Monge) e os botões do ki (o Monge).
+            // Segurar K (o Mago, o Necromante, o Monge, o Espadachim) e os botões do ki (o Monge).
             string canaliza = ClassesDeLuta.OQueCanaliza(hero);
             bool k = canaliza != null;
             if (k != _kNaTela)
@@ -450,7 +456,7 @@ namespace RPGLegend.Game.Jogo
                 if (!k) _segurandoKNaTela = false;
             }
             _botaoK.EnableInClassList("apertado", arena.Canalizando == true);
-            bool ki = canaliza == "ki";
+            bool ki = canaliza == "ki" && Catalog.IdDaClasse(hero.ClassId, hero.ClassName) == "monge";
             if (ki != _kiNoArco)
             {
                 _kiNoArco = ki;
@@ -468,6 +474,15 @@ namespace RPGLegend.Game.Jogo
             }
             if (magia)
                 _botaoMagia.EnableInClassList("sem-mana", hero.BloqueioDaMagia != null || (arena.RecargaDaMagia ?? 0) > 0 || arena.Dupla?.ParceiroCaido != true);
+            // O Corte Invernal (o Espadachim): apagado até juntar o ki dele.
+            bool corte = Estilos.IdDoEstilo(hero) == "espadachim";
+            if (corte != _corteNoArco)
+            {
+                _corteNoArco = corte;
+                _botaoCorte.style.display = corte ? DisplayStyle.Flex : DisplayStyle.None;
+                PosicionarEmVolta();
+            }
+            if (corte) _botaoCorte.EnableInClassList("sem-mana", (arena.Ki ?? 0) < Estilos.Espadachim.Corte);
             if (ki)
             {
                 var monge = GameData.ClassesDeLutaTable.Monge;
@@ -526,6 +541,7 @@ namespace RPGLegend.Game.Jogo
                 botoes.Add(_botaoExplodir);
             }
             if (_magiaNoArco) botoes.Add(_botaoMagia);
+            if (_corteNoArco) botoes.Add(_botaoCorte);
             botoes.Add(_botaoItem);
             // O centro do botão de ataque fica a 54 px do canto de baixo à direita; cada botão em volta tem 62 px.
             bool seis = botoes.Count > AngulosDosBotoesLargo.Length;

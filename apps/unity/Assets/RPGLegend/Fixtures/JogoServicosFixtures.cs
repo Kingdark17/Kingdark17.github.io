@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using RPGLegend.Engine;
 using RPGLegend.Engine.Json;
@@ -150,6 +151,13 @@ namespace RPGLegend.Tests
 
             Fn(M, "abrirGuilda", (a, c) => W(Guildas.AbrirGuilda(JogoJson.LerEstado(a["estado"]))));
             Fn(M, "treinar", (a, c) => W(Guildas.Treinar(R<Guilda>(a["guilda"]), R<ClassDef>(a["classe"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "trocarEstiloNaGuilda", (a, c) =>
+                W(Guildas.TrocarEstiloNaGuilda(R<Guilda>(a["guilda"]), a["id"] == null || a["id"].Type == JTokenType.Null ? null : Str(a["id"]))));
+
+            // ---------- o mestre de estilo (rodada 5a) ----------
+
+            Fn(M, "abrirMestreDeEstilo", (a, c) => W(MestresDeEstilo.Abrir(JogoJson.LerEstado(a["estado"]))));
+            Fn(M, "aprenderComMestre", (a, c) => W(MestresDeEstilo.Aprender(JogoJson.LerEstado(a["estado"]))));
 
             // ---------- a Encantadora ----------
 

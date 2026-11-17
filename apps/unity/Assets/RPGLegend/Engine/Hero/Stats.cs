@@ -119,6 +119,9 @@ namespace RPGLegend.Engine
         /// <summary>A classe, opcional: com ela a vida máxima leva a % da classe (<see cref="ClassesDeLuta"/>).</summary>
         string ClassId { get; }
         string ClassName { get; }
+        /// <summary>Os estilos de luta (<see cref="Estilos"/>): com o Cavaleiro ativo, a vida máxima leva +40%.</summary>
+        IReadOnlyList<string> Estilos { get; }
+        string Estilo { get; }
     }
 
     public sealed class HeroCore : IHeroCore
@@ -128,6 +131,9 @@ namespace RPGLegend.Engine
         public Equipment Equip { get; set; } = new Equipment();
         public string ClassId { get; set; }
         public string ClassName { get; set; }
+        public List<string> Estilos { get; set; }
+        public string Estilo { get; set; }
+        IReadOnlyList<string> IHeroCore.Estilos => Estilos;
     }
 
     /// <summary>TS: DerivedStats.</summary>

@@ -816,6 +816,7 @@ namespace RPGLegend.Game.Jogo
                 case "totem": TelaDoTotem(tela.Totem); break;
                 case "missoes": TelaDasMissoes(tela.Quadro); break;
                 case "professor": TelaDoProfessor(tela.Professor); break;
+                case "mestreDeEstilo": TelaDoMestreDeEstilo(tela.Mestre); break;
                 case "guilda": TelaDaGuilda(tela.Guilda); break;
                 case "encantadora": TelaDaEncantadora(tela.Encantadora); break;
                 case "mochila": TelaDaMochila(tela.Mochila); break;

@@ -29415,6 +29415,5079 @@
     }
   },
   {
+    "name": "estiloAtivo: (5a) guerreiro sem estilo",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) guerreiro sem estilo",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "espadachim",
+          "classe": "guerreiro",
+          "nome": "Espadachim",
+          "icone": "🗡️",
+          "desc": "O golpe avança até 3 blocos rumo ao alvo e dá 1 s de imunidade (a cada 5 s); colado no alvo, atordoa 2 s. Segurando K junta ki, e com 300 solta o Corte Invernal."
+        },
+        {
+          "id": "cavaleiro",
+          "classe": "guerreiro",
+          "nome": "Cavaleiro",
+          "icone": "🛡️",
+          "desc": "+40% de vida, crítico +30% de dano e 1 chance em 5 de desviar dos golpes."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) guerreiro sem estilo",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) guerreiro sem estilo, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) guerreiro sem estilo, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) guerreiro sem estilo",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) guerreiro sem estilo",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) guerreiro sem estilo",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) guerreiro sem estilo",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) guerreiro sem estilo",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) guerreiro sem estilo, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) guerreiro sem estilo, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) guerreiro sem estilo, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 45
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) guerreiro sem estilo, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +20% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) guerreiro sem estilo, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "cavaleiro",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) guerreiro sem estilo, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "espadachim",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro sem estilo, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro sem estilo, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro sem estilo, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro sem estilo, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro sem estilo, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro sem estilo, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro sem estilo, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro sem estilo, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro sem estilo, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) guerreiro espadachim",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "espadachim",
+        "classe": "guerreiro",
+        "nome": "Espadachim",
+        "icone": "🗡️",
+        "desc": "O golpe avança até 3 blocos rumo ao alvo e dá 1 s de imunidade (a cada 5 s); colado no alvo, atordoa 2 s. Segurando K junta ki, e com 300 solta o Corte Invernal."
+      }
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) guerreiro espadachim",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "cavaleiro",
+          "classe": "guerreiro",
+          "nome": "Cavaleiro",
+          "icone": "🛡️",
+          "desc": "+40% de vida, crítico +30% de dano e 1 chance em 5 de desviar dos golpes."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) guerreiro espadachim",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) guerreiro espadachim, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) guerreiro espadachim, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) guerreiro espadachim",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) guerreiro espadachim",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": "ki"
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) guerreiro espadachim",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) guerreiro espadachim",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) guerreiro espadachim",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) guerreiro espadachim, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) guerreiro espadachim, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🗡️ Avanço pronto",
+        "☯️ Ki 120/300"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) guerreiro espadachim, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 45
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) guerreiro espadachim, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +20% · 0/3",
+        "🗡️ Avanço em 2 s",
+        "☯️ Ki 120/300"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) guerreiro espadachim, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "cavaleiro",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) guerreiro espadachim, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "cavaleiro",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro espadachim, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro espadachim, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro espadachim, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro espadachim, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro espadachim, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro espadachim, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro espadachim, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro espadachim, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro espadachim, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ]
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) guerreiro cavaleiro",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "cavaleiro",
+        "classe": "guerreiro",
+        "nome": "Cavaleiro",
+        "icone": "🛡️",
+        "desc": "+40% de vida, crítico +30% de dano e 1 chance em 5 de desviar dos golpes."
+      }
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) guerreiro cavaleiro",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) guerreiro cavaleiro",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) guerreiro cavaleiro, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 140
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) guerreiro cavaleiro, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 108
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) guerreiro cavaleiro",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) guerreiro cavaleiro",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) guerreiro cavaleiro",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) guerreiro cavaleiro",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) guerreiro cavaleiro",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) guerreiro cavaleiro, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) guerreiro cavaleiro, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) guerreiro cavaleiro, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 45
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) guerreiro cavaleiro, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +20% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) guerreiro cavaleiro, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) guerreiro cavaleiro, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro cavaleiro, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro cavaleiro, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro cavaleiro, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro cavaleiro, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro cavaleiro, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro cavaleiro, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) guerreiro cavaleiro, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro cavaleiro, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) guerreiro cavaleiro, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim",
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim",
+          "cavaleiro"
+        ]
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) monge empurrão",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "empurrao",
+        "classe": "monge",
+        "nome": "Empurrão",
+        "icone": "👐",
+        "desc": "+25% de dano; o golpe pega também quem está a 1 bloco do alvo, e cada um pode ser empurrado e atordoado."
+      }
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) monge empurrão",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "chute",
+          "classe": "monge",
+          "nome": "Dash/chute",
+          "icone": "🦶",
+          "desc": "Avança num chute até o alvo, a até 5 blocos; erra 1 vez em 10, e o crítico dá +40% de dano."
+        },
+        {
+          "id": "concentracao",
+          "classe": "monge",
+          "nome": "Concentração",
+          "icone": "🧘",
+          "desc": "A cada 3 s sem atacar junta uma carga (até 3); cada carga dá +50% no próximo golpe. +1 de alcance."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) monge empurrão",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) monge empurrão, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) monge empurrão, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) monge empurrão",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) monge empurrão",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": "ki"
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) monge empurrão",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) monge empurrão",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) monge empurrão",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) monge empurrão, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) monge empurrão, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 120/300"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) monge empurrão, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) monge empurrão, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 120/300"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) monge empurrão, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "concentracao",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) monge empurrão, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "chute",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge empurrão, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "empurrao"
+        ],
+        "estilo": "empurrao"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge empurrão, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "empurrao"
+        ],
+        "estilo": "empurrao"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge empurrão, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "empurrao"
+        ],
+        "estilo": "empurrao"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge empurrão, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "empurrao"
+        ],
+        "estilo": "empurrao"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge empurrão, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "empurrao",
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge empurrão, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "empurrao"
+        ],
+        "estilo": "empurrao"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge empurrão, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "empurrao"
+        ],
+        "estilo": "empurrao"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge empurrão, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "empurrao"
+        ],
+        "estilo": "empurrao"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge empurrão, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "empurrao"
+        ]
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) monge chute",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "chute",
+        "classe": "monge",
+        "nome": "Dash/chute",
+        "icone": "🦶",
+        "desc": "Avança num chute até o alvo, a até 5 blocos; erra 1 vez em 10, e o crítico dá +40% de dano."
+      }
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) monge chute",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "empurrao",
+          "classe": "monge",
+          "nome": "Empurrão",
+          "icone": "👐",
+          "desc": "+25% de dano; o golpe pega também quem está a 1 bloco do alvo, e cada um pode ser empurrado e atordoado."
+        },
+        {
+          "id": "concentracao",
+          "classe": "monge",
+          "nome": "Concentração",
+          "icone": "🧘",
+          "desc": "A cada 3 s sem atacar junta uma carga (até 3); cada carga dá +50% no próximo golpe. +1 de alcance."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) monge chute",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) monge chute, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) monge chute, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) monge chute",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) monge chute",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": "ki"
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) monge chute",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) monge chute",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": 40
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) monge chute",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) monge chute, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) monge chute, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 120/300"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) monge chute, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) monge chute, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 120/300"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) monge chute, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "concentracao",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) monge chute, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "empurrao",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge chute, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge chute, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge chute, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge chute, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge chute, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge chute, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge chute, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge chute, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge chute, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute"
+        ]
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) monge concentração",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "id": "concentracao",
+        "classe": "monge",
+        "nome": "Concentração",
+        "icone": "🧘",
+        "desc": "A cada 3 s sem atacar junta uma carga (até 3); cada carga dá +50% no próximo golpe. +1 de alcance."
+      }
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) monge concentração",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) monge concentração",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) monge concentração, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) monge concentração, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) monge concentração",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) monge concentração",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": "ki"
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) monge concentração",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) monge concentração",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) monge concentração",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) monge concentração, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) monge concentração, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 120/300",
+        "🧘 Cargas 0/3"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) monge concentração, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) monge concentração, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 120/300",
+        "🧘 Cargas 2/3"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) monge concentração, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) monge concentração, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge concentração, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute",
+          "concentracao",
+          "empurrao"
+        ],
+        "estilo": "concentracao"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge concentração, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute",
+          "concentracao",
+          "empurrao"
+        ],
+        "estilo": "concentracao"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge concentração, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute",
+          "concentracao",
+          "empurrao"
+        ],
+        "estilo": "concentracao"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge concentração, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute",
+          "concentracao",
+          "empurrao"
+        ],
+        "estilo": "concentracao"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge concentração, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute",
+          "concentracao",
+          "empurrao"
+        ],
+        "estilo": "concentracao"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge concentração, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute",
+          "concentracao",
+          "empurrao"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) monge concentração, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute",
+          "concentracao",
+          "empurrao"
+        ],
+        "estilo": "concentracao"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge concentração, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute",
+          "concentracao",
+          "empurrao"
+        ],
+        "estilo": "concentracao"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) monge concentração, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute",
+            "concentracao",
+            "empurrao"
+          ],
+          "estilo": "concentracao"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "chute",
+          "concentracao",
+          "empurrao"
+        ]
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) estilo de outra classe",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) estilo de outra classe",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "empurrao",
+          "classe": "monge",
+          "nome": "Empurrão",
+          "icone": "👐",
+          "desc": "+25% de dano; o golpe pega também quem está a 1 bloco do alvo, e cada um pode ser empurrado e atordoado."
+        },
+        {
+          "id": "chute",
+          "classe": "monge",
+          "nome": "Dash/chute",
+          "icone": "🦶",
+          "desc": "Avança num chute até o alvo, a até 5 blocos; erra 1 vez em 10, e o crítico dá +40% de dano."
+        },
+        {
+          "id": "concentracao",
+          "classe": "monge",
+          "nome": "Concentração",
+          "icone": "🧘",
+          "desc": "A cada 3 s sem atacar junta uma carga (até 3); cada carga dá +50% no próximo golpe. +1 de alcance."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) estilo de outra classe",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) estilo de outra classe, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) estilo de outra classe, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) estilo de outra classe",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) estilo de outra classe",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": "ki"
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) estilo de outra classe",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) estilo de outra classe",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) estilo de outra classe",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) estilo de outra classe, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) estilo de outra classe, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 120/300"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) estilo de outra classe, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) estilo de outra classe, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 120/300"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) estilo de outra classe, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "chute",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) estilo de outra classe, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "empurrao",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) estilo de outra classe, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo de outra classe, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) estilo de outra classe, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo de outra classe, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) estilo de outra classe, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "cavaleiro",
+          "chute"
+        ],
+        "estilo": "chute"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo de outra classe, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) estilo de outra classe, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo de outra classe, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo de outra classe, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "monge",
+        "estilos": [
+          "cavaleiro"
+        ]
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) estilo que não aprendeu",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) estilo que não aprendeu",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "espadachim",
+          "classe": "guerreiro",
+          "nome": "Espadachim",
+          "icone": "🗡️",
+          "desc": "O golpe avança até 3 blocos rumo ao alvo e dá 1 s de imunidade (a cada 5 s); colado no alvo, atordoa 2 s. Segurando K junta ki, e com 300 solta o Corte Invernal."
+        },
+        {
+          "id": "cavaleiro",
+          "classe": "guerreiro",
+          "nome": "Cavaleiro",
+          "icone": "🛡️",
+          "desc": "+40% de vida, crítico +30% de dano e 1 chance em 5 de desviar dos golpes."
+        }
+      ]
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) estilo que não aprendeu",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) estilo que não aprendeu, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) estilo que não aprendeu, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) estilo que não aprendeu",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) estilo que não aprendeu",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) estilo que não aprendeu",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) estilo que não aprendeu",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) estilo que não aprendeu",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) estilo que não aprendeu, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) estilo que não aprendeu, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) estilo que não aprendeu, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 45
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) estilo que não aprendeu, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro",
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +20% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) estilo que não aprendeu, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": "cavaleiro",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) estilo que não aprendeu, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": "espadachim",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) estilo que não aprendeu, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "espadachim"
+        ],
+        "estilo": "espadachim"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo que não aprendeu, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) estilo que não aprendeu, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [
+          "cavaleiro"
+        ],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo que não aprendeu, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) estilo que não aprendeu, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo que não aprendeu, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) estilo que não aprendeu, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo que não aprendeu, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": [],
+        "estilo": "cavaleiro"
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) estilo que não aprendeu, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "guerreiro",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "estiloAtivo: (5a) mago",
+    "input": {
+      "fn": "estiloAtivo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "estilosQueFaltam: (5a) mago",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "chanceDoMestre: (5a) mago",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) mago, 100",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 100,
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 100
+    }
+  },
+  {
+    "name": "vidaComOEstilo: (5a) mago, 77",
+    "input": {
+      "fn": "vidaComOEstilo",
+      "args": {
+        "vida": 77,
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 77
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (5a) mago",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "oQueCanaliza: (5a) mago",
+    "input": {
+      "fn": "oQueCanaliza",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": "mana"
+    }
+  },
+  {
+    "name": "passosDoCanal: (5a) mago",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "criticoDoEstilo: (5a) mago",
+    "input": {
+      "fn": "criticoDoEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "esquivaDaClasse: (5a) mago",
+    "input": {
+      "fn": "esquivaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "c": {},
+        "chefe": false
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) mago, {}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "c": {},
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) mago, {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "bonusDoAtaque: (5a) mago, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "textosDaClasse: (5a) mago, {\"cargas\":2,\"recargaDoEstilo\":61,\"combo\":20}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "cargas": 2,
+          "recargaDoEstilo": 61,
+          "combo": 20
+        },
+        "extras": {
+          "ki": 120
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) mago, 0.5",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "sortearEstilo: (5a) mago, 0.01",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.01,
+          0.01
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) mago, espadachim",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) mago, espadachim",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "espadachim"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) mago, cavaleiro",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) mago, cavaleiro",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "cavaleiro"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) mago, chute",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) mago, chute",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "chute"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "aprenderEstilo: (5a) mago, inventado",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) mago, inventado",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "inventado"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "trocarEstilo: (5a) mago, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "derivedStats: o Cavaleiro com 40% de vida",
+    "input": {
+      "fn": "derivedStats",
+      "args": {
+        "hero": {
+          "level": 7,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 13,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {},
+          "classId": "guerreiro",
+          "estilos": [
+            "cavaleiro"
+          ],
+          "estilo": "cavaleiro"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 259,
+        "maxMp": 74,
+        "dmgFisico": 20,
+        "dmgMagico": 30,
+        "esquiva": 5,
+        "critico": 10,
+        "velocidade": 10,
+        "curaBonus": 10,
+        "resistMagica": 10,
+        "descontoLoja": 5
+      }
+    }
+  },
+  {
     "name": "masteryBattlesFor: nível 0",
     "input": {
       "fn": "masteryBattlesFor",

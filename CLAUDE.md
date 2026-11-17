@@ -617,8 +617,35 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   pro outro (o "p" leva `l`, só desenho), mas os monstros só vão atrás dos
   de quem conduz. O texto da janela evita "fi" minúsculo: nessa fonte vira
   outra letra.
-  Falta, nesta ordem: estilos e mestres; mercadores secretos e itens novos (a arte das armas
-  novas é o Claude que desenha, no estilo do Breno); o Caçador.
+  Rodada 5a, **estilos e mestres: o Guerreiro e o Monge** (2026-11-17,
+  decidido com o usuário; regras em `hero/estilos.ts` ↔ `Engine/Hero/Estilos.cs`):
+  **o mestre de estilo é uma sala da masmorra, só do app** (`'estilo'`,
+  `MestreDeEstilo` na célula), depois de zerar a Floresta na dificuldade do
+  personagem: cada andar novo tem a chance da classe (`CHANCE_DO_MESTRE`:
+  Guerreiro, Druida e Monge 15%, Mago 10%) se ainda falta estilo, sorteada
+  em `mestreDoAndar` depois do professor (o rng só gasta quando pode
+  aparecer), e ele ensina **um estilo sorteado** entre os que faltam (os
+  raros com a chance deles). Aprender (`aprenderComMestre`, a tela
+  `mestreDeEstilo`) põe o estilo em **`Hero.estilos` e o deixa ativo em
+  `Hero.estilo`, no save** (o site só guarda); **a troca é na guilda**
+  (`trocarEstiloNaGuilda`, as cartas do app), e as duas recalculam a vida
+  (`recomputeDerived`). **O Cavaleiro tem +40% de vida em todo lugar**
+  (`vidaComOEstilo` no `derived` e no `sanitize` da sala da API, que
+  desde então também conta a mana do Mago); o resto é só da arena: o
+  **Espadachim** avança até 3 blocos rumo ao alvo no golpe, com 1 s de
+  imunidade, a cada 5 s (colado no alvo, atordoa 2 s em vez de avançar), e
+  segurando K junta ki a 3/s pro **Corte Invernal** (botão ❄️, tecla F, 300
+  de ki: uma faixa de 3 casas que anda 6 blocos e acerta todo mundo nela, a
+  80% do golpe); o **Cavaleiro** crita +30% e desvia 1 em 5; o **Empurrão**
+  bate +25% e pega quem está a 1 bloco do alvo, com 25% de empurrar e
+  atordoar cada um; o **Dash/chute** alcança 5 blocos avançando até o alvo,
+  erra 1 em 10 e crita +40%; a **Concentração** junta uma carga a cada 3 s
+  sem golpear (até 3, +50% cada no próximo golpe, que gasta todas) e dá +1
+  de alcance. O que o estilo junta mora em `Arena.classe` e aparece na linha
+  da classe.
+  Falta, nesta ordem: os estilos do Druida (5b) e os elementos do Mago (5c);
+  mercadores secretos e itens novos (a arte das armas novas é o Claude que
+  desenha, no estilo do Breno); o Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

@@ -16,6 +16,7 @@
  */
 
 import { manaComAClasse, vidaComAClasse } from './classes-de-luta.js';
+import { vidaComOEstilo } from './estilos.js';
 import {
   ATTR_KEYS,
   EQUIP_SLOTS,
@@ -98,7 +99,7 @@ export function derivedStats(hero: HeroCore, options: DerivedOptions = {}): Deri
 
   return {
     // A vida da classe (doc do Breno de 2026-11-15) vale no site e no app.
-    maxHp: vidaComAClasse(20 + hero.level * 5 + a.constituicao * 10 + equipmentStat(hero.equip, 'vida', cap), hero),
+    maxHp: vidaComOEstilo(vidaComAClasse(20 + hero.level * 5 + a.constituicao * 10 + equipmentStat(hero.equip, 'vida', cap), hero), hero),
     maxMp: manaComAClasse(10 + hero.level * 2 + a.intelecto * 5 + equipmentStat(hero.equip, 'mana', cap), hero),
     dmgFisico: a.forca * 2,
     dmgMagico: a.intelecto * 3,

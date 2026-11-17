@@ -21,6 +21,19 @@ namespace RPGLegend.Engine
         /// <summary>TS: abrirGuilda.</summary>
         public static Guilda AbrirGuilda(EstadoDoJogo estado) => new Guilda { Estado = estado, Log = new List<string>(), Recado = null };
 
+        /// <summary>TS: trocarEstiloNaGuilda — troca o estilo de luta ativo (rodada 5a, só o app oferece); null, sem estilo.</summary>
+        public static Guilda TrocarEstiloNaGuilda(Guilda guilda, string estilo)
+        {
+            var trocado = Estilos.Trocar(guilda.Estado.Hero, estilo);
+            if (ReferenceEquals(trocado, guilda.Estado.Hero)) return guilda;
+            // A vida máxima acompanha o estilo (o Cavaleiro tem 40% a mais).
+            var hero = Heroes.RecomputeDerived(trocado);
+            string nome = estilo != null ? (Estilos.PorId(estilo)?.Nome ?? estilo) : null;
+            var estado = guilda.Estado.Clone();
+            estado.Hero = hero;
+            return new Guilda { Estado = estado, Log = new List<string> { nome != null ? "Estilo ativo: " + nome + "." : "Você luta sem estilo." }, Recado = null };
+        }
+
         /// <summary>
         /// TS: treinar — quem já tem classe não troca. É aqui que o Aprendiz fecha a etapa "Treine na Guilda".
         /// <paramref name="rng"/> e <paramref name="now"/> sorteiam o uid da arma inicial e a poção do prêmio.

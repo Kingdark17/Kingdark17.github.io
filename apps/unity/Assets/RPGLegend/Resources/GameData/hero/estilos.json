@@ -1,0 +1,77 @@
+{
+  "ESTILOS": [
+    {
+      "id": "espadachim",
+      "classe": "guerreiro",
+      "nome": "Espadachim",
+      "icone": "🗡️",
+      "desc": "O golpe avança até 3 blocos rumo ao alvo e dá 1 s de imunidade (a cada 5 s); colado no alvo, atordoa 2 s. Segurando K junta ki, e com 300 solta o Corte Invernal."
+    },
+    {
+      "id": "cavaleiro",
+      "classe": "guerreiro",
+      "nome": "Cavaleiro",
+      "icone": "🛡️",
+      "desc": "+40% de vida, crítico +30% de dano e 1 chance em 5 de desviar dos golpes."
+    },
+    {
+      "id": "empurrao",
+      "classe": "monge",
+      "nome": "Empurrão",
+      "icone": "👐",
+      "desc": "+25% de dano; o golpe pega também quem está a 1 bloco do alvo, e cada um pode ser empurrado e atordoado."
+    },
+    {
+      "id": "chute",
+      "classe": "monge",
+      "nome": "Dash/chute",
+      "icone": "🦶",
+      "desc": "Avança num chute até o alvo, a até 5 blocos; erra 1 vez em 10, e o crítico dá +40% de dano."
+    },
+    {
+      "id": "concentracao",
+      "classe": "monge",
+      "nome": "Concentração",
+      "icone": "🧘",
+      "desc": "A cada 3 s sem atacar junta uma carga (até 3); cada carga dá +50% no próximo golpe. +1 de alcance."
+    }
+  ],
+  "CHANCE_DO_MESTRE": {
+    "guerreiro": 15,
+    "monge": 15,
+    "druida": 15,
+    "mago": 10
+  },
+  "REGRAS_DO_ESPADACHIM": {
+    "avanco": 3,
+    "imunidade": 60,
+    "recarga": 300,
+    "atordoa": 120,
+    "kiPorSegundo": 3,
+    "corte": 300,
+    "larguraDoCorte": 3,
+    "alcanceDoCorte": 6,
+    "forcaDoCorte": 80
+  },
+  "REGRAS_DO_CAVALEIRO": {
+    "vida": 40,
+    "critico": 30,
+    "desvio": 20
+  },
+  "REGRAS_DO_EMPURRAO": {
+    "dano": 25,
+    "raio": 1,
+    "chance": 25
+  },
+  "REGRAS_DO_CHUTE": {
+    "alcance": 5,
+    "erro": 10,
+    "critico": 40
+  },
+  "REGRAS_DA_CONCENTRACAO": {
+    "passosPorCarga": 180,
+    "tetoDeCargas": 3,
+    "porCarga": 50,
+    "alcance": 1
+  }
+}

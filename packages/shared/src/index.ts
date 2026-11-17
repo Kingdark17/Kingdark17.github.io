@@ -57,6 +57,7 @@ export * from './dungeon/arte-da-sala.js';
 
 export * from './inventory/inventory.js';
 export * from './hero/classes-de-luta.js';
+export * from './hero/estilos.js';
 export * from './npc/npc-services.js';
 export * from './quests/quests.js';
 export * from './city/city.js';
@@ -103,6 +104,7 @@ export * from './jogo/salas-emendadas.js';
 export * from './jogo/luta-no-mapa.js';
 export * from './jogo/portao.js';
 export * from './jogo/professor.js';
+export * from './jogo/mestre-de-estilo.js';
 export * from './jogo/sala.js';
 export * from './jogo/save-inicial.js';
 export * from './jogo/totem.js';

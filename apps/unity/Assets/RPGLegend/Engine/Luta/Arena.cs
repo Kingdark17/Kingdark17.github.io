@@ -336,6 +336,8 @@ namespace RPGLegend.Engine
         public bool? Explodir;
         /// <summary>O Necromante: apertou a Magia Proibida.</summary>
         public bool? Magia;
+        /// <summary>O Espadachim: apertou o Corte Invernal.</summary>
+        public bool? Corte;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -593,6 +595,7 @@ namespace RPGLegend.Engine
             else if (entrada.Revestir == true) Revestir(l);
             else if (entrada.Explodir == true) Explodir(l);
             else if (entrada.Magia == true) UsarMagia(l);
+            else if (entrada.Corte == true) CorteInvernal(l);
             else if (Js.Truthy(entrada.Item)) UsarItem(l, entrada.Item);
 
             if (l.Fim == null)
@@ -859,7 +862,9 @@ namespace RPGLegend.Engine
             if (Catalog.IdDaClasse(quem.ClassId, quem.ClassName) == "druida") return NasVinhas(l, lugar.X, lugar.Y, folga);
             double dx = l.Arena.Heroi.X - lugar.X;
             double dy = l.Arena.Heroi.Y - lugar.Y;
-            double limite = AlcanceNaArena(Masmorra(l).Hero) + folga;
+            // O Espadachim com o avanço pronto alcança mais: ele vai até o alvo (rodada 5a).
+            double avanco = AvancoPronto(l) ? Estilos.Espadachim.Avanco * RoomWalk.TileUnits : 0;
+            double limite = AlcanceNaArena(Masmorra(l).Hero) + folga + avanco;
             return dx * dx + dy * dy <= limite * limite;
         }
 
@@ -1262,17 +1267,52 @@ namespace RPGLegend.Engine
                 Contar(l, Som("miss"));
                 return;
             }
-            bool paladino = Catalog.IdDaClasse(Masmorra(l).Hero.ClassId, Masmorra(l).Hero.ClassName) == "paladino";
-            if (paladino) Avancar(l, indice.Value);
+            var heroDoGolpe = Masmorra(l).Hero;
+            bool paladino = Catalog.IdDaClasse(heroDoGolpe.ClassId, heroDoGolpe.ClassName) == "paladino";
+            string estiloAtivo = Estilos.IdDoEstilo(heroDoGolpe);
+            bool atordoarDepois = false;
+            // O avanço: o do Paladino e o chute do Monge sempre; o do Espadachim, a cada 5 s (colado no alvo, atordoa em vez de avançar).
+            if (paladino || estiloAtivo == "chute") Avancar(l, indice.Value);
+            else if (AvancoPronto(l))
+            {
+                if (Colado(l, indice.Value)) atordoarDepois = true;
+                else
+                {
+                    Avancar(l, indice.Value, Estilos.Espadachim.Avanco);
+                    var imune = Contadores(l).Clone();
+                    imune.Imune = Estilos.Espadachim.Imunidade;
+                    l.Arena.Classe = imune;
+                }
+                var recarga = Contadores(l).Clone();
+                recarga.RecargaDoEstilo = Estilos.Espadachim.Recarga;
+                l.Arena.Classe = recarga;
+            }
+            // O chute erra 1 vez em 10.
+            if (estiloAtivo == "chute" && l.Rng() * 100 < Estilos.Chute.Erro)
+            {
+                Contar(l, Numero("monstro", indice.Value, "Errou", "erro"));
+                Contar(l, Som("miss"));
+                return;
+            }
             double dado = 1 + Rng.RandomInt(Attack.LadosDoDano, l.Rng);
             double? dano = AcertarMonstro(l, l.Arena.Monstros[(int)indice.Value], dado, leitura, aberto.Estilo);
+            // A Concentração gasta as cargas no golpe, acertando ou não.
+            if (estiloAtivo == "concentracao" && l.Arena.Classe != null)
+            {
+                var gastou = l.Arena.Classe.Clone();
+                gastou.Cargas = 0;
+                gastou.SemGolpe = 0;
+                l.Arena.Classe = gastou;
+            }
             if (dano == null || l.Fim != null) return;
             // O Bardo e o Clérigo também se curam batendo; as vinhas do Druida deixam o monstro lento e envenenado.
             ApoiarAqui(l);
             VinhasNoMonstro(l, indice.Value);
             GolpeEmArea(l, indice.Value, dano.Value);
+            if (estiloAtivo == "empurrao") EmpurraoEmVolta(l, indice.Value, dano.Value);
             // O avanço do Paladino empurra o alvo que ficou de pé.
             var alvo = l.Arena.Monstros[(int)indice.Value];
+            if (atordoarDepois && l.Fim == null && alvo.Fase != "caido") Atordoar(l, alvo, Estilos.Espadachim.Atordoa);
             if (paladino && l.Fim == null && alvo.Fase != "caido") Empurrar(l, alvo, l.Arena.Heroi.X, l.Arena.Heroi.Y, CD.Paladino.Empurrao);
         }
 
@@ -1297,12 +1337,13 @@ namespace RPGLegend.Engine
             var moral = MoralAqui(l);
             // O dano a mais: o da classe, o da moral do grupo e o reforço do Bardo.
             double bonus =
-                ClassesDeLuta.BonusDoAtaque(h.ClassId, h.ClassName, h.Equip?.Get("arma")?.TemplateId, Contadores(l), Colado(l, alvo.Indice), monstro.IsBoss, BlocosAte(l, alvo.Indice)) +
+                ClassesDeLuta.BonusDoAtaque(h.ClassId, h.ClassName, h.Equip?.Get("arma")?.TemplateId, Contadores(l), Colado(l, alvo.Indice), monstro.IsBoss, BlocosAte(l, alvo.Indice), Estilos.IdDoEstilo(h)) +
                 moral.Dano +
                 ((l.Arena.Reforco ?? 0) > 0 ? CD.Bardo.Forca : 0) +
                 (l.Arena.Revestido == true ? CD.Monge.DanoRevestido : 0);
             double? daClasse = ClassesDeLuta.CriticoDaClasse(h.ClassId, h.ClassName);
-            double? critico = moral.Critico > 0 ? (daClasse ?? 1.6) + moral.Critico / 100 : daClasse;
+            double criticoAMais = moral.Critico + ClassesDeLuta.CriticoDoEstilo(h);
+            double? critico = criticoAMais > 0 ? (daClasse ?? 1.6) + criticoAMais / 100 : daClasse;
             // O golpe sagrado do Clérigo num morto-vivo.
             bool sagrado = Catalog.IdDaClasse(h.ClassId, h.ClassName) == "clerigo" && estilo == AttackStyles.Magic && ClassesDeLuta.MortoVivo(monstro.SpeciesId);
             var opcoes = new ResolveAttackOptions
@@ -1391,8 +1432,11 @@ namespace RPGLegend.Engine
             return false;
         }
 
-        /// <summary>TS: avancar — o golpe do Paladino é um avanço: ele vai em linha reta até 1 bloco do alvo.</summary>
-        private static void Avancar(Luta l, double indice)
+        /// <summary>
+        /// TS: avancar — o golpe que avança (o Paladino, o chute do Monge, o Espadachim): ele vai em linha reta até 1
+        /// bloco do alvo, no máximo <paramref name="maxBlocos"/> blocos (se não cair numa parede de dentro).
+        /// </summary>
+        private static void Avancar(Luta l, double indice, double? maxBlocos = null)
         {
             var heroi = l.Arena.Heroi;
             var lugar = LugarDe(l, indice);
@@ -1400,7 +1444,7 @@ namespace RPGLegend.Engine
             double dy = lugar.Y - heroi.Y;
             double distancia = Math.Sqrt(dx * dx + dy * dy);
             if (distancia <= RoomWalk.TileUnits) return;
-            double anda = distancia - RoomWalk.TileUnits;
+            double anda = maxBlocos == null ? distancia - RoomWalk.TileUnits : Math.Min(distancia - RoomWalk.TileUnits, maxBlocos.Value * RoomWalk.TileUnits);
             double x = heroi.X + Math.Truncate(dx * anda / distancia);
             double y = heroi.Y + Math.Truncate(dy * anda / distancia);
             if (NaParede(l, x, y)) return;
@@ -1426,12 +1470,12 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: atordoar — o monstro fica atordoado na hora e perde o golpe que vinha (o que já investe segue).</summary>
-        private static void Atordoar(Luta l, MonstroNaArena m)
+        private static void Atordoar(Luta l, MonstroNaArena m, double? tempo = null)
         {
             if (NoEspelho(l) || m.Fase == "caido" || m.Fase == "investindo") return;
             m.Poder = null;
             m.Fase = "atordoado";
-            m.Tempo = D.TempoAtordoado;
+            m.Tempo = tempo ?? D.TempoAtordoado;
             Contar(l, Numero("monstro", m.Indice, "💫", "erro"));
         }
 
@@ -1494,8 +1538,10 @@ namespace RPGLegend.Engine
             var centro = LugarDe(l, alvo);
             EfeitoDaArma(l, arma, l.Arena.Monstros[(int)alvo]);
             double parte = Js.Max(1, Math.Truncate(dano * CD.Barbaro.NosOutros / 100));
-            foreach (var m in l.Arena.Monstros)
+            // Por índice, como o for...of do JS: o lacaio que entra no meio também é visto (o foreach quebraria).
+            for (int i = 0; i < l.Arena.Monstros.Count; i++)
             {
+                var m = l.Arena.Monstros[i];
                 if (l.Fim != null) return;
                 if (m.Indice == alvo || m.Fase == "caido" || !NaAreaDaArma(l, arma, m, centro.X, centro.Y)) continue;
                 if (!FerirComDano(l, m.Indice, parte, "-" + Js.NumberToString(parte))) EfeitoDaArma(l, arma, m);
@@ -1770,6 +1816,7 @@ namespace RPGLegend.Engine
                 else arena.Reforco = null;
             }
             PassarAFe(l);
+            PassarOsEstilos(l);
             Canalizar(l, entrada);
             if (arena.Recarga > 0) arena.Recarga -= 1;
             if (arena.RecargaDoItem > 0) arena.RecargaDoItem -= 1;
@@ -2125,12 +2172,19 @@ namespace RPGLegend.Engine
         /// </summary>
         private static void GolpeNoHeroi(Luta l, double indice, double forca)
         {
+            // O Espadachim fica imune logo depois do avanço (rodada 5a).
+            if ((Contadores(l).Imune ?? 0) > 0)
+            {
+                Contar(l, Numero("heroi", 0, "Imune", "erro"));
+                Contar(l, Som("miss"));
+                return;
+            }
             var estado = Masmorra(l);
             var monstro = MonstroNo(l, indice);
             var c = Contadores(l);
             var h = estado.Hero;
-            // A esquiva da classe (a furtividade do Ladino) soma com a do pet.
-            double esquiva = (Pets.Bonus(l.Pet).Esquiva ?? 0) + ClassesDeLuta.EsquivaDaClasse(h.ClassId, h.ClassName, c, monstro.IsBoss);
+            // A esquiva da classe (a furtividade do Ladino, o desvio do Cavaleiro) soma com a do pet.
+            double esquiva = (Pets.Bonus(l.Pet).Esquiva ?? 0) + ClassesDeLuta.EsquivaDaClasse(h.ClassId, h.ClassName, c, monstro.IsBoss, Estilos.IdDoEstilo(h));
             var golpe = MonsterHit.LandHitOnHero(estado.Hero, monstro, forca, l.Rng, esquiva, Encantamentos.DefesasDoHeroi(estado.Hero), ClassesDeLuta.ClasseRefeita(h));
             if (golpe.Dodged)
             {
@@ -2961,7 +3015,7 @@ namespace RPGLegend.Engine
             }
             arena.Canalizando = true;
             double canal = (arena.Canal ?? 0) + 1;
-            if (canal < ClassesDeLuta.PassosPorPonto(tipo))
+            if (canal < ClassesDeLuta.PassosDoCanal(hero))
             {
                 arena.Canal = canal;
                 return;
@@ -2974,6 +3028,129 @@ namespace RPGLegend.Engine
                 comMana.Hero = hero.Clone();
                 comMana.Hero.Mp = hero.Mp + 1;
                 l.Estado = comMana;
+            }
+        }
+
+        // ---------- os estilos de luta (rodada 5a: Espadachim, Cavaleiro, Empurrão, Dash/chute, Concentração) ----------
+
+        /// <summary>TS: avancoPronto — o Espadachim tem o avanço pronto (a recarga passou).</summary>
+        private static bool AvancoPronto(Luta l) =>
+            Estilos.IdDoEstilo(Masmorra(l).Hero) == "espadachim" && !((Contadores(l).RecargaDoEstilo ?? 0) > 0);
+
+        /// <summary>TS: passarOsEstilos — a espera do avanço e a imunidade do Espadachim correm; a Concentração junta cargas sem golpear.</summary>
+        private static void PassarOsEstilos(Luta l)
+        {
+            string estilo = Estilos.IdDoEstilo(Masmorra(l).Hero);
+            if (estilo != "espadachim" && estilo != "concentracao") return;
+            var c = Contadores(l).Clone();
+            if (estilo == "espadachim")
+            {
+                if (c.RecargaDoEstilo == null && c.Imune == null) return;
+                if (c.RecargaDoEstilo != null) c.RecargaDoEstilo = c.RecargaDoEstilo.Value > 1 ? c.RecargaDoEstilo.Value - 1 : (double?)null;
+                if (c.Imune != null) c.Imune = c.Imune.Value > 1 ? c.Imune.Value - 1 : (double?)null;
+            }
+            else
+            {
+                var r = Estilos.Concentracao;
+                double semGolpe = (c.SemGolpe ?? 0) + 1;
+                if (semGolpe >= r.PassosPorCarga)
+                {
+                    c.SemGolpe = 0;
+                    c.Cargas = Js.Min(r.TetoDeCargas, (c.Cargas ?? 0) + 1);
+                }
+                else c.SemGolpe = semGolpe;
+            }
+            l.Arena.Classe = c;
+        }
+
+        /// <summary>TS: empurraoEmVolta — quem está a 1 bloco do alvo leva o mesmo dano; e cada um (o alvo também) pode ser empurrado e atordoado.</summary>
+        private static void EmpurraoEmVolta(Luta l, double alvo, double dano)
+        {
+            var r = Estilos.Empurrao;
+            var centro = LugarDe(l, alvo);
+            double raio = r.Raio * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            var pegos = new List<MonstroNaArena> { l.Arena.Monstros[(int)alvo] };
+            // Por índice, como o for...of do JS (o lacaio que entra no meio também é visto).
+            for (int i = 0; i < l.Arena.Monstros.Count; i++)
+            {
+                var m = l.Arena.Monstros[i];
+                if (l.Fim != null) return;
+                if (m.Indice == alvo || m.Fase == "caido") continue;
+                double dx = m.CorpoX - centro.X;
+                double dy = m.CorpoY - centro.Y;
+                if (dx * dx + dy * dy > raio * raio) continue;
+                pegos.Add(m);
+                FerirComDano(l, m.Indice, dano, "-" + Js.NumberToString(dano));
+            }
+            double hx = l.Arena.Heroi.X, hy = l.Arena.Heroi.Y;
+            foreach (var m in pegos)
+            {
+                if (l.Fim != null) return;
+                if (m.Fase == "caido" || l.Rng() * 100 >= r.Chance) continue;
+                Empurrar(l, m, hx, hy, 1);
+                Atordoar(l, m);
+            }
+        }
+
+        /// <summary>
+        /// TS: corteInvernal — o Corte Invernal do Espadachim: com 300 de ki, uma faixa de 3 casas de largura que anda 6
+        /// blocos rumo ao alvo (ou pra onde ele olha) e acerta todo mundo nela; o mais perto leva o golpe a 80%, os
+        /// outros o mesmo dano.
+        /// </summary>
+        private static void CorteInvernal(Luta l)
+        {
+            var r = Estilos.Espadachim;
+            var hero = Masmorra(l).Hero;
+            if (Estilos.IdDoEstilo(hero) != "espadachim" || (l.Arena.Ki ?? 0) < r.Corte) return;
+            double sobra = (l.Arena.Ki ?? 0) - r.Corte;
+            l.Arena.Ki = sobra > 0 ? sobra : (double?)null;
+            l.Arena.Recarga = D.RecargaDoAtaque;
+            Contar(l, Aviso("❄️ Corte Invernal"));
+            double hx = l.Arena.Heroi.X, hy = l.Arena.Heroi.Y;
+            double? alvo = AlvoAtual(l);
+            double rx, ry;
+            if (alvo != null)
+            {
+                var lugar = LugarDe(l, alvo.Value);
+                rx = lugar.X - hx;
+                ry = lugar.Y - hy;
+            }
+            else
+            {
+                switch (l.Arena.Heroi.Facing ?? "S")
+                {
+                    case "N": rx = 0; ry = -1; break;
+                    case "E": rx = 1; ry = 0; break;
+                    case "W": rx = -1; ry = 0; break;
+                    default: rx = 0; ry = 1; break;
+                }
+            }
+            double comprimento = Math.Sqrt(rx * rx + ry * ry);
+            if (comprimento == 0) return;
+            double alcance = r.AlcanceDoCorte * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            double meiaLargura = r.LarguraDoCorte * RoomWalk.TileUnits / 2;
+            var pegos = new List<(MonstroNaArena M, double Ao)>();
+            foreach (var m in l.Arena.Monstros)
+            {
+                if (m.Fase == "caido") continue;
+                var lugar = LugarDe(l, m.Indice);
+                double px = lugar.X - hx;
+                double py = lugar.Y - hy;
+                double ao = (px * rx + py * ry) / comprimento;
+                double fora = Math.Abs(px * ry - py * rx) / comprimento;
+                if (ao >= 0 && ao <= alcance && fora <= meiaLargura) pegos.Add((m, ao));
+            }
+            if (pegos.Count == 0) return;
+            pegos.Sort((a, b) => a.Ao != b.Ao ? a.Ao.CompareTo(b.Ao) : a.M.Indice.CompareTo(b.M.Indice));
+            double dado = 1 + Rng.RandomInt(Attack.LadosDoDano, l.Rng);
+            var leitura = new LeituraDaMira { Acerto = true, Forca = r.ForcaDoCorte / 100, Critico = false };
+            var acerto = AcertarMonstro(l, pegos[0].M, dado, leitura, EstiloDoBotao(hero));
+            if (acerto == null || l.Fim != null) return;
+            for (int k = 1; k < pegos.Count; k++)
+            {
+                if (l.Fim != null) return;
+                var m = pegos[k].M;
+                if (m.Fase != "caido") FerirComDano(l, m.Indice, acerto.Value, "❄️-" + Js.NumberToString(acerto.Value));
             }
         }
 

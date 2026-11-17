@@ -50,6 +50,7 @@ import { abrirQuadro, type Quadro } from './missoes.js';
 import type { Mochila } from './mochila.js';
 import { abrirPortao, type Portao } from './portao.js';
 import { abrirProfessor, type Professor } from './professor.js';
+import { abrirMestreDeEstilo, type MestreDeEstiloNaSala } from './mestre-de-estilo.js';
 import { tocarTotem, type Totem } from './totem.js';
 import { marcar, type PassoDoTutorial, type Recado, type ResultadoDoPasso } from './tutorial.js';
 
@@ -80,7 +81,8 @@ export type TelaAberta =
   | { tipo: 'encantadora'; encantadora: Encantadora }
   | { tipo: 'portao'; portao: Portao }
   | { tipo: 'totem'; totem: Totem }
-  | { tipo: 'professor'; professor: Professor };
+  | { tipo: 'professor'; professor: Professor }
+  | { tipo: 'mestreDeEstilo'; mestre: MestreDeEstiloNaSala };
 
 export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;
@@ -275,6 +277,15 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null, now: 
       }
       const professor = abrirProfessor(estado);
       return professor ? { estado, aviso: null, tela: { tipo: 'professor', professor } } : { estado, aviso: null, tela: null };
+    }
+    case 'estilo': {
+      // O mestre de estilo (rodada 5a): só o app o gera e só o app o ouve.
+      const mestre = app ? abrirMestreDeEstilo(estado) : null;
+      if (!mestre) {
+        const texto = celula.mestreDeEstilo?.ensinado ? 'O mestre já seguiu caminho.' : 'Um mestre medita aqui, de olhos fechados.';
+        return { estado, aviso: aviso('🥋', 'Mestre de estilo', texto), tela: null };
+      }
+      return { estado, aviso: null, tela: { tipo: 'mestreDeEstilo', mestre } };
     }
     case 'event': {
       const evento = abrirEvento(estado, app);

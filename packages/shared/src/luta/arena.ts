@@ -101,6 +101,7 @@ import {
   contarGolpeLevado,
   contarParado,
   criticoDaClasse,
+  criticoDoEstilo,
   curaDoApoio,
   custoDaMagia,
   devolucaoDaClasse,
@@ -112,7 +113,7 @@ import {
   miraDaClasse,
   mortoVivo,
   oQueCanaliza,
-  passosPorPonto,
+  passosDoCanal,
   puxaOsMonstros,
   REGRAS_DO_BARBARO,
   REGRAS_DO_BARDO,
@@ -127,6 +128,7 @@ import {
   type Moral,
 } from '../hero/classes-de-luta.js';
 import { idDaClasse } from '../hero/catalog.js';
+import { idDoEstilo, REGRAS_DA_CONCENTRACAO, REGRAS_DO_CHUTE, REGRAS_DO_EMPURRAO, REGRAS_DO_ESPADACHIM } from '../hero/estilos.js';
 import { CHANCE_DE_QUEBRAR_NO_CHEFE, nomeDoMembro, PASSO_COM_PERNA_QUEBRADA, quebrarMembro, type Membro } from '../hero/ferimentos.js';
 import { eventoDaArma, eventoDoAtaque, eventoDoPoder, lerEvento, TAMANHO_DO_DESENHO, type EventoDeArma, type JogadaDoEvento, type TipoDeEvento } from './eventos-de-arma.js';
 
@@ -538,6 +540,8 @@ export interface EntradaDaLuta {
   explodir?: boolean;
   /** O Necromante: apertou a Magia Proibida (levanta o parceiro caído). */
   magia?: boolean;
+  /** O Espadachim: apertou o Corte Invernal. */
+  corte?: boolean;
   /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
   danoDeFora?: readonly { indice: number; dano: number }[];
   /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
@@ -703,6 +707,7 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
   else if (entrada.revestir) revestir(l);
   else if (entrada.explodir) explodir(l);
   else if (entrada.magia) usarMagia(l);
+  else if (entrada.corte) corteInvernal(l);
   else if (entrada.item) usarItem(l, entrada.item);
 
   if (!l.fim) {
@@ -925,7 +930,9 @@ function alcanca(l: Luta, indice: number, folga = 0): boolean {
   if (idDaClasse(masmorra(l).hero) === 'druida') return nasVinhas(l, lugar, folga);
   const dx = l.arena.heroi.x - lugar.x;
   const dy = l.arena.heroi.y - lugar.y;
-  const limite = alcanceNaArena(masmorra(l).hero) + folga;
+  // O Espadachim com o avanço pronto alcança mais: ele vai até o alvo (rodada 5a).
+  const avanco = avancoPronto(l) ? REGRAS_DO_ESPADACHIM.avanco * TILE_UNITS : 0;
+  const limite = alcanceNaArena(masmorra(l).hero) + folga + avanco;
   return dx * dx + dy * dy <= limite * limite;
 }
 
@@ -1253,17 +1260,39 @@ function golpear(l: Luta): void {
     contar(l, { tipo: 'som', som: 'miss' });
     return;
   }
-  const paladino = idDaClasse(masmorra(l).hero) === 'paladino';
-  if (paladino) avancar(l, indice);
+  const heroDoGolpe = masmorra(l).hero;
+  const paladino = idDaClasse(heroDoGolpe) === 'paladino';
+  const estilo = idDoEstilo(heroDoGolpe);
+  let atordoarDepois = false;
+  // O avanço: o do Paladino e o chute do Monge sempre; o do Espadachim, a cada 5 s (colado no alvo, atordoa em vez de avançar).
+  if (paladino || estilo === 'chute') avancar(l, indice);
+  else if (avancoPronto(l)) {
+    if (colado(l, indice)) atordoarDepois = true;
+    else {
+      avancar(l, indice, REGRAS_DO_ESPADACHIM.avanco);
+      l.arena.classe = { ...contadores(l), imune: REGRAS_DO_ESPADACHIM.imunidade };
+    }
+    l.arena.classe = { ...contadores(l), recargaDoEstilo: REGRAS_DO_ESPADACHIM.recarga };
+  }
+  // O chute erra 1 vez em 10.
+  if (estilo === 'chute' && l.rng() * 100 < REGRAS_DO_CHUTE.erro) {
+    contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: 'Errou', tom: 'erro' });
+    contar(l, { tipo: 'som', som: 'miss' });
+    return;
+  }
   const dado = 1 + randomInt(LADOS_DO_DANO, l.rng);
   const acerto = acertarMonstro(l, l.arena.monstros[indice] as MonstroNaArena, dado, leitura, aberto.estilo);
+  // A Concentração gasta as cargas no golpe, acertando ou não.
+  if (estilo === 'concentracao' && l.arena.classe) l.arena.classe = { ...l.arena.classe, cargas: 0, semGolpe: 0 };
   if (!acerto || l.fim) return;
   // O Bardo e o Clérigo também se curam batendo; as vinhas do Druida deixam o monstro lento e envenenado.
   apoiarAqui(l);
   vinhasNoMonstro(l, indice);
   golpeEmArea(l, indice, acerto.dano);
+  if (estilo === 'empurrao') empurraoEmVolta(l, indice, acerto.dano);
   // O avanço do Paladino empurra o alvo que ficou de pé.
   const alvo = l.arena.monstros[indice] as MonstroNaArena;
+  if (atordoarDepois && !l.fim && alvo.fase !== 'caido') atordoar(l, alvo, REGRAS_DO_ESPADACHIM.atordoa);
   if (paladino && !l.fim && alvo.fase !== 'caido') empurrar(l, alvo, l.arena.heroi, REGRAS_DO_PALADINO.empurrao);
 }
 
@@ -1289,7 +1318,8 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     ((l.arena.reforco ?? 0) > 0 ? REGRAS_DO_BARDO.forca : 0) +
     (l.arena.revestido ? REGRAS_DO_MONGE.danoRevestido : 0);
   const daClasse = criticoDaClasse(estado.hero);
-  const critico = moral.critico > 0 ? (daClasse ?? 1.6) + moral.critico / 100 : daClasse;
+  const criticoAMais = moral.critico + criticoDoEstilo(estado.hero);
+  const critico = criticoAMais > 0 ? (daClasse ?? 1.6) + criticoAMais / 100 : daClasse;
   // O golpe sagrado do Clérigo num morto-vivo.
   const sagrado = idDaClasse(estado.hero) === 'clerigo' && estilo === 'magic' && mortoVivo(monstro.speciesId);
   const custoMagico = custoDaMagia(estado.hero);
@@ -1368,15 +1398,19 @@ function naParede(l: Luta, x: number, y: number): boolean {
   return paredesDaSala(masmorra(l).masmorra.dungeon).some((casa) => casa.col === col && casa.row === row);
 }
 
-/** O golpe do Paladino é um avanço: ele vai em linha reta até 1 bloco do alvo (se não cair numa parede de dentro). */
-function avancar(l: Luta, indice: number): void {
+/**
+ * O golpe que avança (o Paladino, o chute do Monge, o Espadachim): ele vai em
+ * linha reta até 1 bloco do alvo, no máximo `maxBlocos` blocos (se não cair
+ * numa parede de dentro).
+ */
+function avancar(l: Luta, indice: number, maxBlocos?: number): void {
   const heroi = l.arena.heroi;
   const lugar = lugarDe(l, indice);
   const dx = lugar.x - heroi.x;
   const dy = lugar.y - heroi.y;
   const distancia = Math.sqrt(dx * dx + dy * dy);
   if (distancia <= TILE_UNITS) return;
-  const anda = distancia - TILE_UNITS;
+  const anda = maxBlocos === undefined ? distancia - TILE_UNITS : Math.min(distancia - TILE_UNITS, maxBlocos * TILE_UNITS);
   const x = heroi.x + Math.trunc((dx * anda) / distancia);
   const y = heroi.y + Math.trunc((dy * anda) / distancia);
   if (naParede(l, x, y)) return;
@@ -1402,11 +1436,11 @@ function empurrar(l: Luta, m: MonstroNaArena, de: { x: number; y: number }, bloc
 }
 
 /** O monstro fica atordoado na hora: para onde está e perde o golpe que vinha (o que já está investindo segue). */
-function atordoar(l: Luta, m: MonstroNaArena): void {
+function atordoar(l: Luta, m: MonstroNaArena, tempo: number = TEMPO_ATORDOADO): void {
   if (noEspelho(l) || m.fase === 'caido' || m.fase === 'investindo') return;
   delete m.poder;
   m.fase = 'atordoado';
-  m.tempo = TEMPO_ATORDOADO;
+  m.tempo = tempo;
   contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: '💫', tom: 'erro' });
 }
 
@@ -1951,13 +1985,115 @@ function canalizar(l: Luta, entrada: EntradaDaLuta): void {
   }
   arena.canalizando = true;
   const canal = (arena.canal ?? 0) + 1;
-  if (canal < passosPorPonto(tipo)) {
+  if (canal < passosDoCanal(hero)) {
     arena.canal = canal;
     return;
   }
   delete arena.canal;
   if (tipo === 'ki') arena.ki = Math.min(REGRAS_DO_MONGE.tetoDoKi, (arena.ki ?? 0) + 1);
   else if (hero.mp < hero.maxMp) l.estado = { ...masmorra(l), hero: { ...hero, mp: hero.mp + 1 } };
+}
+
+// ---------- os estilos de luta (rodada 5a: Espadachim, Cavaleiro, Empurrão, Dash/chute, Concentração) ----------
+
+/** O Espadachim tem o avanço pronto (a recarga passou). */
+function avancoPronto(l: Luta): boolean {
+  return idDoEstilo(masmorra(l).hero) === 'espadachim' && !((contadores(l).recargaDoEstilo ?? 0) > 0);
+}
+
+/** Um passo do mundo: a espera do avanço e a imunidade do Espadachim correm; a Concentração junta cargas sem golpear. */
+function passarOsEstilos(l: Luta): void {
+  const estilo = idDoEstilo(masmorra(l).hero);
+  if (estilo !== 'espadachim' && estilo !== 'concentracao') return;
+  const c = { ...contadores(l) };
+  if (estilo === 'espadachim') {
+    if (c.recargaDoEstilo === undefined && c.imune === undefined) return;
+    if (c.recargaDoEstilo !== undefined) {
+      if (c.recargaDoEstilo > 1) c.recargaDoEstilo -= 1;
+      else delete c.recargaDoEstilo;
+    }
+    if (c.imune !== undefined) {
+      if (c.imune > 1) c.imune -= 1;
+      else delete c.imune;
+    }
+  } else {
+    const r = REGRAS_DA_CONCENTRACAO;
+    const semGolpe = (c.semGolpe ?? 0) + 1;
+    if (semGolpe >= r.passosPorCarga) {
+      c.semGolpe = 0;
+      c.cargas = Math.min(r.tetoDeCargas, (c.cargas ?? 0) + 1);
+    } else c.semGolpe = semGolpe;
+  }
+  l.arena.classe = c;
+}
+
+/** O Empurrão: quem está a 1 bloco do alvo leva o mesmo dano; e cada um (o alvo também) pode ser empurrado e atordoado. */
+function empurraoEmVolta(l: Luta, alvo: number, dano: number): void {
+  const r = REGRAS_DO_EMPURRAO;
+  const centro = lugarDe(l, alvo);
+  const raio = r.raio * TILE_UNITS + TILE_UNITS / 2;
+  const pegos = [l.arena.monstros[alvo] as MonstroNaArena];
+  for (const m of l.arena.monstros) {
+    if (l.fim) return;
+    if (m.indice === alvo || m.fase === 'caido') continue;
+    const dx = m.corpoX - centro.x;
+    const dy = m.corpoY - centro.y;
+    if (dx * dx + dy * dy > raio * raio) continue;
+    pegos.push(m);
+    ferirComDano(l, m.indice, dano, `-${dano}`);
+  }
+  const heroi = { x: l.arena.heroi.x, y: l.arena.heroi.y };
+  for (const m of pegos) {
+    if (l.fim) return;
+    if (m.fase === 'caido' || l.rng() * 100 >= r.chance) continue;
+    empurrar(l, m, heroi, 1);
+    atordoar(l, m);
+  }
+}
+
+/**
+ * O Corte Invernal do Espadachim: com 300 de ki, uma faixa de 3 casas de
+ * largura que anda 6 blocos rumo ao alvo (ou pra onde ele olha) e acerta todo
+ * mundo nela — o mais perto leva o golpe a 80%, os outros o mesmo dano.
+ */
+function corteInvernal(l: Luta): void {
+  const r = REGRAS_DO_ESPADACHIM;
+  const hero = masmorra(l).hero;
+  if (idDoEstilo(hero) !== 'espadachim' || (l.arena.ki ?? 0) < r.corte) return;
+  const sobra = (l.arena.ki ?? 0) - r.corte;
+  if (sobra > 0) l.arena.ki = sobra;
+  else delete l.arena.ki;
+  l.arena.recarga = RECARGA_DO_ATAQUE;
+  contar(l, { tipo: 'aviso', texto: '❄️ Corte Invernal' });
+  const heroi = { x: l.arena.heroi.x, y: l.arena.heroi.y };
+  const alvo = alvoAtual(l);
+  const olhar: Record<string, { x: number; y: number }> = { N: { x: 0, y: -1 }, S: { x: 0, y: 1 }, E: { x: 1, y: 0 }, W: { x: -1, y: 0 } };
+  const rumoDoCorte = alvo !== null ? { x: lugarDe(l, alvo).x - heroi.x, y: lugarDe(l, alvo).y - heroi.y } : (olhar[l.arena.heroi.facing ?? 'S'] ?? { x: 0, y: 1 });
+  const comprimento = Math.sqrt(rumoDoCorte.x * rumoDoCorte.x + rumoDoCorte.y * rumoDoCorte.y);
+  if (comprimento === 0) return;
+  const alcance = r.alcanceDoCorte * TILE_UNITS + TILE_UNITS / 2;
+  const meiaLargura = (r.larguraDoCorte * TILE_UNITS) / 2;
+  const pegos: { m: MonstroNaArena; ao: number }[] = [];
+  for (const m of l.arena.monstros) {
+    if (m.fase === 'caido') continue;
+    const lugar = lugarDe(l, m.indice);
+    const px = lugar.x - heroi.x;
+    const py = lugar.y - heroi.y;
+    const ao = (px * rumoDoCorte.x + py * rumoDoCorte.y) / comprimento;
+    const fora = Math.abs(px * rumoDoCorte.y - py * rumoDoCorte.x) / comprimento;
+    if (ao >= 0 && ao <= alcance && fora <= meiaLargura) pegos.push({ m, ao });
+  }
+  if (pegos.length === 0) return;
+  pegos.sort((a, b) => a.ao - b.ao || a.m.indice - b.m.indice);
+  const dado = 1 + randomInt(LADOS_DO_DANO, l.rng);
+  const leitura = { acerto: true, forca: r.forcaDoCorte / 100, critico: false };
+  const acerto = acertarMonstro(l, (pegos[0] as { m: MonstroNaArena }).m, dado, leitura, estiloDoBotao(hero));
+  if (!acerto || l.fim) return;
+  for (let k = 1; k < pegos.length; k++) {
+    if (l.fim) return;
+    const m = (pegos[k] as { m: MonstroNaArena }).m;
+    if (m.fase !== 'caido') ferirComDano(l, m.indice, acerto.dano, `❄️-${acerto.dano}`);
+  }
 }
 
 /** O Monge com o ki cheio se reveste: bate mais forte até o próximo golpe levado. */
@@ -2202,6 +2338,7 @@ function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
     else delete arena.reforco;
   }
   passarAFe(l);
+  passarOsEstilos(l);
   canalizar(l, entrada);
   if (arena.recarga > 0) arena.recarga -= 1;
   if (arena.recargaDoItem > 0) arena.recargaDoItem -= 1;
@@ -2499,6 +2636,12 @@ function investir(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
  * encantada (que só a arena aplica) e o escudo do vigor, que apanha antes da vida.
  */
 function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
+  // O Espadachim fica imune logo depois do avanço (rodada 5a).
+  if ((contadores(l).imune ?? 0) > 0) {
+    contar(l, { tipo: 'numero', onde: 'heroi', indice: 0, texto: 'Imune', tom: 'erro' });
+    contar(l, { tipo: 'som', som: 'miss' });
+    return;
+  }
   const estado = masmorra(l);
   const monstro = monstroNo(l, indice);
   const c = contadores(l);

@@ -16,6 +16,8 @@ namespace RPGLegend.Engine
         /// Number são lidos). Quem chama decide, porque depende do herói.
         /// </summary>
         public DungeonTeacher Teacher;
+        /// <summary>Põe o mestre de estilo neste andar, com o estilo que ele ensina (rodada 5a: o app decide, pelo herói).</summary>
+        public string MestreDeEstilo;
         /// <summary>Quem gera o andar é o app: os itens dos baús e das salas podem vir com material.</summary>
         public bool App;
         /// <summary>
@@ -130,6 +132,11 @@ namespace RPGLegend.Engine
                 var sala = First(Place(DungeonRoomTypes.Teacher, 1));
                 if (sala != null) sala.Teacher = new DungeonTeacher { ClassId = o.Teacher.ClassId, Number = o.Teacher.Number };
             }
+            if (o.MestreDeEstilo != null)
+            {
+                var sala = First(Place(DungeonRoomTypes.Estilo, 1));
+                if (sala != null) sala.MestreDeEstilo = new MestreDeEstilo { Estilo = o.MestreDeEstilo };
+            }
 
             // Em andar de chefe sem a sala de antes da escada (a escada colada no início), o chefe fica numa sala
             // qualquer: reserva uma pra ele.
@@ -164,6 +171,7 @@ namespace RPGLegend.Engine
             if (cell.Type == DungeonRoomTypes.Boss) return cell.Beaten == true ? D.IconeDoPilar : "👑";
             if (cell.Type == DungeonRoomTypes.Event) return cell.Resolved == true ? "" : "❓";
             if (cell.Type == DungeonRoomTypes.Teacher) return cell.Teacher?.Taught == true ? "" : "🎓";
+            if (cell.Type == DungeonRoomTypes.Estilo) return cell.MestreDeEstilo?.Ensinado == true ? "" : "🥋";
             return D.IconesFixos.TryGet(cell.Type, out var icon) && icon != null ? icon : "";
         }
 
@@ -178,6 +186,7 @@ namespace RPGLegend.Engine
             if (cell.Type == DungeonRoomTypes.Boss) return cell.Beaten == true ? "o pilar de volta à cidade" : "uma presença poderosa e perigosa";
             if (cell.Type == DungeonRoomTypes.Event) return cell.Resolved == true ? "vestígios de um acontecimento" : "algo incomum";
             if (cell.Type == DungeonRoomTypes.Teacher) return cell.Teacher?.Taught == true ? "uma sala onde alguém ensinou" : NomeDoMestre(cell);
+            if (cell.Type == DungeonRoomTypes.Estilo) return cell.MestreDeEstilo?.Ensinado == true ? "uma sala onde alguém ensinou" : "um mestre meditando";
             switch (cell.Type)
             {
                 case DungeonRoomTypes.Npc: return "alguém parado por perto";
@@ -216,6 +225,12 @@ namespace RPGLegend.Engine
                     ? "O mestre seguiu caminho. Ficaram as marcas do treino no chão."
                     : "Encostado na parede, " + NomeDoMestre(cell) + " observa você com atenção.";
             }
+            if (cell.Type == DungeonRoomTypes.Estilo)
+            {
+                return cell.MestreDeEstilo?.Ensinado == true
+                    ? "O mestre seguiu caminho. Ficaram as marcas do treino no chão."
+                    : "No meio da sala, um mestre de estilo medita de olhos fechados.";
+            }
             switch (cell.Type)
             {
                 case DungeonRoomTypes.Npc: return "Alguém está parado por aqui.";
@@ -251,6 +266,7 @@ namespace RPGLegend.Engine
                 if (nome.StartsWith("um", StringComparison.Ordinal)) nome = "Um" + nome.Substring(2);
                 return nome + " espera nesta sala. Deseja falar com ele?";
             }
+            if (cell.Type == DungeonRoomTypes.Estilo && cell.MestreDeEstilo?.Ensinado != true) return "Um mestre de estilo medita nesta sala. Deseja falar com ele?";
             return "Deseja entrar na sala?";
         }
 

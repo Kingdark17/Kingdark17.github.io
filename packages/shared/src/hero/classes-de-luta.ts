@@ -21,6 +21,7 @@
  */
 
 import { idDaClasse, type IdentidadeDeClasse } from './catalog.js';
+import { idDoEstilo, REGRAS_DA_CONCENTRACAO, REGRAS_DO_CAVALEIRO, REGRAS_DO_CHUTE, REGRAS_DO_EMPURRAO, REGRAS_DO_ESPADACHIM, type QuemTemEstilo } from './estilos.js';
 
 export interface ClasseDeLuta {
   /** O alcance do ataque comum, em blocos. */
@@ -72,7 +73,7 @@ export function ataqueDasMaos(quem: QuemLuta & { level?: number }): number {
   return MAOS_DO_MONGE.base + Math.floor(Math.max(1, quem.level ?? 1) / MAOS_DO_MONGE.aCadaNiveis);
 }
 
-export interface QuemLuta extends IdentidadeDeClasse {
+export interface QuemLuta extends QuemTemEstilo {
   equip?: { arma?: { templateId: string } | null } | null;
 }
 
@@ -88,6 +89,10 @@ export function alcanceDoHeroi(quem: QuemLuta): number {
   const arma = quem.equip?.arma?.templateId ?? '';
   if (id === 'barbaro') return ALCANCE_DO_BARBARO[arma] ?? (CLASSES_DE_LUTA.barbaro as ClasseDeLuta).alcance;
   if (!id || !CLASSES_DE_LUTA[id]) return ALCANCE_SEM_CLASSE[arma] ?? CLASSE_PADRAO.alcance;
+  // Os estilos do Monge (rodada 5a): o chute vai longe; a concentração dá +1.
+  const estilo = idDoEstilo(quem);
+  if (estilo === 'chute') return REGRAS_DO_CHUTE.alcance;
+  if (estilo === 'concentracao') return (CLASSES_DE_LUTA[id] as ClasseDeLuta).alcance + REGRAS_DA_CONCENTRACAO.alcance;
   return (CLASSES_DE_LUTA[id] as ClasseDeLuta).alcance;
 }
 
@@ -296,11 +301,28 @@ export const REGRAS_DO_MAGO = {
   custoDoDisparo: 40,
 } as const;
 
-/** O que a classe junta segurando K: a mana (o Mago e o Necromante), o ki (o Monge); `null`, nada. */
-export function oQueCanaliza(quem: IdentidadeDeClasse): 'mana' | 'ki' | null {
+/** O que a classe junta segurando K: a mana (o Mago e o Necromante), o ki (o Monge e o Espadachim); `null`, nada. */
+export function oQueCanaliza(quem: QuemTemEstilo): 'mana' | 'ki' | null {
   const id = idDaClasse(quem);
   if (id === 'mago' || id === 'necromante') return 'mana';
+  if (id === 'guerreiro' && idDoEstilo(quem) === 'espadachim') return 'ki';
   return id === 'monge' ? 'ki' : null;
+}
+
+/** Quantos passos segurando K valem um ponto pra este herói: o Espadachim junta ki mais devagar (3/s). */
+export function passosDoCanal(quem: QuemTemEstilo): number {
+  const tipo = oQueCanaliza(quem);
+  if (!tipo) return 0;
+  if (idDaClasse(quem) === 'guerreiro') return Math.trunc(60 / REGRAS_DO_ESPADACHIM.kiPorSegundo);
+  return passosPorPonto(tipo);
+}
+
+/** O crítico a mais do estilo, em pontos de % (o Cavaleiro +30, o chute +40); os outros, 0. */
+export function criticoDoEstilo(quem: QuemTemEstilo): number {
+  const estilo = idDoEstilo(quem);
+  if (estilo === 'cavaleiro') return REGRAS_DO_CAVALEIRO.critico;
+  if (estilo === 'chute') return REGRAS_DO_CHUTE.critico;
+  return 0;
 }
 
 /** Quantos passos segurando K valem um ponto (de mana ou de ki). */
@@ -436,6 +458,11 @@ export interface ContadoresDaClasse {
   absorcao?: number;
   /** Arqueiro: os passos parado (sem andar), até `REGRAS_DO_ARQUEIRO.parado`. */
   parado?: number;
+  /** Os estilos (rodada 5a): a espera do avanço do Espadachim e a imunidade dele; as cargas da Concentração e os passos sem golpear. */
+  recargaDoEstilo?: number;
+  imune?: number;
+  cargas?: number;
+  semGolpe?: number;
 }
 
 /** A classe já foi refeita pelo doc do Breno: na arena ela fica sem a passiva antiga do site. */
@@ -472,6 +499,13 @@ export function bonusDoAtaque(quem: QuemLuta, c: ContadoresDaClasse, alvo: { col
       return danoDaDistancia(alvo.blocos ?? 0, c.parado ?? 0);
     case 'guerreiro':
       return (alvo.colado ? REGRAS_DO_GUERREIRO.colado : 0) + (c.combo ?? 0);
+    case 'monge': {
+      // Os estilos do Monge: o Empurrão bate mais; a Concentração gasta as cargas no golpe.
+      const estilo = idDoEstilo(quem);
+      if (estilo === 'empurrao') return REGRAS_DO_EMPURRAO.dano;
+      if (estilo === 'concentracao') return (c.cargas ?? 0) * REGRAS_DA_CONCENTRACAO.porCarga;
+      return 0;
+    }
     case 'ladino':
       return contraOChefe(furtividadeEm(c.furtividade ?? 0).ataque, alvo.chefe);
     case 'barbaro':
@@ -481,8 +515,9 @@ export function bonusDoAtaque(quem: QuemLuta, c: ContadoresDaClasse, alvo: { col
   }
 }
 
-/** A esquiva a mais (%) contra o golpe de um monstro: a furtividade do Ladino (a metade contra o chefe). */
-export function esquivaDaClasse(quem: IdentidadeDeClasse, c: ContadoresDaClasse, chefe: boolean): number {
+/** A esquiva a mais (%) contra o golpe de um monstro: a furtividade do Ladino (a metade contra o chefe) e o desvio do Cavaleiro. */
+export function esquivaDaClasse(quem: QuemTemEstilo, c: ContadoresDaClasse, chefe: boolean): number {
+  if (idDoEstilo(quem) === 'cavaleiro') return REGRAS_DO_CAVALEIRO.desvio;
   if (idDaClasse(quem) !== 'ladino') return 0;
   return contraOChefe(furtividadeEm(c.furtividade ?? 0).esquiva, chefe);
 }
@@ -625,15 +660,24 @@ function textosSoDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number
       return [(extras.recargaDaFe ?? 0) > 0 ? `✝️ Fé em ${tempo(extras.recargaDaFe as number)}` : '✝️ Fé pronta'];
     case 'druida':
       return (extras.semAtacar ?? 0) > 0 ? [`🌿 Ataque em ${tempo(extras.semAtacar as number)}`] : [];
-    case 'monge':
-      return [`☯️ Ki ${extras.ki ?? 0}/${REGRAS_DO_MONGE.tetoDoKi}${extras.revestido ? ' · Revestido' : ''}`];
+    case 'monge': {
+      const textos = [`☯️ Ki ${extras.ki ?? 0}/${REGRAS_DO_MONGE.tetoDoKi}${extras.revestido ? ' · Revestido' : ''}`];
+      if (idDoEstilo(quem as QuemTemEstilo) === 'concentracao') textos.push(`🧘 Cargas ${c.cargas ?? 0}/${REGRAS_DA_CONCENTRACAO.tetoDeCargas}`);
+      return textos;
+    }
     case 'necromante':
       if (extras.magiaSelada) return ['☠️ Magia selada'];
       return [(extras.recargaDaMagia ?? 0) > 0 ? `☠️ Magia em ${tempo(extras.recargaDaMagia as number)}` : '☠️ Magia pronta'];
     case 'guerreiro': {
       const resistencia = resistenciaDaClasse(quem, c);
       const combo = `⚔️ Combo +${c.combo ?? 0}% · ${c.seguidos ?? 0}/${REGRAS_DO_GUERREIRO.criticosDoCombo}`;
-      return resistencia > 0 ? [combo, `🛡️ Resistência ${resistencia}%`] : [combo];
+      const textos = resistencia > 0 ? [combo, `🛡️ Resistência ${resistencia}%`] : [combo];
+      // O Espadachim: o avanço e o ki do Corte Invernal.
+      if (idDoEstilo(quem as QuemTemEstilo) === 'espadachim') {
+        textos.push((c.recargaDoEstilo ?? 0) > 0 ? `🗡️ Avanço em ${tempo(c.recargaDoEstilo as number)}` : '🗡️ Avanço pronto');
+        textos.push(`☯️ Ki ${extras.ki ?? 0}/${REGRAS_DO_ESPADACHIM.corte}`);
+      }
+      return textos;
     }
     case 'ladino':
       return [`🗡️ Furtividade ${c.furtividade ?? 0} · ${c.criticos ?? 0}/${REGRAS_DO_LADINO.criticosDaFurtividade}`];

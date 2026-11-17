@@ -20,6 +20,9 @@ namespace RPGLegend.Game.Jogo
         /// e a referência antiga deixaria a ficha presa na versão anterior da peça.
         /// </summary>
         private string _selecionado, _aba = "todos", _paraReforjar, _aprender, _esquecer, _classe;
+        /// <summary>O estilo marcado na guilda (rodada 5a); null, o ativo; <see cref="SemEstilo"/>, lutar sem estilo.</summary>
+        private string _estiloNaGuilda;
+        private const string SemEstilo = "-";
 
         private void EsquecerEscolhas()
         {
@@ -30,6 +33,7 @@ namespace RPGLegend.Game.Jogo
             _aprender = null;
             _esquecer = null;
             _classe = null;
+            _estiloNaGuilda = null;
             _fortificacao = "robustez";
             _nivelDoEncanto = 1;
             _chaveDaJanela = null;
@@ -236,6 +240,39 @@ namespace RPGLegend.Game.Jogo
 
         private void SeguirProfessor(Professor proximo) => _partida.Seguir(new TelaAberta { Tipo = "professor", Professor = proximo }, proximo.Estado);
 
+        // ---------- mestre de estilo (rodada 5a) ----------
+
+        /// <summary>
+        /// O mestre de estilo: mostra o estilo que ele ensina, e o APRENDER fecha a tela com o aviso. O estilo aprendido
+        /// vira o ativo; trocar é na guilda.
+        /// </summary>
+        private void TelaDoMestreDeEstilo(MestreDeEstiloNaSala mestre)
+        {
+            _sairDaTela = () => _partida.Fechar(_partida.Estado);
+            var estilo = mestre.Estilo;
+            var botoes = new List<(string, System.Action)>();
+            if (!mestre.JaTem)
+            {
+                botoes.Add(("APRENDER " + estilo.Nome.ToUpperInvariant(), () =>
+                {
+                    var aprendeu = MestresDeEstilo.Aprender(_partida.Estado);
+                    _partida.Fechar(aprendeu.Estado, new Aviso(estilo.Icone, "Mestre de estilo", aprendeu.Texto));
+                }));
+            }
+            botoes.Add(("AGORA NÃO", _sairDaTela));
+            Janela("🥋 Mestre de estilo", conteudo =>
+            {
+                conteudo.Add(PecasDaTela.Texto(mestre.JaTem
+                    ? "O mestre abre os olhos e sorri. Você já luta do jeito dele."
+                    : "O mestre abre os olhos devagar. \"Posso ensinar o meu jeito de lutar. Quem aprende, leva pra sempre.\"", "fala-da-tela"));
+                conteudo.Add(PecasDaTela.Secao("O mestre ensina"));
+                var grade = PecasDaTela.Grade();
+                grade.Add(PecasDaTela.CartaDeEscolha(estilo.Icone, estilo.Nome, estilo.Desc, true, () => { }));
+                conteudo.Add(grade);
+                conteudo.Add(PecasDaTela.Texto("O estilo aprendido vira o ativo. Na guilda dá pra trocar entre os que você tem.", "vazio"));
+            }, botoes.ToArray());
+        }
+
         // ---------- guilda ----------
 
         /// <summary>
@@ -260,12 +297,41 @@ namespace RPGLegend.Game.Jogo
             }
             botoes.Add(("SAIR", _sairDaTela));
 
-            // Quem já tem classe vê a dele e mais nada: a janela de sempre basta.
+            // Quem já tem classe vê a dele e, se aprendeu estilos com os mestres (rodada 5a, só no app), escolhe o ativo:
+            // a carta marca, e o botão de baixo troca.
             if (treinado)
             {
-                Janela("⚜️ Guilda dos Aventureiros", null, Ultima(guilda.Log), conteudo => conteudo.Add(PecasDaTela.Texto("Você é "
-                    + ((hero.ClassIcon ?? "") + " " + hero.ClassName).Trim()
-                    + ". A guilda segue de portas abertas, mas o treinamento de classe se faz uma vez só.", "fala-da-tela")), botoes.ToArray());
+                var meus = Estilos.DaClasse(hero.ClassId, hero.ClassName).FindAll(e => hero.Estilos != null && hero.Estilos.Contains(e.Id));
+                string ativo = Estilos.IdDoEstilo(hero) ?? SemEstilo;
+                string marcado = _estiloNaGuilda ?? ativo;
+                if (meus.Count > 0 && marcado != ativo)
+                {
+                    string nome = marcado == SemEstilo ? null : Estilos.PorId(marcado)?.Nome;
+                    botoes.Insert(0, (nome != null ? "USAR " + nome.ToUpperInvariant() : "LUTAR SEM ESTILO", () =>
+                    {
+                        var proxima = Guildas.TrocarEstiloNaGuilda(guilda, marcado == SemEstilo ? null : marcado);
+                        _estiloNaGuilda = null;
+                        _partida.Seguir(new TelaAberta { Tipo = "guilda", Guilda = proxima }, proxima.Estado);
+                    }));
+                }
+                Janela("⚜️ Guilda dos Aventureiros", null, Ultima(guilda.Log), conteudo =>
+                {
+                    conteudo.Add(PecasDaTela.Texto("Você é "
+                        + ((hero.ClassIcon ?? "") + " " + hero.ClassName).Trim()
+                        + ". A guilda segue de portas abertas, mas o treinamento de classe se faz uma vez só.", "fala-da-tela"));
+                    if (meus.Count == 0) return;
+                    conteudo.Add(PecasDaTela.Secao("Estilo de luta"));
+                    var grade = PecasDaTela.Grade();
+                    foreach (var estilo in meus)
+                    {
+                        var id = estilo.Id;
+                        grade.Add(PecasDaTela.CartaDeEscolha(estilo.Icone, estilo.Nome + (id == ativo ? " (ativo)" : ""), estilo.Desc, id == marcado,
+                            () => Escolher(() => _estiloNaGuilda = id)));
+                    }
+                    grade.Add(PecasDaTela.CartaDeEscolha("✋", "Sem estilo" + (ativo == SemEstilo ? " (ativo)" : ""), "Luta só com o que a classe dá.", marcado == SemEstilo,
+                        () => Escolher(() => _estiloNaGuilda = SemEstilo)));
+                    conteudo.Add(grade);
+                }, botoes.ToArray());
                 return;
             }
 

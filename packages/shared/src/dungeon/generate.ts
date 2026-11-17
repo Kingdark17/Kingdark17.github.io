@@ -22,7 +22,14 @@ import { colocarArmadilhas, type Armadilha } from './armadilhas.js';
 import { placeExtras, type DungeonExtra } from './extras.js';
 import { distancesFrom, generateRoomGraph, DIR_VECTORS, type Direction, type RoomCell, type RoomGraph } from './graph.js';
 
-export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit' | 'totem' | 'teacher';
+export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit' | 'totem' | 'teacher' | 'estilo';
+
+/** O mestre de estilo numa sala (rodada 5a, só o app gera; `hero/estilos.ts`): o estilo que ele ensina. */
+export interface MestreDeEstilo {
+  estilo: string;
+  /** Já ensinou: a sala vira só uma sala. */
+  ensinado?: boolean;
+}
 
 /** O professor de classe numa sala (ver `hero/teachers.ts`). */
 export interface DungeonTeacher {
@@ -101,6 +108,8 @@ export interface DungeonCell extends RoomCell {
   distanceFromStart?: number;
   startBranch?: string;
   teacher?: DungeonTeacher;
+  /** O mestre de estilo (sala 'estilo'). */
+  mestreDeEstilo?: MestreDeEstilo;
   /** Baú pequeno, vaso, placa, parede rachada (`extras.ts`). Andar gerado antes deles não tem. */
   extras?: DungeonExtra[];
   /** A armadilha escondida no chão (`armadilhas.ts`, desde 2026-11-06). Andar gerado antes delas não tem. */
@@ -168,6 +177,8 @@ export interface DungeonGenerateOptions {
    * depende do herói (maestria, quem já encontrou) e o andar não sabe dele.
    */
   teacher?: Omit<DungeonTeacher, 'taught'>;
+  /** Põe o mestre de estilo neste andar (o app decide, pelo herói). */
+  mestreDeEstilo?: { estilo: string };
   /** Quem gera o andar é o app: os itens dos baús e das salas podem vir com material (`items/materiais.ts`). */
   app?: boolean;
   /**
@@ -387,6 +398,10 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
     const sala = place('teacher', 1)[0];
     if (sala) sala.teacher = { classId: options.teacher.classId, number: options.teacher.number };
   }
+  if (options.mestreDeEstilo) {
+    const sala = place('estilo', 1)[0];
+    if (sala) sala.mestreDeEstilo = { estilo: options.mestreDeEstilo.estilo };
+  }
 
   // Em andar de chefe sem a sala de antes da escada (a escada colada no
   // início), o chefe fica numa sala qualquer: reserva uma pra ele.
@@ -422,6 +437,7 @@ export function iconFor(cell: DungeonCell): string {
   if (cell.type === 'boss') return cell.beaten ? ICONE_DO_PILAR : '👑';
   if (cell.type === 'event') return cell.resolved ? '' : '❓';
   if (cell.type === 'teacher') return cell.teacher?.taught ? '' : '🎓';
+  if (cell.type === 'estilo') return cell.mestreDeEstilo?.ensinado ? '' : '🥋';
   return ICONES_FIXOS[cell.type] ?? '';
 }
 
@@ -437,6 +453,7 @@ export function shortLabel(cell: DungeonCell): string {
   if (cell.type === 'boss') return cell.beaten ? 'o pilar de volta à cidade' : 'uma presença poderosa e perigosa';
   if (cell.type === 'event') return cell.resolved ? 'vestígios de um acontecimento' : 'algo incomum';
   if (cell.type === 'teacher') return cell.teacher?.taught ? 'uma sala onde alguém ensinou' : nomeDoMestre(cell);
+  if (cell.type === 'estilo') return cell.mestreDeEstilo?.ensinado ? 'uma sala onde alguém ensinou' : 'um mestre meditando';
   const labels: Partial<Record<DungeonRoomType, string>> = {
     npc: 'alguém parado por perto',
     treasure: cell.collected ? 'um baú já vazio' : 'um baú fechado',
@@ -468,6 +485,11 @@ export function roomDesc(cell: DungeonCell): string {
       ? 'O mestre seguiu caminho. Ficaram as marcas do treino no chão.'
       : `Encostado na parede, ${nomeDoMestre(cell)} observa você com atenção.`;
   }
+  if (cell.type === 'estilo') {
+    return cell.mestreDeEstilo?.ensinado
+      ? 'O mestre seguiu caminho. Ficaram as marcas do treino no chão.'
+      : 'No meio da sala, um mestre de estilo medita de olhos fechados.';
+  }
   const descs: Partial<Record<DungeonRoomType, string>> = {
     npc: 'Alguém está parado por aqui.',
     treasure: cell.collected ? 'Um baú vazio jaz aberto no chão.' : 'Um baú de madeira reforçada repousa alguns passos à frente.',
@@ -490,5 +512,6 @@ export function entryText(cell: DungeonCell): string {
   if (cell.type === 'exit') return 'Um caminho leva de volta à cidade. Deseja sair da masmorra?';
   if (cell.type === 'totem') return 'Um totem antigo brilha nesta sala. Deseja tocá-lo?';
   if (cell.type === 'teacher') return `${nomeDoMestre(cell).replace(/^um/, 'Um')} espera nesta sala. Deseja falar com ele?`;
+  if (cell.type === 'estilo' && !cell.mestreDeEstilo?.ensinado) return 'Um mestre de estilo medita nesta sala. Deseja falar com ele?';
   return 'Deseja entrar na sala?';
 }

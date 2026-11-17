@@ -899,6 +899,47 @@ for (const cls of ['monge', 'mago', 'necromante']) {
   }
 }
 
+// --- os estilos de luta (rodada 5a) ---
+
+{
+  const COM = (classId: string, estilo?: string, estilos: string[] = estilo ? [estilo] : []) => ({ classId, estilos, ...(estilo ? { estilo } : {}) });
+  for (const [nome, quem] of [
+    ['guerreiro sem estilo', COM('guerreiro')],
+    ['guerreiro espadachim', COM('guerreiro', 'espadachim')],
+    ['guerreiro cavaleiro', COM('guerreiro', 'cavaleiro', ['espadachim', 'cavaleiro'])],
+    ['monge empurrão', COM('monge', 'empurrao')],
+    ['monge chute', COM('monge', 'chute')],
+    ['monge concentração', COM('monge', 'concentracao', ['chute', 'concentracao', 'empurrao'])],
+    ['estilo de outra classe', COM('monge', 'cavaleiro')],
+    ['estilo que não aprendeu', { classId: 'guerreiro', estilos: [], estilo: 'cavaleiro' }],
+    ['mago', COM('mago')],
+  ] as const) {
+    caso(`estiloAtivo: (5a) ${nome}`, 'estiloAtivo', { quem }, (a) => E.estiloAtivo(a.quem));
+    caso(`estilosQueFaltam: (5a) ${nome}`, 'estilosQueFaltam', { quem }, (a) => E.estilosQueFaltam(a.quem));
+    caso(`chanceDoMestre: (5a) ${nome}`, 'chanceDoMestre', { quem }, (a) => E.chanceDoMestre(a.quem));
+    for (const vida of [100, 77]) caso(`vidaComOEstilo: (5a) ${nome}, ${vida}`, 'vidaComOEstilo', { vida, quem }, (a) => E.vidaComOEstilo(a.vida, a.quem));
+    caso(`alcanceDoHeroi: (5a) ${nome}`, 'alcanceDoHeroi', { quem }, (a) => E.alcanceDoHeroi(a.quem));
+    caso(`oQueCanaliza: (5a) ${nome}`, 'oQueCanaliza', { quem }, (a) => E.oQueCanaliza(a.quem));
+    caso(`passosDoCanal: (5a) ${nome}`, 'passosDoCanal', { quem }, (a) => E.passosDoCanal(a.quem));
+    caso(`criticoDoEstilo: (5a) ${nome}`, 'criticoDoEstilo', { quem }, (a) => E.criticoDoEstilo(a.quem));
+    caso(`esquivaDaClasse: (5a) ${nome}`, 'esquivaDaClasse', { quem, c: {}, chefe: false }, (a) => E.esquivaDaClasse(a.quem, a.c, a.chefe));
+    for (const c of [{}, { cargas: 2, recargaDoEstilo: 61, combo: 20 }]) {
+      caso(`bonusDoAtaque: (5a) ${nome}, ${JSON.stringify(c)}`, 'bonusDoAtaque', { quem, c, alvo: { colado: true, chefe: false } }, (a) => E.bonusDoAtaque(a.quem, a.c, a.alvo));
+      caso(`textosDaClasse: (5a) ${nome}, ${JSON.stringify(c)}`, 'textosDaClasse', { quem: { ...quem, hp: 10, maxHp: 10 }, c, extras: { ki: 120 } }, (a) => E.textosDaClasse(a.quem, a.c, a.extras));
+    }
+    for (const [semente, alvo] of [[1, 0.5], [2, 0.01]] as const) {
+      caso(`sortearEstilo: (5a) ${nome}, ${alvo}`, 'sortearEstilo', { quem }, (a, ctx) => E.sortearEstilo(a.quem, ctx.rng), { rng: { sequence: [alvo, alvo] } });
+      void semente;
+    }
+    for (const id of ['espadachim', 'cavaleiro', 'chute', 'inventado']) {
+      caso(`aprenderEstilo: (5a) ${nome}, ${id}`, 'aprenderEstilo', { quem, id }, (a) => E.aprenderEstilo(a.quem, a.id));
+      caso(`trocarEstilo: (5a) ${nome}, ${id}`, 'trocarEstilo', { quem, id }, (a) => E.trocarEstilo(a.quem, a.id));
+    }
+    caso(`trocarEstilo: (5a) ${nome}, nenhum`, 'trocarEstilo', { quem }, (a) => E.trocarEstilo(a.quem, undefined));
+  }
+  caso('derivedStats: o Cavaleiro com 40% de vida', 'derivedStats', { hero: { level: 7, attrs: atributos({ constituicao: 13 }), equip: {}, classId: 'guerreiro', estilos: ['cavaleiro'], estilo: 'cavaleiro' } }, (a) => E.derivedStats(a.hero as never));
+}
+
 // --- maestria ---
 
 for (const level of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1, 2.5, Number.NaN]) {
@@ -3450,6 +3491,42 @@ const veterano = naCidade(saveNovo({ extra: { masteryBattles: E.masteryBattlesFo
 entrar('segundo professor', veterano, sementeOnde((r) => r < 0.25), 76);
 entrar('aprendiz não encontra professor', naCidade(saveNovo({ classe: null, extra: { masteryBattles: 300 } })), 30, 30);
 
+// O mestre de estilo (rodada 5a): só no app, depois de zerar a Floresta, na chance da classe.
+{
+  const comFloresta = (o: Parameters<typeof saveNovo>[0] = {}) => {
+    const c = naCidade(saveNovo(o));
+    return { ...c, progresso: E.markCleared(c.progresso, { dungeon: 'floresta', difficulty: c.masmorra.difficulty }) };
+  };
+  const noApp = (nome: string, estado: EstadoNaCidade, semente: number) =>
+    caso(`entrarNaMasmorra: no app, ${nome}`, 'entrarNaMasmorra', { estado, andar: 3, app: true }, (a, ctx) =>
+      E.entrarNaMasmorra(a.estado, ctx.rng, undefined, a.andar, ctx.now, a.app), { rng: { seed: semente }, now: AGORA });
+  const guerreiro = comFloresta();
+  const sementeDoMestre = sementeOnde((r) => r < 0.15);
+  noApp('o mestre de estilo aparece', guerreiro, sementeDoMestre);
+  noApp('o mestre de estilo não aparece', guerreiro, sementeOnde((r) => r >= 0.15));
+  noApp('sem a Floresta, nada de mestre', naCidade(saveNovo()), sementeDoMestre);
+  noApp('com os dois estilos, nada de mestre', comFloresta({ extra: { estilos: ['espadachim', 'cavaleiro'], estilo: 'cavaleiro' } }), sementeDoMestre);
+  caso('entrarNaMasmorra: no site, mesmo com a Floresta, nada de mestre', 'entrarNaMasmorra', { estado: guerreiro, andar: 3 }, (a, ctx) =>
+    E.entrarNaMasmorra(a.estado, ctx.rng, undefined, a.andar, ctx.now), { rng: { seed: sementeDoMestre }, now: AGORA });
+  // Na sala dele: só o app o ouve; aprender marca a sala; a guilda troca o estilo ativo.
+  const andar = E.entrarNaMasmorra(guerreiro, E.seededRng(sementeDoMestre), undefined, 3, () => 1_700_000_000_000, true);
+  const salaDoMestre = andar.map.flat().find((c) => c.type === 'estilo');
+  if (!salaDoMestre) throw new Error('o mestre de estilo de teste não apareceu');
+  const naSalaDoMestre = { ...andar, pos: { x: salaDoMestre.x, y: salaDoMestre.y } };
+  for (const app of [false, true]) {
+    caso(`interagir: o mestre de estilo${app ? ' no app' : ' no site'}`, 'interagir', { estado: naSalaDoMestre, pet: null, app }, (a, ctx) =>
+      E.interagir(a.estado, ctx.rng, a.pet as never, ctx.now, a.app), { rng: { seed: 5 }, now: AGORA });
+  }
+  caso('abrirMestreDeEstilo: na sala dele', 'abrirMestreDeEstilo', { estado: naSalaDoMestre }, (a) => E.abrirMestreDeEstilo(a.estado));
+  const aprendeu = E.aprenderComMestre(naSalaDoMestre);
+  caso('aprenderComMestre: na sala dele', 'aprenderComMestre', { estado: naSalaDoMestre }, (a) => E.aprenderComMestre(a.estado));
+  caso('abrirMestreDeEstilo: depois de ensinar', 'abrirMestreDeEstilo', { estado: aprendeu.estado }, (a) => E.abrirMestreDeEstilo(a.estado));
+  const guilda = E.abrirGuilda({ ...aprendeu.estado, hero: { ...aprendeu.estado.hero, estilos: ['espadachim', 'cavaleiro'] } });
+  for (const id of ['espadachim', 'cavaleiro', 'chute', undefined]) {
+    caso(`trocarEstiloNaGuilda: ${id ?? 'nenhum'}`, 'trocarEstiloNaGuilda', { guilda, ...(id ? { id } : {}) }, (a) => E.trocarEstiloNaGuilda(a.guilda as never, (a as { id?: string }).id));
+  }
+}
+
 // No app, o andar de entrada pode ter item com material (pelo totem do 60, que o portão já conferiu).
 caso('entrarNaMasmorra: no app, pelo andar 60', 'entrarNaMasmorra', { estado: cidade, andar: 60, app: true }, (a, ctx) =>
   E.entrarNaMasmorra(a.estado, ctx.rng, undefined, a.andar, ctx.now, a.app),
@@ -5695,6 +5772,35 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
         memoria: { recargaDaMagia: 4000 },
       }, (a) => E.abrirLuta(a.estado, a.chegada, null, false, null, a.memoria));
     }
+  }
+
+  // Os estilos de luta (rodada 5a).
+  {
+    const T = E.TILE_UNITS;
+    const MEIO = { x: 4.5 * T, y: 4.5 * T };
+    const CANTO: Walker = { x: 1.5 * T, y: 7.5 * T, facing: 'N' };
+    const golpesNo = (n: number, cursor: { x: number; y: number }, toque = 42, ciclo = 60): EntradaDaLuta[] =>
+      parado(n * ciclo).map((e, i) => (i % ciclo === 0 ? { ...e, atacar: true, cursor } : i % ciclo === toque ? { ...e, tocar: true } : e));
+    const comEstilo = (classe: string, estilo: string, arma: string | null = 'espada') => ({ ...comArma(classe, arma), estilos: [estilo], estilo });
+    const zumbiForte = () => salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]);
+    simula('espadachim avança e fica imune', E.abrirLuta({ ...zumbiForte(), hero: comEstilo('guerreiro', 'espadachim') }, CANTO).luta, [...golpesNo(3, MEIO), ...parado(300)], { seed: 880 });
+    simula('espadachim colado atordoa', abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: comEstilo('guerreiro', 'espadachim') }), golpesNo(3, MEIO), { seed: 881 });
+    {
+      const aberta = abrir({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 }), bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: comEstilo('guerreiro', 'espadachim') });
+      const montada = {
+        ...aberta,
+        arena: { ...aberta.arena, ki: 290, heroi: { x: 4.5 * T, y: 7.5 * T, facing: 'N' as const }, monstros: aberta.arena.monstros.map((m, i) => ({ ...m, corpoX: 4.5 * T, corpoY: (i === 0 ? 5.5 : 3.5) * T })) },
+      };
+      simula('espadachim junta ki e solta o Corte Invernal', montada, [...parado(220).map(() => ({ x: 0, y: 0, canalizar: true })), { x: 0, y: 0, corte: true }, ...parado(20)], { seed: 882 });
+    }
+    simula('cavaleiro crita mais e desvia', abrir({ ...salaCom([bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 30 })]), hero: comEstilo('guerreiro', 'cavaleiro') }), [...golpesNo(4, MEIO), ...parado(300)], { seed: 883 });
+    {
+      const aberta = abrir({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 }), bicho('goblin', { hp: 3000, maxHp: 3000 })]), hero: comEstilo('monge', 'empurrao', null) });
+      const juntos = { ...aberta, arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m, i) => ({ ...m, corpoX: (4.5 + i) * T, corpoY: 4.5 * T })) } };
+      simula('empurrão pega quem está do lado', juntos, golpesNo(4, MEIO), { seed: 884 });
+    }
+    simula('o chute avança de longe e às vezes erra', E.abrirLuta({ ...zumbiForte(), hero: comEstilo('monge', 'chute', null) }, CANTO).luta, golpesNo(6, MEIO), { seed: 885 });
+    simula('a concentração junta cargas e gasta no golpe', abrir({ ...zumbiForte(), hero: comEstilo('monge', 'concentracao', null) }), [...parado(600), ...golpesNo(2, MEIO)], { seed: 886 });
   }
 
   // O cajado no PC: as letras saem dos primeiros sorteios da luta, os do aperto; a tecla da última fecha o evento.

@@ -74,6 +74,9 @@ namespace RPGLegend.Engine
         public Ferimentos Ferimentos;
         /// <summary>O Necromante que a Magia Proibida levantou (rodada 4b): a masmorra a zerar pra ter a magia de volta. Null, liberada.</summary>
         public string BloqueioDaMagia;
+        /// <summary>Os estilos de luta aprendidos com o mestre (rodada 5a; só o app ensina) e o ativo, escolhido na guilda. Null, nenhum.</summary>
+        public List<string> Estilos;
+        public string Estilo;
         /// <summary>O progresso de cada atributo rumo ao próximo ponto, em XP de treino (<see cref="RPGLegend.Engine.Treino"/>).</summary>
         public OrderedMap<double> Treino;
         /// <summary>Os usos de cada atributo desde o último abate: o XP do próximo se reparte por eles.</summary>
@@ -89,6 +92,8 @@ namespace RPGLegend.Engine
         Equipment IHeroCore.Equip => Equip;
         string IHeroCore.ClassId => ClassId;
         string IHeroCore.ClassName => ClassName;
+        IReadOnlyList<string> IHeroCore.Estilos => Estilos;
+        string IHeroCore.Estilo => Estilo;
 
         /// <summary>O <c>{ ...hero }</c> do TS: cópia rasa (os objetos de dentro são os mesmos).</summary>
         public Hero Clone()

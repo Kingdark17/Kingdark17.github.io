@@ -55,6 +55,18 @@ describe('sanitizeHero', () => {
     expect(result.baseAttrs).toBe(60);
   });
 
+  it('a vida do Cavaleiro e a mana do Mago entram no cálculo, como no derivedStats', () => {
+    const attrs = { forca: 1, destreza: 1, constituicao: 10, intelecto: 10, sabedoria: 1, carisma: 1 };
+    const guerreiro = sanitizeHero({ attrs, level: 1, equip: {}, classId: 'guerreiro' }, null, false);
+    const cavaleiro = sanitizeHero({ attrs, level: 1, equip: {}, classId: 'guerreiro', estilos: ['cavaleiro'], estilo: 'cavaleiro' }, null, false);
+    expect(cavaleiro.hero.maxHp).toBe(Math.round(((guerreiro.hero.maxHp as number) * 140) / 100));
+    // Estilo que não é dele não conta.
+    const forjado = sanitizeHero({ attrs, level: 1, equip: {}, classId: 'mago', estilos: ['cavaleiro'], estilo: 'cavaleiro' }, null, false);
+    const mago = sanitizeHero({ attrs, level: 1, equip: {}, classId: 'mago' }, null, false);
+    expect(forjado.hero.maxHp).toBe(mago.hero.maxHp);
+    expect(mago.hero.maxMp).toBe(Math.round(((10 + 2 + 50) * 120) / 100));
+  });
+
   it('soma vida/mana de equipamento, capado por equipmentCap(nível)', () => {
     const candidate = {
       attrs: { forca: 1, destreza: 1, constituicao: 1, intelecto: 1, sabedoria: 1, carisma: 1 },

@@ -26,7 +26,7 @@ namespace RPGLegend.Engine
     /// </summary>
     public sealed class TelaAberta
     {
-        /// <summary>"combate", "loja", "dialogo", "missoes", "evento", "mochila", "guilda", "encantadora", "portao", "totem" ou "professor".</summary>
+        /// <summary>"combate", "loja", "dialogo", "missoes", "evento", "mochila", "guilda", "encantadora", "portao", "totem", "professor" ou "mestreDeEstilo".</summary>
         public string Tipo;
         public Combate Combate;
         public Loja Loja;
@@ -39,6 +39,8 @@ namespace RPGLegend.Engine
         public Portao Portao;
         public Totem Totem;
         public Professor Professor;
+        /// <summary>O mestre de estilo (rodada 5a, só o app).</summary>
+        public MestreDeEstiloNaSala Mestre;
     }
 
     /// <summary>TS: ResultadoDaInteracao.</summary>
@@ -209,6 +211,14 @@ namespace RPGLegend.Engine
                         return ComAviso(estado, "🎓", "Sala do Mestre", "O mestre já seguiu caminho. Ficaram as marcas do treino no chão.");
                     var professor = Professores.AbrirProfessor(estado);
                     return professor != null ? ComTela(estado, new TelaAberta { Tipo = "professor", Professor = professor }) : Nada(estado);
+                }
+                case DungeonRoomTypes.Estilo:
+                {
+                    // O mestre de estilo (rodada 5a): só o app o gera e só o app o ouve.
+                    var mestre = app ? MestresDeEstilo.Abrir(estado) : null;
+                    if (mestre == null)
+                        return ComAviso(estado, "🥋", "Mestre de estilo", celula.MestreDeEstilo?.Ensinado == true ? "O mestre já seguiu caminho." : "Um mestre medita aqui, de olhos fechados.");
+                    return ComTela(estado, new TelaAberta { Tipo = "mestreDeEstilo", Mestre = mestre });
                 }
                 case DungeonRoomTypes.Event:
                 {

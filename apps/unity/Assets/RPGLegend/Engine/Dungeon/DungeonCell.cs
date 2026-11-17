@@ -17,6 +17,27 @@ namespace RPGLegend.Engine
         public const string Exit = "exit";
         public const string Totem = "totem";
         public const string Teacher = "teacher";
+        /// <summary>O mestre de estilo (rodada 5a, só o app gera).</summary>
+        public const string Estilo = "estilo";
+    }
+
+    /// <summary>TS: MestreDeEstilo — o mestre de estilo numa sala (ver hero/estilos.ts): o estilo que ele ensina.</summary>
+    public sealed class MestreDeEstilo
+    {
+        public string Estilo;
+        /// <summary>Já ensinou: a sala vira só uma sala. Opcional.</summary>
+        public bool? Ensinado;
+
+        /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
+        [JsExtra] public JsExtras Extra;
+
+        /// <summary>O <c>{ ...mestreDeEstilo }</c> do TS.</summary>
+        public MestreDeEstilo Clone()
+        {
+            var c = (MestreDeEstilo)MemberwiseClone();
+            c.Extra = Extra?.Clone();
+            return c;
+        }
     }
 
     /// <summary>TS: DungeonTeacher — o professor de classe numa sala (ver hero/teachers.ts).</summary>
@@ -140,6 +161,8 @@ namespace RPGLegend.Engine
         /// <summary>Salas distantes: onde a rota até o início se ramifica ("x,y").</summary>
         public string StartBranch;
         public DungeonTeacher Teacher;
+        /// <summary>O mestre de estilo (sala 'estilo').</summary>
+        public MestreDeEstilo MestreDeEstilo;
         /// <summary>Baú pequeno, vaso, placa, parede rachada (RoomExtras). Andar gerado antes deles não tem: null.</summary>
         public List<DungeonExtra> Extras;
         /// <summary>A armadilha escondida no chão (<see cref="Armadilhas"/>, desde 2026-11-06). Andar gerado antes delas não tem: null.</summary>

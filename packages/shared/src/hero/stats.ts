@@ -69,6 +69,9 @@ export interface HeroCore {
   equip: Equipment;
   classId?: string;
   className?: string;
+  /** Os estilos de luta que o herói aprendeu e o ativo (`hero/estilos.ts`; o Cavaleiro mexe na vida). */
+  estilos?: string[];
+  estilo?: string;
 }
 
 export interface DerivedStats {

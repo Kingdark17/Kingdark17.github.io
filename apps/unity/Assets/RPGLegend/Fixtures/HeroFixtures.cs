@@ -39,7 +39,7 @@ namespace RPGLegend.Tests
             Fn(M, "alcanceDoHeroi", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
-                return N(ClassesDeLuta.AlcanceDoHeroi(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId));
+                return N(ClassesDeLuta.AlcanceDoHeroi(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId, quem.Ativo));
             });
             Fn(M, "ataqueDasMaos", (a, c) =>
             {
@@ -71,12 +71,12 @@ namespace RPGLegend.Tests
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
                 return N(ClassesDeLuta.BonusDoAtaque(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId, R<ContadoresDaClasse>(a["c"]),
                     JsJson.Truthy(JsJson.Prop(a["alvo"], "colado")), JsJson.Truthy(JsJson.Prop(a["alvo"], "chefe")),
-                    JsJson.ToOptionalNumber(JsJson.Prop(a["alvo"], "blocos")) ?? 0));
+                    JsJson.ToOptionalNumber(JsJson.Prop(a["alvo"], "blocos")) ?? 0, quem.Ativo));
             });
             Fn(M, "esquivaDaClasse", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
-                return N(ClassesDeLuta.EsquivaDaClasse(quem.ClassId, quem.ClassName, R<ContadoresDaClasse>(a["c"]), JsJson.Truthy(a["chefe"])));
+                return N(ClassesDeLuta.EsquivaDaClasse(quem.ClassId, quem.ClassName, R<ContadoresDaClasse>(a["c"]), JsJson.Truthy(a["chefe"]), quem.Ativo));
             });
             Fn(M, "resistenciaDaClasse", (a, c) =>
             {
@@ -87,7 +87,7 @@ namespace RPGLegend.Tests
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
                 var extras = a["extras"] != null && a["extras"].Type != JTokenType.Null ? R<ExtrasDaClasse>(a["extras"]) : null;
-                return W(ClassesDeLuta.TextosDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"]), extras));
+                return W(ClassesDeLuta.TextosDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"]), extras, quem.Ativo));
             });
             Fn(M, "apoiaAliado", (a, c) =>
             {
@@ -109,8 +109,45 @@ namespace RPGLegend.Tests
             Fn(M, "oQueCanaliza", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
-                return W(ClassesDeLuta.OQueCanaliza(quem.ClassId, quem.ClassName));
+                return W(ClassesDeLuta.OQueCanaliza(quem.ClassId, quem.ClassName, quem.Ativo));
             });
+            Fn(M, "passosDoCanal", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.PassosDoCanal(quem.ClassId, quem.ClassName, quem.Ativo));
+            });
+            Fn(M, "criticoDoEstilo", (a, c) => N(ClassesDeLuta.CriticoDoEstilo(R<QuemLutaDoCaso>(a["quem"]).Ativo)));
+
+            // ---------- estilos (rodada 5a) ----------
+            Const(M, "ESTILOS", () => W(GameData.EstilosTable.Estilos));
+            Const(M, "CHANCE_DO_MESTRE", () => W(GameData.EstilosTable.ChanceDoMestre));
+            Fn(M, "estiloAtivo", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(Estilos.Ativo(quem.ClassId, quem.ClassName, quem.Estilos, quem.Estilo));
+            });
+            Fn(M, "estilosQueFaltam", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(Estilos.QueFaltam(quem.ClassId, quem.ClassName, quem.Estilos));
+            });
+            Fn(M, "chanceDoMestre", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(Estilos.ChanceDoMestre(quem.ClassId, quem.ClassName, quem.Estilos));
+            });
+            Fn(M, "vidaComOEstilo", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(Estilos.VidaComOEstilo(Num(a["vida"]), quem.ClassId, quem.ClassName, quem.Estilos, quem.Estilo));
+            });
+            Fn(M, "sortearEstilo", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(Estilos.Sortear(quem.ClassId, quem.ClassName, quem.Estilos, c.RngFn));
+            });
+            Fn(M, "aprenderEstilo", (a, c) => AprenderOuTrocar(a, true));
+            Fn(M, "trocarEstilo", (a, c) => AprenderOuTrocar(a, false));
             Fn(M, "custoDaMagia", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
@@ -181,9 +218,37 @@ namespace RPGLegend.Tests
             Fn(M, "idDaRaca", (a, c) =>
                 W(Catalog.IdDaRaca(Str(JsJson.Prop(a["quem"], "raceId")), Str(JsJson.Prop(a["quem"], "race")))));
         }
+
+        /// <summary>
+        /// aprenderEstilo / trocarEstilo do TS: devolvem o próprio `quem` com os estilos novos (ou intacto). Mexe no
+        /// JSON do caso, pra manter os outros campos como vieram.
+        /// </summary>
+        private static JToken AprenderOuTrocar(JToken a, bool aprender)
+        {
+            var quemJson = (JObject)a["quem"].DeepClone();
+            var quem = R<QuemLutaDoCaso>(a["quem"]);
+            string id = a["id"] == null || a["id"].Type == JTokenType.Null ? null : Str(a["id"]);
+            if (aprender)
+            {
+                var novos = Estilos.ComOAprendido(quem.ClassId, quem.ClassName, quem.Estilos, id);
+                if (novos == null) return quemJson;
+                quemJson["estilos"] = new JArray(novos);
+                quemJson["estilo"] = id;
+                return quemJson;
+            }
+            if (id == null)
+            {
+                quemJson.Remove("estilo");
+                return quemJson;
+            }
+            bool tem = quem.Estilos != null && quem.Estilos.Contains(id);
+            if (!tem || Estilos.PorId(id)?.Classe != Catalog.IdDaClasse(quem.ClassId, quem.ClassName)) return quemJson;
+            quemJson["estilo"] = id;
+            return quemJson;
+        }
     }
 
-    /// <summary>O `quem` dos casos de classes-de-luta: a classe e a arma na mão.</summary>
+    /// <summary>O `quem` dos casos de classes-de-luta: a classe, a arma na mão e os estilos.</summary>
     internal sealed class QuemLutaDoCaso
     {
         public string ClassId;
@@ -192,5 +257,10 @@ namespace RPGLegend.Tests
         public Equipment Equip;
         public double? Hp;
         public double? MaxHp;
+        public System.Collections.Generic.List<string> Estilos;
+        public string Estilo;
+
+        /// <summary>O estilo ativo (o idDoEstilo do TS).</summary>
+        public string Ativo => RPGLegend.Engine.Estilos.IdDoEstilo(ClassId, ClassName, Estilos, Estilo);
     }
 }

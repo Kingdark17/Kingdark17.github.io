@@ -69,6 +69,7 @@ const LEGENDA_DA_MASMORRA: Array<[string, string]> = [
   ['boss', 'Chefe'],
   ['totem', 'Totem'],
   ['teacher', 'Mestre da classe'],
+  ['estilo', 'Mestre de estilo'],
   ['stairs', 'Escadas'],
   ['exit', 'Saída'],
   ['event', 'Evento'],
