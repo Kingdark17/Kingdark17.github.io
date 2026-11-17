@@ -517,8 +517,33 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
     cima do boneco dele; a regra continua a do fantasma.
   - **Chat da sala** (`TelaDeJogo.ChatDaSala.cs`, `"m"`): o CHAT dos botões
     de cima, sem guardar nada; digitando, o teclado é do campo.
-  Falta, nesta ordem: as classes em
-  grupos (o Necromante do Breno **substitui** o ajuste de 2026-11-12, e a
+  Rodada 3a, **as classes de corpo a corpo** (2026-11-17, decidido com o
+  usuário; regras em `hero/classes-de-luta.ts` ↔ `ClassesDeLuta.cs`, o que
+  junta na luta em `Arena.classe`, que some no fim): o **Guerreiro** bate
+  +25% colado no alvo (1 bloco), 3 críticos seguidos somam +20% de dano até
+  o fim da luta (um acerto sem crítico zera a contagem e guarda o ganho; sem
+  teto), e cada 10% de vida que falta dá 5% de resistência; o **Ladino**
+  crita 2,25× (o de sempre é 1,6×), e a cada 5 críticos ganha uma
+  furtividade (+20% de esquiva até 60%, +10% de ataque, depois +5%; metade
+  contra o chefe); o **Bárbaro** junta fúria a cada golpe levado (até 15,
+  +13% de dano e +3% de resistência cada, perde 2 a cada 15 s sem
+  apanhar), e com arma pesada bate em área, cheio no alvo e **metade nos
+  outros** (o machadão corta numa faixa até o alcance e pode atordoar, a
+  marreta treme em 5 × 5 em volta dele com +20%, a maça destrói 3 × 3 no
+  alvo e pode empurrar); o **Paladino** golpeia avançando até 1 bloco do
+  alvo e o empurra 1 bloco, devolve 20% do dano que leva (150% com a
+  absorção no teto), junta 10 de absorção por golpe (100 dá 20% de
+  resistência, teto 300) e atrai os monstros (conta 30% mais perto na
+  escolha da dupla, e puxa 30% dos golpes que iam nos companheiros).
+  "Resistência" é a % de dano a menos no golpe levado; os efeitos se somam.
+  **A classe refeita perde, na arena, a passiva antiga do site**
+  (`classeRefeita`, `CLASSES_REFEITAS`; o site continua com ela). O que a
+  classe junta aparece numa linha embaixo das barras, só na luta
+  (`textosDaClasse`). No espelho da dupla, o empurrão e o atordoar do
+  convidado não passam pro anfitrião (o dano passa).
+  Falta, nesta ordem: as classes de longe e de apoio (Arqueiro, Bardo,
+  Clérigo e Druida); as que seguram "K" (Necromante, Monge e Mago; o
+  Necromante do Breno **substitui** o ajuste de 2026-11-12, e a
   habilidade dele revive os aliados);
   estilos e mestres; mercadores secretos e itens novos (a arte das armas
   novas é o Claude que desenha, no estilo do Breno); o Caçador.

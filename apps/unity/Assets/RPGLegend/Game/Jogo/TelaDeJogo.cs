@@ -45,6 +45,9 @@ namespace RPGLegend.Game.Jogo
         private VisualElement _tela, _palco, _areaDaLuta, _caixaDoLugar, _baseDoJoystick, _alavanca, _minimapa, _caixa, _escolhas, _recado, _sobre, _botoesDaJanela, _vida, _mana;
         private VisualElement _janelaEl, _colunasDaJanela;
         private Label _ferimentos;
+        /// <summary>O que a classe junta na luta (a fúria, o combo…), embaixo das barras; só lutando.</summary>
+        private Label _classeNaLuta;
+        private string _classeMostrada;
         private Label _dica, _nome, _nivel, _numeroDaVida, _numeroDaMana, _lugar, _iconeDaCaixa, _tituloDaCaixa, _textoDaCaixa, _tituloDoRecado, _textoDoRecado, _salvamento, _tituloDaJanela, _carregando;
         private Label _ouroDaJanela, _linhaDaJanela;
         private VisualElement _narracao;
@@ -232,6 +235,7 @@ namespace RPGLegend.Game.Jogo
             _numeroDaVida = raiz.Q<Label>("numero-da-vida");
             _numeroDaMana = raiz.Q<Label>("numero-da-mana");
             _ferimentos = raiz.Q<Label>("ferimentos-do-heroi");
+            _classeNaLuta = raiz.Q<Label>("classe-na-luta");
             _minimapa = raiz.Q("minimapa");
             _lugar = raiz.Q<Label>("lugar");
             _narracao = raiz.Q("narracao");
@@ -427,6 +431,22 @@ namespace RPGLegend.Game.Jogo
             _ferimentos.text = string.Join(" · ", ferimentos);
             _ferimentos.EnableInClassList("escondida", ferimentos.Count == 0);
             if (_sala != null) _sala.Ritmo = FerimentosDoHeroi.RitmoDoAndar(hero);
+            DesenharClasse(_partida?.Luta);
+        }
+
+        /// <summary>
+        /// A linha da classe embaixo das barras (rodada 3a do doc do Breno, só no app): o combo do Guerreiro, a
+        /// furtividade do Ladino, a fúria do Bárbaro ou a absorção do Paladino. Fora da luta, some.
+        /// </summary>
+        private void DesenharClasse(LutaEmTempoReal luta)
+        {
+            if (_classeNaLuta == null) return;
+            var textos = luta != null && luta.Fim == null ? ClassesDeLuta.TextosDaClasse(luta.Estado.Hero, luta.Arena.Classe) : null;
+            string texto = textos != null && textos.Count > 0 ? string.Join(" · ", textos) : "";
+            if (texto == _classeMostrada) return;
+            _classeMostrada = texto;
+            _classeNaLuta.text = texto;
+            _classeNaLuta.EnableInClassList("escondida", texto.Length == 0);
         }
 
         private static void Encher(VisualElement barra, Label numero, double atual, double maximo)

@@ -190,10 +190,10 @@ namespace RPGLegend.Engine
         /// TS: landHitOnHero — o golpe no próprio herói (esquiva, defesa, vulnerabilidades, escudo, veneno e dreno
         /// de mana), com o monstro depois dele: acertou, o golpe envenenado do poder de classe se gasta.
         /// </summary>
-        public static HeroHit LandHitOnHero(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng = null, double petEsquiva = 0, DefesasDoHeroi defesas = null)
+        public static HeroHit LandHitOnHero(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng = null, double petEsquiva = 0, DefesasDoHeroi defesas = null, bool semPassivaDaClasse = false)
         {
             rng = rng ?? Rng.Default;
-            var heroHit = ResolveHeroDamage(hero, monster, attackMult, rng, petEsquiva, defesas);
+            var heroHit = ResolveHeroDamage(hero, monster, attackMult, rng, petEsquiva, defesas, semPassivaDaClasse);
             heroHit.Monster = monster;
             if (!heroHit.Dodged && monster.PoisonStrike == true)
             {
@@ -441,7 +441,7 @@ namespace RPGLegend.Engine
         /// <paramref name="defesas"/> são as fortificações da Encantadora, que só a arena do app passa. Sem elas o golpe é
         /// o de sempre, sem um número a mais do rng: os sorteios de resistir só acontecem quando há a resistência.
         /// </summary>
-        private static HeroHit ResolveHeroDamage(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng, double petEsquiva, DefesasDoHeroi defesas)
+        private static HeroHit ResolveHeroDamage(Hero hero, CombatMonsterView monster, double attackMult, RngFn rng, double petEsquiva, DefesasDoHeroi defesas, bool semPassivaDaClasse = false)
         {
             var d = hero.Derived;
             var buffs = hero.Buffs ?? new HeroBuffs();
@@ -475,7 +475,7 @@ namespace RPGLegend.Engine
             if (reducao > 0) dmg = Js.Max(1, Js.Round(dmg * (1 - reducao)));
 
             bool defensivePassiveTriggered = false;
-            if (Catalog.IdDaClasse(nextHero.ClassId, nextHero.ClassName) == "guerreiro" && rng() < 0.2)
+            if (!semPassivaDaClasse && Catalog.IdDaClasse(nextHero.ClassId, nextHero.ClassName) == "guerreiro" && rng() < 0.2)
             {
                 dmg = Js.Max(1, Js.Round(dmg * 0.6));
                 defensivePassiveTriggered = true;

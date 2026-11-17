@@ -157,6 +157,12 @@ export interface ResolveAttackOptions {
   petCriticoBonus?: number;
   /** O dano da classe na luta do app, em % (`hero/classes-de-luta.ts`); ausente, 100. Só a arena passa. */
   danoDaClasse?: number;
+  /** O dano a mais da classe na arena (a fúria, o combo…), em pontos de %, somado ao `danoDaClasse`. Só a arena passa. */
+  bonusDeDano?: number;
+  /** O multiplicador do crítico; ausente, 1,6. O Ladino tem o dele na arena (`criticoDaClasse`). */
+  multiplicadorDoCritico?: number;
+  /** A classe que o doc do Breno refez fica, na arena, sem a passiva antiga do site (decisão do usuário, 2026-11-17). */
+  semPassivaDaClasse?: boolean;
 }
 
 export interface ResolveAttackResult {
@@ -290,7 +296,7 @@ export function resolverGolpe(
   const forcaDaMira = leitura.acerto ? leitura.forca : 1;
 
   let forcaMult = buffs.forcaTurns && buffs.forcaTurns > 0 ? 1 + (buffs.forcaAmount ?? 0) : 1;
-  if (idDaClasse(heroAfterCost) === 'barbaro' && heroAfterCost.hp < heroAfterCost.maxHp * 0.5) {
+  if (!options.semPassivaDaClasse && idDaClasse(heroAfterCost) === 'barbaro' && heroAfterCost.hp < heroAfterCost.maxHp * 0.5) {
     forcaMult *= 1.35;
   }
 
@@ -331,9 +337,10 @@ export function resolverGolpe(
 
   const critChance = (d.critico + (bonus.critico ?? 0) + petCritico + (idDaClasse(heroAfterCost) === 'arqueiro' ? 8 : 0)) / 100;
   const isCrit = guaranteedCrit || rng() < critChance || leitura.critico;
-  if (isCrit) dmg = Math.round(dmg * 1.6);
+  if (isCrit) dmg = Math.round(dmg * (options.multiplicadorDoCritico ?? 1.6));
   dmg = Math.round(dmg * forcaDoBraco(heroAfterCost));
-  if (options.danoDaClasse !== undefined && options.danoDaClasse !== 100) dmg = Math.round((dmg * options.danoDaClasse) / 100);
+  const pctDaClasse = (options.danoDaClasse ?? 100) + (options.bonusDeDano ?? 0);
+  if (pctDaClasse !== 100) dmg = Math.round((dmg * pctDaClasse) / 100);
 
   nextMonster = { ...nextMonster, hp: nextMonster.hp - dmg };
 
@@ -343,7 +350,9 @@ export function resolverGolpe(
   afterHero = procResult.hero;
   nextMonster = { ...nextMonster, ...procResult.monster };
 
-  const passiveResult = applyHeroClassPassive(afterHero, nextMonster, dmg, rng);
+  const passiveResult = options.semPassivaDaClasse
+    ? { hero: afterHero, monster: nextMonster, triggered: null }
+    : applyHeroClassPassive(afterHero, nextMonster, dmg, rng);
   afterHero = passiveResult.hero;
   nextMonster = { ...nextMonster, ...passiveResult.monster };
 

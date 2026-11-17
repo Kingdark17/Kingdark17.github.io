@@ -153,7 +153,15 @@ export interface HeroDamageResult {
  * `defesas` são as fortificações da Encantadora (`items/encantamentos.ts`), que só a arena do app passa. Sem elas o
  * golpe é o de sempre, sem um número a mais do `rng`: os sorteios de resistir só acontecem quando há a resistência.
  */
-function resolveHeroDamage(hero: Hero, monster: CombatMonsterView, attackMult: number, rng: Rng, petEsquiva: number, defesas?: DefesasDoHeroi): HeroDamageResult {
+function resolveHeroDamage(
+  hero: Hero,
+  monster: CombatMonsterView,
+  attackMult: number,
+  rng: Rng,
+  petEsquiva: number,
+  defesas?: DefesasDoHeroi,
+  semPassivaDaClasse = false,
+): HeroDamageResult {
   const d = hero.derived;
   const buffs = hero.buffs ?? {};
   const dodge = d.esquiva + petEsquiva + (buffs.esquivaTurns && buffs.esquivaTurns > 0 ? buffs.esquivaAmount || 0 : 0);
@@ -182,7 +190,7 @@ function resolveHeroDamage(hero: Hero, monster: CombatMonsterView, attackMult: n
   if (reducao > 0) dmg = Math.max(1, Math.round(dmg * (1 - reducao)));
 
   let defensivePassiveTriggered = false;
-  if (idDaClasse(nextHero) === 'guerreiro' && rng() < 0.2) {
+  if (!semPassivaDaClasse && idDaClasse(nextHero) === 'guerreiro' && rng() < 0.2) {
     dmg = Math.max(1, Math.round(dmg * 0.6));
     defensivePassiveTriggered = true;
   }
@@ -305,6 +313,9 @@ export interface HeroHit extends HeroDamageResult {
  * O golpe do monstro no próprio herói: esquiva, defesa, vulnerabilidades,
  * escudo e o que o golpe deixa de volta (veneno, dreno de mana). Acertou, o
  * golpe envenenado do poder de classe se gasta.
+ *
+ * `semPassivaDaClasse`: na arena, a classe refeita pelo doc do Breno fica sem
+ * a passiva antiga do site (a guarda de 20% do Guerreiro).
  */
 export function landHitOnHero(
   hero: Hero,
@@ -313,8 +324,9 @@ export function landHitOnHero(
   rng: Rng = defaultRng,
   petEsquiva = 0,
   defesas?: DefesasDoHeroi,
+  semPassivaDaClasse = false,
 ): HeroHit {
-  const heroHit = resolveHeroDamage(hero, monster, attackMult, rng, petEsquiva, defesas);
+  const heroHit = resolveHeroDamage(hero, monster, attackMult, rng, petEsquiva, defesas, semPassivaDaClasse);
   if (heroHit.dodged) return { ...heroHit, monster };
   const depois = monster.poisonStrike ? { ...monster, poisonStrike: false } : monster;
   // O golpe de chefe que acerta pode quebrar um braço ou uma perna (doc do Breno de 2026-11-06).

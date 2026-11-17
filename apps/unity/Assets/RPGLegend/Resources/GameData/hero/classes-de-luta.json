@@ -91,5 +91,51 @@
   "MAOS_DO_MONGE": {
     "base": 3,
     "aCadaNiveis": 2
+  },
+  "CLASSES_REFEITAS": [
+    "guerreiro",
+    "ladino",
+    "barbaro",
+    "paladino"
+  ],
+  "REGRAS_DO_GUERREIRO": {
+    "colado": 25,
+    "criticosDoCombo": 3,
+    "combo": 20,
+    "degrauDaVida": 10,
+    "resistenciaPorDegrau": 5
+  },
+  "REGRAS_DO_LADINO": {
+    "critico": 2.25,
+    "criticosDaFurtividade": 5,
+    "esquiva": 20,
+    "tetoDaEsquiva": 60,
+    "ataque": 10,
+    "ataqueDepoisDoTeto": 5,
+    "contraOChefe": 50
+  },
+  "REGRAS_DO_BARBARO": {
+    "tetoDaFuria": 15,
+    "danoPorFuria": 13,
+    "resistenciaPorFuria": 3,
+    "calma": 900,
+    "perdeNaCalma": 2,
+    "ladoDoTremor": 5,
+    "marreta": 20,
+    "ladoDaBola": 3,
+    "empurraNaMaca": 20,
+    "larguraDoCorte": 1,
+    "atordoaNoMachado": 30,
+    "nosOutros": 50
+  },
+  "REGRAS_DO_PALADINO": {
+    "empurrao": 1,
+    "devolve": 20,
+    "devolveNoTeto": 150,
+    "absorvePorGolpe": 10,
+    "tetoDaAbsorcao": 300,
+    "absorcaoQueResiste": 100,
+    "resistencia": 20,
+    "foco": 30
   }
 }

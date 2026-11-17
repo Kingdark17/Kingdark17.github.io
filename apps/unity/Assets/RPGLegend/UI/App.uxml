@@ -259,6 +259,7 @@
                     <ui:VisualElement class="trilho"><ui:VisualElement name="mana" class="enchimento mana" /></ui:VisualElement>
                 </ui:VisualElement>
                 <ui:Label name="morto-do-heroi" text="💀 Morto · espere seu parceiro te reviver" class="morto-do-heroi escondida" />
+                <ui:Label name="classe-na-luta" class="classe-na-luta escondida" />
                 <ui:Label name="ferimentos-do-heroi" class="ferimentos-do-heroi escondida" />
             </ui:VisualElement>
             <!-- À direita: o que fala do lugar (aparece na chegada e some sozinho; tocar fecha), a pergunta de SIM/NÃO

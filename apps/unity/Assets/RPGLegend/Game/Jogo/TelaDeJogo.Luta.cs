@@ -312,6 +312,8 @@ namespace RPGLegend.Game.Jogo
                 b.Botao.EnableInClassList("sem-mana", hero.Mp < custo);
             }
 
+            DesenharClasse(luta);
+
             // O escudo do vigor (a Encantadora) aparece ao lado da vida enquanto durar.
             double escudo = arena.Escudo ?? 0;
             _numeroDaVida.text = Js.NumberToString(Math.Floor(hero.Hp)) + "/" + Js.NumberToString(Math.Floor(hero.MaxHp))

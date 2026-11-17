@@ -80,7 +80,24 @@ import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
 import { MAX_ESQUELETOS } from '../combat/invocacao.js';
-import { alcanceDoHeroi, classeDeLuta } from '../hero/classes-de-luta.js';
+import {
+  alcanceDoHeroi,
+  bonusDoAtaque,
+  classeDeLuta,
+  classeRefeita,
+  contarAcerto,
+  contarGolpeLevado,
+  criticoDaClasse,
+  devolucaoDaClasse,
+  esfriar,
+  esquivaDaClasse,
+  puxaOsMonstros,
+  REGRAS_DO_BARBARO,
+  REGRAS_DO_PALADINO,
+  resistenciaDaClasse,
+  type ContadoresDaClasse,
+} from '../hero/classes-de-luta.js';
+import { idDaClasse } from '../hero/catalog.js';
 import { CHANCE_DE_QUEBRAR_NO_CHEFE, nomeDoMembro, PASSO_COM_PERNA_QUEBRADA, quebrarMembro, type Membro } from '../hero/ferimentos.js';
 import { eventoDaArma, eventoDoAtaque, eventoDoPoder, lerEvento, TAMANHO_DO_DESENHO, type EventoDeArma, type JogadaDoEvento, type TipoDeEvento } from './eventos-de-arma.js';
 
@@ -256,6 +273,8 @@ export interface Dupla {
   parceiro?: { x: number; y: number };
   /** O parceiro caiu: os monstros não vão atrás dele. */
   parceiroCaido?: boolean;
+  /** O parceiro é Paladino: os monstros o escolhem como se ele estivesse mais perto (`REGRAS_DO_PALADINO.foco`). */
+  parceiroPuxa?: boolean;
   /** O herói daqui caiu. */
   fantasma?: boolean;
 }
@@ -357,6 +376,8 @@ export interface Arena {
   escudo?: number;
   /** A luta em dupla; ausente na luta de um só. */
   dupla?: Dupla;
+  /** O que a classe do herói junta nesta luta (a fúria, o combo…; `hero/classes-de-luta.ts`). Ausente até juntar algo. */
+  classe?: ContadoresDaClasse;
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -404,8 +425,8 @@ export interface EntradaDaLuta {
   item?: string;
   /** O menu de itens está aberto: o mundo anda em câmera lenta. */
   menu?: boolean;
-  /** Em dupla: onde o parceiro está agora, e se caiu. */
-  parceiro?: { x: number; y: number; caido?: boolean };
+  /** Em dupla: onde o parceiro está agora, se caiu, e se é Paladino (`puxa`: os monstros o preferem). */
+  parceiro?: { x: number; y: number; caido?: boolean; puxa?: boolean };
   /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
   danoDeFora?: readonly { indice: number; dano: number }[];
   /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
@@ -607,6 +628,7 @@ function copiarArena(arena: Arena): Arena {
       : null,
     recargaDosPoderes: { ...arena.recargaDosPoderes },
     ...(arena.dupla ? { dupla: { ...arena.dupla, ...(arena.dupla.parceiro ? { parceiro: { ...arena.dupla.parceiro } } : {}) } } : {}),
+    ...(arena.classe ? { classe: { ...arena.classe } } : {}),
   };
 }
 
@@ -945,12 +967,24 @@ function golpear(l: Luta): void {
     contar(l, { tipo: 'som', som: 'miss' });
     return;
   }
+  const paladino = idDaClasse(masmorra(l).hero) === 'paladino';
+  if (paladino) avancar(l, indice);
   const dado = 1 + randomInt(LADOS_DO_DANO, l.rng);
-  acertarMonstro(l, l.arena.monstros[indice] as MonstroNaArena, dado, leitura, aberto.estilo);
+  const acerto = acertarMonstro(l, l.arena.monstros[indice] as MonstroNaArena, dado, leitura, aberto.estilo);
+  if (!acerto || l.fim) return;
+  golpeEmArea(l, indice, acerto.dano);
+  // O avanço do Paladino empurra o alvo que ficou de pé.
+  const alvo = l.arena.monstros[indice] as MonstroNaArena;
+  if (paladino && !l.fim && alvo.fase !== 'caido') empurrar(l, alvo, l.arena.heroi, REGRAS_DO_PALADINO.empurrao);
 }
 
-/** O golpe do herói chega no monstro: a regra do site, com a guarda do defensivo. */
-function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: LeituraDaMira, estilo: AttackStyle): void {
+/**
+ * O golpe do herói chega no monstro: a regra do site, com a guarda do
+ * defensivo, e o que a classe põe na arena (o dano a mais, o crítico do
+ * Ladino, sem a passiva antiga da classe refeita). Acertou: o dano e se foi
+ * crítico; senão `null`.
+ */
+function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: LeituraDaMira, estilo: AttackStyle): { dano: number; critico: boolean } | null {
   const monstro = monstroNo(l, alvo.indice);
   let lida = leitura;
   if (jeitoDe(monstro).guarda && alvo.fase === 'descansando' && leitura.acerto) {
@@ -958,10 +992,15 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     contar(l, { tipo: 'aviso', texto: `${monstro.name} se protege!` });
   }
   const estado = masmorra(l);
+  const bonus = bonusDoAtaque(estado.hero, contadores(l), { colado: colado(l, alvo.indice), chefe: !!monstro.isBoss });
+  const critico = criticoDaClasse(estado.hero);
   const golpe = resolverGolpe(estado.hero, monstro, dado, lida, estilo, {
     rng: l.rng,
     petCriticoBonus: petBonus(l.pet).critico ?? 0,
     danoDaClasse: classeDeLuta(estado.hero).dano,
+    ...(bonus !== 0 ? { bonusDeDano: bonus } : {}),
+    ...(critico !== undefined ? { multiplicadorDoCritico: critico } : {}),
+    ...(classeRefeita(estado.hero) ? { semPassivaDaClasse: true } : {}),
   });
   // O golpe que acerta treina o atributo dele (`treino.ts`).
   const treinado = golpe.outcome === 'hit' ? anotarUso(golpe.hero, atributoDoGolpe(golpe.hero, estilo)) : golpe.hero;
@@ -969,21 +1008,176 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
 
   if (golpe.outcome === 'no_mana') {
     contar(l, { tipo: 'aviso', texto: 'Mana insuficiente' });
-    return;
+    return null;
   }
   if (golpe.outcome !== 'hit') {
     contar(l, { tipo: 'numero', onde: 'monstro', indice: alvo.indice, texto: golpe.outcome === 'dodged' ? 'Desviou' : 'Errou', tom: 'erro' });
     contar(l, { tipo: 'som', som: 'miss' });
-    return;
+    return null;
   }
   contar(l, numeroNoMonstro(ferida, alvo.indice, `-${golpe.damage}`, golpe.isCrit ? 'critico' : 'dano'));
   contar(l, { tipo: 'som', som: golpe.isCrit ? 'crit' : 'hit' });
+  contarAcertoDaClasse(l, !!golpe.isCrit);
+  const acerto = { dano: golpe.damage ?? 0, critico: !!golpe.isCrit };
   if (!ferida.protegido) roubarVida(l, golpe.damage ?? 0);
   if (ferida.caiu) {
     abater(l, alvo.indice, golpe.monster);
-    return;
+    return acerto;
   }
   if (!ferida.protegido) aplicarRunasDoGolpe(l, alvo.indice, monsterView(ferida.monstro), golpe.damage ?? 0);
+  return acerto;
+}
+
+// ---------- a classe na arena (rodada 3a: Guerreiro, Ladino, Bárbaro e Paladino) ----------
+
+function contadores(l: Luta): ContadoresDaClasse {
+  return l.arena.classe ?? {};
+}
+
+/** O herói está a 1 bloco do monstro: o Guerreiro colado no alvo bate mais forte. */
+function colado(l: Luta, indice: number): boolean {
+  const lugar = lugarDe(l, indice);
+  const dx = l.arena.heroi.x - lugar.x;
+  const dy = l.arena.heroi.y - lugar.y;
+  const limite = TILE_UNITS + TILE_UNITS / 2;
+  return dx * dx + dy * dy <= limite * limite;
+}
+
+/** Um golpe do herói acertou: o combo do Guerreiro e a furtividade do Ladino contam, e avisam quando sobem. */
+function contarAcertoDaClasse(l: Luta, critico: boolean): void {
+  const acerto = contarAcerto(masmorra(l).hero, contadores(l), critico);
+  if (!acerto) return;
+  l.arena.classe = acerto.contadores;
+  if (acerto.combo !== undefined) contar(l, { tipo: 'aviso', texto: `⚔️ Combo! +${acerto.combo}% de dano` });
+  if (acerto.furtividade !== undefined) contar(l, { tipo: 'aviso', texto: `🗡️ Furtividade ${acerto.furtividade}` });
+}
+
+/** A casa em (x, y) é parede de dentro da sala (os cantos da Caverna)? */
+function naParede(l: Luta, x: number, y: number): boolean {
+  const col = Math.floor(x / TILE_UNITS);
+  const row = Math.floor(y / TILE_UNITS);
+  return paredesDaSala(masmorra(l).masmorra.dungeon).some((casa) => casa.col === col && casa.row === row);
+}
+
+/** O golpe do Paladino é um avanço: ele vai em linha reta até 1 bloco do alvo (se não cair numa parede de dentro). */
+function avancar(l: Luta, indice: number): void {
+  const heroi = l.arena.heroi;
+  const lugar = lugarDe(l, indice);
+  const dx = lugar.x - heroi.x;
+  const dy = lugar.y - heroi.y;
+  const distancia = Math.sqrt(dx * dx + dy * dy);
+  if (distancia <= TILE_UNITS) return;
+  const anda = distancia - TILE_UNITS;
+  const x = heroi.x + Math.trunc((dx * anda) / distancia);
+  const y = heroi.y + Math.trunc((dy * anda) / distancia);
+  if (naParede(l, x, y)) return;
+  const olhando = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'E' : 'W') : dy > 0 ? 'S' : 'N';
+  l.arena.heroi = { x, y, facing: olhando };
+}
+
+/**
+ * Empurra o monstro `blocos` casas pra longe de `de`, sem sair do chão nem
+ * entrar em parede. Quem está no aviso ou investindo segue o golpe dele. No
+ * espelho, não: os monstros de lá são do anfitrião.
+ */
+function empurrar(l: Luta, m: MonstroNaArena, de: { x: number; y: number }, blocos: number): void {
+  if (noEspelho(l) || m.fase === 'caido' || m.fase === 'avisando' || m.fase === 'investindo') return;
+  const r = rumo(m.corpoX - de.x, m.corpoY - de.y, blocos * TILE_UNITS);
+  const { cols, rows } = geometria(l);
+  const meia = TILE_UNITS / 2;
+  const x = Math.min(Math.max(m.corpoX + r.x, TILE_UNITS + meia), (cols - 1) * TILE_UNITS - meia);
+  const y = Math.min(Math.max(m.corpoY + r.y, TILE_UNITS + meia), (rows - 1) * TILE_UNITS - meia);
+  if (naParede(l, x, y)) return;
+  m.corpoX = x;
+  m.corpoY = y;
+}
+
+/** O monstro fica atordoado na hora: para onde está e perde o golpe que vinha (o que já está investindo segue). */
+function atordoar(l: Luta, m: MonstroNaArena): void {
+  if (noEspelho(l) || m.fase === 'caido' || m.fase === 'investindo') return;
+  delete m.poder;
+  m.fase = 'atordoado';
+  m.tempo = TEMPO_ATORDOADO;
+  contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: '💫', tom: 'erro' });
+}
+
+/** O monstro `indice` leva este dano (vindo de fora do golpe: a área, a devolução, o parceiro), com a regra do chefe. Caiu? */
+function ferirComDano(l: Luta, indice: number, dano: number, texto: string): boolean {
+  const antes = (sala(l).monsters ?? [])[indice] as CombatMonster;
+  const depois: CombatMonster = { ...antes, hp: Math.max(0, antes.hp - dano) };
+  const ferida = ferirNaArena(l, masmorra(l), indice, depois);
+  contar(l, numeroNoMonstro(ferida, indice, texto, 'dano'));
+  if (ferida.caiu) abater(l, indice, monsterView(depois));
+  return ferida.caiu;
+}
+
+/** O monstro de pé `m` está na área da arma pesada do Bárbaro? */
+function naAreaDaArma(l: Luta, arma: string, m: MonstroNaArena, centro: { x: number; y: number }): boolean {
+  const r = REGRAS_DO_BARBARO;
+  const heroi = l.arena.heroi;
+  if (arma === 'marreta') {
+    const meia = (r.ladoDoTremor * TILE_UNITS) / 2;
+    return Math.abs(m.corpoX - heroi.x) <= meia && Math.abs(m.corpoY - heroi.y) <= meia;
+  }
+  if (arma === 'maca') {
+    const meia = (r.ladoDaBola * TILE_UNITS) / 2;
+    return Math.abs(m.corpoX - centro.x) <= meia && Math.abs(m.corpoY - centro.y) <= meia;
+  }
+  // O machadão: a faixa do herói rumo ao alvo, até o alcance.
+  const dx = centro.x - heroi.x;
+  const dy = centro.y - heroi.y;
+  const comprimento = Math.sqrt(dx * dx + dy * dy);
+  if (comprimento === 0) return false;
+  const px = m.corpoX - heroi.x;
+  const py = m.corpoY - heroi.y;
+  const ao = px * dx + py * dy;
+  const fora = px * dy - py * dx;
+  return ao >= 0 && ao <= alcanceNaArena(masmorra(l).hero) * comprimento && Math.abs(fora) <= ((r.larguraDoCorte * TILE_UNITS) / 2) * comprimento;
+}
+
+/** O que a arma pesada faz em quem acertou: o machadão pode atordoar (o chefe não), a maça pode empurrar pra longe do herói. */
+function efeitoDaArma(l: Luta, arma: string, m: MonstroNaArena): void {
+  if (noEspelho(l) || m.fase === 'caido') return;
+  const r = REGRAS_DO_BARBARO;
+  if (arma === 'machado' && !monstroNo(l, m.indice).isBoss && l.rng() * 100 < r.atordoaNoMachado) atordoar(l, m);
+  else if (arma === 'maca' && l.rng() * 100 < r.empurraNaMaca) empurrar(l, m, l.arena.heroi, 1);
+}
+
+/**
+ * O Bárbaro de arma pesada bate em área (doc do Breno de 2026-11-15): o
+ * machadão corta numa faixa até o alcance, a marreta treme no quadrado em
+ * volta dele, a bola da maça destrói o quadrado em volta do alvo. O alvo já
+ * levou o golpe inteiro; quem mais estiver na área leva metade do dano
+ * (decisão do usuário). Depois do dano, o efeito da arma: primeiro no alvo,
+ * depois em cada um, na ordem da sala.
+ */
+function golpeEmArea(l: Luta, alvo: number, dano: number): void {
+  const hero = masmorra(l).hero;
+  const arma = hero.equip.arma?.templateId ?? '';
+  if (idDaClasse(hero) !== 'barbaro' || !(arma === 'machado' || arma === 'marreta' || arma === 'maca')) return;
+  const centro = lugarDe(l, alvo);
+  efeitoDaArma(l, arma, l.arena.monstros[alvo] as MonstroNaArena);
+  const parte = Math.max(1, Math.trunc((dano * REGRAS_DO_BARBARO.nosOutros) / 100));
+  for (const m of l.arena.monstros) {
+    if (l.fim) return;
+    if (m.indice === alvo || m.fase === 'caido' || !naAreaDaArma(l, arma, m, centro)) continue;
+    if (!ferirComDano(l, m.indice, parte, `-${parte}`)) efeitoDaArma(l, arma, m);
+  }
+}
+
+/**
+ * O herói levou um golpe com dano: a fúria do Bárbaro e a absorção do
+ * Paladino juntam, e o Paladino de pé devolve parte do dano a quem bateu.
+ */
+function apanhou(l: Luta, indice: number, dano: number, vivo: boolean): void {
+  const hero = masmorra(l).hero;
+  const novos = contarGolpeLevado(hero, contadores(l));
+  if (novos) l.arena.classe = novos;
+  const pct = devolucaoDaClasse(hero, contadores(l));
+  const m = l.arena.monstros[indice];
+  if (!vivo || pct <= 0 || dano <= 0 || !m || m.fase === 'caido') return;
+  const devolvido = Math.max(1, Math.trunc((dano * pct) / 100));
+  ferirComDano(l, indice, devolvido, `↩️-${devolvido}`);
 }
 
 /**
@@ -1168,6 +1362,9 @@ function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
     if (falta > 0) arena.recargaDosPoderes[id] = falta;
     else delete arena.recargaDosPoderes[id];
   }
+  // A fúria do Bárbaro esfria sem apanhar.
+  const frio = esfriar(masmorra(l).hero, contadores(l));
+  if (frio) arena.classe = frio;
 
   if (noEspelho(l)) {
     passoDoEspelho(l);
@@ -1336,6 +1533,8 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
     contar(l, { tipo: 'aviso', texto: `${icone} ${monstro.name}: ${nome}!` });
   } else {
     m.alvo = pickMonsterTarget(masmorra(l).party, l.rng) ?? -1;
+    // O Paladino puxa os monstros: parte dos golpes que iam num companheiro vem nele.
+    if (m.alvo >= 0 && puxaOsMonstros(masmorra(l).hero) && l.rng() * 100 < REGRAS_DO_PALADINO.foco) m.alvo = -1;
   }
   m.rumoX = 0;
   m.rumoY = 0;
@@ -1442,7 +1641,10 @@ function investir(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
 function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   const estado = masmorra(l);
   const monstro = monstroNo(l, indice);
-  const golpe = landHitOnHero(estado.hero, monstro, forca, l.rng, petBonus(l.pet).esquiva ?? 0, defesasDoHeroi(estado.hero));
+  const c = contadores(l);
+  // A esquiva da classe (a furtividade do Ladino) soma com a do pet.
+  const esquiva = (petBonus(l.pet).esquiva ?? 0) + esquivaDaClasse(estado.hero, c, !!monstro.isBoss);
+  const golpe = landHitOnHero(estado.hero, monstro, forca, l.rng, esquiva, defesasDoHeroi(estado.hero), classeRefeita(estado.hero));
   if (golpe.dodged) {
     // Esquivar treina a Destreza.
     l.estado = gravarMonstro({ ...estado, hero: anotarUso(golpe.hero, 'destreza') }, indice, golpe.monster);
@@ -1450,7 +1652,11 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
     contar(l, { tipo: 'som', som: 'miss' });
     return;
   }
-  let hero = noEscudo(l, estado.hero.hp, golpe.hero, golpe.damage);
+  // A resistência da classe (a vida que falta no Guerreiro, a fúria, a absorção) tira parte do dano.
+  const resistencia = resistenciaDaClasse(estado.hero, c);
+  const dano = resistencia > 0 ? Math.max(1, golpe.damage - Math.floor((golpe.damage * resistencia) / 100)) : golpe.damage;
+  const ferido = resistencia > 0 ? { ...golpe.hero, hp: Math.max(0, estado.hero.hp - dano) } : golpe.hero;
+  let hero = noEscudo(l, estado.hero.hp, ferido, dano);
   // Os pesados (os Brutamontes) também quebram osso, como o chefe já quebra (doc do Breno de 2026-11-15; só aqui).
   let quebrou: Membro | undefined = golpe.quebrou;
   if (!quebrou && !monstro.isBoss && monstro.enemyClassId === 'brutamontes' && l.rng() < CHANCE_DE_QUEBRAR_NO_CHEFE) {
@@ -1469,6 +1675,8 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   if (golpe.drainResisted) contar(l, { tipo: 'aviso', texto: 'Sua armadura segura o dreno de mana' });
   if (golpe.poisonApplied) contar(l, { tipo: 'aviso', texto: 'Você foi envenenado' });
   if (golpe.poisonResisted) contar(l, { tipo: 'aviso', texto: 'Sua armadura segura o veneno' });
+  apanhou(l, indice, dano, hero.hp > 0);
+  if (l.fim) return;
   if (hero.hp <= 0) cair(l);
 }
 
@@ -1659,7 +1867,9 @@ function presaDe(l: Luta, m: MonstroNaArena): { x: number; y: number } {
 
 /**
  * Em dupla, o monstro que espera escolhe o herói de pé mais perto do corpo
- * dele (o fantasma não conta). Sem sorteio: na luta de um só, nada muda.
+ * dele (o fantasma não conta); o Paladino conta como se estivesse
+ * `REGRAS_DO_PALADINO.foco` % mais perto. Sem sorteio: na luta de um só,
+ * nada muda.
  */
 function escolherPresa(l: Luta, m: MonstroNaArena): void {
   const parceiro = parceiroDePe(l);
@@ -1674,7 +1884,11 @@ function escolherPresa(l: Luta, m: MonstroNaArena): void {
   const heroi = l.arena.heroi;
   const daqui = (heroi.x - m.corpoX) ** 2 + (heroi.y - m.corpoY) ** 2;
   const dele = (parceiro.x - m.corpoX) ** 2 + (parceiro.y - m.corpoY) ** 2;
-  if (dele < daqui) m.noParceiro = true;
+  // As distâncias vêm ao quadrado, e o peso também: (100 − foco)² contra 100².
+  const perto = (100 - REGRAS_DO_PALADINO.foco) * (100 - REGRAS_DO_PALADINO.foco);
+  const pesoDaqui = puxaOsMonstros(masmorra(l).hero) ? perto : 10000;
+  const pesoDele = l.arena.dupla?.parceiroPuxa ? perto : 10000;
+  if (dele * pesoDele < daqui * pesoDaqui) m.noParceiro = true;
   else delete m.noParceiro;
 }
 
@@ -1706,6 +1920,8 @@ function receberDoParceiro(l: Luta, entrada: EntradaDaLuta): void {
     dupla.parceiro = { x: Math.trunc(entrada.parceiro.x), y: Math.trunc(entrada.parceiro.y) };
     if (entrada.parceiro.caido) dupla.parceiroCaido = true;
     else delete dupla.parceiroCaido;
+    if (entrada.parceiro.puxa) dupla.parceiroPuxa = true;
+    else delete dupla.parceiroPuxa;
   }
   if (dupla.fantasma && entrada.reviver) {
     l.estado = { ...masmorra(l), hero: reviver(masmorra(l).hero, entrada.reviver) };
@@ -1733,11 +1949,7 @@ function receberDoParceiro(l: Luta, entrada: EntradaDaLuta): void {
 function danoDoParceiro(l: Luta, indice: number, dano: number): void {
   const m = l.arena.monstros[indice];
   if (!m || m.fase === 'caido' || !(dano > 0)) return;
-  const antes = (sala(l).monsters ?? [])[indice] as CombatMonster;
-  const depois: CombatMonster = { ...antes, hp: Math.max(0, antes.hp - dano) };
-  const ferida = ferirNaArena(l, masmorra(l), indice, depois);
-  contar(l, numeroNoMonstro(ferida, indice, `-${dano}`, 'dano'));
-  if (ferida.caiu) abater(l, indice, monsterView(depois));
+  ferirComDano(l, indice, dano, `-${dano}`);
 }
 
 /**

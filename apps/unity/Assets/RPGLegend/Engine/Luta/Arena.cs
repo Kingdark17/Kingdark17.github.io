@@ -67,6 +67,8 @@ namespace RPGLegend.Engine
         public string Papel;
         public PontoNaSala Parceiro;
         public bool? ParceiroCaido;
+        /// <summary>O parceiro é Paladino: os monstros o escolhem como se ele estivesse mais perto.</summary>
+        public bool? ParceiroPuxa;
         public bool? Fantasma;
 
         public Dupla Clone() => new Dupla
@@ -74,6 +76,7 @@ namespace RPGLegend.Engine
             Papel = Papel,
             Parceiro = Parceiro != null ? new PontoNaSala { X = Parceiro.X, Y = Parceiro.Y } : null,
             ParceiroCaido = ParceiroCaido,
+            ParceiroPuxa = ParceiroPuxa,
             Fantasma = Fantasma,
         };
     }
@@ -106,12 +109,13 @@ namespace RPGLegend.Engine
         public List<Tiro> Tiros = new List<Tiro>();
     }
 
-    /// <summary>TS: o parceiro na entrada — onde ele está agora, e se caiu.</summary>
+    /// <summary>TS: o parceiro na entrada — onde ele está agora, se caiu, e se é Paladino (Puxa: os monstros o preferem).</summary>
     public sealed class ParceiroNaEntrada
     {
         public double X;
         public double Y;
         public bool? Caido;
+        public bool? Puxa;
     }
 
     /// <summary>TS: um dano de fora, ou um dano pra mandar: em qual monstro (índice na sala) e quanto.</summary>
@@ -188,6 +192,8 @@ namespace RPGLegend.Engine
         public double? Escudo;
         /// <summary>A luta em dupla; ausente (null) na luta de um só.</summary>
         public Dupla Dupla;
+        /// <summary>O que a classe do herói junta nesta luta (a fúria, o combo…; <see cref="ClassesDeLuta"/>). Ausente até juntar algo.</summary>
+        public ContadoresDaClasse Classe;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -514,6 +520,7 @@ namespace RPGLegend.Engine
                 Vez = arena.Vez,
                 Escudo = arena.Escudo,
                 Dupla = arena.Dupla?.Clone(),
+                Classe = arena.Classe?.Clone(),
             };
             foreach (var m in arena.Monstros) copia.Monstros.Add(m.Clone());
             foreach (var c in arena.Companheiros) copia.Companheiros.Add(c.Clone());
@@ -952,12 +959,25 @@ namespace RPGLegend.Engine
                 Contar(l, Som("miss"));
                 return;
             }
+            bool paladino = Catalog.IdDaClasse(Masmorra(l).Hero.ClassId, Masmorra(l).Hero.ClassName) == "paladino";
+            if (paladino) Avancar(l, indice.Value);
             double dado = 1 + Rng.RandomInt(Attack.LadosDoDano, l.Rng);
-            AcertarMonstro(l, l.Arena.Monstros[(int)indice.Value], dado, leitura, aberto.Estilo);
+            double? dano = AcertarMonstro(l, l.Arena.Monstros[(int)indice.Value], dado, leitura, aberto.Estilo);
+            if (dano == null || l.Fim != null) return;
+            GolpeEmArea(l, indice.Value, dano.Value);
+            // O avanço do Paladino empurra o alvo que ficou de pé.
+            var alvo = l.Arena.Monstros[(int)indice.Value];
+            if (paladino && l.Fim == null && alvo.Fase != "caido") Empurrar(l, alvo, l.Arena.Heroi.X, l.Arena.Heroi.Y, CD.Paladino.Empurrao);
         }
 
-        /// <summary>O golpe do herói chega no monstro: a regra do site, com a guarda do defensivo.</summary>
-        private static void AcertarMonstro(Luta l, MonstroNaArena alvo, double dado, LeituraDaMira leitura, string estilo)
+        private static ClassesDeLutaData CD => GameData.ClassesDeLutaTable;
+
+        /// <summary>
+        /// TS: acertarMonstro — o golpe do herói chega no monstro: a regra do site, com a guarda do defensivo, e o que a
+        /// classe põe na arena (o dano a mais, o crítico do Ladino, sem a passiva antiga da classe refeita). Acertou: o
+        /// dano; senão null.
+        /// </summary>
+        private static double? AcertarMonstro(Luta l, MonstroNaArena alvo, double dado, LeituraDaMira leitura, string estilo)
         {
             var monstro = MonstroNo(l, alvo.Indice);
             var lida = leitura;
@@ -967,8 +987,18 @@ namespace RPGLegend.Engine
                 Contar(l, Aviso(Js.Str(monstro.Name) + " se protege!"));
             }
             var estado = Masmorra(l);
-            var golpe = Attack.ResolverGolpe(estado.Hero, monstro, dado, lida, estilo,
-                new ResolveAttackOptions { Rng = l.Rng, PetCriticoBonus = Pets.Bonus(l.Pet).Critico ?? 0, DanoDaClasse = ClassesDeLuta.De(estado.Hero).Dano });
+            var h = estado.Hero;
+            double bonus = ClassesDeLuta.BonusDoAtaque(h.ClassId, h.ClassName, h.Equip?.Get("arma")?.TemplateId, Contadores(l), Colado(l, alvo.Indice), monstro.IsBoss);
+            var opcoes = new ResolveAttackOptions
+            {
+                Rng = l.Rng,
+                PetCriticoBonus = Pets.Bonus(l.Pet).Critico ?? 0,
+                DanoDaClasse = ClassesDeLuta.De(h).Dano,
+                BonusDeDano = bonus != 0 ? bonus : (double?)null,
+                MultiplicadorDoCritico = ClassesDeLuta.CriticoDaClasse(h.ClassId, h.ClassName),
+                SemPassivaDaClasse = ClassesDeLuta.ClasseRefeita(h),
+            };
+            var golpe = Attack.ResolverGolpe(estado.Hero, monstro, dado, lida, estilo, opcoes);
             var comHeroi = estado.Clone();
             // O golpe que acerta treina o atributo dele (Treino).
             comHeroi.Hero = golpe.Outcome == "hit" ? Treino.AnotarUso(golpe.Hero, Treino.AtributoDoGolpe(golpe.Hero, estilo)) : golpe.Hero;
@@ -977,23 +1007,189 @@ namespace RPGLegend.Engine
             if (golpe.Outcome == ResolveAttackOutcomes.NoMana)
             {
                 Contar(l, Aviso("Mana insuficiente"));
-                return;
+                return null;
             }
             if (golpe.Outcome != ResolveAttackOutcomes.Hit)
             {
                 Contar(l, Numero("monstro", alvo.Indice, golpe.Outcome == ResolveAttackOutcomes.Dodged ? "Desviou" : "Errou", "erro"));
                 Contar(l, Som("miss"));
-                return;
+                return null;
             }
             Contar(l, NumeroNoMonstro(ferida, alvo.Indice, "-" + Js.NumberToString(golpe.Damage ?? 0), golpe.IsCrit == true ? "critico" : "dano"));
             Contar(l, Som(golpe.IsCrit == true ? "crit" : "hit"));
+            ContarAcertoDaClasse(l, golpe.IsCrit == true);
+            double acerto = golpe.Damage ?? 0;
             if (!ferida.Protegido) RoubarVida(l, golpe.Damage ?? 0);
             if (ferida.Caiu)
             {
                 Abater(l, alvo.Indice, golpe.Monster);
-                return;
+                return acerto;
             }
             if (!ferida.Protegido) AplicarRunasDoGolpe(l, alvo.Indice, Monsters.View(ferida.Monstro), golpe.Damage ?? 0);
+            return acerto;
+        }
+
+        // ---------- a classe na arena (rodada 3a: Guerreiro, Ladino, Bárbaro e Paladino) ----------
+
+        private static ContadoresDaClasse Contadores(Luta l) => l.Arena.Classe ?? new ContadoresDaClasse();
+
+        /// <summary>TS: colado — o herói está a 1 bloco do monstro: o Guerreiro colado no alvo bate mais forte.</summary>
+        private static bool Colado(Luta l, double indice)
+        {
+            var lugar = LugarDe(l, indice);
+            double dx = l.Arena.Heroi.X - lugar.X;
+            double dy = l.Arena.Heroi.Y - lugar.Y;
+            double limite = RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            return dx * dx + dy * dy <= limite * limite;
+        }
+
+        /// <summary>TS: contarAcertoDaClasse — o combo do Guerreiro e a furtividade do Ladino contam, e avisam quando sobem.</summary>
+        private static void ContarAcertoDaClasse(Luta l, bool critico)
+        {
+            var h = Masmorra(l).Hero;
+            var acerto = ClassesDeLuta.ContarAcerto(h.ClassId, h.ClassName, Contadores(l), critico);
+            if (acerto == null) return;
+            l.Arena.Classe = acerto.Contadores;
+            if (acerto.Combo != null) Contar(l, Aviso("⚔️ Combo! +" + Js.NumberToString(acerto.Combo.Value) + "% de dano"));
+            if (acerto.Furtividade != null) Contar(l, Aviso("🗡️ Furtividade " + Js.NumberToString(acerto.Furtividade.Value)));
+        }
+
+        /// <summary>TS: naParede — a casa em (x, y) é parede de dentro da sala (os cantos da Caverna)?</summary>
+        private static bool NaParede(Luta l, double x, double y)
+        {
+            double col = Math.Floor(x / RoomWalk.TileUnits);
+            double row = Math.Floor(y / RoomWalk.TileUnits);
+            foreach (var casa in ArteDaSala.ParedesDaSala(Masmorra(l).Masmorra.Dungeon))
+                if (casa.Col == col && casa.Row == row) return true;
+            return false;
+        }
+
+        /// <summary>TS: avancar — o golpe do Paladino é um avanço: ele vai em linha reta até 1 bloco do alvo.</summary>
+        private static void Avancar(Luta l, double indice)
+        {
+            var heroi = l.Arena.Heroi;
+            var lugar = LugarDe(l, indice);
+            double dx = lugar.X - heroi.X;
+            double dy = lugar.Y - heroi.Y;
+            double distancia = Math.Sqrt(dx * dx + dy * dy);
+            if (distancia <= RoomWalk.TileUnits) return;
+            double anda = distancia - RoomWalk.TileUnits;
+            double x = heroi.X + Math.Truncate(dx * anda / distancia);
+            double y = heroi.Y + Math.Truncate(dy * anda / distancia);
+            if (NaParede(l, x, y)) return;
+            string olhando = Math.Abs(dx) > Math.Abs(dy) ? (dx > 0 ? "E" : "W") : dy > 0 ? "S" : "N";
+            l.Arena.Heroi = new Walker { X = x, Y = y, Facing = olhando };
+        }
+
+        /// <summary>
+        /// TS: empurrar — empurra o monstro tantos blocos pra longe de (deX, deY), sem sair do chão nem entrar em parede.
+        /// Quem está no aviso ou investindo segue o golpe dele; no espelho, não.
+        /// </summary>
+        private static void Empurrar(Luta l, MonstroNaArena m, double deX, double deY, double blocos)
+        {
+            if (NoEspelho(l) || m.Fase == "caido" || m.Fase == "avisando" || m.Fase == "investindo") return;
+            var r = Rumo(m.CorpoX - deX, m.CorpoY - deY, blocos * RoomWalk.TileUnits);
+            var formato = Geometria(l);
+            double meia = RoomWalk.TileUnits / 2;
+            double x = Math.Min(Math.Max(m.CorpoX + r.X, RoomWalk.TileUnits + meia), (formato.Cols - 1) * RoomWalk.TileUnits - meia);
+            double y = Math.Min(Math.Max(m.CorpoY + r.Y, RoomWalk.TileUnits + meia), (formato.Rows - 1) * RoomWalk.TileUnits - meia);
+            if (NaParede(l, x, y)) return;
+            m.CorpoX = x;
+            m.CorpoY = y;
+        }
+
+        /// <summary>TS: atordoar — o monstro fica atordoado na hora e perde o golpe que vinha (o que já investe segue).</summary>
+        private static void Atordoar(Luta l, MonstroNaArena m)
+        {
+            if (NoEspelho(l) || m.Fase == "caido" || m.Fase == "investindo") return;
+            m.Poder = null;
+            m.Fase = "atordoado";
+            m.Tempo = D.TempoAtordoado;
+            Contar(l, Numero("monstro", m.Indice, "💫", "erro"));
+        }
+
+        /// <summary>TS: ferirComDano — o monstro leva este dano (a área, a devolução, o parceiro), com a regra do chefe. Caiu?</summary>
+        private static bool FerirComDano(Luta l, double indice, double dano, string texto)
+        {
+            var depois = CombatMonster.From(Sala(l).Monsters[(int)indice]);
+            depois.Hp = Math.Max(0, depois.Hp - dano);
+            var ferida = FerirNaArena(l, Masmorra(l), indice, depois);
+            Contar(l, NumeroNoMonstro(ferida, indice, texto, "dano"));
+            if (ferida.Caiu) Abater(l, indice, Monsters.View(depois));
+            return ferida.Caiu;
+        }
+
+        /// <summary>TS: naAreaDaArma — o monstro de pé está na área da arma pesada do Bárbaro?</summary>
+        private static bool NaAreaDaArma(Luta l, string arma, MonstroNaArena m, double centroX, double centroY)
+        {
+            var r = CD.Barbaro;
+            var heroi = l.Arena.Heroi;
+            if (arma == "marreta")
+            {
+                double meia = r.LadoDoTremor * RoomWalk.TileUnits / 2;
+                return Math.Abs(m.CorpoX - heroi.X) <= meia && Math.Abs(m.CorpoY - heroi.Y) <= meia;
+            }
+            if (arma == "maca")
+            {
+                double meia = r.LadoDaBola * RoomWalk.TileUnits / 2;
+                return Math.Abs(m.CorpoX - centroX) <= meia && Math.Abs(m.CorpoY - centroY) <= meia;
+            }
+            // O machadão: a faixa do herói rumo ao alvo, até o alcance.
+            double dx = centroX - heroi.X;
+            double dy = centroY - heroi.Y;
+            double comprimento = Math.Sqrt(dx * dx + dy * dy);
+            if (comprimento == 0) return false;
+            double px = m.CorpoX - heroi.X;
+            double py = m.CorpoY - heroi.Y;
+            double ao = px * dx + py * dy;
+            double fora = px * dy - py * dx;
+            return ao >= 0 && ao <= AlcanceNaArena(Masmorra(l).Hero) * comprimento && Math.Abs(fora) <= (r.LarguraDoCorte * RoomWalk.TileUnits / 2) * comprimento;
+        }
+
+        /// <summary>TS: efeitoDaArma — o machadão pode atordoar (o chefe não), a maça pode empurrar pra longe do herói.</summary>
+        private static void EfeitoDaArma(Luta l, string arma, MonstroNaArena m)
+        {
+            if (NoEspelho(l) || m.Fase == "caido") return;
+            var r = CD.Barbaro;
+            if (arma == "machado" && !MonstroNo(l, m.Indice).IsBoss && l.Rng() * 100 < r.AtordoaNoMachado) Atordoar(l, m);
+            else if (arma == "maca" && l.Rng() * 100 < r.EmpurraNaMaca) Empurrar(l, m, l.Arena.Heroi.X, l.Arena.Heroi.Y, 1);
+        }
+
+        /// <summary>
+        /// TS: golpeEmArea — o Bárbaro de arma pesada bate em área: o alvo já levou o golpe inteiro, e quem mais estiver
+        /// na área leva metade. Depois do dano, o efeito da arma: primeiro no alvo, depois em cada um, na ordem da sala.
+        /// </summary>
+        private static void GolpeEmArea(Luta l, double alvo, double dano)
+        {
+            var hero = Masmorra(l).Hero;
+            string arma = hero.Equip?.Get("arma")?.TemplateId ?? "";
+            if (Catalog.IdDaClasse(hero.ClassId, hero.ClassName) != "barbaro" || !(arma == "machado" || arma == "marreta" || arma == "maca")) return;
+            var centro = LugarDe(l, alvo);
+            EfeitoDaArma(l, arma, l.Arena.Monstros[(int)alvo]);
+            double parte = Js.Max(1, Math.Truncate(dano * CD.Barbaro.NosOutros / 100));
+            foreach (var m in l.Arena.Monstros)
+            {
+                if (l.Fim != null) return;
+                if (m.Indice == alvo || m.Fase == "caido" || !NaAreaDaArma(l, arma, m, centro.X, centro.Y)) continue;
+                if (!FerirComDano(l, m.Indice, parte, "-" + Js.NumberToString(parte))) EfeitoDaArma(l, arma, m);
+            }
+        }
+
+        /// <summary>
+        /// TS: apanhou — o herói levou um golpe com dano: a fúria e a absorção juntam, e o Paladino de pé devolve parte do
+        /// dano a quem bateu.
+        /// </summary>
+        private static void Apanhou(Luta l, double indice, double dano, bool vivo)
+        {
+            var h = Masmorra(l).Hero;
+            var novos = ClassesDeLuta.ContarGolpeLevado(h.ClassId, h.ClassName, Contadores(l));
+            if (novos != null) l.Arena.Classe = novos;
+            double pct = ClassesDeLuta.DevolucaoDaClasse(h.ClassId, h.ClassName, Contadores(l));
+            int i = (int)indice;
+            var m = i >= 0 && i < l.Arena.Monstros.Count ? l.Arena.Monstros[i] : null;
+            if (!vivo || pct <= 0 || dano <= 0 || m == null || m.Fase == "caido") return;
+            double devolvido = Js.Max(1, Math.Truncate(dano * pct / 100));
+            FerirComDano(l, indice, devolvido, "↩️-" + Js.NumberToString(devolvido));
         }
 
         /// <summary>
@@ -1235,6 +1431,10 @@ namespace RPGLegend.Engine
                 if (falta > 0) arena.RecargaDosPoderes.Set(id, falta);
                 else arena.RecargaDosPoderes.Remove(id);
             }
+            // A fúria do Bárbaro esfria sem apanhar.
+            var heroiDaVez = Masmorra(l).Hero;
+            var frio = ClassesDeLuta.Esfriar(heroiDaVez.ClassId, heroiDaVez.ClassName, Contadores(l));
+            if (frio != null) arena.Classe = frio;
 
             if (NoEspelho(l))
             {
@@ -1433,6 +1633,8 @@ namespace RPGLegend.Engine
             else
             {
                 m.Alvo = MonsterHit.PickMonsterTarget(Masmorra(l).Party ?? new List<Companion>(), l.Rng) ?? -1;
+                // O Paladino puxa os monstros: parte dos golpes que iam num companheiro vem nele.
+                if (m.Alvo >= 0 && ClassesDeLuta.PuxaOsMonstros(Masmorra(l).Hero) && l.Rng() * 100 < CD.Paladino.Foco) m.Alvo = -1;
             }
             m.RumoX = 0;
             m.RumoY = 0;
@@ -1563,7 +1765,11 @@ namespace RPGLegend.Engine
         {
             var estado = Masmorra(l);
             var monstro = MonstroNo(l, indice);
-            var golpe = MonsterHit.LandHitOnHero(estado.Hero, monstro, forca, l.Rng, Pets.Bonus(l.Pet).Esquiva ?? 0, Encantamentos.DefesasDoHeroi(estado.Hero));
+            var c = Contadores(l);
+            var h = estado.Hero;
+            // A esquiva da classe (a furtividade do Ladino) soma com a do pet.
+            double esquiva = (Pets.Bonus(l.Pet).Esquiva ?? 0) + ClassesDeLuta.EsquivaDaClasse(h.ClassId, h.ClassName, c, monstro.IsBoss);
+            var golpe = MonsterHit.LandHitOnHero(estado.Hero, monstro, forca, l.Rng, esquiva, Encantamentos.DefesasDoHeroi(estado.Hero), ClassesDeLuta.ClasseRefeita(h));
             if (golpe.Dodged)
             {
                 var desviou = estado.Clone();
@@ -1574,7 +1780,16 @@ namespace RPGLegend.Engine
                 Contar(l, Som("miss"));
                 return;
             }
-            var hero = NoEscudo(l, estado.Hero.Hp, golpe.Hero, golpe.Damage);
+            // A resistência da classe (a vida que falta no Guerreiro, a fúria, a absorção) tira parte do dano.
+            double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c);
+            double dano = resistencia > 0 ? Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * resistencia / 100)) : golpe.Damage;
+            var ferido = golpe.Hero;
+            if (resistencia > 0)
+            {
+                ferido = golpe.Hero.Clone();
+                ferido.Hp = Js.Max(0, estado.Hero.Hp - dano);
+            }
+            var hero = NoEscudo(l, estado.Hero.Hp, ferido, dano);
             // Os pesados (os Brutamontes) também quebram osso, como o chefe já quebra (doc do Breno de 2026-11-15; só aqui).
             string quebrou = golpe.Quebrou;
             if (!Js.Truthy(quebrou) && !monstro.IsBoss && monstro.EnemyClassId == "brutamontes" && l.Rng() < FerimentosDoHeroi.ChanceDeQuebrarNoChefe)
@@ -1597,6 +1812,8 @@ namespace RPGLegend.Engine
             if (golpe.DrainResisted == true) Contar(l, Aviso("Sua armadura segura o dreno de mana"));
             if (golpe.PoisonApplied) Contar(l, Aviso("Você foi envenenado"));
             if (golpe.PoisonResisted == true) Contar(l, Aviso("Sua armadura segura o veneno"));
+            Apanhou(l, indice, dano, hero.Hp > 0);
+            if (l.Fim != null) return;
             if (hero.Hp <= 0) Cair(l);
         }
 
@@ -1863,7 +2080,11 @@ namespace RPGLegend.Engine
             var heroi = l.Arena.Heroi;
             double daqui = (heroi.X - m.CorpoX) * (heroi.X - m.CorpoX) + (heroi.Y - m.CorpoY) * (heroi.Y - m.CorpoY);
             double dele = (parceiro.X - m.CorpoX) * (parceiro.X - m.CorpoX) + (parceiro.Y - m.CorpoY) * (parceiro.Y - m.CorpoY);
-            if (dele < daqui) m.NoParceiro = true;
+            // O Paladino conta como se estivesse "foco" % mais perto; as distâncias vêm ao quadrado, e o peso também.
+            double perto = (100 - CD.Paladino.Foco) * (100 - CD.Paladino.Foco);
+            double pesoDaqui = ClassesDeLuta.PuxaOsMonstros(Masmorra(l).Hero) ? perto : 10000;
+            double pesoDele = l.Arena.Dupla?.ParceiroPuxa == true ? perto : 10000;
+            if (dele * pesoDele < daqui * pesoDaqui) m.NoParceiro = true;
             else m.NoParceiro = null;
         }
 
@@ -1897,6 +2118,7 @@ namespace RPGLegend.Engine
             {
                 dupla.Parceiro = new PontoNaSala { X = Math.Truncate(entrada.Parceiro.X), Y = Math.Truncate(entrada.Parceiro.Y) };
                 dupla.ParceiroCaido = entrada.Parceiro.Caido == true ? true : (bool?)null;
+                dupla.ParceiroPuxa = entrada.Parceiro.Puxa == true ? true : (bool?)null;
             }
             if (dupla.Fantasma == true && Js.Truthy(entrada.Reviver))
             {
@@ -1936,11 +2158,7 @@ namespace RPGLegend.Engine
             if (i < 0 || i >= l.Arena.Monstros.Count) return;
             var m = l.Arena.Monstros[i];
             if (m.Fase == "caido" || !(dano > 0)) return;
-            var depois = CombatMonster.From(Sala(l).Monsters[i]);
-            depois.Hp = Math.Max(0, depois.Hp - dano);
-            var ferida = FerirNaArena(l, Masmorra(l), indice, depois);
-            Contar(l, NumeroNoMonstro(ferida, indice, "-" + Js.NumberToString(dano), "dano"));
-            if (ferida.Caiu) Abater(l, indice, Monsters.View(depois));
+            FerirComDano(l, indice, dano, "-" + Js.NumberToString(dano));
         }
 
         /// <summary>

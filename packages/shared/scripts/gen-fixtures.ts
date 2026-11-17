@@ -726,6 +726,41 @@ for (const [vida, cls] of [[205, 'bardo'], [205, 'paladino'], [205, 'guerreiro']
   caso(`vidaComAClasse: ${vida} de ${cls}`, 'vidaComAClasse', { vida, quem: { classId: cls } }, (a) => E.vidaComAClasse(a.vida, a.quem));
 }
 
+// --- as classes refeitas na luta do app (rodada 3a): os contadores, o dano a mais, a esquiva, a resistência ---
+
+for (const cls of [...E.CLASSES.map((c) => c.id), 'nenhuma']) {
+  caso(`classeRefeita: ${cls}`, 'classeRefeita', { quem: { classId: cls } }, (a) => E.classeRefeita(a.quem));
+  caso(`criticoDaClasse: ${cls}`, 'criticoDaClasse', { quem: { classId: cls } }, (a) => E.criticoDaClasse(a.quem) ?? null);
+  caso(`puxaOsMonstros: ${cls}`, 'puxaOsMonstros', { quem: { classId: cls } }, (a) => E.puxaOsMonstros(a.quem));
+}
+{
+  const contadoresDeTeste: [string, E.ContadoresDaClasse][] = [
+    ['zerados', {}],
+    ['meio caminho', { seguidos: 2, combo: 40, criticos: 4, furtividade: 2, furia: 7, calmo: 899, absorcao: 90 }],
+    ['no teto', { seguidos: 1, combo: 200, criticos: 0, furtividade: 6, furia: 15, calmo: 10, absorcao: 300 }],
+    ['absorção que resiste', { absorcao: 100 }],
+    ['fúria de 1 quase esfriando', { furia: 1, calmo: 899 }],
+  ];
+  for (const cls of ['guerreiro', 'ladino', 'barbaro', 'paladino', 'mago']) {
+    for (const [nome, c] of contadoresDeTeste) {
+      for (const arma of ['espada', 'marreta']) {
+        for (const alvo of [{ colado: false, chefe: false }, { colado: true, chefe: false }, { colado: true, chefe: true }]) {
+          caso(`bonusDoAtaque: ${cls} de ${arma}, ${nome}, ${alvo.colado ? 'colado' : 'longe'}${alvo.chefe ? ' no chefe' : ''}`, 'bonusDoAtaque', { quem: { classId: cls, equip: { arma: { templateId: arma } } }, c, alvo }, (a) => E.bonusDoAtaque(a.quem, a.c, a.alvo));
+        }
+      }
+      for (const chefe of [false, true]) caso(`esquivaDaClasse: ${cls}, ${nome}${chefe ? ', contra o chefe' : ''}`, 'esquivaDaClasse', { quem: { classId: cls }, c, chefe }, (a) => E.esquivaDaClasse(a.quem, a.c, a.chefe));
+      for (const [hp, maxHp] of [[100, 100], [91, 100], [90, 100], [45, 100], [0, 100], [150, 100], [5, 0]]) {
+        caso(`resistenciaDaClasse: ${cls}, ${nome}, vida ${hp}/${maxHp}`, 'resistenciaDaClasse', { quem: { classId: cls, hp, maxHp }, c }, (a) => E.resistenciaDaClasse(a.quem, a.c));
+        caso(`textosDaClasse: ${cls}, ${nome}, vida ${hp}/${maxHp}`, 'textosDaClasse', { quem: { classId: cls, hp, maxHp }, c }, (a) => E.textosDaClasse(a.quem, a.c));
+      }
+      for (const critico of [false, true]) caso(`contarAcerto: ${cls}, ${nome}${critico ? ', crítico' : ''}`, 'contarAcerto', { quem: { classId: cls }, c, critico }, (a) => E.contarAcerto(a.quem, a.c, a.critico));
+      caso(`contarGolpeLevado: ${cls}, ${nome}`, 'contarGolpeLevado', { quem: { classId: cls }, c }, (a) => E.contarGolpeLevado(a.quem, a.c));
+      caso(`esfriar: ${cls}, ${nome}`, 'esfriar', { quem: { classId: cls }, c }, (a) => E.esfriar(a.quem, a.c));
+      caso(`devolucaoDaClasse: ${cls}, ${nome}`, 'devolucaoDaClasse', { quem: { classId: cls }, c }, (a) => E.devolucaoDaClasse(a.quem, a.c));
+    }
+  }
+}
+
 // --- maestria ---
 
 for (const level of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, -1, 2.5, Number.NaN]) {
@@ -5253,6 +5288,71 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
     simula(`cajado do ${classe}: o símbolo ${simbolo}`, abrir({ ...zumbi(), hero: comArma(classe, 'cajado') }), golpe(pontos.length + 60, resposta), { seed: semente });
   }
   simula('mago sem mana abre o desenho do golpe físico', abrir({ ...zumbi(), hero: { ...comArma('mago', 'cajado'), mp: 0 } }), golpe(60, { 40: { x: 0, y: 0, tocar: true } }), { seed: 812 });
+
+  // As classes refeitas na luta do app (rodada 3a): o combo, a furtividade, a fúria e a área, o avanço e a devolução.
+  {
+    /** `n` golpes seguidos, um a cada 60 passos: aperta e responde no passo `toque` de cada um. */
+    const golpes = (n: number, resposta: EntradaDaLuta): EntradaDaLuta[] =>
+      parado(n * 60).map((e, i) => (i % 60 === 0 ? { ...e, atacar: true } : i % 60 === 42 ? resposta : e));
+    const toque: EntradaDaLuta = { x: 0, y: 0, tocar: true };
+    const solta: EntradaDaLuta = { x: 0, y: 0, soltar: true };
+    const trio = () => salaCom([bicho('zumbi', { hp: 600, maxHp: 600 }), bicho('goblin', { hp: 600, maxHp: 600 }), bicho('aranha', { hp: 600, maxHp: 600 })]);
+    /** O trio com os três colados em volta do herói, que fica uma casa abaixo do do meio. */
+    const juntos = (luta: LutaEmTempoReal): LutaEmTempoReal => {
+      const T = E.TILE_UNITS;
+      const meio = { x: 4.5 * T, y: 4.5 * T };
+      return {
+        ...luta,
+        arena: {
+          ...luta.arena,
+          heroi: { x: meio.x, y: meio.y + T, facing: 'N' },
+          monstros: luta.arena.monstros.map((m, i) => ({ ...m, corpoX: meio.x + (i - 1) * T, corpoY: meio.y })),
+        },
+      };
+    };
+    simula('guerreiro: críticos seguidos fecham o combo', abrir({ ...zumbi(), hero: comArma('guerreiro', 'espada') }), golpes(7, toque), { seed: 820 });
+    simula('ladino: cinco críticos dão a furtividade', abrir({ ...salaCom([bicho('zumbi', { hp: 3000, maxHp: 3000 })]), hero: comArma('ladino', 'espada') }), golpes(11, toque), { seed: 821 });
+    simula('ladino apanhando, com a furtividade na esquiva', { ...abrir({ ...salaCom([bicho('goblin', { hp: 900, maxHp: 900 })]), hero: comArma('ladino', 'adaga') }), }, parado(600), { seed: 822 });
+    for (const [semente, arma, resposta] of [
+      [823, 'maca', toque],
+      [824, 'machado', solta],
+      [825, 'marreta', solta],
+      [826, 'espada', toque],
+    ] as const) {
+      simula(`bárbaro de ${arma} contra o trio colado`, juntos(abrir({ ...trio(), hero: comArma('barbaro', arma) })), golpes(6, resposta), { seed: semente });
+    }
+    simula('bárbaro apanhando junta fúria', abrir({ ...salaCom([bicho('goblin', { hp: 900, maxHp: 900 }), bicho('aranha', { hp: 900, maxHp: 900 })]), hero: comArma('barbaro', 'machado') }), parado(900), { seed: 827 });
+    {
+      const furioso = abrir({ ...zumbi(), hero: comArma('barbaro', 'machado') });
+      simula('bárbaro: a fúria esfria sem apanhar', { ...furioso, arena: { ...furioso.arena, classe: { furia: 5, calmo: 850 } } }, parado(80), { seed: 828 });
+    }
+    {
+      const aberta = abrir({ ...zumbi(), hero: comArma('paladino', 'maca') });
+      const m = aberta.arena.monstros[0] as MonstroNaArena;
+      const longe = { ...aberta, arena: { ...aberta.arena, heroi: { x: m.corpoX, y: m.corpoY + 2 * E.TILE_UNITS, facing: 'N' as const } } };
+      simula('paladino: o golpe avança e empurra', longe, golpes(4, toque), { seed: 829 });
+    }
+    simula('paladino apanhando devolve e junta absorção', abrir({ ...salaCom([bicho('goblin', { hp: 2000, maxHp: 2000 }), bicho('aranha', { hp: 2000, maxHp: 2000 })]), hero: comArma('paladino', 'maca') }), parado(1500), { seed: 830 });
+    {
+      const noTeto = abrir({ ...salaCom([bicho('goblin', { hp: 2000, maxHp: 2000 })]), hero: comArma('paladino', 'maca') });
+      simula('paladino com a absorção no teto devolve 150%', { ...noTeto, arena: { ...noTeto.arena, classe: { absorcao: 300 } } }, parado(400), { seed: 831 });
+    }
+    {
+      const comEquipe = abrir({ ...salaCom([bicho('goblin', { hp: 2000, maxHp: 2000 })]), hero: comArma('paladino', 'maca'), party: [companheiro('guerreiro'), companheiro('mago')] });
+      simula('paladino puxa os golpes que iam nos companheiros', comEquipe, parado(900), { seed: 832 });
+    }
+    for (const [semente, classe, puxa] of [
+      [833, 'paladino', false],
+      [834, 'monge', true],
+      [835, 'monge', false],
+    ] as const) {
+      const dupla = E.abrirLuta({ ...salaCom([bicho('goblin', { hp: 2000, maxHp: 2000 })]), hero: comArma(classe, 'espada') }, PERTO, null, false, 'anfitriao').luta;
+      const m = dupla.arena.monstros[0] as MonstroNaArena;
+      const perto = { ...dupla, arena: { ...dupla.arena, heroi: { x: m.corpoX, y: m.corpoY + Math.trunc(2.4 * E.TILE_UNITS), facing: 'N' as const } } };
+      const parceiro = { x: m.corpoX, y: m.corpoY - 2 * E.TILE_UNITS, ...(puxa ? { puxa: true } : {}) };
+      simula(`em dupla, ${classe} contra parceiro ${puxa ? 'paladino' : 'comum'}`, perto, parado(200).map((e) => ({ ...e, parceiro })), { seed: semente });
+    }
+  }
 
   // O cajado no PC: as letras saem dos primeiros sorteios da luta, os do aperto; a tecla da última fecha o evento.
   {

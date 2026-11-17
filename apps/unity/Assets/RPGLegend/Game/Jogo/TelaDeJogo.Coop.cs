@@ -39,6 +39,8 @@ namespace RPGLegend.Game.Jogo
         private string _posicaoEnviada;
         /// <summary>O herói do parceiro que está vestido no boneco (pra não vestir de novo a cada perfil igual).</summary>
         private string _parceiroVestido;
+        /// <summary>O parceiro é Paladino: os monstros o preferem (vai na entrada da luta em dupla).</summary>
+        private bool _parceiroPuxa;
         /// <summary>O estado de quem conduz que chegou no meio de uma luta: espera ela acabar.</summary>
         private JObject _estadoPendente;
 
@@ -73,6 +75,7 @@ namespace RPGLegend.Game.Jogo
             _salaEnviada = null;
             _posicaoEnviada = null;
             _parceiroVestido = null;
+            _parceiroPuxa = false;
             _estadoPendente = null;
             EsquecerADupla();
             _partida.EntrarEmSala(Rede.Conduzo);
@@ -156,6 +159,7 @@ namespace RPGLegend.Game.Jogo
         {
             if (!_emCoop) return;
             _parceiroVestido = null;
+            _parceiroPuxa = false;
             _parceiroNaLuta = null;
             // Quem luta em dupla segue sozinho (e o fantasma, sem quem o levante, perde); fora da luta, ele se levanta.
             // Só vale pra luta que está correndo: guardado, desmancharia a dupla da próxima.
@@ -190,6 +194,8 @@ namespace RPGLegend.Game.Jogo
                 var hero = JsSerializer.Read<Hero>(heroi);
                 if (hero == null) return;
                 _parceiroVestido = texto;
+                // O parceiro Paladino puxa os monstros também na luta daqui (rodada 3a).
+                _parceiroPuxa = ClassesDeLuta.PuxaOsMonstros(hero);
                 _sala.DefinirParceiro(hero);
             }
             catch (Newtonsoft.Json.JsonException) { }
@@ -235,7 +241,7 @@ namespace RPGLegend.Game.Jogo
                     if (!Numero(dados["x"], LimiteDaPosicao, out var x) || !Numero(dados["y"], LimiteDaPosicao, out var y)) break;
                     var olha = Texto(dados["f"]);
                     bool caido = dados["c"]?.Type == JTokenType.Boolean && (bool)dados["c"];
-                    _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null };
+                    _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null, Puxa = _parceiroPuxa ? true : (bool?)null };
                     _sala?.MoverParceiro(x, y, olha == "N" || olha == "E" || olha == "W" ? olha : "S", caido);
                     break;
                 case "m":
@@ -460,7 +466,7 @@ namespace RPGLegend.Game.Jogo
             Rede.MandarTempoReal(new JObject { ["t"] = "r", ["n"] = porcento });
             Sons.Tocar("heal");
             // Até o "p" dele dizer que levantou, ele continua caído aqui: o botão some pra não gastar outra poção.
-            _parceiroNaLuta = new ParceiroNaEntrada { X = _parceiroNaLuta.X, Y = _parceiroNaLuta.Y };
+            _parceiroNaLuta = new ParceiroNaEntrada { X = _parceiroNaLuta.X, Y = _parceiroNaLuta.Y, Puxa = _parceiroNaLuta.Puxa };
             MostrarBotaoReviver(false);
         }
 

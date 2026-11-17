@@ -51,6 +51,62 @@ namespace RPGLegend.Tests
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
                 return N(ClassesDeLuta.VidaComAClasse(Num(a["vida"]), quem.ClassId, quem.ClassName));
             });
+            Fn(M, "classeRefeita", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.ClasseRefeita(quem.ClassId, quem.ClassName));
+            });
+            Fn(M, "criticoDaClasse", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.CriticoDaClasse(quem.ClassId, quem.ClassName));
+            });
+            Fn(M, "puxaOsMonstros", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.PuxaOsMonstros(quem.ClassId, quem.ClassName));
+            });
+            Fn(M, "bonusDoAtaque", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.BonusDoAtaque(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId, R<ContadoresDaClasse>(a["c"]),
+                    JsJson.Truthy(JsJson.Prop(a["alvo"], "colado")), JsJson.Truthy(JsJson.Prop(a["alvo"], "chefe"))));
+            });
+            Fn(M, "esquivaDaClasse", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.EsquivaDaClasse(quem.ClassId, quem.ClassName, R<ContadoresDaClasse>(a["c"]), JsJson.Truthy(a["chefe"])));
+            });
+            Fn(M, "resistenciaDaClasse", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.ResistenciaDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"])));
+            });
+            Fn(M, "textosDaClasse", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.TextosDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"])));
+            });
+            Fn(M, "contarAcerto", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.ContarAcerto(quem.ClassId, quem.ClassName, R<ContadoresDaClasse>(a["c"]), JsJson.Truthy(a["critico"])));
+            });
+            Fn(M, "contarGolpeLevado", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.ContarGolpeLevado(quem.ClassId, quem.ClassName, R<ContadoresDaClasse>(a["c"])));
+            });
+            Fn(M, "esfriar", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(ClassesDeLuta.Esfriar(quem.ClassId, quem.ClassName, R<ContadoresDaClasse>(a["c"])));
+            });
+            Fn(M, "devolucaoDaClasse", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(ClassesDeLuta.DevolucaoDaClasse(quem.ClassId, quem.ClassName, R<ContadoresDaClasse>(a["c"])));
+            });
 
             // ---------- catalog ----------
             Const(M, "RACES", () => W(Catalog.Races));
@@ -80,5 +136,7 @@ namespace RPGLegend.Tests
         public string ClassName;
         public double? Level;
         public Equipment Equip;
+        public double? Hp;
+        public double? MaxHp;
     }
 }

@@ -68,6 +68,12 @@ namespace RPGLegend.Engine
         public double? PetCriticoBonus;
         /// <summary>O dano da classe na luta do app, em % (<see cref="ClassesDeLuta"/>); ausente, 100. Só a arena passa.</summary>
         public double? DanoDaClasse;
+        /// <summary>O dano a mais da classe na arena (a fúria, o combo…), em pontos de %, somado ao <see cref="DanoDaClasse"/>.</summary>
+        public double? BonusDeDano;
+        /// <summary>O multiplicador do crítico; ausente, 1,6. O Ladino tem o dele na arena.</summary>
+        public double? MultiplicadorDoCritico;
+        /// <summary>A classe refeita pelo doc do Breno fica, na arena, sem a passiva antiga do site.</summary>
+        public bool SemPassivaDaClasse;
     }
 
     /// <summary>
@@ -309,7 +315,7 @@ namespace RPGLegend.Engine
             double forcaDaMira = leitura.Acerto ? leitura.Forca : 1;
 
             double forcaMult = Js.Truthy(buffs.ForcaTurns) && buffs.ForcaTurns.Value > 0 ? 1 + (buffs.ForcaAmount ?? 0) : 1;
-            if (IdDaClasse(heroAfterCost) == "barbaro" && heroAfterCost.Hp < heroAfterCost.MaxHp * 0.5)
+            if (!options.SemPassivaDaClasse && IdDaClasse(heroAfterCost) == "barbaro" && heroAfterCost.Hp < heroAfterCost.MaxHp * 0.5)
             {
                 forcaMult *= 1.35;
             }
@@ -350,10 +356,11 @@ namespace RPGLegend.Engine
 
             double critChance = (d.Critico + bonus["critico"] + petCritico + (IdDaClasse(heroAfterCost) == "arqueiro" ? 8 : 0)) / 100;
             bool isCrit = guaranteedCrit || rng() < critChance || leitura.Critico;
-            if (isCrit) dmg = Js.Round(dmg * 1.6);
+            if (isCrit) dmg = Js.Round(dmg * (options.MultiplicadorDoCritico ?? 1.6));
             // O braço quebrado bate mais fraco (FerimentosDoHeroi).
             dmg = Js.Round(dmg * FerimentosDoHeroi.ForcaDoBraco(heroAfterCost));
-            if (options.DanoDaClasse != null && options.DanoDaClasse != 100) dmg = Js.Round(dmg * options.DanoDaClasse.Value / 100);
+            double pctDaClasse = (options.DanoDaClasse ?? 100) + (options.BonusDeDano ?? 0);
+            if (pctDaClasse != 100) dmg = Js.Round(dmg * pctDaClasse / 100);
 
             var golpeado = nextMonster.Clone();
             golpeado.Hp = nextMonster.Hp - dmg;
@@ -370,9 +377,14 @@ namespace RPGLegend.Engine
             afterHero = procResult.Hero;
             nextMonster = ComoVisao(procResult.Monster).Clone(); // { ...nextMonster, ...procResult.monster }
 
-            var passiveResult = ClassPassives.ApplyHeroClassPassive(afterHero, nextMonster, dmg, rng);
-            afterHero = passiveResult.Hero;
-            nextMonster = ComoVisao(passiveResult.Monster).Clone(); // { ...nextMonster, ...passiveResult.monster }
+            // A classe refeita, na arena, fica sem a passiva antiga: o resultado vazio da TS.
+            HeroClassPassiveResult passiveResult = null;
+            if (!options.SemPassivaDaClasse)
+            {
+                passiveResult = ClassPassives.ApplyHeroClassPassive(afterHero, nextMonster, dmg, rng);
+                afterHero = passiveResult.Hero;
+                nextMonster = ComoVisao(passiveResult.Monster).Clone(); // { ...nextMonster, ...passiveResult.monster }
+            }
 
             return new ResolveAttackResult
             {
@@ -386,7 +398,7 @@ namespace RPGLegend.Engine
                 IsCrit = isCrit,
                 ProcTriggered = procResult.Triggered,
                 ProcTriggeredSpecified = true,
-                ClassPassiveTriggered = passiveResult.Triggered,
+                ClassPassiveTriggered = passiveResult?.Triggered,
                 ClassPassiveTriggeredSpecified = true,
                 MonsterDefeated = nextMonster.Hp <= 0,
             };
