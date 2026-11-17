@@ -748,6 +748,18 @@
     display: none;
 }
 
+/* O status de morto da partida em dupla, na cor do fantasma (o boneco caído fica azulado). */
+.morto-do-heroi {
+    margin-top: 4px;
+    font-size: 15px;
+    color: #b8d8ff;
+    white-space: normal;
+}
+
+.morto-do-heroi.escondida {
+    display: none;
+}
+
 .rotulo-da-barra {
     flex-direction: row;
     justify-content: space-between;

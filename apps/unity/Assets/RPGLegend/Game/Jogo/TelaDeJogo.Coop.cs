@@ -56,6 +56,9 @@ namespace RPGLegend.Game.Jogo
         /// <summary>O REVIVER dos botões de cima (null até a partida em sala abrir).</summary>
         private UnityEngine.UIElements.Button _botaoReviver;
         private bool _botaoReviverVisivel;
+        /// <summary>O status de morto embaixo das barras (2026-11-17, decisão do usuário: só na tela, a regra não muda).</summary>
+        private UnityEngine.UIElements.Label _morto;
+        private bool _mortoVisivel;
         /// <summary>O fantasma fica a esta distância do parceiro, em unidades da sala (uma casa).</summary>
         private const double FolgaDoFantasma = 1200;
 
@@ -86,6 +89,8 @@ namespace RPGLegend.Game.Jogo
                 _botaoReviver = UnityEngine.UIElements.UQueryExtensions.Q<UnityEngine.UIElements.Button>(_tela, "botao-reviver");
                 if (_botaoReviver != null) _botaoReviver.clicked += ReviverOParceiro;
             }
+            if (_morto == null && _tela != null)
+                _morto = UnityEngine.UIElements.UQueryExtensions.Q<UnityEngine.UIElements.Label>(_tela, "morto-do-heroi");
             EntreiNaSala();
             // Quem acompanha e chegou depois: o estado que a sala já tinha, e o pedido de um novo.
             if (!Rede.Conduzo)
@@ -110,6 +115,7 @@ namespace RPGLegend.Game.Jogo
             _sala?.DefinirParceiro(null);
             if (_sala != null) _sala.Fantasma = false;
             MostrarBotaoReviver(false);
+            MostrarMorto(false);
             PrepararChat(false);
         }
 
@@ -350,6 +356,7 @@ namespace RPGLegend.Game.Jogo
             _lutando = luta != null;
             _sala.Fantasma = _partida.Fantasma;
             AtualizarBotaoReviver();
+            MostrarMorto(EstouCaido);
             if (!Rede.TemParceiro) return;
 
             if (luta != null)
@@ -378,7 +385,7 @@ namespace RPGLegend.Game.Jogo
             var walker = luta != null ? luta.Arena.Heroi : _sala.Walker;
             if (walker == null) return;
             var sala = ChaveDaSalaNaRede();
-            bool caido = luta?.Arena.Dupla?.Fantasma == true || (luta == null && _partida.Estado.Hero.Hp <= 0);
+            bool caido = EstouCaido;
             var agora = sala + "|" + Math.Round(walker.X) + "|" + Math.Round(walker.Y) + "|" + walker.Facing + "|" + caido;
             // Parado, repete de vez em quando: é o que mostra o herói a quem acabou de chegar.
             bool parado = agora == _posicaoEnviada;
@@ -409,6 +416,24 @@ namespace RPGLegend.Game.Jogo
             double distancia = Math.Sqrt(dx * dx + dy * dy);
             if (distancia <= FolgaDoFantasma) return new Vetor(0, 0);
             return new Vetor(dx / distancia, dy / distancia);
+        }
+
+        /// <summary>O meu herói caiu na partida em dupla: na luta quem diz é a arena; fora dela, a vida (o fantasma).</summary>
+        private bool EstouCaido
+        {
+            get
+            {
+                if (!_emCoop || _partida == null) return false;
+                var luta = _partida.Luta;
+                return luta != null ? luta.Arena.Dupla?.Fantasma == true : _partida.Fantasma;
+            }
+        }
+
+        private void MostrarMorto(bool mostrar)
+        {
+            if (_morto == null || mostrar == _mortoVisivel) return;
+            _mortoVisivel = mostrar;
+            _morto.EnableInClassList("escondida", !mostrar);
         }
 
         /// <summary>O REVIVER aparece quando o parceiro caiu na mesma sala, eu estou de pé e tenho a poção.</summary>

@@ -512,7 +512,9 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
     ouro, `foraDoSorteio`, só o vendedor do app, 12% por estoque), que
     devolve 50% da vida máxima (`"r"`); vai servir pra montaria também. O
     fantasma que fica sem parceiro levanta com 1 de vida, e o save nunca
-    guarda herói com 0.
+    guarda herói com 0. O status de morto (2026-11-17) é só da tela: quem
+    caiu lê "💀 Morto" embaixo das barras, e o parceiro vê a caveira em
+    cima do boneco dele; a regra continua a do fantasma.
   - **Chat da sala** (`TelaDeJogo.ChatDaSala.cs`, `"m"`): o CHAT dos botões
     de cima, sem guardar nada; digitando, o teclado é do campo.
   Falta, nesta ordem: as classes em

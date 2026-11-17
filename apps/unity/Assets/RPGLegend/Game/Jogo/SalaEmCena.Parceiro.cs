@@ -19,6 +19,9 @@ namespace RPGLegend.Game.Jogo
         /// <summary>O parceiro caiu: o boneco dele fica meio transparente e azulado, como um fantasma.</summary>
         private bool _parceiroFantasma;
         private static readonly Color CorDoFantasma = new Color(0.7f, 0.85f, 1f, 0.45f);
+        /// <summary>O status de morto (2026-11-17, decisão do usuário): a caveira boiando em cima do parceiro caído.</summary>
+        private SpriteRenderer _caveiraDoParceiro;
+        private float _baseDaCaveira;
 
         /// <summary>Quem é o parceiro (pra vestir o boneco); null tira ele da sala.</summary>
         public void DefinirParceiro(Hero hero)
@@ -35,6 +38,13 @@ namespace RPGLegend.Game.Jogo
                 _parceiro = NovoSeguidor(0);
                 _parceiro.Raiz.name = "Parceiro";
                 _parceiro.Raiz.gameObject.SetActive(false);
+                // Filha da raiz, e não do lado de frente: não espelha nem some quando ele vira de costas.
+                var caveira = new GameObject("Morto");
+                caveira.transform.SetParent(_parceiro.Raiz, false);
+                _caveiraDoParceiro = caveira.AddComponent<SpriteRenderer>();
+                PorNoPe(_caveiraDoParceiro, EmojiDoSistema.Sprite("💀"), Lado * 0.5f);
+                _baseDaCaveira = caveira.transform.localPosition.y;
+                _caveiraDoParceiro.enabled = false;
             }
             VestirOParceiro(hero);
             _temParceiro = true;
@@ -119,6 +129,20 @@ namespace RPGLegend.Game.Jogo
                 camada.sortingOrder = (int)s.Onde.y;
                 camada.color = cor;
             }
+            ColocarCaveira(s);
+        }
+
+        /// <summary>A caveira acima da cabeça (o boneco de emoji é mais alto que o mini), boiando devagar.</summary>
+        private void ColocarCaveira(Seguidor s)
+        {
+            if (_caveiraDoParceiro == null) return;
+            if (_caveiraDoParceiro.enabled != _parceiroFantasma) _caveiraDoParceiro.enabled = _parceiroFantasma;
+            if (!_parceiroFantasma) return;
+            float cabeca = s.DeEmoji ? Lado * 1.3f : Lado * 1.05f;
+            float boia = Mathf.Sin(Time.unscaledTime * 3f) * 2f;
+            var t = _caveiraDoParceiro.transform;
+            t.localPosition = new Vector3(t.localPosition.x, _baseDaCaveira + cabeca + boia, -0.05f);
+            _caveiraDoParceiro.sortingOrder = (int)s.Onde.y + 1;
         }
     }
 }
