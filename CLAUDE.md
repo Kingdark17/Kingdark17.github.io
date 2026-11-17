@@ -473,8 +473,51 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
     mágico e cura (`TIPOS_DE_PODER_MAGICO`) abrem as letras no PC e o
     desenho com o dedo no celular; a força do acerto multiplica o efeito, e
     errando sai com metade (`FORCA_DO_PODER_ERRADO`). A mana só sai no fim.
-  Falta, nesta ordem: chat e co-op em tempo real no app; as classes em
-  grupos (o Necromante do Breno **substitui** o ajuste de 2026-11-12);
+  Rodada 2, **amigos, chat e co-op em tempo real no app** (2026-11-16/17,
+  decidido com o usuário; o site continua com o co-op por turnos):
+  - **Conexão própria**: `Game/App/SocketIo.cs` é um cliente pequeno de
+    socket.io v4 só com websocket (decisão do usuário: sem pacote de
+    terceiros), e `Rede.cs` é a sessão estática (o espelho de
+    `lib/rede/sala.ts`): liga no menu, se identifica pelo `auth` com o
+    token, volta sozinha depois de cair (`rejoin`) e desliga ao sair da
+    conta. Zera no `SubsystemRegistration`, porque o Editor entra no Play
+    sem recarregar o domínio.
+  - **AMIGOS** no menu (`TelaDeAmigos`): as mesmas rotas e conversas do
+    site. **JOGAR JUNTO** (`TelaDeMultiplayer`): personagem (Aprendiz não
+    entra), criar sala, código, salas públicas, convite.
+  - **Salas do app separadas das do site**: o `create`/`join`/`rejoin` do
+    app manda `app: true`, a sala guarda isso, quem é do outro cliente
+    recebe recado e não entra, e o site esconde as salas do app da vitrine.
+    Evento novo **`tempo-real`**: o servidor só repassa pro parceiro, só em
+    sala do app, com teto de tamanho; nada dele é guardado.
+  - **Partida em sala** (`TelaDeJogo.Coop.cs`, `Coop.cs`): só quem conduz
+    manda o estado (o herói que vale é sempre o local); quem acompanha anda
+    livre na mesma sala, mas não passa por porta nem encosta em nada. Cada
+    um diz onde está ~10×/s (`"p"`, com a chave da sala e se caiu) e o outro
+    desenha o mini boneco (`SalaEmCena.Parceiro.cs`). **Cada um grava o
+    próprio herói** (`Partida.ParaGravar`: quem entrou acompanhando grava
+    herói, mochila e equipe por cima do save com que entrou), diferente do
+    site, que não grava a sessão em dupla.
+  - **Luta em dupla** (`Dupla` em `luta/arena.ts` ↔ `Arena.cs`): cada app
+    cuida do próprio herói e o de quem conduz cuida dos monstros, que vão
+    no herói de pé mais perto. Quem acompanha roda um **espelho**: o estado
+    dos monstros chega (`espelhoDaLuta`, `"e"`), o golpe que encosta no
+    herói daqui acerta ali, e o dano dele não derruba: sai em `danos`
+    (`"d"`) e a queda volta de quem conduz. Cada um recebe o XP, o ouro e
+    o item da sala. Sem câmera lenta em dupla. Sem dupla, nada muda.
+  - **Fantasma e Poção de Reviver** (`jogo/dupla.ts` ↔ `Duplas`): quem cai
+    vira fantasma (anda seguindo o parceiro, não age, não apanha, não mexe
+    em nada) e a luta segue com o outro; os dois caídos perdem. Só o
+    parceiro o levanta, com a **Poção de Reviver** (`pot_reviver`, 250 de
+    ouro, `foraDoSorteio`, só o vendedor do app, 12% por estoque), que
+    devolve 50% da vida máxima (`"r"`); vai servir pra montaria também. O
+    fantasma que fica sem parceiro levanta com 1 de vida, e o save nunca
+    guarda herói com 0.
+  - **Chat da sala** (`TelaDeJogo.ChatDaSala.cs`, `"m"`): o CHAT dos botões
+    de cima, sem guardar nada; digitando, o teclado é do campo.
+  Falta, nesta ordem: as classes em
+  grupos (o Necromante do Breno **substitui** o ajuste de 2026-11-12, e a
+  habilidade dele revive os aliados);
   estilos e mestres; mercadores secretos e itens novos (a arte das armas
   novas é o Claude que desenha, no estilo do Breno); o Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
