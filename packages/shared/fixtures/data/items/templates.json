@@ -634,6 +634,17 @@
       "foraDoSorteio": true
     },
     {
+      "id": "cristal_animal",
+      "name": "Cristal de Animal",
+      "genero": "m",
+      "category": "material",
+      "desc": "Um animal do Caçador que caiu. A Poção de Reviver o traz de volta com metade da vida; uma noite na taverna, com a vida cheia.",
+      "sprite": "materials/cristal_animal.png",
+      "base": {},
+      "value": 1,
+      "foraDoSorteio": true
+    },
+    {
       "id": "minerio",
       "name": "Minério Bruto",
       "genero": "m",

@@ -28,5 +28,19 @@
     "danoNaRetaguarda": 20,
     "resistenciaNoOfensivo": 20,
     "ladoDaGuarda": 4
+  },
+  "REGRAS_DA_MONTARIA": {
+    "nivel": 5,
+    "velocidade": 20,
+    "alcance": 6,
+    "nivelDaResistencia": 8,
+    "segura": 15,
+    "nivelDoDano": 10,
+    "dano": 20
+  },
+  "REGRAS_DO_CRISTAL": {
+    "cristal": "cristal_animal",
+    "pocao": "pot_reviver",
+    "vidaComPocao": 50
   }
 }

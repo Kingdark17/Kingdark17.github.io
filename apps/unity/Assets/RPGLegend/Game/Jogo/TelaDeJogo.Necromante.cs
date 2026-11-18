@@ -123,6 +123,8 @@ namespace RPGLegend.Game.Jogo
 
         private Button _botaoAnimais;
         private bool _botaoAnimaisVisivel;
+        /// <summary>O animal que o jogador apertou pra soltar: o segundo aperto confirma (rodada 7d).</summary>
+        private string _soltando;
 
         /// <summary>
         /// Depois da luta, o animal que o Caçador domou ganha nome (rodada 7b); fora da luta, a tecla K e o botão de
@@ -133,7 +135,7 @@ namespace RPGLegend.Game.Jogo
             if (_partida == null) return;
             var hero = _partida.Estado.Hero;
             bool cacador = Catalog.IdDaClasse(hero.ClassId, hero.ClassName) == "cacador";
-            bool temAnimal = cacador && Animais.Quantos(hero, _partida.Estado.Party ?? new List<Companion>()) > 0;
+            bool temAnimal = cacador && Animais.Quantos(hero, _partida.Estado.Party ?? new List<Companion>(), _partida.Estado.Inventory) > 0;
             MostrarBotaoAnimais(temAnimal && _partida.Luta == null);
             if (temAnimal && _partida.Luta == null && _janela == null && Andando)
             {
@@ -185,7 +187,7 @@ namespace RPGLegend.Game.Jogo
             var r = Animais.NaLuta;
             Janela("🐾 Animais", conteudo =>
             {
-                conteudo.Add(Paragrafo("<b>Retaguarda</b>: anda perto de você e ataca quem chegar a 3 blocos (+20% de dano). <b>Ofensivo</b>: vai atrás de qualquer inimigo (+20% de resistência). <b>Estratégico</b>: guarda a área que você marca na luta (no PC, o botão direito no chão; no celular, segure o dedo parado no chão) e bate em todos dentro dela; sem área, vira retaguarda. Até 2 seguem você, e cada 30 lutas vencidas sobem um nível."));
+                conteudo.Add(Paragrafo("<b>Retaguarda</b>: anda perto de você e ataca quem chegar a 3 blocos (+20% de dano). <b>Ofensivo</b>: vai atrás de qualquer inimigo (+20% de resistência). <b>Estratégico</b>: guarda a área que você marca na luta (no PC, o botão direito no chão; no celular, segure o dedo parado no chão) e bate em todos dentro dela; sem área, vira retaguarda. Até 2 seguem você, e cada 30 lutas vencidas sobem um nível. Do nível 5 em diante dá pra montar: +20% de velocidade e alcance 6; no 8 ele segura 15% dos golpes, e no 10 você bate 20% mais forte. O animal que cai vira cristal: a Poção de Reviver (na mochila) ou uma noite na taverna o traz de volta."));
                 void Linha(Companion animal, bool seguindo)
                 {
                     string id = animal.Animal.Id;
@@ -209,16 +211,41 @@ namespace RPGLegend.Game.Jogo
                     }));
                     if (seguindo) linha.Add(PecasDaTela.Botao("GUARDAR", () => MexerNosAnimais(() => _partida.GuardarAnimal(id))));
                     else linha.Add(PecasDaTela.Botao("LEVAR", () => MexerNosAnimais(() => _partida.LevarAnimal(id)), false, naEquipe.Count < Animais.Regras.Ativos));
+                    // A montaria (rodada 7d): do nível 5 em diante, quem segue o herói.
+                    if (seguindo && estado.Hero.Montaria == id) linha.Add(PecasDaTela.Botao("DESMONTAR", () => MexerNosAnimais(() => _partida.Desmontar()), true));
+                    else if (seguindo) linha.Add(PecasDaTela.Botao("MONTAR", () => MexerNosAnimais(() => _partida.MontarAnimal(id)), false, Animais.PodeMontar(animal)));
+                    BotaoDeSoltar(linha, id);
                     conteudo.Add(linha);
                 }
                 foreach (var animal in naEquipe) Linha(animal, true);
                 foreach (var animal in guardados) if (animal.Animal != null) Linha(animal, false);
+                // Os caídos em cristal (rodada 7d).
+                foreach (var item in estado.Inventory ?? new List<Item>())
+                {
+                    if (item.Animal?.Animal == null) continue;
+                    var linha = PecasDaTela.Bloco("passo-do-guia");
+                    linha.Add(PecasDaTela.Texto("💠", "icone-do-passo"));
+                    var textos = PecasDaTela.Bloco("textos-do-passo");
+                    textos.Add(PecasDaTela.Texto(Items.DisplayName(item), "nome-do-passo"));
+                    textos.Add(PecasDaTela.Texto("Caído · Nv " + Js.NumberToString(item.Animal.Animal.Nivel) + " · a Poção de Reviver ou a taverna o trazem de volta", "dica-do-passo"));
+                    linha.Add(textos);
+                    BotaoDeSoltar(linha, item.Animal.Animal.Id);
+                    conteudo.Add(linha);
+                }
             }, ("FECHAR", FecharJanela));
+        }
+
+        /// <summary>O SOLTAR: o primeiro aperto pede a confirmação, o segundo solta pra sempre.</summary>
+        private void BotaoDeSoltar(VisualElement linha, string id)
+        {
+            if (_soltando == id) linha.Add(PecasDaTela.Botao("SOLTAR PRA SEMPRE?", () => MexerNosAnimais(() => _partida.SoltarAnimal(id)), true));
+            else linha.Add(PecasDaTela.Botao("SOLTAR", () => { _soltando = id; _janela = null; AbrirAnimais(); }));
         }
 
         /// <summary>Faz a mudança e redesenha a janela com o que mudou.</summary>
         private void MexerNosAnimais(Action mudanca)
         {
+            _soltando = null;
             mudanca();
             _janela = null;
             AbrirAnimais();

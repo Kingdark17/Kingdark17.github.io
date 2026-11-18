@@ -191,7 +191,8 @@ namespace RPGLegend.Game.Jogo
             if (slot == null && armaOcupando == null && Mochilas.AceitaMaoSecundaria(item))
                 botoes.Add(PecasDaTela.Discreto("Mão secundária", () => SeguirMochila(Mochilas.Equipar(mochila, item, "secundaria"))));
 
-            if (Mochilas.PodeUsar(item)) botoes.Add(PecasDaTela.Botao("USAR", () => SeguirMochila(Mochilas.Usar(mochila, item))));
+            // O cristal do animal (rodada 7d): o USAR gasta a Poção de Reviver nele.
+            if (Mochilas.PodeUsar(item) || Mochilas.PodeReviver(item)) botoes.Add(PecasDaTela.Botao("USAR", () => SeguirMochila(Mochilas.Usar(mochila, item))));
 
             AcoesDeRuna(mochila, item, botoes);
             EncantamentoNaFicha(item, botoes);

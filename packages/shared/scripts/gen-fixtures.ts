@@ -1137,6 +1137,66 @@ for (const cls of ['monge', 'mago', 'necromante']) {
         caso(`levarAnimal: ${nome}`, 'levarAnimal', { estado, id }, (a) => E.levarAnimal(a.estado as never, a.id));
       }
     }
+    // A montaria, o cristal, reviver e soltar (rodada 7d).
+    {
+      const nv = (nivel: number, o: Partial<Companion> = {}, id = 'm1') => ({ ...lobo, ...o, animal: { id, nivel, batalhas: 0, vidaBase: 700, ataqueBase: 35 } }) as Companion;
+      for (const [nome, animal] of [['nível 4', nv(4)], ['nível 5', nv(5)], ['nível 5 caído', nv(5, { hp: 0 })], ['recruta', companheiro('guerreiro')]] as const) {
+        caso(`podeMontar: ${nome}`, 'podeMontar', { animal }, (a) => E.podeMontar(a.animal as never));
+      }
+      const equipeM = { hero: base, party: [nv(4, {}, 'm4'), nv(6), companheiro('mago')] };
+      for (const id of ['m1', 'm4', 'nenhum']) caso(`montarAnimal: ${id}`, 'montarAnimal', { estado: equipeM, id }, (a) => E.montarAnimal(a.estado as never, a.id));
+      const montado = { ...equipeM, hero: { ...base, montaria: 'm1' } };
+      caso('desmontar: montado', 'desmontar', { estado: montado }, (a) => E.desmontar(a.estado as never));
+      caso('desmontar: a pé', 'desmontar', { estado: equipeM }, (a) => E.desmontar(a.estado as never));
+      for (const [nome, estado] of [
+        ['montado', montado],
+        ['a montaria caiu', { ...montado, party: [nv(6, { hp: 0 })] }],
+        ['montado num de nível 4', { ...montado, hero: { ...base, montaria: 'm4' } }],
+        ['a pé', equipeM],
+      ] as const) {
+        caso(`montariaDe: ${nome}`, 'montariaDe', { estado }, (a) => E.montariaDe(a.estado as never));
+      }
+      caso('guardarAnimal: a montaria (o herói desmonta)', 'guardarAnimal', { estado: montado, id: 'm1' }, (a) => E.guardarAnimal(a.estado as never, a.id));
+      for (const [nome, quem] of [
+        ['caçador montado', { classId: 'cacador', montaria: 'm1', equip: { arma: { templateId: 'arco' } } }],
+        ['caçador montado com aljava', { classId: 'cacador', montaria: 'm1', equip: { arma: { templateId: 'arco' }, secundaria: { templateId: 'aljava_explosiva' } } }],
+      ] as const) {
+        caso(`(7d) alcanceDoHeroi: ${nome}`, 'alcanceDoHeroi', { quem }, (a) => E.alcanceDoHeroi(a.quem));
+      }
+      caso('cristalDoAnimal: o lobo', 'cristalDoAnimal', { animal: nv(3, { name: 'Presa' }) }, (a, ctx) => E.cristalDoAnimal(a.animal as never, ctx.rng, ctx.now), { rng: { seed: 71 }, now: AGORA });
+      const comMochila = (party: Companion[], inventory: Item[], hero: Hero = base) => ({ hero, party, inventory });
+      for (const [nome, estado] of [
+        ['ninguém caiu', comMochila([nv(2), companheiro('guerreiro')], [])],
+        ['um caiu', comMochila([nv(2, { hp: 0, name: 'Presa' }), companheiro('guerreiro', { hp: 0 })], [item('pot_vida')])],
+        ['a montaria caiu', comMochila([nv(6, { hp: 0 }), nv(2, {}, 'm2')], [], { ...base, montaria: 'm1' })],
+        ['dois caíram', comMochila([nv(2, { hp: 0 }, 'x'), nv(2, { hp: -3 }, 'y')], [])],
+      ] as const) {
+        caso(`cristalizarCaidos: ${nome}`, 'cristalizarCaidos', { estado }, (a, ctx) => E.cristalizarCaidos(a.estado as never, ctx.rng, ctx.now), { rng: { seed: 72 }, now: AGORA });
+        caso(`(7d) quantosAnimais: ${nome}`, 'quantosAnimais', { estado }, (a) => E.quantosAnimais(a.estado as never));
+      }
+      const cristal = E.cristalDoAnimal(nv(4, { name: 'Presa' }, 'c1'), E.seededRng(73), relogio);
+      const outro = E.cristalDoAnimal(nv(1, {}, 'c2'), E.seededRng(74), relogio);
+      const pocao = item('pot_reviver');
+      for (const [nome, estado, uid] of [
+        ['com a poção', comMochila([nv(1, {}, 'e1')], [pocao, cristal]), cristal.uid],
+        ['sem a poção', comMochila([], [cristal]), cristal.uid],
+        ['equipe cheia: vai guardado', comMochila([nv(1, {}, 'e1'), nv(1, {}, 'e2')], [cristal, pocao]), cristal.uid],
+        ['uid que não é cristal', comMochila([], [pocao, cristal]), pocao.uid],
+      ] as const) {
+        caso(`reviverComPocao: ${nome}`, 'reviverComPocao', { estado, uid }, (a) => E.reviverComPocao(a.estado as never, a.uid));
+      }
+      for (const [nome, estado] of [
+        ['dois cristais', comMochila([nv(1, {}, 'e1')], [cristal, item('pot_vida'), outro])],
+        ['sem cristais', comMochila([nv(1, {}, 'e1')], [item('pot_vida')])],
+      ] as const) {
+        caso(`reviverNaTaverna: ${nome}`, 'reviverNaTaverna', { estado }, (a) => E.reviverNaTaverna(a.estado as never));
+      }
+      const tudo = comMochila([nv(6), companheiro('guerreiro')], [cristal], { ...base, montaria: 'm1', animais: [nv(1, {}, 'g1')] });
+      for (const id of ['m1', 'g1', 'c1', 'nenhum']) caso(`soltarAnimal: ${id}`, 'soltarAnimal', { estado: tudo, id }, (a) => E.soltarAnimal(a.estado as never, a.id));
+      caso('displayName: o cristal do animal', 'displayName', { item: cristal }, (a) => E.displayName(a.item));
+      caso('podeReviver: o cristal', 'podeReviver', { item: cristal }, (a) => E.podeReviver(a.item));
+      caso('podeReviver: a poção', 'podeReviver', { item: pocao }, (a) => E.podeReviver(a.item));
+    }
     for (const nome of ['Presa', '  Sombra\n<b>  ', '', '   ', 'a'.repeat(30), '🐺'.repeat(25), 'Lobo\u0000Mau', 'Ana Júlia', ' 🕷️ Teia ']) {
       caso(`nomeDoAnimal: ${JSON.stringify(nome)}`, 'nomeDoAnimal', { nome, padrao: 'Lobo das Sombras' }, (a) => E.nomeDoAnimal(a.nome, a.padrao));
     }
@@ -4378,6 +4438,12 @@ naMochila('slot vazio', 'desequipar', mochilaCom(guerreiro, [pocaoDeVida]), { sl
 naMochila('poção de vida ferido', 'usar', mochilaCom(ferido, [pocaoDeVida, pocaoDeMana]), { item: pocaoDeVida }, (m, a) => E.usar(m, a.item as Item));
 naMochila('poção de mana', 'usar', mochilaCom(ferido, [pocaoDeVida, pocaoDeMana]), { item: pocaoDeMana }, (m, a) => E.usar(m, a.item as Item));
 naMochila('poção de vida com a vida cheia', 'usar', mochilaCom(guerreiro, [pocaoDeVida]), { item: pocaoDeVida }, (m, a) => E.usar(m, a.item as Item));
+{
+  // O cristal do animal do Caçador (rodada 7d): usar gasta a Poção de Reviver nele.
+  const cristal = E.cristalDoAnimal(E.animalDomado({ speciesId: 'morcego', maxHp: 200, dmg: 15 }, 'k3'), E.seededRng(76), relogio);
+  naMochila('o cristal do animal com a Poção de Reviver', 'usar', mochilaCom(guerreiro, [cristal, item('pot_reviver')]), { item: cristal }, (m, a) => E.usar(m, a.item as Item));
+  naMochila('o cristal do animal sem a poção', 'usar', mochilaCom(guerreiro, [cristal]), { item: cristal }, (m, a) => E.usar(m, a.item as Item));
+}
 naMochila('pergaminho', 'usar', mochilaCom(ferido, [pergaminho]), { item: pergaminho }, (m, a) => E.usar(m, a.item as Item));
 
 for (const [nome, hero, peca] of [
@@ -5283,7 +5349,8 @@ caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: 
   };
   limpaNoApp('o chefe deixa uma runa', comGradeInteira(chefeFundo.estado), chefeFundo.abatido, { seed: sementeComRuna() });
 
-  const perde = (nome: string, estado: EstadoNaMasmorra, rng: RngSpec) => caso(`perderLuta: ${nome}`, 'perderLuta', { estado }, (a, ctx) => E.perderLuta(a.estado, ctx.rng), { rng });
+  const perde = (nome: string, estado: EstadoNaMasmorra, rng: RngSpec) =>
+    caso(`perderLuta: ${nome}`, 'perderLuta', { estado }, (a, ctx) => E.perderLuta(a.estado, ctx.rng, ctx.now), { rng, now: AGORA });
   const nivel = (level: number, gold: number) => heroi({ classe: 'guerreiro', level, extra: { gold, hp: 0 } });
   const mochila = [item('pot_vida'), item('espada', 'raro'), item('couro', 'incomum'), { ...item('adaga'), equipped: true }];
   perde('iniciante não perde nada', comGradeInteira(naSalaDaMasmorra(umMonstro, nivel(5, 300), mochila)), { sequence: [] });
@@ -5293,6 +5360,14 @@ caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: 
   const ossos = { ...companheiro('bardo', { name: 'Esqueleto' }), invocado: true };
   perde('os esqueletos ficam pra trás', comGradeInteira({ ...naSalaDaMasmorra(umMonstro, nivel(2, 0)), party: [ossos, fiel] }), { sequence: [] });
   limpa('os esqueletos voltam ao pó, o fiel fica', { ...ultimo.estado, party: [ossos, temporario, fiel] }, ultimo.abatido, { sequence: [0.99] });
+  {
+    // O animal do Caçador que caiu vira cristal (rodada 7d), na vitória e na derrota.
+    const caido = { ...E.animalDomado({ speciesId: 'aranha', maxHp: 300, dmg: 20 }, 'k1'), hp: 0, name: 'Teia' };
+    const montada = { ...E.animalDomado({ speciesId: 'lobo_sombras', maxHp: 1000, dmg: 50 }, 'k2'), hp: 0, animal: { id: 'k2', nivel: 6, batalhas: 150 } };
+    limpa('o animal caído vira cristal', { ...ultimo.estado, party: [caido, fiel] }, ultimo.abatido, { sequence: [0.99] });
+    limpa('a montaria caída vira cristal e o herói desmonta', { ...ultimo.estado, hero: { ...ultimo.estado.hero, montaria: 'k2' }, party: [montada] }, ultimo.abatido, { seed: 12 });
+    perde('o animal caído vira cristal antes de o grupo levantar', comGradeInteira({ ...naSalaDaMasmorra(umMonstro, nivel(2, 0)), party: [caido, fiel] }), { sequence: [] });
+  }
 }
 
 function naSalaInterage(nome: string, estado: EstadoDoJogo, semente: number, pet: string | null = null): void {
@@ -5304,6 +5379,11 @@ naSalaInterage('portão com classe', naSalaDaCidade('gate', guerreiro), 111);
 naSalaInterage('taverna', { ...naSalaDaCidade('tavern', machucado), party: [companheiro('guerreiro', { hp: 5 })] }, 112);
 // A noite custa 5 de ouro por nível (2026-11-06): sem o ouro, não dorme.
 naSalaInterage('taverna sem ouro', naSalaDaCidade('tavern', { ...machucado, gold: 0 }), 117);
+// A taverna traz os animais em cristal de volta, com a vida cheia (rodada 7d).
+{
+  const teia = E.cristalDoAnimal({ ...E.animalDomado({ speciesId: 'aranha', maxHp: 300, dmg: 20 }, 'k1'), name: 'Teia' }, E.seededRng(75), relogio);
+  naSalaInterage('taverna com um animal em cristal', { ...naSalaDaCidade('tavern', machucado), inventory: [teia, item('pot_vida')] }, 118);
+}
 naSalaInterage('vendedor', naSalaDaCidade('shop'), 113);
 naSalaInterage('ferreiro', naSalaDaCidade('blacksmith'), 114);
 naSalaInterage('quadro de missões', naSalaDaCidade('questboard'), 115);
@@ -6473,6 +6553,22 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
         simula('o animal no estratégico, sem área marcada, fica de retaguarda', guardando, parado(300), { seed: 963 });
         simula('a área fora do chão fica na beirada', guardando, [{ x: 0, y: 0, guardar: { x: 99 * T, y: -5 * T } }, ...parado(30)], { seed: 964 });
       }
+      // Montado (rodada 7d): a montaria não luta sozinha; nível 8 segura 15% do golpe; nível 10 bate +20%; zerou, desmonta.
+      const naMontaria = (nivel: number, monstros: ReturnType<typeof bicho>[], corpos: Array<[number, number]>, o: { vida?: number } = {}) => {
+        const hero = { ...forte({ classe: 'cacador', arma: 'arco' }), montaria: 'a1' };
+        const montaria = { ...lobo, hp: o.vida ?? lobo.maxHp, animal: { id: 'a1', nivel, batalhas: 0, vidaBase: 700, ataqueBase: 35 } };
+        const aberta = E.abrirLuta({ ...salaCom(monstros), hero, party: [montaria] }, EMBAIXO).luta;
+        return {
+          ...aberta,
+          arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m, i) => ({ ...m, corpoX: (corpos[i] as [number, number])[0] * T, corpoY: (corpos[i] as [number, number])[1] * T })) },
+        };
+      };
+      const batedor = () => [bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 })];
+      simula('montado no nível 8: a montaria segura 15% do golpe', naMontaria(8, batedor(), [[4.5, 6.5]]), parado(300), { seed: 966 });
+      simula('montado no nível 5: o herói leva tudo', naMontaria(5, batedor(), [[4.5, 6.5]]), parado(300), { seed: 966 });
+      simula('a montaria fraca cai e o herói desmonta', naMontaria(8, batedor(), [[4.5, 6.5]], { vida: 2 }), parado(300), { seed: 967 });
+      simula('montado no nível 10 bate mais forte, de longe', naMontaria(10, [forteZ()], [[4.5, 1.5]]), [...flechas(2, { x: 4.5 * T, y: 1.5 * T }), ...parado(30)], { seed: 968 });
+      simula('montado anda mais rápido', naMontaria(5, [forteZ()], [[1.5, 1.5]]), rodando(140), { seed: 969 });
       simula('sem animal no estratégico, a área não se marca', comAnimal('retaguarda', dois(), [[6.5, 1.5], [7.5, 2.5]]), [{ x: 0, y: 0, guardar: { x: 7 * T, y: 2 * T } }, ...parado(30)], { seed: 965 });
       {
         const domavel = caca([loboFraco()], [[4.5, 5.5]], { party: [{ ...lobo, animal: { id: 'a1', nivel: 1, batalhas: 29, vidaBase: 700, ataqueBase: 35 } }] });

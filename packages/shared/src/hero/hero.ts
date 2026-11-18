@@ -140,6 +140,8 @@ export interface Hero extends HeroCore {
    * domados que não cabem na equipe (lá seguem 2). Ausente, nenhum.
    */
   animais?: Companion[];
+  /** O Caçador montado (rodada 7d): o id do animal da equipe (nível 5+) em que ele está. Ausente, a pé. */
+  montaria?: string;
   /** Bênção de um NPC do mapa: bônus de esquiva que dura N combates inteiros (não turnos) — distinto de `HeroBuffs`, que zera a cada combate. Concedida por `npc-services.js`'s `blessing()`, consumida no início de cada combate. */
   npcBlessing?: { combats: number; dodge: number };
 }

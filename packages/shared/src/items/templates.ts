@@ -669,6 +669,18 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     value: 30,
     foraDoSorteio: true,
   },
+  // O cristal do animal do Caçador que caiu (rodada 7d): leva o animal dentro, e o nome dele.
+  {
+    id: 'cristal_animal',
+    name: 'Cristal de Animal',
+    genero: 'm',
+    category: 'material',
+    desc: 'Um animal do Caçador que caiu. A Poção de Reviver o traz de volta com metade da vida; uma noite na taverna, com a vida cheia.',
+    sprite: 'materials/cristal_animal.png',
+    base: {},
+    value: 1,
+    foraDoSorteio: true,
+  },
   {
     id: 'minerio',
     name: 'Minério Bruto',

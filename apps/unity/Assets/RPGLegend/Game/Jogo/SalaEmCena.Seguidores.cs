@@ -41,7 +41,7 @@ namespace RPGLegend.Game.Jogo
             var dePe = new List<Companion>();
             if (equipe != null)
                 foreach (var membro in equipe)
-                    if (membro != null && membro.Hp > 0) dePe.Add(membro);
+                    if (SegueOHeroi(membro)) dePe.Add(membro);
 
             while (_seguidores.Count < dePe.Count) _seguidores.Add(NovoSeguidor(_seguidores.Count));
             bool mudou = dePe.Count != _quantosSeguem;

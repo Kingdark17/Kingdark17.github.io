@@ -29,7 +29,7 @@ namespace RPGLegend.Game.Jogo
             int k = 0;
             for (int i = 0; i < equipe.Count; i++)
             {
-                if (equipe[i] == null || equipe[i].Hp <= 0) continue;
+                if (!SegueOHeroi(equipe[i])) continue;
                 foreach (var c in companheiros)
                     if (c.Indice == i && c.X != null && c.Y != null) _lugarNaLuta[k] = PixelDaSala(c.X.Value, c.Y.Value);
                 k++;

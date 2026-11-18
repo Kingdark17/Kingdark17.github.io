@@ -20,6 +20,11 @@
 
 import type { Companion, Hero } from '../hero/hero.js';
 import { speciesById } from '../monsters/species.js';
+import { addItem } from '../inventory/inventory.js';
+import { instantiate, type Item } from '../items/item.js';
+import { RARITIES, type Rarity } from '../items/rarity.js';
+import { templateById, type ItemTemplate } from '../items/templates.js';
+import type { Rng } from '../rng.js';
 
 /** A comida preferida de cada bicho que se doma (a espécie → o modelo da comida). */
 export const COMIDA_DO_ANIMAL: Readonly<Record<string, string>> = {
@@ -66,8 +71,10 @@ export function animaisDaEquipe(party: readonly Companion[]): Companion[] {
 }
 
 /** Quantos animais o herói tem: os da equipe e os guardados. */
-export function quantosAnimais(estado: { hero: Hero; party: readonly Companion[] }): number {
-  return animaisDaEquipe(estado.party).length + (estado.hero.animais?.length ?? 0);
+export function quantosAnimais(estado: { hero: Hero; party: readonly Companion[]; inventory?: readonly Item[] }): number {
+  // O caído em cristal na mochila (rodada 7d) continua sendo dele.
+  const cristais = (estado.inventory ?? []).filter((item) => !!item.animal).length;
+  return animaisDaEquipe(estado.party).length + (estado.hero.animais?.length ?? 0) + cristais;
 }
 
 /** A equipe sem os esqueletos e sem os animais: o que conta na vaga dos recrutas. */
@@ -189,14 +196,15 @@ export function mudarEstadoDoAnimal<T extends { hero: Hero; party: Companion[] }
   return { ...estado, party: estado.party.map(trocar), ...(guardados ? { hero: { ...estado.hero, animais: guardados.map(trocar) } } : {}) };
 }
 
-/** O animal da equipe vai pra junto dos guardados (deixa de seguir o herói). */
+/** O animal da equipe vai pra junto dos guardados (deixa de seguir o herói; se era a montaria, o herói desmonta). */
 export function guardarAnimal<T extends { hero: Hero; party: Companion[] }>(estado: T, id: string): T {
   const animal = estado.party.find((membro) => membro.animal?.id === id);
   if (!animal) return estado;
+  const hero = estado.hero.montaria === id ? semMontaria(estado.hero) : estado.hero;
   return {
     ...estado,
     party: estado.party.filter((membro) => membro !== animal),
-    hero: { ...estado.hero, animais: [...(estado.hero.animais ?? []), animal] },
+    hero: { ...hero, animais: [...(hero.animais ?? []), animal] },
   };
 }
 
@@ -208,4 +216,130 @@ export function levarAnimal<T extends { hero: Hero; party: Companion[] }>(estado
   const resto = guardados.filter((membro) => membro !== animal);
   const { animais: _antes, ...semGuardados } = estado.hero;
   return { ...estado, party: [...estado.party, animal], hero: resto.length > 0 ? { ...estado.hero, animais: resto } : semGuardados };
+}
+
+// ---------- a montaria, o cristal, reviver e soltar (rodada 7d) ----------
+
+export const REGRAS_DA_MONTARIA = {
+  /** A partir deste nível o animal vira montaria. */
+  nivel: 5,
+  /** Montado: a velocidade a mais (%) e o alcance do golpe (em blocos; a aljava ainda soma). */
+  velocidade: 20,
+  alcance: 6,
+  /** A partir do nível `nivelDaResistencia`, a montaria segura este tanto (%) do dano que o herói levaria, na vida dela. */
+  nivelDaResistencia: 8,
+  segura: 15,
+  /** A partir do nível `nivelDoDano`, o herói montado bate este tanto (%) mais forte. */
+  nivelDoDano: 10,
+  dano: 20,
+} as const;
+
+export const REGRAS_DO_CRISTAL = {
+  /** O modelo do cristal, e a poção que o desfaz. */
+  cristal: 'cristal_animal',
+  pocao: 'pot_reviver',
+  /** A Poção de Reviver traz o animal com este tanto (%) da vida máxima; a taverna, com ela cheia. */
+  vidaComPocao: 50,
+} as const;
+
+/** O herói a pé (sem o campo da montaria). */
+function semMontaria(hero: Hero): Hero {
+  const { montaria: _montaria, ...resto } = hero;
+  return resto;
+}
+
+/** O animal pode ser montado: de pé e do nível 5 em diante. */
+export function podeMontar(animal: Companion): boolean {
+  return !!animal.animal && animal.hp > 0 && animal.animal.nivel >= REGRAS_DA_MONTARIA.nivel;
+}
+
+/** A montaria do herói agora: o animal da equipe em que ele está, se ainda pode ser montado; senão `null`. */
+export function montariaDe(estado: { hero: Hero; party: readonly Companion[] }): Companion | null {
+  const id = estado.hero.montaria;
+  if (!id) return null;
+  const animal = estado.party.find((membro) => membro.animal?.id === id);
+  return animal && podeMontar(animal) ? animal : null;
+}
+
+/** Monta no animal `id` da equipe (nível 5+, de pé). */
+export function montarAnimal<T extends { hero: Hero; party: Companion[] }>(estado: T, id: string): T {
+  const animal = estado.party.find((membro) => membro.animal?.id === id);
+  if (!animal || !podeMontar(animal)) return estado;
+  return { ...estado, hero: { ...estado.hero, montaria: id } };
+}
+
+/** Desce da montaria. */
+export function desmontar<T extends { hero: Hero; party: Companion[] }>(estado: T): T {
+  return estado.hero.montaria ? { ...estado, hero: semMontaria(estado.hero) } : estado;
+}
+
+/** O cristal do animal que caiu: o modelo do cristal, com o animal dentro (a vida em 0). */
+export function cristalDoAnimal(animal: Companion, rng: Rng, now?: () => number): Item {
+  const item = instantiate(templateById(REGRAS_DO_CRISTAL.cristal) as ItemTemplate, RARITIES[0] as Rarity, now ? { rng, now } : { rng });
+  return { ...item, animal: { ...animal, hp: 0 } };
+}
+
+/**
+ * No fim da luta, cada animal caído sai da equipe e vira o cristal dele na
+ * mochila (se era a montaria, o herói desmonta).
+ */
+export function cristalizarCaidos<T extends { hero: Hero; party: Companion[]; inventory: Item[] }>(estado: T, rng: Rng, now?: () => number): { estado: T; log: string[] } {
+  const caidos = estado.party.filter((membro) => !!membro.animal && membro.hp <= 0);
+  if (caidos.length === 0) return { estado, log: [] };
+  let inventory = estado.inventory;
+  const log: string[] = [];
+  for (const animal of caidos) {
+    inventory = addItem(inventory, cristalDoAnimal(animal, rng, now));
+    log.push(`💠 ${animal.name} caiu e virou um cristal.`);
+  }
+  const montadoCaiu = caidos.some((membro) => membro.animal?.id === estado.hero.montaria);
+  return {
+    estado: { ...estado, party: estado.party.filter((membro) => !caidos.includes(membro)), inventory, ...(montadoCaiu ? { hero: semMontaria(estado.hero) } : {}) },
+    log,
+  };
+}
+
+/** A Poção de Reviver no cristal: o animal volta com metade da vida (pra equipe, se cabe; senão guardado), e os dois somem da mochila. */
+export function reviverComPocao<T extends { hero: Hero; party: Companion[]; inventory: Item[] }>(estado: T, uid: string): { estado: T; log: string[] } {
+  const cristal = estado.inventory.find((item) => item.uid === uid && !!item.animal);
+  if (!cristal) return { estado, log: [] };
+  const pocao = estado.inventory.find((item) => item.templateId === REGRAS_DO_CRISTAL.pocao);
+  if (!pocao) return { estado, log: ['Falta uma Poção de Reviver pra trazer o animal de volta.'] };
+  const animal = cristal.animal as Companion;
+  const vivo: Companion = { ...animal, hp: Math.max(1, Math.round((animal.maxHp * REGRAS_DO_CRISTAL.vidaComPocao) / 100)) };
+  const inventory = estado.inventory.filter((item) => item.uid !== cristal.uid && item.uid !== pocao.uid);
+  return { estado: juntarAnimal({ ...estado, inventory }, vivo), log: [`Você usa a Poção de Reviver: ${animal.name} volta com metade da vida.`] };
+}
+
+/** Uma noite na taverna traz todos os animais em cristal de volta, com a vida cheia. */
+export function reviverNaTaverna<T extends { hero: Hero; party: Companion[]; inventory: Item[] }>(estado: T): { estado: T; voltaram: number } {
+  const cristais = estado.inventory.filter((item) => !!item.animal);
+  if (cristais.length === 0) return { estado, voltaram: 0 };
+  let novo: T = { ...estado, inventory: estado.inventory.filter((item) => !item.animal) };
+  for (const cristal of cristais) {
+    const animal = cristal.animal as Companion;
+    novo = juntarAnimal(novo, { ...animal, hp: animal.maxHp });
+  }
+  return { estado: novo, voltaram: cristais.length };
+}
+
+/** Solta o animal `id` pra sempre: da equipe, dos guardados ou o cristal dele (se era a montaria, o herói desmonta). */
+export function soltarAnimal<T extends { hero: Hero; party: Companion[]; inventory: Item[] }>(estado: T, id: string): T {
+  const dele = (membro: Companion) => membro.animal?.id === id;
+  const naMochila = estado.inventory.some((item) => !!item.animal && dele(item.animal));
+  const naEquipe = estado.party.some(dele);
+  const guardado = (estado.hero.animais ?? []).some(dele);
+  if (!naMochila && !naEquipe && !guardado) return estado;
+  let hero = estado.hero.montaria === id ? semMontaria(estado.hero) : estado.hero;
+  if (guardado) {
+    const resto = (hero.animais ?? []).filter((membro) => !dele(membro));
+    const { animais: _antes, ...semGuardados } = hero;
+    hero = resto.length > 0 ? { ...hero, animais: resto } : semGuardados;
+  }
+  return {
+    ...estado,
+    hero,
+    party: naEquipe ? estado.party.filter((membro) => !dele(membro)) : estado.party,
+    inventory: naMochila ? estado.inventory.filter((item) => !(item.animal && dele(item.animal))) : estado.inventory,
+  };
 }

@@ -22,6 +22,7 @@
 
 import { idDaClasse, type IdentidadeDeClasse } from './catalog.js';
 import { aljavaNoArco, comDoisLeques, comOChapeu, naMao, REGRAS_DAS_ALJAVAS, REGRAS_DAS_ARMAS_NOVAS } from '../items/pecas-secretas.js';
+import { REGRAS_DA_MONTARIA } from '../combat/animais.js';
 import {
   idDoEstilo,
   REGRAS_DA_AGUA,
@@ -93,6 +94,8 @@ export function ataqueDasMaos(quem: QuemLuta & { level?: number }): number {
 
 export interface QuemLuta extends QuemTemEstilo {
   equip?: { arma?: { templateId: string } | null; secundaria?: { templateId: string } | null; acessorio?: { templateId: string } | null } | null;
+  /** O Caçador montado (rodada 7d): o alcance vira o da montaria. */
+  montaria?: string;
 }
 
 /** Os números da classe do herói; sem classe (ou uma que o texto não traz), os do padrão. */
@@ -108,6 +111,8 @@ export function alcanceDoHeroi(quem: QuemLuta): number {
 
 /** O alcance da classe e do estilo, sem o que a peça nova soma (`alcanceDaArma`). */
 function alcanceSemAPeca(quem: QuemLuta): number {
+  // Montado (rodada 7d), o alcance é o da montaria.
+  if (quem.montaria) return REGRAS_DA_MONTARIA.alcance;
   const id = idDaClasse(quem);
   const arma = quem.equip?.arma?.templateId ?? '';
   if (id === 'barbaro') return ALCANCE_DO_BARBARO[arma] ?? (CLASSES_DE_LUTA.barbaro as ClasseDeLuta).alcance;

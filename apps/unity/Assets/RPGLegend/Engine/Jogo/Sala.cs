@@ -150,11 +150,11 @@ namespace RPGLegend.Engine
                     if (estado.Hero.Gold < preco)
                         return ComAviso(estado, "🍺", "Taverna", "A noite custa " + Js.NumberToString(preco) + " de ouro, e você não tem o bastante.", "door");
                     var descanso = City.RestAtTavern(estado.Hero, estado.Party);
-                    var descansado = estado.Clone();
-                    descansado.Hero = descanso.Hero;
-                    descansado.Party = descanso.Party;
+                    // Os animais do Caçador em cristal voltam com a vida cheia (rodada 7d).
+                    var comAnimais = Animais.ReviverNaTaverna(new HeroiEquipeMochila { Hero = descanso.Hero, Party = descanso.Party, Inventory = estado.Inventory });
+                    var descansado = Animais.NoEstado(estado, comAnimais.Estado);
                     return ComAviso(descansado, "🍺", "Taverna",
-                        "Você paga " + Js.NumberToString(preco) + " de ouro e descansa por uma noite. Vida e mana totalmente restauradas.", "door");
+                        "Você paga " + Js.NumberToString(preco) + " de ouro e descansa por uma noite. Vida e mana totalmente restauradas." + (comAnimais.Voltaram > 0 ? " Os animais em cristal voltam com a vida cheia." : ""), "door");
                 }
                 case "shop":
                     return ComTela(estado, new TelaAberta { Tipo = "loja", Loja = Lojas.AbrirLoja(estado, ShopKinds.Shop, rng, now, app) }, "door");

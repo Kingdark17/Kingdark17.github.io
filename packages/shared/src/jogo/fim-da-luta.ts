@@ -15,7 +15,7 @@
  */
 
 import { FIM_DOS_ESQUELETOS, liberarMagia, semInvocados, semInvocadosCaidos, temInvocadoCaido } from '../combat/invocacao.js';
-import { contarBatalha } from '../combat/animais.js';
+import { contarBatalha, cristalizarCaidos } from '../combat/animais.js';
 import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from '../combat/monster-state.js';
 import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, isCleared, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
 import type { DungeonCell } from '../dungeon/generate.js';
@@ -199,8 +199,14 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
   hero = vitoria.hero;
   if (vitoria.leveledUp) log.push(maestriaSubiu(hero, vitoria.level));
 
+  // O animal do Caçador que caiu vira o cristal dele na mochila (rodada 7d).
+  const cristais = cristalizarCaidos({ hero, party, inventory }, rng, now);
+  hero = cristais.estado.hero;
+  inventory = cristais.estado.inventory;
+  log.push(...cristais.log);
+
   const limpo = substituirCelulaAtual(
-    { ...estado, hero: { ...hero, buffs: {} }, party, inventory, quests },
+    { ...estado, hero: { ...hero, buffs: {} }, party: cristais.estado.party, inventory, quests },
     { ...sala, beaten: true, bonusTreasure: undefined },
   );
 
@@ -273,7 +279,7 @@ function despedirTemporarios(party: readonly Companion[]): { party: Companion[];
  * disso leva 10% do ouro (no máximo 500) e um item comum ou incomum que não
  * esteja equipado. O grupo volta pra cidade com 30% da vida.
  */
-export function perderLuta(estado: EstadoNaMasmorra, rng: Rng = defaultRng): PassoDaLuta<EstadoNaCidade> {
+export function perderLuta(estado: EstadoNaMasmorra, rng: Rng = defaultRng, now?: () => number): PassoDaLuta<EstadoNaCidade> {
   const log: string[] = [];
 
   let hero = estado.hero;
@@ -292,8 +298,13 @@ export function perderLuta(estado: EstadoNaMasmorra, rng: Rng = defaultRng): Pas
     log.push('A proteção de iniciante preservou seus itens e seu ouro.');
   }
 
+  // O animal do Caçador que caiu vira o cristal dele na mochila (rodada 7d), antes de o grupo levantar.
+  const cristais = cristalizarCaidos({ hero, party: estado.party, inventory }, rng, now);
+  hero = cristais.estado.hero;
+  inventory = cristais.estado.inventory;
+  log.push(...cristais.log);
   const revivido: Hero = { ...hero, hp: Math.max(1, Math.floor(hero.maxHp * 0.3)), buffs: {} };
-  const equipe = semInvocados(estado.party).map((membro) => ({ ...membro, hp: Math.max(1, Math.floor(membro.maxHp * 0.3)) }));
+  const equipe = semInvocados(cristais.estado.party).map((membro) => ({ ...membro, hp: Math.max(1, Math.floor(membro.maxHp * 0.3)) }));
   log.push('Você foi derrotado! O grupo retorna à cidade inicial.');
 
   return { estado: voltarParaCidade({ ...estado, hero: revivido, party: equipe, inventory }), log };

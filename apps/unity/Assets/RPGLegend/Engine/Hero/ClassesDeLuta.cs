@@ -318,8 +318,9 @@ namespace RPGLegend.Engine
         /// estilos do Monge (o chute vai longe, a concentração dá +1). <paramref name="estilo"/> é o estilo ativo
         /// (<see cref="Estilos.IdDoEstilo(Hero)"/>).
         /// </summary>
-        public static double AlcanceDoHeroi(string classId, string className, string arma, string estilo = null, string secundaria = null) =>
-            AlcanceSemAPeca(classId, className, arma, estilo) + AlcanceDaArma(classId, className, arma, secundaria);
+        public static double AlcanceDoHeroi(string classId, string className, string arma, string estilo = null, string secundaria = null, string montaria = null) =>
+            // Montado (rodada 7d), o alcance é o da montaria (a aljava ainda soma).
+            (montaria != null ? Animais.Montaria.Alcance : AlcanceSemAPeca(classId, className, arma, estilo)) + AlcanceDaArma(classId, className, arma, secundaria);
 
         /// <summary>TS: alcanceSemAPeca — o alcance da classe e do estilo, sem o que a peça nova soma.</summary>
         private static double AlcanceSemAPeca(string classId, string className, string arma, string estilo)
@@ -339,7 +340,7 @@ namespace RPGLegend.Engine
         }
 
         public static double AlcanceDoHeroi(Hero hero) =>
-            AlcanceDoHeroi(hero.ClassId, hero.ClassName, hero.Equip?.Get("arma")?.TemplateId, Estilos.IdDoEstilo(hero), hero.Equip?.Get("secundaria")?.TemplateId);
+            AlcanceDoHeroi(hero.ClassId, hero.ClassName, hero.Equip?.Get("arma")?.TemplateId, Estilos.IdDoEstilo(hero), hero.Equip?.Get("secundaria")?.TemplateId, hero.Montaria);
 
         /// <summary>
         /// TS: ataqueDasMaos — o ataque das mãos: só o Monge sem arma na mão principal; os outros, 0. Nível ausente

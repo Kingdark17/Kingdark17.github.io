@@ -39,7 +39,7 @@ namespace RPGLegend.Tests
             Fn(M, "alcanceDoHeroi", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
-                return N(ClassesDeLuta.AlcanceDoHeroi(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId, quem.Ativo, quem.Equip?.Get("secundaria")?.TemplateId));
+                return N(ClassesDeLuta.AlcanceDoHeroi(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId, quem.Ativo, quem.Equip?.Get("secundaria")?.TemplateId, quem.Montaria));
             });
             Fn(M, "ataqueDasMaos", (a, c) =>
             {
@@ -98,7 +98,7 @@ namespace RPGLegend.Tests
                 var m = a["monstro"];
                 return W(Animais.Domado((string)JsJson.Prop(m, "speciesId"), JsJson.ToOptionalNumber(JsJson.Prop(m, "maxHp")) ?? 0, JsJson.ToOptionalNumber(JsJson.Prop(m, "dmg")) ?? 0, (string)a["id"]));
             });
-            Fn(M, "quantosAnimais", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return N(Animais.Quantos(e.Hero, e.Party)); });
+            Fn(M, "quantosAnimais", (a, c) => { var e = R<HeroiEquipeMochila>(a["estado"]); return N(Animais.Quantos(e.Hero, e.Party, e.Inventory)); });
             Fn(M, "recrutas", (a, c) => W(Animais.Recrutas(R<System.Collections.Generic.List<Companion>>(a["party"]))));
             Fn(M, "juntarAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Juntar(e.Hero, e.Party, R<Companion>(a["animal"]))); });
             Fn(M, "nomearAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Nomear(e.Hero, e.Party, (string)a["id"], (string)a["nome"])); });
@@ -110,6 +110,18 @@ namespace RPGLegend.Tests
             Fn(M, "mudarEstadoDoAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.MudarEstado(e.Hero, e.Party, (string)a["id"], (string)a["novo"])); });
             Fn(M, "guardarAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Guardar(e.Hero, e.Party, (string)a["id"])); });
             Fn(M, "levarAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Levar(e.Hero, e.Party, (string)a["id"])); });
+            // ---------- a montaria, o cristal, reviver e soltar (rodada 7d) ----------
+            Fn(M, "podeMontar", (a, c) => W(Animais.PodeMontar(R<Companion>(a["animal"]))));
+            Fn(M, "montarAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Montar(e.Hero, e.Party, (string)a["id"])); });
+            Fn(M, "desmontar", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Desmontar(e.Hero, e.Party)); });
+            Fn(M, "montariaDe", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.MontariaDe(e.Hero, e.Party)); });
+            Fn(M, "cristalDoAnimal", (a, c) => W(Animais.CristalDoAnimal(R<Companion>(a["animal"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "cristalizarCaidos", (a, c) => W(Animais.CristalizarCaidos(R<HeroiEquipeMochila>(a["estado"]), c.RngFn, c.NowOrFail)));
+            Fn(M, "reviverComPocao", (a, c) => W(Animais.ReviverComPocao(R<HeroiEquipeMochila>(a["estado"]), (string)a["uid"])));
+            Fn(M, "reviverNaTaverna", (a, c) => W(Animais.ReviverNaTaverna(R<HeroiEquipeMochila>(a["estado"]))));
+            Fn(M, "soltarAnimal", (a, c) => W(Animais.Soltar(R<HeroiEquipeMochila>(a["estado"]), (string)a["id"])));
+            Fn(M, "podeReviver", (a, c) => W(Mochilas.PodeReviver(R<Item>(a["item"]))));
+            Fn(M, "displayName", (a, c) => W(Items.DisplayName(R<Item>(a["item"]))));
             // ---------- as armas novas (rodada 6c) ----------
             Fn(M, "alcanceDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.AlcanceDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
             Fn(M, "criticoDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.CriticoDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
@@ -325,6 +337,8 @@ namespace RPGLegend.Tests
         public double? MaxHp;
         public System.Collections.Generic.List<string> Estilos;
         public string Estilo;
+        /// <summary>O Caçador montado (rodada 7d).</summary>
+        public string Montaria;
 
         /// <summary>O estilo ativo (o idDoEstilo do TS).</summary>
         public string Ativo => RPGLegend.Engine.Estilos.IdDoEstilo(ClassId, ClassName, Estilos, Estilo);

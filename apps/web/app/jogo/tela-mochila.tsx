@@ -36,6 +36,7 @@ import {
   itemCategory,
   mesmaPeca,
   podeEquipar,
+  podeReviver,
   podeUsar,
   slotDoItem,
   usar,
@@ -232,7 +233,7 @@ function AcoesDaPeca({ mochila, item, onAgir }: Readonly<AcoesProps>) {
         </button>
       )}
 
-      {podeUsar(item) && (
+      {(podeUsar(item) || podeReviver(item)) && (
         <button type="button" className={styles.botao} onClick={() => onAgir(usar(mochila, item))}>
           Usar
         </button>

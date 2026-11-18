@@ -1,4 +1,5 @@
 import { defaultRng, pick, randomInt, type Rng } from '../rng.js';
+import type { Companion } from '../hero/hero.js';
 import { multiplicadorDoDegrau, nomeComMaterial, sortearDegrau, ULTIMO_DEGRAU } from './materiais.js';
 import { DIFFICULTIES } from '../dungeon/dungeons.js';
 import { pickRarity, RARITIES, rarityById, type Rarity, type RarityId } from './rarity.js';
@@ -56,6 +57,8 @@ export interface Item {
   tierDaRuna?: number;
   /** Numa arma, as runas engastadas, em ordem (só o app engasta). */
   runas?: RunaNaArma[];
+  /** No cristal do animal (rodada 7d, `combat/animais.ts`): o animal do Caçador que caiu, como ele estava. */
+  animal?: Companion;
   /** Numa armadura, a fortificação da Encantadora (`items/encantamentos.ts`; só o app encanta). */
   encantamento?: EncantamentoNaPeca;
   /**
@@ -120,7 +123,9 @@ export function concordar(item: Pick<Item, 'templateId'>, [m, f, mp, fp]: Formas
  * Até 2026-10 a raridade vinha antes e sempre no masculino ("Lendário
  * Espada"), herança do `items.js` do jogo antigo.
  */
-export function displayName(item: Pick<Item, 'templateId' | 'rarity' | 'degrau' | 'tierDaRuna' | 'nivelDoUnico'>): string {
+export function displayName(item: Pick<Item, 'templateId' | 'rarity' | 'degrau' | 'tierDaRuna' | 'nivelDoUnico' | 'animal'>): string {
+  // O cristal leva o nome do animal: "Cristal de Presa" (rodada 7d).
+  if (item.animal) return `Cristal de ${item.animal.name}`;
   const template = itemTemplate(item);
   // A runa leva o tier no nome: "Runa de Fogo II".
   if (template.runa) return `${template.name} ${ROMANOS[Math.min(ROMANOS.length, Math.max(1, Math.trunc(item.tierDaRuna ?? 1))) - 1]}`;

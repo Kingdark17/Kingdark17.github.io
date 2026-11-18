@@ -18,6 +18,7 @@
  */
 
 import { precoDaTaverna, restAtTavern } from '../city/city.js';
+import { reviverNaTaverna } from '../combat/animais.js';
 import { dungeonById } from '../dungeon/dungeons.js';
 import { ICONE_DO_PILAR, type DungeonCell, type DungeonTreasureBonus } from '../dungeon/generate.js';
 import { hasClass } from '../hero/hero.js';
@@ -208,9 +209,15 @@ function naCidade(estado: EstadoNaCidade, rng: Rng, now: (() => number) | undefi
         return { estado, aviso: aviso('🍺', 'Taverna', `A noite custa ${preco} de ouro, e você não tem o bastante.`), tela: null, som: 'door' };
       }
       const descanso = restAtTavern(estado.hero, estado.party);
+      // Os animais do Caçador em cristal voltam com a vida cheia (rodada 7d).
+      const comAnimais = reviverNaTaverna({ ...estado, hero: descanso.hero, party: descanso.party });
       return {
-        estado: { ...estado, hero: descanso.hero, party: descanso.party },
-        aviso: aviso('🍺', 'Taverna', `Você paga ${preco} de ouro e descansa por uma noite. Vida e mana totalmente restauradas.`),
+        estado: comAnimais.estado,
+        aviso: aviso(
+          '🍺',
+          'Taverna',
+          `Você paga ${preco} de ouro e descansa por uma noite. Vida e mana totalmente restauradas.${comAnimais.voltaram > 0 ? ' Os animais em cristal voltam com a vida cheia.' : ''}`,
+        ),
         tela: null,
         som: 'door',
       };

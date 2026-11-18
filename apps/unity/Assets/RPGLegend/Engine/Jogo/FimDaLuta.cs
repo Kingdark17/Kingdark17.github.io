@@ -236,11 +236,17 @@ namespace RPGLegend.Engine
             hero = vitoria.Hero;
             if (vitoria.LeveledUp) log.Add(Maestria.MaestriaSubiu(hero, vitoria.Level));
 
+            // O animal do Caçador que caiu vira o cristal dele na mochila (rodada 7d).
+            var cristais = Animais.CristalizarCaidos(new HeroiEquipeMochila { Hero = hero, Party = party, Inventory = inventory }, rng, now);
+            hero = cristais.Estado.Hero;
+            inventory = cristais.Estado.Inventory;
+            log.AddRange(cristais.Log);
+
             var semBuffs = hero.Clone();
             semBuffs.Buffs = new HeroBuffs();
             var comTudo = estado.Clone();
             comTudo.Hero = semBuffs;
-            comTudo.Party = party;
+            comTudo.Party = cristais.Estado.Party;
             comTudo.Inventory = inventory;
             comTudo.Quests = quests;
             var vencida = sala.Clone();
@@ -330,7 +336,7 @@ namespace RPGLegend.Engine
         /// incomum que não esteja equipado (o sorteio sai sempre, mesmo sem item). O grupo volta pra cidade com 30%
         /// da vida.
         /// </summary>
-        public static PassoDaLuta<EstadoNaCidade> PerderLuta(EstadoNaMasmorra estado, RngFn rng = null)
+        public static PassoDaLuta<EstadoNaCidade> PerderLuta(EstadoNaMasmorra estado, RngFn rng = null, Func<double> now = null)
         {
             rng = rng ?? Rng.Default;
             var log = new List<string>();
@@ -365,11 +371,16 @@ namespace RPGLegend.Engine
                 log.Add("A proteção de iniciante preservou seus itens e seu ouro.");
             }
 
+            // O animal do Caçador que caiu vira o cristal dele na mochila (rodada 7d), antes de o grupo levantar.
+            var cristais = Animais.CristalizarCaidos(new HeroiEquipeMochila { Hero = hero, Party = estado.Party ?? new List<Companion>(), Inventory = inventory }, rng, now);
+            hero = cristais.Estado.Hero;
+            inventory = cristais.Estado.Inventory;
+            log.AddRange(cristais.Log);
             var revivido = hero.Clone();
             revivido.Hp = Js.Max(1, Math.Floor(hero.MaxHp * 0.3));
             revivido.Buffs = new HeroBuffs();
             var equipe = new List<Companion>();
-            foreach (var membro in Invocacao.SemInvocados(estado.Party ?? new List<Companion>()))
+            foreach (var membro in Invocacao.SemInvocados(cristais.Estado.Party))
             {
                 var voltou = membro.Clone();
                 voltou.Hp = Js.Max(1, Math.Floor(membro.MaxHp * 0.3));

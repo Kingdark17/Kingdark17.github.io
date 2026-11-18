@@ -37,6 +37,50 @@ namespace RPGLegend.Engine
         [JsName("COMIDAS_DOS_ANIMAIS")] public List<string> Comidas = new List<string>();
         [JsName("REGRAS_DE_DOMAR")] public RegrasDeDomar Regras;
         [JsName("REGRAS_DOS_ANIMAIS")] public RegrasDosAnimais NaLuta;
+        [JsName("REGRAS_DA_MONTARIA")] public RegrasDaMontaria Montaria;
+        [JsName("REGRAS_DO_CRISTAL")] public RegrasDoCristal Cristal;
+    }
+
+    /// <summary>TS: REGRAS_DA_MONTARIA — o animal de nível 5+ que leva o herói (rodada 7d).</summary>
+    public sealed class RegrasDaMontaria
+    {
+        public double Nivel;
+        public double Velocidade;
+        public double Alcance;
+        public double NivelDaResistencia;
+        public double Segura;
+        public double NivelDoDano;
+        public double Dano;
+    }
+
+    /// <summary>TS: REGRAS_DO_CRISTAL — o cristal do animal caído e a poção que o desfaz (rodada 7d).</summary>
+    public sealed class RegrasDoCristal
+    {
+        public string Cristal;
+        public string Pocao;
+        public double VidaComPocao;
+    }
+
+    /// <summary>O herói, a equipe e a mochila (o <c>{ hero, party, inventory }</c> do TS nas funções do cristal).</summary>
+    public sealed class HeroiEquipeMochila
+    {
+        public Hero Hero;
+        public List<Companion> Party;
+        public List<Item> Inventory;
+    }
+
+    /// <summary>TS: o retorno de cristalizarCaidos e de reviverComPocao.</summary>
+    public sealed class AnimaisComLog
+    {
+        public HeroiEquipeMochila Estado;
+        public List<string> Log;
+    }
+
+    /// <summary>TS: o retorno de reviverNaTaverna.</summary>
+    public sealed class AnimaisNaTaverna
+    {
+        public HeroiEquipeMochila Estado;
+        public double Voltaram;
     }
 
     /// <summary>TS: o retorno de contarBatalha — a equipe depois da batalha e os animais que subiram de nível.</summary>
@@ -106,8 +150,15 @@ namespace RPGLegend.Engine
             return lista;
         }
 
-        /// <summary>TS: quantosAnimais — os da equipe e os guardados.</summary>
-        public static double Quantos(Hero hero, IReadOnlyList<Companion> party) => DaEquipe(party).Count + (hero.Animais?.Count ?? 0);
+        /// <summary>TS: quantosAnimais — os da equipe, os guardados e os caídos em cristal na mochila (rodada 7d).</summary>
+        public static double Quantos(Hero hero, IReadOnlyList<Companion> party, IReadOnlyList<Item> inventory = null)
+        {
+            double cristais = 0;
+            if (inventory != null)
+                foreach (var item in inventory)
+                    if (item.Animal != null) cristais++;
+            return DaEquipe(party).Count + (hero.Animais?.Count ?? 0) + cristais;
+        }
 
         /// <summary>TS: recrutas — a equipe sem os esqueletos e sem os animais: o que conta na vaga dos recrutas.</summary>
         public static List<Companion> Recrutas(IReadOnlyList<Companion> party)
@@ -316,6 +367,8 @@ namespace RPGLegend.Engine
             var animal = party.Find(m => m.Animal != null && m.Animal.Id == id);
             if (animal == null) return new EquipeDoHeroi { Hero = hero, Party = party };
             var heroNovo = hero.Clone();
+            // Se era a montaria, o herói desmonta (rodada 7d).
+            if (hero.Montaria == id) heroNovo.Montaria = null;
             heroNovo.Animais = hero.Animais != null ? new List<Companion>(hero.Animais) : new List<Companion>();
             heroNovo.Animais.Add(animal);
             return new EquipeDoHeroi { Hero = heroNovo, Party = party.FindAll(m => !ReferenceEquals(m, animal)) };
@@ -336,5 +389,163 @@ namespace RPGLegend.Engine
         }
 
         public static T Levar<T>(T estado, string id) where T : EstadoDoJogo => ComEquipe(estado, Levar(estado.Hero, estado.Party, id));
+
+        // ---------- a montaria, o cristal, reviver e soltar (rodada 7d) ----------
+
+        public static RegrasDaMontaria Montaria => D.Montaria;
+        public static RegrasDoCristal Cristal => D.Cristal;
+
+        private static Hero SemMontaria(Hero hero)
+        {
+            var c = hero.Clone();
+            c.Montaria = null;
+            return c;
+        }
+
+        /// <summary>TS: podeMontar — de pé e do nível 5 em diante.</summary>
+        public static bool PodeMontar(Companion animal) => animal.Animal != null && animal.Hp > 0 && animal.Animal.Nivel >= Montaria.Nivel;
+
+        /// <summary>TS: montariaDe — o animal da equipe em que o herói está, se ainda pode ser montado; senão null.</summary>
+        public static Companion MontariaDe(Hero hero, IReadOnlyList<Companion> party)
+        {
+            if (hero.Montaria == null || party == null) return null;
+            foreach (var membro in party)
+                if (membro.Animal != null && membro.Animal.Id == hero.Montaria) return PodeMontar(membro) ? membro : null;
+            return null;
+        }
+
+        public static Companion MontariaDe(EstadoDoJogo estado) => MontariaDe(estado.Hero, estado.Party);
+
+        /// <summary>TS: montarAnimal — no animal da equipe (nível 5+, de pé).</summary>
+        public static EquipeDoHeroi Montar(Hero hero, List<Companion> party, string id)
+        {
+            var animal = party.Find(m => m.Animal != null && m.Animal.Id == id);
+            if (animal == null || !PodeMontar(animal)) return new EquipeDoHeroi { Hero = hero, Party = party };
+            var novo = hero.Clone();
+            novo.Montaria = id;
+            return new EquipeDoHeroi { Hero = novo, Party = party };
+        }
+
+        public static T Montar<T>(T estado, string id) where T : EstadoDoJogo => ComEquipe(estado, Montar(estado.Hero, estado.Party, id));
+
+        /// <summary>TS: desmontar.</summary>
+        public static EquipeDoHeroi Desmontar(Hero hero, List<Companion> party) =>
+            new EquipeDoHeroi { Hero = hero.Montaria != null ? SemMontaria(hero) : hero, Party = party };
+
+        public static T Desmontar<T>(T estado) where T : EstadoDoJogo => ComEquipe(estado, Desmontar(estado.Hero, estado.Party));
+
+        /// <summary>TS: cristalDoAnimal — o modelo do cristal, com o animal dentro (a vida em 0).</summary>
+        public static Item CristalDoAnimal(Companion animal, RngFn rng, System.Func<double> now = null)
+        {
+            var item = Items.Instantiate(ItemTemplates.ById(Cristal.Cristal), Rarities.All[0], rng, now);
+            var dentro = animal.Clone();
+            dentro.Hp = 0;
+            item.Animal = dentro;
+            return item;
+        }
+
+        /// <summary>TS: cristalizarCaidos — no fim da luta, o animal caído sai da equipe e vira o cristal dele (a montaria caída desmonta).</summary>
+        public static AnimaisComLog CristalizarCaidos(HeroiEquipeMochila estado, RngFn rng, System.Func<double> now = null)
+        {
+            var caidos = estado.Party.FindAll(m => m.Animal != null && m.Hp <= 0);
+            if (caidos.Count == 0) return new AnimaisComLog { Estado = estado, Log = new List<string>() };
+            var inventory = estado.Inventory;
+            var log = new List<string>();
+            foreach (var animal in caidos)
+            {
+                inventory = Inventory.AddItem(inventory, CristalDoAnimal(animal, rng, now));
+                log.Add("💠 " + Js.Str(animal.Name) + " caiu e virou um cristal.");
+            }
+            bool montadoCaiu = caidos.Exists(m => m.Animal.Id == estado.Hero.Montaria);
+            return new AnimaisComLog
+            {
+                Estado = new HeroiEquipeMochila
+                {
+                    Hero = montadoCaiu ? SemMontaria(estado.Hero) : estado.Hero,
+                    Party = estado.Party.FindAll(m => !caidos.Contains(m)),
+                    Inventory = inventory,
+                },
+                Log = log,
+            };
+        }
+
+        /// <summary>TS: reviverComPocao — o animal volta com metade da vida, e o cristal e a poção somem da mochila.</summary>
+        public static AnimaisComLog ReviverComPocao(HeroiEquipeMochila estado, string uid)
+        {
+            var cristal = estado.Inventory.Find(i => i.Uid == uid && i.Animal != null);
+            if (cristal == null) return new AnimaisComLog { Estado = estado, Log = new List<string>() };
+            var pocao = estado.Inventory.Find(i => i.TemplateId == Cristal.Pocao);
+            if (pocao == null) return new AnimaisComLog { Estado = estado, Log = new List<string> { "Falta uma Poção de Reviver pra trazer o animal de volta." } };
+            var animal = cristal.Animal;
+            var vivo = animal.Clone();
+            vivo.Hp = Js.Max(1, Js.Round(animal.MaxHp * Cristal.VidaComPocao / 100));
+            var inventory = estado.Inventory.FindAll(i => i.Uid != cristal.Uid && i.Uid != pocao.Uid);
+            var junto = Juntar(estado.Hero, estado.Party, vivo);
+            return new AnimaisComLog
+            {
+                Estado = new HeroiEquipeMochila { Hero = junto.Hero, Party = junto.Party, Inventory = inventory },
+                Log = new List<string> { "Você usa a Poção de Reviver: " + Js.Str(animal.Name) + " volta com metade da vida." },
+            };
+        }
+
+        /// <summary>TS: reviverNaTaverna — todos os animais em cristal voltam com a vida cheia.</summary>
+        public static AnimaisNaTaverna ReviverNaTaverna(HeroiEquipeMochila estado)
+        {
+            var cristais = estado.Inventory.FindAll(i => i.Animal != null);
+            if (cristais.Count == 0) return new AnimaisNaTaverna { Estado = estado, Voltaram = 0 };
+            var hero = estado.Hero;
+            var party = estado.Party;
+            foreach (var cristal in cristais)
+            {
+                var vivo = cristal.Animal.Clone();
+                vivo.Hp = cristal.Animal.MaxHp;
+                var junto = Juntar(hero, party, vivo);
+                hero = junto.Hero;
+                party = junto.Party;
+            }
+            return new AnimaisNaTaverna
+            {
+                Estado = new HeroiEquipeMochila { Hero = hero, Party = party, Inventory = estado.Inventory.FindAll(i => i.Animal == null) },
+                Voltaram = cristais.Count,
+            };
+        }
+
+        /// <summary>TS: soltarAnimal — pra sempre: da equipe, dos guardados ou o cristal dele (a montaria solta desmonta).</summary>
+        public static HeroiEquipeMochila Soltar(HeroiEquipeMochila estado, string id)
+        {
+            bool Dele(Companion m) => m.Animal != null && m.Animal.Id == id;
+            bool naMochila = estado.Inventory.Exists(i => i.Animal != null && Dele(i.Animal));
+            bool naEquipe = estado.Party.Exists(Dele);
+            bool guardado = estado.Hero.Animais != null && estado.Hero.Animais.Exists(Dele);
+            if (!naMochila && !naEquipe && !guardado) return estado;
+            var hero = estado.Hero.Montaria == id ? SemMontaria(estado.Hero) : estado.Hero;
+            if (guardado)
+            {
+                var resto = hero.Animais.FindAll(m => !Dele(m));
+                hero = ReferenceEquals(hero, estado.Hero) ? hero.Clone() : hero;
+                hero.Animais = resto.Count > 0 ? resto : null;
+            }
+            return new HeroiEquipeMochila
+            {
+                Hero = hero,
+                Party = naEquipe ? estado.Party.FindAll(m => !Dele(m)) : estado.Party,
+                Inventory = naMochila ? estado.Inventory.FindAll(i => !(i.Animal != null && Dele(i.Animal))) : estado.Inventory,
+            };
+        }
+
+        /// <summary>O herói, a equipe e a mochila do estado; e de volta.</summary>
+        public static HeroiEquipeMochila DoEstado(EstadoDoJogo estado) => new HeroiEquipeMochila { Hero = estado.Hero, Party = estado.Party, Inventory = estado.Inventory };
+
+        public static T NoEstado<T>(T estado, HeroiEquipeMochila partes) where T : EstadoDoJogo
+        {
+            if (ReferenceEquals(partes.Hero, estado.Hero) && ReferenceEquals(partes.Party, estado.Party) && ReferenceEquals(partes.Inventory, estado.Inventory)) return estado;
+            var copia = (T)((EstadoDoJogo)estado).Clone();
+            copia.Hero = partes.Hero;
+            copia.Party = partes.Party;
+            copia.Inventory = partes.Inventory;
+            return copia;
+        }
+
+        public static T Soltar<T>(T estado, string id) where T : EstadoDoJogo => NoEstado(estado, Soltar(DoEstado(estado), id));
     }
 }

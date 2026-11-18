@@ -119,6 +119,8 @@ namespace RPGLegend.Engine
         /// </summary>
         public static string DisplayName(Item item)
         {
+            // O cristal leva o nome do animal: "Cristal de Presa" (rodada 7d).
+            if (item.Animal != null) return "Cristal de " + Js.Str(item.Animal.Name);
             var template = TemplateOf(item);
             // A runa leva o tier no nome: "Runa de Fogo II".
             if (Js.Truthy(template.Runa))

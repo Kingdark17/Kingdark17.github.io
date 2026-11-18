@@ -70,8 +70,17 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: usar — bebe a poção e diz o que recuperou.</summary>
+        /// <summary>TS: podeReviver — o cristal do animal do Caçador: o usar gasta a Poção de Reviver nele (rodada 7d).</summary>
+        public static bool PodeReviver(Item item) => item.Animal != null;
+
         public static Mochila Usar(Mochila mochila, Item item)
         {
+            // O cristal do animal: a Poção de Reviver o desfaz (rodada 7d).
+            if (PodeReviver(item))
+            {
+                var revivido = Animais.ReviverComPocao(Animais.DoEstado(mochila.Estado), item.Uid);
+                return new Mochila { Estado = Animais.NoEstado(mochila.Estado, revivido.Estado), Log = revivido.Log };
+            }
             var resultado = Inventory.ConsumeItem(mochila.Estado.Hero, mochila.Estado.Inventory, item);
             if (resultado.Outcome.Kind == ConsumeItemOutcome.KindNoEffect) return ComLog(mochila.Estado, Items.DisplayName(item) + " não faz nada agora.");
 

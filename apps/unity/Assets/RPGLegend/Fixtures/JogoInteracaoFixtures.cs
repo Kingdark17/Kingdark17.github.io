@@ -37,7 +37,7 @@ namespace RPGLegend.Tests
             Fn(M, "pagarAbate", (a, c) => W(FimDaLuta.PagarAbate(R<EstadoNaMasmorra>(a["estado"]), R<CombatMonsterView>(a["abatido"]))));
             Fn(M, "limparSala", (a, c) => W(FimDaLuta.LimparSala(R<EstadoNaMasmorra>(a["estado"]), R<CombatMonsterView>(a["abatido"]), c.RngFn, c.NowOrFail,
                 JsJson.Truthy(a["app"]))));
-            Fn(M, "perderLuta", (a, c) => W(FimDaLuta.PerderLuta(R<EstadoNaMasmorra>(a["estado"]), c.RngFn)));
+            Fn(M, "perderLuta", (a, c) => W(FimDaLuta.PerderLuta(R<EstadoNaMasmorra>(a["estado"]), c.RngFn, c.NowOrFail)));
 
             // O chefe final e o prêmio de quem zera.
             Fn(M, "poderDaVez", (a, c) => W(ChefeFinal.PoderDaVez(R<CombatMonster>(a["monstro"]))));

@@ -809,8 +809,25 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   nível, lutas, vida e estado, e troca o estado, dá nome, guarda e leva de
   volta (`mudarEstadoDoAnimal`, `guardarAnimal`, `levarAnimal`; seguem até 2).
   Na dupla o animal vai pro parceiro com o emoji da espécie.
-  Falta: 7d (montaria, cristal do animal morto, reviver, soltar) do Caçador,
-  e o tratador na cidade.
+  **7d feita** (regras em `REGRAS_DA_MONTARIA` e `REGRAS_DO_CRISTAL`): a
+  **montaria** fica no herói (`Hero.montaria`, o id do animal da equipe;
+  `montarAnimal`/`desmontar` na janela ANIMAIS, só do nível 5 em diante e de
+  pé; `montariaDe` confere). Montado: a montaria não entra na arena como
+  lutador, o alcance vira 6 (`alcanceDoHeroi`; a aljava ainda soma), +20% de
+  velocidade; do nível 8, ela segura 15% de cada golpe no herói, na vida
+  dela (`ferirMontaria`; zerou, ele desmonta); do nível 10, +20% de dano. No
+  app o herói vai desenhado em cima do emoji do bicho
+  (`SalaEmCena.DefinirMontaria`), e o bicho sai da fila. O **cristal**: no fim
+  da luta (vitória e derrota, `cristalizarCaidos` em `limparSala` e
+  `perderLuta`, que agora recebe o relógio) o animal caído vira o item
+  `cristal_animal` com ele dentro (`Item.animal`; `displayName` dá "Cristal
+  de <nome>"; conta entre os 4); o USAR da mochila (`podeReviver`, no site e
+  no app) gasta a Poção de Reviver e o traz com metade da vida
+  (`reviverComPocao`), e a taverna traz todos com a vida cheia
+  (`reviverNaTaverna`). **Soltar** (`soltarAnimal`) é na janela ANIMAIS, com
+  confirmação, e vale pro da equipe, o guardado e o cristal.
+  Falta do Caçador: o tratador na cidade (comprar filhotes; o lugar no mapa
+  e a arte por decidir).
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

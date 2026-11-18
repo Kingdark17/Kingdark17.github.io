@@ -13,6 +13,7 @@
  * continua marcada como equipada na mochila (ou o contrário).
  */
 
+import { reviverComPocao } from '../combat/animais.js';
 import { ATRIBUTO_MAXIMO, cabeNaMaoLivre, equipItem, equippedSlot, isOffhandEligible, spendAttrPoint, unequipItem, type Hero } from '../hero/hero.js';
 import { EQUIP_SLOTS, type AttrKey, type EquipSlot } from '../hero/stats.js';
 import { anotarUso } from '../hero/treino.js';
@@ -35,6 +36,11 @@ export function abrirMochila(estado: EstadoDoJogo): Mochila {
 export function podeEquipar(item: Item): boolean {
   const categoria = itemCategory(item);
   return categoria === 'arma' || categoria === 'armadura' || categoria === 'acessorio';
+}
+
+/** O cristal do animal do Caçador (rodada 7d): o "usar" gasta a Poção de Reviver nele. */
+export function podeReviver(item: Item): boolean {
+  return !!item.animal;
 }
 
 export function podeUsar(item: Item): boolean {
@@ -85,6 +91,11 @@ export function desequipar(mochila: Mochila, slot: EquipSlot): Mochila {
 }
 
 export function usar(mochila: Mochila, item: Item): Mochila {
+  // O cristal do animal: a Poção de Reviver o desfaz (rodada 7d).
+  if (podeReviver(item)) {
+    const revivido = reviverComPocao(mochila.estado, item.uid);
+    return { ...mochila, estado: revivido.estado, log: revivido.log };
+  }
   const resultado = consumeItem(mochila.estado.hero, mochila.estado.inventory, item);
   if (resultado.outcome.kind === 'no_effect') return { ...mochila, log: [`${displayName(item)} não faz nada agora.`] };
 

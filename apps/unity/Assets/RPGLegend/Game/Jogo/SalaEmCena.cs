@@ -227,6 +227,34 @@ namespace RPGLegend.Game.Jogo
             for (int i = 0; i < costas.Count; i++) PorCamadaDoMini(NovaCamada(_deCostas, i), costas[i]);
         }
 
+        /// <summary>A montaria do Caçador (rodada 7d): o id do animal e o emoji dele, desenhado embaixo do herói.</summary>
+        private string _montaria, _emojiDaMontaria;
+        private SpriteRenderer _corpoDaMontaria;
+
+        /// <summary>O herói monta (o emoji do bicho embaixo, ele um pouco acima) ou desce (id null).</summary>
+        public void DefinirMontaria(string id, string emoji)
+        {
+            if (id == _montaria && emoji == _emojiDaMontaria) return;
+            _montaria = id;
+            _emojiDaMontaria = emoji;
+            if (_corpoDaMontaria == null)
+            {
+                var objeto = new GameObject("Montaria");
+                objeto.transform.SetParent(_boneco, false);
+                objeto.transform.localPosition = new Vector3(0f, 0f, 0.002f);
+                _corpoDaMontaria = objeto.AddComponent<SpriteRenderer>();
+            }
+            bool montado = id != null;
+            _corpoDaMontaria.gameObject.SetActive(montado);
+            if (montado) PorNoPe(_corpoDaMontaria, EmojiDoSistema.Sprite(string.IsNullOrEmpty(emoji) ? "🐾" : emoji), Lado * 1.2f);
+            float acima = montado ? Lado * 0.55f : 0f;
+            _deFrente.localPosition = new Vector3(0f, acima, 0f);
+            _deCostas.localPosition = new Vector3(0f, acima, 0f);
+        }
+
+        /// <summary>Quem anda na fila atrás do herói: os de pé da equipe, menos a montaria (ela leva o herói).</summary>
+        private bool SegueOHeroi(Companion membro) => membro != null && membro.Hp > 0 && (membro.Animal == null || membro.Animal.Id != _montaria);
+
         /// <summary>Uma camada do boneco: as de cima um fio mais perto da câmera, que é o que as ordena (a ordem de desenho é a mesma pra todas).</summary>
         private SpriteRenderer NovaCamada(Transform lado, int indice)
         {

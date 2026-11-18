@@ -79,7 +79,17 @@ import { heroiNaLuta, lugaresNaLuta } from '../jogo/luta-no-mapa.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
 import { aljavaNoArco, REGRAS_DAS_ALJAVAS, REGRAS_DAS_ARMAS_NOVAS } from '../items/pecas-secretas.js';
-import { animalDomado, comidaPreferida, estadoDoAnimal, juntarAnimal, quantosAnimais, REGRAS_DE_DOMAR, REGRAS_DOS_ANIMAIS } from '../combat/animais.js';
+import {
+  animalDomado,
+  comidaPreferida,
+  estadoDoAnimal,
+  juntarAnimal,
+  montariaDe,
+  quantosAnimais,
+  REGRAS_DA_MONTARIA,
+  REGRAS_DE_DOMAR,
+  REGRAS_DOS_ANIMAIS,
+} from '../combat/animais.js';
 import { removeByUid } from '../inventory/inventory.js';
 import { templateById } from '../items/templates.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
@@ -733,8 +743,11 @@ export function abrirLuta(
   const heroiNaSala = heroiNaLuta(chegada, formato);
   const paredes = paredesDaSala(preparada.estado.masmorra.dungeon);
   let comCorpo = 0;
+  // A montaria do Caçador (rodada 7d) não luta sozinha: ela leva o herói.
+  const montada = montariaDe(preparada.estado)?.animal?.id;
   preparada.estado.party.forEach((membro, indice) => {
     if (membro.hp <= 0) return;
+    if (montada !== undefined && membro.animal?.id === montada) return;
     const c: CompanheiroNaArena = { indice, tempo: CADENCIA_DO_COMPANHEIRO / 2 + indice * 10 };
     // O lacaio do Necromante entra ao lado do herói (rodada 4b).
     if (membro.invocado || membro.animal) Object.assign(c, lugarAoLado(heroiNaSala, comCorpo++, formato, paredes));
@@ -1473,6 +1486,7 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     (l.arena.revestido ? REGRAS_DO_MONGE.danoRevestido : 0) +
     // O disparo do Mago com elemento (rodada 5c): a rocha, o Arcano, a orbe.
     (estilo === 'magic' && idDaClasse(estado.hero) === 'mago' ? danoDoMago(estado.hero, contadores(l).golpes ?? 0) : 0) +
+    danoMontado(estado) +
     aMais;
   const daClasse = criticoDaClasse(estado.hero);
   // O crítico a mais: o da moral, o do estilo e o do leque (rodada 6c).
@@ -3119,7 +3133,9 @@ function moverHeroi(l: Luta, entrada: EntradaDaLuta): Walker {
   // E a ventania do Vento (rodada 5c).
   const ventania = (contadores(l).ventania ?? 0) > 0 ? REGRAS_DO_VENTO.velocidade : 0;
   // Os dois leques do Monge (rodada 6c).
-  const daMais = daMoral + fundas + ventania + velocidadeDaArma(masmorra(l).hero);
+  // E a montaria do Caçador (rodada 7d).
+  const montado = montariaDe(masmorra(l)) ? REGRAS_DA_MONTARIA.velocidade : 0;
+  const daMais = daMoral + fundas + ventania + velocidadeDaArma(masmorra(l).hero) + montado;
   const velocidade = daMais > 0 ? Math.trunc((base * (100 + daMais)) / 100) : base;
   return walkTick(planta, heroi, { x: entrada.x, y: entrada.y }, velocidade).walker;
 }
@@ -3501,8 +3517,12 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   // O revestimento de ki do Monge segura parte deste golpe, e quebra.
   const revestido = !!l.arena.revestido;
   const resistencia = resistenciaDaClasse(estado.hero, c) + moral.resistencia + (revestido ? escudoDoRevestimento(estado.hero) : 0);
-  const dano = resistencia > 0 ? Math.max(1, golpe.damage - Math.floor((golpe.damage * resistencia) / 100)) : golpe.damage;
-  const ferido = resistencia > 0 ? { ...golpe.hero, hp: Math.max(0, estado.hero.hp - dano) } : golpe.hero;
+  const resistido = resistencia > 0 ? Math.max(1, golpe.damage - Math.floor((golpe.damage * resistencia) / 100)) : golpe.damage;
+  // A montaria de nível 8 em diante (rodada 7d) segura 15% do golpe, na vida dela.
+  const montaria = montariaDe(estado);
+  const segura = montaria && (montaria.animal?.nivel ?? 0) >= REGRAS_DA_MONTARIA.nivelDaResistencia ? Math.trunc((resistido * REGRAS_DA_MONTARIA.segura) / 100) : 0;
+  const dano = resistido - segura;
+  const ferido = resistencia > 0 || segura > 0 ? { ...golpe.hero, hp: Math.max(0, estado.hero.hp - dano) } : golpe.hero;
   let hero = noEscudo(l, estado.hero.hp, ferido, dano);
   // Os pesados (os Brutamontes) também quebram osso, como o chefe já quebra (doc do Breno de 2026-11-15; só aqui).
   let quebrou: Membro | undefined = golpe.quebrou;
@@ -3520,6 +3540,7 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   hero = pisoDaFe(l, estado.hero.hp, hero);
   anotarDanoLevado(l, dano);
   l.estado = gravarMonstro({ ...estado, hero }, indice, golpe.monster);
+  if (segura > 0 && montaria) ferirMontaria(l, montaria, segura);
   contar(l, { tipo: 'som', som: 'hit' });
   if (revestido) {
     delete l.arena.revestido;
@@ -3537,6 +3558,27 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   apanhou(l, indice, dano, hero.hp > 0);
   if (l.fim) return;
   if (hero.hp <= 0) cair(l);
+}
+
+/** O herói montado na montaria de nível 10 (rodada 7d) bate 20% mais forte. */
+function danoMontado(estado: EstadoNaMasmorra): number {
+  const montaria = montariaDe(estado);
+  return montaria && (montaria.animal?.nivel ?? 0) >= REGRAS_DA_MONTARIA.nivelDoDano ? REGRAS_DA_MONTARIA.dano : 0;
+}
+
+/** A montaria segurou parte do golpe na vida dela; zerou, ela cai e o herói desmonta (vira cristal no fim da luta). */
+function ferirMontaria(l: Luta, montaria: Companion, dano: number): void {
+  const estado = masmorra(l);
+  const id = montaria.animal?.id;
+  const hp = Math.max(0, montaria.hp - dano);
+  const party = estado.party.map((membro) => (membro.animal?.id === id ? { ...membro, hp } : membro));
+  if (hp > 0) {
+    l.estado = { ...estado, party };
+    return;
+  }
+  const { montaria: _montaria, ...aPe } = estado.hero;
+  l.estado = { ...estado, party, hero: aPe };
+  contar(l, { tipo: 'aviso', texto: `🐾 ${montaria.name} caiu: você desmonta` });
 }
 
 /** O herói com estes ferimentos (os de antes do golpe); sem nenhum, sem o campo. */
@@ -4015,7 +4057,7 @@ function cair(l: Luta): void {
 }
 
 function perder(l: Luta): void {
-  const perdida = perderLuta(masmorra(l), l.rng);
+  const perdida = perderLuta(masmorra(l), l.rng, l.now);
   l.estado = perdida.estado;
   l.fim = 'derrota';
   l.arena.evento = null;

@@ -32,6 +32,8 @@ namespace RPGLegend.Engine
         public List<RunaNaArma> Runas;
         /// <summary>Numa armadura, a fortificação da Encantadora (<see cref="Encantamentos"/>; só o app encanta).</summary>
         public EncantamentoNaPeca Encantamento;
+        /// <summary>No cristal do animal (rodada 7d, <see cref="Animais"/>): o animal do Caçador que caiu, como ele estava.</summary>
+        public Companion Animal;
         /// <summary>Num acessório único (<see cref="AcessoriosUnicos"/>), a versão: 1 Normal, 2 Difícil, 3 Pesadelo. Ausente, 1.</summary>
         public double? NivelDoUnico;
 

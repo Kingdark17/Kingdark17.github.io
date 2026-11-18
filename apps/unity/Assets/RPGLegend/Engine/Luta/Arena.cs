@@ -592,9 +592,12 @@ namespace RPGLegend.Engine
             var heroiNaSala = LutaNoMapa.HeroiNaLuta(chegada, formato);
             var paredes = ArteDaSala.ParedesDaSala(((EstadoNaMasmorra)preparada.Estado).Masmorra.Dungeon);
             int comCorpo = 0;
+            // A montaria do Caçador (rodada 7d) não luta sozinha: ela leva o herói.
+            string montada = Animais.MontariaDe(preparada.Estado)?.Animal?.Id;
             for (int indice = 0; indice < equipe.Count; indice++)
             {
                 if (equipe[indice].Hp <= 0) continue;
+                if (montada != null && equipe[indice].Animal != null && equipe[indice].Animal.Id == montada) continue;
                 var c = new CompanheiroNaArena { Indice = indice, Tempo = D.CadenciaDoCompanheiro / 2 + indice * 10 };
                 // O lacaio do Necromante entra ao lado do herói (rodada 4b).
                 if (equipe[indice].Invocado == true || equipe[indice].Animal != null)
@@ -1491,6 +1494,7 @@ namespace RPGLegend.Engine
                 (l.Arena.Revestido == true ? CD.Monge.DanoRevestido : 0) +
                 // O disparo do Mago com elemento (rodada 5c): a rocha, o Arcano, a orbe.
                 (estilo == AttackStyles.Magic && Catalog.IdDaClasse(h.ClassId, h.ClassName) == "mago" ? ClassesDeLuta.DanoDoMago(Estilos.IdDoEstilo(h), Contadores(l).Golpes ?? 0) : 0) +
+                DanoMontado(estado) +
                 aMais;
             double? daClasse = ClassesDeLuta.CriticoDaClasse(h.ClassId, h.ClassName);
             // O crítico a mais: o da moral, o do estilo e o do leque (rodada 6c).
@@ -1953,7 +1957,9 @@ namespace RPGLegend.Engine
             // E a ventania do Vento (rodada 5c).
             double ventania = (Contadores(l).Ventania ?? 0) > 0 ? Estilos.Vento.Velocidade : 0;
             // Os dois leques do Monge (rodada 6c).
-            double daMais = daMoral + fundas + ventania + ClassesDeLuta.VelocidadeDaArma(Masmorra(l).Hero);
+            // E a montaria do Caçador (rodada 7d).
+            double montado = Animais.MontariaDe(Masmorra(l)) != null ? Animais.Montaria.Velocidade : 0;
+            double daMais = daMoral + fundas + ventania + ClassesDeLuta.VelocidadeDaArma(Masmorra(l).Hero) + montado;
             double velocidade = daMais > 0 ? Math.Truncate(base_ * (100 + daMais) / 100) : base_;
             return RoomWalk.Tick(planta, heroi, new WalkInput { X = entrada.X, Y = entrada.Y }, velocidade).Walker;
         }
@@ -2398,9 +2404,13 @@ namespace RPGLegend.Engine
             // O revestimento de ki do Monge segura parte deste golpe, e quebra.
             bool revestido = l.Arena.Revestido == true;
             double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c, Estilos.IdDoEstilo(h)) + moral.Resistencia + (revestido ? ClassesDeLuta.EscudoDoRevestimento(h) : 0);
-            double dano = resistencia > 0 ? Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * resistencia / 100)) : golpe.Damage;
+            double resistido = resistencia > 0 ? Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * resistencia / 100)) : golpe.Damage;
+            // A montaria de nível 8 em diante (rodada 7d) segura 15% do golpe, na vida dela.
+            var montaria = Animais.MontariaDe(estado);
+            double segura = montaria != null && montaria.Animal.Nivel >= Animais.Montaria.NivelDaResistencia ? Math.Truncate(resistido * Animais.Montaria.Segura / 100) : 0;
+            double dano = resistido - segura;
             var ferido = golpe.Hero;
-            if (resistencia > 0)
+            if (resistencia > 0 || segura > 0)
             {
                 ferido = golpe.Hero.Clone();
                 ferido.Hp = Js.Max(0, estado.Hero.Hp - dano);
@@ -2427,6 +2437,7 @@ namespace RPGLegend.Engine
             var comHeroi = estado.Clone();
             comHeroi.Hero = hero;
             l.Estado = FimDaLuta.GravarMonstro(comHeroi, indice, golpe.Monster);
+            if (segura > 0 && montaria != null) FerirMontaria(l, montaria, segura);
             Contar(l, Som("hit"));
             if (revestido)
             {
@@ -2682,9 +2693,44 @@ namespace RPGLegend.Engine
             Contar(l, Som("victory"));
         }
 
+        /// <summary>TS: danoMontado — montado na montaria de nível 10 (rodada 7d), o herói bate 20% mais forte.</summary>
+        private static double DanoMontado(EstadoNaMasmorra estado)
+        {
+            var montaria = Animais.MontariaDe(estado);
+            return montaria != null && montaria.Animal.Nivel >= Animais.Montaria.NivelDoDano ? Animais.Montaria.Dano : 0;
+        }
+
+        /// <summary>TS: ferirMontaria — a montaria segurou parte do golpe na vida dela; zerou, ela cai e o herói desmonta.</summary>
+        private static void FerirMontaria(Luta l, Companion montaria, double dano)
+        {
+            var estado = Masmorra(l);
+            string id = montaria.Animal.Id;
+            double hp = Js.Max(0, montaria.Hp - dano);
+            var party = new List<Companion>();
+            foreach (var membro in estado.Party)
+            {
+                if (membro.Animal == null || membro.Animal.Id != id) { party.Add(membro); continue; }
+                var ferida = membro.Clone();
+                ferida.Hp = hp;
+                party.Add(ferida);
+            }
+            var novo = estado.Clone();
+            novo.Party = party;
+            if (hp > 0)
+            {
+                l.Estado = novo;
+                return;
+            }
+            var aPe = estado.Hero.Clone();
+            aPe.Montaria = null;
+            novo.Hero = aPe;
+            l.Estado = novo;
+            Contar(l, Aviso("🐾 " + Js.Str(montaria.Name) + " caiu: você desmonta"));
+        }
+
         private static void Perder(Luta l)
         {
-            var perdida = FimDaLuta.PerderLuta(Masmorra(l), l.Rng);
+            var perdida = FimDaLuta.PerderLuta(Masmorra(l), l.Rng, l.Now);
             l.Estado = perdida.Estado;
             l.Fim = "derrota";
             l.Arena.Evento = null;

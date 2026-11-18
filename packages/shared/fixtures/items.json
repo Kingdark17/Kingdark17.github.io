@@ -744,6 +744,17 @@
           "foraDoSorteio": true
         },
         {
+          "id": "cristal_animal",
+          "name": "Cristal de Animal",
+          "genero": "m",
+          "category": "material",
+          "desc": "Um animal do Caçador que caiu. A Poção de Reviver o traz de volta com metade da vida; uma noite na taverna, com a vida cheia.",
+          "sprite": "materials/cristal_animal.png",
+          "base": {},
+          "value": 1,
+          "foraDoSorteio": true
+        },
+        {
           "id": "minerio",
           "name": "Minério Bruto",
           "genero": "m",
@@ -2376,6 +2387,17 @@
           "sprite": "materials/fruta_madura.png",
           "base": {},
           "value": 30,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "cristal_animal",
+          "name": "Cristal de Animal",
+          "genero": "m",
+          "category": "material",
+          "desc": "Um animal do Caçador que caiu. A Poção de Reviver o traz de volta com metade da vida; uma noite na taverna, com a vida cheia.",
+          "sprite": "materials/cristal_animal.png",
+          "base": {},
+          "value": 1,
           "foraDoSorteio": true
         },
         {
@@ -10322,6 +10344,165 @@
     }
   },
   {
+    "name": "instantiate: cristal_animal em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "cristal_animal",
+          "name": "Cristal de Animal",
+          "genero": "m",
+          "category": "material",
+          "desc": "Um animal do Caçador que caiu. A Poção de Reviver o traz de volta com metade da vida; uma noite na taverna, com a vida cheia.",
+          "sprite": "materials/cristal_animal.png",
+          "base": {},
+          "value": 1,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "cristal_animal_1700000000000_62706",
+          "templateId": "cristal_animal",
+          "rarity": "comum",
+          "stats": {},
+          "value": 1,
+          "equipped": false
+        },
+        {
+          "uid": "cristal_animal_1700000000000_273",
+          "templateId": "cristal_animal",
+          "rarity": "incomum",
+          "stats": {},
+          "value": 1,
+          "equipped": false
+        },
+        {
+          "uid": "cristal_animal_1700000000000_52744",
+          "templateId": "cristal_animal",
+          "rarity": "raro",
+          "stats": {},
+          "value": 2,
+          "equipped": false
+        },
+        {
+          "uid": "cristal_animal_1700000000000_98104",
+          "templateId": "cristal_animal",
+          "rarity": "epico",
+          "stats": {},
+          "value": 2,
+          "equipped": false
+        },
+        {
+          "uid": "cristal_animal_1700000000000_96836",
+          "templateId": "cristal_animal",
+          "rarity": "lendario",
+          "stats": {},
+          "value": 3,
+          "equipped": false
+        },
+        {
+          "uid": "cristal_animal_1700000000000_28110",
+          "templateId": "cristal_animal",
+          "rarity": "mitico",
+          "stats": {},
+          "value": 4,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
     "name": "instantiate: minerio em cada raridade",
     "input": {
       "fn": "instantiate",
@@ -15846,6 +16027,43 @@
         "Fruta Madura",
         "Fruta Madura",
         "Fruta Madura"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: cristal_animal",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "cristal_animal",
+          "name": "Cristal de Animal",
+          "genero": "m",
+          "category": "material",
+          "desc": "Um animal do Caçador que caiu. A Poção de Reviver o traz de volta com metade da vida; uma noite na taverna, com a vida cheia.",
+          "sprite": "materials/cristal_animal.png",
+          "base": {},
+          "value": 1,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Cristal de Animal",
+        "Cristal de Animal",
+        "Cristal de Animal",
+        "Cristal de Animal",
+        "Cristal de Animal",
+        "Cristal de Animal"
       ]
     }
   },

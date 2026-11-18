@@ -161083,6 +161083,710 @@
     }
   },
   {
+    "name": "usar: o cristal do animal com a Poção de Reviver",
+    "input": {
+      "fn": "usar",
+      "args": {
+        "mochila": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "cristal_animal_1700000000000_44873",
+                "templateId": "cristal_animal",
+                "rarity": "comum",
+                "stats": {},
+                "value": 1,
+                "equipped": false,
+                "animal": {
+                  "name": "Morcego Vampírico",
+                  "raceIcon": "🦇",
+                  "race": "Morcego Vampírico",
+                  "className": "Animal",
+                  "classIcon": "🐾",
+                  "hp": 0,
+                  "maxHp": 140,
+                  "attack": 11,
+                  "attrs": {
+                    "forca": 0,
+                    "destreza": 0,
+                    "constituicao": 0,
+                    "intelecto": 0,
+                    "sabedoria": 0,
+                    "carisma": 0
+                  },
+                  "stance": "agressiva",
+                  "ability": "Instinto",
+                  "abilityDesc": "Um animal domado pelo Caçador.",
+                  "especie": "morcego",
+                  "animal": {
+                    "id": "k3",
+                    "nivel": 1,
+                    "batalhas": 0,
+                    "vidaBase": 140,
+                    "ataqueBase": 11
+                  }
+                }
+              },
+              {
+                "uid": "pot_reviver_1700000000000_62706",
+                "templateId": "pot_reviver",
+                "rarity": "comum",
+                "stats": {
+                  "reviver": 50
+                },
+                "value": 250,
+                "equipped": false
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "start",
+                  "x": 3,
+                  "y": 3,
+                  "doors": {
+                    "N": true,
+                    "W": true,
+                    "E": true,
+                    "S": true
+                  },
+                  "visited": true,
+                  "revealed": true
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "item": {
+          "uid": "cristal_animal_1700000000000_44873",
+          "templateId": "cristal_animal",
+          "rarity": "comum",
+          "stats": {},
+          "value": 1,
+          "equipped": false,
+          "animal": {
+            "name": "Morcego Vampírico",
+            "raceIcon": "🦇",
+            "race": "Morcego Vampírico",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 0,
+            "maxHp": 140,
+            "attack": 11,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "morcego",
+            "animal": {
+              "id": "k3",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 140,
+              "ataqueBase": 11
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 70,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "k3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            }
+          ],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "Você usa a Poção de Reviver: Morcego Vampírico volta com metade da vida."
+        ]
+      }
+    }
+  },
+  {
+    "name": "usar: o cristal do animal sem a poção",
+    "input": {
+      "fn": "usar",
+      "args": {
+        "mochila": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 100,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [
+              {
+                "uid": "cristal_animal_1700000000000_44873",
+                "templateId": "cristal_animal",
+                "rarity": "comum",
+                "stats": {},
+                "value": 1,
+                "equipped": false,
+                "animal": {
+                  "name": "Morcego Vampírico",
+                  "raceIcon": "🦇",
+                  "race": "Morcego Vampírico",
+                  "className": "Animal",
+                  "classIcon": "🐾",
+                  "hp": 0,
+                  "maxHp": 140,
+                  "attack": 11,
+                  "attrs": {
+                    "forca": 0,
+                    "destreza": 0,
+                    "constituicao": 0,
+                    "intelecto": 0,
+                    "sabedoria": 0,
+                    "carisma": 0
+                  },
+                  "stance": "agressiva",
+                  "ability": "Instinto",
+                  "abilityDesc": "Um animal domado pelo Caçador.",
+                  "especie": "morcego",
+                  "animal": {
+                    "id": "k3",
+                    "nivel": 1,
+                    "batalhas": 0,
+                    "vidaBase": 140,
+                    "ataqueBase": 11
+                  }
+                }
+              }
+            ],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": null,
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "start",
+                  "x": 3,
+                  "y": 3,
+                  "doors": {
+                    "N": true,
+                    "W": true,
+                    "E": true,
+                    "S": true
+                  },
+                  "visited": true,
+                  "revealed": true
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "log": []
+        },
+        "item": {
+          "uid": "cristal_animal_1700000000000_44873",
+          "templateId": "cristal_animal",
+          "rarity": "comum",
+          "stats": {},
+          "value": 1,
+          "equipped": false,
+          "animal": {
+            "name": "Morcego Vampírico",
+            "raceIcon": "🦇",
+            "race": "Morcego Vampírico",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 0,
+            "maxHp": 140,
+            "attack": 11,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "morcego",
+            "animal": {
+              "id": "k3",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 140,
+              "ataqueBase": 11
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "cristal_animal_1700000000000_44873",
+              "templateId": "cristal_animal",
+              "rarity": "comum",
+              "stats": {},
+              "value": 1,
+              "equipped": false,
+              "animal": {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 0,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "k3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "Falta uma Poção de Reviver pra trazer o animal de volta."
+        ]
+      }
+    }
+  },
+  {
     "name": "usar: pergaminho",
     "input": {
       "fn": "usar",
@@ -219630,7 +220334,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1795011118348_55026",
+                  "uid": "pot_mana_1795026785209_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -219760,7 +220464,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1795011118348_90893",
+                  "uid": "anel_som_1795026785209_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -220049,7 +220753,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1795011118349_87912",
+                  "uid": "pot_mana_1795026785211_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -220266,7 +220970,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1795011118349_18536",
+                  "uid": "pot_vida_1795026785211_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -220468,7 +221172,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1795011118349_69928",
+                  "uid": "bota_vento_1795026785211_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -220544,7 +221248,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1795011118349_12429",
+                "uid": "tala_1795026785211_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -220718,7 +221422,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1795011118350_23232",
+              "uid": "placas_elmo_1795026785214_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -220800,7 +221504,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1795011118350_3788",
+                  "uid": "pot_vida_1795026785214_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -220917,7 +221621,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1795011118350_56339",
+                  "uid": "amuleto_sab_1795026785214_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -221083,7 +221787,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1795011118350_93474",
+              "uid": "anel_som_1795026785214_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {
@@ -296030,7 +296734,8 @@
       },
       "rng": {
         "sequence": []
-      }
+      },
+      "now": 1700000000000
     },
     "expected": {
       "result": {
@@ -296949,7 +297654,8 @@
         "sequence": [
           0.6
         ]
-      }
+      },
+      "now": 1700000000000
     },
     "expected": {
       "result": {
@@ -297812,7 +298518,8 @@
         "sequence": [
           0
         ]
-      }
+      },
+      "now": 1700000000000
     },
     "expected": {
       "result": {
@@ -298684,7 +299391,8 @@
       },
       "rng": {
         "sequence": []
-      }
+      },
+      "now": 1700000000000
     },
     "expected": {
       "result": {
@@ -299602,7 +300310,8 @@
       },
       "rng": {
         "sequence": []
-      }
+      },
+      "now": 1700000000000
     },
     "expected": {
       "result": {
@@ -300777,6 +301486,1834 @@
     }
   },
   {
+    "name": "limparSala: o animal caído vira cristal",
+    "input": {
+      "fn": "limparSala",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [
+            {
+              "name": "Teia",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 0,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "k1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            }
+          ],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 1,
+                    "row": 6,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 2,
+                    "row": 6,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "brutamontes",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 26,
+                    "dmg": 7,
+                    "speed": 8,
+                    "xp": 17,
+                    "gold": 10,
+                    "isBoss": false,
+                    "status": {},
+                    "attackCount": 0
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "abatido": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 3,
+          "hp": 0,
+          "maxHp": 26,
+          "dmg": 7,
+          "speed": 8,
+          "xp": 17,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 1,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            }
+          ],
+          "inventory": [
+            {
+              "uid": "cristal_animal_1700000000000_98999",
+              "templateId": "cristal_animal",
+              "rarity": "comum",
+              "stats": {},
+              "value": 1,
+              "equipped": false,
+              "animal": {
+                "name": "Teia",
+                "raceIcon": "🕷️",
+                "race": "Aranha Gigante",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 0,
+                "maxHp": 210,
+                "attack": 14,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "aranha",
+                "animal": {
+                  "id": "k1",
+                  "nivel": 1,
+                  "batalhas": 1,
+                  "vidaBase": 210,
+                  "ataqueBase": 14
+                }
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 1,
+                    "row": 6,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 2,
+                    "row": 6,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "brutamontes",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 26,
+                    "dmg": 7,
+                    "speed": 8,
+                    "xp": 17,
+                    "gold": 10,
+                    "isBoss": false,
+                    "status": {},
+                    "attackCount": 0
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "💠 Teia caiu e virou um cristal."
+        ],
+        "loot": null
+      },
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "limparSala: a montaria caída vira cristal e o herói desmonta",
+    "input": {
+      "fn": "limparSala",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "montaria": "k2"
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 0,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "k2",
+                "nivel": 6,
+                "batalhas": 150
+              }
+            }
+          ],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 1,
+                    "row": 6,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 2,
+                    "row": 6,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "brutamontes",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 26,
+                    "dmg": 7,
+                    "speed": 8,
+                    "xp": 17,
+                    "gold": 10,
+                    "isBoss": false,
+                    "status": {},
+                    "attackCount": 0
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "abatido": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 3,
+          "hp": 0,
+          "maxHp": 26,
+          "dmg": 7,
+          "speed": 8,
+          "xp": 17,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rng": {
+        "seed": 12
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 1,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "cristal_animal_1700000000000_7566",
+              "templateId": "cristal_animal",
+              "rarity": "comum",
+              "stats": {},
+              "value": 1,
+              "equipped": false,
+              "animal": {
+                "name": "Lobo das Sombras",
+                "raceIcon": "🐺",
+                "race": "Lobo das Sombras",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 0,
+                "maxHp": 700,
+                "attack": 35,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "lobo_sombras",
+                "animal": {
+                  "id": "k2",
+                  "nivel": 6,
+                  "batalhas": 151,
+                  "vidaBase": 700,
+                  "ataqueBase": 35
+                }
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 1,
+                    "row": 6,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 2,
+                    "row": 6,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "brutamontes",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 26,
+                    "dmg": 7,
+                    "speed": 8,
+                    "xp": 17,
+                    "gold": 10,
+                    "isBoss": false,
+                    "status": {},
+                    "attackCount": 0
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "💠 Lobo das Sombras caiu e virou um cristal."
+        ],
+        "loot": null
+      },
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "perderLuta: o animal caído vira cristal antes de o grupo levantar",
+    "input": {
+      "fn": "perderLuta",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 2,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 75,
+            "attrPoints": 0,
+            "gold": 0,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 130,
+              "maxMp": 64,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 130,
+            "hp": 0,
+            "maxMp": 64,
+            "mp": 64,
+            "buffs": {}
+          },
+          "party": [
+            {
+              "name": "Teia",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 0,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "k1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            }
+          ],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 6,
+          "mapCols": 6,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 1,
+                    "row": 6,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 2,
+                    "row": 6,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "brutamontes",
+                    "floor": 3,
+                    "hp": 26,
+                    "maxHp": 26,
+                    "dmg": 7,
+                    "speed": 8,
+                    "xp": 17,
+                    "gold": 10,
+                    "isBoss": false
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      },
+      "rng": {
+        "sequence": []
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 2,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 75,
+            "attrPoints": 0,
+            "gold": 0,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 130,
+              "maxMp": 64,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 130,
+            "hp": 39,
+            "maxMp": 64,
+            "mp": 64,
+            "buffs": {}
+          },
+          "party": [
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "hp": 6,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            }
+          ],
+          "inventory": [
+            {
+              "uid": "cristal_animal_1700000000000_0",
+              "templateId": "cristal_animal",
+              "rarity": "comum",
+              "stats": {},
+              "value": 1,
+              "equipped": false,
+              "animal": {
+                "name": "Teia",
+                "raceIcon": "🕷️",
+                "race": "Aranha Gigante",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 0,
+                "maxHp": 210,
+                "attack": 14,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "aranha",
+                "animal": {
+                  "id": "k1",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 210,
+                  "ataqueBase": 14
+                }
+              }
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 6,
+          "mapCols": 6,
+          "cityMap": [
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 3,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 0,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "gate",
+                "x": 3,
+                "y": 1,
+                "doors": {
+                  "S": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 1,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "guild",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "N": true,
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 2,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 3,
+                "doors": {}
+              },
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              },
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              },
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "questboard",
+                "x": 5,
+                "y": 3,
+                "doors": {
+                  "W": true
+                }
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 4,
+                "doors": {
+                  "N": true,
+                  "S": true
+                },
+                "npc": {
+                  "name": "Velho Ferreiro Bram",
+                  "role": "Ferreiro",
+                  "service": "barter",
+                  "icon": "🔨",
+                  "lines": [
+                    "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                    "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                    "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 4,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 5,
+                "doors": {
+                  "N": true
+                },
+                "npc": {
+                  "name": "Erma, a Vidente",
+                  "role": "Mística",
+                  "service": "blessing",
+                  "icon": "🔮",
+                  "lines": [
+                    "As sombras sussurram seu nome, viajante...",
+                    "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                    "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 5,
+                "doors": {}
+              }
+            ]
+          ],
+          "cityStart": {
+            "x": 3,
+            "y": 3
+          },
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 3,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 0,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "gate",
+                "x": 3,
+                "y": 1,
+                "doors": {
+                  "S": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 1,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "guild",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "N": true,
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 2,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 3,
+                "doors": {}
+              },
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              },
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              },
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "questboard",
+                "x": 5,
+                "y": 3,
+                "doors": {
+                  "W": true
+                }
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 4,
+                "doors": {
+                  "N": true,
+                  "S": true
+                },
+                "npc": {
+                  "name": "Velho Ferreiro Bram",
+                  "role": "Ferreiro",
+                  "service": "barter",
+                  "icon": "🔨",
+                  "lines": [
+                    "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                    "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                    "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 4,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 5,
+                "doors": {
+                  "N": true
+                },
+                "npc": {
+                  "name": "Erma, a Vidente",
+                  "role": "Mística",
+                  "service": "blessing",
+                  "icon": "🔮",
+                  "lines": [
+                    "As sombras sussurram seu nome, viajante...",
+                    "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                    "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 5,
+                "doors": {}
+              }
+            ]
+          ],
+          "pos": {
+            "x": 3,
+            "y": 3
+          }
+        },
+        "log": [
+          "A proteção de iniciante preservou seus itens e seu ouro.",
+          "💠 Teia caiu e virou um cristal.",
+          "Você foi derrotado! O grupo retorna à cidade inicial."
+        ]
+      },
+      "rngCalls": 1
+    }
+  },
+  {
     "name": "interagir: portão de aprendiz",
     "input": {
       "fn": "interagir",
@@ -301846,6 +304383,333 @@
           "icone": "🍺",
           "titulo": "Taverna",
           "texto": "A noite custa 5 de ouro, e você não tem o bastante."
+        },
+        "tela": null,
+        "som": "door",
+        "recado": null
+      },
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "interagir: taverna com um animal em cristal",
+    "input": {
+      "fn": "interagir",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 500,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 10,
+            "maxMp": 62,
+            "mp": 2,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "cristal_animal_1700000000000_24250",
+              "templateId": "cristal_animal",
+              "rarity": "comum",
+              "stats": {},
+              "value": 1,
+              "equipped": false,
+              "animal": {
+                "name": "Teia",
+                "raceIcon": "🕷️",
+                "race": "Aranha Gigante",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 0,
+                "maxHp": 210,
+                "attack": 14,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "aranha",
+                "animal": {
+                  "id": "k1",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 210,
+                  "ataqueBase": 14
+                }
+              }
+            },
+            {
+              "uid": "pot_vida_1700000000000_62706",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "pet": null
+      },
+      "rng": {
+        "seed": 118
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 495,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [
+            {
+              "name": "Teia",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "k1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ],
+          "inventory": [
+            {
+              "uid": "pot_vida_1700000000000_62706",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "aviso": {
+          "icone": "🍺",
+          "titulo": "Taverna",
+          "texto": "Você paga 5 de ouro e descansa por uma noite. Vida e mana totalmente restauradas. Os animais em cristal voltam com a vida cheia."
         },
         "tela": null,
         "som": "door",

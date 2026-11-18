@@ -76,6 +76,8 @@ namespace RPGLegend.Engine
         public string BloqueioDaMagia;
         /// <summary>Os animais do Caçador guardados (rodada 7b, <see cref="Animais"/>): os domados que não cabem na equipe. Null, nenhum.</summary>
         public List<Companion> Animais;
+        /// <summary>O Caçador montado (rodada 7d): o id do animal da equipe (nível 5+) em que ele está. Null, a pé.</summary>
+        public string Montaria;
         /// <summary>Os estilos de luta aprendidos com o mestre (rodada 5a; só o app ensina) e o ativo, escolhido na guilda. Null, nenhum.</summary>
         public List<string> Estilos;
         public string Estilo;

@@ -512,6 +512,10 @@ namespace RPGLegend.Game.Jogo
         public void MudarEstadoDoAnimal(string id, string estado) => MudarAnimais(Animais.MudarEstado(Estado, id, estado));
         public void GuardarAnimal(string id) => MudarAnimais(Animais.Guardar(Estado, id));
         public void LevarAnimal(string id) => MudarAnimais(Animais.Levar(Estado, id));
+        /// <summary>A montaria e soltar (rodada 7d).</summary>
+        public void MontarAnimal(string id) => MudarAnimais(Animais.Montar(Estado, id));
+        public void Desmontar() => MudarAnimais(Animais.Desmontar(Estado));
+        public void SoltarAnimal(string id) => MudarAnimais(Animais.Soltar(Estado, id));
 
         private void MudarAnimais(EstadoDoJogo novo)
         {
