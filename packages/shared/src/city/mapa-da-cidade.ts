@@ -46,9 +46,9 @@ export const PLANTA_DA_CIDADE: readonly string[] = [
   '##########.....########..#####',
   '#########...........####.#####',
   '#######..............##..#####',
-  '######............##......####',
-  '######.##.................####',
-  '######.##...#...###.......####',
+  '######............#####...####',
+  '######.##..........####...####',
+  '######.##...#...#######...####',
   '##..........#..............###',
   '##...##......................#',
   '###..##............###.......#',
@@ -73,6 +73,7 @@ export type PontoDaCidade =
   | 'igreja'
   | 'guilda'
   | 'poco'
+  | 'tratador'
   | 'quadro'
   | 'vidente'
   | 'floresta'
@@ -99,6 +100,9 @@ export const PONTOS_DA_CIDADE: readonly RoomObject[] = [
   { id: 'guilda', col: 15, row: 15 },
   { id: 'poco', col: 16, row: 16 },
   { id: 'poco', col: 17, row: 16 },
+  // O tratador de animais (o fim do Caçador, 2026-11-18): o prédio novo ao lado do ferreiro, com a porta pro caminho.
+  { id: 'tratador', col: 20, row: 11 },
+  { id: 'tratador', col: 21, row: 11 },
   { id: 'igreja', col: 8, row: 16 },
   { id: 'igreja', col: 9, row: 16 },
   { id: 'vidente', col: 10, row: 21 },
@@ -149,6 +153,8 @@ export const CAMADAS_DA_CIDADE: readonly CamadaDaCidade[] = [
   { arquivo: 'taverna', plano: 'meio', base: 12, caixa: [41, 228, 150, 383] },
   { arquivo: 'loja_pocao', plano: 'meio', base: 12, caixa: [195, 224, 316, 383] },
   { arquivo: 'ferreiro', plano: 'meio', base: 12, caixa: [498, 251, 607, 383] },
+  // O prédio do tratador de animais (2026-11-18): arte provisória do Claude, até o Breno desenhar.
+  { arquivo: 'tratador', plano: 'meio', base: 12, caixa: [616, 240, 727, 383] },
   { arquivo: '3_arvore_central', plano: 'meio', base: 13, caixa: [325, 256, 472, 392] },
   { arquivo: 'avisos_guilda', plano: 'meio', base: 15, caixa: [608, 417, 703, 543] },
   { arquivo: 'igreja', plano: 'meio', base: 17, caixa: [225, 373, 378, 553] },

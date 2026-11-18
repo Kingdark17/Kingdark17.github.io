@@ -43,6 +43,8 @@ namespace RPGLegend.Engine
         public MestreDeEstiloNaSala Mestre;
         /// <summary>O negociante secreto (rodada 6, só o app).</summary>
         public NegocianteNaSala Negociante;
+        /// <summary>O tratador de animais (o fim do Caçador), quando Tipo é "tratador".</summary>
+        public Tratador Tratador;
     }
 
     /// <summary>TS: ResultadoDaInteracao.</summary>

@@ -2845,6 +2845,18 @@ for (const run of TODAS_AS_MASMORRAS) {
   for (const floor of [1, 4, 100]) caso(`effectiveFloor: ${E.runKey(run)}, andar ${floor}`, 'effectiveFloor', { run, floor }, (a) => E.effectiveFloor(a.run, a.floor));
 }
 for (const floor of [-3, 0, 1, 2, 9, 10, 11, 78, 100, 155, 331]) caso(`monsterLevel: andar ${floor}`, 'monsterLevel', { floor }, (a) => E.monsterLevel(a.floor));
+// O filhote do tratador (o fim do Caçador): a vida e o dano da espécie no andar, sem sorteio.
+for (const [especie, floor, dificuldade] of [
+  ['lobo_sombras', 1, undefined],
+  ['lobo_sombras', 78, 'normal'],
+  ['aranha', 33, 'dificil'],
+  ['morcego', 140, 'pesadelo'],
+  ['inventado', 5, undefined],
+] as const) {
+  caso(`statusDaEspecie: ${especie} no ${floor}${dificuldade ? `, ${dificuldade}` : ''}`, 'statusDaEspecie', { speciesId: especie, floor, dificuldade: dificuldade ?? null }, (a) =>
+    E.statusDaEspecie(a.speciesId, a.floor, (a.dificuldade ?? undefined) as never),
+  );
+}
 for (const floor of [1, 19, 20, 40, 60, 80, 100]) caso(`isTotemFloor: ${floor}`, 'isTotemFloor', { floor }, (a) => E.isTotemFloor(a.floor));
 for (const [nome, raw] of [
   ['válido', { dungeon: 'torre', difficulty: 'pesadelo' }],
@@ -5045,12 +5057,34 @@ for (const dungeon of ['floresta', 'caverna', 'torre', null] as const) {
     ['caverna, veterano', veteranoNaPraca, 'caverna', false],
     ['caverna sem o nível', { ...naPraca, progresso: florestaZerada }, 'caverna', false],
     ['torre sem a caverna', { ...veteranoNaPraca, hero: heroi({ classe: 'guerreiro', level: 40 }) }, 'torre', false],
+    // O tratador de animais (o fim do Caçador): só o Caçador, só no app.
+    ['tratador no app, o Caçador', { ...semTutorial, hero: heroi({ classe: 'cacador', level: 9, extra: { gold: 900 } }) }, 'tratador', true],
+    ['tratador no app, o Guerreiro', { ...semTutorial, hero: heroi({ classe: 'guerreiro' }) }, 'tratador', true],
   ];
   for (const [nome, estado, ponto, app] of casos) {
     caso(`entrarNoPonto: ${nome}`, 'entrarNoPonto', { estado, ponto, pet: null, app }, (a, ctx) => E.entrarNoPonto(a.estado, a.ponto as never, ctx.rng, a.pet, ctx.now, a.app), {
       rng: { seed: 7 },
       now: AGORA,
     });
+  }
+  {
+    // O tratador: a tela e a compra dos filhotes.
+    const cacadorNaPraca: EstadoNaCidade = { ...semTutorial, hero: heroi({ classe: 'cacador', level: 9, extra: { gold: 900 } }) };
+    const tratador = E.abrirTratador(cacadorNaPraca);
+    caso('abrirTratador: o Caçador no nível 9', 'abrirTratador', { estado: cacadorNaPraca }, (a) => E.abrirTratador(a.estado));
+    const aranha = E.animalDomado({ speciesId: 'aranha', maxHp: 300, dmg: 20 }, 'z');
+    const cheio: EstadoNaCidade = { ...cacadorNaPraca, party: [aranha, aranha], hero: { ...cacadorNaPraca.hero, animais: [aranha, aranha] } };
+    caso('abrirTratador: com os 4 animais', 'abrirTratador', { estado: cheio }, (a) => E.abrirTratador(a.estado));
+    for (const [nome, t, especie] of [
+      ['o lobo', tratador, 'lobo_sombras'],
+      ['o morcego', tratador, 'morcego'],
+      ['sem ouro', E.abrirTratador({ ...cacadorNaPraca, hero: { ...cacadorNaPraca.hero, gold: 10 } }), 'aranha'],
+      ['com os 4 animais', E.abrirTratador(cheio), 'aranha'],
+      ['espécie que não se vende', tratador, 'goblin'],
+      ['com dois na equipe: fica guardado', E.abrirTratador({ ...cacadorNaPraca, party: [aranha, aranha] }), 'lobo_sombras'],
+    ] as const) {
+      caso(`comprarFilhote: ${nome}`, 'comprarFilhote', { tratador: t, especie }, (a, ctx) => E.comprarFilhote(a.tratador as never, a.especie, ctx.rng, ctx.now), { rng: { seed: 77 }, now: AGORA });
+    }
   }
   caso('falarComOBram: na forja', 'falarComOBram', { estado: naSala('blacksmith', semTutorial), app: false }, (a, ctx) => E.falarComOBram(a.estado, ctx.rng, ctx.now, a.app), {
     rng: { seed: 8 },

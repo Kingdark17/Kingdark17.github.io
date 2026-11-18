@@ -17,6 +17,7 @@
  * abrir no lugar da exploração.
  */
 
+import type { Tratador } from './tratador.js';
 import { precoDaTaverna, restAtTavern } from '../city/city.js';
 import { reviverNaTaverna } from '../combat/animais.js';
 import { dungeonById } from '../dungeon/dungeons.js';
@@ -86,7 +87,8 @@ export type TelaAberta =
   | { tipo: 'totem'; totem: Totem }
   | { tipo: 'professor'; professor: Professor }
   | { tipo: 'mestreDeEstilo'; mestre: MestreDeEstiloNaSala }
-  | { tipo: 'negociante'; negociante: NegocianteNaSala };
+  | { tipo: 'negociante'; negociante: NegocianteNaSala }
+  | { tipo: 'tratador'; tratador: Tratador };
 
 export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;

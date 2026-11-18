@@ -71,6 +71,7 @@ namespace RPGLegend.Tests
             Fn(M, "tierOf", (a, c) => N(Dungeons.TierOf(R<DungeonRun>(a["run"]))));
             Fn(M, "tierOffset", (a, c) => N(Dungeons.TierOffset(R<DungeonRun>(a["run"]))));
             Fn(M, "monsterLevel", (a, c) => N(Monsters.MonsterLevel(Num(a["floor"]))));
+            Fn(M, "statusDaEspecie", (a, c) => W(Monsters.StatusDaEspecie(Str(a["speciesId"]), Num(a["floor"]), Str(a["dificuldade"]))));
             Fn(M, "runName", (a, c) => W(Dungeons.RunName(R<DungeonRun>(a["run"]))));
             Fn(M, "runKey", (a, c) => W(Dungeons.RunKey(R<DungeonRun>(a["run"]))));
             Fn(M, "effectiveFloor", (a, c) => N(Dungeons.EffectiveFloor(R<DungeonRun>(a["run"]), Num(a["floor"]))));

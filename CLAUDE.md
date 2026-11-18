@@ -826,8 +826,23 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   (`reviverComPocao`), e a taverna traz todos com a vida cheia
   (`reviverNaTaverna`). **Soltar** (`soltarAnimal`) é na janela ANIMAIS, com
   confirmação, e vale pro da equipe, o guardado e o cristal.
-  Falta do Caçador: o tratador na cidade (comprar filhotes; o lugar no mapa
-  e a arte por decidir).
+  **O tratador de animais** (2026-11-18, o fim do Caçador; regras em
+  `jogo/tratador.ts` ↔ `Engine/Jogo/Tratador.cs`): um prédio novo na cidade,
+  ao lado do ferreiro (casas 19 a 22 das linhas 9 a 11, a porta nas casas 20
+  e 21 da linha 11, o ponto `tratador`, a camada `tratador`), com **arte
+  provisória do Claude** até o Breno desenhar (os mesmos nomes nos dois
+  lugares de sempre; o `hitbox-da-cidade.png` já tem o prédio). **Só no app e
+  só pro Caçador** (`acionar` em `jogo/cidade.ts`: no site a porta fica
+  fechada, e os outros heróis ouvem que só o Caçador cuida de animais; ele
+  não tem sala na grade da cidade). Os três bichos que se domam ficam sempre
+  à venda (`FILHOTES`), no nível 1, com 70% da vida e do dano de um bicho da
+  espécie no andar de força do herói (`statusDaEspecie`, o sorteio do
+  `generate` sem o rng), por 50 de ouro por nível do herói
+  (`REGRAS_DO_TRATADOR`); respeita o limite de 4 animais, e o comprado entra
+  na equipe (se cabe) ou fica guardado (`juntarAnimal`). No app, as cartas
+  selecionam e o COMPRAR diz qual; a janela do nome abre quando a tela fecha
+  (`Tratador.comprou` → `Partida.AnimaisPorNomear`). Os textos dizem
+  "bichinho": "filhote" tem o "fi" que a fonte do app troca.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

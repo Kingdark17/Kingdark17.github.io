@@ -18,6 +18,8 @@ import type { PetId } from '../pets/pets.js';
 import { defaultRng, type Rng } from '../rng.js';
 import { celulaAtual, type EstadoNaCidade, type Posicao } from './estado.js';
 import { abrirPortao, motivo } from './portao.js';
+import { abrirTratador } from './tratador.js';
+import { idDaClasse } from '../hero/catalog.js';
 import { interagir, type ResultadoDaInteracao } from './sala.js';
 import { marcar } from './tutorial.js';
 
@@ -117,6 +119,14 @@ function acionar(estado: EstadoNaCidade, ponto: PontoDaCidade, rng: Rng, pet: Pe
       tela: null,
       recado: null,
     };
+  }
+
+  // O tratador de animais (o fim do Caçador): só no app e só pro Caçador; ele não tem sala na grade da cidade.
+  if (ponto === 'tratador') {
+    const aviso = (texto: string) => ({ estado, aviso: { icone: '🐾', titulo: 'Tratador de Animais', texto }, tela: null, recado: null });
+    if (!app) return aviso('O tratador está no cercado com os animais, e a porta está fechada por enquanto.');
+    if (idDaClasse(estado.hero) !== 'cacador') return aviso('O tratador acena da porta: só o Caçador cuida de animais.');
+    return { estado, aviso: null, tela: { tipo: 'tratador', tratador: abrirTratador(estado) }, recado: null, som: 'door' };
   }
 
   const sala = salaDoPonto(estado, ponto);

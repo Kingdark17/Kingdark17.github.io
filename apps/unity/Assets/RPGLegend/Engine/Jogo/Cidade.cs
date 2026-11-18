@@ -121,6 +121,15 @@ namespace RPGLegend.Engine
                 };
             }
 
+            // O tratador de animais (o fim do Caçador): só no app e só pro Caçador; ele não tem sala na grade da cidade.
+            if (ponto == "tratador")
+            {
+                if (!app) return new ResultadoDaInteracao { Estado = estado, Aviso = new Aviso("🐾", "Tratador de Animais", "O tratador está no cercado com os animais, e a porta está fechada por enquanto.") };
+                if (Catalog.IdDaClasse(estado.Hero.ClassId, estado.Hero.ClassName) != "cacador")
+                    return new ResultadoDaInteracao { Estado = estado, Aviso = new Aviso("🐾", "Tratador de Animais", "O tratador acena da porta: só o Caçador cuida de animais.") };
+                return new ResultadoDaInteracao { Estado = estado, Tela = new TelaAberta { Tipo = "tratador", Tratador = Tratadores.Abrir(estado) }, Som = "door" };
+            }
+
             var sala = SalaDoPonto(estado, ponto);
             if (sala == null) return Nada(estado);
             var naSala = Em(estado, sala);

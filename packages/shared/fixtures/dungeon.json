@@ -8090,6 +8090,91 @@
     }
   },
   {
+    "name": "statusDaEspecie: lobo_sombras no 1",
+    "input": {
+      "fn": "statusDaEspecie",
+      "args": {
+        "speciesId": "lobo_sombras",
+        "floor": 1,
+        "dificuldade": null
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 12,
+        "dmg": 4
+      }
+    }
+  },
+  {
+    "name": "statusDaEspecie: lobo_sombras no 78, normal",
+    "input": {
+      "fn": "statusDaEspecie",
+      "args": {
+        "speciesId": "lobo_sombras",
+        "floor": 78,
+        "dificuldade": "normal"
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 255,
+        "dmg": 64
+      }
+    }
+  },
+  {
+    "name": "statusDaEspecie: aranha no 33, dificil",
+    "input": {
+      "fn": "statusDaEspecie",
+      "args": {
+        "speciesId": "aranha",
+        "floor": 33,
+        "dificuldade": "dificil"
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 125,
+        "dmg": 37
+      }
+    }
+  },
+  {
+    "name": "statusDaEspecie: morcego no 140, pesadelo",
+    "input": {
+      "fn": "statusDaEspecie",
+      "args": {
+        "speciesId": "morcego",
+        "floor": 140,
+        "dificuldade": "pesadelo"
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 562,
+        "dmg": 177
+      }
+    }
+  },
+  {
+    "name": "statusDaEspecie: inventado no 5",
+    "input": {
+      "fn": "statusDaEspecie",
+      "args": {
+        "speciesId": "inventado",
+        "floor": 5,
+        "dificuldade": null
+      }
+    },
+    "expected": {
+      "result": {
+        "maxHp": 27,
+        "dmg": 7
+      }
+    }
+  },
+  {
     "name": "isTotemFloor: 1",
     "input": {
       "fn": "isTotemFloor",

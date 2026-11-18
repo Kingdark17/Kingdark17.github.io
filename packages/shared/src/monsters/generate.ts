@@ -138,6 +138,21 @@ function especiesPermitidas(ids: readonly string[] | undefined): readonly Specie
   return permitidas.length ? permitidas : SPECIES;
 }
 
+/**
+ * A vida máxima e o dano de um bicho desta espécie no andar, sem o que se
+ * sorteia (a classe de inimigo e o resto): o filhote do tratador sai daqui (o
+ * fim do Caçador). Espécie desconhecida, a primeira.
+ */
+export function statusDaEspecie(speciesId: string, floor: number, dificuldade?: DifficultyId): { maxHp: number; dmg: number } {
+  const species = SPECIES.find((especie) => especie.id === speciesId) ?? (SPECIES[0] as Species);
+  const scale = 1 + (floor - 1) * 0.27;
+  const forca = multiplicadorDeForca(dificuldade, false);
+  return {
+    maxHp: Math.max(1, Math.round(Math.round(species.baseHp * scale) * forca)),
+    dmg: Math.max(1, Math.round(Math.round(species.baseDmg + Math.floor((floor - 1) * 0.6)) * forca)),
+  };
+}
+
 export function generate(floor: number, { rng = defaultRng, species: ids, dificuldade }: GenerateOptions = {}): MonsterInstance {
   const species = pick(especiesPermitidas(ids), rng);
   const enemyClass = pick(ENEMY_CLASSES, rng);

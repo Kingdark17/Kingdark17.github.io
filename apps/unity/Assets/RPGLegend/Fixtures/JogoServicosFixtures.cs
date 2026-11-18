@@ -128,6 +128,8 @@ namespace RPGLegend.Tests
             Fn(M, "troncosNoCaminho", (a, c) => W(Cidades.TroncosNoCaminho(R<EstadoNaCidade>(a["estado"]))));
             Fn(M, "plantaDaCidadeAgora", (a, c) => W(Cidades.PlantaDaCidadeAgora(R<EstadoNaCidade>(a["estado"]))));
             Fn(M, "chegadaNaCidade", (a, c) => W(Cidades.ChegadaNaCidade(R<EstadoNaCidade>(a["estado"]), JsJson.Truthy(a["daMasmorra"]))));
+            Fn(M, "abrirTratador", (a, c) => W(Tratadores.Abrir(R<EstadoNaCidade>(a["estado"]))));
+            Fn(M, "comprarFilhote", (a, c) => W(Tratadores.Comprar(R<Tratador>(a["tratador"]), Str(a["especie"]), c.RngFn, c.NowOrFail)));
             Fn(M, "entrarNoPonto", (a, c) => W(Cidades.EntrarNoPonto(R<EstadoNaCidade>(a["estado"]), Str(a["ponto"]), c.RngFn, Str(a["pet"]), c.NowOrFail, JsJson.Truthy(a["app"]))));
             Fn(M, "falarComOBram", (a, c) => W(Cidades.FalarComOBram(R<EstadoNaCidade>(a["estado"]), c.RngFn, c.NowOrFail, JsJson.Truthy(a["app"]))));
             Fn(M, "masmorras", (a, c) => W(Portoes.Masmorras(R<Portao>(a["portao"]))));

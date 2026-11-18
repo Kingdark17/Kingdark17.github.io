@@ -193,6 +193,29 @@ namespace RPGLegend.Engine
         /// TS: generate. Sorteia, nesta ordem: espécie, classe de inimigo, +0..3 de vida, +0..3 de XP e
         /// +0..5 de ouro (5 números do rng).
         /// </summary>
+        /// <summary>TS: o retorno de statusDaEspecie.</summary>
+        public sealed class StatusDeEspecie
+        {
+            public double MaxHp;
+            public double Dmg;
+        }
+
+        /// <summary>TS: statusDaEspecie — a vida máxima e o dano de um bicho da espécie no andar, sem o sorteio (o filhote do tratador).</summary>
+        public static StatusDeEspecie StatusDaEspecie(string speciesId, double floor, string dificuldade = null)
+        {
+            SpeciesDef species = null;
+            foreach (var especie in MonsterCatalog.Species)
+                if (especie.Id == speciesId) { species = especie; break; }
+            species = species ?? MonsterCatalog.Species[0];
+            double scale = 1 + (floor - 1) * 0.27;
+            double forca = MultiplicadorDeForca(dificuldade, false);
+            return new StatusDeEspecie
+            {
+                MaxHp = Js.Max(1, Js.Round(Js.Round(species.BaseHp * scale) * forca)),
+                Dmg = Js.Max(1, Js.Round(Js.Round(species.BaseDmg + Math.Floor((floor - 1) * 0.6)) * forca)),
+            };
+        }
+
         public static MonsterInstance Generate(double floor, GenerateOptions options = null)
         {
             var rng = options?.Rng ?? Rng.Default;

@@ -1,0 +1,10 @@
+{
+  "REGRAS_DO_TRATADOR": {
+    "precoPorNivel": 50
+  },
+  "FILHOTES": [
+    "lobo_sombras",
+    "aranha",
+    "morcego"
+  ]
+}

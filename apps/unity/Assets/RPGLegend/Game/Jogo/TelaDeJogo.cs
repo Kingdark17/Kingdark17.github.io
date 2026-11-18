@@ -845,6 +845,7 @@ namespace RPGLegend.Game.Jogo
                 case "professor": TelaDoProfessor(tela.Professor); break;
                 case "mestreDeEstilo": TelaDoMestreDeEstilo(tela.Mestre); break;
                 case "negociante": TelaDoNegociante(tela.Negociante); break;
+                case "tratador": TelaDoTratador(tela.Tratador); break;
                 case "guilda": TelaDaGuilda(tela.Guilda); break;
                 case "encantadora": TelaDaEncantadora(tela.Encantadora); break;
                 case "mochila": TelaDaMochila(tela.Mochila); break;

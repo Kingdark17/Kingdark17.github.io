@@ -272,6 +272,52 @@ namespace RPGLegend.Game.Jogo
             }, ("AGORA NÃO", _sairDaTela));
         }
 
+        // ---------- tratador de animais (o fim do Caçador) ----------
+
+        /// <summary>
+        /// O tratador de animais (só o Caçador chega aqui): os três bichinhos do cercado em cartas que só selecionam,
+        /// com a vida e o dano com que viriam, e o COMPRAR diz qual e por quanto. Comprou, a tela segue aberta (dá pra
+        /// levar outro), e a janela do nome abre quando ela fechar. Os textos evitam "fi" minúsculo (a fonte do app
+        /// troca por outra letra).
+        /// </summary>
+        private void TelaDoTratador(Tratador tratador)
+        {
+            _sairDaTela = () => _partida.Fechar(tratador.Estado);
+            var hero = tratador.Estado.Hero;
+            var escolhido = tratador.Filhotes.Find(f => f.Especie == _selecionado);
+            var botoes = new List<(string, System.Action)>();
+            if (escolhido != null && !tratador.Cheio)
+            {
+                string especie = escolhido.Especie;
+                botoes.Add(("COMPRAR " + escolhido.Nome.ToUpperInvariant() + " (" + PecasDaTela.Inteiro(tratador.Preco) + " OURO)", () =>
+                {
+                    var depois = Tratadores.Comprar(tratador, especie);
+                    if (depois.Comprou != null) _partida.AnimaisPorNomear.Add(depois.Comprou);
+                    _partida.Seguir(new TelaAberta { Tipo = "tratador", Tratador = depois }, depois.Estado);
+                }));
+            }
+            botoes.Add(("SAIR", _sairDaTela));
+            Janela("🐾 Tratador de Animais", Ouro(hero), null, conteudo =>
+            {
+                conteudo.Add(PecasDaTela.Texto(Ultima(tratador.Log) ?? "", "fala-da-tela"));
+                conteudo.Add(PecasDaTela.Texto("Cada bichinho custa " + PecasDaTela.Inteiro(tratador.Preco) + " de ouro (50 por nível seu), vem no nível 1 e cresce lutando com você.", "vazio"));
+                conteudo.Add(PecasDaTela.Secao("No cercado"));
+                var grade = PecasDaTela.Grade();
+                foreach (var bicho in tratador.Filhotes)
+                {
+                    string especie = bicho.Especie;
+                    grade.Add(PecasDaTela.CartaDeEscolha(bicho.Icone, bicho.Nome,
+                        "Nv 1 · Vida " + PecasDaTela.Inteiro(bicho.Vida) + " · Dano " + PecasDaTela.Inteiro(bicho.Dano),
+                        especie == _selecionado, () => Escolher(() => _selecionado = especie)));
+                }
+                conteudo.Add(grade);
+                if (tratador.Cheio)
+                    conteudo.Add(PecasDaTela.Texto("Você já tem " + PecasDaTela.Inteiro(Animais.Regras.Maximo) + " animais: solte um na janela ANIMAIS pra levar outro.", "vazio"));
+                else if (escolhido == null)
+                    conteudo.Add(PecasDaTela.Texto("Escolha um bichinho.", "vazio"));
+            }, botoes.ToArray());
+        }
+
         // ---------- mestre de estilo (rodada 5a) ----------
 
         /// <summary>

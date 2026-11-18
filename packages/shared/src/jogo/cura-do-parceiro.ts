@@ -67,6 +67,8 @@ export function curarNaTela(aberta: TelaAberta, quantia: number): TelaAberta {
       return { ...aberta, totem: { ...aberta.totem, estado: curarPeloParceiro(aberta.totem.estado, quantia).estado } };
     case 'professor':
       return { ...aberta, professor: { ...aberta.professor, estado: curarPeloParceiro(aberta.professor.estado, quantia).estado } };
+    case 'tratador':
+      return { ...aberta, tratador: { ...aberta.tratador, estado: curarPeloParceiro(aberta.tratador.estado, quantia).estado } };
     case 'mestreDeEstilo':
     case 'negociante':
       // A tela do mestre de estilo e a do negociante não guardam cópia do estado (elas leem o do jogo).
