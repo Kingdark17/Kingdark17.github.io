@@ -1423,6 +1423,7 @@ namespace RPGLegend.Engine
             // O Bardo e o Clérigo também se curam batendo; as vinhas do Druida deixam o monstro lento e envenenado.
             ApoiarAqui(l);
             VinhasNoMonstro(l, indice.Value);
+            SangrarNoMonstro(l, indice.Value, dano.Value);
             GolpeEmArea(l, indice.Value, dano.Value);
             // A kusarigama do Monge (rodada 6c): a área 3 × 2 no alvo.
             if (ClassesDeLuta.KusarigamaNaMao(heroDoGolpe) && l.Fim == null) AreaDaKusarigama(l, indice.Value, dano.Value);
@@ -2190,6 +2191,9 @@ namespace RPGLegend.Engine
                 m.Forca = m.Forca * (100 - PecasSecretas.RegrasDasAljavas.Fraqueza) / 100;
                 m.Fraco = fraco > 1 ? fraco - 1 : (double?)null;
             }
+            // Sangrando pelo golpe do Caçador (rodada 7a): bate mais fraco.
+            if (Catalog.IdDaClasse(estado.Hero.ClassId, estado.Hero.ClassName) == "cacador" && (inicio.Monster.Status?.Sangramento?.Turns ?? 0) > 0)
+                m.Forca = m.Forca * (100 - CD.Cacador.Fraqueza) / 100;
             if (solta)
             {
                 m.Poder = poder;
@@ -2770,6 +2774,24 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: vinhasNoMonstro — as vinhas do Druida deixam o monstro de pé lento e envenenado. No espelho, não.</summary>
+        /// <summary>TS: sangrarNoMonstro — o golpe do Caçador: o monstro de pé sangra 1 turno com 20% do dano (sem encurtar nem enfraquecer o que já tinha).</summary>
+        private static void SangrarNoMonstro(Luta l, double indice, double dano)
+        {
+            var h = Masmorra(l).Hero;
+            if (Catalog.IdDaClasse(h.ClassId, h.ClassName) != "cacador" || NoEspelho(l)) return;
+            var m = MonstroDaArena(l, indice);
+            if (m == null || m.Fase == "caido") return;
+            var r = CD.Cacador;
+            var monstro = CombatMonster.From(Sala(l).Monsters[(int)indice]);
+            var antes = monstro.Status?.Sangramento;
+            double dmg = Js.Max(1, Math.Truncate(dano * r.Sangramento / 100));
+            var status = monstro.Status?.Clone() ?? new MonsterStatus();
+            status.Sangramento = new DotStatus { Turns = Js.Max(r.Turnos, antes?.Turns ?? 0), Dmg = Js.Max(dmg, antes?.Dmg ?? 0) };
+            monstro.Status = status;
+            l.Estado = FimDaLuta.GravarMonstro(Masmorra(l), indice, monstro);
+            if (!((antes?.Turns ?? 0) > 0)) Contar(l, Numero("monstro", indice, "🩸", "erro"));
+        }
+
         private static void VinhasNoMonstro(Luta l, double indice)
         {
             var h = Masmorra(l).Hero;

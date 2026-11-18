@@ -103,6 +103,7 @@ import {
   contarParado,
   auraDeFera,
   aCadaGolpe,
+  REGRAS_DO_CACADOR,
   atordoaNoChute,
   criticoDaArma,
   empurraoDoEmpurrao,
@@ -1405,6 +1406,7 @@ function golpear(l: Luta): void {
   // O Bardo e o Clérigo também se curam batendo; as vinhas do Druida deixam o monstro lento e envenenado.
   apoiarAqui(l);
   vinhasNoMonstro(l, indice);
+  sangrarNoMonstro(l, indice, acerto.dano);
   golpeEmArea(l, indice, acerto.dano);
   // A kusarigama do Monge (rodada 6c): a área 3 × 2 no alvo.
   if (kusarigamaNaMao(heroDoGolpe) && !l.fim) areaDaKusarigama(l, indice, acerto.dano);
@@ -2666,6 +2668,24 @@ function explodirFlecha(l: Luta, origem: number, dano: number, emCadeia: boolean
 }
 
 /**
+ * O golpe do Caçador (rodada 7a): o monstro de pé sangra 1 turno com 20% do
+ * dano do golpe (sem encurtar nem enfraquecer o sangramento que já tinha). No
+ * espelho, não (o monstro é do anfitrião).
+ */
+function sangrarNoMonstro(l: Luta, indice: number, dano: number): void {
+  if (idDaClasse(masmorra(l).hero) !== 'cacador' || noEspelho(l)) return;
+  const m = l.arena.monstros[indice];
+  if (!m || m.fase === 'caido') return;
+  const r = REGRAS_DO_CACADOR;
+  const monstro = (sala(l).monsters ?? [])[indice] as CombatMonster;
+  const antes = monstro.status?.sangramento;
+  const dmg = Math.max(1, Math.trunc((dano * r.sangramento) / 100));
+  const sangramento = { turns: Math.max(r.turnos, antes?.turns ?? 0), dmg: Math.max(dmg, antes?.dmg ?? 0) };
+  l.estado = gravarMonstro(masmorra(l), indice, { ...monstro, status: { ...monstro.status, sangramento } });
+  if (!((antes?.turns ?? 0) > 0)) contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: '🩸', tom: 'erro' });
+}
+
+/**
  * O Florescimento planta uma flor em (x, y), a até `plantio` blocos do herói:
  * no máximo `maximo` no chão, e a nova tira a mais antiga. O botão espera a
  * recarga, como depois de um golpe.
@@ -3193,6 +3213,8 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
     if (fraco > 1) m.fraco = fraco - 1;
     else delete m.fraco;
   }
+  // Sangrando pelo golpe do Caçador (rodada 7a): bate mais fraco.
+  if (idDaClasse(estado.hero) === 'cacador' && (inicio.monster.status?.sangramento?.turns ?? 0) > 0) m.forca = (m.forca * (100 - REGRAS_DO_CACADOR.fraqueza)) / 100;
   if (solta) {
     m.poder = poder;
     m.alvo = -1;

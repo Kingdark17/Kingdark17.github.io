@@ -113,7 +113,8 @@
     "arqueiro",
     "bardo",
     "clerigo",
-    "druida"
+    "druida",
+    "cacador"
   ],
   "REGRAS_DO_GUERREIRO": {
     "colado": 25,
@@ -207,6 +208,11 @@
     "turnos": 2,
     "purificacao": 10,
     "semAtacar": 1800
+  },
+  "REGRAS_DO_CACADOR": {
+    "sangramento": 20,
+    "turnos": 1,
+    "fraqueza": 20
   },
   "REGRAS_DE_CANALIZAR": {
     "manaPorSegundo": 5,

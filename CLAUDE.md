@@ -755,7 +755,22 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   golpe (o primeiro rola o golpe, os outros levam o mesmo dano). No app, o
   chapéu voando é a arte do item girando na tinta da sala, e com sete
   botões o arco abre mais (`AngulosDosBotoesSete`).
-  Falta: o Caçador.
+  Rodada 7, **o Caçador** (2026-11-18, decidido com o usuário), em 4 partes:
+  7a o golpe e as aljavas; 7b domar (só os bichos: lobo das sombras, aranha e
+  morcego, cada um com a comida preferida) e o animal entrando na equipe com
+  nome; 7c o animal na luta (estados, janela do K, níveis); 7d montaria,
+  cristal do animal morto, reviver e soltar. Comprar animal: um tratador na
+  cidade vende filhotes (NPC novo; o lugar e a arte ainda por decidir). O
+  "detecta inimigos em salas próximas" do doc já existia (o Instinto de Caça).
+  **7a feita**: o Caçador virou classe refeita (na arena perde os 30% do
+  Instinto de Caça, que o site mantém); todo golpe dele que acerta deixa o
+  monstro sangrando 1 turno com 20% do dano (`REGRAS_DO_CACADOR`,
+  `sangrarNoMonstro`), e enquanto sangra o monstro bate 20% mais fraco
+  (`comecarGolpe`); o negociante secreto traz as aljavas pra ele também.
+  Cuidado: a luta abre com os monstros sem estado (`prepararLuta`,
+  `freshCombatMonster`), então caso de teste com monstro já sangrando põe o
+  status depois de abrir a luta.
+  Falta: 7b, 7c e 7d do Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

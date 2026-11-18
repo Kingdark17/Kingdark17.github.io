@@ -30,6 +30,7 @@ namespace RPGLegend.Engine
         [JsName("REGRAS_DO_CLERIGO")] public RegrasDoClerigo Clerigo;
         [JsName("MORTOS_VIVOS")] public System.Collections.Generic.List<string> MortosVivos = new System.Collections.Generic.List<string>();
         [JsName("REGRAS_DO_DRUIDA")] public RegrasDoDruida Druida;
+        [JsName("REGRAS_DO_CACADOR")] public RegrasDoCacador Cacador;
         [JsName("REGRAS_DE_CANALIZAR")] public RegrasDeCanalizar Canalizar;
         [JsName("REGRAS_DO_MONGE")] public RegrasDoMonge Monge;
         [JsName("REGRAS_DO_MAGO")] public RegrasDoMago Mago;
@@ -110,6 +111,14 @@ namespace RPGLegend.Engine
         public double TetoDaComunhao;
         public double TetoDoEgoista;
         public double DivisorDoEgoista;
+    }
+
+    /// <summary>TS: REGRAS_DO_CACADOR — o sangramento do golpe e o monstro sangrando mais fraco (rodada 7a).</summary>
+    public sealed class RegrasDoCacador
+    {
+        public double Sangramento;
+        public double Turnos;
+        public double Fraqueza;
     }
 
     /// <summary>TS: REGRAS_DO_DRUIDA — as vinhas, o lento e o veneno, a Purificação.</summary>

@@ -6,8 +6,8 @@
  *
  * - O **negociante secreto** é uma sala da masmorra, depois de zerar a
  *   Floresta: cada andar novo tem `CHANCE_DO_NEGOCIANTE` de trazer um, só pra
- *   quem tem peça secreta da classe (o Arqueiro, o Monge e o Guerreiro; o
- *   Caçador depois). Ele vende 1 peça da classe do herói, por um preço fixo; a
+ *   quem tem peça secreta da classe (o Arqueiro e o Caçador, o Monge e o
+ *   Guerreiro). Ele vende 1 peça da classe do herói, por um preço fixo; a
  *   aljava explosiva só está com 1 de cada 5. Comprou, ele vai embora.
  * - O **chapéu do espadachim** não é do negociante: a loja da cidade (o
  *   ferreiro do app) o tem de vez em quando, depois de zerar a Floresta.
@@ -30,9 +30,9 @@ export interface PecaSecreta {
 }
 
 export const PECAS_SECRETAS: readonly PecaSecreta[] = [
-  { id: 'aljava_paralisante', classes: ['arqueiro'], preco: 900 },
-  { id: 'aljava_flamejante', classes: ['arqueiro'], preco: 900 },
-  { id: 'aljava_explosiva', classes: ['arqueiro'], preco: 1800, raro: 5 },
+  { id: 'aljava_paralisante', classes: ['arqueiro', 'cacador'], preco: 900 },
+  { id: 'aljava_flamejante', classes: ['arqueiro', 'cacador'], preco: 900 },
+  { id: 'aljava_explosiva', classes: ['arqueiro', 'cacador'], preco: 1800, raro: 5 },
   { id: 'bastao', classes: ['monge'], preco: 1000 },
   { id: 'leque', classes: ['monge'], preco: 1000 },
   { id: 'kusarigama', classes: ['monge'], preco: 1000 },

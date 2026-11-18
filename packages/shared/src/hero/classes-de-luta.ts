@@ -159,7 +159,7 @@ export function vidaComAClasse(vida: number, quem: IdentidadeDeClasse): number {
 // "Resistência" é a % de dano a menos no golpe que o herói leva.
 
 /** As classes que o doc do Breno já refez na luta do app: lá elas ficam sem a passiva antiga do site. */
-export const CLASSES_REFEITAS: readonly string[] = ['guerreiro', 'ladino', 'barbaro', 'paladino', 'arqueiro', 'bardo', 'clerigo', 'druida'];
+export const CLASSES_REFEITAS: readonly string[] = ['guerreiro', 'ladino', 'barbaro', 'paladino', 'arqueiro', 'bardo', 'clerigo', 'druida', 'cacador'];
 
 export const REGRAS_DO_GUERREIRO = {
   /** O dano a mais (%) com o alvo a 1 bloco. */
@@ -307,6 +307,19 @@ export const REGRAS_DO_DRUIDA = {
   /** A Purificação: cura este tanto (%) da vida máxima, e o ataque espera `semAtacar` passos (30 s). */
   purificacao: 10,
   semAtacar: 1800,
+} as const;
+
+// ---------- rodada 7a (2026-11-18): o Caçador ----------
+// Decidido com o usuário: na luta do app todo golpe do Caçador que acerta deixa
+// o monstro sangrando 1 turno com 20% do dano do golpe, e enquanto ele sangra
+// bate 20% mais fraco (o site continua com o Instinto de Caça, os 30%).
+
+export const REGRAS_DO_CACADOR = {
+  /** O sangramento: este tanto (%) do dano do golpe, por `turnos` turnos. */
+  sangramento: 20,
+  turnos: 1,
+  /** Sangrando, o monstro bate este tanto (%) mais fraco. */
+  fraqueza: 20,
 } as const;
 
 // ---------- rodada 4a (2026-11-17): segurar K, o Mago e o Monge ----------

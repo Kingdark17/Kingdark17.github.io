@@ -5191,7 +5191,7 @@
       }
     },
     "expected": {
-      "result": false
+      "result": true
     }
   },
   {
@@ -60512,21 +60512,24 @@
         {
           "id": "aljava_paralisante",
           "classes": [
-            "arqueiro"
+            "arqueiro",
+            "cacador"
           ],
           "preco": 900
         },
         {
           "id": "aljava_flamejante",
           "classes": [
-            "arqueiro"
+            "arqueiro",
+            "cacador"
           ],
           "preco": 900
         },
         {
           "id": "aljava_explosiva",
           "classes": [
-            "arqueiro"
+            "arqueiro",
+            "cacador"
           ],
           "preco": 1800,
           "raro": 5
@@ -60567,7 +60570,8 @@
       "result": {
         "id": "aljava_explosiva",
         "classes": [
-          "arqueiro"
+          "arqueiro",
+          "cacador"
         ],
         "preco": 1800,
         "raro": 5
@@ -60594,7 +60598,8 @@
       "result": {
         "id": "aljava_flamejante",
         "classes": [
-          "arqueiro"
+          "arqueiro",
+          "cacador"
         ],
         "preco": 900
       },
@@ -60621,7 +60626,8 @@
       "result": {
         "id": "aljava_flamejante",
         "classes": [
-          "arqueiro"
+          "arqueiro",
+          "cacador"
         ],
         "preco": 900
       },
@@ -60648,7 +60654,8 @@
       "result": {
         "id": "aljava_paralisante",
         "classes": [
-          "arqueiro"
+          "arqueiro",
+          "cacador"
         ],
         "preco": 900
       },
@@ -61074,7 +61081,33 @@
       }
     },
     "expected": {
-      "result": []
+      "result": [
+        {
+          "id": "aljava_paralisante",
+          "classes": [
+            "arqueiro",
+            "cacador"
+          ],
+          "preco": 900
+        },
+        {
+          "id": "aljava_flamejante",
+          "classes": [
+            "arqueiro",
+            "cacador"
+          ],
+          "preco": 900
+        },
+        {
+          "id": "aljava_explosiva",
+          "classes": [
+            "arqueiro",
+            "cacador"
+          ],
+          "preco": 1800,
+          "raro": 5
+        }
+      ]
     }
   },
   {
@@ -61088,7 +61121,7 @@
       }
     },
     "expected": {
-      "result": 0
+      "result": 5
     }
   },
   {
@@ -61107,8 +61140,16 @@
       }
     },
     "expected": {
-      "result": null,
-      "rngCalls": 0
+      "result": {
+        "id": "aljava_explosiva",
+        "classes": [
+          "arqueiro",
+          "cacador"
+        ],
+        "preco": 1800,
+        "raro": 5
+      },
+      "rngCalls": 1
     }
   },
   {
@@ -61127,8 +61168,15 @@
       }
     },
     "expected": {
-      "result": null,
-      "rngCalls": 0
+      "result": {
+        "id": "aljava_flamejante",
+        "classes": [
+          "arqueiro",
+          "cacador"
+        ],
+        "preco": 900
+      },
+      "rngCalls": 2
     }
   },
   {
@@ -61148,8 +61196,15 @@
       }
     },
     "expected": {
-      "result": null,
-      "rngCalls": 0
+      "result": {
+        "id": "aljava_flamejante",
+        "classes": [
+          "arqueiro",
+          "cacador"
+        ],
+        "preco": 900
+      },
+      "rngCalls": 2
     }
   },
   {
@@ -61169,8 +61224,15 @@
       }
     },
     "expected": {
-      "result": null,
-      "rngCalls": 0
+      "result": {
+        "id": "aljava_paralisante",
+        "classes": [
+          "arqueiro",
+          "cacador"
+        ],
+        "preco": 900
+      },
+      "rngCalls": 2
     }
   },
   {
@@ -61203,7 +61265,8 @@
       "result": {
         "id": "aljava_explosiva",
         "classes": [
-          "arqueiro"
+          "arqueiro",
+          "cacador"
         ],
         "preco": 1800,
         "raro": 5

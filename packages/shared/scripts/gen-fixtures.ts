@@ -6279,6 +6279,26 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       caso('(6c) abrirLuta: com a recarga do chapéu na memória', 'abrirLuta', { estado: salaCom([bicho('zumbi')]), chegada: PERTO, memoria: { recargaDoChapeu: 777, ki: 90 } }, (a) =>
         E.abrirLuta(a.estado, a.chegada, null, false, null, a.memoria));
     }
+
+    // O Caçador (rodada 7a): todo golpe sangra 1 turno (20% do golpe), e o monstro sangrando bate 20% mais fraco.
+    const cacador = (aljava: string | null, monstros: ReturnType<typeof bicho>[], corpos: Array<[number, number]>) =>
+      comPecas('cacador', { arma: 'arco', ...(aljava ? { secundaria: aljava } : {}) }, monstros, corpos);
+    const PERTINHO = { x: 4.5 * T, y: 5.5 * T };
+    simula('o Caçador sangra o monstro, e ele bate mais fraco', cacador(null, [bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 })], [[4.5, 5.5]]), [...flechas(4, PERTINHO), ...parado(200)], {
+      seed: 930,
+    });
+    simula('o Caçador com a aljava explosiva', cacador('aljava_explosiva', [forteZ(), forteZ()], [[4.5, 3.5], [5.5, 3.5]]), [...flechas(2), ...parado(60)], { seed: 931 });
+    {
+      // A luta abre com os monstros sem estado (`prepararLuta`): o sangramento entra depois.
+      const comSangue = (luta: LutaEmTempoReal): LutaEmTempoReal => {
+        const cel = E.celulaAtual(luta.estado) as DungeonCell;
+        const monsters = (cel.monsters ?? []).map((m) => ({ ...m, status: { sangramento: { turns: 99, dmg: 1 } } }));
+        return { ...luta, estado: E.substituirCelulaAtual(luta.estado as EstadoNaMasmorra, { ...cel, monsters }) };
+      };
+      const goblin = bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 });
+      simula('o monstro sangrando bate mais fraco no Caçador', comSangue(cacador(null, [goblin], [[4.5, 6.5]])), parado(400), { seed: 932 });
+      simula('o monstro sangrando bate igual no Arqueiro', comSangue(comPecas('arqueiro', { arma: 'arco' }, [goblin], [[4.5, 6.5]])), parado(400), { seed: 932 });
+    }
   }
 
   // O cajado no PC: as letras saem dos primeiros sorteios da luta, os do aperto; a tecla da última fecha o evento.
