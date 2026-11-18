@@ -493,8 +493,10 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   - **Partida em sala** (`TelaDeJogo.Coop.cs`, `Coop.cs`): só quem conduz
     manda o estado (o herói que vale é sempre o local); quem acompanha anda
     livre na mesma sala, mas não passa por porta nem encosta em nada. Cada
-    um diz onde está ~10×/s (`"p"`, com a chave da sala e se caiu) e o outro
-    desenha o mini boneco (`SalaEmCena.Parceiro.cs`). **Cada um grava o
+    um diz onde está ~10×/s (`"p"`, com a chave da sala, se caiu e a vida,
+    `h`/`hm`) e o outro desenha o mini boneco (`SalaEmCena.Parceiro.cs`), com a
+    barra de vida verde dos aliados em cima (2026-11-18, o item do doc que
+    esperava o co-op; caído, a caveira toma o lugar dela). **Cada um grava o
     próprio herói** (`Partida.ParaGravar`: quem entrou acompanhando grava
     herói, mochila e equipe por cima do save com que entrou), diferente do
     site, que não grava a sessão em dupla.

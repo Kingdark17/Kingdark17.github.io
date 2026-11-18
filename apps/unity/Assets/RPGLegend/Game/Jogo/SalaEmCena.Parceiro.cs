@@ -22,6 +22,16 @@ namespace RPGLegend.Game.Jogo
         /// <summary>O status de morto (2026-11-17, decisão do usuário): a caveira boiando em cima do parceiro caído.</summary>
         private SpriteRenderer _caveiraDoParceiro;
         private float _baseDaCaveira;
+        /// <summary>
+        /// A barra de vida em cima do parceiro (doc do Breno de 2026-11-15, só no app): o verde dos aliados das placas
+        /// (<c>.vida-do-aliado</c>), com a borda escura da arte. Caído, a caveira toma o lugar dela.
+        /// </summary>
+        private Transform _barraDoParceiro;
+        private SpriteRenderer _bordaDaBarra, _fundoDaBarra, _vidaNaBarra;
+        private double? _vidaDoParceiro;
+        private static readonly Color CorDaBorda = new Color32(26, 11, 9, 255);
+        private static readonly Color CorDoFundo = new Color32(10, 8, 12, 217);
+        private static readonly Color CorDaVidaDoAliado = new Color32(0x5f, 0xa8, 0x5a, 255);
 
         /// <summary>Quem é o parceiro (pra vestir o boneco); null tira ele da sala.</summary>
         public void DefinirParceiro(Hero hero)
@@ -30,6 +40,7 @@ namespace RPGLegend.Game.Jogo
             {
                 _temParceiro = false;
                 _parceiroTemLugar = false;
+                _vidaDoParceiro = null;
                 if (_parceiro != null) _parceiro.Raiz.gameObject.SetActive(false);
                 return;
             }
@@ -45,6 +56,12 @@ namespace RPGLegend.Game.Jogo
                 PorNoPe(_caveiraDoParceiro, EmojiDoSistema.Sprite("💀"), Lado * 0.5f);
                 _baseDaCaveira = caveira.transform.localPosition.y;
                 _caveiraDoParceiro.enabled = false;
+                _barraDoParceiro = new GameObject("Vida").transform;
+                _barraDoParceiro.SetParent(_parceiro.Raiz, false);
+                _bordaDaBarra = PedacoDaBarra("Borda", CorDaBorda);
+                _fundoDaBarra = PedacoDaBarra("Fundo", CorDoFundo);
+                _vidaNaBarra = PedacoDaBarra("Vida", CorDaVidaDoAliado);
+                _barraDoParceiro.gameObject.SetActive(false);
             }
             VestirOParceiro(hero);
             _temParceiro = true;
@@ -67,6 +84,18 @@ namespace RPGLegend.Game.Jogo
                 _parceiro.Onde = _alvoDoParceiro;
                 _parceiroTemLugar = true;
             }
+        }
+
+        /// <summary>A vida do parceiro, de 0 a 1, como ele disse no "p"; null (ele não disse) esconde a barra.</summary>
+        public void DefinirVidaDoParceiro(double? fracao) => _vidaDoParceiro = fracao;
+
+        private SpriteRenderer PedacoDaBarra(string nome, Color cor)
+        {
+            var pedaco = new GameObject(nome).AddComponent<SpriteRenderer>();
+            pedaco.transform.SetParent(_barraDoParceiro, false);
+            pedaco.sprite = _branco;
+            pedaco.color = cor;
+            return pedaco;
         }
 
         /// <summary>O parceiro some até dizer onde está de novo (a sala mudou, e a posição antiga era da outra).</summary>
@@ -130,6 +159,31 @@ namespace RPGLegend.Game.Jogo
                 camada.color = cor;
             }
             ColocarCaveira(s);
+            ColocarBarra(s);
+        }
+
+        /// <summary>A barra acima da cabeça, do tamanho da dos monstros (0,8 casa); a vida enche da esquerda.</summary>
+        private void ColocarBarra(Seguidor s)
+        {
+            if (_barraDoParceiro == null) return;
+            bool mostrar = !_parceiroFantasma && _vidaDoParceiro != null;
+            if (_barraDoParceiro.gameObject.activeSelf != mostrar) _barraDoParceiro.gameObject.SetActive(mostrar);
+            if (!mostrar) return;
+            float largura = Lado * 0.8f, altura = Mathf.Max(2f, Lado * 0.09f), borda = Mathf.Max(1f, Lado * 0.02f);
+            float cabeca = s.DeEmoji ? Lado * 1.35f : Lado * 1.1f;
+            _barraDoParceiro.localPosition = new Vector3(0f, cabeca, -0.05f);
+            float cheia = (float)_vidaDoParceiro.Value;
+            _bordaDaBarra.transform.localScale = new Vector3(largura + borda * 2f, altura + borda * 2f, 1f);
+            _bordaDaBarra.transform.localPosition = Vector3.zero;
+            _fundoDaBarra.transform.localScale = new Vector3(largura, altura, 1f);
+            _fundoDaBarra.transform.localPosition = new Vector3(0f, 0f, -0.001f);
+            _vidaNaBarra.enabled = cheia > 0f;
+            _vidaNaBarra.transform.localScale = new Vector3(largura * cheia, altura, 1f);
+            _vidaNaBarra.transform.localPosition = new Vector3(-largura * (1f - cheia) / 2f, 0f, -0.002f);
+            int ordem = (int)s.Onde.y + 1;
+            _bordaDaBarra.sortingOrder = ordem;
+            _fundoDaBarra.sortingOrder = ordem + 1;
+            _vidaNaBarra.sortingOrder = ordem + 2;
         }
 
         /// <summary>A caveira acima da cabeça (o boneco de emoji é mais alto que o mini), boiando devagar.</summary>

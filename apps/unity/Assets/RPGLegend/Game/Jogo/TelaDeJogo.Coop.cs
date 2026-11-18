@@ -60,6 +60,8 @@ namespace RPGLegend.Game.Jogo
         private double? _moralRecebida;
         /// <summary>O dano que o parceiro levou nos últimos 30 s, que ele diz no "p" (a Comunhão sagrada conta com ele).</summary>
         private const double LimiteDoDanoLevado = 1000000;
+        /// <summary>A vida que o "p" pode dizer: acima disso o pacote está torto, e a barra não aparece.</summary>
+        private const double LimiteDaVida = 10000000;
         /// <summary>O REVIVER dos botões de cima (null até a partida em sala abrir).</summary>
         private UnityEngine.UIElements.Button _botaoReviver;
         private bool _botaoReviverVisivel;
@@ -253,6 +255,9 @@ namespace RPGLegend.Game.Jogo
                     double? levado = Numero(dados["d"], LimiteDoDanoLevado, out var dano30) && dano30 > 0 ? Math.Truncate(dano30) : (double?)null;
                     _parceiroNaLuta = new ParceiroNaEntrada { X = x, Y = y, Caido = caido ? true : (bool?)null, Puxa = _parceiroPuxa ? true : (bool?)null, Dano = levado, Flores = FloresDoPacote(dados["fl"] as JArray) };
                     _sala?.MoverParceiro(x, y, olha == "N" || olha == "E" || olha == "W" ? olha : "S", caido);
+                    // A barra de vida em cima dele; quem ainda não manda a vida fica sem barra.
+                    bool temVida = Numero(dados["h"], LimiteDaVida, out var vidaDele) & Numero(dados["hm"], LimiteDaVida, out var maximaDele);
+                    _sala?.DefinirVidaDoParceiro(temVida && maximaDele >= 1 ? Math.Min(1.0, Math.Max(0.0, vidaDele / maximaDele)) : (double?)null);
                     // Os lacaios do Necromante parceiro, na luta (rodada 4b): só desenho.
                     _sala?.DefinirLacaiosDoParceiro(LacaiosDoPacote(dados["l"] as JArray));
                     break;
@@ -491,6 +496,10 @@ namespace RPGLegend.Game.Jogo
             if (walker == null) return;
             var sala = ChaveDaSalaNaRede();
             bool caido = EstouCaido;
+            // A vida vai junto (doc do Breno de 2026-11-15): o parceiro desenha a barra em cima do meu boneco. Na luta
+            // ela mora no estado da luta; fora dela, no save.
+            var euAgora = luta != null ? luta.Estado.Hero : _partida.Estado.Hero;
+            double vida = Math.Max(0, Math.Ceiling(euAgora.Hp)), vidaMaxima = Math.Max(1, Math.Round(euAgora.MaxHp));
             // Na luta, o dano que levei nos últimos 30 s vai junto (a Comunhão sagrada do Clérigo parceiro conta com ele).
             double levado = luta != null ? Arenas.DanoLevadoNaJanela(luta) : 0;
             // Na luta, os lacaios com corpo vão junto (o parceiro os desenha).
@@ -511,7 +520,7 @@ namespace RPGLegend.Game.Jogo
             var flores = new JArray();
             if (luta?.Arena.Flores != null)
                 foreach (var f in luta.Arena.Flores) flores.Add(new JArray(Math.Round(f.X), Math.Round(f.Y)));
-            var agora = sala + "|" + Math.Round(walker.X) + "|" + Math.Round(walker.Y) + "|" + walker.Facing + "|" + caido + "|" + levado + "|" + lacaios.ToString(Newtonsoft.Json.Formatting.None) + "|" + flores.ToString(Newtonsoft.Json.Formatting.None);
+            var agora = sala + "|" + Math.Round(walker.X) + "|" + Math.Round(walker.Y) + "|" + walker.Facing + "|" + caido + "|" + levado + "|" + lacaios.ToString(Newtonsoft.Json.Formatting.None) + "|" + flores.ToString(Newtonsoft.Json.Formatting.None) + "|" + vida + "/" + vidaMaxima;
             // Parado, repete de vez em quando: é o que mostra o herói a quem acabou de chegar.
             bool parado = agora == _posicaoEnviada;
             if (parado && Time.unscaledTime < _proximaPosicao + 1f) return;
@@ -519,6 +528,8 @@ namespace RPGLegend.Game.Jogo
             _posicaoEnviada = agora;
             var pacote = new JObject { ["t"] = "p", ["s"] = sala, ["x"] = Math.Round(walker.X), ["y"] = Math.Round(walker.Y), ["f"] = walker.Facing ?? "S" };
             if (caido) pacote["c"] = true;
+            pacote["h"] = vida;
+            pacote["hm"] = vidaMaxima;
             if (levado > 0) pacote["d"] = levado;
             if (lacaios.Count > 0) pacote["l"] = lacaios;
             if (flores.Count > 0) pacote["fl"] = flores;
